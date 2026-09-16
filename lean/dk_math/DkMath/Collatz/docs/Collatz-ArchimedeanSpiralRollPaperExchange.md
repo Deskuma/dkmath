@@ -223,13 +223,13 @@ $$
 Define the dimensional center kernel by
 
 $$
-\operatorname{Gap}_0=\pi t^2.
+\text{Gap}_0=\pi t^2.
 $$
 
 Then every layer Gap has the form
 
 $$
-\operatorname{Gap}(r)=2\pi rt+\operatorname{Gap}_0.
+\text{Gap}(r)=2\pi rt+\text{Gap}_0.
 $$
 
 The same kernel can be read in two equivalent ways.
@@ -482,7 +482,7 @@ sample.
 A useful experimental residual is
 
 $$
-\operatorname{ResidualMass}
+\text{ResidualMass}
 =
 M_{\mathrm{measured\ paper}}
 -
@@ -492,7 +492,7 @@ $$
 Another is
 
 $$
-\operatorname{ResidualLength}
+\text{ResidualLength}
 =
 L_{\mathrm{measured}}
 -

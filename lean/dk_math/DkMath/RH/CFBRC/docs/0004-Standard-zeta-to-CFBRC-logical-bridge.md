@@ -75,9 +75,9 @@ theorem riemannHypothesis_iff_nontrivialZero_re_eq_half :
 
 $$
 \forall s,\quad
-\operatorname{NontrivialRiemannZetaZero}(s)
+\text{NontrivialRiemannZetaZero}(s)
 \Longrightarrow
-\operatorname{Re}(s)=\frac12
+\text{Re}(s)=\frac12
 $$
 
 という形で直接扱える。
@@ -184,10 +184,10 @@ theorem riemannHypothesis_of_standardZeta_map_zero
 必要なのは、
 
 $$
-\operatorname{NontrivialRiemannZetaZero}(s)
+\text{NontrivialRiemannZetaZero}(s)
 \Longrightarrow
-\operatorname{offCriticalCFBRC}
-\bigl(d,\operatorname{Re}(s),\operatorname{phase}(s)\bigr)=0
+\text{offCriticalCFBRC}
+\bigl(d,\text{Re}(s),\text{phase}(s)\bigr)=0
 $$
 
 という写像則である。

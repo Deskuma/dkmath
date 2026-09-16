@@ -34,7 +34,7 @@ CS24 は Green-B とする。
 主要 exact identities は以下。
 
 $$
-\operatorname{Prime}_{\varepsilon,W,X}
+\text{Prime}_{\varepsilon,W,X}
 =\frac{2}{\pi}\sum_{n\le X}\Lambda(n)K_{\varepsilon,W}(n)
 =\frac{E_+^{\mathrm{agg}}(X)-E_-^{\mathrm{agg}}(X)}{2\pi}.
 $$
@@ -88,7 +88,7 @@ CS17 の finite geometric ray amplitude を
 
 $$
 Z_{\varepsilon,W,X,p}(t)
-:=\operatorname{RayAmplitude}_{\varepsilon,W,X,p}(t)
+:=\text{RayAmplitude}_{\varepsilon,W,X,p}(t)
 $$
 
 と読む。
@@ -104,11 +104,11 @@ $$
 CS25 では CS17 の normalized density が pointwise に次へ落ちることをまず theorem 化する。
 
 $$
-\operatorname{PlusDensity}=|Z+1|^2.
+\text{PlusDensity}=|Z+1|^2.
 $$
 
 $$
-\operatorname{MinusDensity}=|Z-1|^2.
+\text{MinusDensity}=|Z-1|^2.
 $$
 
 必要なら denominator form から直接証明してよい。既存 CS17 theorem を壊さない。
@@ -120,31 +120,31 @@ $$
 新しい source-derived density を定義する。
 
 $$
-\operatorname{CommonDensity}(Z):=|Z|^2+1.
+\text{CommonDensity}(Z):=|Z|^2+1.
 $$
 
 $$
-\operatorname{InteractionDensity}(Z):=2\operatorname{Re}Z.
+\text{InteractionDensity}(Z):=2\text{Re}Z.
 $$
 
 純代数として exact に
 
 $$
-|Z+1|^2=\operatorname{CommonDensity}(Z)+\operatorname{InteractionDensity}(Z),
+|Z+1|^2=\text{CommonDensity}(Z)+\text{InteractionDensity}(Z),
 $$
 
 $$
-|Z-1|^2=\operatorname{CommonDensity}(Z)-\operatorname{InteractionDensity}(Z).
+|Z-1|^2=\text{CommonDensity}(Z)-\text{InteractionDensity}(Z).
 $$
 
 従って
 
 $$
-|Z+1|^2+|Z-1|^2=2\operatorname{CommonDensity}(Z),
+|Z+1|^2+|Z-1|^2=2\text{CommonDensity}(Z),
 $$
 
 $$
-|Z+1|^2-|Z-1|^2=2\operatorname{InteractionDensity}(Z)=4\operatorname{Re}Z.
+|Z+1|^2-|Z-1|^2=2\text{InteractionDensity}(Z)=4\text{Re}Z.
 $$
 
 `CommonDensity ≥ 0` は source-derived に証明する。
@@ -240,7 +240,7 @@ $$
 CS24 の normalization と接続すると
 
 $$
-\operatorname{PrimeContribution}_{\varepsilon,W,X}
+\text{PrimeContribution}_{\varepsilon,W,X}
 =\frac{I^{\mathrm{agg}}_{\varepsilon,W,X}}{\pi}.
 $$
 
@@ -261,7 +261,7 @@ $$
 complete normalized source は exact に
 
 $$
-\operatorname{CompleteSource}_{\varepsilon,W,X}
+\text{CompleteSource}_{\varepsilon,W,X}
 =C_{\varepsilon,W}^{\mathrm{corr}}
 +\frac{I^{\mathrm{agg}}_{\varepsilon,W,X}}{\pi}.
 $$
@@ -358,7 +358,7 @@ CS18 ですでに `Complex.normSq ↔ Vec.q2` と complex multiplication ↔ `Ve
 今回の
 
 $$
-|Z\pm1|^2=|Z|^2+1\pm2\operatorname{Re}Z
+|Z\pm1|^2=|Z|^2+1\pm2\text{Re}Z
 $$
 
 は ThreeElement の

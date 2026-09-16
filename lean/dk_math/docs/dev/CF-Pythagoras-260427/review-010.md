@@ -58,17 +58,17 @@ $$
 から、
 
 $$
-y^d=(z-x)\operatorname{Beam}_d(x,z)
+y^d=(z-x)\text{Beam}_d(x,z)
 $$
 
 が出る。
 さらに、\(\gcd(z,x)=1\) の下で、
 
 $$
-\gcd(z-x,\operatorname{Beam}_d(x,z))\mid d
+\gcd(z-x,\text{Beam}_d(x,z))\mid d
 $$
 
-ゆえに、\(p\nmid d\) かつ \(p\mid \operatorname{Beam}_d(x,z)\) なら、
+ゆえに、\(p\nmid d\) かつ \(p\mid \text{Beam}_d(x,z)\) なら、
 
 $$
 p\nmid z-x
@@ -79,7 +79,7 @@ $$
 今回の補題で、そこから
 
 $$
-v_p\bigl((z-x)\operatorname{Beam}_d(x,z)\bigr) = v_p(\operatorname{Beam}_d(x,z))
+v_p\bigl((z-x)\text{Beam}_d(x,z)\bigr) = v_p(\text{Beam}_d(x,z))
 $$
 
 へ行ける。
@@ -94,7 +94,7 @@ $$
 へ落とせば、
 
 $$
-v_p(\operatorname{Beam}_d(x,z))=d,v_p(y)
+v_p(\text{Beam}_d(x,z))=d,v_p(y)
 $$
 
 が出る。
@@ -105,13 +105,13 @@ $$
 たとえば、
 
 $$
-v_p(\operatorname{Beam}_d(x,z))\le 1
+v_p(\text{Beam}_d(x,z))\le 1
 $$
 
-かつ (d\ge 2)、さらに (p\mid \operatorname{Beam}_d(x,z)) なら、
+かつ (d\ge 2)、さらに (p\mid \text{Beam}_d(x,z)) なら、
 
 $$
-1\le v_p(\operatorname{Beam}_d(x,z))=d,v_p(y)
+1\le v_p(\text{Beam}_d(x,z))=d,v_p(y)
 $$
 
 で、右辺は (d) の倍数。
@@ -281,7 +281,7 @@ theorem flt_padicValNat_beam_eq_d_mul_x_of_beam_prime_symm
 結論は、
 
 $$
-v_p(\operatorname{Beam}_d(y,z))=d,v_p(x)
+v_p(\text{Beam}_d(y,z))=d,v_p(x)
 $$
 
 じゃ。

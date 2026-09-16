@@ -85,7 +85,7 @@ The module docstring must explicitly record all of the following.
 2. The canonical algebra is
 
 $$
-\operatorname{Gnomon}(x,u)
+\text{Gnomon}(x,u)
 =
 (x+u)^2-x^2
 =
@@ -94,31 +94,31 @@ $$
 
 For subtraction-free owners, `u(2x+u)` / the GN form is primary.
 
-3. It is the argument-swapped degree-two GN/GTail kernel:
+1. It is the argument-swapped degree-two GN/GTail kernel:
 
 $$
-\operatorname{Gnomon}(x,u)
+\text{Gnomon}(x,u)
 =
 u\,GN_2(u,x),
 $$
 
 where canonical `GN` is `GTail 2 1 u x`.
 
-4. Existing Cosmic Body and the Gnomon are dual degree-two boundary products:
+1. Existing Cosmic Body and the Gnomon are dual degree-two boundary products:
 
 $$
-\operatorname{BodyN}(2,x,u)=x\,GN_2(x,u),
+\text{BodyN}(2,x,u)=x\,GN_2(x,u),
 $$
 
 $$
-\operatorname{Gnomon}(x,u)=u\,GN_2(u,x).
+\text{Gnomon}(x,u)=u\,GN_2(u,x).
 $$
 
-5. Under a fixed `GapN 2 u = u^2`, the `BodyN` sequence grows by successive Gnomon layers. Thus the intended semantics is Body growth with Gap preserved, not "Gap growth".
+1. Under a fixed `GapN 2 u = u^2`, the `BodyN` sequence grows by successive Gnomon layers. Thus the intended semantics is Body growth with Gap preserved, not "Gap growth".
 
-6. This file is a future candidate for promotion/refactoring into a generic `DkMath.Lib.Gnomon`-style owner after the API stabilizes. No promotion is performed in this checkpoint.
+2. This file is a future candidate for promotion/refactoring into a generic `DkMath.Lib.Gnomon`-style owner after the API stabilizes. No promotion is performed in this checkpoint.
 
-7. Future resolution refinement will subdivide one coarse transition into finer Gnomon steps while preserving the same endpoint square transition after normalization/projection. Raw fine coordinates scale by the square of the resolution factor; the projection divides that scale back out. Do not claim that raw local `Gap = v^2` cells add directly to the coarse `u^2` Gap.
+3. Future resolution refinement will subdivide one coarse transition into finer Gnomon steps while preserving the same endpoint square transition after normalization/projection. Raw fine coordinates scale by the square of the resolution factor; the projection divides that scale back out. Do not claim that raw local `Gap = v^2` cells add directly to the coarse `u^2` Gap.
 
 ## 4. Core definitions
 
@@ -159,7 +159,7 @@ If this is definitional equality, a theorem with `rfl` is still useful because t
 Prove
 
 $$
-\operatorname{squareGnomonKernel}(x,u)
+\text{squareGnomonKernel}(x,u)
 =
 2x+u
 $$
@@ -171,7 +171,7 @@ up to commutative normal-form ordering.
 Prove
 
 $$
-\operatorname{squareGnomon}(x,u)
+\text{squareGnomon}(x,u)
 =
 u(2x+u).
 $$
@@ -181,7 +181,7 @@ $$
 Prove the subtraction-free square-growth law
 
 $$
-x^2 + \operatorname{squareGnomon}(x,u)
+x^2 + \text{squareGnomon}(x,u)
 =
 (x+u)^2.
 $$
@@ -195,11 +195,11 @@ This theorem is central to the current interpretation.
 Using existing `BodyN`, prove the correctly indexed step law
 
 $$
-\operatorname{BodyN}(2,x+u,u)
+\text{BodyN}(2,x+u,u)
 =
-\operatorname{BodyN}(2,x,u)
+\text{BodyN}(2,x,u)
 +
-\operatorname{squareGnomon}(x+u,u).
+\text{squareGnomon}(x+u,u).
 $$
 
 For `u=1`, the Body sequence is
@@ -219,15 +219,15 @@ while the same fixed Gap `1` produces Big
 Package the previous theorem with the existing Cosmic decomposition so the semantic statement is visible:
 
 $$
-\operatorname{BigN}(2,x+u,u)
+\text{BigN}(2,x+u,u)
 =
 \bigl(
-\operatorname{BodyN}(2,x,u)
+\text{BodyN}(2,x,u)
 +
-\operatorname{squareGnomon}(x+u,u)
+\text{squareGnomon}(x+u,u)
 \bigr)
 +
-\operatorname{GapN}(2,u).
+\text{GapN}(2,u).
 $$
 
 Do not define a new Gap. Reuse `GapN`.

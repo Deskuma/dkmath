@@ -28,7 +28,7 @@ $$
 その上で、\(\omega := z y^{-1} \in \mathbb Z/q\mathbb Z\) が
 
 $$
-\omega^p=1,\qquad \omega\neq 1,\qquad \operatorname{ord}(\omega)=p
+\omega^p=1,\qquad \omega\neq 1,\qquad \text{ord}(\omega)=p
 $$
 
 を満たす、つまり primitive \(p\)-th root of unity であることが確定した。
@@ -112,13 +112,13 @@ $$
 から
 
 $$
-q \mid \operatorname{val}(\delta)
+q \mid \text{val}(\delta)
 $$
 
 あるいは
 
 $$
-padicValNat\ q\ (\operatorname{val}(\delta)) \ge 1
+padicValNat\ q\ (\text{val}(\delta)) \ge 1
 $$
 
 へ落とす **\(\mathbb N\) 側の橋** が弱い。

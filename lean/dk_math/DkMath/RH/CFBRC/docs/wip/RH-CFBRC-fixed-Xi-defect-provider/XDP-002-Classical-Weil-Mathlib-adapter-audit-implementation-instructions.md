@@ -84,7 +84,7 @@ safe radius 上で
 $$
 D_\Xi(R)
 =
-Q_R-\operatorname{Re}W_R
+Q_R-\text{Re}W_R
 $$
 
 かつ

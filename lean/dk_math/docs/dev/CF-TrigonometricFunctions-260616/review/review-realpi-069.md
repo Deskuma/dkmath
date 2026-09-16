@@ -33,7 +33,7 @@ gch: 4c7bbec6744a7a77ae4075a4b2a854db3924d2c6
 第一に、`phaseDepth_eq_half_iff` が追加され、前回気になっていた「midpoint が一意な最小点」という説明が定理として回収された。
 
 $$
-\operatorname{phaseDepth}(t)=\frac12 \leftrightarrow t=\frac12
+\text{phaseDepth}(t)=\frac12 \leftrightarrow t=\frac12
 $$
 
 これで、文書の主張と Lean の定理が一致した。よい補正じゃ。
@@ -107,14 +107,14 @@ Continuous.vec_mk
 `semanticPhasePath` は自然じゃ。
 
 $$
-\operatorname{Path}\bigl(A^k z,; A^{k+1}z\bigr)
+\text{Path}\bigl(A^k z,; A^{k+1}z\bigr)
 $$
 
 として各 edge を包む。
 そして四本を `Path.trans` で連結し、
 
 $$
-\operatorname{Path}\bigl(z,;A^4z\bigr)
+\text{Path}\bigl(z,;A^4z\bigr)
 $$
 
 を作る。
@@ -122,7 +122,7 @@ $$
 最後に core-zero exact order four から \(A^4z=z\) を使って、
 
 $$
-\operatorname{Path}(z,z)
+\text{Path}(z,z)
 $$
 
 へ閉じる。
@@ -151,7 +151,7 @@ continuous piecewise-affine closed path
 そして affine edge の \(q2\) profile はすでに分かっている。
 
 $$
-q2(E(z,t))=\operatorname{phaseDepth}(t)q2(z)
+q2(E(z,t))=\text{phaseDepth}(t)q2(z)
 $$
 
 つまり、この閉路は途中で境界から沈む。
@@ -164,7 +164,7 @@ $$
 まず一本の edge について、
 
 $$
-N(z,t)=\frac{1}{\sqrt{\operatorname{phaseDepth}(t)}}E(z,t)
+N(z,t)=\frac{1}{\sqrt{\text{phaseDepth}(t)}}E(z,t)
 $$
 
 を定義する流れになる。

@@ -12,7 +12,7 @@ $$
 に当たる `rootIdealNeBotOfEqPow` と、
 
 $$
-\operatorname{span}(z-\zeta y)=K^p \land K\neq\bot \;\Longrightarrow\; z-\zeta y\neq 0
+\text{span}(z-\zeta y)=K^p \land K\neq\bot \;\Longrightarrow\; z-\zeta y\neq 0
 $$
 
 に当たる `linearFactorNeZeroOfSpanEqPow`、さらにその非零版 receiver
@@ -21,14 +21,14 @@ $$
 つまり今、Stage 1 から Stage 2 へ渡すために本当に足りていないのは、
 
 $$
-\operatorname{span}(z-\zeta y)=K^p
+\text{span}(z-\zeta y)=K^p
 $$
 
 という **explicit equality そのもの** じゃ。
 その equality さえ出れば、今回までに整備した exact receiver 群で
 
 $$
-\exists J,\ J \text{ principal} \land \operatorname{span}(z-\zeta y)=J^p
+\exists J,\ J \text{ principal} \land \text{span}(z-\zeta y)=J^p
 $$
 
 へ行けて、さらに Stage 2 の pack-specialized receiver に流し込んで
@@ -77,7 +77,7 @@ $$
 $$
 \boxed{
 \text{Stage 1 pieces を束ねて }
-\operatorname{span}(z-\zeta y)=K^p
+\text{span}(z-\zeta y)=K^p
 \text{ を返す theorem を立てる}
 }
 $$
@@ -99,7 +99,7 @@ $$
 まず本命として、local linear factor について
 
 $$
-\operatorname{span}(z-\zeta y)=K^p
+\text{span}(z-\zeta y)=K^p
 $$
 
 を返す theorem を立てる。
@@ -137,7 +137,7 @@ $$
 結論は
 
 $$
-\exists K : \operatorname{Ideal}(R),\ \operatorname{span}(z-\zeta y)=K^p
+\exists K : \text{Ideal}(R),\ \text{span}(z-\zeta y)=K^p
 $$
 
 で十分じゃ。
@@ -159,7 +159,7 @@ $$
 $$
 \boxed{
 \text{次の最短手は、Stage 1 の本命 theorem として }
-\operatorname{span}(z-\zeta y)=K^p
+\text{span}(z-\zeta y)=K^p
 \text{ を返す explicit-equality theorem を立てること}
 }
 $$

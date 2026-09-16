@@ -34,7 +34,7 @@ $$ (x+y)A_7(x,y)=x^7+y^7 $$
 
 および、
 
-$$ (A_7(x,y):\mathbb Z)=\operatorname{cyclotomicSeven}(x,-y) $$
+$$ (A_7(x,y):\mathbb Z)=\text{cyclotomicSeven}(x,-y) $$
 
 が証明されています。
 
@@ -110,7 +110,7 @@ exists_eq_seventh_power_of_coprime_mul_eq_pow
 
 したがって、
 
-$$\operatorname{residualCore}=r^7$$
+$$\text{residualCore}=r^7$$
 
 が本当に得られ、TERM-009 の receiver は無条件で inhabit されました。
 
@@ -161,11 +161,11 @@ $$c^7-e^7=d^7$$
 
 $$c-e=7^6A^7$$
 
-$$\operatorname{cyclotomicSeven}(c,e)=7B^7$$
+$$\text{cyclotomicSeven}(c,e)=7B^7$$
 
 $$d=7AB$$
 
-$$\operatorname{cyclotomicSevenToTraceOne}(c,e)=\operatorname{sevenAxis}\rho^7$$
+$$\text{cyclotomicSevenToTraceOne}(c,e)=\text{sevenAxis}\rho^7$$
 
 です。
 
@@ -201,11 +201,11 @@ def ramifiedGapQuotient (h e : ℤ) : TraceOneInt (-2) :=
 
 直接展開すると、次の恒等式が成立するはずです。
 
-$$\operatorname{cyclotomicSevenToTraceOne}(e+7h,e)=\operatorname{sevenAxis}\left(-e^3+7h\operatorname{ramifiedGapQuotient}(h,e)\right)$$
+$$\text{cyclotomicSevenToTraceOne}(e+7h,e)=\text{sevenAxis}\left(-e^3+7h\text{ramifiedGapQuotient}(h,e)\right)$$
 
 一方 ramified summit では、
 
-$$\operatorname{cyclotomicSevenToTraceOne}(c,e)=\operatorname{sevenAxis}\rho^7$$
+$$\text{cyclotomicSevenToTraceOne}(c,e)=\text{sevenAxis}\rho^7$$
 
 です。
 
@@ -217,13 +217,13 @@ $$\rho^7+e^3=gQ$$
 
 第二座標だけを見ると、
 
-$$\operatorname{seventhPowerSnd}(u,v)=g,Q_{\mathrm{snd}}$$
+$$\text{seventhPowerSnd}(u,v)=g,Q_{\mathrm{snd}}$$
 
 です。
 
 既存の分解は、
 
-$$\operatorname{seventhPowerSnd}(u,v)=7v\operatorname{seventhPowerSndCore}(u,v)$$
+$$\text{seventhPowerSnd}(u,v)=7v\text{seventhPowerSndCore}(u,v)$$
 
 です。root norm が $7$-unit なら `seventhPowerSndCore` も $7$-unit になります。
 
@@ -282,13 +282,13 @@ def ramifiedRightCubic (u v : ℤ) :=
 
 すると、
 
-$$\boxed{\operatorname{ramifiedSeventhSnd}(u,v)=(2u+v)L_R(u,v)R_R(u,v)}$$
+$$\boxed{\text{ramifiedSeventhSnd}(u,v)=(2u+v)L_R(u,v)R_R(u,v)}$$
 
 という三因子分解が成立します。
 
 さらに、
 
-$$R_R-L_R=7v\operatorname{norm}(\rho)$$
+$$R_R-L_R=7v\text{norm}(\rho)$$
 
 $$L_R+R_R=(u-3v)(u+4v)(2u+v)$$
 
@@ -296,7 +296,7 @@ $$L_R+R_R=(u-3v)(u+4v)(2u+v)$$
 
 一方 endpoint 側では、
 
-$$\operatorname{cyclotomicSevenSnd}(c,e)=-ce(c+e)$$
+$$\text{cyclotomicSevenSnd}(c,e)=-ce(c+e)$$
 
 なので ramified coordinate equationから、
 

@@ -122,13 +122,13 @@ floatDebtPaymentDischarge_iff_target
 により、
 
 $$
-\operatorname{FloatDebtPaymentDischarge}(i,j)
+\text{FloatDebtPaymentDischarge}(i,j)
 $$
 
 が、
 
 $$
-\operatorname{FloatDebtAt}(i)\land j=\tau(i)
+\text{FloatDebtAt}(i)\land j=\tau(i)
 $$
 
 と同値になった。
@@ -169,9 +169,9 @@ floatPaymentCollisionAt_iff_two_le_growthDebtFiberCard
 により、
 
 $$
-\operatorname{FloatPaymentCollisionAt}(j)
+\text{FloatPaymentCollisionAt}(j)
 \Longleftrightarrow
-2\le\#\operatorname{GrowthDebtFiber}(j)
+2\le\#\text{GrowthDebtFiber}(j)
 $$
 
 が確定した。
@@ -199,7 +199,7 @@ $$
 delayed debt load を、
 
 $$
-D_j:=\#\operatorname{GrowthDebtFiber}(j)
+D_j:=\#\text{GrowthDebtFiber}(j)
 $$
 
 とすれば、overload は、
@@ -219,7 +219,7 @@ FloatPaymentOverloadAt
 としてこれを固定し、
 
 $$
-\operatorname{Overload}(j)\Longrightarrow\operatorname{Collision}(j)
+\text{Overload}(j)\Longrightarrow\text{Collision}(j)
 $$
 
 だけを証明した。
@@ -321,7 +321,7 @@ CarryTwoPaymentOverloadAt
 これは前段の exact ledger、
 
 $$
-w_k+\operatorname{ExtraHeight}_k = w_0+\operatorname{CarryTwoCount}_k
+w_k+\text{ExtraHeight}_k = w_0+\text{CarryTwoCount}_k
 $$
 
 と対応する完全な claim vocabulary になっている。
@@ -515,7 +515,7 @@ $$
 この block 内では、各 step の exact width balance が、
 
 $$
-w_{t+1} - w_t = \mathbf 1_{\operatorname{carryTwo}(t)}-(h_t-1)
+w_{t+1} - w_t = \mathbf 1_{\text{carryTwo}(t)}-(h_t-1)
 $$
 
 となる。

@@ -55,7 +55,7 @@ $$
 `PowerGapBeam` は
 
 $$
-z^d-x^d=(z-x)\operatorname{Beam}_d(x,z)
+z^d-x^d=(z-x)\text{Beam}_d(x,z)
 $$
 
 という endpoint 型の差冪分解を扱う。
@@ -87,7 +87,7 @@ $$
 したがって、
 
 $$
-\operatorname{Beam}_d(x,x+u)=GN(d,u,x)
+\text{Beam}_d(x,x+u)=GN(d,u,x)
 $$
 
 となるはず。今回 (d=3) でそれを実装できた。
@@ -157,7 +157,7 @@ S2-H の後続として本命はこちら。
 目標は、
 
 $$
-p\mid \operatorname{Beam}_d,\quad p\nmid d,\quad v_p(\operatorname{Beam}_d)\le1
+p\mid \text{Beam}_d,\quad p\nmid d,\quad v_p(\text{Beam}_d)\le1
 $$
 
 を既存 primitive route から供給すること。

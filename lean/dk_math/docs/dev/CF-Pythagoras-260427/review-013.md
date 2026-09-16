@@ -14,13 +14,13 @@ powerBeam_padicValNat_le_one_of_squarefree
 数学的には、
 
 $$
-\operatorname{Squarefree}(|\operatorname{Beam}_d|)
+\text{Squarefree}(|\text{Beam}_d|)
 $$
 
 なら、
 
 $$
-v_p(|\operatorname{Beam}_d|)\le 1
+v_p(|\text{Beam}_d|)\le 1
 $$
 
 を得る補題じゃ。
@@ -37,8 +37,8 @@ $$
 x^d+y^d=z^d,
 \quad \gcd(z,x)=1,
 \quad p\nmid d,
-\quad p\mid \operatorname{Beam}_d(x,z),
-\quad \operatorname{Squarefree}(|\operatorname{Beam}_d(x,z)|)
+\quad p\mid \text{Beam}_d(x,z),
+\quad \text{Squarefree}(|\text{Beam}_d(x,z)|)
 $$
 
 から `False` が出るようになった。対称版も同時に入っておる。

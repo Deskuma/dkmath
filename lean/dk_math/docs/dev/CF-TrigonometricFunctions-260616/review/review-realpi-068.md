@@ -39,7 +39,7 @@ Gaussian 極限と π 同定は現時点では仮説として明確に隔離し�
 今回の主役はこの係数じゃ。
 
 $$
-\operatorname{phaseDepth}(t)=(1-t)^2+t^2
+\text{phaseDepth}(t)=(1-t)^2+t^2
 $$
 
 これは affine edge
@@ -53,7 +53,7 @@ $$
 Lean 側では、
 
 $$
-q2(E(z,t))=\operatorname{phaseDepth}(t),q2(z)
+q2(E(z,t))=\text{phaseDepth}(t),q2(z)
 $$
 
 が証明された。
@@ -64,7 +64,7 @@ $$
 そして、
 
 $$
-\operatorname{phaseDepth}(1-t)=\operatorname{phaseDepth}(t)
+\text{phaseDepth}(1-t)=\text{phaseDepth}(t)
 $$
 
 も入った。
@@ -85,7 +85,7 @@ $$
 これにより、下界
 
 $$
-\frac12\le \operatorname{phaseDepth}(t)
+\frac12\le \text{phaseDepth}(t)
 $$
 
 と正値性が得られた。
@@ -172,7 +172,7 @@ constant equals Real.pi
 1. theorem を追加する
 
 $$
-\operatorname{phaseDepth}(t)=\frac12 \leftrightarrow t=\frac12
+\text{phaseDepth}(t)=\frac12 \leftrightarrow t=\frac12
 $$
 
 たとえば名前は、
@@ -213,7 +213,7 @@ phaseDepth_eq_min_iff
 その後に、
 
 $$
-N(z,t)=\frac{1}{\sqrt{\operatorname{phaseDepth}(t)}}E(z,t)
+N(z,t)=\frac{1}{\sqrt{\text{phaseDepth}(t)}}E(z,t)
 $$
 
 で固定 \(q2\) 境界へ戻す。

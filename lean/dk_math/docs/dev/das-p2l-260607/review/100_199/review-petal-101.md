@@ -238,7 +238,7 @@ count-level flow を得る
 まず、加速 Collatz 軌道の odd label を置く。
 
 $$
-q_i=\operatorname{oddOrbitLabel}(n,i)
+q_i=\text{oddOrbitLabel}(n,i)
 $$
 
 固定 depth \(d\) で、modulus は

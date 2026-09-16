@@ -48,7 +48,7 @@ $$
 The initial implementation proves the `d = 2` case first, because its real component is already fixed by the existing theorem
 
 $$
-\operatorname{Re}C_2(X,\Theta)=X^2.
+\text{Re}C_2(X,\Theta)=X^2.
 $$
 
 This provides a fully kernel-checkable first exclusion theorem before the general norm argument is introduced.
@@ -146,8 +146,8 @@ $$
 (X^2+\Theta^2)^d=(\Theta^2)^d.
 $$
 
-4. Use nonnegativity and positive-degree injectivity of powers.
-5. Conclude `X^2 = 0`, hence `X = 0`.
+1. Use nonnegativity and positive-degree injectivity of powers.
+2. Conclude `X^2 = 0`, hence `X = 0`.
 
 Do not add the theorem with `sorry`. If the general proof needs API exploration, retain the completed `d = 2` theorem as the stable public kernel and develop the general theorem in a separate scratch branch or private lemma section.
 
@@ -211,7 +211,7 @@ Possible strong bridge form:
 
 $$
 A(s)\,\Xi_c(s)
-=U(s)\,C_d\!\left(s.\operatorname{re}-\frac12,\Theta(s)\right),
+=U(s)\,C_d\!\left(s.\text{re}-\frac12,\Theta(s)\right),
 $$
 
 with independently proved
@@ -227,9 +227,9 @@ in the nontrivial-zero region.
 A weaker implication is sufficient for RH:
 
 $$
-\operatorname{NontrivialZero}(s)
+\text{NontrivialZero}(s)
 \longrightarrow
-C_d\!\left(s.\operatorname{re}-\frac12,\Theta(s)\right)=0.
+C_d\!\left(s.\text{re}-\frac12,\Theta(s)\right)=0.
 $$
 
 The bridge must be auditable and non-circular.
@@ -239,9 +239,9 @@ The bridge must be auditable and non-circular.
 Assume
 
 $$
-\operatorname{NontrivialZero}(s)
+\text{NontrivialZero}(s)
 \quad\land\quad
-s.\operatorname{re}\neq\frac12.
+s.\text{re}\neq\frac12.
 $$
 
 Use the zero-preserving bridge to obtain a standard CFBRC zero. Apply the algebraic off-critical exclusion theorem and derive a contradiction.

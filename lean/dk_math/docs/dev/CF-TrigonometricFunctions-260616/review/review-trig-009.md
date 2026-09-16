@@ -74,11 +74,11 @@ cfcos / cfsin
 つまり、
 
 $$
-\operatorname{cfcos}_F(t)=\text{Core}(F(t))
+\text{cfcos}_F(t)=\text{Core}(F(t))
 $$
 
 $$
-\operatorname{cfsin}_F(t)=\text{Beam}(F(t))
+\text{cfsin}_F(t)=\text{Beam}(F(t))
 $$
 
 として、三角関数を **保存単位核族の座標成分** として自立させた。
@@ -99,39 +99,39 @@ $$
 この目的に対して、現在は次を達成済み。
 
 $$
-\operatorname{cfcos}_F(t)^2+\operatorname{cfsin}_F(t)^2=1
+\text{cfcos}_F(t)^2+\text{cfsin}_F(t)^2=1
 $$
 
 $$
-\operatorname{cfcos}_F(t+s) =
-\operatorname{cfcos}_F(t)\operatorname{cfcos}_F(s) -
-\operatorname{cfsin}_F(t)\operatorname{cfsin}_F(s)
+\text{cfcos}_F(t+s) =
+\text{cfcos}_F(t)\text{cfcos}_F(s) -
+\text{cfsin}_F(t)\text{cfsin}_F(s)
 $$
 
 $$
-\operatorname{cfsin}_F(t+s) =
-\operatorname{cfcos}_F(t)\operatorname{cfsin}_F(s) +
-\operatorname{cfsin}_F(t)\operatorname{cfcos}_F(s)
+\text{cfsin}_F(t+s) =
+\text{cfcos}_F(t)\text{cfsin}_F(s) +
+\text{cfsin}_F(t)\text{cfcos}_F(s)
 $$
 
 $$
-\operatorname{cfcos}_F(-t)=\operatorname{cfcos}_F(t)
+\text{cfcos}_F(-t)=\text{cfcos}_F(t)
 $$
 
 $$
-\operatorname{cfsin}_F(-t)=-\operatorname{cfsin}_F(t)
+\text{cfsin}_F(-t)=-\text{cfsin}_F(t)
 $$
 
 $$
-\operatorname{cfcos}_F(t-t')=
-\operatorname{cfcos}_F(t)\operatorname{cfcos}_F(t') +
-\operatorname{cfsin}_F(t)\operatorname{cfsin}_F(t')
+\text{cfcos}_F(t-t')=
+\text{cfcos}_F(t)\text{cfcos}_F(t') +
+\text{cfsin}_F(t)\text{cfsin}_F(t')
 $$
 
 $$
-\operatorname{cfsin}_F(t-t')=
-\operatorname{cfsin}_F(t)\operatorname{cfcos}_F(t') -
-\operatorname{cfcos}_F(t)\operatorname{cfsin}_F(t')
+\text{cfsin}_F(t-t')=
+\text{cfsin}_F(t)\text{cfcos}_F(t') -
+\text{cfcos}_F(t)\text{cfsin}_F(t')
 $$
 
 これらが `Real.sin` / `Real.cos` を使わず、`KernelFamily` の保存核構造から出ている。
@@ -252,9 +252,9 @@ $$
 
 $$
 \boxed{
-\operatorname{cfcos}
+\text{cfcos}
 \text{ は保存核の Core 成分、}
-\operatorname{cfsin}
+\text{cfsin}
 \text{ は保存核の Beam 成分である。}
 }
 $$
@@ -344,7 +344,7 @@ theorem kernel_eq_mk_cfcos_cfsin
 これが入ると、
 
 $$
-F(t)=(\operatorname{cfcos}_F(t),\operatorname{cfsin}_F(t))
+F(t)=(\text{cfcos}_F(t),\text{cfsin}_F(t))
 $$
 
 が明示される。
@@ -378,11 +378,11 @@ $$
 へ作用したとき、
 
 $$
-x'=\operatorname{cfcos}(t)x-\operatorname{cfsin}(t)y
+x'=\text{cfcos}(t)x-\text{cfsin}(t)y
 $$
 
 $$
-y'=\operatorname{cfcos}(t)y+\operatorname{cfsin}(t)x
+y'=\text{cfcos}(t)y+\text{cfsin}(t)x
 $$
 
 が得られる。
@@ -461,7 +461,7 @@ $$
 $$
 \boxed{
 保存単位核族の Beam/Core 座標として、
-\operatorname{cfsin},\operatorname{cfcos}
+\text{cfsin},\text{cfcos}
 を定義した。
 }
 $$

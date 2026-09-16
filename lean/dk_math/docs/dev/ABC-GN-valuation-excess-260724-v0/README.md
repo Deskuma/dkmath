@@ -33,7 +33,7 @@ ABC triple
 
 最終実装は、三つの一様 budget を与えれば、正の ABC triple 全体について一つの明示定数 `K >= 1` が存在し、
 
-$$c\le K\operatorname{rad}(abc)^{1+\varepsilon}$$
+$$c\le K\text{rad}(abc)^{1+\varepsilon}$$
 
 が従うことを証明する。
 
@@ -96,23 +96,23 @@ $$ (n-1)\log T.c\le\log GN_n(T.a,T.b) $$
 
 ### Exact support / multiplicity identity
 
-$$ \log GN_n=\log\operatorname{rad}(GN_n)+GNValuationExcess_n $$
+$$ \log GN_n=\log\text{rad}(GN_n)+GNValuationExcess_n $$
 
 ### Exponent support split
 
-$$ \operatorname{rad}(GN_n)=E_nN_n $$
+$$ \text{rad}(GN_n)=E_nN_n $$
 
-$$ E_n\mid\operatorname{rad}(n) $$
+$$ E_n\mid\text{rad}(n) $$
 
 ### Fresh support return
 
-$$ \operatorname{rad}(abc)N_n\mid\operatorname{rad}(\text{lifted }abc) $$
+$$ \text{rad}(abc)N_n\mid\text{rad}(\text{lifted }abc) $$
 
 ### Two-budget composition
 
 If
 
-$$\log\operatorname{rad}(\text{lifted }abc)\le(1+\sigma)\log R+C_s$$
+$$\log\text{rad}(\text{lifted }abc)\le(1+\sigma)\log R+C_s$$
 
 and
 
@@ -120,7 +120,7 @@ $$GNValuationExcess\le\tau\log R+C_e$$
 
 then
 
-$$ (n-1)\log c\le(\sigma+\tau)\log R+C_s+C_e+\log\operatorname{rad}(n) $$
+$$ (n-1)\log c\le(\sigma+\tau)\log R+C_s+C_e+\log\text{rad}(n) $$
 
 where `R = rad(a*b*c)`.
 

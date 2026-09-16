@@ -43,10 +43,10 @@ Build completed successfully (8565 jobs).
 任意の候補点 \(r\) と `semanticValue x` がすべての近似区間に入るなら、
 
 $$
-|r-\operatorname{semanticValue}(x)|\le \operatorname{widthReal}(x,n)
+|r-\text{semanticValue}(x)|\le \text{widthReal}(x,n)
 $$
 
-を示し、右辺が \(0\) に収束するので \(r=\operatorname{semanticValue}(x)\) とする。これは王道で、かつ DkReal の「区間幅が潰れる」という表現不変量をそのまま使っている。実装でも `squeeze_zero` と `tendsto_widthReal_zero` で閉じており、証明の構造がよい。
+を示し、右辺が \(0\) に収束するので \(r=\text{semanticValue}(x)\) とする。これは王道で、かつ DkReal の「区間幅が潰れる」という表現不変量をそのまま使っている。実装でも `squeeze_zero` と `tendsto_widthReal_zero` で閉じており、証明の構造がよい。
 
 次に、`semanticValue_eq_of_equiv` が良い。`equiv_tendsto_lo_sub_zero` から rational lower endpoint の差が \(0\) に収束することを取り、`Rat.continuous_coe_real` で `Real` に移し、両 lower sequence の極限一意性で semantic value の一致を出している。これは前回想定したルートそのものじゃ。
 
@@ -59,7 +59,7 @@ $$
 証明は、
 
 $$
-\operatorname{semanticValue}(x)+\operatorname{semanticValue}(y)
+\text{semanticValue}(x)+\text{semanticValue}(y)
 $$
 
 が `add x y` のすべての近似区間に入ることを示し、一意性補題で semantic value と同一視している。これは「演算結果の endpoint と semantic point の interval membership」を使う、今後の乗法・冪にも使える型じゃ。
@@ -134,17 +134,17 @@ theorem DkReal.semanticValue_mulNonneg
 実際の名前は既存 API に合わせるとして、証明方針は加法と同じじゃ。
 
 $$
-\operatorname{semanticValue}(x)\in [x.lo_n,x.hi_n]
+\text{semanticValue}(x)\in [x.lo_n,x.hi_n]
 $$
 
 $$
-\operatorname{semanticValue}(y)\in [y.lo_n,y.hi_n]
+\text{semanticValue}(y)\in [y.lo_n,y.hi_n]
 $$
 
 かつ非負なら、積は
 
 $$
-\operatorname{semanticValue}(x)\operatorname{semanticValue}(y)
+\text{semanticValue}(x)\text{semanticValue}(y)
 \in [x.lo_n y.lo_n,\;x.hi_n y.hi_n]
 $$
 

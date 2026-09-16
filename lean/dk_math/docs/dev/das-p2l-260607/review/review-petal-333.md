@@ -206,7 +206,7 @@ $$
 さらに recent block window について、
 
 $$
-\operatorname{RecentDemand}(L,m)\le b_m-b_{m-L}
+\text{RecentDemand}(L,m)\le b_m-b_{m-L}
 $$
 
 まで閉じた。
@@ -246,7 +246,7 @@ $$
 各 block について、
 
 $$
-A_k=\left| \{ i\in[b_k,b_{k+1}) \mid \operatorname{CarryTwoDebtAt}(n,i) \} \right|
+A_k=\left| \{ i\in[b_k,b_{k+1}) \mid \text{CarryTwoDebtAt}(n,i) \} \right|
 $$
 
 が証明された。
@@ -254,7 +254,7 @@ $$
 さらに任意の block interval で、
 
 $$
-\sum_{k\in[q,m)} A_k = \left| \{ i\in[b_q,b_m) \mid \operatorname{CarryTwoDebtAt}(n,i) \} \right|
+\sum_{k\in[q,m)} A_k = \left| \{ i\in[b_q,b_m) \mid \text{CarryTwoDebtAt}(n,i) \} \right|
 $$
 
 となる。
@@ -292,7 +292,7 @@ $$
 区間自体の cardinality が高々 $H$ なので、
 
 $$
-|\operatorname{RecentSourceClaims}(H,m)|\le H
+|\text{RecentSourceClaims}(H,m)|\le H
 $$
 
 が証明された。
@@ -319,7 +319,7 @@ def CanonicalOutstandingQueueCoveredByRecentSourceClaims
 これは、
 
 $$
-Q_m\le|\operatorname{RecentSourceClaims}(H,m)|
+Q_m\le|\text{RecentSourceClaims}(H,m)|
 $$
 
 という cardinality inequality である。
@@ -417,15 +417,15 @@ $$
 幅は、
 
 $$
-\operatorname{bitWidth}(x_r)=r+2
+\text{bitWidth}(x_r)=r+2
 $$
 
 $$
-\operatorname{bitWidth}(T(x_r))=r+3
+\text{bitWidth}(T(x_r))=r+3
 $$
 
 $$
-\operatorname{bitWidth}(T^2(x_r))=r+4
+\text{bitWidth}(T^2(x_r))=r+4
 $$
 
 となる。
@@ -467,7 +467,7 @@ fixedLowRawSignature r xᵣ
 一方、実 edge weight は、
 
 $$
-\operatorname{bitWidth}(T(x_r))-\operatorname{bitWidth}(x_r)=1
+\text{bitWidth}(T(x_r))-\text{bitWidth}(x_r)=1
 $$
 
 じゃ。
@@ -573,13 +573,13 @@ C.signature x = f (fixedLowRawSignature r x)
 と factor する signature なら、
 
 $$
-\operatorname{fixedLowSig}(T(x_r))=\operatorname{fixedLowSig}(x_r)
+\text{fixedLowSig}(T(x_r))=\text{fixedLowSig}(x_r)
 $$
 
 から、
 
 $$
-C.\operatorname{signature}(T(x_r))=C.\operatorname{signature}(x_r)
+C.\text{signature}(T(x_r))=C.\text{signature}(x_r)
 $$
 
 が従う。
@@ -650,7 +650,7 @@ cp-333 以前は、
 ### 無条件に証明したもの
 
 $$
-\sum_{k\in[q,m)}A_k=\left|\left{i\in[b_q,b_m)\mid\operatorname{CarryTwoDebtAt}(n,i)\right}\right|
+\sum_{k\in[q,m)}A_k=\left|\left{i\in[b_q,b_m)\mid\text{CarryTwoDebtAt}(n,i)\right}\right|
 $$
 
 ### 一般反例族として倒したもの

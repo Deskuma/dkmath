@@ -17,7 +17,7 @@ CubicPrimitiveFLTContext.beam_ne
 これで通常 branch では、
 
 $$
-\operatorname{
+\text{
     Nat.Prime(C.q)
 }
 $$
@@ -27,11 +27,11 @@ C.q\nmid 3
 $$
 
 $$
-C.q\mid |\operatorname{powerBeam}_3(C.b,C.a)|
+C.q\mid |\text{powerBeam}_3(C.b,C.a)|
 $$
 
 $$
-|\operatorname{powerBeam}_3(C.b,C.a)|\ne0
+|\text{powerBeam}_3(C.b,C.a)|\ne0
 $$
 
 を context から直接取り出せる。
@@ -56,7 +56,7 @@ C.beam_ne
 通常 cubic branch の構造は、いまこう読める。
 
 $$
-C : \operatorname{CubicPrimitiveFLTContext}
+C : \text{CubicPrimitiveFLTContext}
 $$
 
 があるとき、これはすでに
@@ -73,7 +73,7 @@ $$
 そこから自動的に、
 
 $$
-q\mid \operatorname{Beam}_3
+q\mid \text{Beam}_3
 $$
 
 $$
@@ -81,7 +81,7 @@ q\nmid3
 $$
 
 $$
-\operatorname{Beam}_3\ne0
+\text{Beam}_3\ne0
 $$
 
 が出る。
@@ -433,7 +433,7 @@ $$
 特に通常 cubic branch については、
 
 $$
-\operatorname{
+\text{
     CubicPrimitiveFLTContext
 }
 +
@@ -445,7 +445,7 @@ $$
 および
 
 $$
-\operatorname{
+\text{
     CubicPrimitiveFLTContext
 }
 +

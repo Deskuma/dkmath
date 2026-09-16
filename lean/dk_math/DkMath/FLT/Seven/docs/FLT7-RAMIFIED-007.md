@@ -320,7 +320,7 @@ $$
 であり、
 
 $$
-B=\operatorname{norm}(\rho)
+B=\text{norm}(\rho)
 $$
 
 です。$\rho$ は現在の quadratic root です。
@@ -330,7 +330,7 @@ RAMIFIED-002 は $\rho$ の二座標が coprime であることを証明して�
 しかし、
 
 $$
-7\nmid\operatorname{norm}(\rho)=B
+7\nmid\text{norm}(\rho)=B
 $$
 
 なので `sevenAxis` は $\rho$ を割れません。
@@ -362,9 +362,9 @@ $$
 よって summit の coordinate equation は、
 
 $$
-\operatorname{cyclotomicSevenToTraceOne}(c,e)
-=\operatorname{sevenAxis}\rho^7
-=\operatorname{sevenAxis}\gamma^{49}
+\text{cyclotomicSevenToTraceOne}(c,e)
+=\text{sevenAxis}\rho^7
+=\text{sevenAxis}\gamma^{49}
 $$
 
 へ上がります。
@@ -389,8 +389,8 @@ $$
 
 $$
 \rho_{\mathrm{snd}}
-=\operatorname{seventhPowerSnd}(\gamma)
-=7\gamma_{\mathrm{snd}}\operatorname{sndCore}(\gamma)
+=\text{seventhPowerSnd}(\gamma)
+=7\gamma_{\mathrm{snd}}\text{sndCore}(\gamma)
 $$
 
 です。
@@ -399,13 +399,13 @@ $$
 
 $$
 |\gamma_{\mathrm{snd}}|,
-|\operatorname{sndCore}(\gamma)|
+|\text{sndCore}(\gamma)|
 =7^4(Xc)^7
 $$
 
 となります。
 
-$\gamma$ の norm は $b$ であり、$7\nmid b$ です。そのため $\operatorname{sndCore}(\gamma)$ は $7$-unit です。
+$\gamma$ の norm は $b$ であり、$7\nmid b$ です。そのため $\text{sndCore}(\gamma)$ は $7$-unit です。
 
 また $\gamma$ の座標は primitive です。もし素数が両座標を割れば、$\gamma^7=\rho$ の両座標も割り、$\rho$ の primitive 性に反します。
 
@@ -413,7 +413,7 @@ $\gamma$ の norm は $b$ であり、$7\nmid b$ です。そのため $\operato
 
 $$
 \gcd\left(|\gamma_{\mathrm{snd}}|,
-|\operatorname{sndCore}(\gamma)|\right)=1
+|\text{sndCore}(\gamma)|\right)=1
 $$
 
 です。
@@ -425,7 +425,7 @@ $$
 $$
 
 $$
-\boxed{|\operatorname{sndCore}(\gamma)|=N^7}
+\boxed{|\text{sndCore}(\gamma)|=N^7}
 $$
 
 $$
@@ -448,7 +448,7 @@ inner root.snd depth = 4
 既存恒等式は、
 
 $$
-\operatorname{sndCore}(u,v)
+\text{sndCore}(u,v)
 =L_0(u,v)R_0(u,v)
 $$
 

@@ -30,17 +30,17 @@ $$
 n^2=(n-u)(n+u)+u^2.
 $$
 
-3. Proper left/right obstruction predicates with endpoint exceptions.
-4. The complete small-prime cutoff up to the square-root boundary.
-5. Exact equivalence between survival from all proper small-prime obstructions and primality of both endpoints.
-6. PrimeWorld residue coordinates, CRT periodicity, and exact full-period survivor cardinality.
-7. Exact finite covered/survivor capacity accounting and
+1. Proper left/right obstruction predicates with endpoint exceptions.
+2. The complete small-prime cutoff up to the square-root boundary.
+3. Exact equivalence between survival from all proper small-prime obstructions and primality of both endpoints.
+4. PrimeWorld residue coordinates, CRT periodicity, and exact full-period survivor cardinality.
+5. Exact finite covered/survivor capacity accounting and
    `strongGoldbach_iff_capacityEscape`.
-8. PCK / old-fresh bridge results, with explicit limitations showing that pointwise primitive escape does not force a simultaneous prime pair.
-9. Exact overlap conservation and pair-overlap accounting.
-10. Pascal residual decomposition of pair overlap.
-11. Canonical GTail core promotion, including tail filtration, exact boundary gcd, prime-row congruence, p-adic support, and cyclotomic bridge.
-12. Degree-two primitive/parity normalization and left/right support separation, audited by GPT-6 Astra.
+6. PCK / old-fresh bridge results, with explicit limitations showing that pointwise primitive escape does not force a simultaneous prime pair.
+7. Exact overlap conservation and pair-overlap accounting.
+8. Pascal residual decomposition of pair overlap.
+9. Canonical GTail core promotion, including tail filtration, exact boundary gcd, prime-row congruence, p-adic support, and cyclotomic bridge.
+10. Degree-two primitive/parity normalization and left/right support separation, audited by GPT-6 Astra.
 
 The key static capacity statement is therefore no longer merely a proposed theorem shape. It is an exact reformulation of Goldbach itself.
 
@@ -52,9 +52,9 @@ $$
 \boxed{
 \forall n\ge2,\;
 \exists u<n,\;
-\operatorname{Prime}(n-u)
+\text{Prime}(n-u)
 \land
-\operatorname{Prime}(n+u)
+\text{Prime}(n+u)
 }
 $$
 
@@ -156,7 +156,7 @@ $$
 Therefore the statement
 
 $$
-\forall P>2,\quad \operatorname{Prime}(P)
+\forall P>2,\quad \text{Prime}(P)
 \to
 \exists d,x,u,\quad GN_d(x,u)=P
 $$
@@ -196,9 +196,9 @@ Therefore the strong Goldbach statement at \(2n\) is equivalent to the existence
 $$
 x+u=n,
 \qquad
-\operatorname{Prime}(x),
+\text{Prime}(x),
 \qquad
-\operatorname{Prime}(GN_2(x,u)).
+\text{Prime}(GN_2(x,u)).
 $$
 
 This equivalence is now implemented by the production Goldbach modules.
@@ -357,7 +357,7 @@ The production theorem now gives the exact equivalence
 $$
 \text{survives all proper small-prime obstructions}
 \iff
-\operatorname{Prime}(n-u)\land\operatorname{Prime}(n+u).
+\text{Prime}(n-u)\land\text{Prime}(n+u).
 $$
 
 Thus the unresolved conjecture is exactly the nonemptiness of the finite survivor set for every `n ≥ 2`.

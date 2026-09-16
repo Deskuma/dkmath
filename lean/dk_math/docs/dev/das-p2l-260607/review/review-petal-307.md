@@ -53,7 +53,7 @@ $$
 各 fixed point $j$ の fiber は連続区間であり、その長さは block start の exact depth に一致する。
 
 $$
-\operatorname{Fiber}(j)=[b,j],\qquad|\operatorname{Fiber}(j)|=j-b+1=A_b
+\text{Fiber}(j)=[b,j],\qquad|\text{Fiber}(j)|=j-b+1=A_b
 $$
 
 これにより、軌道時刻は「payment endpoint への閉包 fiber」として block 化できる状態になった。
@@ -152,7 +152,7 @@ $$
 したがって、数学的には source fiber は単純な関数 fiber じゃ。
 
 $$
-i\in\operatorname{Fiber}(j)\Longleftrightarrow\tau(i)=j
+i\in\text{Fiber}(j)\Longleftrightarrow\tau(i)=j
 $$
 
 次の wrapper は有用じゃ。
@@ -175,7 +175,7 @@ orbitPaymentSourceFiberAt_nonempty_iff_two_le_orbitWindowHeight
 により、
 
 $$
-\operatorname{Fiber}(j)\ne\varnothing\Longleftrightarrow2\le h_j
+\text{Fiber}(j)\ne\varnothing\Longleftrightarrow2\le h_j
 $$
 
 が確定した。
@@ -191,7 +191,7 @@ extra-height orbit times
 数式では、
 
 $$
-\operatorname{Im}(\tau)=\operatorname{Fix}(\tau)={j\mid2\le h_j}
+\text{Im}(\tau)=\text{Fix}(\tau)={j\mid2\le h_j}
 $$
 
 じゃ。
@@ -218,7 +218,7 @@ orbitPaymentSourceFiberAt_card_eq_orbitExactDepth_start
 universal block を $[b,j]$ とすれば、
 
 $$
-|\operatorname{Fiber}(j)|=j-b+1=A_b
+|\text{Fiber}(j)|=j-b+1=A_b
 $$
 
 である。
@@ -319,7 +319,7 @@ universal block を $[b,j]$ とする。
 ### Complete claim count
 
 $$
-Q_j=\#{i\in[b,j]\mid\operatorname{CarryTwoDebtAt}(n,i)}
+Q_j=\#{i\in[b,j]\mid\text{CarryTwoDebtAt}(n,i)}
 $$
 
 interior の carry-two は delayed claim。

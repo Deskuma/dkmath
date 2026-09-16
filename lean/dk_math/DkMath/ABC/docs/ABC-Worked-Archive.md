@@ -1102,7 +1102,7 @@ by_cases h_bad : Bad_ε c γ_values
   つまり結論を
   \(\lnot\mathrm{Bad}_\varepsilon(c)\) を仮定して `quality_le_of_not_bad` を返す定理に変更。
 
-**どうしても**現行シグネチャの「全 c に対して」版を保つなら、Bad ケースで個々の c を抑える新規の点ごと評価（例：Bad の定義から直接 \(\operatorname{rad}(abc)\) を下から張るメカニズム）を別途追加する必要があります。現ファイルの道具立てではその材料は未導入です。ここは仕様レベルの判断ポイント。
+**どうしても**現行シグネチャの「全 c に対して」版を保つなら、Bad ケースで個々の c を抑える新規の点ごと評価（例：Bad の定義から直接 \(\text{rad}(abc)\) を下から張るメカニズム）を別途追加する必要があります。現ファイルの道具立てではその材料は未導入です。ここは仕様レベルの判断ポイント。
 
 ---
 
@@ -1224,7 +1224,7 @@ by
   `bad_set_density_bound_quality` が **X に対して C·X** の形で完全実装済み。- それでも「点ごと版」を残したいなら、Bad 側の**個体評価**を新設する必要があります。
   今の “Chernoff + union bound → 密度” は個数制御までが限界。
   点ごと評価を付けるには、Bad の定義（\(\exists p\) s.t. v_p(2n+1) exceeds …）から
-  \(\operatorname{rad}(abc)\) を**下から押し上げる**独立の決定的補題を作る、などの追加が要ります。
+  \(\text{rad}(abc)\) を**下から押し上げる**独立の決定的補題を作る、などの追加が要ります。
 
 ---
 
@@ -1423,7 +1423,7 @@ have hplus : ∀ {p}, p ≥ 3 → p.Prime →
 \log c
 =\sum_{p} v_p(c)\log p
 =\sum_{p} \min(v_p,1)\log p + \sum_{p}\max(v_p-1,0)\log p
-\le \log\operatorname{rad}(c) + \log 2 + \sum_{p\ge3\mid c}(1+\gamma_p)\log p
+\le \log\text{rad}(c) + \log 2 + \sum_{p\ge3\mid c}(1+\gamma_p)\log p
 \]
 
 を出します（2 だけは“+ log 2”に切り出して緩く抑える現状の設計に合わせる `ABCFinalChernoff.lean.txt`）。
@@ -1467,7 +1467,7 @@ lemma sum_logs_le_log_rad_abc :
   admit
 ```
 
-### (Q5) 予算取り：\(\sum γ_p \log p \le ε \log\operatorname{rad}(abc)\)
+### (Q5) 予算取り：\(\sum γ_p \log p \le ε \log\text{rad}(abc)\)
 
 ここは **γ の選び方の仕様**を前提として与えます（“資料の方針通り”）。
 例えば「`γ_values p := ε · 1_{p∣c}`」や、あなたの Working Note にある「`γ` を `rad(abc)` のログ予算に合わせる」定義を仮定に置き、**仮定として**次を与えるのが設計として正しいです：
@@ -1706,18 +1706,18 @@ v_p(c) \le 1 + (v_p(c)-1)*+,
 \]
 から
 \[
-\log c \le \log\operatorname{rad}(c) + \sum_p (v_p(c)-1)*+ \log p
+\log c \le \log\text{rad}(c) + \sum_p (v_p(c)-1)*+ \log p
 \]
-を作り、\(\neg\text{Bad}_ε\) で右端を \(\le ε\log \operatorname{rad}(abc)+O(1)\) に押し込むこと。
+を作り、\(\neg\text{Bad}_ε\) で右端を \(\le ε\log \text{rad}(abc)+O(1)\) に押し込むこと。
 「+1 を rad 側へ、超過だけ指数側へ」の操作は Working-Note の設計通り。Lean では `rad` の既存補題群（`rad(ab)=…`、squarefree/squarefull 分解）をそのまま使える設計になっているので、あとは `Real.log` で積を和に落とすだけ。
 
 ## Step 9) `abc_quality_final` をサイズ分割で閉じる
 
 `c ≤ X₀` は有限個なので**定数に吸収**、`c>X₀` では Step 7–8 を適用して
 \[
-c \le e^{O(1)}\operatorname{rad}(abc)^{1+ε}
+c \le e^{O(1)}\text{rad}(abc)^{1+ε}
 \]
-を得る。`K := \max\{e^{O(1)}, \max_{c\le X₀}c/\operatorname{rad}(abc)^{1+ε}\}` と定義して終了。
+を得る。`K := \max\{e^{O(1)}, \max_{c\le X₀}c/\text{rad}(abc)^{1+ε}\}` と定義して終了。
 
 ---
 
@@ -3397,11 +3397,11 @@ MGF が“平均の指数化”、Chernoff が“尾確率の指数化”。
 
 - 素数全体に「**予算配分（ε-budget）**」して重ね合わせることで、
 
-- \(c\) の “過剰指数” を \(\varepsilon\log \operatorname{rad}(abc)\) に**吸収**できる。
+- \(c\) の “過剰指数” を \(\varepsilon\log \text{rad}(abc)\) に**吸収**できる。
 
 - すると
   \[
-  c \space\le\space K_\varepsilon\space\operatorname{rad}(abc)^{\ 1+\varepsilon}
+  c \space\le\space K_\varepsilon\space\text{rad}(abc)^{\ 1+\varepsilon}
   \]
   という形が出る。ここで \(K_\varepsilon\) は **(i) 小素数の有限補正** と **(ii) MGF/Chernoff 定数の合成** で決まる定数。
 
@@ -3415,7 +3415,7 @@ MGF が“平均の指数化”、Chernoff が“尾確率の指数化”。
 c=\prod_{p} p^{v_p(c)}.
 \]
 
-\(\operatorname{rad}(abc)=\prod_{p\mid abc} p\) と比べると、指数の“過剰分”
+\(\text{rad}(abc)=\prod_{p\mid abc} p\) と比べると、指数の“過剰分”
 
 \[
 E(c)\space:=\space\sum_{p} (v_p(c)-1)_+ \ \log p
@@ -3426,14 +3426,14 @@ E(c)\space:=\space\sum_{p} (v_p(c)-1)_+ \ \log p
 指数計算から
 
 \[
-c\space=\space\operatorname{rad}(abc)\cdot \exp\!\big(E(c)\big).
+c\space=\space\text{rad}(abc)\cdot \exp\!\big(E(c)\big).
 \]
 
-だから **\(E(c)\) を \(\varepsilon\log\operatorname{rad}(abc)\) で抑えられれば**
+だから **\(E(c)\) を \(\varepsilon\log\text{rad}(abc)\) で抑えられれば**
 
 \[
-c \space\le\space \operatorname{rad}(abc)\cdot \exp\!\big(\varepsilon\log\operatorname{rad}(abc)+O(1)\big)
-\space=\space K_\varepsilon\space\operatorname{rad}(abc)^{\ 1+\varepsilon}.
+c \space\le\space \text{rad}(abc)\cdot \exp\!\big(\varepsilon\log\text{rad}(abc)+O(1)\big)
+\space=\space K_\varepsilon\space\text{rad}(abc)^{\ 1+\varepsilon}.
 \]
 
 勝負は \(E(c)\) の制御に尽きる。
@@ -3460,18 +3460,18 @@ c \space\le\space \operatorname{rad}(abc)\cdot \exp\!\big(\varepsilon\log\operat
 各素数 \(p\) ごとに「許す過剰」\(\gamma_p\) を配る。狙いは
 
 \[
-\sum_{p} \gamma_p \log p \space\le\space \varepsilon \log \operatorname{rad}(abc) \space+\space O(1).
+\sum_{p} \gamma_p \log p \space\le\space \varepsilon \log \text{rad}(abc) \space+\space O(1).
 \]
 
 たとえば、単純な形として
 
 \[
-\gamma_p := \Big\lceil \frac{\varepsilon}{2}\cdot \frac{\log\operatorname{rad}(abc)}{(\log p)\ W}\Big\rceil,
+\gamma_p := \Big\lceil \frac{\varepsilon}{2}\cdot \frac{\log\text{rad}(abc)}{(\log p)\ W}\Big\rceil,
 \quad
-W := \sum_{p\mid abc} \frac{\log\operatorname{rad}(abc)}{\log p},
+W := \sum_{p\mid abc} \frac{\log\text{rad}(abc)}{\log p},
 \]
 
-のように“\(\log p\) で割って薄く配る”設計にすると、総和が \(\approx \varepsilon\log\operatorname{rad}(abc)\) で揃いやすい（設計は一意ではない。要点は**大きい \(p\)** には **小さな \(\gamma_p\)** を、**小さい \(p\)** には多少大きめでも総和が出過ぎないよう“按分”すること）。
+のように“\(\log p\) で割って薄く配る”設計にすると、総和が \(\approx \varepsilon\log\text{rad}(abc)\) で揃いやすい（設計は一意ではない。要点は**大きい \(p\)** には **小さな \(\gamma_p\)** を、**小さい \(p\)** には多少大きめでも総和が出過ぎないよう“按分”すること）。
 
 > 直観：\((v_p-1)\log p\) を足すので、**\(\log p\) で割ったもの**を “個数” と見做し配分するのが自然。
 
@@ -3511,7 +3511,7 @@ MGF→Chernoff→Union bound で \(\#\{n\le X : \text{Bad}_\varepsilon(n)\}\) �
 
 ---
 
-## 5) `¬Bad_ε` から \(E(c)\le \varepsilon\log\operatorname{rad}\ +O(1)\) へ
+## 5) `¬Bad_ε` から \(E(c)\le \varepsilon\log\text{rad}\ +O(1)\) へ
 
 `¬Bad_ε` では \(V_p-2\le \gamma_p\) が全 \(p\) で（例外を除いて）成立。
 
@@ -3525,7 +3525,7 @@ MGF→Chernoff→Union bound で \(\#\{n\le X : \text{Bad}_\varepsilon(n)\}\) �
 \[
 E(c)\space=\space\sum_p (v_p(c)-1)_+\ \log p
 \space\le\space\sum_p \gamma_p \log p
-\space\le\space\varepsilon \log \operatorname{rad}(abc) + O(1).
+\space\le\space\varepsilon \log \text{rad}(abc) + O(1).
 \]
 
 ---
@@ -3535,9 +3535,9 @@ E(c)\space=\space\sum_p (v_p(c)-1)_+\ \log p
 上の 1) で述べた恒等式に戻すと
 \[
 c
-= \operatorname{rad}(abc)\cdot \exp\!\big(E(c)\big)
-\le \operatorname{rad}(abc)\cdot \exp\!\big(\varepsilon\log\operatorname{rad}(abc)+O(1)\big)
-= K_\varepsilon\cdot \operatorname{rad}(abc)^{1+\varepsilon}.
+= \text{rad}(abc)\cdot \exp\!\big(E(c)\big)
+\le \text{rad}(abc)\cdot \exp\!\big(\varepsilon\log\text{rad}(abc)+O(1)\big)
+= K_\varepsilon\cdot \text{rad}(abc)^{1+\varepsilon}.
 \]
 
 - **\(K_\varepsilon\) の中身**：

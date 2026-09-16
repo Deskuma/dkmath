@@ -1460,13 +1460,13 @@ R_5(k)=5\cdot 6^k
 と書けるが、構造式としては
 
 \[
-R_n(k)=n\cdot (n+\operatorname{succ})^k
+R_n(k)=n\cdot (n+\text{succ})^k
 \]
 
 あるいは、
 
 \[
-R_n(k)=\operatorname{Core}(n)\cdot(\operatorname{Core}(n)+\operatorname{OpenSlot})^k
+R_n(k)=\text{Core}(n)\cdot(\text{Core}(n)+\text{OpenSlot})^k
 \]
 
 のように残したい。
@@ -1625,11 +1625,11 @@ theorem lapBase_eq_succ (n : Nat) :
 五角なら、
 
 \[
-\operatorname{Core}=5
+\text{Core}=5
 \]
 
 \[
-\operatorname{LapBase}=5+1
+\text{LapBase}=5+1
 \]
 
 \[
@@ -1874,13 +1874,13 @@ lapBase n
 最終的な構造式は、
 
 \[
-R_n(k)=\operatorname{baseUnitCore}(n)\cdot \operatorname{lapBase}(n)^k
+R_n(k)=\text{baseUnitCore}(n)\cdot \text{lapBase}(n)^k
 \]
 
 ただし、
 
 \[
-\operatorname{lapBase}(n)=\operatorname{baseUnitCore}(n)+\operatorname{inheritanceSlot}(n)
+\text{lapBase}(n)=\text{baseUnitCore}(n)+\text{inheritanceSlot}(n)
 \]
 
 じゃ。
@@ -1914,7 +1914,7 @@ R_n(k)=n(n+1)^k
 これは毎周回で同じ
 
 \[
-\operatorname{LapBase}(n)=n+\operatorname{succ}
+\text{LapBase}(n)=n+\text{succ}
 \]
 
 を掛ける構造じゃな。
@@ -2079,7 +2079,7 @@ D_{\mathbf p}(k)=\prod_{i=1}^{k}p_i=p_k\#
 固定 Petal では、
 
 \[
-\operatorname{lapBase}(n)=n+1
+\text{lapBase}(n)=n+1
 \]
 
 だった。
@@ -2087,17 +2087,17 @@ D_{\mathbf p}(k)=\prod_{i=1}^{k}p_i=p_k\#
 動的 Petal では、
 
 \[
-\operatorname{unitCore}(i)=a_i
+\text{unitCore}(i)=a_i
 \]
 
 \[
-\operatorname{lapBase}(i)=a_i+1
+\text{lapBase}(i)=a_i+1
 \]
 
 とする型と、
 
 \[
-\operatorname{lapBase}(i)=b_i
+\text{lapBase}(i)=b_i
 \]
 
 を直接与える型がある。

@@ -15,17 +15,17 @@ The intended DkMath reading is:
 For degree two the Cosmic Formula already has
 
 $$
-\operatorname{BigN}(2,x,u)
+\text{BigN}(2,x,u)
 =
-\operatorname{BodyN}(2,x,u)
+\text{BodyN}(2,x,u)
 +
-\operatorname{GapN}(2,u),
+\text{GapN}(2,u),
 $$
 
 with
 
 $$
-\operatorname{GapN}(2,u)=u^2.
+\text{GapN}(2,u)=u^2.
 $$
 
 The fixed `u` is the discrete primitive unit. The Gap is preserved while the anchor changes.
@@ -47,7 +47,7 @@ $$
 The ordinary Cosmic Body is
 
 $$
-\operatorname{BodyN}(2,x,u)
+\text{BodyN}(2,x,u)
 =
 x\,GN_2(x,u).
 $$
@@ -55,7 +55,7 @@ $$
 The square Gnomon uses the same kernel with the two boundary roles exchanged:
 
 $$
-\operatorname{Gnomon}(x,u)
+\text{Gnomon}(x,u)
 =
 u\,GN_2(u,x)
 =
@@ -65,7 +65,7 @@ $$
 Hence
 
 $$
-x^2+\operatorname{Gnomon}(x,u)
+x^2+\text{Gnomon}(x,u)
 =
 (x+u)^2.
 $$
@@ -84,7 +84,7 @@ The new owner should preserve this link explicitly rather than introducing an un
 For fixed `u`,
 
 $$
-\operatorname{BodyN}(2,x,u)
+\text{BodyN}(2,x,u)
 =
 (x+u)^2-u^2.
 $$
@@ -94,11 +94,11 @@ Therefore the sequence `x = 0,u,2u,...` gives the Big square sequence with the s
 The next Body is obtained by adding the Gnomon at the current Big anchor:
 
 $$
-\operatorname{BodyN}(2,x+u,u)
+\text{BodyN}(2,x+u,u)
 =
-\operatorname{BodyN}(2,x,u)
+\text{BodyN}(2,x,u)
 +
-\operatorname{Gnomon}(x+u,u).
+\text{Gnomon}(x+u,u).
 $$
 
 For `u=1`:

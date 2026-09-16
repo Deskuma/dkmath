@@ -48,7 +48,7 @@ $$
 多項式 $p$ に対して、既存の `GNFiniteDifference` は次を証明している。
 
 $$
-p(t+h)-p(t)=h\,\operatorname{GNFiniteDifference}(p,h,t)
+p(t+h)-p(t)=h\,\text{GNFiniteDifference}(p,h,t)
 $$
 
 単項式 $p(X)=X^d$ では、この式は通常の `GN d h t` に戻る。
@@ -72,7 +72,7 @@ $$
 最も単純な次数 $d$ の魔核条件は次である。
 
 $$
-\operatorname{MagicCore}_d(X)\;:\Longleftrightarrow\;\exists x,\;x^d=X
+\text{MagicCore}_d(X)\;:\Longleftrightarrow\;\exists x,\;x^d=X
 $$
 
 しかし FLT5 と Jacobian を同じ器へ入れるには、値 $X$ が完全冪かどうかだけでは狭い。
@@ -86,7 +86,7 @@ $$
 固定した Core $c$ 上の復元ファイバーは次である。
 
 $$
-\operatorname{Fiber}_R(c)=\{g\mid R(c,g)\}
+\text{Fiber}_R(c)=\{g\mid R(c,g)\}
 $$
 
 完全冪は特殊な復元関係で表現できる。
@@ -178,7 +178,7 @@ $$
 \longrightarrow
 \text{one Core with distinct restoring Gaps}
 \longrightarrow
-\neg\operatorname{UniqueGap}
+\neg\text{UniqueGap}
 $$
 
 ここで反例は宇宙式圏外へ落ちていない。認証済み `GapCrystal` は複数存在するが、それらを Core へ忘却する射影 `forgetGap` が非単射になる。
@@ -342,7 +342,7 @@ $$
 その有限差分は既存 `GNFiniteDifference` によって扱える。
 
 $$
-P(q+h)-P(q)=\operatorname{GNFiniteDifference}(p_{P,q,h},1,0)
+P(q+h)-P(q)=\text{GNFiniteDifference}(p_{P,q,h},1,0)
 $$
 
 あるいはスカラー増分 $s$ を保って、
@@ -465,7 +465,7 @@ Jacobian 反例では、同一 Core の復元ファイバーが複数点にな�
 したがって、宇宙式圏の第一分類原理は次である。
 
 $$
-\#\operatorname{Fiber}=0,\;1,\;>1
+\#\text{Fiber}=0,\;1,\;>1
 $$
 
 これをそれぞれ、生成不能、一意魔核、一意性解除として読む。

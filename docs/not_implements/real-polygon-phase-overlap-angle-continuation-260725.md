@@ -67,7 +67,7 @@ $$
 実数スケール $n>0$ に対する基本位相区画を次で表す。
 
 $$
-\operatorname{cellWidth}(n)=\frac{1}{n}
+\text{cellWidth}(n)=\frac{1}{n}
 $$
 
 局所区画の座標域は次である。
@@ -113,13 +113,13 @@ Euclidean projection では、$m$ 個の完成した位相区画が分離した�
 一方、重なり幅そのものは正確に定義できる。
 
 $$
-\operatorname{overlapWidth}(n)=\frac{\alpha}{n}
+\text{overlapWidth}(n)=\frac{\alpha}{n}
 $$
 
 実際に占有される局所重なり区間は次である。
 
 $$
-\operatorname{OverlapCell}(n)=\left[0,\frac{\alpha}{n}\right)
+\text{OverlapCell}(n)=\left[0,\frac{\alpha}{n}\right)
 $$
 
 ## 5. Closing Overlap 恒等式
@@ -127,7 +127,7 @@ $$
 完成した $m$ 区画の総幅は次である。
 
 $$
-\operatorname{completeWidth}(n)=\frac{m}{n}
+\text{completeWidth}(n)=\frac{m}{n}
 $$
 
 これに重なり幅を加える。
@@ -209,19 +209,19 @@ DkMath の偏角を、最初から度数法やラジアンで定義しない。
 時刻 $t$ における一周期座標を次とする。
 
 $$
-\operatorname{phase}(n,t)=\frac{t}{n}\pmod 1
+\text{phase}(n,t)=\frac{t}{n}\pmod 1
 $$
 
 特に実数スケール $n$ 自身が持つ局所端数の円周射影は次である。
 
 $$
-\operatorname{overlapArg}(n)=\frac{n-\lfloor n\rfloor}{n}
+\text{overlapArg}(n)=\frac{n-\lfloor n\rfloor}{n}
 $$
 
 この値は区間 $[0,1/n)$ に入る。
 
 $$
-\operatorname{overlapArg}(n)\in\left[0,\frac{1}{n}\right)
+\text{overlapArg}(n)\in\left[0,\frac{1}{n}\right)
 $$
 
 これが今回の観測で得た DkMath 偏角情報の最小候補である。
@@ -229,7 +229,7 @@ $$
 Euclidean angle は最後に正規化位相を読む外部射影として導入する。
 
 $$
-\theta=2\pi\,\operatorname{phase}(n,t)
+\theta=2\pi\,\text{phase}(n,t)
 $$
 
 `Real.pi` は DkMath 位相の生成元ではなく、Euclidean interpretation の尺度である。
@@ -247,11 +247,11 @@ $$
 基本方向区画と重なり幅は次となる。
 
 $$
-\operatorname{directionCellWidth}(n)=\frac{1}{2n}
+\text{directionCellWidth}(n)=\frac{1}{2n}
 $$
 
 $$
-\operatorname{directionOverlapWidth}(n)=\frac{\alpha}{2n}
+\text{directionOverlapWidth}(n)=\frac{\alpha}{2n}
 $$
 
 Closing Overlap 恒等式は次である。
@@ -395,7 +395,7 @@ $$
 実際の重なり偏角は次である。
 
 $$
-\operatorname{overlapArg}(n)=\frac{n-\lfloor n\rfloor}{n}
+\text{overlapArg}(n)=\frac{n-\lfloor n\rfloor}{n}
 $$
 
 正多角形とは、整数個の頂点を先に持つ形ではない。

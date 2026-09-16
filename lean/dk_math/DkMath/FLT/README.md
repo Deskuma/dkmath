@@ -1,227 +1,271 @@
-# DkMath.FLT README
+# DkMath.FLT — current surfaces and research map
 
-このディレクトリは、`d=3` 向けの FLT 補題チェーンを Lean で管理するための実装群です。
-現行方針は次の通りです。
+This README distinguishes **completed exponent-specific public results** from **active generalization research** and **legacy research routes**.
 
-- `Main.lean` は「合成レイヤー」に寄せる
-- 導出補題は `PhaseLift.lean` / `CounterexamplePattern.lean` に集約する
-- `NoSqOnS0` を中心に、複数の入口（harmonic / classify / coprime support）を接続する
+The old documentation centered on `DkMath.FLT.Main`, `FLT_d3_by_padicValNat`, and `NoSqOnS0`. Those files remain useful historical/alternate routes, but they are no longer the canonical description of the completed FLT3 result.
 
-## 0. 現在の公開導線
+## 1. Completed public surface: exponent 3
 
-この README は歴史的に `d=3` の説明が中心だが、現在の公開面はそれだけではない。
-top-level import は `DkMath.FLT` であり、ここから次の 2 系統を辿るのが現行導線である。
+Canonical import:
 
-- `d = 3` 公開面:
-  `DkMath.FLT.Main`
-  の
-  `FLT_d3_by_padicValNat`
-  およびその派生入口群
-- regular-prime / prime-ge5 provider 面:
-  `DkMath.FLT.Kummer.RegularPrimeRoute`
-  の
-  `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
-  と、
-  provider concrete 版
-  `FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
-  から上がる
-  `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
-  /
-  `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
-
-住み分けは次の通り。
-
-- abstract theorem-parameterized route:
-  `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
-- provider concrete route:
-  `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
-  /
-  `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
-
-したがって、
-`TriominoSquarefreeGNBridgeProvider`
-を concrete に持てる branch では、
-上の provider concrete route を canonical な public/provider 導線として使う。
-
-sample と短い案内だけ先に見たい場合は、
-`Samples.lean`
-と
-`README-provider-route.md`
-を参照。
-
-## 1. モジュール責務
-
-- `Main.lean`
-  - 最終定理群の公開面。
-  - 主要入口:
-    - `FLT_d3_by_padicValNat`
-    - `FLT_d3_by_padicValNat_of_NoSqOnS0`
-    - `FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport`
-    - `FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput`
-    - `FLT_d3_by_padicValNat_of_harmonicEnvelope_*`
-    - `FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport`
-    - `FLT_d3_by_padicValNat_of_GEisensteinCore_with_reachability_coprimeSupport`
-    - `FLT_d3_by_padicValNat_of_GEisensteinCore_via_reachability_coprimeSupport`
-    - `GEisenstein_descent_reaches_zero_of_core`
-    - `GEisenstein_descent_reaches_zero_of_descentClassify_primitiveSized`
-    - `FLT_d3_by_padicValNat_of_DescentBaseInput`
-    - `FLT_d3_by_padicValNat_of_NoSqInput`
-
-- `PhaseLift.lean`
-  - 共通導出補題の中核。
-  - `NoSqOnS0` / `AllNonLiftableOnS0` / support 条件 / mod3 分離補題。
-  - 立方差・原始素因子存在・padic 上下界など、`Main` が依存する下位補題を集約。
-  - 入口束:
-    - `NoSqBaseInput`
-    - `NoSqInput`
-
-- `CounterexamplePattern.lean`
-  - `classifyLift` を中心にした反例パターン分類。
-  - `PrimitiveOnS0` と `NonLiftableS0` / `noSquareGate` の接続。
-
-- `CosmicPetalBridge.lean`
-  - `CosmicFormulaBinom` と `S0_nat` をつなぐ橋補題。
-
-- `GEisensteinBridge.lean`
-  - Eisenstein ノルム同型の橋補題。
-  - `descent` 側インターフェース
-    `DescentClassifyImpossibleOnPrimitive` への接続点を提供。
-  - `GEisensteinDescentCore` 構造体で下降法コアを段階拡張可能。
-  - `GEisensteinDescentFrame` で縮小写像枠を保持。
-    - `step` は `measure s > 0` のときのみ要求する設計（終端状態を許容）。
-  - `toyNatGEisensteinDescentFrame` により、非空状態での型運用を確認済み。
-  - `candidateGEisensteinDescentFrame` により、反例候補レコード状態での運用を確認済み。
-    - `GEisensteinCandidate` は `primEvidence : Prop` スロットを持ち、
-      `PrimitiveOnS0` 等の証拠を段階注入できる。
-  - `primitiveCandidateGEisensteinDescentFrame` により、
-    `PrimitiveOnS0` 証拠を保持したまま `fuel` で下降する型を確認済み。
-  - `primitiveSizedCandidateGEisensteinDescentFrame` により、
-    `size ≤ q` 不変量つき測度での下降を確認済み。
-  - 接続補題:
-    - `S0_nat_ne_zero_of_PrimitiveOnS0`
-    - `q_le_S0_nat_of_PrimitiveOnS0`
-    - `primitiveSizedCandidate_measure_le_S0`
-    により、`size` 測度を `S0_nat` 上界へ接続済み。
-  - 不変量補題:
-    - `GEisensteinPrimitiveSizedCandidate.hsize_step`
-    - `primitiveSizedCandidate_measure_le_S0_step`
-    - `primitiveSizedCandidate_measure_step_le`
-    により、`step` 後も上界・単調減少が維持されることを確認済み。
-  - 反復インターフェース:
-    - `GEisensteinDescentFrame.descend`
-    - `GEisensteinDescentFrame.measure_descend_le`
-    - `GEisensteinDescentFrame.measure_descend_one_lt_of_pos`
-    - `GEisensteinDescentFrame.measure_descend_eq_zero_of_step_pred`
-    により、well-founded 接続用の反復骨格を確立。
-    - 具体化: `toyNat_measure_descend_eq_zero`,
-      `primitiveSized_measure_descend_eq_zero`
-  - コア接続補題:
-    - `GEisensteinDescentCore.measure_descend_eq_zero_of_step_pred`
-    - `GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred`
-    により、`GEisensteinDescentCore` から停止到達を直接取り出せる。
-  - `GEisensteinDescentCore` は `step_pred` をフィールド化済み。
-    停止補題呼び出し時に追加仮定が不要な API へ更新。
-  - 非empty core 具体化:
-    - `primitiveSizedCandidate_frame_step_pred`
-    - `GEisensteinDescentCore_of_descentClassify_primitiveSized`
-    により、`primitiveSized` frame を載せた core を直接構成可能。
-  - 橋補題:
-    - `exists_descend_measure_eq_zero_of_descentClassify_primitiveSized`
-    により、`PrimitiveOnS0` 初期状態から停止到達 (`measure = 0`) を直接抽出可能。
-
-- `CosmicFormula/CosmicFormulaBinom.lean`
-  - `add_pow_gap_factor`, `add_pow_tail_u2_*`, `two_gap_xy_factor*` を提供。
-
-- `Kummer/RegularPrimeRoute.lean`
-  - regular-prime mainline の公開面。
-  - 主要入口:
-    - `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
-    - `FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
-    - `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
-    - `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
-
-- `PrimeProvider/*.lean`
-  - `PrimeGe5FLTProvider` / `GlobalPrimeExponentFLTProvider` /
-    `TriominoPrimeProvider` への staging と bridge。
-  - `TriominoCosmicPrimeGe5Core.lean`
-    が
-    `triominoCosmic_globalProvider_of_FLTPrimeGe5`
-    /
-    `triominoPrimeProvider_of_FLTPrimeGe5`
-    を提供し、
-    `RegularPrimeRoute`
-    の provider concrete theorem はそこへ合成される。
-
-## 2. 推奨の証明導線
-
-実装上の標準導線は次の順です。
-
-1. `NoSqOnS0 c b` を供給
-2. `hS0_not_sq_of_NoSqOnS0` で `FLT_d3_by_padicValNat` の仮定形へ変換
-3. `Main` の派生定理（`...of_NoSqOnS0` / `...of_NoSqInput`）へ接続
-
-分類器を使う導線では以下を利用します。
-
-1. `classifyLift = impossible` family
-2. `nonLiftableS0_of_classifyLift_impossible`
-3. `AllNonLiftableOnS0` / `NoSqOnS0`
-4. `Main` の派生定理へ接続
-
-## 3. 補題チェーン（Mermaid）
-
-この図は `docs/NoSqOnS0/NoSqOnS0-WorkNotes.md` と同一内容で同期管理します。
-
-```mermaid
-graph LR
-  A["CosmicFormulaBinom.two_gap_xy_factor*"] --> B["PhaseLift.two_gap_xy_dvd_cube_bridge"]
-  C["CosmicPetalBridge.prime_dvd_S0_via_cosmic_bridge"] --> D["PhaseLift.prime_dvd_S0_of_dvd_cube_sub_not_dvd_diff"]
-  E["PhaseLift.cube_sub_eq_mul_sub_S0"] --> D
-  F["PhaseLift.exists_prime_factor_cube_diff_of_three_dvd_sub"] --> G["PhaseLift.exists_prime_factor_cube_diff"]
-  H["PhaseLift.exists_prime_factor_cube_diff_of_not_three_dvd_sub"] --> G
-  I["PhaseLift.padicValNat_lower_bound_of_dvd_d3"] --> J["Main.FLT_d3_by_padicValNat"]
-  K["PhaseLift.padicValNat_upper_bound_d3"] --> J
-  G --> J
-  L["PhaseLift.hS0_not_sq_of_NoSqOnS0"] --> M["Main.FLT_d3_by_padicValNat_of_NoSqOnS0"]
-  J --> M
-  N["PhaseLift.NoSqInput"] --> O["Main.FLT_d3_by_padicValNat_of_NoSqInput"]
-  M --> O
-  P["CounterexamplePattern.classifyLift_impossible_family_of_harmonicEnvelope_NoSq"] --> Q["Main.FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport"]
-  M --> Q
+```lean
+import DkMath.FLT.Three
 ```
 
-## 4. 現在の入口（phase-06）
+Final endpoint:
 
-`Main` の実用入口としては次を推奨します。
+```lean
+DkMath.FLT.Three.fermatThree_no_positive_solution
+```
 
-- 最小入口:
-  - `FLT_d3_by_padicValNat_of_NoSqOnS0`
-  - `FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport`
+Statement:
 
-- 構造入口（仮定圧縮版）:
-  - `FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput`
-  - `NoSqBaseInput` に `hbc`, `coprime`, `hNonLift` を束ねる
-  - `FLT_d3_by_padicValNat_of_NoSqInput`
-  - `NoSqInput` に `hbc`, `coprime`, `hHarm`, `hNoSq` を束ねる
-  - `*_coprimeSupport` 系は最小仮定版に整理済み（`mod3` 分離引数なし）
+$$
+\forall a,b,c\in\mathbb N_{>0},
+\qquad
+a^3+b^3\ne c^3.
+$$
 
-prime-ge5 / provider 入口としては次を推奨します。
+Primitive endpoint:
 
-- abstract route:
-  - `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
-- provider concrete route:
-  - `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
-  - `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+```lean
+DkMath.FLT.Three.FLT_d3_unconditional
+```
 
-## 5. 作業ログ
+Proof spine:
 
-最新の作業ログ・タスク状態は以下を参照してください。
+```text
+positive solution
+  -> gcd normalization
+  -> PrimitiveCubicPack
+  -> signed 3-adic routing
+  -> Eisenstein ramifier stripping
+  -> conjugate-coprime factors
+  -> Euclidean cube extraction
+  -> unit sectors
+  -> strict primitive descent
+  -> strong induction
+  -> contradiction
+```
 
-- `docs/NoSqOnS0/NoSqOnS0-WorkNotes.md`
+The public `Three` tower does not use the completed legacy conditional theorem as a proof step and does not depend on `hS0_not_sq` / `NoSqOnS0`.
 
-phase ごとのスナップショットは `docs/NoSqOnS0/NoSqOnS0-WorkNotes-phase-*.md` にあります。
+Source map:
 
-## 6. メンテ方針
+```text
+Three.lean
+  -> Three/PositiveCubicNormalization.lean
+     -> Three/PrimitiveCubicClosure.lean
+        -> Three/PrimitiveCubicDescent.lean
+           -> Eisenstein / signed-three-adic tower
+```
 
-- 新しい導出補題は原則 `PhaseLift` / `CounterexamplePattern` に追加する
-- `Main` には局所証明を増やさず、合成定理の追加に限定する
-- 補題チェーン更新時は `NoSqOnS0-WorkNotes.md` に必ず追記する
+Final report:
+
+- `../../docs/dev/FLT3-Unconditional-260904-v0/report-014.md`
+
+Standalone exhibition project:
+
+- <https://github.com/Deskuma/flt3_dk_math_lean4>
+
+## 2. Completed public surface: exponent 5
+
+Canonical import:
+
+```lean
+import DkMath.FLT.Five
+```
+
+Public endpoints:
+
+```lean
+DkMath.FLT.Five.flt5Target
+DkMath.FLT.Five.fermatFive_no_positive_solution
+```
+
+Statement:
+
+$$
+\forall x,y,z\in\mathbb N_{>0},
+\qquad
+x^5+y^5\ne z^5.
+$$
+
+Proof spine:
+
+```text
+positive solution normalization
+  -> signed gap orientation
+  -> GN5 / 5-adic factor splitting
+  -> golden-order arithmetic
+  -> unit classes modulo fifth powers
+  -> nonzero sector exclusion
+  -> zero-sector inversion/factorization
+  -> strict descent
+  -> contradiction
+```
+
+Axiom audit entry point:
+
+- `../../DkMathTest/FLT/Five/CheckAxioms.lean`
+
+Standalone exhibition project:
+
+- <https://github.com/Deskuma/flt5_dk_math_lean4>
+
+## 3. Trust boundary for the completed endpoints
+
+The recorded final endpoint axiom surface for both completed FLT3 and FLT5 developments is:
+
+```text
+{propext, Classical.choice, Quot.sound}
+```
+
+The corresponding audits report no `sorryAx` and no DkMath-defined axiom in the checked final endpoint.
+
+This is a statement about Lean dependency/trust surfaces. It is not a claim of external peer review, historical priority, or community acceptance.
+
+## 4. Current odd-prime generalization research
+
+The current generalization line is under `DkMath.FLT.Prime.*`, not the old FLT3 `Main` route.
+
+Current bounded closeout:
+
+- `../../docs/refact/FLT-Prime-Generalization-260911-v0/summary-026.md`
+
+Proved architecture:
+
+```text
+PrimeAdicFactorPacket
+  -> GTail exact p-adic split
+  -> arbitrary-prime QR/QNR TraceOne coordinates
+  -> primitive coordinates
+  -> prime-discriminant maximal order / Dedekind domain
+  -> discriminant-axis strip
+  -> conjugate-coprime residual ideals
+  -> residual principal ideal = idealRoot^p
+  -> [classGroupPTorsionFreeAt]
+  -> unit * element^p
+  -> unit-sector normalization
+```
+
+Important current production modules:
+
+- `Prime/AdicPowerSplit.lean`
+- `Prime/PrimeTraceOneCoordinateCoprime.lean`
+- `Prime/PrimeTraceOneStrippedIdeal.lean`
+- `Prime/PrimeTraceOneConditionalDescent.lean`
+
+### Imaginary branch
+
+For prime $p\ge7$ with
+
+$$
+p\equiv3\pmod4,
+$$
+
+the current sector machinery removes the unit-sector obstruction. Under the explicit
+
+```lean
+classGroupPTorsionFreeAt (TraceOneInt (signedPrimeParameter p)) p
+```
+
+hypothesis, the stripped residual is returned as an exact $p$-th power.
+
+The class-group hypothesis itself remains open in the generic theorem.
+
+### Real branch
+
+For
+
+$$
+p\equiv1\pmod4,
+$$
+
+the conditional endpoint returns
+
+```text
+residual = rep(i) * delta^p
+```
+
+for a finite sector `i : Fin p`. Nonzero-sector elimination is not supplied by the generic theorem.
+
+### Explicit generalization frontier
+
+1. class-group $p$-torsion / principalization;
+2. real-branch nonzero unit-sector elimination;
+3. optional unification of the `p=3` Eisenstein carrier with the generic `TraceOneInt (-1)` facade.
+
+This architecture is **not** a proof of FLT for arbitrary prime exponent.
+
+## 5. `DkMath.Lib` connection
+
+A major outcome of the FLT3 / FLT5 / generalization work is the migration of reusable mathematics away from owner-specific namespaces.
+
+Examples used by the current FLT research include:
+
+```text
+DkMath.Lib.Cosmic.GTail*
+DkMath.Lib.NumberTheory.PadicValNat
+DkMath.Lib.NumberTheory.PowerFactor
+DkMath.Lib.NumberTheory.IdealPowerFactor
+DkMath.Lib.NumberTheory.PrincipalIdealPower
+DkMath.Lib.NumberTheory.UnitPowerSector
+DkMath.Lib.NumberTheory.TraceOneLatticeLanding
+DkMath.Lib.NumberTheory.TraceOnePowerLanding
+DkMath.Lib.NumberTheory.EisensteinCoordinates
+DkMath.Lib.NumberTheory.EisensteinLatticeLanding
+```
+
+For generic reusable statements, prefer these promoted APIs over copying a fixed-exponent FLT lemma into another research owner.
+
+## 6. Legacy and alternate FLT routes
+
+The following remain in the repository but are not the canonical completed FLT3 story:
+
+### `DkMath.FLT.Main`
+
+Contains the older valuation / `NoSqOnS0` / `GEisensteinBridge` family, including names such as:
+
+```text
+FLT_d3_by_padicValNat
+FLT_d3_by_padicValNat_of_NoSqOnS0
+...
+```
+
+These are historical/alternate research APIs. Existing users may still depend on them, so this documentation refactor does not delete them.
+
+### `DkMath.FLT.PrimeProvider.*` and `DkMath.FLT.Kummer.*`
+
+These directories preserve earlier high-exponent provider and Kummer-style research routes. They still contain reusable ideas and bridge infrastructure, but the latest odd-prime generalization status should be read from `DkMath.FLT.Prime.*` and `summary-026.md`.
+
+### `DkMath.FLT.Seven.*`
+
+This is an extensive exponent-seven research tower. It is not advertised here as a completed unconditional FLT7 endpoint.
+
+## 7. About `DkMath.FLT`
+
+`DkMath.FLT` is a historical broad aggregator that imports several legacy and research surfaces. It is **not** the best discovery import for the completed independent FLT3 proof.
+
+For completed exponent-specific results, prefer explicit imports:
+
+```lean
+import DkMath.FLT.Three
+import DkMath.FLT.Five
+```
+
+For reusable neutral kernels, prefer:
+
+```lean
+import DkMath.Lib
+```
+
+## 8. Documentation policy
+
+Dated work notes and old lemma-chain diagrams are preserved as historical records. When an old document describes `FLT_d3_by_padicValNat` as “the main theorem”, interpret that claim in the context of its checkpoint date.
+
+Current global status is maintained in:
+
+- repository `docs/PROJECT_STATUS.md`;
+- this README for FLT-specific navigation;
+- actual public source modules `DkMath.FLT.Three` and `DkMath.FLT.Five`.

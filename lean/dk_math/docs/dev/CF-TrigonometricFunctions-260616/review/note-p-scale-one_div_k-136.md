@@ -47,7 +47,7 @@ k 回で１周する。は、 k * 1/k = 1 で、良いんだけど、
   1/k と 1/l が同じ細分体系に属するか
 ```
 
-ここで本質的に出てくるのが、\(\gcd(k,l)\)、\(\operatorname{lcm}(k,l)\)、そして素数分割じゃ。
+ここで本質的に出てくるのが、\(\gcd(k,l)\)、\(\text{lcm}(k,l)\)、そして素数分割じゃ。
 
 ## \(1/2\) と \(1/4\) は同じ系統
 
@@ -91,7 +91,7 @@ $$
 共通の土台はある。
 
 $$
-\operatorname{lcm}(4,5) = 20
+\text{lcm}(4,5) = 20
 $$
 
 つまり、\(1/4\) と \(1/5\) は、\(1/20\) 解像度に持ち上げれば比較できる。
@@ -369,7 +369,7 @@ primitive:
 一般に \(k\) と \(l\) を比較するなら、
 
 $$
-m = \operatorname{lcm}(k,l)
+m = \text{lcm}(k,l)
 $$
 
 を取る。
@@ -640,7 +640,7 @@ existence:
 しかし、
 
 $$
-\operatorname{lcm}(4,5)=20
+\text{lcm}(4,5)=20
 $$
 
 なので、同期長では一致する。
@@ -714,19 +714,19 @@ l-scale は syncLiftRight 回で同期一周へ到達する。
 互いに素なら、
 
 $$
-\operatorname{lcm}(k,l)=k,l
+\text{lcm}(k,l)=k,l
 $$
 
 なので、
 
 $$
-\operatorname{lcm}(k,l)/k = l
+\text{lcm}(k,l)/k = l
 $$
 
 かつ、
 
 $$
-\operatorname{lcm}(k,l)/l = k
+\text{lcm}(k,l)/l = k
 $$
 
 となる。
@@ -746,7 +746,7 @@ r_k^k = one
 r_l^l = one
 ```
 
-同期長を \(m=\operatorname{lcm}(k,l)\) とすると、
+同期長を \(m=\text{lcm}(k,l)\) とすると、
 
 ```text id="qco0z9"
 r_k^m = one
@@ -780,7 +780,7 @@ r_l = g^(m/l)
 有限個の分割数 \(k_1,k_2,\dots,k_n\) なら、
 
 $$
-M=\operatorname{lcm}(k_1,k_2,\dots,k_n)
+M=\text{lcm}(k_1,k_2,\dots,k_n)
 $$
 
 が存在する。
@@ -1077,7 +1077,7 @@ theorem isScale_syncLength_of_isScale_right
     IsScale (SyncLength k l) r
 ```
 
-これは、\(k \mid \operatorname{lcm}(k,l)\) を使う。
+これは、\(k \mid \text{lcm}(k,l)\) を使う。
 
 ## 結論
 

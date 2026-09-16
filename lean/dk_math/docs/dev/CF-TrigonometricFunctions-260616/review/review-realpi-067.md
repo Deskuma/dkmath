@@ -86,13 +86,13 @@ $$
 だが、境界からどれだけ内側へ沈むかが、非常にきれいなスカラー係数で表れる。
 
 $$
-\operatorname{phaseDepth}(t)=(1-t)^2+t^2
+\text{phaseDepth}(t)=(1-t)^2+t^2
 $$
 
 しかも、
 
 $$
-\operatorname{phaseDepth}(1-t)=\operatorname{phaseDepth}(t)
+\text{phaseDepth}(1-t)=\text{phaseDepth}(t)
 $$
 
 なので、前半と後半が折り返し対称になる。
@@ -129,7 +129,7 @@ q2 profile
 境界へ戻すには、後段で正規化が必要になる。
 
 $$
-N(z,t)=\frac{1}{\sqrt{\operatorname{phaseDepth}(t)}}E(z,t)
+N(z,t)=\frac{1}{\sqrt{\text{phaseDepth}(t)}}E(z,t)
 $$
 
 このとき、

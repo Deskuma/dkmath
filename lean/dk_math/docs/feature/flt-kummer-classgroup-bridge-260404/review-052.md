@@ -34,7 +34,7 @@ $$
 という Stage 2 の出力から、
 
 $$
-\operatorname{Norm}(z-\zeta y)=GN,p,(z-y),y
+\text{Norm}(z-\zeta y)=GN,p,(z-y),y
 $$
 
 を出す部分と、そこから unit を吸収して

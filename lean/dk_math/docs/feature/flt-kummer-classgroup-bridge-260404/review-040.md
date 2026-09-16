@@ -44,13 +44,13 @@ $$
 
 第一に、
 $$
-\operatorname{Norm}(z-\zeta y)=GN,p,(z-y),y
+\text{Norm}(z-\zeta y)=GN,p,(z-y),y
 $$
 を concrete 化すること。
 
 第二に、
 $$
-\operatorname{Norm}(z-\zeta y)=GN,\qquad z-\zeta y=u\beta^p
+\text{Norm}(z-\zeta y)=GN,\qquad z-\zeta y=u\beta^p
 $$
 から
 $$
@@ -77,10 +77,10 @@ History にも次課題としてそのまま明記されておるし、今回の
 理由は単純で、unit 吸収側は本質的に
 
 $$
-\operatorname{Norm}(u\beta^p)=\operatorname{Norm}(u)\operatorname{Norm}(\beta)^p
+\text{Norm}(u\beta^p)=\text{Norm}(u)\text{Norm}(\beta)^p
 $$
 
-と、\(\operatorname{Norm}(u)\) が \(\mathbb{Z}\) の unit になる話へ落ちるから、構造が素直じゃ。むしろ怖いのは、chosen factor の整数ノルムをどうやって既存の product equality と GN の差冪因数分解へ綺麗に接続するか、そこじゃ。
+と、\(\text{Norm}(u)\) が \(\mathbb{Z}\) の unit になる話へ落ちるから、構造が素直じゃ。むしろ怖いのは、chosen factor の整数ノルムをどうやって既存の product equality と GN の差冪因数分解へ綺麗に接続するか、そこじゃ。
 
 しかも今回の target は右辺が既に
 $$
@@ -100,7 +100,7 @@ $$
 
 まず
 $$
-\operatorname{Norm}(z-\zeta y)
+\text{Norm}(z-\zeta y)
 $$
 を、共役全体の積へ書き換える補題。
 
@@ -125,7 +125,7 @@ unit 吸収は見た目より軽いが、実は最後に符号処理が潜む。
 つまり、
 
 $$
-\operatorname{Norm}(u)\in \mathbb{Z}^\times = {\pm 1}
+\text{Norm}(u)\in \mathbb{Z}^\times = {\pm 1}
 $$
 
 を得たあと、右辺が自然数から来た
@@ -208,7 +208,7 @@ $$
 
 狙いは最終的に
 $$
-\operatorname{Norm}_{K/\mathbb{Q}}(z-\zeta y)=GN,p,(z-y),y
+\text{Norm}_{K/\mathbb{Q}}(z-\zeta y)=GN,p,(z-y),y
 $$
 を出すことじゃが、これを一発でやるのは重い。なので、次の 3 補題へ割る。
 
@@ -318,7 +318,7 @@ theorem cyclotomicNormEqGN_of_firstCase_of_pack_thin
 
 この形の良いところは、現在の target が求めている
 $$
-\operatorname{norm}(\text{chosen factor})=(GN,p,(z-y),y:\mathbb Z)
+\text{norm}(\text{chosen factor})=(GN,p,(z-y),y:\mathbb Z)
 $$
 と、ぴたり一致することじゃ。実際、今の Stage 3 target はまさにこの statement を要求しておる。
 

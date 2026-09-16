@@ -25,11 +25,11 @@ f'(x)=\lim_{u\to 0}\frac{f(x+u)-f(x)}{u}
 \[
 \text{差分 } \delta
 \;\to\;
-\text{差分商 } \operatorname{cosmicKernel}
+\text{差分商 } \text{cosmicKernel}
 \;\to\;
-\text{べき核 } \operatorname{powerKernel}
+\text{べき核 } \text{powerKernel}
 \;\to\;
-\text{多項式拡張 } \operatorname{polynomialKernelExt}
+\text{多項式拡張 } \text{polynomialKernelExt}
 \;\to\;
 \text{微分}
 \]
@@ -45,7 +45,7 @@ f'(x)=\lim_{u\to 0}\frac{f(x+u)-f(x)}{u}
 べき関数に対しては
 
 \[
-(x+u)^d - x^d = u \cdot \operatorname{powerKernel}(d,x,u)
+(x+u)^d - x^d = u \cdot \text{powerKernel}(d,x,u)
 \]
 
 が成立する。
@@ -86,7 +86,7 @@ f'(x)=\lim_{u\to 0}\frac{f(x+u)-f(x)}{u}
 \]
 
 \[
-\operatorname{cosmicKernel}(f,x,u) := \frac{\delta f\,x\,u}{u}
+\text{cosmicKernel}(f,x,u) := \frac{\delta f\,x\,u}{u}
 \]
 
 この上で、
@@ -106,10 +106,10 @@ f'(x)=\lim_{u\to 0}\frac{f(x+u)-f(x)}{u}
 \]
 
 \[
-\operatorname{cosmicKernel}(fg) =
-f(x+u)\operatorname{cosmicKernel}(g)
+\text{cosmicKernel}(fg) =
+f(x+u)\text{cosmicKernel}(g)
 +
-g(x)\operatorname{cosmicKernel}(f)
+g(x)\text{cosmicKernel}(f)
 \]
 
 を得た。
@@ -123,9 +123,9 @@ g(x)\operatorname{cosmicKernel}(f)
 `CosmicDerivativeBasic.lean` では、宇宙式差分商と mathlib の微分述語の橋として
 
 \[
-\operatorname{HasDerivAt}(f,L,x)
+\text{HasDerivAt}(f,L,x)
 \iff
-\operatorname{cosmicKernel}(f,x,u)\to L
+\text{cosmicKernel}(f,x,u)\to L
 \quad (u\to 0,\;u\ne 0)
 \]
 
@@ -153,7 +153,7 @@ g(x)\operatorname{cosmicKernel}(f)
 `CosmicDerivativePower.lean` では
 
 \[
-\operatorname{powerKernel}(d,x,u) =
+\text{powerKernel}(d,x,u) =
 \sum_{j=0}^{d-1}
 \binom{d}{j+1}x^{d-1-j}u^j
 \]
@@ -169,14 +169,14 @@ g(x)\operatorname{cosmicKernel}(f)
 ここで exact factorization
 
 \[
-(x+u)^d - x^d = u \cdot \operatorname{powerKernel}(d,x,u)
+(x+u)^d - x^d = u \cdot \text{powerKernel}(d,x,u)
 \]
 
 を確立し、さらに
 
 \[
-\operatorname{cosmicKernel}(\lambda y,\; y^d, x,u) =
-\operatorname{powerKernel}(d,x,u)
+\text{cosmicKernel}(\lambda y,\; y^d, x,u) =
+\text{powerKernel}(d,x,u)
 \qquad (u\ne 0)
 \]
 
@@ -185,18 +185,18 @@ g(x)\operatorname{cosmicKernel}(f)
 続く `CosmicDerivativePowerLimit.lean` では、
 
 \[
-\operatorname{powerKernel}(d,x,0)=(d:\mathbb{R})x^{d-1}
+\text{powerKernel}(d,x,0)=(d:\mathbb{R})x^{d-1}
 \]
 
 \[
-\operatorname{powerKernel}(d,x,u)\to (d:\mathbb{R})x^{d-1}
+\text{powerKernel}(d,x,u)\to (d:\mathbb{R})x^{d-1}
 \qquad (u\to 0)
 \]
 
 を整備し、最終的に
 
 \[
-\operatorname{HasDerivAt}(\lambda y,\; y^d)\bigl((d:\mathbb{R})x^{d-1}\bigr)\,x
+\text{HasDerivAt}(\lambda y,\; y^d)\bigl((d:\mathbb{R})x^{d-1}\bigr)\,x
 \]
 
 を回収した。
@@ -237,8 +237,8 @@ g(x)\operatorname{cosmicKernel}(f)
 まず monomial について
 
 \[
-\operatorname{cosmicKernel}(\lambda y,\; a y^n, x,u) =
-a \cdot \operatorname{powerKernel}(n,x,u)
+\text{cosmicKernel}(\lambda y,\; a y^n, x,u) =
+a \cdot \text{powerKernel}(n,x,u)
 \qquad (u\ne 0)
 \]
 
@@ -253,8 +253,8 @@ p(y)=\sum_{n=0}^{N} c_n y^n
 に対して
 
 \[
-\operatorname{cosmicKernel}(p.eval,x,u) =
-\sum_{n=0}^{N} c_n \,\operatorname{powerKernel}(n,x,u)
+\text{cosmicKernel}(p.eval,x,u) =
+\sum_{n=0}^{N} c_n \,\text{powerKernel}(n,x,u)
 \qquad (u\ne 0)
 \]
 
@@ -263,9 +263,9 @@ p(y)=\sum_{n=0}^{N} c_n y^n
 さらに
 
 \[
-\operatorname{polynomialKernelExt}(p,x,u)
+\text{polynomialKernelExt}(p,x,u)
 :=
-\sum_{n=0}^{N} c_n \,\operatorname{powerKernel}(n,x,u)
+\sum_{n=0}^{N} c_n \,\text{powerKernel}(n,x,u)
 \]
 
 を導入し、これは
@@ -278,23 +278,23 @@ p(y)=\sum_{n=0}^{N} c_n y^n
 実際、
 
 \[
-\operatorname{polynomialKernelExt}(p,x,0)=p'(x)
+\text{polynomialKernelExt}(p,x,0)=p'(x)
 \]
 
 \[
-\operatorname{polynomialKernelExt}(p,x,u)\to p'(x)
+\text{polynomialKernelExt}(p,x,u)\to p'(x)
 \qquad (u\to 0)
 \]
 
 を示し、そこから
 
 \[
-\operatorname{cosmicKernel}(p.eval,x,u)\to p'(x)
+\text{cosmicKernel}(p.eval,x,u)\to p'(x)
 \qquad (u\to 0,\;u\ne 0)
 \]
 
 \[
-\operatorname{HasDerivAt}(p.eval)(p'(x))\,x
+\text{HasDerivAt}(p.eval)(p'(x))\,x
 \]
 
 を、`via_powerKernel` 系の direct decomposition flow として再構成した。
@@ -405,7 +405,7 @@ p(y)=\sum_{n=0}^{N} c_n y^n
 べき関数では
 
 \[
-(x+u)^d - x^d = u \cdot \operatorname{powerKernel}(d,x,u)
+(x+u)^d - x^d = u \cdot \text{powerKernel}(d,x,u)
 \]
 
 であり、ここで外側の \( u \) は Gap、内側の `powerKernel` は 1 次元下がった核である。
@@ -421,8 +421,8 @@ p(y)=\sum_{n=0}^{N} c_n y^n
 この見方は多項式でも有限和として保たれ、
 
 \[
-\operatorname{cosmicKernel}(p.eval,x,u) =
-\sum_n p_n \operatorname{powerKernel}(n,x,u)
+\text{cosmicKernel}(p.eval,x,u) =
+\sum_n p_n \text{powerKernel}(n,x,u)
 \]
 
 という形で統一される。

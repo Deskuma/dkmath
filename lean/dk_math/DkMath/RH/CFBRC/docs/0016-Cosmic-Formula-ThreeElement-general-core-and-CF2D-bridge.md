@@ -36,15 +36,15 @@ def gapTerm [Semiring R] (u : R) : R :=
 数学的には
 
 $$
-\operatorname{Core}=x^2
+\text{Core}=x^2
 $$
 
 $$
-\operatorname{Interaction}=2xu
+\text{Interaction}=2xu
 $$
 
 $$
-\operatorname{Gap}=u^2
+\text{Gap}=u^2
 $$
 
 である。
@@ -77,17 +77,17 @@ def minusWhole [Ring R] (x u : R) : R :=
 したがって
 
 $$
-\operatorname{squareMass}=x^2+u^2
+\text{squareMass}=x^2+u^2
 $$
 
 であり、二つの whole は
 
 $$
-\operatorname{plusWhole}=(x+u)^2
+\text{plusWhole}=(x+u)^2
 $$
 
 $$
-\operatorname{minusWhole}=(x-u)^2
+\text{minusWhole}=(x-u)^2
 $$
 
 となる。
@@ -124,7 +124,7 @@ theorem plusWhole_sub_minusWhole_eq_two_mul_interactionBeam ...
 すなわち
 
 $$
-\operatorname{plusWhole}-\operatorname{minusWhole}=2\operatorname{Interaction}
+\text{plusWhole}-\text{minusWhole}=2\text{Interaction}
 $$
 
 である。
@@ -138,7 +138,7 @@ theorem plusWhole_add_minusWhole_eq_two_mul_squareMass ...
 すなわち
 
 $$
-\operatorname{plusWhole}+\operatorname{minusWhole}=2\operatorname{squareMass}
+\text{plusWhole}+\text{minusWhole}=2\text{squareMass}
 $$
 
 となる。
@@ -236,13 +236,13 @@ structure PairWholeAssimilation
 概念的には
 
 $$
-\operatorname{plusWhole}\to B
+\text{plusWhole}\to B
 $$
 
 かつ
 
 $$
-\operatorname{minusWhole}\to B
+\text{minusWhole}\to B
 $$
 
 である。
@@ -265,9 +265,9 @@ theorem interaction_tendsto_zero_of_pairWholeAssimilation
 すなわち
 
 $$
-\operatorname{PairWholeAssimilation}(B)
+\text{PairWholeAssimilation}(B)
 \Longrightarrow
-\operatorname{Interaction}\to0
+\text{Interaction}\to0
 $$
 
 である。
@@ -328,15 +328,15 @@ theorem squareMass_tendsto_of_core_gap ...
 は
 
 $$
-\operatorname{Core}\to C,
+\text{Core}\to C,
 \qquad
-\operatorname{Gap}\to G
+\text{Gap}\to G
 $$
 
 から
 
 $$
-\operatorname{squareMass}\to C+G
+\text{squareMass}\to C+G
 $$
 
 を与える。
@@ -599,7 +599,7 @@ interactionBeam : 2 * core * beam
 pair assimilation が与えるのは
 
 $$
-\operatorname{Interaction}\to0
+\text{Interaction}\to0
 $$
 
 であり、同じ target `B` への assimilation ではない。

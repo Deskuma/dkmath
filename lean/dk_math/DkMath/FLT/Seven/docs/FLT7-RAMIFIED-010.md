@@ -461,7 +461,7 @@ $$
 記号を、
 
 $$
-a=\operatorname{innerRoot.fst},\qquad n=\operatorname{innerRoot.snd}=7^4m^7
+a=\text{innerRoot.fst},\qquad n=\text{innerRoot.snd}=7^4m^7
 $$
 
 とします。

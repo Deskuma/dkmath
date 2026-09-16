@@ -64,19 +64,19 @@ $$
 x^d+y^d=z^d,\quad \gcd(z,x)=1,\quad y\ne0,
 $$
 $$
-p\nmid d,\quad p\mid \operatorname{Beam}_d(x,z),\quad
-\operatorname{Beam}_d(x,z)\ne0,\quad
-v_p(\operatorname{Beam}_d(x,z))\le1
+p\nmid d,\quad p\mid \text{Beam}_d(x,z),\quad
+\text{Beam}_d(x,z)\ne0,\quad
+v_p(\text{Beam}_d(x,z))\le1
 $$
 
 を置くと `False` を返す。
 まさに S2-F の
 
 $$
-v_p(\operatorname{Beam}_d)=d,v_p(y)
+v_p(\text{Beam}_d)=d,v_p(y)
 $$
 
-と、\(v_p(\operatorname{Beam}_d)\le1\) を衝突させる補題じゃ。
+と、\(v_p(\text{Beam}_d)\le1\) を衝突させる補題じゃ。
 
 ## 2. 数学的意味
 
@@ -91,7 +91,7 @@ $$
 から、
 
 $$
-y^d=(z-x)\operatorname{Beam}_d(x,z)
+y^d=(z-x)\text{Beam}_d(x,z)
 $$
 
 を得る。
@@ -99,10 +99,10 @@ $$
 次に、
 
 $$
-\gcd(z-x,\operatorname{Beam}_d(x,z))\mid d
+\gcd(z-x,\text{Beam}_d(x,z))\mid d
 $$
 
-なので、\(p\nmid d\) かつ \(p\mid \operatorname{Beam}_d(x,z)\) なら、
+なので、\(p\nmid d\) かつ \(p\mid \text{Beam}_d(x,z)\) なら、
 
 $$
 p\nmid z-x
@@ -113,7 +113,7 @@ $$
 ゆえに、
 
 $$
-v_p((z-x)\operatorname{Beam}_d)=v_p(\operatorname{Beam}_d)
+v_p((z-x)\text{Beam}_d)=v_p(\text{Beam}_d)
 $$
 
 となる。
@@ -121,7 +121,7 @@ $$
 一方で左辺は \(v_p(y^d)\) だから、
 
 $$
-v_p(\operatorname{Beam}_d)=d,v_p(y)
+v_p(\text{Beam}_d)=d,v_p(y)
 $$
 
 となる。
@@ -129,25 +129,25 @@ $$
 ここに
 
 $$
-p\mid \operatorname{Beam}_d
+p\mid \text{Beam}_d
 $$
 
 から
 
 $$
-1\le v_p(\operatorname{Beam}_d)
+1\le v_p(\text{Beam}_d)
 $$
 
 が入り、さらに
 
 $$
-v_p(\operatorname{Beam}_d)\le1
+v_p(\text{Beam}_d)\le1
 $$
 
 が入ると、
 
 $$
-v_p(\operatorname{Beam}_d)=1
+v_p(\text{Beam}_d)=1
 $$
 
 を強制する。
@@ -155,7 +155,7 @@ $$
 しかし
 
 $$
-v_p(\operatorname{Beam}_d)=d,v_p(y)
+v_p(\text{Beam}_d)=d,v_p(y)
 $$
 
 で \(2\le d\) なので、右辺は \(0\) か \(2\) 以上。
@@ -186,35 +186,35 @@ $$
 ここまでの S2 は、非常に明確な階段になっている。
 
 $$
-z^d-x^d=(z-x)\operatorname{Beam}_d(x,z)
+z^d-x^d=(z-x)\text{Beam}_d(x,z)
 $$
 
 $$
 x^d+y^d=z^d
 \Rightarrow
-y^d=(z-x)\operatorname{Beam}_d(x,z)
+y^d=(z-x)\text{Beam}_d(x,z)
 $$
 
 $$
-\gcd(z-x,\operatorname{Beam}_d)\mid d
+\gcd(z-x,\text{Beam}_d)\mid d
 $$
 
 $$
-p\nmid d,\ p\mid \operatorname{Beam}_d
+p\nmid d,\ p\mid \text{Beam}_d
 \Rightarrow
 p\nmid z-x
 $$
 
 $$
-v_p((z-x)\operatorname{Beam}_d)=v_p(\operatorname{Beam}_d)
+v_p((z-x)\text{Beam}_d)=v_p(\text{Beam}_d)
 $$
 
 $$
-v_p(\operatorname{Beam}_d)=d,v_p(y)
+v_p(\text{Beam}_d)=d,v_p(y)
 $$
 
 $$
-p\mid \operatorname{Beam}_d,\ v_p(\operatorname{Beam}_d)\le1,\ 2\le d
+p\mid \text{Beam}_d,\ v_p(\text{Beam}_d)\le1,\ 2\le d
 \Rightarrow
 \bot
 $$
@@ -228,7 +228,7 @@ Chapter 2 はもはや「差分解釈」ではなく、**FLT Gap/Beam valuation 
 
 > Beam 側の primitive prime / squarefree 上界 API から
 > \[
-> v_p(\operatorname{Beam}_d)\le1
+> v_p(\text{Beam}_d)\le1
 > \]
 > を供給する bridge を作る。
 
@@ -287,7 +287,7 @@ theorem powerBeam_padicValNat_le_one_of_primitive_prime
 のような名前で、primitive 条件から直接
 
 $$
-v_p(\operatorname{Beam})\le1
+v_p(\text{Beam})\le1
 $$
 
 を出す。

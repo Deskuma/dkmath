@@ -94,11 +94,11 @@ endpointAccountingTerm_eq_canonicalBlock_bitWidth_sub
 
 は非常に良い。
 
-$$\Delta_n(m)=\operatorname{bitWidth}(\operatorname{NextStart}_n(m))-\operatorname{bitWidth}(\operatorname{Start}_n(m))$$
+$$\Delta_n(m)=\text{bitWidth}(\text{NextStart}_n(m))-\text{bitWidth}(\text{Start}_n(m))$$
 
 が exact theorem になった。さらに prefix sum も、
 
-$$\sum_{k\le m}\Delta_n(k)=\operatorname{bitWidth}(\operatorname{NextStart}_n(m))-\operatorname{bitWidth}(n)$$
+$$\sum_{k\le m}\Delta_n(k)=\text{bitWidth}(\text{NextStart}_n(m))-\text{bitWidth}(n)$$
 
 へ telescope する。
 
@@ -139,7 +139,7 @@ $$n_L=2^L-1$$
 
 について、初期 canonical block が、
 
-$$\operatorname{length}=L,\qquad\operatorname{core}=1,\qquad\operatorname{terminalCarrier}=3^L-1$$
+$$\text{length}=L,\qquad\text{core}=1,\qquad\text{terminalCarrier}=3^L-1$$
 
 を持つことが閉じた。
 
@@ -147,7 +147,7 @@ $$\operatorname{length}=L,\qquad\operatorname{core}=1,\qquad\operatorname{termin
 
 $$\nu_2(3^{2r+1}-1)=1$$
 
-$$\operatorname{NextStart}=\frac{3^{2r+1}-1}{2}$$
+$$\text{NextStart}=\frac{3^{2r+1}-1}{2}$$
 
 まで exact に閉じている。mod $4$ から valuation one を出す流れにも問題はない。
 
@@ -240,7 +240,7 @@ $$\sum\Delta+\sum h+\sum v=\sum L$$
 
 となり、endpoint drift telescope と合わせて、
 
-$$\operatorname{width}_{M+1}-\operatorname{width}_0+\sum h+\sum v=\sum L$$
+$$\text{width}_{M+1}-\text{width}_0+\sum h+\sum v=\sum L$$
 
 が得られる。
 
@@ -318,11 +318,11 @@ credit (m + 1) = credit m - weight m
 
 そこから帰納的に、
 
-$$0\le\operatorname{credit}(M)$$
+$$0\le\text{credit}(M)$$
 
 を得て、telescope により、
 
-$$\sum_{m<M}w(m)=-\operatorname{credit}(M)\le0$$
+$$\sum_{m<M}w(m)=-\text{credit}(M)\le0$$
 
 を導く。
 
@@ -371,7 +371,7 @@ FiniteControlSignedCounterCertificate
 
 を許し、
 
-$$\sum_{m<M}w(m)\le\operatorname{credit}(0)$$
+$$\sum_{m<M}w(m)\le\text{credit}(0)$$
 
 を結論とする版もあると応用範囲が広がる。
 

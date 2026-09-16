@@ -64,7 +64,7 @@ mem_orbitPaymentSourceFiberAt_iff_target_eq
 により、
 
 $$
-i\in\operatorname{Fiber}(j)\Longleftrightarrow\tau(i)=j
+i\in\text{Fiber}(j)\Longleftrightarrow\tau(i)=j
 $$
 
 となった。
@@ -108,7 +108,7 @@ mem_carryTwoPaymentClaimFiberAt_iff_mem_universalPaymentBlock_and_carryTwo
 universal block を $[b,j]$ とすれば、
 
 $$
-i\in\operatorname{ClaimFiber}(j)\Longleftrightarrow i\in[b,j]\land\operatorname{CarryTwoDebtAt}(i)
+i\in\text{ClaimFiber}(j)\Longleftrightarrow i\in[b,j]\land\text{CarryTwoDebtAt}(i)
 $$
 
 が成立する。
@@ -146,7 +146,7 @@ carryTwoPaymentClaimFiberAt_eq_filter_universalPaymentBlock_carryTwo
 により、
 
 $$
-\operatorname{ClaimFiber}(j)=\{i\in[b,j]\mid c_i=2\}
+\text{ClaimFiber}(j)=\{i\in[b,j]\mid c_i=2\}
 $$
 
 が `Finset` の等式として固定された。
@@ -206,11 +206,11 @@ payment capacity:
 現在、universal block $[b,j]$ について次が全て揃っている。
 
 $$
-\operatorname{Fiber}(j)=[b,j]
+\text{Fiber}(j)=[b,j]
 $$
 
 $$
-|\operatorname{Fiber}(j)|=j-b+1=A_b
+|\text{Fiber}(j)|=j-b+1=A_b
 $$
 
 $$

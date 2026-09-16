@@ -115,13 +115,13 @@ KUS はもはや `Nat` 固定の試作品ではなく、**係数層と構造層�
 これにより、
 
 \[
-\operatorname{extract}(x+y)=\operatorname{extract}(x)
+\text{extract}(x+y)=\text{extract}(x)
 \]
 
 や
 
 \[
-\operatorname{extract}(xy)=\operatorname{extract}(x)
+\text{extract}(xy)=\text{extract}(x)
 \]
 
 が、定義に近い形で落ちる。

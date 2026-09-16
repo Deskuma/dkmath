@@ -106,7 +106,7 @@ shiftedOrbitCarryTwoCount_eq_offset_card
 は、
 
 $$
-\operatorname{ShiftedCarryCount}(n,a,\ell)=\#\{t<\ell\mid\operatorname{CarryTwoDebtAt}(n,a+t)\}
+\text{ShiftedCarryCount}(n,a,\ell)=\#\{t<\ell\mid\text{CarryTwoDebtAt}(n,a+t)\}
 $$
 
 を証明する。
@@ -124,7 +124,7 @@ shiftedExtraPaymentCapacity_eq_sum_range
 は、
 
 $$
-\operatorname{ShiftedExtraCapacity}(n,a,\ell)=\sum_{t<\ell}\bigl(h_{a+t}-1\bigr)
+\text{ShiftedExtraCapacity}(n,a,\ell)=\sum_{t<\ell}\bigl(h_{a+t}-1\bigr)
 $$
 
 を証明した。
@@ -200,7 +200,7 @@ shiftedOrbitCarryTwoCount_eq_carryTwoPaymentClaimFiber_card
 block start を $a$、endpoint を $j$ とすれば、
 
 $$
-\operatorname{ShiftedCarryCount}(n,a,j+1-a)=\#\operatorname{CarryTwoPaymentClaimFiberAt}(n,j)
+\text{ShiftedCarryCount}(n,a,j+1-a)=\#\text{CarryTwoPaymentClaimFiberAt}(n,j)
 $$
 
 じゃ。
@@ -261,7 +261,7 @@ shiftedExtraPaymentCapacity_eq_extraPaymentCapacityAt
 によって、
 
 $$
-\operatorname{ShiftedExtraCapacity}(n,a,j+1-a)=\operatorname{extraPaymentCapacityAt}(n,j)
+\text{ShiftedExtraCapacity}(n,a,j+1-a)=\text{extraPaymentCapacityAt}(n,j)
 $$
 
 まで閉じた。
@@ -285,7 +285,7 @@ $$
 ここで、
 
 $$
-P_j=h_j-1,\qquad Q_j=\#\operatorname{CarryTwoPaymentClaimFiberAt}(n,j)
+P_j=h_j-1,\qquad Q_j=\#\text{CarryTwoPaymentClaimFiberAt}(n,j)
 $$
 
 である。
@@ -493,7 +493,7 @@ def paymentBlockDriftInt
 型変換を明示すれば、中心定理から、
 
 $$
-\operatorname{paymentBlockDriftInt}(n,j)=w_{j+1}-w_a
+\text{paymentBlockDriftInt}(n,j)=w_{j+1}-w_a
 $$
 
 を得られる。
@@ -517,7 +517,7 @@ $$
 ここで、
 
 $$
-A_i=\operatorname{ResidualAllOnesDepth}(\operatorname{oddOrbitLabel}(n,i))
+A_i=\text{ResidualAllOnesDepth}(\text{oddOrbitLabel}(n,i))
 $$
 
 じゃ。

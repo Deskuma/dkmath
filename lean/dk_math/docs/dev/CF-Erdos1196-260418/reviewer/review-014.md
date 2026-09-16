@@ -28,7 +28,7 @@ quality 系は最終的に `rad(...)` を介して動くので bridge が効く�
 `RatioBound` を最優先にしたのは良いが、まだ「かなり近い」であって「そのまま刺さる」ではない。差分文書でも書いておる通り、必要なのは
 
 $$
-\operatorname{rad}(a) \ge R
+\text{rad}(a) \ge R
 \Rightarrow
 \text{その count class は } X/R \text{ 型で縮む}
 $$

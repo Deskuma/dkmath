@@ -57,7 +57,7 @@ v_p(c) =
 と分割できるので、
 
 \[
-c = \pi\mathrm{SqRad}(c)\,\operatorname{rad}(c)\,\operatorname{twoTail}(c)
+c = \pi\mathrm{SqRad}(c)\,\text{rad}(c)\,\text{twoTail}(c)
 \]
 
 という分解が得られる。
@@ -113,7 +113,7 @@ v_c(M)=a
 特に \(a,b,c \ge 2\) なので、各素数は少なくとも 2 回ずつ現れる。したがって
 
 \[
-\operatorname{rad}(M)=abc,
+\text{rad}(M)=abc,
 \qquad
 \pi\mathrm{SqRad}(M)=abc
 \]
@@ -121,7 +121,7 @@ v_c(M)=a
 であり、さらに `twoTail` は指数から 2 を引くので
 
 \[
-\operatorname{twoTail}(M) =
+\text{twoTail}(M) =
 a^{b-2} b^{c-2} c^{a-2}.
 \]
 
@@ -136,7 +136,7 @@ M(a,b,c) =
 
 \[
 M(a,b,c) =
-(abc)^2\, \operatorname{twoTail}(M(a,b,c)).
+(abc)^2\, \text{twoTail}(M(a,b,c)).
 \]
 
 これは、巡回指数積が **平方殻 \((abc)^2\)** と、その先の tail に分解されることを意味する。
@@ -194,7 +194,7 @@ a^x b^y c^z \mid x,y,z \in \mathbb{N}
 `twoTail` を \(k\) 回繰り返し適用すると、毎回指数が 2 ずつ減る。よって
 
 \[
-\operatorname{twoTail}^{\,k}(M(a,b,c)) =
+\text{twoTail}^{\,k}(M(a,b,c)) =
 a^{b-2k} b^{c-2k} c^{a-2k}
 \]
 
@@ -217,7 +217,7 @@ b-2k \ge 0,\qquad c-2k \ge 0,\qquad a-2k \ge 0
 
 \[
 M(a,b,c) =
-(abc)^{2k}\,\operatorname{twoTail}^{\,k}(M(a,b,c))
+(abc)^{2k}\,\text{twoTail}^{\,k}(M(a,b,c))
 \]
 
 となり、巡回指数積は **平方殻を 2 層ずつ剥いでいく塔構造** を持つ。
@@ -238,17 +238,17 @@ M(a,b,c):=a^b b^c c^a
 に対して
 
 \[
-\operatorname{rad}(M)=abc,
+\text{rad}(M)=abc,
 \qquad
 \pi\mathrm{SqRad}(M)=abc,
 \qquad
-\operatorname{twoTail}(M)=a^{b-2} b^{c-2} c^{a-2}
+\text{twoTail}(M)=a^{b-2} b^{c-2} c^{a-2}
 \]
 
 が成り立つ。特に
 
 \[
-M=(abc)^2\,\operatorname{twoTail}(M)
+M=(abc)^2\,\text{twoTail}(M)
 \]
 
 である。
@@ -264,13 +264,13 @@ M=(abc)^2\,\operatorname{twoTail}(M)
 ならば
 
 \[
-\operatorname{twoTail}^{\,k}(M)=a^{b-2k} b^{c-2k} c^{a-2k}
+\text{twoTail}^{\,k}(M)=a^{b-2k} b^{c-2k} c^{a-2k}
 \]
 
 かつ
 
 \[
-M=(abc)^{2k}\,\operatorname{twoTail}^{\,k}(M)
+M=(abc)^{2k}\,\text{twoTail}^{\,k}(M)
 \]
 
 が成り立つ。
@@ -291,7 +291,7 @@ M=(abc)^{2k}\,\operatorname{twoTail}^{\,k}(M)
 したがって `rad` は
 
 \[
-\operatorname{rad}(M)=abc
+\text{rad}(M)=abc
 \]
 
 となる。
@@ -317,7 +317,7 @@ v_c(M)-2=a-2
 なので、
 
 \[
-\operatorname{twoTail}(M)=a^{b-2} b^{c-2} c^{a-2}
+\text{twoTail}(M)=a^{b-2} b^{c-2} c^{a-2}
 \]
 
 が従う。
@@ -327,7 +327,7 @@ v_c(M)-2=a-2
 `c = piSqRad(c) * rad(c) * twoTail(c)` を \(c=M\) に適用すると
 
 \[
-M=(abc)(abc)\operatorname{twoTail}(M)=(abc)^2\operatorname{twoTail}(M)
+M=(abc)(abc)\text{twoTail}(M)=(abc)^2\text{twoTail}(M)
 \]
 
 となる。
@@ -349,7 +349,7 @@ M(2,3,5)=2^3 3^5 5^2
 であり、
 
 \[
-\operatorname{rad}(M)=2\cdot3\cdot5=30,
+\text{rad}(M)=2\cdot3\cdot5=30,
 \qquad
 \pi\mathrm{SqRad}(M)=30
 \]
@@ -357,7 +357,7 @@ M(2,3,5)=2^3 3^5 5^2
 さらに
 
 \[
-\operatorname{twoTail}(M)=2^{3-2}3^{5-2}5^{2-2}=2^1 3^3 5^0=54.
+\text{twoTail}(M)=2^{3-2}3^{5-2}5^{2-2}=2^1 3^3 5^0=54.
 \]
 
 よって
@@ -463,7 +463,7 @@ lemma twoTail_iterate_cyclicPowProd
 のような形で
 
 \[
-\operatorname{twoTail}^{\,k}(M)=a^{b-2k} b^{c-2k} c^{a-2k}
+\text{twoTail}^{\,k}(M)=a^{b-2k} b^{c-2k} c^{a-2k}
 \]
 
 を定理化できる。
@@ -501,14 +501,14 @@ M(a,b,c)=a^b\,b^c\,c^a
 に対して、\(a,b,c\) を相異なる素数とすると
 
 \[
-\operatorname{twoTail}(M)=a^{b-2}b^{c-2}c^{a-2}
+\text{twoTail}(M)=a^{b-2}b^{c-2}c^{a-2}
 \]
 
 となり、`twoTail` は底を変えず、指数を一様に 2 だけ減らす。
 したがって
 
 \[
-M=(abc)^2\,\operatorname{twoTail}(M)
+M=(abc)^2\,\text{twoTail}(M)
 \]
 
 という平方殻分解が成り立ち、この族は `twoTail` のもとで閉じている。

@@ -72,7 +72,7 @@ Concrete Eisenstein norm は positive-definite であり、U006A で domain / Eu
 まず production theorem として
 
 $$
-\operatorname{IsUnit}(x)
+\text{IsUnit}(x)
 \iff
 N(x)=1
 $$
@@ -248,7 +248,7 @@ Define representative:
 Prove representative norm:
 
 $$
-N(\operatorname{rep}(s))=1.
+N(\text{rep}(s))=1.
 $$
 
 and optionally IsUnit representative.
@@ -263,9 +263,9 @@ $$
 \forall\varepsilon\in E^\times,\quad
 \exists s,\exists\delta,
 \quad
-\operatorname{IsUnit}(\delta)
+\text{IsUnit}(\delta)
 \land
-\varepsilon=\operatorname{rep}(s)\delta^3.
+\varepsilon=\text{rep}(s)\delta^3.
 $$
 
 Lean candidate:
@@ -379,15 +379,15 @@ Do not duplicate these as fields unless a thin theorem wrapper materially improv
 If cheap, expose:
 
 $$
-\operatorname{rep}(1)=(1,0),
+\text{rep}(1)=(1,0),
 $$
 
 $$
-\operatorname{rep}(\tau)=(0,1),
+\text{rep}(\tau)=(0,1),
 $$
 
 $$
-\operatorname{rep}(\tau^2)=(-1,1).
+\text{rep}(\tau^2)=(-1,1).
 $$
 
 These will make U008 coordinate arithmetic simpler.

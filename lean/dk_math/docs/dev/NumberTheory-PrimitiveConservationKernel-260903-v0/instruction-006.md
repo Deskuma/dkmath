@@ -78,6 +78,7 @@ theorem freshPrimeDirection_self_of_supportDisjointFrom_primeScalesUpTo_coarse_o
 ```
 
 A shorter name is acceptable if it preserves the semantic roles:
+
 - `q` = fine square anchor;
 - `P` = coarse complete-prime-support anchor;
 - `m` = escaping point and self-witness.
@@ -119,7 +120,7 @@ PCK-003 already gives
 $$
 q\le P,
 \qquad
-1<m\le\operatorname{squareBody}(q),
+1<m\le\text{squareBody}(q),
 $$
 
 together with escape from every prime direction at most `P`, implying
@@ -132,9 +133,9 @@ PCK-004 upgrades the semantic conclusion to
 
 $$
 \boxed{
-\operatorname{FreshPrimeDirection}
+\text{FreshPrimeDirection}
 \bigl(
-\operatorname{primeScalesUpTo}(P),m,m
+\text{primeScalesUpTo}(P),m,m
 \bigr).
 }
 $$

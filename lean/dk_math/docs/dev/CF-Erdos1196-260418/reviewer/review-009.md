@@ -102,7 +102,7 @@ Lean 的には小さい工夫じゃが、公開 API を厚くしすぎずに整�
 \[
 F.\texttt{channelProduct}
 \le
-\operatorname{supportMass}(a^d-b^d)
+\text{supportMass}(a^d-b^d)
 \]
 
 という形で、family object から直接 lower bound が読める。
@@ -132,7 +132,7 @@ singleton family `primitiveWitnessFamilyPack_8_1_1` に対して、
 \[
 \texttt{channelProduct}
 \le
-\operatorname{supportMass}(8^1-1^1)
+\text{supportMass}(8^1-1^1)
 \]
 
 を public method だけで読めることを示している。
@@ -195,7 +195,7 @@ F.\texttt{channelProduct}
 いまの橋の目的は `rad` 的 lower bound だから、それで正しい。じゃが、将来 valuation の重み付き counting へ進むなら、別の quantity が要る。ゆえに `channelProduct` はあくまで
 
 \[
-\operatorname{rad}\text{-like size}
+\text{rad}\text{-like size}
 \]
 
 の読みと割り切って使うべきじゃ。
@@ -212,7 +212,7 @@ F.\texttt{channelProduct}
 じゃが、たとえば
 
 \[
-q \in F.\texttt{support} \Rightarrow \operatorname{Prime}(q)
+q \in F.\texttt{support} \Rightarrow \text{Prime}(q)
 \]
 
 や

@@ -246,7 +246,7 @@ $$
 わっちの勧めは、やはり
 
 $$
-\text{supportMass} = \operatorname{rad}
+\text{supportMass} = \text{rad}
 $$
 
 と primitive channel を結ぶ **最小の lower bound 補題** へ進むことじゃな。

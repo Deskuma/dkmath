@@ -43,7 +43,7 @@ $$
 として作り、それを
 
 $$
-\frac{1}{\sqrt{\operatorname{phaseDepth}(t)}}
+\frac{1}{\sqrt{\text{phaseDepth}(t)}}
 $$
 
 で補正して、一本の edge が固定 \(q2\) 境界へ戻るところまでだった。
@@ -109,7 +109,7 @@ $$
 また、
 
 $$
-\operatorname{phaseNormalization}(t)^2\operatorname{phaseDepth}(t)=1
+\text{phaseNormalization}(t)^2\text{phaseDepth}(t)=1
 $$
 
 も `phaseNormalization_sq_mul_phaseDepth` として独立 API になった。

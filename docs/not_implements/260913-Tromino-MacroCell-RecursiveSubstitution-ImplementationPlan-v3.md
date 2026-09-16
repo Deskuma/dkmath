@@ -178,9 +178,9 @@ $$
 原子面積を `area₀`、macro count を `area₁` と区別すると
 
 $$
-\operatorname{area}_0(M)=4,
+\text{area}_0(M)=4,
 \qquad
-\operatorname{area}_1(M)=1.
+\text{area}_1(M)=1.
 $$
 
 この abstraction を
@@ -207,7 +207,7 @@ expandMacroCell
 概念的には
 
 $$
-\operatorname{expand}(\operatorname{collapse}(M)) = M.
+\text{expand}(\text{collapse}(M)) = M.
 $$
 
 ---
@@ -276,11 +276,11 @@ Body は 3 個の `M`、Gap は 1 個の `TypedGap M`。
 従って
 
 $$
-\operatorname{BodyCount}=3,
+\text{BodyCount}=3,
 \qquad
-\operatorname{GapCount}=1,
+\text{GapCount}=1,
 \qquad
-\operatorname{TotalCount}=4.
+\text{TotalCount}=4.
 $$
 
 原子セルへ展開すれば
@@ -332,13 +332,13 @@ $$
 完成後の全体を `M_{k+1}` と抽象化できるなら、
 
 $$
-\operatorname{area}(M_{k+1})=4\operatorname{area}(M_k).
+\text{area}(M_{k+1})=4\text{area}(M_k).
 $$
 
 従って
 
 $$
-\operatorname{area}(M_k)=4^{k+1}
+\text{area}(M_k)=4^{k+1}
 $$
 
 型の再帰が現れる。
@@ -386,7 +386,7 @@ restore
 狙うべき基本定理は
 
 $$
-\operatorname{restore}(\operatorname{peel}(X))=X
+\text{restore}(\text{peel}(X))=X
 $$
 
 である。
@@ -394,7 +394,7 @@ $$
 さらに admissibility を仮定して
 
 $$
-\operatorname{peel}(\operatorname{restore}(G))=G
+\text{peel}(\text{restore}(G))=G
 $$
 
 も検討する。

@@ -224,6 +224,7 @@ full centered-Xi rectangle contribution
 \[
 I_{\partial\mathcal R}(h)
 =
+
 2I_{\mathrm R}^{\mathrm{dec}}(h)
 +
 2I_{\mathrm H}(h).
@@ -266,6 +267,7 @@ fun z =>
 \[
 H_\varepsilon(z)
 =
+
 \frac{1}{2\varepsilon}
 \int_{-\varepsilon}^{\varepsilon}e^{tz}\,dt
 \]
@@ -331,6 +333,7 @@ box Mellin weight は
 \[
 H_\varepsilon(z)
 =
+
 \frac{1}{2\varepsilon}
 \int_{-\varepsilon}^{\varepsilon}e^{tz}\,dt
 \]
@@ -342,6 +345,7 @@ H_\varepsilon(z)
 \[
 H_\varepsilon(z)
 =
+
 \frac{e^{\varepsilon z}-e^{-\varepsilon z}}
 {2\varepsilon z}
 \]
@@ -370,7 +374,7 @@ horizontal fixed-Xi integrand は
 
 \[
 h_{\varepsilon,\tau}(z)
-\,\operatorname{pascalCenteredXiNegLogDeriv}(z)
+\,\text{pascalCenteredXiNegLogDeriv}(z)
 \]
 
 である。

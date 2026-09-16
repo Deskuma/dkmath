@@ -67,7 +67,7 @@ corresponding to
 
 $$
 \boxed{
-\operatorname{PrimePairOverlapCount}=\operatorname{OverlapExcess}+\operatorname{PairOverlapResidual}.
+\text{PrimePairOverlapCount}=\text{OverlapExcess}+\text{PairOverlapResidual}.
 }
 $$
 

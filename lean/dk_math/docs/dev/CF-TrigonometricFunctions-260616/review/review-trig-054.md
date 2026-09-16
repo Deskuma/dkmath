@@ -65,7 +65,7 @@ n 回作用したら z に戻る
 数式で書けば、
 
 $$
-(\operatorname{semanticAct}(r))^{[n]}(z)=z
+(\text{semanticAct}(r))^{[n]}(z)=z
 $$
 
 という有限反復の周期性じゃ。

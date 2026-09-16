@@ -332,15 +332,15 @@ $$q\to q+1\to\cdots\to m+1$$
 
 各 edge $k\to k+1$ の actual weight を `endpointAccountingTerm n k` とすれば、
 
-$$\operatorname{WindowDrift}(q,m)\le C.\operatorname{bound}$$
+$$\text{WindowDrift}(q,m)\le C.\text{bound}$$
 
 が得られる。
 
 そこから、
 
-$$\operatorname{Queue}\le C.\operatorname{bound}$$
+$$\text{Queue}\le C.\text{bound}$$
 
-$$\operatorname{EndpointWidth}\le\operatorname{bitWidth}(n)+C.\operatorname{bound}$$
+$$\text{EndpointWidth}\le\text{bitWidth}(n)+C.\text{bound}$$
 
 まで接続した。
 
@@ -418,13 +418,13 @@ block-level edge は、多数の accelerated steps を一つに集約してい�
 
 一方、raw accelerated step には既に exact ledger、
 
-$$\operatorname{widthBefore}+\operatorname{upperCarry}=\operatorname{height}+\operatorname{widthAfter}$$
+$$\text{widthBefore}+\text{upperCarry}=\text{height}+\text{widthAfter}$$
 
 がある。
 
 さらに width growth は、
 
-$$\operatorname{upperCarry}=2,\qquad\operatorname{height}=1$$
+$$\text{upperCarry}=2,\qquad\text{height}=1$$
 
 の場合に限られ、growth channel は mod $8$ の $3$ または $7$ に制限されている。
 

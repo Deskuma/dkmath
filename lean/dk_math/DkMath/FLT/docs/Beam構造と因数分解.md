@@ -2268,7 +2268,7 @@ a+b=c
 素因子の重複を潰して得る
 
 \[
-\operatorname{rad}(abc)
+\text{rad}(abc)
 \]
 
 が、\(c\) の大きさをどれほど制御できるかを見る。
@@ -2386,7 +2386,7 @@ ABC 的に言えば、
 なぜなら必要なのは最終的に、
 
 \[
-c < K_{\varepsilon}\,\operatorname{rad}(abc)^{1+\varepsilon}
+c < K_{\varepsilon}\,\text{rad}(abc)^{1+\varepsilon}
 \]
 
 という評価へ落とすことだからじゃ。
@@ -2396,10 +2396,10 @@ c < K_{\varepsilon}\,\operatorname{rad}(abc)^{1+\varepsilon}
 ## 7.1. Body 分解と rad の関係
 
 \[
-\operatorname{rad}(\mathrm{Body}),\quad
-\operatorname{rad}(\mathrm{Core}),\quad
-\operatorname{rad}(\mathrm{Beam}),\quad
-\operatorname{rad}(\mathrm{Gap})
+\text{rad}(\mathrm{Body}),\quad
+\text{rad}(\mathrm{Core}),\quad
+\text{rad}(\mathrm{Beam}),\quad
+\text{rad}(\mathrm{Gap})
 \]
 
 の間に、どういう上下界があるか。
@@ -2965,7 +2965,7 @@ N=\mathrm{Core}+\mathrm{Beam}
 の各項の素因子集合
 
 \[
-\mathcal{P}_k := \operatorname{PrimeSet}(\mathrm{Beam}_k)
+\mathcal{P}_k := \text{PrimeSet}(\mathrm{Beam}_k)
 \]
 
 を並べたもの。
@@ -3210,8 +3210,8 @@ u=2,\quad x=15,\quad d=2
 で、それぞれの素因子集合を
 
 \[
-\mathcal{P}_1=\operatorname{PrimeSet}(3x^2u),\qquad
-\mathcal{P}_2=\operatorname{PrimeSet}(3xu^2)
+\mathcal{P}_1=\text{PrimeSet}(3x^2u),\qquad
+\mathcal{P}_2=\text{PrimeSet}(3xu^2)
 \]
 
 として並べられる。
@@ -3264,17 +3264,17 @@ a=\mathrm{Body},\qquad b=\mathrm{Gap},\qquad c=\mathrm{Big}
 
 ### 7.4. レベル 3. 素因子集合比較
 
-- \(\operatorname{PrimeSet}(a)\)
-- \(\operatorname{PrimeSet}(\mathrm{Core})\)
-- \(\operatorname{PrimeSet}(\mathrm{Beam}_k)\)
-- \(\bigcup_k \operatorname{PrimeSet}(\mathrm{Beam}_k)\)
+- \(\text{PrimeSet}(a)\)
+- \(\text{PrimeSet}(\mathrm{Core})\)
+- \(\text{PrimeSet}(\mathrm{Beam}_k)\)
+- \(\bigcup_k \text{PrimeSet}(\mathrm{Beam}_k)\)
 - 差集合
 \[
 \Delta :=
-\operatorname{PrimeSet}(a)\setminus
+\text{PrimeSet}(a)\setminus
 \left(
-\operatorname{PrimeSet}(\mathrm{Core})\cup
-\bigcup_k \operatorname{PrimeSet}(\mathrm{Beam}_k)
+\text{PrimeSet}(\mathrm{Core})\cup
+\bigcup_k \text{PrimeSet}(\mathrm{Beam}_k)
 \right)
 \]
 
@@ -3288,13 +3288,13 @@ a=\mathrm{Body},\qquad b=\mathrm{Gap},\qquad c=\mathrm{Big}
 ここで大事なことがある。
 
 \[
-\operatorname{PrimeSet}(A+B)
+\text{PrimeSet}(A+B)
 \]
 
 は一般に
 
 \[
-\operatorname{PrimeSet}(A)\cup \operatorname{PrimeSet}(B)
+\text{PrimeSet}(A)\cup \text{PrimeSet}(B)
 \]
 
 ではない。
@@ -3588,9 +3588,9 @@ n=(x_n+u_n)^{d_n}-u_n^{d_n}
 各パーツの素因子集合
 
 \[
-\operatorname{PrimeSet}(\mathrm{Core}_n),\quad
-\operatorname{PrimeSet}(\mathrm{Beam}_{n,k}),\quad
-\operatorname{PrimeSet}(\mathrm{Gap}_n)
+\text{PrimeSet}(\mathrm{Core}_n),\quad
+\text{PrimeSet}(\mathrm{Beam}_{n,k}),\quad
+\text{PrimeSet}(\mathrm{Gap}_n)
 \]
 
 を取る。
@@ -3600,10 +3600,10 @@ n=(x_n+u_n)^{d_n}-u_n^{d_n}
 \[
 \Delta_{a,b\to c}
 :=
-\operatorname{PrimeSet}(c)
+\text{PrimeSet}(c)
 \setminus
 \left(
-\operatorname{PrimeSet}(a)\cup \operatorname{PrimeSet}(b)
+\text{PrimeSet}(a)\cup \text{PrimeSet}(b)
 \right)
 \]
 
@@ -3612,11 +3612,11 @@ n=(x_n+u_n)^{d_n}-u_n^{d_n}
 \[
 \Delta^{\rm beam}_{a,b\to c}
 :=
-\operatorname{PrimeSet}(\mathrm{Beam}_c)
+\text{PrimeSet}(\mathrm{Beam}_c)
 \setminus
 \left(
-\operatorname{PrimeSet}(\mathrm{Beam}_a)\cup
-\operatorname{PrimeSet}(\mathrm{Beam}_b)
+\text{PrimeSet}(\mathrm{Beam}_a)\cup
+\text{PrimeSet}(\mathrm{Beam}_b)
 \right)
 \]
 
@@ -3874,9 +3874,9 @@ a+b=c
 各表現について
 
 \[
-\operatorname{PrimeSet}(\mathrm{Core}),\quad
-\operatorname{PrimeSet}(\mathrm{Beam}_k),\quad
-\operatorname{PrimeSet}(\mathrm{Gap})
+\text{PrimeSet}(\mathrm{Core}),\quad
+\text{PrimeSet}(\mathrm{Beam}_k),\quad
+\text{PrimeSet}(\mathrm{Gap})
 \]
 
 を並べる。
@@ -4066,8 +4066,8 @@ x_d = 7^{1/d} - 1
 次にやるなら、これにさらに
 
 \[
-\operatorname{PrimeSet}\!\left(\binom{d}{k}\right),\qquad
-\operatorname{PrimeSet}\!\left(\binom{d}{k}x_d^{d-k}\right)
+\text{PrimeSet}\!\left(\binom{d}{k}\right),\qquad
+\text{PrimeSet}\!\left(\binom{d}{k}x_d^{d-k}\right)
 \]
 
 の「係数素因子レイヤ」と、
@@ -4259,7 +4259,7 @@ n = \prod_{i=1}^r p_i^{e_i}
 という素因数分解そのものというより、そこから生成される **約数全体**
 
 \[
-\operatorname{Div}(n)=\{d\in\mathbb{N}: d\mid n\}
+\text{Div}(n)=\{d\in\mathbb{N}: d\mid n\}
 \]
 
 じゃ。
@@ -4746,7 +4746,7 @@ B_{d,k}:=\binom{d}{k}x_d^{d-k}
 \]
 - Body の通常素因数分解
 \[
-\operatorname{PrimeSet}(2^n-1)
+\text{PrimeSet}(2^n-1)
 \]
 
 そして比較するのは、
@@ -5030,11 +5030,11 @@ a^d-b^d
 2^n \equiv 1 \pmod q
 \]
 
-じゃから、2 の \(q\) における位数 \(\operatorname{ord}_q(2)\) は \(n\) を割る。
+じゃから、2 の \(q\) における位数 \(\text{ord}_q(2)\) は \(n\) を割る。
 そして原始素因子なら
 
 \[
-\operatorname{ord}_q(2)=n
+\text{ord}_q(2)=n
 \]
 
 になる。
@@ -5136,7 +5136,7 @@ q \mid z^p-y^p,\ q\nmid z-y
 について各 \(n\) ごとに
 
 - 通常素因数分解
-- それぞれの素数 \(q\) について \(\operatorname{ord}_q(2)\)
+- それぞれの素数 \(q\) について \(\text{ord}_q(2)\)
 - 原始素因子かどうか
 - 対応する Beam 解像度 \(d\)
 
@@ -5145,7 +5145,7 @@ q \mid z^p-y^p,\ q\nmid z-y
 特に見たいのは、
 
 \[
-q \mid 2^n-1,\qquad \operatorname{ord}_q(2)=n
+q \mid 2^n-1,\qquad \text{ord}_q(2)=n
 \]
 
 となる \(q\) じゃな。

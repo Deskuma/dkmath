@@ -78,21 +78,21 @@ GNNonExceptionalValuationExcess_eq_log_piSqRad_add_log_twoTail
 
 数式では、
 
-$$E=\log\operatorname{piSqRad}(N)+\log\operatorname{twoTail}(N)$$
+$$E=\log\text{piSqRad}(N)+\log\text{twoTail}(N)$$
 
 ただし、
 
-$$N=\operatorname{GNNonExceptionalPart}(p,a,b)$$
+$$N=\text{GNNonExceptionalPart}(p,a,b)$$
 
 じゃ。
 
 Lean コードでは先に、
 
-$$E=\log\operatorname{sqTail}(N)$$
+$$E=\log\text{sqTail}(N)$$
 
 を証明し、
 
-$$\operatorname{sqTail}(N)=\operatorname{piSqRad}(N)\operatorname{twoTail}(N)$$
+$$\text{sqTail}(N)=\text{piSqRad}(N)\text{twoTail}(N)$$
 
 を通して二層へ分解している。
 
@@ -333,7 +333,7 @@ a ≡ a' [MOD q^k]
 
 すると、
 
-$$|\operatorname{Root}(q^k)|\le|\operatorname{Root}(q)|\le p-1$$
+$$|\text{Root}(q^k)|\le|\text{Root}(q)|\le p-1$$
 
 で終わる。
 

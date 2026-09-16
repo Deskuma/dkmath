@@ -101,7 +101,7 @@ block 通過後の bit width と block start の bit width の差である。
 block 自体は既に、
 
 $$
-\operatorname{Fiber}(j)=[b,j]
+\text{Fiber}(j)=[b,j]
 $$
 
 という連続区間であり、exact-depth profile は、
@@ -245,7 +245,7 @@ first target
 仮に、
 
 $$
-\operatorname{floatGrowthDebtFiberAt}(n,j)=\varnothing
+\text{floatGrowthDebtFiberAt}(n,j)=\varnothing
 $$
 
 なら、universal block interior に carry-two は存在できない。
@@ -285,7 +285,7 @@ $$
 これは、
 
 $$
-\operatorname{CarryTwoDebtAt}(n,j)\land h_j=2
+\text{CarryTwoDebtAt}(n,j)\land h_j=2
 $$
 
 に一致するはずじゃ。

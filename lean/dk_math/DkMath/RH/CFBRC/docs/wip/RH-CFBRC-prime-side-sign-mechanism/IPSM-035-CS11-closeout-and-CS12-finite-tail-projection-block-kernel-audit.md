@@ -36,11 +36,11 @@ Tail_{W,X}(t) := OrdinaryZetaNegLogDeriv(s_t) - PHZ_X(s_t).
 
 CS11 gives
 
-$$R_{ε,W,X}.\operatorname{im}=2\int_0^T \operatorname{Re}(\operatorname{RawDifference}_{ε,W,X}(t))\,dt.$$
+$$R_{ε,W,X}.\text{im}=2\int_0^T \text{Re}(\text{RawDifference}_{ε,W,X}(t))\,dt.$$
 
 The raw difference is
 
-$$\operatorname{RawDifference}_{ε,W,X}(t)=-h_ε(z_t)\,\operatorname{Tail}_{W,X}(t),$$
+$$\text{RawDifference}_{ε,W,X}(t)=-h_ε(z_t)\,\text{Tail}_{W,X}(t),$$
 
 where
 
@@ -50,11 +50,11 @@ h_ε(z) := pascalCenteredXiMellinSecondDifferenceWeight ε 0 z.
 
 CS10 gives
 
-$$D_{ε,W,X}-D_{ε,W,\infty}=-\frac{R_{ε,W,X}.\operatorname{im}}{\pi}.$$
+$$D_{ε,W,X}-D_{ε,W,\infty}=-\frac{R_{ε,W,X}.\text{im}}{\pi}.$$
 
 Therefore the next theorem should combine the already proved identities into the exact signed half-interval formula
 
-$$D_{ε,W,X}-D_{ε,W,\infty}=\frac{2}{\pi}\int_0^T\operatorname{Re}\!\left(h_ε(z_t)\operatorname{Tail}_{W,X}(t)\right)dt.$$
+$$D_{ε,W,X}-D_{ε,W,\infty}=\frac{2}{\pi}\int_0^T\text{Re}\!\left(h_ε(z_t)\text{Tail}_{W,X}(t)\right)dt.$$
 
 This is source-derived algebra. It must be proved before introducing any new provider.
 
@@ -151,7 +151,7 @@ noncomputable def pascalCenteredXiPrimeSideFinitePrimeBlock
 
 Then source algebra gives
 
-$$\operatorname{Tail}_{W,X}(t)-\operatorname{Tail}_{W,Y}(t)=\operatorname{Block}_{W,X,Y}(t).$$
+$$\text{Tail}_{W,X}(t)-\text{Tail}_{W,Y}(t)=\text{Block}_{W,X,Y}(t).$$
 
 No summability or sum/integral interchange is required for this identity.
 
@@ -169,7 +169,7 @@ For a finite block, it is safe to use the existing finite von Mangoldt represent
 
 Define a mode kernel without hiding the positive arithmetic coefficient. A suitable semantic target is
 
-$$K_{ε,W}(n)=\int_0^T\operatorname{Re}\!\left(h_ε(z_t)\,(n^{-s_t})\right)dt.$$
+$$K_{ε,W}(n)=\int_0^T\text{Re}\!\left(h_ε(z_t)\,(n^{-s_t})\right)dt.$$
 
 Then a finite block should have the form
 
@@ -199,7 +199,7 @@ $$n^{-s_t}=n^{-\sigma}e^{-it\log n}.$$
 
 A future theorem may therefore isolate
 
-$$K_{ε,W}(n)=n^{-\sigma}\int_0^T\operatorname{Re}\!\left(h_ε(z_t)e^{-it\log n}\right)dt.$$
+$$K_{ε,W}(n)=n^{-\sigma}\int_0^T\text{Re}\!\left(h_ε(z_t)e^{-it\log n}\right)dt.$$
 
 Only introduce this if the required `Complex.cpow` normalization can be proved from existing Mathlib APIs without fragile branch assumptions.
 

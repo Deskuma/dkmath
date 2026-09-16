@@ -58,7 +58,7 @@ Big  = x + z = y
 
 \[
 y^d=(x+z)^d
-   =x^d+z\operatorname{gapGN}(d,x,z)
+   =x^d+z\text{gapGN}(d,x,z)
 \]
 
 となります。これは既存の subtraction-free theorem

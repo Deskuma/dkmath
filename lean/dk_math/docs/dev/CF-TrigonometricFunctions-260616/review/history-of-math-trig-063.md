@@ -16,7 +16,7 @@ cid: 6a37c7e8-06cc-83ee-872b-88f6b57dbc73
 現代の関係で言えば、半径 \(1\) の円では、
 
 $$
-\operatorname{chord}(x)=2\sin\frac{x}{2}
+\text{chord}(x)=2\sin\frac{x}{2}
 $$
 
 です。

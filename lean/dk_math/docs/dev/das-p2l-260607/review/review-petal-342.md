@@ -138,7 +138,7 @@ C.credit = canonicalEndpointCounterCredit n
 
 修正版、
 
-$$C_{n,B}(M)=B+\operatorname{width}(n)-\operatorname{width}(\operatorname{Start}_n(M))$$
+$$C_{n,B}(M)=B+\text{width}(n)-\text{width}(\text{Start}_n(M))$$
 
 は正確に設計されている。
 
@@ -148,7 +148,7 @@ $$C_{n,B}(0)=B$$
 
 $$C_{n,B}(M+1)=C_{n,B}(M)-\Delta_n(M)$$
 
-$$0\le C_{n,B}(M)\iff\operatorname{width}(\operatorname{Start}_n(M))\le\operatorname{width}(n)+B$$
+$$0\le C_{n,B}(M)\iff\text{width}(\text{Start}_n(M))\le\text{width}(n)+B$$
 
 を証明している。全時刻非負性と `CanonicalWidthWithinReserve` の同値も正しい。
 
@@ -210,7 +210,7 @@ RootwiseCanonicalWidthBound n
 
 Lean が証明した方向は、
 
-$$\operatorname{RootwiseCanonicalWidthBound}(n)\Longrightarrow\operatorname{RootwiseEndpointDriftBound}(n)$$
+$$\text{RootwiseCanonicalWidthBound}(n)\Longrightarrow\text{RootwiseEndpointDriftBound}(n)$$
 
 のみ。
 
@@ -314,11 +314,11 @@ not_globalCanonicalWidthReserveBound
 
 量化は、
 
-$$\neg\exists B,\ \forall n,\ \operatorname{WidthWithinReserve}(n,B)$$
+$$\neg\exists B,\ \forall n,\ \text{WidthWithinReserve}(n,B)$$
 
 であり、
 
-$$\forall n,\ \neg\exists B,\ \operatorname{WidthWithinReserve}(n,B)$$
+$$\forall n,\ \neg\exists B,\ \text{WidthWithinReserve}(n,B)$$
 
 ではない。
 

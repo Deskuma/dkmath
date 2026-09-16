@@ -82,13 +82,13 @@ The pointwise product is bilinear.  It is not automatically a Hermitian self-pai
 A genuine positive square has the algebraic shape
 
 $$
-\operatorname{Re}(z\overline z)=|z|^2\ge0.
+\text{Re}(z\overline z)=|z|^2\ge0.
 $$
 
 But changing the first factor already reverses the sign:
 
 $$
-\operatorname{Re}((-z)\overline z)=-|z|^2\le0.
+\text{Re}((-z)\overline z)=-|z|^2\le0.
 $$
 
 The module records this contrast explicitly in
@@ -107,7 +107,7 @@ Therefore a Gram or norm-square argument requires an additional theorem identify
 The finite scalar sign target remains
 
 $$
-E_{\varepsilon,X}(W)=\operatorname{Re}\mathcal W_{\varepsilon,X}(W)-\pi Q(W.R).
+E_{\varepsilon,X}(W)=\text{Re}\mathcal W_{\varepsilon,X}(W)-\pi Q(W.R).
 $$
 
 and the already Green algebra gives

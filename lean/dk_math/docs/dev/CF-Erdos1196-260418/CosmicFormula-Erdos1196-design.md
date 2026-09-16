@@ -436,7 +436,7 @@ rad_lower_bound_of_disjoint_channels
 ### 数学的意図
 
 新しい素因子チャネルが増えるほど、
-\(\operatorname{rad}\) や squarefree 部分の質量が持ち上がることを表す。
+\(\text{rad}\) や squarefree 部分の質量が持ち上がることを表す。
 
 ---
 

@@ -44,13 +44,13 @@ $$
 もともと前回までに
 
 $$
-q_1 q_2 \le \operatorname{supportMass}(a^d-b^d)
+q_1 q_2 \le \text{supportMass}(a^d-b^d)
 $$
 
 という 2-channel 版は入っておった。今回はそれを
 
 $$
-\prod_{q \in S} q \le \operatorname{supportMass}(n)
+\prod_{q \in S} q \le \text{supportMass}(n)
 $$
 
 という `Finset` family 版へ上げた。しかも `Finset` を index に使うことで、distinctness を別仮定で持たずに済ませておる。差分報告にも「distinctness は集合側に吸収」とあるが、これは設計としてとても自然じゃ。 radical 的対象を扱っているのだから、重複を最初から捨てる `Finset` は相性が良い。
@@ -59,7 +59,7 @@ $$
 つまり今回は
 
 $$
-\text{supportMass} = \operatorname{rad}
+\text{supportMass} = \text{rad}
 $$
 
 の family lower bound と、
@@ -85,7 +85,7 @@ $$
 なら
 
 $$
-\prod_{p \in S} p \mid \operatorname{supportMass}(n)
+\prod_{p \in S} p \mid \text{supportMass}(n)
 $$
 
 を言っておる。証明は `supportMass = rad` の定義を展開し、`S` が `n.factorization.support` の部分集合になることを示してから、`Finset.prod_dvd_prod_of_subset` で流している。これは非常に素直じゃ。
@@ -102,7 +102,7 @@ $$
 ここでは上の divisibility から positivity を使って
 
 $$
-\prod_{p \in S} p \le \operatorname{supportMass}(n)
+\prod_{p \in S} p \le \text{supportMass}(n)
 $$
 
 を出しておる。
@@ -121,7 +121,7 @@ $$
 family \(S\) の各 \(q\) に対して primitive witness があれば、
 
 $$
-q \in S \Rightarrow \bigl(\operatorname{Prime}(q) \wedge q \mid a^d-b^d\bigr)
+q \in S \Rightarrow \bigl(\text{Prime}(q) \wedge q \mid a^d-b^d\bigr)
 $$
 
 を返す。
@@ -132,7 +132,7 @@ $$
 これで、上の adapter をそのまま `supportMass_ge_prod_of_prime_channel_family` に流し、
 
 $$
-\prod_{q \in S} q \le \operatorname{supportMass}(a^d-b^d)
+\prod_{q \in S} q \le \text{supportMass}(a^d-b^d)
 $$
 
 を得ておる。
@@ -154,7 +154,7 @@ $$
 `MassBridgeExamples` では
 
 $$
-({2,3} : \mathrm{Finset},\mathbb{N}).\prod \mathrm{id} \le \operatorname{supportMass}(12)
+({2,3} : \mathrm{Finset},\mathbb{N}).\prod \mathrm{id} \le \text{supportMass}(12)
 $$
 
 を通しておる。これは前回の `2 * 3 ≤ supportMass 12` の family 版への持ち上げじゃ。
@@ -163,7 +163,7 @@ $$
 $$
 ({7,13} : \mathrm{Finset},\mathbb{N}).\prod \mathrm{id}
 \le
-\operatorname{supportMass}(6^3 - 5^3)
+\text{supportMass}(6^3 - 5^3)
 $$
 
 を通しておる。こちらは前回の `7,13` 二本 witness 例の family packaging 版じゃ。
@@ -231,7 +231,7 @@ witness packaging を大仰な structure にせず、まず `∀ q ∈ S, Primit
 これは今回の目的には合っておるが、当然ながら
 
 $$
-\operatorname{rad}
+\text{rad}
 $$
 
 型の議論しかできぬ。

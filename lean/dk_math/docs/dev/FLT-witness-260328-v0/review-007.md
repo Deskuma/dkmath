@@ -19,7 +19,7 @@ $$
 ここでの core は
 
 $$
-\mathrm{core}:=\operatorname{boundaryCyclotomicPrimeCore}(.right,d,x,u)
+\mathrm{core}:=\text{boundaryCyclotomicPrimeCore}(.right,d,x,u)
 $$
 
 で、証明はこれを

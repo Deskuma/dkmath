@@ -33,7 +33,7 @@ $$
 \;+\;
 (x)\neq \bot
 \;\Longrightarrow\;
-\operatorname{span}(z-\zeta y)=K^{\mathrm{ctx}.p}
+\text{span}(z-\zeta y)=K^{\mathrm{ctx}.p}
 $$
 
 さらにそこから Stage 2 の
@@ -146,7 +146,7 @@ $$
 そのうえで、
 
 $$
-\prod_{j\neq i} \operatorname{span}(z-\alpha_j y)=\operatorname{span}(\text{tail})
+\prod_{j\neq i} \text{span}(z-\alpha_j y)=\text{span}(\text{tail})
 $$
 
 を返す theorem を作る。

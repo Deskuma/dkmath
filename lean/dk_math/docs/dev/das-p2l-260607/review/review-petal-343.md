@@ -68,7 +68,7 @@ positive suffix excursion
 
 中心式はこれじゃ。
 
-$$\operatorname{AbsorptionDeficit}(n,q,M)=\operatorname{Width}(q+M)-\operatorname{Width}(q)$$
+$$\text{AbsorptionDeficit}(n,q,M)=\text{Width}(q+M)-\text{Width}(q)$$
 
 さらに reflected queue は、この量の**正の suffix 最大値**として読める。
 
@@ -122,7 +122,7 @@ $$D_n(q,M)=\sum_{i<M}\Delta_n(q+i)$$
 
 既存の drift telescopeと合流し、
 
-$$D_n(q,M)=\operatorname{bitWidth}(\operatorname{Start}_n(q+M))-\operatorname{bitWidth}(\operatorname{Start}_n(q))$$
+$$D_n(q,M)=\text{bitWidth}(\text{Start}_n(q+M))-\text{bitWidth}(\text{Start}_n(q))$$
 
 まで閉じている。
 
@@ -175,11 +175,11 @@ canonicalAbsorptionDeficitWindow_eq_canonicalWindowDriftInt
 
 次の同値も正しい。
 
-$$\operatorname{CanonicalWidthWithinReserve}(n,B)\iff\forall M,\ D_n(0,M)\le B$$
+$$\text{CanonicalWidthWithinReserve}(n,B)\iff\forall M,\ D_n(0,M)\le B$$
 
 すなわち、
 
-$$\operatorname{width}(\operatorname{Start}_n(M))\le\operatorname{width}(n)+B$$
+$$\text{width}(\text{Start}_n(M))\le\text{width}(n)+B$$
 
 と、
 
@@ -229,17 +229,17 @@ $$w(m)=C(m)-C(m+1)$$
 
 width reserve $B$ からは、
 
-$$Q_m\le\operatorname{bitWidth}(n)+B$$
+$$Q_m\le\text{bitWidth}(n)+B$$
 
 queue ceiling $C$ からは、
 
-$$\operatorname{width}(\operatorname{Start}_n(M))\le\operatorname{bitWidth}(n)+C$$
+$$\text{width}(\text{Start}_n(M))\le\text{bitWidth}(n)+C$$
 
 が得られる。
 
 従って存在量化では、
 
-$$\operatorname{RootwiseCanonicalWidthBound}(n)\iff\exists C,\ \forall m,\ Q_n(m)\le C$$
+$$\text{RootwiseCanonicalWidthBound}(n)\iff\exists C,\ \forall m,\ Q_n(m)\le C$$
 
 となる。
 
@@ -293,7 +293,7 @@ width reserveからは root width の offsetを払って all-window boundを得�
 
 従って存在量化として、
 
-$$\operatorname{RootwiseCanonicalWidthBound}(n)\iff\exists C,\ \forall q,M,\ D_n(q,M)\le C$$
+$$\text{RootwiseCanonicalWidthBound}(n)\iff\exists C,\ \forall q,M,\ D_n(q,M)\le C$$
 
 が閉じた。
 

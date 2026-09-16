@@ -141,7 +141,7 @@ EtaCriticalMirrorPairedFrameNormalizedCoarseCorrectionObstruction
 
 ## 3. 記号と index discipline
 
-非自明零点を $s=\sigma+it$、critical mirror を $m=\operatorname{criticalMirror}(s)$ とする。
+非自明零点を $s=\sigma+it$、critical mirror を $m=\text{criticalMirror}(s)$ とする。
 
 $$
 m.re=1-\sigma
@@ -233,11 +233,11 @@ etaPairTail_eq_half_endpoint_add_eulerRemainderTail
 ```
 
 $$
-\operatorname{etaPairTail}(K,z)=\frac12\operatorname{etaUnsignedVector}(z,2K)+\operatorname{EulerRemainderTail}(K,z)
+\text{etaPairTail}(K,z)=\frac12\text{etaUnsignedVector}(z,2K)+\text{EulerRemainderTail}(K,z)
 $$
 
 $$
-\|\operatorname{EulerRemainderTail}(K,z)\|=O\!\left(K^{-z.re-1}\right)
+\|\text{EulerRemainderTail}(K,z)\|=O\!\left(K^{-z.re-1}\right)
 $$
 
 ### Normalized eta-tail constant
@@ -253,13 +253,13 @@ $$
 右側 $\frac12<s.re$:
 
 $$
-(k+1)^{m.re}\operatorname{RotDefectTail}_k(s)\longrightarrow C(m)
+(k+1)^{m.re}\text{RotDefectTail}_k(s)\longrightarrow C(m)
 $$
 
 左側 $s.re<\frac12$:
 
 $$
-(k+1)^{s.re}\operatorname{RotDefectTail}_k(s)\longrightarrow-C(s)
+(k+1)^{s.re}\text{RotDefectTail}_k(s)\longrightarrow-C(s)
 $$
 
 実部版:
@@ -288,13 +288,13 @@ etaCriticalMirrorPairedFrameScaledSineTransportCoefficient_tendsto_sq
 右側:
 
 $$
-(k+1)^{m.re+1}\operatorname{SineTerm}_k(s)\longrightarrow-(s.im)^2C_{\mathbb R}(m)
+(k+1)^{m.re+1}\text{SineTerm}_k(s)\longrightarrow-(s.im)^2C_{\mathbb R}(m)
 $$
 
 左側:
 
 $$
-(k+1)^{s.re+1}\operatorname{SineTerm}_k(s)\longrightarrow(s.im)^2C_{\mathbb R}(s)
+(k+1)^{s.re+1}\text{SineTerm}_k(s)\longrightarrow(s.im)^2C_{\mathbb R}(s)
 $$
 
 ```lean
@@ -345,7 +345,7 @@ D_R=-(s.im)^2C_{\mathbb R}(m),\qquad \alpha_R=m.re
 $$
 
 $$
-K^{\alpha_R}\operatorname{SineTransportTail}(K,s)\longrightarrow\frac{D_R}{\alpha_R}<0
+K^{\alpha_R}\text{SineTransportTail}(K,s)\longrightarrow\frac{D_R}{\alpha_R}<0
 $$
 
 左側:
@@ -355,7 +355,7 @@ D_L=(s.im)^2C_{\mathbb R}(s),\qquad \alpha_L=s.re
 $$
 
 $$
-K^{\alpha_L}\operatorname{SineTransportTail}(K,s)\longrightarrow\frac{D_L}{\alpha_L}>0
+K^{\alpha_L}\text{SineTransportTail}(K,s)\longrightarrow\frac{D_L}{\alpha_L}>0
 $$
 
 最初に既存コードを検索する。
@@ -400,13 +400,13 @@ normalized cosine-loss tail は零へ行く。よって correction projection ta
 右側:
 
 $$
-K^{m.re}\operatorname{CorrectionProjectionTail}(K,s)\longrightarrow\frac{D_R}{m.re}<0
+K^{m.re}\text{CorrectionProjectionTail}(K,s)\longrightarrow\frac{D_R}{m.re}<0
 $$
 
 左側:
 
 $$
-K^{s.re}\operatorname{CorrectionProjectionTail}(K,s)\longrightarrow\frac{D_L}{s.re}>0
+K^{s.re}\text{CorrectionProjectionTail}(K,s)\longrightarrow\frac{D_L}{s.re}>0
 $$
 
 `K-1` を使う Abel identity へ接続するとき、eventually $K\ge1$ と shift ratio を明示する。
@@ -422,7 +422,7 @@ EtaCriticalMirrorPairedFrameNormalizedAbelBalanceAudit.lean
 exact identity:
 
 $$
-P_s\!\left(B_{K-1}\operatorname{Tail}(K)\right)=\operatorname{RotatedProjectionTail}(K)+\operatorname{CorrectionProjectionTail}(K-1)
+P_s\!\left(B_{K-1}\text{Tail}(K)\right)=\text{RotatedProjectionTail}(K)+\text{CorrectionProjectionTail}(K-1)
 $$
 
 同じ normalization で監査する。

@@ -78,7 +78,7 @@ primitive witness から
 単に `rad` や `padicValNat` の薄い橋を置いただけでなく、
 
 $$
-\text{supportMass} = \operatorname{rad}
+\text{supportMass} = \text{rad}
 $$
 
 を軸に、
@@ -117,7 +117,7 @@ $$
 \;\to\;
 \text{disjoint channels}
 \;\to\;
-\operatorname{rad}\text{ の下界}
+\text{rad}\text{ の下界}
 $$
 
 という読みにまで到達しておる。
@@ -206,7 +206,7 @@ ABC パッケージには、それを読むための翻訳面と公開導線が�
 $$
 \text{primitive channel 数}
 \;\Rightarrow\;
-\operatorname{rad}(abc)\text{ 下界}
+\text{rad}(abc)\text{ 下界}
 \;\Rightarrow\;
 \text{quality や valuation の制約}
 $$

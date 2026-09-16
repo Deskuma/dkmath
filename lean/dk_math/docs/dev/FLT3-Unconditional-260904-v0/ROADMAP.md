@@ -198,15 +198,15 @@ primitive FLT3 counterexample を mod 9 で signed orientation へ正規化し�
 Target:
 
 $
-\operatorname{carrier}=9A^3,
+\text{carrier}=9A^3,
 $
 
 $
-\operatorname{residual}=3B^3,
+\text{residual}=3B^3,
 $
 
 $
-\operatorname{distinguished}=3AB,
+\text{distinguished}=3AB,
 $
 
 with
@@ -220,11 +220,11 @@ $
 Signed Eisenstein coordinate alpha must satisfy
 
 $
-N(\alpha)=\operatorname{residual},
+N(\alpha)=\text{residual},
 $
 
 $
-\alpha_{\rm snd}-\alpha_{\rm fst}=\operatorname{carrier}.
+\alpha_{\rm snd}-\alpha_{\rm fst}=\text{carrier}.
 $
 
 ### FLT3U-004B — Eisenstein Ramifier Stripping
@@ -332,6 +332,7 @@ and the skew rounding cell
 $
 N_{\mathbb Q}(u,v)
 =
+
 \left(u+\frac v2\right)^2
 +
 \frac34v^2

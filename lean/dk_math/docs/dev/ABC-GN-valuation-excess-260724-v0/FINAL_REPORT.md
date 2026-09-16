@@ -112,15 +112,15 @@ q | GN
 
 自然数 `m` に対し、valuation multiplicity の squarefree support 超過量を定義した。
 
-$$\operatorname{valuationExcess}(m)=\sum_{q\mid m}(v_q(m)-1)\log q$$
+$$\text{valuationExcess}(m)=\sum_{q\mid m}(v_q(m)-1)\log q$$
 
 exact identity:
 
-$$\log m=\log\operatorname{rad}(m)+\operatorname{valuationExcess}(m)$$
+$$\log m=\log\text{rad}(m)+\text{valuationExcess}(m)$$
 
 GN specialization:
 
-$$\log GN=\log\operatorname{rad}(GN)+GNValuationExcess$$
+$$\log GN=\log\text{rad}(GN)+GNValuationExcess$$
 
 さらに指数による exceptional / non-exceptional partition も exact に証明した。
 
@@ -166,7 +166,7 @@ $$(n-1)\log T.c\le\log GN_n(T.a,T.b)$$
 
 Affine 版の概念形:
 
-$$\left((n-1)(1+\varepsilon)-\sigma\right)\log\operatorname{rad}(abc)-C<GNValuationExcess$$
+$$\left((n-1)(1+\varepsilon)-\sigma\right)\log\text{rad}(abc)-C<GNValuationExcess$$
 
 ### 3.7. `DkMath.ABC.GNSupportReturn`
 
@@ -178,7 +178,7 @@ GNExceptionalSupport_disjoint_nonExceptional
 rad_GN_eq_exceptional_mul_nonExceptional
 ```
 
-$$\operatorname{rad}(GN)=E_nN_n$$
+$$\text{rad}(GN)=E_nN_n$$
 
 ここで、`E_n` は `q | n` の exceptional support product、`N_n` は `q ∤ n` の non-exceptional support product である。
 
@@ -188,7 +188,7 @@ Exceptional support は指数 radical へ有限吸収される。
 GNExceptionalSupportProduct_dvd_rad
 ```
 
-$$E_n\mid\operatorname{rad}(n)$$
+$$E_n\mid\text{rad}(n)$$
 
 Non-exceptional support は元の ABC coordinates 全てから fresh である。
 
@@ -204,7 +204,7 @@ $$q\mid N_n\Longrightarrow q\nmid T.aT.bT.c$$
 Triple.rad_mul_nonExceptionalProduct_dvd_lift_rad
 ```
 
-$$\operatorname{rad}(T.aT.bT.c)\,N_n\mid\operatorname{rad}(\operatorname{lift}.a\operatorname{lift}.b\operatorname{lift}.c)$$
+$$\text{rad}(T.aT.bT.c)\,N_n\mid\text{rad}(\text{lift}.a\text{lift}.b\text{lift}.c)$$
 
 その結果、lifted-radical growth budget から full GN support budget への deterministic transport を得た。
 
@@ -248,7 +248,7 @@ Lifted-radical specialization:
 Triple.log_c_mul_pred_le_of_liftGrowth_and_excessBudget
 ```
 
-$$ (n-1)\log c\le(\sigma+\tau)\log R+C_s+C_e+\log\operatorname{rad}(n) $$
+$$ (n-1)\log c\le(\sigma+\tau)\log R+C_s+C_e+\log\text{rad}(n) $$
 
 実装された明示定数:
 
@@ -269,7 +269,7 @@ $$\sigma+\tau\le(n-1)(1+\varepsilon)$$
 
 の下で、
 
-$$c\le GNABCConstant(n,C_s,C_e)\,\operatorname{rad}(abc)^{1+\varepsilon}$$
+$$c\le GNABCConstant(n,C_s,C_e)\,\text{rad}(abc)^{1+\varepsilon}$$
 
 を証明した。
 
@@ -307,23 +307,23 @@ $$ (n-1)\log T.c\le\log GN_n(T.a,T.b) $$
 
 ### 5.2. Exact support / multiplicity identity
 
-$$ \log GN_n=\log\operatorname{rad}(GN_n)+GNValuationExcess_n $$
+$$ \log GN_n=\log\text{rad}(GN_n)+GNValuationExcess_n $$
 
 ### 5.3. Support partition
 
-$$ \operatorname{rad}(GN_n)=E_nN_n $$
+$$ \text{rad}(GN_n)=E_nN_n $$
 
-$$ E_n\mid\operatorname{rad}(n) $$
+$$ E_n\mid\text{rad}(n) $$
 
 ### 5.4. Fresh support return
 
-$$ \operatorname{rad}(abc)N_n\mid\operatorname{rad}(\text{lifted }abc) $$
+$$ \text{rad}(abc)N_n\mid\text{rad}(\text{lifted }abc) $$
 
 ### 5.5. Two-budget height bound
 
 Lifted-radical growth budget:
 
-$$\log\operatorname{rad}(\text{lifted }abc)\le(1+\sigma)\log R+C_s$$
+$$\log\text{rad}(\text{lifted }abc)\le(1+\sigma)\log R+C_s$$
 
 Valuation-excess budget:
 
@@ -331,7 +331,7 @@ $$GNValuationExcess\le\tau\log R+C_e$$
 
 ならば、
 
-$$ (n-1)\log c\le(\sigma+\tau)\log R+C_s+C_e+\log\operatorname{rad}(n) $$
+$$ (n-1)\log c\le(\sigma+\tau)\log R+C_s+C_e+\log\text{rad}(n) $$
 
 となる。
 
@@ -351,7 +351,7 @@ $$c\le K R^{1+\varepsilon}$$
 
 必要な型は概ね次である。
 
-$$\log\operatorname{rad}(\text{lifted }abc)\le(1+\sigma)\log\operatorname{rad}(abc)+C_s$$
+$$\log\text{rad}(\text{lifted }abc)\le(1+\sigma)\log\text{rad}(abc)+C_s$$
 
 これは GN の値そのものではなく、power lift によって発生する相異なる fresh prime support の総対数質量を抑える問題である。
 

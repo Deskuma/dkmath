@@ -21,7 +21,7 @@ $$
 その少し前には、\(\omega:=z,y^{-1}\in \mathbb Z/q\mathbb Z\) が
 
 $$
-\omega^p=1,\qquad \omega\neq 1,\qquad \operatorname{ord}(\omega)=p
+\omega^p=1,\qquad \omega\neq 1,\qquad \text{ord}(\omega)=p
 $$
 
 を満たす、すなわち **primitive \(p\)-th root of unity** であることも確定した。

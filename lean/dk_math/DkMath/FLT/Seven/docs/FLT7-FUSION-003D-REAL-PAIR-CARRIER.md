@@ -21,7 +21,7 @@ signed integer roots
 また、
 
 $$
--(\theta+1)^2C_0C_1C_2=\operatorname{quotientRoot}
+-(\theta+1)^2C_0C_1C_2=\text{quotientRoot}
 $$
 
 という厳密な積再構成から、`quotientRoot ≡ 1 mod 7` の第二証明まで到達しています。
@@ -55,7 +55,7 @@ IsCoprime (r*l) gapRoot
 以下、
 
 $$
-r=\operatorname{signedRightRoot},\qquad l=\operatorname{signedLeftRoot},\qquad d=\operatorname{gapRoot}
+r=\text{signedRightRoot},\qquad l=\text{signedLeftRoot},\qquad d=\text{gapRoot}
 $$
 
 と置きます。
@@ -63,7 +63,7 @@ $$
 既存 packet には、
 
 $$
-\operatorname{IsCoprime}(l,r)
+\text{IsCoprime}(l,r)
 $$
 
 $$
@@ -89,7 +89,7 @@ $$
 なので、
 
 $$
-\operatorname{IsCoprime}(r,d)
+\text{IsCoprime}(r,d)
 $$
 
 です。
@@ -103,7 +103,7 @@ $$
 なので、
 
 $$
-\operatorname{IsCoprime}(l,d)
+\text{IsCoprime}(l,d)
 $$
 
 です。
@@ -111,7 +111,7 @@ $$
 したがって、
 
 $$
-\boxed{\operatorname{IsCoprime}(rl,d)}
+\boxed{\text{IsCoprime}(rl,d)}
 $$
 
 が得られます。
@@ -149,7 +149,7 @@ R=rl
 $$
 
 $$
-H=\theta^{23},\operatorname{thetaSevenUnit}^8,d^2
+H=\theta^{23},\text{thetaSevenUnit}^8,d^2
 $$
 
 $$
@@ -169,7 +169,7 @@ Int.castRingHom SevenRealCubicInt
 で map すれば、
 
 $$
-\operatorname{IsCoprime}\bigl((R:\mathcal O),(d:\mathcal O)\bigr)
+\text{IsCoprime}\bigl((R:\mathcal O),(d:\mathcal O)\bigr)
 $$
 
 が得られます。
@@ -195,13 +195,13 @@ $$
 既存の ramified relation、
 
 $$
-7=\theta^3\operatorname{thetaSevenUnit}
+7=\theta^3\text{thetaSevenUnit}
 $$
 
 を代入すると、
 
 $$
-R-\theta\left(\theta^2\operatorname{thetaSevenUnit}k\right)=1
+R-\theta\left(\theta^2\text{thetaSevenUnit}k\right)=1
 $$
 
 です。
@@ -211,7 +211,7 @@ $$
 よって、
 
 $$
-\operatorname{IsCoprime}(R,\theta)
+\text{IsCoprime}(R,\theta)
 $$
 
 です。
@@ -223,7 +223,7 @@ $R$ は $\theta$ と $d$ に coprime であり、`thetaSevenUnit` は unit で�
 したがって、
 
 $$
-\operatorname{IsCoprime}(R,H)
+\text{IsCoprime}(R,H)
 $$
 
 となります。
@@ -233,7 +233,7 @@ $$
 $C_i=H-u_iR$ なので、Bézout identity の通常の加減変換により、
 
 $$
-\operatorname{IsCoprime}(R,C_i)
+\text{IsCoprime}(R,C_i)
 $$
 
 です。
@@ -255,7 +255,7 @@ $$
 $R\perp C_i$ であるため、
 
 $$
-\boxed{\operatorname{IsCoprime}(C_i,C_j)}
+\boxed{\text{IsCoprime}(C_i,C_j)}
 $$
 
 が従います。
@@ -360,7 +360,7 @@ theorem realPairCore_two_eq_unit_mul_rotate_sq :
 よって、
 
 $$
-\operatorname{Norm}(P_0)=P_0P_1P_2
+\text{Norm}(P_0)=P_0P_1P_2
 $$
 
 です。
@@ -368,7 +368,7 @@ $$
 今回、
 
 $$
-P_0P_1P_2=7,\operatorname{quotientRoot}
+P_0P_1P_2=7,\text{quotientRoot}
 $$
 
 が証明されました。
@@ -382,7 +382,7 @@ $$
 であり、
 
 $$
-\operatorname{Norm}(\theta)=-7
+\text{Norm}(\theta)=-7
 $$
 
 です。
@@ -390,13 +390,13 @@ $$
 したがって、
 
 $$
--7,\operatorname{Norm}(C_0)=7,\operatorname{quotientRoot}
+-7,\text{Norm}(C_0)=7,\text{quotientRoot}
 $$
 
 となり、
 
 $$
-\boxed{\operatorname{Norm}(C_0)=-\operatorname{quotientRoot}}
+\boxed{\text{Norm}(C_0)=-\text{quotientRoot}}
 $$
 
 です。
@@ -404,7 +404,7 @@ $$
 $C_1,C_2$ は norm $1$ の unit を掛けた conjugate なので、
 
 $$
-\boxed{\operatorname{Norm}(C_i)=-\operatorname{quotientRoot}}
+\boxed{\text{Norm}(C_i)=-\text{quotientRoot}}
 $$
 
 が全 $i$ で成立すると予測されます。
@@ -418,7 +418,7 @@ $$
 現在の積は、
 
 $$
--(\theta+1)^2C_0C_1C_2=\operatorname{quotientRoot}
+-(\theta+1)^2C_0C_1C_2=\text{quotientRoot}
 $$
 
 です。
@@ -448,8 +448,8 @@ $$
 ならば、
 
 $$
--\operatorname{quotientRoot}
-=\operatorname{Norm}(\varepsilon)\operatorname{Norm}(\gamma)^7
+-\text{quotientRoot}
+=\text{Norm}(\varepsilon)\text{Norm}(\gamma)^7
 $$
 
 です。
@@ -457,7 +457,7 @@ $$
 したがって少なくとも、
 
 $$
-\boxed{|\operatorname{quotientRoot}|\text{ が七乗}}
+\boxed{|\text{quotientRoot}|\text{ が七乗}}
 $$
 
 でなければなりません。
@@ -506,7 +506,7 @@ column 3 = |m^7|
 第2行を、
 
 $$
-|\operatorname{quotientRoot}|=c_{21}c_{22}c_{23}
+|\text{quotientRoot}|=c_{21}c_{22}c_{23}
 $$
 
 と読みます。
@@ -547,7 +547,7 @@ c21 and c22 are seventh powers
 これが閉じれば、
 
 $$
-|\operatorname{quotientRoot}|=z^7
+|\text{quotientRoot}|=z^7
 $$
 
 が得られ、pairwise coprime core の積から `exists_associated_pow_of_mul_eq_pow` を正当に適用できます。
@@ -769,7 +769,7 @@ Do not claim:
 第一の壁、
 
 $$
-\operatorname{IsCoprime}(rl,d)
+\text{IsCoprime}(rl,d)
 $$
 
 と pair-core coprimality は、**既存 packet の Bézout 代数だけで突破可能**です。
@@ -777,7 +777,7 @@ $$
 しかし、その先の本当の魔核は、
 
 $$
-\boxed{\operatorname{Norm}(C_i)=-\operatorname{quotientRoot}}
+\boxed{\text{Norm}(C_i)=-\text{quotientRoot}}
 $$
 
 です。

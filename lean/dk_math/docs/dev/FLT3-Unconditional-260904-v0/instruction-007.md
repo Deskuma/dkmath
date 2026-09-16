@@ -209,14 +209,14 @@ Use the lattice geometry for tau^2 - tau + 1 = 0.
 Choose
 
 $$
-n=\operatorname{round}(B).
+n=\text{round}(B).
 $$
 
 Then choose
 
 $$
 m=
-\operatorname{round}
+\text{round}
 \left(
 A+\frac{B-n}{2}
 \right).
@@ -300,7 +300,7 @@ Do not import the FLT7 theorem.
 Define
 
 $$
-\operatorname{size}(x)=|N(x)|_{\rm nat}.
+\text{size}(x)=|N(x)|_{\rm nat}.
 $$
 
 Since Eisenstein norm is nonnegative, this is just the Nat shadow of N.
@@ -426,7 +426,7 @@ Also run any focused #check / #print axioms needed.
 FLT3U-006A is complete when kernel-checked source provides
 
 $$
-\operatorname{EuclideanDomain}(\operatorname{EisensteinInt})
+\text{EuclideanDomain}(\text{EisensteinInt})
 $$
 
 with Euclidean size derived from the Eisenstein norm and a proved strict remainder bound.

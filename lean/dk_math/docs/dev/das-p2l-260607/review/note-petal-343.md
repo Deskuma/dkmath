@@ -30,7 +30,7 @@ $$D(q,M)=L(q,M)-H(q,M)-V(q,M)$$
 
 $$D(q,M)=\sum_{i<M}\Delta_{q+i}$$
 
-$$D(q,M)=\operatorname{width}(q+M)-\operatorname{width}(q)$$
+$$D(q,M)=\text{width}(q+M)-\text{width}(q)$$
 
 まで exact に閉じた。
 
@@ -112,7 +112,7 @@ global bound と rootwise bound は同じか
 
 特に、
 
-$$\operatorname{RootwiseWidthBound}(n)$$
+$$\text{RootwiseWidthBound}(n)$$
 
 $$\Longleftrightarrow\exists C,\ \forall m,\ Q_n(m)\le C$$
 
@@ -224,7 +224,7 @@ $$Q(m)\le C_n$$
 
 固定 root の canonical 軌道を有限幅領域へ閉じ込める。
 
-$$\exists C_n,\ \forall M,\ \operatorname{width}(\operatorname{Start}_n(M))\le\operatorname{width}(n)+C_n$$
+$$\exists C_n,\ \forall M,\ \text{width}(\text{Start}_n(M))\le\text{width}(n)+C_n$$
 
 これが閉じれば、固定 rootごとの finite-state reductionへ進める。
 

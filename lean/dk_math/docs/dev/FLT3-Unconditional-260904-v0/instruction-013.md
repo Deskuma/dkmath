@@ -128,7 +128,7 @@ directly rather than the existential wrapper.
 Then the recursion step is:
 
 $$
-\operatorname{measure}(next)<\operatorname{measure}(source).
+\text{measure}(next)<\text{measure}(source).
 $$
 
 However, prefer the closure-facing theorem already created in U009B unless direct use makes the proof materially shorter.

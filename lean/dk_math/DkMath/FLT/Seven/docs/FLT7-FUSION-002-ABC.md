@@ -386,11 +386,11 @@ $$
 したがって、
 
 $$
-\boxed{\neg\operatorname{IsSourcePlane}(X_L)}
+\boxed{\neg\text{IsSourcePlane}(X_L)}
 $$
 
 $$
-\boxed{\neg\operatorname{IsSourcePlane}(X_R)}
+\boxed{\neg\text{IsSourcePlane}(X_R)}
 $$
 
 です。
@@ -821,7 +821,7 @@ $7=\theta^3U$、$U\equiv-1\pmod\theta$ を使うと、$\theta$-depth $10$ の先
 従って既存 ledger の normalized `gapCore` について、
 
 $$
-\boxed{\mathrm{thetaConstModSeven}(\operatorname{gapCore})\equiv-2m}
+\boxed{\mathrm{thetaConstModSeven}(\text{gapCore})\equiv-2m}
 $$
 
 が予測されます。

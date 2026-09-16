@@ -38,7 +38,7 @@ flt_three_primitive_GN_squarefree_contradiction
 これらは、Nat 側の primitive prime witness
 
 $$
-\operatorname{
+\text{
     PrimitivePrimeFactorOfDiffPow(q,a,b,3)
 }
 $$
@@ -46,7 +46,7 @@ $$
 から、S2-L の
 
 $$
-q\mid |\operatorname{powerBeam}_3(b,a)|
+q\mid |\text{powerBeam}_3(b,a)|
 $$
 
 を自動供給し、さらに GN 側の valuation 上界または squarefree 仮定を使って、d=3 の FLT 型方程式から `False` を出す。
@@ -76,7 +76,7 @@ $$
 これを S2-L で
 
 $$
-q\mid |\operatorname{powerBeam}_3(b,a)|
+q\mid |\text{powerBeam}_3(b,a)|
 $$
 
 へ運ぶ。
@@ -90,7 +90,7 @@ $$
 を仮定すると、
 
 $$
-y^3=(a-b)\operatorname{powerBeam}_3(b,a)
+y^3=(a-b)\text{powerBeam}_3(b,a)
 $$
 
 が得られる。
@@ -101,7 +101,7 @@ $$
 そして完全 3 乗性より、
 
 $$
-v_q(\operatorname{powerBeam}_3)=3v_q(y)
+v_q(\text{powerBeam}_3)=3v_q(y)
 $$
 
 が必要になる。
@@ -115,7 +115,7 @@ $$
 または squarefree 条件
 
 $$
-\operatorname{
+\text{
     Squarefree(|GN|)
 }
 $$
@@ -123,7 +123,7 @@ $$
 が来ると、PowerBeam 側でも
 
 $$
-v_q(\operatorname{powerBeam}_3)\le1
+v_q(\text{powerBeam}_3)\le1
 $$
 
 となり、矛盾する。
@@ -170,7 +170,7 @@ hqnd : ¬ q ∣ 3
 S2 の d=3 route は、次の形でまとまった。
 
 $$
-\operatorname{
+\text{
     PrimitivePrimeFactorOfDiffPow(q,a,b,3)
 }
 $$
@@ -180,16 +180,16 @@ $$
 $$
 
 $$
-\Longrightarrow q\mid |\operatorname{powerBeam}_3(b,a)|
+\Longrightarrow q\mid |\text{powerBeam}_3(b,a)|
 $$
 
 $$
-\Longrightarrow v_q(\operatorname{powerBeam}_3)=3v_q(y)
+\Longrightarrow v_q(\text{powerBeam}_3)=3v_q(y)
 $$
 
 $$
 \text{GN 側上界または squarefree}
-\Longrightarrow v_q(\operatorname{powerBeam}_3)\le1
+\Longrightarrow v_q(\text{powerBeam}_3)\le1
 $$
 
 $$
@@ -245,7 +245,7 @@ hbeam_ne : (powerBeam 3 (b : ℤ) (a : ℤ)).natAbs ≠ 0
 しかし、
 
 $$
-q\mid |\operatorname{powerBeam}_3|
+q\mid |\text{powerBeam}_3|
 $$
 
 かつ (q) が素数なら、通常は Beam が 0 でないことを言いたくなる。

@@ -238,7 +238,7 @@ CFBRC README 自身が、位相微分を
 
 \[
 \frac{d}{d\theta}\arg G=
-\operatorname{Im}\!\left(\frac{G'}{G}\right)
+\text{Im}\!\left(\frac{G'}{G}\right)
 \]
 
 として観測指標にしておる。
@@ -299,7 +299,7 @@ GN(p,x,w)=\Phi_p^{\mathrm h}(x+w,w)
 理想形は
 
 \[
-\operatorname{Homog}(\Phi_m)(X,Y)
+\text{Homog}(\Phi_m)(X,Y)
 \]
 
 を一般に定義して、

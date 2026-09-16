@@ -58,11 +58,11 @@ The central structural statement is not a new primality criterion for GN.
 It is the factor-one dichotomy:
 
 $$
-\operatorname{Prime}(xG)
+\text{Prime}(xG)
 \iff
-(x=1\land\operatorname{Prime}(G))
+(x=1\land\text{Prime}(G))
 \lor
-(G=1\land\operatorname{Prime}(x)),
+(G=1\land\text{Prime}(x)),
 $$
 
 specialized to
