@@ -2,7 +2,7 @@
 
 This roadmap is intentionally structure-first.
 
-Numerical exponents and uniform bounds were postponed until the balance law and calibration mechanism became explicit.
+The structural/calibration campaign is now complete. Numerical optimization is not continued on this branch because BCAL-008 identified a missing deterministic bridge between aggregate quantitative estimates and the pointwise calibration budget.
 
 ## BCAL-000 — Coordinate extraction
 
@@ -65,7 +65,7 @@ Status: **complete / Outcome A — EXACT EXCEPTIONAL COMPLETION** at commit `7aa
 
 ## BCAL-006 — Depth-step / finite Hensel transport
 
-Established three distinct levels:
+Established:
 
 ```text
 exact valuation successor:
@@ -86,7 +86,7 @@ Status: **complete / Outcome A — EXACT DEPTH TRANSPORT** at commit `f68cb617a2
 
 ## BCAL-007 — Two-channel / PowerSwap abstraction
 
-A genuine two-consumer abstraction was found and extracted as a stable dependency-neutral kernel:
+Extracted the stable dependency-neutral kernel
 
 ```text
 mass(u,v)    = u + v
@@ -94,66 +94,66 @@ balance(u,v) = u - v
 center(u,v)  = (u + v)/2
 ```
 
-with reconstruction, swap symmetry, and left/right channel transports.
+with exact PowerSwap and ABC/GN consumer bridges while preserving the existing domain APIs.
 
-Exact consumer bridges now identify:
+Status: **complete / Outcome A — GENERIC KERNEL JUSTIFIED** at commit `7c4a1137c92c21d83a3803f46eaec062b30cf718`.
 
-```text
-PowerSwap:
-  gapP = center(gapU,gapV)
-  gapQ = balance(gapU,gapV)
+## BCAL-008 — Quantitative calibration frontier audit
 
-ABC/GN:
-  GNChannelMass    = mass(S,E)
-  GNChannelBalance = balance(S,E)
-```
+The existing quantitative interfaces were classified by population, measured quantity, normalization, and current coordinate class (`S`, `E`, `M`, `Q`, `Cal`, or aggregate/proxy).
 
-Existing domain definitions and direct proofs remain intact.
-
-Status: **complete / Outcome A — GENERIC KERNEL JUSTIFIED**.
-
-## BCAL-008 — Quantitative calibration frontier
-
-Active via `instruction-008.md`.
-
-The structural phase is now sufficiently explicit to revisit historical quantitative estimates without conflating their dimensions.
-
-This checkpoint audits actual theorem statements and classifies each estimate by:
+The audit established:
 
 ```text
-population
-measured quantity
-normalization
-statement type
-coordinate class:
-  support / depth / mass / balance / calibration residual / proxy
+historical 0.435 route
+  != current pointwise M/Cal theorem
+
+count / average / moment / shell exponents
+  != pointwise calibration slopes without an explicit bridge
+
+current pointwise frontier:
+  conditional M <= rho*R + C
+  <-> Cal <= C
+
+current aggregate frontier:
+  finite Hensel layer/depth averages
+  + cubic realized shell/incidence/moment bounds
 ```
 
-Historical constants such as `0.435`, `0.20`, `0.23`, and `0.005` must be interpreted by what their Lean theorems actually prove. Matching decimal arithmetic is not evidence that constants are composable.
+The missing ingredient is a deterministic selector / cover / compensation theorem that converts the aggregate information into compatible pointwise `S` and `E` bounds in the same `R` normalization.
 
-The checkpoint must distinguish at least:
+No exponent improvement, new constant, density-to-pointwise promotion, or ABC conclusion was introduced.
+
+Status: **complete / Outcome A — CALIBRATED QUANTITATIVE MAP COMPLETE** at commit `6dcf3f7c5051a898d7233a6d79648d1cbacc1849`.
+
+## Campaign closeout
+
+This branch is closed as a structural/calibration success.
+
+The final closeout is recorded in:
 
 ```text
-pointwise mass/calibration bounds
-counting bounds
-average bounds
-moment bounds
-shell-count exponents
-asymptotic exceptional-set estimates
+lean/dk_math/docs/dev/ABC-GN-balance-calibration-260915-v0/FINAL_REPORT.md
 ```
 
-and identify the strongest currently existing pointwise endpoint separately from the strongest counting/average endpoint.
+A future quantitative campaign should begin only from the explicit missing bridge:
 
-No exponent improvement or new ABC-strength contract is part of this checkpoint.
+```text
+aggregate counting / layer / incidence / moment control
+        ↓
+deterministic selector / cover / compensation
+        ↓
+pointwise S and E budgets in one R-normalization
+        ↓
+M <= rho*R + C
+        <->
+Cal <= C
+```
 
-## After BCAL-008
-
-If the quantitative audit identifies a dimensionally valid and nontrivial numerical frontier, open a new campaign for optimization rather than extending this structural branch indefinitely.
-
-If instead the existing quantitative route still lacks a deterministic bridge from counting/average control to pointwise calibration, record that frontier explicitly and close this branch as a structural/calibration success.
+Historical constants and exponents must remain classified by their actual theorem population and quantity until such a bridge exists.
 
 ## Global stop rule
 
-If a checkpoint merely renames a statement equivalent to `ABCGNOddPrimeJointContract` without revealing an exact internal component, stop and report it as structural normalization.
+The branch must not be extended by merely renaming a statement equivalent to `ABCGNOddPrimeJointContract`, by optimizing incompatible exponents, or by inferring pointwise bounds from density/average statements.
 
-The branch succeeds if it makes the calibration mechanism and the status of the quantitative frontier explicit even if no new ABC-strength bound is proved.
+**Campaign status: CLOSED / STRUCTURAL-CALIBRATION COMPLETE.**
