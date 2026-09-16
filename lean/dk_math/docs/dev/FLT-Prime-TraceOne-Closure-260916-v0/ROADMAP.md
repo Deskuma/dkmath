@@ -76,7 +76,7 @@ the existing square theorem.
 
 Do not add an existential power-root provider.
 
-Status: **next**.
+Status: **completed — Outcome A**.
 
 ## FPTC-003 — Arbitrary-power TraceOne landing criterion
 
@@ -92,9 +92,10 @@ exists integer coordinates of gamma whose r-th-power coordinate image matches
 
 under the explicit nonzero-norm hypothesis on `beta`.
 
-Specialize the theorem at `r = p` for the generic FLT prime endpoint.
+Keep this checkpoint neutral.  Composition with the generic FLT prime endpoint
+is deferred to FPTC-004.
 
-Status: **planned**.
+Status: **next**.
 
 ## FPTC-004 — Generic imaginary residual coordinate receiver
 
