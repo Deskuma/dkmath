@@ -2,6 +2,52 @@
 
 DkMath is an experimental Lean 4 mathematics library developed through number-theory research by D. and Wise Wolf (AI-GPT).
 
+## Cosmic Formula
+
+An identity designated as the "Cosmic Formula"
+
+$$
+\Large
+N+1=(P+1)^2
+$$
+
+$$
+N = P(P+2)
+$$
+
+$$
+x=P
+$$
+
+$$
+f(x) = (x+1)^2 - x(x+2) = 1
+$$
+
+A project exploring new perspectives on number-theoretic objects, taking this identity as a starting point.
+
+$$
+\large
+(x+u)^d-u^d=x\ GN_d(x,u)
+$$
+
+$$
+\large
+x\,GN_d(x,u):=x\,\sum_{k=0}^{d-1}\binom{d}{k}x^{d-1-k}\,u^{k}
+$$
+
+e.g.
+
+$$
+\begin{array}{lc}
+x\ GN_1(x,u) =& x \qquad \cancel{+ u - u}\\
+x\ GN_2(x,u) =& x^2 + 2xu \qquad \cancel{+ u^2 - u^2}\\
+x\ GN_3(x,u) =& x^3 + 3x^2u + 3xu^2 \qquad \cancel{+ u^3 - u^3}\\
+x\ GN_4(x,u) =& x^4 + 4x^3u + 6x^2u^2 + 4xu^3 \qquad \cancel{+ u^4 - u^4}\\
+\end{array}
+$$
+
+---
+
 現在の公開面では、まず **Lean の kernel まで閉じた成果** を前面に置き、その研究過程から一般化・再利用できた数学を `DkMath.Lib.*` へ昇格する方針を採っている。
 
 > [!IMPORTANT]
@@ -84,13 +130,13 @@ DkMath also contains a Lean proof route from the Cosmic Formula boundary structu
 With
 
 $$
-\operatorname{cosmicN}(P)=P(P+2),
+\text{cosmicN}(P)=P(P+2),
 $$
 
 we have
 
 $$
-\operatorname{cosmicN}(P)+1=(P+1)^2.
+\text{cosmicN}(P)+1=(P+1)^2.
 $$
 
 The formal route constructs a prime outside any finite set of primes from the boundary term and derives:
@@ -127,14 +173,14 @@ GN 系で繰り返し現れた二項展開の tail は、現在 `GTail` とし�
 $$
 \begin{aligned}
 (x+u)^d &\;=\; \sum_{j<r}\binom dj x^j u^{d-j}\\
-&\qquad +x^r\,\operatorname{GTail}(d,r,x,u).
+&\qquad +x^r\,\text{GTail}(d,r,x,u).
 \end{aligned}
 $$
 
 標準 GN は $r=1$ specialization である。
 
 $$
-GN_d(x,u)=\operatorname{GTail}(d,1,x,u).
+GN_d(x,u)=\text{GTail}(d,1,x,u).
 $$
 
 現在の promoted modules には次がある。
