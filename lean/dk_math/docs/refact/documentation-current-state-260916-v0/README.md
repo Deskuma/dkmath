@@ -125,6 +125,9 @@ root docs/PROJECT_STATUS.md
 lean/dk_math/README.md
   implementation and build navigation
 
+lean/dk_math/INDEX.md
+  current navigation map across completed results, DkMath.Lib, active research, and history
+
 DkMath/FLT/README.md
   FLT current surfaces / generalization / legacy map
 
@@ -149,6 +152,7 @@ A later cleanup may add a short standardized historical notice to selected high-
 README.md
 docs/PROJECT_STATUS.md
 lean/dk_math/README.md
+lean/dk_math/INDEX.md
 lean/dk_math/DkMath/FLT/README.md
 lean/dk_math/DkMath/Lib/README.md
 ```
