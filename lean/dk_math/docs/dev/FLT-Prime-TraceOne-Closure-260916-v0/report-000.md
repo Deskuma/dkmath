@@ -3,13 +3,12 @@
 ## Outcome
 
 ```text
-Outcome B — NEUTRAL BRIDGE GREEN, P7 INSTANCE/IMPORT BOUNDARY REMAINS
+Outcome A — P7 CLASS-GROUP HYPOTHESIS DISCHARGED STRUCTURALLY
 ```
 
-The structural p=7 class-group result is green.  The generic Phase-26
-exact-power composition was not added because its current import chain does
-not build on this checkout after the local compatibility repairs listed below.
-No specialized `FLT_d7` contradiction theorem is used.
+The structural p=7 class-group result and the generic Phase-26 residual
+exact-power composition are green.  No specialized `FLT_d7` contradiction
+theorem is used.
 
 ## Repository and scope audit
 
@@ -142,10 +141,11 @@ It contains the requested `#check` declarations, `#synth` checks for the
 Euclidean and principal-ideal instances, and local examples for both the
 subsingleton and p=7 structural implications.
 
-## Failed probes and compatibility boundary
+## Compatibility repairs
 
 The first attempt to build the generic endpoint exposed pre-existing Lean 4.34
-API drift in its dependency chain.  In particular:
+API drift in its dependency chain.  The following local, meaning-preserving
+repairs were applied:
 
 1. `DkMath/NumberTheory/CyclotomicQRCoefficientDescent.lean` used the removed
    qualified projection `MvPolynomial.coeff`; the current projection is
@@ -153,18 +153,27 @@ API drift in its dependency chain.  In particular:
 2. `DkMath/NumberTheory/CyclotomicQRIntegralDescent.lean` had the same
    projection issue and passed an obsolete injectivity argument to
    `isIntegral_algebraMap_iff`.
-3. After those local meaning-preserving repairs, the generic chain still
-   failed in `CyclotomicQRTraceOneBridge.lean` on additional old
-   `MvPolynomial.coeff` uses, and in `TraceOneQuadraticField.lean` while
-   synthesizing the `IsIntegralClosure` instance used by the ring-of-integers
-   equivalence.
+3. `CyclotomicQRTraceOneBridge.lean` had further old qualified coefficient
+   projections and deprecated coefficient rewrite lemmas.
+4. `TraceOneQuadraticField.lean` needed explicit `Field`, `CommRing`,
+   `Algebra`, and `IsIntegralClosure` arguments at
+   `NumberField.RingOfIntegers.equiv`; otherwise Lean 4.34 selected a
+   definitionally different class-instance diamond.
+5. Several generic endpoint proofs required `dsimp` before introducing
+   hypotheses because the result type contains nested local `let` bindings.
 
-Meaning-preserving projection/API repairs were applied in the coefficient,
-integral, Gauss-normalization, and quadratic-field files because they are
-required to replay the requested generic build.  The remaining migration work
-was not expanded into this narrow checkpoint.  Consequently no p=7 theorem calling
-`exists_eq_pow_of_primeTraceOneImaginaryStrippedIdealPacket` was claimed or
-added.  This is the import boundary represented by Outcome B.
+These repairs preserve the mathematical statements and allow the complete
+generic target to build under Lean 4.34.  The remaining messages are warnings
+only (style-linter notices and one deprecated complex import).
+
+## p=7 generic exact-power composition
+
+Added
+`DkMath.FLT.Prime.exists_eq_pow_of_primeTraceOneImaginaryStrippedIdealPacket_seven`.
+It calls the generic Phase-26 theorem, supplies the p=7 structural class-group
+bridge, and explicitly normalizes
+`signedPrimeParameter 7 = -2`.  It introduces no caller-supplied class-group
+hypothesis and does not call a specialized FLT7 contradiction theorem.
 
 ## p=3 and p=5 scope audit only
 
@@ -209,19 +218,16 @@ Successful focused builds:
 
 ```text
 lake build DkMath.Lib.NumberTheory.ClassGroupTorsionBridge
+lake build DkMath.NumberTheory.CyclotomicQRTraceOneBridge
+lake build DkMath.NumberTheory.TraceOnePrimeUnitSectors
+lake build DkMath.FLT.Prime.PrimeTraceOneConditionalDescent
 lake build DkMath.FLT.Prime.PrimeTraceOneClassGroupClosure
 lake build DkMathTest.FLT.Prime.PrimeTraceOneClassGroupClosureApiAudit
 lake build DkMathTest.FLT.Prime.PrimeTraceOneClassGroupClosureAxiomAudit
 lake build DkMath.Lib
 ```
 
-The generic target was attempted with:
-
-```text
-lake build DkMath.FLT.Prime.PrimeTraceOneConditionalDescent
-```
-
-and remains blocked by the compatibility errors listed above.  The successful
+The successful
 new bridge/regression sources contain no `sorry`, `sorryAx`, `admit`, explicit
 axiom, or `unsafe`.  The successful structural route uses only the standard
 Lean/Mathlib proof foundations; no DkMath-defined axiom was introduced.

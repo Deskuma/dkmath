@@ -30,6 +30,7 @@ open DkMath.FLT.Seven
 #check exists_sector_mul_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt
 #check DkMath.FLT.Seven.traceOneNegTwoEuclideanDomain
 #check DkMath.FLT.Prime.classGroupPTorsionFreeAt_traceOneNegTwo_seven
+#check DkMath.FLT.Prime.exists_eq_pow_of_primeTraceOneImaginaryStrippedIdealPacket_seven
 
 #synth EuclideanDomain (TraceOneInt (-2))
 #synth IsPrincipalIdealRing (TraceOneInt (-2))

@@ -325,7 +325,8 @@ theorem traceOneRat_ringOfIntegers_equiv
   let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root hp hp2⟩
-  let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+  let instField : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+  let : Field (TraceOneRat (signedPrimeParameter p)) := instField
   have halg_injective :
       Function.Injective (algebraMap ℚ (TraceOneRat (signedPrimeParameter p))) := by
     intro q₁ q₂ hq
@@ -335,10 +336,11 @@ theorem traceOneRat_ringOfIntegers_equiv
     to_charZero := charZero_of_injective_algebraMap halg_injective
     to_finiteDimensional := inferInstance
   }
-  let : IsIntegralClosure (TraceOneInt (signedPrimeParameter p)) ℤ
-      (TraceOneRat (signedPrimeParameter p)) :=
-    traceOneRat_isIntegralClosure hp hp2
-  exact ⟨NumberField.RingOfIntegers.equiv _⟩
+  exact ⟨@NumberField.RingOfIntegers.equiv
+    (TraceOneRat (signedPrimeParameter p)) instField
+    (TraceOneInt (signedPrimeParameter p)) traceOneCommRing
+    (traceOneRatAlgebra _)
+    (traceOneRat_isIntegralClosure hp hp2)⟩
 
 theorem traceOneRat_isDedekindDomain
     {p : ℕ} (hp : p.Prime) (hp2 : p ≠ 2) :
@@ -346,6 +348,8 @@ theorem traceOneRat_isDedekindDomain
         r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root hp hp2⟩
     let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+    let : CommRing (TraceOneRat (signedPrimeParameter p)) :=
+      QuadraticAlgebra.instCommRing
     let : NumberField (TraceOneRat (signedPrimeParameter p)) := {
       to_charZero := charZero_of_injective_algebraMap (by
         intro q₁ q₂ hq
@@ -362,6 +366,8 @@ theorem traceOneRat_isDedekindDomain
       r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root hp hp2⟩
   let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+  let : CommRing (TraceOneRat (signedPrimeParameter p)) :=
+    QuadraticAlgebra.instCommRing
   have halg_injective :
       Function.Injective (algebraMap ℚ (TraceOneRat (signedPrimeParameter p))) := by
     intro q₁ q₂ hq
@@ -371,9 +377,10 @@ theorem traceOneRat_isDedekindDomain
     to_charZero := charZero_of_injective_algebraMap halg_injective
     to_finiteDimensional := inferInstance
   }
-  let : IsIntegralClosure (TraceOneInt (signedPrimeParameter p)) ℤ
+  have hIC : IsIntegralClosure (TraceOneInt (signedPrimeParameter p)) ℤ
       (TraceOneRat (signedPrimeParameter p)) :=
     traceOneRat_isIntegralClosure hp hp2
+  let := hIC
   let : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
   exact IsIntegralClosure.isDedekindDomain ℤ ℚ

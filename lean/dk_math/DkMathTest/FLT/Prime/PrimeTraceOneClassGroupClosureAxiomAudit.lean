@@ -12,3 +12,4 @@ import DkMath.FLT.Prime.PrimeTraceOneClassGroupClosure
 #print axioms DkMath.Lib.NumberTheory.subsingleton_classGroup_of_isPrincipalIdealRing
 #print axioms DkMath.Lib.NumberTheory.classGroupPTorsionFreeAt_of_isPrincipalIdealRing
 #print axioms DkMath.FLT.Prime.classGroupPTorsionFreeAt_traceOneNegTwo_seven
+#print axioms DkMath.FLT.Prime.exists_eq_pow_of_primeTraceOneImaginaryStrippedIdealPacket_seven

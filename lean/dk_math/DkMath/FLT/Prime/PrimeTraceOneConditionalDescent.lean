@@ -56,6 +56,7 @@ theorem exists_unit_mul_pow_of_primeTraceOneStrippedIdealPacket
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
   let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
     traceOneRat_isDedekindDomain P0.prime hp2
+  dsimp
   intro hfree
   exact exists_unit_mul_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt
     Q.idealRoot_nonzero hfree Q.residual_span_eq
@@ -95,6 +96,7 @@ theorem exists_sector_mul_pow_of_primeTraceOneStrippedIdealPacket
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
   let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
     traceOneRat_isDedekindDomain P0.prime hp2
+  dsimp
   intro hfree
   exact exists_sector_mul_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt
     S Q.idealRoot_nonzero hfree Q.residual_span_eq
@@ -131,6 +133,7 @@ theorem exists_eq_pow_of_primeTraceOneImaginaryStrippedIdealPacket
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
   let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
     traceOneRat_isDedekindDomain P0.prime (by omega)
+  dsimp
   intro hfree
   exact traceOnePrimeImaginary_exists_eq_pow_of_span_eq_pow
     P0.prime hp7 hmod Q.idealRoot_nonzero hfree Q.residual_span_eq
@@ -180,6 +183,7 @@ theorem exists_sector_mul_pow_of_primeTraceOneRealStrippedIdealPacket
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
   let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
     traceOneRat_isDedekindDomain P0.prime (by omega)
+  dsimp
   intro hfree
   exact traceOnePrimeReal_exists_sector_mul_pow_of_span_eq_pow
     P0.prime hmod Q.idealRoot_nonzero hfree Q.residual_span_eq
