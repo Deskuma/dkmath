@@ -95,7 +95,7 @@ under the explicit nonzero-norm hypothesis on `beta`.
 Keep this checkpoint neutral.  Composition with the generic FLT prime endpoint
 is deferred to FPTC-004.
 
-Status: **next**.
+Status: **completed — Outcome A**.
 
 ## FPTC-004 — Generic imaginary residual coordinate receiver
 
@@ -115,7 +115,7 @@ branch residual. Check `p=7` and `p=11` as regressions.
 This checkpoint should identify the next contradiction target without assuming
 that the coordinate equations are already impossible.
 
-Status: **planned**.
+Status: **next**.
 
 ## FPTC-005 — p=3 generic sector adapter
 
