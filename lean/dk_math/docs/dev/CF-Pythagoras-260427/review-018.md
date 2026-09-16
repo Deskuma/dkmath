@@ -14,7 +14,7 @@ $$
 今回追加された主補題は二つじゃな。
 
 $$
-\operatorname{padicValNat}_p(|GN(3,z-x,x)|)\le 1
+\text{padicValNat}_p(|GN(3,z-x,x)|)\le 1
 $$
 
 から d=3 の FLT 型方程式に対して `False` を出す
@@ -62,7 +62,7 @@ $$
 から、
 
 $$
-y^3=(z-x)\operatorname{powerBeam}_3(x,z)
+y^3=(z-x)\text{powerBeam}_3(x,z)
 $$
 
 を得る。
@@ -70,7 +70,7 @@ $$
 そして
 
 $$
-\operatorname{powerBeam}_3(x,z)=GN(3,z-x,x)
+\text{powerBeam}_3(x,z)=GN(3,z-x,x)
 $$
 
 なので、GN 側で
@@ -82,7 +82,7 @@ $$
 が得られれば、
 
 $$
-v_p(\operatorname{powerBeam}_3(x,z))\le 1
+v_p(\text{powerBeam}_3(x,z))\le 1
 $$
 
 となる。
@@ -90,7 +90,7 @@ $$
 一方、これまでの S2-F により、Beam 側に現れる (p\nmid 3) の素因子は
 
 $$
-v_p(\operatorname{powerBeam}_3)=3v_p(y)
+v_p(\text{powerBeam}_3)=3v_p(y)
 $$
 
 を満たす必要がある。
@@ -98,7 +98,7 @@ $$
 ここに
 
 $$
-p\mid \operatorname{powerBeam}_3,\qquad v_p(\operatorname{powerBeam}_3)\le1
+p\mid \text{powerBeam}_3,\qquad v_p(\text{powerBeam}_3)\le1
 $$
 
 を入れると矛盾する。
@@ -152,11 +152,11 @@ x^3+y^3=z^3
 $$
 
 $$
-y^3=(z-x)\operatorname{powerBeam}_3(x,z)
+y^3=(z-x)\text{powerBeam}_3(x,z)
 $$
 
 $$
-\operatorname{powerBeam}_3(x,z)=GN(3,z-x,x)
+\text{powerBeam}_3(x,z)=GN(3,z-x,x)
 $$
 
 $$

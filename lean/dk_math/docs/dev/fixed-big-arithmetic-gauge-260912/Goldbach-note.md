@@ -90,7 +90,7 @@ branch: `wip/cf2d-prime-gauge-projection-260911-v1`
 今回、期待していた骨格そのものは全部 Lean に入った。CF2D exact order から
 
 $$
-(\operatorname{regularKernel}(k))^a=(\operatorname{regularKernel}(k))^b
+(\text{regularKernel}(k))^a=(\text{regularKernel}(k))^b
 \iff
 a\equiv b\pmod k
 $$
@@ -98,7 +98,7 @@ $$
 へ落とし、Goldbach の左右 obstruction を conjugate gauge として表現できた。さらに center $n\to n+1$ では marker が逆向きに回り、相対 phase は
 
 $$
-\operatorname{regularKernel}(r)^{2n}
+\text{regularKernel}(r)^{2n}
 $$
 
 となって、一歩進むごとに固定 $2$-step だけ進むところまで kernel-check されている。これはわれらが予想した「Goldbach obstruction を動的位相として読む」構造そのものじゃ。fileciteturn169file0 fileciteturn170file0 fileciteturn171file0
@@ -136,7 +136,7 @@ $$
 phase fiber では、
 
 $$
-|\operatorname{pairedSurvivingChildIndices}|=5=q-2
+|\text{pairedSurvivingChildIndices}|=5=q-2
 $$
 
 なのに、実 child は
@@ -491,7 +491,7 @@ example :
 お主の Lean 例が示しているのは、まさに
 
 $$
-\operatorname{primeWorldChild}(S,r,j)=r+jM
+\text{primeWorldChild}(S,r,j)=r+jM
 $$
 
 で、`primeWorld235` なら $M=30$、さらに $r=29=M-1$ なので、
@@ -722,9 +722,9 @@ Goldbach には二軸の paired observable が必要。
 
 $$
 \boxed{
-\operatorname{GoldbachMass}(n)
+\text{GoldbachMass}(n)
 =
-\sum_{u\in\operatorname{goldbachOffsets}(n)}
+\sum_{u\in\text{goldbachOffsets}(n)}
 \Lambda(n-u)\Lambda(n+u)
 }
 $$
@@ -1127,14 +1127,14 @@ $$
 ただし周期として本当に本質なのは、
 
 $$
-L_A:=\operatorname{lcm}(a_1,\dots,a_k).
+L_A:=\text{lcm}(a_1,\dots,a_k).
 $$
 
 だから、
 
 **intrinsic synchronization modulus — 内在同期法**
 
-は $\operatorname{lcm}$。
+は $\text{lcm}$。
 
 素数集合や pairwise coprime 集合では、
 
@@ -1153,7 +1153,7 @@ $$
 だが、
 
 $$
-\operatorname{lcm}(6,14,21)=42.
+\text{lcm}(6,14,21)=42.
 $$
 
 したがって $1764$ は「選んだ平方スケール」として使えるが、可除性模様の最小周期は $42$。
@@ -1309,7 +1309,7 @@ theorem squarePrimeExpansion_eq_primeScalesUpTo_squareBody (P : ℕ) :
 そして、
 
 $$
-\operatorname{squareBody}(P)+1=(P+1)^2
+\text{squareBody}(P)+1=(P+1)^2
 $$
 
 も既存 theorem じゃ。fileciteturn190file0
@@ -1334,13 +1334,13 @@ DkMath の現在の語彙なら、
 
 $$
 \boxed{
-P<n\le\operatorname{squareBody}(P)
+P<n\le\text{squareBody}(P)
 \Longrightarrow
 \left(
-\operatorname{Prime}(n)
+\text{Prime}(n)
 \iff
-\operatorname{SupportDisjointFrom}
-(\operatorname{primeScalesUpTo}(P),n)
+\text{SupportDisjointFrom}
+(\text{primeScalesUpTo}(P),n)
 \right).
 }
 $$
@@ -1448,7 +1448,7 @@ $$
 ここへお主の $30$ を入れる。
 
 $$
-\operatorname{squareBody}(30)
+\text{squareBody}(30)
 =
 30^2+2\cdot30
 =
@@ -1462,7 +1462,7 @@ $$
 30<n\le960
 \Longrightarrow
 \left[
-\operatorname{Prime}(n)
+\text{Prime}(n)
 \iff
 \gcd(n,30^\#)=1
 \right].
@@ -1594,9 +1594,9 @@ $$
 \boxed{
 \{2,3,5\}
 \cup
-(\operatorname{PHZ30}\setminus\{1\})
+(\text{PHZ30}\setminus\{1\})
 =
-\operatorname{primeScalesUpTo}(30)
+\text{primeScalesUpTo}(30)
 }
 $$
 
@@ -1631,7 +1631,7 @@ theorem prime_iff_supportDisjointFrom_in_squareBody ...
 ```
 
 $$
-\operatorname{Prime}(n)
+\text{Prime}(n)
 \iff
 \text{old prime support から escape}.
 $$
@@ -1643,7 +1643,7 @@ theorem prime_iff_coprime_primeWorldModulus_in_squareBody ...
 ```
 
 $$
-\operatorname{Prime}(n)
+\text{Prime}(n)
 \iff
 \gcd(n,P^\#)=1.
 $$
@@ -1797,7 +1797,7 @@ $$
 $$
 \boxed{
 \frac{\mathrm{Body}}{u_P^2}
-=\operatorname{squareBody}(P).
+=\text{squareBody}(P).
 }
 $$
 
@@ -1931,7 +1931,7 @@ $$
 しかし可除性パターンの本質的な同期周期は、
 
 $$
-\operatorname{lcm}(6,14,21)=42.
+\text{lcm}(6,14,21)=42.
 $$
 
 つまり $1764$ には冗長な factor が大量に入っている。
@@ -1944,7 +1944,7 @@ $$
 \boxed{
 M_{\min}
 =
-\operatorname{lcm}(a_1,\dots,a_k)
+\text{lcm}(a_1,\dots,a_k)
 }
 $$
 
@@ -1953,7 +1953,7 @@ $$
 一方、prime directions が相異なる素数なら、
 
 $$
-\operatorname{lcm}(p_1,\dots,p_k)
+\text{lcm}(p_1,\dots,p_k)
 =
 \prod_i p_i.
 $$
@@ -1985,7 +1985,7 @@ $$
 同じ gauge information を持つ方向集合 $A$ に対し、その intrinsic modulus を
 
 $$
-L(A):=\operatorname{lcm}(A)
+L(A):=\text{lcm}(A)
 $$
 
 とする。
@@ -2252,7 +2252,7 @@ $$
 そして finite prime world $S$ の同期 modulus を
 
 $$
-M_S=\operatorname{primeWorldModulus}(S)
+M_S=\text{primeWorldModulus}(S)
 $$
 
 とすれば、CPG-V1-008 はまず「この $M_S$ が gauge family の同時帰還周期」であることを固定する。
@@ -2266,14 +2266,14 @@ $$
 と CF2D の
 
 $$
-\operatorname{regularPhaseStep}(k)=\frac1k
+\text{regularPhaseStep}(k)=\frac1k
 $$
 
 を
 
 $$
 \boxed{
-U(k-1)=\operatorname{regularPhaseStep}(k)=\frac1k
+U(k-1)=\text{regularPhaseStep}(k)=\frac1k
 }
 $$
 
@@ -2418,7 +2418,7 @@ $$
 =
 U(P)
 =
-\operatorname{regularPhaseStep}(P+1).
+\text{regularPhaseStep}(P+1).
 $$
 
 なので、
@@ -2456,7 +2456,7 @@ $$
 違うのは cell width だけ。
 
 $$
-\boxed{\operatorname{mesh}(G_k)=\frac1k.}
+\boxed{\text{mesh}(G_k)=\frac1k.}
 $$
 
 だから、
@@ -2676,7 +2676,7 @@ $$
 CPG-V1-008 では有限 prime family の同時帰還が
 
 $$
-\forall p\in S,\quad \operatorname{regularKernel}(p)^n=1
+\forall p\in S,\quad \text{regularKernel}(p)^n=1
 \iff
 M_S\mid n
 $$
@@ -2687,7 +2687,7 @@ $$
 
 $$
 U(k-1)=\frac1k
-=\operatorname{regularPhaseStep}(k),
+=\text{regularPhaseStep}(k),
 $$
 
 さらに finite prime world では、
@@ -2797,7 +2797,7 @@ $$
 =
 U(P)
 =
-\operatorname{regularPhaseStep}(P+1).
+\text{regularPhaseStep}(P+1).
 }
 $$
 
@@ -2837,7 +2837,7 @@ $$
 =
 P^2+2P
 =
-\operatorname{squareBody}(P).
+\text{squareBody}(P).
 }
 $$
 
@@ -2866,7 +2866,7 @@ $$
 
 $$
 \boxed{
-\operatorname{squareBody}(P)
+\text{squareBody}(P)
 =
 \frac{R^2-u^2}{u^2}
 }
@@ -2984,7 +2984,7 @@ $$
 \boxed{
 \frac{\mathrm{Big}-\mathrm{Gap}}{\mathrm{Gap}}
 =
-\operatorname{squareBody}(P)
+\text{squareBody}(P)
 }
 $$
 
@@ -3162,7 +3162,7 @@ $$
 \frac{R^2-u_{P+1}^2}{u_{P+1}^2}
 =(P+1)^2-1
 =P^2+2P
-=\operatorname{squareBody}(P).
+=\text{squareBody}(P).
 $$
 
 ここが最初の大きな橋じゃ。

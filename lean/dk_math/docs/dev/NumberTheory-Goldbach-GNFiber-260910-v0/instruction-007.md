@@ -12,17 +12,17 @@ This is the **final checkpoint** of the current Goldbach branch.
 Instruction-006 established:
 
 $$
-\operatorname{Incidence}=\operatorname{Covered}+\operatorname{OverlapExcess},
+\text{Incidence}=\text{Covered}+\text{OverlapExcess},
 $$
 
 $$
-\operatorname{Survivors}+\operatorname{Incidence}=(n-1)+\operatorname{OverlapExcess},
+\text{Survivors}+\text{Incidence}=(n-1)+\text{OverlapExcess},
 $$
 
 and an exact unordered prime-pair double count with
 
 $$
-\operatorname{OverlapExcess}\le\operatorname{PrimePairOverlapCount}.
+\text{OverlapExcess}\le\text{PrimePairOverlapCount}.
 $$
 
 The next observation is that the local support multiplicities already form a Pascal hierarchy.
@@ -30,7 +30,7 @@ The next observation is that the local support multiplicities already form a Pas
 If
 
 $$
-k=|\operatorname{goldbachObstructionSupport}(n,u)|,
+k=|\text{goldbachObstructionSupport}(n,u)|,
 $$
 
 then
@@ -43,7 +43,7 @@ Therefore the current pair-overlap inequality can be strengthened to an **exact 
 
 $$
 \boxed{
-\operatorname{PrimePairOverlapCount}=\operatorname{OverlapExcess}+\operatorname{PairOverlapResidual}.
+\text{PrimePairOverlapCount}=\text{OverlapExcess}+\text{PairOverlapResidual}.
 }
 $$
 
@@ -235,7 +235,7 @@ Update module docstrings to state clearly:
 4. the exact residual
 
 $$
-\operatorname{PairOverlapResidual}=\operatorname{PrimePairOverlapCount}-\operatorname{OverlapExcess}
+\text{PairOverlapResidual}=\text{PrimePairOverlapCount}-\text{OverlapExcess}
 $$
 
 measures higher local multiplicity already present inside the pair ledger;

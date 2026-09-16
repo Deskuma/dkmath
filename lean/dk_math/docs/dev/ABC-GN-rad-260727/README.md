@@ -19,7 +19,7 @@
 それなのに、
 
 $$
-c\operatorname{rad}(ab)=\operatorname{sqTail}(c)\operatorname{rad}(abc)
+c\text{rad}(ab)=\text{sqTail}(c)\text{rad}(abc)
 $$
 
 という **ABC 本体の完全相殺式** が存在しない。検索しても見つからなかった。
@@ -39,7 +39,7 @@ DkMath/ABC/SquareTailGapIdentity.lean
 中心定理はこれだけじゃ。
 
 $$
-c\operatorname{rad}(ab)=\operatorname{sqTail}(c)\operatorname{rad}(abc)
+c\text{rad}(ab)=\text{sqTail}(c)\text{rad}(abc)
 $$
 
 除算を一切使わず、自然数上で正確に閉じる。
@@ -49,7 +49,7 @@ $$
 この等式を分数として読めば、
 
 $$
-\frac{c}{\operatorname{rad}(abc)}=\frac{\operatorname{sqTail}(c)}{\operatorname{rad}(ab)}
+\frac{c}{\text{rad}(abc)}=\frac{\text{sqTail}(c)}{\text{rad}(ab)}
 $$
 
 じゃ。
@@ -123,7 +123,7 @@ theorem Triple.abcGap_eq_squareTailDebt
 したがって普遍層は、
 
 $$
-a+b=c=\operatorname{sqTail}(c)\operatorname{rad}(c)
+a+b=c=\text{sqTail}(c)\text{rad}(c)
 $$
 
 ここまで。

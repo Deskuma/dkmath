@@ -6,7 +6,7 @@
 
 T は large boundary を単なる解析上の余りではなく、
 
-$$\operatorname{RepeatedPart}(N)=\operatorname{piSqRad}(N)^2\operatorname{twoTail}(N)$$
+$$\text{RepeatedPart}(N)=\text{piSqRad}(N)^2\text{twoTail}(N)$$
 
 という **GN 内部の完全な repeated prime-power divisor** に固定した。さらに target CRT modulus とこの repeated part を整数として同一視し、support-heavy / deep-tail-heavy の分岐、$3/4$-power 境界評価、そして raw ABC と uniform joint contract の同値まで Lean 上で確定した。
 
@@ -86,13 +86,13 @@ $$v_q!\left((a+b)^p-b^p\right)=v_q!\left(GN_p(a,b)\right)$$
 
 従って、T の repeated support 上で $q\nmid a$ を回収すれば、
 
-$$q\in\operatorname{Active}\Longrightarrow\operatorname{WieferichLift}(p,b,a+b,q)$$
+$$q\in\text{Active}\Longrightarrow\text{WieferichLift}(p,b,a+b,q)$$
 
 が成立する。
 
 逆も canonical nonexceptional family 内では成立するので、最終的には、
 
-$$q\in\operatorname{Active}\iff\operatorname{GNWieferichLift}(p,a,b,q)$$
+$$q\in\text{Active}\iff\text{GNWieferichLift}(p,a,b,q)$$
 
 まで狙える。
 

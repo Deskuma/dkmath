@@ -21,7 +21,7 @@ $$
 が入れば
 
 $$
-\operatorname{span}(z-\zeta y)=K^{\mathrm{ctx}.p}
+\text{span}(z-\zeta y)=K^{\mathrm{ctx}.p}
 $$
 
 が出て、その先の Stage 2 の concrete target

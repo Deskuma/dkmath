@@ -60,11 +60,11 @@ cp-314 は、単なる補題追加ではない。
 現在の一 block は、概念的に次の二つの有限集合で表せる。
 
 $$
-C_k=\operatorname{canonicalPaymentClaimDepths}(n,k)
+C_k=\text{canonicalPaymentClaimDepths}(n,k)
 $$
 
 $$
-S_k=\operatorname{canonicalEndpointCapacityDepthSlots}(n,k)
+S_k=\text{canonicalEndpointCapacityDepthSlots}(n,k)
 $$
 
 そして、
@@ -302,7 +302,7 @@ CanonicalEndpointBackwardCreditMatching
 その向きは、
 
 $$
-\operatorname{slotBlock}\le\operatorname{claimBlock}
+\text{slotBlock}\le\text{claimBlock}
 $$
 
 じゃ。
@@ -324,7 +324,7 @@ CanonicalEndpointForwardRepaymentMatching
 は、
 
 $$
-\operatorname{claimBlock}\le\operatorname{slotBlock}
+\text{claimBlock}\le\text{slotBlock}
 $$
 
 を要求する。
@@ -430,7 +430,7 @@ EveryFiniteCanonicalClaimPrefixHasFutureSlotEmbedding
 block $q$ の直前 balance を、
 
 $$
-B_{q^-}:=\operatorname{canonicalEndpointBalanceBefore}(n,q)
+B_{q^-}:=\text{canonicalEndpointBalanceBefore}(n,q)
 $$
 
 とする。
@@ -520,13 +520,13 @@ $$
 に対して recovery fiber は singleton になる。
 
 $$
-\operatorname{RecoveryFiber}(k,d)={e_k+1-d}
+\text{RecoveryFiber}(k,d)={e_k+1-d}
 $$
 
 さらに、その唯一の source が carry-two である depth だけを集めると、
 
 $$
-C_k=\operatorname{canonicalPaymentClaimDepths}(n,k)
+C_k=\text{canonicalPaymentClaimDepths}(n,k)
 $$
 
 になる。
@@ -558,7 +558,7 @@ delayed depth は正確に Icc 2 blockLength
 実際に証明されたのは、
 
 $$
-\operatorname{DelayedClaimDepths}_k\subseteq[2,L_k]
+\text{DelayedClaimDepths}_k\subseteq[2,L_k]
 $$
 
 じゃ。
@@ -570,10 +570,10 @@ carry-two が立った depth だけが marked される。
 正確な等式は、
 
 $$
-\operatorname{DelayedClaimDepths}_k
+\text{DelayedClaimDepths}_k
 ===================================
 
-\operatorname{canonicalPaymentMarkedDebtDepths}_k
+\text{canonicalPaymentMarkedDebtDepths}_k
 $$
 
 である。
@@ -909,7 +909,7 @@ $$
 に加えて、
 
 $$
-\operatorname{Eligible}\bigl((k,d),(\ell,s)\bigr)
+\text{Eligible}\bigl((k,d),(\ell,s)\bigr)
 $$
 
 を満たすもの。

@@ -41,7 +41,7 @@ For a finite complex-vector family, define:
 Lean proves:
 
 $$
-\operatorname{endpoint}=0
+\text{endpoint}=0
 \quad\Longleftrightarrow\quad
 M_+=M_-
 \;\land\;
@@ -105,7 +105,7 @@ x+u=1,
 $$
 
 $$
-\operatorname{Big}=(x+u)^2=1,
+\text{Big}=(x+u)^2=1,
 $$
 
 and, at finite closure,
@@ -134,7 +134,7 @@ The remaining center-identification obligation is isolated as
 $$
 \sigma-\frac12
 =
-\operatorname{normalizedProjectedCenterOffset}.
+\text{normalizedProjectedCenterOffset}.
 $$
 
 Given this identification and a genuine finite closure, Lean derives:

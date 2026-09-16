@@ -156,13 +156,13 @@ References:
 The stable sample route defines the boundary object by
 
 $$
-\operatorname{cosmicN}(P)=P(P+2),
+\text{cosmicN}(P)=P(P+2),
 $$
 
 with
 
 $$
-\operatorname{cosmicN}(P)+1=(P+1)^2.
+\text{cosmicN}(P)+1=(P+1)^2.
 $$
 
 For a finite set of primes, the proof uses the product $P$ and a prime divisor of the boundary term $P+1$ (or its square) to obtain a prime outside the finite set. The formal route yields:
@@ -214,14 +214,14 @@ research experiment
 $$
 \begin{aligned}
 (x+u)^d &\;=\; \sum_{j<r}\binom dj x^j u^{d-j}\\
-&\qquad +x^r\operatorname{GTail}(d,r,x,u).
+&\qquad +x^r\text{GTail}(d,r,x,u).
 \end{aligned}
 $$
 
 The standard GN layer is the $r=1$ specialization:
 
 $$
-GN_d(x,u)=\operatorname{GTail}(d,1,x,u).
+GN_d(x,u)=\text{GTail}(d,1,x,u).
 $$
 
 Promoted modules in the snapshot:

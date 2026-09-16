@@ -12,13 +12,13 @@ $$
 言い換えると、いまは
 
 $$
-\operatorname{span}(z-\zeta y)=K^p
+\text{span}(z-\zeta y)=K^p
 $$
 
 が出れば、
 
 $$
-\exists J,\ J \text{ principal} \land \operatorname{span}(z-\zeta y)=J^p
+\exists J,\ J \text{ principal} \land \text{span}(z-\zeta y)=J^p
 $$
 
 を取り直せて、さらに
@@ -55,7 +55,7 @@ $$
 ゆえに、Stage 1 側が supply すべきものは、もう本当に
 
 $$
-\operatorname{span}(z-\zeta y)=K^p
+\text{span}(z-\zeta y)=K^p
 $$
 
 という **explicit equality** にまで細くなった。
@@ -68,7 +68,7 @@ $$
 $$
 \boxed{
 \text{Stage 1 pieces を束ねて }
-\operatorname{span}(z-\zeta y)=K^p
+\text{span}(z-\zeta y)=K^p
 \text{ を返す theorem を立てる}
 }
 $$
@@ -89,7 +89,7 @@ $$
 
 * まず、Stage 1 の generic pieces をまとめて、ある線型因子 ideal について
   $$
-  \exists K,\ \operatorname{span}(z-\zeta y)=K^p
+  \exists K,\ \text{span}(z-\zeta y)=K^p
   $$
   を返す theorem を立てる。
 * ついで、それを今回の `linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill` と
@@ -104,7 +104,7 @@ principal 性の回収は、今回追加した exact receiver がやってくれ
 だから Stage 1 theorem の仕事は、ほんに
 
 $$
-\operatorname{span}(z-\zeta y)=K^p
+\text{span}(z-\zeta y)=K^p
 $$
 
 を返すところまででよい。そこを欲張らぬ方が最短じゃ。
@@ -128,7 +128,7 @@ $$
 $$
 \boxed{
 \text{次の最短手は、Stage 1 から }
-\operatorname{span}(z-\zeta y)=K^p
+\text{span}(z-\zeta y)=K^p
 \text{ を返す theorem を立てること}
 }
 $$

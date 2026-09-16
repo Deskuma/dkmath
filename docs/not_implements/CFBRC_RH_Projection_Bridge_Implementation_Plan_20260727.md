@@ -36,9 +36,9 @@ lang: "ja"
 最終目標は、定義へ Riemann hypothesis を埋め込まず、次の型を Lean kernel に通すことである。
 
 $$
-\operatorname{NontrivialZero}(\rho)
+\text{NontrivialZero}(\rho)
 \longrightarrow
-\rho.\operatorname{re}=\frac12
+\rho.\text{re}=\frac12
 $$
 
 ---
@@ -82,21 +82,21 @@ prime exponent では単一の prime cyclotomic core となる。
 既存 `DkMath.CFBRC.TrigBridge.General` には、次の再帰がある。
 
 $$
-\operatorname{cfbrcRe}(d+1,X,\Theta)
+\text{cfbrcRe}(d+1,X,\Theta)
 =
-X\operatorname{cfbrcRe}(d,X,\Theta)
+X\text{cfbrcRe}(d,X,\Theta)
 -
-\Theta\operatorname{cfbrcIm}(d,X,\Theta)
+\Theta\text{cfbrcIm}(d,X,\Theta)
 +
 X\Re((i\Theta)^d)
 $$
 
 $$
-\operatorname{cfbrcIm}(d+1,X,\Theta)
+\text{cfbrcIm}(d+1,X,\Theta)
 =
-X\operatorname{cfbrcIm}(d,X,\Theta)
+X\text{cfbrcIm}(d,X,\Theta)
 +
-\Theta\operatorname{cfbrcRe}(d,X,\Theta)
+\Theta\text{cfbrcRe}(d,X,\Theta)
 +
 X\Im((i\Theta)^d)
 $$
@@ -270,7 +270,7 @@ $$
 互いに素性は単項性質ではなく二項関係である。
 
 $$
-\operatorname{Coprime}(x,u)
+\text{Coprime}(x,u)
 $$
 
 `Nat.Coprime x u` の下で、
@@ -352,9 +352,9 @@ $$
 その後に独立定理として、
 
 $$
-\operatorname{leftMass}(\sigma,t)
+\text{leftMass}(\sigma,t)
 =
-\operatorname{rightMass}(\sigma,t)
+\text{rightMass}(\sigma,t)
 $$
 
 $$
@@ -376,7 +376,7 @@ $$
 しかし、一般に
 
 $$
-\operatorname{phaseVel}(f,t)=0
+\text{phaseVel}(f,t)=0
 $$
 
 から

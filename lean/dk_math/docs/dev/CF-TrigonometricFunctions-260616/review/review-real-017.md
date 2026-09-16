@@ -103,7 +103,7 @@ def powNonnegApprox
 なぜなら、`DkReal` にするにはさらに
 
 $$
-\operatorname{width}\bigl((I_n)^d\bigr)\to0
+\text{width}\bigl((I_n)^d\bigr)\to0
 $$
 
 を証明する必要があるからじゃ。
@@ -117,8 +117,8 @@ powNonnegApprox_width_eq
 で明示している。
 
 $$
-\operatorname{width}(I_n^d) =
-\operatorname{width}(I_n)\cdot gapGN_d(I_n.lo,\operatorname{width}(I_n))
+\text{width}(I_n^d) =
+\text{width}(I_n)\cdot gapGN_d(I_n.lo,\text{width}(I_n))
 $$
 
 これで残りの課題が正確に切り出された。

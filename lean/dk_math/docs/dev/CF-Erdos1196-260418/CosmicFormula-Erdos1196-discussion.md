@@ -569,7 +569,7 @@ a+b=c
 そのものへ直接当てるより、まず
 
 \[
-\operatorname{rad}(abc),\quad v_p(\cdot),\quad \text{squarefree/squarefull 分解},\quad \text{primitive prime}
+\text{rad}(abc),\quad v_p(\cdot),\quad \text{squarefree/squarefull 分解},\quad \text{primitive prime}
 \]
 
 のあたりに当てるのが自然じゃ。DkMath でも ABC 側の顔として p-adic valuation がすでに前面に出ておるからの。
@@ -592,7 +592,7 @@ n \mapsto n/p^k
 
 これは ABC でいう
 
-- \(\operatorname{rad}(abc)\) がどれだけ取りこぼせないか
+- \(\text{rad}(abc)\) がどれだけ取りこぼせないか
 - squarefree 部分がどれだけ本質的か
 - high valuation が起きるなら別の場所で質量不足が起きる
 
@@ -731,7 +731,7 @@ DkMath/ABC/ValuationFlowBridge.lean
 本丸の目標を最初から
 
 \[
-c < K_\varepsilon \operatorname{rad}(abc)^{1+\varepsilon}
+c < K_\varepsilon \text{rad}(abc)^{1+\varepsilon}
 \]
 
 へ置くのではなく、
@@ -1270,7 +1270,7 @@ theorem rad_lower_bound_of_disjoint_mass_channels
 ```
 
 最後の名はかなり本質的じゃ。
-互いに独立な新規素因子チャネルが増えるほど \(\operatorname{rad}(abc)\) は持ち上がる、という読みへ橋を架けられる。
+互いに独立な新規素因子チャネルが増えるほど \(\text{rad}(abc)\) は持ち上がる、という読みへ橋を架けられる。
 
 ## 9. 具体的な Phase 分割
 

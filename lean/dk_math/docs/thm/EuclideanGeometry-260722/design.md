@@ -97,7 +97,7 @@ normalizedCycleStep k = 1 / k
 and proves for positive `k`:
 
 $$
-k\cdot\operatorname{normalizedCycleStep}(k)=1.
+k\cdot\text{normalizedCycleStep}(k)=1.
 $$
 
 This theorem is purely scalar. It neither names a circle nor implies a unit-kernel return by itself.
@@ -335,7 +335,7 @@ def kernelActIter (r : UnitKernel R) (n : ℕ) (z : Vec R) : Vec R :=
 Prove:
 
 $$
-\operatorname{act}(r^n,z)=\operatorname{actIter}(r,n,z).
+\text{act}(r^n,z)=\text{actIter}(r,n,z).
 $$
 
 This is the generic counterpart of the existing semantic theorem.
@@ -629,7 +629,7 @@ Vec.one R = (1,0)
 Then:
 
 $$
-\operatorname{act}(r,\operatorname{one})=r.
+\text{act}(r,\text{one})=r.
 $$
 
 Thus equality of orbit vertices at the neutral base is equality of kernel powers. This makes exact-order injectivity elementary.

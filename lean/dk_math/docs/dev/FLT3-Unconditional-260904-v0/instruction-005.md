@@ -122,7 +122,7 @@ $$
 004A packet は
 
 $$
-s-r=\operatorname{carrier}=9A^3
+s-r=\text{carrier}=9A^3
 $$
 
 を持つため、
@@ -213,7 +213,7 @@ Lean では Nat/Int coercion を明示し、truncated subtraction を使わな�
 $$
 \alpha_{\rm snd}-\alpha_{\rm fst}
 =
-\operatorname{carrier}
+\text{carrier}
 =
 9A^3
 $$
@@ -263,7 +263,7 @@ $$
 004A から
 
 $$
-N(\alpha)=\operatorname{residual}=3B^3.
+N(\alpha)=\text{residual}=3B^3.
 $$
 
 U003 から

@@ -35,7 +35,7 @@ n.factorization.support.biUnion fun p =>
 数学的には、
 
 $$
-{p^k\mid p\in \operatorname{supp}(n.factorization),\ 1\le k\le v_p(n)}
+{p^k\mid p\in \text{supp}(n.factorization),\ 1\le k\le v_p(n)}
 $$
 
 を有限集合として直接作った、ということじゃ。

@@ -208,7 +208,7 @@ noncomputable def pascalPrimePowerLabel
 最後は exact に、
 
 $$
-\operatorname{cost}(p^{k+1})=\log p
+\text{cost}(p^{k+1})=\log p
 $$
 
 を与える。

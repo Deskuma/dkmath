@@ -64,7 +64,7 @@ z
 この沈み込みが
 
 $$
-\operatorname{phaseDepth}(t)=(1-t)^2+t^2
+\text{phaseDepth}(t)=(1-t)^2+t^2
 $$
 
 として見える。
@@ -72,7 +72,7 @@ $$
 そして中央で一番深く、左右対称。
 
 $$
-\operatorname{phaseDepth}(1-t)=\operatorname{phaseDepth}(t)
+\text{phaseDepth}(1-t)=\text{phaseDepth}(t)
 $$
 
 ここで初めて「くぼみ」が観測対象になる。
@@ -83,7 +83,7 @@ $$
 その後で、
 
 $$
-\frac{1}{\sqrt{\operatorname{phaseDepth}(t)}}
+\frac{1}{\sqrt{\text{phaseDepth}(t)}}
 $$
 
 を掛けると、くぼみが持ち上がり、元の \(q2\) 境界へ戻る。

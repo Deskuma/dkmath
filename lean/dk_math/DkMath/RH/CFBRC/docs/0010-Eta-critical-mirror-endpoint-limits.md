@@ -11,7 +11,7 @@
 ここで重要なのは、本書が有限段階の exact closure を主張しないことである。
 
 $$
-\operatorname{etaPartialEndpoint}(N,s)\longrightarrow 0
+\text{etaPartialEndpoint}(N,s)\longrightarrow 0
 $$
 
 は、ある有限 `N` で endpoint が厳密に `0` になることを意味しない。
@@ -177,7 +177,7 @@ theorem norm_etaPairTerm_le_summableMajorant
 を証明し、概念的には
 
 $$
-\lVert\operatorname{etaPairTerm}(s,k)\rVert
+\lVert\text{etaPairTerm}(s,k)\rVert
 \lesssim
 \lVert s\rVert(k+1)^{-\Re(s)-1}
 $$
@@ -468,13 +468,13 @@ theorem etaCriticalMirrorEndpoint_add_tendsto_zero_of_nontrivialRiemannZetaZero
 次は証明済みである。
 
 $$
-\operatorname{etaPartialEndpoint}(N,s)\longrightarrow0
+\text{etaPartialEndpoint}(N,s)\longrightarrow0
 $$
 
 しかし、ここから
 
 $$
-\exists N,\quad \operatorname{etaPartialEndpoint}(N,s)=0
+\exists N,\quad \text{etaPartialEndpoint}(N,s)=0
 $$
 
 は導けない。
@@ -482,16 +482,16 @@ $$
 さらに、
 
 $$
-\operatorname{etaPartialEndpoint}(N,\operatorname{criticalMirror}(s))
+\text{etaPartialEndpoint}(N,\text{criticalMirror}(s))
 -
-\operatorname{etaPartialEndpoint}(N,s)
+\text{etaPartialEndpoint}(N,s)
 \longrightarrow0
 $$
 
 から
 
 $$
-\operatorname{criticalMirror}(s)=s
+\text{criticalMirror}(s)=s
 $$
 
 も導けない。

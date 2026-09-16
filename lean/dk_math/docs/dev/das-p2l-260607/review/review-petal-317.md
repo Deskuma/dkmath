@@ -52,7 +52,7 @@ cp-317 の登頂作業を、最初の真正な障害まで完了しました。
 
 - scalar queue は endpoint width の過去最小値からの正確な drawup。
 - queue の一様有界性と endpoint width の一様有界性は存在量として同値。
-- canonical block は厳密に $(L,u)\mapsto\operatorname{oddPart}(3^Lu-1)$ で遷移する。
+- canonical block は厳密に $(L,u)\mapsto\text{oddPart}(3^Lu-1)$ で遷移する。
 - block 内の最大幅増加は delayed-debt 数そのもの。
 - 有限に返済される primitive excursion は、正 partial sum と完全に一致する。
 - 有界 potential を持つ有限抽象が作れれば、正の closed signature path は排除できる。
@@ -203,7 +203,7 @@ $$
 とすると、
 
 $$
-\operatorname{capacity}=v
+\text{capacity}=v
 $$
 
 そして次 block start は、
@@ -217,7 +217,7 @@ $$
 したがって complete block transition は厳密に、
 
 $$
-(L,u)\longmapsto\operatorname{oddPart}(3^Lu-1)
+(L,u)\longmapsto\text{oddPart}(3^Lu-1)
 $$
 
 となった。
@@ -283,7 +283,7 @@ block interior は height $1$ なので、bit width は endpoint 前まで非減
 今回、
 
 $$
-\operatorname{width}(\mathrm{endpoint}) = \operatorname{width}(\mathrm{start}) + |\operatorname{GrowthDebtFiber}|
+\text{width}(\mathrm{endpoint}) = \text{width}(\mathrm{start}) + |\text{GrowthDebtFiber}|
 $$
 
 が証明された。
@@ -571,7 +571,7 @@ $$
 claim depth は $[1,L]$ の部分集合で cardinality が $L$ だから、
 
 $$
-\operatorname{ClaimDepths}=[1,L]
+\text{ClaimDepths}=[1,L]
 $$
 
 である。

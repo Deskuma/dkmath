@@ -73,7 +73,7 @@ CanonicalLengthOneBalancedCarrySuccessor
 
 さらに任意の block 内部について、
 
-$$\operatorname{iterateT}(\operatorname{sourceAtDepth}(d))+1=2^d3^{L-d}u$$
+$$\text{iterateT}(\text{sourceAtDepth}(d))+1=2^d3^{L-d}u$$
 
 という完全な core-word 表現が得られ、claim membership もこの exact word の upper carry だけで判定できるようになった。
 
@@ -108,19 +108,19 @@ $$3y+1<4x$$
 
 一方、saturated block の exact unit drift により、
 
-$$\operatorname{bitWidth}(y)=\operatorname{bitWidth}(x)+1$$
+$$\text{bitWidth}(y)=\text{bitWidth}(x)+1$$
 
 である。
 
-$x<2^{\operatorname{bitWidth}(x)}$ と合わせると、
+$x<2^{\text{bitWidth}(x)}$ と合わせると、
 
-$$3y+1<2^{\operatorname{bitWidth}(y)+1}$$
+$$3y+1<2^{\text{bitWidth}(y)+1}$$
 
 となり、carry-two threshold に到達しない。
 
 したがって、
 
-$$\operatorname{stateUpperCarry}(y)=1$$
+$$\text{stateUpperCarry}(y)=1$$
 
 じゃ。
 
@@ -140,7 +140,7 @@ canonicalPaymentSourceAtDepth_length_eq_startTime
 
 により、
 
-$$\operatorname{sourceAtDepth}(L)=\operatorname{blockStartTime}$$
+$$\text{sourceAtDepth}(L)=\text{blockStartTime}$$
 
 が証明された。
 
@@ -148,7 +148,7 @@ $$\operatorname{sourceAtDepth}(L)=\operatorname{blockStartTime}$$
 
 よって、
 
-$$L\in\operatorname{ClaimHoles}$$
+$$L\in\text{ClaimHoles}$$
 
 が得られた。
 
@@ -350,7 +350,7 @@ $$x_d+1=2^d3^{L-d}u$$
 
 ここで、
 
-$$x_d=(\operatorname{iterateT}(\operatorname{sourceAtDepth}(d)),n).1$$
+$$x_d=(\text{iterateT}(\text{sourceAtDepth}(d)),n).1$$
 
 じゃ。
 
@@ -362,7 +362,7 @@ $$x_d=2^d3^{L-d}u-1$$
 
 claim membership も、
 
-$$d\in\operatorname{Claims}\iff\operatorname{stateUpperCarry}(2^d3^{L-d}u-1)=2$$
+$$d\in\text{Claims}\iff\text{stateUpperCarry}(2^d3^{L-d}u-1)=2$$
 
 となった。
 
@@ -463,7 +463,7 @@ $$H=1$$
 
 さらに唯一の hole は最深 depth $2$ なので、
 
-$$\operatorname{Claims}={1}$$
+$$\text{Claims}={1}$$
 
 じゃ。
 
@@ -485,7 +485,7 @@ $$d_{\mathrm{missing}}=L$$
 
 したがって、
 
-$$\operatorname{Claims}=\operatorname{Icc}(1,L-1)$$
+$$\text{Claims}=\text{Icc}(1,L-1)$$
 
 じゃ。
 
@@ -571,7 +571,7 @@ report の、
 
 既存 scalar queue 層では既に、
 
-$$\exists C,\ Q_m\le C\quad\Longleftrightarrow\quad\exists B,\ \operatorname{endpointWidth}_m\le B$$
+$$\exists C,\ Q_m\le C\quad\Longleftrightarrow\quad\exists B,\ \text{endpointWidth}_m\le B$$
 
 が得られている。
 

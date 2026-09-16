@@ -85,9 +85,9 @@ mixed `(2,3)` で `n≡2 (mod 3)` とし、degree-two 側をprimeとすると、
 `n≥3` において
 
 \[
-\operatorname{GoldbachPairAt}(n)
-\iff \operatorname{UnitPairAt}(n,2,2)
-\iff \exists d,e\text{ prime},\operatorname{UnitPairAt}(n,d,e).
+\text{GoldbachPairAt}(n)
+\iff \text{UnitPairAt}(n,2,2)
+\iff \exists d,e\text{ prime},\text{UnitPairAt}(n,d,e).
 \]
 
 これを `goldbachPairAt_iff_unitPairAt_two_two` と `exists_prime_degrees_iff_goldbach` に固定した。

@@ -37,7 +37,7 @@ noncomputable def centeredSigma (σ : ℝ) : ℝ :=
 数学的には、
 
 $$
-\operatorname{centeredSigma}(\sigma)=\sigma-\frac12.
+\text{centeredSigma}(\sigma)=\sigma-\frac12.
 $$
 
 したがって、中心座標が零になることと臨界線上にいることは同値である。
@@ -50,7 +50,7 @@ $$
 すなわち、
 
 $$
-\operatorname{centeredSigma}(\sigma)=0
+\text{centeredSigma}(\sigma)=0
 \iff
 \sigma=\frac12.
 $$
@@ -69,9 +69,9 @@ noncomputable def offCriticalCFBRC (d : ℕ) (σ Θ : ℝ) : ℂ :=
 数学的には、
 
 $$
-\operatorname{offCriticalCFBRC}(d,\sigma,\Theta)
+\text{offCriticalCFBRC}(d,\sigma,\Theta)
 :=
-\operatorname{cfbrcR}\!\left(d,\sigma-\frac12,\Theta\right).
+\text{cfbrcR}\!\left(d,\sigma-\frac12,\Theta\right).
 $$
 
 $\Theta$ は CFBRC の第二実パラメータであり、この段階ではゼータ関数から導かれる位相量とは仮定しない。
@@ -93,7 +93,7 @@ offCriticalCFBRC = 0
 既存 CFBRC の二次展開は、実入力 $X,\Theta$ に対して概念的に、
 
 $$
-\operatorname{cfbrcR}(2,X,\Theta)
+\text{cfbrcR}(2,X,\Theta)
 =
 X^2+2iX\Theta
 $$
@@ -110,7 +110,7 @@ theorem cfbrcR_two_eq_zero_iff_x_eq_zero (X Θ : ℝ) :
 したがって、
 
 $$
-\operatorname{cfbrcR}(2,X,\Theta)=0
+\text{cfbrcR}(2,X,\Theta)=0
 \iff
 X=0.
 $$
@@ -154,7 +154,7 @@ theorem offCriticalCFBRC_two_eq_zero_iff_re_eq_half (σ Θ : ℝ) :
 数学的には、
 
 $$
-\operatorname{offCriticalCFBRC}(2,\sigma,\Theta)=0
+\text{offCriticalCFBRC}(2,\sigma,\Theta)=0
 \iff
 \sigma=\frac12.
 $$
@@ -193,7 +193,7 @@ $$
 d>0
 \Longrightarrow
 \left(
-\operatorname{cfbrcR}(d,X,\Theta)=0
+\text{cfbrcR}(d,X,\Theta)=0
 \iff
 X=0
 \right).
@@ -279,7 +279,7 @@ theorem offCriticalCFBRC_eq_zero_iff_re_eq_half
 
 $$
 \boxed{
-\operatorname{offCriticalCFBRC}(d,\sigma,\Theta)=0
+\text{offCriticalCFBRC}(d,\sigma,\Theta)=0
 \iff
 \sigma=\frac12
 }
@@ -334,7 +334,7 @@ $$
 $$
 \zeta(s)=0
 \Longrightarrow
-\operatorname{offCriticalCFBRC}(d,s.re,\Theta(s))=0
+\text{offCriticalCFBRC}(d,s.re,\Theta(s))=0
 $$
 
 を証明していない。

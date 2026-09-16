@@ -255,7 +255,7 @@ $$A_n^{\mathrm{owned}}(j,d)$$
 
 を既存の、
 
-$$S_n(j,d)=\operatorname{canonicalExactLengthServiceAtDepth}(n,j,d)$$
+$$S_n(j,d)=\text{canonicalExactLengthServiceAtDepth}(n,j,d)$$
 
 へ接続できるかを見る。
 

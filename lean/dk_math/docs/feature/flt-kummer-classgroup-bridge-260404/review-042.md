@@ -7,12 +7,12 @@
 今回の到達点は、`CyclotomicNormEqGNFirstCasePackThinTarget` を no-sorry concrete theorem として閉じたことじゃ。つまり Stage 3 前半、すなわち
 
 $$
-\operatorname{Norm}(z-\zeta y)=GN,p,(z-y),y
+\text{Norm}(z-\zeta y)=GN,p,(z-y),y
 $$
 
 の側は、もう abstract target ではなく concrete な mainline 資産になった。しかも combinatorial bridge
 $$
-(ZMod,p)^\times \;\to\; (\operatorname{Finset.range} p).\operatorname{erase} 0
+(ZMod,p)^\times \;\to\; (\text{Finset.range} p).\text{erase} 0
 $$
 まで theorem 化され、axiom 監視も clean と整理されておる。残る open は `CyclotomicNormUnitAbsorbFirstCasePackThinTarget` ただ 1 本、と明言できる段階じゃ。
 
@@ -40,10 +40,10 @@ $$
 から norm を取って
 
 $$
-GN = \operatorname{Norm}(u)\cdot \operatorname{Norm}(\beta)^p
+GN = \text{Norm}(u)\cdot \text{Norm}(\beta)^p
 $$
 
-を得たあと、\(\operatorname{Norm}(u)\) が unit なので、最終的に
+を得たあと、\(\text{Norm}(u)\) が unit なので、最終的に
 
 $$
 GN=s^p
@@ -55,7 +55,7 @@ $$
 賢狼の読みでは、ここは
 
 $$
-\operatorname{natAbs}
+\text{natAbs}
 $$
 
 で一気に吸うのが最も筋がよい。
@@ -63,15 +63,15 @@ $$
 なぜなら、\((GN : \mathbb{Z}) = \varepsilon \cdot m^p\) で \(\varepsilon\) が unit なら、
 
 $$
-GN = \operatorname{natAbs}((GN:\mathbb{Z})) = \operatorname{natAbs}(\varepsilon \cdot m^p) = \operatorname{natAbs}(\varepsilon) \cdot \operatorname{natAbs}(m^p) = (\operatorname{natAbs} m)^p
+GN = \text{natAbs}((GN:\mathbb{Z})) = \text{natAbs}(\varepsilon \cdot m^p) = \text{natAbs}(\varepsilon) \cdot \text{natAbs}(m^p) = (\text{natAbs} m)^p
 $$
 
 と落ちるからじゃ。
-ここでは \(\operatorname{natAbs}(\varepsilon)=1\) が効く。
+ここでは \(\text{natAbs}(\varepsilon)=1\) が効く。
 つまり、面倒な符号分岐をせずとも、自然数 witness は
 
 $$
-s := \operatorname{Int.natAbs}(\operatorname{Norm}(\beta))
+s := \text{Int.natAbs}(\text{Norm}(\beta))
 $$
 
 でよい。
@@ -91,7 +91,7 @@ $$
 に `congrArg (Algebra.norm ℤ)` をかけて、
 
 $$
-\operatorname{Norm}(z-\zeta y) = \operatorname{Norm}(unitFactor)\cdot \operatorname{Norm}(\beta)^p
+\text{Norm}(z-\zeta y) = \text{Norm}(unitFactor)\cdot \text{Norm}(\beta)^p
 $$
 
 を返す薄い補題を置く。

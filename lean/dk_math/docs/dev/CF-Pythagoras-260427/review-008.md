@@ -20,13 +20,13 @@ gcd_powerGap_powerBeam_dvd_d_of_coprime_int
 が入り、仮定は
 
 $$
-1\le d,\qquad \operatorname{gcd}(z,x)=1
+1\le d,\qquad \text{gcd}(z,x)=1
 $$
 
 結論は
 
 $$
-\operatorname{gcd}(z-x,\mathrm{Beam}_d(x,z))\mid d
+\text{gcd}(z-x,\mathrm{Beam}_d(x,z))\mid d
 $$
 
 じゃ。報告にも、`PowerGapBeam.lean` 本体には数論依存を入れず、新規 bridge ファイルで既存 `GcdDiffPow.gcd_divides_d` を包んだとある。これは依存設計としても正しい。

@@ -33,7 +33,7 @@ $$
 そこで、時刻 \(i\) の odd label を次のように読む。
 
 $$
-q_i = \operatorname{oddOrbitLabel}(n,i)
+q_i = \text{oddOrbitLabel}(n,i)
 $$
 
 そして height profile を
@@ -510,7 +510,7 @@ $$
 tail 側も定義する。
 
 $$
-C^{\operatorname{tail}}*{d,a}(n,k) = \#{i < k\mid q*{i+1}\bmod 2^d = a}
+C^{\text{tail}}*{d,a}(n,k) = \#{i < k\mid q*{i+1}\bmod 2^d = a}
 $$
 
 Lean では generic API `orbitWindowResidueCountPow2` と `orbitWindowResidueCountPow2Tail` が追加され、任意 depth の \(2^\text{depth}\) 座標で「ある residue cell に何回入ったか」を扱える入口ができた。さらに pointwise な recursive two-adic Petal transition は count-level の source-to-tail 不等式まで上げられた。
@@ -532,13 +532,13 @@ $$
 たとえば recovery sibling については、
 
 $$
-C_{r+2,\,2^{r+1}-1}(n,k)\le C^{\operatorname{tail}}_{r+1,\,2^r-1}(n,k)
+C_{r+2,\,2^{r+1}-1}(n,k)\le C^{\text{tail}}_{r+1,\,2^r-1}(n,k)
 $$
 
 continuation sibling については、
 
 $$
-C_{r+2,\,2^{r+2}-1}(n,k)\le C^{\operatorname{tail}}_{r+1,\,2^{r+1}-1}(n,k)
+C_{r+2,\,2^{r+2}-1}(n,k)\le C^{\text{tail}}_{r+1,\,2^{r+1}-1}(n,k)
 $$
 
 となる。
@@ -569,7 +569,7 @@ checkpoint 097 では、この source 側 partition theorem が Lean で確定�
 さらに tail 側でも同じことを示す。
 
 $$
-\sum_{a=0}^{2^d-1} C^{\operatorname{tail}}_{d,a}(n,k)=k
+\sum_{a=0}^{2^d-1} C^{\text{tail}}_{d,a}(n,k)=k
 $$
 
 checkpoint 098 では、この shifted-tail partition `orbitWindowResidueCountPow2Tail_sum_eq_window` と、pointwise residue transition を count inequality に持ち上げる汎用 helper `orbitWindowResidueCountPow2_le_tail_of_pointwise` が実装された。これで source residue distribution から pointwise transition law を経て tail residue distribution へ読む finite channel-flow system が得られた。
@@ -581,7 +581,7 @@ $$
 $$
 
 $$
-\sum_{a < 2^d} C^{\operatorname{tail}}_{d,a}(n,k)=k
+\sum_{a < 2^d} C^{\text{tail}}_{d,a}(n,k)=k
 $$
 
 これは確率ではなく、Nat count の保存則である。
@@ -620,7 +620,7 @@ $$
 $$
 
 $$
-\text{TailDistribution}\quad:\quad \sum_{a < 2^d} C^{\operatorname{tail}}_{d,a} = k
+\text{TailDistribution}\quad:\quad \sum_{a < 2^d} C^{\text{tail}}_{d,a} = k
 $$
 
 $$
@@ -628,17 +628,17 @@ $$
 $$
 
 $$
-\text{CountFlow}\quad:\quad C_A\le C^{\operatorname{tail}}_B
+\text{CountFlow}\quad:\quad C_A\le C^{\text{tail}}_B
 $$
 
 そして recursive two-adic Petal の二つの具体例は、
 
 $$
-C_{r+2,\,2^{r+1}-1}\le C^{\operatorname{tail}}_{r+1,\,2^r-1}
+C_{r+2,\,2^{r+1}-1}\le C^{\text{tail}}_{r+1,\,2^r-1}
 $$
 
 $$
-C_{r+2,\,2^{r+2}-1}\le C^{\operatorname{tail}}_{r+1,\,2^{r+1}-1}
+C_{r+2,\,2^{r+2}-1}\le C^{\text{tail}}_{r+1,\,2^{r+1}-1}
 $$
 
 である。
@@ -692,7 +692,7 @@ $$
 という channel transition として読み、
 
 $$
-C_{r+2,a}(n,k)\le C^{\operatorname{tail}}_{r+1,b}(n,k)
+C_{r+2,a}(n,k)\le C^{\text{tail}}_{r+1,b}(n,k)
 $$
 
 へ持ち上げた。
@@ -742,7 +742,7 @@ $$
 しかも continuation sibling は次階層の retention cell そのもの。
 
 $$
-\operatorname{ContinuationSibling}(r) = R_{r+1}
+\text{ContinuationSibling}(r) = R_{r+1}
 $$
 
 したがって、
@@ -1100,7 +1100,7 @@ $$
 最後に、
 
 $$
-\text{finite channel-flow }C_A\le C^{\operatorname{tail}}_B
+\text{finite channel-flow }C_A\le C^{\text{tail}}_B
 $$
 
 へ到達した。

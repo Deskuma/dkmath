@@ -16,7 +16,7 @@ $$
 から
 
 $$
-v_p(|\operatorname{powerBeam}_3(b,a)|)\le 1
+v_p(|\text{powerBeam}_3(b,a)|)\le 1
 $$
 
 へ移す
@@ -36,7 +36,7 @@ $$
 から
 
 $$
-Squarefree(|\operatorname{powerBeam}_3(b,a)|)
+Squarefree(|\text{powerBeam}_3(b,a)|)
 $$
 
 へ移す
@@ -62,7 +62,7 @@ $$
 を、Int 側の
 
 $$
-q \mid |\operatorname{powerBeam}_3(b,a)|
+q \mid |\text{powerBeam}_3(b,a)|
 $$
 
 へ運ぶ wrapper になっておる。`PrimitiveBeam.primitive_prime_dvd_GN` の出力を、Chapter 2 側がそのまま使える `p ∣ (powerBeam 3 ...).natAbs` 型に変換できるようになったわけじゃ。
@@ -80,7 +80,7 @@ $$
 から
 
 $$
-y^d=(z-x)\operatorname{powerBeam}_d(x,z)
+y^d=(z-x)\text{powerBeam}_d(x,z)
 $$
 
 を得て、さらに Beam 側素因子の valuation 制約を作った。
@@ -96,7 +96,7 @@ $$
 が
 
 $$
-q\mid \operatorname{powerBeam}_3(b,a)
+q\mid \text{powerBeam}_3(b,a)
 $$
 
 へ渡る。

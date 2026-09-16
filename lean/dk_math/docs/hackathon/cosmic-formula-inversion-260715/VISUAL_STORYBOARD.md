@@ -1440,7 +1440,7 @@ wide projected interval
 Possible text:
 
 $$
-\operatorname{width}(I)<1
+\text{width}(I)<1
 $$
 
 followed by:

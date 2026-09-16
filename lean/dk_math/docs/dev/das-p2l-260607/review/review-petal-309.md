@@ -153,7 +153,7 @@ shiftedOrbitCarryTwoCount_eq_carryTwoPaymentClaimFiber_card_universal
 により、
 
 $$
-\operatorname{ShiftedCarryTwoCount}(b,j+1-b)=Q_j
+\text{ShiftedCarryTwoCount}(b,j+1-b)=Q_j
 $$
 
 となる。
@@ -167,7 +167,7 @@ shiftedExtraPaymentCapacity_eq_extraPaymentCapacityAt_universal
 により、
 
 $$
-\operatorname{ShiftedExtraCapacity}(b,j+1-b)=P_j
+\text{ShiftedExtraCapacity}(b,j+1-b)=P_j
 $$
 
 となる。
@@ -335,7 +335,7 @@ D:
 数式では、
 
 $$
-L_j=|\operatorname{Fiber}(j)|=A_b
+L_j=|\text{Fiber}(j)|=A_b
 $$
 
 $$

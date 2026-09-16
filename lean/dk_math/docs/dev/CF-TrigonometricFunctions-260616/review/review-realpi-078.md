@@ -161,14 +161,14 @@ phaseDepth_dyadic_reflect
 もともと
 
 $$
-\operatorname{phaseDepth}(1-t)=\operatorname{phaseDepth}(t)
+\text{phaseDepth}(1-t)=\text{phaseDepth}(t)
 $$
 
 があった。
 これを dyadic node 上に落とすと、
 
 $$
-\operatorname{phaseDepth}(t_{n,2^n-k}) = \operatorname{phaseDepth}(t_{n,k})
+\text{phaseDepth}(t_{n,2^n-k}) = \text{phaseDepth}(t_{n,k})
 $$
 
 になる。
@@ -250,7 +250,7 @@ local boundary correction の合成則
 まず、
 
 $$
-\operatorname{phaseDepth}(t)
+\text{phaseDepth}(t)
 $$
 
 これは境界からの沈み込み率。
@@ -258,7 +258,7 @@ $$
 次に、
 
 $$
-\operatorname{phaseNormalization}(t) = \frac{1}{\sqrt{\operatorname{phaseDepth}(t)}}
+\text{phaseNormalization}(t) = \frac{1}{\sqrt{\text{phaseDepth}(t)}}
 $$
 
 これは境界へ戻す補正率。
@@ -266,13 +266,13 @@ $$
 さらに、log を取れば、
 
 $$
-\log(\operatorname{phaseNormalization}(t))
+\log(\text{phaseNormalization}(t))
 $$
 
 あるいは、
 
 $$
--\frac12\log(\operatorname{phaseDepth}(t))
+-\frac12\log(\text{phaseDepth}(t))
 $$
 
 が加法的に扱える可能性がある。

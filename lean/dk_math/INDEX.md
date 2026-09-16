@@ -147,11 +147,11 @@ The OpenAI Build Week GN5 work is the historical origin of this route. The reusa
 Core boundary identities:
 
 $$
-\operatorname{cosmicN}(P)=P(P+2),
+\text{cosmicN}(P)=P(P+2),
 $$
 
 $$
-\operatorname{cosmicN}(P)+1=(P+1)^2.
+\text{cosmicN}(P)+1=(P+1)^2.
 $$
 
 Main route:
@@ -218,13 +218,13 @@ $$
 (x+u)^d
 =
 \sum_{j<r}\binom dj x^j u^{d-j}
-+x^r\operatorname{GTail}(d,r,x,u).
++x^r\text{GTail}(d,r,x,u).
 $$
 
 The standard GN layer is the specialization
 
 $$
-GN_d(x,u)=\operatorname{GTail}(d,1,x,u).
+GN_d(x,u)=\text{GTail}(d,1,x,u).
 $$
 
 Modules:

@@ -35,8 +35,8 @@ import DkMath.NumberTheory.PrimitiveBeam
 これで `PowerGapBeamGN.lean` は、低次数の
 
 $$
-\operatorname{powerBeam}_3 \leftrightarrow GN_3,\qquad
-\operatorname{powerBeam}_4 \leftrightarrow GN_4
+\text{powerBeam}_3 \leftrightarrow GN_3,\qquad
+\text{powerBeam}_4 \leftrightarrow GN_4
 $$
 
 および valuation / squarefree の単純移送だけを担う軽量 bridge に戻った。
@@ -52,7 +52,7 @@ $$
 `PowerGapBeamPrimitive.lean` 側には、
 
 $$
-\operatorname{
+\text{
     PrimitivePrimeFactorOfDiffPow(q,a,b,3)
 }
 $$
@@ -60,7 +60,7 @@ $$
 から
 
 $$
-q\mid |\operatorname{powerBeam}_3(b,a)|
+q\mid |\text{powerBeam}_3(b,a)|
 $$
 
 を得る
@@ -82,9 +82,9 @@ $$
 つまり、Chapter 2 の流れ
 
 $$
-\operatorname{PrimitiveBeam}
+\text{PrimitiveBeam}
 \to GN
-\to \operatorname{PowerBeam}
+\to \text{PowerBeam}
 \to \text{valuation contradiction}
 \to \text{False}
 $$
@@ -173,7 +173,7 @@ hbeam_ne : (powerBeam 3 (b : ℤ) (a : ℤ)).natAbs ≠ 0
 d=3 では
 
 $$
-\operatorname{powerBeam}_3(b,a)=a^2+ab+b^2
+\text{powerBeam}_3(b,a)=a^2+ab+b^2
 $$
 
 なので、自然数 (a,b) で (b<a) なら、これは正のはずじゃ。

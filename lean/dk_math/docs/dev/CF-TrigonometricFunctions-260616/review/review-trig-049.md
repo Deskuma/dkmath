@@ -90,11 +90,11 @@ def semanticUnitKernel (r : UnitKernel DkNNRealQ) : UnitKernel ℝ :=
 難しかったのはその前に、
 
 $$
-\operatorname{semanticValue}(x+y)=\operatorname{semanticValue}(x)+\operatorname{semanticValue}(y)
+\text{semanticValue}(x+y)=\text{semanticValue}(x)+\text{semanticValue}(y)
 $$
 
 $$
-\operatorname{semanticValue}(xy)=\operatorname{semanticValue}(x)\operatorname{semanticValue}(y)
+\text{semanticValue}(xy)=\text{semanticValue}(x)\text{semanticValue}(y)
 $$
 
 を閉じたところじゃ。

@@ -129,9 +129,9 @@ The theorem should immediately support numeral specializations such as
 $$
 6\le30
 \Longrightarrow
-\operatorname{squareBody}(6)
+\text{squareBody}(6)
 \le
-\operatorname{squareBody}(30),
+\text{squareBody}(30),
 $$
 
 but no dedicated numeric theorem is required in PCK-002.

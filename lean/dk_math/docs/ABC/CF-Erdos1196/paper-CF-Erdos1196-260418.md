@@ -11,16 +11,16 @@ $$
 \to
 2^{\text{channelCount}}
 \to
-\operatorname{rad}(c)
+\text{rad}(c)
 \to
-\operatorname{rad}(abc)
+\text{rad}(abc)
 \to
-\operatorname{quality}(a,b,c)
+\text{quality}(a,b,c)
 $$
 
 というルートが Lean 上で theorem 名を伴って実装され、さらに `DkMath.ABC.Main` から辿れる公開導線に載せられた。
 
-ここで言う「成果」とは、問題そのものの完全解決ではなく、Erdős #1196 の背後にある primitive prime / radical growth / quality bound の構造を、既存 ABC 形式化の内部へ自然に合流させる橋梁を実装したことである。数学的には、primitive prime から得られる独立な channel 情報を `rad(c)` の定量的下界に変換し、その下界を通じて `c \le \operatorname{rad}(abc)^{1+\varepsilon}` 型の skeleton に接続する形式的インフラを構築した。
+ここで言う「成果」とは、問題そのものの完全解決ではなく、Erdős #1196 の背後にある primitive prime / radical growth / quality bound の構造を、既存 ABC 形式化の内部へ自然に合流させる橋梁を実装したことである。数学的には、primitive prime から得られる独立な channel 情報を `rad(c)` の定量的下界に変換し、その下界を通じて `c \le \text{rad}(abc)^{1+\varepsilon}` 型の skeleton に接続する形式的インフラを構築した。
 
 ## 1. 背景と目的
 
@@ -92,7 +92,7 @@ $$
 - `channelProduct`
 - member-wise extraction (`prime`, `dvd diff` など)
 - `2^{\text{channelCount}} \le \text{channelProduct}`
-- `2^{\text{channelCount}} \le \operatorname{supportMass}(c)`
+- `2^{\text{channelCount}} \le \text{supportMass}(c)`
 
 この段階で、primitive witness family から radical lower bound に至る spine は次の形に固定された。
 
@@ -103,7 +103,7 @@ $$
 \to
 \text{channelProduct}
 \to
-\operatorname{rad}(c).
+\text{rad}(c).
 $$
 
 これはまさに Erdős #1196 的な「distinct prime channel の数が radical を押し上げる」という主張の形式化である。
@@ -117,9 +117,9 @@ $$
 まず `rad(c)` の下界を一度 `TailBound` の形に transport し、既存 `ABC038` の convenience theorem 群に流す道である。概念的には
 
 $$
-\operatorname{rad}(c)
+\text{rad}(c)
 \to
-\operatorname{rad}(u v)
+\text{rad}(u v)
 \to
 \text{TailBound}
 \to
@@ -135,21 +135,21 @@ $$
 であり、
 
 $$
-\pi\mathrm{SqRad}(c) \le \operatorname{rad}(ab)^\delta,
+\pi\mathrm{SqRad}(c) \le \text{rad}(ab)^\delta,
 \qquad
-\mathrm{twoTail}(c) \le \operatorname{rad}(c)^\gamma
+\mathrm{twoTail}(c) \le \text{rad}(c)^\gamma
 $$
 
 から
 
 $$
-c \le \operatorname{rad}(abc)^{1+\delta+\gamma}
+c \le \text{rad}(abc)^{1+\delta+\gamma}
 $$
 
 を導く。この skeleton は ABC 予想の標準形
 
 $$
-c \lesssim \operatorname{rad}(abc)^{1+\varepsilon}
+c \lesssim \text{rad}(abc)^{1+\varepsilon}
 $$
 
 にかなり近い。
@@ -180,7 +180,7 @@ $$
 が得られており、これらにより
 
 $$
-2^{\text{channelCount}} \le \operatorname{rad}(c)
+2^{\text{channelCount}} \le \text{rad}(c)
 $$
 
 が theorem 名で読める。
@@ -201,9 +201,9 @@ $$
 $$
 \text{channelCount}
 \to
-\operatorname{rad}(c)\text{ budget}
+\text{rad}(c)\text{ budget}
 \to
-\operatorname{rad}(abc)
+\text{rad}(abc)
 \to
 \text{quality}
 $$
@@ -234,7 +234,7 @@ $$
 
 - `channelCount = 2`
 - `channelProduct = 7 \cdot 13`
-- `2^{\text{channelCount}} \le \operatorname{rad}(91)`
+- `2^{\text{channelCount}} \le \text{rad}(91)`
 
 が得られることを確認した。これは counting spine の 2-channel concrete witness である。
 
@@ -249,13 +249,13 @@ $$
 に対し、
 
 - `piSqRad(7) = 1`
-- `twoTail(7) \le \operatorname{rad}(7)`
-- `1 < \operatorname{rad}(6\cdot 1\cdot 7)`
+- `twoTail(7) \le \text{rad}(7)`
+- `1 < \text{rad}(6\cdot 1\cdot 7)`
 
 を用いて
 
 $$
-\operatorname{quality}(6,1,7) \le 2
+\text{quality}(6,1,7) \le 2
 $$
 
 を Lean 上で閉じた。ここで重要なのは、この例が最終的に
@@ -348,9 +348,9 @@ Lean 実装では theorem 名の細部が重要だが、論文では概念のま
 $$
 \text{channelCount}
 \to
-\operatorname{rad}(c)
+\text{rad}(c)
 \to
-\operatorname{rad}(abc)
+\text{rad}(abc)
 \to
 \text{quality}
 $$

@@ -58,13 +58,13 @@ $$
 したがって \(\omega\) は \(ZMod\ q\) の乗法群の中の **非自明な \(p\) 乗根** になる。ここで `orderOf_eq_prime` を使って
 
 $$
-\operatorname{orderOf}(\omega)=p
+\text{orderOf}(\omega)=p
 $$
 
 を出し、さらに \(ZMod\ q\) の非零元は位数 \(q-1\) の群に入るから
 
 $$
-\operatorname{orderOf}(\omega)\mid (q-1)
+\text{orderOf}(\omega)\mid (q-1)
 $$
 
 よって

@@ -168,7 +168,7 @@ $$
 なので
 
 $$
-T_\delta\circ T_\delta=\operatorname{id}.
+T_\delta\circ T_\delta=\text{id}.
 $$
 
 また
@@ -523,7 +523,7 @@ $$
 を交換する自己同型群がある。
 
 $$
-\operatorname{Aut}(V_4)\cong GL(2,\mathbb F_2)\cong S_3.
+\text{Aut}(V_4)\cong GL(2,\mathbb F_2)\cong S_3.
 $$
 
 役割を分ける。

@@ -126,7 +126,7 @@ Do not attempt to prove provenance for an arbitrary SignedThreeAdicPacket.
 For positive a,b,c, prove from distinguished_cases:
 
 $$
-\operatorname{distinguished}\le abc.
+\text{distinguished}\le abc.
 $$
 
 Candidate theorem:
@@ -414,7 +414,7 @@ Constructor from source, and thin constructor directly from primitive solution.
 Using origin provenance and
 
 $$
-\operatorname{distinguished}=3AB,
+\text{distinguished}=3AB,
 $$
 
 prove
@@ -432,7 +432,7 @@ $$
 because A,B>0, then
 
 $$
-3AB=\operatorname{distinguished}\le abc.
+3AB=\text{distinguished}\le abc.
 $$
 
 Mandatory theorem:

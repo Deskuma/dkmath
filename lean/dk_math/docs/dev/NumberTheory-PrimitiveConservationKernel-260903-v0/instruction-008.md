@@ -129,7 +129,7 @@ Let
 
 $$
 A=
-\operatorname{finitePrimeBasisProduct}(S).
+\text{finitePrimeBasisProduct}(S).
 $$
 
 Prove a thin wrapper of PCK-003:
@@ -174,6 +174,7 @@ natural-number product is used as the coarse anchor.
 The finite-prime-basis semantics are supplied separately by theorem 3 above.
 
 This separation is deliberate:
+
 - theorem 3 says when the product really comes from a prime basis;
 - theorem 4 says any resulting numeric anchor can drive the already-proved
   coarse-to-fine certification.
@@ -238,7 +239,7 @@ But the complete prime support at that anchor is
 $$
 \mathcal P_{\le A}
 =
-\operatorname{primeScalesUpTo}(A).
+\text{primeScalesUpTo}(A).
 $$
 
 In general,
@@ -289,9 +290,9 @@ in the precise certification sense.
 PCK-005 already proves
 
 $$
-\operatorname{squarePrimeExpansion}(A)
+\text{squarePrimeExpansion}(A)
 =
-\operatorname{primeScalesUpTo}(\operatorname{squareBody}(A)).
+\text{primeScalesUpTo}(\text{squareBody}(A)).
 $$
 
 Therefore after PCK-006 the formal architecture is:
@@ -338,6 +339,7 @@ Run axiom checks on the two required theorems.
 If the optional PCK-005 specialization is added, axiom-check it as well.
 
 Audit:
+
 - no forbidden imports;
 - no accidental basis/closure equality;
 - no unused semantic hypothesis added merely to make a theorem look

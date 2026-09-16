@@ -345,7 +345,7 @@ $$
 その後 unit-norm theorem に接続して
 
 $$
-\operatorname{IsUnit}(d)
+\text{IsUnit}(d)
 $$
 
 を得る。
@@ -493,13 +493,13 @@ d\mid\beta
 \land
 d\mid\overline\beta
 \Longrightarrow
-\operatorname{IsUnit}(d).
+\text{IsUnit}(d).
 $$
 
 Equivalently via the chosen predicate:
 
 $$
-\operatorname{EisensteinRelPrime}
+\text{EisensteinRelPrime}
 (\beta,\overline\beta).
 $$
 

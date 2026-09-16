@@ -139,7 +139,7 @@ $$
 現在実装された `seventhSourcePlaneEquation` は、本質的にはこの $H$ です。
 
 $$
-x^7\in\operatorname{SourcePlane}\iff H(A,B,C)=0
+x^7\in\text{SourcePlane}\iff H(A,B,C)=0
 $$
 
 です。
@@ -185,11 +185,11 @@ $$
 現在の exact-power packet には、
 
 $$
-X_L^7=\operatorname{leftSource}(a,n)
+X_L^7=\text{leftSource}(a,n)
 $$
 
 $$
-X_R^7=\operatorname{rightSource}(a,n)
+X_R^7=\text{rightSource}(a,n)
 $$
 
 があります。
@@ -211,11 +211,11 @@ $$
 $\theta$ 基底では source は、
 
 $$
-\operatorname{leftSource}(a,n)=(a-3n)-n\theta
+\text{leftSource}(a,n)=(a-3n)-n\theta
 $$
 
 $$
-\operatorname{rightSource}(a,n)=(a+4n)+n\theta
+\text{rightSource}(a,n)=(a+4n)+n\theta
 $$
 
 です。
@@ -443,11 +443,11 @@ $$
 `IsSourcePlane x` は $C=0$ なので、
 
 $$
-\boxed{X_L\notin\operatorname{SourcePlane}}
+\boxed{X_L\notin\text{SourcePlane}}
 $$
 
 $$
-\boxed{X_R\notin\operatorname{SourcePlane}}
+\boxed{X_R\notin\text{SourcePlane}}
 $$
 
 です。

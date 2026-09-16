@@ -25,7 +25,7 @@ $$
 と
 
 $$
-q \mid \operatorname{cyclotomicPrimeCore}(d,1,u-1)
+q \mid \text{cyclotomicPrimeCore}(d,1,u-1)
 $$
 
 を同時に要求する route。
@@ -61,7 +61,7 @@ $$
 つまり route の芯は、
 
 $$
-\exists q_{\mathrm{body}},\ q_{\mathrm{body}} \mid \operatorname{cyclotomicPrimeCore}(d,1,u-1)
+\exists q_{\mathrm{body}},\ q_{\mathrm{body}} \mid \text{cyclotomicPrimeCore}(d,1,u-1)
 $$
 
 を packet descent に渡すことにある。
@@ -115,7 +115,7 @@ $$
 そして本当に数学として追うべき新しい核は、
 
 $$
-\exists q_{\mathrm{body}},\ q_{\mathrm{body}} \mid \operatorname{cyclotomicPrimeCore}(d,1,u-1)
+\exists q_{\mathrm{body}},\ q_{\mathrm{body}} \mid \text{cyclotomicPrimeCore}(d,1,u-1)
 $$
 
 の existence じゃ。
@@ -159,7 +159,7 @@ $$
 しかも first body は arithmetic 側ではなく、
 
 $$
-q_{\mathrm{body}} \mid \operatorname{cyclotomicPrimeCore}(d,1,u-1)
+q_{\mathrm{body}} \mid \text{cyclotomicPrimeCore}(d,1,u-1)
 $$
 
 を与える body/core witness existence に置くべきじゃろう。

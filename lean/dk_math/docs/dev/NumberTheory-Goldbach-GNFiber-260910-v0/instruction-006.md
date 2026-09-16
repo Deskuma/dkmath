@@ -25,20 +25,20 @@ into the Goldbach vocabulary.
 The first target is an exact finite conservation law:
 
 $$
-\operatorname{Incidence}(n)=\operatorname{Covered}(n)+\operatorname{OverlapExcess}(n).
+\text{Incidence}(n)=\text{Covered}(n)+\text{OverlapExcess}(n).
 $$
 
 Combining with the already proved
 
 $$
-\operatorname{Survivors}(n)+\operatorname{Covered}(n)=n-1
+\text{Survivors}(n)+\text{Covered}(n)=n-1
 $$
 
 should yield
 
 $$
 \boxed{
-\operatorname{Survivors}(n)+\operatorname{Incidence}(n)=(n-1)+\operatorname{OverlapExcess}(n).
+\text{Survivors}(n)+\text{Incidence}(n)=(n-1)+\text{OverlapExcess}(n).
 }
 $$
 
@@ -116,7 +116,7 @@ squareCoverIncidenceCount_eq_two_mul_add_overlapExcess_of_fullyCovered
 The idea is:
 
 $$
-\sum_{\text{seat}} |\operatorname{support}(\text{seat})|=|\operatorname{covered\ seats}|+\sum_{\text{seat}}\left(|\operatorname{support}(\text{seat})|-1\right),
+\sum_{\text{seat}} |\text{support}(\text{seat})|=|\text{covered\ seats}|+\sum_{\text{seat}}\left(|\text{support}(\text{seat})|-1\right),
 $$
 
 where natural subtraction makes the excess zero for an uncovered seat.

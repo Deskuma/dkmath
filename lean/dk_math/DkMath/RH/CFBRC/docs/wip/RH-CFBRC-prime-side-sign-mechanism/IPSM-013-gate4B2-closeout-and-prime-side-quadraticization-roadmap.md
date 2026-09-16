@@ -95,7 +95,7 @@ $$
 The feature-map energy is a normalized finite-interval integral of a norm square, so
 
 $$
-0\le \operatorname{Re}Q_\varepsilon(z,c).
+0\le \text{Re}Q_\varepsilon(z,c).
 $$
 
 The imaginary part vanishes exactly.
@@ -256,13 +256,13 @@ A legitimate construction must define its finite-family data from already availa
 The strongest desired shape is:
 
 $$
-E_{\varepsilon,X}(W)=\operatorname{Re}Q_\varepsilon(Z_{\varepsilon,W,X},C_{\varepsilon,W,X}).
+E_{\varepsilon,X}(W)=\text{Re}Q_\varepsilon(Z_{\varepsilon,W,X},C_{\varepsilon,W,X}).
 $$
 
 If an exact equality is too strong but a decomposition appears naturally, an acceptable alternative is:
 
 $$
-E_{\varepsilon,X}(W)=\operatorname{Re}Q_\varepsilon(Z,C)+R_{\varepsilon,W,X}.
+E_{\varepsilon,X}(W)=\text{Re}Q_\varepsilon(Z,C)+R_{\varepsilon,W,X}.
 $$
 
 The remainder can support a sign theorem only if its nonnegativity is proved independently from source mathematics.
@@ -298,7 +298,7 @@ A useful audit theorem may explicitly split a finite Gram quadratic form into di
 The prime-side sign target is the scalar excess
 
 $$
-E_{\varepsilon,X}(W)=\operatorname{Re}\mathcal W_{\varepsilon,X}(W)-\pi Q(W.R).
+E_{\varepsilon,X}(W)=\text{Re}\mathcal W_{\varepsilon,X}(W)-\pi Q(W.R).
 $$
 
 Therefore the most useful positive representation would not merely represent the whole surface.  It would represent the difference from the radial baseline.
@@ -306,7 +306,7 @@ Therefore the most useful positive representation would not merely represent the
 The ideal provider shape is conceptually
 
 $$
-\operatorname{Re}\mathcal W_{\varepsilon,X}(W)=\pi Q(W.R)+\text{PSD energy}.
+\text{Re}\mathcal W_{\varepsilon,X}(W)=\pi Q(W.R)+\text{PSD energy}.
 $$
 
 If such an identity exists, positivity follows immediately.

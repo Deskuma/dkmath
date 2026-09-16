@@ -136,7 +136,7 @@ $$A_7(x,y)=\frac{x^7+y^7}{x+y}$$
 
 これは整数 cyclotomic 表現では、
 
-$$A_7(x,y)=\operatorname{cyclotomicSeven}(x,-y)$$
+$$A_7(x,y)=\text{cyclotomicSeven}(x,-y)$$
 
 に対応します。
 

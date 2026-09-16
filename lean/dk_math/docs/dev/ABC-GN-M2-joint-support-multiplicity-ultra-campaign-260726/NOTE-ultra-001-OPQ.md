@@ -18,13 +18,13 @@ GNDepthMassAt_eq_support_add_excess
 
 により、
 
-$$\operatorname{DepthMass}=S+E$$
+$$\text{DepthMass}=S+E$$
 
 が pointwise exact identity になった。
 
 さらに canonical interval family 上で、
 
-$$\operatorname{GNDepthMassAt}=\log\operatorname{GNNonExceptionalPart}$$
+$$\text{GNDepthMassAt}=\log\text{GNNonExceptionalPart}$$
 
 まで接続された。
 
@@ -48,11 +48,11 @@ $$M=\prod_{q\in Q}q^{k_q}$$
 
 を構成し、CRT によって、
 
-$$\#\operatorname{JointRoots}\le(p-1)^{|Q|}$$
+$$\#\text{JointRoots}\le(p-1)^{|Q|}$$
 
 および、
 
-$$\#\operatorname{JointEvent}\le(p-1)^{|Q|}\left(\frac{X+1}{M}+1\right)$$
+$$\#\text{JointEvent}\le(p-1)^{|Q|}\left(\frac{X+1}{M}+1\right)$$
 
 まで閉じた。
 
@@ -150,7 +150,7 @@ $$M(e)=\prod_{q\in A(e)}q^{e_q+1}$$
 
 住所数は、
 
-$$\#\operatorname{Roots}(e)\le(p-1)^{|A(e)|}$$
+$$\#\text{Roots}(e)\le(p-1)^{|A(e)|}$$
 
 となるべきじゃ。
 

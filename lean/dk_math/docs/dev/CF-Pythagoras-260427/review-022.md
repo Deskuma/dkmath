@@ -72,7 +72,7 @@ flt_three_primitive_GN_squarefree_contradiction_of_lt_ne_three
 必要な主な仮定は、
 
 $$
-\operatorname{
+\text{
     PrimitivePrimeFactorOfDiffPow(q,a,b,3),
 }
 \quad b<a,
@@ -94,7 +94,7 @@ $$
 または
 
 $$
-\operatorname{
+\text{
     Squarefree(GN)
 }
 $$

@@ -20,13 +20,13 @@ $$
 なら
 
 $$
-\operatorname{powerBeam}_3(b,a)=a^2+ab+b^2
+\text{powerBeam}_3(b,a)=a^2+ab+b^2
 $$
 
 が正なので、
 
 $$
-|\operatorname{powerBeam}_3(b,a)|\ne0
+|\text{powerBeam}_3(b,a)|\ne0
 $$
 
 という補題じゃ。
@@ -61,7 +61,7 @@ powerBeam_three_natAbs_ne_zero_of_lt hab_lt
 cubic route の主要な仮定は、いまやだいぶ自然になった。
 
 $$
-\operatorname{
+\text{
     PrimitivePrimeFactorOfDiffPow
 }
 (q,a,b,3),
@@ -87,7 +87,7 @@ $$
 または
 
 $$
-\operatorname{
+\text{
     Squarefree(GN)
 }
 $$
@@ -131,7 +131,7 @@ flt_three_primitive_GN_squarefree_contradiction
 いまの d=3 route は、こう整理できる。
 
 $$
-\operatorname{
+\text{
     PrimitivePrimeFactorOfDiffPow(q,a,b,3)
 }
 $$
@@ -139,13 +139,13 @@ $$
 と (b < a) から、
 
 $$
-q\mid |\operatorname{powerBeam}_3(b,a)|
+q\mid |\text{powerBeam}_3(b,a)|
 $$
 
 かつ
 
 $$
-|\operatorname{powerBeam}_3(b,a)|\ne0
+|\text{powerBeam}_3(b,a)|\ne0
 $$
 
 が内部供給される。
@@ -167,7 +167,7 @@ $$
 または
 
 $$
-\operatorname{
+\text{
     Squarefree(|GN(3,a-b,b)|)
 }
 $$

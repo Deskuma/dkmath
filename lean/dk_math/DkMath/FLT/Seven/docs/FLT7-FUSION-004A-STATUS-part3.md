@@ -51,7 +51,7 @@ RAMIFIED で得た real-cubic descent seed を、
 最終形は、
 
 $$
-\operatorname{Norm}(C_i)=-e
+\text{Norm}(C_i)=-e
 $$
 
 および、
@@ -167,7 +167,7 @@ degree-six 世界で oriented linear factor に分けられるか
 現在の停止点は、
 
 $$
-\operatorname{map}(\mathfrak p)=\mathfrak P\overline{\mathfrak P}
+\text{map}(\mathfrak p)=\mathfrak P\overline{\mathfrak P}
 $$
 
 の逆包含だけです。

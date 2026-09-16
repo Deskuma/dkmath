@@ -858,7 +858,7 @@ lineRestriction_mul
 中心評価定理は次である。
 
 $$
-\operatorname{eval}(s,\operatorname{lineRestriction}(P,q,h))=P(q+s h)
+\text{eval}(s,\text{lineRestriction}(P,q,h))=P(q+s h)
 $$
 
 ### 停止条件
@@ -892,7 +892,7 @@ def MvGNFiniteDifference
 ### 中心定理
 
 $$
-P(q+s h)-P(q)=s\,\operatorname{MvGNFiniteDifference}(P,q,h,s)
+P(q+s h)-P(q)=s\,\text{MvGNFiniteDifference}(P,q,h,s)
 $$
 
 ### 写像版

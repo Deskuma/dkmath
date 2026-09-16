@@ -7,7 +7,7 @@ DkMath の既存 `GN` を再利用しつつ、prime exponent case の「円分�
 として Lean で実装し、最終的に
 
 \[
-\operatorname{CyclotomicPrimeCore}(p,x,u) = GN(p,x,u)
+\text{CyclotomicPrimeCore}(p,x,u) = GN(p,x,u)
 \]
 
 を **exact に証明** する。
@@ -94,7 +94,7 @@ open DkMath.CosmicFormulaBinom
 数学的意味は
 
 \[
-\operatorname{CyclotomicPrimeCore}(p,x,u)
+\text{CyclotomicPrimeCore}(p,x,u)
 :=
 \sum_{k=0}^{p-1}(x+u)^k u^{p-1-k}.
 \]
@@ -171,7 +171,7 @@ theorem mul_cyclotomicPrimeCore_eq_mul_GN
 数学的には
 
 \[
-x \cdot \operatorname{CyclotomicPrimeCore}(p,x,u)=
+x \cdot \text{CyclotomicPrimeCore}(p,x,u)=
 x \cdot GN(p,x,u).
 \]
 
@@ -185,7 +185,7 @@ x \cdot GN(p,x,u).
 と、定理 1 の
 
 \[
-(x+u)^p = x\cdot \operatorname{CyclotomicPrimeCore}(p,x,u)+u^p
+(x+u)^p = x\cdot \text{CyclotomicPrimeCore}(p,x,u)+u^p
 \]
 
 を比較して結論を得る。
@@ -207,7 +207,7 @@ theorem cyclotomicPrimeCore_eq_GN_nat
 \[
 x>0
 \;\Longrightarrow\;
-\operatorname{CyclotomicPrimeCore}(p,x,u)=GN(p,x,u).
+\text{CyclotomicPrimeCore}(p,x,u)=GN(p,x,u).
 \]
 
 **証明方針**
@@ -231,7 +231,7 @@ theorem dvd_cyclotomicPrimeCore_iff_dvd_GN_nat
 \[
 x>0
 \;\Longrightarrow\;
-q \mid \operatorname{CyclotomicPrimeCore}(p,x,u)
+q \mid \text{CyclotomicPrimeCore}(p,x,u)
 \iff
 q \mid GN(p,x,u).
 \]
@@ -258,7 +258,7 @@ theorem prime_dvd_cyclotomicPrimeCore_of_dvd_sub_not_dvd_left
 \[
 q \mid ((x+u)^p-u^p),\quad q \nmid x
 \;\Longrightarrow\;
-q \mid \operatorname{CyclotomicPrimeCore}(p,x,u).
+q \mid \text{CyclotomicPrimeCore}(p,x,u).
 \]
 
 **証明方針**
@@ -274,7 +274,7 @@ lemma sub_eq_mul_cyclotomicPrimeCore_nat (p x u : ℕ) :
 あとは既存の `prime_dvd_GN_of_dvd_sub_not_dvd_left` と同じ形で
 
 \[
-q \mid x \cdot \operatorname{CyclotomicPrimeCore}(p,x,u)
+q \mid x \cdot \text{CyclotomicPrimeCore}(p,x,u)
 \]
 
 を得て、`hq.dvd_mul.mp` から `resolve_left hq_ndvd` で終える。
@@ -383,7 +383,7 @@ lake build DkMath.NumberTheory.ZsigmondyCyclotomic
 したがって、最初の作業時間の大半を
 
 \[
-(x+u)^p = x \cdot \operatorname{CyclotomicPrimeCore}(p,x,u)+u^p
+(x+u)^p = x \cdot \text{CyclotomicPrimeCore}(p,x,u)+u^p
 \]
 
 の証明に投入してよい。

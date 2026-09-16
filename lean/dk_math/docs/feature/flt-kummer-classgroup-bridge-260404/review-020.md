@@ -22,7 +22,7 @@ $$
 
 * Stage 1 から
   $$
-  \exists I,\ I \text{ principal} \land \operatorname{span}(z-\zeta y)=I^p
+  \exists I,\ I \text{ principal} \land \text{span}(z-\zeta y)=I^p
   $$
   を返す theorem
 * Stage 3 の norm descent concrete 化
@@ -50,7 +50,7 @@ $$
 今回の更新で、この **Stage 2 の戻し方そのもの** はもう確立した。残るのは、その入力である
 
 $$
-\operatorname{span}(z-\zeta y)=I^p
+\text{span}(z-\zeta y)=I^p
 $$
 
 を Stage 1 側が explicit に返すことだけじゃ。
@@ -84,7 +84,7 @@ $$
 そしてその正規化形は、今回もう受け皿も receiver も揃った。だから最短手は、その入力の手前、すなわち
 
 $$
-\exists I,\ I \text{ principal} \land \operatorname{span}(z-\zeta y)=I^p
+\exists I,\ I \text{ principal} \land \text{span}(z-\zeta y)=I^p
 $$
 
 を返す Stage 1 theorem を立てることじゃ。そこが通れば、残る honest open はほんに norm 側だけになる。
@@ -98,8 +98,8 @@ $$
 pack と gap-divisible 条件のもとで、
 
 $$
-\exists I : \operatorname{Ideal}(R),\ I \text{ principal} \land
-\operatorname{span}\bigl((z:R)-\zeta (y:R)\bigr)=I^{,p}
+\exists I : \text{Ideal}(R),\ I \text{ principal} \land
+\text{span}\bigl((z:R)-\zeta (y:R)\bigr)=I^{,p}
 $$
 
 を返す theorem じゃ。
@@ -151,7 +151,7 @@ $$
 $$
 \boxed{
 \text{次の最短手は、Stage 1 の出力を }
-\exists I,\ I \text{ principal} \land \operatorname{span}(z-\zeta y)=I^p
+\exists I,\ I \text{ principal} \land \text{span}(z-\zeta y)=I^p
 \text{ として返す theorem を立てること}
 }
 $$

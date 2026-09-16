@@ -135,11 +135,11 @@ $$
 ここで、
 
 $$
-Q_j=\#\operatorname{CarryTwoPaymentClaimFiberAt}(n,j)
+Q_j=\#\text{CarryTwoPaymentClaimFiberAt}(n,j)
 $$
 
 $$
-P_j=\operatorname{extraPaymentCapacityAt}(n,j)
+P_j=\text{extraPaymentCapacityAt}(n,j)
 $$
 
 である。
@@ -235,7 +235,7 @@ $$
 ここで、
 
 $$
-A_i=\operatorname{orbitExactDepth}(n,i)
+A_i=\text{orbitExactDepth}(n,i)
 $$
 
 である。
@@ -293,7 +293,7 @@ $$
 ここで、
 
 $$
-\tau(i)=\operatorname{orbitPaymentTarget}(n,i)
+\tau(i)=\text{orbitPaymentTarget}(n,i)
 $$
 
 じゃ。
@@ -511,7 +511,7 @@ $$
 逆向きは、fiber membership と最小性から、
 
 $$
-i\in\operatorname{Fiber}(j)\Longrightarrow b\le i\le j
+i\in\text{Fiber}(j)\Longrightarrow b\le i\le j
 $$
 
 である。
@@ -519,7 +519,7 @@ $$
 以上より、
 
 $$
-\operatorname{orbitPaymentSourceFiberAt}(n,j)=\operatorname{Finset.Icc}(b,j)
+\text{orbitPaymentSourceFiberAt}(n,j)=\text{Finset.Icc}(b,j)
 $$
 
 が得られる。

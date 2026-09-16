@@ -147,7 +147,7 @@ if the proof is independent of Xi, zeta, and the finite explicit formula.
 The diagonal of the candidate Gram kernel is
 
 $$
-K_\varepsilon(z,z)=|z|^2H_\varepsilon(2\operatorname{Re}z).
+K_\varepsilon(z,z)=|z|^2H_\varepsilon(2\text{Re}z).
 $$
 
 The actual explicit-formula multiplier is instead

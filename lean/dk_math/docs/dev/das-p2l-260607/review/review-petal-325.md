@@ -119,7 +119,7 @@ allDepthActualResidualCausalQueueEmbedding_fst
 これで、
 
 $$
-\operatorname{Residual}(d)\hookrightarrow\operatorname{Queue}(d)
+\text{Residual}(d)\hookrightarrow\text{Queue}(d)
 $$
 
 が depth ごとに独立に成立し、そのまま全 depth へ持ち上がった。
@@ -137,7 +137,7 @@ canonicalSelectedDriftSpareCarrier
 は selected carrier から、classically chosen drift image を除いた実 Finset じゃ。
 
 $$
-|\operatorname{SelectedCarrier}|=|\operatorname{DriftImage}|+|\operatorname{SpareCarrier}|
+|\text{SelectedCarrier}|=|\text{DriftImage}|+|\text{SpareCarrier}|
 $$
 
 が exact に証明された。
@@ -145,13 +145,13 @@ $$
 terminal valuation $v\ge2$ の positive nonsaturated block では、
 
 $$
-D+1\le|\operatorname{SelectedCarrier}|
+D+1\le|\text{SelectedCarrier}|
 $$
 
 なので、
 
 $$
-1\le|\operatorname{SpareCarrier}|
+1\le|\text{SpareCarrier}|
 $$
 
 となる。
@@ -173,7 +173,7 @@ oneEmbedding_canonicalSelectedDriftSpareCarrier
 $v=1$ では selected depth は $1$ で、selected carrier の大きさは、
 
 $$
-|\operatorname{SelectedCarrier}|=L-2
+|\text{SelectedCarrier}|=L-2
 $$
 
 になる。
@@ -189,7 +189,7 @@ $$
 したがって spare cardinality は、
 
 $$
-|\operatorname{SpareCarrier}|=(L-2)-(A-1)=L-A-1
+|\text{SpareCarrier}|=(L-2)-(A-1)=L-A-1
 $$
 
 となる。
@@ -197,7 +197,7 @@ $$
 よって no-spare 条件は、
 
 $$
-|\operatorname{SpareCarrier}|=0\iff A=L-1
+|\text{SpareCarrier}|=0\iff A=L-1
 $$
 
 である。
@@ -229,7 +229,7 @@ $$
 今回得た carrier-empty 条件と合わせると、`CanonicalZeroCarrierBalancedBorderBlock` は次の二種類に完全に潰せる。
 
 $$
-\operatorname{ZeroCarrierBalanced}\iff(L=v\land A=L)\lor(v=1\land L=2\land A=1)
+\text{ZeroCarrierBalanced}\iff(L=v\land A=L)\lor(v=1\land L=2\land A=1)
 $$
 
 第一分岐は、
@@ -331,13 +331,13 @@ positive nonsaturated block について、hole 数を $H$ とする。
 terminal valuation $v\ge2$ では、
 
 $$
-|\operatorname{SpareCarrier}|=H
+|\text{SpareCarrier}|=H
 $$
 
 terminal valuation $v=1$ では、
 
 $$
-|\operatorname{SpareCarrier}|=H-1
+|\text{SpareCarrier}|=H-1
 $$
 
 となる。
@@ -413,7 +413,7 @@ $$
 successor spare carrier が nonempty なら、
 
 $$
-\operatorname{Fin}(1)\hookrightarrow\operatorname{SpareCarrier}_{k+1}
+\text{Fin}(1)\hookrightarrow\text{SpareCarrier}_{k+1}
 $$
 
 を構成できる。

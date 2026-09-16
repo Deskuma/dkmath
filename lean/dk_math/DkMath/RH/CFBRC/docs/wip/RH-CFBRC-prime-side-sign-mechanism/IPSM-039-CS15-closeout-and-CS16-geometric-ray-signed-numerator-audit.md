@@ -150,12 +150,12 @@ Now use `1 - q_p(t) ≠ 0` to obtain the quotient form, but immediately rational
 The preferred mathematical identity is
 
 $$
-\operatorname{Re}\!\left(
+\text{Re}\!\left(
   h(t)\frac{q(t)-q(t)^{m+1}}{1-q(t)}
 \right)
 =
 \frac{
-  \operatorname{Re}\!\left(
+  \text{Re}\!\left(
     h(t)(q(t)-q(t)^{m+1})\overline{(1-q(t))}
   \right)
 }{|1-q(t)|^2}.
@@ -240,7 +240,7 @@ Optionally expose
 $$
 |1-q|^2
 =
-1-2\operatorname{Re}(q)+|q|^2.
+1-2\text{Re}(q)+|q|^2.
 $$
 
 Since `q = p^{-σ-it}`, this can later be read as a positive oscillatory denominator.

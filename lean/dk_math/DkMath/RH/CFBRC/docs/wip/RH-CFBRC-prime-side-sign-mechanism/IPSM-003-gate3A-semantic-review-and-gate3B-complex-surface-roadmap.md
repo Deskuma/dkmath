@@ -131,7 +131,7 @@ The normalization relation should be proved from the original complex `z`, not r
 Conceptually:
 
 $$
-\operatorname{Re}\left((2\pi i)^{-1}(2z)\right)=\frac{\operatorname{Re}(-iz)}{\pi}.
+\text{Re}\left((2\pi i)^{-1}(2z)\right)=\frac{\text{Re}(-iz)}{\pi}.
 $$
 
 This is the genuine orientation theorem needed before Gate 3B.
@@ -194,13 +194,13 @@ Let the genuine deoriented vertical surface be `V` and the original top-horizont
 The Gate 3A scalar surface has the form:
 
 $$
-S_{\varepsilon,X}(W)=\operatorname{Re}V_{\varepsilon,X}(W)+\operatorname{Im}H_{\varepsilon}(W).
+S_{\varepsilon,X}(W)=\text{Re}V_{\varepsilon,X}(W)+\text{Im}H_{\varepsilon}(W).
 $$
 
 But multiplication by `-i` converts the imaginary part of `H` into a real part:
 
 $$
-\operatorname{Re}(-iH)=\operatorname{Im}H.
+\text{Re}(-iH)=\text{Im}H.
 $$
 
 Therefore define a genuine whole complex surface candidate:
@@ -214,7 +214,7 @@ pascalCenteredXiMellinQuadraticComplexWholeSurface :=
 Then the desired exact representation is:
 
 $$
-S_{\varepsilon,X}(W)=\operatorname{Re}\mathcal W_{\varepsilon,X}(W).
+S_{\varepsilon,X}(W)=\text{Re}\mathcal W_{\varepsilon,X}(W).
 $$
 
 This is a better Gate 3B input because `W` retains both real and imaginary information.
@@ -228,7 +228,7 @@ The existing scalar excess should remain the sign target.
 After the genuine whole complex surface is available, prove only the representation:
 
 $$
-E_{\varepsilon,X}(W)=\operatorname{Re}\mathcal W_{\varepsilon,X}(W)-\pi Q(W.R).
+E_{\varepsilon,X}(W)=\text{Re}\mathcal W_{\varepsilon,X}(W)-\pi Q(W.R).
 $$
 
 Together with the already Green theorem:

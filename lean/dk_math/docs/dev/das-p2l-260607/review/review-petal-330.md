@@ -74,7 +74,7 @@ claim holes = {2}
 
 cp-330 は、前 checkpoint の誤った「非循環」解釈を Lean 上で正式に撤回した。
 
-$$\exists P,R,\ \operatorname{AbstractAmortizationCertificate}(P,R)\iff\exists C,\ \operatorname{QueueUniformUpperBound}(C)$$
+$$\exists P,R,\ \text{AbstractAmortizationCertificate}(P,R)\iff\exists C,\ \text{QueueUniformUpperBound}(C)$$
 
 が証明されたため、旧 amortization law は問題を簡約せず、queue 上界を complement potential に埋め込んでいただけだったことが確定した。
 
@@ -305,9 +305,9 @@ $$W_1=53,\qquad W_2=35,\qquad W_3=23$$
 
 claim profile は、
 
-$$\operatorname{Claims}={1,3}$$
+$$\text{Claims}={1,3}$$
 
-$$\operatorname{Holes}={2}$$
+$$\text{Holes}={2}$$
 
 じゃ。
 
@@ -387,7 +387,7 @@ queue は常に $0$ で一様有界。
 
 しかし、
 
-$$\sum_{k<m}\operatorname{replenishment}(k)=m$$
+$$\sum_{k<m}\text{replenishment}(k)=m$$
 
 なので、有限定数 $R$ による累積上界は存在しない。
 
@@ -515,7 +515,7 @@ RelationalFiniteSignedTransitionPotentialCertificate
 
 は既に、
 
-$$\operatorname{pathWeight}\le\operatorname{bound}$$
+$$\text{pathWeight}\le\text{bound}$$
 
 を証明している。
 
@@ -564,7 +564,7 @@ theorem canonicalQueueUniformUpperBound_of_relationalFiniteCertificate
 
 証明は、
 
-$$\operatorname{WindowDrift}(q,m)=\operatorname{pathWeight}(q,m-q+1)$$
+$$\text{WindowDrift}(q,m)=\text{pathWeight}(q,m-q+1)$$
 
 と書き、`pathWeight_le_bound` を使うだけじゃ。
 
@@ -599,11 +599,11 @@ nondeterministic sound over-approximation
 
 必要なのは、
 
-$$\operatorname{actualWeight}\le\operatorname{projectedUpperWeight}$$
+$$\text{actualWeight}\le\text{projectedUpperWeight}$$
 
 と、
 
-$$\operatorname{projectedUpperWeight}(s,t)\le\Phi(t)-\Phi(s)$$
+$$\text{projectedUpperWeight}(s,t)\le\Phi(t)-\Phi(s)$$
 
 じゃ。
 

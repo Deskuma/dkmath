@@ -37,7 +37,7 @@ p+q=2k を満たす素数対
 このとき必要十分条件は既存の
 
 \[
-\#\operatorname{goldbachCoveredSeats}(n,\operatorname{goldbachSmallPrimes}(n))<n-1
+\#\text{goldbachCoveredSeats}(n,\text{goldbachSmallPrimes}(n))<n-1
 \]
 
 へ戻る。全ての `n≥2` でこの不等式を示す独立な証明は今回得られなかった。

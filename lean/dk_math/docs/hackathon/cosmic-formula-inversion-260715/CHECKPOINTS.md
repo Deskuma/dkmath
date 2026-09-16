@@ -818,7 +818,7 @@ Prefer direct reuse.
 #### Supplied Prime-Divisor Exclusion
 
 $$
-\operatorname{Prime}(q)\land q\mid P+u\land\gcd(P,u)=1\Longrightarrow q\notin S
+\text{Prime}(q)\land q\mid P+u\land\gcd(P,u)=1\Longrightarrow q\notin S
 $$
 
 where `P` is the product of `S`.
@@ -826,13 +826,13 @@ where `P` is the product of `S`.
 #### Universal Freshness
 
 $$
-\forall q,\ \operatorname{Prime}(q)\land q\mid P+u\Longrightarrow q\notin S
+\forall q,\ \text{Prime}(q)\land q\mid P+u\Longrightarrow q\notin S
 $$
 
 #### Fresh-Prime Existence
 
 $$
-1<P+u\Longrightarrow\exists q,\ \operatorname{Prime}(q)\land q\mid P+u\land q\notin S
+1<P+u\Longrightarrow\exists q,\ \text{Prime}(q)\land q\mid P+u\land q\notin S
 $$
 
 ### Hypothesis Audit
@@ -1636,7 +1636,7 @@ Prove that reconstructed interval width below one implies at most one integer ca
 ### Required Theorem
 
 $$
-\operatorname{width}(I)<1\Longrightarrow\operatorname{AtMostOne}\{z\in\mathbb Z\mid z\in I\}
+\text{width}(I)<1\Longrightarrow\text{AtMostOne}\{z\in\mathbb Z\mid z\in I\}
 $$
 
 The exact Lean shape must follow existing APIs.

@@ -32,13 +32,13 @@ $$
 から
 
 $$
-y^d=(z-x)\operatorname{Beam}_d(x,z)
+y^d=(z-x)\text{Beam}_d(x,z)
 $$
 
 を導く `flt_eq_forces_powerGapBeam` と、対称版
 
 $$
-x^d=(z-y)\operatorname{Beam}_d(y,z)
+x^d=(z-y)\text{Beam}_d(y,z)
 $$
 
 を導く `flt_eq_forces_powerGapBeam_symm` が入った。ここが今回の数学的な大きな橋じゃ。
@@ -141,13 +141,13 @@ $$
 数学的には、標準的に次の形を狙う。
 
 $$
-\gcd(z-x,\operatorname{Beam}_d(x,z)) \mid d z^{d-1}
+\gcd(z-x,\text{Beam}_d(x,z)) \mid d z^{d-1}
 $$
 
 あるいは primitive / coprime 条件の下で、
 
 $$
-\gcd(z-x,\operatorname{Beam}_d(x,z))\mid d
+\gcd(z-x,\text{Beam}_d(x,z))\mid d
 $$
 
 を目指す。

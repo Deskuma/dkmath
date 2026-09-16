@@ -43,7 +43,7 @@ root norm
 
 特に、
 
-$$\operatorname{endpointLeft}^7-\operatorname{endpointRight}^7=\operatorname{distinguished}^7$$
+$$\text{endpointLeft}^7-\text{endpointRight}^7=\text{distinguished}^7$$
 
 という整数版に統一したことで、自然 Row-Y と signed Row-Z の違いが summit より下へ隠れました。
 
@@ -73,13 +73,13 @@ PrimitiveRamifiedSummitPacket.rootSnd_padicValNat
 
 まず exact second-coordinate equation、
 
-$$\operatorname{seventhPowerSnd}(u,v)=7^6A^7Q$$
+$$\text{seventhPowerSnd}(u,v)=7^6A^7Q$$
 
 を、`sevenAxis` のキャンセルと gap expansion から構成しています。
 
 その後、
 
-$$\operatorname{seventhPowerSnd}(u,v)=7v,S(u,v)$$
+$$\text{seventhPowerSnd}(u,v)=7v,S(u,v)$$
 
 と比較し、$S$ と $Q$ がともに $7$-unit であることを使って、
 
@@ -113,7 +113,7 @@ ramifiedRightCubic
 
 について、
 
-$$\operatorname{ramifiedSeventhSnd}=T,L,R$$
+$$\text{ramifiedSeventhSnd}=T,L,R$$
 
 が証明されました。
 

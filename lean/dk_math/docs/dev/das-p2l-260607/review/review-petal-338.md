@@ -76,9 +76,9 @@ cp-338 で、これまで曖昧だった局所枝が次の exact theorem に整�
 
 したがって、
 
-$$\operatorname{Saturated}(123,0)$$
+$$\text{Saturated}(123,0)$$
 
-$$\operatorname{endpointAccountingTerm}(123,1)=0$$
+$$\text{endpointAccountingTerm}(123,1)=0$$
 
 $$W_0(0,2)=1$$
 
@@ -86,11 +86,11 @@ $$W_0(0,2)=1$$
 
 これにより、
 
-$$\operatorname{successorDrift}\le0\Longrightarrow W_0(m,2)\le0$$
+$$\text{successorDrift}\le0\Longrightarrow W_0(m,2)\le0$$
 
 は偽であり、正しい境界は厳密な、
 
-$$\operatorname{successorDrift}<0$$
+$$\text{successorDrift}<0$$
 
 であることが確定した。
 
@@ -143,9 +143,9 @@ $$F_0(m)=\max(-Q_m,\Delta_m)$$
 
 ここで、
 
-$$Q_m=\operatorname{queueBeforeBlock}(m)$$
+$$Q_m=\text{queueBeforeBlock}(m)$$
 
-$$\Delta_m=\operatorname{endpointAccountingTerm}(m)=A_m-S_m$$
+$$\Delta_m=\text{endpointAccountingTerm}(m)=A_m-S_m$$
 
 である。
 
@@ -251,7 +251,7 @@ $$\Delta_{m+1}>0\Longrightarrow W_0(m,2)=1+\Delta_{m+1}$$
 
 $H\le b_m$ の mature regimeでは、saturated blockの crossing interval は長さ二であり、
 
-$$\operatorname{Crossing}*H(m)={b_m-H,\ b_m-H+1}*{\mathrm{carry}}$$
+$$\text{Crossing}*H(m)={b_m-H,\ b_m-H+1}*{\mathrm{carry}}$$
 
 となる。
 
@@ -291,7 +291,7 @@ CanonicalSaturatedBorderBlock.predecessor_not_carryTwo
 
 じゃ。
 
-$$0<b_m\Longrightarrow\neg\operatorname{CarryTwoDebtAt}(n,b_m-1)$$
+$$0<b_m\Longrightarrow\neg\text{CarryTwoDebtAt}(n,b_m-1)$$
 
 が証明された。
 
@@ -299,7 +299,7 @@ $$0<b_m\Longrightarrow\neg\operatorname{CarryTwoDebtAt}(n,b_m-1)$$
 
 saturated start stateを $x$ とすると、まず、
 
-$$3\cdot2^{\operatorname{bitWidth}(x)-1}<2x$$
+$$3\cdot2^{\text{bitWidth}(x)-1}<2x$$
 
 を導いている。
 
@@ -311,21 +311,21 @@ $$3y+1=2^{s(y)}x$$
 
 および bit-width balanceから、
 
-$$\bigl(\operatorname{bitWidth}(x)-1\bigr)+\bigl(s(y)-1\bigr)=\operatorname{bitWidth}(y)$$
+$$\bigl(\text{bitWidth}(x)-1\bigr)+\bigl(s(y)-1\bigr)=\text{bitWidth}(y)$$
 
 が得られる。
 
 上の $x$ の下界を scaleすると、
 
-$$3\cdot2^{\operatorname{bitWidth}(y)}<3y+1$$
+$$3\cdot2^{\text{bitWidth}(y)}<3y+1$$
 
 となる。
 
 しかし、
 
-$$y<2^{\operatorname{bitWidth}(y)}$$
+$$y<2^{\text{bitWidth}(y)}$$
 
-なので右辺は $3\cdot2^{\operatorname{bitWidth}(y)}$ より小さくなければならず、矛盾する。
+なので右辺は $3\cdot2^{\text{bitWidth}(y)}$ より小さくなければならず、矛盾する。
 
 証明経路に循環性はない。
 
@@ -343,7 +343,7 @@ $$F_1(m)=\mathbf1_{\mathrm{carry}(b_m-1)}$$
 
 今回、
 
-$$\neg\operatorname{carry}(b_m-1)$$
+$$\neg\text{carry}(b_m-1)$$
 
 が証明されたので、
 
@@ -448,13 +448,13 @@ canonicalPreBlockCarryCarrier n H m
 
 exact identityは、
 
-$$D_H(m)=Q_m-\left|\operatorname{PreBlockCarryCarrier}_H(m)\right|$$
+$$D_H(m)=Q_m-\left|\text{PreBlockCarryCarrier}_H(m)\right|$$
 
 である。
 
 従って、
 
-$$\operatorname{UniformSourceAge}(H)\iff\forall m,\ Q_m\le\left|\operatorname{PreBlockCarryCarrier}_H(m)\right|$$
+$$\text{UniformSourceAge}(H)\iff\forall m,\ Q_m\le\left|\text{PreBlockCarryCarrier}_H(m)\right|$$
 
 となる。
 
@@ -472,7 +472,7 @@ $$\operatorname{UniformSourceAge}(H)\iff\forall m,\ Q_m\le\left|\operatorname{Pr
 
 mature regimeで、
 
-$$R_H(m)=\left|\operatorname{PreBlockCarryCarrier}_H(m)\right|$$
+$$R_H(m)=\left|\text{PreBlockCarryCarrier}_H(m)\right|$$
 
 を明示 theorem にしておくとよい。
 

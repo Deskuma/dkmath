@@ -88,7 +88,7 @@ $$q^2\mid(a+b)^p-b^p$$
 
 したがって、canonical target profile 上では概念的に、
 
-$$q\in\operatorname{ActiveProfile}\iff\operatorname{WieferichLift}(p,b,a+b,q)$$
+$$q\in\text{ActiveProfile}\iff\text{WieferichLift}(p,b,a+b,q)$$
 
 まで持っていける。
 

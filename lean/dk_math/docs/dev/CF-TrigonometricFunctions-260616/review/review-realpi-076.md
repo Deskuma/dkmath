@@ -35,7 +35,7 @@ core-zero semantic action
 つまり、円以前・角度以前に得ていた四相作用が、標準 Euclidean 幾何へ移したあと、Mathlib の向き付き回転として
 
 $$
-\operatorname{rotation}\left(\frac{\pi}{2}\right)
+\text{rotation}\left(\frac{\pi}{2}\right)
 $$
 
 と一致するところまで Lean が認めた、ということじゃ。

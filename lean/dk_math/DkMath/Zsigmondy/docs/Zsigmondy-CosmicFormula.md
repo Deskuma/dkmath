@@ -2823,13 +2823,13 @@ q \text{ prime},\quad q \mid a^n-b^n,\quad
 次に、\(\gcd(a,b)=1\) かつ \(q\nmid ab\) のもとで
 
 \[
-q \mid a^n-b^n \;\Rightarrow\; \operatorname{ord}_q(a b^{-1}) \mid n
+q \mid a^n-b^n \;\Rightarrow\; \text{ord}_q(a b^{-1}) \mid n
 \]
 
 型、さらに原始性から
 
 \[
-\operatorname{ord}_q(a b^{-1}) = n
+\text{ord}_q(a b^{-1}) = n
 \]
 
 を出す補題を作る。ここが原始素因子の「新しさ」の芯じゃ。有限体・`ZMod q`・`orderOf` が主戦場になる。
@@ -3342,7 +3342,7 @@ Core / Beam / Gap
 ### 1B. 構造層
 
 \[
-q \mid a^n-b^n,\ \text{primitive} \Rightarrow \operatorname{ord}_q(a/b)=n
+q \mid a^n-b^n,\ \text{primitive} \Rightarrow \text{ord}_q(a/b)=n
 \]
 
 ### 1C. 存在層
@@ -3745,7 +3745,7 @@ theorem beam_factor_xu_nat
 次に primitive 条件を使って、lower exponent を排除して
 
 \[
-\operatorname{ord} = n
+\text{ord} = n
 \]
 
 へ上げる。
@@ -3955,7 +3955,7 @@ x\,G_{n-1}(x,u)
 \]
 
 \[
-\text{さらに } \operatorname{ord}=n
+\text{さらに } \text{ord}=n
 \Rightarrow
 \Phi_n \text{ 側の新因子}
 \]

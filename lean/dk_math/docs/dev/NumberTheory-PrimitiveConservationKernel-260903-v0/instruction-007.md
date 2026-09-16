@@ -103,6 +103,7 @@ def squarePrimeExpansion (P : ℕ) : Finset ℕ :=
 Minor syntactic changes are acceptable if required by decidability/elaboration.
 
 The lower bound `2` is intentional:
+
 - it exposes `1 < n` immediately for square certification;
 - old primes are supplied by the left union term;
 - support-disjoint filtering does not need to inspect 0 or 1.
@@ -272,7 +273,7 @@ $$
 because
 
 $$
-\operatorname{squareBody}(P)
+\text{squareBody}(P)
 =
 P(P+2)
 =
@@ -280,6 +281,7 @@ P(P+2)
 $$
 
 The construction itself uses only:
+
 - the already-known complete old prime world;
 - divisibility exclusion against that old world;
 - the finite square bound.
@@ -380,6 +382,7 @@ If PCK-005 is green, authorize only:
 > PCK-006 — primorial coarse anchor → fine square world bridge.
 
 PCK-006 should reuse:
+
 - `finitePrimeBasisProduct` / synchronization from PrimorialUniverse;
 - the canonical complete closure `primeScalesUpTo A`;
 - PCK-003 coarse-to-fine certification;

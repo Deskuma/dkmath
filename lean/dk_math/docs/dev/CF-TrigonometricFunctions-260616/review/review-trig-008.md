@@ -42,29 +42,29 @@ git diff --check
 今回の到達点はこれじゃ。
 
 $$
-\operatorname{conj}(x,y)=(x,-y)
+\text{conj}(x,y)=(x,-y)
 $$
 
 $$
-Q(\operatorname{conj} z)=Q(z)
+Q(\text{conj} z)=Q(z)
 $$
 
 $$
-z\star\operatorname{conj}(z)=(Q(z),0)
+z\star\text{conj}(z)=(Q(z),0)
 $$
 
 $$
-\operatorname{conj}(z)\star z=(Q(z),0)
+\text{conj}(z)\star z=(Q(z),0)
 $$
 
 そして単位核では、
 
 $$
-r\star\operatorname{conj}(r)=1
+r\star\text{conj}(r)=1
 $$
 
 $$
-\operatorname{conj}(r)\star r=1
+\text{conj}(r)\star r=1
 $$
 
 つまり、
@@ -84,14 +84,14 @@ $$
 `Vec.conj_star` が入ったので、共役は単なる符号反転ではなく、`star` と相性のよい対称操作になった。
 
 $$
-\operatorname{conj}(r\star z) =
-\operatorname{conj}(r)\star\operatorname{conj}(z)
+\text{conj}(r\star z) =
+\text{conj}(r)\star\text{conj}(z)
 $$
 
 さらに、
 
 $$
-z\star\operatorname{conj}(z)=(Q(z),0)
+z\star\text{conj}(z)=(Q(z),0)
 $$
 
 により、二成分に分散していた平方質量が core 成分へ回収される。
@@ -128,11 +128,11 @@ $$
 したがって第一段階は、
 
 $$
-\operatorname{cfcos}_F(t)=C_F(t)
+\text{cfcos}_F(t)=C_F(t)
 $$
 
 $$
-\operatorname{cfsin}_F(t)=S_F(t)
+\text{cfsin}_F(t)=S_F(t)
 $$
 
 とするのがよい。
@@ -473,13 +473,13 @@ Task: Add CF2D cosmic-formula sine/cosine API.
 
 $$
 \boxed{
-\operatorname{cfcos}_F(t)=\text{保存単位核 }F(t)\text{ の Core 成分}
+\text{cfcos}_F(t)=\text{保存単位核 }F(t)\text{ の Core 成分}
 }
 $$
 
 $$
 \boxed{
-\operatorname{cfsin}_F(t)=\text{保存単位核 }F(t)\text{ の Beam 成分}
+\text{cfsin}_F(t)=\text{保存単位核 }F(t)\text{ の Beam 成分}
 }
 $$
 
@@ -488,11 +488,11 @@ $$
 そして Real bridge で初めて、
 
 $$
-\operatorname{cfcos}_{real}(t)=\cos t
+\text{cfcos}_{real}(t)=\cos t
 $$
 
 $$
-\operatorname{cfsin}_{real}(t)=\sin t
+\text{cfsin}_{real}(t)=\sin t
 $$
 
 と読む。

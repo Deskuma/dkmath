@@ -5,7 +5,7 @@
 これは **良い一手** じゃ。前回までで
 
 $$
-\text{supportMass} = \operatorname{rad}
+\text{supportMass} = \text{rad}
 $$
 
 という読みを置き、bridge と concrete example まで整えた上で、今回はついに **distinct prime channels から support mass の下界を出す最小 spine** が入った。差分報告の要約どおり、`supportMass_pos`、`supportMass_dvd_of_prime_channel`、`pairwise_distinct_channels_mul_dvd_supportMass`、`supportMass_ge_of_two_distinct_prime_channels` が `MassBridge` に追加され、さらに $2 * 3 \le \text{supportMass}\,12$ の concrete example まで付いておる。
@@ -100,7 +100,7 @@ $$
 を示す。これはまさに
 
 $$
-\operatorname{rad}(n)
+\text{rad}(n)
 $$
 
 の定義に沿っておる。
@@ -133,7 +133,7 @@ $$
 **「異なる channel は support mass の中で重ならず、乗法的に寄与する」**
 
 ということじゃ。
-この一歩で、channel の “個数” ではなく “相異なる prime channel の積” が support mass を押し上げる、という形ができた。これは \(\operatorname{rad}\) の本質そのものじゃよ。
+この一歩で、channel の “個数” ではなく “相異なる prime channel の積” が support mass を押し上げる、という形ができた。これは \(\text{rad}\) の本質そのものじゃよ。
 
 ### 3.4. `supportMass_ge_of_two_distinct_prime_channels` の意味
 
@@ -153,7 +153,7 @@ $$
 これはまさに差分中のコメントどおり、
 
 $$
-\text{supportMass} = \operatorname{rad}
+\text{supportMass} = \text{rad}
 $$
 
 のもとでの **"disjoint channels force larger support"** の shadow じゃ。
@@ -179,7 +179,7 @@ $$
 が出る。しかも実際には
 
 $$
-\text{supportMass}(12)=\operatorname{rad}(12)=6
+\text{supportMass}(12)=\text{rad}(12)=6
 $$
 
 なので equality になる。
@@ -223,7 +223,7 @@ $$
 まず、証明の材料が既存の `mem_support_factorization_iff` と prime coprime 補題だけで閉じていることじゃ。差分報告にも「そのまま閉じた」とあるが、これは大きい。設計した新概念が既存資産に素直に乗っている証拠じゃ。
 
 次に、lower bound を divisibility から作っていること。
-これは \(\operatorname{rad}\) 的対象には正攻法じゃ。最初から不等式で殴るのでなく、
+これは \(\text{rad}\) 的対象には正攻法じゃ。最初から不等式で殴るのでなく、
 
 $$
 \text{prime channels} \Rightarrow \text{divisibility}

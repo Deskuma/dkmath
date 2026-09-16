@@ -116,16 +116,16 @@ B = finite geometric-ray denominator vector.
 CS17 proved
 
 $$
-4\operatorname{Re}(A\overline B)
+4\text{Re}(A\overline B)
 =|A+B|^2-|A-B|^2.
 $$
 
 Transport this to CF2D:
 
 $$
-4\operatorname{Re}(A\overline B)
-= q2(\operatorname{vec}(A+B))
-- q2(\operatorname{vec}(A-B)).
+4\text{Re}(A\overline B)
+= q2(\text{vec}(A+B))
+- q2(\text{vec}(A-B)).
 $$
 
 Prefer exact theorem statements connecting the existing CS17 plus/minus numerator masses to `Vec.q2` rather than reproving polarization from scratch.
@@ -165,9 +165,9 @@ $$
 Then express them in CF2D form:
 
 $$
-E_+(t)=q2(\operatorname{vec}(R(t)+1)),
+E_+(t)=q2(\text{vec}(R(t)+1)),
 \qquad
-E_-(t)=q2(\operatorname{vec}(R(t)-1)).
+E_-(t)=q2(\text{vec}(R(t)-1)).
 $$
 
 This is the smallest pointwise state currently visible.
@@ -176,7 +176,7 @@ Record the exact ordering equivalence:
 
 $$
 E_-(t)\le E_+(t)
-\iff 0\le \operatorname{Re}R(t).
+\iff 0\le \text{Re}R(t).
 $$
 
 This is an adapter only. It is not an independent sign provider.
@@ -197,30 +197,30 @@ Z_im = (A.im, B.im).
 Using `CF2D.ThreeElementBridge`, prove exact identities of the form
 
 $$
-\operatorname{cf2dPlusWhole}(Z_{re})
-+\operatorname{cf2dPlusWhole}(Z_{im})
+\text{cf2dPlusWhole}(Z_{re})
++\text{cf2dPlusWhole}(Z_{im})
 =|A+B|^2,
 $$
 
 $$
-\operatorname{cf2dMinusWhole}(Z_{re})
-+\operatorname{cf2dMinusWhole}(Z_{im})
+\text{cf2dMinusWhole}(Z_{re})
++\text{cf2dMinusWhole}(Z_{im})
 =|A-B|^2,
 $$
 
 and
 
 $$
-\operatorname{cf2dInteractionBeam}(Z_{re})
-+\operatorname{cf2dInteractionBeam}(Z_{im})
-=2\operatorname{Re}(A\overline B).
+\text{cf2dInteractionBeam}(Z_{re})
++\text{cf2dInteractionBeam}(Z_{im})
+=2\text{Re}(A\overline B).
 $$
 
 Hence
 
 $$
 (\text{plus whole total})-(\text{minus whole total})
-=4\operatorname{Re}(A\overline B).
+=4\text{Re}(A\overline B).
 $$
 
 This is the precise place to test the old Core / interaction-Beam / Gap vocabulary against the newly derived prime-side surface.

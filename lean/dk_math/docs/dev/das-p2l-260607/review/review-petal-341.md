@@ -156,7 +156,7 @@ $$K\le\Delta_n(m)\iff K+H_n(m)+V_n(m)\le L_n(m)$$
 rootwiseEndpointDriftBound_iff_length_le_absorption_add
 ```
 
-$$\operatorname{RootwiseBound}(n)\iff\exists B,\ \forall m,\ L_n(m)\le H_n(m)+V_n(m)+B$$
+$$\text{RootwiseBound}(n)\iff\exists B,\ \forall m,\ L_n(m)\le H_n(m)+V_n(m)+B$$
 
 これは fixed-root 問題を解いたわけではないが、問題を exact に整地した。
 

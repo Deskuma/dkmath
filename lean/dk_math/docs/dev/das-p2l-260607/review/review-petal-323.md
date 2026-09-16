@@ -139,13 +139,13 @@ canonicalPaymentBlockWindow n q m
 $q\le m$ について、
 
 $$
-\operatorname{BlockWindow}(q,m) = \operatorname{Icc}(b_q,e_m)
+\text{BlockWindow}(q,m) = \text{Icc}(b_q,e_m)
 $$
 
 および、
 
 $$
-\operatorname{BlockWindow}(q,m) = \operatorname{range}(e_m+1) \setminus \operatorname{range}(b_q)
+\text{BlockWindow}(q,m) = \text{range}(e_m+1) \setminus \text{range}(b_q)
 $$
 
 が証明された。
@@ -161,7 +161,7 @@ canonical blocks が単に抽象的に partition されているだけでなく�
 さらに任意の predicate $P$ について、
 
 $$
-|{i\in\operatorname{BlockWindow}(q,m)\mid P(i)}| = \sum_{k=q}^{m}|{i\in B_k\mid P(i)}|
+|{i\in\text{BlockWindow}(q,m)\mid P(i)}| = \sum_{k=q}^{m}|{i\in B_k\mid P(i)}|
 $$
 
 が得られた。
@@ -184,7 +184,7 @@ canonicalPaymentBlockWindowRecoveryFiber
 そして、
 
 $$
-W_{q,m}(d) = |\operatorname{Continuation}*{q,m}(d)| - |\operatorname{Recovery}*{q,m}(d)|
+W_{q,m}(d) = |\text{Continuation}*{q,m}(d)| - |\text{Recovery}*{q,m}(d)|
 $$
 
 が証明された。
@@ -230,7 +230,7 @@ $$
 したがって、同一 block が両方になることはない。
 
 $$
-\operatorname{ActiveSelectedBlocks}(d)\cap\operatorname{ExactLengthBlocks}(d)=\varnothing
+\text{ActiveSelectedBlocks}(d)\cap\text{ExactLengthBlocks}(d)=\varnothing
 $$
 
 これは重要な構造事実じゃ。
@@ -254,7 +254,7 @@ canonicalSelectedPositiveDriftEmbedding
 により、positive nonsaturated block $k$ について、
 
 $$
-\operatorname{Fin}(D_k)\hookrightarrow\operatorname{SelectedCarrier}_k
+\text{Fin}(D_k)\hookrightarrow\text{SelectedCarrier}_k
 $$
 
 が構成された。
@@ -335,7 +335,7 @@ CanonicalActualSelectedDriftResidualCarrier
 が作られ、
 
 $$
-|\operatorname{ActualResidual}(d)|=R_d
+|\text{ActualResidual}(d)|=R_d
 $$
 
 が証明された。
@@ -407,13 +407,13 @@ report がこの境界を明記したのは正しい。
 したがって $m$ を $m+1$ へ延長したとき、
 
 $$
-\operatorname{Residual}(q,m)\subseteq\operatorname{Residual}(q,m+1)
+\text{Residual}(q,m)\subseteq\text{Residual}(q,m+1)
 $$
 
 とも、
 
 $$
-\operatorname{Residual}(q,m+1)\subseteq\operatorname{Residual}(q,m)
+\text{Residual}(q,m+1)\subseteq\text{Residual}(q,m)
 $$
 
 とも限らない。
@@ -669,7 +669,7 @@ def FiniteServiceCarrier
 eligibility は、
 
 $$
-\operatorname{claimBlock}\le\operatorname{serviceBlock}
+\text{claimBlock}\le\text{serviceBlock}
 $$
 
 じゃ。
@@ -681,7 +681,7 @@ Q_{q,m}=0
 $$
 
 $$
-\Longleftrightarrow\quad\forall t\in[q,m],\ \operatorname{Claims}[t,m]\le\operatorname{Service}[t,m]
+\Longleftrightarrow\quad\forall t\in[q,m],\ \text{Claims}[t,m]\le\text{Service}[t,m]
 $$
 
 $$

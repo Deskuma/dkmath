@@ -60,13 +60,13 @@ DkMath.NumberTheory.Primitive.squareBody
 数学的には
 
 $$
-\operatorname{squareBody}(P)=P^2+2P=P(P+2).
+\text{squareBody}(P)=P^2+2P=P(P+2).
 $$
 
 既存 theorem:
 
 $$
-\operatorname{squareBody}(P)+1=(P+1)^2.
+\text{squareBody}(P)+1=(P+1)^2.
 $$
 
 従って
@@ -124,7 +124,7 @@ $$
 `P = 30` なら
 
 $$
-\operatorname{squareBody}(30)=30\cdot32=960,
+\text{squareBody}(30)=30\cdot32=960,
 $$
 
 $$
@@ -198,7 +198,7 @@ $$
 同じ `q` は square Body 側で
 
 $$
-\operatorname{squareBody}(q)+1=(q+1)^2
+\text{squareBody}(q)+1=(q+1)^2
 $$
 
 を決める。
@@ -225,9 +225,9 @@ $$
 従って
 
 $$
-\operatorname{squareBody}(q)
+\text{squareBody}(q)
 \le
-\operatorname{squareBody}(P).
+\text{squareBody}(P).
 $$
 
 この単調性により、一つの coarse anchor `P` の complete prime support は、その内部の全 fine anchor `q ≤ P` に対する square certification に再利用できる。
@@ -397,7 +397,7 @@ This is a finite closure theorem. It does not assert a new asymptotic prime-dist
 Given a finite prime basis `S0`, let
 
 $$
-A=\operatorname{finitePrimeBasisProduct}(S0).
+A=\text{finitePrimeBasisProduct}(S0).
 $$
 
 After obtaining complete prime support up to `A`, transport it to every fine anchor `q ≤ A`.

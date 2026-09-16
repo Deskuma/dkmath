@@ -23,7 +23,7 @@ $$
 したがって、
 
 $$
-\neg\operatorname{Injective}(F)
+\neg\text{Injective}(F)
 $$
 
 であり、左逆および多項式逆写像は存在しない。

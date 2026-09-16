@@ -15,15 +15,15 @@ primitive FLT3 counterexample を mod 9 で signed orientation へ正規化し�
 この checkpoint の最終出力は
 
 $$
-\operatorname{carrier}=3^2 A^3,
+\text{carrier}=3^2 A^3,
 $$
 
 $$
-\operatorname{residual}=3 B^3,
+\text{residual}=3 B^3,
 $$
 
 $$
-\operatorname{distinguished}=3AB
+\text{distinguished}=3AB
 $$
 
 という exact power split である。
@@ -148,15 +148,15 @@ $$
 Set
 
 $$
-\operatorname{carrier}=c-b,
+\text{carrier}=c-b,
 $$
 
 $$
-\operatorname{residual}=c^2+cb+b^2=S_0(c,b),
+\text{residual}=c^2+cb+b^2=S_0(c,b),
 $$
 
 $$
-\operatorname{distinguished}=a.
+\text{distinguished}=a.
 $$
 
 Eisenstein signed coordinate:
@@ -168,13 +168,13 @@ $$
 Then
 
 $$
-N(\alpha)=\operatorname{residual}
+N(\alpha)=\text{residual}
 $$
 
 and
 
 $$
-\alpha_{\rm snd}-\alpha_{\rm fst}=\operatorname{carrier}.
+\alpha_{\rm snd}-\alpha_{\rm fst}=\text{carrier}.
 $$
 
 ### Branch B — b is distinguished
@@ -188,15 +188,15 @@ c^3-a^3=b^3,
 $$
 
 $$
-\operatorname{carrier}=c-a,
+\text{carrier}=c-a,
 $$
 
 $$
-\operatorname{residual}=c^2+ca+a^2,
+\text{residual}=c^2+ca+a^2,
 $$
 
 $$
-\operatorname{distinguished}=b.
+\text{distinguished}=b.
 $$
 
 A natural signed coordinate is
@@ -208,11 +208,11 @@ $$
 Again require
 
 $$
-N(\alpha)=\operatorname{residual},
+N(\alpha)=\text{residual},
 $$
 
 $$
-\alpha_{\rm snd}-\alpha_{\rm fst}=\operatorname{carrier}.
+\alpha_{\rm snd}-\alpha_{\rm fst}=\text{carrier}.
 $$
 
 ### Branch C — c is distinguished
@@ -232,15 +232,15 @@ $$
 Set
 
 $$
-\operatorname{carrier}=a+b,
+\text{carrier}=a+b,
 $$
 
 $$
-\operatorname{residual}=a^2-ab+b^2,
+\text{residual}=a^2-ab+b^2,
 $$
 
 $$
-\operatorname{distinguished}=c.
+\text{distinguished}=c.
 $$
 
 For Nat implementation, define the positive sum residual in a subtraction-safe form, for example
@@ -260,11 +260,11 @@ $$
 Then
 
 $$
-N(\alpha)=\operatorname{residual},
+N(\alpha)=\text{residual},
 $$
 
 $$
-\alpha_{\rm snd}-\alpha_{\rm fst}=\operatorname{carrier}.
+\alpha_{\rm snd}-\alpha_{\rm fst}=\text{carrier}.
 $$
 
 ## 7. Common signed packet
@@ -305,23 +305,23 @@ Do not store redundant fields merely to mirror FLT5.
 For every normalized branch prove:
 
 $$
-\operatorname{residual}\equiv3\pmod9.
+\text{residual}\equiv3\pmod9.
 $$
 
 Hence:
 
 $$
-3\mid\operatorname{residual},
+3\mid\text{residual},
 $$
 
 $$
-9\nmid\operatorname{residual}.
+9\nmid\text{residual}.
 $$
 
 If current padicValNat API makes it short, also expose
 
 $$
-v_3(\operatorname{residual})=1.
+v_3(\text{residual})=1.
 $$
 
 The mod-9 theorem is mandatory.
@@ -333,7 +333,7 @@ The padic equality is optional only if it would add substantial API overhead.
 Prove for the normalized packet:
 
 $$
-\gcd(\operatorname{carrier},\operatorname{residual})=3.
+\gcd(\text{carrier},\text{residual})=3.
 $$
 
 Recommended route:
@@ -352,27 +352,27 @@ Do not assume gcd = 3 as a packet input.
 From
 
 $$
-\operatorname{carrier}\cdot\operatorname{residual}
+\text{carrier}\cdot\text{residual}
 =
-\operatorname{distinguished}^3,
+\text{distinguished}^3,
 $$
 
 $$
-\gcd(\operatorname{carrier},\operatorname{residual})=3,
+\gcd(\text{carrier},\text{residual})=3,
 $$
 
 and exact residual 3-adic depth one, extract positive coprime A,B with
 
 $$
-\operatorname{carrier}=3^2A^3,
+\text{carrier}=3^2A^3,
 $$
 
 $$
-\operatorname{residual}=3B^3,
+\text{residual}=3B^3,
 $$
 
 $$
-\operatorname{distinguished}=3AB.
+\text{distinguished}=3AB.
 $$
 
 Candidate structure:
@@ -418,7 +418,7 @@ From
 $$
 \alpha_{\rm snd}-\alpha_{\rm fst}
 =
-\operatorname{carrier}
+\text{carrier}
 =
 9A^3,
 $$
@@ -448,7 +448,7 @@ $$
 should give
 
 $$
-\beta_{\rm snd}=\frac{\operatorname{carrier}}3=3A^3.
+\beta_{\rm snd}=\frac{\text{carrier}}3=3A^3.
 $$
 
 Do not construct beta in this checkpoint.
@@ -522,15 +522,15 @@ Required:
 FLT3U-004A is complete when every positive primitive FLT3 counterexample produces a common signed packet and a power-split packet with
 
 $$
-\operatorname{carrier}=9A^3,
+\text{carrier}=9A^3,
 $$
 
 $$
-\operatorname{residual}=3B^3,
+\text{residual}=3B^3,
 $$
 
 $$
-\operatorname{distinguished}=3AB,
+\text{distinguished}=3AB,
 $$
 
 $$
@@ -544,11 +544,11 @@ $$
 and the packet carries an Eisenstein alpha satisfying
 
 $$
-N(\alpha)=\operatorname{residual},
+N(\alpha)=\text{residual},
 $$
 
 $$
-\alpha_{\rm snd}-\alpha_{\rm fst}=\operatorname{carrier}.
+\alpha_{\rm snd}-\alpha_{\rm fst}=\text{carrier}.
 $$
 
 Stop there.

@@ -167,7 +167,7 @@ The theorem formalizes the finite conservation law
 $$
 q\le P,
 \qquad
-0<m\le\operatorname{squareBody}(q)
+0<m\le\text{squareBody}(q)
 $$
 
 implying the dichotomy
@@ -223,6 +223,7 @@ Do not say that the whole point `m` is squarefree.
 The theorem allows arbitrary exponents among the old prime factors in `k`.
 
 What is controlled is only the fresh direction:
+
 - there is at most one fresh prime `p > P`;
 - `p` does not divide the cofactor;
 - therefore the fresh direction occurs to depth one.
@@ -242,6 +243,7 @@ also holds in the certified fine square world, PCK-003/PCK-004 force `m`
 itself to be prime and self-fresh.
 
 PCK-008 is more general:
+
 - it does not assume support disjointness;
 - old support may remain in the bounded cofactor `k`;
 - it classifies every positive point in the square window.
@@ -273,6 +275,7 @@ not require it.
 ## 10. Optional theorem policy
 
 Do not add:
+
 - a new Prop named `PrimitiveConservationKernel`;
 - a structure/class/package;
 - an iff wrapper duplicating the same disjunction;
@@ -317,6 +320,7 @@ Run:
 Use the exact final theorem name if changed.
 
 Audit the new owner for:
+
 - forbidden imports;
 - accidental new definitions;
 - duplicated factorization proofs;

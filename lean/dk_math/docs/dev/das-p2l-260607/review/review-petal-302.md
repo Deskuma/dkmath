@@ -85,7 +85,7 @@ floatPaymentBlockStart n j h
 つまり target $j$ を持つ delayed growth debt の最小時刻を、
 
 $$
-a:=\min{i\mid \operatorname{FloatDebtAt}(i),\ \tau(i)=j}
+a:=\min{i\mid \text{FloatDebtAt}(i),\ \tau(i)=j}
 $$
 
 とする。
@@ -187,13 +187,13 @@ mem_growthDebtFiber_iff_mem_floatPaymentBlockInterior_and_carryTwo
 ```
 
 $$
-i\in\operatorname{GrowthDebtFiber}(j)
+i\in\text{GrowthDebtFiber}(j)
 $$
 
 と、
 
 $$
-i\in[a,j)\land\operatorname{CarryTwoDebtAt}(i)
+i\in[a,j)\land\text{CarryTwoDebtAt}(i)
 $$
 
 が同値になった。
@@ -207,7 +207,7 @@ floatGrowthDebtFiberAt_eq_filter_floatPaymentBlockInterior_carryTwo
 により、
 
 $$
-\operatorname{GrowthDebtFiber}(j) = \{i\in[a,j)\mid c_i=2\}
+\text{GrowthDebtFiber}(j) = \{i\in[a,j)\mid c_i=2\}
 $$
 
 が成立する。
@@ -229,7 +229,7 @@ mem_carryTwoPaymentClaimFiber_iff_mem_floatPaymentBlockWithEndpoint_and_carryTwo
 が証明された。
 
 $$
-i\in\operatorname{CarryTwoClaimFiber}(j)
+i\in\text{CarryTwoClaimFiber}(j)
 $$
 
 と、
@@ -247,7 +247,7 @@ endpoint の carry-two は immediate self-claim。
 したがって、
 
 $$
-\operatorname{CarryTwoClaimFiber}(j) = \{i\in[a,j]\mid c_i=2\}
+\text{CarryTwoClaimFiber}(j) = \{i\in[a,j]\mid c_i=2\}
 $$
 
 である。
@@ -463,7 +463,7 @@ $$
 claim fiber identification により、
 
 $$
-C(a,\ell)=\#\operatorname{CarryTwoClaimFiber}(j)
+C(a,\ell)=\#\text{CarryTwoClaimFiber}(j)
 $$
 
 となる。
@@ -471,7 +471,7 @@ $$
 よって、
 
 $$
-w_{j+1}+(h_j-1) = w_a+\#\operatorname{CarryTwoClaimFiber}(j)
+w_{j+1}+(h_j-1) = w_a+\#\text{CarryTwoClaimFiber}(j)
 $$
 
 が得られる。
@@ -479,7 +479,7 @@ $$
 すなわち、
 
 $$
-w_{j+1}-w_a = \#\operatorname{CarryTwoClaimFiber}(j)-(h_j-1)
+w_{j+1}-w_a = \#\text{CarryTwoClaimFiber}(j)-(h_j-1)
 $$
 
 じゃ。
@@ -493,7 +493,7 @@ $$
 上の等式から直ちに、
 
 $$
-h_j-1 < \#\operatorname{CarryTwoClaimFiber}(j)
+h_j-1 < \#\text{CarryTwoClaimFiber}(j)
 $$
 
 と、
@@ -507,7 +507,7 @@ $$
 つまり、
 
 $$
-\operatorname{CarryTwoPaymentOverloadAt}(j)
+\text{CarryTwoPaymentOverloadAt}(j)
 \Longleftrightarrow
 w_a < w_{j+1}
 $$

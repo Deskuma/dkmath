@@ -169,7 +169,7 @@ motion = cc.motion(theta, op)
 - 位相微分は
   $$
   \frac{d}{d\theta}\arg G
-  = \operatorname{Im}\!\left(\frac{G'}{G}\right)
+  = \text{Im}\!\left(\frac{G'}{G}\right)
   $$
 
   に対応し、ζ関数の \(\zeta'/\zeta\) と同型の構造を持つ。

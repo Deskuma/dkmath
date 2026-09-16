@@ -183,7 +183,7 @@ primitive witness から、
 単に `rad` や `padicValNat` の薄い橋を置いただけではなく、
 
 \[
-\text{supportMass} = \operatorname{rad}
+\text{supportMass} = \text{rad}
 \]
 
 を軸にして、
@@ -231,7 +231,7 @@ primitive witness から、
 \;\to\;
 \text{disjoint channels}
 \;\to\;
-\operatorname{rad}\text{ の下界}
+\text{rad}\text{ の下界}
 \]
 
 という読みまで到達している。
@@ -369,7 +369,7 @@ ABC 本丸から見れば、まだ次の大事な分岐が残っている。
 \[
 \text{primitive channel 数}
 \;\Rightarrow\;
-\operatorname{rad}(abc)\text{ 下界}
+\text{rad}(abc)\text{ 下界}
 \;\Rightarrow\;
 \text{quality や valuation の制約}
 \]
@@ -404,7 +404,7 @@ ABC 本丸から見れば、まだ次の大事な分岐が残っている。
 \;\to\;
 \text{disjoint channels}
 \;\to\;
-\operatorname{rad}\text{ の下界}
+\text{rad}\text{ の下界}
 \]
 
 という lower-bound spine まで入っている。

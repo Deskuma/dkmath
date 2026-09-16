@@ -178,7 +178,7 @@ $$
 すなわち、
 
 $$
-\operatorname{Ico}(a,j+1)=\operatorname{Icc}(a,j)
+\text{Ico}(a,j+1)=\text{Icc}(a,j)
 $$
 
 じゃ。
@@ -225,7 +225,7 @@ $$
 目標は、
 
 $$
-\operatorname{shiftedOrbitCarryTwoCount}(n,a,\ell)=#{i\in[a,a+\ell)\mid c_i=2}
+\text{shiftedOrbitCarryTwoCount}(n,a,\ell)=#{i\in[a,a+\ell)\mid c_i=2}
 $$
 
 じゃ。
@@ -257,7 +257,7 @@ iterateT_add_eq_iterateT_from_shift
 目標は、
 
 $$
-\operatorname{shiftedExtraPaymentCapacity}(n,a,\ell)=\sum_{i=a}^{a+\ell-1}(h_i-1)
+\text{shiftedExtraPaymentCapacity}(n,a,\ell)=\sum_{i=a}^{a+\ell-1}(h_i-1)
 $$
 
 じゃ。
@@ -313,7 +313,7 @@ $$
 つまり、
 
 $$
-\operatorname{extraPaymentCapacityOn}(n,[a,j])=\operatorname{extraPaymentCapacityAt}(n,j)
+\text{extraPaymentCapacityOn}(n,[a,j])=\text{extraPaymentCapacityAt}(n,j)
 $$
 
 である。
@@ -409,7 +409,7 @@ $$
 ここで、
 
 $$
-A_i=\operatorname{ResidualAllOnesDepth}(\operatorname{oddOrbitLabel}(n,i))
+A_i=\text{ResidualAllOnesDepth}(\text{oddOrbitLabel}(n,i))
 $$
 
 じゃ。
@@ -1261,7 +1261,7 @@ theorem shiftedOrbitCarryTwoCount_eq_offset_card
 この帰納では右辺が `Finset.range len` なので、recursive count と同じ末尾 `len` が現れる。
 
 $$
-\operatorname{range}(len+1)=\operatorname{range}(len)\cup{len}
+\text{range}(len+1)=\text{range}(len)\cup{len}
 $$
 
 global index への変換は、その後に別定理として行う。
@@ -1434,7 +1434,7 @@ mem_carryTwoPaymentClaimFiber_iff_mem_floatPaymentBlockWithEndpoint_and_carryTwo
 中心等式は、
 
 $$
-\operatorname{bitWidth}(T^{j+1}(n))+\operatorname{extraPaymentCapacityAt}(n,j)=\operatorname{bitWidth}(T^a(n))+#\operatorname{ClaimFiber}(n,j)
+\text{bitWidth}(T^{j+1}(n))+\text{extraPaymentCapacityAt}(n,j)=\text{bitWidth}(T^a(n))+#\text{ClaimFiber}(n,j)
 $$
 
 じゃ。
@@ -1442,15 +1442,15 @@ $$
 これが得られれば、
 
 $$
-\operatorname{claims}>\operatorname{capacity}\Longleftrightarrow\operatorname{widthBefore}<\operatorname{widthAfter}
+\text{claims}>\text{capacity}\Longleftrightarrow\text{widthBefore}<\text{widthAfter}
 $$
 
 $$
-\operatorname{claims}=\operatorname{capacity}\Longleftrightarrow\operatorname{widthBefore}=\operatorname{widthAfter}
+\text{claims}=\text{capacity}\Longleftrightarrow\text{widthBefore}=\text{widthAfter}
 $$
 
 $$
-\operatorname{claims}<\operatorname{capacity}\Longleftrightarrow\operatorname{widthAfter}<\operatorname{widthBefore}
+\text{claims}<\text{capacity}\Longleftrightarrow\text{widthAfter}<\text{widthBefore}
 $$
 
 が出る。
