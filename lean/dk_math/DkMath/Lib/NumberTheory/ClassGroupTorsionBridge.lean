@@ -43,4 +43,15 @@ theorem classGroupPTorsionFreeAt_of_isPrincipalIdealRing
     subsingleton_classGroup_of_isPrincipalIdealRing (R := R)
   exact @classGroupPTorsionFreeAt_of_subsingleton_classGroup R _ _ hsub p
 
+/-- Coprimality with the finite class-group cardinality excludes `p`-torsion. -/
+theorem classGroupPTorsionFreeAt_of_coprime_card
+    {R : Type*} [CommRing R] [IsDomain R]
+    [Fintype (ClassGroup R)] {p : ℕ}
+    (hcop : Nat.Coprime p (Fintype.card (ClassGroup R))) :
+    classGroupPTorsionFreeAt R p := by
+  intro a hpow
+  apply orderOf_eq_one_iff.mp
+  exact Nat.eq_one_of_dvd_coprimes hcop
+    (orderOf_dvd_of_pow_eq_one hpow) orderOf_dvd_card
+
 end DkMath.Lib.NumberTheory
