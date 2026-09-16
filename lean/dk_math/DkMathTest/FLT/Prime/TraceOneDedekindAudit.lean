@@ -22,22 +22,22 @@ namespace DkMathTest.FLT.Prime.TraceOneDedekindAudit
 #check exists_eq_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt
 
 example {p : ℕ} (hp : p.Prime) (hp2 : p ≠ 2) :
-    letI : Fact (∀ r : ℚ,
+    let : Fact (∀ r : ℚ,
         r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root hp hp2⟩
-    letI : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+    let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
     IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) := by
-  letI : Fact (∀ r : ℚ,
+  let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root hp hp2⟩
-  letI : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+  let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
   exact traceOneRat_isDedekindDomain hp hp2
 
 example {p : ℕ} (hp : p.Prime) (hp2 : p ≠ 2) :
-    letI : Fact (∀ r : ℚ,
+    let : Fact (∀ r : ℚ,
         r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root hp hp2⟩
-    letI : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+    let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
     Nonempty (NumberField.RingOfIntegers (TraceOneRat (signedPrimeParameter p))
       ≃+* TraceOneInt (signedPrimeParameter p)) :=
   traceOneRat_ringOfIntegers_equiv hp hp2
@@ -53,13 +53,13 @@ example {R : Type*} [CommRing R] [IsDedekindDomain R]
     hI0 hfree hunit hspan
 
 example {p : ℕ} (hp : p.Prime) (hp2 : p ≠ 2) :
-    letI : Fact (∀ r : ℚ,
+    let : Fact (∀ r : ℚ,
         r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root hp hp2⟩
-    letI : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
-    letI : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
+    let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+    let : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
       (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-    letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
+    let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
       traceOneRat_isDedekindDomain hp hp2
     ∀ {I : Ideal (TraceOneInt (signedPrimeParameter p))}
       {a : TraceOneInt (signedPrimeParameter p)},
@@ -69,23 +69,23 @@ example {p : ℕ} (hp : p.Prime) (hp2 : p ≠ 2) :
         ∃ e, u = e ^ p) →
       Ideal.span ({a} : Set (TraceOneInt (signedPrimeParameter p))) = I ^ p →
       ∃ delta : TraceOneInt (signedPrimeParameter p), a = delta ^ p := by
-  letI : Fact (∀ r : ℚ,
+  let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root hp hp2⟩
-  letI : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
-  letI : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
+  let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+  let : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-  letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
+  let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
     traceOneRat_isDedekindDomain hp hp2
   intro I a hI0 hfree hunit hspan
   exact exists_eq_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt
     hI0 hfree hunit hspan
 
 example :
-    letI : Field (TraceOneRat (signedPrimeParameter 3)) :=
+    let : Field (TraceOneRat (signedPrimeParameter 3)) :=
       traceOneRatField (p := 3) (by norm_num) (by norm_num)
     IsDedekindDomain (TraceOneInt (signedPrimeParameter 3)) := by
-  letI : Field (TraceOneRat (signedPrimeParameter 3)) :=
+  let : Field (TraceOneRat (signedPrimeParameter 3)) :=
     traceOneRatField (p := 3) (by norm_num) (by norm_num)
   exact traceOneRat_isDedekindDomain (p := 3) (by norm_num) (by norm_num)
 

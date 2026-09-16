@@ -70,8 +70,8 @@ theorem coeff_Rpoly_mem_range_algebraMap
     (ζ : L) (hζ : IsPrimitiveRoot ζ p) (d : Fin 2 →₀ ℕ) :
     MvPolynomial.coeff d (Rpoly (p := p) ζ) ∈
       Set.range (algebraMap K L) := by
-  letI : IsGalois K L := IsCyclotomicExtension.isGalois {p} K L
-  letI : FiniteDimensional K L := finiteDimensional_cyclotomic (p := p)
+  let : IsGalois K L := IsCyclotomicExtension.isGalois {p} K L
+  let : FiniteDimensional K L := finiteDimensional_cyclotomic (p := p)
   apply (IsGalois.mem_range_algebraMap_iff_fixed
     (MvPolynomial.coeff d (Rpoly (p := p) ζ))).2
   intro σ
@@ -85,8 +85,8 @@ theorem coeff_Dpoly_sq_mem_range_algebraMap
     (ζ : L) (hζ : IsPrimitiveRoot ζ p) (d : Fin 2 →₀ ℕ) :
     MvPolynomial.coeff d (Dpoly (p := p) ζ ^ 2) ∈
       Set.range (algebraMap K L) := by
-  letI : IsGalois K L := IsCyclotomicExtension.isGalois {p} K L
-  letI : FiniteDimensional K L := finiteDimensional_cyclotomic (p := p)
+  let : IsGalois K L := IsCyclotomicExtension.isGalois {p} K L
+  let : FiniteDimensional K L := finiteDimensional_cyclotomic (p := p)
   apply (IsGalois.mem_range_algebraMap_iff_fixed
     (MvPolynomial.coeff d (Dpoly (p := p) ζ ^ 2))).2
   intro σ

@@ -693,7 +693,7 @@ lemma bad_set_density_bound
   -- to other uses of `decidable_Bad_ε γ_values` in this file. This avoids mismatches
   -- between locally-built `DecidablePred` values and the global one, which can
   -- make `exact` fail while `convert` still succeeds.
-  haveI := decidable_Bad_ε γ_values
+  have := decidable_Bad_ε γ_values
   -- #check this
 
   -- Use the union_bound_chernoff result (gives a per-X bound for sums over primes ≤ X)

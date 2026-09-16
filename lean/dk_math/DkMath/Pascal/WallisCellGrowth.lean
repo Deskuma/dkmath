@@ -989,8 +989,7 @@ theorem tendsto_nat_mul_centralRatio_normalized_sub_one_of_square_correction
       Filter.atTop (nhds (1 / 8 : ℝ)) := by
     convert hquot using 1
     · ext m
-      simp only [Pi.div_apply]
-    · norm_num
+      ring_nf
   refine hquot'.congr' ?_
   filter_upwards [eventually_gt_atTop 0] with m hm
   have hmR : (m : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
@@ -1496,8 +1495,7 @@ theorem tendsto_nat_sq_centralBinomial_fast_relative_sub_first_of_second_correct
     have h := ha2.div hu (by norm_num : (1 : ℝ) ≠ 0)
     convert h using 1
     · ext m
-      rfl
-    · norm_num
+      ring_nf
   have hinv : Filter.Tendsto
       (fun m : ℕ => (1 : ℝ) / (m : ℝ)) Filter.atTop (nhds 0) :=
     tendsto_one_div_atTop_nhds_zero_nat
@@ -1521,8 +1519,7 @@ theorem tendsto_nat_sq_centralBinomial_fast_relative_sub_first_of_second_correct
     have h := hsub.div hu (by norm_num : (1 : ℝ) ≠ 0)
     convert h using 1
     · ext m
-      rfl
-    · norm_num
+      ring_nf
   have hprod : Filter.Tendsto
       (fun m : ℕ => ((m : ℝ) ^ 2 *
         (u m - 1 - 1 / (8 * (m : ℝ)))) *
@@ -1667,7 +1664,7 @@ theorem certifiedCentralBinomialNat_eq_choose_of_width_lt_one
     (hwidth : centralBinomialWallisUpperR m <
       centralBinomialWallisLowerR m + 1) :
     certifiedCentralBinomialNat m = Nat.choose (2 * m) m := by
-  rw [certifiedCentralBinomialNat, if_pos hwidth]
+  rw [certifiedCentralBinomialNat, ite_eq_left hwidth]
   exact ceil_centralBinomialWallisLowerR_eq_choose_of_width_lt_one m hwidth
 
 /-!
@@ -1766,7 +1763,7 @@ theorem certifiedCentralBinomialSecondNat_eq_choose_of_width_lt_one
     (hwidth : centralBinomialSecondUpperR m <
       centralBinomialSecondLowerR m + 1) :
     certifiedCentralBinomialSecondNat m = Nat.choose (2 * m) m := by
-  rw [certifiedCentralBinomialSecondNat, if_pos hwidth]
+  rw [certifiedCentralBinomialSecondNat, ite_eq_left hwidth]
   exact ceil_centralBinomialSecondLowerR_eq_choose_of_width_lt_one hm hwidth
 
 /-!
@@ -2023,12 +2020,12 @@ def pascalCellGrowthNatFast (n k : ℕ) : ℕ :=
 theorem pascalCellGrowthNatFast_eq_choose (n k : ℕ) :
     pascalCellGrowthNatFast n k = Nat.choose n k := by
   by_cases hk : k ≤ n
-  · rw [pascalCellGrowthNatFast, if_pos hk,
+  · rw [pascalCellGrowthNatFast, ite_eq_left hk,
       pascalCellGrowthNatFastAux_eq_choose]
     rcases le_total k (n - k) with hleft | hright
     · rw [min_eq_left hleft]
     · rw [min_eq_right hright, Nat.choose_symm hk]
-  · rw [pascalCellGrowthNatFast, if_neg hk]
+  · rw [pascalCellGrowthNatFast, ite_eq_right hk]
     norm_num [Nat.choose_eq_zero_of_lt (Nat.lt_of_not_ge hk)]
 
 /-!
@@ -2080,11 +2077,11 @@ theorem pascalCellGrowthQ_index_le_half (n k : ℕ) :
 theorem pascalCellGrowthQ_eq_cast_choose (n k : ℕ) :
     pascalCellGrowthQ n k = (Nat.choose n k : ℚ) := by
   by_cases hk : k ≤ n
-  · rw [pascalCellGrowthQ, if_pos hk, pascalPrefixGrowthQ_eq_cast_choose]
+  · rw [pascalCellGrowthQ, ite_eq_left hk, pascalPrefixGrowthQ_eq_cast_choose]
     rcases le_total k (n - k) with hleft | hright
     · rw [min_eq_left hleft]
     · rw [min_eq_right hright, Nat.choose_symm hk]
-  · rw [pascalCellGrowthQ, if_neg hk]
+  · rw [pascalCellGrowthQ, ite_eq_right hk]
     norm_num [Nat.choose_eq_zero_of_lt (Nat.lt_of_not_ge hk)]
 
 /--

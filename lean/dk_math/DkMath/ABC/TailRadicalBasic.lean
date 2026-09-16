@@ -21,8 +21,9 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 /- Slice の和恒等式と Markov による重いスライスの個数上界 -/
 /--

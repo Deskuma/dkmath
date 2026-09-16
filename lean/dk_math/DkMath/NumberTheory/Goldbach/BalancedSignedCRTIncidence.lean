@@ -49,7 +49,7 @@ theorem signedSingleResidues_card_eq_forbidden
     (signedSingleResidues n r).card =
       (goldbachForbiddenResidues n r).card := by
   classical
-  letI : NeZero r := ⟨Nat.ne_of_gt hr.pos⟩
+  let : NeZero r := ⟨Nat.ne_of_gt hr.pos⟩
   refine Finset.card_bij (s := signedSingleResidues n r)
     (t := goldbachForbiddenResidues n r) (fun t _ => (t : ZMod r)) ?_ ?_ ?_
   · intro t ht
@@ -91,7 +91,7 @@ theorem goldbachSignedSingleCRTCount_eq_windowBlockedSeats_card
     goldbachSignedSingleCRTCount n w r =
       (goldbachWindowBlockedSeats n w r).card := by
   classical
-  letI : NeZero r := ⟨Nat.ne_of_gt (hS hr).pos⟩
+  let : NeZero r := ⟨Nat.ne_of_gt (hS hr).pos⟩
   let L : Finset (Σ _ : ℕ, ℕ) :=
     (signedSingleResidues n r).sigma
       (fun t₀ => goldbachProgressionSeats (min (n - 2) w) t₀ r)

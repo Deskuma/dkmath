@@ -156,11 +156,11 @@ theorem nonempty_primeTraceOneStrippedIdealPacket
       hparent_norm_ne hparent_norm S.prime_not_dvd_b
   have hres_coprime : IsCoprime residual.fst residual.snd :=
     coordinate_isCoprime_of_eq_discrAxis_mul haxis hparent_coprime
-  letI : Field (TraceOneRat (signedPrimeParameter p)) :=
+  let : Field (TraceOneRat (signedPrimeParameter p)) :=
     traceOneRatField P0.prime hp2
-  letI : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
+  let : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-  letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
+  let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
     traceOneRat_isDedekindDomain P0.prime hp2
   have hideal_coprime :
       IsCoprime (Ideal.span ({residual} : Set _))

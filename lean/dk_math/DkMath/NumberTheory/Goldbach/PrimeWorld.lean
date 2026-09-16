@@ -68,12 +68,12 @@ theorem goldbach_card_forbidden (n r : ℕ) :
     (goldbachForbiddenResidues n r).card = if r ∣ 2 * n then 1 else 2 := by
   by_cases h : r ∣ 2 * n
   · have he := (goldbach_residue_eq_neg_iff n r).mpr h
-    rw [if_pos h]
+    rw [ite_eq_left h]
     unfold goldbachForbiddenResidues
     rw [Finset.insert_eq_of_mem (Finset.mem_singleton.mpr he)]
     exact Finset.card_singleton _
   · have he := (goldbach_residue_eq_neg_iff n r).not.mpr h
-    rw [if_neg h]
+    rw [ite_eq_right h]
     exact Finset.card_pair he
 
 /-- Local raw survivors in a nonzero modulus. -/

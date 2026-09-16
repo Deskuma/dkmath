@@ -274,7 +274,7 @@ theorem paritySafeFarProductWaveRoughOffsets_eq_if_survives
   classical
   ext r
   by_cases hsurv : ParitySafeFarProductKeySurvives n (p, (q, s))
-  · rw [if_pos hsurv]
+  · rw [ite_eq_left hsurv]
     constructor
     · intro hr
       exact Finset.mem_singleton.mpr
@@ -283,7 +283,7 @@ theorem paritySafeFarProductWaveRoughOffsets_eq_if_survives
     · intro hr
       exact (mem_paritySafeFarProductWaveRoughOffsets_iff_survives_and_eq_nextSeat
         hkey).mpr ⟨hsurv, Finset.mem_singleton.mp hr⟩
-  · rw [if_neg hsurv]
+  · rw [ite_eq_right hsurv]
     constructor
     · intro hr
       exact False.elim (hsurv

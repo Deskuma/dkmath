@@ -45,7 +45,7 @@ theorem GNExcessJointDepthModulus_factorization_at
   by_cases hactive : 0 < GNExcessProfileValue Q excess q
   · have hqS : q ∈ S := by
       exact Finset.mem_filter.mpr ⟨hqQ, hactive⟩
-    rw [if_pos hactive]
+    rw [ite_eq_left hactive]
     calc
       ∑ r ∈ S,
           (GNExcessProfileValue Q excess r + 1) * r.factorization q =
@@ -62,7 +62,7 @@ theorem GNExcessJointDepthModulus_factorization_at
   · have hqnot : q ∉ S := by
       intro hqS
       exact hactive (Finset.mem_filter.mp hqS).2
-    rw [if_neg hactive]
+    rw [ite_eq_right hactive]
     apply Finset.sum_eq_zero
     intro r hr
     rw [(hprime r hr).factorization, Finsupp.single_apply]

@@ -768,7 +768,8 @@ lemma Slab_pairwise_disjoint (d x u : ℕ) :
       refine ⟨riFun i (Finset.mem_univ _), hri_lt, ?_⟩
       -- qi = ofNatCellEmb … riFun
       have := congrArg (fun f => f i) hqi_eq
-      simpa [CellDim.ofNatCellEmb, Function.Embedding.trans, CellDim.piToFunEmb] using this.symm
+      convert this.symm using 1
+      rfl
     -- qj の軸 i の上界（i < j なので長さは u）
     have hqj_axis : ∃ rj : ℕ, rj < u ∧ qj i = Int.ofNat rj := by
       rcases Finset.mem_map.mp hqj with ⟨rjFun, hrj_mem, hqj_eq⟩
@@ -780,7 +781,8 @@ lemma Slab_pairwise_disjoint (d x u : ℕ) :
         simpa [hlen] using this
       refine ⟨rjFun i (Finset.mem_univ _), hrj_lt, ?_⟩
       have := congrArg (fun f => f i) hqj_eq
-      simpa [CellDim.ofNatCellEmb, Function.Embedding.trans, CellDim.piToFunEmb] using this.symm
+      convert this.symm using 1
+      rfl
     rcases hqi_axis with ⟨ri, hri_lt, hqi_eq⟩
     rcases hqj_axis with ⟨rj, hrj_lt, hqj_eq⟩
     -- p i を両方の表現から計算
@@ -826,7 +828,8 @@ lemma Slab_pairwise_disjoint (d x u : ℕ) :
         simpa [hlen] using this
       refine ⟨rjFun j (Finset.mem_univ _), hrj_lt, ?_⟩
       have := congrArg (fun f => f j) hqj_eq
-      simpa [CellDim.ofNatCellEmb, Function.Embedding.trans, CellDim.piToFunEmb] using this.symm
+      convert this.symm using 1
+      rfl
     have hqi_axis : ∃ ri : ℕ, ri < u ∧ qi j = Int.ofNat ri := by
       rcases Finset.mem_map.mp hqi with ⟨riFun, hri_mem, hqi_eq⟩
       rcases Finset.mem_pi.mp hri_mem j (Finset.mem_univ _) with hri_range
@@ -840,7 +843,8 @@ lemma Slab_pairwise_disjoint (d x u : ℕ) :
         simpa [hcase] using this
       refine ⟨riFun j (Finset.mem_univ _), hri_lt, ?_⟩
       have := congrArg (fun f => f j) hqi_eq
-      simpa [CellDim.ofNatCellEmb, Function.Embedding.trans, CellDim.piToFunEmb] using this.symm
+      convert this.symm using 1
+      rfl
     rcases hqj_axis with ⟨rj, hrj_lt, hqj_eq⟩
     rcases hqi_axis with ⟨ri, hri_lt, hqi_eq⟩
     have hp_j_from_qj : p j = Int.ofNat rj + Int.ofNat u := by

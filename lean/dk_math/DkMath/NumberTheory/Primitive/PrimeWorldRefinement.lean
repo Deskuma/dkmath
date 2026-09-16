@@ -246,7 +246,7 @@ theorem existsUnique_child_eq_target
     ∃! j : ℕ,
       j < q ∧
       (primeWorldChild S r j : ZMod q) = a := by
-  letI : NeZero q := ⟨hq.ne_zero⟩
+  let : NeZero q := ⟨hq.ne_zero⟩
   let M := primeWorldModulus S
   have hMpos : 0 < M := by
     simpa [M] using primeWorldModulus_pos hS

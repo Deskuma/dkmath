@@ -119,7 +119,7 @@ theorem completedZetaCanonicalSlopeDirection_inv_mul_deriv_im_eq_zero
       deriv completedRiemannZeta s).im = 0 := by
   by_cases hderiv : deriv completedRiemannZeta s = 0
   · simp [completedZetaCanonicalSlopeDirection, hderiv]
-  · rw [completedZetaCanonicalSlopeDirection, if_neg hderiv,
+  · rw [completedZetaCanonicalSlopeDirection, ite_eq_right hderiv,
       inv_mul_cancel₀ hderiv]
     norm_num
 

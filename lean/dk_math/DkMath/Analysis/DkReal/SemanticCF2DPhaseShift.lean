@@ -2838,15 +2838,16 @@ theorem shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_finFourLevelPat
     (z : Vec ℝ) :
     shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z =
       shiftedSemanticFinFourLevelPath hcore z := by
-  calc
-    shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z =
-        shiftedSemanticObservedCyclicFourPathViaEdges hcore z :=
-      shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_viaEdges hcore z
-    _ = shiftedSemanticFinFourLevelPathViaEdges hcore z :=
-      shiftedSemanticObservedCyclicFourPathViaEdges_eq_finFourLevelPathViaEdges hcore z
-    _ = shiftedSemanticFinFourLevelPath hcore z := by
-      symm
-      exact shiftedSemanticFinFourLevelPath_eq_viaEdges hcore z
+  have h₁ : shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint hcore z =
+      shiftedSemanticObservedCyclicFourPathViaEdges hcore z :=
+    shiftedSemanticObservedCyclicFourPathAsFiniteEndpoint_eq_viaEdges hcore z
+  have h₂ : shiftedSemanticObservedCyclicFourPathViaEdges hcore z =
+      shiftedSemanticFinFourLevelPathViaEdges hcore z :=
+    shiftedSemanticObservedCyclicFourPathViaEdges_eq_finFourLevelPathViaEdges hcore z
+  have h₃ : shiftedSemanticFinFourLevelPathViaEdges hcore z =
+      shiftedSemanticFinFourLevelPath hcore z :=
+    (shiftedSemanticFinFourLevelPath_eq_viaEdges hcore z).symm
+  exact h₁.trans (h₂.trans h₃)
 
 /--
 Public final form of the shifted cyclic path-packaging comparison.

@@ -204,7 +204,7 @@ theorem etaCriticalMirrorSuppressedEulerHalfEndpointCarrier_tendsto_zero
       · have hnh : ¬ s.re < (1 : ℝ) / 2 := by linarith
         have hnhInv : ¬ s.re < (2 : ℝ)⁻¹ := by
           exact not_lt_of_ge (le_of_lt (lt_of_not_ge hside))
-        rw [if_neg hnhInv]
+        rw [ite_eq_right hnhInv]
         ring
 
 /-- Transverse defect of the single dominant Euler half-endpoint carrier. -/

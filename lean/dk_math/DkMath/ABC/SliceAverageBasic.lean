@@ -20,8 +20,9 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 /-
 slice_average_bound: average化 → 大多数のスライスが小さい（Markov 的引数）

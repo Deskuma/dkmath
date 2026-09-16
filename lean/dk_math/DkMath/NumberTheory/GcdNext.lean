@@ -76,7 +76,7 @@ lemma dvd_padicVal_of_eq_pow {t n d : ℕ} (_ht : 0 < t) :
   intro heq p hp
   subst heq
   -- padicValNat.pow は Fact (Nat.Prime p) のインスタンスが必要
-  haveI : Fact p.Prime := ⟨hp⟩
+  have : Fact p.Prime := ⟨hp⟩
   -- padicValNat.pow : padicValNat p (a ^ n) = n * padicValNat p a (a ≠ 0 条件付き)
   by_cases hn : n = 0
   · -- n = 0 の場合
@@ -100,7 +100,7 @@ lemma dvd_padicVal_of_eq_pow {t n d : ℕ} (_ht : 0 < t) :
 lemma padicVal_mul_eq_add_of_coprime {A B : ℕ} (hcop : Nat.Coprime A B) {p : ℕ} (hp : Nat.Prime p) :
     padicValNat p (A * B) = padicValNat p A + padicValNat p B := by
   -- Fact インスタンスを用意
-  haveI : Fact p.Prime := ⟨hp⟩
+  have : Fact p.Prime := ⟨hp⟩
   -- padicValNat.mul : a ≠ 0 → b ≠ 0 → padicValNat p (a * b) = padicValNat p a + padicValNat p b
   by_cases hA : A = 0
   · subst hA

@@ -27,18 +27,18 @@ private abbrev cycloField (p : ℕ) := CyclotomicField p ℚ
 
 private instance cycloField_isCyclotomicExtension (p : ℕ) [Fact p.Prime] :
     IsCyclotomicExtension {p} ℚ (cycloField p) := by
-  letI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
-  letI : NeZero (p : ℚ) := ⟨by
+  let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  let : NeZero (p : ℚ) := ⟨by
     exact_mod_cast (Fact.out : Nat.Prime p).ne_zero⟩
   exact CyclotomicField.isCyclotomicExtension p ℚ
 
 private def cycloZeta (p : ℕ) [Fact p.Prime] : cycloField p := by
-  letI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   exact IsCyclotomicExtension.zeta p ℚ (cycloField p)
 
 private theorem cycloZeta_isPrimitiveRoot (p : ℕ) [Fact p.Prime] :
     IsPrimitiveRoot (cycloZeta p) p := by
-  letI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   exact IsCyclotomicExtension.zeta_spec p ℚ (cycloField p)
 
 /-! The new integer witnesses and the existing p=11 shell/norm chain are

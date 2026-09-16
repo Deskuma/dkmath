@@ -126,7 +126,7 @@ theorem paritySafeFarProductWave_canonical_eq_iff_no_smaller_active_dvd_cofactor
   · intro hcanonical a ha hap hdiv
     have hminCanonical : p = (paritySafeActiveSupport n r).min' hnonempty := by
       unfold paritySafeCanonicalSupportPrime at hcanonical
-      rw [dif_pos hnonempty] at hcanonical
+      rw [dite_eq_left hnonempty] at hcanonical
       exact hcanonical
     have hasupport :=
       (paritySafeFarProductWave_smallerActive_mem_support_iff_dvd_cofactor
@@ -153,7 +153,7 @@ theorem paritySafeFarProductWave_canonical_eq_iff_no_smaller_active_dvd_cofactor
           · omega
       exact hmp.symm
     unfold paritySafeCanonicalSupportPrime
-    rw [dif_pos hnonempty]
+    rw [dite_eq_left hnonempty]
     exact hmin
 
 /-! ### PRIM-L048.3: rough selector -/

@@ -5564,8 +5564,8 @@ theorem restore_witness_cong_one_mod_p
   have hq_not_dvd_z : ¬ q ∣ z :=
     flt_not_dvd_z_of_dvd_x_not_dvd_y hpack hq_prime hq_dvd_x hq_not_dvd_y
   -- Step 1: ZMod q 上での計算
-  haveI : Fact (Nat.Prime q) := ⟨hq_prime⟩
-  haveI : Fact (Nat.Prime p) := ⟨hp_prime⟩
+  have : Fact (Nat.Prime q) := ⟨hq_prime⟩
+  have : Fact (Nat.Prime p) := ⟨hp_prime⟩
   -- y は ZMod q で可逆
   have hy_ne_zero : (y : ZMod q) ≠ 0 := by
     intro heq

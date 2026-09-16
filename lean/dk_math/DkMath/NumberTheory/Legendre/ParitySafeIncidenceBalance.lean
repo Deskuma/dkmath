@@ -248,7 +248,7 @@ theorem paritySafeActiveWaveExtraOffsets_card_eq
       (paritySafeActiveWaveOffsets n q).card - 1 := by
   classical
   by_cases hq : (paritySafeActiveWaveOffsets n q).Nonempty
-  · rw [paritySafeActiveWaveExtraOffsets, dif_pos hq]
+  · rw [paritySafeActiveWaveExtraOffsets, dite_eq_left hq]
     exact Finset.card_erase_of_mem (Finset.min'_mem _ hq)
   · have hempty : paritySafeActiveWaveOffsets n q = ∅ :=
       Finset.not_nonempty_iff_eq_empty.mp hq

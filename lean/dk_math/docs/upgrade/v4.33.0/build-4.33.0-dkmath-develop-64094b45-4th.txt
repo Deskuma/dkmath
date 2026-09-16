@@ -1,0 +1,139 @@
+⚠ [8832/9584] Replayed DkMath.NumberTheory.ZsigmondyCyclotomicResearch
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+⚠ [8949/9584] Replayed DkMath.Petal.ErdosBridge
+warning: DkMath/Petal/ErdosBridge.lean:226:26: `Nat.infinite_setOf_prime` has been deprecated: Use `Nat.infinite_setOfPred_prime` instead
+⚠ [9140/9584] Replayed DkMath.FLT.PrimeProvider.TriominoCosmicBranchA
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+⚠ [9146/9584] Replayed DkMath.NumberTheory.GcdNextResearch
+warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+⚠ [9323/9584] Built DkMath.FLT.Seven.SevenRealCubicCoprimeExtraction (16s)
+warning: DkMath/FLT/Seven/SevenRealCubicCoprimeExtraction.lean:100:10: `Prime.not_unit` has been deprecated: Use `Prime.not_isUnit` instead
+warning: DkMath/FLT/Seven/SevenRealCubicCoprimeExtraction.lean:137:16: `Prime.not_unit` has been deprecated: Use `Prime.not_isUnit` instead
+warning: DkMath/FLT/Seven/SevenRealCubicCoprimeExtraction.lean:149:13: `Prime.not_unit` has been deprecated: Use `Prime.not_isUnit` instead
+✖ [9342/9584] Building DkMath.RH.CFBRC.EtaCriticalMirrorPairedAbelTransform (10s)
+info: DkMath/RH/CFBRC/EtaCriticalMirrorPairedAbelTransform.lean:13:0: file: DkMath.RH.CFBRC.EtaCriticalMirrorPairedAbelTransform
+error: DkMath/RH/CFBRC/EtaCriticalMirrorPairedAbelTransform.lean:57:2: Type mismatch: After simplification, term
+  Finset.sum_range_by_parts (etaPairBaseRotation s) (etaCriticalMirrorDefectPairTerm s) K
+ has type
+  @Eq ℂ (∑ x ∈ Finset.range K, etaPairBaseRotation s x * etaCriticalMirrorDefectPairTerm s x)
+    (etaPairBaseRotation s (K - 1) * ∑ i ∈ Finset.range K, etaCriticalMirrorDefectPairTerm s i -
+      ∑ x ∈ Finset.range (K - 1),
+        (etaPairBaseRotation s (x + 1) - etaPairBaseRotation s x) *
+          ∑ i ∈ Finset.range (x + 1), etaCriticalMirrorDefectPairTerm s i)
+but is expected to have type
+  @Eq ℂ ((Finset.range K).sum (etaCriticalMirrorRotatedDefectPairTerm s))
+    (etaPairBaseRotation s (K - 1) * (Finset.range K).sum (etaCriticalMirrorDefectPairTerm s) -
+      (Finset.range (K - 1)).sum (etaCriticalMirrorPairedFrameCorrectionTerm s))
+error: Lean exited with code 1
+✖ [9346/9584] Building DkMath.CosmicFormula.TriominoFLT (46s)
+info: DkMath/CosmicFormula/TriominoFLT.lean:14:0: file: DkMath.CosmicFormula.TriominoFLT
+error: DkMath/CosmicFormula/TriominoFLT.lean:505:2: Type mismatch: After simplification, term
+  card_filter_range_mod3_eq_of_dvd m (c + k₁) (c + k₂) hm
+ has type
+  @Eq ℕ {x ∈ Finset.range m | x % 3 = (c + k₁) % 3}.card {x ∈ Finset.range m | x % 3 = (c + k₂) % 3}.card
+but is expected to have type
+  @Eq ℕ {x ∈ Finset.range m | x % 3 = (c + k₁) % 3}.card {x ∈ Finset.range m | x % 3 = (c + k₂) % 3}.card
+error: DkMath/CosmicFormula/TriominoFLT.lean:1219:2: Type mismatch: After simplification, term
+  color3_val hd (((CellDim.piToFunEmb d).trans (CellDim.ofNatCellEmb d)) f)
+ has type
+  @Eq ℕ (↑(color3 ({ toFun := fun p i ↦ ↑(p i), inj' := ⋯ } ({ toFun := fun f i ↦ f i ⋯, inj' := ⋯ } f))))
+    (({ toFun := fun p i ↦ ↑(p i), inj' := ⋯ } ({ toFun := fun f i ↦ f i ⋯, inj' := ⋯ } f) ⟨0, ⋯⟩ -
+          { toFun := fun p i ↦ ↑(p i), inj' := ⋯ } ({ toFun := fun f i ↦ f i ⋯, inj' := ⋯ } f) ⟨1, ⋯⟩) %
+        3).toNat
+but is expected to have type
+  @Eq ℕ (↑(color3 ({ toFun := fun p i ↦ ↑(p i), inj' := ⋯ } ({ toFun := fun f i ↦ f i ⋯, inj' := ⋯ } f))))
+    ((↑(f ⟨0, ⋯⟩ ⋯) - ↑(f ⟨1, ⋯⟩ ⋯)) % 3).toNat
+warning: DkMath/CosmicFormula/TriominoFLT.lean:1917:6: declaration uses `sorry`
+error: Lean exited with code 1
+⚠ [9358/9584] Built DkMath.FLT.Seven.SevenRealCubicAxisDrop (27s)
+warning: DkMath/FLT/Seven/SevenRealCubicAxisDrop.lean:142:35: `Prime.not_unit` has been deprecated: Use `Prime.not_isUnit` instead
+warning: DkMath/FLT/Seven/SevenRealCubicAxisDrop.lean:199:33: `Prime.not_unit` has been deprecated: Use `Prime.not_isUnit` instead
+warning: DkMath/FLT/Seven/SevenRealCubicAxisDrop.lean:220:29: `Prime.not_unit` has been deprecated: Use `Prime.not_isUnit` instead
+warning: DkMath/FLT/Seven/SevenRealCubicAxisDrop.lean:328:33: `Prime.not_unit` has been deprecated: Use `Prime.not_isUnit` instead
+warning: DkMath/FLT/Seven/SevenRealCubicAxisDrop.lean:365:31: `Prime.not_unit` has been deprecated: Use `Prime.not_isUnit` instead
+warning: DkMath/FLT/Seven/SevenRealCubicAxisDrop.lean:519:15: `Prime.not_unit` has been deprecated: Use `Prime.not_isUnit` instead
+warning: DkMath/FLT/Seven/SevenRealCubicAxisDrop.lean:625:31: `Prime.not_unit` has been deprecated: Use `Prime.not_isUnit` instead
+warning: DkMath/FLT/Seven/SevenRealCubicAxisDrop.lean:708:15: `Prime.not_unit` has been deprecated: Use `Prime.not_isUnit` instead
+warning: DkMath/FLT/Seven/SevenRealCubicAxisDrop.lean:729:17: `Prime.not_unit` has been deprecated: Use `Prime.not_isUnit` instead
+⚠ [9368/9584] Built DkMath.FLT.Seven.SevenRamifiedSignedRootDepth (15s)
+warning: DkMath/FLT/Seven/SevenRamifiedSignedRootDepth.lean:364:15: `Prime.not_unit` has been deprecated: Use `Prime.not_isUnit` instead
+✖ [9473/9584] Building DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmplitude (33s)
+info: DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmplitude.lean:10:0: file: DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmplitude
+error: DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmplitude.lean:705:41: unsolved goals
+n : OddNat
+d : ℕ
+⊢ 2 * ↑(orbitWindowResidueCountPow2 n 0 (d + 1) (2 ^ (d + 1) - 1)) - ↑(orbitWindowResidueCountPow2 n 0 d (2 ^ d - 1)) =
+    0
+error: DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmplitude.lean:1051:2: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≤ 0
+  a - b + c ≥ 1
+where
+ a := ↑(canonicalSelectedDriftImageCarrier n k).card
+ b := ↑(canonicalSelectedPressureCarrier n k).card
+ c := ↑(have this := Fintype.ofFinset (canonicalSelectedPressureCarrier n k) ⋯;
+    Finset.univ \ canonicalSelectedDriftImageCarrier n k).card
+error: DkMath/Collatz/PetalBridge/FloatWindow/UniversalPaymentAmplitude.lean:3278:2: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  d - e ≤ -1
+  c ≥ 2
+  b ≥ 3
+  a ≥ 1
+where
+ a := endpointAccountingTerm n (k + 1)
+ b := ↑(canonicalBlockLength n (k + 1))
+ c := ↑2 ^ (canonicalBlockLength n (k + 1) - 2)
+ d := ↑↑({ toFun := fun i ↦ ⟨2 ^ (canonicalBlockLength n (k + 1) - 2) + ↑i, ⋯⟩, inj' := ⋯ } j)
+ e := ↑2 ^ (canonicalBlockLength n (k + 1) - 1)
+error: Lean exited with code 1
+✖ [9498/9584] Building DkMath.FLT.Kummer.CyclotomicPrincipalization (40s)
+info: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:15:0: file: DkMath.FLT.Kummer.CyclotomicPrincipalization
+error: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:1862:4: `simp` made no progress
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    IsPrimitiveRoot.toInteger._proof_1 hζ'
+  has type
+    IsIntegral ℤ ζ
+  but is expected to have type
+    ζ ∈ integralClosure ℤ K
+  in the application
+    ⟨ζ, ⋯⟩
+error: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:2091:37: unsolved goals
+K : Type u_1
+inst✝⁴ : Field K
+inst✝³ : NumberField K
+inst✝² : CharZero K
+p z y : ℕ
+inst✝¹ : Fact (Nat.Prime p)
+inst✝ : IsCyclotomicExtension {p} ℚ K
+ζ : K
+hζ : IsPrimitiveRoot ζ p
+hy0 : y ≠ 0
+hyz : y < z
+lin : 𝓞 K := ↑z - hζ.toInteger * ↑y
+hyK : ↑y ≠ 0
+hirr : Irreducible (Polynomial.cyclotomic p ℚ)
+hfinrank : Module.finrank ℚ K = p - 1
+hrat : ↑(↑z / ↑y) = ↑z / ↑y
+hdiv : ↑y * ↑(↑z / ↑y) = ↑z
+⊢ (algebraMap (𝓞 K) K) hζ.toInteger = ζ ∨ y = 0
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5388:8: declaration uses `sorry`
+error: Lean exited with code 1
+✖ [9569/9584] Building DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicConjugatePrimePair (31s)
+info: DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicConjugatePrimePair.lean:9:0: file: DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicConjugatePrimePair
+error: DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicConjugatePrimePair.lean:260:0: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+error: DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicConjugatePrimePair.lean:325:8: (kernel) unknown constant 'DkMath.FLT.Seven.RamifiedSignedRootRoutingPacket.CyclotomicLinearPrimeAddress.conjugatePrimeProduct_le_realPrimeFiberIdeal'
+error: Lean exited with code 1
+Some required targets logged failures:
+- DkMath.RH.CFBRC.EtaCriticalMirrorPairedAbelTransform
+- DkMath.CosmicFormula.TriominoFLT
+- DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmplitude
+- DkMath.FLT.Kummer.CyclotomicPrincipalization
+- DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicConjugatePrimePair

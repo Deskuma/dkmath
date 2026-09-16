@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.CFBRC.TrigBridge.General
-import Mathlib.Data.Complex.BigOperators
+import Mathlib.Basic.Complex.BigOperators
 import Mathlib.Data.Nat.Choose.Sum
 
 #print "file: DkMath.CFBRC.TrigBridge.ClosedForm"

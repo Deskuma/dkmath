@@ -100,11 +100,11 @@ private theorem traceOneRat_all_images_real
 
 theorem traceOneRat_isTotallyReal_of_prime_mod_four_eq_one
     {p : ℕ} (hp : Nat.Prime p) (hmod : p % 4 = 1) :
-    letI : Fact (∀ r : ℚ,
+    let : Fact (∀ r : ℚ,
         r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root hp (by omega)⟩
-    letI : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
-    letI : NumberField (TraceOneRat (signedPrimeParameter p)) := {
+    let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+    let : NumberField (TraceOneRat (signedPrimeParameter p)) := {
       to_charZero := charZero_of_injective_algebraMap (by
         intro q₁ q₂ hq
         have hre := congrArg QuadraticAlgebra.re hq
@@ -113,11 +113,11 @@ theorem traceOneRat_isTotallyReal_of_prime_mod_four_eq_one
       to_finiteDimensional := inferInstance
     }
     NumberField.IsTotallyReal (TraceOneRat (signedPrimeParameter p)) := by
-  letI : Fact (∀ r : ℚ,
+  let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root hp (by omega)⟩
-  letI : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
-  letI : NumberField (TraceOneRat (signedPrimeParameter p)) := {
+  let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+  let : NumberField (TraceOneRat (signedPrimeParameter p)) := {
     to_charZero := charZero_of_injective_algebraMap (by
       intro q₁ q₂ hq
       have hre := congrArg QuadraticAlgebra.re hq
@@ -136,11 +136,11 @@ theorem traceOneRat_isTotallyReal_of_prime_mod_four_eq_one
 
 theorem traceOnePrimeReal_signature
     {p : ℕ} (hp : Nat.Prime p) (hmod : p % 4 = 1) :
-    letI : Fact (∀ r : ℚ,
+    let : Fact (∀ r : ℚ,
         r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root hp (by omega)⟩
-    letI : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
-    letI : NumberField (TraceOneRat (signedPrimeParameter p)) := {
+    let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+    let : NumberField (TraceOneRat (signedPrimeParameter p)) := {
       to_charZero := charZero_of_injective_algebraMap (by
         intro q₁ q₂ hq
         have hre := congrArg QuadraticAlgebra.re hq
@@ -154,11 +154,11 @@ theorem traceOnePrimeReal_signature
       NumberField.InfinitePlace.nrRealPlaces
           (TraceOneRat (signedPrimeParameter p)) = 2 ∧
       NumberField.Units.rank (TraceOneRat (signedPrimeParameter p)) = 1 := by
-  letI : Fact (∀ r : ℚ,
+  let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root hp (by omega)⟩
-  letI : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
-  letI : NumberField (TraceOneRat (signedPrimeParameter p)) := {
+  let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+  let : NumberField (TraceOneRat (signedPrimeParameter p)) := {
     to_charZero := charZero_of_injective_algebraMap (by
       intro q₁ q₂ hq
       have hre := congrArg QuadraticAlgebra.re hq
@@ -169,7 +169,7 @@ theorem traceOnePrimeReal_signature
   have htot : NumberField.IsTotallyReal
       (TraceOneRat (signedPrimeParameter p)) :=
     traceOneRat_isTotallyReal_of_prime_mod_four_eq_one hp hmod
-  letI : NumberField.IsTotallyReal
+  let : NumberField.IsTotallyReal
       (TraceOneRat (signedPrimeParameter p)) := htot
   have hfin : Module.finrank ℚ
       (TraceOneRat (signedPrimeParameter p)) = 2 := by
@@ -248,7 +248,7 @@ private theorem traceOneReal_ringOfIntegers_unit_sector_complete
     NumberField.Units.exist_unique_eq_mul_prod K u
   have hu' : u = (ζ : (NumberField.RingOfIntegers K)ˣ) *
       NumberField.Units.fundSystem K j ^ exponent j := by
-    letI : Unique (Fin (NumberField.Units.rank K)) :=
+    let : Unique (Fin (NumberField.Units.rank K)) :=
       { default := j
         uniq := by
           intro a
@@ -352,11 +352,11 @@ the explicit ring equivalence from the quadratic-field API.
 -/
 noncomputable def traceOnePrimeRealFinSectorSystem
     {p : ℕ} (hp : Nat.Prime p) (hmod : p % 4 = 1) :
-    letI : Fact (∀ r : ℚ,
+    let : Fact (∀ r : ℚ,
         r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root hp (by omega)⟩
-    letI : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
-    letI : NumberField (TraceOneRat (signedPrimeParameter p)) := {
+    let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+    let : NumberField (TraceOneRat (signedPrimeParameter p)) := {
       to_charZero := charZero_of_injective_algebraMap (by
         intro q₁ q₂ hq
         have hre := congrArg QuadraticAlgebra.re hq
@@ -366,11 +366,11 @@ noncomputable def traceOnePrimeRealFinSectorSystem
     }
     UnitPowerSectorSystem (TraceOneInt (signedPrimeParameter p)) p := by
   classical
-  letI : Fact (∀ r : ℚ,
+  let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root hp (by omega)⟩
-  letI : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
-  letI : NumberField (TraceOneRat (signedPrimeParameter p)) := {
+  let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+  let : NumberField (TraceOneRat (signedPrimeParameter p)) := {
     to_charZero := charZero_of_injective_algebraMap (by
       intro q₁ q₂ hq
       have hre := congrArg QuadraticAlgebra.re hq
@@ -378,7 +378,7 @@ noncomputable def traceOnePrimeRealFinSectorSystem
       exact hre)
     to_finiteDimensional := inferInstance
   }
-  letI : NumberField.IsTotallyReal
+  let : NumberField.IsTotallyReal
       (TraceOneRat (signedPrimeParameter p)) :=
     traceOneRat_isTotallyReal_of_prime_mod_four_eq_one hp hmod
   have hsignature := traceOnePrimeReal_signature hp hmod
@@ -422,11 +422,11 @@ noncomputable def traceOnePrimeRealFinSectorSystem
 /-- Conditional Phase-18 endpoint with the real finite unit sector system. -/
 theorem traceOnePrimeReal_exists_sector_mul_pow_of_span_eq_pow
     {p : ℕ} (hp : Nat.Prime p) (hmod : p % 4 = 1) :
-    letI : Fact (∀ r : ℚ,
+    let : Fact (∀ r : ℚ,
         r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root hp (by omega)⟩
-    letI : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
-    letI : NumberField (TraceOneRat (signedPrimeParameter p)) := {
+    let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+    let : NumberField (TraceOneRat (signedPrimeParameter p)) := {
       to_charZero := charZero_of_injective_algebraMap (by
         intro q₁ q₂ hq
         have hre := congrArg QuadraticAlgebra.re hq
@@ -434,9 +434,9 @@ theorem traceOnePrimeReal_exists_sector_mul_pow_of_span_eq_pow
         exact hre)
       to_finiteDimensional := inferInstance
     }
-    letI : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
+    let : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
       (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-    letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
+    let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
       traceOneRat_isDedekindDomain hp (by omega)
     ∀ {I : Ideal (TraceOneInt (signedPrimeParameter p))}
       {a : TraceOneInt (signedPrimeParameter p)},
@@ -447,11 +447,11 @@ theorem traceOnePrimeReal_exists_sector_mul_pow_of_span_eq_pow
         ∃ delta : TraceOneInt (signedPrimeParameter p),
         a = (traceOnePrimeRealFinSectorSystem hp hmod).rep i * delta ^ p := by
   classical
-  letI : Fact (∀ r : ℚ,
+  let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root hp (by omega)⟩
-  letI : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
-  letI : NumberField (TraceOneRat (signedPrimeParameter p)) := {
+  let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+  let : NumberField (TraceOneRat (signedPrimeParameter p)) := {
     to_charZero := charZero_of_injective_algebraMap (by
       intro q₁ q₂ hq
       have hre := congrArg QuadraticAlgebra.re hq
@@ -459,9 +459,9 @@ theorem traceOnePrimeReal_exists_sector_mul_pow_of_span_eq_pow
       exact hre)
     to_finiteDimensional := inferInstance
   }
-  letI : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
+  let : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-  letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
+  let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
     traceOneRat_isDedekindDomain hp (by omega)
   intro I a hI0 hfree hspan
   exact exists_sector_mul_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt
@@ -593,13 +593,13 @@ def traceOnePrimeImaginarySingletonSectorSystem
 /-- Conditional exact-power extraction for the imaginary branch. -/
 theorem traceOnePrimeImaginary_exists_eq_pow_of_span_eq_pow
     {p : ℕ} (hp : Nat.Prime p) (hp7 : 7 ≤ p) (hmod : p % 4 = 3) :
-    letI : Fact (∀ r : ℚ,
+    let : Fact (∀ r : ℚ,
         r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root hp (by omega)⟩
-    letI : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
-    letI : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
+    let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+    let : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
       (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-    letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
+    let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
       traceOneRat_isDedekindDomain hp (by omega)
     ∀ {I : Ideal (TraceOneInt (signedPrimeParameter p))}
       {a : TraceOneInt (signedPrimeParameter p)},
@@ -607,13 +607,13 @@ theorem traceOnePrimeImaginary_exists_eq_pow_of_span_eq_pow
       classGroupPTorsionFreeAt (TraceOneInt (signedPrimeParameter p)) p →
       Ideal.span ({a} : Set (TraceOneInt (signedPrimeParameter p))) = I ^ p →
       ∃ delta : TraceOneInt (signedPrimeParameter p), a = delta ^ p := by
-  letI : Fact (∀ r : ℚ,
+  let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter p : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root hp (by omega)⟩
-  letI : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
-  letI : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
+  let : Field (TraceOneRat (signedPrimeParameter p)) := inferInstance
+  let : IsDomain (TraceOneInt (signedPrimeParameter p)) :=
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-  letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
+  let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
     traceOneRat_isDedekindDomain hp (by omega)
   intro I a hI0 hfree hspan
   exact exists_eq_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt_of_unit_pow_surjective

@@ -97,7 +97,7 @@ private theorem prime_dvd_intCast_of_dvd_eisensteinAxis
       _ = -(q * k) := by rw [hk]
       _ = q * (-k) := by ring
   · exact
-      (hq.not_unit
+      (hq.not_isUnit
         (isUnit_of_dvd_unit hqunit
           (eisensteinAxisUnit_isUnit.pow 2))).elim
 
@@ -134,7 +134,7 @@ theorem linearSource_isCoprime_rotateEquiv
           convert dvd_mul_of_dvd_left hqseven (k : SevenRealCubicInt) using 1
           norm_num
         · exact
-            (hq.not_unit
+            (hq.not_isUnit
               (isUnit_of_dvd_unit hqalpha alpha_isUnit)).elim
       · exact hqb
     have hqa : q ∣ (a : SevenRealCubicInt) := by
@@ -146,7 +146,7 @@ theorem linearSource_isCoprime_rotateEquiv
         IsCoprime (a : SevenRealCubicInt)
           (b : SevenRealCubicInt) :=
       hab.map (Int.castRingHom SevenRealCubicInt)
-    exact hq.not_unit (hcop.isUnit_of_dvd' hqa hqb)
+    exact hq.not_isUnit (hcop.isUnit_of_dvd' hqa hqb)
 
 /-- The three cyclic conjugates of a primitive seven-loaded linear source are
 pairwise coprime. -/

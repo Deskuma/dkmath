@@ -51,7 +51,7 @@ theorem signedPrimeDiscriminant_mod_four
     rcases hodd with ⟨k, hk⟩
     omega
   rcases hcases with h | h
-  · rw [signedPrimeDiscriminant, if_pos h]
+  · rw [signedPrimeDiscriminant, ite_eq_left h]
     exact_mod_cast h
   · have hpmod : (p : ℤ) % 4 = 3 := by
       exact_mod_cast h
@@ -59,7 +59,7 @@ theorem signedPrimeDiscriminant_mod_four
       intro hdiv
       have hz : (p : ℤ) % 4 = 0 := Int.emod_eq_zero_of_dvd hdiv
       omega
-    rw [signedPrimeDiscriminant, if_neg (by omega), Int.neg_emod]
+    rw [signedPrimeDiscriminant, ite_eq_right (by omega), Int.neg_emod]
     simp [hpnot, hpmod]
 
 def signedPrimeParameter (p : ℕ) : ℤ :=

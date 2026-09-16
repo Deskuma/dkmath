@@ -63,11 +63,11 @@ example : signedPrimeParameter 13 = 3 := by
   norm_num [signedPrimeParameter, signedPrimeDiscriminant]
 
 example :
-    letI : Fact (∀ r : ℚ,
+    let : Fact (∀ r : ℚ,
         r ^ 2 ≠ (signedPrimeParameter 5 : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root (by norm_num) (by norm_num)⟩
-    letI : Field (TraceOneRat (signedPrimeParameter 5)) := inferInstance
-    letI : NumberField (TraceOneRat (signedPrimeParameter 5)) := {
+    let : Field (TraceOneRat (signedPrimeParameter 5)) := inferInstance
+    let : NumberField (TraceOneRat (signedPrimeParameter 5)) := {
       to_charZero := charZero_of_injective_algebraMap (by
         intro q₁ q₂ hq
         have hre := congrArg QuadraticAlgebra.re hq
@@ -85,11 +85,11 @@ example :
 
 noncomputable example :
     UnitPowerSectorSystem (TraceOneInt (signedPrimeParameter 5)) 5 := by
-  letI : Fact (∀ r : ℚ,
+  let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter 5 : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root (by norm_num) (by norm_num)⟩
-  letI : Field (TraceOneRat (signedPrimeParameter 5)) := inferInstance
-  letI : NumberField (TraceOneRat (signedPrimeParameter 5)) := {
+  let : Field (TraceOneRat (signedPrimeParameter 5)) := inferInstance
+  let : NumberField (TraceOneRat (signedPrimeParameter 5)) := {
     to_charZero := charZero_of_injective_algebraMap (by
       intro q₁ q₂ hq
       have hre := congrArg QuadraticAlgebra.re hq
@@ -101,11 +101,11 @@ noncomputable example :
 
 noncomputable example :
     UnitPowerSectorSystem (TraceOneInt (signedPrimeParameter 13)) 13 := by
-  letI : Fact (∀ r : ℚ,
+  let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter 13 : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root (by norm_num) (by norm_num)⟩
-  letI : Field (TraceOneRat (signedPrimeParameter 13)) := inferInstance
-  letI : NumberField (TraceOneRat (signedPrimeParameter 13)) := {
+  let : Field (TraceOneRat (signedPrimeParameter 13)) := inferInstance
+  let : NumberField (TraceOneRat (signedPrimeParameter 13)) := {
     to_charZero := charZero_of_injective_algebraMap (by
       intro q₁ q₂ hq
       have hre := congrArg QuadraticAlgebra.re hq

@@ -731,12 +731,19 @@ theorem composite_AKSCyclicCongruenceFails_four_one_one :
   intro h
   unfold aksQuotientX aksQuotientC aksQuotientMap AKSCyclicQuotient aksCyclicIdeal at h
   rw [← map_add, ← map_pow, ← map_pow, ← map_add] at h
-  rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem] at h
-  rw [Ideal.mem_span_singleton] at h
+  have hzero : Ideal.Quotient.mk (aksCyclicIdeal (ZMod 4) 1)
+      ((X + 1) ^ 4 - (X ^ 4 + 1)) = 0 := by
+    rw [map_sub]
+    exact sub_eq_zero.mpr h
+  have hmem := (Ideal.Quotient.eq_zero_iff_mem).mp hzero
+  have hmem' : (X + 1) ^ 4 - (X ^ 4 + 1) ∈
+      Ideal.span ({X ^ 1 - 1} : Set (ZMod 4)[X]) := by
+    simpa [aksCyclicIdeal] using hmem
+  rw [Ideal.mem_span_singleton] at hmem'
   have hroot :
       (((X + 1) ^ 4 - (X ^ 4 + 1) : (ZMod 4)[X]).IsRoot (1 : ZMod 4)) := by
     rw [← Polynomial.dvd_iff_isRoot]
-    simpa using h
+    simpa using hmem'
   rw [Polynomial.IsRoot.def] at hroot
   norm_num at hroot
   have hdiv : 4 ∣ 14 := (ZMod.natCast_eq_zero_iff 14 4).mp hroot
@@ -754,12 +761,19 @@ theorem composite_AKSCyclicFoldedCongruenceFails_four_one_one :
   intro h
   unfold aksQuotientX aksQuotientC aksQuotientMap AKSCyclicQuotient aksCyclicIdeal at h
   rw [← map_add, ← map_pow, ← map_pow, ← map_add] at h
-  rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem] at h
-  rw [Ideal.mem_span_singleton] at h
+  have hzero : Ideal.Quotient.mk (aksCyclicIdeal (ZMod 4) 1)
+      ((X + 1) ^ 4 - (X ^ (4 % 1) + 1)) = 0 := by
+    rw [map_sub]
+    exact sub_eq_zero.mpr h
+  have hmem := (Ideal.Quotient.eq_zero_iff_mem).mp hzero
+  have hmem' : (X + 1) ^ 4 - (X ^ (4 % 1) + 1) ∈
+      Ideal.span ({X ^ 1 - 1} : Set (ZMod 4)[X]) := by
+    simpa [aksCyclicIdeal] using hmem
+  rw [Ideal.mem_span_singleton] at hmem'
   have hroot :
       (((X + 1) ^ 4 - (X ^ (4 % 1) + 1) : (ZMod 4)[X]).IsRoot (1 : ZMod 4)) := by
     rw [← Polynomial.dvd_iff_isRoot]
-    simpa using h
+    simpa using hmem'
   rw [Polynomial.IsRoot.def] at hroot
   norm_num at hroot
   have hdiv : 4 ∣ 14 := (ZMod.natCast_eq_zero_iff 14 4).mp hroot

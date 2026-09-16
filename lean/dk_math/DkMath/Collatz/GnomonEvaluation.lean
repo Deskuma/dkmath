@@ -103,8 +103,14 @@ theorem square_succ_eq_square_add_oddGnomonLayer
 theorem sum_oddGnomonLayer_eq_square
     (n : ℕ) :
     (Finset.range n).sum OddGnomonLayer = n ^ 2 := by
-  simpa only [oddGnomonLayer_eq_oddGnomon] using
-    DkMath.Gnomon.sum_oddGnomon_eq_square n
+  induction n with
+  | zero =>
+      simp only [Finset.range_zero, Finset.sum_empty, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true,
+        zero_pow]
+  | succ n ih =>
+      rw [Finset.sum_range_succ, ih]
+      unfold OddGnomonLayer Gnomon.oddGnomon
+      ring_nf
 
 /--
 The classical odd-number sum form.
@@ -115,7 +121,8 @@ This alias is useful for callers that do not want the named
 theorem sum_odd_eq_square
     (n : ℕ) :
     (Finset.range n).sum (fun i => 2 * i + 1) = n ^ 2 := by
-  exact DkMath.Gnomon.sum_odd_eq_square n
+  convert sum_oddGnomonLayer_eq_square n using 1
+  rfl
 
 /--
 A shifted gnomon band from `P` of length `u`.

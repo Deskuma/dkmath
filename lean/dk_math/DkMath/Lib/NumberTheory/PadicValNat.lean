@@ -109,7 +109,7 @@ lemma padicValNat_le_iff_dvd {p n : ℕ} (hp : p.Prime) (hn : n ≠ 0) (k : ℕ)
 /-- The valuation of a nonzero power is the exponent times the valuation of its base. -/
 lemma padicValNat_pow {p a : ℕ} (hp : p.Prime) (d : ℕ) (_ha : a ≠ 0) :
     padicValNat p (a ^ d) = d * padicValNat p a := by
-  haveI : Fact p.Prime := ⟨hp⟩
+  have : Fact p.Prime := ⟨hp⟩
   exact padicValNat.pow a d
 
 /-- A power valuation identity using nonzeroness of the power as the input hypothesis. -/
@@ -151,7 +151,7 @@ theorem padicValNat_carrier_shape_of_mul_eq_prime
     padicValNat_pow hp p hd0
   have hmul : padicValNat p (carrier * residual) =
       padicValNat p carrier + padicValNat p residual := by
-    letI : Fact (Nat.Prime p) := ⟨hp⟩
+    let : Fact (Nat.Prime p) := ⟨hp⟩
     simpa using (padicValNat.mul (p := p) hc0 hr0)
   have hvalEq : p * padicValNat p distinguished =
       padicValNat p carrier + 1 := by

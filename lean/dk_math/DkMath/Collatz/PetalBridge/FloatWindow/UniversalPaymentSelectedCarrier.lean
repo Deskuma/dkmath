@@ -202,13 +202,13 @@ theorem endpointAccountingTerm_le_selectedPositivePressure_of_not_saturated
           exact hLthree)
     have hdrift := endpointAccountingTerm_eq_blockClaimCount_sub_capacityCount n k
     rw [canonicalBlockCapacityCount_eq_terminalValuation] at hdrift
-    rw [canonicalSelectedPositivePressureDepth, if_pos hv]
+    rw [canonicalSelectedPositivePressureDepth, ite_eq_left hv]
     rw [hpressure]
     change endpointAccountingTerm n k ≤ ((L - 1 : ℕ) : ℤ) - 1
     omega
   · have hvpos := one_le_canonicalBlockTerminalValuation n k
     have hv2 : 2 ≤ v := by omega
-    rw [canonicalSelectedPositivePressureDepth, if_neg hv]
+    rw [canonicalSelectedPositivePressureDepth, ite_eq_right hv]
     exact endpointAccountingTerm_le_blockPressure_pred_terminal hpos hv2
 
 /-- Saturation consumes exactly one unit beyond its selected depth-one pressure. -/
@@ -220,7 +220,7 @@ theorem CanonicalSaturatedBorderBlock.drift_eq_selectedPositivePressure_add_one
   have hp := h.pressure_eq_zero
   rw [h.terminalValuation_eq_one] at hp
   rw [h.2.2, canonicalSelectedPositivePressureDepth,
-    if_pos h.terminalValuation_eq_one, hp]
+    ite_eq_left h.terminalValuation_eq_one, hp]
   norm_num
 
 /-- Refined pointwise accounting using only positive pressure depths. -/
@@ -271,7 +271,7 @@ theorem selectedPositivePressureDepth_lt_length_of_pos_of_not_saturated
   have hvlt :=
     canonicalBlockTerminalValuation_lt_length_of_endpointAccountingTerm_pos hpos
   by_cases hv : v = 1
-  · rw [canonicalSelectedPositivePressureDepth, if_pos hv]
+  · rw [canonicalSelectedPositivePressureDepth, ite_eq_left hv]
     by_contra hL
     rw [hLen] at hL
     have hLtwo : L = 2 := by omega
@@ -281,7 +281,7 @@ theorem selectedPositivePressureDepth_lt_length_of_pos_of_not_saturated
     have hclaims : canonicalBlockClaimCount n k = L := by omega
     exact hnot (canonicalSaturatedBorderBlock_of_pos_of_claimCount_eq_length
       hpos hclaims)
-  · rw [canonicalSelectedPositivePressureDepth, if_neg hv]
+  · rw [canonicalSelectedPositivePressureDepth, ite_eq_right hv]
     rw [hLen]
     omega
 
@@ -316,7 +316,7 @@ theorem CanonicalSaturatedBorderBlock.selectedPressureCarrier_eq_empty
   apply Finset.card_eq_zero.mp
   unfold canonicalSelectedPressureCarrier
   rw [canonicalPaymentBlockContinuationFiber_card,
-    canonicalSelectedPositivePressureDepth, if_pos h.terminalValuation_eq_one]
+    canonicalSelectedPositivePressureDepth, ite_eq_left h.terminalValuation_eq_one]
   change canonicalBlockLength n k - 2 = 0
   rw [h.length_eq_two]
 

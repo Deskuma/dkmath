@@ -152,7 +152,7 @@ private theorem goldbachWindow_support_card_eq_indicator_add_excess
   by_cases hs : (goldbachObstructionSupportIn n t S).Nonempty
   · have hpos : 0 < (goldbachObstructionSupportIn n t S).card :=
       Finset.card_pos.mpr hs
-    rw [if_pos hs]
+    rw [ite_eq_left hs]
     change (goldbachObstructionSupportIn n t S).card =
       1 + ((goldbachObstructionSupportIn n t S).card - 1)
     omega

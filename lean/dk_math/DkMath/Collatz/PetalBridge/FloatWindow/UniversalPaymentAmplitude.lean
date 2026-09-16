@@ -704,7 +704,7 @@ prefix-pressure hypothesis.
 theorem sourcePressureMarginInt_zero (n : OddNat) (d : ℕ) :
     SourcePressureMarginInt n 0 d = 0 := by
   simp [SourcePressureMarginInt, orbitWindowContinuationSiblingMassPow2,
-    orbitWindowRetentionMassPow2]
+    orbitWindowRetentionMassPow2, orbitWindowResidueCountPow2]
 
 /-- Pressure at the start of block `q` is the contribution of blocks strictly
 before `q`. -/
@@ -1588,7 +1588,7 @@ theorem intToNat_endpointAccountingTerm_add_one_le_selectedPressureCarrier_card
         canonicalBlockTerminalValuation n k : ℕ) by omega)
   unfold canonicalSelectedPressureCarrier
   rw [canonicalPaymentBlockContinuationFiber_card]
-  rw [canonicalSelectedPositivePressureDepth, if_neg (by omega)]
+  rw [canonicalSelectedPositivePressureDepth, ite_eq_right (by omega)]
   rw [htoNat]
   change canonicalBlockClaimCount n k - canonicalBlockTerminalValuation n k + 1 ≤
     canonicalBlockLength n k -
@@ -2049,7 +2049,7 @@ theorem card_selectedDriftSpareCarrier_eq_claimHoles_card
       canonicalBlockLength n k - canonicalBlockTerminalValuation n k := by
     unfold canonicalSelectedPressureCarrier
     rw [canonicalPaymentBlockContinuationFiber_card,
-      canonicalSelectedPositivePressureDepth, if_neg (by omega)]
+      canonicalSelectedPositivePressureDepth, ite_eq_right (by omega)]
     change canonicalBlockLength n k -
       (canonicalBlockTerminalValuation n k - 1 + 1) =
         canonicalBlockLength n k - canonicalBlockTerminalValuation n k
@@ -2192,7 +2192,7 @@ theorem selectedPressureCarrier_eq_empty_iff_length_le_terminalValuation_of_zero
   rw [← Finset.card_eq_zero]
   unfold canonicalSelectedPressureCarrier
   rw [canonicalPaymentBlockContinuationFiber_card]
-  rw [canonicalSelectedPositivePressureDepth, if_neg (by omega)]
+  rw [canonicalSelectedPositivePressureDepth, ite_eq_right (by omega)]
   change canonicalBlockLength n k -
       (canonicalBlockTerminalValuation n k - 1 + 1) = 0 ↔
     canonicalBlockLength n k ≤ canonicalBlockTerminalValuation n k
@@ -3275,6 +3275,8 @@ theorem abstractSaturatedUnitEmbeddingLowerHalf_ne_demandEmbeddingUpperHalf
   have hval := congrArg Fin.val heq
   dsimp [abstractSaturatedUnitEmbeddingLowerHalf,
     abstractDyadicDemandEmbeddingUpperHalf] at hval
+  change i.val = 2 ^ (canonicalBlockLength n (k + 1) - 2) + j.val at hval
+  have hi : i.val < 2 := i.isLt
   omega
 
 /-! ## Unified local saturated-successor discharge

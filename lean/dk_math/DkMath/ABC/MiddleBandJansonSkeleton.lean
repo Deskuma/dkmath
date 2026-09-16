@@ -22,8 +22,9 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 -- -------------------------------------------------------
 
@@ -51,7 +52,7 @@ open MeasureTheory ProbabilityTheory
 theorem adjKBadCount_unfold {δ : ℝ} {k X : ℕ} (h : ¬ X ≤ k) :
   adjKBadCount δ k X = (@Finset.filter ℕ (fun n => BadPair δ X (n, n + k))
     (fun n => Classical.propDecidable (BadPair δ X (n, n + k))) (Finset.Icc 1 ((X - k) / 2))).card := by
-  simp [adjKBadCount, if_neg h]
+  simp [adjKBadCount, ite_eq_right h]
 
 
 /-- k-diagonal triple: (n, n+k, 2n+k)
@@ -472,7 +473,7 @@ theorem hoeffding_downward_indep01
     simp [phi, X, Finset.sum_sub_distrib]
   have sets_eq : {ω | t ≤ ∑ i, ((fun x => -x) ∘ phi i ∘ fun ω => indR (S i) ω) ω} = {ω | t ≤ ∑ i, - X i ω} := by
     ext ω
-    simp only [Set.mem_setOf_eq]
+    simp only [Set.mem_ofPred_eq]
     rw [sums_eq ω]
 
   -- Rewrite the RHS exponential first (needs sum_val and c_eq) and then apply the set equality

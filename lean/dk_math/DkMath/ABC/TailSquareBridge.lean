@@ -17,8 +17,9 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
+open Real Rat Filter
 open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 /-- TailBound γ for triple (a,b,c): twoTail c ≤ (rad (a * b)) ^ γ (in ℝ). -/
 def TailBound (γ : ℝ) (a b c : ℕ) : Prop :=
@@ -55,7 +56,7 @@ lemma oddPart_le_rad (n : ℕ) : (oddPart n : ℝ) ≤ (rad n : ℝ) := by
       simp
   have prod_le_nat :
       Finset.prod S (fun p => p ^ (n.factorization p % 2)) ≤ Finset.prod S fun p => p :=
-    Finset.prod_le_prod' fun p hp => pointwise_nat p hp
+    Finset.prod_le_prod fun p hp => pointwise_nat p hp
   exact_mod_cast prod_le_nat
 
 lemma sqTail_le_sqPart (n : ℕ) : (sqTail n : ℝ) ≤ (sqPart n : ℝ) := by

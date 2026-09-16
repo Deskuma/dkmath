@@ -85,7 +85,7 @@ theorem paritySafeCanonicalResidualTripleIncidence_shell_packet
   rw [hsupport] at hqoff hsoff
   have hpmin : p = (paritySafeActiveSupport n r).min' hnonempty := by
     dsimp [p, paritySafeCanonicalSupportPrime]
-    rw [dif_pos hnonempty]
+    rw [dite_eq_left hnonempty]
   have hpqle : p ≤ q := by
     rw [hpmin]
     exact Finset.min'_le _ _ hqoff

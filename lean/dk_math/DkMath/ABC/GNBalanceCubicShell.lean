@@ -48,13 +48,13 @@ theorem repeatedPrimePowerComplement_factorization
   · have hq_one : 1 ≤ n.factorization q :=
       one_le_factorization_of_mem_support hq
     by_cases htwo : 2 ≤ n.factorization q
-    · rw [if_pos ⟨hq, htwo⟩, if_neg (by omega)]
+    · rw [ite_eq_left ⟨hq, htwo⟩, ite_eq_right (by omega)]
       omega
     · have hone : n.factorization q = 1 := by omega
       have hnot : ¬(q ∈ n.factorization.support ∧
           2 ≤ n.factorization q) := by
         exact fun h => htwo h.2
-      rw [if_neg hnot, if_pos ⟨hq, hone⟩]
+      rw [ite_eq_right hnot, ite_eq_left ⟨hq, hone⟩]
       simp [hone]
   · have hzero : n.factorization q = 0 := by
       by_contra hne
@@ -65,7 +65,7 @@ theorem repeatedPrimePowerComplement_factorization
     have hnot_one : ¬(q ∈ n.factorization.support ∧
         n.factorization q = 1) := by
       exact fun h => hq h.1
-    rw [if_neg hnot_two, if_neg hnot_one, hzero]
+    rw [ite_eq_right hnot_two, ite_eq_right hnot_one, hzero]
 
 theorem twoTail_eq_overDepthProduct (n : ℕ) :
     twoTail n =
@@ -245,8 +245,8 @@ private theorem GNNonExceptionalPart_eq_GN_of_not_dvd_three
   intro q
   rw [GNNonExceptionalPart_factorization]
   by_cases hq : q ∈ (GN 3 a 1).factorization.support
-  · rw [if_pos (by simpa [hsupport] using hq)]
-  · rw [if_neg (by simpa [hsupport] using hq)]
+  · rw [ite_eq_left (by simpa [hsupport] using hq)]
+  · rw [ite_eq_right (by simpa [hsupport] using hq)]
     by_contra hne
     have hfac : (GN 3 a 1).factorization q ≠ 0 := by
       intro hzero
@@ -297,7 +297,7 @@ theorem GNExceptionalSupportProduct_three_one_eq_if
         have hqeq : q = 3 := by simpa using hq
         subst q
         exact Finset.mem_filter.mpr ⟨hmem3, by simp⟩
-    rw [GNExceptionalSupportProduct, hE, if_pos h3]
+    rw [GNExceptionalSupportProduct, hE, ite_eq_left h3]
     rfl
   · have hE : GNExceptionalSupport 3 a 1 = ∅ := by
       ext q
@@ -310,7 +310,7 @@ theorem GNExceptionalSupportProduct_three_one_eq_if
         subst q
         exact False.elim (h3 (mem_support_factorization_iff.mp hq'.1).2.2)
       · simp
-    rw [GNExceptionalSupportProduct, hE, if_neg h3]
+    rw [GNExceptionalSupportProduct, hE, ite_eq_right h3]
     rfl
 
 theorem GN_cubic_eq_exceptional_mul_nonExceptionalPart
@@ -353,9 +353,9 @@ theorem GN_cubic_eq_exceptional_mul_nonExceptionalPart
       simpa only [hqeq] using (mem_support_factorization_iff.mp hq'.1).2.2
     subst q
     have hv := GN_cubic_three_factorization_eq_one_of_dvd h3
-    rw [if_pos hqE, if_neg hqN, hv]
+    rw [ite_eq_left hqE, ite_eq_right hqN, hv]
   · by_cases hqN : q ∈ GNNonExceptionalSupport 3 a 1
-    · rw [if_neg hqE, if_pos hqN]
+    · rw [ite_eq_right hqE, ite_eq_left hqN]
       simp only [zero_add]
     · have hqF : q ∉ (GN 3 a 1).factorization.support := by
         intro hqF
@@ -369,7 +369,7 @@ theorem GN_cubic_eq_exceptional_mul_nonExceptionalPart
       have hzero : (GN 3 a 1).factorization q = 0 := by
         by_contra hne
         exact hqF (Finsupp.mem_support_iff.mpr hne)
-      rw [if_neg hqE, if_neg hqN, hzero]
+      rw [ite_eq_right hqE, ite_eq_right hqN, hzero]
 
 theorem GNExcessCubicComplement_eq_exceptional_mul_nonExceptionalSingleLayer
     (a : ℕ) :
@@ -437,7 +437,7 @@ theorem twoTail_GN_cubic_eq_twoTail_nonExceptionalPart
       have hqS : q ∈ GNNonExceptionalSupport 3 a 1 := by
         rw [← GNNonExceptionalPart_factorization_support]
         exact hq
-      rw [GNNonExceptionalPart_factorization, if_pos hqS]
+      rw [GNNonExceptionalPart_factorization, ite_eq_left hqS]
 
 /-! ## The unconditional full-shell balance and gauge form -/
 
@@ -475,7 +475,7 @@ theorem GNChannelBalance_cubic_eq_log_complement_sub_log_twoTail_recovered
       Real.log (GNExcessCubicComplement a : ℝ) -
         Real.log (twoTail (GN 3 a 1) : ℝ) := by
   rw [GNChannelBalance_cubic_eq_log_fullComplement_sub_log_twoTail_sub_log_exceptional,
-    GNExceptionalSupportProduct_three_one_eq_if, if_neg h3]
+    GNExceptionalSupportProduct_three_one_eq_if, ite_eq_right h3]
   norm_num
 
 theorem GNChannelBalance_cubic_eq_fullShell_sub_radLog_add_gaugeSlack

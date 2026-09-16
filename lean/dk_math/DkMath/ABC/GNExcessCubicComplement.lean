@@ -74,13 +74,13 @@ theorem GNNonExceptionalRepeatedPart_three_one_eq_repeatedPrimePowerPart
     repeatedPrimePowerPart_factorization]
   by_cases hs : q ∈ GNNonExceptionalSupport 3 a 1
   · rw [GNNonExceptionalPart_factorization_support,
-      GNNonExceptionalPart_factorization, if_pos hs]
+      GNNonExceptionalPart_factorization, ite_eq_left hs]
     have hq := (Finset.mem_filter.mp hs).1
     simp only [hs, hq, true_and]
   · have hv : ¬ 2 ≤ (GN 3 a 1).factorization q := fun h => hs (hdepth h)
     rw [GNNonExceptionalPart_factorization_support,
-      GNNonExceptionalPart_factorization, if_neg hs]
-    simp only [hs, hv, false_and, and_false, if_false]
+      GNNonExceptionalPart_factorization, ite_eq_right hs]
+    simp only [hs, hv, false_and, and_false, ite_false]
 
 /-- The full repeated prime-power part, including odd exponents, is the
 factor removed by this complement.  It is not the parity squarefree kernel. -/
@@ -113,7 +113,7 @@ theorem squarefree_repeatedPrimePowerComplement {n : ℕ} (hn : n ≠ 0) :
   by_cases hv : 2 ≤ n.factorization q
   · have hq : q ∈ n.factorization.support :=
       Finsupp.mem_support_iff.mpr (by omega)
-    rw [if_pos ⟨hq, hv⟩]
+    rw [ite_eq_left ⟨hq, hv⟩]
     omega
   · split_ifs <;> omega
 
@@ -141,7 +141,7 @@ theorem coprime_repeatedPrimePowerPart_complement {n : ℕ} (hn : n ≠ 0) :
   have hvS := (hq.pow_dvd_iff_le_factorization hS).mp
     (by simpa using hqS : q ^ 1 ∣ repeatedPrimePowerComplement n)
   rw [hfac, repeatedPrimePowerPart_factorization,
-    if_pos hcond, Nat.sub_self] at hvS
+    ite_eq_left hcond, Nat.sub_self] at hvS
   omega
 
 /-! ## Canonical cubic complement -/

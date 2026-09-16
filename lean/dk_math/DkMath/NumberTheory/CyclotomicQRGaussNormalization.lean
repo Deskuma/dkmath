@@ -26,7 +26,7 @@ noncomputable section
 private def quadraticAddChar
     {L : Type*} [Field L] {p : ℕ} [Fact p.Prime]
     (ζ : L) (hζ : IsPrimitiveRoot ζ p) : AddChar (ZMod p) L := by
-  letI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   exact AddChar.zmodChar p hζ.pow_eq_one
 
 private def quadraticCharL
@@ -74,7 +74,7 @@ theorem quadraticGauss_sq
     (hp2 : p ≠ 2) (ζ : L) (hζ : IsPrimitiveRoot ζ p) :
     quadraticGauss ζ hζ ^ 2 =
       algebraMap ℤ L (signedPrimeDiscriminant p) := by
-  letI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   have hchar : ringChar (ZMod p) ≠ 2 := by
     rw [ZMod.ringChar_zmod_n]
     exact hp2
@@ -165,7 +165,7 @@ private theorem quadraticAddChar_map
     (hσζ : σ ζ = ζ ^ (ut : ZMod p).val) (a : ZMod p) :
     σ (quadraticAddChar ζ hζ a) =
       (quadraticAddChar ζ hζ).mulShift (ut : ZMod p) a := by
-  letI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   rw [quadraticAddChar, AddChar.zmodChar_apply hζ.pow_eq_one, map_pow,
     hσζ, AddChar.mulShift_apply,
     AddChar.zmodChar_apply hζ.pow_eq_one]
@@ -180,7 +180,7 @@ theorem map_quadraticGauss_of_power
     σ (quadraticGauss ζ hζ) =
       algebraMap ℤ L (quadraticChar (ZMod p) (ut : ZMod p)) *
         quadraticGauss ζ hζ := by
-  letI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   let χL : MulChar (ZMod p) L := quadraticCharL (L := L) (p := p)
   let ψ : AddChar (ZMod p) L := quadraticAddChar ζ hζ
   have hquad : MulChar.IsQuadratic χL :=
@@ -255,7 +255,7 @@ private theorem coeff_Dpoly_map_of_power
     σ (MvPolynomial.coeff d (Dpoly (p := p) ζ)) =
       algebraMap ℤ L (quadraticChar (ZMod p) (ut : ZMod p)) *
         MvPolynomial.coeff d (Dpoly (p := p) ζ) := by
-  letI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   by_cases hsq : IsSquare (ut : ZMod p)
   · have hpoly := map_Dpoly_of_square ζ hζ (ut : ZMod p)
       σ.toRingEquiv hut0 hsq hσζ
@@ -297,7 +297,7 @@ private theorem coeff_Dpoly_div_quadraticGauss_fixed
       quadraticGauss ζ hζ) =
       MvPolynomial.coeff d (Dpoly (p := p) ζ) /
         quadraticGauss ζ hζ := by
-  letI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   obtain ⟨ut, hut0, hσζ⟩ := cyclotomicAut_power_spec ζ hζ σ
   let s : L := algebraMap ℤ L (quadraticChar (ZMod p) (ut : ZMod p))
   have hcoeff := coeff_Dpoly_map_of_power ζ hζ σ ut hut0 hσζ d
@@ -321,8 +321,8 @@ theorem coeff_Dpoly_eq_gauss_mul_rat
     ∃ q : ℚ,
       MvPolynomial.coeff d (Dpoly (p := p) ζ) =
         algebraMap ℚ L q * quadraticGauss ζ hζ := by
-  letI : IsGalois ℚ L := IsCyclotomicExtension.isGalois {p} ℚ L
-  letI : FiniteDimensional ℚ L :=
+  let : IsGalois ℚ L := IsCyclotomicExtension.isGalois {p} ℚ L
+  let : FiniteDimensional ℚ L :=
     IsCyclotomicExtension.finiteDimensional {p} ℚ L
   have hrange := (IsGalois.mem_range_algebraMap_iff_fixed
     (MvPolynomial.coeff d (Dpoly (p := p) ζ) / quadraticGauss ζ hζ)).2

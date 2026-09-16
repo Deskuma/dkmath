@@ -141,13 +141,17 @@ theorem pascalRiemannXiNegLogDeriv_eq_zeta_add_archimedean_add_elementary
       logDeriv (fun t : ℂ => t) s +
         logDeriv (fun t : ℂ => 1 - t) s +
         logDeriv riemannZeta s + logDeriv Complex.Gammaℝ s := by
+    change logDeriv ((fun t : ℂ => t * (1 - t)) *
+        (fun t : ℂ => riemannZeta t * Complex.Gammaℝ t)) s = _
     rw [logDeriv_mul (f := fun t : ℂ => t * (1 - t))
       (g := fun t : ℂ => riemannZeta t * Complex.Gammaℝ t) s
       (mul_ne_zero hs0 (sub_ne_zero.mpr (Ne.symm hs1)))
-      (mul_ne_zero hzeta hGamma) (hsf.mul h1sf) (hzf.mul hgf),
-      logDeriv_mul (f := fun t : ℂ => t) (g := fun t : ℂ => 1 - t) s
-        hs0 (sub_ne_zero.mpr (Ne.symm hs1)) hsf h1sf,
-      logDeriv_mul (f := riemannZeta) (g := Complex.Gammaℝ) s
+      (mul_ne_zero hzeta hGamma) (hsf.mul h1sf) (hzf.mul hgf)]
+    change logDeriv ((fun t : ℂ => t) * (fun t : ℂ => 1 - t)) s + _ = _
+    rw [logDeriv_mul (f := fun t : ℂ => t) (g := fun t : ℂ => 1 - t) s
+        hs0 (sub_ne_zero.mpr (Ne.symm hs1)) hsf h1sf]
+    change _ + _ + logDeriv (riemannZeta * Complex.Gammaℝ) s = _
+    rw [logDeriv_mul (f := riemannZeta) (g := Complex.Gammaℝ) s
         hzeta hGamma hzf hgf,
       logDeriv_one_sub hs1]
     ac_rfl

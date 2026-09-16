@@ -77,7 +77,7 @@ theorem prime_packet_coordinate_isCoprime
   rw [Int.isCoprime_iff_gcd_eq_one]
   by_contra hne
   obtain ⟨q, hq, hqgcd⟩ := Nat.exists_prime_and_dvd hne
-  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  let : Fact (Nat.Prime q) := ⟨hq⟩
   have hqgcdInt : (q : ℤ) ∣
       (Int.gcd
         (MvPolynomial.eval ![(g + u : ℤ), (u : ℤ)] P.AZ)

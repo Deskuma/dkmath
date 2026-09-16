@@ -25,18 +25,18 @@ private abbrev probeField (p : ℕ) := CyclotomicField p ℚ
 
 private instance probeField_isCyclotomicExtension (p : ℕ) [Fact p.Prime] :
     IsCyclotomicExtension {p} ℚ (probeField p) := by
-  letI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
-  letI : NeZero (p : ℚ) := ⟨by
+  let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  let : NeZero (p : ℚ) := ⟨by
     exact_mod_cast (Fact.out : Nat.Prime p).ne_zero⟩
   exact CyclotomicField.isCyclotomicExtension p ℚ
 
 private def probeZeta (p : ℕ) [Fact p.Prime] : probeField p := by
-  letI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   exact IsCyclotomicExtension.zeta p ℚ (probeField p)
 
 private theorem probeZeta_isPrimitiveRoot (p : ℕ) [Fact p.Prime] :
     IsPrimitiveRoot (probeZeta p) p := by
-  letI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   exact IsCyclotomicExtension.zeta_spec p ℚ (probeField p)
 
 private instance factPrime3 : Fact (Nat.Prime 3) := ⟨by norm_num⟩

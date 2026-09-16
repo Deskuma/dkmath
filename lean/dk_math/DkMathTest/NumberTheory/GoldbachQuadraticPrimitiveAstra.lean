@@ -340,7 +340,7 @@ theorem oriented_modEq {n p q u v : ℕ} (hc : Nat.Coprime p q)
 theorem oriented_crt (n p q : ℕ) (hp : p ≠ 0) (hq : q ≠ 0)
     (hc : Nat.Coprime p q) :
     ∃! u : ℕ, u < p * q ∧ orientedResidue n p q u := by
-  letI : NeZero q := ⟨hq⟩
+  let : NeZero q := ⟨hq⟩
   let a := Nat.chineseRemainder hc n (-(n : ZMod q)).val
   have ha : orientedResidue n p q a.val := by
     constructor
@@ -516,9 +516,9 @@ theorem pair_iff_normalized_capacity (n : ℕ) :
   rw [goldbachPairAt_iff_survivors_nonempty, ← Finset.card_pos, survivor_card_exact]
   have hn := normalized_conservation n
   by_cases hp : Nat.Prime n
-  · rw [if_pos hp]
+  · rw [ite_eq_left hp]
     exact ⟨fun _ => Or.inl hp, fun _ => by omega⟩
-  · rw [if_neg hp, Nat.add_zero, or_iff_right hp]
+  · rw [ite_eq_right hp, Nat.add_zero, or_iff_right hp]
     omega
 
 /-- Exact universal equivalence classifies the normalized criterion as a

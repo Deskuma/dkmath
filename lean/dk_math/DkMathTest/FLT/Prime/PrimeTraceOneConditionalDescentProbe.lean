@@ -26,18 +26,18 @@ private abbrev cycloField (p : ℕ) := CyclotomicField p ℚ
 
 private instance cycloField_isCyclotomicExtension (p : ℕ) [Fact p.Prime] :
     IsCyclotomicExtension {p} ℚ (cycloField p) := by
-  letI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
-  letI : NeZero (p : ℚ) := ⟨by
+  let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  let : NeZero (p : ℚ) := ⟨by
     exact_mod_cast (Fact.out : Nat.Prime p).ne_zero⟩
   exact CyclotomicField.isCyclotomicExtension p ℚ
 
 private def cycloZeta (p : ℕ) [Fact p.Prime] : cycloField p := by
-  letI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   exact IsCyclotomicExtension.zeta p ℚ (cycloField p)
 
 private theorem cycloZeta_isPrimitiveRoot (p : ℕ) [Fact p.Prime] :
     IsPrimitiveRoot (cycloZeta p) p := by
-  letI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   exact IsCyclotomicExtension.zeta_spec p ℚ (cycloField p)
 
 private instance factPrime3 : Fact (Nat.Prime 3) := ⟨by norm_num⟩
@@ -61,24 +61,24 @@ example {x y z : ℕ} (q : SevenQuadraticResidualPacket x y z) :
 
 example {g u x : ℕ}
     (P0 : DkMath.FLT.Prime.PrimeAdicFactorPacket 7 g u x) :
-    letI : Fact (∀ r : ℚ,
+    let : Fact (∀ r : ℚ,
         r ^ 2 ≠ (signedPrimeParameter 7 : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root (by norm_num) (by norm_num)⟩
-    letI : Field (TraceOneRat (signedPrimeParameter 7)) :=
+    let : Field (TraceOneRat (signedPrimeParameter 7)) :=
       traceOneRatField (by norm_num) (by norm_num)
-    letI : IsDomain (TraceOneInt (signedPrimeParameter 7)) :=
+    let : IsDomain (TraceOneInt (signedPrimeParameter 7)) :=
       (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-    letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter 7)) :=
+    let : IsDedekindDomain (TraceOneInt (signedPrimeParameter 7)) :=
       traceOneRat_isDedekindDomain (by norm_num) (by norm_num)
     classGroupPTorsionFreeAt (TraceOneInt (signedPrimeParameter 7)) 7 → True := by
-  letI : Fact (∀ r : ℚ,
+  let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter 7 : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root (by norm_num) (by norm_num)⟩
-  letI : Field (TraceOneRat (signedPrimeParameter 7)) :=
+  let : Field (TraceOneRat (signedPrimeParameter 7)) :=
     traceOneRatField (by norm_num) (by norm_num)
-  letI : IsDomain (TraceOneInt (signedPrimeParameter 7)) :=
+  let : IsDomain (TraceOneInt (signedPrimeParameter 7)) :=
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-  letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter 7)) :=
+  let : IsDedekindDomain (TraceOneInt (signedPrimeParameter 7)) :=
     traceOneRat_isDedekindDomain (by norm_num) (by norm_num)
   intro hfree
   obtain ⟨P⟩ := exists_prime_traceOne_coordinate_packet
@@ -92,24 +92,24 @@ example {g u x : ℕ}
 
 example {g u x : ℕ}
     (P0 : DkMath.FLT.Prime.PrimeAdicFactorPacket 11 g u x) :
-    letI : Fact (∀ r : ℚ,
+    let : Fact (∀ r : ℚ,
         r ^ 2 ≠ (signedPrimeParameter 11 : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root (by norm_num) (by norm_num)⟩
-    letI : Field (TraceOneRat (signedPrimeParameter 11)) :=
+    let : Field (TraceOneRat (signedPrimeParameter 11)) :=
       traceOneRatField (by norm_num) (by norm_num)
-    letI : IsDomain (TraceOneInt (signedPrimeParameter 11)) :=
+    let : IsDomain (TraceOneInt (signedPrimeParameter 11)) :=
       (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-    letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter 11)) :=
+    let : IsDedekindDomain (TraceOneInt (signedPrimeParameter 11)) :=
       traceOneRat_isDedekindDomain (by norm_num) (by norm_num)
     classGroupPTorsionFreeAt (TraceOneInt (signedPrimeParameter 11)) 11 → True := by
-  letI : Fact (∀ r : ℚ,
+  let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter 11 : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root (by norm_num) (by norm_num)⟩
-  letI : Field (TraceOneRat (signedPrimeParameter 11)) :=
+  let : Field (TraceOneRat (signedPrimeParameter 11)) :=
     traceOneRatField (by norm_num) (by norm_num)
-  letI : IsDomain (TraceOneInt (signedPrimeParameter 11)) :=
+  let : IsDomain (TraceOneInt (signedPrimeParameter 11)) :=
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-  letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter 11)) :=
+  let : IsDedekindDomain (TraceOneInt (signedPrimeParameter 11)) :=
     traceOneRat_isDedekindDomain (by norm_num) (by norm_num)
   intro hfree
   obtain ⟨P⟩ := exists_prime_traceOne_coordinate_packet
@@ -124,38 +124,38 @@ example {g u x : ℕ}
 /-! The real p=5 and p=13 endpoints retain their finite sector. -/
 example {g u x : ℕ}
     (P0 : DkMath.FLT.Prime.PrimeAdicFactorPacket 5 g u x) :
-    letI : Fact (∀ r : ℚ,
+    let : Fact (∀ r : ℚ,
         r ^ 2 ≠ (signedPrimeParameter 5 : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root (by norm_num) (by norm_num)⟩
-    letI : Field (TraceOneRat (signedPrimeParameter 5)) :=
+    let : Field (TraceOneRat (signedPrimeParameter 5)) :=
       traceOneRatField (by norm_num) (by norm_num)
-    letI : NumberField (TraceOneRat (signedPrimeParameter 5)) := {
+    let : NumberField (TraceOneRat (signedPrimeParameter 5)) := {
       to_charZero := charZero_of_injective_algebraMap (by
         intro q₁ q₂ hq
         have hre := congrArg QuadraticAlgebra.re hq
         change q₁ = q₂ at hre
         exact hre)
       to_finiteDimensional := inferInstance }
-    letI : IsDomain (TraceOneInt (signedPrimeParameter 5)) :=
+    let : IsDomain (TraceOneInt (signedPrimeParameter 5)) :=
       (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-    letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter 5)) :=
+    let : IsDedekindDomain (TraceOneInt (signedPrimeParameter 5)) :=
       traceOneRat_isDedekindDomain (by norm_num) (by norm_num)
     classGroupPTorsionFreeAt (TraceOneInt (signedPrimeParameter 5)) 5 → True := by
-  letI : Fact (∀ r : ℚ,
+  let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter 5 : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root (by norm_num) (by norm_num)⟩
-  letI : Field (TraceOneRat (signedPrimeParameter 5)) :=
+  let : Field (TraceOneRat (signedPrimeParameter 5)) :=
     traceOneRatField (by norm_num) (by norm_num)
-  letI : NumberField (TraceOneRat (signedPrimeParameter 5)) := {
+  let : NumberField (TraceOneRat (signedPrimeParameter 5)) := {
     to_charZero := charZero_of_injective_algebraMap (by
       intro q₁ q₂ hq
       have hre := congrArg QuadraticAlgebra.re hq
       change q₁ = q₂ at hre
       exact hre)
     to_finiteDimensional := inferInstance }
-  letI : IsDomain (TraceOneInt (signedPrimeParameter 5)) :=
+  let : IsDomain (TraceOneInt (signedPrimeParameter 5)) :=
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-  letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter 5)) :=
+  let : IsDedekindDomain (TraceOneInt (signedPrimeParameter 5)) :=
     traceOneRat_isDedekindDomain (by norm_num) (by norm_num)
   intro hfree
   obtain ⟨P⟩ := exists_prime_traceOne_coordinate_packet
@@ -169,38 +169,38 @@ example {g u x : ℕ}
 
 example {g u x : ℕ}
     (P0 : DkMath.FLT.Prime.PrimeAdicFactorPacket 13 g u x) :
-    letI : Fact (∀ r : ℚ,
+    let : Fact (∀ r : ℚ,
         r ^ 2 ≠ (signedPrimeParameter 13 : ℚ) + 1 * r) :=
       ⟨traceOneRat_no_rational_root (by norm_num) (by norm_num)⟩
-    letI : Field (TraceOneRat (signedPrimeParameter 13)) :=
+    let : Field (TraceOneRat (signedPrimeParameter 13)) :=
       traceOneRatField (by norm_num) (by norm_num)
-    letI : NumberField (TraceOneRat (signedPrimeParameter 13)) := {
+    let : NumberField (TraceOneRat (signedPrimeParameter 13)) := {
       to_charZero := charZero_of_injective_algebraMap (by
         intro q₁ q₂ hq
         have hre := congrArg QuadraticAlgebra.re hq
         change q₁ = q₂ at hre
         exact hre)
       to_finiteDimensional := inferInstance }
-    letI : IsDomain (TraceOneInt (signedPrimeParameter 13)) :=
+    let : IsDomain (TraceOneInt (signedPrimeParameter 13)) :=
       (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-    letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter 13)) :=
+    let : IsDedekindDomain (TraceOneInt (signedPrimeParameter 13)) :=
       traceOneRat_isDedekindDomain (by norm_num) (by norm_num)
     classGroupPTorsionFreeAt (TraceOneInt (signedPrimeParameter 13)) 13 → True := by
-  letI : Fact (∀ r : ℚ,
+  let : Fact (∀ r : ℚ,
       r ^ 2 ≠ (signedPrimeParameter 13 : ℚ) + 1 * r) :=
     ⟨traceOneRat_no_rational_root (by norm_num) (by norm_num)⟩
-  letI : Field (TraceOneRat (signedPrimeParameter 13)) :=
+  let : Field (TraceOneRat (signedPrimeParameter 13)) :=
     traceOneRatField (by norm_num) (by norm_num)
-  letI : NumberField (TraceOneRat (signedPrimeParameter 13)) := {
+  let : NumberField (TraceOneRat (signedPrimeParameter 13)) := {
     to_charZero := charZero_of_injective_algebraMap (by
       intro q₁ q₂ hq
       have hre := congrArg QuadraticAlgebra.re hq
       change q₁ = q₂ at hre
       exact hre)
     to_finiteDimensional := inferInstance }
-  letI : IsDomain (TraceOneInt (signedPrimeParameter 13)) :=
+  let : IsDomain (TraceOneInt (signedPrimeParameter 13)) :=
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
-  letI : IsDedekindDomain (TraceOneInt (signedPrimeParameter 13)) :=
+  let : IsDedekindDomain (TraceOneInt (signedPrimeParameter 13)) :=
     traceOneRat_isDedekindDomain (by norm_num) (by norm_num)
   intro hfree
   obtain ⟨P⟩ := exists_prime_traceOne_coordinate_packet

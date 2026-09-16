@@ -79,7 +79,7 @@ theorem padicValNat_GN_three_eq_three_mul_padicValNat_of_packet
     (hEq : a ^ 3 + b ^ 3 = c ^ 3) :
     padicValNat q (DkMath.CosmicFormulaBinom.GN 3 (c - b) b) =
       3 * padicValNat q a := by
-  letI : Fact (Nat.Prime q) := ⟨h.hq⟩
+  let : Fact (Nat.Prime q) := ⟨h.hq⟩
   have htransport := padicValNat_cubic_diff_eq_GN_of_packet h ha hEq
   have hsub : c ^ 3 - b ^ 3 = a ^ 3 := cube_sub_eq_of_add_eq hEq
   calc
@@ -125,7 +125,7 @@ theorem cube_dvd_GN_of_primitiveCubicLiftPacket
     {a b c q : ℕ}
     (h : PrimitiveCubicLiftPacket a b c q) :
     q ^ 3 ∣ DkMath.CosmicFormulaBinom.GN 3 (c - b) b := by
-  letI : Fact (Nat.Prime q) := ⟨h.hq⟩
+  let : Fact (Nat.Prime q) := ⟨h.hq⟩
   exact
     (@padicValNat_dvd_iff_le q (Fact.mk h.hq)
       (DkMath.CosmicFormulaBinom.GN 3 (c - b) b) 3

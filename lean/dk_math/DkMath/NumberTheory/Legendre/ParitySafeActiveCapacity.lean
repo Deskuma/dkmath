@@ -315,7 +315,7 @@ private theorem paritySafePacketChoice_mem_of_odd_anchor
     (hr : r ∈ squareAnchorCoprimeBaseOffsets n) :
     paritySafePacketChoice n r ∈ squareAnchorOddPointCoprimeOffsets n := by
   by_cases hodd : Odd (n ^ 2 + r)
-  · rw [paritySafePacketChoice, if_pos hodd]
+  · rw [paritySafePacketChoice, ite_eq_left hodd]
     exact mem_squareAnchorOddPointCoprimeOffsets.mpr
       ⟨mem_squareAnchorCoprimeBaseOffsets_mem_coprimeOffsets hr, hodd⟩
   · have heven : Even (n ^ 2 + r) := Nat.not_odd_iff_even.mp hodd
@@ -324,7 +324,7 @@ private theorem paritySafePacketChoice_mem_of_odd_anchor
       have heq : n ^ 2 + (n + r) = (n ^ 2 + r) + n := by omega
       rw [heq]
       exact hsum
-    rw [paritySafePacketChoice, if_neg hodd]
+    rw [paritySafePacketChoice, ite_eq_right hodd]
     exact mem_squareAnchorOddPointCoprimeOffsets.mpr
       ⟨mem_squareAnchorCoprimeBaseOffsets_shift_mem_coprimeOffsets hr, hshiftodd⟩
 

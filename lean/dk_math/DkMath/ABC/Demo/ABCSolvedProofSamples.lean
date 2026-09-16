@@ -1432,7 +1432,7 @@ lemma union_bound_chernoff_pow'
     -- Extract properties from membership in the filtered set
     simp only [Finset.mem_filter, Finset.mem_range] at hp
     have ⟨hp_in, ⟨hpPrime, hp3⟩⟩ := hp
-    haveI : Fact p.Prime := ⟨hpPrime⟩
+    have : Fact p.Prime := ⟨hpPrime⟩
     have hαpos : 0 < α := by
       have : 1 < (3:ℝ) := by norm_num
       exact (div_pos (Real.log_pos (by norm_num)) (Real.log_pos this))
@@ -1472,7 +1472,7 @@ lemma bad_set_density_bound_pv
   -- to other uses of `decidable_Bad_ε γ_values` in this file. This avoids mismatches
   -- between locally-built `DecidablePred` values and the global one, which can
   -- make `exact` fail while `convert` still succeeds.
-  haveI := decidable_Bad_ε γ_values
+  have := decidable_Bad_ε γ_values
   -- #check this
 
   -- Use the pow-form union_bound_chernoff_pow result (gives a per-X bound with p^(-α(γ+2)))

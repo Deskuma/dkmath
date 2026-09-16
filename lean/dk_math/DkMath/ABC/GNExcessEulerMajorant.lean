@@ -116,8 +116,8 @@ private theorem GNExcessLocalDensityWeight_half_succ_le
               Real.log (q : ℝ)) /
             (q : ℝ)) := by
     unfold GNExcessLocalDensityWeight
-    rw [if_neg (Nat.succ_ne_zero j),
-      if_neg (Nat.ne_of_gt hj)]
+    rw [ite_eq_right (Nat.succ_ne_zero j),
+      ite_eq_right (Nat.ne_of_gt hj)]
     rw [pow_succ]
     have hexp :
         Real.exp ((1 / 2 : ℝ) * (j + 1 : ℕ) *
@@ -289,7 +289,7 @@ theorem GNExcessLocalDensityTail_half_le
       rw [Real.exp_add, Real.exp_log hq0]
     unfold GNExcessLocalDensityWeight
       GNExcessHalfPowerEnvelope
-    simp only [if_false, Nat.one_ne_zero,
+    simp only [ite_false, Nat.one_ne_zero,
       Nat.cast_one]
     rw [hrpow]
     field_simp
@@ -358,7 +358,7 @@ theorem GNExcessFiniteEulerDensity_le_envelope
         GNExcessLocalDensityFactor p q
           (Nat.log q (p * (X + b) ^ p) + 1) t) ≤
         ∏ q ∈ Q, Real.exp (g q) := by
-      exact Finset.prod_le_prod
+      exact Finset.prod_le_prod₀
         (fun q _ =>
           GNExcessLocalDensityFactor_nonneg)
         (fun q hq =>

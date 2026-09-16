@@ -22,9 +22,10 @@ namespace DkMath.ABC
 
 open scoped BigOperators
 
-open Nat Real Rat Filter Finset
-open MeasureTheory ProbabilityTheory
 open ABC.Janson
+open Real Rat Filter
+open MeasureTheory ProbabilityTheory
+open _root_.Nat _root_.Finset
 
 namespace Middle
 

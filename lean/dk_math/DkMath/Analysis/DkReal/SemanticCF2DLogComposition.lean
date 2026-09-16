@@ -535,10 +535,10 @@ theorem sum_dyadicPhaseTrapezoidWeight_eq_one (n : ℕ) :
           intro k hk
           unfold dyadicPhaseTrapezoidWeight
           by_cases hendpoint : k = 0 ∨ k = dyadicPhaseDenom n
-          · rw [if_pos hendpoint]
+          · rw [ite_eq_left hendpoint]
             simp [hendpoint]
             ring_nf
-          · rw [if_neg hendpoint]
+          · rw [ite_eq_right hendpoint]
             simp [hendpoint]
     _ = 1 := by
       rw [hmesh, hend]
@@ -576,10 +576,10 @@ theorem dyadicPhaseMeshWeight_sum_sub_trapezoid_sum_eq_endpoint_half
         intro k hk
         unfold dyadicPhaseTrapezoidWeight
         by_cases hendpoint : k = 0 ∨ k = dyadicPhaseDenom n
-        · rw [if_pos hendpoint]
+        · rw [ite_eq_left hendpoint]
           simp [hendpoint]
           ring_nf
-        · rw [if_neg hendpoint]
+        · rw [ite_eq_right hendpoint]
           simp [hendpoint]
     _ = dyadicPhaseMeshWeight n / 2 *
         (f 0 + f (dyadicPhaseDenom n)) := by

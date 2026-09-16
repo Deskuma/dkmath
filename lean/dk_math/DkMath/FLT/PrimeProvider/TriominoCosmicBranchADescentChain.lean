@@ -1251,7 +1251,7 @@ theorem pow_eq_one_imp_eq_omega_pow
     · exact (hω_ne_one_order h1).elim
     · exact hp'
   have hprim : IsPrimitiveRoot ω p := (IsPrimitiveRoot.iff_orderOf).2 hω_order
-  haveI : NeZero p := ⟨hp.ne_zero⟩
+  have : NeZero p := ⟨hp.ne_zero⟩
   obtain ⟨i, hi_lt, hi_eq⟩ := hprim.eq_pow_of_pow_eq_one hr_pow
   exact ⟨⟨i, hi_lt⟩, hi_eq.symm⟩
 
@@ -1291,7 +1291,7 @@ geom_sum₂ representation は不要。
 -/
 theorem qAdicResidue : QAdicResidueTarget := by
   intro p x y z hPack gap hgap q hq_prime hq_ne_p hq_dvd_GN hq_ndvd_gap hq_coprime_y ω hω_pow hω_ne_one
-  haveI : Fact (Nat.Prime q) := Fact.mk hq_prime
+  have : Fact (Nat.Prime q) := Fact.mk hq_prime
   -- (y : ZMod q) ≠ 0 (from coprimality with q)
   have hy_ne : (y : ZMod q) ≠ 0 := by
     intro h

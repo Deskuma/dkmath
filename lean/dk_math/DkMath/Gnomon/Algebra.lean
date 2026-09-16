@@ -151,7 +151,11 @@ theorem sum_oddGnomon_eq_square (n : ℕ) :
 
 theorem sum_odd_eq_square (n : ℕ) :
     (Finset.range n).sum (fun i => 2 * i + 1) = n ^ 2 := by
-  simpa [oddGnomon] using sum_oddGnomon_eq_square n
+  have hodd : oddGnomon = (fun i => 2 * i + 1) := by
+    funext i
+    rfl
+  rw [← hodd]
+  exact sum_oddGnomon_eq_square n
 
 example : oddGnomon 0 = 1 := by norm_num [oddGnomon]
 

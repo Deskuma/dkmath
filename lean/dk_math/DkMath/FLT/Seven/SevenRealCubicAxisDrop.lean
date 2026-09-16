@@ -139,7 +139,7 @@ private theorem exactDepth_pow
       constructor
       · simp
       · intro h
-        exact eisensteinAxis_prime.not_unit
+        exact eisensteinAxis_prime.not_isUnit
           (isUnit_of_dvd_one (by simpa using h))
   | succ n ih =>
       rw [pow_succ, Nat.mul_succ]
@@ -196,7 +196,7 @@ theorem exactDepth_of_associated
     constructor
     · simp
     · intro h
-      exact eisensteinAxis_prime.not_unit
+      exact eisensteinAxis_prime.not_isUnit
         (isUnit_of_dvd_unit (by simpa using h) u.isUnit)
   simpa using exactDepth_mul hx hu
 
@@ -217,7 +217,7 @@ theorem normalizedAxis_exactThetaDepth :
   have hmul : eisensteinAxis * z = 1 := by
     apply mul_left_cancel₀ eisensteinAxis_prime.ne_zero
     simpa [pow_two, mul_assoc] using hz.symm
-  exact eisensteinAxis_prime.not_unit
+  exact eisensteinAxis_prime.not_isUnit
     (IsUnit.of_mul_eq_one z hmul)
 
 /-- Unit coefficient in the identity `7 = theta^3 * thetaSevenUnit`. -/
@@ -325,7 +325,7 @@ theorem exists_seventhQuotient_core_exactDepth_three
         thetaResidue] using hy
     have hures : thetaResidue thetaSevenUnit ≠ 0 := by
       intro hu
-      exact eisensteinAxis_prime.not_unit
+      exact eisensteinAxis_prime.not_isUnit
         (isUnit_of_dvd_unit
           ((eisensteinAxis_dvd_iff_thetaConstModSeven_eq_zero _).mpr hu)
           thetaSevenUnit_isUnit)
@@ -362,7 +362,7 @@ theorem normalizedWitness_exactThetaDepth
         (ramifiedUnitInv ^ 8) 0 := by
     refine ⟨by simp, ?_⟩
     intro h
-    exact eisensteinAxis_prime.not_unit
+    exact eisensteinAxis_prime.not_isUnit
       (isUnit_of_dvd_unit (by simpa using h) (hinv.pow 8))
   unfold normalizedWitness
   simpa using
@@ -516,7 +516,7 @@ theorem sources_isCoprime
         exact
           p.upToUnit.normPacket.quadratic.innerRoot_coordinates_isCoprime.map
             (Int.castRingHom SevenRealCubicInt)
-      exact hq.not_unit (hcop.isUnit_of_dvd' hqa hqn)
+      exact hq.not_isUnit (hcop.isUnit_of_dvd' hqa hqn)
 
 /-- Exact seventh roots inherit coprimality from their two sources. -/
 theorem roots_isCoprime
@@ -622,7 +622,7 @@ theorem nonempty_depthLedger
     have hmul : eisensteinAxis * z = 1 := by
       apply mul_left_cancel₀ eisensteinAxis_prime.ne_zero
       simpa [pow_two, mul_assoc] using hz.symm
-    exact eisensteinAxis_prime.not_unit
+    exact eisensteinAxis_prime.not_isUnit
       (IsUnit.of_mul_eq_one z hmul)
   have hquotientDepth :
       HasExactThetaDepth quotient 3 := by
@@ -705,7 +705,7 @@ theorem normalizedFactors_isCoprime
           q ∣ p.exactPower.rightRoot := by
         have := dvd_add hqGap hleft
         simpa using this
-      exact hq.not_unit
+      exact hq.not_isUnit
         (p.exactPower.roots_isCoprime.isUnit_of_dvd'
           hleft hright)
     have hqRemainder :
@@ -726,7 +726,7 @@ theorem normalizedFactors_isCoprime
         exact
           (hq.dvd_mul.mp hqSeven).resolve_right
             (fun hunit =>
-              hq.not_unit
+              hq.not_isUnit
                 (isUnit_of_dvd_unit hunit thetaSevenUnit_isUnit))
       have hqTheta : q ∣ eisensteinAxis :=
         hq.dvd_of_dvd_pow hqThetaCube

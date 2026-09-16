@@ -357,7 +357,7 @@ theorem cfzp031EfficiencyLedger_eq_weighted_occupancy_sum
             cfzp031PrimePowerReferenceMass ε W pk.1 (pk.2 + 1) := by
     apply Finset.sum_congr rfl
     intro pk hpk
-    rw [if_pos hpk]
+    rw [ite_eq_left hpk]
     ring
   have hbadSum :
       (∑ pk ∈ cfzp024BadPrimePowerPairBlockSupport A B Good,
@@ -377,7 +377,7 @@ theorem cfzp031EfficiencyLedger_eq_weighted_occupancy_sum
           (-cfzp031PrimePowerReferenceMass ε W pk.1 (pk.2 + 1)) := by
             apply Finset.sum_congr rfl
             intro pk hpk
-            rw [if_neg (by exact (Finset.mem_sdiff.mp hpk).2)]
+            rw [ite_eq_right (by exact (Finset.mem_sdiff.mp hpk).2)]
             ring
       _ = -(∑ pk ∈ cfzp024BadPrimePowerPairBlockSupport A B Good,
           cfzp031PrimePowerReferenceMass ε W pk.1 (pk.2 + 1)) := by
