@@ -56,6 +56,64 @@ theorem traceOne_pow_coordinates (s m n : ℤ) (r : ℕ) :
       rw [pow_succ, ih]
       apply traceOne_ext <;> simp [traceOnePowCoords]
 
+/-! ## Arbitrary-power/Core-image landing -/
+
+/-- Exact arbitrary-power/Core-image landing in conjugate coordinates. -/
+theorem traceOne_pow_core_landing_iff
+    {s : ℤ} {alpha beta : TraceOneInt s} {r : ℕ}
+    (hNorm : traceNorm beta ≠ 0) :
+    (∃ gamma : TraceOneInt s, alpha = beta * gamma ^ r) ↔
+      ∃ m n : ℤ,
+        (alpha * conj beta).fst =
+            traceNorm beta * (traceOnePowCoords s m n r).1 ∧
+          (alpha * conj beta).snd =
+            traceNorm beta * (traceOnePowCoords s m n r).2 := by
+  constructor
+  · rintro ⟨gamma, hgamma⟩
+    rcases gamma with ⟨m, n⟩
+    have hprod : alpha * conj beta =
+        DkMath.NumberTheory.TraceOneQuadratic.ofInt s (traceNorm beta) *
+          (⟨m, n⟩ : TraceOneInt s) ^ r := by
+      calc
+        alpha * conj beta =
+            (beta * (⟨m, n⟩ : TraceOneInt s) ^ r) * conj beta := by
+              rw [hgamma]
+        _ = (beta * conj beta) *
+            (⟨m, n⟩ : TraceOneInt s) ^ r := by ring
+        _ = DkMath.NumberTheory.TraceOneQuadratic.ofInt s
+            (traceNorm beta) * (⟨m, n⟩ : TraceOneInt s) ^ r := by
+              rw [traceOne_mul_conj]
+    rw [traceOne_pow_coordinates] at hprod
+    refine ⟨m, n, ?_, ?_⟩
+    · simpa [DkMath.NumberTheory.TraceOneQuadratic.ofInt] using
+        congrArg TraceOneInt.fst hprod
+    · simpa [DkMath.NumberTheory.TraceOneQuadratic.ofInt] using
+        congrArg TraceOneInt.snd hprod
+  · rintro ⟨m, n, hfst, hsnd⟩
+    let gamma : TraceOneInt s := ⟨m, n⟩
+    have hscalar :
+        DkMath.NumberTheory.TraceOneQuadratic.ofInt s (traceNorm beta) *
+            gamma ^ r = alpha * conj beta := by
+      change DkMath.NumberTheory.TraceOneQuadratic.ofInt s (traceNorm beta) *
+          (⟨m, n⟩ : TraceOneInt s) ^ r = alpha * conj beta
+      rw [traceOne_pow_coordinates]
+      apply traceOne_ext
+      · simpa [DkMath.NumberTheory.TraceOneQuadratic.ofInt] using
+          hfst.symm
+      · simpa [DkMath.NumberTheory.TraceOneQuadratic.ofInt] using
+          hsnd.symm
+    have hprod : alpha * conj beta = (beta * gamma ^ r) * conj beta := by
+      calc
+        alpha * conj beta =
+            DkMath.NumberTheory.TraceOneQuadratic.ofInt s
+              (traceNorm beta) * gamma ^ r := hscalar.symm
+        _ = (beta * conj beta) * gamma ^ r := by rw [traceOne_mul_conj]
+        _ = (beta * gamma ^ r) * conj beta := by ring
+    have hNormConj : traceNorm (conj beta) ≠ 0 := by
+      simpa only [traceOne_norm_conj] using hNorm
+    refine ⟨gamma, ?_⟩
+    exact traceOne_mul_right_cancel_of_norm_ne_zero hNormConj hprod
+
 /-- Coordinates of a square in the arbitrary TraceOne quadratic carrier. -/
 theorem traceOne_sq_coordinates (s m n : ℤ) :
     (⟨m, n⟩ : TraceOneInt s) ^ 2 =
