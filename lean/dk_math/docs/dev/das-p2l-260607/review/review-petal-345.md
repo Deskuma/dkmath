@@ -77,7 +77,7 @@ $$N(q,m)=\sum_{k=q}^{m}\max(-\Delta_k,0)$$
 
 について、
 
-$$\operatorname{WindowDrift}(q,m)=P(q,m)-N(q,m)$$
+$$\text{WindowDrift}(q,m)=P(q,m)-N(q,m)$$
 
 が exact に閉じた。
 
@@ -103,7 +103,7 @@ queue はもはや「最大 deficit」という静的表現だけでなく、
 
 既存の dynamic pressure theorem と合流し、
 
-$$Q(m)+N(q,m)\le\operatorname{DynamicPressureMass}(q,m)+\operatorname{SaturatedCount}(q,m)$$
+$$Q(m)+N(q,m)\le\text{DynamicPressureMass}(q,m)+\text{SaturatedCount}(q,m)$$
 
 を得ている。
 
@@ -270,13 +270,13 @@ spare carrierはsuccessor自身のdrift imageに使われていない部分な�
 
 目標は、
 
-$$\operatorname{NonsaturatedPositiveMass}+\operatorname{InternalSpareCount}\le\operatorname{SelectedCarrierCard}$$
+$$\text{NonsaturatedPositiveMass}+\text{InternalSpareCount}\le\text{SelectedCarrierCard}$$
 
 である。
 
 これは、
 
-$$P\le\operatorname{PressureMass}+\operatorname{SaturatedCount}$$
+$$P\le\text{PressureMass}+\text{SaturatedCount}$$
 
 より一段強い、実体的な所有権定理になる。
 
@@ -292,7 +292,7 @@ $$-\Delta_{k+1}\ge1$$
 
 なので、写像 $k\mapsto k+1$ により、
 
-$$\#\operatorname{InternalNegativeSat}\le N(q,m)$$
+$$\#\text{InternalNegativeSat}\le N(q,m)$$
 
 が出せる。
 
@@ -306,13 +306,13 @@ successor indexは一意なので、同じ negative blockが二つの predecesso
 
 internal tokenとterminal tokenを分ければ、期待する形は、
 
-$$Q(m)\le\operatorname{SelectedCarrierCard}(q,m)+\operatorname{InternalRigidCount}(q,m)+T_n(m)$$
+$$Q(m)\le\text{SelectedCarrierCard}(q,m)+\text{InternalRigidCount}(q,m)+T_n(m)$$
 
 じゃ。
 
 ここで $T_n(m)\le1$ なので、
 
-$$Q(m)\le\operatorname{SelectedCarrierCard}(q,m)+\operatorname{InternalRigidCount}(q,m)+1$$
+$$Q(m)\le\text{SelectedCarrierCard}(q,m)+\text{InternalRigidCount}(q,m)+1$$
 
 となる。
 
@@ -444,7 +444,7 @@ cp-344 の約 $61$ creditsに比べ、かなり重い。
 
 次にやるべきことは、以下の一本に限定する。
 
-$$Q(m)\le\operatorname{SelectedCarrierCard}(q,m)+\operatorname{InternalRigidCount}(q,m)+T_n(m)$$
+$$Q(m)\le\text{SelectedCarrierCard}(q,m)+\text{InternalRigidCount}(q,m)+T_n(m)$$
 
 そのために必要なのは、
 

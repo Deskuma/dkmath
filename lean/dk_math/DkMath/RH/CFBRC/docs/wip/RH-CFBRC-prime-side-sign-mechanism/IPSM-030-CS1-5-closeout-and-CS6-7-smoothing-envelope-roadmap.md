@@ -35,7 +35,7 @@ ArithmeticDefectEndpoint(ε,W)
 For every fixed source point `z`, the weight converges to the zero-side defect density:
 
 $$
-\operatorname{CommonDefectWeight}_\varepsilon(z)\longrightarrow 2(\operatorname{Re}z)^2.
+\text{CommonDefectWeight}_\varepsilon(z)\longrightarrow 2(\text{Re}z)^2.
 $$
 
 This confirms that the common-source reduction is genuine rather than a renaming layer.
@@ -49,13 +49,13 @@ Only the smoothing remainder around the limiting density is automatically small.
 Define conceptually:
 
 $$
-R_\varepsilon(z):=\operatorname{CommonDefectWeight}_\varepsilon(z)-2(\operatorname{Re}z)^2.
+R_\varepsilon(z):=\text{CommonDefectWeight}_\varepsilon(z)-2(\text{Re}z)^2.
 $$
 
 Then the correct decomposition is:
 
 $$
-\operatorname{CommonDefectWeight}_\varepsilon(z)=2(\operatorname{Re}z)^2+R_\varepsilon(z).
+\text{CommonDefectWeight}_\varepsilon(z)=2(\text{Re}z)^2+R_\varepsilon(z).
 $$
 
 The first term is the genuine off-critical defect density. It does not vanish merely because the Mellin box shrinks.
@@ -93,7 +93,7 @@ Use the already proved logarithmic-average formula rather than unfolding the Mel
 The mathematical identity is:
 
 $$
-\frac{1}{2\varepsilon}\int_{-\varepsilon}^{\varepsilon}e^{ity}\,dt=\operatorname{sinc}(\varepsilon y).
+\frac{1}{2\varepsilon}\int_{-\varepsilon}^{\varepsilon}e^{ity}\,dt=\text{sinc}(\varepsilon y).
 $$
 
 The `Real.sinc` totalization handles `y = 0`; do not introduce a fake `y ≠ 0` hypothesis into the public theorem.

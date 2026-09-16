@@ -164,7 +164,7 @@ PPW-023 では safe radius 上で fixed holomorphic second-contour functional �
 $$
 W_R(c,c)
 =
-\operatorname{FixedHolomorphicSecondContour}(R)
+\text{FixedHolomorphicSecondContour}(R)
 $$
 
 まで接続する。
@@ -201,14 +201,14 @@ PPW-023 の fixed defect は safe radius 上で
 
 $$
 D_\Xi(R)
-=Q_R+\operatorname{Re}M_{2,R}
+=Q_R+\text{Re}M_{2,R}
 $$
 
 であり、`W_R(c,c)=-M₂,R` を用いると
 
 $$
 D_\Xi(R)
-=Q_R-\operatorname{Re}W_R(c,c)
+=Q_R-\text{Re}W_R(c,c)
 $$
 
 となる。
@@ -230,7 +230,7 @@ $$
 
 $$
 \frac12\left|c(\rho)-c(m(\rho))\right|^2
-=2\left(\operatorname{Re}(\rho)-\frac12\right)^2
+=2\left(\text{Re}(\rho)-\frac12\right)^2
 $$
 
 となる。
@@ -379,7 +379,7 @@ critical mirror が同じ window を置換するという reindexing は、こ�
 boundary-safe radius では既存 theorem により
 
 $$
-\operatorname{FixedHolomorphicSecondContour}(R)
+\text{FixedHolomorphicSecondContour}(R)
 =-M_{2,R}
 $$
 
@@ -419,7 +419,7 @@ pascalCriticalMirrorZeroWindowRadialSecondMoment
 
 $$
 D_\Xi(R)
-=Q_R-\operatorname{Re}W_R(c,c)
+=Q_R-\text{Re}W_R(c,c)
 $$
 
 である。
@@ -538,7 +538,7 @@ $$
 \boxed{
 D_\Xi(R)
 =
-Q_R-\operatorname{Re}W_R(c,c)
+Q_R-\text{Re}W_R(c,c)
 =
 \frac12\sum_{\rho\in W_R}
  m_\rho

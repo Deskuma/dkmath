@@ -90,7 +90,7 @@ routing projection は不変
 `signedDepth` の整数 root を、
 
 $$
-r=\operatorname{signedRightRoot},\qquad l=\operatorname{signedLeftRoot}
+r=\text{signedRightRoot},\qquad l=\text{signedLeftRoot}
 $$
 
 とします。
@@ -98,13 +98,13 @@ $$
 既に、
 
 $$
-r^7-l^7=(r-l)\operatorname{signedSeventhQuotient}(r,l)
+r^7-l^7=(r-l)\text{signedSeventhQuotient}(r,l)
 $$
 
 および、
 
 $$
-r-l=7^4d,\qquad\operatorname{signedSeventhQuotient}(r,l)=7e
+r-l=7^4d,\qquad\text{signedSeventhQuotient}(r,l)=7e
 $$
 
 が packet に保存されています。
@@ -158,7 +158,7 @@ $$
 したがって、
 
 $$
-\boxed{P_0P_1P_2=\operatorname{signedSeventhQuotient}(r,l)=7e}
+\boxed{P_0P_1P_2=\text{signedSeventhQuotient}(r,l)=7e}
 $$
 
 です。
@@ -388,13 +388,13 @@ seven cyclotomic quotient
 現在の `relativeRealIndex` は、
 
 $$
-\operatorname{relativeRealIndex}(k)=\left(\frac{k}{\tau}\right)^2
+\text{relativeRealIndex}(k)=\left(\frac{k}{\tau}\right)^2
 $$
 
 であり、
 
 $$
-\operatorname{relativeRealIndex}(k)=1\iff k=\tau\ \lor\ k=-\tau
+\text{relativeRealIndex}(k)=1\iff k=\tau\ \lor\ k=-\tau
 $$
 
 を証明しています。
@@ -418,7 +418,7 @@ $$
 したがって明示的 equivalence、
 
 $$
-\operatorname{PairPhase}:\operatorname{Fin}3\simeq\mu_3
+\text{PairPhase}:\text{Fin}3\simeq\mu_3
 $$
 
 を、
@@ -432,7 +432,7 @@ $$
 そして、
 
 $$
-i_\tau:=\operatorname{PairPhase}^{-1}(\tau^2)
+i_\tau:=\text{PairPhase}^{-1}(\tau^2)
 $$
 
 とすれば、選択された pair core は、
@@ -584,7 +584,7 @@ $$
 従って、
 
 $$
-\boxed{\operatorname{IsCoprime}(C_i,C_j)}
+\boxed{\text{IsCoprime}(C_i,C_j)}
 $$
 
 が証明できる可能性が非常に高いです。

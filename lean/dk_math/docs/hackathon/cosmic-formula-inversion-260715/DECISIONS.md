@@ -508,7 +508,7 @@ q\mid P+u
 $$
 
 $$
-\operatorname{Prime}(q)
+\text{Prime}(q)
 $$
 
 implies:
@@ -520,7 +520,7 @@ $$
 The preferred public existence theorem is:
 
 $$
-1<P+u\Longrightarrow\exists q,\ \operatorname{Prime}(q)\land q\mid P+u\land q\notin S
+1<P+u\Longrightarrow\exists q,\ \text{Prime}(q)\land q\mid P+u\land q\notin S
 $$
 
 ### Rationale
@@ -1297,7 +1297,7 @@ Inverse projection may reconstruct a macro-scale interval rather than an exact v
 Use the finite uniqueness criterion:
 
 $$
-\operatorname{width}(I)<1
+\text{width}(I)<1
 $$
 
 to prove that an interval contains at most one integer candidate.

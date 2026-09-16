@@ -138,7 +138,7 @@ explicitUnit p k
 は、
 
 $$
-U_k=\operatorname{rightUnit}\cdot\operatorname{leftUnit}^{-1}
+U_k=\text{rightUnit}\cdot\text{leftUnit}^{-1}
 $$
 
 です。
@@ -163,7 +163,7 @@ RamifiedGapUnitBridgePacket
 は、
 
 $$
-R-L=(c-e)U_k\qquad\text{in }\operatorname{ZMod}(7^k)
+R-L=(c-e)U_k\qquad\text{in }\text{ZMod}(7^k)
 $$
 
 を証明しています。
@@ -249,7 +249,7 @@ mod $7$ では、任意の unit が Frobenius によって七乗として見え�
 最初の本当の判定面は、
 
 $$
-\operatorname{ZMod}(49)
+\text{ZMod}(49)
 $$
 
 です。

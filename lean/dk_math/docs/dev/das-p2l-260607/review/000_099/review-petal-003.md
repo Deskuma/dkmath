@@ -130,7 +130,7 @@ outerPetalRemainder_le_blockSize
 これで remainder は、
 
 $$
-1\le \operatorname{remainder}\le blockSize
+1\le \text{remainder}\le blockSize
 $$
 
 という one-based value として再利用できる。

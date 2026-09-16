@@ -1135,7 +1135,7 @@ v_2(n)=\max\{k\in\mathbb N\mid 2^k\mid n\}
 そして「偶数は半位相落とす」は、
 
 \[
-\operatorname{odd}(n):=\frac{n}{2^{v_2(n)}}
+\text{odd}(n):=\frac{n}{2^{v_2(n)}}
 \]
 
 （\(n\) の 2冪因子を全部落として奇数化）
@@ -1229,13 +1229,13 @@ v_2(n)=\max\{k\in\mathbb N\mid 2^k\mid n\}
 定義としては
 
 \[
-\operatorname{gcd_phase}(a,b):=\gcd(\operatorname{odd}(a),\operatorname{odd}(b))
+\text{gcd_phase}(a,b):=\gcd(\text{odd}(a),\text{odd}(b))
 \]
 
 あるいはスケールも残すなら
 
 \[
-\gcd(a,b)=2^{\min(v_2(a),v_2(b))}\cdot \gcd(\operatorname{odd}(a),\operatorname{odd}(b))
+\gcd(a,b)=2^{\min(v_2(a),v_2(b))}\cdot \gcd(\text{odd}(a),\text{odd}(b))
 \]
 
 これが「偶数は半位相落とす必要がある」を、嘘なく数学に落とした形じゃ。
@@ -1246,7 +1246,7 @@ v_2(n)=\max\{k\in\mathbb N\mid 2^k\mid n\}
 
 - 「\(+1/2\) で gcd(n,n+1/2)=0.5」
   → これは **定義域を外れる**ので、代わりに
-  \(\operatorname{odd}\) 正規化か、\((N,\epsilon)\) のペア構造で表すのが筋。
+  \(\text{odd}\) 正規化か、\((N,\epsilon)\) のペア構造で表すのが筋。
 
 ---
 
@@ -1463,7 +1463,7 @@ end DkMath
 ぬしが言う「偶数は半位相落とす必要」や「2因子を剥いだ後の真の尺度」は、\(\pi(n)=\lfloor n/2\rfloor\) ではなく
 
 \[
-\operatorname{odd}(n)=\frac{n}{2^{v_2(n)}}
+\text{odd}(n)=\frac{n}{2^{v_2(n)}}
 \]
 
 （2冪を全部剥ぐ）に進化するのが自然じゃ。

@@ -72,7 +72,7 @@ $$
 かつ、
 
 $$
-\operatorname{width}(I_n)=b_n-a_n\to0
+\text{width}(I_n)=b_n-a_n\to0
 $$
 
 じゃ。
@@ -103,7 +103,7 @@ $$
 幅は、
 
 $$
-\operatorname{width}(J_n)=b_n^d-a_n^d
+\text{width}(J_n)=b_n^d-a_n^d
 $$
 
 である。ここで \(b_n=a_n+w_n\)、\(w_n=b_n-a_n\) と置けば、
@@ -123,7 +123,7 @@ $$
 したがって、
 
 $$
-\operatorname{width}(J_n) = w_n,GapGN_d(a_n,w_n)
+\text{width}(J_n) = w_n,GapGN_d(a_n,w_n)
 $$
 
 じゃ。
@@ -232,7 +232,7 @@ $$
 ただし、
 
 $$
-W_n=\operatorname{width}(I_n)
+W_n=\text{width}(I_n)
 $$
 
 $$

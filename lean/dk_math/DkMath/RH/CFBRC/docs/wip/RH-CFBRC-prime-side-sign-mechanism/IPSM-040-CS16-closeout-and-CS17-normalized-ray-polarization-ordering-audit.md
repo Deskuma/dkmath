@@ -39,13 +39,13 @@ B(t) = 1 - q(t)
 Then the CS16 signed numerator is
 
 $$
-N(t)=\operatorname{Re}(A(t)\overline{B(t)}).
+N(t)=\text{Re}(A(t)\overline{B(t)}).
 $$
 
 The strictly positive denominator is
 
 $$
-D(t)=|B(t)|^2=\operatorname{normSq}(B(t))>0.
+D(t)=|B(t)|^2=\text{normSq}(B(t))>0.
 $$
 
 The central CS17 identity is the real polarization law
@@ -57,7 +57,7 @@ $$
 Therefore the ray amplitude should admit an exact normalized plus/minus decomposition
 
 $$
-4\operatorname{Re}(\operatorname{RayAmplitude}(t))=E_+(t)-E_-(t),
+4\text{Re}(\text{RayAmplitude}(t))=E_+(t)-E_-(t),
 $$
 
 with
@@ -185,7 +185,7 @@ First certify interval integrability from existing finite-ray continuity / integ
 Then prove
 
 $$
-4\,\operatorname{RayKernel}_{p,X}=\operatorname{RayPlusEnergy}_{p,X}-\operatorname{RayMinusEnergy}_{p,X}.
+4\,\text{RayKernel}_{p,X}=\text{RayPlusEnergy}_{p,X}-\text{RayMinusEnergy}_{p,X}.
 $$
 
 Also prove
@@ -233,9 +233,9 @@ Use the CS14 exact ray decomposition and CS17-D to prove the finite mode ledger 
 $$
 4\sum_{n\le X}\Lambda(n)K_{\varepsilon,W}(n)
 =
-\operatorname{AggregatePlusEnergy}_{\varepsilon,W,X}
+\text{AggregatePlusEnergy}_{\varepsilon,W,X}
 -
-\operatorname{AggregateMinusEnergy}_{\varepsilon,W,X}.
+\text{AggregateMinusEnergy}_{\varepsilon,W,X}.
 $$
 
 Then prove the aggregate ordering adapter
@@ -283,7 +283,7 @@ Keep the following strengths explicitly distinct:
 
 This is strongest and may fail because the phase is oscillatory.
 
-2. **Integrated single-ray ordering**
+1. **Integrated single-ray ordering**
 
 ```text
 RayMinusEnergy ≤ RayPlusEnergy
@@ -291,7 +291,7 @@ RayMinusEnergy ≤ RayPlusEnergy
 
 This allows cancellation in `t` but still asks every prime ray to have one sign.
 
-3. **Aggregate prime-weighted ordering**
+1. **Aggregate prime-weighted ordering**
 
 ```text
 AggregateMinusEnergy ≤ AggregatePlusEnergy
@@ -328,7 +328,7 @@ Do **not** extrapolate it to all `t`; the finite phase is oscillatory.
 The polarization identity
 
 $$
-4\operatorname{Re}(A\overline B)=|A+B|^2-|A-B|^2
+4\text{Re}(A\overline B)=|A+B|^2-|A-B|^2
 $$
 
 is exactly a two-dimensional quadratic-mass statement.

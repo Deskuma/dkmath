@@ -1400,7 +1400,7 @@ The central identity is
 \[
 (x+u)^d =
   \sum_{j<r} \binom{d}{j} x^j u^{d-j}
-  + x^r \operatorname{GTail}(d,r,x,u).
+  + x^r \text{GTail}(d,r,x,u).
 \]
 
 The standard gap-normalized kernel `GN` is the `r = 1`

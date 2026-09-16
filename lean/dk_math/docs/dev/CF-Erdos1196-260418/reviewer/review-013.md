@@ -32,7 +32,7 @@ $$
 $$
 \text{independent primitive channels}
 \;\Rightarrow\;
-\operatorname{rad}\text{ の下界}
+\text{rad}\text{ の下界}
 $$
 
 が、`supportMass` を経由せず **直接 `ABC.rad` の語で読める** ようになった。

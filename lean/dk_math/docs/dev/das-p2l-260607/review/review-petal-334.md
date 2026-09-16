@@ -81,19 +81,19 @@ eraseOldestN c s
 証明された cardinality は、
 
 $$
-|\operatorname{eraseOldestN}(c,s)|=|s|\mathbin{\dotminus}c
+|\text{eraseOldestN}(c,s)|=|s|\mathbin{\dotminus}c
 $$
 
 消費 carrier は、
 
 $$
-\operatorname{consumedOldestN}(c,s)=s\setminus\operatorname{eraseOldestN}(c,s)
+\text{consumedOldestN}(c,s)=s\setminus\text{eraseOldestN}(c,s)
 $$
 
 であり、
 
 $$
-|\operatorname{consumedOldestN}(c,s)|=\min(c,|s|)
+|\text{consumedOldestN}(c,s)|=\min(c,|s|)
 $$
 
 となる。
@@ -103,7 +103,7 @@ $$
 FIFO の中心順序則も正しい。
 
 $$
-x\in\operatorname{Consumed},\ y\in\operatorname{Remainder}\Longrightarrow x\le y
+x\in\text{Consumed},\ y\in\text{Remainder}\Longrightarrow x\le y
 $$
 
 source time は小さいほど古いので、
@@ -173,7 +173,7 @@ $$
 次が証明された。
 
 $$
-|\operatorname{BlockClaimSourceCarrier}(k)|=\operatorname{canonicalQueueDemand}(k)
+|\text{BlockClaimSourceCarrier}(k)|=\text{canonicalQueueDemand}(k)
 $$
 
 また、異なる canonical blocks の carrier は disjoint であり、全要素が本当に `CarryTwoDebtAt` を満たす。
@@ -234,7 +234,7 @@ $$
 旧 outstanding claims と新 block claims は、
 
 $$
-\operatorname{OldQueue}_k\cap\operatorname{NewClaims}_k=\varnothing
+\text{OldQueue}_k\cap\text{NewClaims}_k=\varnothing
 $$
 
 である。
@@ -253,7 +253,7 @@ $$
 block $k$ では、
 
 $$
-\operatorname{Consumed}*k\sqcup\operatorname{Queue}*{k+1}=\operatorname{Available}_k
+\text{Consumed}*k\sqcup\text{Queue}*{k+1}=\text{Available}_k
 $$
 
 が exact に成立する。
@@ -261,7 +261,7 @@ $$
 さらに、一度 block $k$ で消費された source $i$ は、任意の $m>k$ に対して、
 
 $$
-i\notin\operatorname{Queue}_m
+i\notin\text{Queue}_m
 $$
 
 となる。
@@ -309,7 +309,7 @@ card_canonicalOwnedOutstandingClaimsBeforeBlock
 じゃ。
 
 $$
-|\operatorname{OwnedQueue}_k|=Q_k^{\mathrm{before}}
+|\text{OwnedQueue}_k|=Q_k^{\mathrm{before}}
 $$
 
 が全 $k$ について証明された。
@@ -317,7 +317,7 @@ $$
 消費 carrier も、
 
 $$
-|\operatorname{OwnedConsumed}_k|=\operatorname{canonicalQueueConsumed}(k)
+|\text{OwnedConsumed}_k|=\text{canonicalQueueConsumed}(k)
 $$
 
 となる。
@@ -375,7 +375,7 @@ CanonicalOwnedOutstandingClaimsHaveSourceAgeAtMost n H
 として、
 
 $$
-i\in\operatorname{OwnedQueue}_m\Longrightarrow b_m-i\le H
+i\in\text{OwnedQueue}_m\Longrightarrow b_m-i\le H
 $$
 
 を要求する。
@@ -383,7 +383,7 @@ $$
 この仮定から実 source membership、
 
 $$
-i\in\operatorname{RecentSourceClaimCarrier}(H,m)
+i\in\text{RecentSourceClaimCarrier}(H,m)
 $$
 
 が証明された。
@@ -391,7 +391,7 @@ $$
 さらに exact cardinality agreement を通じて、
 
 $$
-\operatorname{ActualAgeBound}(H)\Longrightarrow Q_m\le|\operatorname{RecentClaims}(H,m)|\le H
+\text{ActualAgeBound}(H)\Longrightarrow Q_m\le|\text{RecentClaims}(H,m)|\le H
 $$
 
 となる。
@@ -405,7 +405,7 @@ $$
 および、
 
 $$
-\operatorname{EndpointWidth}_m\le\operatorname{bitWidth}(n)+H
+\text{EndpointWidth}_m\le\text{bitWidth}(n)+H
 $$
 
 まで閉じた。
@@ -427,7 +427,7 @@ raw Collatz map `C` の一ステップ数ではない。
 今回証明された chain は、
 
 $$
-\exists H,\ \operatorname{ActualSourceAgeBound}(H)\Longrightarrow\operatorname{UniformQueueBound}\Longrightarrow\operatorname{UniformEndpointWidthBound}
+\exists H,\ \text{ActualSourceAgeBound}(H)\Longrightarrow\text{UniformQueueBound}\Longrightarrow\text{UniformEndpointWidthBound}
 $$
 
 じゃ。
@@ -435,7 +435,7 @@ $$
 しかし、
 
 $$
-\exists H,\ \operatorname{CanonicalOwnedOutstandingClaimsHaveSourceAgeAtMost}(n,H)
+\exists H,\ \text{CanonicalOwnedOutstandingClaimsHaveSourceAgeAtMost}(n,H)
 $$
 
 は証明されていない。
@@ -469,7 +469,7 @@ FIFO queue に残る actual source の年齢が一様有界
 block $m$ までの全 historical claim carrier を、
 
 $$
-\operatorname{HistoricalClaims}_m=\{i\in[0,b_m)\mid\operatorname{CarryTwoDebtAt}(n,i)\}
+\text{HistoricalClaims}_m=\{i\in[0,b_m)\mid\text{CarryTwoDebtAt}(n,i)\}
 $$
 
 とする。
@@ -477,7 +477,7 @@ $$
 また累積 consumed carrier を、
 
 $$
-\operatorname{ConsumedPrefix}*m=\bigcup*{k<m}\operatorname{OwnedConsumed}_k
+\text{ConsumedPrefix}*m=\bigcup*{k<m}\text{OwnedConsumed}_k
 $$
 
 とする。
@@ -485,13 +485,13 @@ $$
 次の exact partition が証明できるはずじゃ。
 
 $$
-\operatorname{HistoricalClaims}_m=\operatorname{ConsumedPrefix}_m\sqcup\operatorname{OwnedQueue}_m
+\text{HistoricalClaims}_m=\text{ConsumedPrefix}_m\sqcup\text{OwnedQueue}_m
 $$
 
 さらに FIFO なので、
 
 $$
-x\in\operatorname{ConsumedPrefix}_m,\ y\in\operatorname{OwnedQueue}_m\Longrightarrow x\le y
+x\in\text{ConsumedPrefix}_m,\ y\in\text{OwnedQueue}_m\Longrightarrow x\le y
 $$
 
 となる。
@@ -501,7 +501,7 @@ $$
 これが閉じれば、owned queue は単なる recursive constructionではなく、
 
 $$
-\operatorname{OwnedQueue}*m=\operatorname{eraseOldestN}\left(\sum*{k<m}\operatorname{Consumed}_k,\operatorname{HistoricalClaims}_m\right)
+\text{OwnedQueue}*m=\text{eraseOldestN}\left(\sum*{k<m}\text{Consumed}_k,\text{HistoricalClaims}_m\right)
 $$
 
 という global normal formを持つ。
@@ -517,7 +517,7 @@ cp-334 の FIFO upper-tail 性を大域化すれば、逆向きも証明でき�
 recent claim carrierを、
 
 $$
-R_{H,m}=\{i\in[b_m-H,b_m)\mid\operatorname{CarryTwoDebtAt}(n,i)\}
+R_{H,m}=\{i\in[b_m-H,b_m)\mid\text{CarryTwoDebtAt}(n,i)\}
 $$
 
 とする。
@@ -533,7 +533,7 @@ $$
 従って、
 
 $$
-\operatorname{ActualSourceAgeBound}(H)\iff\operatorname{CardinalityCoverage}(H)
+\text{ActualSourceAgeBound}(H)\iff\text{CardinalityCoverage}(H)
 $$
 
 まで強化できる見込みがある。
@@ -553,7 +553,7 @@ cardinality coverage が arbitrary rematching による弱い代用品ではな�
 old claim carrierを、
 
 $$
-O_{H,m}=\{i\in[0,b_m-H)\mid\operatorname{CarryTwoDebtAt}(n,i)\}
+O_{H,m}=\{i\in[0,b_m-H)\mid\text{CarryTwoDebtAt}(n,i)\}
 $$
 
 とする。
@@ -569,13 +569,13 @@ $$
 また historical claims は old と recent に分割され、
 
 $$
-|\operatorname{HistoricalClaims}*m|=|O*{H,m}|+|R_{H,m}|
+|\text{HistoricalClaims}*m|=|O*{H,m}|+|R_{H,m}|
 $$
 
 scalar prefix balance は、
 
 $$
-Q_m+C_m=|\operatorname{HistoricalClaims}_m|
+Q_m+C_m=|\text{HistoricalClaims}_m|
 $$
 
 じゃ。
@@ -611,7 +611,7 @@ false_of_step_of_signature_eq_of_actualWeight_pos
 一つの realized edgeについて、
 
 $$
-\operatorname{signature}(b)=\operatorname{signature}(a)
+\text{signature}(b)=\text{signature}(a)
 $$
 
 かつ、
@@ -633,13 +633,13 @@ cp-333 の all-ones theorem がその corollary へ整理されたのもよい�
 任意の有限 map、
 
 $$
-f:\operatorname{FixedLowRawSignature}(r)\to\Sigma
+f:\text{FixedLowRawSignature}(r)\to\Sigma
 $$
 
 に対して、
 
 $$
-\sigma(x)=f(\operatorname{fixedLowSig}(x))
+\sigma(x)=f(\text{fixedLowSig}(x))
 $$
 
 と factorする certificateも排除された。
@@ -664,11 +664,11 @@ $$
 all-ones witnessでは、
 
 $$
-\operatorname{topTwo}(x_r)=3
+\text{topTwo}(x_r)=3
 $$
 
 $$
-\operatorname{topTwo}(T(x_r))=2
+\text{topTwo}(T(x_r))=2
 $$
 
 となる。
@@ -688,11 +688,11 @@ $$
 $r=1$ において、次が exact に証明された。
 
 $$
-\operatorname{sig}(T(55))=\operatorname{sig}(39)
+\text{sig}(T(55))=\text{sig}(39)
 $$
 
 $$
-\operatorname{sig}(T(39))=\operatorname{sig}(55)
+\text{sig}(T(39))=\text{sig}(55)
 $$
 
 実状態では、
@@ -814,15 +814,15 @@ $$
 幅は、
 
 $$
-\operatorname{width}(A_r)=\operatorname{width}(B_r)=r+5
+\text{width}(A_r)=\text{width}(B_r)=r+5
 $$
 
 $$
-\operatorname{width}(T(A_r))=r+6,\qquad\operatorname{width}(T(B_r))=r+5
+\text{width}(T(A_r))=r+6,\qquad\text{width}(T(B_r))=r+5
 $$
 
 $$
-\operatorname{width}(T^2(A_r))=\operatorname{width}(T^2(B_r))=r+6
+\text{width}(T^2(A_r))=\text{width}(T^2(B_r))=r+6
 $$
 
 従って edge weights は、
@@ -840,11 +840,11 @@ $$
 また全状態は low $r$ bits が all onesであり、height class・upper carry・growth flag・normalized top-two bitsを監査すると、
 
 $$
-\operatorname{sig}(T(A_r))=\operatorname{sig}(B_r)
+\text{sig}(T(A_r))=\text{sig}(B_r)
 $$
 
 $$
-\operatorname{sig}(T(B_r))=\operatorname{sig}(A_r)
+\text{sig}(T(B_r))=\text{sig}(A_r)
 $$
 
 となる。

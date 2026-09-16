@@ -159,7 +159,7 @@ NormalizedArithmeticEndpoint ε W = -Mε,R.
 Hence the arithmetic defect endpoint is exactly
 
 $$
-D_\varepsilon(W)=Q_R+\operatorname{Re}M_{\varepsilon,R}.
+D_\varepsilon(W)=Q_R+\text{Re}M_{\varepsilon,R}.
 $$
 
 Define the pointwise real defect weight:
@@ -207,7 +207,7 @@ for every fixed `z`.
 Hence the common-source defect weight should satisfy
 
 $$
-\operatorname{DefectWeight}_\varepsilon(z)\longrightarrow |z|^2+\operatorname{Re}(z^2)=2(\operatorname{Re}z)^2.
+\text{DefectWeight}_\varepsilon(z)\longrightarrow |z|^2+\text{Re}(z^2)=2(\text{Re}z)^2.
 $$
 
 Target:
@@ -242,7 +242,7 @@ For `y ≠ 0`, this is the usual sinc factor.
 Consequently the common-source point defect becomes
 
 $$
-\operatorname{DefectWeight}_\varepsilon(iy)=y^2\left(1-\frac{\sin(\varepsilon y)}{\varepsilon y}\right).
+\text{DefectWeight}_\varepsilon(iy)=y^2\left(1-\frac{\sin(\varepsilon y)}{\varepsilon y}\right).
 $$
 
 This is nonnegative, and is strictly positive whenever `ε y ≠ 0`.

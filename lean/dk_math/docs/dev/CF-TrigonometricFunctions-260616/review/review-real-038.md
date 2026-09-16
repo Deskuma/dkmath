@@ -158,7 +158,7 @@ theorem add_diffNonneg_equiv
 これは、
 
 $$
-x+\operatorname{Gap}(x,y)\sim y
+x+\text{Gap}(x,y)\sim y
 $$
 
 ということ。

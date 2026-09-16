@@ -79,7 +79,7 @@ checkpoint 332 は、
 
 旧定義の未来参照を除去し、
 
-$$\operatorname{RecentMass}(L,m)=\sum_{k\in[m-L,m)}a_k$$
+$$\text{RecentMass}(L,m)=\sum_{k\in[m-L,m)}a_k$$
 
 へ修正された。
 
@@ -235,7 +235,7 @@ $$\sum_{k=q}^{m-1}A_k\le b_m-b_q$$
 
 cp-332 の recent window へ入れると、
 
-$$\operatorname{RecentDemand}(L,m)\le b_m-b_{m-L}$$
+$$\text{RecentDemand}(L,m)\le b_m-b_{m-L}$$
 
 じゃ。
 
@@ -267,7 +267,7 @@ canonicalRecentSourceClaimCarrier n H m :=
 
 と置けば、
 
-$$|\operatorname{RecentSourceClaims}(H,m)|\le H$$
+$$|\text{RecentSourceClaims}(H,m)|\le H$$
 
 は直ちに証明できる。
 
@@ -279,7 +279,7 @@ CanonicalOutstandingQueueCoveredByRecentSourceClaims n H
 
 を、
 
-$$Q^{\mathrm{before}}_m\le|\operatorname{RecentSourceClaims}(H,m)|$$
+$$Q^{\mathrm{before}}_m\le|\text{RecentSourceClaims}(H,m)|$$
 
 と定義すれば、
 
@@ -339,15 +339,15 @@ $$s(x_r)=1$$
 
 $$s(T(x_r))=1$$
 
-$$\operatorname{stateUpperCarry}(x_r)=2$$
+$$\text{stateUpperCarry}(x_r)=2$$
 
-$$\operatorname{stateUpperCarry}(T(x_r))=2$$
+$$\text{stateUpperCarry}(T(x_r))=2$$
 
 であり、二つの step はとも width growth $+1$ になる。
 
 特に、
 
-$$\operatorname{bitWidth}(T(x_r))=\operatorname{bitWidth}(x_r)+1$$
+$$\text{bitWidth}(T(x_r))=\text{bitWidth}(x_r)+1$$
 
 じゃ。
 

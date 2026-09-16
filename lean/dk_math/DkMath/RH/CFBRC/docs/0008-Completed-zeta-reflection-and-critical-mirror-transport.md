@@ -23,7 +23,7 @@ $$
 後者は複素共役を用いれば
 
 $$
-\operatorname{criticalMirror}(s)=1-\overline{s}
+\text{criticalMirror}(s)=1-\overline{s}
 $$
 
 に対応するが、現行の `CompletedZetaBridge.lean` に同一高さへの mirror transport を直接述べる theorem は置かれていない。
@@ -155,7 +155,7 @@ noncomputable def criticalMirror (s : ℂ) : ℂ :=
 これは
 
 $$
-\operatorname{criticalMirror}(\sigma+it)=(1-\sigma)+it
+\text{criticalMirror}(\sigma+it)=(1-\sigma)+it
 $$
 
 であり、虚部を保存する。
@@ -189,7 +189,7 @@ same-height mirror へ進む標準的な構造は二段階になる。
 すると
 
 $$
-1-\overline{s}=\operatorname{criticalMirror}(s)
+1-\overline{s}=\text{criticalMirror}(s)
 $$
 
 となる。
@@ -233,7 +233,7 @@ theorem criticalMirror_eq_self_iff_re_eq_half (s : ℂ) :
 すなわち
 
 $$
-\operatorname{criticalMirror}(s)=s
+\text{criticalMirror}(s)=s
 \iff
 \Re(s)=\frac12
 $$
@@ -251,13 +251,13 @@ $$
 仮に same-height mirror transport が完成し、
 
 $$
-Z(s)=0\Longrightarrow Z(\operatorname{criticalMirror}(s))=0
+Z(s)=0\Longrightarrow Z(\text{criticalMirror}(s))=0
 $$
 
 を得たとしても、そこから
 
 $$
-\operatorname{criticalMirror}(s)=s
+\text{criticalMirror}(s)=s
 $$
 
 は従わない。
@@ -321,7 +321,7 @@ offCriticalCFBRC zeros lie exactly on σ = 1/2
 特に degree 3 では
 
 $$
-\operatorname{mirrorCFBRC}(3,X,\Theta)=0
+\text{mirrorCFBRC}(3,X,\Theta)=0
 $$
 
 が

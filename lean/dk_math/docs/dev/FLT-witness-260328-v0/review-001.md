@@ -31,7 +31,7 @@ $$
 という arithmetic 側の (q) を、そのまま
 
 $$
-q \mid \operatorname{cyclotomicPrimeCore}(d,1,u-1)
+q \mid \text{cyclotomicPrimeCore}(d,1,u-1)
 $$
 
 の (q) と同一視し始めた。そこがズレじゃった。今回の更新は、そのズレを修正して、datum を
@@ -59,7 +59,7 @@ $$
 つまり datum は分離されたが、**まだ同じ (q)** に
 
 * (q \mid x+1,\ q\nmid x)
-* (q \mid \operatorname{cyclotomicPrimeCore}(d,1,u-1))
+* (q \mid \text{cyclotomicPrimeCore}(d,1,u-1))
 
 の両方を要求しておる。
 
@@ -89,7 +89,7 @@ $$
 もし (x+1=6) の prime 因子 (2,3) のどちらも
 
 $$
-q \nmid \operatorname{cyclotomicPrimeCore}(5,1,6)
+q \nmid \text{cyclotomicPrimeCore}(5,1,6)
 $$
 
 なら、新しい existential `BodyCoreWitness` route も偽じゃ。
@@ -101,7 +101,7 @@ $$
 
 $$
 \exists q_{\mathrm{core}},\
-q_{\mathrm{core}} \mid \operatorname{cyclotomicPrimeCore}(d,1,u-1)
+q_{\mathrm{core}} \mid \text{cyclotomicPrimeCore}(d,1,u-1)
 $$
 
 と
@@ -169,7 +169,7 @@ $$
 
 $$
 \exists q_{\mathrm{core}},\
-q_{\mathrm{core}} \mid \operatorname{cyclotomicPrimeCore}(d,1,u-1)
+q_{\mathrm{core}} \mid \text{cyclotomicPrimeCore}(d,1,u-1)
 $$
 
 を別に持つ。

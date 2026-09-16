@@ -596,7 +596,7 @@ joint function
 
 $$
 (2\pi i)^{-1}
-\operatorname{OuterContour}(z^2,R)
+\text{OuterContour}(z^2,R)
 =
 -M_{2,R}.
 $$
@@ -623,7 +623,7 @@ $$
 \lim_{\varepsilon\to0^+}
 \left[
 \lim_{\tau\to0}
-\operatorname{NormalizedOuterContour}
+\text{NormalizedOuterContour}
 (Q_{\tau,h_\varepsilon},R)
 \right]
 =

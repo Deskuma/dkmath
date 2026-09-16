@@ -37,7 +37,7 @@ $$
 または
 
 $$
-\operatorname{
+\text{
     Squarefree(|GN(3,a-b,b)|)
 }
 $$
@@ -63,7 +63,7 @@ C.squarefree_contradiction hGN_sq
 これまで構築した cubic route は、以下の流れじゃった。
 
 $$
-\operatorname{
+\text{
     PrimitivePrimeFactorOfDiffPow(q,a,b,3)
 }
 $$
@@ -75,11 +75,11 @@ $$
 から、PowerBeam 側の条件を内部で回収し、
 
 $$
-q\mid |\operatorname{powerBeam}_3(b,a)|,
+q\mid |\text{powerBeam}_3(b,a)|,
 $$
 
 $$
-|\operatorname{powerBeam}_3(b,a)|\ne0,
+|\text{powerBeam}_3(b,a)|\ne0,
 $$
 
 $$
@@ -94,7 +94,7 @@ $$
 なぜなら、今後は「cubic primitive FLT context に GN 上界を与えると矛盾」と言えるからじゃ。
 
 $$
-\operatorname{
+\text{
     CubicPrimitiveFLTContext
 }
 +
@@ -106,11 +106,11 @@ $$
 または
 
 $$
-\operatorname{
+\text{
     CubicPrimitiveFLTContext
 }
 +
-\operatorname{
+\text{
     Squarefree(GN)
 }
 \Rightarrow

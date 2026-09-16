@@ -148,7 +148,7 @@ $$
 XDP-004 では、十分な regularity / measurability / integrability 仮定のもとで
 
 $$
-\forall s\in\mathbb C,\quad \operatorname{MellinConvergent}(h,s)
+\forall s\in\mathbb C,\quad \text{MellinConvergent}(h,s)
 $$
 
 を与える generic theorem を構成する。
@@ -406,13 +406,13 @@ mellinCriticalMirror h x
 概念的に
 
 $$
-\operatorname{supp}(h)\subseteq[a,b],\quad0<a\le b
+\text{supp}(h)\subseteq[a,b],\quad0<a\le b
 $$
 
 なら
 
 $$
-\operatorname{supp}(h^\vee)\cap(0,\infty)
+\text{supp}(h^\vee)\cap(0,\infty)
 \subseteq[1/b,1/a].
 $$
 

@@ -50,7 +50,7 @@ path:
 数学的には、まず各 edge \(e_i\) について、次が証明された。
 
 $$
-\operatorname{Eval}_z \circ e_i \simeq \widetilde e_i
+\text{Eval}_z \circ e_i \simeq \widetilde e_i
 $$
 
 ここで、
@@ -91,7 +91,7 @@ Eval_z:
 欲しい主張は、概念的にはこれ。
 
 $$
-\operatorname{Eval}_z(e_0 * e_1 * e_2 * e_3) = \operatorname{Eval}_z(e_0) * \operatorname{Eval}_z(e_1) * \operatorname{Eval}_z(e_2) * \operatorname{Eval}_z(e_3)
+\text{Eval}_z(e_0 * e_1 * e_2 * e_3) = \text{Eval}_z(e_0) * \text{Eval}_z(e_1) * \text{Eval}_z(e_2) * \text{Eval}_z(e_3)
 $$
 
 ここで \(*\) は経路の連結、つまり `Path.trans` に対応する。

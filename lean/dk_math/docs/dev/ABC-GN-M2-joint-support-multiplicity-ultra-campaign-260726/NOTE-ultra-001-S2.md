@@ -33,7 +33,7 @@ GN exact factorization
 
 S2 では、予告した経路そのままに、公比 $3/4$ の有限幾何級数から、
 
-$$\operatorname{GNExcessLocalDensityTail}\left(p,q,K,\frac12\right)\le\frac{4(p-1)}{q^{3/2}}$$
+$$\text{GNExcessLocalDensityTail}\left(p,q,K,\frac12\right)\le\frac{4(p-1)}{q^{3/2}}$$
 
 を証明し、`htail` 仮定を完全に除去している。これで small-profile 側の定数は $Q,b,X$ に依存せず、指数 $p$ のみに依存する。
 
@@ -46,7 +46,7 @@ Lean CI run 388 も成功している。✔
 
 small side について、無条件に、
 
-$$\sum_{a=0}^{X}\exp\left(\frac12E_Q(a)\right)\le2(X+1)C_p+\operatorname{LargeBoundary}(Q,p,b,X)$$
+$$\sum_{a=0}^{X}\exp\left(\frac12E_Q(a)\right)\le2(X+1)C_p+\text{LargeBoundary}(Q,p,b,X)$$
 
 を得た。
 
@@ -107,15 +107,15 @@ $$M=\prod_{v_q(N)\ge2}q^{v_q(N)}$$
 
 旧 ABC 塔の言葉へ戻すと、
 
-$$M=\operatorname{piSqRad}(N)\operatorname{sqTail}(N)$$
+$$M=\text{piSqRad}(N)\text{sqTail}(N)$$
 
 さらに既存の、
 
-$$\operatorname{sqTail}(N)=\operatorname{piSqRad}(N)\operatorname{twoTail}(N)$$
+$$\text{sqTail}(N)=\text{piSqRad}(N)\text{twoTail}(N)$$
 
 を代入すれば、
 
-$$M=\operatorname{piSqRad}(N)^2\operatorname{twoTail}(N)$$
+$$M=\text{piSqRad}(N)^2\text{twoTail}(N)$$
 
 となる。
 
@@ -159,25 +159,25 @@ Cyclotomic / GN 的には、
 
 ## large profile は二体へ分裂する
 
-$$\log M=2\log\operatorname{piSqRad}(N)+\log\operatorname{twoTail}(N)$$
+$$\log M=2\log\text{piSqRad}(N)+\log\text{twoTail}(N)$$
 
 なので、$X+1<M$ なら必ず、
 
-$$\frac14\log(X+1)<\log\operatorname{piSqRad}(N)$$
+$$\frac14\log(X+1)<\log\text{piSqRad}(N)$$
 
 または、
 
-$$\frac12\log(X+1)<\log\operatorname{twoTail}(N)$$
+$$\frac12\log(X+1)<\log\text{twoTail}(N)$$
 
 のどちらかが成立する。
 
 冪の形では、
 
-$$\left(X+1\right)^{1/4}<\operatorname{piSqRad}(N)$$
+$$\left(X+1\right)^{1/4}<\text{piSqRad}(N)$$
 
 または、
 
-$$\left(X+1\right)^{1/2}<\operatorname{twoTail}(N)$$
+$$\left(X+1\right)^{1/2}<\text{twoTail}(N)$$
 
 じゃ。
 
@@ -211,19 +211,19 @@ $$q\equiv1\pmod p$$
 
 従って $p<q$ であり、
 
-$$(p-1)^r\le\operatorname{piSqRad}(N)$$
+$$(p-1)^r\le\text{piSqRad}(N)$$
 
 となる。
 
 また、
 
-$$\exp\left(\frac12E\right)=\operatorname{sqTail}(N)^{1/2}$$
+$$\exp\left(\frac12E\right)=\text{sqTail}(N)^{1/2}$$
 
 なので、large boundary の一 profile weight は、
 
-$$(p-1)^r\exp\left(\frac12E\right)\le\operatorname{piSqRad}(N)\operatorname{sqTail}(N)^{1/2}$$
+$$(p-1)^r\exp\left(\frac12E\right)\le\text{piSqRad}(N)\text{sqTail}(N)^{1/2}$$
 
-さらに $\operatorname{piSqRad}(N)\le\operatorname{sqTail}(N)$ より、
+さらに $\text{piSqRad}(N)\le\text{sqTail}(N)$ より、
 
 $$(p-1)^r\exp\left(\frac12E\right)\le M^{3/4}$$
 

@@ -8,13 +8,13 @@
 今回で、
 
 $$
-\operatorname{powerBeam}_3(x,x+u)=GN(3,u,x)
+\text{powerBeam}_3(x,x+u)=GN(3,u,x)
 $$
 
 に続いて、
 
 $$
-\operatorname{powerBeam}_4(x,x+u)=GN(4,u,x)
+\text{powerBeam}_4(x,x+u)=GN(4,u,x)
 $$
 
 も Lean 上で固定された。
@@ -23,7 +23,7 @@ $$
 `powerBeam` は endpoint 型、
 
 $$
-z^d-x^d=(z-x)\operatorname{powerBeam}_d(x,z)
+z^d-x^d=(z-x)\text{powerBeam}_d(x,z)
 $$
 
 の商であり、`GN` は gap 型、
@@ -45,13 +45,13 @@ $$
 endpoint 型では、
 
 $$
-\operatorname{powerBeam}_d(x,z)=\sum_{i=0}^{d-1}z^{d-1-i}x^i
+\text{powerBeam}_d(x,z)=\sum_{i=0}^{d-1}z^{d-1-i}x^i
 $$
 
 で、
 
 $$
-z^d-x^d=(z-x)\operatorname{powerBeam}_d(x,z)
+z^d-x^d=(z-x)\text{powerBeam}_d(x,z)
 $$
 
 を担う。
@@ -59,7 +59,7 @@ $$
 一方で (z=x+u) とすると、
 
 $$
-\operatorname{powerBeam}_d(x,x+u)=\sum_{i=0}^{d-1}(x+u)^{d-1-i}x^i
+\text{powerBeam}_d(x,x+u)=\sum_{i=0}^{d-1}(x+u)^{d-1-i}x^i
 $$
 
 になる。
@@ -68,7 +68,7 @@ $$
 たとえば (d=4) なら、
 
 $$
-\operatorname{powerBeam}_4(x,x+u)=(x+u)^3+(x+u)^2x+(x+u)x^2+x^3
+\text{powerBeam}_4(x,x+u)=(x+u)^3+(x+u)^2x+(x+u)x^2+x^3
 $$
 
 展開すると、
@@ -119,7 +119,7 @@ $$
 から
 
 $$
-q\mid \operatorname{powerBeam}_d(b,a)
+q\mid \text{powerBeam}_d(b,a)
 $$
 
 へ移す wrapper じゃ。
@@ -141,7 +141,7 @@ $$
 のとき、
 
 $$
-\operatorname{powerBeam}_d(b,a)=GN(d,a-b,b)
+\text{powerBeam}_d(b,a)=GN(d,a-b,b)
 $$
 
 じゃ。

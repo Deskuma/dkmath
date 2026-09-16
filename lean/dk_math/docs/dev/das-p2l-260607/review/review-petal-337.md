@@ -81,7 +81,7 @@ canonicalSaturatedBorderBlock_fiftyNine_zero
 
 従って、
 
-$$\exists n,m,\ \operatorname{CanonicalSaturatedBorderBlock}(n,m)$$
+$$\exists n,m,\ \text{CanonicalSaturatedBorderBlock}(n,m)$$
 
 が Lean theorem になった。
 
@@ -109,7 +109,7 @@ cp-336 では条件付き obstruction だったものが、今回は本物の fo
 
 今回、
 
-$$F_0(m)=\operatorname{Demand}(m)-\operatorname{Consumed}(m)$$
+$$F_0(m)=\text{Demand}(m)-\text{Consumed}(m)$$
 
 および、
 
@@ -192,7 +192,7 @@ report の記述はおおむねこの境界を守っている。
 
 成熟領域 $H<b_m$ では、horizon を一増やすと old carrier から境界 sourceを一つ eraseする。
 
-$$D_{H+1}(m)=D_H(m)-\mathbf{1}_{\operatorname{CarryTwo}(b_m-H-1)}$$
+$$D_{H+1}(m)=D_H(m)-\mathbf{1}_{\text{CarryTwo}(b_m-H-1)}$$
 
 が exact に証明された。
 
@@ -200,7 +200,7 @@ $$D_{H+1}(m)=D_H(m)-\mathbf{1}_{\operatorname{CarryTwo}(b_m-H-1)}$$
 
 crossing windowについても、
 
-$$F_{H+1}(m)-F_H(m)=\mathbf{1}*{\operatorname{CarryTwo}(b_m-H-1)}-\mathbf{1}*{\operatorname{CarryTwo}(b_{m+1}-H-1)}$$
+$$F_{H+1}(m)-F_H(m)=\mathbf{1}*{\text{CarryTwo}(b_m-H-1)}-\mathbf{1}*{\text{CarryTwo}(b_{m+1}-H-1)}$$
 
 が証明された。
 
@@ -214,19 +214,19 @@ block-time 方向だけでなく、horizon 方向にも exact difference equatio
 
 $b_m>0$ なら、
 
-$$\operatorname{Crossing}*1(m)={b_m-1}*{\mathrm{carry}}\sqcup\left(\operatorname{BlockClaims}(m)\setminus{b_{m+1}-1}\right)$$
+$$\text{Crossing}*1(m)={b_m-1}*{\mathrm{carry}}\sqcup\left(\text{BlockClaims}(m)\setminus{b_{m+1}-1}\right)$$
 
 となる。
 
 cardinality では、
 
-$$|\operatorname{Crossing}*1(m)|=\mathbf{1}*{\operatorname{CarryTwo}(b_m-1)}+\operatorname{Demand}(m)-\mathbf{1}*{\operatorname{CarryTwo}(b*{m+1}-1)}$$
+$$|\text{Crossing}*1(m)|=\mathbf{1}*{\text{CarryTwo}(b_m-1)}+\text{Demand}(m)-\mathbf{1}*{\text{CarryTwo}(b*{m+1}-1)}$$
 
 じゃ。
 
 saturated blockでは current block の final source も claimなので、
 
-$$F_1(m)=\mathbf{1}_{\operatorname{CarryTwo}(b_m-1)}$$
+$$F_1(m)=\mathbf{1}_{\text{CarryTwo}(b_m-1)}$$
 
 が得られた。
 
@@ -242,7 +242,7 @@ $$F_1(0)=0$$
 
 だが、
 
-$$\mathbf{1}*{\operatorname{CarryTwo}(b_0-1)}=\mathbf{1}*{\operatorname{CarryTwo}(0)}=1$$
+$$\mathbf{1}*{\text{CarryTwo}(b_0-1)}=\mathbf{1}*{\text{CarryTwo}(0)}=1$$
 
 になる。
 
@@ -340,7 +340,7 @@ saturated blockの直後では queue が少なくとも一ある。
 
 全 canonical block の service も少なくとも一なので、
 
-$$\operatorname{Consumed}(m+1)>0$$
+$$\text{Consumed}(m+1)>0$$
 
 が証明された。
 
@@ -361,13 +361,13 @@ service successor ≥ 1
 
 successor endpoint drift が厳密に負なら、
 
-$$\operatorname{Service}(m+1)\ge\operatorname{Demand}(m+1)+1$$
+$$\text{Service}(m+1)\ge\text{Demand}(m+1)+1$$
 
 となる。
 
 saturated block が残した queue unit により available mass も demand より一以上大きいので、
 
-$$\operatorname{Consumed}(m+1)\ge\operatorname{Demand}(m+1)+1$$
+$$\text{Consumed}(m+1)\ge\text{Demand}(m+1)+1$$
 
 となる。
 
@@ -428,7 +428,7 @@ $$W_0(m,2)=1+\max(-Q_{m+1},\Delta_{m+1})$$
 
 successor drift が $0$ なら、
 
-$$\operatorname{Service}(m+1)=\operatorname{Demand}(m+1)$$
+$$\text{Service}(m+1)=\text{Demand}(m+1)$$
 
 である。
 
@@ -467,11 +467,11 @@ audit では実際に root `123`, block `0` が `[1,0]` を与えている。
 
 successor endpoint drift が正なら、
 
-$$\operatorname{Service}<\operatorname{Demand}$$
+$$\text{Service}<\text{Demand}$$
 
 なので、queue の大きさに関係なく service は完全消費され、
 
-$$F_0(m+1)=\operatorname{Demand}-\operatorname{Service}=\Delta_{m+1}>0$$
+$$F_0(m+1)=\text{Demand}-\text{Service}=\Delta_{m+1}>0$$
 
 となる。
 
@@ -528,7 +528,7 @@ saturated blockの length は $2$、actual consumption は $1$ である。
 
 従って $H\le b_m$ なら crossing intervalも length $2$ となり、
 
-$$F_H(m)=\mathbf{1}*{\operatorname{CarryTwo}(b_m-H)}+\mathbf{1}*{\operatorname{CarryTwo}(b_m-H+1)}-1$$
+$$F_H(m)=\mathbf{1}*{\text{CarryTwo}(b_m-H)}+\mathbf{1}*{\text{CarryTwo}(b_m-H+1)}-1$$
 
 が得られるはずじゃ。
 
@@ -536,7 +536,7 @@ $$F_H(m)=\mathbf{1}*{\operatorname{CarryTwo}(b_m-H)}+\mathbf{1}*{\operatorname{C
 
 $$F_0(m)=1+1-1=1$$
 
-$$F_1(m)=\mathbf{1}_{\operatorname{CarryTwo}(b_m-1)}+1-1$$
+$$F_1(m)=\mathbf{1}_{\text{CarryTwo}(b_m-1)}+1-1$$
 
 となり、今回の theoremを統一できる。
 

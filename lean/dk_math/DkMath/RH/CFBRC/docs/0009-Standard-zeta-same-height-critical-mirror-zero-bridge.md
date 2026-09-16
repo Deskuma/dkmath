@@ -9,7 +9,7 @@
 現行実装では、standard nontrivial Riemann-zeta zero `s` から
 
 $$
-\operatorname{criticalMirror}(s)=1-\overline{s}
+\text{criticalMirror}(s)=1-\overline{s}
 $$
 
 へ standard zeta の零点を移送する theorem が証明済みである。
@@ -21,7 +21,7 @@ $$
 ただし、mirror pair が同一点になること、すなわち
 
 $$
-\operatorname{criticalMirror}(s)=s
+\text{criticalMirror}(s)=s
 $$
 
 はこの theorem 群からは従わない。
@@ -181,7 +181,7 @@ theorem criticalMirror_eq_star_one_sub (s : ℂ) :
 複素数で `starRingEnd ℂ` は共役に対応するため、数学的には
 
 $$
-\operatorname{criticalMirror}(s)=\overline{1-s}=1-\overline{s}
+\text{criticalMirror}(s)=\overline{1-s}=1-\overline{s}
 $$
 
 である。
@@ -266,7 +266,7 @@ theorem criticalMirror_re_lt_one_of_nontrivialRiemannZetaZero
 これらは
 
 $$
-\Re(\operatorname{criticalMirror}(s))=1-\Re(s)
+\Re(\text{criticalMirror}(s))=1-\Re(s)
 $$
 
 と元の open critical strip 条件から `linarith` で得られる。
@@ -344,7 +344,7 @@ $$
 と
 
 $$
-\operatorname{criticalMirror}(s)=(1-\sigma)+it
+\text{criticalMirror}(s)=(1-\sigma)+it
 $$
 
 の双方が nontrivial zero になる。

@@ -38,7 +38,7 @@ XDP-021 の finite arithmetic defect approximant は概念的に
 
 $$
 D_{\varepsilon,X}(W)
-:= Q(W.R)-\operatorname{Re} A_{\varepsilon,X}(W)
+:= Q(W.R)-\text{Re} A_{\varepsilon,X}(W)
 $$
 
 である。
@@ -99,7 +99,7 @@ $$
 \frac{1}{\pi}
 \sum_{n\le X}\Lambda(n)n^{-\sigma}
 \int_{-T}^{T}
-\operatorname{Re}
+\text{Re}
 \left(
 q_\varepsilon(a+it)e^{-it\log n}
 \right)dt
@@ -187,7 +187,7 @@ $$
 F_{a,T}(c)
 :=
 \int_{-T}^{T}
-\operatorname{Re}\left((a+it)e^{-ict}\right)dt
+\text{Re}\left((a+it)e^{-ict}\right)dt
 $$
 
 と置く。
@@ -263,7 +263,7 @@ top-horizontal correction
 狙う形は
 
 $$
-\operatorname{Re}A_{\varepsilon,X}
+\text{Re}A_{\varepsilon,X}
 =
 P_{\varepsilon,X}
 +A_\varepsilon
@@ -295,7 +295,7 @@ XDP-021 の CF2D surface により radial side は既に同じ theorem surface �
 $$
 Q_{\mathrm{CF2D}}(W.R)
 \le
-\operatorname{Re}A_{\varepsilon,X}(W)
+\text{Re}A_{\varepsilon,X}(W)
 $$
 
 または、その eventual / endpoint 版である。

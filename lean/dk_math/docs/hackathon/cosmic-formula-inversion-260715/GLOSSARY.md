@@ -312,7 +312,7 @@ under the assumptions that:
 The public existence form is:
 
 $$
-\exists q,\ \operatorname{Prime}(q)\land q\mid P+u\land q\notin S
+\exists q,\ \text{Prime}(q)\land q\mid P+u\land q\notin S
 $$
 
 when:
@@ -495,7 +495,7 @@ A theorem about a supplied divisor is logically weaker than a theorem asserting 
 The property that every prime divisor of `P + u` lies outside `S`.
 
 $$
-\forall q,\ \operatorname{Prime}(q)\land q\mid P+u\Longrightarrow q\notin S
+\forall q,\ \text{Prime}(q)\land q\mid P+u\Longrightarrow q\notin S
 $$
 
 This does not mean every prime outside `S` divides `P + u`.
@@ -1080,7 +1080,7 @@ The repository audit determines the correct implementation.
 For an interval with endpoints `a ≤ b`:
 
 $$
-\operatorname{width}([a,b])=b-a
+\text{width}([a,b])=b-a
 $$
 
 The exact definition must reuse the existing interval API when possible.
@@ -1106,7 +1106,7 @@ The property that interval width tends to zero or becomes smaller than a require
 For integer uniqueness, the key finite condition is:
 
 $$
-\operatorname{width}(I)<1
+\text{width}(I)<1
 $$
 
 ---
@@ -1124,7 +1124,7 @@ The property that an interval contains at most one integer.
 A sufficient condition is:
 
 $$
-\operatorname{width}(I)<1
+\text{width}(I)<1
 $$
 
 together with the appropriate endpoint and ordering assumptions.

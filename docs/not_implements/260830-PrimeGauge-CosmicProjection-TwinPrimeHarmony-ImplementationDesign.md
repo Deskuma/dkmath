@@ -597,7 +597,7 @@ $$
 候補 finite theorem:
 
 $$
-\operatorname{TwinSafeDensity}(S)
+\text{TwinSafeDensity}(S)
 =
 \prod_{p\in S,\ p>2}\frac{p-2}{p}
 $$

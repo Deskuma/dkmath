@@ -89,7 +89,7 @@ U005 では
 GCDMonoid 導入後は gcd が両方を割るので、
 
 $$
-\operatorname{IsUnit}(\gcd(\beta,\overline\beta))
+\text{IsUnit}(\gcd(\beta,\overline\beta))
 $$
 
 を thin theorem として得る。
@@ -119,7 +119,7 @@ $$
 existing traceOne_mul_conj gives
 
 $$
-\beta\overline\beta=\operatorname{ofInt}(B^3).
+\beta\overline\beta=\text{ofInt}(B^3).
 $$
 
 これを ring power の形へ変換する。
@@ -160,7 +160,7 @@ Mathlib の generic theorem
 Expected input:
 
 $$
-\operatorname{IsUnit}(\gcd(x,y)),
+\text{IsUnit}(\gcd(x,y)),
 $$
 
 $$

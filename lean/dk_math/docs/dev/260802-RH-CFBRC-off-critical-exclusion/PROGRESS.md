@@ -34,7 +34,7 @@ theorem cfbrcR_eq_zero_iff_x_eq_zero
 Hence, for every positive degree,
 
 $$
-\operatorname{offCriticalCFBRC}(d,\sigma,\Theta)=0
+\text{offCriticalCFBRC}(d,\sigma,\Theta)=0
 \quad\Longleftrightarrow\quad
 \sigma=\frac12.
 $$
@@ -100,13 +100,13 @@ $$
 Taking real and imaginary parts gives
 
 $$
-(1+\operatorname{Re}\omega)X
-+\operatorname{Im}\omega\,\Theta=0,
+(1+\text{Re}\omega)X
++\text{Im}\omega\,\Theta=0,
 $$
 
 $$
-\operatorname{Im}\omega\,X
-+(1-\operatorname{Re}\omega)\Theta=0.
+\text{Im}\omega\,X
++(1-\text{Re}\omega)\Theta=0.
 $$
 
 Positive degree implies `|ω| = 1`. The antipodal branch forces `Θ = 0`; every
@@ -114,8 +114,8 @@ ordinary branch satisfies
 
 $$
 X=
-\frac{-\operatorname{Im}\omega\,\Theta}
-{1+\operatorname{Re}\omega}.
+\frac{-\text{Im}\omega\,\Theta}
+{1+\text{Re}\omega}.
 $$
 
 CI result: success through the public import graph.
@@ -220,9 +220,9 @@ The algebraic threat model is complete:
 Thus a future zeta bridge has two possible proof routes:
 
 $$
-\operatorname{NontrivialZetaZero}(s)
+\text{NontrivialZetaZero}(s)
 \longrightarrow
-C_d\!\left(s.\operatorname{re}-\frac12,\Theta(s)\right)=0,
+C_d\!\left(s.\text{re}-\frac12,\Theta(s)\right)=0,
 $$
 
 or, for a mirror-valued bridge, prove that its image enters none of the finite

@@ -234,7 +234,7 @@ Core = output point
 
 具体例では、
 
-$$\operatorname{Core}=\left(\frac18,0,0\right)$$
+$$\text{Core}=\left(\frac18,0,0\right)$$
 
 です。
 
@@ -405,19 +405,19 @@ $$p(T)=\sum_na_nT^n$$
 
 に対して、
 
-$$\operatorname{GNFiniteDifference}(p,h,t)=\sum_na_nGN_n(h,t)$$
+$$\text{GNFiniteDifference}(p,h,t)=\sum_na_nGN_n(h,t)$$
 
 を定義しました。
 
 Lean は、
 
-$$p(t+h)-p(t)=h\,\operatorname{GNFiniteDifference}(p,h,t)$$
+$$p(t+h)-p(t)=h\,\text{GNFiniteDifference}(p,h,t)$$
 
 を任意の可換環上で証明しました。
 
 さらに体上で $h\ne0$ なら、
 
-$$\frac{p(t+h)-p(t)}h=\operatorname{GNFiniteDifference}(p,h,t)$$
+$$\frac{p(t+h)-p(t)}h=\text{GNFiniteDifference}(p,h,t)$$
 
 です。
 

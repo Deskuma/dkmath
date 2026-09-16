@@ -100,7 +100,7 @@ canonicalOwnedCumulativeConsumedClaimsBeforeBlock n m
 membership は正確に、
 
 $$
-i\in\operatorname{CumulativeConsumed}(m) \iff \exists k<m,\ i\in\operatorname{ConsumedAtBlock}(k)
+i\in\text{CumulativeConsumed}(m) \iff \exists k<m,\ i\in\text{ConsumedAtBlock}(k)
 $$
 
 となる。
@@ -130,7 +130,7 @@ canonicalHistoricalClaimSourceCarrier n m
 として、
 
 $$
-\{i\in[0,b_m)\mid\operatorname{CarryTwoDebtAt}(n,i)\}
+\{i\in[0,b_m)\mid\text{CarryTwoDebtAt}(n,i)\}
 $$
 
 により定義された。
@@ -138,7 +138,7 @@ $$
 そして source identity の集合として、
 
 $$
-\operatorname{HistoricalClaims}_m = \operatorname{CumulativeConsumed}_m \sqcup \operatorname{OwnedOutstanding}_m
+\text{HistoricalClaims}_m = \text{CumulativeConsumed}_m \sqcup \text{OwnedOutstanding}_m
 $$
 
 が証明された。
@@ -146,7 +146,7 @@ $$
 cardinality でも、
 
 $$
-|\operatorname{HistoricalClaims}_m| = \operatorname{CumulativeConsumedCount}_m+Q_m
+|\text{HistoricalClaims}_m| = \text{CumulativeConsumedCount}_m+Q_m
 $$
 
 となる。
@@ -192,7 +192,7 @@ canonicalOwnedOutstandingClaimsBeforeBlock_eq_eraseOldestN_historical
 じゃ。
 
 $$
-\operatorname{OwnedOutstanding}_m = \operatorname{eraseOldestN} \left(\operatorname{CumulativeConsumedCount}_m,\operatorname{HistoricalClaims}_m\right)
+\text{OwnedOutstanding}_m = \text{eraseOldestN} \left(\text{CumulativeConsumedCount}_m,\text{HistoricalClaims}_m\right)
 $$
 
 が証明された。
@@ -217,7 +217,7 @@ unused service は未来へ保存されないため、normal form に混入し�
 cp-333 時点では、
 
 $$
-Q_m\le|\operatorname{RecentClaims}(H,m)|
+Q_m\le|\text{RecentClaims}(H,m)|
 $$
 
 は匿名 cardinality inequalityにすぎなかった。
@@ -225,7 +225,7 @@ $$
 cp-335 では newest-tail normal form と threshold theorem により、
 
 $$
-\operatorname{ActualSourceAgeBound}(H) \iff \operatorname{CardCoveredByRecentSources}(H)
+\text{ActualSourceAgeBound}(H) \iff \text{CardCoveredByRecentSources}(H)
 $$
 
 まで強化された。
@@ -253,7 +253,7 @@ FIFO queue は歴史上最も新しい $Q_m$ 個を残すため、recent carrier
 old source carrier は、
 
 $$
-\operatorname{OldClaims}(H,m) = \{i\in[0,b_m-H)\mid\operatorname{CarryTwoDebtAt}(n,i)\}
+\text{OldClaims}(H,m) = \{i\in[0,b_m-H)\mid\text{CarryTwoDebtAt}(n,i)\}
 $$
 
 じゃ。
@@ -261,7 +261,7 @@ $$
 source-age deficit は、
 
 $$
-D_H(m) = |\operatorname{OldClaims}(H,m)| - \operatorname{CumulativeConsumedCount}(m)
+D_H(m) = |\text{OldClaims}(H,m)| - \text{CumulativeConsumedCount}(m)
 $$
 
 として定義された。
@@ -269,7 +269,7 @@ $$
 そして exact signed identity、
 
 $$
-D_H(m) = Q_m-|\operatorname{RecentClaims}(H,m)|
+D_H(m) = Q_m-|\text{RecentClaims}(H,m)|
 $$
 
 が証明された。
@@ -285,7 +285,7 @@ $$
 uniform version は、
 
 $$
-\operatorname{UniformSourceAge}(H) \iff \forall m,\ D_H(m)\le0
+\text{UniformSourceAge}(H) \iff \forall m,\ D_H(m)\le0
 $$
 
 じゃ。
@@ -303,7 +303,7 @@ $$
 owned queue が非空なら、その最小 source time が最古 outstanding sourceになる。
 
 $$
-\operatorname{MaximumAge}(m) = b_m - \min(\operatorname{OwnedQueue}_m)
+\text{MaximumAge}(m) = b_m - \min(\text{OwnedQueue}_m)
 $$
 
 空なら $0$ と定義された。
@@ -311,7 +311,7 @@ $$
 そして、
 
 $$
-\operatorname{UniformSourceAge}(H) \iff \forall m,\ \operatorname{MaximumAge}(m)\le H
+\text{UniformSourceAge}(H) \iff \forall m,\ \text{MaximumAge}(m)\le H
 $$
 
 が証明された。
@@ -336,7 +336,7 @@ maximum age
 その任意の admissible remainder $u$ に対して、
 
 $$
-\min(u)\le\min(\operatorname{FIFOQueue})
+\min(u)\le\min(\text{FIFOQueue})
 $$
 
 が証明された。
@@ -398,7 +398,7 @@ $$
 従って次へ強化できる。
 
 $$
-\exists j<k+H+1,\ i\in\operatorname{ConsumedAtBlock}(j)
+\exists j<k+H+1,\ i\in\text{ConsumedAtBlock}(j)
 $$
 
 ---
@@ -427,7 +427,7 @@ report の、
 したがって一般には、
 
 $$
-\operatorname{UniformSourceAge}\Longrightarrow\operatorname{UniformQueueBound}
+\text{UniformSourceAge}\Longrightarrow\text{UniformQueueBound}
 $$
 
 だが、逆向きは成立しない。
@@ -569,7 +569,7 @@ canonicalExpiredOutstandingClaims n H m :=
 期待される exact theorem は、
 
 $$
-|\operatorname{ExpiredOutstanding}(H,m)| = \operatorname{Int.toNat}(D_H(m))
+|\text{ExpiredOutstanding}(H,m)| = \text{Int.toNat}(D_H(m))
 $$
 
 である。
@@ -577,7 +577,7 @@ $$
 従って、
 
 $$
-D_H(m)\le0 \iff \operatorname{ExpiredOutstanding}(H,m)=\varnothing
+D_H(m)\le0 \iff \text{ExpiredOutstanding}(H,m)=\varnothing
 $$
 
 となる。
@@ -591,7 +591,7 @@ $$
 次の horizon-crossing carrier を定義する。
 
 $$
-\operatorname{Crossing}_H(m) = \{ i\in[b_m-H,b_{m+1}-H) \mid \operatorname{CarryTwoDebtAt}(n,i) \}
+\text{Crossing}_H(m) = \{ i\in[b_m-H,b_{m+1}-H) \mid \text{CarryTwoDebtAt}(n,i) \}
 $$
 
 これは block $m\to m+1$ の進行によって、新たに age horizon の外側へ出た claim source の集合じゃ。
@@ -599,7 +599,7 @@ $$
 old carrier は、
 
 $$
-\operatorname{OldClaims}(H,m+1) = \operatorname{OldClaims}(H,m) \sqcup \operatorname{Crossing}_H(m)
+\text{OldClaims}(H,m+1) = \text{OldClaims}(H,m) \sqcup \text{Crossing}_H(m)
 $$
 
 となる。
@@ -607,13 +607,13 @@ $$
 cumulative consumed count は、
 
 $$
-C_{m+1}=C_m+\operatorname{Consumed}(m)
+C_{m+1}=C_m+\text{Consumed}(m)
 $$
 
 だから、
 
 $$
-D_H(m+1) = D_H(m) + |\operatorname{Crossing}_H(m)| - \operatorname{Consumed}(m)
+D_H(m+1) = D_H(m) + |\text{Crossing}_H(m)| - \text{Consumed}(m)
 $$
 
 が得られる。

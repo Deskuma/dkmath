@@ -139,7 +139,7 @@ $$
 正確には今や、
 
 $$
-\operatorname{Saturated}(k)
+\text{Saturated}(k)
 \Longleftrightarrow
 D_k>0\land A_k=L_k
 $$
@@ -221,7 +221,7 @@ $$
 $$
 M_k(d)=
 \left|
-\operatorname{ContinuationFiber}_k(d+1)
+\text{ContinuationFiber}_k(d+1)
 \right|
 $$
 
@@ -247,7 +247,7 @@ positive nonsaturated block では、
 $$
 D_k\le
 \left|
-\operatorname{SelectedCarrier}_k
+\text{SelectedCarrier}_k
 \right|
 $$
 
@@ -260,7 +260,7 @@ D_k=1
 $$
 
 $$
-\operatorname{SelectedCarrier}_k=\varnothing
+\text{SelectedCarrier}_k=\varnothing
 $$
 
 となり、その残差を saturated token 一個として保持する。
@@ -270,9 +270,9 @@ $$
 $$
 D_k^+
 \le
-|\operatorname{SelectedCarrier}*k|
+|\text{SelectedCarrier}*k|
 +
-\mathbf1*{\operatorname{Saturated}(k)}
+\mathbf1*{\text{Saturated}(k)}
 $$
 
 が完全に閉じた。
@@ -298,9 +298,9 @@ selected carrier は各 block の部分集合なので、
 $$
 k\ne\ell
 \Longrightarrow
-\operatorname{Carrier}*k
+\text{Carrier}*k
 \cap
-\operatorname{Carrier}*\ell = \varnothing
+\text{Carrier}*\ell = \varnothing
 $$
 
 が得られた。
@@ -368,7 +368,7 @@ block $k$ の unit が、別 block $\ell$ の carrier へ送られる可能性�
 そうすれば、
 
 $$
-\operatorname{block}(\operatorname{image}(x)) = \operatorname{block}(x)
+\text{block}(\text{image}(x)) = \text{block}(x)
 $$
 
 を満たす真の incidence embedding になる。
@@ -382,7 +382,7 @@ $$
 saturated index は隣接しないので、block interval $[q,m]$ では、
 
 $$
-|\operatorname{Saturated}|
+|\text{Saturated}|
 \le
 \frac{m-q+2}{2}
 $$
@@ -394,7 +394,7 @@ $$
 $$
 \sum D_k^+
 \le
-|\operatorname{GlobalCarrier}|
+|\text{GlobalCarrier}|
 +
 \frac{m-q+2}{2}
 $$
@@ -416,7 +416,7 @@ saturation は孤立したが、まだ「総数が有限定数以下」になっ
 global carrier が、
 
 $$
-|\operatorname{GlobalCarrier}| = \sum_{d\in\operatorname{DepthSupport}}|\operatorname{BucketCarrier}(d)|
+|\text{GlobalCarrier}| = \sum_{d\in\text{DepthSupport}}|\text{BucketCarrier}(d)|
 $$
 
 と分解された。
@@ -427,7 +427,7 @@ $$
 
 $$
 i\in
-\operatorname{ContinuationFiber}_{k}(d+1)
+\text{ContinuationFiber}_{k}(d+1)
 $$
 
 を満たす。
@@ -437,9 +437,9 @@ $$
 次に明示すべきは、block coordinate を忘れる embedding、
 
 $$
-\operatorname{BucketCarrier}(d)
+\text{BucketCarrier}(d)
 \hookrightarrow
-\operatorname{OrbitContinuationRangeFiber}(d+1)
+\text{OrbitContinuationRangeFiber}(d+1)
 $$
 
 じゃ。
@@ -449,9 +449,9 @@ $$
 これにより、
 
 $$
-|\operatorname{BucketCarrier}(d)|
+|\text{BucketCarrier}(d)|
 \le
-\operatorname{orbitDepthContinuationFiberCount}(K,d+1)
+\text{orbitDepthContinuationFiberCount}(K,d+1)
 $$
 
 が直接得られる。
@@ -516,7 +516,7 @@ block length を $L_k$ とし、$d\ge1$ とする。
 各 block の pressure contribution は厳密に、
 
 $$
-M_k(d) = \left|\operatorname{ContinuationFiber}_k(d+1)\right| - \mathbf1_{L_k=d}
+M_k(d) = \left|\text{ContinuationFiber}_k(d+1)\right| - \mathbf1_{L_k=d}
 $$
 
 じゃ。
@@ -541,7 +541,7 @@ $$
 ここで、
 
 $$
-C_I(d+1) = \sum_{k\in I}\left|\operatorname{ContinuationFiber}_k(d+1)\right|
+C_I(d+1) = \sum_{k\in I}\left|\text{ContinuationFiber}_k(d+1)\right|
 $$
 
 $$
@@ -611,9 +611,9 @@ depth d の正 pressure amplitude unit
 したがって global carrier は、
 
 $$
-|\operatorname{GlobalCarrier}|
+|\text{GlobalCarrier}|
 \le
-\#\{\text{blocks}\} + \sum_d \left(\operatorname{WindowPressure}(d)\right)_+
+\#\{\text{blocks}\} + \sum_d \left(\text{WindowPressure}(d)\right)_+
 $$
 
 へ圧縮できる。
@@ -638,7 +638,7 @@ $$
 ところが cp-320 が生成した carrier は、各 depth $d$ について、
 
 $$
-\left(\operatorname{WindowPressure}(d)\right)_+
+\left(\text{WindowPressure}(d)\right)_+
 $$
 
 個の unit を持ち得る。
@@ -696,13 +696,13 @@ $$
 一方 selected carrier の cardinality は、
 
 $$
-|\operatorname{Carrier}|=L-v
+|\text{Carrier}|=L-v
 $$
 
 なので、
 
 $$
-D+1\le|\operatorname{Carrier}|
+D+1\le|\text{Carrier}|
 $$
 
 が得られる。

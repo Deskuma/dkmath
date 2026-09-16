@@ -2624,7 +2624,7 @@ theorem evalCounterexampleQ_noLeftInverse :
 数学的には、
 
 $$
-G\circ F=\operatorname{id}
+G\circ F=\text{id}
 $$
 
 ならば $F$ は単射でなければならぬため、今回の明示衝突と両立しない。
@@ -3421,7 +3421,7 @@ change MvPolynomial.eval₂ qToC (qToC ∘ p) ...
 
 によって、評価点の輸送を明示的に露出させている。これは API の都合を隠すだけの変形ではなく、
 
-$$qToC\bigl(f(p)\bigr)=\bigl(\operatorname{map}qToC\,f\bigr)(qToC\circ p)$$
+$$qToC\bigl(f(p)\bigr)=\bigl(\text{map}qToC\,f\bigr)(qToC\circ p)$$
 
 という評価可換図そのものじゃ。
 
@@ -3499,7 +3499,7 @@ simp [polyMapQC, qToC]
 
 複素世界でも再び六項 determinant を展開したのではなく、
 
-$$\det(\operatorname{map}J)=\operatorname{map}(\det J)$$
+$$\det(\text{map}J)=\text{map}(\det J)$$
 
 によって有理証明書を運んでいる。
 
@@ -5026,11 +5026,11 @@ $$\neg\exists!G,\ R(C,G)$$
 
 さらに、証明付きの Core–Gap 対を一つの世界へ持ち上げ、
 
-$$\operatorname{forgetGap}(C,G)=C$$
+$$\text{forgetGap}(C,G)=C$$
 
 とすると、同じ Core に異なる Gap が二つ存在する時、
 
-$$\operatorname{forgetGap}$$
+$$\text{forgetGap}$$
 
 は非単射になる。
 
@@ -5929,13 +5929,13 @@ $$F(p_0)=F(p_1)=F(p_2)$$
 
 ではなく、
 
-$$\neg\operatorname{UniqueGap}(\operatorname{normalizedTargetC})$$
+$$\neg\text{UniqueGap}(\text{normalizedTargetC})$$
 
 として再解釈された。
 
 さらに、証明付き Core–Gap 世界から Core だけを残す射影は、
 
-$$\neg\operatorname{Injective}(\operatorname{forgetGap})$$
+$$\neg\text{Injective}(\text{forgetGap})$$
 
 である。
 
@@ -6603,7 +6603,7 @@ $$
 これにより、任意の可換環上の多項式 $p$ について、
 
 $$
-p(t+h)-p(t)=h\,\operatorname{GNFiniteDifference}(p,h,t)
+p(t+h)-p(t)=h\,\text{GNFiniteDifference}(p,h,t)
 $$
 
 が閉じた。
@@ -6611,7 +6611,7 @@ $$
 さらに体上で $h\ne0$ なら、
 
 $$
-\frac{p(t+h)-p(t)}h=\operatorname{GNFiniteDifference}(p,h,t)
+\frac{p(t+h)-p(t)}h=\text{GNFiniteDifference}(p,h,t)
 $$
 
 を得る。
@@ -6643,7 +6643,7 @@ $$
 に対して、そのまま
 
 $$
-\operatorname{GNFD}(p,h,t)=\sum_n a_nGN_n(h,t)
+\text{GNFD}(p,h,t)=\sum_n a_nGN_n(h,t)
 $$
 
 という定義になっておる。
@@ -6682,7 +6682,7 @@ $$
 定数多項式について、
 
 $$
-\operatorname{GNFD}(C(a),h,t)=0
+\text{GNFD}(C(a),h,t)=0
 $$
 
 となるのも正しい。定数項は差分で消え、$GN_0=0$ に対応しておる。
@@ -6747,7 +6747,7 @@ $$
 主定理が `CommRing` 上で除算なしに成立している点が重要じゃ。
 
 $$
-p(t+h)-p(t)=h\,\operatorname{GNFD}(p,h,t)
+p(t+h)-p(t)=h\,\text{GNFD}(p,h,t)
 $$
 
 は $h=0$ でも成立し、体や逆元を必要としない。
@@ -6859,7 +6859,7 @@ $$
 したがって、
 
 $$
-\operatorname{GNFiniteDifference}(p,h,t)
+\text{GNFiniteDifference}(p,h,t)
 =
 \sum_na_nGN_n(h,t)
 $$
@@ -6879,7 +6879,7 @@ $$
 そして $h\ne0$ なら、
 
 $$
-\operatorname{GNFiniteDifference}(p,h,t)
+\text{GNFiniteDifference}(p,h,t)
 =
 \frac{p(t+h)-p(t)}h
 $$
@@ -6919,7 +6919,7 @@ $$
 $$
 \text{同じ Core に異なる認証済み Gap}
 \Longrightarrow
-\neg\operatorname{UniqueGap}
+\neg\text{UniqueGap}
 $$
 
 ## 有限差分層
@@ -8003,11 +8003,11 @@ Gap:
 
 今回、標準 GN の冪差恒等式を一般多項式へ持ち上げ、
 
-$$p(t+h)-p(t)=h\,\operatorname{GNFiniteDifference}(p,h,t)$$
+$$p(t+h)-p(t)=h\,\text{GNFiniteDifference}(p,h,t)$$
 
 を任意の可換環上で証明しました。体上で $h\ne0$ なら、
 
-$$\frac{p(t+h)-p(t)}h=\operatorname{GNFiniteDifference}(p,h,t)$$
+$$\frac{p(t+h)-p(t)}h=\text{GNFiniteDifference}(p,h,t)$$
 
 となります。fileciteturn39file0L76-L113
 

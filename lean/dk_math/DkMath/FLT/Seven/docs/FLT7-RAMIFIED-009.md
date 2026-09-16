@@ -300,11 +300,11 @@ $$
 このとき determinant norm を計算すると、
 
 $$
-\boxed{\operatorname{Norm}(a-\alpha n)=L(a,n)}
+\boxed{\text{Norm}(a-\alpha n)=L(a,n)}
 $$
 
 $$
-\boxed{\operatorname{Norm}(a+(1+\alpha)n)=R(a,n)}
+\boxed{\text{Norm}(a+(1+\alpha)n)=R(a,n)}
 $$
 
 です。
@@ -322,11 +322,11 @@ $$
 と置けば、
 
 $$
-\operatorname{Norm}(\eta_L)=l^7
+\text{Norm}(\eta_L)=l^7
 $$
 
 $$
-\operatorname{Norm}(\eta_R)=r^7
+\text{Norm}(\eta_R)=r^7
 $$
 
 です。
@@ -342,7 +342,7 @@ $$
 計算すると、
 
 $$
-\operatorname{Norm}(\pi)=-7
+\text{Norm}(\pi)=-7
 $$
 
 です。
@@ -370,7 +370,7 @@ $$
 であり、
 
 $$
-\operatorname{Norm}(\varepsilon)=-1
+\text{Norm}(\varepsilon)=-1
 $$
 
 なので $\varepsilon$ は unit です。
@@ -496,11 +496,11 @@ $$
 それぞれの norm は、
 
 $$
-\operatorname{Norm}(\alpha)=-1
+\text{Norm}(\alpha)=-1
 $$
 
 $$
-\operatorname{Norm}(1+\alpha)=1
+\text{Norm}(1+\alpha)=1
 $$
 
 です。

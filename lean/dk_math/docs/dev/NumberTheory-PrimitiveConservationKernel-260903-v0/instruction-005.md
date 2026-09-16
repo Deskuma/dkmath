@@ -119,9 +119,9 @@ The key point is not a new primality criterion. It is the reuse law:
 Equivalently,
 
 $$
-\operatorname{squareBody}(q)
+\text{squareBody}(q)
 \subseteq
-\operatorname{squareBody}(P)
+\text{squareBody}(P)
 $$
 
 at the order level, so the coarse prime support is sufficient for the entire nested family.

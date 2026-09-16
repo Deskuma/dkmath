@@ -43,7 +43,7 @@ BCAL-004 では、既存 ABC cubic-shell 系で用いられている repeated-pa
     既存コードには少なくとも概念的に
 
     $$
-    \operatorname{repeatedPrimePowerPart}(n)=\operatorname{piSqRad}(n)^2\operatorname{twoTail}(n)
+    \text{repeatedPrimePowerPart}(n)=\text{piSqRad}(n)^2\text{twoTail}(n)
     $$
 
     という exact decomposition が存在する。
@@ -115,19 +115,19 @@ over-depth layer
 概念的には
 
 $$
-n=\operatorname{single}(n)\operatorname{pivot}(n)\operatorname{overDepth}(n).
+n=\text{single}(n)\text{pivot}(n)\text{overDepth}(n).
 $$
 
 既存 `repeatedPrimePowerPart` decomposition が利用できる場合、pivot と over-depth は原則として
 
 $$
-\operatorname{pivot}(n)=\operatorname{piSqRad}(n)^2
+\text{pivot}(n)=\text{piSqRad}(n)^2
 $$
 
 および
 
 $$
-\operatorname{overDepth}(n)=\operatorname{twoTail}(n)
+\text{overDepth}(n)=\text{twoTail}(n)
 $$
 
 に対応するはずである。
@@ -147,7 +147,7 @@ $$
 三層分解が exact に成立する場合、neutral pivot は消去され、
 
 $$
-Q=\log(\operatorname{single})-\log(\operatorname{overDepth})
+Q=\log(\text{single})-\log(\text{overDepth})
 $$
 
 という形になることを期待する。
@@ -171,7 +171,7 @@ $$
 $M_{\mathrm{shell}}$ が
 
 $$
-\operatorname{piSqRad}^2
+\text{piSqRad}^2
 $$
 
 という neutral pivot mass を含む場合、この式は BCAL-003 の $Q$ とは異なる。
@@ -216,7 +216,7 @@ source audit の結果に応じ、以下のうち安全に証明できるもの�
 既存 API を直接 expose / specialize して、
 
 $$
-\operatorname{repeatedPart}=\operatorname{pivotPart}\operatorname{overDepthPart}
+\text{repeatedPart}=\text{pivotPart}\text{overDepthPart}
 $$
 
 を得る。
@@ -250,7 +250,7 @@ $$
 最終的に可能なら、
 
 $$
-Q_{\mathrm{BCAL}}=\log(\operatorname{single})-\log(\operatorname{twoTail})
+Q_{\mathrm{BCAL}}=\log(\text{single})-\log(\text{twoTail})
 $$
 
 または現行 API に即した同値な exact theorem を production に置く。

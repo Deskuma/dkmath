@@ -237,7 +237,7 @@ Triple.GNExceptionalExcessBudgetAffine_zero_of_oddPrime
 
 定義展開後は:
 
-$$0\le0\cdot\log\operatorname{rad}(abc)+0$$
+$$0\le0\cdot\log\text{rad}(abc)+0$$
 
 となる。
 

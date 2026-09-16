@@ -39,7 +39,7 @@ q = p^j
 現在の有限 PHZ は exact に
 
 $$
-\operatorname{PHZ}_X(s)
+\text{PHZ}_X(s)
 :=
 \sum_{p\le X,\ p\ \mathrm{prime}}
 \sum_{k<X}
@@ -279,7 +279,7 @@ theorem canonicalPrimePowerShadowCost_nonneg
 canonical natural-number index で、
 
 $$
-\operatorname{PHZ}^{q}_X(s)
+\text{PHZ}^{q}_X(s)
 :=
 \sum_{q=0}^{X}
 \Lambda_{\mathrm{shadow}}(q)q^{-s}

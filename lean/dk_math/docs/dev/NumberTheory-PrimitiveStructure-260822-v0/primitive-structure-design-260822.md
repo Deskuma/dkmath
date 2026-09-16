@@ -158,7 +158,7 @@ part of the Primitive core theorem surface.
 The generic square Body is
 
 $$
-\operatorname{squareBody}(P)=P^2+2P=(P+1)^2-1.
+\text{squareBody}(P)=P^2+2P=(P+1)^2-1.
 $$
 
 This layer is independent of Legendre.
@@ -286,9 +286,9 @@ $$
 The current facade proves the exact frontier
 
 $$
-\operatorname{LegendreConjecture}
+\text{LegendreConjecture}
 \iff
-\forall n>0,\;\neg\operatorname{SquareOffsetsFullyCovered}(n).
+\forall n>0,\;\neg\text{SquareOffsetsFullyCovered}(n).
 $$
 
 Equivalently, Legendre is exactly the assertion that every square shell has at
@@ -305,7 +305,7 @@ rather than by analytic prime estimates.
 For a modulus `m`, the square-wave hit count is exact:
 
 $$
-|\operatorname{squareWaveOffsets}(n,m)|
+|\text{squareWaveOffsets}(n,m)|
 =
 \left\lfloor\frac{n^2+2n}{m}\right\rfloor
 -
@@ -467,7 +467,7 @@ $$
 The large Legendre quotient therefore has the dual normal form
 
 $$
-\operatorname{squareOffsetSupportQuotient}(n,p,r)
+\text{squareOffsetSupportQuotient}(n,p,r)
 =
 \ell\left(\frac{k}{p}\right).
 $$

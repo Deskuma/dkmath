@@ -23,7 +23,7 @@ FUSION-003 pre-bridge:
 現在 Lean は、
 
 $$
-\mathrm{thetaResidue}(\operatorname{gapCore})=-2m
+\mathrm{thetaResidue}(\text{gapCore})=-2m
 $$
 
 まで algebraic gap の先頭係数を確定し、$\mathbf F_7^\times$ を正式に $\mu_2\times\mu_3$ へ分解しました。左右 root は反対の binary sector、同一の ternary sectorです。さらに routing は同じ `signedDepth` packet 上に接続され、第三行、active cell、signed margin、cycle ratio、cyclotomic torsor まで一貫して固定されています。
@@ -127,7 +127,7 @@ B₃ = |m⁷|
 ここで、
 
 $$
-E=\operatorname{quotientRoot}\equiv1\pmod7
+E=\text{quotientRoot}\equiv1\pmod7
 $$
 
 $$
@@ -362,7 +362,7 @@ $$
 よって、
 
 $$
-\mathrm{thetaResidue}(\operatorname{gapCore})=-2m
+\mathrm{thetaResidue}(\text{gapCore})=-2m
 $$
 
 は回転により、
@@ -464,7 +464,7 @@ $$
 から、real relative index を、
 
 $$
-\operatorname{relativeRealIndex}(k):=\left(\frac{k}{\tau}\right)^2
+\text{relativeRealIndex}(k):=\left(\frac{k}{\tau}\right)^2
 $$
 
 と定義します。
@@ -472,7 +472,7 @@ $$
 すると、
 
 $$
-\operatorname{relativeRealIndex}(k)=1
+\text{relativeRealIndex}(k)=1
 $$
 
 であることは、

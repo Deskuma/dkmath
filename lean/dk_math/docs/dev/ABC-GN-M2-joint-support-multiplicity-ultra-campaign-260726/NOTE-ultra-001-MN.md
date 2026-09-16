@@ -114,7 +114,7 @@ card badSet ≤ explicit average / λ
 
 現在の bad-set theorem は第一モーメントから、
 
-$$\#\operatorname{Bad}(\lambda)\le\frac{\sum M(a)}{\lambda}$$
+$$\#\text{Bad}(\lambda)\le\frac{\sum M(a)}{\lambda}$$
 
 を出している。
 
@@ -209,7 +209,7 @@ $0<t<1$ なら指数 $2-t>1$ なので、全素数にわたる majorant が収�
 
 つまり、形式化すべき予想形は、
 
-$$\sum_{a\le X}\exp!\left(t,\operatorname{GNExcessMassAt}(a)\right)\le C_{p,t}(X+1)+\text{finite boundary}$$
+$$\sum_{a\le X}\exp!\left(t,\text{GNExcessMassAt}(a)\right)\le C_{p,t}(X+1)+\text{finite boundary}$$
 
 そして Chernoff により、
 
@@ -276,7 +276,7 @@ theorem GNDepthMassAt_eq_support_add_excess
 theorem GNDepthMassAt_intervalFamily_eq_log_nonExceptionalPart
 ```
 
-$$\operatorname{GNDepthMassAt}(Q,p,b,a)=\log\operatorname{GNNonExceptionalPart}(p,a,b)$$
+$$\text{GNDepthMassAt}(Q,p,b,a)=\log\text{GNNonExceptionalPart}(p,a,b)$$
 
 を狙う。
 
@@ -303,7 +303,7 @@ def GNJointDepthResidues
 theorem card_GNJointDepthResidues_le
 ```
 
-$$\#\operatorname{JointRoots}\le(p-1)^{|Q|}$$
+$$\#\text{JointRoots}\le(p-1)^{|Q|}$$
 
 および、
 
@@ -311,7 +311,7 @@ $$\#\operatorname{JointRoots}\le(p-1)^{|Q|}$$
 theorem card_gn_joint_deep_lift_interval_le
 ```
 
-$$\#\operatorname{JointEvent}\le(p-1)^{|Q|}\left(\frac{X+1}{M}+1\right)$$
+$$\#\text{JointEvent}\le(p-1)^{|Q|}\left(\frac{X+1}{M}+1\right)$$
 
 を閉じる。
 

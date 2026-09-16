@@ -152,7 +152,7 @@ activeSelectedPressureDepthSupport_bucketCarrier_nonempty
 によって、
 
 $$
-d\in\operatorname{ActiveSupport}\Longrightarrow\operatorname{Bucket}(d)\ne\varnothing
+d\in\text{ActiveSupport}\Longrightarrow\text{Bucket}(d)\ne\varnothing
 $$
 
 が確定した。
@@ -202,7 +202,7 @@ $$
 から block coordinate を忘れ、source time $i$ を、
 
 $$
-\operatorname{orbitDepthContinuationRangeFiber}(e_m+1,d+1)
+\text{orbitDepthContinuationRangeFiber}(e_m+1,d+1)
 $$
 
 へ送っている。
@@ -220,9 +220,9 @@ injectivity は、
 結果として、
 
 $$
-|\operatorname{SelectedBucket}(d)|
+|\text{SelectedBucket}(d)|
 \le
-\operatorname{ContinuationCount}(e_m+1,d+1)
+\text{ContinuationCount}(e_m+1,d+1)
 $$
 
 が得られた。
@@ -244,7 +244,7 @@ blockPressureContributionInt_eq_succCarrier_sub_exactLengthIndicator
 正 depth $d\ge1$ について、
 
 $$
-M_k(d)=|\operatorname{ContinuationFiber}*k(d+1)|-\mathbf1*{L_k=d}
+M_k(d)=|\text{ContinuationFiber}*k(d+1)|-\mathbf1*{L_k=d}
 $$
 
 が証明された。
@@ -358,7 +358,7 @@ sourcePressureMarginInt_paymentEndpointSeq_eq_continuation_succ_sub_exactLength
 によって、endpoint prefix では、
 
 $$
-\operatorname{SourcePressureMargin}(e_m+1,d)=C_{0,m}(d+1)-E_{0,m}(d)
+\text{SourcePressureMargin}(e_m+1,d)=C_{0,m}(d+1)-E_{0,m}(d)
 $$
 
 が証明された。
@@ -410,7 +410,7 @@ $q=0$ なら両者は一致する。
 block $q$ の start time を $b_q$ とすれば、次の形が期待される。
 
 $$
-W_{q,m}(d)=\operatorname{SourcePressureMargin}(e_m+1,d)-\operatorname{SourcePressureMargin}(b_q,d)
+W_{q,m}(d)=\text{SourcePressureMargin}(e_m+1,d)-\text{SourcePressureMargin}(b_q,d)
 $$
 
 したがって、
@@ -580,15 +580,15 @@ $$
 次に selected residual carrier をまとめる。
 
 $$
-\operatorname{ResidualCarrier}*{q,m}:=\bigsqcup*{d\in\operatorname{ActiveSupport}}\operatorname{Fin}(R_d)
+\text{ResidualCarrier}*{q,m}:=\bigsqcup*{d\in\text{ActiveSupport}}\text{Fin}(R_d)
 $$
 
 すると、global selected carrier は、
 
 $$
-|\operatorname{GlobalSelectedCarrier}|
+|\text{GlobalSelectedCarrier}|
 \le
-(m-q+1)+|\operatorname{ResidualCarrier}_{q,m}|
+(m-q+1)+|\text{ResidualCarrier}_{q,m}|
 $$
 
 まで縮む。
@@ -596,9 +596,9 @@ $$
 さらに、
 
 $$
-|\operatorname{ResidualCarrier}*{q,m}|
+|\text{ResidualCarrier}*{q,m}|
 \le
-|\operatorname{PressureAmplitudeCarrier}*{q,m}|
+|\text{PressureAmplitudeCarrier}*{q,m}|
 $$
 
 じゃ。
@@ -630,7 +630,7 @@ $$
 Lean では amplitude carrier、
 
 $$
-\bigsqcup_{d\in S}\operatorname{Fin}(A_d)
+\bigsqcup_{d\in S}\text{Fin}(A_d)
 $$
 
 の座標を交換すればよい。

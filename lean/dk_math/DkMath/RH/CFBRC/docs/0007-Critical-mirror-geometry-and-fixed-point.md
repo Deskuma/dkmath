@@ -47,7 +47,7 @@ $$
 に対して、
 
 $$
-\operatorname{criticalMirror}(s)=(1-\sigma)+it
+\text{criticalMirror}(s)=(1-\sigma)+it
 $$
 
 である。
@@ -55,11 +55,11 @@ $$
 したがって、実部と虚部について、
 
 $$
-\Re(\operatorname{criticalMirror}(s))=1-\Re(s)
+\Re(\text{criticalMirror}(s))=1-\Re(s)
 $$
 
 $$
-\Im(\operatorname{criticalMirror}(s))=\Im(s)
+\Im(\text{criticalMirror}(s))=\Im(s)
 $$
 
 が exact に成立する。
@@ -96,7 +96,7 @@ $$
 一方 critical mirror は、
 
 $$
-\operatorname{criticalMirror}(s)=(1-\sigma)+it
+\text{criticalMirror}(s)=(1-\sigma)+it
 $$
 
 である。
@@ -187,7 +187,7 @@ $$
 
 $$
 \boxed{
-\operatorname{criticalMirror}(s)=s
+\text{criticalMirror}(s)=s
 \iff
 \Re(s)=\frac12
 }
@@ -213,7 +213,7 @@ noncomputable def centeredComplex (s : ℂ) : ℂ :=
 したがって、
 
 $$
-\operatorname{centeredComplex}(s)
+\text{centeredComplex}(s)
 =
 \left(\Re(s)-\frac12\right)+i\Im(s)
 $$
@@ -240,7 +240,7 @@ centeredComplex_im
 この座標では臨界線は、
 
 $$
-\Re(\operatorname{centeredComplex}(s))=0
+\Re(\text{centeredComplex}(s))=0
 $$
 
 という中心線になる。
@@ -303,7 +303,7 @@ cfbrcR d X Θ
 standard positive-degree CFBRC については `0003` で、
 
 $$
-\operatorname{cfbrcR}(d,X,\Theta)=0
+\text{cfbrcR}(d,X,\Theta)=0
 \iff
 X=0
 $$
@@ -313,7 +313,7 @@ $$
 しかし mirror CFBRC では、degree 3 において、
 
 $$
-\operatorname{mirrorCFBRC}(3,X,\Theta)=0
+\text{mirrorCFBRC}(3,X,\Theta)=0
 $$
 
 が、
@@ -368,9 +368,9 @@ mirrorCFBRC_eq_boundary_mul_core
 により、
 
 $$
-\operatorname{mirrorCFBRC}(d,X,\Theta)
+\text{mirrorCFBRC}(d,X,\Theta)
 =
-2X\,\operatorname{mirrorCFBRCCore}(d,X,\Theta)
+2X\,\text{mirrorCFBRCCore}(d,X,\Theta)
 $$
 
 と exact に因数分解される。
@@ -419,7 +419,7 @@ mirrorCFBRC may have off-centered branches
 特に、
 
 $$
-\operatorname{criticalMirror}(s)=s
+\text{criticalMirror}(s)=s
 \iff
 \Re(s)=\frac12
 $$
@@ -473,7 +473,7 @@ zero fixedness
 `0003` では、CFBRC 側の centered coordinate として、
 
 $$
-\operatorname{centeredSigma}(\sigma)=\sigma-\frac12
+\text{centeredSigma}(\sigma)=\sigma-\frac12
 $$
 
 を導入した。

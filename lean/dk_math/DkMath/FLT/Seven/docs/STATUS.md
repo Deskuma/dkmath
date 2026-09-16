@@ -553,7 +553,7 @@ AwaySevenBaseTerminalRoutingPacket
 
 produces a local scale:
 
-$$s_q\in\operatorname{ZMod}(q^{e_q})$$
+$$s_q\in\text{ZMod}(q^{e_q})$$
 
 with:
 
@@ -582,7 +582,7 @@ $$\gcd(q_1^{e_1},q_2^{e_2})=1$$
 
 The packet contains one combined residue scale:
 
-$$s_{12}\in\operatorname{ZMod}(q_1^{e_1}q_2^{e_2})$$
+$$s_{12}\in\text{ZMod}(q_1^{e_1}q_2^{e_2})$$
 
 whose two Chinese-remainder reductions recover the original local scales.
 

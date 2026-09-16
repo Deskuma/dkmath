@@ -38,11 +38,11 @@ commit `42cde955784c6fd8a26661d3278d5d0952d52aaa` と添付 report/diff は一�
 
 cp-336 で確定した中心構造は次じゃ。
 
-$$\operatorname{SourceAgeDeficit}_H(m+1)=\operatorname{SourceAgeDeficit}_H(m)+\operatorname{FrontierIncrement}_H(m)$$
+$$\text{SourceAgeDeficit}_H(m+1)=\text{SourceAgeDeficit}_H(m)+\text{FrontierIncrement}_H(m)$$
 
-$$\operatorname{FrontierIncrement}_H(m)=|\operatorname{Crossing}_H(m)|-\operatorname{ActualConsumed}(m)$$
+$$\text{FrontierIncrement}_H(m)=|\text{Crossing}_H(m)|-\text{ActualConsumed}(m)$$
 
-$$\operatorname{UniformSourceAge}(H)\iff\forall m,\ \sum_{k<m}\operatorname{FrontierIncrement}_H(k)\le0$$
+$$\text{UniformSourceAge}(H)\iff\forall m,\ \sum_{k<m}\text{FrontierIncrement}_H(k)\le0$$
 
 これで残る正方向の問題は、queue の定義や ownership の整備ではない。
 
@@ -77,7 +77,7 @@ ownedOutstandingQueue ∩ oldSourceCarrier
 
 membership は正確に、
 
-$$i\in\operatorname{Expired}_H(m)\iff i\in\operatorname{Outstanding}(m)\land H<b_m-i$$
+$$i\in\text{Expired}_H(m)\iff i\in\text{Outstanding}(m)\land H<b_m-i$$
 
 となる。したがって、これは単に古い historical claim ではなく、
 
@@ -87,7 +87,7 @@ $$i\in\operatorname{Expired}_H(m)\iff i\in\operatorname{Outstanding}(m)\land H<b
 
 空性も exact である。
 
-$$\operatorname{Expired}_H(m)=\varnothing\iff\forall i\in\operatorname{Outstanding}(m),\ b_m-i\le H$$
+$$\text{Expired}_H(m)=\varnothing\iff\forall i\in\text{Outstanding}(m),\ b_m-i\le H$$
 
 これで source-age violation が actual identity を持つ有限 carrier として公開された。
 
@@ -97,7 +97,7 @@ $$\operatorname{Expired}_H(m)=\varnothing\iff\forall i\in\operatorname{Outstandi
 
 cp-336 の最も強い carrier theorem は、
 
-$$|\operatorname{Expired}_H(m)|=\operatorname{Int.toNat}!\left(\operatorname{SourceAgeDeficit}_H(m)\right)$$
+$$|\text{Expired}_H(m)|=\text{Int.toNat}!\left(\text{SourceAgeDeficit}_H(m)\right)$$
 
 じゃ。
 
@@ -127,11 +127,11 @@ exact cardinal theorem の背後で、より強い集合 inclusion が証明さ�
 
 deficit が正なら、
 
-$$\operatorname{CumulativeConsumed}(m)\subseteq\operatorname{OldClaims}_H(m)$$
+$$\text{CumulativeConsumed}(m)\subseteq\text{OldClaims}_H(m)$$
 
 deficit が非正なら、
 
-$$\operatorname{OldClaims}_H(m)\subseteq\operatorname{CumulativeConsumed}(m)$$
+$$\text{OldClaims}_H(m)\subseteq\text{CumulativeConsumed}(m)$$
 
 となる。
 
@@ -143,7 +143,7 @@ historical claims は source time 順に並び、FIFO は古い側から消費�
 
 この全順序性があるため、
 
-$$|\operatorname{OldClaims}|-|\operatorname{Consumed}|$$
+$$|\text{OldClaims}|-|\text{Consumed}|$$
 
 の正部分が、そのまま actual expired remainder の cardinalityになる。
 
@@ -165,7 +165,7 @@ $$[b_m-H,\ b_{m+1}-H)$$
 
 old carrier は一段ごとに、
 
-$$\operatorname{Old}_H(m+1)=\operatorname{Old}_H(m)\sqcup\operatorname{Crossing}_H(m)$$
+$$\text{Old}_H(m+1)=\text{Old}_H(m)\sqcup\text{Crossing}_H(m)$$
 
 と成長する。
 
@@ -181,7 +181,7 @@ $$\operatorname{Old}_H(m+1)=\operatorname{Old}_H(m)\sqcup\operatorname{Crossing}
 
 frontier increment は、
 
-$$F_H(m)=|\operatorname{Crossing}_H(m)|-\operatorname{Consumed}(m)$$
+$$F_H(m)=|\text{Crossing}_H(m)|-\text{Consumed}(m)$$
 
 として `Int` で定義された。
 
@@ -219,13 +219,13 @@ $$D_H(m)=\sum_{k<m}F_H(k)$$
 
 cp-336 は、
 
-$$\operatorname{UniformSourceAge}(H)\iff\forall m,\ \sum_{k<m}F_H(k)\le0$$
+$$\text{UniformSourceAge}(H)\iff\forall m,\ \sum_{k<m}F_H(k)\le0$$
 
 を証明した。
 
 さらに carrier 版として、
 
-$$\operatorname{UniformSourceAge}(H)\iff\forall m,\ \operatorname{Expired}_H(m)=\varnothing$$
+$$\text{UniformSourceAge}(H)\iff\forall m,\ \text{Expired}_H(m)=\varnothing$$
 
 も得られた。
 
@@ -255,7 +255,7 @@ $$D_0(m)=Q_m$$
 
 crossing carrier も current block claim carrierそのものになる。
 
-$$\operatorname{Crossing}_0(m)=\operatorname{BlockClaims}(m)$$
+$$\text{Crossing}_0(m)=\text{BlockClaims}(m)$$
 
 従って次の theorem は直ちに追加できる。
 
@@ -263,7 +263,7 @@ $$F_0(m)=Q_{m+1}-Q_m$$
 
 また、
 
-$$F_0(m)=\operatorname{Demand}(m)-\operatorname{Consumed}(m)$$
+$$F_0(m)=\text{Demand}(m)-\text{Consumed}(m)$$
 
 でもある。
 
@@ -283,7 +283,7 @@ $$D_{H_2}(m)\le D_{H_1}(m)$$
 
 expired carrierも、
 
-$$\operatorname{Expired}*{H_2}(m)\subseteq\operatorname{Expired}*{H_1}(m)$$
+$$\text{Expired}*{H_2}(m)\subseteq\text{Expired}*{H_1}(m)$$
 
 となる。
 
@@ -319,11 +319,11 @@ cardinality は常に $1$ だが、時刻 $m$ における source age は $m$ �
 
 従って一般論では、
 
-$$\operatorname{UniformAge}\Longrightarrow\operatorname{UniformCardinality}$$
+$$\text{UniformAge}\Longrightarrow\text{UniformCardinality}$$
 
 だが、
 
-$$\operatorname{UniformCardinality}\Longrightarrow\operatorname{UniformAge}$$
+$$\text{UniformCardinality}\Longrightarrow\text{UniformAge}$$
 
 ではない。
 
@@ -337,13 +337,13 @@ source-age bound を queue bound の別名として循環利用する道を正�
 
 任意の cutoff $t$ と、FIFO queue と同じ cardinalityを持つ任意の admissible assignment $u$ について、
 
-$$|{i\in u\mid t\le i}|\le|{i\in\operatorname{FIFO}\mid t\le i}|$$
+$$|{i\in u\mid t\le i}|\le|{i\in\text{FIFO}\mid t\le i}|$$
 
 が証明された。
 
 これは以前の、
 
-$$\min(u)\le\min(\operatorname{FIFO})$$
+$$\min(u)\le\min(\text{FIFO})$$
 
 より強い。
 
@@ -454,9 +454,9 @@ s ∈ reachableFromInitial →
 
 saturated blockでは、
 
-$$|\operatorname{Crossing}_0(m)|=2$$
+$$|\text{Crossing}_0(m)|=2$$
 
-$$\operatorname{Consumed}(m)=1$$
+$$\text{Consumed}(m)=1$$
 
 従って、
 
@@ -571,7 +571,7 @@ successor pressure > 0
 
 従って期待される signed identity は、
 
-$$|\operatorname{Crossing}*{H+1}(m)|-|\operatorname{Crossing}*H(m)|=\mathbf{1}*{\mathrm{CarryTwo}(b_m-H-1)}-\mathbf{1}*{\mathrm{CarryTwo}(b_{m+1}-H-1)}$$
+$$|\text{Crossing}*{H+1}(m)|-|\text{Crossing}*H(m)|=\mathbf{1}*{\mathrm{CarryTwo}(b_m-H-1)}-\mathbf{1}*{\mathrm{CarryTwo}(b_{m+1}-H-1)}$$
 
 となる。
 
@@ -611,7 +611,7 @@ current saturated block の二 source のうち、前半一 sourceだけがこ�
 
 従って期待される exact formula は、
 
-$$|\operatorname{Crossing}*1(m)|=1+\mathbf{1}*{\mathrm{CarryTwo}(b_m-1)}$$
+$$|\text{Crossing}*1(m)|=1+\mathbf{1}*{\mathrm{CarryTwo}(b_m-1)}$$
 
 actual consumption は $1$ なので、
 
@@ -1838,7 +1838,7 @@ index 00000000..228df457
 +
 +今回確定した第一の事実は、
 +
-+$$|\operatorname{ExpiredOutstanding}_H(m)|=\operatorname{Int.toNat}!\left(\operatorname{SourceAgeDeficit}_H(m)\right)$$
++$$|\text{ExpiredOutstanding}_H(m)|=\text{Int.toNat}!\left(\text{SourceAgeDeficit}_H(m)\right)$$
 +
 +じゃ。
 +
@@ -1858,7 +1858,7 @@ index 00000000..228df457
 +
 +第二の事実はさらに大きい。
 +
-+$$\operatorname{UniformAge}(H)\iff\forall m,\ \sum_{k<m}\operatorname{FrontierIncrement}_H(k)\le0$$
++$$\text{UniformAge}(H)\iff\forall m,\ \sum_{k<m}\text{FrontierIncrement}_H(k)\le0$$
 +
 +ここまで来ると、残る命題は完全に signed-flow 問題じゃ。
 +
@@ -1876,13 +1876,13 @@ index 00000000..228df457
 +
 +単に、
 +
-+$$\sum_{k<m}\operatorname{FrontierIncrement}_H(k)\le C$$
++$$\sum_{k<m}\text{FrontierIncrement}_H(k)\le C$$
 +
 +を得ても、source age は閉じない。
 +
 +必要なのは、
 +
-+$$\sum_{k<m}\operatorname{FrontierIncrement}_H(k)\le0$$
++$$\sum_{k<m}\text{FrontierIncrement}_H(k)\le0$$
 +
 +じゃ。
 +
@@ -1911,13 +1911,13 @@ index 00000000..228df457
 +
 +saturated branch で pointwise に、
 +
-+$$\operatorname{FrontierIncrement}_H(m)\le0$$
++$$\text{FrontierIncrement}_H(m)\le0$$
 +
 +まで言えれば最強じゃが、毎 block で horizon crossing と consumption が同期するとは限らぬ。
 +
 +その場合は、
 +
-+$$\sum_{j=0}^{L-1}\operatorname{FrontierIncrement}_H(m+j)\le0$$
++$$\sum_{j=0}^{L-1}\text{FrontierIncrement}_H(m+j)\le0$$
 +
 +という固定短窓 discharge theorem が本命になる。
 +
@@ -1960,7 +1960,7 @@ index 00000000..228df457
 +
 +おお、これは**非常に価値の高い反例確定**じゃ。
 +
-+$$\operatorname{FrontierIncrement}_{0}(m)=2-1=1$$
++$$\text{FrontierIncrement}_{0}(m)=2-1=1$$
 +
 +つまり saturated block では、
 +
@@ -1978,7 +1978,7 @@ index 00000000..228df457
 +
 +しかし、source-age route 自体が倒れたわけではない。uniform age に必要なのは各項の非正性ではなく、
 +
-+$$\forall m,\ \sum_{k<m}\operatorname{FrontierIncrement}_{H}(k)\le0$$
++$$\forall m,\ \sum_{k<m}\text{FrontierIncrement}_{H}(k)\le0$$
 +
 +という**全 prefix の非正性**じゃ。
 +
@@ -1994,7 +1994,7 @@ index 00000000..228df457
 +
 +例えば saturated block の $+1$ に対し、後続 block が $-1$ 以下を供給して、
 +
-+$$\sum_{j=0}^{L-1}\operatorname{FrontierIncrement}_{H}(m+j)\le0$$
++$$\sum_{j=0}^{L-1}\text{FrontierIncrement}_{H}(m+j)\le0$$
 +
 +を証明する道じゃ。
 +

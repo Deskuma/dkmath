@@ -21,13 +21,13 @@ $$
 つまり、
 
 $$
-\operatorname{cyclotomicPrimeCore}(d,1,u-1)
+\text{cyclotomicPrimeCore}(d,1,u-1)
 $$
 
 側は壊れるが、
 
 $$
-\operatorname{boundaryCyclotomicPrimeCore}(.right,d,x,u)
+\text{boundaryCyclotomicPrimeCore}(.right,d,x,u)
 $$
 
 側は生きている、という切り分けが付いたのじゃ。
@@ -41,7 +41,7 @@ $$
 $$
 q \mid x
 \Longrightarrow
-\operatorname{boundaryCyclotomicPrimeCore}(.right,d,x,u)
+\text{boundaryCyclotomicPrimeCore}(.right,d,x,u)
 \equiv
 d\cdot u^{d-1}
 \pmod q
@@ -73,14 +73,14 @@ $$
 前までは
 
 $$
-\operatorname{cyclotomicPrimeCore}(d,1,u-1)
+\text{cyclotomicPrimeCore}(d,1,u-1)
 $$
 
 を first target にする枝をいじっておった。
 だがこれは (u=1) で
 
 $$
-\operatorname{cyclotomicPrimeCore}(d,1,0)=1
+\text{cyclotomicPrimeCore}(d,1,0)=1
 $$
 
 となって壊れる。ここは false だと確定した。
@@ -88,7 +88,7 @@ $$
 それに対して今の本線は
 
 $$
-\operatorname{boundaryCyclotomicPrimeCore}(.right,d,x,u)
+\text{boundaryCyclotomicPrimeCore}(.right,d,x,u)
 $$
 
 を見ている。こちらは (x) を保持しており、((5,5,1)) でも nontrivial な値を持つ。
@@ -137,7 +137,7 @@ $$
 まず
 
 $$
-\operatorname{cyclotomicPrimeCore}(d,x,u)\equiv d\cdot u^{d-1}\pmod{d^2}
+\text{cyclotomicPrimeCore}(d,x,u)\equiv d\cdot u^{d-1}\pmod{d^2}
 $$
 
 型の精密合同補題。
@@ -150,22 +150,22 @@ $$
 と合成して、
 
 $$
-\operatorname{core}\equiv d \pmod{d^2}
+\text{core}\equiv d \pmod{d^2}
 $$
 
 へ落とす。そこから
 
 $$
-v_d(\operatorname{core})=1
+v_d(\text{core})=1
 $$
 
 相当の結論、少なくとも
 
 $$
-d \nmid \operatorname{core}/d
+d \nmid \text{core}/d
 $$
 
-を取る。最後に `Nat.exists_prime_and_dvd` で (\operatorname{core}/d) の prime divisor を取り出せば、今回の step 1 補題群と合体して main theorem へ到達する。
+を取る。最後に `Nat.exists_prime_and_dvd` で (\text{core}/d) の prime divisor を取り出せば、今回の step 1 補題群と合体して main theorem へ到達する。
 
 ## 6. 賢狼の総括
 

@@ -72,7 +72,7 @@ $$
 に対し、
 
 $$
-\forall q \in F.\mathrm{support},\ \operatorname{Prime}(q) \wedge q \mid a^d - b^d
+\forall q \in F.\mathrm{support},\ \text{Prime}(q) \wedge q \mid a^d - b^d
 $$
 
 を返す。
@@ -83,7 +83,7 @@ $$
 こちらも同様で、package を直接
 
 $$
-F.\mathrm{support}.prod\ \mathrm{id} \le \operatorname{supportMass}(a^d - b^d)
+F.\mathrm{support}.prod\ \mathrm{id} \le \text{supportMass}(a^d - b^d)
 $$
 
 へ送る method じゃ。
@@ -110,7 +110,7 @@ $$
 そして example で
 
 $$
-\operatorname{Prime}(7) \wedge 7 \mid 6^3 - 5^3
+\text{Prime}(7) \wedge 7 \mid 6^3 - 5^3
 $$
 
 が `PrimitiveWitnessFamily.primeChannelFamily` 経由で読めること、さらに
@@ -118,7 +118,7 @@ $$
 $$
 \mathrm{support}.prod\ \mathrm{id}
 \le
-\operatorname{supportMass}(6^3 - 5^3)
+\text{supportMass}(6^3 - 5^3)
 $$
 
 が `PrimitiveWitnessFamily.supportMassLowerBound` 経由で読めることを確認しておる。つまり package 化が **本当に利用側の記述を簡潔にしている** と concrete に示したわけじゃ。

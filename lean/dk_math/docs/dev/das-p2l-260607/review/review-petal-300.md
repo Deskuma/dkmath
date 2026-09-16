@@ -80,7 +80,7 @@ OrbitDepthRecoversExactlyAt
 時刻 $i$ の orbit label に対し、
 
 $$
-A_i:=\operatorname{ResidualAllOnesDepth}(\operatorname{oddOrbitLabel}(n,i))
+A_i:=\text{ResidualAllOnesDepth}(\text{oddOrbitLabel}(n,i))
 $$
 
 と置く。
@@ -88,15 +88,15 @@ $$
 すると意味は正確に、
 
 $$
-\operatorname{Retained}(i,d)\Longleftrightarrow d\le A_i
+\text{Retained}(i,d)\Longleftrightarrow d\le A_i
 $$
 
 $$
-\operatorname{Continues}(i,d)\Longleftrightarrow d+1\le A_i
+\text{Continues}(i,d)\Longleftrightarrow d+1\le A_i
 $$
 
 $$
-\operatorname{Recovers}(i,d)\Longleftrightarrow A_i=d
+\text{Recovers}(i,d)\Longleftrightarrow A_i=d
 $$
 
 となる。
@@ -170,7 +170,7 @@ $$
 であり、residue では、
 
 $$
-\operatorname{oddOrbitLabel}(n,i)\bmod2^{d+1}=2^d-1
+\text{oddOrbitLabel}(n,i)\bmod2^{d+1}=2^d-1
 $$
 
 と特徴づけられた。
@@ -354,7 +354,7 @@ orbitDepthRecoversExactlyAt_delayed_height_two_le
 $$
 A_i=d,\quad 2\le d
 \Longrightarrow
-2\le\operatorname{orbitWindowHeight}(n,i+d-1)
+2\le\text{orbitWindowHeight}(n,i+d-1)
 $$
 
 つまり exact depth $d$ は、時刻、
@@ -451,7 +451,7 @@ $$
 growth debt なら、
 
 $$
-\operatorname{carry}=2,\qquad h_i=1
+\text{carry}=2,\qquad h_i=1
 $$
 
 かつ、
@@ -485,9 +485,9 @@ floatDebtAt_exists_paymentDischarge
 で、
 
 $$
-\operatorname{FloatDebtAt}(n,i)
+\text{FloatDebtAt}(n,i)
 \Longrightarrow
-\exists j,\operatorname{Discharge}(n,i,j)
+\exists j,\text{Discharge}(n,i,j)
 $$
 
 を証明した。

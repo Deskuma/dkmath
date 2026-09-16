@@ -103,7 +103,7 @@ v_2(M)=3,\qquad v_3(M)=5,\qquad v_5(M)=2
 であるから、
 
 \[
-\operatorname{twoTail}(M)=2^{3-2}3^{5-2}5^{2-2}=2^1 3^3 5^0=54
+\text{twoTail}(M)=2^{3-2}3^{5-2}5^{2-2}=2^1 3^3 5^0=54
 \]
 
 となる。
@@ -111,7 +111,7 @@ v_2(M)=3,\qquad v_3(M)=5,\qquad v_5(M)=2
 また、
 
 \[
-\operatorname{rad}(M)=2\cdot3\cdot5=30
+\text{rad}(M)=2\cdot3\cdot5=30
 \]
 
 であり、各指数がすべて \(2\) 以上なので
@@ -123,7 +123,7 @@ v_2(M)=3,\qquad v_3(M)=5,\qquad v_5(M)=2
 も成り立つ。よって
 
 \[
-M=\pi\mathrm{SqRad}(M)\,\operatorname{rad}(M)\,\operatorname{twoTail}(M)
+M=\pi\mathrm{SqRad}(M)\,\text{rad}(M)\,\text{twoTail}(M)
 \]
 
 は
@@ -159,7 +159,7 @@ v_a(M)=b,\qquad v_b(M)=c,\qquad v_c(M)=a
 したがって
 
 \[
-\operatorname{rad}(M)=abc
+\text{rad}(M)=abc
 \]
 
 であり、さらに \(a,b,c \ge 2\) より各指数は 2 以上なので
@@ -177,7 +177,7 @@ v_a(M)=b,\qquad v_b(M)=c,\qquad v_c(M)=a
 同じ仮定の下で、
 
 \[
-\operatorname{twoTail}(M) =
+\text{twoTail}(M) =
 a^{b-2} b^{c-2} c^{a-2}
 \]
 
@@ -194,7 +194,7 @@ M=(abc)(abc)\,a^{b-2}b^{c-2}c^{a-2}
 すなわち
 
 \[
-M=(abc)^2 \operatorname{twoTail}(M)
+M=(abc)^2 \text{twoTail}(M)
 \]
 
 を得る。
@@ -246,7 +246,7 @@ a^x b^y c^z \;\middle|\; x,y,z \in \mathbb{N}
 `twoTail` を \(k\) 回繰り返し適用すると、各回で指数が 2 ずつ減るので、
 
 \[
-\operatorname{twoTail}^{\,k}(M(a,b,c)) =
+\text{twoTail}^{\,k}(M(a,b,c)) =
 a^{b-2k} b^{c-2k} c^{a-2k}
 \]
 
@@ -262,7 +262,7 @@ a^{b-2k} b^{c-2k} c^{a-2k}
 そのとき
 
 \[
-M(a,b,c)=(abc)^{2k}\operatorname{twoTail}^{\,k}(M(a,b,c))
+M(a,b,c)=(abc)^{2k}\text{twoTail}^{\,k}(M(a,b,c))
 \]
 
 と書ける。
@@ -290,17 +290,17 @@ M(a,b,c):=a^b b^c c^a
 このとき
 
 \[
-\operatorname{rad}(M)=abc,
+\text{rad}(M)=abc,
 \qquad
 \pi\mathrm{SqRad}(M)=abc,
 \qquad
-\operatorname{twoTail}(M)=a^{b-2} b^{c-2} c^{a-2}.
+\text{twoTail}(M)=a^{b-2} b^{c-2} c^{a-2}.
 \]
 
 特に
 
 \[
-M=(abc)^2 \operatorname{twoTail}(M)
+M=(abc)^2 \text{twoTail}(M)
 \]
 
 が成り立つ。
@@ -318,13 +318,13 @@ M=(abc)^2 \operatorname{twoTail}(M)
 を満たすなら
 
 \[
-\operatorname{twoTail}^{\,k}(M)=a^{b-2k} b^{c-2k} c^{a-2k}
+\text{twoTail}^{\,k}(M)=a^{b-2k} b^{c-2k} c^{a-2k}
 \]
 
 かつ
 
 \[
-M=(abc)^{2k}\operatorname{twoTail}^{\,k}(M)
+M=(abc)^{2k}\text{twoTail}^{\,k}(M)
 \]
 
 が成り立つ。
@@ -448,7 +448,7 @@ Lean 実装は次の順で進めるのが安全である。
 5. `twoTail` の計算
 6. 分解恒等式
    \[
-   M=(abc)^2\operatorname{twoTail}(M)
+   M=(abc)^2\text{twoTail}(M)
    \]
 
 7. 必要なら反復版へ進む
@@ -474,7 +474,7 @@ M(a,b,c)=a^b b^c c^a
 この族は、相異なる素数を底に持つ場合、
 
 \[
-\operatorname{twoTail}(M)=a^{b-2}b^{c-2}c^{a-2}
+\text{twoTail}(M)=a^{b-2}b^{c-2}c^{a-2}
 \]
 
 を満たし、`twoTail` に対して底を保つ閉構造を持つ。

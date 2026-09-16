@@ -81,7 +81,7 @@ cp-344 は、queue 周辺の言い換えをもう一枚増やしただけでは�
 
 特に重要なのは、queue と deficit が存在量化だけでなく、**同じ定数 $C$ で一致した**ことじゃ。
 
-$$\operatorname{QueueBound}(n,C)\iff\operatorname{AllWindowDeficitBound}(n,C)$$
+$$\text{QueueBound}(n,C)\iff\text{AllWindowDeficitBound}(n,C)$$
 
 さらに各終点 $m$ で、
 
@@ -129,7 +129,7 @@ canonicalAbsorptionDeficitSuffixMaximum
 
 `Finset.range (m+1)` が $0\le q\le m$ を正確に走り、`Int.toNat` が非正 deficit を $0$ に反射する。
 
-$$Q_n(m)=\sup_{q\le m}\operatorname{toNat}D_n(q,m-q+1)$$
+$$Q_n(m)=\sup_{q\le m}\text{toNat}D_n(q,m-q+1)$$
 
 という定義と theorem の組み合わせに問題はない。
 
@@ -260,7 +260,7 @@ $$\Delta_k=L_k-H_k-V_k$$
 
 $$D(q,M)=\sum_{i<M}\Delta_{q+i}$$
 
-$$D(q,M)=\operatorname{width}(q+M)-\operatorname{width}(q)$$
+$$D(q,M)=\text{width}(q+M)-\text{width}(q)$$
 
 $$Q(m)=\max_{q\le m}\max(0,D(q,m-q+1))$$
 
@@ -412,25 +412,25 @@ all-ones 族では、rootを変えながら初期 driftを任意に大きくで�
 
 そこで有限 open excursion $[q,m]$ に対し、次を定義する。
 
-$$\operatorname{PosMass}(q,m)=\sum_{\Delta_k>0}\Delta_k$$
+$$\text{PosMass}(q,m)=\sum_{\Delta_k>0}\Delta_k$$
 
-$$\operatorname{NegMass}(q,m)=\sum_{\Delta_k<0}(-\Delta_k)$$
+$$\text{NegMass}(q,m)=\sum_{\Delta_k<0}(-\Delta_k)$$
 
-$$\operatorname{PressureMass}(q,m)=\sum_{\Delta_k>0}P_k$$
+$$\text{PressureMass}(q,m)=\sum_{\Delta_k>0}P_k$$
 
-$$\operatorname{SatCount}(q,m)=#{k:\operatorname{Saturated}(k)}$$
+$$\text{SatCount}(q,m)=#{k:\text{Saturated}(k)}$$
 
 open excursionでは reflectionが働かないので、
 
-$$Q(m)=\operatorname{PosMass}(q,m)-\operatorname{NegMass}(q,m)$$
+$$Q(m)=\text{PosMass}(q,m)-\text{NegMass}(q,m)$$
 
 既存の pressure theoremから、
 
-$$\operatorname{PosMass}(q,m)\le\operatorname{PressureMass}(q,m)+\operatorname{SatCount}(q,m)$$
+$$\text{PosMass}(q,m)\le\text{PressureMass}(q,m)+\text{SatCount}(q,m)$$
 
 従って、
 
-$$Q(m)+\operatorname{NegMass}(q,m)\le\operatorname{PressureMass}(q,m)+\operatorname{SatCount}(q,m)$$
+$$Q(m)+\text{NegMass}(q,m)\le\text{PressureMass}(q,m)+\text{SatCount}(q,m)$$
 
 となる。
 
@@ -537,7 +537,7 @@ scalar potentialを新しく定義するだけでは、queue boundを補集合 p
 
 まず、
 
-$$Q+\operatorname{NegMass}\le\operatorname{PressureMass}+\operatorname{SatCount}$$
+$$Q+\text{NegMass}\le\text{PressureMass}+\text{SatCount}$$
 
 を Lean で閉じる。
 
@@ -554,7 +554,7 @@ saturated indexを successor classificationで分割する。
 
 spare-charged familyについて、
 
-$$#\operatorname{SaturatedSpare}\le#\operatorname{GlobalSpareCarrier}$$
+$$#\text{SaturatedSpare}\le#\text{GlobalSpareCarrier}$$
 
 を finite interval theoremとして証明する。
 
@@ -583,7 +583,7 @@ selected pressure sourceを、
 
 これが最終的に、
 
-$$\operatorname{PressureMass}+\operatorname{UnpaidSat}\le\operatorname{NegMass}+C_n$$
+$$\text{PressureMass}+\text{UnpaidSat}\le\text{NegMass}+C_n$$
 
 を与えれば、
 

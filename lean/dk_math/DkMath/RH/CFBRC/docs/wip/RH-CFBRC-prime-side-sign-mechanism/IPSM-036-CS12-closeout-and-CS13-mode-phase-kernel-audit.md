@@ -113,7 +113,7 @@ $$q_e(z_t)n^{-s_t}=\frac{n^{-1/2}}{2e}z_t\left(\exp((e-\log n)z_t)-\exp((-e-\log
 
 `a = sigma - 1/2`、実数 `r` に対して
 
-$$\operatorname{Re}((a+it)e^{r(a+it)})=e^{ar}\left(a\cos(rt)-t\sin(rt)\right).$$
+$$\text{Re}((a+it)e^{r(a+it)})=e^{ar}\left(a\cos(rt)-t\sin(rt)\right).$$
 
 を Lean で固定する。
 

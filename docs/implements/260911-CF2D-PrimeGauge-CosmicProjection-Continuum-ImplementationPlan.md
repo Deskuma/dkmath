@@ -161,7 +161,7 @@ regularVertex_ncard_range
 正の `k` について既に
 
 $$
-\operatorname{orderOf}(\operatorname{regularKernel}(k))=k
+\text{orderOf}(\text{regularKernel}(k))=k
 $$
 
 が成立する。
@@ -266,7 +266,7 @@ theorem regularKernel_pow_eq_one_iff_dvd
 数学的内容:
 
 $$
-(\operatorname{regularKernel}(k))^n=1
+(\text{regularKernel}(k))^n=1
 \iff
 k\mid n.
 $$
@@ -486,7 +486,7 @@ u_j=r+jM,
 \qquad
 0\le j<q,
 \qquad
-M=\operatorname{primeWorldModulus}(S)
+M=\text{primeWorldModulus}(S)
 $$
 
 のうち exactly one を新 `q` wave が予約する。
@@ -692,7 +692,7 @@ Goldbach dynamic phase とは独立に、v0 で計画した finite prime-family 
 有限 prime set `S` に対し
 
 $$
-\forall p\in S,\quad (\operatorname{regularKernel}(p))^n=1
+\forall p\in S,\quad (\text{regularKernel}(p))^n=1
 $$
 
 は
@@ -778,7 +778,7 @@ $$
 CF2D normalized cycle step は
 
 $$
-\operatorname{regularPhaseStep}(k)=\frac1k.
+\text{regularPhaseStep}(k)=\frac1k.
 $$
 
 `P=k-1` と置けば
@@ -787,7 +787,7 @@ $$
 \boxed{
 \Pi(k-1)+1
 =U(k-1)
-=\operatorname{regularPhaseStep}(k)
+=\text{regularPhaseStep}(k)
 =\frac1k
 }.
 $$

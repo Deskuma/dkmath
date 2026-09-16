@@ -135,7 +135,7 @@ offCriticalCFBRC_eq_zero_of_nontrivialRiemannZetaZero_of_...
 $s=\sigma+it$ の critical mirror は、実部だけを $1/2$ の反対側へ移す。
 
 $$
-m=\operatorname{criticalMirror}(s)
+m=\text{criticalMirror}(s)
 $$
 
 実部は、
@@ -171,9 +171,9 @@ etaCriticalMirrorDefectPairTerm s k
 $$
 D_k(s)
 =
-\operatorname{etaPairTerm}(m,k)
+\text{etaPairTerm}(m,k)
 -
-\operatorname{etaPairTerm}(s,k)
+\text{etaPairTerm}(s,k)
 $$
 
 である。
@@ -357,11 +357,11 @@ etaCriticalMirrorPairedFrameCorrectionTail K s
 中心恒等式:
 
 $$
-B_{K-1}\operatorname{Tail}(K)
+B_{K-1}\text{Tail}(K)
 =
-\operatorname{RotatedTail}(K)
+\text{RotatedTail}(K)
 +
-\operatorname{CorrectionTail}(K-1)
+\text{CorrectionTail}(K-1)
 $$
 
 Lean:
@@ -373,11 +373,11 @@ etaPairBaseRotation_pred_mul_defectPairTail_eq_rotatedTail_add_correctionTail
 projection 版:
 
 $$
-P_s\!\left(B_{K-1}\operatorname{Tail}(K)\right)
+P_s\!\left(B_{K-1}\text{Tail}(K)\right)
 =
-\operatorname{RotatedProjectionTail}(K)
+\text{RotatedProjectionTail}(K)
 +
-\operatorname{CorrectionProjectionTail}(K-1)
+\text{CorrectionProjectionTail}(K-1)
 $$
 
 Lean:
@@ -401,7 +401,7 @@ correction complex norm と projection tail に、明示的 power upper bound �
 概形は、$m.re=1-\sigma$ として、
 
 $$
-\operatorname{CorrectionBound}(K)
+\text{CorrectionBound}(K)
 =
 O\!\left(K^{-(1-\sigma)}\right)
 +
@@ -441,11 +441,11 @@ EtaCriticalMirrorPairedFrameMovingProjectionTailMargin
 moving projection tail を有限 block と後続 tailへ厳密分解した。
 
 $$
-\operatorname{ProjectionTail}(K)
+\text{ProjectionTail}(K)
 =
-\sum_{j<N}\operatorname{PairProjection}(K+j)
+\sum_{j<N}\text{PairProjection}(K+j)
 +
-\operatorname{ProjectionTail}(K+N)
+\text{ProjectionTail}(K+N)
 $$
 
 後続 tail も同じ符号なので、common-frame のように margin を半分へ落とす必要がない。
@@ -453,17 +453,17 @@ $$
 右側:
 
 $$
-\operatorname{RightBlockMarginSum}(K,N)
+\text{RightBlockMarginSum}(K,N)
 <
-\operatorname{ProjectionTail}(K)
+\text{ProjectionTail}(K)
 $$
 
 左側:
 
 $$
-\operatorname{LeftBlockMarginSum}(K,N)
+\text{LeftBlockMarginSum}(K,N)
 <
--\operatorname{ProjectionTail}(K)
+-\text{ProjectionTail}(K)
 $$
 
 主要結果:
@@ -629,17 +629,17 @@ etaCriticalMirrorLeftBlockMarginPowerLowerBound_le
 右側:
 
 $$
-\operatorname{CorrectionProjectionPowerBound}(K-1)
+\text{CorrectionProjectionPowerBound}(K-1)
 <
-\operatorname{RightBlockMarginSum}(K,N(K))
+\text{RightBlockMarginSum}(K,N(K))
 $$
 
 左側:
 
 $$
-\operatorname{CorrectionProjectionPowerBound}(K-1)
+\text{CorrectionProjectionPowerBound}(K-1)
 <
-\operatorname{LeftBlockMarginSum}(K,N(K))
+\text{LeftBlockMarginSum}(K,N(K))
 $$
 
 これが成立すれば、moving projection tail が correction tail を上回り、predecessor-frame whole tail の符号を確定できる。
@@ -697,7 +697,7 @@ $\|s\|$ と $\|m\|$ が入るため、現在の norm majorant はかなり大き
 
 $$
 0<
-P_s\!\left(B_{K-1}\operatorname{Tail}(K)\right)
+P_s\!\left(B_{K-1}\text{Tail}(K)\right)
 $$
 
 が eventually 成立しても、その値が零へ近づくことは可能。
@@ -784,7 +784,7 @@ $$
 
 $$
 L_K^{1-\sigma}
-\operatorname{RightBlockPowerLowerBound}
+\text{RightBlockPowerLowerBound}
 \longrightarrow
 \frac{t^2}{4}
 \rho(1+2\rho)^{\sigma-2}
@@ -794,7 +794,7 @@ $$
 
 $$
 L_K^\sigma
-\operatorname{LeftBlockPowerLowerBound}
+\text{LeftBlockPowerLowerBound}
 \longrightarrow
 \frac{t^2}{4}
 \rho(1+2\rho)^{-\sigma-1}
@@ -813,14 +813,14 @@ correction projection power bound を同じ基準で正規化する。
 
 $$
 L_K^{1-\sigma}
-\operatorname{CorrectionProjectionPowerBound}(K-1)
+\text{CorrectionProjectionPowerBound}(K-1)
 $$
 
 左側 $\sigma<\frac12$:
 
 $$
 L_K^\sigma
-\operatorname{CorrectionProjectionPowerBound}(K-1)
+\text{CorrectionProjectionPowerBound}(K-1)
 $$
 
 それぞれ dominant term と消える term を分離する。

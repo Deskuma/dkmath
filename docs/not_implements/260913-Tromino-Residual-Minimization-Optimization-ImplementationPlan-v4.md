@@ -154,7 +154,7 @@ $$
 その同値類の中で complexity が最小の代表元を normal form とする。
 
 $$
-\operatorname{NF}_T(G)
+\text{NF}_T(G)
 :=
 \arg\min_{H \sim_T G} \mu(H).
 $$
@@ -194,9 +194,9 @@ Boundary IR は最低限、次を保持する。
 目標:
 
 $$
-\operatorname{Semantics}(\operatorname{encode}(G))
+\text{Semantics}(\text{encode}(G))
 =
-\operatorname{Semantics}(G).
+\text{Semantics}(G).
 $$
 
 ---
@@ -256,7 +256,7 @@ $$
 
 $$
 \boxed{
-\operatorname{escapeDegree}(P):=|A(P)|=4-|F(P)|
+\text{escapeDegree}(P):=|A(P)|=4-|F(P)|
 }
 $$
 
@@ -335,13 +335,13 @@ boundary flow の even pair を path transport としてまとめる。
 各 rule に対し必ず
 
 $$
-\operatorname{Semantics}(G)=\operatorname{Semantics}(H)
+\text{Semantics}(G)=\text{Semantics}(H)
 $$
 
 または用途に応じて
 
 $$
-\operatorname{Solvable}(G) \leftrightarrow \operatorname{Solvable}(H)
+\text{Solvable}(G) \leftrightarrow \text{Solvable}(H)
 $$
 
 を要求する。
@@ -446,9 +446,9 @@ $$
 理想:
 
 $$
-\operatorname{Solvable}(G)
+\text{Solvable}(G)
 \iff
-\operatorname{Solvable}(K(G)).
+\text{Solvable}(K(G)).
 $$
 
 さらに復元証明書を保存し、kernel の解から元対象の解を構成する。
@@ -563,9 +563,9 @@ $$
 branching が必要な場合は、自由度が最小の piece を優先する。
 
 $$
-P^* := \arg\min_P \operatorname{escapeDegree}(P),
+P^* := \arg\min_P \text{escapeDegree}(P),
 \qquad
-\operatorname{escapeDegree}(P)>1.
+\text{escapeDegree}(P)>1.
 $$
 
 これは CSP の minimum remaining values heuristic に相当する。
@@ -689,12 +689,15 @@ TrominoReduces G H := Relation.ReflTransGen TrominoStep G H
 ### TRO-009: normal form / confluence assessment
 
 Outcome A:
+
 - canonical normal form unique up to symmetry
 
 Outcome B:
+
 - deterministic canonical strategy only
 
 Outcome C:
+
 - non-confluent but residual minimization search is effective
 
 ### TRO-010: benchmark

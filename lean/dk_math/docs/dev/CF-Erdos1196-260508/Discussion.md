@@ -817,7 +817,7 @@ def supportMass (n : ℕ) : ℕ :=
 つまり ABC 側では
 
 \[
-\text{supportMass}(n)=\operatorname{rad}(n)
+\text{supportMass}(n)=\text{rad}(n)
 \]
 
 と読む。
@@ -852,7 +852,7 @@ supportMass_ge_prod_of_prime_channel_family
 意味は、
 
 \[
-\prod_{p\in S}p \le \operatorname{rad}(n)
+\prod_{p\in S}p \le \text{rad}(n)
 \]
 
 を、prime channel family から導くこと。
@@ -900,7 +900,7 @@ PrimitiveWitnessFamily.pow_channelCount_le_abc_rad_diff
 特に、
 
 \[
-2^{\#S}\le \prod_{q\in S}q \le \operatorname{rad}(a^d-b^d)
+2^{\#S}\le \prod_{q\in S}q \le \text{rad}(a^d-b^d)
 \]
 
 という形が Lean に入っている。
@@ -1214,7 +1214,7 @@ quality_le_of_not_bad_with_channelCount_tail_dvd
 \to
 \text{prime channel family}
 \to
-\text{supportMass}=\operatorname{rad}
+\text{supportMass}=\text{rad}
 \to
 \text{lower bound}
 \]

@@ -156,25 +156,25 @@ $$
 直線遷移 \(E(z,t)\) の \(q2\) を測ると、驚くほど綺麗な式が出た。
 
 $$
-q2(E(z,t))=\operatorname{phaseDepth}(t),q2(z)
+q2(E(z,t))=\text{phaseDepth}(t),q2(z)
 $$
 
 ここで、
 
 $$
-\operatorname{phaseDepth}(t)=(1-t)^2+t^2
+\text{phaseDepth}(t)=(1-t)^2+t^2
 $$
 
 この profile は、端点で 1、中央で最小になる。
 
 $$
-\operatorname{phaseDepth}\left(\frac12\right)=\frac12
+\text{phaseDepth}\left(\frac12\right)=\frac12
 $$
 
 さらに、
 
 $$
-\operatorname{phaseDepth}(1-t)=\operatorname{phaseDepth}(t)
+\text{phaseDepth}(1-t)=\text{phaseDepth}(t)
 $$
 
 左右対称だった。
@@ -200,13 +200,13 @@ $$
 そこで現れたのが、
 
 $$
-\operatorname{phaseNormalization}(t) = \frac{1}{\sqrt{\operatorname{phaseDepth}(t)}}
+\text{phaseNormalization}(t) = \frac{1}{\sqrt{\text{phaseDepth}(t)}}
 $$
 
 これを affine edge に掛ける。
 
 $$
-N(z,t)=\operatorname{phaseNormalization}(t),E(z,t)
+N(z,t)=\text{phaseNormalization}(t),E(z,t)
 $$
 
 すると、

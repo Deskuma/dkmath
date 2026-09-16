@@ -215,13 +215,13 @@ Lindley reflection の完全な離散形になっている。
 endpoint 後の bit width を、
 
 $$
-W_m=\operatorname{bitWidth}\left(T^{e_m+1}(n)\right)
+W_m=\text{bitWidth}\left(T^{e_m+1}(n)\right)
 $$
 
 初期 width を、
 
 $$
-W_{-1}=\operatorname{bitWidth}(n)
+W_{-1}=\text{bitWidth}(n)
 $$
 
 と置く。
@@ -349,7 +349,7 @@ cp-316 の Hall 逆向きは、非常によくできている。
 
 $$
 \forall t\in[q,r],\quad
-\operatorname{Claims}[t,r]\le\operatorname{Capacity}[t,r]
+\text{Claims}[t,r]\le\text{Capacity}[t,r]
 $$
 
 じゃ。
@@ -375,9 +375,9 @@ $$
 $$
 |A|
 \le
-\operatorname{Claims}[t,r]
+\text{Claims}[t,r]
 \le
-\operatorname{Capacity}[t,r]
+\text{Capacity}[t,r]
 \le
 |N(A)|
 $$
@@ -401,7 +401,7 @@ canonicalEndpointForwardWindowMatching_iff_suffixClaims_le_capacity
 eligibility は、
 
 $$
-\operatorname{claimBlock}\le\operatorname{capacityBlock}
+\text{claimBlock}\le\text{capacityBlock}
 $$
 
 だけじゃ。
@@ -601,7 +601,7 @@ $$
 ### Window
 
 $$
-\sum_{k=q}^{r}D_k = \operatorname{Claims}[q,r]-\operatorname{Capacity}[q,r]
+\sum_{k=q}^{r}D_k = \text{Claims}[q,r]-\text{Capacity}[q,r]
 $$
 
 ### Queue
@@ -691,7 +691,7 @@ $$
 canonical block 全体が、
 
 $$
-(L,u)\longmapsto\operatorname{oddPart}(3^Lu-1)
+(L,u)\longmapsto\text{oddPart}(3^Lu-1)
 $$
 
 という一つの arithmetic transition に圧縮される。
@@ -751,7 +751,7 @@ $$
 canonical block interior では height が $1$ なので、一 step drift は、
 
 $$
-\operatorname{carry}-1\in{0,1}
+\text{carry}-1\in{0,1}
 $$
 
 じゃ。

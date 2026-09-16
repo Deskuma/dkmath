@@ -16,7 +16,7 @@ def twoTail (c : ℕ) : ℕ :=
 
 そして exact に、
 
-$$c=\operatorname{piSqRad}(c)\operatorname{rad}(c)\operatorname{twoTail}(c)$$
+$$c=\text{piSqRad}(c)\text{rad}(c)\text{twoTail}(c)$$
 
 を証明している。
 
@@ -35,7 +35,7 @@ twoTail(c)
 
 さらに、
 
-$$\log\operatorname{twoTail}(c)=\sum_q(v_q(c)-2)_+\log q$$
+$$\log\text{twoTail}(c)=\sum_q(v_q(c)-2)_+\log q$$
 
 も既に Lean 化されている。
 
@@ -54,7 +54,7 @@ E
 
 したがって、
 
-$$S+E=\log\operatorname{rad}(GN_{\mathrm{nonexc}})+\log\operatorname{piSqRad}(GN_{\mathrm{nonexc}})+\log\operatorname{twoTail}(GN_{\mathrm{nonexc}})$$
+$$S+E=\log\text{rad}(GN_{\mathrm{nonexc}})+\log\text{piSqRad}(GN_{\mathrm{nonexc}})+\log\text{twoTail}(GN_{\mathrm{nonexc}})$$
 
 となる。
 

@@ -292,7 +292,7 @@ a,b\text{ は }U\text{-局所的に互いに素}
 あるいは、より Lean 実装向けに言うなら、
 
 \[
-\operatorname{core}_U(n) =
+\text{core}_U(n) =
 \frac{n}{\prod_{p\in U}p^{v_p(n)}}
 \]
 
@@ -302,7 +302,7 @@ a,b\text{ は }U\text{-局所的に互いに素}
 \boxed{
 a\perp_U b
 \quad\Longleftrightarrow\quad
-\gcd(\operatorname{core}_U(a),\operatorname{core}_U(b))=1
+\gcd(\text{core}_U(a),\text{core}_U(b))=1
 }
 \]
 
@@ -454,7 +454,7 @@ x(x+2u)
 の共通因子は、すべて \(u\) 側に由来する。
 よって、\(u\) の素因子を **基底単位** として単位化すれば、この二つは互いに素になる。
 
-すなわち、\(U=\operatorname{PrimeFactors}(u)\) とすれば、
+すなわち、\(U=\text{PrimeFactors}(u)\) とすれば、
 
 \[
 \boxed{
@@ -746,7 +746,7 @@ p\nmid u
 Petal 的には、
 
 \[
-\operatorname{Supp}(\gcd(A,B))\subseteq \operatorname{Supp}(u)
+\text{Supp}(\gcd(A,B))\subseteq \text{Supp}(u)
 \]
 
 という形になる。
@@ -946,7 +946,7 @@ d\mid u^2
 \(u\) の素因子を基底単位として見る。
 
 \[
-U=\operatorname{PrimeFactors}(u)
+U=\text{PrimeFactors}(u)
 \]
 
 すると、
@@ -958,7 +958,7 @@ U=\operatorname{PrimeFactors}(u)
 より、\(A\) と \(B\) の共通素因子はすべて \(u\) 側に属する。
 
 \[
-\operatorname{Supp}(\gcd(A,B))\subseteq \operatorname{Supp}(u)
+\text{Supp}(\gcd(A,B))\subseteq \text{Supp}(u)
 \]
 
 つまり、

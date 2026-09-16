@@ -39,7 +39,7 @@ $$
 今回の証明は、boundary core
 
 $$
-\mathrm{core}:=\operatorname{boundaryCyclotomicPrimeCore}(.right,d,x,u)
+\mathrm{core}:=\text{boundaryCyclotomicPrimeCore}(.right,d,x,u)
 $$
 
 を
@@ -188,7 +188,7 @@ $$
 今回証明された内容の本質はこれじゃ。
 
 $$
-\operatorname{boundaryCyclotomicPrimeCore}(.right,d,x,u) = d,u^{d-1}
+\text{boundaryCyclotomicPrimeCore}(.right,d,x,u) = d,u^{d-1}
 +
 (\text{すべて } d^2 \text{ を含む tail})
 $$

@@ -313,7 +313,7 @@ statement は実装しやすい exact finite sum normal form でよい。
 狙う数学内容:
 
 $$
-\operatorname{PHZ}_X(s)
+\text{PHZ}_X(s)
 =
 \sum_{\substack{p\ \mathrm{prime},\ k\ge1\\p^k\le X}}
 (\log p)(p^k)^{-s}
@@ -329,7 +329,7 @@ $$
 
 $$
 \sum
-\operatorname{vonMangoldtLogCost}(L_{p,k})
+\text{vonMangoldtLogCost}(L_{p,k})
 \cdot q_{p,k}^{-s}
 $$
 

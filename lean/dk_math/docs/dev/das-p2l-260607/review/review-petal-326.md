@@ -78,7 +78,7 @@ canonicalBlockClaimHoles
 
 は、正 depth 全体から claim depths を除いた有限集合じゃ。
 
-$$\operatorname{Claims}\sqcup\operatorname{Holes}=\operatorname{Icc}(1,L)$$
+$$\text{Claims}\sqcup\text{Holes}=\text{Icc}(1,L)$$
 
 したがって、
 
@@ -117,11 +117,11 @@ positive nonsaturated block について、spare cardinality が hole 数と直�
 
 terminal valuation が $1$ なら、
 
-$$|\operatorname{Spare}|=H-1$$
+$$|\text{Spare}|=H-1$$
 
 terminal valuation が $2$ 以上なら、
 
-$$|\operatorname{Spare}|=H$$
+$$|\text{Spare}|=H$$
 
 じゃ。
 
@@ -133,7 +133,7 @@ $v=1$ では最初の hole 一個が selected carrier の境界補正に消費�
 
 したがって、
 
-$$v=1\land|\operatorname{Spare}|=0\iff H=1$$
+$$v=1\land|\text{Spare}|=0\iff H=1$$
 
 である。
 
@@ -173,7 +173,7 @@ CanonicalZeroCarrierBalancedBorderBlock
 
 hole cardinality が一なら、唯一の missing depth が選べる。
 
-$$\operatorname{Claims}=\operatorname{Icc}(1,L)\setminus{d_{\mathrm{miss}}}$$
+$$\text{Claims}=\text{Icc}(1,L)\setminus{d_{\mathrm{miss}}}$$
 
 これは tight valuation-one positive block と exceptional length-two balanced block の両方に適用される。
 
@@ -227,7 +227,7 @@ $$1+D_{k+1}\le0$$
 
 spare branch では、
 
-$$\operatorname{Fin}(1)\hookrightarrow\operatorname{SpareCarrier}_{k+1}$$
+$$\text{Fin}(1)\hookrightarrow\text{SpareCarrier}_{k+1}$$
 
 が実 source incidence として構成された。
 
@@ -262,9 +262,9 @@ $$D,2^d\le2^{L-1}$$
 
 さらに saturated predecessor の mass $2$ を lower region、successor demand を upper half へ埋め込み、二つの像が交わらないことまで証明した。
 
-$$\operatorname{Fin}(2)\hookrightarrow[0,2^{L-2})$$
+$$\text{Fin}(2)\hookrightarrow[0,2^{L-2})$$
 
-$$\operatorname{Demand}\hookrightarrow[2^{L-2},2^{L-1})$$
+$$\text{Demand}\hookrightarrow[2^{L-2},2^{L-1})$$
 
 したがって、
 
@@ -363,7 +363,7 @@ length-one block では claim depth は $1$ しか存在しない。
 
 今回、
 
-$$A=1\iff\operatorname{CarryTwoDebtAt}(e_k)$$
+$$A=1\iff\text{CarryTwoDebtAt}(e_k)$$
 
 が証明された。
 

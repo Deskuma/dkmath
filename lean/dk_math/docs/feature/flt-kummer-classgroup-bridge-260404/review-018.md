@@ -6,7 +6,7 @@
 今回の進展の本質は、Stage 2 の一般核ではなく、 **pack-specialized な exact receiver** まで no-sorry で入ったことじゃ。つまり今はもう
 
 $$
-\operatorname{span}(z-\zeta y)=I^p
+\text{span}(z-\zeta y)=I^p
 $$
 
 という explicit な ideal equality さえ手に入れば、
@@ -23,7 +23,7 @@ $$
 残っているのは「unit normalization が出来るか」ではなく、 **Stage 1 の出力を、Stage 2 がそのまま食べられる exact 境界条件へ落とせるか** だけじゃ。つまり open は
 
 $$
-\text{Stage 1 output} \;\Longrightarrow\; \operatorname{span}(z-\zeta y)=I^p
+\text{Stage 1 output} \;\Longrightarrow\; \text{span}(z-\zeta y)=I^p
 $$
 
 という一点と、その先の Stage 3 の norm descent に縮んだ。ここはかなり面白い。理論の大穴ではなく、接続点の precise 化にまで縮退したということじゃ。
@@ -32,10 +32,10 @@ $$
 
 ひとつ、やわらかく指摘しておくのぅ。
 今回切り出した `CyclotomicLinearFactorIdealPthPowerTarget` は、発想は正しいが、 **そのままでは target の形が強すぎる可能性が高い**。
-いまの形は「任意の principal ideal (I) について (\operatorname{span}(z-\zeta y)=I^p)」と読めてしまう。これは Stage 1 の出力としては普通は強すぎる。論理的に欲しいのは、おそらく
+いまの形は「任意の principal ideal (I) について (\text{span}(z-\zeta y)=I^p)」と読めてしまう。これは Stage 1 の出力としては普通は強すぎる。論理的に欲しいのは、おそらく
 
 $$
-\exists I,\ I \text{ principal} \land \operatorname{span}(z-\zeta y)=I^p
+\exists I,\ I \text{ principal} \land \text{span}(z-\zeta y)=I^p
 $$
 
 という **存在形** じゃ。
@@ -52,7 +52,7 @@ $$
 つまり、次に欲しいのは例えば
 
 $$
-\exists I,\ I \text{ principal} \land \operatorname{span}(z-\zeta y)=I^p
+\exists I,\ I \text{ principal} \land \text{span}(z-\zeta y)=I^p
 $$
 
 を返す theorem じゃ。
@@ -102,7 +102,7 @@ $$
 $$
 \boxed{
 \text{次の最短手は、Stage 1 の出力を }
-\operatorname{span}(z-\zeta y)=I^p
+\text{span}(z-\zeta y)=I^p
 \text{ の存在定理として concrete 化すること}
 }
 $$

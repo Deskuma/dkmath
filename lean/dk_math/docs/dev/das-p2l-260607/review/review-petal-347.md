@@ -161,7 +161,7 @@ canonicalSelectedDriftSpareCarrier
 
 後者は前者の補集合なので、
 
-$$\operatorname{DriftImage}\cap\operatorname{SpareCarrier}=\varnothing$$
+$$\text{DriftImage}\cap\text{SpareCarrier}=\varnothing$$
 
 じゃ。
 
@@ -177,7 +177,7 @@ $$k_1+1=k_2+1\Longrightarrow k_1=k_2$$
 
 したがって、
 
-$$|\operatorname{GlobalDriftImage}|+|S_{\mathrm{positive}}|\le|\operatorname{GlobalSelectedCarrier}|$$
+$$|\text{GlobalDriftImage}|+|S_{\mathrm{positive}}|\le|\text{GlobalSelectedCarrier}|$$
 
 がactual ownershipとして証明された。
 
@@ -198,23 +198,23 @@ sum_intToNat_positiveDrift_eq_globalDriftImage_add_saturatedCard
 
 一つのpositive blockについて、
 
-$$\Delta_k^+=|\operatorname{DriftImage}_k|+\operatorname{SaturatedToken}_k$$
+$$\Delta_k^+=|\text{DriftImage}_k|+\text{SaturatedToken}_k$$
 
 となる。
 
 これをwindow全体へ足して、
 
-$$P(q,m)=|\operatorname{GlobalDriftImage}(q,m)|+\operatorname{SatCount}(q,m)$$
+$$P(q,m)=|\text{GlobalDriftImage}(q,m)|+\text{SatCount}(q,m)$$
 
 がexactに閉じた。
 
 ここでpositive-spare tokenを左辺へ加え、
 
-$$P+S_{\mathrm{positive}}\le G+\operatorname{SatCount}$$
+$$P+S_{\mathrm{positive}}\le G+\text{SatCount}$$
 
 を作る。その後、
 
-$$\operatorname{SatCount}=N_{\mathrm{int}}+S_{\mathrm{zero}}+S_{\mathrm{positive}}+R_{\mathrm{int}}+T$$
+$$\text{SatCount}=N_{\mathrm{int}}+S_{\mathrm{zero}}+S_{\mathrm{positive}}+R_{\mathrm{int}}+T$$
 
 を使うことで、$S_{\mathrm{positive}}$ が両側から消える。
 

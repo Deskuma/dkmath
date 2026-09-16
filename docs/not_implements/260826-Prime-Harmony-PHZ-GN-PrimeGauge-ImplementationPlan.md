@@ -145,7 +145,7 @@ DkMath.NumberTheory.Primitive.PHZ30
 `KnownPrimeScales S` の下では既に
 
 $$
-\operatorname{SupportDisjointFrom}(S,n)
+\text{SupportDisjointFrom}(S,n)
 \iff
 \gcd(n,M_S)=1
 $$
@@ -155,9 +155,9 @@ $$
 また support state は `M_S` 周期である。
 
 $$
-\operatorname{SupportDisjointFrom}(S,n+kM_S)
+\text{SupportDisjointFrom}(S,n+kM_S)
 \iff
-\operatorname{SupportDisjointFrom}(S,n)
+\text{SupportDisjointFrom}(S,n)
 $$
 
 ---
@@ -363,7 +363,7 @@ $$
 すなわち
 
 $$
-\operatorname{squareBody}(P)=P^2+2P=(P+1)^2-1
+\text{squareBody}(P)=P^2+2P=(P+1)^2-1
 $$
 
 となる。

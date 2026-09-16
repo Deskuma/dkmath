@@ -33,11 +33,11 @@ cosmic_formula_binom
 The current `CommRing` layer already defines
 
 $$
-\operatorname{Big}(d,x,u)=(x+u)^d,
+\text{Big}(d,x,u)=(x+u)^d,
 $$
 
 $$
-\operatorname{Gap}(d,u)=u^d,
+\text{Gap}(d,u)=u^d,
 $$
 
 and a Body whose normalized form is the canonical `GZ` kernel.  In particular,
@@ -326,15 +326,15 @@ boundaryMass_eq_zero_of_not_dvd
 The current definitions are exactly:
 
 $$
-\operatorname{diffMass}_q(a,b,d)=v_q(a^d-b^d),
+\text{diffMass}_q(a,b,d)=v_q(a^d-b^d),
 $$
 
 $$
-\operatorname{boundaryMass}_q(a,b)=v_q(a-b),
+\text{boundaryMass}_q(a,b)=v_q(a-b),
 $$
 
 $$
-\operatorname{beamMass}_q(a,b,d)=v_q(GN_d(a-b,b)).
+\text{beamMass}_q(a,b,d)=v_q(GN_d(a-b,b)).
 $$
 
 ### Primitive-project interpretation
@@ -365,7 +365,7 @@ FullExponentSlotCoverage
 and the specification
 
 $$
-q=p^k,\qquad1\le k\le n.\operatorname{factorization}(p).
+q=p^k,\qquad1\le k\le n.\text{factorization}(p).
 $$
 
 ### Primitive-project interpretation

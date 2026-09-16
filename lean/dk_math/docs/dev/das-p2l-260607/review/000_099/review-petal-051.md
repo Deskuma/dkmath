@@ -78,7 +78,7 @@ zsigmondyPrimitivePrimeDivisor_noLift_singleton_logSubProbability_GN
 $$
 \text{PetalNoLiftPrimeChannel}
 \Rightarrow
-\operatorname{padicValNat}_q(GN)=1
+\text{padicValNat}_q(GN)=1
 $$
 
 が no-sorry で固定されたのは強い。
@@ -131,7 +131,7 @@ injective Petal carrier family
 $$
 \text{PetalNoLiftPrimeChannel}
 \Rightarrow
-\operatorname{padicValNat}_q(GN(d,x,u))=1
+\text{padicValNat}_q(GN(d,x,u))=1
 $$
 
 つまり、NoLift が単なる

@@ -60,7 +60,7 @@ $$
 について
 
 $$
-\omega^p=1,\qquad \omega\ne 1,\qquad \operatorname{ord}(\omega)=p
+\omega^p=1,\qquad \omega\ne 1,\qquad \text{ord}(\omega)=p
 $$
 
 が定理として確定し、`QAdicLiftSeed` に直接接続した。

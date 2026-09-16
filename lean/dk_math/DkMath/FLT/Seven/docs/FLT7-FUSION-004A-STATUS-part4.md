@@ -107,7 +107,7 @@ $$
 7次円分体の Galois 群は、
 
 $$
-\operatorname{Gal}(K/\mathbb Q)\cong(\mathbb Z/7\mathbb Z)^\times\cong C_6
+\text{Gal}(K/\mathbb Q)\cong(\mathbb Z/7\mathbb Z)^\times\cong C_6
 $$
 
 です。
@@ -115,7 +115,7 @@ $$
 複素共役による位数2部分を除くと、最大実部分体側には、
 
 $$
-\operatorname{Gal}(K^+/\mathbb Q)\cong C_3
+\text{Gal}(K^+/\mathbb Q)\cong C_3
 $$
 
 が残ります。
@@ -135,7 +135,7 @@ $$
 を構成し、
 
 $$
-t^7=1,\qquad t\neq1,\qquad \operatorname{ord}(t)=7
+t^7=1,\qquad t\neq1,\qquad \text{ord}(t)=7
 $$
 
 を証明しています。
@@ -377,7 +377,7 @@ $$
 Lean 上の表現は、
 
 $$
-\operatorname{evalKernelMultiplicity}=\operatorname{padicValNat}(q,\operatorname{cell})
+\text{evalKernelMultiplicity}=\text{padicValNat}(q,\text{cell})
 $$
 
 です。
@@ -443,11 +443,11 @@ DkMath の report も、この theorem は ideal factorization であり、各 k
 各 load について、
 
 $$
-|\operatorname{Norm}(L_{21,i})|=c_{21}
+|\text{Norm}(L_{21,i})|=c_{21}
 $$
 
 $$
-|\operatorname{Norm}(L_{22,i})|=c_{22}
+|\text{Norm}(L_{22,i})|=c_{22}
 $$
 
 が成立します。
@@ -455,7 +455,7 @@ $$
 さらに、
 
 $$
-c_{21}c_{22}|\operatorname{Norm}(D_i)|=|e|
+c_{21}c_{22}|\text{Norm}(D_i)|=|e|
 $$
 
 です。
@@ -807,7 +807,7 @@ degree-six oriented prime
 特に、
 
 $$
-\operatorname{padicValNat}(q,\operatorname{cell})=v_{\mathfrak p_q}(\operatorname{load})
+\text{padicValNat}(q,\text{cell})=v_{\mathfrak p_q}(\text{load})
 $$
 
 を、元の routing provenance を保ったまま接続している点は、DkMath 独自の形式化構造です。

@@ -72,7 +72,7 @@ DkNNRealQ.semanticValue_mono
 `semanticValue_mulNonneg` は、非負区間上で endpoint multiplication が順序保存になることを利用し、期待される実数値
 
 $$
-\operatorname{semanticValue}(x)\operatorname{semanticValue}(y)
+\text{semanticValue}(x)\text{semanticValue}(y)
 $$
 
 が product representation の全近似区間に入ることを示して、一意性で落としている。これは前回の加法保存と同じ proof pattern で、非常に良い。
@@ -104,7 +104,7 @@ $$
 そして semantic map が加法を保ち、\(z\) の semantic value が非負なので、
 
 $$
-\operatorname{semanticValue}(y) = \operatorname{semanticValue}(x)+\operatorname{semanticValue}(z) \ge \operatorname{semanticValue}(x)
+\text{semanticValue}(y) = \text{semanticValue}(x)+\text{semanticValue}(z) \ge \text{semanticValue}(x)
 $$
 
 となる。
@@ -239,7 +239,7 @@ semanticValue_pow
 がある。つまり、
 
 $$
-\operatorname{semanticValue}(x^2+y^2) = \operatorname{semanticValue}(x)^2+\operatorname{semanticValue}(y)^2
+\text{semanticValue}(x^2+y^2) = \text{semanticValue}(x)^2+\text{semanticValue}(y)^2
 $$
 
 が出せる。

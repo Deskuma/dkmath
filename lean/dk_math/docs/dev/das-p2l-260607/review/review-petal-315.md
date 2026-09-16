@@ -99,7 +99,7 @@ canonicalEndpointPositiveExcursionAt_iff_accountingTerm_pos
 により、
 
 $$
-\operatorname{PositiveExcursionAt}(q)\Longleftrightarrow0<D_q
+\text{PositiveExcursionAt}(q)\Longleftrightarrow0<D_q
 $$
 
 となった。
@@ -117,7 +117,7 @@ $$
 $q\le r$ に対して、
 
 $$
-\operatorname{RepaidAt}(q,r)
+\text{RepaidAt}(q,r)
 \Longleftrightarrow
 \sum_{k=q}^{r}D_k\le0
 $$
@@ -125,7 +125,7 @@ $$
 さらに、
 
 $$
-\operatorname{RepaidAt}(q,r)
+\text{RepaidAt}(q,r)
 \Longleftrightarrow
 \sum_{k=q}^{r}A_k\le
 \sum_{k=q}^{r}P_k
@@ -169,7 +169,7 @@ CanonicalEndpointForwardWindowMatching
 は、
 
 $$
-\operatorname{claimBlock}\le\operatorname{slotBlock}
+\text{claimBlock}\le\text{slotBlock}
 $$
 
 を要求する。
@@ -177,9 +177,9 @@ $$
 そして、
 
 $$
-\operatorname{ForwardWindowMatching}(q,r)
+\text{ForwardWindowMatching}(q,r)
 \Longrightarrow
-\operatorname{RepaidAt}(q,r)
+\text{RepaidAt}(q,r)
 $$
 
 が証明された。
@@ -209,11 +209,11 @@ $$
 ここで、
 
 $$
-C_k=\operatorname{canonicalPaymentClaimDepths}(n,k)
+C_k=\text{canonicalPaymentClaimDepths}(n,k)
 $$
 
 $$
-S_k=\operatorname{canonicalEndpointCapacityLevelSlots}(n,k)
+S_k=\text{canonicalEndpointCapacityLevelSlots}(n,k)
 $$
 
 じゃ。

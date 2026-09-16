@@ -69,7 +69,7 @@ hCenter :
 `centeredSigma σ` は、
 
 $$
-\operatorname{centeredSigma}(σ)=σ-\frac12
+\text{centeredSigma}(σ)=σ-\frac12
 $$
 
 である。
@@ -325,11 +325,11 @@ theorem etaPartialEndpoint_eq_positive_sub_negative
 により、
 
 $$
-\operatorname{etaPartialEndpoint}(N,s)
+\text{etaPartialEndpoint}(N,s)
 =
-\operatorname{etaPositivePartial}(N,s)
+\text{etaPositivePartial}(N,s)
 -
-\operatorname{etaNegativePartial}(N,s)
+\text{etaNegativePartial}(N,s)
 $$
 
 が exact に成立する。
@@ -343,11 +343,11 @@ theorem etaPartialEndpoint_eq_zero_iff_parity_balance
 すなわち、
 
 $$
-\operatorname{etaPartialEndpoint}(N,s)=0
+\text{etaPartialEndpoint}(N,s)=0
 \iff
-\operatorname{etaPositivePartial}(N,s)
+\text{etaPositivePartial}(N,s)
 =
-\operatorname{etaNegativePartial}(N,s)
+\text{etaNegativePartial}(N,s)
 $$
 
 が得られる。
@@ -398,13 +398,13 @@ theorem etaNormalizedProjectedMass_eq_half_of_endpoint_eq_zero
 により、
 
 $$
-\operatorname{normalizedPositiveProjectedMass}=\frac12
+\text{normalizedPositiveProjectedMass}=\frac12
 $$
 
 かつ、
 
 $$
-\operatorname{normalizedNegativeProjectedMass}=\frac12
+\text{normalizedNegativeProjectedMass}=\frac12
 $$
 
 が得られる。

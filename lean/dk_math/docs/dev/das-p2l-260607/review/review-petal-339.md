@@ -47,7 +47,7 @@ commit `f696225cef4b392f6c9c7099e1850cf45777e4f6` と提出 diff/report は一�
 
 今回確定した中心同値は、固定 root $n$ と固定 horizon $H$ に対する、
 
-$$\operatorname{UB}(F_H)\iff\operatorname{UB}(F_0)\iff\operatorname{UB}(\Delta)$$
+$$\text{UB}(F_H)\iff\text{UB}(F_0)\iff\text{UB}(\Delta)$$
 
 じゃ。
 
@@ -55,7 +55,7 @@ $$\operatorname{UB}(F_H)\iff\operatorname{UB}(F_0)\iff\operatorname{UB}(\Delta)$
 
 さらに任意の有限 signature に対して、
 
-$$\text{sound finite upper-weight table exists}\iff\operatorname{UB}(F_H)$$
+$$\text{sound finite upper-weight table exists}\iff\text{UB}(F_H)$$
 
 が証明された。
 
@@ -81,7 +81,7 @@ canonicalPreBlockCarryWord n H m : Fin H → Bool
 
 そして全領域で、
 
-$$\#\operatorname{trueBits}=\left|\operatorname{PreBlockCarryCarrier}_H(m)\right|$$
+$$\#\text{trueBits}=\left|\text{PreBlockCarryCarrier}_H(m)\right|$$
 
 が証明された。
 
@@ -143,7 +143,7 @@ $$F_0(m)\le F_H(m)+H$$
 
 非成熟 blockは高々最初の $H$ blockだけなので、有限 prefixの上界を別に取ることで、
 
-$$\operatorname{UB}(F_H)\iff\operatorname{UB}(F_0)$$
+$$\text{UB}(F_H)\iff\text{UB}(F_0)$$
 
 が全 blockについて証明された。
 
@@ -167,13 +167,13 @@ $$F_0(m)\le B\iff\Delta_m\le B$$
 
 そこから、
 
-$$\operatorname{UB}(F_0)\iff\operatorname{UB}(\Delta)$$
+$$\text{UB}(F_0)\iff\text{UB}(\Delta)$$
 
 となる。
 
 従って最終的に、
 
-$$\operatorname{UB}(F_H)\iff\operatorname{CanonicalEndpointAccountingTermUniformUpperBound}(n)$$
+$$\text{UB}(F_H)\iff\text{CanonicalEndpointAccountingTermUniformUpperBound}(n)$$
 
 が任意の固定 $H$ について成立する。
 
@@ -288,7 +288,7 @@ $$F_H(m)\le\Phi(\sigma_{m+1})-\Phi(\sigma_m)\le\Phi(\sigma_0)-\min_s\Phi(s)$$
 
 従って、
 
-$$\text{finite source-age potential certificate}\Longrightarrow\operatorname{UB}(\Delta)$$
+$$\text{finite source-age potential certificate}\Longrightarrow\text{UB}(\Delta)$$
 
 まで閉じた。
 
@@ -356,13 +356,13 @@ uniform source age target
 
 既存 APIでは `endpointAccountingTerm` は canonical block の signed width driftであり、その prefix sumは、
 
-$$\sum_{k\le m}\Delta(k)=\operatorname{bitWidth}(\operatorname{nextStart}_{m})-\operatorname{bitWidth}(n)$$
+$$\sum_{k\le m}\Delta(k)=\text{bitWidth}(\text{nextStart}_{m})-\text{bitWidth}(n)$$
 
 へ telescopeする。
 
 また block normal formでは、
 
-$$\Delta(k)=\operatorname{ClaimCount}(k)-\operatorname{Capacity}(k)$$
+$$\Delta(k)=\text{ClaimCount}(k)-\text{Capacity}(k)$$
 
 であり、
 
@@ -422,7 +422,7 @@ queue coordinateは `queueCap+1` を overflow markerとしており、queue boun
 
 candidateに対して証明されたのは、
 
-$$\text{sound upper table exists}\iff\operatorname{UB}(\Delta)$$
+$$\text{sound upper table exists}\iff\text{UB}(\Delta)$$
 
 のみである。
 

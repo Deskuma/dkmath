@@ -10,7 +10,7 @@
 ひとつめは、`CyclotomicLinearFactorIdealPthPowerTarget` を「任意の principal ideal (I)」ではなく、
 
 $$
-\exists I,\ I \text{ principal} \;\land\; \operatorname{span}(z-\zeta y)=I^p
+\exists I,\ I \text{ principal} \;\land\; \text{span}(z-\zeta y)=I^p
 $$
 
 という **存在形** に直したことじゃ。これは Stage 1 の出力として正しい。Stage 1 が自然に返すのは「ある root ideal がある」であって、「どの principal ideal に対しても成り立つ」ではないからの。
@@ -30,7 +30,7 @@ $$
 Stage 1 の仕事は、線型因子 ideal について
 
 $$
-\operatorname{span}(z-\zeta y)=I^p
+\text{span}(z-\zeta y)=I^p
 $$
 
 となる principal ideal (I) の存在を出すこと。
@@ -68,7 +68,7 @@ $$
 いまその入力を返す theorem はもうある。ならば次に要るのは、その入力の前段、すなわち
 
 $$
-\exists I,\ I \text{ principal} \land \operatorname{span}(z-\zeta y)=I^p
+\exists I,\ I \text{ principal} \land \text{span}(z-\zeta y)=I^p
 $$
 
 を Stage 1 の theorem として出すことだけじゃ。そこが通れば、残る honest open はほんに Stage 3 だけになる。
@@ -82,8 +82,8 @@ $$
 pack と gap-divisible 条件のもとで、
 
 $$
-\exists I : \operatorname{Ideal}(R),\ I \text{ principal} \land
-\operatorname{span}(z-\zeta y)=I^p
+\exists I : \text{Ideal}(R),\ I \text{ principal} \land
+\text{span}(z-\zeta y)=I^p
 $$
 
 を返す theorem じゃ。
@@ -107,7 +107,7 @@ $$
 すると欲しい
 
 $$
-\operatorname{span}(z-\zeta y)=I^p
+\text{span}(z-\zeta y)=I^p
 $$
 
 が、ある principal ideal (I) について成立する。
@@ -138,7 +138,7 @@ $$
 $$
 \boxed{
 \text{次の最短手は、Stage 1 の出力を }
-\exists I,\ I \text{ principal} \land \operatorname{span}(z-\zeta y)=I^p
+\exists I,\ I \text{ principal} \land \text{span}(z-\zeta y)=I^p
 \text{ として concrete 化すること}
 }
 $$

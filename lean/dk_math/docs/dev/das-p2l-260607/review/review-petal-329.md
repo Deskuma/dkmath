@@ -67,13 +67,13 @@ mem_claimDepths_iff_coreWordAtDepth_carryTwo
 
 有効 depth $d$ について、
 
-$$\operatorname{CoreWord}(d)=2^d3^{L-d}u-1$$
+$$\text{CoreWord}(d)=2^d3^{L-d}u-1$$
 
 となり、実際の orbit state と一致する。
 
 さらに claim membership が、
 
-$$d\in\operatorname{Claims}\iff\operatorname{stateUpperCarry}(\operatorname{CoreWord}(d))=2$$
+$$d\in\text{Claims}\iff\text{stateUpperCarry}(\text{CoreWord}(d))=2$$
 
 として固定された。
 
@@ -94,11 +94,11 @@ orbit time の定義
 
 今回、
 
-$$3(\operatorname{CoreWord}(d+1)+1)=2(\operatorname{CoreWord}(d)+1)$$
+$$3(\text{CoreWord}(d+1)+1)=2(\text{CoreWord}(d)+1)$$
 
 および、
 
-$$\operatorname{SourceAtDepth}(d+1)+1=\operatorname{SourceAtDepth}(d)$$
+$$\text{SourceAtDepth}(d+1)+1=\text{SourceAtDepth}(d)$$
 
 が証明された。
 
@@ -191,9 +191,9 @@ $$L=2,\qquad v=1,\qquad A=1$$
 
 さらに、
 
-$$\operatorname{ClaimHoles}={2}$$
+$$\text{ClaimHoles}={2}$$
 
-$$\operatorname{ClaimDepths}={1}$$
+$$\text{ClaimDepths}={1}$$
 
 となる。
 
@@ -203,9 +203,9 @@ full-balanced branch は deepest hole の存在と矛盾するため消滅した
 
 唯一の hole は最深 depth になる。
 
-$$\operatorname{ClaimHoles}={L}$$
+$$\text{ClaimHoles}={L}$$
 
-$$\operatorname{ClaimDepths}=\operatorname{Icc}(1,L-1)$$
+$$\text{ClaimDepths}=\text{Icc}(1,L-1)$$
 
 これは非常に強い。
 
@@ -338,11 +338,11 @@ $$Q_k\le C$$
 
 $$P_k:=C-Q_k$$
 
-$$\operatorname{demand}_k:=0$$
+$$\text{demand}_k:=0$$
 
-$$\operatorname{consumed}_k:=0$$
+$$\text{consumed}_k:=0$$
 
-$$\operatorname{replenishment}_k:=0$$
+$$\text{replenishment}_k:=0$$
 
 `State k` は `PUnit` でよい。
 
@@ -410,13 +410,13 @@ noncomputable def trivialAmortizedTransitionOfQueueBound
 
 cp-329 は既に、
 
-$$\operatorname{AmortizationLaw}(P,R)\Longrightarrow\operatorname{QueueBound}(Q_0+P+R)$$
+$$\text{AmortizationLaw}(P,R)\Longrightarrow\text{QueueBound}(Q_0+P+R)$$
 
 を証明している。
 
 今示した逆向きと合わせると、
 
-$$\left(\exists P,R,\ \operatorname{AmortizationLaw}(P,R)\right)\iff\left(\exists C,\ \operatorname{QueueBound}(C)\right)$$
+$$\left(\exists P,R,\ \text{AmortizationLaw}(P,R)\right)\iff\left(\exists C,\ \text{QueueBound}(C)\right)$$
 
 となる。
 
@@ -619,13 +619,13 @@ CanonicalOwnedAmortizedResource.lean
 
 ### Demand
 
-$$\operatorname{demand}(k)=\operatorname{canonicalBlockClaimCount}(n,k)$$
+$$\text{demand}(k)=\text{canonicalBlockClaimCount}(n,k)$$
 
 または対象を positive drift に限定するなら、その exact carrier cardinality。
 
 ### Queue
 
-$$\operatorname{queue}(k)=\operatorname{canonicalOutstandingClaimQueue}(n,k)$$
+$$\text{queue}(k)=\text{canonicalOutstandingClaimQueue}(n,k)$$
 
 ### Consumption
 
@@ -645,7 +645,7 @@ actual service token または actual source incidence の image cardinality。
 
 ### Temporal transition
 
-$$\operatorname{Available}_{k+1}=(\operatorname{Available}_k\setminus\operatorname{Consumed}_k)\cup\operatorname{Replenished}_k$$
+$$\text{Available}_{k+1}=(\text{Available}_k\setminus\text{Consumed}_k)\cup\text{Replenished}_k$$
 
 に相当する actual carrier identity。
 

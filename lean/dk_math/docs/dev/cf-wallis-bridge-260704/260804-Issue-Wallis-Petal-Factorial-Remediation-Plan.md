@@ -118,7 +118,7 @@ lap = 0:
 とする。
 
 $$
-\operatorname{FactorialPetal}(0)
+\text{FactorialPetal}(0)
 =
 1\cdot\prod_{i<0}(i+1)
 =
@@ -130,7 +130,7 @@ $$
 Petal の幾何・数え上げとして有効な単位核は正である、と明示する。
 
 $$
-\operatorname{IsValidPetalCore}(n)
+\text{IsValidPetalCore}(n)
 \iff
 0<n
 $$

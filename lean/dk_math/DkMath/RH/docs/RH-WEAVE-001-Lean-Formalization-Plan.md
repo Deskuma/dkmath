@@ -53,15 +53,15 @@ cid: 6a6deaaf-6240-83e8-8f97-f1ef176868b2
 必要な構造は次である。
 
 $$
-\operatorname{PrimePhaseState}(\sigma,t)
+\text{PrimePhaseState}(\sigma,t)
 \Longrightarrow
-\operatorname{CFBRCDefect}(d,\sigma,\Theta)=0
+\text{CFBRCDefect}(d,\sigma,\Theta)=0
 $$
 
 既存または将来の CFBRC 排除定理により、
 
 $$
-\operatorname{CFBRCDefect}(d,\sigma,\Theta)=0
+\text{CFBRCDefect}(d,\sigma,\Theta)=0
 \Longrightarrow
 \sigma=\frac12
 $$
@@ -69,9 +69,9 @@ $$
 さらに、標準ゼータ零点から独立な素数側状態を構成し、
 
 $$
-\operatorname{StandardZetaZero}(\sigma,t)
+\text{StandardZetaZero}(\sigma,t)
 \Longrightarrow
-\operatorname{PrimePhaseState}(\sigma,t)
+\text{PrimePhaseState}(\sigma,t)
 $$
 
 を得る。
@@ -79,7 +79,7 @@ $$
 この三本を合成して、
 
 $$
-\operatorname{StandardZetaZero}(\sigma,t)
+\text{StandardZetaZero}(\sigma,t)
 \Longrightarrow
 \sigma=\frac12
 $$
@@ -126,7 +126,7 @@ $$
 -\sum_{n\le N}\Lambda(n)n^{-s}
 $$
 
-を $\operatorname{Re}s=1/2$ でそのまま極限化してはならない。
+を $\text{Re}s=1/2$ でそのまま極限化してはならない。
 
 平滑化または正則化を入れる。
 
@@ -554,7 +554,7 @@ $$
 候補例は次である。
 
 $$
-\operatorname{primePhaseScore}_{N}(\sigma,t)
+\text{primePhaseScore}_{N}(\sigma,t)
 =
 \left|L_{N,w}(\sigma+it)\right|
 $$
@@ -562,9 +562,9 @@ $$
 または、
 
 $$
-\operatorname{primePhaseSpike}_{N}(\sigma,t)
+\text{primePhaseSpike}_{N}(\sigma,t)
 =
-\left|\operatorname{Re}L_{N,w}(\sigma+it)\right|
+\left|\text{Re}L_{N,w}(\sigma+it)\right|
 $$
 
 局所極値は、解析的微分ではなく最初は区間比較で定義する。
@@ -593,7 +593,7 @@ def IsLocalPeakOn
 監査対象は次である。
 
 - 標準リーマンゼータの定義名。
-- $\operatorname{Re}s>1$ での Dirichlet 級数表示。
+- $\text{Re}s>1$ での Dirichlet 級数表示。
 - eta との関係。
 - 解析接続。
 - 複素微分。
@@ -639,7 +639,7 @@ $$
 $$
 \frac{d}{dt}\log\left|\zeta(\sigma+it)\right|
 =
--\operatorname{Im}\frac{\zeta'(s)}{\zeta(s)}
+-\text{Im}\frac{\zeta'(s)}{\zeta(s)}
 $$
 
 また、
@@ -647,7 +647,7 @@ $$
 $$
 \frac{d}{dt}\arg\zeta(\sigma+it)
 =
-\operatorname{Re}\frac{\zeta'(s)}{\zeta(s)}
+\text{Re}\frac{\zeta'(s)}{\zeta(s)}
 $$
 
 である。
@@ -934,13 +934,13 @@ sigma = 1/2
 - [ ] `PHZCandidate` の定義に `zetazero` または既知零点表がない。
 - [ ] `CFBRCDefect` の定義に $\sigma=1/2$ がない。
 - [ ] raw Dirichlet series を臨界線上で収束級数として使っていない。
-- [ ] raw $\Lambda$ series を $\operatorname{Re}s\le1$ で収束級数として使っていない。
+- [ ] raw $\Lambda$ series を $\text{Re}s\le1$ で収束級数として使っていない。
 - [ ] 無限級数を任意に並べ替えていない。
 - [ ] 全ての項が共通の $t$ を使う。
 - [ ] reverse-negate による強制閉包を解析零点と呼んでいない。
 - [ ] `atan(im / re)` を位相定義に使っていない。
-- [ ] 位相微分に $\operatorname{Re}(\zeta'/\zeta)$ を使用している。
-- [ ] 振幅対数微分に $-\operatorname{Im}(\zeta'/\zeta)$ を使用している。
+- [ ] 位相微分に $\text{Re}(\zeta'/\zeta)$ を使用している。
+- [ ] 振幅対数微分に $-\text{Im}(\zeta'/\zeta)$ を使用している。
 - [ ] 多重零点を sign change だけで処理していない。
 - [ ] 独自 `eulerZeta` と標準ゼータを同一視していない。
 - [ ] 数値 oracle を Lean 定理の仮定にしていない。
@@ -989,7 +989,7 @@ Control/IndexShiftAudit.lean
 旧 3D-B 型の終点式は、第一腕を $v_1,\ldots,v_m$ とすると、
 
 $$
-\operatorname{endpoint}
+\text{endpoint}
 =
 v_1+v_m
 $$
@@ -1247,7 +1247,7 @@ experiments/rh_weave/
 
 **分岐 D — eta–zeta Bridge が不足**
 
-$\operatorname{Re}s>1$ で有限・無限和を証明し、解析接続の一意性で延長する。
+$\text{Re}s>1$ で有限・無限和を証明し、解析接続の一意性で延長する。
 
 **分岐 E — Abel $\Lambda$ 極限が重すぎる**
 

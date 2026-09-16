@@ -103,17 +103,17 @@ x^p
 
 元の等式をそのまま `Ideal.span` に持ち上げることで、principal ideals の積等式
 \[
-\operatorname{span}(\text{kernel}) \cdot \operatorname{span}(z - \zeta y) = \operatorname{span}(x^p)
+\text{span}(\text{kernel}) \cdot \text{span}(z - \zeta y) = \text{span}(x^p)
 \]
 が得られる。
 
 さらに `Ideal.span_singleton_pow` を用いて
 \[
-\operatorname{span}(x^p) = \operatorname{span}(x)^p
+\text{span}(x^p) = \text{span}(x)^p
 \]
 と書き換えることで、
 \[
-\operatorname{span}(\text{kernel}) \cdot \operatorname{span}(z - \zeta y) = \operatorname{span}(x)^p
+\text{span}(\text{kernel}) \cdot \text{span}(z - \zeta y) = \text{span}(x)^p
 \]
 を得る。
 
@@ -143,7 +143,7 @@ z - \alpha y,\qquad z - \beta y
 
 すなわち、
 \[
-\operatorname{span}(z - \alpha y) \,\vee\, \operatorname{span}(z - \beta y) = \top
+\text{span}(z - \alpha y) \,\vee\, \text{span}(z - \beta y) = \top
 \]
 が成立する。
 
@@ -155,13 +155,13 @@ z - \alpha y,\qquad z - \beta y
 
 上記の comaximal 性から、元そのものについても
 \[
-\operatorname{IsCoprime}(z - \alpha y,\; z - \beta y)
+\text{IsCoprime}(z - \alpha y,\; z - \beta y)
 \]
 が従う。
 
 さらに ideals 自体についても
 \[
-\operatorname{IsCoprime}\bigl(\operatorname{span}(z - \alpha y),\; \operatorname{span}(z - \beta y)\bigr)
+\text{IsCoprime}\bigl(\text{span}(z - \alpha y),\; \text{span}(z - \beta y)\bigr)
 \]
 が成り立つ。
 
@@ -185,7 +185,7 @@ I \cap J = IJ
 
 本件では具体的に
 \[
-\operatorname{span}(z - \alpha y) \cap \operatorname{span}(z - \beta y) = \operatorname{span}(z - \alpha y)\operatorname{span}(z - \beta y)
+\text{span}(z - \alpha y) \cap \text{span}(z - \beta y) = \text{span}(z - \alpha y)\text{span}(z - \beta y)
 \]
 を得た。
 

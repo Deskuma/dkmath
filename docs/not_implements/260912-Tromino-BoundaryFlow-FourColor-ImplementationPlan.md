@@ -370,9 +370,9 @@ C -- C
 概念的には
 
 $$
-\operatorname{ConservedBoundary}_{\mathrm{even}}
+\text{ConservedBoundary}_{\mathrm{even}}
 \Longrightarrow
-\operatorname{PerfectPairing}
+\text{PerfectPairing}
 $$
 
 である。
@@ -391,11 +391,11 @@ $$
 
 $$
 \boxed{
-\operatorname{ConservedBoundary}
+\text{ConservedBoundary}
 =
-\operatorname{PairedTransport}
+\text{PairedTransport}
 +
-\operatorname{TrominoResidual}
+\text{TrominoResidual}
 }
 $$
 
@@ -520,9 +520,9 @@ $$
 
 $$
 \boxed{
-\operatorname{ValidBoundaryFlow}
+\text{ValidBoundaryFlow}
 \Longrightarrow
-\operatorname{ProperFourStateColoring}
+\text{ProperFourStateColoring}
 }
 $$
 

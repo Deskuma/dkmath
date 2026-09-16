@@ -43,7 +43,7 @@ $$
 を作り、その \(q2\) profile が
 
 $$
-q2(E(z,t))=\operatorname{phaseDepth}(t),q2(z)
+q2(E(z,t))=\text{phaseDepth}(t),q2(z)
 $$
 
 になるところまで来ていた。
@@ -52,13 +52,13 @@ $$
 今回の更新では、その離脱係数を平方根で補正した。
 
 $$
-\operatorname{phaseNormalization}(t)=\frac{1}{\sqrt{\operatorname{phaseDepth}(t)}}
+\text{phaseNormalization}(t)=\frac{1}{\sqrt{\text{phaseDepth}(t)}}
 $$
 
 そして、
 
 $$
-N(z,t)=\operatorname{phaseNormalization}(t),E(z,t)
+N(z,t)=\text{phaseNormalization}(t),E(z,t)
 $$
 
 として、正規化 edge を作った。
@@ -107,7 +107,7 @@ $$
 特に、`phaseDepth` はすでに
 
 $$
-\frac12\le \operatorname{phaseDepth}(t)
+\frac12\le \text{phaseDepth}(t)
 $$
 
 を持っているので、平方根も割り算も安全に使える。
@@ -230,7 +230,7 @@ q2:
 なぜなら、今回の補正係数はまさに
 
 $$
-\frac{1}{\sqrt{\operatorname{phaseDepth}(t)}}
+\frac{1}{\sqrt{\text{phaseDepth}(t)}}
 $$
 
 であり、平方根補正が自然に出てきたからじゃ。
@@ -285,7 +285,7 @@ $$
 を作り、その \(q2\) profile が
 
 $$
-q2(E(z,t))=\operatorname{phaseDepth}(t),q2(z)
+q2(E(z,t))=\text{phaseDepth}(t),q2(z)
 $$
 
 になるところまで来ていた。
@@ -294,13 +294,13 @@ $$
 今回の更新では、その離脱係数を平方根で補正した。
 
 $$
-\operatorname{phaseNormalization}(t)=\frac{1}{\sqrt{\operatorname{phaseDepth}(t)}}
+\text{phaseNormalization}(t)=\frac{1}{\sqrt{\text{phaseDepth}(t)}}
 $$
 
 そして、
 
 $$
-N(z,t)=\operatorname{phaseNormalization}(t),E(z,t)
+N(z,t)=\text{phaseNormalization}(t),E(z,t)
 $$
 
 として、正規化 edge を作った。
@@ -349,7 +349,7 @@ $$
 特に、`phaseDepth` はすでに
 
 $$
-\frac12\le \operatorname{phaseDepth}(t)
+\frac12\le \text{phaseDepth}(t)
 $$
 
 を持っているので、平方根も割り算も安全に使える。
@@ -472,7 +472,7 @@ q2:
 なぜなら、今回の補正係数はまさに
 
 $$
-\frac{1}{\sqrt{\operatorname{phaseDepth}(t)}}
+\frac{1}{\sqrt{\text{phaseDepth}(t)}}
 $$
 
 であり、平方根補正が自然に出てきたからじゃ。

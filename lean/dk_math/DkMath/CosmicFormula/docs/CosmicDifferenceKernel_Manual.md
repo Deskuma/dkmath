@@ -170,7 +170,7 @@ K_f(x,u):=\frac{\Delta_u f(x)}{u}
 次に
 
 \[
-\operatorname{cosmicKernel}(f,x,u):=\frac{\delta(f,x,u)}{u}
+\texternel}(f,x,u):=\frac{\delta(f,x,u)}{u}
 =\frac{f(x+u)-f(x)}{u}
 \]
 
@@ -361,7 +361,7 @@ Lean では `Finset.induction_on` を使う。空集合では自明、1 個追�
 ## 6.1. 命題 6.1. 表示公式
 
 \[
-\operatorname{cosmicKernel}(f,x,u)=\frac{f(x+u)-f(x)}{u}
+\texternel}(f,x,u)=\frac{f(x+u)-f(x)}{u}
 \]
 
 これは定義の確認に過ぎぬが、後の書き換え規則の出発点である。
@@ -440,7 +440,7 @@ K_{fg}(x,u)=f(x+u)K_g(x,u)+g(x)K_f(x,u)
 ## 7.1. 定理 7.1. 微分可能性と cosmicKernel 極限の同値
 
 \[
-\operatorname{HasDerivAt}(f,L,x)
+\textvAt}(f,L,x)
 \iff
 K_f(x,u)\to L
 \quad (u\to 0,\ u\neq 0)
@@ -489,7 +489,7 @@ K_f(x,u)\to 0
 ## 8.1. 定義 8.1. `powerKernel`
 
 \[
-\operatorname{powerKernel}(d,x,u)
+\textrnel}(d,x,u)
 :=
 \sum_{j=0}^{d-1}
 \binom{d}{j+1}x^{d-1-j}u^j
@@ -508,7 +508,7 @@ K_f(x,u)\to 0
 DkMath 既存の二項補助関数 `GN` と入れ替えた形で
 
 \[
-\operatorname{powerKernel}(d,x,u)=GN(d,u,x)
+\textrnel}(d,x,u)=GN(d,u,x)
 \]
 
 が成り立つ。
@@ -520,7 +520,7 @@ DkMath 既存の二項補助関数 `GN` と入れ替えた形で
 ## 8.3. 定理 8.3. 冪差の因数分解
 
 \[
-(x+u)^d-x^d=u\,\operatorname{powerKernel}(d,x,u)
+(x+u)^d-x^d=u\,\textrnel}(d,x,u)
 \]
 
 ### 証明
@@ -538,7 +538,7 @@ Lean では `CosmicFormulaBinom.cosmic_id_csr'` を呼び、GN 表現へ落と�
 ## 8.4. 系 8.4. \(u\neq 0\) での核の一致
 
 \[
-K_{y\mapsto y^d}(x,u)=\operatorname{powerKernel}(d,x,u)
+K_{y\mapsto y^d}(x,u)=\textrnel}(d,x,u)
 \qquad (u\neq 0)
 \]
 
@@ -559,7 +559,7 @@ K_{y\mapsto y^d}(x,u)=\operatorname{powerKernel}(d,x,u)
 ## 9.1. 命題 9.1. `powerKernel` の連続性
 
 \[
- u\mapsto \operatorname{powerKernel}(d,x,u)
+ u\mapsto \textrnel}(d,x,u)
 \]
 
 は連続である。
@@ -571,7 +571,7 @@ K_{y\mapsto y^d}(x,u)=\operatorname{powerKernel}(d,x,u)
 ## 9.2. 命題 9.2. 中心値
 
 \[
-\operatorname{powerKernel}(d,x,0)=(d: \mathbb{R})x^{d-1}
+\textrnel}(d,x,0)=(d: \mathbb{R})x^{d-1}
 \]
 
 ### 証明
@@ -591,7 +591,7 @@ K_{y\mapsto y^d}(x,u)=\operatorname{powerKernel}(d,x,u)
 たとえば \(d=3\) なら
 
 \[
-\operatorname{powerKernel}(3,x,u)=3x^2+3xu+u^2
+\textrnel}(3,x,u)=3x^2+3xu+u^2
 \]
 
 だから、\(u=0\) を入れると \(3x^2\) だけが残る。これはまさに \(x^3\) の微分係数じゃ。
@@ -630,7 +630,7 @@ K_{y\mapsto y^d}(x,u)=\operatorname{powerKernel}(d,x,u)
 ## 10.1. 命題 10.1. 単項式の核
 
 \[
-K_{y\mapsto ay^n}(x,u)=a\,\operatorname{powerKernel}(n,x,u)
+K_{y\mapsto ay^n}(x,u)=a\,\textrnel}(n,x,u)
 \qquad (u\neq 0)
 \]
 
@@ -642,7 +642,7 @@ K_{y\mapsto ay^n}(x,u)=a\,\operatorname{powerKernel}(n,x,u)
 
 \[
 K_{y\mapsto p(y)}(x,u) =
-\sum_{n=0}^{\deg p} a_n\,\operatorname{powerKernel}(n,x,u)
+\sum_{n=0}^{\deg p} a_n\,\textrnel}(n,x,u)
 \]
 
 ### 証明
@@ -669,9 +669,9 @@ K_{y\mapsto p(y)}(x,u) =
 DkMath はさらに
 
 \[
-\operatorname{polynomialKernelExt}(p,x,u)
+\textialKernelExt}(p,x,u)
 :=
-\sum_{n=0}^{\deg p}a_n\operatorname{powerKernel}(n,x,u)
+\sum_{n=0}^{\deg p}a_n\textrnel}(n,x,u)
 \]
 
 を定義する。
@@ -681,7 +681,7 @@ DkMath はさらに
 ## 10.4. 命題 10.4. 0 での値
 
 \[
-\operatorname{polynomialKernelExt}(p,x,0)=p'(x)
+\textialKernelExt}(p,x,0)=p'(x)
 \]
 
 ### 証明
@@ -689,7 +689,7 @@ DkMath はさらに
 各項で命題 9.2 を適用すると
 
 \[
- a_n\operatorname{powerKernel}(n,x,0)=a_n\,n x^{n-1}
+ a_n\textrnel}(n,x,0)=a_n\,n x^{n-1}
 \]
 
 となるので、全体でちょうど多項式導関数の係数表示になる。
@@ -729,7 +729,7 @@ DkMath はさらに
 ## 11.1. 命題 11.1. 差分との接続
 
 \[
-\delta(y\mapsto y^2,x,u)=u\,\operatorname{powerKernel}(2,x,u)
+\delta(y\mapsto y^2,x,u)=u\,\textrnel}(2,x,u)
 \]
 
 これは冪差の因数分解の次数 2 の場合である。
@@ -739,7 +739,7 @@ DkMath はさらに
 `CosmicFormulaDerivativeBridge` では
 
 \[
-\operatorname{cosmic_formula_unit}(x,u) =
+\textformula_unit}(x,u) =
 \delta(y\mapsto y^2,x,u)-2xu
 \]
 
@@ -760,7 +760,7 @@ DkMath はさらに
 である。すなわち
 
 \[
-\operatorname{cosmic_formula_unit}(x,u)=u^2
+\textformula_unit}(x,u)=u^2
 \]
 
 が再び現れる。

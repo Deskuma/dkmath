@@ -207,7 +207,7 @@ FiniteForwardWindowMatching
 eligibility は、
 
 $$
-\operatorname{claimBlock}\le\operatorname{serviceBlock}
+\text{claimBlock}\le\text{serviceBlock}
 $$
 
 である。
@@ -474,7 +474,7 @@ natCard_allDepthActualResidual_le_causalQueueCarrier
 各 depth について、
 
 $$
-|\operatorname{Residual}(d)|\le Q(d)
+|\text{Residual}(d)|\le Q(d)
 $$
 
 を足しているからじゃ。
@@ -490,7 +490,7 @@ exists_allDepthActualResidualEmbedding_causalQueueCarrier
 したがって、その embedding は、
 
 $$
-\operatorname{depth}(\operatorname{image}(x))=\operatorname{depth}(x)
+\text{depth}(\text{image}(x))=\text{depth}(x)
 $$
 
 を保証しない。
@@ -579,7 +579,7 @@ intToNat_endpointAccountingTerm_add_one_le_selectedPressureCarrier_card
 によって、positive nonsaturated block かつ terminal valuation $v\ge2$ なら、
 
 $$
-D_k+1\le|\operatorname{SelectedCarrier}_k|
+D_k+1\le|\text{SelectedCarrier}_k|
 $$
 
 が証明された。
@@ -600,7 +600,7 @@ canonicalSelectedDriftSpareCarrier n k :=
 を定義し、
 
 $$
-1\le|\operatorname{SpareCarrier}_k|
+1\le|\text{SpareCarrier}_k|
 $$
 
 を示すべきじゃ。
@@ -625,7 +625,7 @@ report では、
 このとき selected depth は $1$ で、
 
 $$
-|\operatorname{SelectedCarrier}|=L-2
+|\text{SelectedCarrier}|=L-2
 $$
 
 また、
@@ -639,7 +639,7 @@ $$
 したがって spare が存在しないのは、
 
 $$
-D=|\operatorname{SelectedCarrier}|
+D=|\text{SelectedCarrier}|
 $$
 
 すなわち、
@@ -671,7 +671,7 @@ drift image は空なので selected carrier が一件でもあれば、その�
 したがって unresolved なのは、
 
 $$
-|\operatorname{SelectedCarrier}|=0
+|\text{SelectedCarrier}|=0
 $$
 
 の場合だけじゃ。

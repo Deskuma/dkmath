@@ -52,7 +52,7 @@ $$
 について
 
 $$
-\omega^p = 1,\qquad \omega \neq 1,\qquad \operatorname{ord}(\omega)=p
+\omega^p = 1,\qquad \omega \neq 1,\qquad \text{ord}(\omega)=p
 $$
 
 が sorry なしで立ち、`QAdicLiftSeed` へ直接つながった。
@@ -142,7 +142,7 @@ $$
 すでに
 
 $$
-\omega^p=1,\quad \omega\neq 1,\quad \operatorname{ord}(\omega)=p
+\omega^p=1,\quad \omega\neq 1,\quad \text{ord}(\omega)=p
 $$
 
 が立っておる。

@@ -83,7 +83,7 @@ S : Finset ℕ
 Assume every member of `S` is prime:
 
 $$
-\forall p\in S,\ \operatorname{Prime}(p)
+\forall p\in S,\ \text{Prime}(p)
 $$
 
 Define the product of the finite prime universe:
@@ -266,7 +266,7 @@ then a prime divisor of `P + u` exists.
 Combining prime-divisor existence with prime-member exclusion yields:
 
 $$
-\exists q,\ \operatorname{Prime}(q)\land q\mid P+u\land q\notin S
+\exists q,\ \text{Prime}(q)\land q\mid P+u\land q\notin S
 $$
 
 This is the preferred public theorem for the first demonstration.
@@ -276,7 +276,7 @@ This is the preferred public theorem for the first demonstration.
 A stronger universal statement is also valid:
 
 $$
-\forall q,\ \operatorname{Prime}(q)\land q\mid P+u\Longrightarrow q\notin S
+\forall q,\ \text{Prime}(q)\land q\mid P+u\Longrightarrow q\notin S
 $$
 
 This theorem is useful because the concrete example has two fresh factors, `13` and `17`.
@@ -567,7 +567,7 @@ The general theorem may remain valid, but this is not the intended demonstration
 The main public theorem may assume:
 
 $$
-S.\operatorname{Nonempty}
+S.\text{Nonempty}
 $$
 
 if that improves meaning or avoids unhelpful edge cases.
@@ -1002,7 +1002,7 @@ The reconstruction goal is to prove that eventually the interval contains at mos
 A standard sufficient condition is:
 
 $$
-\operatorname{width}(J_n)<1
+\text{width}(J_n)<1
 $$
 
 Then two distinct integers cannot both lie in `J_n`.
@@ -1246,7 +1246,7 @@ The first mathematical milestone is complete when Lean proves all of the followi
 ### General arithmetic theorem
 
 $$
-\exists q,\ \operatorname{Prime}(q)\land q\mid P+u\land q\notin S
+\exists q,\ \text{Prime}(q)\land q\mid P+u\land q\notin S
 $$
 
 under the finite-prime, coprimality, and boundary-size assumptions.
@@ -1358,7 +1358,7 @@ $$
 $$
 
 $$
-\exists q,\ \operatorname{Prime}(q)\land q\mid P+u\land q\notin S
+\exists q,\ \text{Prime}(q)\land q\mid P+u\land q\notin S
 $$
 
 and:
