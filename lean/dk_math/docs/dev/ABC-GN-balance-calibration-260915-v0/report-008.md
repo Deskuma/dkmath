@@ -79,8 +79,9 @@ class F until a theorem identifies them with a pointwise `S`, `E`, `M`, or
 The archived prose identifies the intended arithmetic as
 
 \[
-  0.20\;\text{(large band)} + 0.23\;\text{(middle band)}
-  + 0.005\;\text{(small-band absorption)}=0.435.
+  0.20\;\text{(large band)} +
+  0.23\;\text{(middle band)} +
+  0.005\;\text{(small-band absorption)}=0.435.
 \]
 
 The production theorem `delta_0435_final` does not establish this assembly.

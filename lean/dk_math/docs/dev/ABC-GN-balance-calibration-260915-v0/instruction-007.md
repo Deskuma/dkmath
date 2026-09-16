@@ -18,21 +18,21 @@ The pattern now has at least two real production consumers:
 
 1. `DkMath.PowerSwap.Contours`
 
-```text
-U = gapU x y
-V = gapV x y
-gapP = (U + V) / 2
-gapQ = U - V
-```
+    ```text
+    U = gapU x y
+    V = gapV x y
+    gapP = (U + V) / 2
+    gapQ = U - V
+    ```
 
 2. ABC/GN balance calibration
 
-```text
-U = GNChannelSupportMass
-V = GNChannelDepthMass
-GNChannelMass    = U + V
-GNChannelBalance = U - V
-```
+    ```text
+    U = GNChannelSupportMass
+    V = GNChannelDepthMass
+    GNChannelMass    = U + V
+    GNChannelBalance = U - V
+    ```
 
 BCAL-006 also exposed the generic right-channel step law: increasing the right component by `δ` sends
 
