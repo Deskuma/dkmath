@@ -172,7 +172,7 @@ GN 系で繰り返し現れた二項展開の tail は、現在 `GTail` とし�
 
 $$
 \begin{aligned}
-(x+u)^d &\;=\; \sum_{j<r}\binom dj x^j u^{d-j}\\
+(x+u)^d &\;=\; \sum_{j < r}\binom dj x^j u^{d-j}\\
 &\qquad +x^r\,\text{GTail}(d,r,x,u).
 \end{aligned}
 $$
