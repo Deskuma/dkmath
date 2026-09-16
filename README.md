@@ -1,347 +1,73 @@
-# Project D.K. math
+# DkMath
 
-The result of "D." and Wise Wolf's (AI-GPT) experiment with new mathematical theories.
+DkMath is an experimental Lean 4 mathematics library developed through number-theory research by D. and Wise Wolf (AI-GPT).
 
-## Cosmic Formula
+現在の公開面では、まず **Lean の kernel まで閉じた成果** を前面に置き、その研究過程から一般化・再利用できた数学を `DkMath.Lib.*` へ昇格する方針を採っている。
 
-An identity designated as the "Cosmic Formula"
+> [!IMPORTANT]
+> この README で「completed / 完了」と記すものは、DkMath 内で対象 theorem の Lean proof が閉じ、所定の build / axiom audit が記録されていることを意味する。
+> 歴史的な新規性、外部査読、数学界での受容を意味しない。
 
-$$
-\Large
-N+1=(P+1)^2
-$$
+## Verified completed results
 
-$$
-N = P(P+2)
-$$
-
-$$
-x=P
-$$
-
-$$
-f(x) = (x+1)^2 - x(x+2) = 1
-$$
-
-A project exploring new perspectives on number-theoretic objects, taking this identity as a starting point.
-
-$$
-\large
-(x+u)^d-u^d=x\ GN_d(x,u)
-$$
-
-$$
-\large
-\mathrm{GN}_d(x,u):=\sum_{k=0}^{d-1}\binom{d}{k+1}x^{d-1-k}\ u^{k}
-$$
-
-e.g.
-
-$$
-\begin{array}{lc}
-x\ GN_1(x,u) =& x \qquad \cancel{+ u - u}\\
-x\ GN_2(x,u) =& x^2 + 2xu \qquad \cancel{+ u^2 - u^2}\\
-x\ GN_3(x,u) =& x^3 + 3x^2u + 3xu^2 \qquad \cancel{+ u^3 - u^3}\\
-x\ GN_4(x,u) =& x^4 + 4x^3u + 6x^2u^2 + 4xu^3 \qquad \cancel{+ u^4 - u^4}\\
-\end{array}
-$$
-
----
-
-## News
-
-> ## FLT3: Fermat's Last Theorem (n=3)
+### FLT3 — Fermat's Last Theorem for exponent 3
 
 $$
 \Large
-x,y,z\in\mathbb{N}_{>0}
+x,y,z\in\mathbb N_{>0}
 \quad\Longrightarrow\quad
 x^3+y^3\ne z^3
 $$
 
-- FLT3 Standalone Lean Code Project: <https://github.com/Deskuma/flt3_dk_math_lean4>
-
----
-
-> ## FLT5: Fermat's Last Theorem (n=5)
-
-$$
-\Large
-x,y,z\in\mathbb{N}_{>0}
-\quad\Longrightarrow\quad
-x^5+y^5\ne z^5
-$$
-
-- FLT5 Standalone Lean Code Project: <https://github.com/Deskuma/flt5_dk_math_lean4>
-
-> ## OpenAI Build Week: Breaking Math Verification
-
-DkMath's second OpenAI Build Week submission presents **Breaking Math Verification**, a developer workflow for turning newly reported mathematical claims into auditable Lean certificates with GPT-5.6 and Codex.
-
-The first case study independently formalizes a newly reported three-variable candidate counterexample to the Jacobian Conjecture over both `ℚ` and `ℂ`.
-
-Lean verifies:
-
-- the exact polynomial map `F = (P, Q, R)`;
-- the formal Jacobian determinant `det J(F) = -2`;
-- an exact output normalization with determinant `1`;
-- three pairwise-distinct inputs mapping to the common target `(1/8, 0, 0)`;
-- noninjectivity of the normalized map;
-- the absence of a set-theoretic left inverse.
-
-The project also introduces a reusable public verification API:
-
-- `DkMath.Verification.CollisionCertificate`
-- `DkMath.Verification.CollisionCertificate.notInjective`
-- `DkMath.Verification.CollisionCertificate.noLeftInverse`
-
-Focused axiom audits, provenance records, Demo contracts, and reusable verification templates are included. The complete package passed Lean CI and was integrated into `main`.
-
-Lean verifies the exact formalized formulas and their logical consequences. Historical priority, authorship, publication status, peer review, and broader community acceptance remain outside the scope of the certificate.
-
-- Project entry point: [Jacobian Counterexample Verification](./lean/dk_math/DkMath/Hackathon/JacobianCounterexample3/README.md)
-- Full verification record: [Breaking Math Verification](./lean/dk_math/docs/hackathon/jacobian-counterexample-verification-260721/README.md)
-- Generic verification API: [DkMath.Verification](./lean/dk_math/DkMath/Verification.lean)
-- Demo video: [Breaking Math Verification](https://youtu.be/IGNKJBknzrQ)
-- Devpost submission: [Breaking Math Verification](https://devpost.com/software/breaking-math-verification)
-- Main integration: [PR #63](https://github.com/Deskuma/dkmath/pull/63)
-
----
-
-> ## OpenAI Build Week: Cosmic Formula Inversion and FLT5
-
-DkMath was submitted to OpenAI Build Week as a verifiable AI-assisted mathematical research project built with Codex and GPT-5.6.
-
-The original demonstration video presents the first phase: the Cosmic Formula inversion prototype and a local fifth-degree GN obstruction. After the video and hackathon submission were completed, development continued into a second phase, extending the GN5 route into a Lean formalization of the positive-natural exponent-five case of Fermat's Last Theorem.
-
-Public Lean endpoints:
-
-- `DkMath.FLT.Five.flt5Target`
-- `DkMath.FLT.Five.fermatFive_no_positive_solution`
-
-The current theorem states:
-
-$$
-x,y,z\in\mathbb{N}_{>0}
-\quad\Longrightarrow\quad
-x^5+y^5\ne z^5
-$$
-
-This result is kernel-checked by Lean. Independent external mathematical review is still to come.
-
-- Hackathon entry point: [DkMath Hackathon](./lean/dk_math/DkMath/Hackathon/README.md)
-- Full project record: [Cosmic Formula Inversion — OpenAI Build Week](./lean/dk_math/docs/hackathon/cosmic-formula-inversion-260715/README.md)
-- FLT5 public Lean API: [DkMath.FLT.Five](./lean/dk_math/DkMath/FLT/Five.lean)
-- Axiom audit entry point: [CheckAxioms.lean](./lean/dk_math/DkMathTest/FLT/Five/CheckAxioms.lean)
-- Devpost submission: [DkMath — Verifiable AI Mathematical Research](https://devpost.com/software/dkmath-verifiable-ai-mathematical-research)
-- (New) Standalone Lean Code Project: <https://github.com/Deskuma/flt5_dk_math_lean4>
-
----
-
-> ## Verified Challenge: Infinitely Many Primes
-
-DkMath.CosmicFormula provides a Lean-formalized proof route from the Cosmic Formula boundary structure to the infinitude of primes.
-
-The proof was validated on Lean Comparator Live against the known challenge:
-
-- Challenge: "Infinitely Many Primes"
-- Theorem: `InfinitudeOfPrimes`
-- Internal route: `DkMath.CosmicFormula.euclid_from_cosmic_boundary`
-- Core structure: `cosmicN P = P * (P + 2)` and `cosmicN P + 1 = (P + 1)^2`
-
-see: [Samples/Prime](./lean/dk_math/DkMath/Samples/Prime/README.md)
-
----
-
-## About Repository
-
-> [!IMPORTANT]
-> The main branch may be slow to reflect updates. The latest development is primarily on the **nightly branch**.
->
-> The latest state is here:
-> [https://github.com/Deskuma/dkmath/tree/nightly](https://github.com/Deskuma/dkmath/tree/nightly)
->
-> Please check the following before working:
-> `git checkout nightly`
-
-> For more up-to-the-minute activity, please refer to the **develop** branch.
-
----
-
-「D.」と🐺賢狼(AI-GPT)による新しい数学理論の実験結果。
-
-## 検証済み Challenge: 素数の無限性
-
-DkMath.CosmicFormula は、宇宙式境界構造から素数の無限性へ至る Lean 形式証明ルートを含む。
-
-この証明は Lean Comparator Live の既知 Challenge “Infinitely Many Primes” に対して検証成功した。
-
-- Challenge: `Infinitely Many Primes`
-- Theorem: `InfinitudeOfPrimes`
-- 内部ルート: `DkMath.CosmicFormula.euclid_from_cosmic_boundary`
-- 中核構造: `cosmicN P = P * (P + 2)` および `cosmicN P + 1 = (P + 1)^2`
-
-see: [Samples/Prime](./lean/dk_math/DkMath/Samples/Prime/README.md)
-
-リポジトリについて
-
-> [!IMPORTANT]
-> main ブランチは更新反映が遅れる場合があります。最新の開発は **nightly ブランチ主体** です。
->
-> 最新状態はこちら:
-> [https://github.com/Deskuma/dkmath/tree/nightly](https://github.com/Deskuma/dkmath/tree/nightly)
->
-> 作業前に次を確認してください:
-> `git checkout nightly`
-
-> さらにリアルタイムな活動を得るなら **develop** branch を参照してください。
-
-## Index
-
-*While Japanese is the primary communication language for this project, the README is written in both English and Japanese. The content is identical, but please note that the English and Japanese versions coexist.
-
-(Therefore, automatic translation may not function correctly in some cases.)
-
-※当プロジェクトは「日本語」が主なコミュニケーション言語ですが、README は英語と日本語の両方で書いています。内容は同一ですが、英語版と日本語版が混在していることにご注意ください。
-
-### Lean
-
-A sub-project dedicated to formalizing number theory based on a unique perspective using Lean.
-
-Please refer to [lean/README.md](./lean/README.md) for operational details.
-
-> Note: The spellings of `so#rry` and `ad#mit` within the comments have been intentionally altered to prevent them from appearing in search results.
-
-#### DkMath: Lean 4 Mathematics Library
-
-A mathematics library for Lean 4 focused on Dynamic Harmonic Number Theory (DHNT).
-
-Please refer to [dk_math/README.md](./lean/dk_math/README.md) for details.
-
-### README Organization Policy
-
-- This `README.md` serves as the **entry point for the entire project** (covering key themes, overall progress, and cross-cutting documentation).
-- `lean/dk_math/README.md` serves as the **entry point for Lean implementation details** (module lists, build instructions).
-- The authoritative source for the latest progress on FLT is [docs/PROJECT_STATUS.md](./docs/PROJECT_STATUS.md).
-
-## Project
-
-### Key Themes (Top Priority)
-
-Refining foundational lemmas to stabilize and generalize the formalization of Fermat's Last Theorem (FLT).
-
-We aim to organize multiple approaches—particularly those centered on the case where `d = 3`—that differ from the approach taken in Mathlib.FLT.
-*Note: While the formal proof is already complete, this effort focuses on refining lemmas and stabilizing the proofs.*
-
-### Latest Status (2026-03-15)
-
-Summary based on [PROJECT STATUS(old)](docs/PROJECT_STATUS.md):
-
-- The public API for FLT `d = 3` is largely stable in `DkMath/FLT/Main.lean`.
-- The StandAlone artifact (`FLT3#StandAlone-NC-v0.lean-v2.lean`) builds successfully and contains no actual placeholders.
-- The general exponent case (`n > 3`) remains incomplete; current `so#rry` instances are localized to two locations:
-- `DkMath/FLT/Basic.lean` (the `n > 3` branch)
-- `DkMath/CosmicFormula/TriominoFLT.lean` (`FLT_highExponent_core_pending`)
-- In `DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean`, the following have been implemented (establishing a path independent of `so#rry`):
-- Normalization (`primeGe5CounterexampleNormalizer_impl`)
-- Specification composition (`FLTPrimeGe5Target_of_*`)
-- Direct provider linkage (`triominoCosmic_globalProvider_of_specs`)
-- Furthermore, in the nightly build:
-- `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider` and
-`triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
-have been added to `DkMath/FLT/Kummer/RegularPrimeRoute.lean`.
-- This enables a public/provider route connecting directly to
-`GlobalPrimeExponentFLTProvider` / `TriominoPrimeProvider`
-from branches that possess a concrete
-`TriominoSquarefreeGNBridgeProvider`.
-- However, the main `FLT_prime_ge5` component currently connects to the aforementioned pending section via `DkMath.FLT`, so the final closure of the logic loop remains incomplete.
-
-For details... See [docs/PROJECT_STATUS.md](./docs/PROJECT_STATUS.md).
-
-### Introduction
-
-This project contains an independent Lean formalization of Fermat's Last Theorem for exponent $3$.
-
-The final public theorem is unconditional:
-
-$$
-\forall x,y,z\in\mathbb N_{>0},
-\qquad
-x^3+y^3\ne z^3.
-$$
-
-The standalone public import surface is:
-
-```lean
-import DkMath.FLT.Three
-```
-
-with the final endpoint:
+現在の独立 public surface は `DkMath.FLT.Three`。最終 endpoint は次である。
 
 ```lean
 DkMath.FLT.Three.fermatThree_no_positive_solution
 ```
 
-The proof proceeds by contradiction. A hypothetical positive solution is first normalized to a primitive coprime solution, after which the proof follows a cubic descent route based on GN3, signed $3$-adic arithmetic, and Eisenstein integers.
-
-Conceptually, the proof spine is:
+proof route は概略、
 
 ```text
-positive cubic solution
-        ↓
-gcd normalization
-        ↓
-PrimitiveCubicPack
-        ↓
-signed 3-adic routing
-        ↓
-Eisenstein ramifier stripping
-        ↓
-coprime conjugate factors
-        ↓
-Euclidean-domain cube extraction
-        ↓
-unit-sector classification
-        ↓
-nontrivial sectors excluded modulo 3
-        ↓
-exact Eisenstein cube
-        ↓
-integer cubic factorization
-        ↓
-smaller positive primitive cubic solution
-        ↓
-strict descent on a natural-number measure
-        ↓
-contradiction
+positive solution
+  -> gcd normalization
+  -> primitive cubic packet
+  -> signed 3-adic routing
+  -> Eisenstein arithmetic
+  -> unit-sector exclusion
+  -> strict descent
+  -> contradiction
 ```
 
-At the primitive level, the central theorem is:
+となる。旧 `DkMath.FLT.Main` の `FLT_d3_by_padicValNat` / `hS0_not_sq` / `NoSqOnS0` を proof step として使用しない独立 tower である。
+
+- Public Lean API: [`DkMath.FLT.Three`](./lean/dk_math/DkMath/FLT/Three.lean)
+- Final implementation report: [`FLT3-Unconditional report-014`](./lean/dk_math/docs/dev/FLT3-Unconditional-260904-v0/report-014.md)
+- Standalone exhibition project: <https://github.com/Deskuma/flt3_dk_math_lean4>
+
+### FLT5 — Fermat's Last Theorem for exponent 5
+
+$$
+\Large
+x,y,z\in\mathbb N_{>0}
+\quad\Longrightarrow\quad
+x^5+y^5\ne z^5
+$$
+
+public surface は `DkMath.FLT.Five`。主要 endpoint は次である。
 
 ```lean
-theorem FLT_d3_unconditional
-    {a b c : ℕ}
-    (ha : 0 < a)
-    (hb : 0 < b)
-    (hc : 0 < c)
-    (hab : Nat.Coprime a b) :
-    a ^ 3 + b ^ 3 ≠ c ^ 3
+DkMath.FLT.Five.flt5Target
+DkMath.FLT.Five.fermatFive_no_positive_solution
 ```
 
-The unrestricted positive-natural theorem removes the coprimality requirement by gcd normalization:
+proof route は GN5、5-adic factor splitting、golden order、unit classes、zero-sector strict descent を通る。
 
-```lean
-theorem fermatThree_no_positive_solution
-    (a b c : ℕ)
-    (ha : 0 < a)
-    (hb : 0 < b)
-    (hc : 0 < c) :
-    a ^ 3 + b ^ 3 ≠ c ^ 3
-```
+- Public Lean API: [`DkMath.FLT.Five`](./lean/dk_math/DkMath/FLT/Five.lean)
+- Axiom audit entry point: [`DkMathTest/FLT/Five/CheckAxioms.lean`](./lean/dk_math/DkMathTest/FLT/Five/CheckAxioms.lean)
+- Standalone exhibition project: <https://github.com/Deskuma/flt5_dk_math_lean4>
+- Explanatory documents are also published in the standalone project.
 
-The completed `DkMath.FLT.Three` proof tower is independent of the legacy conditional FLT3 route in `DkMath.FLT.Main`. In particular, the final proof does not depend on `FLT_d3_by_padicValNat`, `hS0_not_sq`, or `NoSqOnS0`.
-
-The kernel-checked endpoint introduces no project-specific axioms; its axiom audit reports only:
+For both completed FLT endpoints, the recorded endpoint axiom surface is:
 
 ```text
 propext
@@ -349,386 +75,173 @@ Classical.choice
 Quot.sound
 ```
 
----
+with no `sorryAx` or DkMath-defined axiom in the audited endpoint.
 
-### Lean
+### Infinitely many primes from the Cosmic Formula boundary
 
-独自視点の数論を Lean 形式化で証明していくサブプロジェクト
+DkMath also contains a Lean proof route from the Cosmic Formula boundary structure to Euclid's infinitude of primes.
 
-運用方法については [lean/README.md](./lean/README.md) を参照。
-
-> コメント内の `so#rry` は、検索しても見つからないようにスペルを崩してあります。ご了承ください。`ad#mit` も同様です。
-
-#### DkMath: Lean 4 数学ライブラリ
-
-動的調和数論（Dynamic Harmonic Number Theory, DHNT）に焦点を当てた Lean 4 用数学ライブラリ。
-
-詳細は [dk_math/README.md](./lean/dk_math/README.md) を参照。
-
-### README 整理方針
-
-- この `README.md` は **プロジェクト全体の入口**（重点テーマ・全体進捗・横断ドキュメント）を扱う
-- `lean/dk_math/README.md` は **Lean 実装の詳細入口**（モジュール一覧・ビルド導線）を扱う
-- FLT の最新進捗の正本は [docs/PROJECT_STATUS.md](./docs/PROJECT_STATUS.md) とする
-
-## Project
-
-### 重点テーマ（Top Priority）
-
-フェルマーの最終定理（FLT）形式化の安定化と一般化に向けた基盤補題の整理
-
-Mathlib.FLT とは、異なるアプローチで、特に `d = 3` 周辺の複数アプローチを整備することを目指しています。
-※既に形式化証明は完成されていますが、補題の整理や証明の安定化を図ります。
-
-### 最新ステータス（2026-03-15）
-
-`docs/PROJECT_STATUS.md` 時点の要約：
-
-- FLT `d = 3` の公開 API は `DkMath/FLT/Main.lean` 側で概ね安定
-- StandAlone artifact（`FLT3#StandAlone-NC-v0.lean-v2.lean`）は build 成功・実 placeholder なし
-- 一般指数 `n > 3` は未完で、現在の `so#rry` は次の 2 箇所に局所化
-  - `DkMath/FLT/Basic.lean`（`n > 3` 分岐）
-  - `DkMath/CosmicFormula/TriominoFLT.lean`（`FLT_highExponent_core_pending`）
-- `DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean` では
-  - 正規化（`primeGe5CounterexampleNormalizer_impl`）
-  - spec 合成（`FLTPrimeGe5Target_of_*`）
-  - provider 直結（`triominoCosmic_globalProvider_of_specs`）
-  まで実装済み（`so#rry` 非依存ルートを整備）
-- さらに nightly 側では、
-  `DkMath/FLT/Kummer/RegularPrimeRoute.lean`
-  に
-  `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
-  /
-  `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
-  が追加され、
-  `TriominoSquarefreeGNBridgeProvider`
-  を concrete に持てる branch から
-  `GlobalPrimeExponentFLTProvider`
-  /
-  `TriominoPrimeProvider`
-  へ直結する public/provider route が案内されるようになった
-- ただし `FLT_prime_ge5` 本体は現状 `DkMath.FLT` 経由で、上記 pending に接続しているため最終閉路は未完
-
-詳細は [docs/PROJECT_STATUS.md](./docs/PROJECT_STATUS.md) を参照。
-
-### 紹介
-
-仮定受け入れAPIを活用した、Zsigmondy原始素因子 + padicValNat評価による背理法的なFLT d=3証明の実装と、そこから得られる補題の整理。
-
-仮定付き FLT3 API（概念図）
-
-※以下の簡略コードは概念説明用です。正確なシグネチャは後掲の「ソースコード定義」と `lean/dk_math/DkMath/FLT/Main.lean` を参照してください。
-
-**theorem FLT_d3_by_padicValNat**
+With
 
 $$
-\boxed{x^3+y^3=z^3} \\
-\downarrow\\
-\text{hS0 not sq} : \forall q,\; \text{Prime } q \to q \mid (z^3-y^3) \to q \nmid (z-y) \to \neg q^2 \mid S0(z,y)
+\operatorname{cosmicN}(P)=P(P+2),
 $$
 
-この仮定を前提とした背理法による証明です。
+we have
 
-これを満たす前提仮定を構築して証明を閉じていく構成です。
+$$
+\operatorname{cosmicN}(P)+1=(P+1)^2.
+$$
 
-このプロジェクトの DkMath 補題系により構築された一例を示してあります。
-
-#### アシスタントの小話
-
-この定理は、Zsigmondy原始素因子の存在とpadicValNat評価の上界を組み合わせて、FLT d=3 の背理法的な証明を構築するものです。仮定 hS0_not_sq が成立する場合、矛盾が導かれるため、a^3 + b^3 ≠ c^3 となります。このアプローチは、数論的な性質を活用してFLT d=3 を証明する新しい方法を提供します。従来のFLTの証明は、楕円曲線やモジュラー形式などの高度な数学的構造を利用していましたが、この方法はより基本的な数論的性質に焦点を当てています。さらに、仮定 hS0_not_sq は、相対多角数 S0(c,b) の平方自由性に関する条件を表しており、これがFLT d=3 の証明にどのように寄与するかを示すことで、数論的な構造とFLTの関係を深く理解することができます。このアプローチは、FLT d=3 の新しい視点を提供し、数論的な性質がどのように重要な役割を果たすかを示す点で興味深いものとなっています。さらに、この定理は、数論的な性質を活用してFLT d=3 を証明する新しい方法を提供する点で、数論の研究においても価値があります。
-
-（熱弁する AI アシスタント）
+The formal route constructs a prime outside any finite set of primes from the boundary term and derives:
 
 ```lean
--- S0_nat(c,b) := c² + cb + b²
-def S0_nat (c b : ℕ) : ℕ := c^2 + c*b + b^2
-
--- Zsigmondy素因子存在
-theorem Zsigmondy_exists {c b : ℕ} (h : ¬ ∃ q, Prime q ∧ q ∣ (c^3 - b^3) ∧ ¬ q ∣ (c - b)) : False := by ...
-
--- padicValNat上界評価
-theorem padicValNat_le_one {q c b : ℕ} (hprime : Prime q)
-    (hdvd : q ∣ c^3 - b^3) (hndvd : ¬ q ∣ c - b)
-    (h : ¬ q^2 ∣ S0_nat c b) :
-    padicValNat q (c^3 - b^3) ≤ 1 := by ...
-
--- 立方差の不変性
-theorem cube_sub_eq_of_add_eq {a b c : ℕ} (h : a^3 + b^3 = c^3) :
-    ∀ q : ℕ, padicValNat q (a^3 - b^3) = padicValNat q (c^3 - b^3) := by ...
-
--- 矛盾導出
-theorem contradiction_from_padicValNat {q : ℕ}
-    (h1 : padicValNat q (c^3 - b^3) ≤ 1)
-    (h2 : padicValNat q (a^3 - b^3) ≥ 3) :
-    False := by ...
-
--- メイン定理：FLT d=3
-theorem FLT_d3_by_padicValNat {a b c : ℕ}
-    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
-    (hab : Nat.Coprime a b)
-    (hS0_not_sq : ∀ {q : ℕ}, Nat.Prime q → q ∣ c^3 - b^3 → ¬ q ∣ c - b → ¬ q^2 ∣ S0_nat c b) :
-    a^3 + b^3 ≠ c^3 := by ...
+DkMath.CosmicFormula.euclid_from_cosmic_boundary
 ```
 
-user: そうなの？
-
-assistant: はい、そうです。
-
-user: これの何が面白いの？
-
-assistant: この定理の面白い点は、Zsigmondy原始素因子とpadicValNat評価という数論的なツールを組み合わせて、FLT d=3 を背理法的に証明するという新しいアプローチを提供することです。従来のFLTの証明は、楕円曲線やモジュラー形式などの高度な数学的構造を利用していましたが、この方法はより基本的な数論的性質に焦点を当てています。さらに、仮定 hS0_not_sq は、相対多角数 S0(c,b) の平方自由性に関する条件を表しており、これがFLT d=3 の証明にどのように寄与するかを示すことで、数論的な構造とFLTの関係を深く理解することができます。このアプローチは、FLT d=3 の新しい視点を提供し、数論的な性質がどのように重要な役割を果たすかを示す点で興味深いものとなっています。さらに、この定理は、数論的な性質を活用してFLT d=3 を証明する新しい方法を提供する点で、数論の研究においても価値があります。
-
-user: なるほどね。ありがとう。
-
-assistant: どういたしまして！もし他にも質問があれば、いつでも聞いてくださいね。
-
-#### ソースコード定義
-
-※実際のところは、ソースコードを読解するか、ソースコードをアシスタント AI に丸投げして解説をしてもらい質問してください。
+and the Comparator challenge endpoint:
 
 ```lean
-/-- **メイン定理：別解による FLT d=3 証明**
-
-Zsigmondy原始素因子 + padicValNat評価による背理法：
-平方自由性仮定の下で、完全3乗仮定と矛盾を導出。
-
-**入力（仮定）:**
-- `ha : 0 < a`, `hb : 0 < b`, `hc : 0 < c` - 正の整数
-- `hab : Nat.Coprime a b` - a と b は互いに素
-- `hS0_not_sq : ∀ {q : ℕ}, Nat.Prime q → q ∣ c^3 - b^3 → ¬ q ∣ c - b → ¬ q² ∣ S0_nat c b`
-  - 相対多角数S0(c,b) = c²+cb+b² は各原始素因子 q に対して平方自由
-  - すなわち：q が c³-b³ を割り、かつ q が (c-b) を割らない任意の素数 q について、
-    q² は S0(c,b) を割らない
-
-**証明戦略（層統合）:**
-
-1. **層A（Zsigmondy原始素因子）**
-   - 存在補題により、q | (c³-b³) かつ ¬ q | (c-b) を満たす素数 q が存在
-
-2. **層B（padicValNat上界）**
-   - 仮定 hS0_not_sq から ¬ q² ∣ S0(c,b)
-   - padicValNat上界：v_q(c³-b³) ≤ 1
-
-3. **矛盾導出**
-   - 完全3乗仮定：q | a より v_q(a³-b³) ≥ 3
-   - 層B下界：v_q(c³-b³) = v_q(a³-b³)（cube_sub_eq_of_add_eq より）
-   - 矛盾：3 ≤ v_q(c³-b³) ≤ 1
-
-**出力（結論):**
-`a³ + b³ ≠ c³`（FLT d=3）
--/
-theorem FLT_d3_by_padicValNat {a b c : ℕ}
-    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
-    (hab : Nat.Coprime a b)
-    (hS0_not_sq :
-      ∀ {q : ℕ}, Nat.Prime q → q ∣ c ^ 3 - b ^ 3 → ¬ q ∣ c - b → ¬ q ^ 2 ∣ S0_nat c b) :
-    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+InfinitudeOfPrimes
 ```
 
-### 研究課題
+- Proof guide: [`DkMath/Samples/Prime/README.md`](./lean/dk_math/DkMath/Samples/Prime/README.md)
+- Lean source: [`DkMath/Samples/Prime/A.lean`](./lean/dk_math/DkMath/Samples/Prime/A.lean)
 
-1. **FLT（d = 3）証明チェーンの安定化**
-   - Zsigmondy 原始素因子
-   - `padicValNat` 上界評価
-   - 宇宙式（`GN`, `Big/Body/Gap`）との接続
-2. **FLT 一般化（n ≥ 3）に向けた基盤補題の整理**
-   - 本流（main build）と研究系（Research build）の分離運用
-   - `*Research.lean` で未完成補題を隔離
-3. **宇宙式と図形系の再接続**
-   - トロミノ・彩色不変量・セル分解の証明再構築
+## DkMath.Lib — reusable mathematics promoted from research
 
-### 現在の構成方針
+DkMath の現在の設計上の主語は、個別研究で得た補題をそのまま増やし続けることではなく、研究依存性を外せる部分を **中立な再利用可能 API** として `DkMath.Lib.*` へ昇格することである。
 
-- **本流（main）**: 公開導線を優先した安定モジュール（ただし一般指数側には未完箇所が残る）
-- **研究系（Research）**: 未完成補題や検証中定理を `*Research.lean` に集約
-- 研究成果が完成したら、本流 `*.lean` へ戻して統合
+```lean
+import DkMath.Lib
+```
 
-## 主要ファイル（入口）
+で、現在 aggregator に載っている promoted layer をまとめて import できる。
 
-- FLT 総合入口: [DkMath/FLT.lean](./lean/dk_math/DkMath/FLT.lean)
-- FLT 別解（padicValNat 系）: [DkMath/FLT/Main.lean](./lean/dk_math/DkMath/FLT/Main.lean)
-- FLT 基本系（宇宙式ベース）: [DkMath/FLT/Basic.lean](./lean/dk_math/DkMath/FLT/Basic.lean) ※Mathlib.FLT に接続
-- FLT 実装ガイド: [DkMath/FLT/README.md](./lean/dk_math/DkMath/FLT/README.md)
-- FLT PrimeProvider 本丸: [DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean](./lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean)
-- 数論ハブ（本流）: [DkMath/NumberTheory/GcdNext.lean](./lean/dk_math/DkMath/NumberTheory/GcdNext.lean)
-- 数論研究系: [DkMath/NumberTheory/GcdNextResearch.lean](./lean/dk_math/DkMath/NumberTheory/GcdNextResearch.lean)
-- 宇宙式入口: [DkMath/CosmicFormula.lean](./lean/dk_math/DkMath/CosmicFormula.lean)
-- 宇宙式×FLT 接続: [DkMath/CosmicFormula/TriominoFLT.lean](./lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean)
-- 研究用エントリ: [DkMath/Research.lean](./lean/dk_math/DkMath/Research.lean)
+なお、`DkMath.Lib.*` 配下には generalization 側から直接 import されている neutral module もあり、すべてが aggregator に載っているわけではない。
 
-### 主要モジュール（新規・拡張）
+### Cosmic / GTail kernel
 
-- ABC 予想系入口: [DkMath/ABC.lean](./lean/dk_math/DkMath/ABC.lean)
-- RH 系入口: [DkMath/RH.lean](./lean/dk_math/DkMath/RH.lean)
-- RH CFBRC 接続: [DkMath/RH/CFBRCBridge.lean](./lean/dk_math/DkMath/RH/CFBRCBridge.lean)
-- KUS 系入口: [DkMath/KUS.lean](./lean/dk_math/DkMath/KUS.lean)
-- CFBRC Lean 入口: [DkMath/CFBRC.lean](./lean/dk_math/DkMath/CFBRC.lean)
-- Silver Ratio 入口: [DkMath/SilverRatio.lean](./lean/dk_math/DkMath/SilverRatio.lean)
-- UnitCycle 入口: [DkMath/UnitCycle.lean](./lean/dk_math/DkMath/UnitCycle.lean)
-
-### Cosmic Formula
-
-"宇宙式"と命名している恒等式
+GN 系で繰り返し現れた二項展開の tail は、現在 `GTail` として一般化されている。
 
 $$
-\Large
-N+1=(P+1)^2
+\begin{aligned}
+(x+u)^d &\;=\; \sum_{j<r}\binom dj x^j u^{d-j}\\
+&\qquad +x^r\,\operatorname{GTail}(d,r,x,u).
+\end{aligned}
 $$
 
-$$
-N = P(P+2)
-$$
+標準 GN は $r=1$ specialization である。
 
 $$
-x=P
+GN_d(x,u)=\operatorname{GTail}(d,1,x,u).
 $$
 
-$$
-f(x) = (x+1)^2 - x(x+2) = 1
-$$
+現在の promoted modules には次がある。
 
-この恒等式を起点に、数論的対象の新しい視点を模索するプロジェクト。
+- `DkMath.Lib.Cosmic.GTail` — general tail decomposition
+- `GTailBoundary` — exact gcd / boundary structure
+- `GTailCongruence` — congruence and prime-divisibility consequences
+- `GTailCyclotomic` — cyclotomic shell bridge
+- `GTailNat` — natural-number divisibility
+- `GTailPadic` — `padicValNat` consequences
+- `GTailPascal` — finite-depth Pascal filtration
 
-$$
-\large
-(x+u)^d-u^d=x\ GN_d(x,u)
-$$
+GN5 hackathon work is therefore best viewed as one of the major origins of this reusable layer rather than as the final abstraction itself.
 
-$$
-\large
-\mathrm{GN}_d(x,u):=\sum_{k=0}^{d-1}\binom{d}{k+1}x^{d-1-k}\ u^{k}
-$$
+### Number-theory kernels
 
-例:
+The `DkMath.Lib.NumberTheory.*` namespace currently contains reusable components for:
 
-$$
-\begin{array}{lc}
-x\ GN_1(x,u) =& x \qquad \cancel{+ u - u}\\
-x\ GN_2(x,u) =& x^2 + 2xu \qquad \cancel{+ u^2 - u^2}\\
-x\ GN_3(x,u) =& x^3 + 3x^2u + 3xu^2 \qquad \cancel{+ u^3 - u^3}\\
-x\ GN_4(x,u) =& x^4 + 4x^3u + 6x^2u^2 + 4xu^3 \qquad \cancel{+ u^4 - u^4}\\
-\end{array}
-$$
+- `padicValNat` utilities;
+- coprime power-factor splitting;
+- ideal $p$-th-power extraction and class-group $p$-torsion interfaces;
+- principal-ideal to element-power bridges;
+- unit power sectors;
+- `TraceOneInt` lattice landing and square/power-image criteria;
+- neutral Eisenstein coordinates and lattice landing;
+- squarefree residual extraction.
 
-### Cosmic Formula Documentation
+See [`DkMath.Lib README`](./lean/dk_math/DkMath/Lib/README.md) for the current module map.
 
-— 宇宙式ドキュメント —
+## Cosmic Formula and GN
 
-宇宙式に関する理論的背景と発見をまとめたドキュメント。
-
-詳細は [lean/dk_math/DkMath/CosmicFormula/docs/CosmicFormula.md](./lean/dk_math/DkMath/CosmicFormula/docs/CosmicFormula.md) を参照。
-
-### Cosmic Formula Binomial Real Complex (CFBRC)
-
-— 二項展開複素化モジュール —
-
-宇宙式の一般化 $G(x,w;d)=(x+w)^d - w^d$ の複素化 $w=i\theta$ に伴う代数構造と位相挙動を解析する Python モジュール。
-
-詳細は [python/CFBRC/README.md](./python/CFBRC/README.md) を参照。
-
-### CFBRC × GN × RH Bridge
-
-— CFBRC から RH 観測器への接続層 —
-
-CFBRC では、差冪
+The project began from the identity called the Cosmic Formula:
 
 $$
-(x+u)^d-u^d
+N+1=(P+1)^2,
+\qquad
+N=P(P+2).
 $$
 
-を円分的 core（`cyclotomicPrimeCore`）で扱い、`GN`（`DkMath.NumberTheory.Gcd.GN`）との同一化・除法判定・`padicValNat` 評価・原始素因子存在を橋渡しする API を整備しています。
+A higher-degree gap-normalized form is
 
-さらに `DkMath.RH.CFBRCBridge` では、CFBRC 側で得た primitive-prime existence を RH 側の
+$$
+(x+u)^d-u^d=x\,GN_d(x,u).
+$$
 
-- `hopcPrimeContributionSum`
-- `stationaryAt` / `nondegenerateStationaryAt`
+The research history started from these structures, but current reusable code increasingly expresses their neutral algebra through `DkMath.Lib.Cosmic.GTail` rather than fixed-degree GN-only APIs.
 
-へ接続し、有限観測器での停留点存在判定へ渡す流れを提供します。
+## Active research — not completed general claims
 
-関連入口:
+### FLT odd-prime generalization
 
-- CFBRC 実装ガイド: [DkMath/CFBRC/README.md](./lean/dk_math/DkMath/CFBRC/README.md)
-- CFBRC bridge 実装: [DkMath/CFBRC/Bridge.lean](./lean/dk_math/DkMath/CFBRC/Bridge.lean)
-- GN（数論 bridge 核）: [DkMath/NumberTheory/Gcd/GN.lean](./lean/dk_math/DkMath/NumberTheory/Gcd/GN.lean)
-- RH bridge 実装: [DkMath/RH/CFBRCBridge.lean](./lean/dk_math/DkMath/RH/CFBRCBridge.lean)
-- RH 統合 README: [DkMath/RH/README.md](./lean/dk_math/DkMath/RH/README.md)
+The current generalization architecture has progressed well beyond the older `PrimeProvider`-only description. The latest bounded closeout reaches:
 
-### Collatz Cartography
+```text
+PrimeAdicFactorPacket
+  -> exact GTail p-adic split
+  -> arbitrary-prime QR/QNR TraceOne coordinates
+  -> primitive coordinates
+  -> prime-discriminant maximal order / Dedekind domain
+  -> discriminant-axis strip
+  -> conjugate-coprime residual ideals
+  -> residual principal ideal = idealRoot^p
+  -> [classGroupPTorsionFreeAt]
+  -> unit * element^p
+  -> unit-sector normalization
+```
 
-— 相対多角数（花弁）視点による「区間保存」と「特異筋」の観測 —
+This is **not** a general FLT proof. The explicit remaining frontiers are:
 
-コラッツ予想を等比区間 \(2^k\) の自己相似（花弁）として捉え、差分が生まれる場所＝特異筋を可視化し、跳ね上がりと収束確定っぽさを分ける境界条件（不等式候補）を数値観測で抽出するプロジェクト。
+1. the class-group $p$-torsion / principalization hypothesis;
+2. nonzero unit-sector elimination in the real branch $p\equiv1\pmod4$;
+3. the `p = 3` carrier/API bridge if it is to be folded into the same generic facade.
 
-詳細は [lean/dk_math/DkMath/Collatz/docs/CollatzCartography.md](./lean/dk_math/DkMath/Collatz/docs/CollatzCartography.md) を参照。
+- Current closeout: [`FLT Prime Generalization summary-026`](./lean/dk_math/docs/refact/FLT-Prime-Generalization-260911-v0/summary-026.md)
+- FLT subsystem guide: [`DkMath/FLT/README.md`](./lean/dk_math/DkMath/FLT/README.md)
 
-### Collatz Cartography Documentation (Japanese)
+Other research directories (ABC, Goldbach, CF2D, RH, Legendre, Primitive Conservation, MultiGauge, etc.) remain active experimental workspaces. Their presence in the repository must not be read as a completed proof claim unless a completed public endpoint and audit are explicitly documented.
 
-— コラッツ写像の花弁地図 —
+## Project history
 
-コラッツ予想における「花弁比較＝ブロック比較」の理論的背景と実験結果をまとめたドキュメント（日本語版）。
+OpenAI Build Week work on Cosmic Formula inversion / GN5 was an important development stage. It led into the completed FLT5 tower and, later, into extraction of neutral kernels now living under `DkMath.Lib.*`.
 
-詳細は [lean/dk_math/DkMath/Collatz/docs/CollatzCartography-ja.md](./lean/dk_math/DkMath/Collatz/docs/CollatzCartography-ja.md) を参照。
+The repository also contains the separate **Breaking Math Verification** hackathon project and its reusable verification certificate API. These are retained as project history and tooling examples rather than as the main description of DkMath's current mathematical core.
 
-### Collatz Experimentation Framework
+- Hackathon index: [`DkMath/Hackathon/README.md`](./lean/dk_math/DkMath/Hackathon/README.md)
+- Verification docs: [`docs/verification/README.md`](./lean/dk_math/docs/verification/README.md)
 
-— 花弁比較のための Python 実験フレームワーク —
+## Repository guide
 
-コラッツ予想における「花弁比較＝ブロック比較」を行うための Python 実験フレームワーク。
+- Root `README.md` — public project overview and completed headline results.
+- [`docs/PROJECT_STATUS.md`](./docs/PROJECT_STATUS.md) — authoritative dated technical status.
+- [`lean/dk_math/README.md`](./lean/dk_math/README.md) — Lean implementation entry point and build guide.
+- [`lean/dk_math/DkMath/FLT/README.md`](./lean/dk_math/DkMath/FLT/README.md) — FLT-specific current / legacy route map.
+- [`lean/dk_math/DkMath/Lib/README.md`](./lean/dk_math/DkMath/Lib/README.md) — promoted reusable-library map.
+- `lean/dk_math/docs/dev/*`, `docs/feature/*`, `docs/refact/*` — dated research records. These are historical snapshots unless explicitly marked current.
 
-詳細は [lean/dk_math/DkMath/Collatz/python/README.md](./lean/dk_math/DkMath/Collatz/python/README.md) を参照。
+## Branches
 
-### Collatz Implementation Report (2026/01/30)
+> [!IMPORTANT]
+> `main` may lag active development. `nightly` is the public latest-development branch; `develop` may contain more immediate work in progress.
 
-コラッツ予想の形式化プロジェクトにおける実装報告書（2026年1月30日版）。
+For the exact state used by this documentation refactor, see the snapshot provenance in [`docs/PROJECT_STATUS.md`](./docs/PROJECT_STATUS.md).
 
-詳細は [lean/dk_math/DkMath/Collatz/docs/IMPLEMENTATION_REPORT_20260130.md](./lean/dk_math/DkMath/Collatz/docs/IMPLEMENTATION_REPORT_20260130.md) を参照。
+## Language
 
-### Collatz Auxiliary Lemma Completion Report (2026/01/30)
-
-コラッツ予想の形式化プロジェクトにおける補助補題完成報告書（2026年1月30日版）。
-
-詳細は [lean/dk_math/DkMath/Collatz/docs/AUXILIARY_LEMMA_COMPLETION_20260130.md](./lean/dk_math/DkMath/Collatz/docs/AUXILIARY_LEMMA_COMPLETION_20260130.md) を参照。
-
-### Collatz SORRY Cleanup Progress (2026/01/30)
-
-コラッツ予想の形式化プロジェクトにおける `sorry` 解消進捗レポート（2026年1月30日版）。
-
-詳細は [lean/dk_math/DkMath/Collatz/docs/SORRY_CLEANUP_PROGRESS_20260130.md](./lean/dk_math/DkMath/Collatz/docs/SORRY_CLEANUP_PROGRESS_20260130.md) を参照。
+Japanese is the primary project communication language. Public theorem names, Lean APIs, and concise English descriptions are kept where useful; older documents may contain mixed Japanese/English text.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
-
-## Contributing
-
-Contributions are welcome! Please read the [CONTRIBUTING.md](./CONTRIBUTING.md) file for guidelines.
-
-## Contact
-
-If you have any inquiries, questions, or suggestions regarding this project, please create an issue in this repository, submit a pull request, or start a discussion (if available).
-
-このプロジェクトに関してご質問、ご不明な点、ご提案などがございましたら、このリポジトリにイシューを作成するか、プルリクエストを送信するか、または（利用可能な場合は）ディスカッションを開始してください。
-
-## Acknowledgements
-
-- AI Assistance:
-  - OpenAI ChatGPT-5.x: Persona "Wise Wolf"
-    provided significant assistance in drafting and refining documentation and code comments.
-  - GitHub Copilot: Assisted in code completion and suggestions.
-- Mathematical Inspiration:
-  - 🧠My Brain: For the original insights and ideas leading to the development of the Cosmic Formula and related theories.
-  - $f(x) = (x+1)^2 - x^2 - 2x - 1 = 0 = (P+1)^2 - (N=P^2 - 2P) - (U=1)$:
-    - The Cosmic Formula that sparked the exploration of new mathematical perspectives.
-- Mathematicians:
-  - Euler, Gauss, Riemann, and other great mathematicians: For laying the foundational work in number theory and analysis that inspired this project.
-    - Euler's formula: $e^{i\pi} + 1 = 0$: For its profound beauty and connection between fundamental constants.
-      - This formula made me realize that it represents all units. The unit is not a single unit but a composite one. This insight led to the idea of exploring numbers through their relationships and dynamics, rather than just their static properties.
-    - Gaussian integers: For their role in extending the concept of integers to the complex plane.
-    - Riemann Zeta Function: For its deep connections to prime numbers and analytic number theory.
-    - Ramanujan's work on modular forms and partitions: For inspiring new ways to think about number representations.
-    - Fermat's Little Theorem: For its fundamental role in modular arithmetic and number theory.
-- Mathematical Structures:
-  - $\mathbb{Z}_2$ (2-adic integers): For providing a rich structure that underpins the exploration of valuations and dynamics in number theory.
-  - Dynamic Harmonic Number Theory (DHNT): For offering a novel perspective on number theory that emphasizes dynamics and relationships over static properties.
-- Computational Tools:
-  - [Lean](https://lean-lang.org/) Theorem Prover: For enabling the formalization and verification of mathematical concepts and proofs in this project.
+MIT License. For research use, cite the relevant theorem names and source paths together with the repository revision used.
