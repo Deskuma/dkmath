@@ -135,11 +135,13 @@ theorem traceOneRat_isIntegralClosure
         have hre := congrArg QuadraticAlgebra.re hq
         simpa using hre
       have htraceRat : IsIntegral ℤ (quadraticTrace _ x) := by
-        apply (isIntegral_algebraMap_iff halg_injective).mp
+        apply (isIntegral_algebraMap_iff (R := ℤ) (A := ℚ)
+          (B := TraceOneRat (signedPrimeParameter p))).mp
         rw [traceOneRat_trace_eq_add_star]
         exact htrace
       have hnormRat : IsIntegral ℤ (QuadraticAlgebra.norm x) := by
-        apply (isIntegral_algebraMap_iff halg_injective).mp
+        apply (isIntegral_algebraMap_iff (R := ℤ) (A := ℚ)
+          (B := TraceOneRat (signedPrimeParameter p))).mp
         rw [traceOneRat_norm_eq_mul_star]
         exact hnorm
       obtain ⟨t, ht⟩ :=
