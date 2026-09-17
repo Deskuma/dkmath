@@ -264,10 +264,54 @@ not infer a chart from `7 ∣ carrier`, does not construct a new counterexample
 or provider, and does not complete the recursive state bridge.  FLT7TC-006
 therefore remains blocked.
 
+## FLT7TC-005R4 — Primitive second-case classification and global ramified resolution
+
+The primitive natural counterexample surface is now normalized directly:
+
+```text
+CounterexamplePack x y z
+  -> exactly one of x, y, z is divisible by 7
+  -> provenance-preserving PrimitiveCounterexampleRamifiedResolution
+  -> PrimitiveRamifiedSummitPacket.
+```
+
+Status: **completed — Outcome A for FLT7TC-005R4**.
+
+`primitiveSevenDivisibleEndpoint_of_counterexample` obtains the one-hot
+classification from the existing mod-seven sectors.  The putative `y + z`
+sector is eliminated by `no_counterexample_of_seven_dvd_y_add_z`.  The
+`x`-divisible sector uses the ordinary quadratic seventh-power packet; the
+`y`- and `z`-divisible sectors reuse the two public 005R3 chart resolutions.
+The resulting resolution retains the original source endpoint, its
+divisibility witness, and the exact equality to the summit distinguished
+coordinate.
+
+The common summit now has the exact generic laws
+
+```text
+v7(|distinguished|) = 1 + v7(gapRoot)
+v7(|root.snd|) + 2 = 7 * v7(|distinguished|).
+```
+
+Consequently, under the existing U1.6 reconstruction obligation only, its
+depth-four carrier gives `v7(gapRoot) = 3`, `v7(|root.snd|) = 26`, and
+`7 ∣ gapRoot`.  This is not a contradiction and does not construct that
+obligation.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
-Once both branch contradictions exist, compose them with the checked
-`PrimeCounterexampleRoute` / p=7 specialized routing surface.
+The original away branch no longer needs an independent final contradiction:
+it is absorbed into the common ramified second-case surface by FLT7TC-005R4.
+The next target is a kernel-checked exclusion of a ramified summit carrying
+counterexample provenance:
+
+```text
+PrimitiveCounterexampleRamifiedResolution source -> False.
+```
+
+Equivalently, a stronger provenance-preserving ramified packet may be shown
+impossible.  This is deliberately not a claim that an arbitrary
+`PrimitiveRamifiedSummitPacket` is impossible.
 
 Target a theorem at the primitive positive natural level asserting that no
 primitive FLT7 counterexample exists.
@@ -275,7 +319,10 @@ primitive FLT7 counterexample exists.
 Keep branch orchestration separate from normalization to make the dependency
 surface auditable.
 
-Status: blocked on FLT7TC-003/004/005/005R/005R2 reconstruction frontiers.
+Status: blocked on a counterexample-origin ramified summit exclusion.  The
+historical prescribed-carrier reconstruction kernel remains an audited
+conditional boundary, but is no longer needed to normalize an original away
+branch into the common summit surface.
 
 ## FLT7TC-007 — Public unconditional FLT7 endpoint and closeout
 
