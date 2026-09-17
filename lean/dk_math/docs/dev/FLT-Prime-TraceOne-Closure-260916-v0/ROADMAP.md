@@ -243,7 +243,7 @@ Use p=7 as the strongest compatibility regression and p=5 where the specialized
 packet hypotheses genuinely match.  Audit p=3 without refactoring the completed
 proof unnecessarily.
 
-Status: **next**.
+Status: **completed — Outcome A**.
 
 ## FPTC-010 — Public facade and closeout
 
@@ -260,7 +260,7 @@ A closeout document must not call the campaign a proof of general FLT unless
 all front-end, class-group, sector, and final-contradiction obligations are
 actually closed.
 
-Status: **future**.
+Status: **next**.
 
 ## Global stop rules
 
