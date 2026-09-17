@@ -188,7 +188,7 @@ for the imaginary prime-discriminant family, not uniform class number one.
 A precise theorem-shaped external frontier is an acceptable research outcome
 if current checked APIs do not prove the required coprimality.
 
-Status: **next**.
+Status: **completed — Outcome C**.
 
 ## FPTC-008 — Real `Fin p` sector obstruction
 
@@ -204,12 +204,17 @@ primitive/discriminant-axis conditions
 
 and determine which exact coordinate/residue conditions depend on `i`.
 
-The checkpoint goal is first to isolate a machine-checkable obstruction for
-`i != 0`, not to assume that all nonzero sectors disappear.
+First expose a sector-preserving integer-coordinate receiver. Then extract the
+terminal-axis consequence that the p-th-power base norm is prime to `p`, and
+compare the p=5 explicit Golden sectors with the specialized FLT5 nonzero-sector
+arithmetic without assuming a generic/specialized packet bridge.
 
-Test `p=5` and `p=13` separately before claiming a uniform theorem.
+Test `p=5` unconditionally through the Golden/PID closure and `p=13`
+conditionally on the existing class-group hypothesis. The goal is to eliminate
+nonzero sectors only where the checked packet data genuinely suffice; otherwise
+isolate the exact missing bridge theorem.
 
-Status: **research frontier**.
+Status: **next**.
 
 ## FPTC-009 — Generic counterexample routing
 
