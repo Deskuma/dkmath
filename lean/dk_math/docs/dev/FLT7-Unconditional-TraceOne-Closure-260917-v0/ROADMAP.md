@@ -382,6 +382,26 @@ bridge does not derive a global receiver from counterexample provenance, so no
 receiver existence, descent, contradiction, or unconditional FLT7 result is
 claimed.  See `report-012.md`.
 
+## FLT7TC-005R8 — Receiver-bypass audit via cyclotomic PID / clean Kummer p=7 specialization
+
+Status: **Outcome D — CLEAN KUMMER NEEDS AN UNAVAILABLE PROVIDER; DIRECT PID
+NEEDS A NEW UNIT/LINEAR-FACTOR BRIDGE**.
+
+The seventh cyclotomic Minkowski/PID development now supplies clean
+`classGroupPTorsionFreeAt` adapters for the abstract ring of integers and the
+concrete degree-six carrier at `p = 7`. This closes only the concrete
+specialization, not the generic Kummer target quantified over all domains and
+exponents. Concrete principalization still returns an associated unit/load
+factor; no degree-six unit seventh-power theorem or real-cubic transport bridge
+is available.
+
+The existing oriented PID element packet is clean but starts from the older
+`RamifiedSignedRootRoutingPacket`, downstream of the current TraceOne receiver.
+It therefore does not bypass or prove equivalent to
+`CubicGapSeventhShapeReceiver`. No squarefree/no-lift GN provider is constructed
+from `GN = s^7`, and default/legacy Kummer surfaces containing `sorryAx` remain
+quarantined. See `report-013.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:
