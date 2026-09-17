@@ -153,7 +153,15 @@ obligation.
 Do not import a theorem whose conclusion is already the desired FLT7
 contradiction.
 
-Status: **current**.
+Status: **completed — Outcome B**.
+
+The direct specialized-packet adapter reaches the common
+`PrimitiveRamifiedSummitPacket` and recovers the exact ramified depth formula,
+but it does not provide the terminal carrier/provenance retained by
+`TerminalPrimitiveRamifiedSummitPacket`.  The next focused ramified frontier is
+therefore an honest carrier/provenance bridge, if one can be constructed from
+the specialized packet; no such bridge is assumed here.  FLT7TC-005 is now the
+current named checkpoint for the separate away-branch audit.
 
 ## FLT7TC-005 — Away-branch closure
 
@@ -184,7 +192,7 @@ Success milestone:
 away primitive FLT7 counterexample -> False
 ```
 
-Status: planned after ramified analysis.
+Status: **current**.
 
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
