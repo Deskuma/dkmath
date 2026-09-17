@@ -341,6 +341,27 @@ same-summit terminalization is impossible.  This branch cannot enter the old
 terminal packet, and no direct contradiction follows from the newly retained
 orientation, endpoint-unit, and root-coprimality facts.
 
+## FLT7TC-005R6 — Higher-depth primary ramified routing
+
+Status: **Outcome B — HIGHER-DEPTH PRIMARY ROUTING GREEN;
+RECEIVER/INNER-ROOT BOUNDARY REMAINS OPEN**.
+
+The positive gap root is now factored as
+`gapRoot = 7^k * gapUnit`, with `k = v7(gapRoot)` and `7 ∤ gapUnit`.  The
+terminal-independent second-coordinate product and coprimality lemmas are
+exposed for `PrimitiveRamifiedSummitPacket`, and they construct a generalized
+`CoprimeTripleRouting` board with columns
+`7^(5 + 7*k)`, `gapUnit^7`, and the gap quotient coordinate.  Depth zero
+calibrates back to the historical columns, while depth at least two proves
+`7 ∣ gapRoot`.  Counterexample provenance also receives the exact relation
+`primaryDepth + 1 = v7(|distinguishedEndpoint|)` and a same-summit routing
+entry point.
+
+The normalized routing board does not by itself provide the
+`RamifiedCubicGapSeventhShapeReceiver` or the expected quadratic inner-root
+extraction.  Those remain the next boundary; no contradiction or unconditional
+FLT7 theorem is claimed.  See `report-011.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:
