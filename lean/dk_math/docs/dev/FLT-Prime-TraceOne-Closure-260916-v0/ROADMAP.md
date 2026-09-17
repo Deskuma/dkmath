@@ -260,7 +260,7 @@ A closeout document must not call the campaign a proof of general FLT unless
 all front-end, class-group, sector, and final-contradiction obligations are
 actually closed.
 
-Status: **next**.
+Status: **completed — Outcome A**.
 
 ## Global stop rules
 

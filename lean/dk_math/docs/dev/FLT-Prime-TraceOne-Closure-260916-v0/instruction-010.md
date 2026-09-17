@@ -314,33 +314,33 @@ Name the exact theorem-shaped blockers separately.
 
 1. **Imaginary class-number frontier**
 
-```text
-∀ p, p.Prime -> p % 4 = 3 ->
-  Nat.Coprime p
-    (NumberField.classNumber
-      (TraceOneRat (signedPrimeParameter p)))
-```
+    ```text
+    ∀ p, p.Prime -> p % 4 = 3 ->
+      Nat.Coprime p
+        (NumberField.classNumber
+          (TraceOneRat (signedPrimeParameter p)))
+    ```
 
-or the exact equivalent checked formulation produced by FPTC-007.
+    or the exact equivalent checked formulation produced by FPTC-007.
 
 2. **Real p=5 packet bridge frontier**
 
-A checked correspondence from generic p=5
-`PrimeTraceOneStrippedIdealPacket` data to the specialized Golden
-`SignedGoldenRamifierStrippedPacket` data sufficient to invoke
-`signedGolden_nonzero_unitSector_false`.
+    A checked correspondence from generic p=5
+    `PrimeTraceOneStrippedIdealPacket` data to the specialized Golden
+    `SignedGoldenRamifierStrippedPacket` data sufficient to invoke
+    `signedGolden_nonzero_unitSector_false`.
 
 3. **Away-branch frontier**
 
-The generic route only proves
+    The generic route only proves
 
-```text
-z-y = a^p
-GTail p 1 (z-y) y = b^p
-```
+    ```text
+    z-y = a^p
+    GTail p 1 (z-y) y = b^p
+    ```
 
-when `p ∤ z-y`.  No generic contradiction for this branch is currently
-established by this campaign.
+    when `p ∤ z-y`.  No generic contradiction for this branch is currently
+    established by this campaign.
 
 4. Any additional exact blocker found during closeout, but do not invent one.
 
