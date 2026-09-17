@@ -153,14 +153,14 @@ private theorem add_self_eq_zero_modTwo
     (T : MvPolynomial (Fin 2) (ZMod 2)) : T + T = 0 := by
   apply MvPolynomial.ext
   intro d
-  rw [MvPolynomial.coeff_add, MvPolynomial.coeff_zero]
+  rw [AddMonoidAlgebra.coeff_add, AddMonoidAlgebra.coeff_zero]
   have htwo : (2 : ZMod 2) = 0 := by
     change ((2 : ℤ) : ZMod 2) = 0
     rw [ZMod.intCast_zmod_eq_zero_iff_dvd]
     norm_num
   calc
-    MvPolynomial.coeff d T + MvPolynomial.coeff d T =
-        (2 : ZMod 2) * MvPolynomial.coeff d T := by ring
+    T.coeff d + T.coeff d =
+        (2 : ZMod 2) * T.coeff d := by ring
     _ = 0 := by rw [htwo, zero_mul]
 
 theorem map_modTwo_eq_of_integral_gauss_form
@@ -243,16 +243,16 @@ theorem exists_half_difference
       RZ = MvPolynomial.C 2 * AZ + SZ := by
   classical
   have hdiv (d : Fin 2 →₀ ℕ) :
-      (2 : ℤ) ∣ MvPolynomial.coeff d RZ - MvPolynomial.coeff d SZ := by
-    have hd := congrArg (MvPolynomial.coeff d) hmod2
+      (2 : ℤ) ∣ RZ.coeff d - SZ.coeff d := by
+    have hd := congrArg (fun P => P.coeff d) hmod2
     have hz :
-        ((MvPolynomial.coeff d RZ - MvPolynomial.coeff d SZ : ℤ) : ZMod 2) = 0 := by
+        ((RZ.coeff d - SZ.coeff d : ℤ) : ZMod 2) = 0 := by
       have hd' :
-          ((MvPolynomial.coeff d RZ : ℤ) : ZMod 2) =
-            ((MvPolynomial.coeff d SZ : ℤ) : ZMod 2) := by
+          ((RZ.coeff d : ℤ) : ZMod 2) =
+            ((SZ.coeff d : ℤ) : ZMod 2) := by
         simpa [MvPolynomial.coeff_map] using hd
       change (Int.castRingHom (ZMod 2))
-        (MvPolynomial.coeff d RZ - MvPolynomial.coeff d SZ) = 0
+        (RZ.coeff d - SZ.coeff d) = 0
       rw [map_sub]
       exact sub_eq_zero.mpr hd'
     exact (ZMod.intCast_zmod_eq_zero_iff_dvd _ _).mp hz
@@ -260,24 +260,25 @@ theorem exists_half_difference
     .ofCoeff <| Finsupp.mapRange halfOf halfOf_zero <|
       AddMonoidAlgebra.coeff (RZ - SZ)
   have hcoeff_AZ (d : Fin 2 →₀ ℕ) :
-      MvPolynomial.coeff d AZ =
-        halfOf (MvPolynomial.coeff d (RZ - SZ)) := by
+      AZ.coeff d =
+        halfOf ((RZ - SZ).coeff d) := by
     change (Finsupp.mapRange halfOf halfOf_zero
       (AddMonoidAlgebra.coeff (RZ - SZ))) d = _
     rfl
   have hcoeff_diff (d : Fin 2 →₀ ℕ) :
-      MvPolynomial.coeff d (RZ - SZ) =
-        MvPolynomial.coeff d RZ - MvPolynomial.coeff d SZ := by
+      (RZ - SZ).coeff d =
+        RZ.coeff d - SZ.coeff d := by
     simp
   have hhalf (d : Fin 2 →₀ ℕ) :
-      MvPolynomial.coeff d RZ - MvPolynomial.coeff d SZ =
-        2 * MvPolynomial.coeff d AZ := by
+      RZ.coeff d - SZ.coeff d =
+        2 * AZ.coeff d := by
     rw [hcoeff_AZ, hcoeff_diff]
     exact halfOf_spec (hdiv d)
   refine ⟨AZ, ?_⟩
   apply MvPolynomial.ext
   intro d
-  rw [MvPolynomial.coeff_add, MvPolynomial.coeff_C_mul]
+  change RZ.coeff d = (MvPolynomial.C 2 * AZ).coeff d + SZ.coeff d
+  rw [MvPolynomial.coeff_C_mul]
   linear_combination hhalf d
 
 /-! ## The arbitrary-prime TraceOne bridge -/
