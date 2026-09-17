@@ -93,7 +93,7 @@ Acceptable outcomes include:
 
 Do not infer element equality from equality of norms.
 
-Status: **current**.
+Status: **completed — Outcome B**.
 
 ## FLT7TC-003 — Direct ramified seventh-power obstruction
 
@@ -134,7 +134,7 @@ ramified primitive FLT7 counterexample -> False
 
 This milestone alone is not yet FLT7 unconditionality.
 
-Status: planned.
+Status: **current**.
 
 ## FLT7TC-004 — Ramified fallback bridge to the existing specialized tower
 

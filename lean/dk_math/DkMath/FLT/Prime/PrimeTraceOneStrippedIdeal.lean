@@ -41,6 +41,8 @@ structure PrimeTraceOneStrippedIdealPacket
     (P : PrimeTraceOneCoordinatePacket L p ζ hζ) : Type where
   adicSplit : PrimeAdicPowerSplit p g u x
   parent : TraceOneInt (signedPrimeParameter p)
+  parent_eq_coord :
+    parent = P.coord (g + u : ℤ) (u : ℤ)
   residual : TraceOneInt (signedPrimeParameter p)
   axis_eq : parent = discrAxis (signedPrimeParameter p) * residual
   parent_coordinate_coprime : IsCoprime parent.fst parent.snd
@@ -187,6 +189,7 @@ theorem nonempty_primeTraceOneStrippedIdealPacket
   refine ⟨{
     adicSplit := S
     parent := parent
+    parent_eq_coord := by rfl
     residual := residual
     axis_eq := haxis
     parent_coordinate_coprime := hparent_coprime
