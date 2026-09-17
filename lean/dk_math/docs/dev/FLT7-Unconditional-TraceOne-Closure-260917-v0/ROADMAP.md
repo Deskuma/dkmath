@@ -223,6 +223,26 @@ necessary local divisibility gate is proved.  U1.6's depth-four carrier is
 positive and locally admissible, but remains an unresolved reconstruction
 receiver.  FLT7TC-006 therefore remains blocked.
 
+## FLT7TC-005R2 — Prescribed-carrier additive Fermat chart normalization
+
+Remove the route/root packaging from the common reconstruction statement by
+normalizing it to one of three actual primitive Fermat charts:
+
+```text
+carrier = y, carrier = z, or carrier = y + z.
+```
+
+Status: **completed — Outcome B**.
+
+`AwayCarrierReconstruction carrier` is equivalent to the inductive
+`AwayCarrierFermatChart carrier`.  The reverse direction uses the existing
+coordinate route and `nonempty_awayValuationTransferPacket`; the ramified
+branch is excluded by the checked one-hot mod-seven/divisibility facts.  The
+three positions remain distinct as prescribed-carrier data.  The `z` chart
+and `y+z` chart have all coordinates strictly below the fixed carrier; the
+`y` chart exposes only `carrier < z` and `x < z`.  No chart/provider is
+constructed, so FLT7TC-006 remains blocked.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 Once both branch contradictions exist, compose them with the checked
@@ -234,7 +254,7 @@ primitive FLT7 counterexample exists.
 Keep branch orchestration separate from normalization to make the dependency
 surface auditable.
 
-Status: blocked on FLT7TC-003/004/005/005R reconstruction frontiers.
+Status: blocked on FLT7TC-003/004/005/005R/005R2 reconstruction frontiers.
 
 ## FLT7TC-007 — Public unconditional FLT7 endpoint and closeout
 
