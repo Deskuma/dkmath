@@ -200,6 +200,29 @@ match, or away packet.  The existing `AwayDescentClosureProvider` remains the
 exact reconstruction boundary; no direct contradiction or closure provider
 was constructed in this checkpoint.
 
+## FLT7TC-005R — Common counterexample-carrier reconstruction kernel
+
+Normalize the two remaining reconstruction boundaries against the smallest
+honest receiver:
+
+```text
+there exists an actual AwayValuationTransferPacket
+whose selected carrier is a prescribed natural number.
+```
+
+Status: **completed — Outcome B**.
+
+The new `AwayCarrierReconstruction` predicate is definitionally independent
+of the degree-six tower.  The away closure provider is equivalent to this
+predicate at the old root second coordinate, and the U1.6 internal-depth-four
+obligation is equivalent to the same predicate at its prescribed carrier.
+Actual reconstruction is still not proved.  Depth one is terminal: the
+candidate root second coordinate has depth zero, so neither a new away packet
+nor an away closure provider can exist there.  At depth at least two, only the
+necessary local divisibility gate is proved.  U1.6's depth-four carrier is
+positive and locally admissible, but remains an unresolved reconstruction
+receiver.  FLT7TC-006 therefore remains blocked.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 Once both branch contradictions exist, compose them with the checked
@@ -211,7 +234,7 @@ primitive FLT7 counterexample exists.
 Keep branch orchestration separate from normalization to make the dependency
 surface auditable.
 
-Status: blocked on FLT7TC-003/004/005 reconstruction frontiers.
+Status: blocked on FLT7TC-003/004/005/005R reconstruction frontiers.
 
 ## FLT7TC-007 — Public unconditional FLT7 endpoint and closeout
 
