@@ -14,6 +14,7 @@ import DkMath.FLT.Seven.QuadraticResidualPacket
 import DkMath.FLT.Seven.QuadraticCoprimeFactor
 import DkMath.FLT.Seven.QuadraticSeventhPowerNormalForm
 import DkMath.FLT.Seven.SeventhPowerCoordinates
+import DkMath.FLT.Seven.PrimeTraceOneClosureBridge
 import DkMath.FLT.Seven.CoordinateNormalForm
 import DkMath.FLT.Seven.ModSevenSectors
 import DkMath.FLT.Seven.AwaySecondCoordinateLoad

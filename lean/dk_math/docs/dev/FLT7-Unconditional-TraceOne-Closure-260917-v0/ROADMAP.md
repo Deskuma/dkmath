@@ -40,7 +40,7 @@ without importing a final contradiction.
 
 Deliverable: `report-000.md` only.
 
-Status: **current**.
+Status: **completed — Outcome B**.
 
 ## FLT7TC-001 — Seventh-power coordinate bridge and 7-unit consequences
 
@@ -63,7 +63,7 @@ to invoke existing lemmas such as
 Do not claim a contradiction in this checkpoint unless it follows immediately
 from already checked packet data.
 
-Status: planned.
+Status: **completed — Outcome A**.
 
 ## FLT7TC-002 — Generic-parent to specialized p=7 coordinate bridge
 
@@ -93,7 +93,7 @@ Acceptable outcomes include:
 
 Do not infer element equality from equality of norms.
 
-Status: planned.
+Status: **current**.
 
 ## FLT7TC-003 — Direct ramified seventh-power obstruction
 
