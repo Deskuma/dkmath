@@ -17,6 +17,7 @@ import DkMath.FLT.Seven.SeventhPowerCoordinates
 import DkMath.FLT.Seven.PrimeTraceOneClosureBridge
 import DkMath.FLT.Seven.CoordinateNormalForm
 import DkMath.FLT.Seven.PrimeTraceOneRamifiedObstruction
+import DkMath.FLT.Seven.PrimeTraceOneAwayClosureAudit
 import DkMath.FLT.Seven.ModSevenSectors
 import DkMath.FLT.Seven.AwaySecondCoordinateLoad
 import DkMath.FLT.Seven.AwayValuationTransfer

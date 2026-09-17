@@ -192,7 +192,13 @@ Success milestone:
 away primitive FLT7 counterexample -> False
 ```
 
-Status: **current**.
+Status: **completed — Outcome B**.
+
+The generic p = 7 away split is definitionally the existing specialized
+`GN 7` split and adds no new endpoint, primitive counterexample, carrier
+match, or away packet.  The existing `AwayDescentClosureProvider` remains the
+exact reconstruction boundary; no direct contradiction or closure provider
+was constructed in this checkpoint.
 
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
@@ -205,7 +211,7 @@ primitive FLT7 counterexample exists.
 Keep branch orchestration separate from normalization to make the dependency
 surface auditable.
 
-Status: blocked on FLT7TC-003/004 and FLT7TC-005.
+Status: blocked on FLT7TC-003/004/005 reconstruction frontiers.
 
 ## FLT7TC-007 — Public unconditional FLT7 endpoint and closeout
 

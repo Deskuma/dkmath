@@ -1,0 +1,9 @@
+import DkMath.FLT.Seven.PrimeTraceOneAwayClosureAudit
+
+open DkMath.FLT.Seven
+
+#print axioms CounterexamplePack.toPrimitivePrimeCounterexample
+#print axioms CounterexamplePack.away_branch_power_factor_split_gtail
+#print axioms counterexamplePack_away_split_gtail_iff_gn
+#print axioms CounterexamplePack.away_branch_power_factor_split_iff_specialized
+#print axioms AwayCoordinateNormalForm.away_factor_split_gtail
