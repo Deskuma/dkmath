@@ -134,7 +134,7 @@ ramified primitive FLT7 counterexample -> False
 
 This milestone alone is not yet FLT7 unconditionality.
 
-Status: **current**.
+Status: **completed — Outcome B**.
 
 ## FLT7TC-004 — Ramified fallback bridge to the existing specialized tower
 
@@ -153,7 +153,7 @@ obligation.
 Do not import a theorem whose conclusion is already the desired FLT7
 contradiction.
 
-Status: conditional.
+Status: **current**.
 
 ## FLT7TC-005 — Away-branch closure
 
