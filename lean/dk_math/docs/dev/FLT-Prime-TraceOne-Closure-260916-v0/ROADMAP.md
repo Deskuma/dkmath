@@ -214,24 +214,36 @@ conditionally on the existing class-group hypothesis. The goal is to eliminate
 nonzero sectors only where the checked packet data genuinely suffice; otherwise
 isolate the exact missing bridge theorem.
 
-Status: **next**.
+Status: **completed — Outcome B**.
 
 ## FPTC-009 — Generic counterexample routing
 
-Audit the remaining front-end gap:
+Audit and implement the honest front-end split from a primitive positive
+odd-prime FLT counterexample:
 
 ```text
-arbitrary odd-prime FLT counterexample
-  -> PrimeAdicFactorPacket
+counterexample
+  |
+  |-- p ∣ (z-y)
+  |      -> PrimeAdicFactorPacket p (z-y) y x
+  |      -> existing TraceOne closure architecture
+  |
+  `-- p ∤ (z-y)
+         -> gcd(z-y, GTail) = 1
+         -> z-y = a^p and GTail = b^p
+         -> separate away-branch frontier
 ```
 
-At present the generic prime architecture begins from the packet rather than
-from the public FLT counterexample statement.
+The checkpoint should factor or extract only the neutral gap/coprimality and
+Cosmic factorization facts already present in the old provider and fixed-exponent
+routes.  Do not hide `p ∣ z-y` as if it held for every counterexample, and do not
+claim the away branch is contradictory unless a checked theorem proves it.
 
-Factor existing FLT3/5/7 routing only where the hypotheses genuinely match.
-Do not hide a branch assumption inside a constructor.
+Use p=7 as the strongest compatibility regression and p=5 where the specialized
+packet hypotheses genuinely match.  Audit p=3 without refactoring the completed
+proof unnecessarily.
 
-Status: **planned after closure kernel**.
+Status: **next**.
 
 ## FPTC-010 — Public facade and closeout
 
