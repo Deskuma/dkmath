@@ -402,6 +402,26 @@ It therefore does not bypass or prove equivalent to
 from `GN = s^7`, and default/legacy Kummer surfaces containing `sorryAx` remain
 quarantined. See `report-013.md`.
 
+## FLT7TC-005R9 — Direct second-case cyclotomic launchpad and μ₇-unit phase frontier
+
+Status: **Outcome C — DIRECT NORM GREEN; IDEAL RAMIFIED-LOAD OWNERSHIP IS THE
+PRECISE FRONTIER**.
+
+The new audit module
+`PrimeTraceOneDirectCyclotomicSecondCaseAudit` starts directly from
+`PrimitiveCounterexampleRamifiedProvenance` and reuses its stored summit.  It
+defines the concrete factor
+`η = endpointLeft - ζ * endpointRight`, proves its explicit relative-quadratic
+and real-cubic norm expansion, and specializes the result to
+`N(η) = 7 * residualRoot^7` together with the division-free seventh-power
+product identities.
+
+No direct ideal identity
+`Ideal.span {η} = ramifiedPrime * I^7` is proved.  Therefore no PID element
+equation, associated-load unit, μ₇ phase normal form, phase-selection
+congruence, or checked bridge to `CubicGapSeventhShapeReceiver` is claimed.
+The public facade remains unchanged.  See `report-014.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:
