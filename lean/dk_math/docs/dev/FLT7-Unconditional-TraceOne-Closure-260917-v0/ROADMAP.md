@@ -502,6 +502,47 @@ relative norm-one unit quotient and its `mu_7` phase.  No exact seventh-power
 equation for `Q₁`, no receiver, no contradiction, and no unconditional FLT7
 claim is made.  See `report-017.md`.
 
+## FLT7TC-005R13 — Relative-norm-one unit reduction and residual μ₇ phase
+
+Status: **Outcome C — NORM-ONE REDUCTION GREEN; CONCRETE/ABSTRACT UNIT-THEORY
+TRANSPORT IS THE PRECISE FRONTIER**.
+
+The new module
+`PrimeTraceOneDirectCyclotomicRelativeNormPhase` introduces a checked
+unit-level quadratic conjugation and norm.  For the actual R12 packet unit
+`u`, the preferred phase
+
+```text
+delta = u / starUnit u
+```
+
+satisfies
+
+```text
+quadraticNormUnit delta = 1,
+delta - 1 ∈ (7).
+```
+
+The latter is a full principal-ideal congruence, obtained from the R12
+rational congruence and the unit inverse; it is stronger than equality under
+the first ramified residue.
+
+The remaining target is isolated as
+`RelativeNormOneScalarUnitAtSeven`.  If this target is supplied, the module
+kernel-checks `delta = 1`, `u^2 = t^7`, and the explicit 2/7 Bézout root
+construction, yielding conditional equations
+
+```text
+Q₁ = gamma^7,
+directLinearFactor = ramifiedUniformizer * gamma^7.
+```
+
+The target itself is not proved.  The existing
+`ringOfIntegersToRing_surjective` map has not been upgraded to an equivalence,
+and no checked classification of the concrete relative norm-one units as
+roots of unity is available.  Thus no unconditional exact-power equation,
+contradiction, receiver, or FLT7 conclusion is claimed.  See `report-018.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:
