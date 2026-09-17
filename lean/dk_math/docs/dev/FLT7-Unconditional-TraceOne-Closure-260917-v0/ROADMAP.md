@@ -439,6 +439,35 @@ coprimality, and the seventh-power ideal extraction are not yet proved.  Hence
 no direct ideal packet, PID element equation, unit phase reduction, or bridge
 to `CubicGapSeventhShapeReceiver` is claimed.  See `report-015.md`.
 
+## FLT7TC-005R11 — Chosen-factor/tail nonramified coprimality and direct ideal extraction
+
+Status: **Outcome A — CHOSEN/TAIL COPRIMALITY AND DIRECT RAMIFIED-IDEAL
+SEVENTH-POWER EXTRACTION GREEN**.
+
+The direct `PrimitiveCounterexampleRamifiedProvenance` cyclotomic route now
+defines all six phase factors and their explicit common-uniformizer quotients.
+For `1 ≤ j < 7`, the quotient residue is `j * endpointRight` modulo seven,
+which proves nonramified quotient support and exact first ramified multiplicity
+without using the integer norm as an ideal argument.  For `2 ≤ j < 7`, the
+generic common-prime disjunction is closed concretely: the ramified branch is
+the unique maximal ramified prime, while the endpoint-right branch contradicts
+the stored integer Bezout relation.
+
+Only chosen-vs-other coprimality is used.  The five-phase tail is coprime to
+the chosen quotient, its product has the expected `pi^5` factor, and the
+rotation/star formulas identify the resulting six-factor product with
+`sixPhaseProduct`.  After cancelling `pi^6`, the unit-weighted residual
+seventh-power identity is converted to an ideal product identity; the
+two-factor Dedekind extraction proves the direct target
+
+```text
+∃ I, Ideal.span {directLinearFactor r} = ramifiedPrime * I^7.
+```
+
+The unit is not treated as a seventh power.  PID associated-unit exposure,
+`mu_7` phase normalization, receiver construction, contradiction, and
+unconditional FLT7 remain outside this checkpoint.  See `report-016.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:
