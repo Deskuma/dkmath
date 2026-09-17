@@ -1,0 +1,18 @@
+import DkMath.FLT.Seven.PrimeTraceOneDirectCyclotomicUnitCongruence
+
+#print "file: DkMathTest.FLT.SevenPrimeTraceOneDirectCyclotomicUnitCongruenceAxiom"
+
+open DkMath.FLT
+open DkMath.FLT.Seven
+
+#print axioms DkMath.FLT.Seven.degreeSix_pow_seven_scalarized_mod_seven
+#print axioms DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket.beta_not_mem_ramifiedPrime
+#print axioms DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket.unit_congruentToRationalModSeven
+#print axioms DkMath.FLT.Seven.exists_directCyclotomicChosenQuotientPowerPacket
+#print axioms DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket.directLinearFactor_eq
+#print axioms DkMath.FLT.Seven.directRamifiedGapTail_mem_sevenIdeal
+#print axioms DkMath.FLT.Seven.directCyclotomicChosenQuotient_sub_endpointRight_mem_sevenIdeal
+#print axioms DkMath.FLT.Seven.directCyclotomicChosenQuotient_quadraticNorm
+#print axioms DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket.realSource_eq_normUnit_mul_normBeta_pow
+#print axioms DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket.realUnit_projectiveLog_eq_zero
+#print axioms DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket.exists_realNormUnit_seventhPower

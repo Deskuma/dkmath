@@ -468,6 +468,40 @@ The unit is not treated as a seventh power.  PID associated-unit exposure,
 `mu_7` phase normalization, receiver construction, contradiction, and
 unconditional FLT7 remain outside this checkpoint.  See `report-016.md`.
 
+## FLT7TC-005R12 — Direct chosen-quotient unit congruence and p=7 Kummer-unit frontier
+
+Status: **Outcome C — ELEMENT PACKET AND MOD-SEVEN RATIONAL CONGRUENCE GREEN;
+FULL KUMMER UNIT LEMMA BLOCKED ON A CONCRETE UNIT-THEORY BRIDGE**.
+
+The new module
+`PrimeTraceOneDirectCyclotomicUnitCongruence` extracts an honest element
+packet from the R11 ideal identity:
+
+```text
+Q₁ = unit * beta^7,
+directLinearFactor = ramifiedUniformizer * unit * beta^7.
+```
+
+The explicit R11 tail is proved to lie in `(7)`, so the chosen quotient is
+congruent to `endpointRight` modulo `(7)`.  A characteristic-seven
+scalarization theorem holds for every element of the concrete degree-six
+carrier, without assuming that the quotient by `(7)` is reduced.  Applying
+it to `beta` and using the nonramified chosen quotient proves that the actual
+associated unit is congruent to a seven-nondivisible rational integer.
+
+The quadratic norm audit is also green.  Its exact source is
+`L*R - eisensteinAxis^35 * thetaSevenUnit^12 * A^14`; its mod-seven
+coordinates are `(nonzero, 0, 0)`.  Therefore the associated real-cubic norm
+unit has zero projective logarithm and is a seventh power in the real-cubic
+unit group.
+
+The degree-six unit itself is not absorbed.  The remaining first theorem is
+the concrete `DegreeSixKummerUnitLemmaAtSeven`, requiring either a checked
+ring-of-integers/rank-six unit transport or a direct classification of the
+relative norm-one unit quotient and its `mu_7` phase.  No exact seventh-power
+equation for `Q₁`, no receiver, no contradiction, and no unconditional FLT7
+claim is made.  See `report-017.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:
