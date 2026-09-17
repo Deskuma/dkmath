@@ -243,6 +243,27 @@ and `y+z` chart have all coordinates strictly below the fixed carrier; the
 `y` chart exposes only `carrier < z` and `x < z`.  No chart/provider is
 constructed, so FLT7TC-006 remains blocked.
 
+## FLT7TC-005R3 — Prescribed-carrier chart to common ramified summit resolution
+
+Starting from an actual `AwayCarrierFermatChart carrier`, resolve every
+prescribed position into a common `PrimitiveRamifiedSummitPacket` with
+`distinguished = carrier`.  The endpoint-sum chart is now unconditionally
+impossible at the finite counterexample level; the right chart reaches a
+natural ramified coordinate form after summand exchange; and the left chart
+has a generalized alternating split, signed residual core, and exact
+quadratic seventh-power root.
+
+Status: **completed — Outcome A for FLT7TC-005R3**.
+
+The public wrapper is `PrescribedCarrierRamifiedSummit carrier`, with main
+theorem `nonempty_prescribedCarrierRamifiedSummit_of_fermatChart` and the
+corollary `nonempty_prescribedCarrierRamifiedSummit_of_awayCarrierReconstruction`.
+U1.6 receives the same conditional wrapper at `internalDepthFourCarrier`
+under its existing named reconstruction obligation.  The implementation does
+not infer a chart from `7 ∣ carrier`, does not construct a new counterexample
+or provider, and does not complete the recursive state bridge.  FLT7TC-006
+therefore remains blocked.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 Once both branch contradictions exist, compose them with the checked

@@ -28,6 +28,104 @@ inductive AwayCarrierFermatChart (carrier : ℕ) : Prop
       (carrier_eq : y + z = carrier)
       (seven_dvd_carrier : 7 ∣ carrier)
 
+namespace CounterexamplePack
+
+/-- Exchange the two positive summands without importing the terminal-row
+resolution layer.  This is the structural permutation used by the prescribed
+carrier resolution. -/
+theorem swapXY_for_reconstruction {x y z : ℕ}
+    (source : CounterexamplePack x y z) :
+    CounterexamplePack y x z where
+  hx := source.hy
+  hy := source.hx
+  hz := source.hz
+  hxy := source.hxy.symm
+  hEq := by
+    simpa [Fermat7Equation, add_comm] using source.hEq
+
+end CounterexamplePack
+
+/-- A primitive Fermat-seven counterexample cannot have its endpoint sum
+divisible by seven.  The proof is entirely finite and residue-theoretic; it
+does not use a terminal profile or a carrier reconstruction. -/
+theorem no_counterexample_of_seven_dvd_y_add_z
+    {x y z : ℕ} (source : CounterexamplePack x y z)
+    (hsum7 : 7 ∣ y + z) : False := by
+  have hsum0 : (y : ModSeven) + (z : ModSeven) = 0 := by
+    rw [← Nat.cast_add]
+    exact (ZMod.natCast_eq_zero_iff _ _).2 hsum7
+  rcases sevenEndpointResidueSector_of_counterexample source with
+      ⟨t, ht, hx, hy, hz⟩ |
+      ⟨t, ht, hx, hy, hz⟩ |
+      ⟨t, ht, hx, hy, hz⟩ |
+      ⟨t, ht, hx, hy, hz⟩
+  · rw [hy, hz] at hsum0
+    have htwo : (2 : ModSeven) ≠ 0 := by decide
+    have hprod : (2 : ModSeven) * t = 0 := by
+      linear_combination hsum0
+    exact ht ((mul_eq_zero.mp hprod).resolve_left htwo)
+  · rw [hy, hz] at hsum0
+    exact ht (by linear_combination hsum0)
+  · rw [hy, hz] at hsum0
+    exact ht (by simpa using hsum0)
+  · have hx7 : ¬ 7 ∣ x := by
+      intro h
+      have hx0 : (x : ModSeven) = 0 :=
+        (ZMod.natCast_eq_zero_iff _ _).2 h
+      rw [hx] at hx0
+      have htwo : (-2 : ModSeven) ≠ 0 := by decide
+      exact ht ((mul_eq_zero.mp hx0).resolve_left htwo)
+    have hz7 : ¬ 7 ∣ z := by
+      intro h
+      have hz0 : (z : ModSeven) = 0 :=
+        (ZMod.natCast_eq_zero_iff _ _).2 h
+      rw [hz] at hz0
+      exact ht (neg_eq_zero.mp hz0)
+    have hxz7 : ¬ 7 ∣ x + z := by
+      intro h
+      have hxz0 : (x : ModSeven) + (z : ModSeven) = 0 := by
+        rw [← Nat.cast_add]
+        exact (ZMod.natCast_eq_zero_iff _ _).2 h
+      rw [hx, hz] at hxz0
+      have hthree : (-3 : ModSeven) ≠ 0 := by decide
+      have hprod : (-3 : ModSeven) * t = 0 := by
+        linear_combination hxz0
+      exact ht ((mul_eq_zero.mp hprod).resolve_left hthree)
+    have hxle : x ≤ z :=
+      (right_lt_of_fermat7Equation
+        (CounterexamplePack.swapXY_for_reconstruction source).hx
+        (CounterexamplePack.swapXY_for_reconstruction source).hEq).le
+    have hgap7 : ¬ 7 ∣ z - x := by
+      intro hgap
+      have hzx : (z : ModSeven) = (x : ModSeven) :=
+        (ZMod.natCast_eq_natCast_iff _ _ _).2
+          ((Nat.modEq_iff_dvd' hxle).2 hgap).symm
+      rw [hz, hx] at hzx
+      have ht' : t = 0 := by linear_combination hzx
+      exact ht ht'
+    rcases coordinateCounterexampleRoute_of_pack
+        (CounterexamplePack.swapXY_for_reconstruction source) with ⟨route⟩
+    cases route with
+    | ramified packet =>
+        exact hgap7
+          packet.seventhPower.residual.powerSplit.sevenAdic.seven_dvd_gap
+    | away packet =>
+        have hprod := seven_dvd_endpoint_product_of_away packet
+        rcases (Nat.Prime.dvd_mul (by norm_num : Nat.Prime 7)).mp hprod with
+          hxz | hxzsum
+        · rcases (Nat.Prime.dvd_mul (by norm_num : Nat.Prime 7)).mp hxz with
+            hx' | hz'
+          · exact hx7 hx'
+          · exact hz7 hz'
+        · exact hxz7 hxzsum
+
+theorem AwayCarrierFermatChart.sum_impossible
+    {carrier x y z : ℕ} (pack : CounterexamplePack x y z)
+    (carrier_eq : y + z = carrier) (seven_dvd_carrier : 7 ∣ carrier) :
+    False := by
+  apply no_counterexample_of_seven_dvd_y_add_z pack
+  simpa [carrier_eq] using seven_dvd_carrier
+
 theorem awayCarrierReconstruction_to_fermatChart {carrier : ℕ}
     (h : AwayCarrierReconstruction carrier) :
     AwayCarrierFermatChart carrier := by

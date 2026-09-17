@@ -26,6 +26,7 @@ import DkMath.FLT.Seven.CoprimeTripleRouting
 import DkMath.FLT.Seven.DescentClosureAudit
 import DkMath.FLT.Seven.PrimeTraceOneReconstructionKernel
 import DkMath.FLT.Seven.PrimeTraceOneReconstructionChart
+import DkMath.FLT.Seven.PrimeTraceOneReconstructionRamifiedResolution
 import DkMath.FLT.Seven.FirstCoordinateRemainders
 import DkMath.FLT.Seven.RoutingSevenPivot
 import DkMath.FLT.Seven.FirstCoordinateRoutingAudit
@@ -136,6 +137,7 @@ import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicAdditiveChartBoundary
 import DkMath.FLT.Seven.SevenRamifiedFusionStrictDescentFailureBoundary
 import DkMath.FLT.Seven.PrimeTraceOneReconstructionKernelU16
 import DkMath.FLT.Seven.PrimeTraceOneReconstructionChartU16
+import DkMath.FLT.Seven.PrimeTraceOneReconstructionRamifiedResolutionU16
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
