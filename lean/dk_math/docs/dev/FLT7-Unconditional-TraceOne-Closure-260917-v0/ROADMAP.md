@@ -422,6 +422,23 @@ equation, associated-load unit, μ₇ phase normal form, phase-selection
 congruence, or checked bridge to `CubicGapSeventhShapeReceiver` is claimed.
 The public facade remains unchanged.  See `report-014.md`.
 
+## FLT7TC-005R10 — Direct cyclotomic ideal ownership from the six-phase orbit
+
+Status: **Outcome D — DIRECT NORM REMAINS GREEN, BUT ONE EARLIER IDEAL/GALOIS
+BRIDGE IS STILL MISSING**.
+
+The direct R9 factor now has a kernel-checked explicit factorization by the
+ramified uniformizer.  Its membership in `ramifiedPrime` and exclusion from
+`ramifiedPrime^2` use the current summit gap equation and
+`endpointRight_not_seven_dvd`, proving exact local multiplicity one.  The
+existing general six-phase product also specializes directly to
+`7 * residualRoot^7`.
+
+The six rotated/conjugate stripped factors, their pairwise nonramified
+coprimality, and the seventh-power ideal extraction are not yet proved.  Hence
+no direct ideal packet, PID element equation, unit phase reduction, or bridge
+to `CubicGapSeventhShapeReceiver` is claimed.  See `report-015.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:
