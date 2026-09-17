@@ -259,8 +259,6 @@ end PrimitiveRamifiedSummitPacket
 
 structure RamifiedPrimarySecondCoordinateRoutingPacket
     (p : PrimitiveRamifiedSummitPacket) : Type where
-  summit : PrimitiveRamifiedSummitPacket
-  summit_eq : summit = p
   primary : RamifiedGapRootPrimaryDecomposition p
   routing : CoprimeTripleRouting
     (Int.natAbs p.root.snd)
@@ -268,8 +266,13 @@ structure RamifiedPrimarySecondCoordinateRoutingPacket
     1
     (7 ^ (5 + 7 * primary.depth))
     (primary.unitRoot ^ 7)
-    (Int.natAbs (ramifiedGapQuotient
+      (Int.natAbs (ramifiedGapQuotient
       (7 ^ 5 * (p.gapRoot : ℤ) ^ 7) p.endpointRight).snd)
+
+def RamifiedPrimarySecondCoordinateRoutingPacket.summit
+    {p : PrimitiveRamifiedSummitPacket}
+    (_ : RamifiedPrimarySecondCoordinateRoutingPacket p) :
+    PrimitiveRamifiedSummitPacket := p
 
 namespace PrimitiveRamifiedSummitPacket
 
@@ -318,8 +321,6 @@ theorem nonempty_primarySecondCoordinateRouting
       p.rootSnd_sndCore_coprime (Nat.coprime_one_right _)
       (Nat.coprime_one_right _) h7U h7Q hUQ (by simpa using hprod) with ⟨routing⟩
   exact ⟨{
-    summit := p
-    summit_eq := rfl
     primary := d
     routing := routing }⟩
 

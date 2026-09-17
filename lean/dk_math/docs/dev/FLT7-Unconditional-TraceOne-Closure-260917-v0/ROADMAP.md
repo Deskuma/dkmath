@@ -362,6 +362,26 @@ The normalized routing board does not by itself provide the
 extraction.  Those remain the next boundary; no contradiction or unconditional
 FLT7 theorem is claimed.  See `report-011.md`.
 
+## FLT7TC-005R7 — Higher-depth canonical split and unified receiver frontier
+
+Status: **Outcome B — GENERALIZED CANONICAL SPLIT / RECEIVER EQUIVALENCES
+GREEN; CONDITIONAL INNER-ROOT GENERALIZATION GREEN; RECEIVER EXISTENCE REMAINS
+THE PRECISE GLOBAL FRONTIER**.
+
+The R6 normalized routing board now has a canonical split with
+`c31 = c32 = c33 = c21 = 1`, `c11 = 7^(5+7*k)`, and terminal-independent
+compensation core `gcd(|root.snd|, |Q|)`.  The exact generalized cubic-gap
+formula and receiver equivalences are proved, including depth-zero calibration
+to the historical same-summit terminal receiver.
+
+Under an explicit receiver hypothesis, the conditional quadratic inner-root
+packet is generalized.  It proves the inner product in `7^4 * seventh-power`
+form and exact depth `4 + 7*k`.  The historical downstream consumers that
+require exact depth four therefore remain terminal-depth APIs.  The gap-unit
+bridge does not derive a global receiver from counterexample provenance, so no
+receiver existence, descent, contradiction, or unconditional FLT7 result is
+claimed.  See `report-012.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:
