@@ -298,6 +298,49 @@ depth-four carrier gives `v7(gapRoot) = 3`, `v7(|root.snd|) = 26`, and
 `7 ∣ gapRoot`.  This is not a contradiction and does not construct that
 obligation.
 
+## FLT7TC-005R5 — Counterexample-origin ramified provenance and terminalization criterion
+
+The common summit is now refined only when it originates from an actual
+primitive counterexample:
+
+```text
+CounterexamplePack
+  -> PrimitiveCounterexampleRamifiedProvenance
+  -> same-summit PrimitiveCounterexampleRamifiedResolution.
+```
+
+Status: **Outcome B — COUNTEREXAMPLE PROVENANCE GREEN; TERMINALIZATION IFF DEPTH ONE;
+HIGHER-DEPTH RAMIFIED BRANCH IS THE PRECISE OPEN FRONTIER**.
+
+The new provenance packet retains the three branch orientations and
+`Nat.Coprime gapRoot residualRoot`; it also proves that both oriented endpoints
+and their oriented sum are seven-units.  It does not choose a second summit:
+`toResolution_summit` identifies the adapter's summit with the stored one.
+
+For this provenance packet alone, terminalization means that a
+`TerminalPrimitiveRamifiedSummitPacket` has exactly the same summit.  The
+kernel-checked criterion is
+
+```text
+terminalizable
+  <-> 7 ∤ gapRoot
+  <-> v7(distinguishedEndpoint) = 1.
+```
+
+The forward implication transports `gapRoot_not_seven_dvd` through the
+same-summit equality.  Conversely the terminal carrier is explicitly
+`gapRoot * residualRoot`, using retained root coprimality and both unit facts.
+Thus depth one reaches the historical
+`RamifiedSecondCoordinateRoutingPacket` API.  Its first additional missing
+input remains the old `RamifiedCubicGapSeventhShapeReceiver`; no receiver or
+contradiction is constructed here.
+
+Every counterexample-origin endpoint has positive depth, hence it is either
+depth one or at least two.  In the higher-depth branch, `7 ∣ gapRoot` and
+same-summit terminalization is impossible.  This branch cannot enter the old
+terminal packet, and no direct contradiction follows from the newly retained
+orientation, endpoint-unit, and root-coprimality facts.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:
@@ -320,9 +363,12 @@ Keep branch orchestration separate from normalization to make the dependency
 surface auditable.
 
 Status: blocked on a counterexample-origin ramified summit exclusion.  The
-historical prescribed-carrier reconstruction kernel remains an audited
-conditional boundary, but is no longer needed to normalize an original away
-branch into the common summit surface.
+depth-one subbranch reaches only the historical second-coordinate routing
+surface and still needs its explicit shape receiver; the genuinely new
+higher-depth branch has `v7(distinguishedEndpoint) ≥ 2` and cannot use the
+terminal entry packet.  The historical prescribed-carrier reconstruction
+kernel remains an audited conditional boundary, but is no longer needed to
+normalize an original away branch into the common summit surface.
 
 ## FLT7TC-007 — Public unconditional FLT7 endpoint and closeout
 
