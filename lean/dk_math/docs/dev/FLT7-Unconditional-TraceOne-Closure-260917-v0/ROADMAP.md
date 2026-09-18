@@ -651,6 +651,21 @@ factorization and coprimality of `rho1 - rho0` together with its homogeneous
 seventh quotient, so no descent consumer applies.  No new state or strict
 descent measure is claimed.  See `report-022.md`.
 
+## FLT7TC-005R18 — Production direct orbit split
+
+Productionize the direct real-cubic orbit split from Astra-001, stopping at
+the exact theta depths and current-provenance stripped-core coprimality.  The
+target remains receiver-free and must not assume a successor state.
+
+Status: **completed — Outcome C**.
+
+`PrimeTraceOneDirectRealCubicOrbitSplit` now exposes the seven-adic gap-root
+split, exact quotient depth three, exact gap depth `32 + 42*k`, the stable
+theta^32 divisibility, direct root coprimality, common-prime localization to
+the Eisenstein axis, and coprimality of the stripped cores.  The associated
+unit-times-seventh-power extraction and Archimedean smaller-norm bound remain
+the next bounded layer.  See `report-023.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:

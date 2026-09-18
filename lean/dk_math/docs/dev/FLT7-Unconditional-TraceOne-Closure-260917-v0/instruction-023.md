@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Source of truth:
+
 - astra-report-001.md
 - astra-001/OrbitChecks.lean
 - astra-001-findings-freeze.md
@@ -75,6 +76,7 @@ The first should reuse the generic theorem already present in
 SevenRealCubicAxisDrop when possible.
 
 For the second, combine:
+
 - exact total depth of d*H from the explicit edge factorization;
 - depth 3 of H;
 - 7 = theta^3 * thetaSevenUnit;
@@ -102,6 +104,7 @@ Package these witnesses.
 Productionize the scratch proof that rho0 and rho1 are coprime.
 
 The proof must use:
+
 - the edge seventh-power factorization;
 - theta-unit property of the roots;
 - gcd(A,B)=1 via the mapped integer Bezout relation;
@@ -260,6 +263,7 @@ At minimum:
     git diff --check
 
 Print axioms for:
+
 - exact depth of d;
 - exact depth of H;
 - stripped-core coprimality;
