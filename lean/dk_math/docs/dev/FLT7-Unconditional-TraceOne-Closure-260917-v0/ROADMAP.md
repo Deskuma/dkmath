@@ -693,6 +693,18 @@ successor state, or descent claim is made until that bridge is kernel-checked.
 The unresolved projective unit classes are explicitly nonessential for this
 height checkpoint.  See `report-026.md`.
 
+## FLT7TC-005R21 — Sign-free three-conjugate gap height and strict smaller norm
+
+The current direct power-split packet now has a chosen real embedding,
+cyclic real norm evaluation, sign-free three-conjugate height control, exact
+direct orbit norm product, positivity, and a strict smaller root norm.  The
+result is packaged as `DirectOrbitSmallerNormPacket` and exported through the
+FLT7 facade.
+
+Status: **completed — Outcome A**.  This remains a current-provenance
+smaller-norm packet only; no successor state, infinite descent, or
+unconditional FLT7 closure is claimed.  See `report-027.md`.
+
 ## FLT7TC-005R24 — Generic homogeneous power quotient kernel
 
 Instruction-024 generalized the existing difference-of-powers quotient without

@@ -51,10 +51,8 @@ theorem realH7_ge_gap (l r : ℝ) :
     positivity
   linarith only [heq, hn]
 
-/- The current direct packet still needs a production bridge from
-   `QuadraticAlgebra.norm cyclotomicRoot.gammaNorm` to all three real
-   embeddings of `SevenRealCubic.Field`.  In particular, positivity of its
-   rational norm is not used as a substitute for total positivity. -/
+/- The embedding bridge and the resulting current-packet norm comparison are
+   implemented in `PrimeTraceOneDirectRealCubicOrbitGapHeight`. -/
 
 end
 end DkMath.FLT.Seven
