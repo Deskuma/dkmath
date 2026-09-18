@@ -561,6 +561,33 @@ and the unconditional seventh-power closure remain open. No unconditional
 direct-factor equation, contradiction, receiver, or FLT7 claim is made. See
 `report-019.md`.
 
+## FLT7TC-005R15 — Explicit CM conjugation transport and torsion phase kill
+
+Status: **Outcome A — CM TORSION PHASE KILLED; DIRECT CHOSEN QUOTIENT EXACT
+SEVENTH POWER GREEN**.
+
+`PrimeTraceOneDirectCyclotomicCMTorsionPhase` transports Mathlib's explicit
+CM conjugation through `ringOfIntegersToRingEquiv`, including the unit-level
+coherence, and checks the abstract seventh-cyclotomic torsion order as `14`.
+Concrete norm-one units satisfy `delta ^ 28 = 1`; the actual R13 phase has
+the checked exponent-14 identity.
+
+The standalone full-`(7)` concrete torsion-kill theorem is proved by a
+mod-49 argument in the explicit carrier. Consequently
+`RelativeNormOneScalarUnitAtSeven` is unconditional, and the existing R13
+2/7 Bézout consequences are instantiated unconditionally:
+
+```text
+associated unit = unitRoot^7,
+Q₁ = gamma^7,
+directLinearFactor = ramifiedUniformizer * gamma^7.
+```
+
+The clean downstream audit found no receiver-free theorem that turns this
+exact direct-factor equation into a primitive contradiction. FLT7TC-006 and
+the public unconditional FLT7 endpoint therefore remain separate targets. See
+`report-020.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:

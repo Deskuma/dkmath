@@ -131,6 +131,31 @@ def ringOfIntegersToRing :
   abstractIntegralPowerBasis.lift
     zeta zeta_aeval_abstractIntegralPowerBasis_minpoly
 
+theorem ringOfIntegersToRing_gen :
+    ringOfIntegersToRing abstractIntegralPowerBasis.gen = zeta := by
+  rw [ringOfIntegersToRing, PowerBasis.lift_gen]
+
+/- The chosen integral cyclotomic generator is exposed so downstream
+   conjugation proofs do not need to rely on a hidden `Star` instance. -/
+noncomputable def cyclotomicIntegralGenerator :
+    𝓞 (CyclotomicField 7 ℚ) := abstractIntegralPowerBasis.gen
+
+theorem cyclotomicIntegralGenerator_coe :
+    (cyclotomicIntegralGenerator : CyclotomicField 7 ℚ) =
+      IsCyclotomicExtension.zeta 7 ℚ (CyclotomicField 7 ℚ) := by
+  rw [cyclotomicIntegralGenerator, abstractIntegralPowerBasis,
+    IsPrimitiveRoot.integralPowerBasis_gen]
+  exact abstractZeta_isPrimitiveRoot.coe_toInteger
+
+theorem ringOfIntegersToRing_cyclotomicIntegralGenerator :
+    ringOfIntegersToRing cyclotomicIntegralGenerator = zeta := by
+  exact ringOfIntegersToRing_gen
+
+theorem adjoin_cyclotomicIntegralGenerator_eq_top :
+    Algebra.adjoin ℤ ({cyclotomicIntegralGenerator} :
+      Set (𝓞 (CyclotomicField 7 ℚ))) = ⊤ := by
+  exact abstractIntegralPowerBasis.adjoin_gen_eq_top
+
 /-- The power-basis map from the abstract seventh cyclotomic ring of integers
 onto the explicit degree-six carrier is surjective. -/
 theorem ringOfIntegersToRing_surjective :
