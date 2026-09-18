@@ -666,6 +666,21 @@ the Eisenstein axis, and coprimality of the stripped cores.  The associated
 unit-times-seventh-power extraction and Archimedean smaller-norm bound remain
 the next bounded layer.  See `report-023.md`.
 
+## FLT7TC-005R24 — Generic homogeneous power quotient kernel
+
+Instruction-024 generalized the existing difference-of-powers quotient without
+duplicating `DkMath.Algebra.DiffPow.diffPowSum`.  The new neutral
+`DkMath.Lib.NumberTheory.HomogeneousPowerQuotient` alias exposes the generic
+factorization, the arbitrary-exponent gap congruence, and common-prime
+localization to the exponent scalar, with an `IsCoprime` corollary.  The
+generic module imports no FLT code.  Separate tests cover exponents 3, 5, and
+7, an integer common-prime instance, and the equality with the existing FLT7
+`seventhQuotient`; the module is exported from `DkMath.Lib`.
+
+Status: **completed — Outcome A**.  The optional AM-GM inequality was deferred
+because it is not part of the quotient/localization kernel.  See
+`report-024-generalization.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:

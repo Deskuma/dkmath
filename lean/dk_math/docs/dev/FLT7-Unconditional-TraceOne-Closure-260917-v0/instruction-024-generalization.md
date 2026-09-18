@@ -19,6 +19,7 @@ Preferred new module:
     DkMath/Lib/NumberTheory/HomogeneousPowerQuotient.lean
 
 Before adding anything, audit existing:
+
 - DkMath.Lib.Cosmic.GTailCyclotomic
 - DkMath.NumberTheory.GcdDiffPow
 - DkMath.NumberTheory.CyclotomicQRCommonPrimeSupport
@@ -100,11 +101,13 @@ logical core of:
 and/or the Astra direct common-prime argument.
 
 Do not move:
+
 - SevenRealCubicInt;
 - eisensteinAxis;
 - theta depth;
 - orbitUnit01;
 - projectiveLog;
+
 into DkMath.Lib.
 
 The Lib module must import no FLT module.
@@ -140,6 +143,7 @@ Preferred:
     DkMathTest/NumberTheory/HomogeneousPowerQuotient.lean
 
 Calibrate at least:
+
 - n=3;
 - n=5;
 - n=7;
@@ -150,6 +154,7 @@ If the module is stable and genuinely neutral, add it to DkMath.Lib.lean.
 ## Report
 
 Create a short report documenting:
+
 1. whether an existing definition was reused;
 2. the weakest hypotheses achieved;
 3. the exact common-prime localization theorem;
