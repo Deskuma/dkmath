@@ -120,6 +120,7 @@ Then prove an explicit factorization, up to an overall sign/orientation:
       = orbitUnit01 * (theta^5 * U * (A : SevenRealCubicInt)^2)^7.
 
 The exact definition of orbitUnit01 may differ, but it must be:
+
 - explicit;
 - independent of source arithmetic data;
 - proved to be a unit.
@@ -148,6 +149,7 @@ Then use
 to decide by kernel-checked proof whether this fixed unit is a seventh power.
 
 If the class is zero:
+
 - construct v with orbitUnit01 = v^7;
 - absorb it and obtain a pure real-cubic equation
 
@@ -158,6 +160,7 @@ If the class is zero:
 Do not call this integer FLT7.
 
 If the class is nonzero:
+
 - record the exact class;
 - prove that no unit seventh root exists.
 
@@ -258,6 +261,7 @@ At minimum:
     git diff --check
 
 Print axioms for:
+
 - the mod-49 equivalence audit;
 - the exact real-root seventh-power theorem;
 - the exact norm theorem;

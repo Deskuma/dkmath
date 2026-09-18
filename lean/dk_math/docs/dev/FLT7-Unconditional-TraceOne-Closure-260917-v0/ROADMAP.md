@@ -617,6 +617,40 @@ The congruence is a checked gate only: no six-residue classifier, receiver-free
 contradiction, or global FLT7 closure is claimed, and no historical receiver is
 used. See `report-021.md`.
 
+## FLT7TC-005R17 — Real-cubic exact-power orbit and fixed unit-class frontier
+
+Status: **Outcome B — REAL-CUBIC ORBIT DIFFERENCE GREEN; FIXED UNIT CLASS
+DECIDED; NEXT THETA-ADIC COPRIMALITY/DESCENT BRIDGE IDENTIFIED**.
+
+The R16 mod-49 seventh-power congruence is shown, for units in `ZMod 49`, to
+be equivalent to the existing sixth-power identity.  Specializing this to
+`endpointRight` records that the finite gate is exhausted and is not a
+contradiction.
+
+The relative quadratic norm of the R16 normalized cyclotomic root gives a
+current-provenance real-cubic element `rho` with
+`directChosenQuotientRealSource = rho ^ 7` and exact signed norm equal to
+`residualRoot`.  Its nonzero theta residue is proved from the residual-root
+seven-unit condition.  The three rotated sources and roots form an exact
+order-three orbit.
+
+The first rotated source difference is factored as
+
+```text
+orbitUnit01 * (eisensteinAxis^5 * thetaSevenUnit * gapRoot^2)^7
+```
+
+where `orbitUnit01` is explicit, source-independent, and a unit.  Its fixed
+unit class is computed exactly as `(0, 5)` in `ZMod 7 × ZMod 7`; therefore it
+has no seventh root.  This is a global unit-class obstruction, not a
+contradiction.
+
+The clean real-cubic files were audited without instantiating a historical
+receiver.  No current-provenance theorem yet controls the theta-adic
+factorization and coprimality of `rho1 - rho0` together with its homogeneous
+seventh quotient, so no descent consumer applies.  No new state or strict
+descent measure is claimed.  See `report-022.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:
