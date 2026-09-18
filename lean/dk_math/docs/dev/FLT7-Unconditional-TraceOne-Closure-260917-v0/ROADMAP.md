@@ -543,6 +543,24 @@ and no checked classification of the concrete relative norm-one units as
 roots of unity is available.  Thus no unconditional exact-power equation,
 contradiction, receiver, or FLT7 conclusion is claimed.  See `report-018.md`.
 
+## FLT7TC-005R14 — Cyclotomic ring-of-integers equivalence for the CM phase
+
+Status: **Outcome C — RING-OF-INTEGERS EQUIVALENCE GREEN; CM STAR/TORSION
+TRANSPORT IS THE PRECISE FRONTIER**.
+
+The PID layer now proves injectivity of the concrete `ringOfIntegersToRing`
+map. The proof uses the explicit carrier's first coordinate for characteristic
+zero, the fraction-field minimal polynomial of the primitive seventh root, and
+`PowerBasis.equivOfMinpoly`. Together with the existing surjection this yields
+the new algebra equivalence `ringOfIntegersToRingEquiv` in
+`PrimeTraceOneDirectCyclotomicCMUnitPhase`.
+
+The current ring-of-integers type has no Mathlib `Star` instance, so the CM
+star transport is not fabricated. Torsion transport, the mod-49 phase kill,
+and the unconditional seventh-power closure remain open. No unconditional
+direct-factor equation, contradiction, receiver, or FLT7 claim is made. See
+`report-019.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:
