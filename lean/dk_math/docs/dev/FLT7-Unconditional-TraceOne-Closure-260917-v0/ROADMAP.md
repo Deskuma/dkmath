@@ -666,6 +666,20 @@ the Eisenstein axis, and coprimality of the stripped cores.  The associated
 unit-times-seventh-power extraction and Archimedean smaller-norm bound remain
 the next bounded layer.  See `report-023.md`.
 
+## FLT7TC-005R19 — Stripped-core seventh-power extraction
+
+The direct-orbit stripped cores now have a literal theta-cancelled product
+identity and generic coprime seventh-power extraction.  The new
+`DirectOrbitPowerSplitPacket` retains the current direct provenance, exact
+theta depths, coprimality, roots, explicit units, and unit-times-seventh-power
+equalities.  The common-prime theorem consumes the neutral homogeneous
+quotient kernel from FLT7TC-005R24.
+
+Status: **completed — Outcome C**.  The exact projective unit classes `(2,4)`
+and `(5,1)` remain a separate local congruence and generator-invariance
+bridge; no Archimedean smaller-norm theorem is claimed here.  See
+`report-025.md`.
+
 ## FLT7TC-005R24 — Generic homogeneous power quotient kernel
 
 Instruction-024 generalized the existing difference-of-powers quotient without

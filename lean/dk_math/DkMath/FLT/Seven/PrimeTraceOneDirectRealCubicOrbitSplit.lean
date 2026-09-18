@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicOrbit
 import DkMath.FLT.Seven.SevenRealCubicCoprimeExtraction
+import DkMath.Lib.NumberTheory.HomogeneousPowerQuotient
 
 #print "file: DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicOrbitSplit"
 
@@ -14,6 +15,7 @@ namespace DkMath.FLT.Seven
 noncomputable section
 
 open SevenRealCubicInt
+open DkMath.Lib.NumberTheory
 
 local instance : Fact (Nat.Prime 7) := ⟨by norm_num⟩
 
@@ -376,15 +378,11 @@ theorem directOrbit_commonPrime_associated_theta
     {x y : SevenRealCubicInt} (hxy : IsCoprime x y) (q : SevenRealCubicInt)
     (hq : Prime q) (hgap : q ∣ x - y) (hh : q ∣ seventhQuotient x y) :
     Associated q eisensteinAxis := by
-  have hy : ¬q ∣ y := by
-    intro h
-    have hx : q ∣ x := by simpa using dvd_add hgap h
-    exact hq.not_isUnit (hxy.isUnit_of_dvd' hx h)
-  have hrem := hgap.trans
-    (gap_dvd_seventhQuotient_sub_seven_mul_pow_six x y)
-  have hprod : q ∣ 7 * y ^ 6 := by simpa using dvd_sub hh hrem
-  have hseven := (hq.dvd_mul.mp hprod).resolve_right
-    (fun h => hy (hq.dvd_of_dvd_pow h))
+  have hseven : q ∣ (7 : SevenRealCubicInt) := by
+    apply prime_dvd_exponent_cast_of_coprime_gap_and_homogeneous
+      q x y 7 hq hxy hgap
+    simpa [homogeneousPowerQuotient, DkMath.Algebra.DiffPow.diffPowSum,
+      seventhQuotient, Finset.sum_range_succ] using hh
   rw [seven_eq_eisensteinAxis_cube_mul_unit] at hseven
   have htheta := (hq.dvd_mul.mp hseven).resolve_right
     (fun h => hq.not_isUnit
