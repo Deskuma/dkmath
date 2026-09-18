@@ -161,21 +161,29 @@ Preferred elementary route:
 1. from `hcong`, write `delta = 1 + 7*a`;
 2. if `delta ≠ 1`, cancel `delta - 1` from
    `delta^28 - 1 = 0` in the concrete domain to get
+
    ```text
    S := Σ n in range 28, delta^n = 0;
    ```
+
 3. prove modulo 49:
+
    ```text
    delta^n ≡ 1 + 7*n*a;
    ```
+
 4. sum from `0` to `27` and use
+
    ```text
    7 * (0 + ... + 27) ≡ 0 (mod 49)
    ```
+
    to obtain
+
    ```text
    S ≡ 28 (mod 49);
    ```
+
 5. `S = 0` would force `28 ∈ (49)`;
 6. contradict this using the explicit integral coordinate model of the
    concrete carrier.
