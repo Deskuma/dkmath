@@ -680,6 +680,19 @@ and `(5,1)` remain a separate local congruence and generator-invariance
 bridge; no Archimedean smaller-norm theorem is claimed here.  See
 `report-025.md`.
 
+## FLT7TC-005R20 — Archimedean bridge and smaller-norm frontier
+
+The production height module now contains the exact `H7` sum-of-squares
+inequalities needed by the Astra route and exports them through the FLT7
+facade.  The required total-positivity bridge from
+`QuadraticAlgebra.norm gammaNorm` to all three real embeddings of the cubic
+field is not present in the current direct API.
+
+Status: **completed — Outcome C**.  No norm lower bound, strict smaller norm,
+successor state, or descent claim is made until that bridge is kernel-checked.
+The unresolved projective unit classes are explicitly nonessential for this
+height checkpoint.  See `report-026.md`.
+
 ## FLT7TC-005R24 — Generic homogeneous power quotient kernel
 
 Instruction-024 generalized the existing difference-of-powers quotient without

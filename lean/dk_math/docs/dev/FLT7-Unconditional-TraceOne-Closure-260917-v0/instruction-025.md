@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-023.md
 - astra-report-001.md
 - PrimeTraceOneDirectRealCubicOrbitSplit.lean
@@ -109,6 +110,7 @@ The theta powers must cancel exactly.
 Reuse existing generic machinery rather than historical packets.
 
 Preferred sources:
+
 - DkMath.Lib.NumberTheory.PowerFactor
 - Mathlib exists_associated_pow_of_associated_pow_mul if already imported
 - a tiny neutral wrapper only if needed.
@@ -275,6 +277,7 @@ At minimum:
     git diff --check
 
 Print axioms for:
+
 - exact stripped product identity;
 - gap-core associated seventh-power theorem;
 - quotient-core associated seventh-power theorem;

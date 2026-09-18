@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - astra-report-001.md
 - report-023.md
 - report-025.md
@@ -105,6 +106,7 @@ Do not assert positivity merely because the rational norm B is positive.
 If Mathlib's abstract extension/CM API is too expensive, it is acceptable to
 construct the three real embeddings concretely by composing one real embedding
 with powers of ringOfIntegersRotateEquiv / rotateEquiv, provided:
+
 - they are proved to be exactly the three embeddings;
 - positivity of rho under the base embedding comes honestly from the
   cyclotomic relative norm;
@@ -165,6 +167,7 @@ Use
     packet.gapCore = eta * g^7
 
 and:
+
 - abs(norm theta) = 7;
 - norm of a global unit is ±1;
 - n = 32+42*k is even.
@@ -257,6 +260,7 @@ First prove:
     0 < G.
 
 Use:
+
 - g != 0, derived from packet.gapCore_eq and exact theta-freeness/nonzero core;
 - norm of a nonzero element in this number-field order is nonzero;
 - natAbs positivity.
@@ -323,6 +327,7 @@ Do not add successor endpoints or a successor CounterexamplePack.
 Do not make (2,4) / (5,1) unit classes a prerequisite.
 
 Add a short comment/TODO or report note:
+
 - the classes remain structurally interesting;
 - the smaller-norm theorem depends only on unit norm ±1, not on their
   projective classes;
@@ -389,6 +394,7 @@ At minimum:
     git diff --check
 
 Print axioms for:
+
 - total positivity / embedding positivity theorem;
 - norm(H) lower bound;
 - stripped gap absolute norm theorem;
