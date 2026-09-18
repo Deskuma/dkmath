@@ -588,6 +588,35 @@ exact direct-factor equation into a primitive contradiction. FLT7TC-006 and
 the public unconditional FLT7 endpoint therefore remain separate targets. See
 `report-020.md`.
 
+## FLT7TC-005R16 — Exact root norm and canonical μ₇ first-order phase normalization
+
+Status: **Outcome B — NORMALIZED ROOT PACKET GREEN; EXACT NORM AND MOD-49
+SEVENTH-POWER GATE GREEN; SURVIVING RESIDUE/GLOBAL BRANCHES REMAIN**.
+
+The new `PrimeTraceOneDirectCyclotomicRootPhaseNormalization` module packages
+the R15 chosen quotient witness with an exact integral root `gamma`. It retains
+`gamma ∉ ramifiedPrime` and proves the exact signed norm identity
+
+```text
+cyclotomicNormHom gamma = residualRoot.
+```
+
+For every non-ramified cyclotomic scalar, the module defines the integer
+`scalarLift` and proves existence and uniqueness of the first-order `Fin 7`
+μ₇ phase. The normalized root packet preserves both the seventh-power quotient
+identity and the residual norm. Its first-order normalization gives the
+explicit gain
+
+```text
+gammaNorm^7 - scalarLift(gamma)^7 ∈ ramifiedPrime^8.
+```
+
+Taking the degree-six rational norm contracts this to `49 ∣ endpointRight -
+scalarLift(gamma)^7`, and exposes the exact `ZMod 49` endpoint congruence.
+The congruence is a checked gate only: no six-residue classifier, receiver-free
+contradiction, or global FLT7 closure is claimed, and no historical receiver is
+used. See `report-021.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:

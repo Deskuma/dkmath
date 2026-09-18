@@ -1,0 +1,26 @@
+import DkMath.FLT.Seven.PrimeTraceOneDirectCyclotomicRootPhaseNormalization
+
+#print "file: DkMathTest.FLT.SevenPrimeTraceOneDirectCyclotomicRootPhaseNormalizationApi"
+
+namespace DkMath.FLT.Seven
+
+open SevenCyclotomicDegreeSixInt
+
+#check DirectCyclotomicExactRootPacket
+#check exactRootPacket_of_chosenQuotientPowerPacket
+#check scalarLift
+#check sub_scalarLift_mem_ramifiedPrime
+#check scalarLift_not_seven_dvd
+#check FirstOrderPhaseNormalized
+#check firstOrderPhaseIndex_normalized
+#check exists_unique_firstOrderPhaseNormalized
+#check DirectCyclotomicNormalizedRootPacket
+#check normalizedRootPacket_of_exactRootPacket
+#check seventhPower_gain_of_ramifiedPrime_sq
+#check normalizedRoot_seventhPower_gain
+#check normalizedRoot_endpointRight_sub_scalarLift_pow_mem_ramifiedPrime_pow_eight
+#check fortyNine_dvd_of_intCast_mem_ramifiedPrime_pow_eight
+#check fortyNine_dvd_endpointRight_sub_scalarLift_pow
+#check endpointRight_eq_scalarLift_pow_mod_fortyNine
+
+end DkMath.FLT.Seven
