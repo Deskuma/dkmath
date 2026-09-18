@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-026.md
 - PrimeTraceOneDirectRealCubicOrbit.lean
 - PrimeTraceOneDirectRealCubicOrbitSplit.lean
@@ -56,6 +57,7 @@ to choose one ring embedding
     realEmbedding : SevenRealCubic.Field ->+* Real.
 
 A suggested construction is:
+
 1. choose any complex embedding of SevenRealCubic.Field;
 2. use total reality to prove it is real;
 3. apply ComplexEmbedding.IsReal.embedding.
@@ -65,6 +67,7 @@ Then define a concrete evaluation ring hom
     realEval : SevenRealCubicInt ->+* Real
 
 by composing:
+
 - SevenRealCubic.modelToRingOfIntegers;
 - the canonical coercion/algebra map from the ring of integers to
   SevenRealCubic.Field;
@@ -89,6 +92,7 @@ This should be a direct map of the existing kernel theorem
 No field-level extension of rotateEquiv is required.
 
 Also expose the obvious map formulas needed below:
+
 - realEval (x-y) = realEval x - realEval y;
 - realEval of integer casts;
 - realEval of seventhQuotient in terms of H7.
@@ -168,6 +172,7 @@ and, for
     SevenRealCubicInt.norm (orbitW A) = 7^5 * (A : Int)^6.
 
 Reuse:
+
 - norm_eisensteinAxis;
 - norm thetaSevenUnit;
 - norm_intCast;
@@ -272,6 +277,7 @@ Combine with Part F and cancel a^42 (using a > 0) to obtain:
     7^(189+252*k) * a^7 <= 64^3.
 
 But:
+
 - a >= 1;
 - 189 + 252*k >= 7;
 - 64^3 < 7^7.
@@ -288,6 +294,7 @@ Conclude:
     G < a.
 
 This route deliberately does NOT use:
+
 - total positivity of rho;
 - norm(H) >= 7^3 * B^6;
 - the original endpoint lower bound A^42 < B^7;
@@ -298,6 +305,7 @@ Then prove:
     0 < G.
 
 Use:
+
 - packet.gapCore_not_axis_dvd, hence gapCore != 0;
 - packet.gapCore_eq, hence g != 0;
 - injectivity/nonzero norm for a nonzero element of the cubic number-field
@@ -382,9 +390,9 @@ Create report-027.md and update ROADMAP.md.
 4. Was the sign-free norm inequality
    norm(d)^6 <= 64^3 * norm(H) proved?
 5. Were norm(H) and norm(d) proved positive from the edge product?
-6. Was D = 7^(32+42*k) * G^7 proved?
+6. Was D = 7^(32+42*k)* G^7 proved?
 7. Was
-   7^(189+252*k) * G^49 <= 64^3 * a^42
+   7^(189+252*k)* G^49 <= 64^3 * a^42
    proved?
 8. Was 0 < G < a <= A proved?
 9. Was DirectOrbitSmallerNormPacket constructed?
@@ -408,6 +416,7 @@ At minimum:
     git diff --check
 
 Print axioms for:
+
 - realEval;
 - cyclic norm evaluation theorem;
 - sign-free norm inequality;
