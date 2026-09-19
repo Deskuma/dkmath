@@ -64,3 +64,12 @@ The checked result is a structural square-refined twisted obstruction and a
 mixed-sign audit at the current direct-orbit level. It does not supply a
 theorem forcing `c0` to be square or totally positive, and therefore does not
 close the remaining FLT7 successor/descent route.
+
+## Outcome
+
+**Outcome B — SQUARE-WEIGHTED STATE GREEN; `c0` PROVED NON-SQUARE WITH MIXED
+REAL SIGNATURE; POWER-REFINEMENT ROUTE FROZEN.**
+
+The seventh-power gauge normalization is obstructed by R24/R25, ordinary
+homogeneous restart is obstructed by R25, and the square-gauge normalization
+is obstructed here. No FLT7 contradiction is claimed.
