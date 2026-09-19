@@ -972,6 +972,22 @@ a.factorization q` and `S.factorization q = 2 * a.factorization q`; no
 canonical `C,U,V` packet or contradiction claim is made before that bridge.
 See `report-041.md`.
 
+## FLT7TC-005R36 — Ideal-norm exponent transport
+
+The R36 production layer completes the R35 transport from ideal
+multiplicities to natural factorization coefficients.  Inertia degree one
+gives `Ideal.absNorm P = q` for every common prime ideal above `(q)`.  The
+gap-side q-primary residual is q-free and yields
+`natAbs (norm gapSquareRoot).factorization q = a.factorization q`.
+The two-prime quotient-side residual is likewise q-free and yields
+`natAbs (norm quotientSquareRoot).factorization q =
+2 * a.factorization q`.
+
+Status: **completed — Outcome B**. The production module, `DkMath.FLT.Seven`
+facade, API audit, axiom audit, and R36 scratch verification pass.  The
+global canonical `C,U,V` packet, successor/descent, and FLT7 contradiction
+remain outside this checkpoint. See `report-042.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:
