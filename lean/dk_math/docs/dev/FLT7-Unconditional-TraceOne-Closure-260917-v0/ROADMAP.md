@@ -910,6 +910,22 @@ Status: **completed — Outcome A**.  This is a prime-support theorem only; it
 does not assert rational norm coprimality, a new successor, descent, or FLT7
 closure. See `report-037.md`.
 
+## FLT7TC-005R32 — Cube-defect normal form of the square-root norm split
+
+The R32 production layer uses the common finite prime support of the two
+square-root norms and the identity `R * S = a^3` to split exponents modulo
+three.  It constructs squarefree, coprime `D1,D2` and cubic parts `U,V` with
+`R = D1 * D2^2 * U^3`, `S = D1^2 * D2 * V^3`, and
+`a = D1 * D2 * U * V`.  The defect divides `gcd R S`, inherits the R31
+`q ≡ ±1 (mod 7)` support, and satisfies the required height inequality.
+
+The current square-refinement packet is exported through the FLT7 facade as
+`DirectOrbitCubeDefectPacket`.
+
+Status: **completed — Outcome B**.  The normal form is kernel-checked, but no
+new coprimality, defect-triviality, contradiction, or FLT7 closure follows at
+this checkpoint. See `report-038.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:

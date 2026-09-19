@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-032.md
 - report-034.md
 - report-037.md
@@ -37,6 +38,7 @@ Construct positive naturals D1,D2,U,V satisfying
     a = D1 * D2 * U * V
 
 with:
+
 - D1 and D2 squarefree;
 - Nat.Coprime D1 D2;
 - every prime divisor of D1 or D2 is congruent to 1 or 6 modulo 7;
@@ -62,6 +64,7 @@ then for every prime q,
     3 * a.factorization q.
 
 Use:
+
 - Nat.factorization_mul for nonzero factors;
 - Nat.factorization_pow.
 
@@ -136,6 +139,7 @@ is welcome if the statement is clean.
 Use the valuation ledger from Part A.
 
 For every prime q:
+
 - if R exponent is 1 mod 3, S exponent is 2 mod 3;
 - if R exponent is 2 mod 3, S exponent is 1 mod 3;
 - if R exponent is 0 mod 3, S exponent is 0 mod 3.
@@ -270,6 +274,7 @@ lemma.
 After the packet is green, inspect current direct provenance only.
 
 Ask whether any existing theorem forces:
+
 - D1=D2=1;
 - a prime divisor of a outside the decomposition;
 - a residue class of a incompatible with
@@ -366,6 +371,7 @@ At minimum:
 If a generic CubeDefect module is created, build and axiom-audit it directly.
 
 Print axioms for:
+
 - valuation ledger;
 - off-exception cube-multiplicity theorem;
 - both defect decompositions;

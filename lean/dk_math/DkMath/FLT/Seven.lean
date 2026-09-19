@@ -49,6 +49,7 @@ import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicSquareIdealSupport
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicSquareGaloisSupport
 import DkMath.FLT.Seven.SevenRealCubicResidueCriterion
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicResidueSupport
+import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicCubeDefect
 import DkMath.FLT.Seven.FirstCoordinateRemainders
 import DkMath.FLT.Seven.RoutingSevenPivot
 import DkMath.FLT.Seven.FirstCoordinateRoutingAudit
