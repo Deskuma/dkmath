@@ -830,7 +830,7 @@ positive nor totally negative.  This is a structural mixed-sign obstruction;
 it is not an FLT7 contradiction and does not provide the missing successor or
 descent theorem.
 
-Status: **completed — Outcome A**. See `report-033.md`.
+Status: **completed — Outcome B**. The square-weighted state is green, `c0` is a non-square mixed-sign norm-one unit, and the repeated power-refinement route is frozen. No FLT7 contradiction is claimed. See `report-033.md`.
 
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
