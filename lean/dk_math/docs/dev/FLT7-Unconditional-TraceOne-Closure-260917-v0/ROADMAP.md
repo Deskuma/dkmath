@@ -705,6 +705,21 @@ Status: **completed — Outcome A**.  This remains a current-provenance
 smaller-norm packet only; no successor state, infinite descent, or
 unconditional FLT7 closure is claimed.  See `report-027.md`.
 
+## FLT7TC-005R22 — Smaller-norm successor audit and cyclic twisted state
+
+The smaller-norm packet now exposes the exact complement identity
+`natAbs(norm gapRoot) * natAbs(norm quotientRoot) = a^6`.  All three rotated
+gap edges are expressed with one common theta factor and retained unit
+coefficients; telescoping gives an exact cyclic twisted seventh-power
+equation.  These facts are packaged as `DirectRealCubicTwistedSeventhState`,
+with root equal to the extracted gap root and a strict measure comparison to
+the original summit gap root.
+
+Status: **completed — Outcome B**.  The state is not yet self-similar: exact
+theta-depth, quotient coprimality/localization, and a repeated theta-free
+seventh-power split are the first missing bridge.  No integer summit
+reconstruction or infinite descent is claimed.  See `report-028.md`.
+
 ## FLT7TC-005R24 — Generic homogeneous power quotient kernel
 
 Instruction-024 generalized the existing difference-of-powers quotient without

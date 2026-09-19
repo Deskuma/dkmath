@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-027.md
 - PrimeTraceOneDirectRealCubicOrbitGapHeight.lean
 - PrimeTraceOneDirectRealCubicOrbitPowerSplit.lean
@@ -61,6 +62,7 @@ Take absolute norms in:
       (thetaSevenUnit^(1+2*k) * (a : O)^2)^7.
 
 Use:
+
 - natAbs(norm eta) = 1;
 - natAbs(norm nu) = 1;
 - natAbs(norm orbitUnit01) = 1;
@@ -281,6 +283,7 @@ noncircular well-founded descent from the current counterexample provenance.
 ## Preferred implementation
 
 Production only for facts that are clearly stable:
+
 - exact norm complement G*Q=a^6;
 - three rotated gap equations;
 - telescoping twisted seventh-power equation;
@@ -328,6 +331,7 @@ At minimum:
     git diff --check
 
 Print axioms for:
+
 - G*Q=a^6;
 - each rotated gap equation;
 - twisted seventh-power equation;
