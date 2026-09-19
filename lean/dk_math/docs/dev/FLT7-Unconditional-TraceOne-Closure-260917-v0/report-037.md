@@ -88,3 +88,13 @@ The axiom audits report only the expected foundational axioms
 The new production and scratch files contain no `sorry`, `admit`, or
 `unsafe`.  `git diff --check` and explicit `git diff --no-index --check`
 checks for the new files produced no whitespace diagnostics.
+
+
+## Outcome
+
+**Outcome A — COMMON NORM PRIME RESIDUE SUPPORT q ≡ ±1 (mod 7) GREEN.**
+
+The neutral finite-field primitive-root/Frobenius criterion and its
+current-provenance residue-field instantiation are kernel-checked. Every prime
+dividing the gcd of the two square-root norms is congruent to 1 or 6 modulo
+7. No gcd-equals-one, successor, descent, or FLT7 contradiction is claimed.
