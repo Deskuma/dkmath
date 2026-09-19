@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-030.md
 - PrimeTraceOneDirectRealCubicLocalClass.lean
 - PrimeTraceOneDirectRealCubicTwistClass.lean
@@ -60,6 +61,7 @@ rewriting of 42*k and 32.
 
 Do not confuse this with the already proved projective-log reduction
 e = 4 in ZMod 7. These are different exponent reductions:
+
 - projective additive class uses mod 7;
 - multiplicative nonzero residue uses mod 6.
 
@@ -74,6 +76,7 @@ For every current DirectOrbitPowerSplitPacket s, prove:
         (directOrbitTwistedCoeff0 s)⁻¹ : SevenRealCubicInt)) = 2.
 
 Use:
+
 - coeff1 = P^e * rotateUnit(coeff0);
 - thetaResidue_rotateEquiv;
 - thetaResidue of a unit inverse;
@@ -294,6 +297,7 @@ At minimum:
     git diff --check
 
 Print axioms for:
+
 - pair-axis scalar residue;
 - coefficient-ratio scalar residue;
 - coefficient-difference theta-nondivisibility;

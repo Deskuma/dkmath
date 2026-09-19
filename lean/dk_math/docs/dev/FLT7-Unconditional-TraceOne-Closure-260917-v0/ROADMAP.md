@@ -762,6 +762,32 @@ because it is not part of the quotient/localization kernel.  Weighted successor
 divisibility, iterable descent, and unconditional FLT7 closure remain outside
 this checkpoint.  See `report-024-generalization.md` and `report-030.md`.
 
+## FLT7TC-005R25 — Weighted-gap nondivisibility and ordinary self-similarity closeout
+
+Instruction-031 computes the scalar theta residue of the transport unit
+`directOrbitPairAxisUnitOne` as `4`.  For the transport exponent
+`32 + 42*k`, the multiplicative residue-field calculation is carried out
+modulo `6`, giving `4^(32+42*k) = 2`; this is kept distinct from the
+projective-log exponent reduction modulo `7`.
+
+For every current `DirectOrbitPowerSplitPacket`, the coefficient ratio has
+scalar residue `2`.  Consequently the coefficient difference is not divisible
+by `eisensteinAxis`, while the rotated root gap is divisible by it and the
+root seventh power is not.  The weighted remainder is therefore not
+theta-divisible.  The exact weighted difference identity then proves that the
+full weighted difference is not divisible by the ordinary root gap.
+
+The production API exposes both
+`directOrbit_weighted_difference_not_gap_dvd` and the explicit
+`directOrbit_no_ordinary_homogeneous_restart` corollary, plus the optional
+unit-gauge obstruction from the R24 projective classes.
+
+Status: **completed — Outcome B**.  The R22/R23 smaller twisted state is not
+self-similar under the ordinary homogeneous seventh-power gap extraction
+mechanism.  This is a structural obstruction, not an FLT7 contradiction;
+weighted/twisted factorization and alternate successor constructions remain
+separate research choices.  See `report-031.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:
