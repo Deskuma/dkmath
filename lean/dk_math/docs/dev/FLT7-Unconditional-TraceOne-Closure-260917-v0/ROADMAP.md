@@ -63,7 +63,9 @@ to invoke existing lemmas such as
 Do not claim a contradiction in this checkpoint unless it follows immediately
 from already checked packet data.
 
-Status: **completed — Outcome A**.
+Status: **completed — Outcome B**.  Two distinct primes above a common norm
+prime are green; the field-level Galois and complete-splitting bridge is the
+next checkpoint.  See `report-035.md`.
 
 ## FLT7TC-002 — Generic-parent to specialized p=7 coordinate bridge
 
@@ -877,6 +879,23 @@ does not establish complete splitting or residue-degree one, and does not
 close FLT7.  See `report-035.md`.
 
 Status: **completed — Outcome B**. Two distinct primes above a supplied common norm prime are kernel-checked; the field-level Galois / complete-splitting bridge is the next frontier. See `report-035.md`.
+
+## FLT7TC-005R30 — Real-cubic Galois bridge and complete splitting
+
+The R30 production layer extends the actual ring-of-integers rotation through
+the fraction field, proves the cubic splitting-field and Galois instances,
+and instantiates the Mathlib prime-decomposition identity for
+`ℤ ⊂ 𝓞 SevenRealCubic.Field`.  The unique prime above `(7)` is exposed with
+`primesOver.ncard = 1`; the current R29 norm-prime hypotheses separately
+exclude `7` from either square-root norm.  For every supplied common norm
+prime, the R29 lower bound together with Galois degree three yields exactly
+three primes over the rational prime and ramification/inertia indices equal
+to one.
+
+Status: **completed — Outcome B**. The complete-splitting theorem is a
+common-norm-prime result.  The audit for a residue criterion
+`q ≡ ±1 (mod 7)` and any FLT7 endpoint remains outside this checkpoint. See
+`report-036.md`.
 
 ## FLT7TC-006 — Primitive FLT7 branch closure
 

@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-035.md
 - PrimeTraceOneDirectRealCubicSquareIdealSupport.lean
 - SevenRealCubicNumberField.lean
@@ -24,6 +25,7 @@ Do not attempt q ≡ ±1 mod 7 until complete splitting is green.
 ## Part A — correct R29 status
 
 R29 is Outcome B, not Outcome A:
+
 - two distinct primes above q are green;
 - complete splitting was not yet proved.
 
@@ -70,6 +72,7 @@ For every prime/maximal ideal P lying over (7),
     P = P7.
 
 Preferred proof:
+
 - P lies over (7), hence 7 belongs to P;
 - equivalently P divides the principal ideal (7);
 - use (7)=P7^3 and P prime to show P divides P7;
@@ -160,6 +163,7 @@ Let:
     theta2 := fieldRotateEquiv theta1.
 
 Prove:
+
 - polynomialQ.eval₂ ... thetai = 0 for i=0,1,2;
 - theta0, theta1, theta2 are pairwise distinct.
 
@@ -174,6 +178,7 @@ Since:
 prove that polynomialQ splits over Field.
 
 Any clean Mathlib route is acceptable:
+
 - explicit factorization into the three linear factors;
 - root-cardinality plus monicity/natDegree;
 - a splitting-field constructor.
@@ -258,6 +263,7 @@ After complete splitting is green, audit the cleanest path to:
     q ≡ 1 or -1 (mod 7).
 
 Possible future routes:
+
 1. identify Field as the maximal real subfield of Q(zeta_7) and use cyclotomic
    Frobenius/order;
 2. use the explicit cubic polynomial modulo q and Kummer-Dedekind;
@@ -332,6 +338,7 @@ At minimum:
 If a separate SevenRealCubicGalois module is created, build/audit it directly.
 
 Print axioms for:
+
 - unique prime above seven;
 - seven exclusion from both square-root norms;
 - fieldRotateEquiv;
