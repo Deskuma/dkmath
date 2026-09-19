@@ -42,6 +42,7 @@ import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicSuccessorAudit
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicTwistClass
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicLocalClass
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicWeightedGapObstruction
+import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicSquareRefinement
 import DkMath.FLT.Seven.FirstCoordinateRemainders
 import DkMath.FLT.Seven.RoutingSevenPivot
 import DkMath.FLT.Seven.FirstCoordinateRoutingAudit

@@ -788,6 +788,26 @@ mechanism.  This is a structural obstruction, not an FLT7 contradiction;
 weighted/twisted factorization and alternate successor constructions remain
 separate research choices.  See `report-031.md`.
 
+## FLT7TC-005R26 — Coprime square refinement beneath the power split
+
+Instruction-032 returns to the exact element product before norms.  For every
+current `DirectOrbitPowerSplitPacket`, the unit factors are removed from the
+core coprimality statement, and `IsCoprime.pow_iff` proves coprimality of the
+two extracted seventh roots.  The R24 projective classes make the unit defect
+between the root product and the scalar square a seventh power.  Seventh-power
+equality is transported through the existing real embedding, where odd-power
+injectivity is valid, and then returned to the integral model.
+
+The existing generic associated-power splitter at exponent two supplies
+square roots and explicit unit-times-square equations.  The norm consequences
+are `G=R^2`, `Q=S^2`, `R*S=a^3`, together with `0<R` and `R^2<a` from the R21
+strict bound.  No norm-coprimality inference, weighted quotient, successor
+state, or descent claim is made.
+
+Status: **completed — Outcome A**.  The element-level square refinement is
+kernel-checked, while the successor bridge and unconditional FLT7 closure
+remain open.  See `report-032.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:

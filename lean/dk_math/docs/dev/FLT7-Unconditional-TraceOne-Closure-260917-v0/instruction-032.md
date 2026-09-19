@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-025.md
 - report-027.md
 - report-030.md
@@ -55,6 +56,7 @@ prove:
     IsCoprime gapRoot quotientRoot.
 
 Preferred proof:
+
 - either use an existing IsCoprime.of_pow / pow API;
 - or use the prime-divisor criterion:
   a common prime divisor of gapRoot and quotientRoot divides both cores,
@@ -257,6 +259,7 @@ Ask whether the new equations
     R*S = a^3
 
 combine with any existing real-cubic/Galois structure to produce:
+
 - a canonical smaller arithmetic state;
 - an integer factorization of a;
 - a contradiction with the known unit classes;
@@ -275,6 +278,7 @@ Do NOT assume element-level coprimality implies rational norm coprimality:
 a rational prime may split into distinct prime ideals and divide both norms.
 
 Record:
+
 - 7 cannot divide G or Q because gapRoot and quotientRoot are theta-units;
 - for q != 7, classify whether a common rational prime can only arise from
   split prime ideals in the cyclic cubic field.
@@ -340,6 +344,7 @@ At minimum:
     git diff --check
 
 Print axioms for:
+
 - extracted-root coprimality;
 - unit-defect projectiveLog zero;
 - unit-defect seventh-power witness;
