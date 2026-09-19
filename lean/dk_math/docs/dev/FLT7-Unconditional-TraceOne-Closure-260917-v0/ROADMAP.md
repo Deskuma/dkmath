@@ -988,6 +988,21 @@ facade, API audit, axiom audit, and R36 scratch verification pass.  The
 global canonical `C,U,V` packet, successor/descent, and FLT7 contradiction
 remain outside this checkpoint. See `report-042.md`.
 
+## FLT7TC-005R37 — Canonical gcd cubic split
+
+The R37 production layer classifies every prime in the finite support of `a`
+into common, gap-only, or quotient-only support.  Using the R36 exponent
+transport and the cube ledger, it constructs the canonical products
+`C,U,V` and proves
+`R = C*U^3`, `S = C^2*V^3`, and `a = C*U*V`.  The common product is identified
+with `gcd R S`; the three products are pairwise coprime, `C ∣ a`, common
+primes retain the existing mod-7 residue support, and the strict height
+`C*U^5 < V` is packaged in `DirectOrbitCanonicalCommonFactorPacket`.
+
+Status: **completed — Outcome B**.  The production module, facade, API/axiom
+audits, and R37 scratch verification pass.  No successor, descent, or FLT7
+contradiction is claimed. See `report-043.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:

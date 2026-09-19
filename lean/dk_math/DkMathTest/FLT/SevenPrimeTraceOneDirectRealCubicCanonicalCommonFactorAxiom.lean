@@ -9,6 +9,8 @@ import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicCanonicalCommonFactor
 
 open DkMath.FLT.Seven
 
+#print axioms SevenRealCubic.directOrbitCanonicalCommonFactor_prime_exponent_table
+#print axioms SevenRealCubic.directOrbitSquareRefinement_canonicalCommonFactor_nonempty
 #print axioms SevenRealCubic.directOrbitCanonicalCommonFactor_scalar_ideal_multiplicity
 #print axioms SevenRealCubic.directOrbitCanonicalCommonFactor_allocated_ideal_multiplicities
 #print axioms SevenRealCubic.directOrbitCanonicalCommonFactor_prime_absNorm

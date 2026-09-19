@@ -14,12 +14,521 @@ namespace DkMath.FLT.Seven
 noncomputable section
 
 open SevenRealCubicInt
+open scoped BigOperators
 open scoped NumberField Pointwise
 
 set_option linter.style.longLine false
 set_option linter.style.setOption false
 
+def directOrbitCanonicalCommonFactor_commonSupport (R S a : ℕ) : Finset ℕ :=
+  a.primeFactors.filter (fun q => q ∣ R ∧ q ∣ S)
+
+def directOrbitCanonicalCommonFactor_gapOnlySupport (R S a : ℕ) : Finset ℕ :=
+  a.primeFactors.filter (fun q => q ∣ R ∧ ¬q ∣ S)
+
+def directOrbitCanonicalCommonFactor_quotientOnlySupport (R S a : ℕ) : Finset ℕ :=
+  a.primeFactors.filter (fun q => ¬q ∣ R ∧ q ∣ S)
+
+def directOrbitCanonicalCommonFactor_commonProduct (R S a : ℕ) : ℕ :=
+  ∏ q ∈ directOrbitCanonicalCommonFactor_commonSupport R S a,
+    q ^ a.factorization q
+
+def directOrbitCanonicalCommonFactor_gapRoot (R S a : ℕ) : ℕ :=
+  ∏ q ∈ directOrbitCanonicalCommonFactor_gapOnlySupport R S a,
+    q ^ a.factorization q
+
+def directOrbitCanonicalCommonFactor_quotientRoot (R S a : ℕ) : ℕ :=
+  ∏ q ∈ directOrbitCanonicalCommonFactor_quotientOnlySupport R S a,
+    q ^ a.factorization q
+
+structure DirectOrbitCanonicalCommonFactorPacket
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : PrimitiveCounterexampleRamifiedProvenance source}
+    (p : DirectRealCubicRootPacket source r) where
+  squareRefinement : DirectOrbitSquareRefinementPacket p
+  c : ℕ
+  u : ℕ
+  v : ℕ
+  c_pos : 0 < c
+  u_pos : 0 < u
+  v_pos : 0 < v
+  c_eq_gcd : c = Nat.gcd
+    (Int.natAbs (norm squareRefinement.gapSquareRoot))
+    (Int.natAbs (norm squareRefinement.quotientSquareRoot))
+  c_dvd_a : c ∣ squareRefinement.powerSplit.gapSplit.a
+  gapNorm_eq : Int.natAbs (norm squareRefinement.gapSquareRoot) = c * u ^ 3
+  quotientNorm_eq :
+    Int.natAbs (norm squareRefinement.quotientSquareRoot) = c ^ 2 * v ^ 3
+  unitPart_eq : squareRefinement.powerSplit.gapSplit.a = c * u * v
+  c_u_coprime : Nat.Coprime c u
+  c_v_coprime : Nat.Coprime c v
+  u_v_coprime : Nat.Coprime u v
+  c_prime_support : ∀ q, q.Prime → q ∣ c → exceptionalModSeven q
+  height : c * u ^ 5 < v
+
 namespace SevenRealCubic
+
+private theorem canonicalCommonFactor_support_prime
+    {_R _S a : ℕ} {q : ℕ} (hq : q ∈ a.primeFactors) : q.Prime :=
+  Nat.prime_of_mem_primeFactors hq
+
+private theorem canonicalCommonFactor_factorization_prime_power
+    {p q e : ℕ} (hp : p.Prime) :
+    (p ^ e).factorization q = if p = q then e else 0 := by
+  rw [Nat.Prime.factorization_pow hp]
+  by_cases h : p = q <;> simp [h]
+
+private theorem canonicalCommonFactor_product_factorization
+    {_R _S a : ℕ} {s : Finset ℕ} (hs : ∀ q ∈ s, q.Prime) (q : ℕ) :
+    (∏ p ∈ s, p ^ a.factorization p).factorization q =
+      if q ∈ s then a.factorization q else 0 := by
+  classical
+  have hne : ∀ p ∈ s, p ^ a.factorization p ≠ 0 := by
+    intro p hp
+    exact pow_ne_zero _ (hs p hp).ne_zero
+  rw [Nat.factorization_prod_apply hne]
+  by_cases hq : q ∈ s
+  · rw [Finset.sum_eq_single_of_mem q hq]
+    · rw [canonicalCommonFactor_factorization_prime_power (hs q hq)]
+      simp [hq]
+    · intro b hb hneq
+      rw [canonicalCommonFactor_factorization_prime_power (hs b hb)]
+      simp [hneq]
+  · rw [Finset.sum_eq_zero]
+    · simp [hq]
+    · intro b hb
+      rw [canonicalCommonFactor_factorization_prime_power (hs b hb)]
+      have hneq : b ≠ q := by
+        intro heq
+        apply hq
+        simpa [heq] using hb
+      simp [hneq]
+
+private theorem canonicalCommonFactor_prime_support_partition
+    {R S a : ℕ} (ha : a ≠ 0) (hRS : R * S = a ^ 3)
+    {q : ℕ} (hq : q ∈ a.primeFactors) :
+    q ∈ directOrbitCanonicalCommonFactor_commonSupport R S a ∨
+      q ∈ directOrbitCanonicalCommonFactor_gapOnlySupport R S a ∨
+      q ∈ directOrbitCanonicalCommonFactor_quotientOnlySupport R S a := by
+  have hqa : q ∣ a :=
+    (Nat.mem_primeFactors_of_ne_zero ha).mp hq |>.2
+  have hqprime : q.Prime := Nat.prime_of_mem_primeFactors hq
+  have hqprod : q ∣ R * S := by
+    rw [hRS]
+    exact dvd_pow hqa (by decide)
+  rcases hqprime.dvd_mul.mp hqprod with hqR | hqS
+  · by_cases hqS' : q ∣ S
+    · exact Or.inl (Finset.mem_filter.mpr ⟨hq, hqR, hqS'⟩)
+    · exact Or.inr (Or.inl (Finset.mem_filter.mpr ⟨hq, hqR, hqS'⟩))
+  · by_cases hqR' : q ∣ R
+    · exact Or.inl (Finset.mem_filter.mpr ⟨hq, hqR', hqS⟩)
+    · exact Or.inr (Or.inr (Finset.mem_filter.mpr ⟨hq, hqR', hqS⟩))
+
+private theorem canonicalCommonFactor_prime_support_disjoint
+    {R S a : ℕ} :
+    Disjoint (directOrbitCanonicalCommonFactor_commonSupport R S a)
+        (directOrbitCanonicalCommonFactor_gapOnlySupport R S a) ∧
+      Disjoint (directOrbitCanonicalCommonFactor_commonSupport R S a)
+        (directOrbitCanonicalCommonFactor_quotientOnlySupport R S a) ∧
+      Disjoint (directOrbitCanonicalCommonFactor_gapOnlySupport R S a)
+        (directOrbitCanonicalCommonFactor_quotientOnlySupport R S a) := by
+  refine ⟨?_, ?_, ?_⟩ <;> rw [Finset.disjoint_left] <;>
+    intro q hq1 hq2
+  · exact (Finset.mem_filter.mp hq2).2.2 (Finset.mem_filter.mp hq1).2.2
+  · exact (Finset.mem_filter.mp hq2).2.1 (Finset.mem_filter.mp hq1).2.1
+  · exact (Finset.mem_filter.mp hq1).2.2 (Finset.mem_filter.mp hq2).2.2
+
+private theorem canonicalCommonFactor_prime_support_equalities
+    {R S a : ℕ} (hR : R ≠ 0) (hS : S ≠ 0) (ha : a ≠ 0)
+    (hRS : R * S = a ^ 3) :
+    R.primeFactors = a.primeFactors.filter (fun q => q ∣ R) ∧
+      S.primeFactors = a.primeFactors.filter (fun q => q ∣ S) := by
+  have hRpf : R.primeFactors = a.primeFactors.filter (fun q => q ∣ R) := by
+    ext q
+    simp only [Nat.mem_primeFactors_of_ne_zero hR,
+      Nat.mem_primeFactors_of_ne_zero ha, Finset.mem_filter]
+    constructor
+    · rintro ⟨hqprime, hqR⟩
+      have hqpow : q ∣ R * S := dvd_mul_of_dvd_left hqR S
+      have hqa : q ∣ a := hqprime.dvd_of_dvd_pow (by simpa [hRS] using hqpow)
+      exact ⟨⟨hqprime, hqa⟩, hqR⟩
+    · rintro ⟨⟨hqprime, _⟩, hqR⟩
+      exact ⟨hqprime, hqR⟩
+  have hSpf : S.primeFactors = a.primeFactors.filter (fun q => q ∣ S) := by
+    ext q
+    simp only [Nat.mem_primeFactors_of_ne_zero hS,
+      Nat.mem_primeFactors_of_ne_zero ha, Finset.mem_filter]
+    constructor
+    · rintro ⟨hqprime, hqS⟩
+      have hqpow : q ∣ R * S := dvd_mul_of_dvd_right hqS R
+      have hqa : q ∣ a := hqprime.dvd_of_dvd_pow (by simpa [hRS] using hqpow)
+      exact ⟨⟨hqprime, hqa⟩, hqS⟩
+    · rintro ⟨⟨hqprime, _⟩, hqS⟩
+      exact ⟨hqprime, hqS⟩
+  exact ⟨hRpf, hSpf⟩
+
+private theorem canonicalCommonFactor_three_case_exponents
+    {R S a : ℕ} (hledger : ∀ q, R.factorization q + S.factorization q =
+      3 * a.factorization q)
+    (hcommon : ∀ {q}, q.Prime → q ∣ R → q ∣ S →
+      R.factorization q = a.factorization q ∧
+        S.factorization q = 2 * a.factorization q)
+    {q : ℕ} (hq : q.Prime) (_hqa : q ∣ a) :
+    (q ∣ R ∧ q ∣ S →
+      R.factorization q = a.factorization q ∧
+        S.factorization q = 2 * a.factorization q) ∧
+    (q ∣ R ∧ ¬q ∣ S →
+      R.factorization q = 3 * a.factorization q ∧
+        S.factorization q = 0) ∧
+    (¬q ∣ R ∧ q ∣ S →
+      R.factorization q = 0 ∧
+        S.factorization q = 3 * a.factorization q) := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro hqRS
+    exact hcommon hq hqRS.1 hqRS.2
+  · intro hqR
+    have hzero : S.factorization q = 0 :=
+      Nat.factorization_eq_zero_of_not_dvd hqR.2
+    refine ⟨?_, hzero⟩
+    have hsum := hledger q
+    rw [hzero] at hsum
+    omega
+  · intro hqS
+    have hzero : R.factorization q = 0 :=
+      Nat.factorization_eq_zero_of_not_dvd hqS.1
+    refine ⟨hzero, ?_⟩
+    have hsum := hledger q
+    rw [hzero] at hsum
+    omega
+
+private theorem canonicalCommonFactor_reconstruction
+    {R S a : ℕ} (hR : R ≠ 0) (hS : S ≠ 0) (ha : a ≠ 0)
+    (hRS : R * S = a ^ 3)
+    (htable : ∀ {q}, q.Prime → q ∣ a →
+      (q ∣ R ∧ q ∣ S →
+        R.factorization q = a.factorization q ∧
+          S.factorization q = 2 * a.factorization q) ∧
+      (q ∣ R ∧ ¬q ∣ S →
+        R.factorization q = 3 * a.factorization q ∧
+          S.factorization q = 0) ∧
+      (¬q ∣ R ∧ q ∣ S →
+        R.factorization q = 0 ∧
+          S.factorization q = 3 * a.factorization q)) :
+    R = directOrbitCanonicalCommonFactor_commonProduct R S a *
+        directOrbitCanonicalCommonFactor_gapRoot R S a ^ 3 ∧
+      S = directOrbitCanonicalCommonFactor_commonProduct R S a ^ 2 *
+        directOrbitCanonicalCommonFactor_quotientRoot R S a ^ 3 ∧
+      a = directOrbitCanonicalCommonFactor_commonProduct R S a *
+        directOrbitCanonicalCommonFactor_gapRoot R S a *
+        directOrbitCanonicalCommonFactor_quotientRoot R S a := by
+  classical
+  have hRpf := canonicalCommonFactor_prime_support_equalities hR hS ha hRS |>.1
+  have hSpf := canonicalCommonFactor_prime_support_equalities hR hS ha hRS |>.2
+  have hcommon_filter :
+      (a.primeFactors.filter (fun q => q ∣ R)).filter (fun q => q ∣ S) =
+        directOrbitCanonicalCommonFactor_commonSupport R S a := by
+    ext q
+    simp [directOrbitCanonicalCommonFactor_commonSupport, and_assoc,
+      and_left_comm, and_comm]
+  have hgap_filter :
+      (a.primeFactors.filter (fun q => q ∣ R)).filter (fun q => ¬q ∣ S) =
+        directOrbitCanonicalCommonFactor_gapOnlySupport R S a := by
+    ext q
+    simp [directOrbitCanonicalCommonFactor_gapOnlySupport, and_assoc,
+      and_left_comm, and_comm]
+  have hRprod :
+      R = ∏ q ∈ a.primeFactors.filter (fun q => q ∣ R),
+        q ^ R.factorization q := by
+    rw [← hRpf]
+    exact Nat.prod_primeFactors_pow_factorization hR
+  have hSprod :
+      S = ∏ q ∈ a.primeFactors.filter (fun q => q ∣ S),
+        q ^ S.factorization q := by
+    rw [← hSpf]
+    exact Nat.prod_primeFactors_pow_factorization hS
+  have hRsplit :
+      (∏ q ∈ a.primeFactors.filter (fun q => q ∣ R),
+        q ^ R.factorization q) =
+        (∏ q ∈ directOrbitCanonicalCommonFactor_commonSupport R S a,
+          q ^ R.factorization q) *
+        (∏ q ∈ directOrbitCanonicalCommonFactor_gapOnlySupport R S a,
+          q ^ R.factorization q) := by
+    rw [← Finset.prod_filter_mul_prod_filter_not
+      (a.primeFactors.filter (fun q => q ∣ R))
+      (fun q : ℕ => q ∣ S) (fun q => q ^ R.factorization q)]
+    rw [hcommon_filter]
+    have hgap_filter' :
+        (a.primeFactors.filter (fun q => q ∣ R)).filter (fun q => ¬q ∣ S) =
+          directOrbitCanonicalCommonFactor_gapOnlySupport R S a := by
+      ext q
+      simp [directOrbitCanonicalCommonFactor_gapOnlySupport, and_assoc,
+        and_left_comm, and_comm]
+    rw [hgap_filter']
+  have hSsplit :
+      (∏ q ∈ a.primeFactors.filter (fun q => q ∣ S),
+        q ^ S.factorization q) =
+        (∏ q ∈ directOrbitCanonicalCommonFactor_commonSupport R S a,
+          q ^ S.factorization q) *
+        (∏ q ∈ directOrbitCanonicalCommonFactor_quotientOnlySupport R S a,
+          q ^ S.factorization q) := by
+    rw [← Finset.prod_filter_mul_prod_filter_not
+      (a.primeFactors.filter (fun q => q ∣ S))
+      (fun q : ℕ => q ∣ R) (fun q => q ^ S.factorization q)]
+    have hcommon_filter' :
+        (a.primeFactors.filter (fun q => q ∣ S)).filter (fun q => q ∣ R) =
+          directOrbitCanonicalCommonFactor_commonSupport R S a := by
+      ext q
+      simp [directOrbitCanonicalCommonFactor_commonSupport, and_assoc,
+        and_left_comm, and_comm]
+    have hquot_filter' :
+        (a.primeFactors.filter (fun q => q ∣ S)).filter (fun q => ¬q ∣ R) =
+          directOrbitCanonicalCommonFactor_quotientOnlySupport R S a := by
+      ext q
+      simp [directOrbitCanonicalCommonFactor_quotientOnlySupport, and_assoc,
+        and_left_comm, and_comm]
+    rw [hcommon_filter', hquot_filter']
+  have hRcommon :
+      (∏ q ∈ directOrbitCanonicalCommonFactor_commonSupport R S a,
+        q ^ R.factorization q) =
+        directOrbitCanonicalCommonFactor_commonProduct R S a := by
+    apply Finset.prod_congr rfl
+    intro q hq
+    have hq0 := Finset.mem_filter.mp hq
+    have hqprime := Nat.prime_of_mem_primeFactors hq0.1
+    have hqa := (Nat.mem_primeFactors_of_ne_zero ha).mp hq0.1 |>.2
+    exact congrArg (fun e => q ^ e)
+      (htable hqprime hqa |>.1 hq0.2 |>.1)
+  have hRgap :
+      (∏ q ∈ directOrbitCanonicalCommonFactor_gapOnlySupport R S a,
+        q ^ R.factorization q) =
+        directOrbitCanonicalCommonFactor_gapRoot R S a ^ 3 := by
+    unfold directOrbitCanonicalCommonFactor_gapRoot
+    rw [← Finset.prod_pow]
+    apply Finset.prod_congr rfl
+    intro q hq
+    have hq0 := Finset.mem_filter.mp hq
+    have hqprime := Nat.prime_of_mem_primeFactors hq0.1
+    have hqa := (Nat.mem_primeFactors_of_ne_zero ha).mp hq0.1 |>.2
+    rw [htable hqprime hqa |>.2.1 hq0.2 |>.1]
+    rw [← pow_mul]
+    exact congrArg (fun n => q ^ n) (Nat.mul_comm _ _)
+  have hScommon :
+      (∏ q ∈ directOrbitCanonicalCommonFactor_commonSupport R S a,
+        q ^ S.factorization q) =
+        directOrbitCanonicalCommonFactor_commonProduct R S a ^ 2 := by
+    unfold directOrbitCanonicalCommonFactor_commonProduct
+    rw [← Finset.prod_pow]
+    apply Finset.prod_congr rfl
+    intro q hq
+    have hq0 := Finset.mem_filter.mp hq
+    have hqprime := Nat.prime_of_mem_primeFactors hq0.1
+    have hqa := (Nat.mem_primeFactors_of_ne_zero ha).mp hq0.1 |>.2
+    rw [htable hqprime hqa |>.1 hq0.2 |>.2]
+    rw [← pow_mul]
+    exact congrArg (fun n => q ^ n) (Nat.mul_comm _ _)
+  have hSquoter :
+      (∏ q ∈ directOrbitCanonicalCommonFactor_quotientOnlySupport R S a,
+        q ^ S.factorization q) =
+        directOrbitCanonicalCommonFactor_quotientRoot R S a ^ 3 := by
+    unfold directOrbitCanonicalCommonFactor_quotientRoot
+    rw [← Finset.prod_pow]
+    apply Finset.prod_congr rfl
+    intro q hq
+    have hq0 := Finset.mem_filter.mp hq
+    have hqprime := Nat.prime_of_mem_primeFactors hq0.1
+    have hqa := (Nat.mem_primeFactors_of_ne_zero ha).mp hq0.1 |>.2
+    rw [htable hqprime hqa |>.2.2 hq0.2 |>.2]
+    rw [← pow_mul]
+    exact congrArg (fun n => q ^ n) (Nat.mul_comm _ _)
+  have hR_eq : R = directOrbitCanonicalCommonFactor_commonProduct R S a *
+      directOrbitCanonicalCommonFactor_gapRoot R S a ^ 3 := by
+    calc
+      R = ∏ q ∈ a.primeFactors.filter (fun q => q ∣ R),
+          q ^ R.factorization q := hRprod
+      _ = _ := hRsplit
+      _ = _ := by rw [hRcommon, hRgap]
+  have hS_eq : S = directOrbitCanonicalCommonFactor_commonProduct R S a ^ 2 *
+      directOrbitCanonicalCommonFactor_quotientRoot R S a ^ 3 := by
+    calc
+      S = ∏ q ∈ a.primeFactors.filter (fun q => q ∣ S),
+          q ^ S.factorization q := hSprod
+      _ = _ := hSsplit
+      _ = _ := by rw [hScommon, hSquoter]
+  have hA_Rsplit :
+      (∏ q ∈ directOrbitCanonicalCommonFactor_commonSupport R S a,
+        q ^ a.factorization q) *
+        (∏ q ∈ directOrbitCanonicalCommonFactor_gapOnlySupport R S a,
+          q ^ a.factorization q) =
+        ∏ q ∈ a.primeFactors.filter (fun q => q ∣ R),
+          q ^ a.factorization q := by
+    rw [← Finset.prod_filter_mul_prod_filter_not
+      (a.primeFactors.filter (fun q => q ∣ R))
+      (fun q : ℕ => q ∣ S) (fun q => q ^ a.factorization q)]
+    rw [hcommon_filter]
+    have hgap_filter' :
+        (a.primeFactors.filter (fun q => q ∣ R)).filter (fun q => ¬q ∣ S) =
+          directOrbitCanonicalCommonFactor_gapOnlySupport R S a := by
+      ext q
+      simp [directOrbitCanonicalCommonFactor_gapOnlySupport, and_assoc,
+        and_left_comm, and_comm]
+    rw [hgap_filter']
+  have hnotR_filter :
+      a.primeFactors.filter (fun q => ¬q ∣ R) =
+        directOrbitCanonicalCommonFactor_quotientOnlySupport R S a := by
+    ext q
+    change q ∈ a.primeFactors.filter (fun q => ¬q ∣ R) ↔
+      q ∈ a.primeFactors.filter (fun q => ¬q ∣ R ∧ q ∣ S)
+    constructor
+    · intro hq
+      have hq0 := Finset.mem_filter.mp hq
+      have hqprime := Nat.prime_of_mem_primeFactors hq0.1
+      have hqprod : q ∣ R * S := by
+        have hqa := (Nat.mem_primeFactors_of_ne_zero ha).mp hq0.1 |>.2
+        rw [hRS]
+        exact dvd_pow hqa (by decide)
+      rcases hqprime.dvd_mul.mp hqprod with hqR' | hqS
+      · exact (hq0.2 hqR').elim
+      · exact Finset.mem_filter.mpr ⟨hq0.1, ⟨hq0.2, hqS⟩⟩
+    · intro hq
+      have hq0 := Finset.mem_filter.mp hq
+      exact Finset.mem_filter.mpr ⟨hq0.1, hq0.2.1⟩
+  have hApart :
+      (∏ q ∈ directOrbitCanonicalCommonFactor_commonSupport R S a,
+        q ^ a.factorization q) *
+        (∏ q ∈ directOrbitCanonicalCommonFactor_gapOnlySupport R S a,
+          q ^ a.factorization q) *
+          (∏ q ∈ directOrbitCanonicalCommonFactor_quotientOnlySupport R S a,
+            q ^ a.factorization q) =
+        ∏ q ∈ a.primeFactors, q ^ a.factorization q := by
+    calc
+      _ = (∏ q ∈ a.primeFactors.filter (fun q => q ∣ R),
+          q ^ a.factorization q) *
+          (∏ q ∈ a.primeFactors.filter (fun q => ¬q ∣ R),
+            q ^ a.factorization q) := by
+        rw [hA_Rsplit, hnotR_filter]
+      _ = _ := Finset.prod_filter_mul_prod_filter_not
+        a.primeFactors (fun q : ℕ => q ∣ R)
+        (fun q => q ^ a.factorization q)
+  have ha_eq : a = directOrbitCanonicalCommonFactor_commonProduct R S a *
+      directOrbitCanonicalCommonFactor_gapRoot R S a *
+      directOrbitCanonicalCommonFactor_quotientRoot R S a := by
+    calc
+      a = ∏ q ∈ a.primeFactors, q ^ a.factorization q :=
+        Nat.prod_primeFactors_pow_factorization ha
+      _ = _ := by simpa [directOrbitCanonicalCommonFactor_commonProduct,
+        directOrbitCanonicalCommonFactor_gapRoot,
+        directOrbitCanonicalCommonFactor_quotientRoot] using hApart.symm
+  exact ⟨hR_eq, hS_eq, ha_eq⟩
+
+private theorem canonicalCommonFactor_gcd_eq
+    {R S a : ℕ} (hR : R ≠ 0) (hS : S ≠ 0) (ha : a ≠ 0)
+    (hRS : R * S = a ^ 3)
+    (htable : ∀ {q}, q.Prime → q ∣ a →
+      (q ∣ R ∧ q ∣ S →
+        R.factorization q = a.factorization q ∧
+          S.factorization q = 2 * a.factorization q) ∧
+      (q ∣ R ∧ ¬q ∣ S →
+        R.factorization q = 3 * a.factorization q ∧ S.factorization q = 0) ∧
+      (¬q ∣ R ∧ q ∣ S →
+        R.factorization q = 0 ∧ S.factorization q = 3 * a.factorization q)) :
+    directOrbitCanonicalCommonFactor_commonProduct R S a = Nat.gcd R S := by
+  classical
+  have hsp : ∀ q ∈ directOrbitCanonicalCommonFactor_commonSupport R S a,
+      q.Prime := by
+    intro q hq
+    exact Nat.prime_of_mem_primeFactors (Finset.mem_filter.mp hq).1
+  have hcp : directOrbitCanonicalCommonFactor_commonProduct R S a ≠ 0 := by
+    unfold directOrbitCanonicalCommonFactor_commonProduct
+    exact Finset.prod_ne_zero_iff.mpr (fun q hq =>
+      pow_ne_zero _ (hsp q hq).ne_zero)
+  apply Nat.eq_of_factorization_eq hcp (Nat.gcd_ne_zero_left hR)
+  intro q
+  by_cases hq : q.Prime
+  · unfold directOrbitCanonicalCommonFactor_commonProduct
+    rw [canonicalCommonFactor_product_factorization (_R := R) (_S := S) (a := a)
+        hsp q,
+      Nat.factorization_gcd hR hS]
+    by_cases hqC : q ∈ directOrbitCanonicalCommonFactor_commonSupport R S a
+    · have hq0 := Finset.mem_filter.mp hqC
+      have hqa := (Nat.mem_primeFactors_of_ne_zero ha).mp hq0.1 |>.2
+      have htab := htable hq hqa |>.1 hq0.2
+      simp [hqC, htab.1, htab.2]
+      omega
+    · by_cases hqR : q ∣ R
+      · have hqS : ¬q ∣ S := by
+          intro hqS
+          have hqa : q ∣ a := hq.dvd_of_dvd_pow (by
+            have : q ∣ R * S := dvd_mul_of_dvd_left hqR S
+            simpa [hRS] using this)
+          exact hqC (Finset.mem_filter.mpr ⟨
+            (Nat.mem_primeFactors_of_ne_zero ha).mpr ⟨hq, hqa⟩, hqR, hqS⟩)
+        have hqa : q ∣ a := hq.dvd_of_dvd_pow (by
+          have : q ∣ R * S := dvd_mul_of_dvd_left hqR S
+          simpa [hRS] using this)
+        have htab := htable hq hqa |>.2.1 ⟨hqR, hqS⟩
+        simp [hqC, htab.1, htab.2]
+      · simp [hqC, Nat.factorization_eq_zero_of_not_dvd hqR]
+  · simp [Nat.factorization_eq_zero_of_not_prime _ hq]
+
+private theorem canonicalCommonFactor_pairwise_coprime
+    {R S a : ℕ} :
+    Nat.Coprime
+        (directOrbitCanonicalCommonFactor_commonProduct R S a)
+        (directOrbitCanonicalCommonFactor_gapRoot R S a) ∧
+      Nat.Coprime
+        (directOrbitCanonicalCommonFactor_commonProduct R S a)
+        (directOrbitCanonicalCommonFactor_quotientRoot R S a) ∧
+      Nat.Coprime
+        (directOrbitCanonicalCommonFactor_gapRoot R S a)
+        (directOrbitCanonicalCommonFactor_quotientRoot R S a) := by
+  classical
+  have hsp : ∀ q ∈ a.primeFactors, q.Prime := fun q hq =>
+    Nat.prime_of_mem_primeFactors hq
+  have hpowcop : ∀ {p q e f : ℕ}, p.Prime → q.Prime → p ≠ q →
+      Nat.Coprime (p ^ e) (q ^ f) := by
+    intro p q e f hp hq hpq
+    exact Nat.coprime_pow_primes e f hp hq hpq
+  have hdisj := canonicalCommonFactor_prime_support_disjoint (R := R) (S := S) (a := a)
+  refine ⟨?_, ?_, ?_⟩
+  · unfold directOrbitCanonicalCommonFactor_commonProduct
+    unfold directOrbitCanonicalCommonFactor_gapRoot
+    rw [Nat.coprime_prod_left_iff]
+    intro p hp
+    rw [Nat.coprime_prod_right_iff]
+    intro q hq
+    have hp0 := Finset.mem_filter.mp hp
+    have hq0 := Finset.mem_filter.mp hq
+    have hpq : p ≠ q := by
+      intro heq
+      apply (Finset.disjoint_left.mp hdisj.1) hp
+      simpa [heq] using hq
+    exact hpowcop (hsp p hp0.1) (hsp q hq0.1) hpq
+  · unfold directOrbitCanonicalCommonFactor_commonProduct
+    unfold directOrbitCanonicalCommonFactor_quotientRoot
+    rw [Nat.coprime_prod_left_iff]
+    intro p hp
+    rw [Nat.coprime_prod_right_iff]
+    intro q hq
+    have hp0 := Finset.mem_filter.mp hp
+    have hq0 := Finset.mem_filter.mp hq
+    have hpq : p ≠ q := by
+      intro heq
+      apply (Finset.disjoint_left.mp hdisj.2.1) hp
+      simpa [heq] using hq
+    exact hpowcop (hsp p hp0.1) (hsp q hq0.1) hpq
+  · unfold directOrbitCanonicalCommonFactor_gapRoot
+    unfold directOrbitCanonicalCommonFactor_quotientRoot
+    rw [Nat.coprime_prod_left_iff]
+    intro p hp
+    rw [Nat.coprime_prod_right_iff]
+    intro q hq
+    have hp0 := Finset.mem_filter.mp hp
+    have hq0 := Finset.mem_filter.mp hq
+    have hpq : p ≠ q := by
+      intro heq
+      apply (Finset.disjoint_left.mp hdisj.2.2) hp
+      simpa [heq] using hq
+    exact hpowcop (hsp p hp0.1) (hsp q hq0.1) hpq
 
 private theorem canonicalCommonFactor_scalar_ideal_map
     {x y z : ℕ} {source : CounterexamplePack x y z}
@@ -564,6 +1073,144 @@ theorem directOrbitCanonicalCommonFactor_quotient_factorization
   rw [directOrbitSquareRefinement_absNorm_span_model] at hfac
   rw [hfacJ, hfacPow, add_zero] at hfac
   exact hfac
+
+theorem directOrbitCanonicalCommonFactor_prime_exponent_table
+    {x y z q : ℕ} {source : CounterexamplePack x y z}
+    {r : PrimitiveCounterexampleRamifiedProvenance source}
+    {p : DirectRealCubicRootPacket source r}
+    (t : DirectOrbitSquareRefinementPacket p)
+    (hq : q.Prime)
+    (hqa : q ∣ t.powerSplit.gapSplit.a) :
+    (q ∣ Int.natAbs (norm t.gapSquareRoot) ∧
+        q ∣ Int.natAbs (norm t.quotientSquareRoot) →
+      (Int.natAbs (norm t.gapSquareRoot)).factorization q =
+          t.powerSplit.gapSplit.a.factorization q ∧
+        (Int.natAbs (norm t.quotientSquareRoot)).factorization q =
+          2 * t.powerSplit.gapSplit.a.factorization q) ∧
+    (q ∣ Int.natAbs (norm t.gapSquareRoot) ∧
+        ¬q ∣ Int.natAbs (norm t.quotientSquareRoot) →
+      (Int.natAbs (norm t.gapSquareRoot)).factorization q =
+          3 * t.powerSplit.gapSplit.a.factorization q ∧
+        (Int.natAbs (norm t.quotientSquareRoot)).factorization q = 0) ∧
+    (¬q ∣ Int.natAbs (norm t.gapSquareRoot) ∧
+        q ∣ Int.natAbs (norm t.quotientSquareRoot) →
+      (Int.natAbs (norm t.gapSquareRoot)).factorization q = 0 ∧
+        (Int.natAbs (norm t.quotientSquareRoot)).factorization q =
+          3 * t.powerSplit.gapSplit.a.factorization q) := by
+  let R := Int.natAbs (norm t.gapSquareRoot)
+  let S := Int.natAbs (norm t.quotientSquareRoot)
+  let a := t.powerSplit.gapSplit.a
+  have hR : R ≠ 0 := by
+    simpa [R] using (directOrbitSquareRefinement_gap_square_norm_pos t).ne'
+  have hS : S ≠ 0 := by
+    simpa [S] using (directOrbitSquareRefinement_quotient_square_norm_pos t).ne'
+  have hRS : R * S = a ^ 3 := by
+    simpa [R, S, a] using directOrbitSquareRefinement_squareRoots_norm_mul_eq_cube t
+  have hledger : ∀ q, R.factorization q + S.factorization q =
+      3 * a.factorization q := cubeDefect_factorization_ledger hR hS hRS
+  have hcommon : ∀ {q}, q.Prime → q ∣ R → q ∣ S →
+      R.factorization q = a.factorization q ∧
+        S.factorization q = 2 * a.factorization q := by
+    intro q hq hqR hqS
+    refine ⟨?_, ?_⟩
+    · simpa [R, a] using directOrbitCanonicalCommonFactor_gap_factorization
+        t hq (by simpa [R] using hqR) (by simpa [S] using hqS)
+    · simpa [S, a] using directOrbitCanonicalCommonFactor_quotient_factorization
+        t hq (by simpa [R] using hqR) (by simpa [S] using hqS)
+  simpa [R, S, a] using
+    canonicalCommonFactor_three_case_exponents hledger hcommon hq
+      (by simpa [a] using hqa)
+
+theorem directOrbitSquareRefinement_canonicalCommonFactor_nonempty
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : PrimitiveCounterexampleRamifiedProvenance source}
+    {p : DirectRealCubicRootPacket source r}
+    (t : DirectOrbitSquareRefinementPacket p) :
+    Nonempty (DirectOrbitCanonicalCommonFactorPacket p) := by
+  let R := Int.natAbs (norm t.gapSquareRoot)
+  let S := Int.natAbs (norm t.quotientSquareRoot)
+  let a := t.powerSplit.gapSplit.a
+  let C := directOrbitCanonicalCommonFactor_commonProduct R S a
+  let U := directOrbitCanonicalCommonFactor_gapRoot R S a
+  let V := directOrbitCanonicalCommonFactor_quotientRoot R S a
+  have hR : R ≠ 0 := by
+    simpa [R] using (directOrbitSquareRefinement_gap_square_norm_pos t).ne'
+  have hS : S ≠ 0 := by
+    simpa [S] using (directOrbitSquareRefinement_quotient_square_norm_pos t).ne'
+  have ha : a ≠ 0 := by
+    simpa [a] using t.powerSplit.gapSplit.a_pos.ne'
+  have hRS : R * S = a ^ 3 := by
+    simpa [R, S, a] using directOrbitSquareRefinement_squareRoots_norm_mul_eq_cube t
+  have htable : ∀ {q}, q.Prime → q ∣ a →
+      (q ∣ R ∧ q ∣ S →
+        R.factorization q = a.factorization q ∧
+          S.factorization q = 2 * a.factorization q) ∧
+      (q ∣ R ∧ ¬q ∣ S →
+        R.factorization q = 3 * a.factorization q ∧ S.factorization q = 0) ∧
+      (¬q ∣ R ∧ q ∣ S →
+        R.factorization q = 0 ∧ S.factorization q = 3 * a.factorization q) := by
+    intro q hq hqa
+    simpa [R, S, a] using
+      directOrbitCanonicalCommonFactor_prime_exponent_table t hq
+        (by simpa [a] using hqa)
+  obtain ⟨hR_eq, hS_eq, ha_eq⟩ :=
+    canonicalCommonFactor_reconstruction hR hS ha hRS htable
+  have hCeq : C = Nat.gcd R S := by
+    simpa [C] using canonicalCommonFactor_gcd_eq hR hS ha hRS htable
+  have hcop := canonicalCommonFactor_pairwise_coprime (R := R) (S := S) (a := a)
+  have hCpos : 0 < C := by
+    unfold C directOrbitCanonicalCommonFactor_commonProduct
+    exact Finset.prod_pos (fun q hq =>
+      pow_pos (Nat.prime_of_mem_primeFactors (Finset.mem_filter.mp hq).1).pos _)
+  have hUpos : 0 < U := by
+    unfold U directOrbitCanonicalCommonFactor_gapRoot
+    exact Finset.prod_pos (fun q hq =>
+      pow_pos (Nat.prime_of_mem_primeFactors (Finset.mem_filter.mp hq).1).pos _)
+  have hVpos : 0 < V := by
+    unfold V directOrbitCanonicalCommonFactor_quotientRoot
+    exact Finset.prod_pos (fun q hq =>
+      pow_pos (Nat.prime_of_mem_primeFactors (Finset.mem_filter.mp hq).1).pos _)
+  have hheight0 : R ^ 2 < a := by
+    simpa [R, a] using directOrbitSquareRefinement_gap_square_norm_lt_base t
+  have hleft : R ^ 2 = (C * U) * (C * U ^ 5) := by
+    rw [hR_eq]
+    simp only [C, U]
+    ring
+  have hright : a = (C * U) * V := by
+    rw [ha_eq]
+  rw [hleft, hright] at hheight0
+  have hheight : C * U ^ 5 < V :=
+    (Nat.mul_lt_mul_left (mul_pos hCpos hUpos)).mp hheight0
+  have hc_dvd_a : C ∣ a := by
+    refine ⟨U * V, ?_⟩
+    calc
+      a = C * U * V := ha_eq
+      _ = C * (U * V) := by ring
+  have hc_support : ∀ q, q.Prime → q ∣ C → exceptionalModSeven q := by
+    intro q hq hqC
+    have hqg : q ∣ Nat.gcd R S := by simpa [hCeq] using hqC
+    have hqRS : q ∣ R ∧ q ∣ S := Nat.dvd_gcd_iff.mp hqg
+    exact common_norm_prime_mod_seven t hq
+      (by simpa [R] using hqRS.1) (by simpa [S] using hqRS.2)
+  refine ⟨{
+    squareRefinement := t
+    c := C
+    u := U
+    v := V
+    c_pos := hCpos
+    u_pos := hUpos
+    v_pos := hVpos
+    c_eq_gcd := hCeq
+    c_dvd_a := by simpa [C, a] using hc_dvd_a
+    gapNorm_eq := by simpa [R, C, U] using hR_eq
+    quotientNorm_eq := by simpa [S, C, V] using hS_eq
+    unitPart_eq := by simpa [a, C, U, V] using ha_eq
+    c_u_coprime := hcop.1
+    c_v_coprime := hcop.2.1
+    u_v_coprime := hcop.2.2
+    c_prime_support := hc_support
+    height := hheight
+  }⟩
 
 end SevenRealCubic
 end
