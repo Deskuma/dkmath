@@ -1021,6 +1021,23 @@ The R38 scratch calibration has a `q = 29` nonresidue example and a
 contradiction.  Status: **completed — Outcome B**.  No successor, descent, or
 FLT7 contradiction is claimed. See `report-044.md`.
 
+## FLT7TC-005R39 — C=1 ideal scalarization and unit-only twisted reduction
+
+The R39 production layer proves scalar principal-ideal norms `U^3` and `V^3`,
+checks a neutral norm-coprime-to-ideal-coprime lemma, and derives the two
+cross-coprimality statements from the canonical `Nat.Coprime U V` packet. The
+`c = 1` product identity is rewritten with `a = U*V`; Euclid cancellation then
+proves the square-root ideal equalities `(r) = (U)` and `(s) = (V)`. The
+associated generators are transported to model units `eta, xi`, and the R27
+square-twist identity is reduced to the unit-only cyclic three-term equation.
+
+The R39 scratch calibration kernel-checks exact cancellation in all three
+existing mod-7 theta coordinates. Therefore this theta-cubed surface yields
+no contradiction. The scanned mod-49/depth APIs apply to separate
+cyclotomic/terminal packets and do not supply a current-provenance bridge for
+the R39 unit equation. Status: **completed — Outcome B**. No successor,
+descent, or FLT7 contradiction is claimed. See `report-045.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:
