@@ -892,10 +892,7 @@ prime, the R29 lower bound together with Galois degree three yields exactly
 three primes over the rational prime and ramification/inertia indices equal
 to one.
 
-Status: **completed — Outcome B**. The complete-splitting theorem is a
-common-norm-prime result.  The audit for a residue criterion
-`q ≡ ±1 (mod 7)` and any FLT7 endpoint remains outside this checkpoint. See
-`report-036.md`.
+Status: **completed — Outcome A**. The real cubic field is Galois of degree three; every common norm prime is different from seven and splits completely, with ramification and inertia degrees one. The residue criterion `q ≡ ±1 (mod 7)` and any FLT7 endpoint remain outside this checkpoint. See `report-036.md`.
 
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
