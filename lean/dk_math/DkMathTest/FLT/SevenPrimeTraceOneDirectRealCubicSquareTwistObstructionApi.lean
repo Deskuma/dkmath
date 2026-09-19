@@ -1,0 +1,30 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicSquareTwistObstruction
+
+#print "file: DkMathTest.FLT.SevenPrimeTraceOneDirectRealCubicSquareTwistObstructionApi"
+
+open DkMath.FLT.Seven
+
+#check directOrbitSquareTwistCoeff0
+#check directOrbitSquareTwistCoeff1
+#check directOrbitSquareTwistCoeff2
+#check directOrbit_squareTwist_twisted_eq
+#check directOrbit_squareTwist_exponent_even
+#check directOrbitSquareTwistExponentHalf
+#check directOrbit_squareTwist_exponent_eq_two_mul_half
+#check directOrbit_squareTwist_axis_pow_is_square
+#check directOrbit_squareTwist_coeff1_transport
+#check directOrbit_squareTwist_coeff2_transport
+#check directOrbit_squareTwist_coeff_projectiveLog
+#check directOrbit_squareTwist_squareRoot_ne_zero
+#check directOrbit_squareTwist_rotatedSquareRoot_ne_zero
+#check directOrbit_squareTwist_twiceRotatedSquareRoot_ne_zero
+#check directOrbit_squareTwist_coeff0_not_square
+#check directOrbit_squareTwist_coeff0_norm_eq_one
+#check directOrbit_squareTwist_coeff0_not_all_real_positive
+#check directOrbit_squareTwist_coeff0_not_all_real_negative

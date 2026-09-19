@@ -808,6 +808,30 @@ Status: **completed — Outcome A**.  The element-level square refinement is
 kernel-checked, while the successor bridge and unconditional FLT7 closure
 remain open.  See `report-032.md`.
 
+## FLT7TC-005R27 — Square-refined twisted signature audit
+
+The R27 production layer defines the square-refined twisted unit coefficients
+and proves the exact identity
+
+```text
+c0 * (r0^7)^2 + c1 * (r1^7)^2 + c2 * (r2^7)^2 = 0.
+```
+
+The exponent `32 + 42*k` is even, so the pair-axis factor is a square and
+the coefficient transports are `c1 = P^e * rotate(c0)` and
+`c2 = P^e * rotate(c1)`.  The projective classes remain `(2,4)`, `(2,2)`,
+`(2,5)`, and all three square-root variables are nonzero by real-embedding
+injectivity.  A square-unit assumption on `c0` gives a strict real positivity
+contradiction, hence `c0` is not a square unit.
+
+The signed norm is fixed by the positive direct-gap norm and unit norm
+absolute value: `norm c0 = 1`.  The cyclic real signature is neither totally
+positive nor totally negative.  This is a structural mixed-sign obstruction;
+it is not an FLT7 contradiction and does not provide the missing successor or
+descent theorem.
+
+Status: **completed — Outcome A**. See `report-033.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:

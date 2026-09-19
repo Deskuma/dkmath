@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-028.md
 - report-031.md
 - report-032.md
@@ -228,6 +229,7 @@ Read-only audit after Parts E-G.
 
 Search the current checked repository for a theorem forcing c0 or its defining
 factors to be:
+
 - a square unit;
 - totally positive;
 - or of a fixed incompatible real signature.
@@ -255,6 +257,7 @@ If no contradiction is found, freeze the repeated power-refinement route:
 - square-gauge normalization is obstructed (this checkpoint).
 
 The remaining serious choices are then:
+
 1. a genuinely new weighted/unit-sign arithmetic invariant;
 2. a different hybrid successor reconstruction;
 3. a fresh integrated research pass using all R21-R27 facts.
@@ -319,6 +322,7 @@ At minimum:
     git diff --check
 
 Print axioms for:
+
 - square-weighted twisted equation;
 - coefficient transport;
 - even transport exponent / square transport factor;
