@@ -876,7 +876,7 @@ This remains a common-norm-prime existence statement.  It does not infer
 does not establish complete splitting or residue-degree one, and does not
 close FLT7.  See `report-035.md`.
 
-Status: **completed — Outcome A**.
+Status: **completed — Outcome B**. Two distinct primes above a supplied common norm prime are kernel-checked; the field-level Galois / complete-splitting bridge is the next frontier. See `report-035.md`.
 
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
