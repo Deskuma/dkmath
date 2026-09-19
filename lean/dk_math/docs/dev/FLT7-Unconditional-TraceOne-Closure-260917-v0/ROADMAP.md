@@ -944,6 +944,20 @@ canonical `C = gcd R S` normal form can be stated.
 Status: **partial — Part A and the exclusive allocation xor are
 kernel-checked; Galois orbit/cardinality remains open**. See `report-039.md`.
 
+## FLT7TC-005R34 — Cyclic Galois orbit and exact 1-to-2 common-prime allocation
+
+The R34 production layer exposes the order-three Galois actor, identifies its
+ring-of-integers action with concrete model rotation, and records Mathlib's
+inverse/comap ideal-action orientation. It proves the cyclic prime-address
+alternative, the R27 two-root forcing lemma, and the resulting at-most-one gap
+allocation. Using the R29 witnesses, the R30 complete-split cardinality, and
+the R33 xor partition, it exports exact gap and quotient cardinalities `1` and
+`2` for every common norm prime.
+
+Status: **completed — Outcome B**. Exact 1-to-2 allocation is kernel-checked;
+valuation equalities, canonical `C,U,V` data, successor/descent, and FLT7
+closure remain outside this checkpoint. See `report-040.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:
