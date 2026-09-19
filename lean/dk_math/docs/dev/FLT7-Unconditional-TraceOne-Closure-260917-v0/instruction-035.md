@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-034.md
 - PrimeTraceOneDirectRealCubicSquarePrimeSupport.lean
 - SevenRealCubicNumberField.lean
@@ -67,6 +68,7 @@ For every x : SevenRealCubicInt prove:
     Int.natAbs (SevenRealCubicInt.norm x).
 
 Preferred route:
+
 1. use Ideal.absNorm_span_singleton;
 2. prove compatibility between
        Algebra.norm Z (modelEquivRingOfIntegers x)
@@ -121,6 +123,7 @@ For the P obtained above, expose:
     modelEquivRingOfIntegers x ∈ P.
 
 Use:
+
 - ideal divisibility as reverse inclusion;
 - span-singleton membership.
 
@@ -229,6 +232,7 @@ gives enough to prove:
       -> ncard(primesOver q) = 3.
 
 Possible ingredients:
+
 - SevenRealCubic.finrank_eq_three;
 - a checked IsGalois Q SevenRealCubic.Field instance/theorem;
 - ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn;
@@ -317,6 +321,7 @@ At minimum:
     git diff --check
 
 Print axioms for:
+
 - principal ideal absNorm compatibility;
 - norm-prime maximal-ideal existence;
 - ring-of-integers coprimality transport;

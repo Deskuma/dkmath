@@ -859,6 +859,25 @@ Status: **completed — Outcome C**. The element-level scalar split and
 theta-unit audit are kernel-checked; the prime-ideal/Galois support bridge
 remains open. See `report-034.md`.
 
+## FLT7TC-005R29 — Norm-prime to distinct prime ideals above q
+
+The R29 production layer adds the missing ideal-level bridge for the current
+R28 square packet.  For a rational prime `q` dividing both current model
+norms, Mathlib's absolute-norm support theorem is applied to the two principal
+ideals in the actual ring of integers `𝓞 SevenRealCubic.Field`.  The resulting
+maximal ideals lie over `Ideal.span {(q : ℤ)}` and divide the corresponding
+principal ideals.  R28 coprimality is transported through the ring
+equivalence, so equality of the two maximal ideals would force the unit ideal;
+therefore they are distinct.  Consequently the primes-over set has cardinal
+at least two.
+
+This remains a common-norm-prime existence statement.  It does not infer
+`Nat.Coprime` of the two rational norms, does not prove `q ∣ r` or `q ∣ s`,
+does not establish complete splitting or residue-degree one, and does not
+close FLT7.  See `report-035.md`.
+
+Status: **completed — Outcome A**.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:
