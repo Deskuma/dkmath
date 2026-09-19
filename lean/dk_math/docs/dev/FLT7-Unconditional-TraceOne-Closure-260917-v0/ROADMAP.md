@@ -894,7 +894,6 @@ to one.
 
 Status: **completed — Outcome A**. The real cubic field is Galois of degree three; every common norm prime is different from seven and splits completely, with ramification and inertia degrees one. The residue criterion `q ≡ ±1 (mod 7)` and any FLT7 endpoint remain outside this checkpoint. See `report-036.md`.
 
-
 ## FLT7TC-005R31 — Complete-split prime residue criterion modulo seven
 
 The neutral finite-field layer constructs a primitive seventh root from a
@@ -957,6 +956,21 @@ the R33 xor partition, it exports exact gap and quotient cardinalities `1` and
 Status: **completed — Outcome B**. Exact 1-to-2 allocation is kernel-checked;
 valuation equalities, canonical `C,U,V` data, successor/descent, and FLT7
 closure remain outside this checkpoint. See `report-040.md`.
+
+## FLT7TC-005R35 — Exact common-prime ideal multiplicities
+
+The R35 production layer adds the scalar principal-ideal multiplicity theorem
+and the allocated-side exact multiplicity alternatives. For a common norm
+prime `q`, every prime ideal above `(q)` has scalar coefficient
+`a.factorization q`; the R33 ideal product and xor then give the exact `m/0`
+or `0/m` alternatives on the gap and quotient sides. The module is exported
+through `DkMath.FLT.Seven` with focused API and axiom audits.
+
+Status: **partial — Outcome C**. The remaining precise frontier is the global
+ideal-norm to `Nat.factorization` transport required for `R.factorization q =
+a.factorization q` and `S.factorization q = 2 * a.factorization q`; no
+canonical `C,U,V` packet or contradiction claim is made before that bridge.
+See `report-041.md`.
 
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
