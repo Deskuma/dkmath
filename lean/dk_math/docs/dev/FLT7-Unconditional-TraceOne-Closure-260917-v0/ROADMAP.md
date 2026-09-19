@@ -751,9 +751,16 @@ generic module imports no FLT code.  Separate tests cover exponents 3, 5, and
 7, an integer common-prime instance, and the equality with the existing FLT7
 `seventhQuotient`; the module is exported from `DkMath.Lib`.
 
+Instruction-030 extends this kernel with the production real-cubic local-class
+bridge in `PrimeTraceOneDirectRealCubicLocalClass`: the canonical quotient core
+has three exact theta coordinates, the production quotient-unit class is
+`(5,1)`, and the production gap-unit class is `(2,4)`.  The coefficient and
+ratio classes are exported unconditionally from the packet identities.
+
 Status: **completed — Outcome A**.  The optional AM-GM inequality was deferred
-because it is not part of the quotient/localization kernel.  See
-`report-024-generalization.md`.
+because it is not part of the quotient/localization kernel.  Weighted successor
+divisibility, iterable descent, and unconditional FLT7 closure remain outside
+this checkpoint.  See `report-024-generalization.md` and `report-030.md`.
 
 ## FLT7TC-006 — Primitive FLT7 branch closure
 

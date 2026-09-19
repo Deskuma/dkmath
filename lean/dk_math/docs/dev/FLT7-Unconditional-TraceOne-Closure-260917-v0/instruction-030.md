@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-029.md
 - PrimeTraceOneDirectRealCubicOrbitSplit.lean
 - PrimeTraceOneDirectRealCubicOrbitPowerSplit.lean
@@ -128,6 +129,7 @@ Use:
       (thetaSevenUnit^(1+2*k) * a^2)^7
 
 together with:
+
 - projectiveLog orbitUnit01 = (0,5);
 - projectiveLog of a seventh power = 0;
 - the proved quotientUnit class.
@@ -233,6 +235,7 @@ At minimum:
     git diff --check
 
 Print axioms for:
+
 - quotientCore uniqueness;
 - all theta-local coordinate theorems;
 - generic local projective-log extraction;
