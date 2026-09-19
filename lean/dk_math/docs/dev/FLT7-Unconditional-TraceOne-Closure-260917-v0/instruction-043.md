@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-042.md
 - PrimeTraceOneDirectRealCubicCanonicalCommonFactor.lean
 - PrimeTraceOneDirectRealCubicCubeDefect.lean
@@ -198,6 +199,7 @@ if it follows immediately from the residue support theorem.
 Do not delete or modify DirectOrbitCubeDefectPacket.
 
 Record the conceptual relation:
+
 - R32 D1,D2 record only the common-factor exponent modulo 3;
 - canonical C retains the full common exponent;
 - canonical U,V contain only exclusive support and are therefore pairwise coprime with C.
@@ -267,6 +269,7 @@ unless a neutral arithmetic helper materially simplifies the proof.
 After the packet is green, audit only existing checked theorems for an immediate contradiction.
 
 Questions:
+
 - Does any existing theorem force C = 1?
 - Does existing element-level coprimality of the algebraic square roots imply any stronger rational-norm coprimality now that the allocation is explicit?
 - Does the projective unit-class or twisted-signature layer forbid a nontrivial C?
@@ -328,6 +331,7 @@ At minimum:
     git diff --check
 
 Print axioms for:
+
 - complete prime exponent classification;
 - common product = gcd;
 - C | a;
