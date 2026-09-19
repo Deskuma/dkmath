@@ -86,3 +86,14 @@ All checks were run sequentially:
 
 R29 is therefore recorded as a completed ideal-support layer for a supplied
 common norm prime.  No complete-splitting or FLT-closure statement was added.
+
+
+## Outcome
+
+**Outcome B — COMMON NORM PRIME -> TWO DISTINCT PRIMES ABOVE q GREEN;
+COMPLETE-SPLITTING BRIDGE IS NEXT.**
+
+The current production theorem reaches two distinct maximal ideals above the
+same rational prime and the lower bound on primesOver cardinality. It does not
+yet prove the real cubic field is Galois at the field level, complete
+splitting, or the residue criterion q ≡ ±1 (mod 7).
