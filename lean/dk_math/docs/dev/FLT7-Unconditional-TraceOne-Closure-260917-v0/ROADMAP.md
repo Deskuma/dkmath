@@ -832,6 +832,33 @@ descent theorem.
 
 Status: **completed — Outcome B**. The square-weighted state is green, `c0` is a non-square mixed-sign norm-one unit, and the repeated power-refinement route is frozen. No FLT7 contradiction is claimed. See `report-033.md`.
 
+## FLT7TC-005R28 — Square-root scalar split and Galois prime-support audit
+
+The R28 production layer operates on the current
+`DirectOrbitSquareRefinementPacket`. It proves coprimality of the two square
+roots by removing the unit factors and applying `IsCoprime.pow_iff`, then
+proves the scalar product split
+
+```text
+Associated (r * s) (a : O)
+r * s = unit * (a : O)
+```
+
+The associated-square step uses Mathlib's `Associated.pow_iff` in the
+integrally closed real-cubic integer ring. The existing R26 norm theorem is
+re-exported as `R * S = a^3`, `0 < R` and `R^2 < a` are retained, and `S > 0`
+is added. Both square roots are proved not divisible by the Eisenstein axis.
+
+The rational norm-prime and cyclic Galois support layer is deliberately not
+overstated: the current checkpoint does not add a neutral ideal-factorization
+bridge, `7 ∤ R/S`, a gcd support theorem, or `q ≡ ±1 (mod 7)`. In particular,
+it does not infer element divisibility from rational norm divisibility and it
+does not claim `Nat.Coprime R S`.
+
+Status: **completed — Outcome C**. The element-level scalar split and
+theta-unit audit are kernel-checked; the prime-ideal/Galois support bridge
+remains open. See `report-034.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:

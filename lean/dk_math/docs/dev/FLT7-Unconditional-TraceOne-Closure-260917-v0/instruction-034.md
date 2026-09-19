@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-032.md
 - report-033.md
 - PrimeTraceOneDirectRealCubicSquareRefinement.lean
@@ -11,6 +12,7 @@ Authoritative inputs:
 - SevenRealCubicNumberField.lean
 
 R27 freezes repeated power-refinement:
+
 - seventh-power gauge normalization is obstructed;
 - ordinary homogeneous restart is obstructed;
 - square-gauge normalization is obstructed.
@@ -122,6 +124,7 @@ Prove:
     ¬ theta ∣ s.
 
 Reason:
+
 - gapRoot and quotientRoot are theta-units;
 - if theta divided r or s, it would divide the corresponding square and hence
   the original root despite the unit factor.
@@ -197,6 +200,7 @@ Define conceptually:
 Prove the strongest honest statement available:
 
 Every prime q dividing C:
+
 - q != 7;
 - q splits completely in the real cubic field;
 - optionally q ≡ ±1 mod 7.
@@ -310,6 +314,7 @@ At minimum:
     git diff --check
 
 Print axioms for:
+
 - square-root coprimality;
 - associated scalar product;
 - explicit unit-times-scalar equation;
