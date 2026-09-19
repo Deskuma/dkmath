@@ -67,3 +67,15 @@ successful experiment will be recorded below.
 - `lake env lean DkMathTest/FLT/SevenPrimeTraceOneDirectRealCubicSquareGaloisSupportApi.lean` passed and printed the intended public rotation, ideal-support, root, splitting, Galois, and complete-splitting declarations.
 - `lake env lean DkMathTest/FLT/SevenPrimeTraceOneDirectRealCubicSquareGaloisSupportAxiom.lean` passed.  The audited declarations depend only on `propext`, `Classical.choice`, and `Quot.sound`; no project-specific axiom was introduced.
 - The forbidden-construct scan over production, scratch, and API files found no `sorry`, `admit`, `unsafe`, or `axiom`.  `git diff --check` and no-index whitespace checks for the new files were clean.
+
+
+## Outcome
+
+**Outcome A — REAL CUBIC ISGALOIS GREEN; EVERY COMMON NORM PRIME q != 7 SPLITS
+COMPLETELY.**
+
+The current production layer proves the field-level Galois structure, the
+unique prime above seven, exclusion of seven from both square-root norms, and
+for every common norm prime exactly three primes above q with ramification and
+inertia degrees one. The residue criterion q ≡ ±1 (mod 7) and FLT7 closure
+remain outside this checkpoint.
