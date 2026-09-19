@@ -1,0 +1,328 @@
+# FLT7TC-005R29 — Norm-prime to distinct prime ideals above q
+
+Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
+
+Authoritative inputs:
+- report-034.md
+- PrimeTraceOneDirectRealCubicSquarePrimeSupport.lean
+- SevenRealCubicNumberField.lean
+- Mathlib/RingTheory/Ideal/Norm/AbsNorm.lean
+
+R28 proves:
+
+    IsCoprime r s
+    Associated (r*s) (a : O)
+    R*S = a^3
+
+for the two square roots r,s, but deliberately stops before rational
+norm-prime support.
+
+Mathlib already provides the exact neutral bridge:
+
+    Ideal.exists_isMaximal_dvd_of_dvd_absNorm'
+
+This checkpoint connects that theorem to the explicit real-cubic model and
+constructs distinct prime ideals above any common rational norm prime.
+
+Do not attempt the full residue criterion q ≡ ±1 mod 7 unless the ideal layer
+is completely green first.
+
+## Goal
+
+Let:
+
+    r := t.gapSquareRoot
+    s := t.quotientSquareRoot
+    R := Int.natAbs (SevenRealCubicInt.norm r)
+    S := Int.natAbs (SevenRealCubicInt.norm s).
+
+For every rational prime q with
+
+    q ∣ R
+    q ∣ S
+
+construct prime/maximal ideals P,Q of the actual ring of integers
+O SevenRealCubic.Field such that:
+
+    P lies over Ideal.span {(q : Z)}
+    Q lies over Ideal.span {(q : Z)}
+
+    P ∣ Ideal.span {modelEquivRingOfIntegers r}
+    Q ∣ Ideal.span {modelEquivRingOfIntegers s}
+
+and
+
+    P ≠ Q.
+
+This is the main theorem.
+
+## Part A — principal ideal absNorm compatibility
+
+For every x : SevenRealCubicInt prove:
+
+    Ideal.absNorm
+      (Ideal.span
+        {SevenRealCubic.modelEquivRingOfIntegers x})
+      =
+    Int.natAbs (SevenRealCubicInt.norm x).
+
+Preferred route:
+1. use Ideal.absNorm_span_singleton;
+2. prove compatibility between
+       Algebra.norm Z (modelEquivRingOfIntegers x)
+   and
+       SevenRealCubicInt.norm x;
+3. take Int.natAbs.
+
+Do not reprove ideal norm theory.
+
+If exact signed norm compatibility is convenient, expose separately:
+
+    Algebra.norm Z (modelEquivRingOfIntegers x)
+      = SevenRealCubicInt.norm x.
+
+A natAbs-only theorem is sufficient for this checkpoint.
+
+## Part B — one norm prime gives one maximal ideal above q
+
+Let hp : Nat.Prime q and hq : q ∣ natAbs(norm x).
+
+Apply:
+
+    Ideal.exists_isMaximal_dvd_of_dvd_absNorm'
+
+to
+
+    I := Ideal.span {modelEquivRingOfIntegers x}.
+
+Using Part A, construct P with:
+
+    P.IsMaximal
+    P.under Z = Ideal.span {(q : Z)}
+    P ∣ I.
+
+Package a theorem conceptually:
+
+    exists_maximalIdeal_above_of_prime_dvd_modelNorm
+      (hp : Nat.Prime q)
+      (hq : q ∣ natAbs(norm x)) :
+      exists P,
+        P.IsMaximal and
+        P.under Z = Ideal.span {(q : Z)} and
+        P ∣ Ideal.span {modelEquivRingOfIntegers x}.
+
+Prefer a neutral theorem in a generic location only if it genuinely does not
+mention the concrete model.
+
+## Part C — ideal divisor implies element membership
+
+For the P obtained above, expose:
+
+    modelEquivRingOfIntegers x ∈ P.
+
+Use:
+- ideal divisibility as reverse inclusion;
+- span-singleton membership.
+
+Do not rewrite q ∣ norm x as q ∣ x.
+
+## Part D — transport square-root coprimality to the ring of integers
+
+From:
+
+    IsCoprime r s
+
+prove:
+
+    IsCoprime
+      (modelEquivRingOfIntegers r)
+      (modelEquivRingOfIntegers s).
+
+Use the ring equivalence or a mapped Bezout identity.
+
+Equivalently expose:
+
+    Ideal.span {rI} sup Ideal.span {sI} = top
+
+for:
+
+    rI := modelEquivRingOfIntegers r
+    sI := modelEquivRingOfIntegers s.
+
+Keep whichever form makes Part E shortest.
+
+## Part E — common norm prime yields distinct primes above q
+
+Assume:
+
+    hp : Nat.Prime q
+    hqR : q ∣ R
+    hqS : q ∣ S.
+
+Use Part B twice to obtain P above q dividing (rI) and Q above q dividing
+(sI).
+
+Prove:
+
+    P ≠ Q.
+
+If P = Q, then the same proper maximal ideal contains both rI and sI.
+But their principal ideals are comaximal, so it contains 1, contradiction.
+
+Expose the stable theorem, conceptually:
+
+    common_norm_prime_gives_distinct_primes_above
+      (hp : Nat.Prime q)
+      (hqR : q ∣ R)
+      (hqS : q ∣ S) :
+      exists P Q,
+        P.IsMaximal and Q.IsMaximal and
+        P.under Z = Ideal.span {(q : Z)} and
+        Q.under Z = Ideal.span {(q : Z)} and
+        P ≠ Q and
+        P ∣ Ideal.span {rI} and
+        Q ∣ Ideal.span {sI}.
+
+Using LiesOver instead of explicit under equality is acceptable.
+
+## Part F — at least two primes above q
+
+From Part E prove:
+
+    2 ≤ (Ideal.primesOver
+      (Ideal.span {(q : Z)})
+      (O SevenRealCubic.Field)).ncard.
+
+Do not yet claim complete splitting.
+
+This theorem is the clean bridge from the current square-root packet to
+Galois splitting theory.
+
+## Part G — exclude q = 7 if current ramified-prime API is cheap
+
+R28 already proves:
+
+    not (eisensteinAxis ∣ r)
+    not (eisensteinAxis ∣ s).
+
+Audit the current real-cubic number-field API for the unique prime above 7.
+
+If there is a clean theorem identifying the unique prime above 7 with the
+ideal generated by the Eisenstein axis, prove:
+
+    7 ∤ R
+    7 ∤ S
+
+and hence every common norm prime q satisfies q ≠ 7.
+
+Do not build a new ramification theory solely for this optional part.
+
+If unavailable, stop with the distinct-primes-above theorem and record q=7
+as the next local bridge.
+
+## Part H — optional degree-three Galois closeout
+
+Only after Parts A-F are green, audit whether current checked API already
+gives enough to prove:
+
+    2 ≤ ncard(primesOver q)
+      -> ncard(primesOver q) = 3.
+
+Possible ingredients:
+- SevenRealCubic.finrank_eq_three;
+- a checked IsGalois Q SevenRealCubic.Field instance/theorem;
+- ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn;
+- unramifiedness for q ≠ 7.
+
+If a current IsGalois bridge is missing, STOP. Do not fabricate it from the
+order-three ring automorphism without extending it honestly to the field.
+
+The full splitting/residue criterion belongs to the next checkpoint if this
+bridge is nontrivial.
+
+## Part I — generalization candidate
+
+If Part B/C naturally produce a neutral theorem:
+
+    q prime
+    q ∣ absNorm(span{x})
+      -> exists maximal ideal P above q with P ∣ span{x},
+
+do not duplicate Mathlib; it already exists as
+Ideal.exists_isMaximal_dvd_of_dvd_absNorm'.
+
+Only add a DkMath generic wrapper if it materially simplifies transport from
+element norms to principal ideal norms.
+
+The genuinely new reusable theorem, if any, is:
+
+    coprime elements + common rational norm prime
+      -> two distinct primes above q.
+
+Place that outside FLT7 only if the hypotheses remain cleanly generic.
+
+## Hard stops
+
+- No inference IsCoprime r s -> Nat.Coprime R S.
+- No inference q ∣ norm x -> q ∣ x as an element.
+- No historical receiver/routing packet as input.
+- No complete-splitting claim from "two primes above q" without the
+  degree/Galois/unramified theorem.
+- No q ≡ ±1 mod 7 claim without a checked splitting criterion.
+- No successor/descent or FLT7 contradiction claim.
+- No sorry/sorryAx/admit/unsafe/project axiom.
+
+## Preferred production file
+
+    DkMath/FLT/Seven/PrimeTraceOneDirectRealCubicSquareIdealSupport.lean
+
+Tests:
+
+    DkMathTest/FLT/SevenPrimeTraceOneDirectRealCubicSquareIdealSupportApi.lean
+    DkMathTest/FLT/SevenPrimeTraceOneDirectRealCubicSquareIdealSupportAxiom.lean
+
+Create report-035.md and update ROADMAP.md.
+
+## Report questions
+
+1. Was principal-ideal absNorm proved equal to natAbs of the concrete cubic norm?
+2. Was Mathlib's exists_isMaximal_dvd_of_dvd_absNorm' consumed directly?
+3. Was q|norm x converted to a maximal ideal above q dividing (x)?
+4. Was element membership in that ideal exposed?
+5. Was square-root coprimality transported to the ring of integers?
+6. Were P and Q proved distinct for a common norm prime?
+7. Was ncard(primesOver q) >= 2 proved?
+8. Was q=7 excluded?
+9. Is an IsGalois/unramified bridge already available for complete splitting?
+10. What exact theorem remains before q ≡ ±1 mod 7?
+
+## Outcomes
+
+- Outcome A — DISTINCT PRIMES ABOVE q GREEN; DEGREE-THREE GALOIS API ALSO
+  GIVES COMPLETE SPLITTING.
+- Outcome B — COMMON NORM PRIME -> TWO DISTINCT PRIMES ABOVE q GREEN;
+  COMPLETE-SPLITTING BRIDGE IS NEXT.
+- Outcome C — PRINCIPAL IDEAL NORM BRIDGE GREEN; DISTINCTNESS/PRIMES-OVER
+  PACKAGING IS THE PRECISE FRONTIER.
+- Outcome D — CONCRETE NORM DOES NOT TRANSPORT TO IDEAL ABSNORM AS EXPECTED.
+
+## Validation
+
+At minimum:
+
+    lake build DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicSquareIdealSupport
+    lake build DkMath.FLT.Seven
+    lake build DkMathTest.FLT.SevenPrimeTraceOneDirectRealCubicSquareIdealSupportApi
+    lake build DkMathTest.FLT.SevenPrimeTraceOneDirectRealCubicSquareIdealSupportAxiom
+    git diff --check
+
+Print axioms for:
+- principal ideal absNorm compatibility;
+- norm-prime maximal-ideal existence;
+- ring-of-integers coprimality transport;
+- distinct-primes-above theorem;
+- ncard primesOver lower bound;
+- q=7 exclusion if added;
+- complete splitting if claimed.
+
+Run forbidden-source/import scans on every decisive file.
