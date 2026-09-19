@@ -720,6 +720,26 @@ theta-depth, quotient coprimality/localization, and a repeated theta-free
 seventh-power split are the first missing bridge.  No integer summit
 reconstruction or infinite descent is claimed.  See `report-028.md`.
 
+## FLT7TC-005R23 — Twisted coefficient classes and self-similarity obstruction audit
+
+The real-cubic rotation action on the projective unit class is now exported
+as an additive map `M(X,Y)=(4X,X+2Y)`, with kernel-checked order-three and
+zero-norm identities.  The pair-axis class, exponent reduction, weighted
+two-term remainder identity, and a transported twisted successor state are
+also productionized.
+
+The exact `(2,4)` class of an arbitrary extracted `gapUnit` is not derivable
+from the current power-split packet fields alone: the missing theta-free local
+congruence has not been promoted from the Astra finite witness.  Therefore the
+coefficient triple, ratio classes, and seventh-power gauge obstruction are
+exported only under that explicit local-class hypothesis.  No weighted gap
+divisibility or ordinary homogeneous quotient restart is claimed.
+
+Status: **completed — Outcome D**.  The current successor state is not
+self-similar under the available extraction mechanism.  The strict smaller
+norm from R22 remains available, but no iterable descent is claimed.  See
+`report-029.md`.
+
 ## FLT7TC-005R24 — Generic homogeneous power quotient kernel
 
 Instruction-024 generalized the existing difference-of-powers quotient without

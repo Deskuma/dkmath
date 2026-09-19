@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-028.md
 - PrimeTraceOneDirectRealCubicSuccessorAudit.lean
 - PrimeTraceOneDirectRealCubicOrbitPowerSplit.lean
@@ -72,6 +73,7 @@ generator-independent theorem predicted by Astra:
 The proof must not depend on an arbitrary PID generator choice.
 
 Use only checked data:
+
 - s.gapCore_eq;
 - s.quotientCore_eq;
 - s.cores_product_eq;
@@ -179,6 +181,7 @@ Hence divisibility by root1-root requires control of the coefficient-difference
 term.
 
 Audit the actual constructed state:
+
 - is eps1-eps0 divisible by root1-root?
 - if not, is it at least divisible by a fixed theta power?
 - what is the exact theta depth of eps1-eps0?
@@ -218,12 +221,14 @@ Do not include original integer endpoints unless an actual theorem needs them.
 After Parts D/E, classify the next route.
 
 ### Route 1 — ordinary quotient survives
+
 Only if the actual coefficient-difference term is divisible strongly enough
 to recover a useful homogeneous quotient.
 
 State the exact theorem required.
 
 ### Route 2 — twisted homogeneous quotient
+
 If ordinary divisibility fails, formulate the weakest useful weighted kernel
 for:
 
@@ -238,6 +243,7 @@ Do not implement a large abstraction unless one concrete successor instance
 demonstrates the needed identity.
 
 ### Route 3 — state is not self-similar
+
 If the current successor data cannot reproduce an exact factorization of the
 same kind, record this cleanly.  The strict smaller norm remains true, but it
 does not by itself generate an iterable descent.
@@ -252,6 +258,7 @@ checkpoint except to update the audit conclusion if new coefficient-class
 data materially changes it.
 
 The known missing integer data remain:
+
 - successor endpoints;
 - Fermat seventh-power equation;
 - exact 7^6 gap;
@@ -312,6 +319,7 @@ At minimum:
     git diff --check
 
 Print axioms for:
+
 - Galois action on projectiveLog;
 - gapUnit class;
 - all three coefficient classes;
