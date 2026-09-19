@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-040.md
 - report-041.md
 - PrimeTraceOneDirectRealCubicPrimeAllocation.lean
@@ -14,6 +15,7 @@ Authoritative inputs:
 
 R34 kernel-checks exact common-prime cardinal allocation: gap side has exactly one prime ideal above q; quotient side has exactly two.
 R35 kernel-checks exact ideal multiplicities. Writing m := a.factorization q, every prime P above a common q has exactly one alternative:
+
 - gap allocation: multiplicity P gapIdeal = m and multiplicity P quotientIdeal = 0;
 - quotient allocation: multiplicity P gapIdeal = 0 and multiplicity P quotientIdeal = m.
 
@@ -66,6 +68,7 @@ Then prove
     not (q divides Ideal.absNorm J).
 
 The required contradiction route is:
+
 1. Assume q divides absNorm J.
 2. Use Ideal.exists_isMaximal_dvd_of_dvd_absNorm' to obtain a maximal ideal Q above q with Q divides J.
 3. Since I = Qpart * J, Q contributes an additional positive multiplicity to I.
@@ -201,6 +204,7 @@ At minimum:
     git diff --check
 
 Print axioms for:
+
 - prime-above-q absNorm equality;
 - gap residual q-freeness;
 - quotient residual q-freeness;
