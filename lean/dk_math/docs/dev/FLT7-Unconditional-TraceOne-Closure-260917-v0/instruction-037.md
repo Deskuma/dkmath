@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-036.md
 - PrimeTraceOneDirectRealCubicSquareGaloisSupport.lean
 - SevenRealCubicNumberField.lean
@@ -10,6 +11,7 @@ Authoritative inputs:
 - Mathlib finite-field / algebraic-closure APIs
 
 R30 proves that every rational prime q dividing both current square-root norms:
+
 - is different from 7;
 - splits completely in SevenRealCubic.Field;
 - has ramification index one and inertia degree one.
@@ -45,6 +47,7 @@ From R29/R30 choose any prime ideal P above q that divides the principal ideal
 of the gap square root.
 
 Retain:
+
 - P.IsMaximal;
 - P.LiesOver (q);
 - inertia degree of P over q is one.
@@ -67,6 +70,7 @@ or use the quotient field O / P if that API is simpler.
 Because the inertia degree is one, prove that the residue field has q elements.
 
 Preferred routes:
+
 1. use cardQuot_pow_inertiaDeg and the base quotient cardinal;
 2. use absNorm / cardQuot directly;
 3. use the definition of inertia degree as residue-field finrank.
@@ -90,11 +94,13 @@ Define a ring hom:
     evalP : SevenRealCubicInt →+* ZMod q
 
 by:
+
 - modelEquivRingOfIntegers;
 - quotient/residue-field map modulo P;
 - residueEquiv.
 
 Prove:
+
 - evalP maps integer casts to the usual cast in ZMod q;
 - its kernel contains the model pullback of P;
 - define
@@ -210,6 +216,7 @@ are t and t^-1, prove:
     t^q = t ∨ t^q = t^-1.
 
 Preferred proof:
+
 - factor the polynomial explicitly as (X-t)(X-t^-1);
 - evaluate at t^q and use no-zero-divisors in the algebraic closure.
 
@@ -290,6 +297,7 @@ only for a theorem forcing a prime divisor of gcd(R,S), a, R, or S into a
 residue class outside ±1 mod 7.
 
 Possible inputs may include:
+
 - current seven-adic unit-part a;
 - exact R*S=a^3;
 - current primitive/coprime endpoint data.
@@ -386,6 +394,7 @@ At minimum:
 If only one production file is used, adapt the focused build accordingly.
 
 Print axioms for:
+
 - residue-field evaluation;
 - beta cubic relation / beta != 3;
 - primitive seventh-root lift;
