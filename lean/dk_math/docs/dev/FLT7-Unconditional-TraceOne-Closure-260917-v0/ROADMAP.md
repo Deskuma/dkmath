@@ -894,6 +894,22 @@ to one.
 
 Status: **completed — Outcome A**. The real cubic field is Galois of degree three; every common norm prime is different from seven and splits completely, with ramification and inertia degrees one. The residue criterion `q ≡ ±1 (mod 7)` and any FLT7 endpoint remain outside this checkpoint. See `report-036.md`.
 
+
+## FLT7TC-005R31 — Complete-split prime residue criterion modulo seven
+
+The neutral finite-field layer constructs a primitive seventh root from a
+root of the discriminant-49 real cubic, uses Frobenius to obtain
+`7 | q^2 - 1`, and concludes `q % 7 = 1 ∨ q % 7 = 6`.  The current packet
+layer builds the residue-field evaluation from the R29/R30 prime ideal and
+inertia-degree-one data, without historical routing/address assumptions.
+
+The resulting gcd support theorem states that every prime divisor of the gcd
+of the two current square-root norms is congruent to `±1 mod 7`.
+
+Status: **completed — Outcome A**.  This is a prime-support theorem only; it
+does not assert rational norm coprimality, a new successor, descent, or FLT7
+closure. See `report-037.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:
