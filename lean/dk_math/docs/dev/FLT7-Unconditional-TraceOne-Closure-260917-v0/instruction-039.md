@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-033.md
 - report-034.md
 - report-036.md
@@ -85,6 +86,7 @@ Do not rebuild this from norms.
 Let q be prime with q|R and q|S.
 
 R30/R31 give:
+
 - q != 7;
 - exactly three primes above q;
 - ramification index one;
@@ -124,10 +126,12 @@ define/order:
     P2 := sigma^2 • P0.
 
 Prove:
+
 - P0,P1,P2 are pairwise distinct;
 - they exhaust primesOver(q).
 
 Preferred API:
+
 - Ideal.orbit_eq_primesOver;
 - the IsGalois pretransitive action on primesOver;
 - R30 cardinality = 3.
@@ -212,6 +216,7 @@ Let:
     m := a.factorization q.
 
 Use:
+
 - q is completely split;
 - e=f=1;
 - each prime above q occurs in the principal ideal (a) with exponent m;
@@ -293,6 +298,7 @@ This decomposition should be canonical up to the ordinary uniqueness of
 natural cube roots.
 
 Relate it to R32:
+
 - D1,D2 are the mod-three squarefree shadow of C;
 - do not delete the R32 API, but state a bridge if cheap.
 
@@ -349,6 +355,7 @@ Only after the 1-to-2 allocation theorem and canonical C normal form are
 green, inspect current direct-provenance facts for a clash.
 
 Specifically ask:
+
 - can a common prime be forced to allocate two primes to r by another current
   theorem?
 - does the twisted coefficient/local residue data forbid the remaining
@@ -426,6 +433,7 @@ At minimum:
     git diff --check
 
 Print axioms for:
+
 - ideal scalar split;
 - allocation xor theorem;
 - Galois orbit enumeration;

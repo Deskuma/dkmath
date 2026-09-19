@@ -926,6 +926,24 @@ Status: **completed — Outcome B**.  The normal form is kernel-checked, but no
 new coprimality, defect-triviality, contradiction, or FLT7 closure follows at
 this checkpoint. See `report-038.md`.
 
+## FLT7TC-005R33 — Principal ideal split and common-prime allocation xor
+
+The R33 production layer transports the square-root unit split into the
+actual ring of integers. It proves the principal-ideal scalar identity,
+transports ideal coprimality, derives `q | a` from the existing norm-cube
+identity, and proves that every prime ideal above a common norm prime contains
+exactly one of the two square-root principal ideals. The public facade and
+API/axiom audit tests export these Part A–B results.
+
+The explicit cyclic three-prime orbit, the two-gap-primes-to-three forcing
+argument, the one-versus-two cardinality theorem, and the subsequent ideal
+valuation/norm-exponent transport were not added to this checkpoint. The
+precise next frontier is the rotation/membership bridge needed before any
+canonical `C = gcd R S` normal form can be stated.
+
+Status: **partial — Part A and the exclusive allocation xor are
+kernel-checked; Galois orbit/cardinality remains open**. See `report-039.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:

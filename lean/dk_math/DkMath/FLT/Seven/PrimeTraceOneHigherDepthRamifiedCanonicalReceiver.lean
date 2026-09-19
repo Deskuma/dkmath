@@ -207,7 +207,7 @@ private theorem column_coprime_unit_quotient
   exact ⟨7 ^ r.primary.depth, by rw [r.primary.gapRoot_eq]; ring⟩
 
 private theorem summit_sndCore_not_seven_dvd
-    (r : RamifiedPrimarySecondCoordinateRoutingPacket p) :
+    (_r : RamifiedPrimarySecondCoordinateRoutingPacket p) :
     ¬ (7 : ℤ) ∣ seventhPowerSndCore p.root.fst p.root.snd :=
   p.sndCore_not_seven_dvd
 
@@ -265,7 +265,7 @@ theorem depth_zero_compensation_core_eq_terminal
   rw [p.compensationCore_eq]
   unfold PrimitiveRamifiedSummitPacket.ramifiedPrimaryCompensationCore
   unfold TerminalPrimitiveRamifiedSummitPacket.ramifiedCompensationCore
-  simpa [ht]
+  simp [ht]
 
 theorem depth_zero_receiver_iff_terminal_receiver
     (p : RamifiedPrimarySecondCoordinateCanonicalSplit q)
@@ -275,7 +275,7 @@ theorem depth_zero_receiver_iff_terminal_receiver
     p.CubicGapSeventhShapeReceiver ↔
       t.RamifiedCubicGapSeventhShapeReceiver := by
   have hcore := p.depth_zero_compensation_core_eq_terminal t ht hd
-  simpa [CubicGapSeventhShapeReceiver,
+  simp [CubicGapSeventhShapeReceiver,
     TerminalPrimitiveRamifiedSummitPacket.RamifiedCubicGapSeventhShapeReceiver,
     RamifiedPrimarySecondCoordinateRoutingPacket.summit, hcore, ht]
 
@@ -287,8 +287,7 @@ theorem vertical_coprime_compensation_residual
       (p.compensationCore * p.primaryRouting.summit.residualRoot) := by
   have hVU : p.verticalUnitRoot ∣ p.primaryRouting.summit.gapRoot := by
     have hVU' : p.verticalUnitRoot ∣ p.primaryRouting.primary.unitRoot :=
-      ⟨p.horizontalUnitRoot, by rw [p.unitRoot_eq]
-        <;> ring⟩
+      ⟨p.horizontalUnitRoot, by rw [p.unitRoot_eq]⟩
     have hUG : p.primaryRouting.primary.unitRoot ∣
         p.primaryRouting.summit.gapRoot := by
       refine ⟨7 ^ p.primaryRouting.primary.depth, ?_⟩
