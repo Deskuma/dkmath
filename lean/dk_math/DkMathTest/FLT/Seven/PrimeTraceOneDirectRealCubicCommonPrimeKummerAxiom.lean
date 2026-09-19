@@ -1,0 +1,16 @@
+import DkMath.FLT.Seven
+
+open DkMath.FLT.Seven
+open DkMath.FLT.Seven.SevenRealCubic
+
+#print axioms directOrbitCanonicalCommonFactor_c_eq_one_or_prime_dvd
+#print axioms directOrbitCanonicalCommonFactor_c_eq_one_arithmetic
+#print axioms directOrbitCommonPrime_dvd_data
+#print axioms directOrbitCommonPrime_q_mod_seven
+#print axioms directOrbitCommonPrimeKummerUnit_projectiveLog
+#print axioms directOrbitCommonPrimeTwistRatio21_projectiveLog
+#print axioms directOrbitCommonPrime_global_seventh_correction
+#print axioms directOrbitCommonPrime_oriented_gap_prime
+#print axioms directOrbitCommonPrime_fourteen_power_ratio
+#print axioms directOrbitCommonPrime_kummer_residue_condition
+#print axioms directOrbitCommonPrime_kummer_beta_form

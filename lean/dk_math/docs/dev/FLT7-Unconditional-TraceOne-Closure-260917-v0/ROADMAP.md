@@ -1003,6 +1003,24 @@ Status: **completed — Outcome B**.  The production module, facade, API/axiom
 audits, and R37 scratch verification pass.  No successor, descent, or FLT7
 contradiction is claimed. See `report-043.md`.
 
+## FLT7TC-005R38 — Common-prime Kummer residue obstruction
+
+The R38 production layer splits the canonical common factor into the `C = 1`
+arithmetic branch and the prime-divisor branch.  For `q | C` it transports the
+existing `q % 7 = 1 ∨ q % 7 = 6` and complete-splitting facts, chooses the
+unique oriented gap prime, and proves both rotated roots are nonzero in its
+residue field.  The R27 square-twist identity then gives an explicit 14th
+power for the coefficient ratio.  Both that ratio and the fixed unit
+`alphaUnit * alphaAddOneUnit` have projective class `(0,3)`, so their quotient
+has an exact global seventh-power correction.  The resulting local packet is
+`z^7 = beta * (1 + beta)` with
+`beta^3 = 2*beta^2 + beta - 1`.
+
+The R38 scratch calibration has a `q = 29` nonresidue example and a
+`q = 379` residue example, so the fixed condition is not a universal
+contradiction.  Status: **completed — Outcome B**.  No successor, descent, or
+FLT7 contradiction is claimed. See `report-044.md`.
+
 ## FLT7TC-006 — Primitive FLT7 branch closure
 
 The original away branch no longer needs an independent final contradiction:

@@ -52,6 +52,7 @@ import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicResidueSupport
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicCubeDefect
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicPrimeAllocation
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicCanonicalCommonFactor
+import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicCommonPrimeKummer
 import DkMath.FLT.Seven.FirstCoordinateRemainders
 import DkMath.FLT.Seven.RoutingSevenPivot
 import DkMath.FLT.Seven.FirstCoordinateRoutingAudit
