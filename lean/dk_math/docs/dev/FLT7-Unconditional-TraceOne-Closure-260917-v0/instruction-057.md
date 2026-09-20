@@ -1,0 +1,338 @@
+# FLT7TC-005R51 — Simplest-cubic class-zero certificate audit
+
+Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
+
+Authoritative inputs:
+- report-056.md
+- SevenRealCubicSourcePlaneNormSeven.lean
+- PrimeTraceOneDirectRealCubicSharpenedBranch.lean
+- SevenRealCubicThetaSeventhPower.lean
+- SevenRealCubicThetaSeventhPowerDepth.lean
+- SevenRealCubicUnitClass.lean
+- SevenRealCubicEisenstein.lean
+- SevenRealCubicCoprimeExtraction.lean
+
+External mathematical calibration, for research guidance only:
+- Shanks simplest cubic forms
+  F_m(X,Y) = X^3 - m X^2 Y - (m+3) X Y^2 - Y^3.
+- The R50 form is F_{-2}.
+- F_{-2}(a,b) = -F_{-1}(b,a).
+- Hoshi's published solution table for the m=-1, lambda=7 equation lists
+  (1,-3), (-3,2), (2,1), corresponding exactly to the R50 triples
+  (-3,1), (2,-3), (1,2).
+
+This published classification is NOT an admissible Lean proof by citation.
+Use it only to confirm the exact target and to guide a special-case certificate.
+
+Important correction:
+the binary cubic discriminant of
+
+    a^3 + 2*a^2*b - a*b^2 - b^3
+
+is 49, not 2401.  The R50 production theorems do not depend on the earlier
+documentation typo.
+
+R51 is a research/certificate checkpoint.  Do not build a generic Thue solver.
+
+## Part A — package the exact binary cubic and discriminant
+
+Define a neutral binary cubic, if useful:
+
+    sourcePlaneNormSevenForm a b
+      := a^3 + 2*a^2*b - a*b^2 - b^3.
+
+Prove:
+
+    norm (linearSource a b) = sourcePlaneNormSevenForm a b.
+
+Kernel-check its classical binary-cubic discriminant as 49 using an explicit
+integer formula.  Keep the definition local/neutral; do not introduce a large
+binary-form framework.
+
+## Part B — exact mod-seven degeneration
+
+Prove the integer identity
+
+    F(a,b) = (a + 3*b)^3 - 7*b*(a + 2*b)^2.
+
+Hence from
+
+    F(a,b) = -7
+
+deduce
+
+    7 | a + 3*b.
+
+Choose c with
+
+    a = 7*c - 3*b.
+
+Then kernel-check
+
+    F(7*c - 3*b, b)
+      = -7 * (b^3 - 14*b^2*c + 49*b*c^2 - 49*c^3).
+
+Thus the norm-minus-seven problem is equivalent to the special unit equation
+
+    b^3 - 14*b^2*c + 49*b*c^2 - 49*c^3 = 1.
+
+This is a structural reduction, not yet a solution.
+
+## Part C — Hessian/Jacobian covariant certificate
+
+Define the two explicit covariants
+
+    Q(a,b) := a^2 + a*b + b^2
+    P(a,b) := a^3 - 12*a^2*b - 15*a*b^2 - b^3.
+
+Prove the exact polynomial identity
+
+    P(a,b)^2
+      = 28 * Q(a,b)^3 - 27 * F(a,b)^2.
+
+Also kernel-check that the normalized Hessian of F is
+
+    7 * Q(a,b).
+
+Under F(a,b) = -7, prove:
+
+    7 | Q(a,b)
+    7 | P(a,b).
+
+With
+
+    Q(a,b) = 7*q
+    P(a,b) = 7*k
+
+derive
+
+    k^2 = 196*q^3 - 27,
+
+equivalently
+
+    k^2 + 27 = 196*q^3.
+
+Do not claim this Mordell-type equation solved unless a complete proof follows.
+
+## Part D — positive-definite Eisenstein shadow
+
+Using a = 7*c - 3*b, prove
+
+    Q(a,b) / 7 = b^2 - 5*b*c + 7*c^2
+
+at the integer divisibility level, avoiding informal division.
+
+Then prove
+
+    b^2 - 5*b*c + 7*c^2
+      = (b - 2*c)^2 - (b - 2*c)*c + c^2.
+
+Record that this is the ordinary Eisenstein norm form.
+
+Audit whether the existing FLT3/Eisenstein infrastructure can consume this
+identity without importing any FLT3 terminal theorem.
+
+The purpose is to see whether the Mordell certificate can be factored in a
+UFD with finite unit group and reduced to a finite, checkable set of cubic
+coefficient equations.
+
+## Part E — exploit the CURRENT class-zero/high-power condition
+
+Do not solve all norm-minus-seven points unless necessary.
+
+For a current R50 correction
+
+    Y = P.t^(7^9)
+
+prove a forward-depth theorem if not already available:
+
+    ThetaNilpotentDepth n (u^(7^n))
+
+for every model unit u and natural n.
+
+This should follow by induction from the exact seventh-power coordinate
+formulas.  Do not confuse it with the reverse depth-drop theorem.
+
+Instantiate n=9 to obtain
+
+    7^9 | thetaLinearInt Y
+    7^9 | thetaSquareInt Y.
+
+Combine with the correction line
+
+    3*thetaLinearInt Y = 14*thetaSquareInt Y.
+
+Write uniquely
+
+    thetaLinearInt Y = 14*m
+    thetaSquareInt Y = 3*m.
+
+Prove
+
+    7^9 | m.
+
+For
+
+    x := sourcePlaneNormSevenAxis * Y = linearSource a b
+
+derive the exact coordinate transformation
+
+    a = 2*A - 21*m
+    b = -3*A + 28*m
+
+where A = thetaConstInt Y, and the inverse identities
+
+    A = -4*a - 3*b
+    7*m = -(3*a + 2*b).
+
+Therefore current provenance gives the strong congruence
+
+    7^10 | (3*a + 2*b).
+
+This is strictly stronger than merely projectiveLog Y = 0.
+
+## Part F — p-adic branch calibration
+
+From F(a,b) = -7 and the high-depth congruence, derive the strongest cheap
+7-adic consequences.
+
+At minimum prove:
+
+- a + 3*b is divisible by 7;
+- 3*a + 2*b is divisible by 7^10;
+- Q(a,b) is divisible by 7;
+- thetaConstInt Y satisfies its norm-one cube congruence to the justified
+  modulus.
+
+Determine whether these conditions force x modulo 7^10 to lie in one of the
+three Hensel branches generated by the R50 calibration points.
+
+If so, state the result as a congruence classification only.  Do not turn
+p-adic uniqueness into integer equality.
+
+## Part G — special-case completeness routes
+
+Compare the following routes for a kernel-checkable COMPLETE proof.
+
+### G1. Eisenstein factorization route
+
+Try to factor
+
+    k^2 + 27 = 196*q^3
+
+in the Eisenstein integers.
+
+Keep track of primes above 2, 3, and 7 exactly.
+
+A successful route must end in a finite set of integer cubic coefficient
+equations that Lean can verify exhaustively.
+
+If the factorization merely reproduces the original Thue equation, state so.
+
+### G2. Reduced binary-cubic / covariant route
+
+Investigate whether the unusually small discriminant 49 and the positive
+quadratic Hessian allow an elementary reduction bound on Q(a,b).
+
+Do not assume such a bound.  Prove it or stop.
+
+### G3. Published simplest-cubic proof specialization
+
+Inspect the proof mechanism behind the known m=-1, lambda=7 classification.
+
+Identify the minimum theorem actually used:
+- a field-coincidence classification;
+- a continued-fraction bound;
+- a linear-form-in-logarithms bound;
+- or a finite explicit reduction certificate.
+
+Do not import an external theorem as an axiom.
+
+If the published argument can be specialized to a finite arithmetic
+certificate, describe exactly how that certificate could be checked in Lean.
+
+### G4. Current high-depth-only theorem
+
+Prefer a theorem weaker than full classification if possible:
+
+    F(a,b) = -7
+    7^10 | 3*a + 2*b
+    current justified residue/norm conditions
+    -----------------------------------------
+    a = 2 and b = -3.
+
+This is sufficient for the current C=1 packet.
+
+If this can be proved without classifying all norm-minus-seven solutions, it is
+the preferred R51 breakthrough.
+
+## Part H — contradiction only if completeness is kernel-checked
+
+If G4 or the full R50 classification is proved, combine with
+
+    Y != 1
+
+and the exact calibration
+
+    sourcePlaneNormSevenAxis * 1 = linearSource 2 (-3)
+
+to eliminate the C=1 branch.
+
+Preferred endpoint:
+
+    directOrbit_no_trivial_common_factor_sharpened_packet
+      (P : DirectOrbitTrivialCommonFactorSharpenedPacket h) : False.
+
+Then collapse the R49 dichotomy to the C>1 packet.
+
+Do not add this theorem from external literature alone.
+
+## Part I — Mathlib capability audit
+
+Search the exact Mathlib version used by this project for:
+- binary cubic covariants;
+- continued fractions and convergent approximation theorems;
+- elliptic/Mordell curve integral-point solvers;
+- certified linear forms in logarithms;
+- Thue solvers.
+
+Distinguish basic definitions from an effective completeness API.
+
+A generic elliptic curve definition is not an integral-point solver.
+
+## Deliverables
+
+Primary:
+- report-057.md
+- ROADMAP.md
+
+Scratch Lean is strongly encouraged for Parts A-F.
+
+Promote a neutral production module only if the covariant/depth lemmas are
+clean and reusable.
+
+Promote C=1 exclusion only if an actual complete proof is kernel-checked.
+
+## Hard stops
+
+- No external paper theorem as an axiom.
+- No finite numerical search as completeness.
+- No PARI/Sage answer treated as a proof without a Lean-checkable certificate.
+- No p-adic congruence promoted to integer equality.
+- No invented Mathlib Thue/Mordell solver.
+- No fundamental-unit basis assumption.
+- No C>1 character work in this checkpoint.
+- No FLT7 conclusion unless all required branches are actually closed.
+- No sorry, sorryAx, admit, unsafe, or project axiom.
+
+## Outcomes
+
+- Outcome A — a kernel-checkable special certificate proves the high-depth
+  current solution is the calibration point, eliminating C=1.
+- Outcome B — full three-solution norm-minus-seven classification is
+  kernel-checked, hence C=1 is eliminated.
+- Outcome C — covariant/high-depth reductions are green and yield a strictly
+  smaller explicit completeness theorem, but that theorem remains open.
+- Outcome D — the problem reduces to a genuine effective Thue/Mordell/Baker
+  theorem absent from current infrastructure; record the exact certificate
+  boundary.
