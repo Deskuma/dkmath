@@ -1108,3 +1108,20 @@ Stop and report rather than force a theorem if:
 - the away simultaneous-power split is declared impossible without proof;
 - a well-founded descent relation is assumed rather than constructed;
 - any new source requires `sorry`, `sorryAx`, `admit`, or a project `axiom`.
+
+## FLT7TC-005R40 — Weighted cyclic trace and first mod-49 seventh-power jet
+
+The R40 production layer adds the neutral cyclic trace, compresses the R39
+unit equation into the exact weighted trace with transport exponent
+`32 + 42*k`, and records the ramified-axis normalization through
+`7 = eisensteinAxis^3 * thetaSevenUnit`. It also proves the arbitrary
+theta-coordinate trace formula and checks the class-(1,1) calibration unit
+`rho = -alphaUnit^3`.
+
+The neutral theta seventh-power layer now exposes the linear and square
+coordinate congruences modulo `49`. The unrestricted constant-coordinate
+expansion, the current-provenance signed norm/projective-class proof for the
+normalized unit, and transport to the first root jet remain open. No
+contradiction, successor, descent, or FLT7 conclusion is claimed.
+
+Status: **implemented — Outcome E/C boundary**. See `report-046.md`.

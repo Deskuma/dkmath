@@ -1,0 +1,28 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+-/
+
+import DkMath.FLT.Seven
+
+#print "file: DkMathTest.FLT.SevenPrimeTraceOneDirectRealCubicTrivialCommonFactorDeepJetApi"
+
+open DkMath.FLT.Seven
+open DkMath.FLT.Seven.SevenRealCubic
+open DkMath.FLT.Seven.SevenRealCubicInt
+
+#check directOrbitCyclicTrace
+#check directOrbitDeepJet_exponent_eq_three_mul_add_two
+#check directOrbitDeepJet_weighted_trace_eq_zero
+#check directOrbitCyclicTrace_weighted_eq_zero
+#check directOrbitDeepJet_normalization
+#check directOrbitDeepJet_normalized_trace_zero
+#check directOrbitCyclicTrace_theta_coordinate_formula
+#check directOrbitDeepJet_trace_plane
+#check directOrbitDeepJetRho
+#check directOrbitDeepJetRho_val
+#check directOrbitDeepJetRho_norm
+#check directOrbitDeepJetRho_projectiveLog
+#check directOrbitDeepJetRho_trace_zero
+#check thetaLinear_pow_seven_mod49_neutral
+#check thetaSquare_pow_seven_mod49_neutral

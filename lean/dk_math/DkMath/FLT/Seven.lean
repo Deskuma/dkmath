@@ -53,6 +53,8 @@ import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicCubeDefect
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicPrimeAllocation
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicCanonicalCommonFactor
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicTrivialCommonFactor
+import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicTrivialCommonFactorDeepJet
+import DkMath.FLT.Seven.SevenRealCubicThetaSeventhPowerMod49
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicCommonPrimeKummer
 import DkMath.FLT.Seven.FirstCoordinateRemainders
 import DkMath.FLT.Seven.RoutingSevenPivot
