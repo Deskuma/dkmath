@@ -1302,3 +1302,20 @@ second-coordinate 方程式を厳密に展開した。
 finite shell、`C = 1` contradiction はこの checkpoint では未接続である。R52 は
 **Outcome C**（exact stripping と、相対素性を仮定した cube extraction/sector
 normalization が green）である。See `report-058.md`.
+
+## FLT7TC-005R53 — Current Eisenstein coprimality and unique tauSq sector
+
+R53 は R52 の current stripping data に対して、`3 ∤ q`、`q` と stripped second
+coordinate `s` の相対素性、`delta` と共役の `EisensteinRelPrime` を kernel-check
+した。これにより、相対素性を仮定していた neutral cube extraction を
+`EisensteinCurrentCubeSectorPacket` に接続し、`norm gamma = q`、高深度の
+`7^8` proximity、線形 relation を packet に保持した。
+
+さらに `pi7^2` stripping の second-coordinate identity を `ZMod 7` の finite
+decision に接続し、`.one` と `.tau` を除外して sector を `.tauSq` に固定した。
+そこから残る exact binary cubic equation
+`R^3 - 5*R^2*S - 8*R*S^2 - S^3 = 1` を追加した。
+
+q=1、F_5 の外部分類、`7^8 | R*S*(R+S)` の後続 local audit、finite shell、
+`C = 1` contradiction は未接続である。R53 は **Outcome B**（relative primality、
+unique tauSq、F_5 endpoint が green）である。See `report-059.md`.
