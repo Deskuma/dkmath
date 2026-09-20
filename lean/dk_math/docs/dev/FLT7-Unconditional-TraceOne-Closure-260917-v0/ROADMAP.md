@@ -1274,3 +1274,18 @@ the mandatory dichotomy and the optional norm, non-torsion, and height
 refinements all passed the focused checks.
 
 See `report-055.md`.
+
+## FLT7TC-005R50 — Source-plane norm-minus-seven landing
+
+R50 は R49 の `C = 1` sharpened packet から
+`Y = t^(7^9)` の correction line
+`3 * thetaLinearInt Y = 14 * thetaSquareInt Y` を取り出し、
+`sourcePlaneNormSevenAxis = linearSource 2 (-3)` との積を source plane に着地させ、
+norm `-7` を得る中立 production module を追加した。axis の theta-square product
+formula、linear-source norm formula、Eisenstein/ramified/source-plane の三校正、
+および `Y0/Y1/Y2` の projective logs `(0,0)/(0,5)/(0,1)` も kernel-check した。
+
+Part F/G の binary-cubic classification、Part H の `C = 1` exclusion、Part I の
+dichotomy collapse、successor/descent、FLT7 conclusion はこの checkpoint に含めて
+いない。R50 は **Outcome B**（landing/calibrations green、classification frontier
+継続）である。See `report-056.md`.
