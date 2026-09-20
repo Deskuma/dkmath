@@ -1172,3 +1172,17 @@ The `Z` square-coordinate jet and projective-root closure are not included in
 this checkpoint.  No contradiction, descent, or FLT7 conclusion is claimed.
 
 Status: **implemented — Outcome C frontier**. See `report-049.md`.
+
+## FLT7TC-005R44 — Square-jet closure and 49th-power correction
+
+R44 proves the source-root scalar difference and source sixth-power scalarity
+modulo `49`, cancels the quotient-side theta unit from the depth-32 remainder,
+and reaches `49 | thetaSquareInt (Z^7)`.  The neutral square jet then gives
+`thetaSquareModSeven Z = 0`; the square coordinate is transported to `v⁻¹`
+and `v`, followed by projective-log zero, `v = w^7`, and the exact correction
+`W = rho * w^49`.  The paired quotient identity remains
+`quotientCore = thetaSevenUnit * Z^7`.
+
+No independent checked clash, descent, or FLT7 contradiction is introduced.
+
+Status: **implemented — Outcome B algebraic endpoint**. See `report-050.md`.
