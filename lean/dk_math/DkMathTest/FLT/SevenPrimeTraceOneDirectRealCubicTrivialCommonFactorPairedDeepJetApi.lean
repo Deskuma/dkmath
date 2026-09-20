@@ -1,0 +1,17 @@
+import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicTrivialCommonFactorPairedDeepJet
+
+namespace DkMathTest.FLT.SevenPrimeTraceOneDirectRealCubicTrivialCommonFactorPairedDeepJetApi
+
+open DkMath.FLT.Seven
+open DkMath.FLT.Seven.SevenRealCubic
+
+#check directOrbitPairedDeepJetY
+#check directOrbitPairedDeepJet_fixed_unit_identity
+#check directOrbitPairedDeepJet_quotientCore_eq
+#check directOrbitPairedDeepJet_gapCore_eq
+#check directOrbitPairedDeepJet_cores_product_unit_eq
+#check directOrbitPairedDeepJet_quotientCore_eq_canonical_depth32
+#check directOrbit_axis_pow_six_dvd_imp_natCast49
+#check directOrbit_axis_pow_nine_dvd_imp_natCast343
+
+end DkMathTest.FLT.SevenPrimeTraceOneDirectRealCubicTrivialCommonFactorPairedDeepJetApi

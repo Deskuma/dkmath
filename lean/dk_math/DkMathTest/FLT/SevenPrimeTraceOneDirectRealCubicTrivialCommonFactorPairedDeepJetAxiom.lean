@@ -1,0 +1,12 @@
+import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicTrivialCommonFactorPairedDeepJet
+
+open DkMath.FLT.Seven
+open DkMath.FLT.Seven.SevenRealCubic
+
+#print axioms directOrbitPairedDeepJet_fixed_unit_identity
+#print axioms directOrbitPairedDeepJet_quotientCore_eq
+#print axioms directOrbitPairedDeepJet_gapCore_eq
+#print axioms directOrbitPairedDeepJet_cores_product_unit_eq
+#print axioms directOrbitPairedDeepJet_quotientCore_eq_canonical_depth32
+#print axioms directOrbit_axis_pow_six_dvd_imp_natCast49
+#print axioms directOrbit_axis_pow_nine_dvd_imp_natCast343

@@ -1146,3 +1146,16 @@ No constant-coordinate mod-49 expansion, Thue solver, contradiction,
 successor, descent, or FLT7 conclusion is claimed.
 
 Status: **implemented — mandatory R41 Parts A–I green**. See `report-047.md`.
+
+## FLT7TC-005R42 — Paired quotient core and second deep-jet coordinate
+
+R42 starts the paired-core closure in a focused module.  It records the
+literal fixed-unit cancellation, the quotient-side model `Y`, exact gap and
+quotient scalarizations, cancellation of the paired product's natural scalar,
+the depth-32 canonical witness with `eisensteinAxis^31 ∣ d`, and the neutral
+axis-depth implications `axis^6 → 49` and `axis^9 → 343`.
+
+No mod-343 trace expansion, contradiction, successor, descent, or FLT7
+conclusion is claimed.
+
+Status: **implemented — focused algebraic/core layer**. See `report-048.md`.
