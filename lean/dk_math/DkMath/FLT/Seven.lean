@@ -65,6 +65,7 @@ import DkMath.FLT.Seven.SevenRealCubicSourcePlaneNormSeven
 import DkMath.FLT.Seven.SevenRealCubicSimplestCubicCertificate
 import DkMath.FLT.Seven.SevenRealCubicEisensteinCubeCertificate
 import DkMath.FLT.Seven.SevenRealCubicEisensteinCoprimality
+import DkMath.FLT.Seven.SevenRealCubicHighDepthFive
 import DkMath.FLT.Seven.FirstCoordinateRemainders
 import DkMath.FLT.Seven.RoutingSevenPivot
 import DkMath.FLT.Seven.FirstCoordinateRoutingAudit

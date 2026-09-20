@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-059.md
 - SevenRealCubicEisensteinCoprimality.lean
 - SevenRealCubicEisensteinCubeCertificate.lean
@@ -10,6 +11,7 @@ Authoritative inputs:
 - SevenRealCubicSourcePlaneNormSeven.lean
 
 R53 kernel-checks:
+
 - current Eisenstein conjugate relative primality;
 - cube extraction;
 - unique tauSq sector;
@@ -300,6 +302,7 @@ Only then expose C=1 exclusion.
 ## Deliverables
 
 Primary:
+
 - a neutral/current high-depth F5 production module if Parts A-G are clean;
 - report-060.md;
 - ROADMAP.md.
