@@ -1224,3 +1224,32 @@ aggregation.  No theorem excludes `W = rho`, and the `q ≡ -1 mod 7` branch
 remains invisible to the reduced Kummer test.  R46 is therefore **Outcome E**:
 the endpoint is saturated and all current closure routes require a substantial
 new theorem.  See `report-052.md`.
+
+## FLT7TC-005R47 — Source-sensitive calibration exclusion
+
+R47 promotes the source-sensitive calibration exclusion from the Astra scratch
+work into a standalone production module.  The checked endpoint excludes the
+calibrated `W = rho` branch for the current deep-jet data.  It does not exclude
+`C = 1` in general and does not add a `q % 7 = 1` bridge, a degree-six phase,
+reciprocity, a Thue solver, or an FLT7 conclusion.
+
+Status: **implemented — Outcome B, calibration branch removed**.
+See `report-053.md`.
+
+## FLT7TC-005R48 — Common-prime residue-one strengthening
+
+R48 promotes the neutral common-prime residue bridge.  For the quotient-side
+finite-field construction, a prime `q` dividing the canonical common factor
+satisfies `q % 7 = 1`.  The proof is routed through the public neutral theorem
+`quotient_eval_mod_seven_one`, the existing square-refinement provenance, and
+the canonical common-prime endpoint.  The optional finite lower-bound corollary
+also gives `1 < C -> 29 <= C`.
+
+The old `common_norm_prime_mod_seven` theorem is unchanged.  Calibration
+exclusion, the 14th-power/Kummer layer, cyclic products, the degree-six phase,
+reciprocity, successor/descent, and a `C > 1` contradiction remain outside this
+checkpoint.  In particular, `q = 379` remains locally Kummer-compatible, so no
+general FLT7 closure is claimed.
+
+Status: **implemented — Outcome B, residue support strengthened**.
+See `report-054.md`.
