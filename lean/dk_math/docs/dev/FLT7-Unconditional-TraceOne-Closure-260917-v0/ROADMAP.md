@@ -1186,3 +1186,23 @@ and `v`, followed by projective-log zero, `v = w^7`, and the exact correction
 No independent checked clash, descent, or FLT7 contradiction is introduced.
 
 Status: **implemented — Outcome B algebraic endpoint**. See `report-050.md`.
+
+## FLT7TC-005R45 — Finite-Hensel depth amplification and the 7^9 correction
+
+R45 adds the neutral finite-depth predicate `ThetaNilpotentDepth`, its generic
+seventh-power depth-drop theorem, the depth-one unit-class closure, recursive
+finite `7^n`-power extraction, and the general
+`eisensteinAxis^(3*m) -> 7^m` scalar divisibility transport.
+
+Using only the existing depth-32 quotient remainder, the current paired
+provenance reaches depth 9 for the source root, its sixth power, and `Z^7`.
+The depth-drop and exact coordinate-scalar formulas then transfer depth 8 to
+`v⁻¹`, yielding `v = t^(7^8)` and the mandatory correction
+`W = rho * t^(7^9)`.  The quotient identity is retained in the provenance
+wrapper.
+
+No arbitrary-depth claim, infinite descent, contradiction, successor, or FLT7
+conclusion is made.  Existing non-square, sign, height, and binary-cubic/Thue
+results do not produce an independent clash at this checkpoint.
+
+Status: **implemented — Outcome B finite-Hensel endpoint**. See `report-051.md`.

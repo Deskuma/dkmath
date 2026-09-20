@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 -/
 
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicTrivialCommonFactorDeepJet
+import DkMath.FLT.Seven.SevenRealCubicThetaSeventhPowerDepth
 
 #print "file: DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicTrivialCommonFactorPairedDeepJet"
 
@@ -902,6 +903,315 @@ theorem directOrbitPairedDeepJet_49th_power_correction
     h hc xi v hxi hvY
   refine ⟨w, hv, hlin, hvsq, hlog, hw, ?_, hquot⟩
   rw [hv, hw, ← pow_mul]
+
+theorem directOrbitPairedDeepJet_source_root_depth9
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : PrimitiveCounterexampleRamifiedProvenance source}
+    (p : DirectRealCubicRootPacket source r) :
+    ThetaNilpotentDepth 9 p.rho := by
+  have hpow32 : eisensteinAxis ^ 32 ∣ directOrbitGap p :=
+    directOrbit_gap_axis_pow32_dvd p
+  have hpow30 : eisensteinAxis ^ 30 ∣ directOrbitGap p := by
+    apply dvd_trans (show eisensteinAxis ^ 30 ∣ eisensteinAxis ^ 32 by
+      refine ⟨eisensteinAxis ^ 2, ?_⟩
+      rw [← pow_add]
+      ) hpow32
+  have hscalar :=
+    eisensteinAxis_pow_three_mul_dvd_imp_ofInt_pow (m := 10) hpow30
+  have hcoords := directOrbitPairedDeepJet_ofInt_dvd_theta_coordinates
+    (n := (7 : ℤ) ^ 10) (x := directOrbitGap p) hscalar
+  let A : ℤ := thetaConstInt p.rho
+  let B : ℤ := thetaLinearInt p.rho
+  let C : ℤ := thetaSquareInt p.rho
+  have hrho : p.rho = ofThetaCoordinates A B C :=
+    theta_coordinate_decomposition p.rho
+  have hrot := directOrbitPairedDeepJet_rotate_gap_theta_coordinates A B C
+  have hcoords' :
+      (7 : ℤ) ^ 10 ∣ -7 * C ∧
+        (7 : ℤ) ^ 10 ∣ 3 * B - 21 * C ∧
+          (7 : ℤ) ^ 10 ∣ B - 6 * C := by
+    rw [directOrbitGap, hrho] at hcoords
+    simpa only [hrot.1, hrot.2.1, hrot.2.2, A, B, C] using hcoords
+  have hC : (7 : ℤ) ^ 9 ∣ C := by
+    rcases hcoords'.1 with ⟨q, hq⟩
+    refine ⟨-q, ?_⟩
+    norm_num [pow_succ] at hq ⊢
+    nlinarith
+  have hB : (7 : ℤ) ^ 9 ∣ B := by
+    rcases hcoords'.2.2 with ⟨q, hq⟩
+    rcases hC with ⟨c, hc⟩
+    refine ⟨7 * q + 6 * c, ?_⟩
+    norm_num [pow_succ] at hq hc ⊢
+    nlinarith
+  exact ⟨by simpa [B] using hB, by simpa [C] using hC⟩
+
+theorem directOrbitPairedDeepJet_source_root_sub_scalar_dvd_pow9
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : PrimitiveCounterexampleRamifiedProvenance source}
+    (p : DirectRealCubicRootPacket source r) :
+    ofInt ((7 : ℤ) ^ 9) ∣
+      p.rho - ofInt (thetaConstInt p.rho) := by
+  let A : ℤ := thetaConstInt p.rho
+  let B : ℤ := thetaLinearInt p.rho
+  let C : ℤ := thetaSquareInt p.rho
+  have hrho : p.rho = ofThetaCoordinates A B C :=
+    theta_coordinate_decomposition p.rho
+  have hdepth := directOrbitPairedDeepJet_source_root_depth9 p
+  have hB : (7 : ℤ) ^ 9 ∣ B := by simpa [B] using hdepth.1
+  have hC : (7 : ℤ) ^ 9 ∣ C := by simpa [C] using hdepth.2
+  rcases hB with ⟨b, hb⟩
+  rcases hC with ⟨c, hc⟩
+  refine ⟨ofInt b * eisensteinAxis + ofInt c * eisensteinAxis ^ 2, ?_⟩
+  rw [hrho, hb, hc]
+  apply SevenRealCubicInt.ext <;>
+    norm_num [ofThetaCoordinates, thetaConstInt, thetaLinearInt,
+      thetaSquareInt, ofInt, eisensteinAxis_sq_coordinates,
+      SevenRealCubicInt.mul] <;> ring
+
+theorem directOrbitPairedDeepJet_source_root_pow_six_depth9
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : PrimitiveCounterexampleRamifiedProvenance source}
+    (p : DirectRealCubicRootPacket source r) :
+    ThetaNilpotentDepth 9 (p.rho ^ 6) := by
+  have hscalar := directOrbitPairedDeepJet_source_root_sub_scalar_dvd_pow9 p
+  rcases hscalar with ⟨q, hq⟩
+  let a : SevenRealCubicInt := ofInt (thetaConstInt p.rho)
+  have hrho : p.rho = a + ofInt ((7 : ℤ) ^ 9) * q := by
+    linear_combination hq
+  have hpow : p.rho ^ 6 =
+      (a + ofInt ((7 : ℤ) ^ 9) * q) ^ 6 := by
+    rw [hrho]
+  have hscalarPow : ofInt ((7 : ℤ) ^ 9) ∣
+      p.rho ^ 6 - (ofInt (thetaConstInt p.rho)) ^ 6 := by
+    refine ⟨q * (6 * a ^ 5 + 15 * ofInt ((7 : ℤ) ^ 9) * a ^ 4 * q +
+        20 * ofInt ((7 : ℤ) ^ 9) ^ 2 * a ^ 3 * q ^ 2 +
+        15 * ofInt ((7 : ℤ) ^ 9) ^ 3 * a ^ 2 * q ^ 3 +
+        6 * ofInt ((7 : ℤ) ^ 9) ^ 4 * a * q ^ 4 +
+        ofInt ((7 : ℤ) ^ 9) ^ 5 * q ^ 5), ?_⟩
+    calc
+      p.rho ^ 6 - (ofInt (thetaConstInt p.rho)) ^ 6 =
+          (a + ofInt ((7 : ℤ) ^ 9) * q) ^ 6 - a ^ 6 := by
+        rw [hpow]
+      _ = ofInt ((7 : ℤ) ^ 9) *
+          (q * (6 * a ^ 5 + 15 * ofInt ((7 : ℤ) ^ 9) * a ^ 4 * q +
+            20 * ofInt ((7 : ℤ) ^ 9) ^ 2 * a ^ 3 * q ^ 2 +
+            15 * ofInt ((7 : ℤ) ^ 9) ^ 3 * a ^ 2 * q ^ 3 +
+            6 * ofInt ((7 : ℤ) ^ 9) ^ 4 * a * q ^ 4 +
+            ofInt ((7 : ℤ) ^ 9) ^ 5 * q ^ 5)) := by ring
+  have hcoords := directOrbitPairedDeepJet_ofInt_dvd_theta_coordinates
+    (n := (7 : ℤ) ^ 9)
+    (x := p.rho ^ 6 - (ofInt (thetaConstInt p.rho)) ^ 6) hscalarPow
+  have hlinearScalar :
+      thetaLinearInt ((ofInt (thetaConstInt p.rho)) ^ 6) = 0 := by
+    norm_num [thetaLinearInt, ofInt, SevenRealCubicInt.mul,
+      pow_two, pow_succ]
+  have hsquareScalar :
+      thetaSquareInt ((ofInt (thetaConstInt p.rho)) ^ 6) = 0 := by
+    norm_num [thetaSquareInt, ofInt, SevenRealCubicInt.mul,
+      pow_two, pow_succ]
+  rcases hcoords.2.1 with ⟨q₁, hq₁⟩
+  rcases hcoords.2.2 with ⟨q₂, hq₂⟩
+  refine ⟨?_, ?_⟩
+  · refine ⟨q₁, ?_⟩
+    simpa [thetaLinearInt, hlinearScalar] using hq₁
+  · refine ⟨q₂, ?_⟩
+    simpa [thetaSquareInt, hsquareScalar] using hq₂
+
+theorem directOrbitPairedDeepJet_z_pow_seven_depth9
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : PrimitiveCounterexampleRamifiedProvenance source}
+    {p : DirectRealCubicRootPacket source r}
+    (h : DirectOrbitCanonicalCommonFactorPacket p) (hc : h.c = 1)
+    (xi v : SevenRealCubicIntˣ)
+    (hxi : h.squareRefinement.quotientSquareRoot =
+      (xi : SevenRealCubicInt) * (h.v : SevenRealCubicInt))
+    (hvY : directOrbitPairedDeepJetY h xi =
+      directOrbitDeepJetThetaUnit * (v⁻¹) ^ 7) :
+    ThetaNilpotentDepth 9 (directOrbitPairedDeepJetZ h v ^ 7) := by
+  have hdiff := directOrbitPairedDeepJet_quotient_remainder_cancel_theta
+    h hc xi v hxi hvY
+  have haxis30 : eisensteinAxis ^ 30 ∣
+      (directOrbitPairedDeepJetZ h v) ^ 7 - p.rho ^ 6 := by
+    exact dvd_trans (by
+      refine ⟨eisensteinAxis ^ 2, ?_⟩
+      rw [← pow_add]) hdiff
+  have hscalar :=
+    eisensteinAxis_pow_three_mul_dvd_imp_ofInt_pow (m := 10) haxis30
+  have hcoords := directOrbitPairedDeepJet_ofInt_dvd_theta_coordinates
+    (n := (7 : ℤ) ^ 10)
+    (x := (directOrbitPairedDeepJetZ h v) ^ 7 - p.rho ^ 6) hscalar
+  have hsource := directOrbitPairedDeepJet_source_root_pow_six_depth9 p
+  have hsum : (directOrbitPairedDeepJetZ h v) ^ 7 =
+      ((directOrbitPairedDeepJetZ h v) ^ 7 - p.rho ^ 6) + p.rho ^ 6 := by
+    ring
+  have hlinear : thetaLinearInt ((directOrbitPairedDeepJetZ h v) ^ 7) =
+      thetaLinearInt ((directOrbitPairedDeepJetZ h v) ^ 7 - p.rho ^ 6) +
+        thetaLinearInt (p.rho ^ 6) := by
+    rw [hsum]
+    simp [thetaLinearInt]
+    ring
+  have hsquare : thetaSquareInt ((directOrbitPairedDeepJetZ h v) ^ 7) =
+      thetaSquareInt ((directOrbitPairedDeepJetZ h v) ^ 7 - p.rho ^ 6) +
+        thetaSquareInt (p.rho ^ 6) := by
+    rw [hsum]
+    simp [thetaSquareInt]
+  constructor
+  · rcases hcoords.2.1 with ⟨q, hq⟩
+    rcases hsource.1 with ⟨q₀, hq₀⟩
+    refine ⟨7 * q + q₀, ?_⟩
+    rw [hlinear, hq, hq₀]
+    norm_num [pow_succ]
+    ring
+  · rcases hcoords.2.2 with ⟨q, hq⟩
+    rcases hsource.2 with ⟨q₀, hq₀⟩
+    refine ⟨7 * q + q₀, ?_⟩
+    rw [hsquare, hq, hq₀]
+    norm_num [pow_succ]
+    ring
+
+theorem directOrbitPairedDeepJet_z_depth8
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : PrimitiveCounterexampleRamifiedProvenance source}
+    {p : DirectRealCubicRootPacket source r}
+    (h : DirectOrbitCanonicalCommonFactorPacket p) (hc : h.c = 1)
+    (xi v : SevenRealCubicIntˣ)
+    (hxi : h.squareRefinement.quotientSquareRoot =
+      (xi : SevenRealCubicInt) * (h.v : SevenRealCubicInt))
+    (hvY : directOrbitPairedDeepJetY h xi =
+      directOrbitDeepJetThetaUnit * (v⁻¹) ^ 7)
+    (hlin : thetaLinearModSeven (v : SevenRealCubicInt) = 0) :
+    ThetaNilpotentDepth 8 (directOrbitPairedDeepJetZ h v) := by
+  have hdepth := directOrbitPairedDeepJet_z_pow_seven_depth9
+    h hc xi v hxi hvY
+  have hlocal := directOrbitPairedDeepJet_z_local_unit_and_linear
+    h xi v hxi hlin
+  have hconst : ¬(7 : ℤ) ∣
+      thetaConstInt (directOrbitPairedDeepJetZ h v) := by
+    intro hdiv
+    apply hlocal.1
+    exact (ZMod.intCast_zmod_eq_zero_iff_dvd _ 7).mpr hdiv
+  exact thetaNilpotentDepth_pow_seven_drop
+    (directOrbitPairedDeepJetZ h v) 8 hconst hdepth
+
+theorem directOrbitPairedDeepJet_z_theta_coordinates
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : PrimitiveCounterexampleRamifiedProvenance source}
+    {p : DirectRealCubicRootPacket source r}
+    (h : DirectOrbitCanonicalCommonFactorPacket p)
+    (v : SevenRealCubicIntˣ) :
+    thetaLinearInt (directOrbitPairedDeepJetZ h v) =
+        thetaLinearInt ((v⁻¹ : SevenRealCubicIntˣ) : SevenRealCubicInt) *
+          (h.v : ℤ) ^ 2 ∧
+      thetaSquareInt (directOrbitPairedDeepJetZ h v) =
+        thetaSquareInt ((v⁻¹ : SevenRealCubicIntˣ) : SevenRealCubicInt) *
+          (h.v : ℤ) ^ 2 := by
+  constructor
+  · norm_num [directOrbitPairedDeepJetZ, thetaLinearInt, thetaSquareInt,
+      SevenRealCubicInt.mul, pow_two, pow_succ]
+    ring
+  · norm_num [directOrbitPairedDeepJetZ, thetaLinearInt, thetaSquareInt,
+      SevenRealCubicInt.mul, pow_two, pow_succ]
+
+theorem directOrbitPairedDeepJet_inverse_depth8
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : PrimitiveCounterexampleRamifiedProvenance source}
+    {p : DirectRealCubicRootPacket source r}
+    (h : DirectOrbitCanonicalCommonFactorPacket p) (hc : h.c = 1)
+    (xi v : SevenRealCubicIntˣ)
+    (hxi : h.squareRefinement.quotientSquareRoot =
+      (xi : SevenRealCubicInt) * (h.v : SevenRealCubicInt))
+    (hvY : directOrbitPairedDeepJetY h xi =
+      directOrbitDeepJetThetaUnit * (v⁻¹) ^ 7)
+    (hlin : thetaLinearModSeven (v : SevenRealCubicInt) = 0) :
+    ThetaNilpotentDepth 8
+      ((v⁻¹ : SevenRealCubicIntˣ) : SevenRealCubicInt) := by
+  have hZ := directOrbitPairedDeepJet_z_depth8 h hc xi v hxi hvY hlin
+  have hcoords := directOrbitPairedDeepJet_z_theta_coordinates h v
+  have hnotNat : ¬7 ∣ h.v := directOrbitPairedDeepJet_not_seven_v h xi hxi
+  have hnotInt : ¬(7 : ℤ) ∣ (h.v : ℤ) := by
+    intro hdiv
+    apply hnotNat
+    exact_mod_cast hdiv
+  have hcop0 : IsCoprime (7 : ℤ) (h.v : ℤ) :=
+    (show Prime (7 : ℤ) by norm_num).coprime_iff_not_dvd.mpr hnotInt
+  have hcop : IsCoprime ((7 : ℤ) ^ 8) ((h.v : ℤ) ^ 2) := by
+    exact (hcop0.pow_left).pow_right
+  constructor
+  · have hprod : (7 : ℤ) ^ 8 ∣
+        thetaLinearInt ((v⁻¹ : SevenRealCubicIntˣ) : SevenRealCubicInt) *
+          (h.v : ℤ) ^ 2 := by
+      simpa [hcoords.1] using hZ.1
+    exact hcop.dvd_of_dvd_mul_right hprod
+  · have hprod : (7 : ℤ) ^ 8 ∣
+        thetaSquareInt ((v⁻¹ : SevenRealCubicIntˣ) : SevenRealCubicInt) *
+          (h.v : ℤ) ^ 2 := by
+      simpa [hcoords.2] using hZ.2
+    exact hcop.dvd_of_dvd_mul_right hprod
+
+theorem directOrbitPairedDeepJet_7pow9_correction
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : PrimitiveCounterexampleRamifiedProvenance source}
+    {p : DirectRealCubicRootPacket source r}
+    (h : DirectOrbitCanonicalCommonFactorPacket p) (hc : h.c = 1)
+    (eta xi v : SevenRealCubicIntˣ)
+    (heta : h.squareRefinement.gapSquareRoot =
+      (eta : SevenRealCubicInt) * (h.u : SevenRealCubicInt))
+    (hxi : h.squareRefinement.quotientSquareRoot =
+      (xi : SevenRealCubicInt) * (h.v : SevenRealCubicInt))
+    (hv : directOrbitDeepJetWUnit h.squareRefinement eta =
+      directOrbitDeepJetRho * v ^ 7)
+    (hlin : thetaLinearModSeven (v : SevenRealCubicInt) = 0) :
+    ∃ t : SevenRealCubicIntˣ,
+      ThetaNilpotentDepth 8
+          ((v⁻¹ : SevenRealCubicIntˣ) : SevenRealCubicInt) ∧
+        v = t ^ (7 ^ 8) ∧
+        directOrbitDeepJetWUnit h.squareRefinement eta =
+          directOrbitDeepJetRho * t ^ (7 ^ 9) := by
+  have hvY := directOrbitPairedDeepJet_same_v_unit_identity
+    h hc eta xi v heta hxi hv
+  have hdepth := directOrbitPairedDeepJet_inverse_depth8
+    h hc xi v hxi hvY hlin
+  obtain ⟨t, ht⟩ := unit_is_pow_seven_pow_of_inverse_depth v 8 hdepth
+  refine ⟨t, hdepth, ht, ?_⟩
+  calc
+    directOrbitDeepJetWUnit h.squareRefinement eta =
+        directOrbitDeepJetRho * v ^ 7 := hv
+    _ = directOrbitDeepJetRho * (t ^ (7 ^ 8)) ^ 7 := by rw [ht]
+    _ = directOrbitDeepJetRho * t ^ (7 ^ 9) := by
+      rw [← pow_mul]
+      congr 1
+
+theorem directOrbitPairedDeepJet_current_depth9_wrapper
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : PrimitiveCounterexampleRamifiedProvenance source}
+    {p : DirectRealCubicRootPacket source r}
+    (h : DirectOrbitCanonicalCommonFactorPacket p) (hc : h.c = 1)
+    (eta xi v : SevenRealCubicIntˣ)
+    (heta : h.squareRefinement.gapSquareRoot =
+      (eta : SevenRealCubicInt) * (h.u : SevenRealCubicInt))
+    (hxi : h.squareRefinement.quotientSquareRoot =
+      (xi : SevenRealCubicInt) * (h.v : SevenRealCubicInt))
+    (hv : directOrbitDeepJetWUnit h.squareRefinement eta =
+      directOrbitDeepJetRho * v ^ 7)
+    (hlin : thetaLinearModSeven (v : SevenRealCubicInt) = 0) :
+    ∃ t : SevenRealCubicIntˣ,
+      ThetaNilpotentDepth 8
+          ((v⁻¹ : SevenRealCubicIntˣ) : SevenRealCubicInt) ∧
+        v = t ^ (7 ^ 8) ∧
+        directOrbitDeepJetWUnit h.squareRefinement eta =
+          directOrbitDeepJetRho * t ^ (7 ^ 9) ∧
+        h.squareRefinement.powerSplit.quotientCore =
+          thetaSevenUnit * (directOrbitPairedDeepJetZ h v) ^ 7 := by
+  have hvY := directOrbitPairedDeepJet_same_v_unit_identity
+    h hc eta xi v heta hxi hv
+  have hdepth := directOrbitPairedDeepJet_inverse_depth8
+    h hc xi v hxi hvY hlin
+  obtain ⟨t, htdepth, ht, hw⟩ :=
+    directOrbitPairedDeepJet_7pow9_correction
+      h hc eta xi v heta hxi hv hlin
+  have hquot := directOrbitPairedDeepJet_quotientCore_eq_theta_mul_Z_pow_seven
+    h hc xi v hxi hvY
+  exact ⟨t, hdepth, ht, hw, hquot⟩
 
 end SevenRealCubic
 end
