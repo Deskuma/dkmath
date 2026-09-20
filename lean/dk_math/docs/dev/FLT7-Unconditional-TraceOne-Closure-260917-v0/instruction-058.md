@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-057.md
 - SevenRealCubicSimplestCubicCertificate.lean
 - SevenRealCubicSourcePlaneNormSeven.lean
@@ -67,9 +68,10 @@ Also prove q > 0.
 ## Part B — high-depth Jacobian orientation
 
 Use:
+
 - 7^9 | m;
 - norm-one correction-line equation
-  A^3 - 35*A^2*m + 392*A*m^2 - 1421*m^3 = 1;
+  `A^3 - 35*A^2*m + 392*A*m^2 - 1421*m^3 = 1`;
 
 to prove
 
@@ -264,8 +266,8 @@ The three unsigned linear forms before setting equal to 3 are expected to be:
       3*X - 5*Y
 
 where
-    X = R^3 - 3*R*S^2 - S^3
-    Y = 3*R*S*(R+S).
+    `X = R^3 - 3*R*S^2 - S^3`
+    `Y = 3*R*S*(R+S).`
 
 Let Lean determine orientation/sign exactly.
 
@@ -276,6 +278,7 @@ Do not assume numerical reconnaissance.
 Attempt elementary elimination of the sectors.
 
 Useful cheap checks:
+
 - parity;
 - mod 3;
 - mod 7;
@@ -284,6 +287,7 @@ Useful cheap checks:
 - norm gamma0 = q > 0.
 
 The reconnaissance expectation is:
+
 - two canonical sectors may be removable by congruence;
 - the surviving sector reduces to a discriminant-2401 cubic equation.
 
@@ -301,6 +305,7 @@ The preferred R52 theorem is:
 Equivalently q = 1.
 
 If q = 1 is proved, then:
+
 - Q(a,b) = 7;
 - positive-definite Q gives a finite coordinate shell;
 - use norm-seven calibration to classify (a,b) by finite exact arithmetic;
@@ -355,6 +360,7 @@ seven classification by one explicitly oriented cube-sector equation carrying
 ## Deliverables
 
 Primary:
+
 - report-058.md
 - ROADMAP.md
 

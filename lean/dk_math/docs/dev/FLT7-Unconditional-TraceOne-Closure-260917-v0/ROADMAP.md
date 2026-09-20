@@ -1289,3 +1289,16 @@ Part F/G の binary-cubic classification、Part H の `C = 1` exclusion、Part I
 dichotomy collapse、successor/descent、FLT7 conclusion はこの checkpoint に含めて
 いない。R50 は **Outcome B**（landing/calibrations green、classification frontier
 継続）である。See `report-056.md`.
+
+## FLT7TC-005R52 — Eisenstein cube-extraction certificate
+
+R52 は current `C = 1` source-plane parameter を明示的な `q,k` 多項式へ展開し、
+Mordell 等式、`7^10 ∣ k+13` の高深度 orientation、Eisenstein Mordell element の
+`pi7^2` stripping を kernel-check した。さらに既存 FLT3 の Euclidean cube
+extraction と unit-sector API を neutral な相対素性仮定へ接続し、三 sector の
+second-coordinate 方程式を厳密に展開した。
+
+`3 ∤ q`、current-specific conjugate coprimality、`q = 1`、sector elimination、
+finite shell、`C = 1` contradiction はこの checkpoint では未接続である。R52 は
+**Outcome C**（exact stripping と、相対素性を仮定した cube extraction/sector
+normalization が green）である。See `report-058.md`.
