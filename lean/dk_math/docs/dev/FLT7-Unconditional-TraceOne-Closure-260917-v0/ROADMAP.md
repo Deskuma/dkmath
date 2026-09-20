@@ -1253,3 +1253,24 @@ general FLT7 closure is claimed.
 
 Status: **implemented — Outcome B, residue support strengthened**.
 See `report-054.md`.
+
+## FLT7TC-005R49 — Post-Astra sharpened branch packet
+
+R49 consolidates the current provenance without introducing a new contradiction.
+The `C = 1` packet carries the existing scalar units, the R41 global seventh
+correction, the R45 depth-9 wrapper, and the R47 calibration exclusion, giving
+`W = rho * t^(7^9)` together with `t^(7^9) != 1`.  The same packet now records
+the cheaply derived `norm t = 1` and the transported unit's non-torsion result.
+
+The `C > 1` packet carries `29 <= C`, prime support
+`q | C -> q % 7 = 1`, and the short height corollary `29*u^5 < v`.
+The final public theorem is a provenance-preserving `Nonempty` dichotomy of
+these two packets.
+
+The cyclic product, oriented Galois residue transport, character/mod-28 route,
+reciprocity, new Hensel depth, successor/descent, explicit unit basis, Thue
+completeness, and FLT7 closure remain deferred.  R49 is **Outcome A** because
+the mandatory dichotomy and the optional norm, non-torsion, and height
+refinements all passed the focused checks.
+
+See `report-055.md`.

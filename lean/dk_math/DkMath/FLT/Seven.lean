@@ -60,6 +60,7 @@ import DkMath.FLT.Seven.SevenRealCubicThetaSeventhPowerMod49
 import DkMath.FLT.Seven.SevenRealCubicThetaSeventhPowerDepth
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicCommonPrimeKummer
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicCommonPrimeResidueOne
+import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicSharpenedBranch
 import DkMath.FLT.Seven.FirstCoordinateRemainders
 import DkMath.FLT.Seven.RoutingSevenPivot
 import DkMath.FLT.Seven.FirstCoordinateRoutingAudit
