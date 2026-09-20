@@ -1159,3 +1159,16 @@ No mod-343 trace expansion, contradiction, successor, descent, or FLT7
 conclusion is claimed.
 
 Status: **implemented — focused algebraic/core layer**. See `report-048.md`.
+
+## FLT7TC-005R43 — Paired deep-jet transport and source-root mod-49 scalarity
+
+R43 reuses the same R41 seventh-root unit `v`.  The focused paired module now
+proves `Y = thetaU * (v⁻¹)^7`, the exact `quotientCore = thetaSevenUnit * Z^7`
+form, the depth-32 quotient remainder, exact rotation-gap theta-coordinate
+formulas, scalar divisibility transport, and source-root linear/square
+coordinate divisibility by `49`.
+
+The `Z` square-coordinate jet and projective-root closure are not included in
+this checkpoint.  No contradiction, descent, or FLT7 conclusion is claimed.
+
+Status: **implemented — Outcome C frontier**. See `report-049.md`.
