@@ -1125,3 +1125,24 @@ normalized unit, and transport to the first root jet remain open. No
 contradiction, successor, descent, or FLT7 conclusion is claimed.
 
 Status: **implemented — Outcome E/C boundary**. See `report-046.md`.
+
+## FLT7TC-005R41 — Deep-jet invariant closure and constant-coordinate elimination
+
+R41 completes the global invariant package for the normalized real-cubic unit:
+the calibrated theta unit has value, norm, and projective class `(5, 1)`;
+the square-twist unit has norm `1` and class `(2, 4)`; the transport exponent
+is even and is `3` modulo seven; and the resulting unit `W` has norm `1` and
+class `(1, 1)`.  The unit-class criterion then gives the exact orientation
+`W = rho * v^7`.
+
+The new trace-plane functional satisfies the exact identity
+`Phi(rho * Y) = -3 * thetaLinearInt Y + 14 * thetaSquareInt Y`, so the
+constant coordinate disappears before the mod-49 calculation.  Reusing only
+the existing neutral linear/square jets proves
+`49 | 21 * B * A^6`, and the unit constant-coordinate nonvanishing then gives
+the mandatory endpoint `thetaLinearModSeven v = 0`.
+
+No constant-coordinate mod-49 expansion, Thue solver, contradiction,
+successor, descent, or FLT7 conclusion is claimed.
+
+Status: **implemented — mandatory R41 Parts A–I green**. See `report-047.md`.
