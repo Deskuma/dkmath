@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-056.md
 - SevenRealCubicSourcePlaneNormSeven.lean
 - PrimeTraceOneDirectRealCubicSharpenedBranch.lean
@@ -13,6 +14,7 @@ Authoritative inputs:
 - SevenRealCubicCoprimeExtraction.lean
 
 External mathematical calibration, for research guidance only:
+
 - Shanks simplest cubic forms
   F_m(X,Y) = X^3 - m X^2 Y - (m+3) X Y^2 - Y^3.
 - The R50 form is F_{-2}.
@@ -241,6 +243,7 @@ Do not assume such a bound.  Prove it or stop.
 Inspect the proof mechanism behind the known m=-1, lambda=7 classification.
 
 Identify the minimum theorem actually used:
+
 - a field-coincidence classification;
 - a continued-fraction bound;
 - a linear-form-in-logarithms bound;
@@ -290,6 +293,7 @@ Do not add this theorem from external literature alone.
 ## Part I — Mathlib capability audit
 
 Search the exact Mathlib version used by this project for:
+
 - binary cubic covariants;
 - continued fractions and convergent approximation theorems;
 - elliptic/Mordell curve integral-point solvers;
@@ -303,6 +307,7 @@ A generic elliptic curve definition is not an integral-point solver.
 ## Deliverables
 
 Primary:
+
 - report-057.md
 - ROADMAP.md
 

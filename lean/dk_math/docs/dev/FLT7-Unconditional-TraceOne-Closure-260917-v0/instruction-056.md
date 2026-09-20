@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-055.md
 - PrimeTraceOneDirectRealCubicSharpenedBranch.lean
 - PrimeTraceOneDirectRealCubicTrivialCommonFactorDeepJet.lean
@@ -165,6 +166,7 @@ An equivalent theorem may assume directly that u is a seventh power.
 This theorem is not currently known. It is the primary R50 research target.
 
 Audit possible use of:
+
 - the unique ramified prime above seven;
 - ramifiedAxis_associated_eisensteinAxis;
 - the projective-log class criterion;
@@ -236,10 +238,11 @@ Package this only after Part H is green.
 Python/SymPy/PARI may be used only for discovery.
 
 Current heuristic observations:
-- a^3 + 2*a^2*b - a*b^2 - b^3 = -7 appears to have only
+
+- `a^3 + 2*a^2*b - a*b^2 - b^3 = -7` appears to have only
   (-3,1), (1,2), (2,-3) in large search windows.
 - the induced norm-one correction line
-  A^3 - 35*A^2*m + 392*A*m^2 - 1421*m^3 = 1
+  `A^3 - 35*A^2*m + 392*A*m^2 - 1421*m^3 = 1`
   appears to have only
   (A,m) = (1,0), (9,1), (-10,-1)
   in large search windows.
@@ -261,6 +264,7 @@ These are not proofs.
 ## Preferred deliverables
 
 If Part F/H succeeds:
+
 - DkMath/FLT/Seven/SevenRealCubicSourcePlaneNormSeven.lean
 - DkMath/FLT/Seven/PrimeTraceOneDirectRealCubicTrivialCommonFactorExclusion.lean
 - report-056.md
@@ -275,6 +279,7 @@ For promoted neutral/public theorems run the focused module builds, facade,
 API/axiom clients, scratch, forbidden-source scan, and git diff --check.
 
 Print axioms for:
+
 - correction-line theorem;
 - source-plane landing;
 - Part F narrow classification, if proved;
