@@ -1206,3 +1206,21 @@ conclusion is made.  Existing non-square, sign, height, and binary-cubic/Thue
 results do not produce an independent clash at this checkpoint.
 
 Status: **implemented — Outcome B finite-Hensel endpoint**. See `report-051.md`.
+
+## FLT7TC-005R46 — Saturation audit and closure-route selection
+
+R46 audits the finite-Hensel budget and confirms that the existing theta^32
+provenance saturates at `W = rho * t^(7^9)`: the source coordinate loss is one
+factor of seven, so depth 9 for `v⁻¹` and exponent `7^10` are not justified.
+The ordinary homogeneous, square, mixed-sign, and successor routes remain
+frozen.  A scratch proof now gives the complete trace-plane parameterization
+`(A,B,C) = (5(r+s), 5r-2s,r-s)`, the exact norm equation
+`-(r^3-4r^2s-11rs^2+43s^3)=1`, and the class congruence `r = 3s mod 7`,
+with rho calibrated at `(-3,-1)`.
+
+Repository/Mathlib audits found no complete Thue solver, concrete
+fundamental-unit index proof, or global seventh-power reciprocity/Kummer
+aggregation.  No theorem excludes `W = rho`, and the `q ≡ -1 mod 7` branch
+remains invisible to the reduced Kummer test.  R46 is therefore **Outcome E**:
+the endpoint is saturated and all current closure routes require a substantial
+new theorem.  See `report-052.md`.

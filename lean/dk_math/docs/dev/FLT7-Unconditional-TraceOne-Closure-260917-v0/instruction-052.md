@@ -325,18 +325,22 @@ The report must end with a ranked technical assessment of the following
 routes, but do not call any route a proof unless it is one:
 
 ### Route T — trace-plane / binary cubic
+
 Use
 `Phi(W)=0`, `norm W=1`, projective congruence, and
 `W=rho*t^(7^9)`.
 
 ### Route U — explicit global unit lattice
+
 Prove an explicit fundamental-unit basis and reduce to an exponential
 Diophantine equation.
 
 ### Route K — global common-prime Kummer/reciprocity
+
 Return to `C>1` and combine the local conditions over all common primes.
 
 ### Route S — successor/descent
+
 Revisit the smaller twisted state only if R45 supplies a genuinely new bridge.
 
 For each route record:
