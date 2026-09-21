@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative current inputs:
+
 - report-054.md
 - report-055.md
 - report-063.md
@@ -91,6 +92,7 @@ The only well-definedness obligation is the quadratic relation
 which should follow immediately from eval_alpha.
 
 Then define the two kernels selected by ratio and ratio^-1 and prove:
+
 - maximality/surjectivity;
 - distinctness;
 - their contractions to the real cubic kernel coincide;
@@ -132,6 +134,7 @@ For k in {1,2,3}, define
     beta_k := 1 + tau^k + tau^(-k).
 
 Kernel-check:
+
 - each beta_k satisfies X^3 - 2X^2 - X + 1 = 0;
 - beta_1, beta_2, beta_3 are pairwise distinct when q != 7;
 - the polynomial factors as
@@ -157,6 +160,7 @@ and construct CurrentMuSevenResidueAddress q.
 Then construct the two current degree-six prime kernels over Q.
 
 Expose:
+
 - ratio has exact order 7;
 - zeta maps to ratio;
 - zetaInv maps to ratio^-1;
@@ -289,6 +293,7 @@ No computational result is production evidence.
 Produce a theorem-by-theorem reuse ledger:
 
 Reusable neutral:
+
 - SevenCyclotomicDegreeSixInt.Ring
 - zeta/zetaInv algebra
 - local evaluation algebra after neutralization
@@ -296,6 +301,7 @@ Reusable neutral:
 - fiber product ideal identities.
 
 Historical-provenance only:
+
 - RamifiedSignedRootRoutingPacket
 - loaded-core packets
 - global loaded factorization attached to old signed-root routes
@@ -307,11 +313,13 @@ coercion tricks.
 ## Part L — report next closure route
 
 If H1 is true:
+
 - record q % 28 = 1 as a genuine strengthened common-prime support theorem;
 - assess whether the cyclotomic Kummer expression has a reciprocity/character
   obstruction.
 
 If H2 is true:
+
 - close the mod-28 mirage permanently;
 - keep the neutral current degree-six address as production infrastructure;
 - identify the next genuinely independent global character/reciprocity theorem
@@ -333,6 +341,7 @@ If H2 is true:
 ## Deliverables
 
 Primary:
+
 - a neutral/current degree-six residue-address module if Parts A-E are clean;
 - a phase-transport scratch/production theorem for Parts F-H;
 - report-064.md;

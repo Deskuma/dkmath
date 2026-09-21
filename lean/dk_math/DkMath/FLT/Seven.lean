@@ -60,6 +60,8 @@ import DkMath.FLT.Seven.SevenRealCubicThetaSeventhPowerMod49
 import DkMath.FLT.Seven.SevenRealCubicThetaSeventhPowerDepth
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicCommonPrimeKummer
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicCommonPrimeResidueOne
+import DkMath.FLT.Seven.SevenRealCubicCurrentCyclotomicAddress
+import DkMath.FLT.Seven.SevenRealCubicCurrentCyclotomicPhase
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicSharpenedBranch
 import DkMath.FLT.Seven.SevenRealCubicSourcePlaneNormSeven
 import DkMath.FLT.Seven.SevenRealCubicSimplestCubicCertificate
