@@ -3,12 +3,14 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative project inputs:
+
 - report-061.md
 - ThomasThueSixAudit.lean
 - SevenRealCubicHighDepthFive.lean
 - scratch-061-mathlib-audit.lean
 
 External primary-source targets:
+
 - E. Thomas, Complete solutions to a family of cubic Diophantine equations,
   J. Number Theory 34 (1990), 235–250.
 - M. Mignotte, Verification of a conjecture of E. Thomas,
@@ -17,6 +19,7 @@ External primary-source targets:
   x^3-(n-1)x^2 y-(n+2)xy^2-y^3=k, Acta Arith. 76 (1996), 245–269.
 
 Source discipline:
+
 - The 1996 paper explicitly treats the |F_n|=1 classification as already
   solved by Thomas/Mignotte. Its detailed Siegel–Baker/Baker–Davenport
   machinery is not, by itself, the fixed n=6 proof.
@@ -36,6 +39,7 @@ after cyclic normalization a nontrivial C=1 branch gives
 Hence |S| >= 7^8 = 5764801.
 
 R56 has two goals:
+
 1. finish the exact Lean approximation-to-convergent bridge;
 2. identify and formalize the smallest fixed-n=6 finite certificate giving
    |S| < 7^8, or full triviality.
@@ -65,6 +69,7 @@ For integers R,S with S != 0, prove over R:
       = (R/S-lambda1)*(R/S-lambda2)*(R/S-lambda3).
 
 It is acceptable to prove the monic-cubic factorization from:
+
 - the three roots;
 - pairwise distinctness;
 - equality of two monic cubics of degree three.
@@ -85,6 +90,7 @@ For |S| >= 6, prove there exists i in {1,2,3} such that
 A simple fixed constant proof is preferred.
 
 Suggested route:
+
 1. From the product identity, one factor has absolute value <= 1/|S|.
 2. For |S| >= 6 this nearest distance is <= 1/6.
 3. The two other root distances are bounded below using the minimum root
@@ -118,6 +124,7 @@ Obtain the actual article text if legally/publicly accessible in the working
 environment. Do not infer its method from the abstract.
 
 For the proof of the range 0 <= n <= 1000, record exactly:
+
 - theorem/lemma numbers;
 - root chosen;
 - rational approximation theorem used;
@@ -142,6 +149,7 @@ Preferred result: an explicit theorem/data pair
 with a concrete integer B < 7^8.
 
 The proof may be:
+
 - a direct specialization of Thomas's small-n bound;
 - a finite convergent-index bound;
 - a fixed unit-exponent bound;
@@ -183,6 +191,7 @@ If the full Thomas certificate is awkward, seek only:
     False.
 
 Allowed tools:
+
 - Part D convergent bridge;
 - exact continued-fraction prefix/recurrence;
 - denominator growth;
@@ -197,6 +206,7 @@ If Thomas 1990 does not expose a usable finite certificate, inspect Mignotte
 1993 directly.
 
 Extract the fixed n=6 specialization of the proof of n>3 triviality:
+
 - fundamental units used;
 - linear form in logarithms;
 - explicit lower bound;
@@ -213,6 +223,7 @@ boundary.
 ## Part J — 1996 paper role
 
 Use the 1996 Mignotte–Petho–Lemmermeyer paper only for:
+
 - root estimates that can be specialized and proved directly;
 - general method calibration;
 - Baker–Davenport lemma shape;
@@ -257,6 +268,7 @@ for example:
 or a stronger exact index-bound version.
 
 Also state:
+
 - everything before this theorem that is kernel-checked;
 - everything after it that would be finite/kernel-checkable;
 - why the missing theorem requires new transcendence/reduction machinery.
@@ -276,6 +288,7 @@ Also state:
 ## Deliverables
 
 Primary:
+
 - report-062.md
 - ROADMAP.md
 - scratch/production Lean for Parts A-D.
