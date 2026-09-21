@@ -1,0 +1,8 @@
+import DkMath.FLT.Seven.PrimeTraceOneDirectCyclotomicCMUnitPhase
+
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ringOfIntegersToRingEquiv
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ringOfIntegersToRingEquiv_apply
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ringOfIntegersToRingEquiv_injective
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ringOfIntegersToRingEquiv_surjective
+#print axioms DkMath.FLT.Seven.directRelativeNormOnePhase_norm_one
+#print axioms DkMath.FLT.Seven.directRelativeNormOnePhase_sub_one_mem_sevenIdeal

@@ -14,3 +14,4 @@ import DkMath.FLT.Prime.PrimeTraceOneStrippedIdeal
 #print axioms DkMath.NumberTheory.TraceOneQuadratic.span_mul_span_conj_eq_pow_of_norm_eq_pow
 #print axioms DkMath.FLT.Prime.nonempty_primeTraceOneStrippedIdealPacket
 #print axioms DkMath.FLT.Prime.primeTraceOneStrippedIdealPacket
+#print axioms DkMath.FLT.Prime.PrimeTraceOneStrippedIdealPacket.parent_eq_coord

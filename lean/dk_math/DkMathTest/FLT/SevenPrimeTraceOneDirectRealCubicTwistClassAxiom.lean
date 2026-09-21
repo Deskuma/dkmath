@@ -1,0 +1,11 @@
+import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicTwistClass
+
+open DkMath.FLT.Seven
+
+#print axioms directOrbit_projectiveLog_rotate
+#print axioms directOrbitRotateProjectiveLog_order_three
+#print axioms directOrbitRotateProjectiveLog_norm_zero
+#print axioms directOrbit_pairAxisUnitOne_projectiveLog
+#print axioms directOrbit_twistedExponent_mod_seven
+#print axioms weighted_seventh_difference_remainder
+#print axioms directOrbitTransportedTwistedState

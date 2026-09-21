@@ -1,0 +1,16 @@
+import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicTrivialCommonFactorPairedDeepJet
+
+open DkMath.FLT.Seven
+open DkMath.FLT.Seven.SevenRealCubic
+
+#check ThetaNilpotentDepth
+#check thetaNilpotentDepth_pow_seven_drop
+#check unit_is_pow_seven_pow_of_inverse_depth
+#check eisensteinAxis_pow_three_mul_dvd_imp_ofInt_pow
+#check directOrbitPairedDeepJet_source_root_depth9
+#check directOrbitPairedDeepJet_source_root_pow_six_depth9
+#check directOrbitPairedDeepJet_z_pow_seven_depth9
+#check directOrbitPairedDeepJet_z_depth8
+#check directOrbitPairedDeepJet_inverse_depth8
+#check directOrbitPairedDeepJet_7pow9_correction
+#check directOrbitPairedDeepJet_current_depth9_wrapper

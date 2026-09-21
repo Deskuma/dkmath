@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.Lib.Basic
 import DkMath.Lib.TwoChannel
 import DkMath.Lib.NumberTheory.PadicValNat
+import DkMath.Lib.NumberTheory.HomogeneousPowerQuotient
 import DkMath.Lib.NumberTheory.ClassGroupTorsionBridge
 import DkMath.Lib.NumberTheory.TraceOneLatticeLanding
 import DkMath.Lib.NumberTheory.TraceOnePowerLanding

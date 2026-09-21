@@ -1,0 +1,13 @@
+import DkMath.FLT.Seven.PrimeTraceOneReconstructionChartU16
+
+open DkMath.FLT.Seven
+
+#print axioms awayCarrierReconstruction_to_fermatChart
+#print axioms fermatChart_to_awayCarrierReconstruction
+#print axioms awayCarrierReconstruction_iff_fermatChart
+#print axioms awayCarrierReconstruction_additive_decomposition
+#print axioms AwayCarrierFermatChart.left_bounds
+#print axioms AwayCarrierFermatChart.sum_bounds
+#print axioms AwayCarrierFermatChart.right_bounds
+#print axioms AwayValuationTransferPacket.no_fermatChart_at_depth_one
+#print axioms RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.internalDepthFourReconstruction_iff_fermatChart

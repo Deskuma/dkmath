@@ -1,0 +1,25 @@
+import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicOrbit
+
+#print "file: DkMathTest.FLT.SevenPrimeTraceOneDirectRealCubicOrbitApi"
+
+namespace DkMath.FLT.Seven
+
+#check isUnit_seventhPower_iff_pow_six_eq_one_mod49
+#check normalizedRoot_endpointRight_seventhPower_iff_sixth_eq_one_mod49
+#check normalizedRoot_endpointRight_mod49_gate_redundant
+#check DirectRealCubicRootPacket
+#check directRealCubicRootPacket_of_normalizedRootPacket
+#check directRealCubicOrbitSource
+#check directRealCubicOrbitRoot
+#check directRealCubicOrbit_exact_powers
+#check directRealCubicOrbit_source_three_eq_zero
+#check directRealCubicOrbit_root_three_eq_zero
+#check pairAxisUnit_one_cube_mul_rotate_thetaSevenUnit_eq
+#check orbitUnit01
+#check orbitUnit01_isUnit
+#check directRealCubicOrbit_source_difference_factorization
+#check orbitUnit01_projectiveLog
+#check orbitUnit01_not_seventhPower
+#check orbitUnit01_class_is_nonzero
+
+end DkMath.FLT.Seven
