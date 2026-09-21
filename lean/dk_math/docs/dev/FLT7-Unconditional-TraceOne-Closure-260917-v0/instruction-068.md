@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-067.md when available
 - SevenRealCubicCurrentResidueKernel.lean
 - SevenRealCubicCurrentOrientationRatio.lean
@@ -20,6 +21,7 @@ Authoritative inputs:
 Strategic position:
 
 R61 production now gives:
+
 - same-kernel ZMod evaluation uniqueness;
 - quotient/gap orientation as tau = delta or delta^-1;
 - phase/inversion blindness of the real Kummer condition;
@@ -86,6 +88,7 @@ Under the conjugate local evaluation prove:
       ((c.tau^-1 : (ZMod q)^x) : ZMod q).
 
 Also prove:
+
 - currentPhaseZeta^7 = 1;
 - currentPhaseZeta != 1;
 - star currentPhaseZeta = currentPhaseZeta^-1.
@@ -132,6 +135,7 @@ Then prove:
       (currentLinearCarrier c) != 0.
 
 Use:
+
 - evalReal rho0 != 0;
 - tau != tau^-1, since orderOf tau = 7.
 
@@ -241,6 +245,7 @@ Prove that the selected factor lies in the quotient prime Q.
 If clean, prove the other two factors do not lie in Q.
 
 Preferred route:
+
 - evaluate them in ZMod q;
 - divide by evalReal rho0^2;
 - reduce to the three distinct values
@@ -263,6 +268,7 @@ Target:
       c.address.conjugate.currentKernel.
 
 The current modules already provide:
+
 - both kernels maximal;
 - distinctness;
 - common real contraction.
@@ -341,6 +347,7 @@ SevenRamifiedFusionOrientedCarrierValuationOwnership.
 Classify each ingredient:
 
 Reusable neutral:
+
 - quadratic carrier coordinates;
 - current/conjugate kernel pair algebra;
 - coprimality of the two kernels;
@@ -348,6 +355,7 @@ Reusable neutral:
 - ideal product/contraction arguments.
 
 Historical-provenance only:
+
 - RamifiedSignedRootRoutingPacket;
 - old load families;
 - historical quotientExponent;
@@ -365,6 +373,7 @@ frontier exactly.
 Preferred formulation:
 
 At every common q >= 379, current provenance canonically selects:
+
 - one real prime Q above q;
 - two conjugate degree-six primes K and Kbar over Q;
 - an oriented linear carrier L with
@@ -374,6 +383,7 @@ At every common q >= 379, current provenance canonically selects:
 
 Then the next genuinely global theorem must couple these local oriented
 ownership choices across all common primes, likely through:
+
 - a principal-ideal seventh-power statement;
 - a class-number-one principalization;
 - or a global cyclotomic unit/character constraint.
@@ -397,6 +407,7 @@ Do not start that global theorem in R62 unless it falls out immediately.
 ## Deliverables
 
 Primary:
+
 - current phase-corrected linear-carrier production module;
 - neutral current real-pair factorization module if clean;
 - current conjugate-prime fibre equality if Part I succeeds;

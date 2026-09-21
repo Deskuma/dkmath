@@ -1365,6 +1365,25 @@ cross-prime multiplication, historical contradiction, or final FLT7 claim.
 Status: **implemented — Outcome B, phase collapse and orbit alternative
 kernel-checked**.  See `report-066.md`.
 
+## FLT7TC-005R62 — Current phase-corrected degree-six carrier
+
+R62 adds the phase-corrected current degree-six carrier in a separate module.
+The inverse exponent table `0 ↦ 1`, `1 ↦ 4`, `2 ↦ 5` is kernel-checked, as are
+the current/conjugate evaluations, seventh-power and star identities, and
+nontriviality.  The current packet now records the equality between its
+residue evaluation data and the degree-six address data explicitly.
+
+The current linear carrier and its star-conjugate have exact selected-kernel
+membership and opposite-kernel nonmembership.  The neutral cyclic real-pair
+carrier and its finite product identity with `seventhQuotient` are also
+kernel-checked.
+
+The explicit phase-trace coordinate expansion and the ideal-fibre equality
+remain outside this checkpoint because their required coordinate/fibre proofs
+were not completed.  Historical terminal contradiction, reciprocity,
+multiplicity without factorization, and final FLT7 closure remain excluded.
+Status: **implemented — Outcome C**.  See `report-068.md`.
+
 ## FLT7TC-005R61 — Unconditional trace-one closure phase sieve
 
 R61 adds the neutral current-residue kernel and orientation-ratio modules,

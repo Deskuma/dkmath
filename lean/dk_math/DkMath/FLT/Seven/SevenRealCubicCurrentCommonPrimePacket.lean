@@ -270,6 +270,8 @@ structure CurrentCommonPrimeCyclotomicPacket
   ratio_ne_one : ratio ≠ 1
   ratio_orderOf : orderOf ratio = 7
   address : CurrentMuSevenResidueAddress q
+  address_evalReal_eq : address.evalReal = residue.evalReal
+  address_ratio_eq : address.ratio = ratio
 
 theorem currentCommonPrime_cyclotomicAddress
     {x y z : ℕ} {source : CounterexamplePack x y z}
@@ -326,7 +328,9 @@ theorem currentCommonPrime_cyclotomicAddress
     ratio_pow_seven := hratio7
     ratio_ne_one := hratio1
     ratio_orderOf := hratioOrder
-    address := address }⟩
+    address := address
+    address_evalReal_eq := rfl
+    address_ratio_eq := rfl }⟩
 
 theorem CurrentCommonPrimeCyclotomicPacket.ratio_val_ne_inv
     {x y z : ℕ} {source : CounterexamplePack x y z}
