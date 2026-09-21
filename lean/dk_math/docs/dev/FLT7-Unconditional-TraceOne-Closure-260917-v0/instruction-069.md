@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - SevenRealCubicCurrentPhaseCorrectedCarrier.lean
 - SevenRealCubicCurrentCommonPrimePacket.lean
 - SevenRealCubicCurrentCyclotomicAddress.lean
@@ -16,6 +17,7 @@ Authoritative inputs:
 
 Repository hygiene prerequisite:
 At the start of R63, check whether these files exist on the branch:
+
 - report-067.md
 - report-068.md
 
@@ -27,6 +29,7 @@ ROADMAP summaries before writing report-069.md.
 Do not invent unimplemented claims.
 
 R62 outcome is C:
+
 - phase inverse exponent is green;
 - phase-corrected zeta is green;
 - current/conjugate linear carriers are green;
@@ -66,6 +69,7 @@ Equivalent star/inverse formulation is acceptable:
 A Fin-3 proof is preferred.
 
 For the three cases kernel-check the concrete identities:
+
 - zeta + zetaInv = ofReal (alpha - 1)
 - zeta^4 + zetaInv^4 =
     ofReal (-alpha^2 + alpha + 1)
@@ -136,6 +140,7 @@ Under orderOf r = 7 prove pairwise distinctness:
     beta2 != beta3.
 
 The proof may use:
+
 - finite exponent algebra from r^7=1 and r!=1;
 - the three roots of X^3 - 2X^2 - X + 1;
 - a Fin-3 finite decision after reducing to powers of one primitive root.
@@ -150,6 +155,7 @@ Then prove for i : Fin 3:
     i = phaseTraceIndex c.phase.
 
 Consequently:
+
 - exactly one of the three real factors lies in Q;
 - the other two do not lie in Q.
 
@@ -199,6 +205,7 @@ First prove:
     currentKernel ⊔ conjugate.currentKernel = top.
 
 Use:
+
 - both kernels maximal;
 - currentKernel != conjugate.currentKernel.
 
@@ -208,6 +215,7 @@ Then prove the easy direction:
       currentKernel * conjugate.currentKernel.
 
 Use:
+
 - common real contractions;
 - Ideal.mul_eq_inf_of_coprime.
 
@@ -308,6 +316,7 @@ The expected Q-adic contribution is a multiple of 14.
 
 Before introducing a valuation theorem, audit existing Dedekind factorization
 APIs for:
+
 - Ideal.factorization;
 - exponent of Q in a principal ideal;
 - factorization of products and powers;
@@ -343,6 +352,7 @@ a principal-ideal factorization of that carrier.
 Audit whether the historical
 SevenRamifiedFusionOrientedCarrierValuationOwnership
 proof can be neutralized using only:
+
 - fibre equality;
 - carrier*conjugateCarrier = ofReal(selectedRealFactor);
 - selected/opposite membership;
@@ -389,10 +399,12 @@ oriented local factors.
 ## Deliverables
 
 Repository hygiene:
+
 - create report-067.md if still absent;
 - create report-068.md if still absent.
 
 R63:
+
 - phase trace / selected-real-factor production module;
 - neutral CurrentMuSevenResidueAddress fibre-equality theorem/module;
 - selected-factor uniqueness if clean;

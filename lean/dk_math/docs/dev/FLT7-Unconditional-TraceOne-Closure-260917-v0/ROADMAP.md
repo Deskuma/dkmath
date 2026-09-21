@@ -1384,6 +1384,35 @@ were not completed.  Historical terminal contradiction, reciprocity,
 multiplicity without factorization, and final FLT7 closure remain excluded.
 Status: **implemented — Outcome C**.  See `report-068.md`.
 
+## FLT7TC-005R63 — Selected real factor and current conjugate-prime fibre
+
+R63 adds the separate module
+`SevenRealCubicCurrentSelectedFactorFiber.lean`.  The phase trace is
+kernel-checked for all three current phases, including the fourth- and
+fifth-power inverse-root reductions from the quadratic and cubic relations.
+The selected real-pair carrier is defined from `phaseTraceIndex`; its product
+with the current conjugate linear carrier is exactly the selected real factor,
+and the corresponding QuadraticAlgebra norm identity is proved.  Its current
+residue evaluation is zero and the model prime `Q` contains the corresponding
+model integer.
+
+The neutral `CurrentMuSevenResidueAddress` now has an explicit real-prime
+fibre ideal.  Its current and conjugate kernels are shown distinct maximal
+ideals with top supremum, and the coordinate proof gives the exact fibre
+equality
+`map ofReal (ker evalReal) = currentKernel * conjugate.currentKernel`.
+The current packet specialization and both carrier ideal-divisibility
+statements are exposed.  The three-factor product is also identified with
+`directOrbitQuotient`.
+
+The remaining R63 boundary is selected-factor uniqueness: the phase-neutral
+pairwise distinctness/nonmembership proof for the two alternate real factors
+has not been asserted without a completed beta-coordinate bridge.  Existing
+factorization APIs were not extended into a new valuation framework, so exact
+q-adic and degree-six multiplicity remain the R64 frontier.  Historical
+terminal contradiction, reciprocity, and final FLT7 closure remain excluded.
+Status: **implemented — Outcome C**.  See `report-069.md`.
+
 ## FLT7TC-005R61 — Unconditional trace-one closure phase sieve
 
 R61 adds the neutral current-residue kernel and orientation-ratio modules,
