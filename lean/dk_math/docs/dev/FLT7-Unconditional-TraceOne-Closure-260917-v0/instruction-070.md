@@ -4,18 +4,18 @@ Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Canonical checkpoint-document directory:
 
-    docs/dev/FLT7-Unconditional-TraceOne-Closure-260917-v0/
+    lean/dk_math/docs/dev/FLT7-Unconditional-TraceOne-Closure-260917-v0/
 
-Do NOT place new R64 report/instruction files under
-lean/dk_math/docs/dev/FLT7-Unconditional-TraceOne-Closure-260917-v0/.
+All R64 instruction/report/ROADMAP updates belong in this directory.
 
 Repository hygiene at start:
 
-- report-067.md exists in the canonical docs/dev directory.
-- report-068.md exists in the canonical docs/dev directory.
-- report-069.md currently exists under the old lean/dk_math/docs/dev path.
-  Move/recreate report-069.md in the canonical docs/dev directory and remove
-  the misplaced copy if that copy is part of this branch's diff.
+- report-067.md exists here.
+- report-068.md exists here.
+- report-069.md exists here.
+- Keep these reports in this directory.
+- Do NOT create or migrate FLT7TC checkpoint documents to a repository-root
+  docs/dev/FLT7-Unconditional-TraceOne-Closure-260917-v0/ directory.
 - Preserve the mathematical content; do not rewrite history.
 
 Authoritative production inputs:
