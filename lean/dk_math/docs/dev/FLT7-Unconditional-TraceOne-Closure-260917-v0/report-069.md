@@ -1,5 +1,10 @@
 # FLT7TC-005R63 implementation report
 
+Document location: `lean/dk_math/docs/dev/FLT7-Unconditional-TraceOne-Closure-260917-v0/report-069.md`
+
+The project-local `lean/dk_math/docs/dev` directory is the canonical location
+for this checkpoint series.
+
 ## Scope
 
 Implement `instruction-069.md` from the R62 workspace.  The primary targets

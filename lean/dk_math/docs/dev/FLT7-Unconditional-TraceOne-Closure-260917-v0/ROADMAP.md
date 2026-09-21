@@ -1413,6 +1413,28 @@ q-adic and degree-six multiplicity remain the R64 frontier.  Historical
 terminal contradiction, reciprocity, and final FLT7 closure remain excluded.
 Status: **implemented — Outcome C**.  See `report-069.md`.
 
+## FLT7TC-005R64 — Current selected-factor uniqueness and exact current 14e multiplicity
+
+R64 adds the separate current selected-factor uniqueness module.  The three
+current beta phases are pairwise distinct under `orderOf tau = 7`; the three
+phase-dependent `currentCyclicAlpha` evaluation tables are kernel-checked; and
+the real-pair carrier evaluates to the nonzero rho-square/tau coefficient times
+the beta-coordinate difference.  Consequently, evaluation zero and model-prime
+membership are each equivalent to the unique `phaseTraceIndex`.
+
+The separate local `Associates.count` API proves product/power additivity,
+zero count off the current prime, and positive count on the current quotient
+square root.  The current quotient has the exact form
+`eisensteinAxis^3 * U * S^14`, where `U` is a current unit and `S` is the
+current quotient square root.  Since `eisensteinAxis ∉ Q`, the selected real
+factor receives exactly `14 * eQ` copies of `Q`, with membership at that power
+and nonmembership at the successor exposed as public theorems.
+
+Status: **implemented — Outcome B**.  The current degree-six carrier cutoff
+and the global aggregation into a principal ideal remain the R65 frontier.
+Historical quotient exponents, terminal contradictions, and global FLT7
+closure remain excluded.  See `report-070.md`.
+
 ## FLT7TC-005R61 — Unconditional trace-one closure phase sieve
 
 R61 adds the neutral current-residue kernel and orientation-ratio modules,
