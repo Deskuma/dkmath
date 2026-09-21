@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Seven.SevenRealCubicHighDepthFive
 
+#print "file: DkMath.FLT.Seven.ThomasThueSixAudit"
+
 /-!
 # Fixed `n = 6` Thomas-family audit
 

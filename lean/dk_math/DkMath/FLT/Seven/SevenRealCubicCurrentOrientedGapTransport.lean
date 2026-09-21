@@ -1,6 +1,14 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
 import DkMath.FLT.Seven.SevenRealCubicCurrentCommonPrimePacket
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicCommonPrimeKummer
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicResidueSupport
+
+#print "file: DkMath.FLT.Seven.SevenRealCubicCurrentOrientedGapTransport"
 
 namespace DkMath.FLT.Seven
 
@@ -32,6 +40,7 @@ structure CurrentOrientedGapPrimeTransport
   f0 : SevenRealCubicInt →+* ZMod q
   f0_formula : f0 = evalEquiv.toRingHom.comp
       (@directOrbitCommonPrimeEval P P_prime)
+  gap_mem : modelEquivRingOfIntegers h.squareRefinement.gapSquareRoot ∈ P
   gap_zero : f0 h.squareRefinement.gapSquareRoot = 0
   rotate_gap_ne_zero : f0 (rotateEquiv h.squareRefinement.gapSquareRoot) ≠ 0
   rotate2_gap_ne_zero : f0
@@ -92,6 +101,7 @@ theorem currentOrientedGapPrimeTransport
     evalEquiv := e
     f0 := f
     f0_formula := by rfl
+    gap_mem := hgap
     gap_zero := hzero hgap
     rotate_gap_ne_zero := hne hrot1
     rotate2_gap_ne_zero := hne hrot2 }⟩
@@ -169,6 +179,67 @@ theorem CurrentOrientedGapPrimeTransport.f2_gap_rotate2_zero
     (a : CurrentOrientedGapPrimeTransport h q) :
     a.f2 (rotateEquiv (rotateEquiv h.squareRefinement.gapSquareRoot)) = 0 := by
   rw [a.f2_rotate_twice, a.gap_zero]
+
+theorem CurrentOrientedGapPrimeTransport.f1_gap_zero_ne_zero
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : PrimitiveCounterexampleRamifiedProvenance source}
+    {p : DirectRealCubicRootPacket source r}
+    {h : DirectOrbitCanonicalCommonFactorPacket p} {q : ℕ}
+    (a : CurrentOrientedGapPrimeTransport h q) :
+    a.f1 h.squareRefinement.gapSquareRoot ≠ 0 := by
+  intro hz
+  have hh := a.f1_rotate
+    (rotateEquiv (rotateEquiv h.squareRefinement.gapSquareRoot))
+  rw [rotateEquiv_three, hz] at hh
+  exact a.rotate2_gap_ne_zero hh.symm
+
+theorem CurrentOrientedGapPrimeTransport.f2_gap_zero_ne_zero
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : PrimitiveCounterexampleRamifiedProvenance source}
+    {p : DirectRealCubicRootPacket source r}
+    {h : DirectOrbitCanonicalCommonFactorPacket p} {q : ℕ}
+    (a : CurrentOrientedGapPrimeTransport h q) :
+    a.f2 h.squareRefinement.gapSquareRoot ≠ 0 := by
+  intro hz
+  have hh := a.f2_rotate_twice
+    (rotateEquiv h.squareRefinement.gapSquareRoot)
+  rw [rotateEquiv_three, hz] at hh
+  exact a.rotate_gap_ne_zero hh.symm
+
+theorem CurrentOrientedGapPrimeTransport.f2_gap_rotate_ne_zero
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : PrimitiveCounterexampleRamifiedProvenance source}
+    {p : DirectRealCubicRootPacket source r}
+    {h : DirectOrbitCanonicalCommonFactorPacket p} {q : ℕ}
+    (a : CurrentOrientedGapPrimeTransport h q) :
+    a.f2 (rotateEquiv h.squareRefinement.gapSquareRoot) ≠ 0 := by
+  intro hz
+  have hh : a.f2 (rotateEquiv h.squareRefinement.gapSquareRoot) =
+      a.f0 (rotateEquiv (rotateEquiv h.squareRefinement.gapSquareRoot)) := by
+    simpa only [rotateEquiv_three] using a.f2_rotate_twice
+      (rotateEquiv (rotateEquiv h.squareRefinement.gapSquareRoot))
+  rw [hz] at hh
+  exact a.rotate2_gap_ne_zero hh.symm
+
+theorem CurrentOrientedGapPrimeTransport.zero_nonzero_pattern
+    {x y z : ℕ} {source : CounterexamplePack x y z}
+    {r : PrimitiveCounterexampleRamifiedProvenance source}
+    {p : DirectRealCubicRootPacket source r}
+    {h : DirectOrbitCanonicalCommonFactorPacket p} {q : ℕ}
+    (a : CurrentOrientedGapPrimeTransport h q) :
+    a.f0 h.squareRefinement.gapSquareRoot = 0 ∧
+      a.f0 (rotateEquiv h.squareRefinement.gapSquareRoot) ≠ 0 ∧
+      a.f0 (rotateEquiv (rotateEquiv h.squareRefinement.gapSquareRoot)) ≠ 0 ∧
+      a.f1 h.squareRefinement.gapSquareRoot ≠ 0 ∧
+      a.f1 (rotateEquiv h.squareRefinement.gapSquareRoot) = 0 ∧
+      a.f1 (rotateEquiv (rotateEquiv h.squareRefinement.gapSquareRoot)) ≠ 0 ∧
+      a.f2 h.squareRefinement.gapSquareRoot ≠ 0 ∧
+      a.f2 (rotateEquiv h.squareRefinement.gapSquareRoot) ≠ 0 ∧
+      a.f2 (rotateEquiv (rotateEquiv h.squareRefinement.gapSquareRoot)) = 0 := by
+  exact ⟨a.gap_zero, a.rotate_gap_ne_zero, a.rotate2_gap_ne_zero,
+    a.f1_gap_zero_ne_zero, a.f1_gap_rotate_zero,
+    a.f1_gap_rotate2_ne_zero, a.f2_gap_zero_ne_zero,
+    a.f2_gap_rotate_ne_zero, a.f2_gap_rotate2_zero⟩
 
 end SevenRealCubic
 end

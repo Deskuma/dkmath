@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Seven.ThomasThueSixAudit
 import Mathlib.NumberTheory.DiophantineApproximation.ContinuedFractions
 
+#print "file: DkMath.FLT.Seven.ThomasThueSixApproximation"
+
 /-!
 # Fixed `n = 6` Thomas approximation bridge
 

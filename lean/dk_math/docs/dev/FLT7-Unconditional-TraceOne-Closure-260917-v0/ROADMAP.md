@@ -1335,3 +1335,32 @@ Thomas 1990 の公開 abstract と書誌情報は確認したが、本文の the
 従って `B < 7^8` と deep-S contradiction は未接続であり、R56 は **Outcome C**
 （Parts A–D green、本文由来 fixed-n finite certificate は継続境界）である。
 See `report-062.md`.
+
+## FLT7TC-005R59 — Current common-prime cyclotomic and oriented-gap packets
+
+R59 added the current quotient-side residue/cyclotomic packet, the exact
+order-seven phase-normalized address, the degree-six current/conjugate
+kernels, and a fixed-`ZMod q` oriented-gap transport.  It also added the
+neutral fourteen-power zero-index lemmas and the coefficient-ratio packet
+used by R60.  These are finite and conditional packets; they do not supply
+Strong Goldbach, a universal prime provider, reciprocity, or FLT7 closure.
+
+See `report-065.md`.
+
+## FLT7TC-005R60 — Coefficient-ratio phase collapse and quotient/gap orientation
+
+R60 proves the exact cyclic norm for the coefficient transport multiplier,
+all three coefficient rotation laws, and the unit-level ratio cycle.  The
+oriented fixed-residue packet now exposes the complete three-row zero/nonzero
+pattern.  Three separate applications of the twisted identity give
+fourteen-power witnesses for `f0(R0)`, `f1(R1)`, and `f2(R2)`, and the
+rotation laws collapse their values to one oriented residue witness.
+
+The quotient-side prime is not identified with the oriented gap prime:
+coprime square-root ideals prove `Q != P0`.  The existing cubic Galois
+orbit theorem then classifies the quotient as `P1` or `P2`.  The theorem does
+not choose between these orientations and introduces no mod-28, reciprocity,
+cross-prime multiplication, historical contradiction, or final FLT7 claim.
+
+Status: **implemented — Outcome B, phase collapse and orbit alternative
+kernel-checked**.  See `report-066.md`.

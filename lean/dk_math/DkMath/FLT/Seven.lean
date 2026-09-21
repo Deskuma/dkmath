@@ -66,6 +66,8 @@ import DkMath.FLT.Seven.SevenRealCubicCurrentCommonPrimePacket
 import DkMath.FLT.Seven.SevenRealCubicCurrentOrientedGapTransport
 import DkMath.FLT.Seven.SevenRealCubicCurrentCyclotomicFourteen
 import DkMath.FLT.Seven.SevenRealCubicCurrentCoefficientRatios
+import DkMath.FLT.Seven.SevenRealCubicCurrentCoefficientPhaseCollapse
+import DkMath.FLT.Seven.SevenRealCubicCurrentQuotientGapOrientation
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicSharpenedBranch
 import DkMath.FLT.Seven.SevenRealCubicSourcePlaneNormSeven
 import DkMath.FLT.Seven.SevenRealCubicSimplestCubicCertificate
