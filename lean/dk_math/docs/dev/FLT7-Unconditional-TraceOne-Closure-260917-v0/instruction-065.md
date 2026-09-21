@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-064.md
 - SevenRealCubicCurrentCyclotomicAddress.lean
 - SevenRealCubicCurrentCyclotomicPhase.lean
@@ -14,6 +15,7 @@ Authoritative inputs:
 - SevenRamifiedFusionCyclotomicConjugatePrimePair.lean
 
 R58 outcome is C:
+
 - neutral current cyclotomic address is green;
 - phase-index theorem is green;
 - current common-prime constructor is not yet packaged;
@@ -51,6 +53,7 @@ Preferred conceptual structure:
 Equivalent data organization is acceptable.
 
 Construct it from:
+
 - directOrbitCommonPrime_dvd_data;
 - directOrbitSquareRefinement_exists_distinct_prime_ideals;
 - common_norm_prime_complete_split;
@@ -100,6 +103,7 @@ Define
 as a unit.
 
 Prove:
+
 - ratio^7 = 1;
 - ratio != 1;
 - orderOf ratio = 7;
@@ -126,6 +130,7 @@ Expose a public theorem:
 or an equivalent explicit existential.
 
 The packet should carry:
+
 - current residue packet;
 - tau;
 - phase index k;
@@ -136,6 +141,7 @@ The packet should carry:
 ## Part D — degree-six kernel pair for current provenance
 
 From the current address prove:
+
 - both degree-six kernels are maximal;
 - their contractions to the real cubic order equal ker evalReal;
 - the two kernels are distinct.
@@ -160,6 +166,7 @@ For h and q | h.c, obtain the current oriented gap prime P0 from
     directOrbitCommonPrime_oriented_gap_prime.
 
 Thus:
+
 - gap root r0 lies in P0;
 - rotate r0 and rotate^2 r0 do not lie in P0.
 
@@ -216,6 +223,7 @@ Promote a neutral field lemma for
 with nonzero c_i.
 
 Prove:
+
 - if r0=0:
       (r1/r2)^14 = -c2/c1
 - if r1=0:
@@ -265,6 +273,7 @@ in terms of f0.
 Determine exactly whether:
 
 ### I1 — independent product case
+
 the transported values are
     f0(R0), f0(R1), f0(R2),
 
@@ -276,6 +285,7 @@ Then prove -1 is a 14th power in ZMod q and derive q % 28 = 1.
 The group-order argument must be fully kernel-checked.
 
 ### I2 — phase-collapse case
+
 the transport identity gives
 
     fi(Ri) = f0(R0)
@@ -300,6 +310,7 @@ Only if I1 is proved, expose:
       q % 28 = 1.
 
 Then derive:
+
 - every common prime is 1 mod 28;
 - c > 1 gives the corresponding smallest-prime lower bound;
 - update the C>1 sharpened packet if the bound is cheap.
@@ -313,6 +324,7 @@ the cyclic-product identity cannot be multiplied across transported local
 statements.
 
 Keep:
+
 - the current cyclotomic address;
 - degree-six kernel pair;
 - exact transport theorems.
@@ -325,6 +337,7 @@ prime addresses rather than transporting all of them to the same orientation.
 
 Audit whether the quotient-side real prime from Parts A-C and the gap-side
 prime P0 from Part E are:
+
 - distinct real primes above q;
 - Galois conjugates;
 - or can coincide under a specific phase.
@@ -352,6 +365,7 @@ Do not force the two evaluations into one packet without proof.
 ## Deliverables
 
 Primary:
+
 - current common-prime cyclotomic constructor module;
 - exact fixed-ZMod Galois transport module;
 - report-065.md;
