@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative inputs:
+
 - report-066.md
 - SevenRealCubicCurrentCommonPrimePacket.lean
 - SevenRealCubicCurrentOrientedGapTransport.lean
@@ -14,6 +15,7 @@ Authoritative inputs:
 - PrimeTraceOneDirectRealCubicPrimeAllocation.lean
 
 R60 outcome is B:
+
 - the three fourteen-power relations collapse under exact Galois transport;
 - the naive q % 28 route is closed;
 - the quotient real prime satisfies exactly
@@ -77,6 +79,7 @@ Prove for every x : SevenRealCubicInt:
     b.f2 x = 0 <-> modelEquivRingOfIntegers x ∈ P2.
 
 Use:
+
 - b.f0_formula;
 - directOrbitGaloisSigma_mem_iff;
 - directOrbitGaloisSigma_model_rotate_mem_iff;
@@ -130,6 +133,7 @@ Prove:
     b.f0 (directOrbitGap p) = 0.
 
 Preferred route:
+
 - expand the power-split/square-refinement factorization;
 - b.gap_zero kills gapSquareRoot;
 - all surrounding factors are irrelevant.
@@ -146,6 +150,7 @@ Prove both are nonzero.
 
 For rho2, prove nonzero using the orientation dichotomy plus the quotient-side
 nonzero fields:
+
 - in Q=P1, a.rho_ne_zero becomes f0 rho2 != 0;
 - in Q=P2, a.rotate_rho_ne_zero becomes f0 rho2 != 0.
 
@@ -390,6 +395,7 @@ Do not mutate old APIs unnecessarily.
 If the lower bound 379 is green, record:
 
 C>1 now gives:
+
 - every q | c is 1 mod 7;
 - every q | c is Kummer-compatible;
 - every q | c is >= 379;
@@ -419,6 +425,7 @@ Do not start reciprocity in R61.
 ## Deliverables
 
 Primary:
+
 - orientation-to-ratio/inverse production module;
 - neutral Kummer-phase module;
 - fixed finite sieve module if Part K succeeds;

@@ -1364,3 +1364,18 @@ cross-prime multiplication, historical contradiction, or final FLT7 claim.
 
 Status: **implemented — Outcome B, phase collapse and orbit alternative
 kernel-checked**.  See `report-066.md`.
+
+## FLT7TC-005R61 — Unconditional trace-one closure phase sieve
+
+R61 adds the neutral current-residue kernel and orientation-ratio modules,
+then connects the current common-prime witness to a phase-independent normalized
+Kummer support statement.  The phase identities, inversion invariance, and
+current order-seven ratio are kernel-checked.  The finite compatibility sieve
+excludes exactly the primes
+`29, 43, 71, 113, 127, 197, 211, 239, 281, 337` below `379`; the bounded
+`q % 7 = 1` classification and the resulting `q ≥ 379`, `c ≥ 379`, and
+`379 * u^5 < v` bounds are also implemented.
+
+The result remains Outcome B: no mod-28 shortcut, reciprocity, universal prime
+provider, `C = 1` closure, or final FLT7 theorem is asserted.  See
+`report-067.md`.
