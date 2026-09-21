@@ -1431,9 +1431,22 @@ factor receives exactly `14 * eQ` copies of `Q`, with membership at that power
 and nonmembership at the successor exposed as public theorems.
 
 Status: **implemented — Outcome B**.  The current degree-six carrier cutoff
-and the global aggregation into a principal ideal remain the R65 frontier.
-Historical quotient exponents, terminal contradictions, and global FLT7
-closure remain excluded.  See `report-070.md`.
+and the global aggregation into a principal ideal are explicitly deferred by
+the branch freeze and are not R65 FLT7 implementation work.  Historical
+quotient exponents, terminal contradictions, and global FLT7 closure remain
+excluded.  See `report-070.md` and `CURRENT_STATE_FREEZE.md`.
+
+## FLT7TC-005 — FROZEN / BRANCH CLOSED
+
+R64 Outcome B is the final mathematical checkpoint of this FLT7-specific
+branch.  R65 is documentation and freeze only; no R66 is planned on this
+branch.  FLT7-specific degree-six carrier cutoff work and global oriented
+aggregation must not continue here.  Re-entry requires a genuinely new
+general GN/cyclotomic/norm theorem, and any future FLT7 work must start from
+`CURRENT_STATE_FREEZE.md` after that general theorem is available.
+
+The generalization target and priority order are recorded in
+`GENERALIZATION_HANDOFF.md`.
 
 ## FLT7TC-005R61 — Unconditional trace-one closure phase sieve
 

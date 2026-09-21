@@ -74,5 +74,5 @@ checkpoint.
   forbidden constructs and historical `quotientExponent` are clean.
 - Parts I–K were not asserted through the historical `quotientExponent` or a
   new global factorization theorem.  The exact degree-six carrier cutoff and
-  the global aggregation statement remain the R65 frontier; no terminal
-  contradiction or final FLT7 theorem was introduced.
+  the global aggregation statement are explicitly deferred by the branch
+  freeze; no terminal contradiction or final FLT7 theorem was introduced.
