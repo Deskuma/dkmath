@@ -3,6 +3,7 @@
 Branch: research/FLT7-Unconditional-TraceOne-Closure-260917-v0
 
 Authoritative project inputs:
+
 - report-062.md
 - ThomasThueSixApproximation.lean
 - ThomasThueSixAudit.lean
@@ -116,6 +117,7 @@ For all R S : Z prove:
       = F5 R S.
 
 Preferred proof:
+
 - direct coordinate/norm expansion, or
 - conjugate-product identity if shorter.
 
@@ -321,6 +323,7 @@ Otherwise stop at the exact new unit/depth endpoint.
 ## Deliverables
 
 Primary:
+
 - SevenRealCubicThomasUnit.lean if Parts A-G are clean;
 - report-063.md;
 - ROADMAP.md.
