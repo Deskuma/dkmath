@@ -149,29 +149,46 @@ difference through Complex.normSq.
 
 This is intentionally only the first norm-aware layer.
 
-## Critical distinction: complex norm square is not yet field norm
+## Field norm bridge: extracted, with one remaining boundary
 
-The current DkMath.CFBRC.CyclotomicNorm results use Complex.normSq.
+GCNB-003 extracted a genuine algebraic norm theorem into
+DkMath.CFBRC.CyclotomicNorm.
 
-They do **not** yet prove the cyclotomic field norm theorem
+For a prime p, a cyclotomic extension K/Q, a primitive p-th root zeta, and
+natural gap/base coordinates x,u with u != 0, the branch now proves the
+ring-of-integers norm identity
 
 ~~~text
-Algebra.norm_{Q(zeta_p)/Q} ((x+u) - u*zeta_p) = GN p x u
+Algebra.norm Z ( (x+u) - zeta*u ) = GN p x u
 ~~~
 
-or an equivalent integral statement.
+with the exact Lean carrier supplied by
+cyclotomicLinearFactorInRingOfIntegers.
 
-Likewise, the branch does not yet provide:
+The public theorems are:
 
-- a principal-ideal identity for the cyclotomic carrier;
+~~~text
+cyclotomicLinearFactor_norm_eq_GN_ratCast
+cyclotomicLinearFactor_norm_eq_GN
+~~~
+
+This is a genuine Algebra.norm result and is distinct from the earlier
+Complex.normSq layer.
+
+The remaining GCNB-003 boundary is the proof-path hypothesis u != 0. The
+current implementation reaches the homogeneous cyclotomic value through the
+ratio (x+u)/u; the mathematical identity itself is expected to extend across
+u = 0. GCNB-003R is assigned to remove that accidental division boundary if
+the pinned API permits a clean direct homogeneous proof.
+
+The branch still does not yet provide:
+
+- a principal-ideal identity for the new generic carrier;
 - ideal-level p-power transport;
-- valuation transport through a field norm;
+- valuation transport through the carrier norm;
 - a conjugate-pair half-product theorem;
 - a generic bridge from the full cyclotomic carrier back to the existing
   Prime/TraceOne residual packets.
-
-Those are subsequent checkpoints, not consequences of the present
-Complex.normSq API.
 
 ## General-d versus prime-p
 
@@ -239,7 +256,7 @@ This branch currently does **not** claim:
 
 - FLT7 unconditionality;
 - a new proof of general FLT;
-- a cyclotomic field-norm theorem;
+- an assumption-free u = 0-inclusive cyclotomic field-norm theorem;
 - cyclotomic principalization from the new carrier;
 - a new class-group theorem;
 - a p-th-power root of the carrier;
