@@ -184,14 +184,34 @@ The u = 0 branch is proved directly: the carrier reduces to the scalar x, its
 field norm is x^(p-1), and GN p x 0 is proved to be the same power. Thus the
 stable API no longer exposes the ratio-based proof restriction.
 
+GCNB-004 now also attaches the principal ideal
+
+~~~text
+I_alpha = (alpha)
+~~~
+
+and proves
+
+~~~text
+Ideal.absNorm I_alpha = GN p x u
+x * Ideal.absNorm I_alpha = (x+u)^p - u^p
+padicValNat q (Ideal.absNorm I_alpha) = padicValNat q (GN p x u)
+~~~
+
+together with the existing-hypothesis bridge to the valuation of the complete
+power difference.
+
+This is intentionally a **global rational-prime valuation** layer. It does not
+identify the multiplicity of any one prime ideal above q.
+
 The branch still does not yet provide:
 
-- a principal-ideal identity for the new generic carrier;
-- ideal-level p-power transport;
-- valuation transport through the carrier norm;
+- local prime-ideal multiplicity ownership for the new carrier;
+- ideal-level p-power transport from a norm p-th power alone;
+- principalization/class-group consequences from the new carrier;
 - a conjugate-pair half-product theorem;
-- a generic bridge from the full cyclotomic carrier back to the existing
-  Prime/TraceOne residual packets.
+- a generic bridge from the full cyclotomic carrier into the existing
+  FLT Prime/TraceOne packet tower.
 
 ## General-d versus prime-p
 
@@ -239,10 +259,11 @@ information to close an actual FLT obligation.
 
 The initial implementation is kernel checked under Lean v4.34.0.
 
-PR #105 reached:
+PR #105 has reached multiple green checkpoints. The current GCNB-004 code
+state was confirmed by:
 
 ~~~text
-Lean CI #1017
+Lean CI #1029
 Build DkMath: SUCCESS
 ~~~
 
