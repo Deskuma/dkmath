@@ -144,6 +144,33 @@ For odd prime p, a later corollary may express the full field norm as a product
 of complex conjugate-pair norm squares, but that decomposition is not a
 substitute for the field-norm theorem itself.
 
+Status: **completed — Outcome B**.
+
+A genuine dependency-neutral Algebra.norm = GN theorem is now production
+code. The only remaining hypothesis is u != 0, inherited from the ratio-based
+proof route.
+
+## GCNB-003R — Remove the nonzero-base proof boundary
+
+Before opening the ideal layer, attempt to remove the remaining u != 0
+hypothesis from the public norm theorem.
+
+Prefer a direct homogeneous proof:
+
+~~~text
+Norm((x+u) - zeta*u)
+  = product over embeddings / primitive roots
+  = GTailCyclotomicShell p x u
+  = GN p x u
+~~~
+
+which should avoid division entirely.
+
+A simpler explicit u = 0 branch is acceptable if it yields the same stable
+public theorem without introducing stronger assumptions.
+
+Required boundary regressions include u = 0 and, ideally, x = u = 0.
+
 Status: **next checkpoint**.
 
 ## GCNB-004 — Principal ideal and valuation transport
