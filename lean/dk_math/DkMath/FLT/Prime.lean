@@ -5,6 +5,7 @@ Released under MIT license as described in the file LICENSE.
 
 import DkMath.FLT.Prime.CounterexampleRouting
 import DkMath.FLT.Prime.AdicPowerSplit
+import DkMath.FLT.Prime.PrimeCyclotomicIdeal
 import DkMath.FLT.Prime.PrimeTraceOneCoordinateCoprime
 import DkMath.FLT.Prime.PrimeTraceOneStrippedIdeal
 import DkMath.FLT.Prime.PrimeTraceOneConditionalDescent
