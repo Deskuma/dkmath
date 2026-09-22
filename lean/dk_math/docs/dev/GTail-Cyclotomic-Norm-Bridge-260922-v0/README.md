@@ -224,14 +224,30 @@ A PrimeGe5CounterexamplePack reaches the complete carrier identity without
 assuming p divides the gap; that divisibility is introduced only by the local
 ramified constructor.
 
+GCNB-006 now proves that the arbitrary-prime TraceOne coordinate shadow and
+the full cyclotomic ideal carrier have exactly the same scalar norm:
+
+~~~text
+TraceOne.norm (P.coord (g+u) u)
+  = (Ideal.absNorm I_alpha : Z),
+
+natAbs (TraceOne.norm (P.coord (g+u) u))
+  = Ideal.absNorm I_alpha.
+~~~
+
+The same equality is available through rational-prime divisibility and
+padicValNat, and through PrimeAdicFactorPacket / PrimeAdicPowerSplit. The
+Nat/Int GTail-shell bridge is now unconditional at g = 0.
+
 The branch still does not yet provide:
 
 - local prime-ideal multiplicity ownership for the new carrier;
 - ideal-level p-power transport from a norm p-th power alone;
 - principalization/class-group consequences from the new carrier;
 - a conjugate-pair half-product theorem;
-- a checked compatibility theorem equating the cyclotomic ideal absNorm with
-  the existing TraceOne coordinate norm.
+- identification of cyclotomic elements or ideals with TraceOne elements or
+  ideals;
+- p=3/5/7 calibration against the older dedicated carrier APIs.
 
 ## General-d versus prime-p
 
