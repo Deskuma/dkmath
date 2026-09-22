@@ -73,9 +73,23 @@ example {p x u q : ℕ} (hq : Nat.Prime q) (hqx : ¬ q ∣ x) :
   prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
     (p := p) (x := x) (u := u) (q := q) hq hqx
 
+example {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
+    cyclotomicPrimeCore d x u = DkMath.CosmicFormula.GTail d 1 x u :=
+  cyclotomicPrimeCore_eq_GTail_one d x u
+
+example {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
+    cyclotomicPrimeCore d x u = GN d x u :=
+  cyclotomicPrimeCore_eq_GN d x u
+
+example (d u : ℕ) :
+    cyclotomicPrimeCore d 0 u = GN d 0 u :=
+  cyclotomicPrimeCore_eq_GN d 0 u
+
 example {d x u : ℕ} (hx : 0 < x) :
     cyclotomicPrimeCore d x u = GN d x u :=
   cyclotomicPrimeCore_eq_GN_nat (p := d) (x := x) (u := u) hx
+
+#print axioms DkMath.CFBRC.cyclotomicPrimeCore_eq_GN
 
 -- general d の Re/Im 補助
 example (X Θ : ℝ) :
