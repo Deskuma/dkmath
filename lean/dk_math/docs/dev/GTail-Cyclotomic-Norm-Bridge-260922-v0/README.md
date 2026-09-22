@@ -204,14 +204,34 @@ power difference.
 This is intentionally a **global rational-prime valuation** layer. It does not
 identify the multiplicity of any one prime ideal above q.
 
+GCNB-005 now connects the generic FLT arithmetic packet to the carrier. For
+a PrimeAdicFactorPacket one has
+
+~~~text
+g * Ideal.absNorm I_alpha = x^p,
+padicValNat p (Ideal.absNorm I_alpha) = 1,
+p divides Ideal.absNorm I_alpha,
+p^2 does not divide Ideal.absNorm I_alpha.
+~~~
+
+For PrimeAdicPowerSplit the same carrier satisfies
+
+~~~text
+Ideal.absNorm I_alpha = p * b^p.
+~~~
+
+A PrimeGe5CounterexamplePack reaches the complete carrier identity without
+assuming p divides the gap; that divisibility is introduced only by the local
+ramified constructor.
+
 The branch still does not yet provide:
 
 - local prime-ideal multiplicity ownership for the new carrier;
 - ideal-level p-power transport from a norm p-th power alone;
 - principalization/class-group consequences from the new carrier;
 - a conjugate-pair half-product theorem;
-- a generic bridge from the full cyclotomic carrier into the existing
-  FLT Prime/TraceOne packet tower.
+- a checked compatibility theorem equating the cyclotomic ideal absNorm with
+  the existing TraceOne coordinate norm.
 
 ## General-d versus prime-p
 
@@ -265,6 +285,9 @@ state was confirmed by:
 ~~~text
 Lean CI #1029
 Build DkMath: SUCCESS
+
+GCNB-005 also passed all focused/full local builds recorded in report-003.md;
+the corresponding GitHub CI run is tracked separately as the branch advances.
 ~~~
 
 The repair commit at the time this README was created was:
