@@ -357,8 +357,9 @@ Stop and report rather than forcing a theorem if:
 
 ## Next implementation document
 
-Create instruction-000.md for GCNB-003.
+Use instruction-002.md for GCNB-004.
 
-It should be a bounded reconnaissance / implementation instruction for the
-**cyclotomic field Norm bridge**, beginning with the exact current
-CyclotomicNorm.lean API and pinned Mathlib v4.34.0 support.
+The next bounded checkpoint is the **principal ideal / absolute ideal norm /
+global rational-prime valuation bridge** for the stabilized cyclotomic
+linear-factor carrier. Local prime-ideal multiplicity ownership is explicitly
+deferred unless the pinned Dedekind API makes the aggregate theorem immediate.
