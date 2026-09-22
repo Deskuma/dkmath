@@ -1,4 +1,4 @@
-/- 
+/-
 Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
 Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
@@ -34,6 +34,7 @@ open scoped BigOperators
 open DkMath.CosmicFormula
 open DkMath.CosmicFormulaBinom
 open DkMath.NumberTheory.CyclotomicQRProduct
+open ComplexConjugate
 
 noncomputable section
 
@@ -47,7 +48,7 @@ def cyclotomicRootProduct
 theorem cyclotomicRootProduct_eq_shell
     {K : Type*} [Field K] {p : ℕ} [Fact p.Prime]
     (ζ : K) (hζ : IsPrimitiveRoot ζ p) (x u : K) :
-    cyclotomicRootProduct ζ x u = GTailCyclotomicShell p x u := by
+    cyclotomicRootProduct (p := p) ζ x u = GTailCyclotomicShell p x u := by
   simpa [cyclotomicRootProduct, GTailCyclotomicShell] using
     nonzeroRoot_product_eq_shell ζ hζ (x + u) u
 
@@ -55,7 +56,7 @@ theorem cyclotomicRootProduct_eq_shell
 theorem cyclotomicRootProduct_eq_GTail_one
     {K : Type*} [Field K] {p : ℕ} [Fact p.Prime]
     (ζ : K) (hζ : IsPrimitiveRoot ζ p) (x u : K) :
-    cyclotomicRootProduct ζ x u = GTail p 1 x u := by
+    cyclotomicRootProduct (p := p) ζ x u = GTail p 1 x u := by
   rw [cyclotomicRootProduct_eq_shell ζ hζ]
   exact (GTail_one_eq_GTailCyclotomicShell p x u).symm
 
@@ -63,7 +64,7 @@ theorem cyclotomicRootProduct_eq_GTail_one
 theorem cyclotomicRootProduct_eq_GN
     {K : Type*} [Field K] {p : ℕ} [Fact p.Prime]
     (ζ : K) (hζ : IsPrimitiveRoot ζ p) (x u : K) :
-    cyclotomicRootProduct ζ x u = GN p x u := by
+    cyclotomicRootProduct (p := p) ζ x u = CosmicFormulaBinom.GN p x u := by
   exact cyclotomicRootProduct_eq_GTail_one ζ hζ x u
 
 /--
@@ -74,7 +75,7 @@ at the cyclotomic quotient.
 theorem gap_mul_cyclotomicRootProduct_eq_sub_pow
     {K : Type*} [Field K] {p : ℕ} [Fact p.Prime]
     (ζ : K) (hζ : IsPrimitiveRoot ζ p) (x u : K) :
-    x * cyclotomicRootProduct ζ x u = (x + u) ^ p - u ^ p := by
+    x * cyclotomicRootProduct (p := p) ζ x u = (x + u) ^ p - u ^ p := by
   rw [cyclotomicRootProduct_eq_GTail_one ζ hζ]
   rw [eq_sub_iff_add_eq]
   exact (add_pow_eq_mul_GTail_one_add_gap p x u).symm
@@ -83,8 +84,8 @@ theorem gap_mul_cyclotomicRootProduct_eq_sub_pow
 theorem complex_rootFactor_mul_conj_eq_normSq
     {p : ℕ} [Fact p.Prime]
     (ζ : ℂ) (a : ZMod p) (x u : ℂ) :
-    rootFactor ζ a (x + u) u *
-        Complex.conj (rootFactor ζ a (x + u) u) =
+    rootFactor (p := p) ζ a (x + u) u *
+        conj (rootFactor ζ a (x + u) u) =
       Complex.normSq (rootFactor ζ a (x + u) u) := by
   exact Complex.mul_conj _
 
@@ -92,8 +93,8 @@ theorem complex_rootFactor_mul_conj_eq_normSq
 theorem complex_normSq_cyclotomicRootProduct_eq_GN
     {p : ℕ} [Fact p.Prime]
     (ζ : ℂ) (hζ : IsPrimitiveRoot ζ p) (x u : ℂ) :
-    Complex.normSq (cyclotomicRootProduct ζ x u) =
-      Complex.normSq (GN p x u) := by
+    Complex.normSq (cyclotomicRootProduct (p := p) ζ x u) =
+      Complex.normSq (CosmicFormulaBinom.GN p x u) := by
   rw [cyclotomicRootProduct_eq_GN ζ hζ]
 
 /--
@@ -104,7 +105,7 @@ compression.
 theorem complex_normSq_gap_mul_cyclotomicRootProduct_eq_sub_pow
     {p : ℕ} [Fact p.Prime]
     (ζ : ℂ) (hζ : IsPrimitiveRoot ζ p) (x u : ℂ) :
-    Complex.normSq (x * cyclotomicRootProduct ζ x u) =
+    Complex.normSq (x * cyclotomicRootProduct (p := p) ζ x u) =
       Complex.normSq ((x + u) ^ p - u ^ p) := by
   rw [gap_mul_cyclotomicRootProduct_eq_sub_pow ζ hζ]
 

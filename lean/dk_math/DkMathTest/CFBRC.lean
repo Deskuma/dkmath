@@ -29,6 +29,7 @@ namespace DkMathTest.CFBRC
 open DkMath.CFBRC
 open DkMath.CFBRC.TrigBridge
 open DkMath.CosmicFormulaBinom
+open ComplexConjugate
 
 -- d=2 三角置換 bridge
 example (a φ : ℝ) :
@@ -93,13 +94,12 @@ example {d x u : ℕ} (hx : 0 < x) :
 
 example {K : Type*} [Field K] {p : ℕ} [Fact p.Prime]
     (ζ : K) (hζ : IsPrimitiveRoot ζ p) (x u : K) :
-    x * cyclotomicRootProduct ζ x u = (x + u) ^ p - u ^ p :=
+    x * cyclotomicRootProduct (p := p) ζ x u = (x + u) ^ p - u ^ p :=
   gap_mul_cyclotomicRootProduct_eq_sub_pow ζ hζ x u
 
 example {p : ℕ} [Fact p.Prime]
     (ζ : ℂ) (a : ZMod p) (x u : ℂ) :
-    DkMath.NumberTheory.CyclotomicQRProduct.rootFactor ζ a (x + u) u *
-        Complex.conj
+    DkMath.NumberTheory.CyclotomicQRProduct.rootFactor ζ a (x + u) u * conj
           (DkMath.NumberTheory.CyclotomicQRProduct.rootFactor ζ a (x + u) u) =
       Complex.normSq
         (DkMath.NumberTheory.CyclotomicQRProduct.rootFactor ζ a (x + u) u) :=
