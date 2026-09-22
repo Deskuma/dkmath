@@ -248,7 +248,12 @@ for every counterexample.
 The output should be a reusable packet or theorem family, not an FLT7-specific
 adapter.
 
-Status: **next checkpoint**.
+Status: **completed — Outcome A**.
+
+PrimeAdicFactorPacket now reaches the canonical cyclotomic ideal with exact
+complete-power and p-adic information. PrimeGe5CounterexamplePack reaches the
+same carrier without globally assuming p divides the gap, while the ramified
+constructor localizes that divisibility hypothesis.
 
 ## GCNB-006 — Prime/TraceOne shadow compatibility
 
@@ -278,7 +283,7 @@ p-th-power residual equations
 Do not infer equality of full cyclotomic elements from equality of TraceOne
 norms.
 
-Status: **blocked on GCNB-004/005**.
+Status: **next checkpoint**.
 
 ## GCNB-007 — Conjugate-pair complex norm decomposition
 
@@ -373,9 +378,9 @@ Stop and report rather than forcing a theorem if:
 
 ## Next implementation document
 
-Use instruction-003.md for GCNB-005.
+Use instruction-004.md for GCNB-006.
 
-The next bounded checkpoint connects the stabilized cyclotomic
-Norm/ideal/valuation carrier to the existing generic odd-prime FLT arithmetic
-packet. GCNB-004L local prime-ideal aggregation remains deferred until a
-downstream theorem requires it.
+The next bounded checkpoint proves norm-level compatibility between the full
+cyclotomic ideal carrier and the existing arbitrary-prime TraceOne coordinate
+shadow. It must preserve the distinction between equality of scalar norms and
+equality of algebraic elements or ideals.
