@@ -209,7 +209,23 @@ principal-ideal powers
 p-th-power aggregation
 ~~~
 
-Status: **next checkpoint**.
+Status: **completed — Outcome A**.
+
+The canonical cyclotomic principal ideal now satisfies exact absNorm = GN,
+retains the complete gap product, and exposes global rational-prime
+padicValNat transport. Individual prime-ideal multiplicity is deliberately
+deferred.
+
+### GCNB-004L — Local prime-ideal multiplicity aggregation
+
+Deferred follow-up.
+
+This checkpoint should be opened only when a downstream theorem actually needs
+a chosen prime ideal above q or an aggregate residue-degree formula. It must
+not identify padicValNat q (Ideal.absNorm I) with one prime-ideal exponent
+without a checked sum formula over primes above q.
+
+Status: **deferred; not the next checkpoint**.
 
 ## GCNB-005 — Generic FLT gap packet compatibility
 
@@ -232,7 +248,7 @@ for every counterexample.
 The output should be a reusable packet or theorem family, not an FLT7-specific
 adapter.
 
-Status: **blocked on GCNB-003/004**.
+Status: **next checkpoint**.
 
 ## GCNB-006 — Prime/TraceOne shadow compatibility
 
@@ -357,9 +373,9 @@ Stop and report rather than forcing a theorem if:
 
 ## Next implementation document
 
-Use instruction-002.md for GCNB-004.
+Use instruction-003.md for GCNB-005.
 
-The next bounded checkpoint is the **principal ideal / absolute ideal norm /
-global rational-prime valuation bridge** for the stabilized cyclotomic
-linear-factor carrier. Local prime-ideal multiplicity ownership is explicitly
-deferred unless the pinned Dedekind API makes the aggregate theorem immediate.
+The next bounded checkpoint connects the stabilized cyclotomic
+Norm/ideal/valuation carrier to the existing generic odd-prime FLT arithmetic
+packet. GCNB-004L local prime-ideal aggregation remains deferred until a
+downstream theorem requires it.
