@@ -91,6 +91,23 @@ example {d x u : ℕ} (hx : 0 < x) :
 
 #print axioms DkMath.CFBRC.cyclotomicPrimeCore_eq_GN
 
+example {K : Type*} [Field K] {p : ℕ} [Fact p.Prime]
+    (ζ : K) (hζ : IsPrimitiveRoot ζ p) (x u : K) :
+    x * cyclotomicRootProduct ζ x u = (x + u) ^ p - u ^ p :=
+  gap_mul_cyclotomicRootProduct_eq_sub_pow ζ hζ x u
+
+example {p : ℕ} [Fact p.Prime]
+    (ζ : ℂ) (a : ZMod p) (x u : ℂ) :
+    DkMath.NumberTheory.CyclotomicQRProduct.rootFactor ζ a (x + u) u *
+        Complex.conj
+          (DkMath.NumberTheory.CyclotomicQRProduct.rootFactor ζ a (x + u) u) =
+      Complex.normSq
+        (DkMath.NumberTheory.CyclotomicQRProduct.rootFactor ζ a (x + u) u) :=
+  complex_rootFactor_mul_conj_eq_normSq ζ a x u
+
+#print axioms DkMath.CFBRC.gap_mul_cyclotomicRootProduct_eq_sub_pow
+#print axioms DkMath.CFBRC.complex_rootFactor_mul_conj_eq_normSq
+
 -- general d の Re/Im 補助
 example (X Θ : ℝ) :
     cfbrcRe 1 X Θ = X := by
