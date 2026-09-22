@@ -9,6 +9,7 @@ import DkMath.CFBRC.Basic
 import DkMath.CFBRC.Bridge
 import DkMath.CFBRC.CyclotomicProduct
 import DkMath.CFBRC.CyclotomicNorm
+import DkMath.CFBRC.CyclotomicIdeal
 import DkMath.CFBRC.TrigBridge.General
 import DkMath.CFBRC.TrigBridge.ClosedForm
 import DkMath.CFBRC.TrigBridge.Main
