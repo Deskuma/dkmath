@@ -175,11 +175,14 @@ cyclotomicLinearFactor_norm_eq_GN
 This is a genuine Algebra.norm result and is distinct from the earlier
 Complex.normSq layer.
 
-The remaining GCNB-003 boundary is the proof-path hypothesis u != 0. The
-current implementation reaches the homogeneous cyclotomic value through the
-ratio (x+u)/u; the mathematical identity itself is expected to extend across
-u = 0. GCNB-003R is assigned to remove that accidental division boundary if
-the pinned API permits a clean direct homogeneous proof.
+GCNB-003R has now removed the remaining proof-path hypothesis u != 0.
+The canonical public Norm = GN theorem is unconditional in the natural
+gap/base coordinates x,u. The former nonzero-base results remain available as
+compatibility lemmas with the suffix _of_ne_zero.
+
+The u = 0 branch is proved directly: the carrier reduces to the scalar x, its
+field norm is x^(p-1), and GN p x 0 is proved to be the same power. Thus the
+stable API no longer exposes the ratio-based proof restriction.
 
 The branch still does not yet provide:
 
@@ -256,8 +259,8 @@ This branch currently does **not** claim:
 
 - FLT7 unconditionality;
 - a new proof of general FLT;
-- an assumption-free u = 0-inclusive cyclotomic field-norm theorem;
 - cyclotomic principalization from the new carrier;
+- local prime-ideal multiplicity transport from the new carrier;
 - a new class-group theorem;
 - a p-th-power root of the carrier;
 - a contradiction from GN being a perfect power;
