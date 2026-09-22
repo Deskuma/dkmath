@@ -46,11 +46,30 @@ private theorem norm_regression (p : ℕ) [Fact p.Prime] :
       ((DkMath.CosmicFormulaBinom.GN p 1 1 : ℕ) : ℤ) := by
   exact cyclotomicLinearFactor_norm_eq_GN
     (p := p) (x := 1) (u := 1) (cycloZeta_isPrimitiveRoot p)
-      (by norm_num : (1 : ℕ) ≠ 0)
+
+private theorem zero_base_norm_regression (p : ℕ) [Fact p.Prime] :
+    Algebra.norm ℤ
+        (cyclotomicLinearFactorInRingOfIntegers
+          (cycloZeta_isPrimitiveRoot p) 1 0) =
+      ((DkMath.CosmicFormulaBinom.GN p 1 0 : ℕ) : ℤ) := by
+  exact cyclotomicLinearFactor_norm_eq_GN
+    (p := p) (x := 1) (u := 0) (cycloZeta_isPrimitiveRoot p)
 
 example := norm_regression 3
 example := norm_regression 5
 example := norm_regression 7
+
+example := zero_base_norm_regression 3
+example := zero_base_norm_regression 5
+example := zero_base_norm_regression 7
+
+example :
+    Algebra.norm ℤ
+        (cyclotomicLinearFactorInRingOfIntegers
+          (cycloZeta_isPrimitiveRoot 3) 0 0) =
+      ((DkMath.CosmicFormulaBinom.GN 3 0 0 : ℕ) : ℤ) := by
+  exact cyclotomicLinearFactor_norm_eq_GN
+    (p := 3) (x := 0) (u := 0) (cycloZeta_isPrimitiveRoot 3)
 
 example (p : ℕ) [Fact p.Prime] (x u : ℕ) :
     cyclotomicRootProduct (p := p) (cycloZeta p) (x : cycloField p) (u : cycloField p) =

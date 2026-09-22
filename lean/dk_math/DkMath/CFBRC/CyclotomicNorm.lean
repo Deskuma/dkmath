@@ -150,7 +150,7 @@ private lemma cyclotomicEval_nat_gap_mul_pow_eq_GN
     _ = DkMath.CFBRC.cyclotomicShiftedEval p (x : K) (u : K) := hshift.symm
     _ = ((DkMath.CosmicFormulaBinom.GN p x u : ℕ) : K) := hprod
 
-theorem cyclotomicLinearFactor_norm_eq_GN_ratCast
+theorem cyclotomicLinearFactor_norm_eq_GN_ratCast_of_ne_zero
     {K : Type*} [Field K] [NumberField K] [CharZero K]
     {p x u : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
     {ζ : K} (hζ : IsPrimitiveRoot ζ p) (hu0 : u ≠ 0) :
@@ -237,14 +237,80 @@ theorem cyclotomicLinearFactor_norm_eq_GN_ratCast
     Algebra.coe_norm_int lin
   simpa [lin] using hcoe.trans hfield
 
-theorem cyclotomicLinearFactor_norm_eq_GN
+theorem cyclotomicLinearFactor_norm_eq_GN_of_ne_zero
     {K : Type*} [Field K] [NumberField K] [CharZero K]
     {p x u : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
     {ζ : K} (hζ : IsPrimitiveRoot ζ p) (hu0 : u ≠ 0) :
     Algebra.norm ℤ (cyclotomicLinearFactorInRingOfIntegers hζ x u) =
       ((DkMath.CosmicFormulaBinom.GN p x u : ℕ) : ℤ) := by
   exact Int.cast_injective
-    (cyclotomicLinearFactor_norm_eq_GN_ratCast hζ hu0)
+    (cyclotomicLinearFactor_norm_eq_GN_ratCast_of_ne_zero hζ hu0)
+
+private lemma GN_nat_right_zero (p x : ℕ) [Fact p.Prime] :
+    DkMath.CosmicFormulaBinom.GN p x 0 = x ^ (p - 1) := by
+  classical
+  change DkMath.CosmicFormula.GTail p 1 x 0 = x ^ (p - 1)
+  rw [DkMath.CosmicFormula.GTail_one_eq_sum]
+  have hp : 0 < p := (Fact.out : Nat.Prime p).pos
+  have hmem : p - 1 ∈ Finset.range p := by
+    exact Finset.mem_range.2 (Nat.sub_lt hp Nat.zero_lt_one)
+  rw [Finset.sum_eq_single (p - 1)]
+  · have hpred : p - 1 + 1 = p := by omega
+    simp [hpred]
+  · intro b hb hbp
+    have hb' : b < p := Finset.mem_range.1 hb
+    have hlt : b < p - 1 := by omega
+    have hpos : 0 < p - 1 - b := by omega
+    simp [Nat.zero_pow hpos]
+  · intro hnot
+    exact (hnot hmem).elim
+
+theorem cyclotomicLinearFactor_norm_eq_GN_ratCast
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p x u : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    ((Algebra.norm ℤ
+        (cyclotomicLinearFactorInRingOfIntegers hζ x u) : ℤ) : ℚ) =
+      ((DkMath.CosmicFormulaBinom.GN p x u : ℕ) : ℚ) := by
+  by_cases hu0 : u = 0
+  · subst u
+    have hfinrank : Module.finrank ℚ K = p - 1 := by
+      rw [IsCyclotomicExtension.finrank K
+        (Polynomial.cyclotomic.irreducible_rat
+          (Nat.Prime.pos (Fact.out : Nat.Prime p)))]
+      simp [Nat.totient_prime (Fact.out : Nat.Prime p)]
+    have hnormX : Algebra.norm ℚ (x : K) = (x : ℚ) ^ (p - 1) := by
+      calc
+        Algebra.norm ℚ (x : K) = (x : ℚ) ^ Module.finrank ℚ K := by
+          rw [show (x : K) = algebraMap ℚ K (x : ℚ) by simp,
+            Algebra.norm_algebraMap]
+        _ = (x : ℚ) ^ (p - 1) := by rw [hfinrank]
+    have hGN :
+        (DkMath.CosmicFormulaBinom.GN p x 0 : ℕ) = x ^ (p - 1) :=
+      GN_nat_right_zero p x
+    have hcoe :
+        ((Algebra.norm ℤ
+            (cyclotomicLinearFactorInRingOfIntegers hζ x 0) : ℤ) : ℚ) =
+          Algebra.norm ℚ
+            ((cyclotomicLinearFactorInRingOfIntegers hζ x 0 : 𝓞 K) : K) :=
+      Algebra.coe_norm_int (cyclotomicLinearFactorInRingOfIntegers hζ x 0)
+    rw [hcoe]
+    have hGNq :
+        ((DkMath.CosmicFormulaBinom.GN p x 0 : ℕ) : ℚ) =
+          (x : ℚ) ^ (p - 1) := by
+      exact_mod_cast hGN
+    rw [hGNq]
+    simpa [cyclotomicLinearFactorInRingOfIntegers] using hnormX
+  · exact cyclotomicLinearFactor_norm_eq_GN_ratCast_of_ne_zero hζ hu0
+
+theorem cyclotomicLinearFactor_norm_eq_GN
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p x u : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    Algebra.norm ℤ (cyclotomicLinearFactorInRingOfIntegers hζ x u) =
+      ((DkMath.CosmicFormulaBinom.GN p x u : ℕ) : ℤ) := by
+  exact Int.cast_injective
+    (cyclotomicLinearFactor_norm_eq_GN_ratCast hζ)
 
 /-- The complete nonzero-root cyclotomic product in gap/base coordinates. -/
 def cyclotomicRootProduct
