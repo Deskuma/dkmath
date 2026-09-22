@@ -283,7 +283,11 @@ p-th-power residual equations
 Do not infer equality of full cyclotomic elements from equality of TraceOne
 norms.
 
-Status: **next checkpoint**.
+Status: **completed — Outcome A**.
+
+The arbitrary-prime TraceOne coordinate norm is now proved equal to the cast
+cyclotomic ideal absNorm, with Nat-valued, divisibility, valuation, FLT-packet,
+and ramified-split transports. The bridge remains scalar-only.
 
 ## GCNB-007 — Conjugate-pair complex norm decomposition
 
@@ -338,7 +342,7 @@ the deferred degree-six carrier / common-prime aggregation frontier
 Regression means representation compatibility, not reusing the completed
 FLT3/FLT5 contradictions as generic black boxes.
 
-Status: **blocked on the stable GCNB-003..006 API**.
+Status: **next checkpoint**.
 
 ## GCNB-009 — FLT7 re-entry gate
 
@@ -378,9 +382,10 @@ Stop and report rather than forcing a theorem if:
 
 ## Next implementation document
 
-Use instruction-004.md for GCNB-006.
+Use instruction-005.md for GCNB-008.
 
-The next bounded checkpoint proves norm-level compatibility between the full
-cyclotomic ideal carrier and the existing arbitrary-prime TraceOne coordinate
-shadow. It must preserve the distinction between equality of scalar norms and
-equality of algebraic elements or ideals.
+The next bounded checkpoint calibrates the generic cyclotomic ideal / TraceOne
+scalar bridge against the existing dedicated p=3 Eisenstein, p=5 Golden, and
+p=7 explicit quadratic-shadow carriers. GCNB-007 remains optional and
+independent; GCNB-004L remains deferred until a later theorem genuinely needs
+local prime-ideal multiplicity.
