@@ -171,7 +171,10 @@ public theorem without introducing stronger assumptions.
 
 Required boundary regressions include u = 0 and, ideally, x = u = 0.
 
-Status: **next checkpoint**.
+Status: **completed — Outcome A**.
+
+The canonical public Algebra.norm = GN theorem is now assumption-free in u.
+The old nonzero-base route remains only as a compatibility wrapper.
 
 ## GCNB-004 — Principal ideal and valuation transport
 
@@ -206,7 +209,7 @@ principal-ideal powers
 p-th-power aggregation
 ~~~
 
-Status: **blocked on GCNB-003**.
+Status: **next checkpoint**.
 
 ## GCNB-005 — Generic FLT gap packet compatibility
 
