@@ -135,11 +135,11 @@ This should be obtained from prime_power_unitFilteredPrimeDialHeight or the exac
 3. PrimePowerExponentGauge must not assert any converse characterization not already proved.
 4. Preserve the distinction:
 
-~~~text
-support prime          = divisibility support
-prime-dial height      = p-adic valuation depth
-filtered unit indices  = indices with p not dividing k
-~~~
+    ~~~text
+    support prime          = divisibility support
+    prime-dial height      = p-adic valuation depth
+    filtered unit indices  = indices with p not dividing k
+    ~~~
 
 5. No ValueGauge or mod-exponent value residue in this checkpoint.
 6. No new structure, class, quotient, or custom valuation engine.

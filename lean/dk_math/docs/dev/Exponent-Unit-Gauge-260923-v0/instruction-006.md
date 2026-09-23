@@ -145,9 +145,9 @@ Implementation guidance:
 1. extract `hp : p.Prime` from `hGauge`;
 2. install locally:
 
-~~~lean
-letI : Fact p.Prime := ⟨hp⟩
-~~~
+    ~~~lean
+    letI : Fact p.Prime := ⟨hp⟩
+    ~~~
 
 3. reuse the existing `cyclotomicLinearFactorIdeal_absNorm_eq_GN` theorem;
 4. only bridge `GN` to `GTail p 1` through the existing definitional/API relation.

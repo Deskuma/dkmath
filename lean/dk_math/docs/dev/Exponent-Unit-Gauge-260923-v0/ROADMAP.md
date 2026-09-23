@@ -13,6 +13,7 @@ Each checkpoint must first search for reusable production APIs. Prefer thin sema
 Goal: determine the exact production surface to reuse and freeze the first public vocabulary.
 
 Deliverables:
+
 - inventory of Pascal/exponent, value/power, Gap/Beam, cyclotomic, Norm/ideal/valuation, TraceOne, and landing APIs;
 - classify each as reuse as-is, semantic alias/bridge, genuinely missing theorem, or deferred research;
 - propose module/file ownership;
@@ -65,6 +66,7 @@ Target n-th powers having zero local residue, multiplicative transport where val
 Formalize the exponent-2 calibration. Prefer a denominator-free scaled identity equivalent to the midpoint correction formula.
 
 Targets:
+
 - exact d = 2 correction-zero theorem;
 - explicit d = 3 correction formula;
 - generic odd-correction expansion if technically clean;
