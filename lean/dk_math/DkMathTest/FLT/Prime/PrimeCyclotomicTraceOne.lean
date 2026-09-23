@@ -8,6 +8,8 @@ import DkMath.FLT.Prime.PrimeCyclotomicTraceOne
 
 #print "file: DkMathTest.FLT.Prime.PrimeCyclotomicTraceOne"
 
+/-! Regression tests for scalar compatibility with the TraceOne carrier. -/
+
 namespace DkMathTest.FLT.Prime
 
 open DkMath.CFBRC
@@ -18,6 +20,7 @@ open DkMath.NumberTheory.TraceOneQuadratic
 
 noncomputable section
 
+/-- The cyclotomic field used in the TraceOne compatibility examples. -/
 private abbrev cycloField (p : ℕ) := CyclotomicField p ℚ
 
 private instance cycloField_isCyclotomicExtension (p : ℕ) [Fact p.Prime] :
@@ -27,10 +30,12 @@ private instance cycloField_isCyclotomicExtension (p : ℕ) [Fact p.Prime] :
     exact_mod_cast (Fact.out : Nat.Prime p).ne_zero⟩
   exact CyclotomicField.isCyclotomicExtension p ℚ
 
+/-- Choose the canonical primitive root for the TraceOne tests. -/
 private def cycloZeta (p : ℕ) [Fact p.Prime] : cycloField p := by
   let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   exact IsCyclotomicExtension.zeta p ℚ (cycloField p)
 
+/-- Record the primitive-root property required by the generic packet. -/
 private theorem cycloZeta_isPrimitiveRoot (p : ℕ) [Fact p.Prime] :
     IsPrimitiveRoot (cycloZeta p) p := by
   let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩

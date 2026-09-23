@@ -1,11 +1,14 @@
 /-
 Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
 Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
 -/
 
 import DkMath.CFBRC.CyclotomicNorm
 
 #print "file: DkMathTest.CFBRC.CyclotomicNorm"
+
+/-! Regression tests for the unconditional cyclotomic norm and root product. -/
 
 namespace DkMathTest.CFBRC
 
@@ -21,6 +24,7 @@ private instance factPrime3 : Fact (Nat.Prime 3) := ⟨by norm_num⟩
 private instance factPrime5 : Fact (Nat.Prime 5) := ⟨by norm_num⟩
 private instance factPrime7 : Fact (Nat.Prime 7) := ⟨by norm_num⟩
 
+/-- The cyclotomic field used to instantiate the norm carrier. -/
 private abbrev cycloField (p : ℕ) := CyclotomicField p ℚ
 
 private instance cycloField_isCyclotomicExtension (p : ℕ) [Fact p.Prime] :
@@ -30,15 +34,18 @@ private instance cycloField_isCyclotomicExtension (p : ℕ) [Fact p.Prime] :
     exact_mod_cast (Fact.out : Nat.Prime p).ne_zero⟩
   exact CyclotomicField.isCyclotomicExtension p ℚ
 
+/-- Choose the canonical primitive `p`-th root in the test field. -/
 private def cycloZeta (p : ℕ) [Fact p.Prime] : cycloField p := by
   let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   exact IsCyclotomicExtension.zeta p ℚ (cycloField p)
 
+/-- Record the primitive-root specification for the chosen test root. -/
 private theorem cycloZeta_isPrimitiveRoot (p : ℕ) [Fact p.Prime] :
     IsPrimitiveRoot (cycloZeta p) p := by
   let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   exact IsCyclotomicExtension.zeta_spec p ℚ (cycloField p)
 
+/-- Check the norm bridge at the nonzero base point `(1,1)`. -/
 private theorem norm_regression (p : ℕ) [Fact p.Prime] :
     Algebra.norm ℤ
         (cyclotomicLinearFactorInRingOfIntegers
@@ -47,6 +54,7 @@ private theorem norm_regression (p : ℕ) [Fact p.Prime] :
   exact cyclotomicLinearFactor_norm_eq_GN
     (p := p) (x := 1) (u := 1) (cycloZeta_isPrimitiveRoot p)
 
+/-- Check the norm bridge at the boundary base `u = 0`. -/
 private theorem zero_base_norm_regression (p : ℕ) [Fact p.Prime] :
     Algebra.norm ℤ
         (cyclotomicLinearFactorInRingOfIntegers

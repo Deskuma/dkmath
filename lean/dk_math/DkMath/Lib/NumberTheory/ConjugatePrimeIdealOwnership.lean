@@ -19,9 +19,15 @@ particular number field or involution.
 
 namespace DkMath.Lib.NumberTheory
 
-/-- A conjugate pair whose product descends through a contracted ideal power
-cannot have its first factor in the corresponding successor power when the
-base factor is not in that power. -/
+/-- A conjugate pair transports a base cutoff to the upstairs prime power.
+
+Assume that membership of `alpha` in `P^(m+1)` transports to membership of
+`alphaBar` in the conjugate power.  If their product is the image of `beta`,
+the two upstairs powers are the image of `Q^(m+1)`, and extension followed by
+contraction fixes that base power, then `beta ∉ Q^(m+1)` rules out
+`alpha ∈ P^(m+1)`.  The argument uses only ideal membership and does not
+assume that the ideals are prime, principal, or unique-factorization ideals;
+the contraction equality is intentionally supplied by the caller. -/
 theorem not_mem_primePower_succ_of_conjugate_norm_cutoff
     {A B : Type*} [CommRing A] [CommRing B]
     (f : A →+* B) (Q : Ideal A) (P Pbar : Ideal B)

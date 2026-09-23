@@ -8,6 +8,8 @@ import DkMath.Lib.Cosmic.GTailCyclotomic
 
 #print "file: DkMathTest.CosmicFormula.GTailCyclotomic"
 
+/-! Regression tests for the cancellation-free `GTail`/cyclotomic bridge. -/
+
 open scoped BigOperators
 
 namespace DkMathTest.CosmicFormula

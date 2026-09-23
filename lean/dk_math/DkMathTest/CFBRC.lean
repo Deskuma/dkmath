@@ -173,6 +173,7 @@ example (d : ℕ) (X Θ : ℝ) :
     Complex.im (cfbrcClosed d X Θ) = cfbrcImClosed d X Θ := by
   simpa using cfbrcClosed_im_eq_cfbrcImClosed d X Θ
 
+/-- Convert the closed complex real part back to the recursive real API. -/
 private lemma cfbrcClosed_re_eq_cfbrcRe_via_closed (d : ℕ) (X Θ : ℝ) :
     Complex.re (cfbrcClosed d X Θ) = cfbrcRe d X Θ := by
   calc
@@ -181,6 +182,7 @@ private lemma cfbrcClosed_re_eq_cfbrcRe_via_closed (d : ℕ) (X Θ : ℝ) :
     _ = cfbrcRe d X Θ := by
       simpa using (cfbrcRe_eq_cfbrcReClosed d X Θ).symm
 
+/-- Convert the closed complex imaginary part back to the recursive imaginary API. -/
 private lemma cfbrcClosed_im_eq_cfbrcIm_via_closed (d : ℕ) (X Θ : ℝ) :
     Complex.im (cfbrcClosed d X Θ) = cfbrcIm d X Θ := by
   calc
@@ -426,10 +428,12 @@ example (X Θ : ℝ) :
   simpa [cfbrcClosed_im_eq_cfbrcIm_via_closed] using cfbrcIm_twelve_from_template X Θ
 
 -- d=3..12 回帰（`cfbrcReClosed` / `cfbrcImClosed` 主語）
+/-- Orient the real closed-form equality for use in regression examples. -/
 private lemma cfbrcReClosed_eq_cfbrcRe_via_api (d : ℕ) (X Θ : ℝ) :
     cfbrcReClosed d X Θ = cfbrcRe d X Θ := by
   simpa using (cfbrcRe_eq_cfbrcReClosed d X Θ).symm
 
+/-- Orient the imaginary closed-form equality for use in regression examples. -/
 private lemma cfbrcImClosed_eq_cfbrcIm_via_api (d : ℕ) (X Θ : ℝ) :
     cfbrcImClosed d X Θ = cfbrcIm d X Θ := by
   simpa using (cfbrcIm_eq_cfbrcImClosed d X Θ).symm

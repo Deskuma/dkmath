@@ -25,6 +25,7 @@ namespace DkMath.Lib.NumberTheory
 noncomputable section
 
 /-! The one-variable evaluation of the integer cyclotomic polynomial. -/
+/-- Evaluate the integer cyclotomic polynomial in a commutative ring. -/
 @[simp] def cyclotomicEval {R : Type _} [CommRing R]
     (m : ℕ) (X : R) : R :=
   Polynomial.eval₂ (Int.castRingHom R) X (Polynomial.cyclotomic m ℤ)
@@ -33,6 +34,10 @@ noncomputable section
 The product of the cyclotomic factors indexed by the proper nontrivial
 divisors of `d`, evaluated in a commutative ring.
 -/
+/-- The proper cyclotomic factors multiply to the finite geometric sum.
+
+For `d > 0`, the factors indexed by the nontrivial divisors of `d` reproduce
+`1 + X + ... + X^(d-1)` after evaluation in any commutative ring. -/
 theorem prod_cyclotomicEval_eq_geomSum {R : Type _} [CommRing R]
     {d : ℕ} (hd : 0 < d) (X : R) :
     (∏ m ∈ d.divisors.erase 1, cyclotomicEval m X) =
@@ -57,6 +62,11 @@ The homogeneous evaluation of an integer polynomial in the degree-`p` shell.
 The range restriction is the same finite support used by the prime
 cyclotomic polynomial.
 -/
+/-- Homogeneously evaluate the first `p` coefficients of an integer polynomial.
+
+The powers of `x + u` and `u` make the evaluation homogeneous of degree
+`p - 1`, which is the form needed to compare a prime cyclotomic polynomial
+with the one-gap `GTail` kernel. -/
 @[simp] def GTailCyclotomicHomEval {R : Type _} [CommRing R]
     (p : ℕ) (Φ : Polynomial ℤ) (x u : R) : R :=
   ∑ k ∈ Finset.range p, (Φ.coeff k : R) * (x + u) ^ k * u ^ (p - 1 - k)
@@ -65,10 +75,16 @@ cyclotomic polynomial.
 The geometric shell attached to the power difference
 `(x + u)^d - u^d`.
 -/
+/-- The homogeneous geometric shell attached to a power difference.
+
+It is the finite quotient kernel satisfying
+`(x + u)^d - u^d = x * shell(d,x,u)` in the additive reconstruction theorem
+below, without requiring division by `x`. -/
 @[simp] def GTailCyclotomicShell {R : Type _} [CommSemiring R]
     (d : ℕ) (x u : R) : R :=
   ∑ k ∈ Finset.range d, (x + u) ^ k * u ^ (d - 1 - k)
 
+/-- The shell recurrence separates its last term from the preceding shell. -/
 lemma GTailCyclotomicShell_succ {R : Type _} [CommSemiring R]
     (d : ℕ) (x u : R) :
     GTailCyclotomicShell (d + 1) x u =
@@ -85,6 +101,11 @@ lemma GTailCyclotomicShell_succ {R : Type _} [CommSemiring R]
     ring
   · simp
 
+/-- The complete power is reconstructed from the gap and the shell.
+
+This is the cancellation-free identity
+`(x + u)^d = x * shell(d,x,u) + u^d`; it is valid over every commutative
+semiring, including the boundary case `x = 0`. -/
 theorem add_pow_eq_mul_GTailCyclotomicShell_add_gap
     {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
     (x + u) ^ d = x * GTailCyclotomicShell d x u + u ^ d := by
@@ -103,6 +124,7 @@ Unlike the older cancellation proof, this is a polynomial identity over an
 arbitrary commutative semiring.  In particular it remains valid at `x = 0`;
 no field structure and no nonzero boundary assumption are needed.
 -/
+/-- The `r = 1` `GTail` row satisfies the same recurrence as the shell. -/
 private lemma GTail_one_succ
     {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
     GTail (d + 1) 1 x u =
@@ -135,6 +157,12 @@ private lemma GTail_one_succ
       simp
       ring
 
+/-- The one-gap `GTail` kernel is the homogeneous cyclotomic shell.
+
+The proof compares the two recurrences and their zero-degree initial values,
+so the result is a polynomial identity over a commutative semiring.  In
+particular, the promotion does not use cancellation, a field, or a
+nonzero-gap hypothesis. -/
 theorem GTail_one_eq_GTailCyclotomicShell
     {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
     GTail d 1 x u = GTailCyclotomicShell d x u := by
@@ -152,6 +180,7 @@ theorem GTail_one_eq_GTailCyclotomicShell_of_ne_zero
 
 /-! The Nat row and its integer homogeneous-shell realization. -/
 
+/-- The shell identity survives the cast from natural gap coordinates to `ℤ`. -/
 theorem natCast_GTail_one_eq_GTailCyclotomicShell
     {p g u : ℕ} :
     ((GTail p 1 g u : ℕ) : ℤ) =
@@ -164,12 +193,17 @@ theorem natCast_GTail_one_eq_GTailCyclotomicShell
     _ = GTailCyclotomicShell p (g : ℤ) (u : ℤ) :=
       GTail_one_eq_GTailCyclotomicShell p (g : ℤ) (u : ℤ)
 
+/-- Compatibility form retaining the former unnecessary nonzero-gap premise. -/
 theorem natCast_GTail_one_eq_GTailCyclotomicShell_of_ne_zero
     {p g u : ℕ} (_hg : g ≠ 0) :
     ((GTail p 1 g u : ℕ) : ℤ) =
       GTailCyclotomicShell p (g : ℤ) (u : ℤ) :=
   natCast_GTail_one_eq_GTailCyclotomicShell
 
+/-- For a prime index, homogeneous evaluation of `Φ_p` equals the shell.
+
+The prime cyclotomic polynomial has coefficient `1` in degrees below `p`, so
+its homogeneous evaluation is exactly the geometric shell used by `GTail`. -/
 theorem GTailCyclotomicHomEval_prime_eq_shell
     {R : Type _} [CommRing R] {p : ℕ} (hp : Nat.Prime p) (x u : R) :
     GTailCyclotomicHomEval p (Polynomial.cyclotomic p ℤ) x u =
@@ -191,6 +225,11 @@ theorem GTailCyclotomicHomEval_prime_eq_shell
   simp
 
 /-! The prime row of `GTail` is the homogeneous prime cyclotomic shell. -/
+/-- The prime one-gap `GTail` row is a homogeneous cyclotomic evaluation.
+
+This is the field-level presentation of the cancellation-free shell bridge;
+the explicit `x ≠ 0` argument is retained only for compatibility with the
+older API. -/
 theorem GTail_one_eq_cyclotomicHomEval_of_prime
     {R : Type _} [Field R] {p : ℕ} (hp : Nat.Prime p)
     (x u : R) (hx : x ≠ 0) :

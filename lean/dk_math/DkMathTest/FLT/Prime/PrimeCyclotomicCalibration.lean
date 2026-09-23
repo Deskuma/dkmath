@@ -8,6 +8,8 @@ import DkMath.FLT.Prime.PrimeCyclotomicCalibration
 
 #print "file: DkMathTest.FLT.Prime.PrimeCyclotomicCalibration"
 
+/-! Regression tests for the p = 3, 5, 7 scalar norm calibrations. -/
+
 namespace DkMathTest.FLT.Prime
 
 open DkMath.CFBRC
@@ -18,6 +20,7 @@ open DkMath.NumberTheory.TraceOneQuadratic
 
 noncomputable section
 
+/-- The cyclotomic field used for fixed-prime calibration examples. -/
 private abbrev cycloField (p : ℕ) := CyclotomicField p ℚ
 
 private instance cycloField_isCyclotomicExtension (p : ℕ) [Fact p.Prime] :
@@ -27,10 +30,12 @@ private instance cycloField_isCyclotomicExtension (p : ℕ) [Fact p.Prime] :
     exact_mod_cast (Fact.out : Nat.Prime p).ne_zero⟩
   exact CyclotomicField.isCyclotomicExtension p ℚ
 
+/-- Choose the canonical primitive root for a calibration prime. -/
 private def cycloZeta (p : ℕ) [Fact p.Prime] : cycloField p := by
   let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   exact IsCyclotomicExtension.zeta p ℚ (cycloField p)
 
+/-- Record the primitive-root property used by the carrier theorems. -/
 private theorem cycloZeta_isPrimitiveRoot (p : ℕ) [Fact p.Prime] :
     IsPrimitiveRoot (cycloZeta p) p := by
   let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩

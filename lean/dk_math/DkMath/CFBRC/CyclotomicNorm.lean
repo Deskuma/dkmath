@@ -58,6 +58,7 @@ def cyclotomicLinearFactorInRingOfIntegers
     {ζ : K} (hζ : IsPrimitiveRoot ζ p) (x u : ℕ) : 𝓞 K :=
   ((x + u : ℕ) : 𝓞 K) - hζ.toInteger * (u : 𝓞 K)
 
+/-- The norm of `a - ζ` is the rational cyclotomic polynomial at `a`. -/
 private lemma norm_sub_primitiveRoot_eq_eval_cyclotomic_rat
     {K : Type*} [Field K] [CharZero K]
     {p : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
@@ -105,6 +106,7 @@ private lemma norm_sub_primitiveRoot_eq_eval_cyclotomic_rat
             (Polynomial.eval₂_at_apply (p := Polynomial.cyclotomic p ℚ)
               (algebraMap ℚ E) a)
 
+/-- Homogenized cyclotomic evaluation recovers the natural `GN` kernel. -/
 private lemma cyclotomicEval_nat_gap_mul_pow_eq_GN
     {K : Type*} [Field K] [CharZero K]
     {p x u : ℕ} [Fact p.Prime] (hu0 : u ≠ 0) :
@@ -150,6 +152,12 @@ private lemma cyclotomicEval_nat_gap_mul_pow_eq_GN
     _ = DkMath.CFBRC.cyclotomicShiftedEval p (x : K) (u : K) := hshift.symm
     _ = ((DkMath.CosmicFormulaBinom.GN p x u : ℕ) : K) := hprod
 
+/-- For a nonzero base, the norm of the integral cyclotomic factor is `GN`.
+
+Writing the factor as `u * (((x+u)/u) - ζ)` reduces its field norm to the
+cyclotomic polynomial evaluation at `(x+u)/u`; the homogeneous identity then
+restores the missing factor `u^(p-1)`.  The theorem is scalar norm equality
+only and makes no claim about a distinguished prime ideal. -/
 theorem cyclotomicLinearFactor_norm_eq_GN_ratCast_of_ne_zero
     {K : Type*} [Field K] [NumberField K] [CharZero K]
     {p x u : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
@@ -237,6 +245,7 @@ theorem cyclotomicLinearFactor_norm_eq_GN_ratCast_of_ne_zero
     Algebra.coe_norm_int lin
   simpa [lin] using hcoe.trans hfield
 
+/-- The same nonzero-base norm identity, before rational casting. -/
 theorem cyclotomicLinearFactor_norm_eq_GN_of_ne_zero
     {K : Type*} [Field K] [NumberField K] [CharZero K]
     {p x u : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
@@ -246,6 +255,7 @@ theorem cyclotomicLinearFactor_norm_eq_GN_of_ne_zero
   exact Int.cast_injective
     (cyclotomicLinearFactor_norm_eq_GN_ratCast_of_ne_zero hζ hu0)
 
+/-- At zero base, `GN` reduces to the expected pure power. -/
 private lemma GN_nat_right_zero (p x : ℕ) [Fact p.Prime] :
     DkMath.CosmicFormulaBinom.GN p x 0 = x ^ (p - 1) := by
   classical
@@ -265,6 +275,12 @@ private lemma GN_nat_right_zero (p x : ℕ) [Fact p.Prime] :
   · intro hnot
     exact (hnot hmem).elim
 
+/-- The cyclotomic factor norm equals `GN` without a nonzero-base hypothesis.
+
+The proof separates `u = 0`, where the factor is the scalar `x` and its norm
+is `x^(p-1)`, from `u ≠ 0`, where the normalized factorization above applies.
+This boundary split makes the canonical norm carrier unconditional in the
+base coordinate. -/
 theorem cyclotomicLinearFactor_norm_eq_GN_ratCast
     {K : Type*} [Field K] [NumberField K] [CharZero K]
     {p x u : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
@@ -303,6 +319,7 @@ theorem cyclotomicLinearFactor_norm_eq_GN_ratCast
     simpa [cyclotomicLinearFactorInRingOfIntegers] using hnormX
   · exact cyclotomicLinearFactor_norm_eq_GN_ratCast_of_ne_zero hζ hu0
 
+/-- Integer-valued form of the unconditional cyclotomic norm bridge. -/
 theorem cyclotomicLinearFactor_norm_eq_GN
     {K : Type*} [Field K] [NumberField K] [CharZero K]
     {p x u : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
