@@ -5,13 +5,14 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.Gauge.Exponent
+import DkMath.NumberTheory.Gauge.Value
 
 #print "file: DkMath.NumberTheory.Gauge"
 
 /-!
 # Public exponent/unit gauge facade
 
-The checkpoint currently promotes only the exponent-side Pascal vocabulary.
-Value, dyadic, landing, and FLT-specific gauge modules remain separate future
-checkpoints.
+The facade promotes the exponent-side Pascal vocabulary and the separate
+value-side prime-coordinate residue vocabulary. Dyadic, landing, and
+FLT-specific gauge modules remain separate future checkpoints.
 -/
