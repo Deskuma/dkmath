@@ -1,6 +1,6 @@
 # ROADMAP — Exponent Unit Gauge v0
 
-Status: STARTED
+Status: GAGE-000 through GAGE-007 executed; v0 closure recorded in report-007.md
 
 Branch: research/Exponent-Unit-Gauge-260923-v0
 

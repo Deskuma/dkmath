@@ -6,14 +6,15 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.Gauge.Exponent
 import DkMath.NumberTheory.Gauge.Value
+import DkMath.NumberTheory.Gauge.Landing
 import DkMath.NumberTheory.Gauge.Dyadic
 
 #print "file: DkMath.NumberTheory.Gauge"
 
 /-!
-# Public exponent/unit gauge facade
+# Public exponent/unit/landing gauge facade
 
 The facade promotes the exponent-side Pascal vocabulary and the separate
-value-side prime-coordinate residue vocabulary. Dyadic, landing, and
-FLT-specific gauge modules remain separate future checkpoints.
+value-side prime-coordinate residue vocabulary, and neutral landing
+vocabulary. FLT-specific calibration remains a separate module.
 -/
