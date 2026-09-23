@@ -56,8 +56,7 @@ private theorem coordinate_prime_dvd_residual
     have hshell : (p : ℤ) ^ 2 ∣
         GTailCyclotomicShell p (g : ℤ) (u : ℤ) := by
       simpa using hnorm_shell
-    rw [← DkMath.CosmicFormula.natCast_GTail_one_eq_GTailCyclotomicShell
-      P0.gap_pos.ne'] at hshell
+    rw [← DkMath.CosmicFormula.natCast_GTail_one_eq_GTailCyclotomicShell] at hshell
     exact_mod_cast hshell
   exact P0.residual_not_prime_sq (by exact_mod_cast hres)
 

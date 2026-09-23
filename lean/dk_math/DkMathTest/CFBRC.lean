@@ -29,6 +29,7 @@ namespace DkMathTest.CFBRC
 open DkMath.CFBRC
 open DkMath.CFBRC.TrigBridge
 open DkMath.CosmicFormulaBinom
+open ComplexConjugate
 
 -- d=2 三角置換 bridge
 example (a φ : ℝ) :
@@ -73,9 +74,39 @@ example {p x u q : ℕ} (hq : Nat.Prime q) (hqx : ¬ q ∣ x) :
   prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
     (p := p) (x := x) (u := u) (q := q) hq hqx
 
+example {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
+    cyclotomicPrimeCore d x u = DkMath.CosmicFormula.GTail d 1 x u :=
+  cyclotomicPrimeCore_eq_GTail_one d x u
+
+example {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
+    cyclotomicPrimeCore d x u = GN d x u :=
+  cyclotomicPrimeCore_eq_GN d x u
+
+example (d u : ℕ) :
+    cyclotomicPrimeCore d 0 u = GN d 0 u :=
+  cyclotomicPrimeCore_eq_GN d 0 u
+
 example {d x u : ℕ} (hx : 0 < x) :
     cyclotomicPrimeCore d x u = GN d x u :=
   cyclotomicPrimeCore_eq_GN_nat (p := d) (x := x) (u := u) hx
+
+#print axioms DkMath.CFBRC.cyclotomicPrimeCore_eq_GN
+
+example {K : Type*} [Field K] {p : ℕ} [Fact p.Prime]
+    (ζ : K) (hζ : IsPrimitiveRoot ζ p) (x u : K) :
+    x * cyclotomicRootProduct (p := p) ζ x u = (x + u) ^ p - u ^ p :=
+  gap_mul_cyclotomicRootProduct_eq_sub_pow ζ hζ x u
+
+example {p : ℕ} [Fact p.Prime]
+    (ζ : ℂ) (a : ZMod p) (x u : ℂ) :
+    DkMath.NumberTheory.CyclotomicQRProduct.rootFactor ζ a (x + u) u * conj
+          (DkMath.NumberTheory.CyclotomicQRProduct.rootFactor ζ a (x + u) u) =
+      Complex.normSq
+        (DkMath.NumberTheory.CyclotomicQRProduct.rootFactor ζ a (x + u) u) :=
+  complex_rootFactor_mul_conj_eq_normSq ζ a x u
+
+#print axioms DkMath.CFBRC.gap_mul_cyclotomicRootProduct_eq_sub_pow
+#print axioms DkMath.CFBRC.complex_rootFactor_mul_conj_eq_normSq
 
 -- general d の Re/Im 補助
 example (X Θ : ℝ) :

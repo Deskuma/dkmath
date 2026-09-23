@@ -65,7 +65,7 @@ private theorem parent_norm_eq_natCast_residual
     {p g u : ℕ} [Fact p.Prime]
     [IsCyclotomicExtension {p} ℚ L]
     {ζ : L} {hζ : IsPrimitiveRoot ζ p}
-    (P : PrimeTraceOneCoordinatePacket L p ζ hζ) (hg : g ≠ 0) :
+    (P : PrimeTraceOneCoordinatePacket L p ζ hζ) :
     norm (P.coord (g + u : ℤ) (u : ℤ)) =
       ((GTail p 1 g u : ℕ) : ℤ) := by
   rw [P.coord_norm_eq]
@@ -74,7 +74,7 @@ private theorem parent_norm_eq_natCast_residual
   have hnat :
       ((GTail p 1 g u : ℕ) : ℤ) =
         GTailCyclotomicShell p (g : ℤ) (u : ℤ) :=
-    DkMath.CosmicFormula.natCast_GTail_one_eq_GTailCyclotomicShell hg
+    DkMath.CosmicFormula.natCast_GTail_one_eq_GTailCyclotomicShell
   exact hnat.symm
 
 private theorem parent_norm_ne_zero
@@ -87,7 +87,7 @@ private theorem parent_norm_ne_zero
     norm (P.coord (g + u : ℤ) (u : ℤ)) ≠ 0 := by
   have hnorm : norm (P.coord (g + u : ℤ) (u : ℤ)) =
       ((GTail p 1 g u : ℕ) : ℤ) :=
-    parent_norm_eq_natCast_residual P P0.gap_pos.ne'
+    parent_norm_eq_natCast_residual P
   intro hzero
   have hreszero : GTail p 1 g u = 0 := by
     apply Int.ofNat_eq_zero.mp
@@ -99,7 +99,7 @@ private theorem parent_norm_ne_zero
   omega
 
 private theorem parent_natAbs_norm_eq_split
-    {p g u x : ℕ} (P0 : PrimeAdicFactorPacket p g u x)
+    {p g u x : ℕ} (_P0 : PrimeAdicFactorPacket p g u x)
     {L : Type*} [Field L] [Algebra ℚ L]
     [Fact p.Prime] [IsCyclotomicExtension {p} ℚ L]
     {ζ : L} {hζ : IsPrimitiveRoot ζ p}
@@ -107,7 +107,7 @@ private theorem parent_natAbs_norm_eq_split
     (S : PrimeAdicPowerSplit p g u x) :
     Int.natAbs (norm (P.coord (g + u : ℤ) (u : ℤ))) =
       p * S.b ^ p := by
-  rw [parent_norm_eq_natCast_residual P P0.gap_pos.ne']
+  rw [parent_norm_eq_natCast_residual P]
   rw [Int.natAbs_natCast, S.residual_eq]
 
 private theorem ideal_ne_bot_of_generator_ne_zero

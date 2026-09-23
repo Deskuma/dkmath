@@ -96,52 +96,79 @@ theorem add_pow_eq_mul_GTailCyclotomicShell_add_gap
       rw [ih]
       ring
 
-theorem GTail_one_eq_GTailCyclotomicShell_of_ne_zero
-    {R : Type _} [Field R] {d : ℕ} (x u : R) (hx : x ≠ 0) :
+/-!
+The one-gap tail is exactly the geometric power-difference shell.
+
+Unlike the older cancellation proof, this is a polynomial identity over an
+arbitrary commutative semiring.  In particular it remains valid at `x = 0`;
+no field structure and no nonzero boundary assumption are needed.
+-/
+private lemma GTail_one_succ
+    {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
+    GTail (d + 1) 1 x u =
+      u * GTail d 1 x u + (x + u) ^ d := by
+  have hprefix :
+      (∑ k ∈ Finset.range d,
+          ((Nat.choose (d + 1) (k + 1) : ℕ) : R) *
+            x ^ k * u ^ (d - k)) =
+        u * (∑ k ∈ Finset.range d,
+          ((Nat.choose d (k + 1) : ℕ) : R) *
+            x ^ k * u ^ (d - 1 - k)) +
+        ∑ k ∈ Finset.range d,
+          x ^ k * u ^ (d - k) * ((Nat.choose d k : ℕ) : R) := by
+    rw [Finset.mul_sum, ← Finset.sum_add_distrib]
+    apply Finset.sum_congr rfl
+    intro k hk
+    have hklt : k < d := Finset.mem_range.mp hk
+    have hsub : d - k = d - 1 - k + 1 := by omega
+    rw [Nat.choose_succ_succ, Nat.cast_add, hsub, pow_succ]
+    ring
+  calc
+    GTail (d + 1) 1 x u =
+        (∑ k ∈ Finset.range d,
+          ((Nat.choose (d + 1) (k + 1) : ℕ) : R) *
+            x ^ k * u ^ (d - k)) + x ^ d := by
+      rw [GTail_one_eq_sum, Finset.sum_range_succ]
+      simp
+    _ = u * GTail d 1 x u + (x + u) ^ d := by
+      rw [hprefix, GTail_one_eq_sum, add_pow, Finset.sum_range_succ]
+      simp
+      ring
+
+theorem GTail_one_eq_GTailCyclotomicShell
+    {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
     GTail d 1 x u = GTailCyclotomicShell d x u := by
-  cases d with
+  induction d with
   | zero =>
       simp [GTail, GTailCyclotomicShell]
-  | succ d =>
-      have htail :
-          (x + u) ^ (d + 1) - u ^ (d + 1) = x * GTail (d + 1) 1 x u := by
-        have h := higher_tail_eq_pow_mul_GTail (d + 1) 1 x u (by omega)
-        simpa [pow_one, Nat.choose_zero_right, pow_zero, one_mul] using h
-      have hshell :
-          (x + u) ^ (d + 1) - u ^ (d + 1) =
-            x * GTailCyclotomicShell (d + 1) x u := by
-        rw [sub_eq_iff_eq_add]
-        simpa [add_comm, add_left_comm, add_assoc] using
-          (add_pow_eq_mul_GTailCyclotomicShell_add_gap (d + 1) x u)
-      exact mul_left_cancel₀ hx (htail.symm.trans hshell)
+  | succ d ih =>
+      rw [GTail_one_succ, GTailCyclotomicShell_succ, ih]
+
+/-- Compatibility wrapper for the former field/nonzero API. -/
+theorem GTail_one_eq_GTailCyclotomicShell_of_ne_zero
+    {R : Type _} [Field R] {d : ℕ} (x u : R) (_hx : x ≠ 0) :
+    GTail d 1 x u = GTailCyclotomicShell d x u :=
+  GTail_one_eq_GTailCyclotomicShell d x u
 
 /-! The Nat row and its integer homogeneous-shell realization. -/
 
 theorem natCast_GTail_one_eq_GTailCyclotomicShell
-    {p g u : ℕ} (hg : g ≠ 0) :
+    {p g u : ℕ} :
     ((GTail p 1 g u : ℕ) : ℤ) =
       GTailCyclotomicShell p (g : ℤ) (u : ℤ) := by
-  have hq : GTail p 1 (g : ℚ) (u : ℚ) =
-      GTailCyclotomicShell p (g : ℚ) (u : ℚ) :=
-    GTail_one_eq_GTailCyclotomicShell_of_ne_zero
-      (R := ℚ) (d := p) (g : ℚ) (u : ℚ) (by exact_mod_cast hg)
-  have hcast : GTail p 1 (g : ℚ) (u : ℚ) =
-      (GTail p 1 g u : ℚ) := by
-    simp only [GTail]
-  have hcast_shell :
-      ((GTailCyclotomicShell p (g : ℤ) (u : ℤ) : ℤ) : ℚ) =
-        GTailCyclotomicShell p (g : ℚ) (u : ℚ) := by
-    simp only [GTailCyclotomicShell]
-    push_cast
-    rfl
-  have hq' : (GTail p 1 g u : ℚ) =
-      ((GTailCyclotomicShell p (g : ℤ) (u : ℤ) : ℤ) : ℚ) :=
-    hcast.symm.trans (hq.trans hcast_shell.symm)
-  have hcast_target :
-      (((GTail p 1 g u : ℕ) : ℤ) : ℚ) =
-        ((GTailCyclotomicShell p (g : ℤ) (u : ℤ) : ℤ) : ℚ) := by
-    simpa using hq'
-  exact (Int.cast_injective : Function.Injective (Int.cast : ℤ → ℚ)) hcast_target
+  calc
+    ((GTail p 1 g u : ℕ) : ℤ) = GTail p 1 (g : ℤ) (u : ℤ) := by
+      simp only [GTail]
+      push_cast
+      rfl
+    _ = GTailCyclotomicShell p (g : ℤ) (u : ℤ) :=
+      GTail_one_eq_GTailCyclotomicShell p (g : ℤ) (u : ℤ)
+
+theorem natCast_GTail_one_eq_GTailCyclotomicShell_of_ne_zero
+    {p g u : ℕ} (_hg : g ≠ 0) :
+    ((GTail p 1 g u : ℕ) : ℤ) =
+      GTailCyclotomicShell p (g : ℤ) (u : ℤ) :=
+  natCast_GTail_one_eq_GTailCyclotomicShell
 
 theorem GTailCyclotomicHomEval_prime_eq_shell
     {R : Type _} [CommRing R] {p : ℕ} (hp : Nat.Prime p) (x u : R) :

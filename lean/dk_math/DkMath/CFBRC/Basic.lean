@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.CFBRC.Defs
+import DkMath.Lib.Cosmic.GTailCyclotomic
 import Mathlib
 
 #print "file: DkMath.CFBRC.Basic"
@@ -86,6 +87,29 @@ theorem add_pow_eq_mul_cyclotomicPrimeCore_add_gap
       ring
 
 /--
+The CFBRC prime core is exactly the promoted one-gap `GTail` kernel.
+
+This is a polynomial identity over an arbitrary commutative semiring; no
+positivity, nonzero-gap, or cancellation hypothesis is needed.
+-/
+theorem cyclotomicPrimeCore_eq_GTail_one
+    {R : Type _} [CommSemiring R] (p : ℕ) (x u : R) :
+    cyclotomicPrimeCore p x u =
+      DkMath.CosmicFormula.GTail p 1 x u := by
+  change DkMath.CosmicFormula.GTailCyclotomicShell p x u =
+    DkMath.CosmicFormula.GTail p 1 x u
+  exact (DkMath.CosmicFormula.GTail_one_eq_GTailCyclotomicShell p x u).symm
+
+/--
+The CFBRC prime core is exactly the canonical `GN` kernel, without
+cancellation assumptions.
+-/
+theorem cyclotomicPrimeCore_eq_GN
+    {R : Type _} [CommSemiring R] (p : ℕ) (x u : R) :
+    cyclotomicPrimeCore p x u = GN p x u := by
+  exact cyclotomicPrimeCore_eq_GTail_one p x u
+
+/--
 core 版と `GN` 版の Cosmic Formula を比較し、
 `x` を掛けた形では両者が一致することを示す橋渡し補題。
 -/
@@ -103,11 +127,9 @@ theorem mul_cyclotomicPrimeCore_eq_mul_GN
 `cyclotomicPrimeCore p x u = GN p x u` を得る。
 -/
 theorem cyclotomicPrimeCore_eq_GN_nat
-    {p x u : ℕ} (hx : 0 < x) :
-    cyclotomicPrimeCore p x u = GN p x u := by
-  have hmul : x * cyclotomicPrimeCore p x u = x * GN p x u :=
-    mul_cyclotomicPrimeCore_eq_mul_GN p x u
-  exact Nat.eq_of_mul_eq_mul_left hx hmul
+    {p x u : ℕ} (_hx : 0 < x) :
+    cyclotomicPrimeCore p x u = GN p x u :=
+  cyclotomicPrimeCore_eq_GN p x u
 
 /--
 Gap 形 `x = z - y`（`y < z`）での `cyclotomicPrimeCore = GN` specialization。
