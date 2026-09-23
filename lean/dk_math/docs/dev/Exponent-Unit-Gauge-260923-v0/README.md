@@ -1,5 +1,7 @@
 # Exponent Unit Gauge
 
+cid: `6aabcacf-96b4-83e8-ba49-f829c7cf5d71`
+
 Branch: research/Exponent-Unit-Gauge-260923-v0
 
 Base: develop
