@@ -241,15 +241,38 @@ The same equality is available through rational-prime divisibility and
 padicValNat, and through PrimeAdicFactorPacket / PrimeAdicPowerSplit. The
 Nat/Int GTail-shell bridge is now unconditional at g = 0.
 
+GCNB-008 now calibrates the generic scalar bridge against all three existing
+fixed-prime carrier families:
+
+~~~text
+p = 3:
+  cyclotomic ideal absNorm
+    = Eisenstein / TraceOneInt (-1) norm
+
+p = 5:
+  cyclotomic ideal absNorm
+    = Golden square-link / TraceOneInt 1 norm
+    = GoldenNorm square-link
+
+p = 7:
+  cyclotomic ideal absNorm
+    = norm (cyclotomicSevenToTraceOne ...)
+~~~
+
+For p = 3,5,7 the arbitrary-prime PrimeTraceOneCoordinatePacket norm is also
+proved equal to the corresponding dedicated fixed-prime scalar. The
+calibration remains scalar-only.
+
 The branch still does not yet provide:
 
 - local prime-ideal multiplicity ownership for the new carrier;
+- an exact local upper-cutoff theorem for a chosen oriented cyclotomic prime;
 - ideal-level p-power transport from a norm p-th power alone;
 - principalization/class-group consequences from the new carrier;
-- a conjugate-pair half-product theorem;
+- a conjugate-pair complex norm decomposition;
 - identification of cyclotomic elements or ideals with TraceOne elements or
   ideals;
-- p=3/5/7 calibration against the older dedicated carrier APIs.
+- any FLT7 endpoint theorem.
 
 ## General-d versus prime-p
 
@@ -329,6 +352,24 @@ This branch currently does **not** claim:
 - resolution of the deferred FLT7 degree-six carrier cutoff.
 
 These require further checked bridges.
+
+## FLT7 re-entry audit after GCNB-008
+
+The completed generic stack now supplies the norm-aware carrier machinery
+requested by the closed FLT7 handoff, but this alone does not reopen FLT7.
+
+The R64 endpoint already proves an exact multiplicity 14 * eQ for the selected
+real factor. Its deferred obstruction is the **exact upper cutoff in the
+current phase-corrected degree-six oriented kernel**.
+
+The generic absNorm / rational-prime padicValNat layer is an aggregate scalar
+statement and does not by itself determine the exponent of one chosen prime
+ideal.
+
+A final bounded checkpoint, GCNB-009A, therefore targets a reusable
+conjugate-prime / relative-norm ownership theorem. The FLT7 re-entry gate opens
+only if that generic theorem can be instantiated, in a scratch/test
+specialization, to recover the missing R64 current-carrier upper cutoff.
 
 ## Working rules
 
