@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.Gauge.Exponent
 import DkMath.NumberTheory.Gauge.Value
+import DkMath.NumberTheory.Gauge.Dyadic
 
 #print "file: DkMath.NumberTheory.Gauge"
 
