@@ -94,7 +94,12 @@ theorem cyclotomicIdeal_absNorm_eq_goldenNorm_squareLink
         (((g + u) * u : ℕ) : ℤ) :=
       DkMath.FLT.Five.GN5_eq_goldenNorm_squareLink g u
 
-/-- The generic p = 7 ideal norm is the explicit cubic TraceOne norm. -/
+/-- The generic p = 7 ideal norm is the explicit cubic TraceOne norm.
+
+At `p = 7`, the general cyclotomic ideal norm is calibrated against the
+dedicated cubic TraceOne polynomial through the common scalar `GN 7 g u`.
+This is a norm-value regression between two carriers, not an identification of
+their elements or a completion of the FLT7 descent. -/
 theorem cyclotomicIdeal_absNorm_eq_traceOneNorm_seven
     {K : Type*} [Field K] [NumberField K] [CharZero K]
     [IsCyclotomicExtension {7} ℚ K]

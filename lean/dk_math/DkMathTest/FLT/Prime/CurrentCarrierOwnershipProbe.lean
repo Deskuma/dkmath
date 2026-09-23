@@ -9,6 +9,8 @@ import DkMath.Lib.NumberTheory.ConjugatePrimeIdealOwnership
 
 #print "file: DkMathTest.FLT.Prime.CurrentCarrierOwnershipProbe"
 
+/-! Kernel-checked applicability probe for the R64 current-carrier cutoff. -/
+
 open DkMath DkMath.FLT.Seven DkMath.FLT.Seven.SevenRealCubic
 open scoped NumberField
 
@@ -30,6 +32,7 @@ variable {r : PrimitiveCounterexampleRamifiedProvenance source}
 variable {p : DirectRealCubicRootPacket source r}
 variable {h : DirectOrbitCanonicalCommonFactorPacket p} {q : ℕ}
 
+/-- The explicit star coordinate sends current evaluation to conjugate evaluation. -/
 private theorem currentLocalEval_conjugate_star_local
     (a : CurrentMuSevenResidueAddress q)
     (u : SevenCyclotomicDegreeSixInt.Ring) :
@@ -41,6 +44,7 @@ private theorem currentLocalEval_conjugate_star_local
   rw [map_add, map_mul, map_sub, map_neg, a.eval_alpha, map_one]
   ring
 
+/-- Star maps each current kernel onto its conjugate kernel. -/
 private theorem map_star_currentKernel_eq_conjugateKernel_local
     (a : CurrentMuSevenResidueAddress q) :
     Ideal.map (starRingEnd SevenCyclotomicDegreeSixInt.Ring) a.currentKernel =
@@ -68,6 +72,7 @@ private theorem map_star_currentKernel_eq_conjugateKernel_local
       exact hu
     · simp only [starRingEnd_apply, star_star]
 
+/-- Transport current-kernel power membership to the conjugate kernel power. -/
 private theorem currentConjugateLinearCarrier_mem_conjugateKernel_pow_of_mem_current_local
     (c : CurrentCommonPrimeCyclotomicPacket h q) {k : ℕ}
     (hmem : currentLinearCarrier c ∈ c.address.currentKernel ^ k) :
@@ -80,6 +85,7 @@ private theorem currentConjugateLinearCarrier_mem_conjugateKernel_pow_of_mem_cur
   rw [Ideal.map_pow, map_star_currentKernel_eq_conjugateKernel_local] at hmap
   simpa only [currentConjugateLinearCarrier] using hmap
 
+/-- Transfer the frozen R64 base cutoff to the real-cubic evaluation kernel. -/
 private theorem selectedRealPairCarrier_not_mem_evalRealKernel_pow_succ_local
     (c : CurrentCommonPrimeCyclotomicPacket h q) :
     selectedRealPairCarrier c ∉ (RingHom.ker c.residue.evalReal) ^
@@ -100,6 +106,14 @@ private theorem selectedRealPairCarrier_not_mem_evalRealKernel_pow_succ_local
   rw [hmapEq] at hmap
   exact c.selectedRealPairCarrier_not_mem_Q_pow_succ hmap
 
+/-- The R64 current linear carrier misses the successor current-kernel power.
+
+The proof is the relative-norm ownership argument: star transports membership
+to the conjugate kernel, the carrier pair product descends through `ofReal`,
+the current/conjugate fibre identity identifies the mapped powers, and
+faithfully-flat contraction returns the forbidden successor power of the
+selected real factor.  Hence the exact R64 base cutoff becomes an upper cutoff
+for the selected degree-six prime kernel. -/
 theorem currentLinearCarrier_not_mem_currentKernel_pow_succ
     (c : CurrentCommonPrimeCyclotomicPacket h q) :
     currentLinearCarrier c ∉ c.address.currentKernel ^

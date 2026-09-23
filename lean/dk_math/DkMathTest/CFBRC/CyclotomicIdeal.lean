@@ -7,6 +7,8 @@ import DkMath.CFBRC.CyclotomicIdeal
 
 #print "file: DkMathTest.CFBRC.CyclotomicIdeal"
 
+/-! Regression tests for the principal cyclotomic ideal and its global norm. -/
+
 namespace DkMathTest.CFBRC
 
 open DkMath.CFBRC
@@ -19,6 +21,7 @@ private instance factPrime3 : Fact (Nat.Prime 3) := ⟨by norm_num⟩
 private instance factPrime5 : Fact (Nat.Prime 5) := ⟨by norm_num⟩
 private instance factPrime7 : Fact (Nat.Prime 7) := ⟨by norm_num⟩
 
+/-- The cyclotomic field used to instantiate the generic carrier. -/
 private abbrev cycloField (p : ℕ) := CyclotomicField p ℚ
 
 private instance cycloField_isCyclotomicExtension (p : ℕ) [Fact p.Prime] :
@@ -28,15 +31,18 @@ private instance cycloField_isCyclotomicExtension (p : ℕ) [Fact p.Prime] :
     exact_mod_cast (Fact.out : Nat.Prime p).ne_zero⟩
   exact CyclotomicField.isCyclotomicExtension p ℚ
 
+/-- Choose the canonical primitive `p`-th root in the test field. -/
 private def cycloZeta (p : ℕ) [Fact p.Prime] : cycloField p := by
   let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   exact IsCyclotomicExtension.zeta p ℚ (cycloField p)
 
+/-- Record the primitive-root specification for the chosen test root. -/
 private theorem cycloZeta_isPrimitiveRoot (p : ℕ) [Fact p.Prime] :
     IsPrimitiveRoot (cycloZeta p) p := by
   let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   exact IsCyclotomicExtension.zeta_spec p ℚ (cycloField p)
 
+/-- Check the ideal-norm bridge at the nonzero base point `(1,1)`. -/
 private theorem absNorm_regression (p : ℕ) [Fact p.Prime] :
     Ideal.absNorm
         (cyclotomicLinearFactorIdeal
@@ -45,6 +51,7 @@ private theorem absNorm_regression (p : ℕ) [Fact p.Prime] :
   exact cyclotomicLinearFactorIdeal_absNorm_eq_GN
     (p := p) (x := 1) (u := 1) (cycloZeta_isPrimitiveRoot p)
 
+/-- Check the unconditional ideal-norm bridge at the boundary base `u = 0`. -/
 private theorem zero_base_absNorm_regression (p : ℕ) [Fact p.Prime] :
     Ideal.absNorm
         (cyclotomicLinearFactorIdeal

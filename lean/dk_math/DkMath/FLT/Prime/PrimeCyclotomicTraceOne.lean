@@ -31,7 +31,13 @@ noncomputable section
 
 namespace TraceOneScalar
 
-/-- The TraceOne coordinate norm is the cast of the canonical ideal norm. -/
+/-- The TraceOne coordinate norm is the cast of the canonical ideal norm.
+
+The coordinate uses endpoint inputs `(g+u,u)`, whose difference is the gap
+`g`.  The existing TraceOne norm formula therefore reduces to the same
+`GTail`/`GN` scalar that computes the cyclotomic principal ideal norm.  This
+proves scalar compatibility only; it does not identify the two elements or
+their ideals. -/
 theorem coord_norm_eq_cyclotomicIdeal_absNorm
     {L : Type*} [Field L] [NumberField L] [CharZero L]
     {p : ℕ} [Fact p.Prime]
@@ -98,7 +104,12 @@ theorem PrimeAdicFactorPacket.coord_norm_eq_cyclotomicIdeal_absNorm
         (cyclotomicLinearFactorIdeal (K := L) (p := p) hζ g u) : ℤ) :=
   TraceOneScalar.coord_norm_eq_cyclotomicIdeal_absNorm P g u
 
-/-- The complete packet equation through the TraceOne scalar norm. -/
+/-- The complete packet equation through the TraceOne scalar norm.
+
+Combining scalar compatibility with the packet factor equation yields
+`g * |Norm(P.coord)| = x^p`.  Thus the TraceOne presentation preserves the
+same arithmetic boundary factor as the cyclotomic carrier, while remaining a
+scalar statement rather than an equality of carrier objects. -/
 theorem PrimeAdicFactorPacket.gap_mul_coord_natAbs_norm_eq_pow
     {L : Type*} [Field L] [NumberField L] [CharZero L]
     {p g u x : ℕ} [Fact p.Prime]

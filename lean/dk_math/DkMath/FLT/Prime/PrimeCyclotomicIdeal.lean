@@ -40,7 +40,11 @@ theorem PrimeAdicFactorPacket.cyclotomicIdeal_absNorm_eq_residual
     (cyclotomicLinearFactorIdeal_absNorm_eq_GN
       (p := p) (x := g) (u := u) hζ)
 
-/-- The packet's distinguished `x^p` equation through the cyclotomic ideal. -/
+/-- The packet's distinguished `x^p` equation through the cyclotomic ideal.
+
+The packet supplies `x^p = g * GTail p 1 g u`; replacing the residual `GTail`
+by the absolute norm of the canonical cyclotomic ideal transfers the same
+factor equation to the new carrier without introducing a prime-ideal choice. -/
 theorem PrimeAdicFactorPacket.gap_mul_cyclotomicIdeal_absNorm_eq_pow
     {K : Type*} [Field K] [NumberField K] [CharZero K]
     {p g u x : ℕ} [Fact p.Prime]
