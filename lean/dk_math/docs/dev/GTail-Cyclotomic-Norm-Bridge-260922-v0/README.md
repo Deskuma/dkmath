@@ -1,5 +1,7 @@
 # GTail Cyclotomic Norm Bridge
 
+cid: `6ab15403-df28-83e8-bd7c-af7177767135`
+
 Branch: **research/GTail-Cyclotomic-Norm-Bridge-260922-v0**
 
 Base: **develop** at **0e1e8468f8110b65e58bb7a8d5455696281a7d2e**
