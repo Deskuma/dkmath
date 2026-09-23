@@ -342,6 +342,38 @@ the deferred degree-six carrier / common-prime aggregation frontier
 Regression means representation compatibility, not reusing the completed
 FLT3/FLT5 contradictions as generic black boxes.
 
+Status: **completed — Outcome A**.
+
+The generic cyclotomic ideal absNorm and arbitrary-prime TraceOne packet norm
+are calibrated against the existing p=3 Eisenstein, p=5 Golden, and p=7
+explicit quadratic-shadow norm carriers. No element or ideal identification is
+claimed.
+
+## GCNB-009A — Relative-norm local prime ownership
+
+This is the final bounded generalization checkpoint before the FLT7 re-entry
+decision.
+
+The R64 FLT7 endpoint already has an exact multiplicity for the selected real
+factor. What remains missing is the exact **upper cutoff** for the
+phase-corrected linear carrier in one chosen degree-six prime kernel.
+
+The generic theorem should abstract the successful conjugate-pair proof shape:
+
+~~~text
+alpha in P^(m+1)
+  -> star(alpha) in Pbar^(m+1)
+  -> alpha * star(alpha) in P^(m+1) * Pbar^(m+1)
+  -> relative norm / base element in Q^(m+1)
+  -> contradiction with the exact Q cutoff.
+~~~
+
+Production code must be neutral and must not mention FLT7-specific carriers.
+
+A scratch/test-only specialization must then instantiate the theorem with the
+current R64 data. Outcome A is allowed only if that specialization proves the
+missing current degree-six carrier upper cutoff.
+
 Status: **next checkpoint**.
 
 ## GCNB-009 — FLT7 re-entry gate
@@ -362,7 +394,7 @@ The handoff names two useful classes of input:
 If no such theorem is produced, do not reopen the old FLT7 tower merely
 because the same identities have been rewritten in cyclotomic notation.
 
-Status: **re-entry gate closed**.
+Status: **re-entry gate closed pending GCNB-009A specialization**.
 
 ## Global stop rules
 
@@ -382,10 +414,12 @@ Stop and report rather than forcing a theorem if:
 
 ## Next implementation document
 
-Use instruction-005.md for GCNB-008.
+Use instruction-006.md for GCNB-009A.
 
-The next bounded checkpoint calibrates the generic cyclotomic ideal / TraceOne
-scalar bridge against the existing dedicated p=3 Eisenstein, p=5 Golden, and
-p=7 explicit quadratic-shadow carriers. GCNB-007 remains optional and
-independent; GCNB-004L remains deferred until a later theorem genuinely needs
-local prime-ideal multiplicity.
+The next bounded checkpoint extracts a neutral conjugate-prime /
+relative-norm local ownership theorem and tests it against the frozen R64
+current-provenance degree-six carrier. The FLT7 re-entry gate opens only if
+that scratch/test specialization proves a genuinely deferred R64 upper-cutoff
+obligation.
+
+GCNB-007 remains optional and independent.
