@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.PascalPrimeDial
+import Mathlib.Data.Nat.Choose.Lucas
 
 #print "file: DkMath.NumberTheory.Gauge.Exponent"
 
@@ -80,6 +81,57 @@ theorem exponentGaugeHeight_prime_pow_of_not_dvd
     (DkMath.NumberTheory.prime_power_unitFilteredPrimeDialHeight hp)
       k hk0 hke hpk
 
+/-! ## Prime-power purity and the interior gcd detector -/
+
+/-- The gcd of the interior binomial coefficients in row `n`. -/
+abbrev exponentGaugeInteriorGCD (n : ℕ) : ℕ :=
+  (Finset.Icc 1 (n - 1)).gcd n.choose
+
+/-- Common prime support in a nontrivial row forces that row to be a power of the support prime. -/
+theorem innerRowSupportPrime_eq_prime_pow
+    {n p : ℕ} (hn : 1 < n)
+    (h : DkMath.NumberTheory.InnerRowSupportPrime n p) :
+    ∃ e : ℕ, 0 < e ∧ n = p ^ e := by
+  have hp : p.Prime := h.1
+  have hmod : ∀ i ∈ Finset.Icc 1 (n - 1),
+      Nat.choose n i ≡ 0 [MOD p] := by
+    intro i hi
+    have hi' := Finset.mem_Icc.mp hi
+    exact Nat.modEq_zero_iff_dvd.mpr (h.2 i (by omega) (by omega))
+  have hpow : n = p ^ multiplicity p n :=
+    @Choose.eq_pow_multiplicity_of_choose_modEq_zero_nat n p ⟨hp⟩
+      (Nat.zero_lt_of_lt hn) hmod
+  have he : 0 < multiplicity p n := by
+    apply Nat.pos_of_ne_zero
+    intro he0
+    rw [he0, pow_zero] at hpow
+    omega
+  exact ⟨multiplicity p n, he, hpow⟩
+
+/-- Under `1 < n`, a row has common prime support exactly when it is a positive power
+of that same prime. -/
+theorem innerRowSupportPrime_iff_prime_pow
+    {n p : ℕ} (hn : 1 < n) :
+    DkMath.NumberTheory.InnerRowSupportPrime n p ↔
+      p.Prime ∧ ∃ e : ℕ, 0 < e ∧ n = p ^ e := by
+  constructor
+  · intro h
+    exact ⟨h.1, innerRowSupportPrime_eq_prime_pow hn h⟩
+  · rintro ⟨hp, e, he, rfl⟩
+    exact DkMath.NumberTheory.prime_power_innerRowSupportPrime hp
+
+/-- The interior gcd of a positive prime-power row is its least prime factor. -/
+theorem exponentGaugeInteriorGCD_eq_minFac_of_isPrimePow
+    {n : ℕ} (h : IsPrimePow n) :
+    exponentGaugeInteriorGCD n = n.minFac :=
+  Choose.gcd_choose_eq_minFac_of_isPrimePow h
+
+/-- A nontrivial non-prime-power row has interior gcd one. -/
+theorem exponentGaugeInteriorGCD_eq_one_of_not_isPrimePow
+    {n : ℕ} (hn : 1 < n) (h : ¬ IsPrimePow n) :
+    exponentGaugeInteriorGCD n = 1 :=
+  Choose.gcd_choose_eq_one_of_not_isPrimePow hn h
+
 end DkMath.NumberTheory.Gauge
 
 #print axioms DkMath.NumberTheory.Gauge.primeExponentGauge_of_prime
@@ -89,3 +141,7 @@ end DkMath.NumberTheory.Gauge
 #print axioms DkMath.NumberTheory.Gauge.primePowerExponentGauge_of_prime_of_pos
 #print axioms DkMath.NumberTheory.Gauge.exponentGaugeHeight_prime_pow_add_index
 #print axioms DkMath.NumberTheory.Gauge.exponentGaugeHeight_prime_pow_of_not_dvd
+#print axioms DkMath.NumberTheory.Gauge.innerRowSupportPrime_eq_prime_pow
+#print axioms DkMath.NumberTheory.Gauge.innerRowSupportPrime_iff_prime_pow
+#print axioms DkMath.NumberTheory.Gauge.exponentGaugeInteriorGCD_eq_minFac_of_isPrimePow
+#print axioms DkMath.NumberTheory.Gauge.exponentGaugeInteriorGCD_eq_one_of_not_isPrimePow

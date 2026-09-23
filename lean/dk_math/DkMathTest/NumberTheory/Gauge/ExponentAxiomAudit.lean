@@ -15,3 +15,7 @@ import DkMath.NumberTheory.Gauge.Exponent
 #print axioms DkMath.NumberTheory.Gauge.primePowerExponentGauge_of_prime_of_pos
 #print axioms DkMath.NumberTheory.Gauge.exponentGaugeHeight_prime_pow_add_index
 #print axioms DkMath.NumberTheory.Gauge.exponentGaugeHeight_prime_pow_of_not_dvd
+#print axioms DkMath.NumberTheory.Gauge.innerRowSupportPrime_eq_prime_pow
+#print axioms DkMath.NumberTheory.Gauge.innerRowSupportPrime_iff_prime_pow
+#print axioms DkMath.NumberTheory.Gauge.exponentGaugeInteriorGCD_eq_minFac_of_isPrimePow
+#print axioms DkMath.NumberTheory.Gauge.exponentGaugeInteriorGCD_eq_one_of_not_isPrimePow
