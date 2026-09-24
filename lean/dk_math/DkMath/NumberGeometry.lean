@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberGeometry.Radical
 import DkMath.NumberGeometry.GaugeTransition
+import DkMath.NumberGeometry.PrimeScale
 import DkMath.NumberGeometry.Bridge.SilverRatio
 import DkMath.NumberGeometry.Examples.EgyptianCircle
 
