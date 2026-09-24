@@ -1,0 +1,89 @@
+
+# Roadmap — Tromino Exchange Calculus
+
+## TRM-000 — Representation / ownership audit
+
+Confirm current Mathlib Klein-four API and compare:
+ZMod 2 × ZMod 2, Bool × Bool, Fin 4.
+
+Audit DkMath for an existing production four-state exchange carrier.
+Keep NumberGeometry read-only / pattern-only.
+
+## TRM-001 — Four-state / exchange kernel
+
+Proposed modules:
+
+- DkMath/Tromino/State.lean
+- DkMath/Tromino/Exchange.lean
+- DkMathTest/Tromino/ExchangeAxiomAudit.lean
+
+Target concepts:
+
+- TrominoState
+- waitingStates
+- exchange
+
+Target facts:
+
+- state cardinality = 4
+- waiting cardinality = 3
+- zero exchange
+- involutive exchange
+- composition by addition
+- commutativity
+- unique exchange to a target
+- nonzero exchange for a distinct target
+
+## TRM-002 — Geometric / CosmicFormula calibration
+
+Create a one-way bridge from the existing geometric theorem
+
+area block2 = area L_tromino + area hole2
+
+to DkMath.CosmicFormula.Mass.BodyGapSplit Nat.
+
+Calibrate against degree 2, x = u = 1:
+
+Big = 4
+Body = 3
+Gap = 1
+
+Keep the state kernel independent of CosmicFormula.
+
+## TRM-003 — Typed gap / restoration bridge
+
+Audit whether BookOfMagic.GapCrystal already expresses the dependent typed-gap
+semantics. Prefer a thin adapter over a duplicate abstraction.
+
+## TRM-004 — Uniform exchange rescue
+
+For a local piece translated by one global exchange delta, define forbidden
+exchange elements induced by boundary contacts.
+
+Prove only the conditional rescue statement:
+
+forbidden ≠ univ → legal exchange exists.
+
+If the current state conflicts and forbidden ≠ univ, produce a nonzero rescue.
+
+## TRM-005 — Macro-cell / recursive substitution
+
+Implement the v3 macro-cell idea and certified peel / restore.
+
+## TRM-006 — Boundary IR
+
+Boundary ports, state domains, macro nodes, restoration stack, optional cyclic
+order.
+
+## TRM-007 — Pairing / transition graph
+
+XOR/parity, IN/OUT pairing, derived path/cycle graph, state integration.
+
+## TRM-008 — Residual minimization
+
+Escape degree, forced moves, contraction, irreducible residual, mod observers,
+kernelization certificate.
+
+## TRM-009 — Planar-map bridge assessment
+
+Assess how much arbitrary planar-map coloring compiles into the Tromino IR.
