@@ -87,3 +87,22 @@ kernelization certificate.
 ## TRM-009 — Planar-map bridge assessment
 
 Assess how much arbitrary planar-map coloring compiles into the Tromino IR.
+
+
+## Roadmap refinement — 2026-09-25
+
+TRM-004 completed the state-only forbidden-set rescue calculus. Before
+MacroCell work, insert one bounded algebraic checkpoint:
+
+### TRM-005 — Uniform piece exchange / boundary forbidden deltas
+
+- indexed uniform exchange;
+- internal distinctness preservation;
+- one contact forbids one unique delta;
+- finite forbiddenExchangeSet;
+- boundaryCompatible iff delta is outside the forbidden set;
+- conditional piece rescue and nonzero rescue.
+
+The earlier MacroCell / recursive-substitution work moves one checkpoint later.
+This refinement preserves the original direction: local exchange algebra is
+completed before geometric recursion and BoundaryIR.
