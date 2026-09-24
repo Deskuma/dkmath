@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.NumberGeometry.Basic
+import DkMath.NumberGeometry.Gauge
 
 #print "file: DkMath.NumberGeometry"
 
