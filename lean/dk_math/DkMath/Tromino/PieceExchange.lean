@@ -33,7 +33,7 @@ theorem uniformExchange_eq_iff {I : Type*}
       simpa [uniformExchange, exchange] using h
     exact add_right_cancel h'
   · intro h
-    simp [uniformExchange, h]
+    simpa [uniformExchange, h]
 
 /-- Uniform exchange preserves inequality of indexed states. -/
 theorem uniformExchange_ne_iff {I : Type*}
@@ -131,26 +131,24 @@ theorem boundaryCompatible_iff_not_mem
       (exchange_eq_contact_iff contact delta).1 hconflict |>.symm⟩
 
 /-- The finite set of deltas compatible with every recorded contact. -/
-noncomputable def compatibleExchanges
-    (contacts : Finset BoundaryContact) : Finset TrominoState := by
-  classical
-  exact Finset.univ.filter (fun delta => boundaryCompatible delta contacts)
+def compatibleExchanges
+    (contacts : Finset BoundaryContact) : Finset TrominoState :=
+  availableExchanges 0 (forbiddenExchangeSet contacts)
 
 @[simp] theorem mem_compatibleExchanges_iff
     {contacts : Finset BoundaryContact} {delta : TrominoState} :
     delta ∈ compatibleExchanges contacts ↔
       boundaryCompatible delta contacts := by
-  simp [compatibleExchanges]
+  rw [compatibleExchanges, mem_availableExchanges_iff,
+    boundaryCompatible_iff_not_mem]
+  simp [exchange]
 
 /-- Compatible deltas are the state-only available exchanges from zero. -/
 theorem compatibleExchanges_eq_availableExchanges_zero
     (contacts : Finset BoundaryContact) :
     compatibleExchanges contacts =
       availableExchanges 0 (forbiddenExchangeSet contacts) := by
-  ext delta
-  rw [mem_compatibleExchanges_iff, mem_availableExchanges_iff,
-    boundaryCompatible_iff_not_mem]
-  simp [exchange]
+  rfl
 
 /-- A non-full forbidden contact set admits a uniform piece rescue. -/
 theorem exists_boundaryCompatible_of_forbiddenExchangeSet_ne_univ

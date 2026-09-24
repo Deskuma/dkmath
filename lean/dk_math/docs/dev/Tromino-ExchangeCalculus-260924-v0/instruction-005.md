@@ -204,6 +204,7 @@ Do not introduce GL(2,2), affine S4, or spatial D4 actions yet.
 Optionally expose a very thin cardinal calibration:
 
 atomic FourColorCell has
+
 - 4 geometric cells;
 - 4 states exactly once.
 
