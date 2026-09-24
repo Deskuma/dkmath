@@ -13,7 +13,7 @@ namespace DkMath.Tromino
 /-!
 # Additive Tromino exchange
 
-An exchange is translation by a state delta.  The laws below are inherited
+An exchange is translation by a state delta. The laws below are inherited
 from the characteristic-two additive Klein four-group; no color names or
 geometric solver state are built into this kernel.
 -/
@@ -84,5 +84,33 @@ theorem exchange_delta_ne_zero_iff {delta x : TrominoState} :
     apply hdelta
     apply add_left_cancel (a := x)
     simpa [exchange] using hzero
+
+/-- The exchange map from deltas to target states is a permutation. -/
+def exchangeEquiv (x : TrominoState) : TrominoState ≃ TrominoState :=
+  Equiv.addRight x
+
+@[simp] theorem exchangeEquiv_apply (x delta : TrominoState) :
+    exchangeEquiv x delta = exchange delta x := by
+  simp [exchangeEquiv, exchange, add_comm]
+
+/-- Every target has a unique exchange delta, including the identity delta. -/
+theorem existsUnique_exchange_to (x y : TrominoState) :
+    ∃! delta, exchange delta x = y := by
+  by_cases hxy : x = y
+  · subst y
+    refine ⟨0, exchange_zero x, ?_⟩
+    intro delta hdelta
+    apply add_left_cancel (a := x)
+    simpa [exchange] using hdelta
+  · rcases existsUnique_nonzero_exchange_to hxy with
+      ⟨delta, ⟨hdelta, htarget⟩, hunique⟩
+    refine ⟨delta, htarget, ?_⟩
+    intro other hother
+    apply hunique other
+    refine ⟨?_, hother⟩
+    intro hzero
+    apply hxy
+    subst other
+    simpa using hother
 
 end DkMath.Tromino
