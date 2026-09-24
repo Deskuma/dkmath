@@ -106,3 +106,17 @@ MacroCell work, insert one bounded algebraic checkpoint:
 The earlier MacroCell / recursive-substitution work moves one checkpoint later.
 This refinement preserves the original direction: local exchange algebra is
 completed before geometric recursion and BoundaryIR.
+
+
+### TRM-006 — Atomic FourColorCell
+
+After the piece-level forbidden-delta calculus, return to geometry with the
+smallest colored object:
+
+- audit executable compatibleExchanges;
+- define a minimal colored finite shape;
+- construct the canonical 2×2 block with all four states exactly once;
+- prove uniform exchange preserves four-state completeness;
+- introduce only the minimum grid-adjacency notion if ownership remains local.
+
+MacroCell collapse/expand begins only after this atomic cell is stable.
