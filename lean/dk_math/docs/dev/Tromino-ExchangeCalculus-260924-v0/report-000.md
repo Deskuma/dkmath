@@ -2,7 +2,7 @@
 
 Date: 2026-09-24
 Branch: `research/Tromino-ExchangeCalculus-260924-v0`
-Base develop: `11f1762613ce8ca6d971956c18e13077388a202a`
+Base develop: `11f1762613ce8ca6d971956c18e13077388a202e`
 
 ## Scope
 
