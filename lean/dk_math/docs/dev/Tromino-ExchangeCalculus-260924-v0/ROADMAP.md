@@ -135,3 +135,20 @@ unit.
 
 A separate scaled/recursive macro abstraction will follow after this bounded
 level-0 contract is stable.
+
+
+### TRM-008 — MacroTrominoFrame / typed macro gap
+
+Build the first level-1 macro composition:
+
+- MacroShape: a finite macro-coordinate footprint with FourColorMacroCell
+  payloads;
+- canonical 2×2 macro frame;
+- L-shaped three-macro body plus one typed MacroGapSlot;
+- exact restoration certificate;
+- macro count 3+1=4;
+- lifted atomic count 12+4=16.
+
+Do not yet generalize to arbitrary recursion depth. The next checkpoint will
+choose the scaled/recursive representation after this one-level composition is
+kernel-checked.
