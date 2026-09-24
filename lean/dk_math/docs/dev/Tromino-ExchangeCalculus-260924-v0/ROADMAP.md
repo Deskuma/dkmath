@@ -120,3 +120,18 @@ smallest colored object:
 - introduce only the minimum grid-adjacency notion if ownership remains local.
 
 MacroCell collapse/expand begins only after this atomic cell is stable.
+
+
+### TRM-007 — FourColorMacroCell collapse / expand
+
+The atomic complete four-state cell now becomes one explicit level-0 macro
+unit.
+
+- certify a complete four-state payload;
+- lossless collapse / expand;
+- record 4 atomic cells <-> 1 macro unit;
+- transport uniform exchange through the abstraction;
+- keep recursive scale/level out of this type.
+
+A separate scaled/recursive macro abstraction will follow after this bounded
+level-0 contract is stable.
