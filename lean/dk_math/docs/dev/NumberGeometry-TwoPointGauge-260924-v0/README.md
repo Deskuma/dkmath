@@ -1,5 +1,7 @@
 # Number Geometry — Two-Point Unit Gauge
 
+cid: `6ab3af36-0020-83e8-bc6a-897565fba74b`
+
 Branch: `research/NumberGeometry-TwoPointGauge-260924-v0`
 
 Base: `develop`
