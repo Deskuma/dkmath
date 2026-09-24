@@ -10,6 +10,7 @@ import DkMath.NumberGeometry.PrimeScale
 import DkMath.NumberGeometry.Bridge.UnitCycle
 import DkMath.NumberGeometry.Bridge.LogGauge
 import DkMath.NumberGeometry.Phase.TwoPrime
+import DkMath.NumberGeometry.Phase.SevenTreasure
 import DkMath.NumberGeometry.Bridge.SilverRatio
 import DkMath.NumberGeometry.Examples.EgyptianCircle
 
