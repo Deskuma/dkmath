@@ -5,6 +5,8 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberGeometry.Radical
+import DkMath.NumberGeometry.Bridge.SilverRatio
+import DkMath.NumberGeometry.Examples.EgyptianCircle
 
 #print "file: DkMath.NumberGeometry"
 
