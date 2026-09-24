@@ -1,4 +1,3 @@
-
 # TRM-000 — Repository-first audit and TRM-001 launch
 
 ## Goal
@@ -20,8 +19,7 @@ Base develop HEAD: 11f1762613ce8ca6d971956c18e13077388a202e
 Read first:
 
 - README.md
-- AGENT.md
-- SUMMARY.md
+- ROADMAP.md
 - DkMath/Tromino.lean
 - the four Tromino implementation plans in docs/not_implements dated 260912–260913
 

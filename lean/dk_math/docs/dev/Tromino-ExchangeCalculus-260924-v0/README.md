@@ -1,6 +1,8 @@
 
 # Tromino Exchange Calculus 260924 v0
 
+cid: `6aa51f66-502c-83e9-994c-dbd0118584c1`
+
 Status: active research / Lean implementation
 
 Base: develop at 11f1762613ce8ca6d971956c18e13077388a202e
