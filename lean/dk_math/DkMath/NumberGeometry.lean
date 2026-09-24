@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.NumberGeometry.LevelSet
+import DkMath.NumberGeometry.Radical
 
 #print "file: DkMath.NumberGeometry"
 
