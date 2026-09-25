@@ -8,8 +8,10 @@ Implement the first level-1 macro composition above FourColorMacroCell.
 The target finite structure is the macro-coordinate analogue of the original
 2×2 / L + hole geometry:
 
+~~~text
 [M][G]
 [M][M]
+~~~
 
 where each M is a FourColorMacroCell and G is a typed slot whose expected
 payload is also a FourColorMacroCell.
