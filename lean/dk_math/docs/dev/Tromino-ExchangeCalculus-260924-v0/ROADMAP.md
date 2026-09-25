@@ -436,3 +436,20 @@ The 2×3 and 2×4 fixtures should calibrate that chi is a property of the
 supplied rotation/crossing data and is not automatically 2.
 
 Genus-zero and planarity certification remain separate later checkpoints.
+
+
+### TRM-025 — Connected combinatorial-map certificate / arithmetic genus
+
+Strengthen weak Euler counting to the setting where V really corresponds to
+one local rotation cycle per region.
+
+- FlowCombinatorialMap = crossing + FlowRotationSystem + nonempty connected
+  region graph;
+- arithmetic HasCombinatorialGenus: chi = 2 - 2g;
+- HasSphereCharacteristic: chi = 2;
+- valid cyclic connected chi=2 / genus-0 fixture;
+- valid cyclic connected chi=0 / genus-1 fixture;
+- old 2×4 identity-rotation chi=2 fixture retained as a weak non-example
+  because it is not cyclic.
+
+No topological realization or planarity theorem is claimed yet.
