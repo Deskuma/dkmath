@@ -350,3 +350,21 @@ region multigraph.
   theory.
 
 Global state-potential reconstruction remains the next separate checkpoint.
+
+
+### TRM-020 — Region potential reconstruction
+
+Use the general region-walk zero-holonomy theorem to reconstruct absolute
+TrominoState values.
+
+- RegionPotential with edge law state(target)=state(source)+label;
+- every potential integrates walk XOR;
+- potential existence requires zero holonomy;
+- zero holonomy + rooted reachability gives existence for any base state;
+- fixed-base uniqueness;
+- global translation/gauge freedom;
+- recovered state differences equal the original labels;
+- every crossing has distinct endpoint states.
+
+This is the label-only ColorRecovery kernel for a supplied FlowNetwork, not a
+Four-Color theorem about arbitrary planar maps.
