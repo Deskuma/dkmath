@@ -230,3 +230,20 @@ Hence a conserved boundary has exactly two forms:
 - all-odd: same-label pairs plus one A/B/C residual port each.
 
 Keep TransitionGraph and planarity for later checkpoints.
+
+
+### TRM-013 — Closed transition network / alternating involutions
+
+Use the TRM-012 local mate involution together with a second certified
+involution for real boundary crossing.
+
+For perfect/even local pairings:
+
+- cross is fixed-point-free and changes region;
+- local mate is fixed-point-free and stays in-region;
+- each global port has exactly two distinct neighbors;
+- transitionStep = localMate ∘ cross is a finite permutation;
+- every transition orbit is periodic;
+- the boundary delta label is constant along the orbit.
+
+Residual/open endpoints and ghost completion remain a later checkpoint.
