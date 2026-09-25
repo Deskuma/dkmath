@@ -33,7 +33,7 @@ theorem uniformExchange_eq_iff {I : Type*}
       simpa [uniformExchange, exchange] using h
     exact add_right_cancel h'
   · intro h
-    simpa [uniformExchange, h]
+    simp [uniformExchange, h]
 
 /-- Uniform exchange preserves inequality of indexed states. -/
 theorem uniformExchange_ne_iff {I : Type*}
