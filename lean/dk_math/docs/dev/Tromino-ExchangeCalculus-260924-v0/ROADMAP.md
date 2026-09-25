@@ -247,3 +247,23 @@ For perfect/even local pairings:
 - the boundary delta label is constant along the orbit.
 
 Residual/open endpoints and ghost completion remain a later checkpoint.
+
+
+### TRM-014 — Closed-orbit XOR obstruction
+
+Before introducing open residual endpoints, test whether the closed transition
+kernel already guarantees XOR-integrable cycles.
+
+It does not appear to do so abstractly.
+
+For a primitive transition orbit with preserved nonzero label delta:
+
+- cycle XOR = n copies of delta;
+- characteristic two gives cycle XOR = 0 iff n is even.
+
+Formalize primitive return length, transitionXor, state transport, and a
+3-region / 6-edge alternating fixture whose transitionStep has primitive
+period 3 and nonzero cycle XOR.
+
+This isolates the extra global zero-holonomy condition required beyond local
+conservation and perfect pairing.
