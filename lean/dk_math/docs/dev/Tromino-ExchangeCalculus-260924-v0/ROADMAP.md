@@ -469,3 +469,18 @@ Separate the combinatorial carrier from the nonzero V4 labels.
 
 This separation is required before stating the real Four-Color-side existence
 problem on an unlabeled sphere/planar combinatorial map.
+
+
+### TRM-027 — Port rotation system / unlabeled face-step migration
+
+Move the purely structural rotation-system layer onto PortNetwork.
+
+- PortLocalRotation / PortRotationSystem;
+- portFaceStep = rho ∘ alpha;
+- finite periodicity / first-return API;
+- exact erasure from existing Flow rotation data;
+- exact lift through any V4FlowAssignment;
+- prove face dynamics are independent of the chosen V4 labels.
+
+Face-orbit counting, Euler characteristic and genus remain on the Flow side
+until the next reviewed migration.
