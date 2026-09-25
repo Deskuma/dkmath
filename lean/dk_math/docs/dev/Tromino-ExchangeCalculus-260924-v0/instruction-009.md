@@ -24,9 +24,9 @@ u = s(k)
 
 has:
 
-Gap  = s(k)^2       = 4^(k+1)
-Body = 3*s(k)^2     = 3*4^(k+1)
-Big  = 4*s(k)^2     = 4^(k+2).
+Gap  = `s(k)^2`       = `4^(k+1)`
+Body = `3*s(k)^2`     = `3*4^(k+1)`
+Big  = `4*s(k)^2`     = `4^(k+2)`.
 
 These are exactly the existing recursive Tromino quantities:
 
@@ -166,10 +166,12 @@ preferred for the same proof-field reason as TRM-002.
 
 At equal scale x=u=s(k), the CosmicFormula refines the Tromino 3+1 split:
 
+~~~text
 Core = 1 * 4^(k+1)
 Beam = 2 * 4^(k+1)
 Gap  = 1 * 4^(k+1)
 Big  = 4 * 4^(k+1).
+~~~
 
 Prove the numeric formulas:
 
@@ -195,7 +197,7 @@ exist in the current API.
 
 The allowed statement is:
 
-the body mass 3*m refines numerically as core mass m + beam mass 2*m.
+the body mass `3*m` refines numerically as core mass m + beam mass `2*m`.
 
 ## G. Recursive law as scaled unit law
 
