@@ -401,3 +401,20 @@ claiming planarity.
 
 Face quotient/cardinality, Euler characteristic, genus-zero certification and
 non-crossing pairing remain later checkpoints.
+
+
+### TRM-023 — Face orbit materialization / finite partition
+
+Materialize the TRM-022 face-step permutation orbits as explicit finite
+FlowNetworkPort sets.
+
+- computable faceOrbit;
+- first-return distinctness;
+- orbit card = firstFaceReturn;
+- membership iff some faceStep iterate;
+- SameFaceOrbit equivalence behavior;
+- intersecting orbits are equal, otherwise disjoint;
+- face length is invariant under change of starting port;
+- one-face and multi-face regression fixtures.
+
+Euler characteristic and genus-zero certification remain later checkpoints.
