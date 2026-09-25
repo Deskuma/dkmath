@@ -333,3 +333,20 @@ label-only ClosedFlowNetwork.
 
 This still concerns homogeneous alternating transition orbits only. General
 region-path potential reconstruction remains a later checkpoint.
+
+
+### TRM-019 — General region walk / crossing holonomy
+
+Generalize from routed transition orbits to arbitrary crossing walks on the
+region multigraph.
+
+- oriented crossing edge = one FlowNetworkPort;
+- indexed region walks preserving parallel-edge identity;
+- append/reverse and XOR calculus;
+- RegionZeroHolonomy = every closed region walk has XOR 0;
+- zero holonomy -> path-XOR independence;
+- reachability API;
+- transitionRegionWalk embeds TRM-018 transition XOR into the general walk
+  theory.
+
+Global state-potential reconstruction remains the next separate checkpoint.
