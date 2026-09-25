@@ -418,3 +418,21 @@ FlowNetworkPort sets.
 - one-face and multi-face regression fixtures.
 
 Euler characteristic and genus-zero certification remain later checkpoints.
+
+
+### TRM-024 — Combinatorial V/E/F counting and Euler characteristic
+
+Count the finite permutation data before introducing any topological
+realization theorem.
+
+- V = region count;
+- E = crossing involution 2-orbit count;
+- F = distinct faceStep orbit count;
+- total ports = 2E;
+- sum of face-orbit lengths = total ports;
+- chi = V - E + F in Int.
+
+The 2×3 and 2×4 fixtures should calibrate that chi is a property of the
+supplied rotation/crossing data and is not automatically 2.
+
+Genus-zero and planarity certification remain separate later checkpoints.
