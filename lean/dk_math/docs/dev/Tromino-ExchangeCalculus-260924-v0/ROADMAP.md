@@ -317,3 +317,19 @@ Move the TRM-013 closed transition kernel onto FlowSignature/FlowPairing.
 - exact pointwise agreement of the erased transition step.
 
 TransitionXor remains contact-based until the next reviewed migration.
+
+
+### TRM-018 — FlowTransitionXor migration
+
+Move the TRM-014 transition-orbit XOR/primitive-holonomy layer onto the
+label-only ClosedFlowNetwork.
+
+- flowTransitionXor and additivity;
+- XOR zero iff step count even;
+- primitive return / compatibility;
+- prefix state transport;
+- pure Flow period-2 and period-3 fixtures;
+- exact erasure calibration with contact-based TransitionXor.
+
+This still concerns homogeneous alternating transition orbits only. General
+region-path potential reconstruction remains a later checkpoint.
