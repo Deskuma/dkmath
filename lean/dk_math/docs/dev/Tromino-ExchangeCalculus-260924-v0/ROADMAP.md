@@ -484,3 +484,19 @@ Move the purely structural rotation-system layer onto PortNetwork.
 
 Face-orbit counting, Euler characteristic and genus remain on the Flow side
 until the next reviewed migration.
+
+
+### TRM-028 — Port face-orbit and Euler-count migration
+
+Move TRM-023/TRM-024 structural counting onto unlabeled PortNetwork data.
+
+- portFaceOrbit and orbit partition;
+- edge 2-orbits;
+- Port V/E/F/D counts;
+- D = 2E;
+- D = sum face lengths;
+- portCombinatorialEulerCharacteristic;
+- exact calibration with existing Flow FaceOrbit/EulerCount;
+- prove all face/Euler data are independent of V4FlowAssignment.
+
+Strong connected genus wrappers remain for the next checkpoint.
