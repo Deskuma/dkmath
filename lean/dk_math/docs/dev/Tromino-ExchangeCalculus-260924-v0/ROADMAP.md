@@ -287,3 +287,19 @@ existing BoundarySignature API factors exactly through a computable erasure.
 
 Pairing and transition migration to the label-only carrier remains the next
 reviewed step.
+
+
+### TRM-016 — FlowPairing migration
+
+Move the TRM-012 pairing/residual normal form onto the label-only
+FlowSignature while preserving the existing contact-based stack.
+
+- FlowPairing = label-preserving involution;
+- deterministic canonical pairing;
+- residual count per label = multiplicity mod 2;
+- conserved even -> perfect;
+- conserved odd -> one A/B/C residual;
+- BoundaryPairing adapter and canonical erasure calibration.
+
+TransitionGraph and TransitionXor remain contact-based until the next reviewed
+migration.
