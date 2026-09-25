@@ -181,10 +181,12 @@ Desired mathematical reading:
 
 At every successor level,
 
+~~~text
 3 lower-level macro units
 + 1 typed residual macro unit
 = 4 lower-level macro units
 = 1 higher-level macro unit.
+~~~
 
 The count theorem may be stated without introducing a new record if a tuple of
 equalities is simpler.
