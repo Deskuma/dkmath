@@ -209,3 +209,24 @@ iff
 n_A, n_B, n_C have equal parity.
 
 Pairing and TransitionGraph remain later checkpoints.
+
+
+### TRM-012 — Same-label pairing / Tromino residual
+
+Turn the TRM-011 parity theorem into an explicit pairing normal form.
+
+Represent local pairing as a label-preserving involution on boundary ports:
+
+- non-fixed 2-cycles = paired transport;
+- fixed points = residual ports.
+
+Target normal form for every boundary:
+
+- each A/B/C fiber leaves exactly count mod 2 residual ports.
+
+Hence a conserved boundary has exactly two forms:
+
+- all-even: perfect same-label pairing;
+- all-odd: same-label pairs plus one A/B/C residual port each.
+
+Keep TransitionGraph and planarity for later checkpoints.
