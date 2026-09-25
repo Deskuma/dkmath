@@ -152,3 +152,18 @@ Build the first level-1 macro composition:
 Do not yet generalize to arbitrary recursion depth. The next checkpoint will
 choose the scaled/recursive representation after this one-level composition is
 kernel-checked.
+
+
+### TRM-009 — Recursive scaled macro levels
+
+Generalize the one-level 3+1 frame into a level-indexed carrier:
+
+- level 0 = FourColorMacroCell;
+- level k+1 = four level-k children;
+- body positions = 3;
+- typed residual position = 1;
+- atomic mass at level k = 4^(k+1);
+- successor split = 3*4^(k+1) + 4^(k+1) = 4^(k+2);
+- recursive uniform exchange preserves mass.
+
+Keep physical flattening and boundary signatures for later checkpoints.
