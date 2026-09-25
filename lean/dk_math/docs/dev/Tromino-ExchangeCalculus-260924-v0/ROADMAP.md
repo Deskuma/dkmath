@@ -303,3 +303,17 @@ FlowSignature while preserving the existing contact-based stack.
 
 TransitionGraph and TransitionXor remain contact-based until the next reviewed
 migration.
+
+
+### TRM-017 — FlowTransition migration
+
+Move the TRM-013 closed transition kernel onto FlowSignature/FlowPairing.
+
+- FlowNetwork / FlowCrossing / ClosedFlowNetwork;
+- two-neighbor transition relation;
+- alternating transition permutation;
+- label preservation and finite periodicity;
+- adapters from contact-based BoundaryNetwork;
+- exact pointwise agreement of the erased transition step.
+
+TransitionXor remains contact-based until the next reviewed migration.
