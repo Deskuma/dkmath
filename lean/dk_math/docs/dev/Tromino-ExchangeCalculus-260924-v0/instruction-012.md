@@ -8,9 +8,10 @@ Build the first global transition layer above BoundaryPairing.
 TRM-012 already provides the local involution:
 
 local mate
-  - same label;
-  - involutive;
-  - fixed-point-free in the perfect/even case.
+
+- same label;
+- involutive;
+- fixed-point-free in the perfect/even case.
 
 TRM-013 should add the second involution:
 
@@ -101,9 +102,8 @@ with required laws:
    (cross p).1 != p.1
 
 3. cross_sameLabel:
-   boundaryDelta (signature (cross p).1) (cross p).2
-     =
-   boundaryDelta (signature p.1) p.2
+
+   boundaryDelta (signature (cross p).1) (cross p).2 = boundaryDelta (signature p.1) p.2
 
 The region-change condition deliberately excludes self-adjacent region edges
 in this first kernel. Record this scope boundary.
