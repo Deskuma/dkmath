@@ -167,3 +167,21 @@ Generalize the one-level 3+1 frame into a level-indexed carrier:
 - recursive uniform exchange preserves mass.
 
 Keep physical flattening and boundary signatures for later checkpoints.
+
+
+### TRM-010 — Recursive CosmicFormula scale bridge
+
+Before boundary signatures, calibrate the arbitrary-level recursive mass law
+against the degree-two equal-scale CosmicFormula.
+
+For s(k)=2^(k+1):
+
+- s(k)^2 = 4^(k+1);
+- Cosmic Gap = 4^(k+1);
+- Cosmic Body = 3*4^(k+1);
+- Cosmic Big = 4^(k+2);
+
+matching gapAtomicMass, bodyAtomicMass, and successor atomicMass exactly.
+
+Also record the numeric Core/Beam/Gap refinement 1+2+1=4 without assigning
+specific macro positions to Core or Beam.
