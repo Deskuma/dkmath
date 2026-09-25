@@ -368,3 +368,18 @@ TrominoState values.
 
 This is the label-only ColorRecovery kernel for a supplied FlowNetwork, not a
 Four-Color theorem about arbitrary planar maps.
+
+
+### TRM-021 — SimpleGraph/Dart bridge / standard Coloring landing
+
+Land the completed label-only recovery theory in Mathlib's standard graph APIs.
+
+- forget FlowNetwork crossing multiplicity to an underlying region SimpleGraph;
+- map FlowNetworkPort to SimpleGraph.Dart;
+- crossing reversal agrees with Dart.symm;
+- make parallel-edge information loss explicit;
+- convert RegionPotential to SimpleGraph.Coloring TrominoState;
+- zero holonomy + rooted reachability gives a standard proper 4-state coloring
+  of the supplied region graph.
+
+Planar embedding / rotation-system extraction remains the next separate layer.
