@@ -453,3 +453,19 @@ one local rotation cycle per region.
   because it is not cyclic.
 
 No topological realization or planarity theorem is claimed yet.
+
+
+### TRM-026 — Unlabeled port network / V4 flow-assignment split
+
+Separate the combinatorial carrier from the nonzero V4 labels.
+
+- PortNetwork = regions + port multiplicities only;
+- PortCrossing = fixed-point-free crossing involution only;
+- V4FlowAssignment = nonzero TrominoState label per port, constant across
+  crossing reversal;
+- assignment rebuilds the current FlowNetwork/FlowCrossing;
+- current FlowNetwork/FlowCrossing erase back to structural data + assignment;
+- round-trip theorems make the factorization explicit.
+
+This separation is required before stating the real Four-Color-side existence
+problem on an unlabeled sphere/planar combinatorial map.
