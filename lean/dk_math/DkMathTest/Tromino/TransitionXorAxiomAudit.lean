@@ -34,7 +34,8 @@ def canonicalAAPairing : BoundaryPairing aaSignature where
 
 theorem canonicalAAPairing_perfect : residualPorts canonicalAAPairing = ∅ := by
   ext i
-  fin_cases i <;> simp [residualPorts, canonicalAAPairing, aaSwap] <;> decide
+  fin_cases i <;> simp only [residualPorts, canonicalAAPairing, aaSwap, Finset.notMem_empty,
+    iff_false] <;> decide
 
 def twoRegionNetwork : BoundaryNetwork where
   regionCount := 2
@@ -152,37 +153,32 @@ theorem transitionStep_three_p3 : transitionStep threeRegionClosed p3 = p3₁ :=
   apply Sigma.ext
   · apply Fin.ext
     simp [p3, p3₁, transitionStep, localMatePort, crossPort, threeRegionClosed,
-      threeRegionCrossing, threeRegionNetwork, crossThree, mk3,
-      canonicalAAPairing, aaSwap] <;> norm_num
+      threeRegionCrossing, threeRegionNetwork, crossThree, mk3, canonicalAAPairing, aaSwap]
   · apply heq_of_eq
     apply Fin.ext
     simp [p3, p3₁, transitionStep, localMatePort, crossPort, threeRegionClosed,
-      threeRegionCrossing, threeRegionNetwork, crossThree, mk3,
-      canonicalAAPairing, aaSwap] <;> norm_num
+      threeRegionCrossing, threeRegionNetwork, crossThree, mk3, canonicalAAPairing, aaSwap]
 
 theorem transitionStep_three_p3₁ : transitionStep threeRegionClosed p3₁ = p3₂ := by
   apply Sigma.ext
   · apply Fin.ext
-    simp [p3, p3₁, p3₂, transitionStep, localMatePort, crossPort, threeRegionClosed,
-      threeRegionCrossing, threeRegionNetwork, crossThree, mk3,
-      canonicalAAPairing, aaSwap] <;> norm_num
+    simp [    p3₁, p3₂, transitionStep, localMatePort, crossPort, threeRegionClosed,
+      threeRegionCrossing, threeRegionNetwork, crossThree, mk3, canonicalAAPairing, aaSwap]
   · apply heq_of_eq
     apply Fin.ext
-    simp [p3, p3₁, p3₂, transitionStep, localMatePort, crossPort, threeRegionClosed,
-      threeRegionCrossing, threeRegionNetwork, crossThree, mk3,
-      canonicalAAPairing, aaSwap] <;> norm_num
+    simp [    p3₁, p3₂, transitionStep, localMatePort, crossPort, threeRegionClosed,
+      threeRegionCrossing, threeRegionNetwork, crossThree, mk3, canonicalAAPairing, aaSwap]
 
 theorem transitionStep_three_p3₂ : transitionStep threeRegionClosed p3₂ = p3 := by
   apply Sigma.ext
   · apply Fin.ext
     simp [p3, p3₂, transitionStep, localMatePort, crossPort, threeRegionClosed,
-      threeRegionCrossing, threeRegionNetwork, crossThree, mk3,
-      canonicalAAPairing, aaSwap] <;> norm_num
+      threeRegionCrossing, threeRegionNetwork, crossThree, mk3, canonicalAAPairing, aaSwap]
   · apply heq_of_eq
     apply Fin.ext
     simp [p3, p3₂, transitionStep, localMatePort, crossPort, threeRegionClosed,
       threeRegionCrossing, threeRegionNetwork, crossThree, mk3,
-      canonicalAAPairing, aaSwap] <;> norm_num
+      canonicalAAPairing, aaSwap]
 
 theorem transitionStep_three_p3_sq : (transitionStep threeRegionClosed)^[2] p3 = p3₂ := by
   simp only [Function.iterate_succ_apply, Function.iterate_zero_apply]
