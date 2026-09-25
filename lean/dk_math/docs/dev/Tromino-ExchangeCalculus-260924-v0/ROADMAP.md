@@ -185,3 +185,27 @@ matching gapAtomicMass, bodyAtomicMass, and successor atomicMass exactly.
 
 Also record the numeric Core/Beam/Gap refinement 1+2+1=4 without assigning
 specific macro positions to Core or Beam.
+
+
+### TRM-011 — Boundary signature / XOR conservation
+
+Begin the structural boundary layer after completing recursive mass
+calibration.
+
+Key bridge:
+
+forbiddenDelta(contact) = inside + outside
+
+is reused as the boundary crossing delta. The same quantity has two roles:
+
+- PieceExchange: one distinct forbidden exchange value;
+- BoundaryFlow: one multiplicity-preserving boundary label.
+
+Introduce an ordered finite BoundarySignature, boundarySum, A/B/C label
+counts, and prove:
+
+boundarySum = 0
+iff
+n_A, n_B, n_C have equal parity.
+
+Pairing and TransitionGraph remain later checkpoints.
