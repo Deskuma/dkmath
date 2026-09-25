@@ -533,3 +533,22 @@ Complete the strong map/genus migration onto unlabeled PortNetwork data.
 This checkpoint should expose the remaining Four-Color-side gap as the
 existence of a suitable V4 flow assignment on an unlabeled genus-zero
 combinatorial map.
+
+
+### TRM-031 — V4 tension / proper 4-coloring equivalence
+
+Before attempting the universal genus-zero existence arrow, formalize its
+logical strength.
+
+- define the unlabeled Port region SimpleGraph;
+- proper TrominoState coloring -> nonzero V4 endpoint-XOR assignment;
+- prove the induced assignment has zero holonomy;
+- zero-holonomy assignment -> RegionPotential -> Port coloring;
+- prove for every connected strong Port map that zero-holonomy V4 tension
+  existence is equivalent to PortFourStateColorable;
+- prove the universal genus-zero tension target iff the universal genus-zero
+  four-color target.
+
+This is a no-circularity audit. The current zero-holonomy object should be
+documented as tension/coboundary-like, distinct from a true Kirchhoff
+nowhere-zero graph flow. Planar dual-flow theory remains later work.
