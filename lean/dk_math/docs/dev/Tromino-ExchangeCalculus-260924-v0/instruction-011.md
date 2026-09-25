@@ -240,7 +240,7 @@ either
 
 1. P is a perfect same-label pairing with no residual,
 
-or
+   or
 
 2. P has exactly the three A/B/C residual ports.
 
