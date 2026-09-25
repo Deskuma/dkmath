@@ -383,3 +383,21 @@ Land the completed label-only recovery theory in Mathlib's standard graph APIs.
   of the supplied region graph.
 
 Planar embedding / rotation-system extraction remains the next separate layer.
+
+
+### TRM-022 — Rotation-system kernel / combinatorial face step
+
+Introduce combinatorial-map permutation data on FlowNetworkPort without
+claiming planarity.
+
+- local port rotation preserving each region;
+- optional one-cycle-per-region FlowRotationSystem certificate;
+- crossing packaged as the edge-reversal permutation alpha;
+- faceStep = rho ∘ alpha;
+- finite periodic face-step orbits / first returns;
+- preserve parallel-edge information by keeping FlowNetworkPort primary;
+- calibrate with FlowTransition only under an explicit rotate = localMate
+  hypothesis.
+
+Face quotient/cardinality, Euler characteristic, genus-zero certification and
+non-crossing pairing remain later checkpoints.
