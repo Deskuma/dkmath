@@ -500,3 +500,18 @@ Move TRM-023/TRM-024 structural counting onto unlabeled PortNetwork data.
 - prove all face/Euler data are independent of V4FlowAssignment.
 
 Strong connected genus wrappers remain for the next checkpoint.
+
+
+### TRM-029 — Port region-walk / structural connectivity migration
+
+Move region paths and connectedness onto the unlabeled PortNetwork layer.
+
+- PortRegionWalk with nil/singleton/append/reverse;
+- PortRegionReachable, rooted/global connectedness;
+- exact FlowRegionWalk erasure;
+- exact lift through any V4FlowAssignment;
+- reachability/connectivity are independent of the chosen assignment;
+- connected 2×2/2×3 and disconnected structural regression fixtures.
+
+This is the final structural prerequisite before migrating the strong
+combinatorial-map/genus wrapper onto PortNetwork.
