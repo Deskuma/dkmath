@@ -267,3 +267,23 @@ period 3 and nonzero cycle XOR.
 
 This isolates the extra global zero-holonomy condition required beyond local
 conservation and perfect pairing.
+
+
+### TRM-015 — Label-only boundary flow certificate
+
+TRM-014 exposed a genuine global zero-holonomy obstruction. Before color
+recovery, remove a logical circularity in the current certificate stack:
+BoundarySignature still stores the absolute inside/outside states whose
+differences it analyses.
+
+Introduce a label-only FlowSignature:
+
+- finite ordered ports;
+- one nonzero TrominoState delta per port;
+- no absolute states.
+
+Reprove the conservation/parity theorem on this carrier and show that the
+existing BoundarySignature API factors exactly through a computable erasure.
+
+Pairing and transition migration to the label-only carrier remains the next
+reviewed step.
