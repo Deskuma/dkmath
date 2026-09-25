@@ -515,3 +515,21 @@ Move region paths and connectedness onto the unlabeled PortNetwork layer.
 
 This is the final structural prerequisite before migrating the strong
 combinatorial-map/genus wrapper onto PortNetwork.
+
+
+### TRM-030 — Strong Port combinatorial map / unlabeled arithmetic genus
+
+Complete the strong map/genus migration onto unlabeled PortNetwork data.
+
+- PortCombinatorialMap = crossing + PortRotationSystem + nonempty + structural
+  connectedness;
+- label-free V/E/F/D/chi observers;
+- PortHasCombinatorialGenus and PortHasSphereCharacteristic;
+- PortGenusZeroCombinatorialMap as the canonical unlabeled genus-zero input;
+- exact FlowCombinatorialMap erasure and assignment lift;
+- genus/sphere characteristic calibrates exactly across Flow/Port;
+- strong-map invariants are independent of V4FlowAssignment.
+
+This checkpoint should expose the remaining Four-Color-side gap as the
+existence of a suitable V4 flow assignment on an unlabeled genus-zero
+combinatorial map.
