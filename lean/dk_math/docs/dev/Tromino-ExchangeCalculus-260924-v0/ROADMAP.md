@@ -593,3 +593,23 @@ a general dual PortNetwork.
 
 The converse dual-face conservation -> primal tension is deliberately deferred
 to a later genus-zero cycle-space / face-generation theorem.
+
+
+### TRM-034 — Port F2 chain complex scaffold
+
+Build the multigraph-safe F2 chain layer directly on Port edge/face orbits.
+
+- C0 = F2-valued region functions;
+- C1 = F2-valued crossing-edge-orbit functions;
+- C2 = F2-valued face-orbit functions;
+- define edge-vertex incidence and face-edge incidence;
+- define boundary1 and boundary2;
+- convert PortRegionWalks to edge-parity chains;
+- prove the endpoint-boundary law and closed-walk membership in ker boundary1;
+- identify primitive face-boundary walks with canonical face boundary chains;
+- prove boundary1 ∘ boundary2 = 0 and im boundary2 <= ker boundary1;
+- calibrate triangle and concrete triangle-dual chain vectors.
+
+Genus-zero exactness im boundary2 = ker boundary1 is deliberately reserved for
+the next checkpoint, where rank/nullity and dual-connectivity arguments can be
+audited separately.
