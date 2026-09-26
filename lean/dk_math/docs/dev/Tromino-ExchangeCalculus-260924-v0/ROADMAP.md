@@ -613,3 +613,24 @@ Build the multigraph-safe F2 chain layer directly on Port edge/face orbits.
 Genus-zero exactness im boundary2 = ker boundary1 is deliberately reserved for
 the next checkpoint, where rank/nullity and dual-connectivity arguments can be
 audited separately.
+
+
+### TRM-035 — Gaussian/Eisenstein local V4 frame and global V4-chain bridge
+
+Return to the original Tromino source picture and connect it to the new F2
+homological layer.
+
+- abstract a finite 3+1 TrominoExchangeFrame;
+- realize the actual Gaussian 2x2 block with hole (1,1);
+- realize the Eisenstein three nonzero directions at the mod-2 local level;
+- prove a Gaussian/Eisenstein frame equivalence preserving relative V4 deltas;
+- formalize local exchange conjugacy;
+- lift V4 = F2² to C0/C1/C2 chain spaces;
+- define V4 boundary maps and prove their coordinate decomposition;
+- prove V4 cycle space is exactly two scalar F2 cycle conditions;
+- calibrate deltaA/deltaB/deltaC as the common Gaussian/Tromino/Eisenstein
+  three-direction basis and verify the triangle/dual balanced-flow example.
+
+This checkpoint reconnects the original local 3+1 exchange idea to the global
+duality/homology development. It deliberately does not claim a Gaussian/
+Eisenstein ring isomorphism or genus-zero exactness.
