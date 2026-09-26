@@ -737,3 +737,38 @@ three-direction language.
 The checkpoint does not prove assignment existence.  It sharpens the next
 fork to (a) triangulation reduction for arbitrary maps or (b) direct
 tetrahedral A/B/C assignment existence on all-triangular genus-zero maps.
+
+
+### TRM-040 — Face-star subdivision / triangulation reduction
+
+Reduce every connected genus-zero Port combinatorial map to an all-triangular
+genus-zero map by a combinatorial face-star subdivision.
+
+For each old face orbit:
+
+- add one center region;
+- keep every old crossing edge;
+- add one radial edge for every old boundary dart;
+- use an interleaved old-region rotation and inverse face-step rotation at the
+  new center so that every old dart generates one triangular face.
+
+Target count laws:
+
+    V' = V + F
+    D' = 3D
+    E' = E + D = 3E
+    F' = D = 2E
+    chi' = chi.
+
+The construction is computable relative to an explicit finite face/face-port
+indexing package; indexing existence may be proved classically without adding
+a noncomputable production selector.
+
+A coloring of the subdivided map restricts to a coloring of the original map.
+Hence the universal genus-zero four-color target is equivalent to its
+all-triangular restriction.  Combined with TRM-039, it is also equivalent to
+the universal tetrahedral A/B/C assignment target on all-triangular
+genus-zero maps.
+
+This is a reduction theorem only; the triangular assignment-existence target
+remains the next Four-Color-strength gap.
