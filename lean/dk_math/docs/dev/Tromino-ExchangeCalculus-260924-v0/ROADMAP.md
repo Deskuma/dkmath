@@ -683,3 +683,32 @@ The tetrahedral rolling/stamp interpretation remains a parallel visualization
 and game-design track: one roll is one RegionWalk transition, the downward
 face stamps the region color, and closed-roll color return is V4 holonomy.
 It is intentionally kept out of the TRM-037 proof kernel.
+
+
+### TRM-038 — Genus-zero face conservation / zero-holonomy closure
+
+Use TRM-037's genus-zero F2 exactness to close the converse left open by
+TRM-033.
+
+- extract one computable V4 label per crossing-edge orbit using the canonical
+  smaller-region orientation;
+- define a linear evaluation from scalar F2 edge chains to TrominoState;
+- prove evaluation of a PortRegionWalk edge-parity chain is exactly its V4
+  regionWalkXor;
+- define representative-free face-cell label sums;
+- prove face-boundary Kirchhoff conservation annihilates im boundary2;
+- combine with im boundary2 = ker boundary1 to show every closed walk has zero
+  V4 holonomy on genus-zero maps;
+- conclude, for each fixed assignment,
+  IsDualFaceKirchhoff iff IsZeroHolonomyV4Tension;
+- reconstruct a proper four-state coloring with exactly the same edge labels;
+- prove existence of a dual-face Kirchhoff assignment iff four-state
+  colorability, and the corresponding universal target equivalence.
+
+This does not prove the universal assignment-existence target.  It isolates
+that target as the remaining Four-Color-strength gap.
+
+The tetrahedral rolling/stamp game interpretation now has a formal global
+meaning: elementary face-boundary roll conservation implies closed-route
+bottom-color return on genus zero, while full orientation holonomy remains a
+strictly stronger future layer.
