@@ -8,11 +8,11 @@ Current branch:
 
 Current active checkpoint:
 
-    TRM-042 — Actual Port Codec / Semantic Transport Bridge
+    TRM-043 — Actual Constructor Calibration Closure
 
 Current instruction:
 
-    instruction-041.md
+    instruction-042.md
 
 Last fully accepted major theorem checkpoints:
 
@@ -21,54 +21,61 @@ Last fully accepted major theorem checkpoints:
 - TRM-038: genus-zero dual-face conservation <-> zero holonomy
 - TRM-039: tetrahedral local closure and triangular A/B/C normal form
 
-Partial infrastructure:
+Face-star progress:
 
 - TRM-040:
-  face-star indexing, descriptor carrier, regions and actual port constructors
+  indexing, semantic three-way carrier, old/center regions,
+  concrete actual-port constructors
 - TRM-041:
   semantic crossing and semantic rotation
+- TRM-042:
+  actual dependent-Fin codec COMPLETE;
+  both codec round trips COMPLETE;
+  actual PortCrossing COMPLETE;
+  actual PortLocalRotation COMPLETE;
+  source-region proofs COMPLETE;
+  descriptor-level crossing/rotation transport formulas COMPLETE.
 
 Current exact blocker:
 
-    PortNetworkPort (faceStarNetwork M I)
-      ≃
-    FaceStarPortDesc M
+The pre-existing concrete constructors are not yet calibrated against
+faceStarPortEncode.
 
-Specifically, the reverse dependent-Sigma/Fin round trip:
+Need exactly:
 
-    encode (decode q) = q.
+    encode (.oldEdge p)      = faceStarOldEdgePort I p
+    encode (.radialOld p)    = faceStarRadialOldPort I p
+    encode (.radialCenter p) = faceStarRadialCenterPort I p
 
-Do not bypass this with an axiom, hypothesis, cardinality argument or
-noncomputable selector.
+Then derive:
 
-After this bridge succeeds, the planned order is:
+- the three decoder constructor formulas;
+- the three exact actual crossing formulas;
+- the three exact actual rotation formulas.
 
-1. transport crossing / local rotation to actual ports;
-2. prove old-region and face-center cyclicity;
-3. prove every new face is a primitive 3-cycle;
+Do not redesign the codec.
+
+After this calibration closure:
+
+1. prove old-region and face-center cyclicity;
+2. package PortRotationSystem;
+3. prove exact 3-step triangular face dynamics;
 4. construct connected faceStarCombinatorialMap;
 5. prove count formulas and Euler/genus preservation;
 6. restrict subdivision colorings to the original map;
-7. prove the universal all-triangular reduction;
-8. move the remaining existence problem to the tetrahedral/Eisenstein track.
+7. prove universal all-triangular reduction;
+8. move to tetrahedral/Eisenstein realization.
 
 Four Color theorem status:
 
     NOT PROVED.
 
-Current equivalent/near-equivalent target already formalized on
-all-triangular genus-zero maps:
-
-    existence of a nowhere-zero V4 assignment
-    with A/B/C exactly once on every triangular face.
-
 Eisenstein status:
 
-- eisensteinParity : TraceOneInt (-1) ->+ TrominoState is verified;
-- its canonical nonzero direction parity image is {A,B,C};
-- tetrahedral roll transport is V4 addition;
-- a global Eisenstein lattice realization of an arbitrary triangular Port map
-  has NOT yet been constructed.
+- eisensteinParity : TraceOneInt (-1) ->+ TrominoState verified;
+- canonical nonzero Eisenstein direction parity image = {A,B,C};
+- tetrahedral roll transport = V4 addition;
+- global triangular-Port -> Eisenstein-lattice realization NOT YET constructed.
 
 ## Agent completion rule
 
@@ -78,8 +85,7 @@ Before completion:
 
 1. re-read the active instruction;
 2. enumerate every mandatory acceptance item;
-3. attach a concrete theorem/definition name to each item;
-4. if one item is missing, report Outcome P with the exact missing bridge.
+3. attach a concrete theorem/definition name to each;
+4. if one item is missing, report Outcome P and name it.
 
-Repository state and actual Lean source override any stale status sentence in
-copied task reports.
+Actual repository state overrides stale task-report repository status.
