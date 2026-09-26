@@ -571,3 +571,25 @@ Introduce the true nowhere-zero V4 graph-flow condition:
 Combinatorial duality is intentionally deferred. The next design must also
 address the bridge -> dual-loop issue because PortCrossing currently forbids
 loops.
+
+
+### TRM-033 — Face-boundary duality kernel / triangle dual calibration
+
+Formalize combinatorial duality at the permutation/orbit level before building
+a general dual PortNetwork.
+
+- alpha* = alpha and rho* = primal faceStep = rho ∘ alpha;
+- raw dual faceStep = primal rotation;
+- dual vertices are primal face orbits;
+- dual faces are primal vertex rotation cycles;
+- V/F swap, E/D stay fixed, chi is preserved;
+- construct primitive face-boundary walks and prove primal zero-holonomy
+  tension implies Kirchhoff conservation at every dual vertex;
+- define DualLoopFree at the face-orbit level;
+- construct the actual triangle dual fixture with V=2,E=3,F=3,chi=2;
+- distinguish it from the old 2x3 genus-1 rotation system;
+- transport the triangle coloring/tension labels to a balanced dual Kirchhoff
+  flow.
+
+The converse dual-face conservation -> primal tension is deliberately deferred
+to a later genus-zero cycle-space / face-generation theorem.
