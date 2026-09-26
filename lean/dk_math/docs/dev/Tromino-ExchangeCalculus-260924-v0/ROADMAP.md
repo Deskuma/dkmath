@@ -772,3 +772,30 @@ genus-zero maps.
 
 This is a reduction theorem only; the triangular assignment-existence target
 remains the next Four-Color-strength gap.
+
+
+### TRM-041 — Face-star crossing/rotation completion
+
+Complete the carrier-level partial result of TRM-040.
+
+The existing face-star indexing, semantic three-way port carrier, region split
+and actual-port constructors remain the foundation.  Add:
+
+- a computable actual-port <-> FaceStarPortDesc equivalence;
+- the semantic/transported crossing;
+- the interleaved old-region rotation and inverse-face-step center rotation;
+- a cyclic PortRotationSystem;
+- exact three-step new face dynamics;
+- a connected PortCombinatorialMap;
+- proof that every new face has cardinality 3;
+- D'=3D, F'=D, E'=3E=E+D, V'=V+F;
+- Euler and genus-zero preservation;
+- restriction of a new-map coloring to the original map;
+- indexing-free genus-zero triangulation reduction;
+- equivalence of the universal four-color target with its all-triangular and
+  all-triangular tetrahedral A/B/C target forms.
+
+TRM-041 is GREEN only when the actual map and the universal reduction
+theorems are kernel-checked.  The remaining proof-strength gap after GREEN is
+universal tetrahedral A/B/C assignment existence on all-triangular genus-zero
+maps.
