@@ -9,9 +9,8 @@ import DkMath.Tromino.PortTriangulationReduction
 /-!
 # Face-star subdivision API and axiom audit
 
-This audit checks the public indexing, semantic carrier, region split, and
-actual-port constructor surface.  The axiom printouts document the logical
-dependencies of the finite existence and cardinality results.
+This audit checks the verified indexing, semantic descriptor, region split,
+actual-port constructor surface, and semantic crossing/rotation layer.
 -/
 
 namespace DkMathTest.Tromino
@@ -31,10 +30,18 @@ open DkMath.Tromino
 #check faceStar_descriptor_card
 #check faceStar_regionCount_eq
 
+/-! ## Semantic crossing and rotation -/
+
+#check faceStarCrossDesc
+#check faceStarCrossDesc_involutive
+#check faceStarRotateDesc
+#check faceStarRotateDescEquiv
+
 /-! ## Axiom dependencies -/
 
 #print axioms exists_portFaceStarIndexing
 #print axioms FaceStarPortDesc.card
-#print axioms faceStar_descriptor_card
+#print axioms faceStarCrossDesc_involutive
+#print axioms faceStarRotateDescEquiv
 
 end DkMathTest.Tromino
