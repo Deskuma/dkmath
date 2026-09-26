@@ -343,6 +343,166 @@ def faceStarPortDecode {P : PortNetwork}
     faceStarPortEncode I (faceStarPortDecode I p) = p :=
   (faceStarPortEquiv I).symm_apply_apply p
 
+private theorem faceStarPortSumEquiv_oldSlot {P : PortNetwork}
+    {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
+    (p : PortNetworkPort P) (b : Fin 2) :
+    faceStarPortSumEquiv I
+        ⟨oldRegion I p.1, oldPortFin I p b⟩ =
+      Sum.inl (b, p) := by
+  have hi : oldPortFin I p b =
+      (faceStarOldFiberEquiv I p.1).symm (b, p.2) := by
+    apply Fin.ext
+    rfl
+  have hfiber : (faceStarOldFiberEquiv I p.1) (oldPortFin I p b) =
+      (b, p.2) := by
+    rw [hi, (faceStarOldFiberEquiv I p.1).apply_symm_apply]
+  have hs : (faceStarRegionEquiv M I).symm
+      (oldRegion I p.1) = Sum.inl p.1 := by
+    change (faceStarRegionEquiv M I).symm
+      ((faceStarRegionEquiv M I) (Sum.inl p.1)) = Sum.inl p.1
+    rw [Equiv.symm_apply_apply]
+    rfl
+  have hactual : faceStarActualRegionEquiv I
+      ⟨oldRegion I p.1, oldPortFin I p b⟩ =
+        ⟨Sum.inl p.1, oldPortFin I p b⟩ := by
+    simp only [faceStarNetwork, faceStarRegionArity, faceStarRegionEquiv, faceStarActualRegionEquiv,
+      oldRegion, oldPortFin]
+    have hfirst : (faceStarRegionEquiv M I).symm
+        ((faceStarRegionEquiv M I) (Sum.inl p.1)) =
+          (Sum.inl p.1 : Fin M.vertexCount ⊕ Fin M.faceCount) := by
+      exact (faceStarRegionEquiv M I).symm_apply_apply _
+    apply Sigma.ext hfirst
+    apply (Fin.heq_ext_iff (congrArg (fun s =>
+      (faceStarNetwork M I).arity (faceStarRegionEquiv M I s)) hfirst)).2
+    rfl
+  simp only [faceStarPortSumEquiv, Equiv.trans_apply]
+  rw [hactual]
+  simp only [Equiv.sumCongr, Equiv.sumSigmaDistrib, Equiv.coe_fn_mk, Sum.map_inl, Sum.inl.injEq]
+  change (let q := (faceStarOldFiberEquiv I p.1) (oldPortFin I p b)
+    ⟨q.1, ⟨faceStarVertexToOld p.1, q.2⟩⟩) = (b, p)
+  rw [hfiber]
+  rfl
+
+@[simp] theorem faceStarPortEncode_oldEdge {P : PortNetwork}
+    {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
+    (p : PortNetworkPort P) :
+    faceStarPortEncode I (.oldEdge p) = faceStarOldEdgePort I p := by
+  apply (faceStarPortEquiv I).injective
+  simp only [faceStarPortEncode, Equiv.apply_symm_apply,
+    faceStarPortEquiv, Equiv.trans_apply]
+  rw [show faceStarOldEdgePort I p =
+      ⟨oldRegion I p.1, oldPortFin I p 0⟩ by rfl,
+    faceStarPortSumEquiv_oldSlot I p 0]
+  rfl
+
+@[simp] theorem faceStarPortEncode_radialOld {P : PortNetwork}
+    {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
+    (p : PortNetworkPort P) :
+    faceStarPortEncode I (.radialOld p) = faceStarRadialOldPort I p := by
+  apply (faceStarPortEquiv I).injective
+  simp only [faceStarPortEncode, Equiv.apply_symm_apply,
+    faceStarPortEquiv, Equiv.trans_apply]
+  rw [show faceStarRadialOldPort I p =
+      ⟨oldRegion I p.1, oldPortFin I p 1⟩ by rfl,
+    faceStarPortSumEquiv_oldSlot I p 1]
+  rfl
+
+@[simp] theorem faceStarPortEncode_radialCenter {P : PortNetwork}
+    {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
+    (p : PortNetworkPort P) :
+    faceStarPortEncode I (.radialCenter p) = faceStarRadialCenterPort I p := by
+  apply (faceStarPortEquiv I).injective
+  simp only [faceStarPortEncode, Equiv.apply_symm_apply,
+    faceStarPortEquiv, Equiv.trans_apply]
+  let F := faceCellOfPort M.localRotation M.crossing p
+  let q : {q : PortNetworkPort P // q ∈ F.val} :=
+    ⟨p, by exact faceCellOfPort_mem _ _ _⟩
+  change .radialCenter p = faceStarSumDescEquiv (faceStarPortSumEquiv I
+    ⟨faceCenterRegion I F, centerPortFin I F q⟩)
+  have hactual : faceStarActualRegionEquiv I
+      ⟨faceCenterRegion I F, centerPortFin I F q⟩ =
+        ⟨Sum.inr (I.faceEquiv F), centerPortFin I F q⟩ := by
+    simp only [faceStarRegionEquiv, faceStarActualRegionEquiv, faceCenterRegion]
+    have hfirst : (faceStarRegionEquiv M I).symm
+        ((faceStarRegionEquiv M I) (Sum.inr (I.faceEquiv F))) =
+          (Sum.inr (I.faceEquiv F) : Fin M.vertexCount ⊕ Fin M.faceCount) := by
+      exact (faceStarRegionEquiv M I).symm_apply_apply _
+    apply Sigma.ext hfirst
+    apply (Fin.heq_ext_iff (congrArg (fun s =>
+      (faceStarNetwork M I).arity (faceStarRegionEquiv M I s)) hfirst)).2
+    rfl
+  have hF : I.faceEquiv.symm (I.faceEquiv F) = F :=
+    I.faceEquiv.symm_apply_apply F
+  let q' : {q : PortNetworkPort P //
+      q ∈ (I.faceEquiv.symm (I.faceEquiv F)).val} :=
+    (I.faceEquiv.symm_apply_apply F).symm ▸ q
+  have hport : HEq (I.facePortEquiv F q)
+      (I.facePortEquiv (I.faceEquiv.symm (I.faceEquiv F)) q') := by
+    dsimp [q']
+    congr <;> simp [hF] <;> try rfl
+    have hdom :
+        {q : PortNetworkPort P // q ∈ F.val} =
+          {q : PortNetworkPort P //
+            q ∈ (I.faceEquiv.symm (I.faceEquiv F)).val} :=
+      congrArg (fun G : PortFaceCell M.localRotation M.crossing =>
+        {q : PortNetworkPort P // q ∈ G.val}) hF.symm
+    apply Function.hfunext hdom
+    intro a a' haa
+    rfl
+  have hcard : (faceCellOfPort M.localRotation M.crossing p).val.card =
+      (I.faceEquiv.symm (I.faceEquiv
+        (faceCellOfPort M.localRotation M.crossing p))).val.card := by
+    exact congrArg (fun G => G.val.card) hF.symm
+  have hval : (I.facePortEquiv F q).val =
+      (I.facePortEquiv (I.faceEquiv.symm (I.faceEquiv F)) q').val := by
+    exact (Fin.heq_ext_iff hcard).1 hport
+  have hfin : centerPortFin I F q =
+      (faceStarCenterFiberEquiv I (I.faceEquiv F)).symm q' := by
+    apply Fin.ext
+    simpa [centerPortFin, faceStarCenterFiberEquiv] using hval
+  have hqheq : HEq q' q := by
+    dsimp [q']
+    exact eqRec_heq_self
+      (motive := fun G _ => {q : PortNetworkPort P // q ∈ G.val}) q
+      (I.faceEquiv.symm_apply_apply F).symm
+  have hqval : q'.val = q.val := by
+    apply (Subtype.heq_iff_coe_eq (fun x => by simp [hF])).1
+    exact hqheq
+  have hcenter : faceStarCenterSigmaEquiv I
+      ⟨I.faceEquiv F, centerPortFin I F q⟩ = p := by
+    simp only [faceStarCenterSigmaEquiv, Equiv.trans_apply,
+      Equiv.sigmaCongrRight]
+    rw [hfin]
+    simp
+    simpa only [q] using hqval
+  simp only [faceStarPortSumEquiv, Equiv.trans_apply]
+  rw [hactual]
+  simp [Equiv.sumSigmaDistrib, Equiv.sumCongr, hcenter]
+  rfl
+
+/-! ## Decoder calibration -/
+
+@[simp] theorem faceStarPortDecode_oldEdgePort {P : PortNetwork}
+    {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
+    (p : PortNetworkPort P) :
+    faceStarPortDecode I (faceStarOldEdgePort I p) = .oldEdge p := by
+  rw [← faceStarPortEncode_oldEdge I p]
+  exact faceStarPortDecode_encode I _
+
+@[simp] theorem faceStarPortDecode_radialOldPort {P : PortNetwork}
+    {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
+    (p : PortNetworkPort P) :
+    faceStarPortDecode I (faceStarRadialOldPort I p) = .radialOld p := by
+  rw [← faceStarPortEncode_radialOld I p]
+  exact faceStarPortDecode_encode I _
+
+@[simp] theorem faceStarPortDecode_radialCenterPort {P : PortNetwork}
+    {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
+    (p : PortNetworkPort P) :
+    faceStarPortDecode I (faceStarRadialCenterPort I p) = .radialCenter p := by
+  rw [← faceStarPortEncode_radialCenter I p]
+  exact faceStarPortDecode_encode I _
+
 def faceStarDescSource {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     FaceStarPortDesc M → Fin (faceStarNetwork M I).regionCount
@@ -484,6 +644,64 @@ theorem faceStarLocalRotation_encode {P : PortNetwork}
         (faceStarPortDecode I (faceStarPortEncode I d))) = _
   rw [faceStarPortDecode_encode]
   rfl
+
+/-! ## Exact constructor formulas -/
+
+@[simp] theorem faceStarCross_oldEdge {P : PortNetwork}
+    {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
+    (p : PortNetworkPort P) :
+    (faceStarCrossing I).cross (faceStarOldEdgePort I p) =
+      faceStarOldEdgePort I (M.crossing.cross p) := by
+  rw [← faceStarPortEncode_oldEdge I p, faceStarCrossing_encode]
+  change faceStarPortEncode I (.oldEdge (M.crossing.cross p)) = _
+  rw [faceStarPortEncode_oldEdge]
+
+@[simp] theorem faceStarCross_radialOld {P : PortNetwork}
+    {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
+    (p : PortNetworkPort P) :
+    (faceStarCrossing I).cross (faceStarRadialOldPort I p) =
+      faceStarRadialCenterPort I p := by
+  rw [← faceStarPortEncode_radialOld I p, faceStarCrossing_encode]
+  change faceStarPortEncode I (.radialCenter p) = _
+  rw [faceStarPortEncode_radialCenter]
+
+@[simp] theorem faceStarCross_radialCenter {P : PortNetwork}
+    {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
+    (p : PortNetworkPort P) :
+    (faceStarCrossing I).cross (faceStarRadialCenterPort I p) =
+      faceStarRadialOldPort I p := by
+  rw [← faceStarPortEncode_radialCenter I p, faceStarCrossing_encode]
+  change faceStarPortEncode I (.radialOld p) = _
+  rw [faceStarPortEncode_radialOld]
+
+@[simp] theorem faceStarRotate_radialOld {P : PortNetwork}
+    {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
+    (p : PortNetworkPort P) :
+    (faceStarLocalRotation I).rotate (faceStarRadialOldPort I p) =
+      faceStarOldEdgePort I p := by
+  rw [← faceStarPortEncode_radialOld I p, faceStarLocalRotation_encode]
+  change faceStarPortEncode I (.oldEdge p) = _
+  rw [faceStarPortEncode_oldEdge]
+
+@[simp] theorem faceStarRotate_oldEdge {P : PortNetwork}
+    {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
+    (p : PortNetworkPort P) :
+    (faceStarLocalRotation I).rotate (faceStarOldEdgePort I p) =
+      faceStarRadialOldPort I (M.localRotation.rotate p) := by
+  rw [← faceStarPortEncode_oldEdge I p, faceStarLocalRotation_encode]
+  change faceStarPortEncode I (.radialOld (M.localRotation.rotate p)) = _
+  rw [faceStarPortEncode_radialOld]
+
+@[simp] theorem faceStarRotate_radialCenter {P : PortNetwork}
+    {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
+    (p : PortNetworkPort P) :
+    (faceStarLocalRotation I).rotate (faceStarRadialCenterPort I p) =
+      faceStarRadialCenterPort I
+        ((portFaceEquiv M.localRotation M.crossing).symm p) := by
+  rw [← faceStarPortEncode_radialCenter I p, faceStarLocalRotation_encode]
+  change faceStarPortEncode I
+      (.radialCenter ((portFaceEquiv M.localRotation M.crossing).symm p)) = _
+  rw [faceStarPortEncode_radialCenter]
 
 /-! ## Public carrier facts -/
 

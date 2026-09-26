@@ -37,6 +37,21 @@ open DkMath.Tromino
 #check faceStarDescSource
 #check faceStarPortDecode_source
 
+/-! ## Actual-port calibration -/
+
+#check faceStarPortEncode_oldEdge
+#check faceStarPortEncode_radialOld
+#check faceStarPortEncode_radialCenter
+#check faceStarPortDecode_oldEdgePort
+#check faceStarPortDecode_radialOldPort
+#check faceStarPortDecode_radialCenterPort
+#check faceStarCross_oldEdge
+#check faceStarCross_radialOld
+#check faceStarCross_radialCenter
+#check faceStarRotate_radialOld
+#check faceStarRotate_oldEdge
+#check faceStarRotate_radialCenter
+
 /-! ## Semantic crossing and rotation -/
 
 #check faceStarCrossDesc
@@ -57,6 +72,11 @@ open DkMath.Tromino
 #print axioms faceStarPortDecode_encode
 #print axioms faceStarPortEncode_decode
 #print axioms faceStarPortDecode_source
+#print axioms faceStarPortEncode_oldEdge
+#print axioms faceStarPortEncode_radialOld
+#print axioms faceStarPortEncode_radialCenter
+#print axioms faceStarCross_oldEdge
+#print axioms faceStarRotate_radialOld
 #print axioms faceStarCrossing
 #print axioms faceStarLocalRotation
 #print axioms faceStarCrossing_encode
