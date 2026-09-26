@@ -712,3 +712,28 @@ The tetrahedral rolling/stamp game interpretation now has a formal global
 meaning: elementary face-boundary roll conservation implies closed-route
 bottom-color return on genus zero, while full orientation holonomy remains a
 strictly stronger future layer.
+
+
+### TRM-039 — Tetrahedral local closure / triangular-face normal form
+
+After TRM-038, move the remaining existence problem into the tetrahedral
+three-direction language.
+
+- model the four tetrahedron faces by the four V4 states;
+- model the six tetrahedron edges as unordered pairs of distinct faces;
+- prove their edge deltas split as two A, two B, two C opposite pairs;
+- prove fixing one face leaves exactly the three nonzero V4 roll directions;
+- introduce a bottom-face roll kernel c -> c + delta;
+- prove three nonzero V4 labels sum to zero iff they are exactly A/B/C once;
+- define triangular Port faces and prove face conservation is equivalent to
+  the local tetrahedral A/B/C pattern;
+- show conserved triangular faces are automatically dual-loop-free;
+- on all-triangular genus-zero maps, identify tetrahedral-face-assignment
+  existence with the existing dual-face-Kirchhoff/colorability existence
+  problem;
+- add finite roll-list / stamp-color transport as the proof-compatible kernel
+  for the future tetrahedron puzzle game.
+
+The checkpoint does not prove assignment existence.  It sharpens the next
+fork to (a) triangulation reduction for arbitrary maps or (b) direct
+tetrahedral A/B/C assignment existence on all-triangular genus-zero maps.
