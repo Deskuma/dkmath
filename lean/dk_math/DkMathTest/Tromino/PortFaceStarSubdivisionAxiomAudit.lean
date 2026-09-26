@@ -29,6 +29,13 @@ open DkMath.Tromino
 #check faceStarRadialCenterPort
 #check faceStar_descriptor_card
 #check faceStar_regionCount_eq
+#check faceStarPortEquiv
+#check faceStarPortEncode
+#check faceStarPortDecode
+#check faceStarPortDecode_encode
+#check faceStarPortEncode_decode
+#check faceStarDescSource
+#check faceStarPortDecode_source
 
 /-! ## Semantic crossing and rotation -/
 
@@ -36,6 +43,10 @@ open DkMath.Tromino
 #check faceStarCrossDesc_involutive
 #check faceStarRotateDesc
 #check faceStarRotateDescEquiv
+#check faceStarCrossing
+#check faceStarLocalRotation
+#check faceStarCrossing_encode
+#check faceStarLocalRotation_encode
 
 /-! ## Axiom dependencies -/
 
@@ -43,5 +54,12 @@ open DkMath.Tromino
 #print axioms FaceStarPortDesc.card
 #print axioms faceStarCrossDesc_involutive
 #print axioms faceStarRotateDescEquiv
+#print axioms faceStarPortDecode_encode
+#print axioms faceStarPortEncode_decode
+#print axioms faceStarPortDecode_source
+#print axioms faceStarCrossing
+#print axioms faceStarLocalRotation
+#print axioms faceStarCrossing_encode
+#print axioms faceStarLocalRotation_encode
 
 end DkMathTest.Tromino
