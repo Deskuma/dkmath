@@ -656,3 +656,30 @@ integral coordinate carriers.
 
 After this source bridge is closed, return to the genus-zero exactness target
 im boundary2 = ker boundary1.
+
+
+### TRM-037 — Genus-zero F2 exactness
+
+Return to the global proof line and prove the central homological statement
+
+    im boundary2 = ker boundary1
+
+for connected strong genus-zero Port combinatorial maps.
+
+The planned proof is rank-theoretic but grounded in two constructive
+connectivity statements:
+
+- connected primal maps give
+  range(boundary1) = kernel(vertex total-sum);
+- cyclic local rotations plus primal connectivity make the face-orbit
+  adjacency graph connected, so kernel(boundary2) consists exactly of
+  constant face chains.
+
+Rank-nullity plus V-E+F=2 then identifies the face-boundary space and cycle
+space. The concrete corollary is that every closed PortRegionWalk edge-parity
+cycle is an F2 sum of face boundaries.
+
+The tetrahedral rolling/stamp interpretation remains a parallel visualization
+and game-design track: one roll is one RegionWalk transition, the downward
+face stamps the region color, and closed-roll color return is V4 holonomy.
+It is intentionally kept out of the TRM-037 proof kernel.
