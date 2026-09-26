@@ -552,3 +552,22 @@ logical strength.
 This is a no-circularity audit. The current zero-holonomy object should be
 documented as tension/coboundary-like, distinct from a true Kirchhoff
 nowhere-zero graph flow. Planar dual-flow theory remains later work.
+
+
+### TRM-032 — Kirchhoff V4 flow kernel / tension separation
+
+Introduce the true nowhere-zero V4 graph-flow condition:
+
+- V4FlowAssignment supplies nonzero edge labels and reversal symmetry;
+- Kirchhoff conservation requires the XOR/sum of incident labels at every
+  region to vanish;
+- prove local parity characterization;
+- show by explicit fixtures that Kirchhoff flow and zero-holonomy tension are
+  incomparable on the same primal graph;
+- use a genus-zero triangle and the 2-region x 3-parallel-edge map as the
+  canonical contrasting pair;
+- preview the triangle-coloring / dual balanced-flow pattern.
+
+Combinatorial duality is intentionally deferred. The next design must also
+address the bridge -> dual-loop issue because PortCrossing currently forbids
+loops.
