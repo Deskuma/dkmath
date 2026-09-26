@@ -365,6 +365,62 @@ theorem faceBoundaryEdgeChain_cycle {P : PortNetwork}
   norm_num
   exact htwo
 
+theorem faceCellOfPort_eq_of_mem {P : PortNetwork}
+    (R : PortLocalRotation P) (C : PortCrossing P)
+    (p q : PortNetworkPort P) (hq : q ∈ portFaceOrbit R C p) :
+    faceCellOfPort R C q = faceCellOfPort R C p := by
+  apply Subtype.ext
+  exact portFaceOrbit_eq_of_mem R C p q hq
+
+theorem walkEdgeCoeff_cross_indicator {P : PortNetwork}
+    (C : PortCrossing P) (E : PortEdgeCell C) (p : PortNetworkPort P) :
+    (if C.cross p ∈ E.val then (1 : PortF2) else 0) =
+      if p ∈ E.val then 1 else 0 := by
+  by_cases h : p ∈ E.val
+  · have hp : edgeCellOfPort C p = E :=
+      (edgeCellOfPort_eq_iff C p E).2 h
+    have hcp : edgeCellOfPort C (C.cross p) = E := by
+      rw [edgeCellOfPort_cross]
+      exact hp
+    have hcross : C.cross p ∈ E.val :=
+      (edgeCellOfPort_eq_iff C (C.cross p) E).1 hcp
+    simp [h, hcross]
+  · have hp : edgeCellOfPort C p ≠ E := by
+      intro he
+      exact h ((edgeCellOfPort_eq_iff C p E).1 he)
+    have hcp : edgeCellOfPort C (C.cross p) ≠ E := by
+      intro he
+      apply hp
+      rw [edgeCellOfPort_cross] at he
+      exact he
+    have hcross : C.cross p ∉ E.val := by
+      intro hm
+      exact hcp ((edgeCellOfPort_eq_iff C (C.cross p) E).2 hm)
+    simp [h, hcross]
+
+theorem walkEdgeCoeff_reverseEdges {P : PortNetwork}
+    (C : PortCrossing P) (E : PortEdgeCell C)
+    (xs : List (PortNetworkPort P)) :
+    walkEdgeCoeff C E (PortRegionWalk.reverseEdges C xs) =
+      walkEdgeCoeff C E xs := by
+  induction xs with
+  | nil => rfl
+  | cons p xs ih =>
+      simp only [PortRegionWalk.reverseEdges, List.reverse_cons,
+        List.map_append, List.map_singleton]
+      rw [walkEdgeCoeff_append]
+      change walkEdgeCoeff C E (PortRegionWalk.reverseEdges C xs) +
+        walkEdgeCoeff C E [C.cross p] = walkEdgeCoeff C E (p :: xs)
+      rw [ih]
+      simp [walkEdgeCoeff, walkEdgeCoeff_cross_indicator]
+      ac_rfl
+
+theorem portWalkEdgeChain_reverse {P : PortNetwork} {C : PortCrossing P}
+    {r s : Fin P.regionCount} (W : PortRegionWalk C r s) :
+    portWalkEdgeChain W.reverse = portWalkEdgeChain W := by
+  funext E
+  exact walkEdgeCoeff_reverseEdges C E W.edges
+
 theorem portBoundary2_as_sum_basis {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (y : PortFaceChain R C) :
