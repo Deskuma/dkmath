@@ -634,3 +634,25 @@ homological layer.
 This checkpoint reconnects the original local 3+1 exchange idea to the global
 duality/homology development. It deliberately does not claim a Gaussian/
 Eisenstein ring isomorphism or genus-zero exactness.
+
+
+### TRM-036 — Integral mod-2 Gaussian/Eisenstein parity bridge
+
+Close the source-side meaning of the local frame equivalence on actual
+integral coordinate carriers.
+
+- GaussianInt coordinate parity -> V4;
+- TraceOneInt(-1) / eisensteinCoord parity -> V4;
+- both maps are surjective additive reductions;
+- Gaussian block2 relative direction equals its V4 frameDelta;
+- the three nonzero Gaussian and Eisenstein directions have the common parity
+  image {deltaA, deltaB, deltaC};
+- define the two induced mod-2 multiplication formulas on the common additive
+  V4 carrier;
+- prove the Gaussian side has a nonzero square-zero direction while the
+  Eisenstein side does not;
+- therefore the common exchange frame is additive/local, not a hidden ring
+  identification.
+
+After this source bridge is closed, return to the genus-zero exactness target
+im boundary2 = ker boundary1.
