@@ -8,63 +8,60 @@ Current branch:
 
 Current active checkpoint:
 
-    TRM-043 — Actual Constructor Calibration Closure
+    TRM-044 — Face-star cyclic rotation and triangular face dynamics
 
 Current instruction:
 
-    instruction-042.md
+    instruction-043.md
 
-Last fully accepted major theorem checkpoints:
+Last fully accepted theorem checkpoints:
 
-- TRM-037: genus-zero F2 exactness
-      im boundary2 = ker boundary1
-- TRM-038: genus-zero dual-face conservation <-> zero holonomy
-- TRM-039: tetrahedral local closure and triangular A/B/C normal form
+- TRM-037:
+  genus-zero F2 exactness
+- TRM-038:
+  genus-zero dual-face conservation <-> zero holonomy
+- TRM-039:
+  tetrahedral local closure and triangular A/B/C normal form
+- TRM-043:
+  actual constructor calibration closure
 
-Face-star progress:
+Face-star status now verified:
 
-- TRM-040:
-  indexing, semantic three-way carrier, old/center regions,
-  concrete actual-port constructors
-- TRM-041:
-  semantic crossing and semantic rotation
-- TRM-042:
-  actual dependent-Fin codec COMPLETE;
-  both codec round trips COMPLETE;
-  actual PortCrossing COMPLETE;
-  actual PortLocalRotation COMPLETE;
-  source-region proofs COMPLETE;
-  descriptor-level crossing/rotation transport formulas COMPLETE.
+- explicit face/face-port indexing;
+- semantic three-way carrier;
+- old/center region split;
+- actual port constructors;
+- semantic crossing and semantic rotation;
+- computable actual-port <-> semantic-descriptor equivalence;
+- both codec round trips;
+- actual PortCrossing;
+- actual PortLocalRotation;
+- exact source-region formulas;
+- exact 3 encoder calibrations;
+- exact 3 decoder calibrations;
+- exact 3 crossing formulas;
+- exact 3 rotation formulas.
 
-Current exact blocker:
+Current target:
 
-The pre-existing concrete constructors are not yet calibrated against
-faceStarPortEncode.
+1. prove old-region cyclicity;
+2. prove center-region cyclicity;
+3. package faceStarRotationSystem;
+4. prove exact face-step 3-cycle;
+5. prove first face return = 3;
+6. prove every face cell has cardinality 3.
 
-Need exactly:
+Do NOT work on connectivity or Euler/genus yet.
 
-    encode (.oldEdge p)      = faceStarOldEdgePort I p
-    encode (.radialOld p)    = faceStarRadialOldPort I p
-    encode (.radialCenter p) = faceStarRadialCenterPort I p
+After TRM-044:
 
-Then derive:
-
-- the three decoder constructor formulas;
-- the three exact actual crossing formulas;
-- the three exact actual rotation formulas.
-
-Do not redesign the codec.
-
-After this calibration closure:
-
-1. prove old-region and face-center cyclicity;
-2. package PortRotationSystem;
-3. prove exact 3-step triangular face dynamics;
-4. construct connected faceStarCombinatorialMap;
-5. prove count formulas and Euler/genus preservation;
-6. restrict subdivision colorings to the original map;
-7. prove universal all-triangular reduction;
-8. move to tetrahedral/Eisenstein realization.
+1. prove face-star connectivity;
+2. construct faceStarCombinatorialMap;
+3. prove V/E/F/D formulas;
+4. prove Euler/genus-zero preservation;
+5. prove coloring restriction;
+6. prove universal all-triangular reduction;
+7. then begin the tetrahedral/Eisenstein realization branch.
 
 Four Color theorem status:
 
@@ -73,8 +70,8 @@ Four Color theorem status:
 Eisenstein status:
 
 - eisensteinParity : TraceOneInt (-1) ->+ TrominoState verified;
-- canonical nonzero Eisenstein direction parity image = {A,B,C};
-- tetrahedral roll transport = V4 addition;
+- canonical nonzero Eisenstein directions reduce to {A,B,C};
+- tetrahedral roll transport is V4 addition;
 - global triangular-Port -> Eisenstein-lattice realization NOT YET constructed.
 
 ## Agent completion rule
@@ -85,7 +82,7 @@ Before completion:
 
 1. re-read the active instruction;
 2. enumerate every mandatory acceptance item;
-3. attach a concrete theorem/definition name to each;
-4. if one item is missing, report Outcome P and name it.
+3. attach a concrete theorem/definition to each;
+4. if one item is missing, report Outcome P and identify it.
 
 Actual repository state overrides stale task-report repository status.
