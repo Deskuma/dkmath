@@ -8,11 +8,11 @@ Current branch:
 
 Current active checkpoint:
 
-    TRM-044 — Face-star cyclic rotation and triangular face dynamics
+    TRM-045 — Face-star connectivity and combinatorial-map packaging
 
 Current instruction:
 
-    instruction-043.md
+    instruction-044.md
 
 Last fully accepted theorem checkpoints:
 
@@ -24,44 +24,44 @@ Last fully accepted theorem checkpoints:
   tetrahedral local closure and triangular A/B/C normal form
 - TRM-043:
   actual constructor calibration closure
+- TRM-044:
+  cyclic face-star rotation and triangular face dynamics
 
 Face-star status now verified:
 
 - explicit face/face-port indexing;
-- semantic three-way carrier;
-- old/center region split;
-- actual port constructors;
-- semantic crossing and semantic rotation;
-- computable actual-port <-> semantic-descriptor equivalence;
-- both codec round trips;
+- semantic and actual port codecs;
 - actual PortCrossing;
 - actual PortLocalRotation;
-- exact source-region formulas;
-- exact 3 encoder calibrations;
-- exact 3 decoder calibrations;
-- exact 3 crossing formulas;
-- exact 3 rotation formulas.
+- exact constructor calibration;
+- old-region and center-region rotation cyclicity;
+- faceStarRotationSystem;
+- exact face-step three-cycle;
+- primitive face return = 3;
+- canonical triangle orbit;
+- every actual port lies in a canonical triangle;
+- every face cell of the raw rotation/crossing pair has cardinality 3.
 
 Current target:
 
-1. prove old-region cyclicity;
-2. prove center-region cyclicity;
-3. package faceStarRotationSystem;
-4. prove exact face-step 3-cycle;
-5. prove first face return = 3;
-6. prove every face cell has cardinality 3.
+1. lift original region walks through oldEdge ports;
+2. attach every face-center to an old region by one radial edge;
+3. prove global face-star region connectivity;
+4. prove new region set is nonempty;
+5. package faceStarCombinatorialMap;
+6. transport the all-face-card-3 theorem to the packaged map.
 
-Do NOT work on connectivity or Euler/genus yet.
+Do NOT work on count formulas or Euler/genus in TRM-045.
 
-After TRM-044:
+After TRM-045:
 
-1. prove face-star connectivity;
-2. construct faceStarCombinatorialMap;
-3. prove V/E/F/D formulas;
-4. prove Euler/genus-zero preservation;
-5. prove coloring restriction;
-6. prove universal all-triangular reduction;
-7. then begin the tetrahedral/Eisenstein realization branch.
+1. prove D'=3D, F'=D, E'=3E=E+D, V'=V+F;
+2. prove Euler preservation;
+3. construct genus-zero face-star wrapper;
+4. prove coloring restriction to the original map;
+5. prove universal all-triangular reduction;
+6. close this branch;
+7. begin the tetrahedral/Eisenstein realization branch.
 
 Four Color theorem status:
 
