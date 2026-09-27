@@ -8,52 +8,73 @@ import DkMath.Tromino.FlowTransitionXor
 
 #print "file: DkMath.Tromino.RegionWalk"
 
+/-!
+# Region walks and holonomy
+
+A region walk is a finite list of crossing ports whose endpoints match
+successively.  Its V4 XOR is the accumulated edge label.  The walk algebra
+supports concatenation and reversal; `RegionZeroHolonomy` asserts that every
+closed walk has zero accumulated label, which is the exactness condition used
+to construct region potentials.
+-/
+
 namespace DkMath.Tromino
 
 open scoped BigOperators
 
+/-- Source region of a flow crossing port. -/
 def flowEdgeSource {N : FlowNetwork} (_C : FlowCrossing N)
     (p : FlowNetworkPort N) : Fin N.regionCount := p.1
 
+/-- Target region reached by crossing a flow port. -/
 def flowEdgeTarget {N : FlowNetwork} (C : FlowCrossing N)
     (p : FlowNetworkPort N) : Fin N.regionCount := (C.cross p).1
 
+/-- V4 label carried by a flow crossing port. -/
 def flowEdgeLabel {N : FlowNetwork} (_C : FlowCrossing N)
     (p : FlowNetworkPort N) : TrominoState :=
   (N.signature p.1).label p.2
 
+/-- Reverse a flow edge by applying the crossing involution. -/
 def reverseEdge {N : FlowNetwork} (C : FlowCrossing N)
     (p : FlowNetworkPort N) : FlowNetworkPort N := C.cross p
 
+/-- Reversal exchanges edge source with target. -/
 theorem flowEdgeSource_reverseEdge {N : FlowNetwork} (C : FlowCrossing N)
     (p : FlowNetworkPort N) :
     flowEdgeSource C (reverseEdge C p) = flowEdgeTarget C p := rfl
 
+/-- Reversal exchanges edge target with source. -/
 theorem flowEdgeTarget_reverseEdge {N : FlowNetwork} (C : FlowCrossing N)
     (p : FlowNetworkPort N) :
     flowEdgeTarget C (reverseEdge C p) = flowEdgeSource C p :=
   congrArg Sigma.fst (C.involutive p)
 
+/-- Reversing an edge twice returns the original port. -/
 theorem reverseEdge_reverseEdge {N : FlowNetwork} (C : FlowCrossing N)
     (p : FlowNetworkPort N) : reverseEdge C (reverseEdge C p) = p :=
   C.involutive p
 
+/-- Edge labels are invariant under reversal. -/
 theorem flowEdgeLabel_reverseEdge {N : FlowNetwork} (C : FlowCrossing N)
     (p : FlowNetworkPort N) :
     flowEdgeLabel C (reverseEdge C p) = flowEdgeLabel C p :=
   C.sameLabel p
 
+/-- A crossing edge connects distinct regions. -/
 theorem flowEdge_source_ne_target {N : FlowNetwork} (C : FlowCrossing N)
     (p : FlowNetworkPort N) :
     flowEdgeSource C p ≠ flowEdgeTarget C p :=
   (C.changesRegion p).symm
 
+/-- Inductive validity condition for a list of flow crossing ports. -/
 def FlowRegionWalk.Valid {N : FlowNetwork} (C : FlowCrossing N)
     (r s : Fin N.regionCount) :
     List (FlowNetworkPort N) → Prop
   | [] => r = s
   | p :: ps => p.1 = r ∧ FlowRegionWalk.Valid C (C.cross p).1 s ps
 
+/-- A valid finite walk between two flow regions. -/
 structure FlowRegionWalk {N : FlowNetwork} (C : FlowCrossing N)
     (r s : Fin N.regionCount) where
   edges : List (FlowNetworkPort N)
@@ -61,6 +82,7 @@ structure FlowRegionWalk {N : FlowNetwork} (C : FlowCrossing N)
 
 namespace FlowRegionWalk
 
+/-- A flow region walk is determined by its port list. -/
 theorem ext {N : FlowNetwork} {C : FlowCrossing N}
     {r s : Fin N.regionCount} {w₁ w₂ : FlowRegionWalk C r s}
     (h : w₁.edges = w₂.edges) : w₁ = w₂ := by
@@ -69,14 +91,17 @@ theorem ext {N : FlowNetwork} {C : FlowCrossing N}
   cases h
   rfl
 
+/-- The empty walk between equal regions. -/
 def nil {N : FlowNetwork} (C : FlowCrossing N)
     (r : Fin N.regionCount) : FlowRegionWalk C r r :=
   ⟨[], rfl⟩
 
+/-- Number of crossing ports in a walk. -/
 def length {N : FlowNetwork} {C : FlowCrossing N}
     {r s : Fin N.regionCount} (w : FlowRegionWalk C r s) : Nat :=
   w.edges.length
 
+/-- Appending composable valid walks preserves validity. -/
 theorem valid_append {N : FlowNetwork} {C : FlowCrossing N}
     {r s t : Fin N.regionCount} {xs : List (FlowNetworkPort N)}
     (hxs : FlowRegionWalk.Valid C r s xs) {ys : List (FlowNetworkPort N)}
@@ -91,6 +116,7 @@ theorem valid_append {N : FlowNetwork} {C : FlowCrossing N}
     simp only [FlowRegionWalk.Valid] at hxs ⊢
     exact ⟨hxs.1, ih hxs.2 hys⟩
 
+/-- Concatenate two walks with matching intermediate region. -/
 def append {N : FlowNetwork} {C : FlowCrossing N}
     {r s t : Fin N.regionCount}
     (w₁ : FlowRegionWalk C r s) (w₂ : FlowRegionWalk C s t) :
@@ -109,6 +135,7 @@ def append {N : FlowNetwork} {C : FlowCrossing N}
   apply FlowRegionWalk.ext
   simp [append, nil]
 
+/-- Walk concatenation is associative. -/
 theorem append_assoc {N : FlowNetwork} {C : FlowCrossing N}
     {r s t u : Fin N.regionCount}
     (w₁ : FlowRegionWalk C r s) (w₂ : FlowRegionWalk C s t)
@@ -117,14 +144,17 @@ theorem append_assoc {N : FlowNetwork} {C : FlowCrossing N}
   apply FlowRegionWalk.ext
   simp [append, List.append_assoc]
 
+/-- The one-edge walk determined by a crossing port. -/
 def singleton {N : FlowNetwork} (C : FlowCrossing N)
     (p : FlowNetworkPort N) : FlowRegionWalk C p.1 (C.cross p).1 :=
   ⟨[p], by simp [FlowRegionWalk.Valid]⟩
 
+/-- Reverse the order and orientation of a list of flow edges. -/
 def reverseEdges {N : FlowNetwork} (C : FlowCrossing N) :
     List (FlowNetworkPort N) → List (FlowNetworkPort N) :=
   fun xs => xs.reverse.map C.cross
 
+/-- Reversing edge lists reverses a valid walk. -/
 theorem valid_reverseEdges {N : FlowNetwork} {C : FlowCrossing N}
     {r s : Fin N.regionCount} {xs : List (FlowNetworkPort N)}
     (hxs : FlowRegionWalk.Valid C r s xs) :
@@ -144,6 +174,7 @@ theorem valid_reverseEdges {N : FlowNetwork} {C : FlowCrossing N}
     simpa only [reverseEdges, List.reverse_cons, List.map_append,
       List.map_singleton, hxs.1] using happ
 
+/-- Reverse a valid walk and exchange its endpoints. -/
 def reverse {N : FlowNetwork} {C : FlowCrossing N}
     {r s : Fin N.regionCount} (w : FlowRegionWalk C r s) :
     FlowRegionWalk C s r :=
@@ -155,6 +186,7 @@ def reverse {N : FlowNetwork} {C : FlowCrossing N}
   apply FlowRegionWalk.ext
   rfl
 
+/-- Reversal reverses the order of an appended pair of walks. -/
 theorem reverse_append {N : FlowNetwork} {C : FlowCrossing N}
     {r s t : Fin N.regionCount}
     (w₁ : FlowRegionWalk C r s) (w₂ : FlowRegionWalk C s t) :
@@ -162,6 +194,7 @@ theorem reverse_append {N : FlowNetwork} {C : FlowCrossing N}
   apply FlowRegionWalk.ext
   simp [reverse, append, reverseEdges, List.map_append]
 
+/-- Reversing twice recovers the original walk. -/
 theorem reverse_reverse {N : FlowNetwork} {C : FlowCrossing N}
     {r s : Fin N.regionCount} (w : FlowRegionWalk C r s) :
     reverse (reverse w) = w := by
@@ -170,6 +203,7 @@ theorem reverse_reverse {N : FlowNetwork} {C : FlowCrossing N}
 
 end FlowRegionWalk
 
+/-- XOR of the V4 labels encountered by a region walk. -/
 def regionWalkXor {N : FlowNetwork} {C : FlowCrossing N}
     {r s : Fin N.regionCount} (W : FlowRegionWalk C r s) : TrominoState :=
   (W.edges.map (flowEdgeLabel C)).sum
@@ -179,11 +213,13 @@ def regionWalkXor {N : FlowNetwork} {C : FlowCrossing N}
     regionWalkXor (FlowRegionWalk.nil C r) = 0 := by
   simp [regionWalkXor, FlowRegionWalk.nil]
 
+/-- The XOR of a singleton walk is its edge label. -/
 theorem regionWalkXor_singleton {N : FlowNetwork} (C : FlowCrossing N)
     (p : FlowNetworkPort N) :
     regionWalkXor (FlowRegionWalk.singleton C p) = flowEdgeLabel C p := by
   simp [regionWalkXor, FlowRegionWalk.singleton]
 
+/-- Walk XOR is additive under concatenation. -/
 theorem regionWalkXor_append {N : FlowNetwork} {C : FlowCrossing N}
     {r s t : Fin N.regionCount}
     (W₁ : FlowRegionWalk C r s) (W₂ : FlowRegionWalk C s t) :
@@ -191,6 +227,7 @@ theorem regionWalkXor_append {N : FlowNetwork} {C : FlowCrossing N}
       regionWalkXor W₁ + regionWalkXor W₂ := by
   simp [regionWalkXor, FlowRegionWalk.append, List.map_append, List.sum_append]
 
+/-- Reversal identifies the two endpoint labels of a crossing edge. -/
 theorem flowEdgeLabel_sum_cross {N : FlowNetwork} (C : FlowCrossing N)
     (xs : List (FlowNetworkPort N)) :
     (xs.map C.cross |>.map (flowEdgeLabel C)).sum =
@@ -203,6 +240,7 @@ theorem flowEdgeLabel_sum_cross {N : FlowNetwork} (C : FlowCrossing N)
       C.sameLabel p
     rw [hp, ih]
 
+/-- Reversing a walk leaves its V4 XOR unchanged. -/
 theorem regionWalkXor_reverse {N : FlowNetwork} {C : FlowCrossing N}
     {r s : Fin N.regionCount} (W : FlowRegionWalk C r s) :
     regionWalkXor (FlowRegionWalk.reverse W) = regionWalkXor W := by
@@ -210,12 +248,15 @@ theorem regionWalkXor_reverse {N : FlowNetwork} {C : FlowCrossing N}
     List.map_reverse, List.sum_reverse]
   exact flowEdgeLabel_sum_cross C W.edges
 
+/-- A region walk whose endpoints coincide. -/
 abbrev ClosedRegionWalk {N : FlowNetwork} (C : FlowCrossing N)
     (r : Fin N.regionCount) := FlowRegionWalk C r r
 
+/-- Every closed region walk has zero accumulated V4 XOR. -/
 def RegionZeroHolonomy {N : FlowNetwork} (C : FlowCrossing N) : Prop :=
   ∀ r (W : ClosedRegionWalk C r), regionWalkXor W = 0
 
+/-- Zero holonomy identifies XORs of walks with the same endpoints. -/
 theorem regionWalkXor_eq_of_zeroHolonomy {N : FlowNetwork} (C : FlowCrossing N)
     (hzero : RegionZeroHolonomy C)
     {r s : Fin N.regionCount} (W₁ W₂ : FlowRegionWalk C r s) :
@@ -232,6 +273,7 @@ theorem regionWalkXor_eq_of_zeroHolonomy {N : FlowNetwork} (C : FlowCrossing N)
     _ = 0 + regionWalkXor W₂ := by rw [hclosed]
     _ = regionWalkXor W₂ := by rw [zero_add]
 
+/-- Equality of endpoint XORs implies zero holonomy. -/
 theorem RegionZeroHolonomy_of_same_endpoint_xor
     {N : FlowNetwork} (C : FlowCrossing N)
     (heq : ∀ r s (W₁ W₂ : FlowRegionWalk C r s),
@@ -242,19 +284,23 @@ theorem RegionZeroHolonomy_of_same_endpoint_xor
   rw [regionWalkXor_nil] at h
   exact h.symm
 
+/-- Region reachability generated by finite valid walks. -/
 def RegionReachable {N : FlowNetwork} (C : FlowCrossing N)
     (r s : Fin N.regionCount) : Prop :=
   Nonempty (FlowRegionWalk C r s)
 
+/-- Region reachability is reflexive. -/
 theorem regionReachable_refl {N : FlowNetwork} (C : FlowCrossing N)
     (r : Fin N.regionCount) : RegionReachable C r r :=
   ⟨FlowRegionWalk.nil C r⟩
 
+/-- Region reachability is symmetric. -/
 theorem regionReachable_symm {N : FlowNetwork} (C : FlowCrossing N)
     {r s : Fin N.regionCount} : RegionReachable C r s → RegionReachable C s r := by
   rintro ⟨W⟩
   exact ⟨FlowRegionWalk.reverse W⟩
 
+/-- Region reachability is transitive. -/
 theorem regionReachable_trans {N : FlowNetwork} (C : FlowCrossing N)
     {r s t : Fin N.regionCount} :
     RegionReachable C r s → RegionReachable C s t → RegionReachable C r t := by

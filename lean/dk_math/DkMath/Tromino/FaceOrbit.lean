@@ -9,16 +9,27 @@ import DkMath.Tromino.RotationSystem
 
 #print "file: DkMath.Tromino.FaceOrbit"
 
+/-!
+# Face orbits of a flow rotation system
+
+The face step is a finite permutation of flow-network ports.  Its primitive
+orbit is the combinatorial face cell.  This module proves orbit membership,
+cardinality, equality or disjointness, and coverage of the full dart carrier.
+-/
+
 namespace DkMath.Tromino
 
+/-- The total number of dependent ports in a flow network. -/
 def totalPortCount (N : FlowNetwork) : Nat :=
   Fintype.card (FlowNetworkPort N)
 
+/-- The finite primitive face orbit of a flow-network port. -/
 def faceOrbit {N : FlowNetwork} (R : FlowLocalRotation N)
     (C : FlowCrossing N) (p : FlowNetworkPort N) : Finset (FlowNetworkPort N) :=
   (Finset.range (firstFaceReturn R C p)).image
     (fun n => (faceStep R C)^[n] p)
 
+/-- A face orbit contains its starting port. -/
 theorem faceOrbit_contains {N : FlowNetwork} (R : FlowLocalRotation N)
     (C : FlowCrossing N) (p : FlowNetworkPort N) :
     p ∈ faceOrbit R C p := by
@@ -26,6 +37,7 @@ theorem faceOrbit_contains {N : FlowNetwork} (R : FlowLocalRotation N)
   exact ⟨0, Finset.mem_range.mpr (firstFaceReturn_spec R C p).1,
     by simp⟩
 
+/-- Every face-step iterate belongs to the primitive orbit. -/
 theorem faceOrbit_mem_iterate {N : FlowNetwork} (R : FlowLocalRotation N)
     (C : FlowCrossing N) (p : FlowNetworkPort N) (n : Nat) :
     (faceStep R C)^[n] p ∈ faceOrbit R C p := by
@@ -39,6 +51,7 @@ theorem faceOrbit_mem_iterate {N : FlowNetwork} (R : FlowLocalRotation N)
     Finset.mem_range.mpr (Nat.mod_lt n hk), ?_⟩
   exact hperiod.iterate_mod_apply n
 
+/-- Orbit membership is equivalent to face-step reachability. -/
 theorem faceOrbit_mem_iff_iterate {N : FlowNetwork} (R : FlowLocalRotation N)
     (C : FlowCrossing N) (p q : FlowNetworkPort N) :
     q ∈ faceOrbit R C p ↔
@@ -50,6 +63,7 @@ theorem faceOrbit_mem_iff_iterate {N : FlowNetwork} (R : FlowLocalRotation N)
   · rintro ⟨n, rfl⟩
     exact faceOrbit_mem_iterate R C p n
 
+/-- Iterates before the first return are pairwise distinct. -/
 theorem faceOrbit_iterate_distinct
     {N : FlowNetwork} (R : FlowLocalRotation N) (C : FlowCrossing N)
     (p : FlowNetworkPort N) {i j : Nat}
@@ -79,6 +93,7 @@ theorem faceOrbit_iterate_distinct
       exact False.elim
         ((firstFaceReturn_primitive R C p).2.2 (i - j) hpos hlt hcancel)
 
+/-- The orbit cardinality equals the first face-return length. -/
 theorem faceOrbit_card {N : FlowNetwork} (R : FlowLocalRotation N)
     (C : FlowCrossing N) (p : FlowNetworkPort N) :
     (faceOrbit R C p).card = firstFaceReturn R C p := by
@@ -93,6 +108,7 @@ theorem faceOrbit_card {N : FlowNetwork} (R : FlowLocalRotation N)
             (Finset.mem_range.mp hi) (Finset.mem_range.mp hj) hij
     _ = firstFaceReturn R C p := Finset.card_range _
 
+/-- Reversing a face boundary stays in the same face orbit. -/
 theorem faceOrbit_reverse_mem {N : FlowNetwork} (R : FlowLocalRotation N)
     (C : FlowCrossing N) (p q : FlowNetworkPort N)
     (hq : q ∈ faceOrbit R C p) :
@@ -112,6 +128,7 @@ theorem faceOrbit_reverse_mem {N : FlowNetwork} (R : FlowLocalRotation N)
       rw [Nat.sub_add_cancel (Nat.le_of_lt hnlt)]
     _ = p := hperiod
 
+/-- An orbit based at an orbit member is contained in the original orbit. -/
 theorem faceOrbit_subset_of_mem {N : FlowNetwork} (R : FlowLocalRotation N)
     (C : FlowCrossing N) (p q : FlowNetworkPort N)
     (hq : q ∈ faceOrbit R C p) :
@@ -124,6 +141,7 @@ theorem faceOrbit_subset_of_mem {N : FlowNetwork} (R : FlowLocalRotation N)
   rw [Function.iterate_add_apply, hn]
   exact hmx
 
+/-- Orbits based at members of one orbit are equal. -/
 theorem faceOrbit_eq_of_mem {N : FlowNetwork} (R : FlowLocalRotation N)
     (C : FlowCrossing N) (p q : FlowNetworkPort N)
     (hq : q ∈ faceOrbit R C p) :
@@ -133,33 +151,39 @@ theorem faceOrbit_eq_of_mem {N : FlowNetwork} (R : FlowLocalRotation N)
   · exact faceOrbit_subset_of_mem R C q p
       (faceOrbit_reverse_mem R C p q hq)
 
+/-- Equivalence relation of lying in the same face orbit. -/
 def SameFaceOrbit {N : FlowNetwork} (R : FlowLocalRotation N)
     (C : FlowCrossing N) (p q : FlowNetworkPort N) : Prop :=
   q ∈ faceOrbit R C p
 
+/-- Same-face orbit is reflexive. -/
 theorem sameFaceOrbit_refl {N : FlowNetwork} (R : FlowLocalRotation N)
     (C : FlowCrossing N) (p : FlowNetworkPort N) :
     SameFaceOrbit R C p p :=
   faceOrbit_contains R C p
 
+/-- Same-face orbit is symmetric. -/
 theorem sameFaceOrbit_symm {N : FlowNetwork} (R : FlowLocalRotation N)
     (C : FlowCrossing N) {p q : FlowNetworkPort N}
     (hpq : SameFaceOrbit R C p q) :
     SameFaceOrbit R C q p :=
   faceOrbit_reverse_mem R C p q hpq
 
+/-- Same-face orbit is transitive. -/
 theorem sameFaceOrbit_trans {N : FlowNetwork} (R : FlowLocalRotation N)
     (C : FlowCrossing N) {p q r : FlowNetworkPort N}
     (hpq : SameFaceOrbit R C p q) (hqr : SameFaceOrbit R C q r) :
     SameFaceOrbit R C p r := by
   exact faceOrbit_subset_of_mem R C p q hpq hqr
 
+/-- Setoid whose equivalence classes are the face orbits. -/
 def faceOrbitSetoid {N : FlowNetwork} (R : FlowLocalRotation N)
     (C : FlowCrossing N) : Setoid (FlowNetworkPort N) where
   r := SameFaceOrbit R C
   iseqv := ⟨sameFaceOrbit_refl R C, @sameFaceOrbit_symm N R C,
     @sameFaceOrbit_trans N R C⟩
 
+/-- Two face orbits are either equal or disjoint. -/
 theorem faceOrbit_eq_or_disjoint {N : FlowNetwork} (R : FlowLocalRotation N)
     (C : FlowCrossing N) (p q : FlowNetworkPort N) :
     faceOrbit R C p = faceOrbit R C q ∨
@@ -173,11 +197,13 @@ theorem faceOrbit_eq_or_disjoint {N : FlowNetwork} (R : FlowLocalRotation N)
     exact (faceOrbit_eq_of_mem R C p x hxp).symm.trans
       (faceOrbit_eq_of_mem R C q x hxq)
 
+/-- Face orbits cover every flow-network port. -/
 theorem faceOrbit_coverage {N : FlowNetwork} (R : FlowLocalRotation N)
     (C : FlowCrossing N) :
     ∀ p : FlowNetworkPort N, p ∈ faceOrbit R C p :=
   fun p => faceOrbit_contains R C p
 
+/-- First return length is constant on a face orbit. -/
 theorem firstFaceReturn_eq_of_mem {N : FlowNetwork}
     (R : FlowLocalRotation N) (C : FlowCrossing N)
     (p q : FlowNetworkPort N) (hq : q ∈ faceOrbit R C p) :
