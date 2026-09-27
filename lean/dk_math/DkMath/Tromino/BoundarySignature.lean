@@ -161,7 +161,7 @@ theorem boundaryLabelCount_sum (S : BoundarySignature) :
           exact hpoint i
     _ = S.arity := by simp
 
-set_option linter.unusedSimpArgs false in
+/-- The first V4 coordinate counts delta-A and delta-C labels mod two. -/
 theorem boundarySum_fst (S : BoundarySignature) :
     (boundarySum S).1 =
       (boundaryLabelCount S deltaA + boundaryLabelCount S deltaC : ZMod 2) := by
@@ -176,9 +176,9 @@ theorem boundarySum_fst (S : BoundarySignature) :
       apply Finset.sum_congr rfl
       intro i hi
       rcases boundaryDelta_eq_deltaA_or_deltaB_or_deltaC S i with hA | hB | hC
-      · simp [hA, deltaA, deltaB, deltaC]
+      · simp [hA, deltaA,         deltaC]
       · simp [hB, deltaA, deltaB, deltaC]
-      · simp [hC, deltaA, deltaB, deltaC]
+      · simp [hC, deltaA,         deltaC]
     _ = (Finset.sum Finset.univ
           (fun i : Fin S.arity =>
             if boundaryDelta S i = deltaA then (1 : ZMod 2) else 0)) +
@@ -189,7 +189,7 @@ theorem boundarySum_fst (S : BoundarySignature) :
     _ = (boundaryLabelCount S deltaA + boundaryLabelCount S deltaC : ZMod 2) := by
       rw [← boundaryLabelCount_cast, ← boundaryLabelCount_cast]
 
-set_option linter.unusedSimpArgs false in
+/-- The second V4 coordinate counts delta-B and delta-C labels mod two. -/
 theorem boundarySum_snd (S : BoundarySignature) :
     (boundarySum S).2 =
       (boundaryLabelCount S deltaB + boundaryLabelCount S deltaC : ZMod 2) := by
@@ -205,8 +205,8 @@ theorem boundarySum_snd (S : BoundarySignature) :
       intro i hi
       rcases boundaryDelta_eq_deltaA_or_deltaB_or_deltaC S i with hA | hB | hC
       · simp [hA, deltaA, deltaB, deltaC]
-      · simp [hB, deltaA, deltaB, deltaC]
-      · simp [hC, deltaA, deltaB, deltaC]
+      · simp [hB,         deltaB, deltaC]
+      · simp [hC,         deltaB, deltaC]
     _ = (Finset.sum Finset.univ
           (fun i : Fin S.arity =>
             if boundaryDelta S i = deltaB then (1 : ZMod 2) else 0)) +
@@ -217,11 +217,13 @@ theorem boundarySum_snd (S : BoundarySignature) :
     _ = (boundaryLabelCount S deltaB + boundaryLabelCount S deltaC : ZMod 2) := by
       rw [← boundaryLabelCount_cast, ← boundaryLabelCount_cast]
 
+/-- In `ZMod 2`, a sum of natural casts vanishes exactly at equal parity. -/
 theorem zmodTwo_natCast_add_eq_zero_iff_mod_eq (m n : Nat) :
     ((m + n : Nat) : ZMod 2) = 0 ↔ m % 2 = n % 2 := by
   rw [ZMod.natCast_eq_zero_iff_even, Nat.even_iff]
   omega
 
+/-- Boundary conservation is equivalent to two parity equations. -/
 theorem boundaryConserved_iff_parity (S : BoundarySignature) :
     BoundaryConserved S ↔
       boundaryLabelCount S deltaA % 2 = boundaryLabelCount S deltaC % 2 ∧
@@ -241,6 +243,7 @@ theorem boundaryConserved_iff_parity (S : BoundarySignature) :
     · rw [boundarySum_snd, ← Nat.cast_add]
       exact (zmodTwo_natCast_add_eq_zero_iff_mod_eq _ _).mpr hBC
 
+/-- A conserved boundary has either all-even or all-odd nonzero fibers. -/
 theorem boundaryConserved_even_or_odd (S : BoundarySignature)
     (hconserved : BoundaryConserved S) :
     (boundaryLabelCount S deltaA % 2 = 0 ∧
@@ -256,6 +259,7 @@ theorem boundaryConserved_even_or_odd (S : BoundarySignature)
   · right
     exact ⟨hA, by omega, by omega⟩
 
+/-- The empty signature, whose boundary sum is vacuously zero. -/
 def emptyBoundarySignature : BoundarySignature where
   arity := 0
   contact := fun i => Fin.elim0 i
@@ -263,6 +267,7 @@ def emptyBoundarySignature : BoundarySignature where
     intro i
     exact Fin.elim0 i
 
+/-- The empty boundary signature is conserved. -/
 theorem emptyBoundarySignature_conserved :
     BoundaryConserved emptyBoundarySignature := by
   unfold BoundaryConserved boundarySum

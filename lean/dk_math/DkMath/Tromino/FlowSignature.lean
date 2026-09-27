@@ -105,7 +105,7 @@ theorem flowLabelCount_sum (F : FlowSignature) :
       exact hpoint i
     _ = F.arity := by simp
 
-set_option linter.unusedSimpArgs false in
+/-- The first V4 coordinate is the parity of delta-A plus delta-C. -/
 theorem flowSum_fst (F : FlowSignature) :
     (flowSum F).1 =
       (flowLabelCount F deltaA + flowLabelCount F deltaC : ZMod 2) := by
@@ -119,9 +119,9 @@ theorem flowSum_fst (F : FlowSignature) :
       apply Finset.sum_congr rfl
       intro i hi
       rcases flowLabel_eq_deltaA_or_deltaB_or_deltaC F i with hA | hB | hC
-      · simp [hA, deltaA, deltaB, deltaC]
+      · simp [hA, deltaA,         deltaC]
       · simp [hB, deltaA, deltaB, deltaC]
-      · simp [hC, deltaA, deltaB, deltaC]
+      · simp [hC, deltaA,         deltaC]
     _ = (Finset.sum Finset.univ
           (fun i : Fin F.arity => if F.label i = deltaA then (1 : ZMod 2) else 0)) +
           Finset.sum Finset.univ
@@ -130,7 +130,7 @@ theorem flowSum_fst (F : FlowSignature) :
     _ = (flowLabelCount F deltaA + flowLabelCount F deltaC : ZMod 2) := by
       rw [← flowLabelCount_cast, ← flowLabelCount_cast]
 
-set_option linter.unusedSimpArgs false in
+/-- The second V4 coordinate is the parity of delta-B plus delta-C. -/
 theorem flowSum_snd (F : FlowSignature) :
     (flowSum F).2 =
       (flowLabelCount F deltaB + flowLabelCount F deltaC : ZMod 2) := by
@@ -145,8 +145,8 @@ theorem flowSum_snd (F : FlowSignature) :
       intro i hi
       rcases flowLabel_eq_deltaA_or_deltaB_or_deltaC F i with hA | hB | hC
       · simp [hA, deltaA, deltaB, deltaC]
-      · simp [hB, deltaA, deltaB, deltaC]
-      · simp [hC, deltaA, deltaB, deltaC]
+      · simp [hB,         deltaB, deltaC]
+      · simp [hC,         deltaB, deltaC]
     _ = (Finset.sum Finset.univ
           (fun i : Fin F.arity => if F.label i = deltaB then (1 : ZMod 2) else 0)) +
           Finset.sum Finset.univ
@@ -155,6 +155,7 @@ theorem flowSum_snd (F : FlowSignature) :
     _ = (flowLabelCount F deltaB + flowLabelCount F deltaC : ZMod 2) := by
       rw [← flowLabelCount_cast, ← flowLabelCount_cast]
 
+/-- Flow conservation is equivalent to two label-parity equations. -/
 theorem flowConserved_iff_parity (F : FlowSignature) :
     FlowConserved F ↔
       flowLabelCount F deltaA % 2 = flowLabelCount F deltaC % 2 ∧
@@ -174,6 +175,7 @@ theorem flowConserved_iff_parity (F : FlowSignature) :
     · rw [flowSum_snd, ← Nat.cast_add]
       exact (zmodTwo_natCast_add_eq_zero_iff_mod_eq _ _).mpr hBC
 
+/-- A conserved flow has all-even or all-odd nonzero label fibers. -/
 theorem flowConserved_even_or_odd (F : FlowSignature)
     (hconserved : FlowConserved F) :
     (flowLabelCount F deltaA % 2 = 0 ∧
@@ -187,15 +189,19 @@ theorem flowConserved_even_or_odd (F : FlowSignature)
   · right
     exact ⟨hA, by omega, by omega⟩
 
+/-- The flow sum of a converted signature is the original boundary sum. -/
 theorem flowSum_toFlowSignature (S : BoundarySignature) :
     flowSum S.toFlowSignature = boundarySum S := rfl
 
+/-- Boundary conservation is preserved by the flow conversion. -/
 theorem flowConserved_toFlowSignature_iff (S : BoundarySignature) :
     FlowConserved S.toFlowSignature ↔ BoundaryConserved S := Iff.rfl
 
+/-- Label counts are preserved by the boundary-to-flow conversion. -/
 theorem flowLabelCount_toFlowSignature (S : BoundarySignature) (delta : TrominoState) :
     flowLabelCount S.toFlowSignature delta = boundaryLabelCount S delta := rfl
 
+/-- The boundary parity criterion can be stated in flow notation. -/
 theorem boundaryConserved_iff_flowConserved_parity (S : BoundarySignature) :
     BoundaryConserved S ↔
       flowLabelCount S.toFlowSignature deltaA % 2 =
@@ -205,9 +211,11 @@ theorem boundaryConserved_iff_flowConserved_parity (S : BoundarySignature) :
   rw [← flowConserved_toFlowSignature_iff S]
   exact flowConserved_iff_parity S.toFlowSignature
 
+/-- Translate both sides of a contact by one common V4 state. -/
 def exchangeBoundaryContact (gamma : TrominoState) (c : BoundaryContact) : BoundaryContact :=
   { inside := exchange gamma c.inside, outside := exchange gamma c.outside }
 
+/-- Common translation leaves a contact delta unchanged. -/
 theorem contactDelta_exchangeBoundaryContact (gamma : TrominoState) (c : BoundaryContact) :
     contactDelta (exchangeBoundaryContact gamma c) = contactDelta c := by
   simp only [contactDelta, exchangeBoundaryContact, forbiddenDelta, exchange]
@@ -216,6 +224,7 @@ theorem contactDelta_exchangeBoundaryContact (gamma : TrominoState) (c : Boundar
         (c.inside + c.outside) + (gamma + gamma) := by ac_rfl
     _ = c.inside + c.outside := by rw [state_add_self, add_zero]
 
+/-- A contact from `x` to `x + delta` has delta exactly `delta`. -/
 theorem contactDelta_same_of_translation (x delta : TrominoState) :
     contactDelta { inside := x, outside := x + delta } = delta := by
   simp only [contactDelta, forbiddenDelta]
