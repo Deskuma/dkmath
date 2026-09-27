@@ -13,20 +13,33 @@ namespace DkMath.Tromino
 
 open scoped BigOperators
 
+/-!
+# Triangular face patterns and tetrahedral assignments
+
+On a triangular face, three nonzero V4 labels sum to zero exactly when they
+are the three distinct nonzero states. This turns dual-face conservation into
+the local A/B/C tetrahedral pattern and, in genus zero, into four-state
+colorability.
+-/
+
+/-- A face is triangular when its boundary port set has cardinality three. -/
 def IsTriangularPortFace {P : PortNetwork} {R : PortLocalRotation P}
     {C : PortCrossing P} (F : PortFaceCell R C) : Prop :=
   F.val.card = 3
 
+/-- Every face cell of a combinatorial map is triangular. -/
 def PortAllFacesTriangular {P : PortNetwork}
     (M : PortCombinatorialMap P) : Prop :=
   ∀ F : PortFaceCell M.localRotation M.crossing,
     IsTriangularPortFace F
 
+/-- The set of V4 labels appearing on a face boundary. -/
 def facePortLabelSet {P : PortNetwork} {R : PortLocalRotation P}
     {C : PortCrossing P} (A : V4FlowAssignment C)
     (F : PortFaceCell R C) : Finset TrominoState :=
   F.val.image A.label
 
+/-- Nowhere-zero V4 labels can only be the three nonzero tetrahedral states. -/
 theorem facePortLabelSet_subset_deltaSet {P : PortNetwork}
     {R : PortLocalRotation P} {C : PortCrossing P}
     (A : V4FlowAssignment C) (F : PortFaceCell R C) :
@@ -38,6 +51,7 @@ theorem facePortLabelSet_subset_deltaSet {P : PortNetwork}
   · simp [h]
   · simp [h]
 
+/-- The face-cell sum agrees with the direct sum over the face boundary. -/
 theorem faceCellLabelSum_eq_facePortLabelSum {P : PortNetwork}
     {R : PortLocalRotation P} {C : PortCrossing P}
     (A : V4FlowAssignment C) (F : PortFaceCell R C) :
@@ -47,6 +61,8 @@ theorem faceCellLabelSum_eq_facePortLabelSum {P : PortNetwork}
   rw [← hF, faceCellLabelSum_faceCellOfPort]
   rfl
 
+/-- On a triangle, zero boundary sum is equivalent to seeing A, B, and C
+exactly once. -/
 theorem triangular_faceLabelSet_iff_faceCellLabelSum_zero
     {P : PortNetwork} {R : PortLocalRotation P} {C : PortCrossing P}
     (A : V4FlowAssignment C) (F : PortFaceCell R C)
@@ -66,6 +82,7 @@ theorem triangular_faceLabelSet_iff_faceCellLabelSum_zero
   exact three_nonzero_sum_zero_iff_delta_finset
     (A.nonzero p) (A.nonzero q) (A.nonzero r)
 
+/-- A conserved triangular face has pairwise distinct boundary labels. -/
 theorem conserved_triangular_face_label_injective
     {P : PortNetwork} {R : PortLocalRotation P} {C : PortCrossing P}
     (A : V4FlowAssignment C) (F : PortFaceCell R C)
@@ -77,6 +94,8 @@ theorem conserved_triangular_face_label_injective
     decide
   exact (Finset.card_image_iff.mp hcard)
 
+/-- A conserved triangular face cannot contain both darts of one crossing
+edge. -/
 theorem conserved_triangular_face_no_crossing_pair
     {P : PortNetwork} {R : PortLocalRotation P} {C : PortCrossing P}
     (A : V4FlowAssignment C) (F : PortFaceCell R C)
@@ -88,12 +107,15 @@ theorem conserved_triangular_face_no_crossing_pair
   have hpc : p = C.cross p := hinj hp hcross heq
   exact C.cross_ne p hpc.symm
 
+/-- The local A/B/C pattern required of a tetrahedral triangular face. -/
 def IsTetrahedralFacePattern {P : PortNetwork}
     {R : PortLocalRotation P} {C : PortCrossing P}
     (A : V4FlowAssignment C) (F : PortFaceCell R C) : Prop :=
   IsTriangularPortFace F ∧
     facePortLabelSet A F = ({deltaA, deltaB, deltaC} : Finset TrominoState)
 
+/-- On an all-triangular map, dual-face Kirchhoff conservation is equivalent
+to the tetrahedral pattern on every face. -/
 theorem isDualFaceKirchhoff_iff_tetrahedralFacePattern
     {P : PortNetwork} (M : PortCombinatorialMap P)
     (htri : PortAllFacesTriangular M) (A : V4FlowAssignment M.crossing) :
@@ -111,12 +133,16 @@ theorem isDualFaceKirchhoff_iff_tetrahedralFacePattern
     exact (triangular_faceLabelSet_iff_faceCellLabelSum_zero A F (h F).1).mpr
       (h F).2
 
+/-- Existence of one V4 assignment realizing the tetrahedral pattern on every
+face of a combinatorial map. -/
 def HasTetrahedralFaceAssignment {P : PortNetwork}
     (M : PortCombinatorialMap P) : Prop :=
   ∃ A : V4FlowAssignment M.crossing,
     ∀ F : PortFaceCell M.localRotation M.crossing,
       IsTetrahedralFacePattern A F
 
+/-- For a genus-zero all-triangular map, tetrahedral assignments are exactly
+dual-face Kirchhoff assignments. -/
 theorem hasTetrahedralFaceAssignment_iff_dualFaceKirchhoff
     {P : PortNetwork} (G : PortGenusZeroCombinatorialMap P)
     (htri : PortAllFacesTriangular G.map) :
@@ -130,6 +156,8 @@ theorem hasTetrahedralFaceAssignment_iff_dualFaceKirchhoff
     refine ⟨A, ?_⟩
     exact (isDualFaceKirchhoff_iff_tetrahedralFacePattern G.map htri A).mp hA
 
+/-- The local tetrahedral formulation is equivalent to four-state
+colorability on triangular genus-zero maps. -/
 theorem hasTetrahedralFaceAssignment_iff_fourStateColorable
     {P : PortNetwork} (G : PortGenusZeroCombinatorialMap P)
     (htri : PortAllFacesTriangular G.map) :
@@ -138,6 +166,8 @@ theorem hasTetrahedralFaceAssignment_iff_fourStateColorable
   rw [hasTetrahedralFaceAssignment_iff_dualFaceKirchhoff G htri]
   exact G.dualFaceKirchhoff_iff_colorable
 
+/-- Conserved triangular faces exclude crossing pairs, hence eliminate dual
+loops. -/
 theorem allTriangular_dualFaceKirchhoff_dualLoopFree
     {P : PortNetwork} (M : PortCombinatorialMap P)
     (htri : PortAllFacesTriangular M)
@@ -152,11 +182,14 @@ theorem allTriangular_dualFaceKirchhoff_dualLoopFree
   apply conserved_triangular_face_no_crossing_pair A F (htri F) hsum p hp
   exact hloop
 
+/-- Transport a base tetrahedron color along a flow walk by V4 addition. -/
 def tetraStampColor {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) (c : TrominoState) {r s : Fin P.regionCount}
     (W : FlowRegionWalk A.toFlowCrossing r s) : TrominoState :=
   c + regionWalkXor W
 
+/-- Stamping along a concatenated walk equals successive stamping along its
+two pieces. -/
 theorem tetraStampColor_append {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) (c : TrominoState)
     {r s t : Fin P.regionCount}
@@ -168,6 +201,8 @@ theorem tetraStampColor_append {P : PortNetwork} {C : PortCrossing P}
   rw [regionWalkXor_append W₁ W₂]
   ac_rfl
 
+/-- Zero holonomy makes the tetrahedral stamp return to its initial color on
+every closed walk. -/
 theorem tetraStampColor_closed_of_zeroHolonomy
     {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) (c : TrominoState)

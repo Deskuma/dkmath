@@ -14,6 +14,12 @@ This file records the finite, multigraph-safe chain spaces attached to a port
 combinatorial map.  Edge cells are crossing orbits and face cells are face
 orbits; in particular, parallel edges are not identified by a `SimpleGraph`.
 The endpoint of this file is the chain condition `im ∂₂ ≤ ker ∂₁`.
+
+Here `∂₁` records the two endpoints of each crossing orbit and `∂₂`
+records the edge boundary of each face orbit, all over `ZMod 2`.  Working
+with orbit cells rather than a simple graph preserves parallel edges and
+makes the later genus-zero exactness argument a finite linear-algebra
+statement.
 -/
 
 namespace DkMath.Tromino

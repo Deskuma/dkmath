@@ -20,6 +20,8 @@ namespace DkMath.Tromino
 
 /-! ## Triangular packaging and old-edge calibration -/
 
+/-- Every face cell of the packaged face-star map has the three darts created
+by the face-star construction. -/
 theorem faceStar_allFacesTriangular {P : PortNetwork}
     (M : PortCombinatorialMap P) (I : PortFaceStarIndexing M) :
     PortAllFacesTriangular (faceStarCombinatorialMap M I) := by
@@ -27,18 +29,23 @@ theorem faceStar_allFacesTriangular {P : PortNetwork}
   change F.val.card = 3
   exact faceStarCombinatorialMap_everyFaceCell_card_three I F
 
+/-- The genus-zero wrapper inherits triangularity from its packaged map. -/
 theorem faceStarGenusZero_allFacesTriangular {P : PortNetwork}
     (G : PortGenusZeroCombinatorialMap P) (I : PortFaceStarIndexing G.map) :
     PortAllFacesTriangular (faceStarGenusZero G I).map := by
   rw [faceStarGenusZero_map]
   exact faceStar_allFacesTriangular G.map I
 
+/-- The source region of an old-edge port is the old-region copy of the
+original source region. -/
 theorem faceStar_oldEdge_source {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (p : PortNetworkPort P) :
     (faceStarOldEdgePort I p).1 = oldRegion I p.1 :=
   faceStarOldEdgePort_source I p
 
+/-- The old-edge crossing transports the original target region to its
+old-region copy in the face-star map. -/
 theorem faceStar_oldEdge_target {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (p : PortNetworkPort P) :
@@ -50,16 +57,21 @@ theorem faceStar_oldEdge_target {P : PortNetwork}
 
 /-! ## Old-region embedding and adjacency -/
 
+/-- The canonical inclusion of original regions into the old-region part of
+the face-star region carrier. -/
 def faceStarOldRegionEmbedding {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     Fin P.regionCount → Fin (faceStarNetwork M I).regionCount :=
   oldRegion I
 
+/-- Distinct original regions remain distinct after the face-star inclusion. -/
 theorem faceStarOldRegionEmbedding_injective {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     Function.Injective (faceStarOldRegionEmbedding I) := by
   exact oldRegion_injective I
 
+/-- Each original edge yields an adjacency between the corresponding old
+regions in the face-star graph. -/
 theorem faceStar_oldAdjacency_of_port {P : PortNetwork}
     (M : PortCombinatorialMap P) (I : PortFaceStarIndexing M)
     (p : PortNetworkPort P) :
@@ -71,6 +83,7 @@ theorem faceStar_oldAdjacency_of_port {P : PortNetwork}
   · exact faceStar_oldEdge_source I p
   · exact faceStar_oldEdge_target I p
 
+/-- Every original region adjacency embeds through the old-region inclusion. -/
 theorem faceStar_oldAdjacency {P : PortNetwork}
     (M : PortCombinatorialMap P) (I : PortFaceStarIndexing M)
     {r s : Fin P.regionCount}
@@ -87,6 +100,7 @@ theorem faceStar_oldAdjacency {P : PortNetwork}
 
 /-! ## Pullback of a face-star coloring -/
 
+/-- Pull a face-star region coloring back along the old-region embedding. -/
 def faceStarRestrictColoring {P : PortNetwork}
     (M : PortCombinatorialMap P) (I : PortFaceStarIndexing M)
     (K : (portRegionSimpleGraph
@@ -96,6 +110,8 @@ def faceStarRestrictColoring {P : PortNetwork}
     intro r s h
     exact K.valid (faceStar_oldAdjacency M I h))
 
+/-- Evaluation of the restricted coloring is exactly evaluation of the source
+coloring at the corresponding old region. -/
 @[simp] theorem faceStarRestrictColoring_apply {P : PortNetwork}
     (M : PortCombinatorialMap P) (I : PortFaceStarIndexing M)
     (K : (portRegionSimpleGraph
@@ -103,6 +119,7 @@ def faceStarRestrictColoring {P : PortNetwork}
     (r : Fin P.regionCount) :
     faceStarRestrictColoring M I K r = K (oldRegion I r) := rfl
 
+/-- The pulled-back coloring separates the endpoints of every original edge. -/
 theorem faceStarRestrictColoring_edge_ne {P : PortNetwork}
     (M : PortCombinatorialMap P) (I : PortFaceStarIndexing M)
     (K : (portRegionSimpleGraph
@@ -115,6 +132,8 @@ theorem faceStarRestrictColoring_edge_ne {P : PortNetwork}
 
 /-! ## One-way colorability reduction -/
 
+/-- Four-state colorability of the face-star graph implies four-state
+colorability of the original graph. -/
 theorem faceStar_colorable_imp_original {P : PortNetwork}
     (M : PortCombinatorialMap P) (I : PortFaceStarIndexing M) :
     PortFourStateColorable (faceStarCombinatorialMap M I).crossing →
@@ -122,6 +141,8 @@ theorem faceStar_colorable_imp_original {P : PortNetwork}
   rintro ⟨K⟩
   exact ⟨faceStarRestrictColoring M I K⟩
 
+/-- The preceding restriction specializes to the genus-zero face-star
+wrapper. -/
 theorem faceStarGenusZero_colorable_imp_original {P : PortNetwork}
     (G : PortGenusZeroCombinatorialMap P) (I : PortFaceStarIndexing G.map) :
     PortFourStateColorable (faceStarGenusZero G I).map.crossing →
@@ -131,6 +152,8 @@ theorem faceStarGenusZero_colorable_imp_original {P : PortNetwork}
 
 /-! ## Tetrahedral consequence on the packaged face-star map -/
 
+/-- On the triangular genus-zero face-star map, tetrahedral assignments and
+four-state colorings are equivalent. -/
 theorem faceStar_tetrahedral_iff_colorable {P : PortNetwork}
     (G : PortGenusZeroCombinatorialMap P) (I : PortFaceStarIndexing G.map) :
     HasTetrahedralFaceAssignment (faceStarGenusZero G I).map ↔
@@ -138,6 +161,8 @@ theorem faceStar_tetrahedral_iff_colorable {P : PortNetwork}
   exact hasTetrahedralFaceAssignment_iff_fourStateColorable
     (faceStarGenusZero G I) (faceStarGenusZero_allFacesTriangular G I)
 
+/-- A tetrahedral assignment on the face-star map restricts to a coloring of
+the original genus-zero map. -/
 theorem faceStar_tetrahedral_imp_original_colorable {P : PortNetwork}
     (G : PortGenusZeroCombinatorialMap P) (I : PortFaceStarIndexing G.map) :
     HasTetrahedralFaceAssignment (faceStarGenusZero G I).map →

@@ -18,6 +18,8 @@ namespace DkMath.Tromino
 
 /-! ## Port count and old-port face cells -/
 
+/-- The three descriptor families give three copies of every old port, hence
+the face-star port count is `D' = 3D`. -/
 theorem faceStar_portCount {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     (faceStarCombinatorialMap M I).portCount = 3 * M.portCount := by
@@ -25,6 +27,7 @@ theorem faceStar_portCount {P : PortNetwork}
   rw [Fintype.card_congr (faceStarPortEquiv I)]
   exact faceStar_descriptor_card M
 
+/-- Associate to an old port the face cell containing its old-edge dart. -/
 def faceStarOldPortToFaceCell {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (p : PortNetworkPort P) :
@@ -32,6 +35,8 @@ def faceStarOldPortToFaceCell {P : PortNetwork}
       (faceStarCombinatorialMap M I).crossing :=
   faceCellOfPort _ _ (faceStarOldEdgePort I p)
 
+/-- The face cell of an old port is the triangular orbit attached to that
+old port. -/
 theorem faceStarOldPortToFaceCell_val {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (p : PortNetworkPort P) :
@@ -40,12 +45,15 @@ theorem faceStarOldPortToFaceCell_val {P : PortNetwork}
       (faceStarCrossing I) (faceStarOldEdgePort I p) = faceStarTriangle M I p
   exact (faceStarTriangle_eq_oldEdge_orbit I p).symm
 
+/-- Every face-star triangle contains the old-edge dart from which it is
+indexed. -/
 theorem faceStarTriangle_oldEdge_mem {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (p : PortNetworkPort P) :
     faceStarOldEdgePort I p ∈ faceStarTriangle M I p := by
   simp [faceStarTriangle]
 
+/-- The old-edge constructor remembers its original port. -/
 theorem faceStarOldEdgePort_injective {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     Function.Injective (faceStarOldEdgePort I) := by
@@ -53,6 +61,8 @@ theorem faceStarOldEdgePort_injective {P : PortNetwork}
   have hd := congrArg (faceStarPortDecode I) hpq
   simpa using hd
 
+/-- Within a face-star triangle, the old-edge dart identifies its source
+old port uniquely. -/
 theorem faceStarTriangle_oldEdge_unique {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     {p q : PortNetworkPort P}
@@ -66,6 +76,7 @@ theorem faceStarTriangle_oldEdge_unique {P : PortNetwork}
   · have hd := congrArg (faceStarPortDecode I) hq
     simp at hd
 
+/-- Different old ports determine different face cells. -/
 theorem faceStarOldPortToFaceCell_injective {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     Function.Injective (faceStarOldPortToFaceCell I) := by
@@ -81,6 +92,8 @@ theorem faceStarOldPortToFaceCell_injective {P : PortNetwork}
     exact faceStarTriangle_oldEdge_mem I q
   exact (faceStarTriangle_oldEdge_unique I (p := p) (q := q) hmem).symm
 
+/-- A finite face cell has a representative port, allowing a computable
+representative to be selected in the explicit face-star carrier. -/
 theorem faceStar_newFaceCell_nonempty {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (F : PortFaceCell (faceStarCombinatorialMap M I).localRotation
@@ -93,6 +106,8 @@ theorem faceStar_newFaceCell_nonempty {P : PortNetwork}
   rw [hq]
   exact portFaceOrbit_contains _ _ q
 
+/-- Choose a deterministic port representative for a face cell by decoding
+the least port in its orbit. -/
 def faceStarFaceCellRepresentative {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (F : PortFaceCell (faceStarCombinatorialMap M I).localRotation
@@ -105,6 +120,8 @@ def faceStarFaceCellRepresentative {P : PortNetwork}
   | .radialOld p => (portFaceEquiv M.localRotation M.crossing).symm p
   | .radialCenter p => p
 
+/-- The chosen representative maps back to the face cell from which it was
+selected. -/
 theorem faceStarFaceCellRepresentative_cell {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (F : PortFaceCell (faceStarCombinatorialMap M I).localRotation
@@ -178,6 +195,7 @@ theorem faceStarFaceCellRepresentative_cell {P : PortNetwork}
         exact portFaceOrbit_contains _ _ _
       exact (faceCellOfPort_eq_of_mem _ _ _ _ hmemOrbit).symm.trans hcell
 
+/-- Every face-star face cell is represented by an old port. -/
 theorem faceStarOldPortToFaceCell_surjective {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     Function.Surjective (faceStarOldPortToFaceCell I) := by
@@ -204,6 +222,7 @@ theorem faceStarOldPortToFaceCell_surjective {P : PortNetwork}
 
 /-! ## Face-cell equivalence and counts -/
 
+/-- The old ports and the new face cells are equivalent finite sets. -/
 def faceStarFaceCellEquiv {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     PortNetworkPort P ≃
@@ -219,6 +238,8 @@ def faceStarFaceCellEquiv {P : PortNetwork}
     intro F
     exact faceStarFaceCellRepresentative_cell I F
 
+/-- The face-cell equivalence gives `F' = D`, since old ports index the new
+face cells. -/
 theorem faceStar_faceCount {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     (faceStarCombinatorialMap M I).faceCount = M.portCount := by
@@ -234,17 +255,21 @@ theorem faceStar_faceCount {P : PortNetwork}
       (Fintype.card_congr (faceStarFaceCellEquiv I)).symm
     _ = M.portCount := rfl
 
+/-- Face-star subdivision adds one center region for each old face, so
+`V' = V + F`. -/
 theorem faceStar_vertexCount {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     (faceStarCombinatorialMap M I).vertexCount = M.vertexCount + M.faceCount := by
   change (faceStarNetwork M I).regionCount = M.vertexCount + M.faceCount
   exact faceStarNetwork_regionCount I
 
+/-- Each crossing edge has two ports, giving the basic identity `2E = D`. -/
 theorem two_mul_edgeCount_eq_portCount {P : PortNetwork}
     (M : PortCombinatorialMap P) :
     2 * M.edgeCount = M.portCount := by
   exact two_mul_portCrossingEdgeCount M.crossing
 
+/-- The face-star construction triples the old edge count: `E' = 3E`. -/
 theorem faceStar_edgeCount {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     (faceStarCombinatorialMap M I).edgeCount = 3 * M.edgeCount := by
@@ -254,6 +279,8 @@ theorem faceStar_edgeCount {P : PortNetwork}
   have hport := faceStar_portCount I
   omega
 
+/-- The same edge count can be read as old edges plus one radial edge per
+old port: `E' = E + D`. -/
 theorem faceStar_edgeCount_eq_add_portCount {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     (faceStarCombinatorialMap M I).edgeCount = M.edgeCount + M.portCount := by
@@ -261,12 +288,15 @@ theorem faceStar_edgeCount_eq_add_portCount {P : PortNetwork}
   have hold := two_mul_edgeCount_eq_portCount M
   omega
 
+/-- Expand the packaged Euler characteristic as `V - E + F`. -/
 theorem portCombinatorialMap_eulerCharacteristic_eq {P : PortNetwork}
     (M : PortCombinatorialMap P) :
     M.eulerCharacteristic =
       (M.vertexCount : Int) - (M.edgeCount : Int) + (M.faceCount : Int) := by
   rfl
 
+/-- The count identities preserve Euler characteristic under face-star
+subdivision: `χ' = χ`. -/
 theorem faceStar_eulerCharacteristic {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     (faceStarCombinatorialMap M I).eulerCharacteristic =
@@ -281,6 +311,8 @@ theorem faceStar_eulerCharacteristic {P : PortNetwork}
 
 /-! ## Genus preservation -/
 
+/-- Any stated combinatorial genus is preserved because it is determined by
+Euler characteristic. -/
 theorem faceStar_preserves_combinatorial_genus {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     {g : Nat} (hg : PortHasCombinatorialGenus M g) :
@@ -288,6 +320,8 @@ theorem faceStar_preserves_combinatorial_genus {P : PortNetwork}
   unfold PortHasCombinatorialGenus at hg ⊢
   rw [faceStar_eulerCharacteristic I, hg]
 
+/-- The face-star map has genus `g` exactly when the original map has genus
+`g`. -/
 theorem faceStar_combinatorial_genus_iff {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) (g : Nat) :
     PortHasCombinatorialGenus (faceStarCombinatorialMap M I) g ↔
@@ -295,6 +329,7 @@ theorem faceStar_combinatorial_genus_iff {P : PortNetwork}
   rw [PortHasCombinatorialGenus, PortHasCombinatorialGenus,
     faceStar_eulerCharacteristic I]
 
+/-- Package the face-star map and its preserved genus-zero witness. -/
 def faceStarGenusZero {P : PortNetwork}
     (G : PortGenusZeroCombinatorialMap P)
     (I : PortFaceStarIndexing G.map) :
@@ -302,35 +337,41 @@ def faceStarGenusZero {P : PortNetwork}
   map := faceStarCombinatorialMap G.map I
   genusZero := faceStar_preserves_combinatorial_genus I G.genusZero
 
+/-- The map field of the genus-zero wrapper is the packaged face-star map. -/
 @[simp] theorem faceStarGenusZero_map {P : PortNetwork}
     (G : PortGenusZeroCombinatorialMap P)
     (I : PortFaceStarIndexing G.map) :
     (faceStarGenusZero G I).map = faceStarCombinatorialMap G.map I := rfl
 
+/-- Vertex-count calibration for the genus-zero face-star wrapper. -/
 @[simp] theorem faceStarGenusZero_vertexCount {P : PortNetwork}
     (G : PortGenusZeroCombinatorialMap P)
     (I : PortFaceStarIndexing G.map) :
     (faceStarGenusZero G I).vertexCount = G.map.vertexCount + G.map.faceCount :=
   faceStar_vertexCount I
 
+/-- Edge-count calibration for the genus-zero face-star wrapper. -/
 @[simp] theorem faceStarGenusZero_edgeCount {P : PortNetwork}
     (G : PortGenusZeroCombinatorialMap P)
     (I : PortFaceStarIndexing G.map) :
     (faceStarGenusZero G I).edgeCount = 3 * G.map.edgeCount :=
   faceStar_edgeCount I
 
+/-- Face-count calibration for the genus-zero face-star wrapper. -/
 @[simp] theorem faceStarGenusZero_faceCount {P : PortNetwork}
     (G : PortGenusZeroCombinatorialMap P)
     (I : PortFaceStarIndexing G.map) :
     (faceStarGenusZero G I).faceCount = G.map.portCount :=
   faceStar_faceCount I
 
+/-- Port-count calibration for the genus-zero face-star wrapper. -/
 @[simp] theorem faceStarGenusZero_portCount {P : PortNetwork}
     (G : PortGenusZeroCombinatorialMap P)
     (I : PortFaceStarIndexing G.map) :
     (faceStarGenusZero G I).portCount = 3 * G.map.portCount :=
   faceStar_portCount I
 
+/-- Euler-characteristic calibration for the genus-zero face-star wrapper. -/
 @[simp] theorem faceStarGenusZero_eulerCharacteristic {P : PortNetwork}
     (G : PortGenusZeroCombinatorialMap P)
     (I : PortFaceStarIndexing G.map) :

@@ -9,6 +9,16 @@ import DkMath.Tromino.RegionWalk
 
 #print "file: DkMath.Tromino.PortRegionWalk"
 
+/-!
+# Walks in the region adjacency graph
+
+A `PortRegionWalk` is a list of crossing ports whose successive region
+indices match.  The constructors and lemmas below give concatenation,
+reversal, and the induced equivalence relation of region reachability.
+Consequently connectedness is expressed entirely by finite port data and
+can be transported to and from the earlier flow-network presentation.
+-/
+
 namespace DkMath.Tromino
 
 def PortRegionWalk.Valid {P : PortNetwork} (C : PortCrossing P)
