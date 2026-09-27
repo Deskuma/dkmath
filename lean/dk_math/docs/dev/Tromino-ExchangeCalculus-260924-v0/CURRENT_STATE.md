@@ -1,3 +1,4 @@
+
 # Tromino Exchange Calculus — Current State
 
 ## Read this first
@@ -8,72 +9,69 @@ Current branch:
 
 Current active checkpoint:
 
-    TRM-046 — Face-star count identities / Euler and genus-zero preservation
+    TRM-047 — Packaged triangulation and coloring restriction
 
 Current instruction:
 
-    instruction-045.md
+    instruction-046.md
 
 Last fully accepted theorem checkpoints:
 
-- TRM-037:
-  genus-zero F2 exactness
-- TRM-038:
-  genus-zero dual-face conservation <-> zero holonomy
-- TRM-039:
-  tetrahedral local closure and triangular A/B/C normal form
-- TRM-043:
-  actual constructor calibration closure
-- TRM-044:
-  cyclic rotation and every face cell card = 3
-- TRM-045:
-  connected face-star PortCombinatorialMap packaging
+- TRM-037: genus-zero F2 exactness
+- TRM-038: genus-zero dual-face conservation <-> zero holonomy
+- TRM-039: tetrahedral local closure and triangular A/B/C normal form
+- TRM-043: actual constructor calibration closure
+- TRM-044: cyclic rotation and every face cell card = 3
+- TRM-045: connected face-star PortCombinatorialMap packaging
+- TRM-046: count identities, Euler/genus preservation, faceStarGenusZero
 
 Face-star status now verified:
 
-- explicit face/face-port indexing;
-- semantic and actual port codecs;
-- actual crossing and rotation;
-- cyclic PortRotationSystem;
-- exact primitive 3-cycle face dynamics;
-- every raw and packaged face cell has cardinality 3;
-- lifted original region walks;
-- radial attachment of every face center;
-- global region connectivity;
-- nonempty region set;
-- faceStarCombinatorialMap.
+- actual connected PortCombinatorialMap;
+- every face cell has cardinality 3;
+- D' = 3D;
+- F' = D;
+- E' = 3E = E + D;
+- V' = V + F;
+- chi' = chi;
+- arbitrary stated combinatorial genus is preserved;
+- faceStarGenusZero is available.
 
 Current target:
 
-    D' = 3D
-    F' = D
-    E' = 3E = E + D
-    V' = V + F
-    chi' = chi
+1. expose PortAllFacesTriangular for the packaged map;
+2. embed original adjacency through oldRegion;
+3. restrict any face-star four-state coloring to original regions;
+4. prove face-star colorable -> original colorable;
+5. combine with TRM-039 to obtain:
+       face-star tetrahedral assignment -> original colorable.
 
-Then:
+Do NOT prove universal target equivalence in TRM-047.
 
-- preserve arbitrary stated combinatorial genus;
-- package faceStarGenusZero.
+After TRM-047:
 
-Do NOT work on coloring restriction or universal target equivalence in
-TRM-046.
+TRM-048 final reduction layer:
 
-After TRM-046:
+1. use exists_portFaceStarIndexing;
+2. define PortGenusZeroTriangularFourColorTarget;
+3. prove triangular target <-> general PortGenusZeroFourColorTarget;
+4. define PortGenusZeroTriangularTetrahedralTarget;
+5. prove triangular tetrahedral target <-> general four-color target;
+6. state exact remaining Gap: universal tetrahedral assignment existence;
+7. close the ExchangeCalculus branch.
 
-1. identify packaged map as PortAllFacesTriangular;
-2. prove old adjacency embeds;
-3. restrict any face-star four-coloring to the original map;
-4. prove indexing-free genus-zero triangulation reduction;
-5. prove universal all-triangular target iff general target;
-6. use TRM-039 to identify the all-triangular target with tetrahedral A/B/C
-   assignment existence;
-7. close this branch;
-8. begin the tetrahedral/Eisenstein realization branch.
+Then begin a new branch for:
+
+    triangular Port map -> Eisenstein lattice / parity texture realization.
 
 Four Color theorem status:
 
     NOT PROVED.
+
+Current exact remaining mathematical existence problem after reduction:
+
+    every all-triangular genus-zero Port map
+    admits a tetrahedral A/B/C face assignment.
 
 Eisenstein status:
 
