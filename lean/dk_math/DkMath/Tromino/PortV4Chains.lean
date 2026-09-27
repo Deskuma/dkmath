@@ -12,15 +12,29 @@ namespace DkMath.Tromino
 
 open scoped BigOperators
 
+/-!
+# V4-valued chain coordinates
+
+The Klein four-group `TrominoState` is represented by two F₂ coordinates.
+This module transports the port vertex, edge, and face chain spaces into
+that coordinate form, so V4-valued conservation becomes two ordinary F₂
+boundary equations.  The final identities record that the coordinate
+boundary complex still satisfies `∂₁ ∘ ∂₂ = 0`.
+-/
+
+/-- V4-valued vertex chains on the region carrier. -/
 abbrev PortV4VertexChain (P : PortNetwork) :=
   Fin P.regionCount → TrominoState
 
+/-- V4-valued edge chains on crossing orbits. -/
 abbrev PortV4EdgeChain {P : PortNetwork} (C : PortCrossing P) :=
   PortEdgeCell C → TrominoState
 
+/-- V4-valued face chains on face orbits. -/
 abbrev PortV4FaceChain {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) := PortFaceCell R C → TrominoState
 
+/-- Linear equivalence between V4-valued functions and two F₂ functions. -/
 def v4FunEquiv (α : Type*) :
     (α → TrominoState) ≃ₗ[PortF2]
       ((α → PortF2) × (α → PortF2)) where
@@ -41,16 +55,19 @@ def v4FunEquiv (α : Type*) :
     intro a x
     apply Prod.ext <;> funext b <;> rfl
 
+/-- Coordinate equivalence for vertex chains. -/
 def v4VertexChainEquiv {P : PortNetwork} :
     PortV4VertexChain P ≃ₗ[PortF2]
       (PortVertexChain P × PortVertexChain P) :=
   v4FunEquiv (Fin P.regionCount)
 
+/-- Coordinate equivalence for edge chains. -/
 def v4EdgeChainEquiv {P : PortNetwork} {C : PortCrossing P} :
     PortV4EdgeChain C ≃ₗ[PortF2]
       (PortEdgeChain C × PortEdgeChain C) :=
   v4FunEquiv (PortEdgeCell C)
 
+/-- Coordinate equivalence for face chains. -/
 def v4FaceChainEquiv {P : PortNetwork} {R : PortLocalRotation P}
     {C : PortCrossing P} :
     PortV4FaceChain R C ≃ₗ[PortF2]
@@ -83,6 +100,7 @@ def v4FaceChainEquiv {P : PortNetwork} {R : PortLocalRotation P}
     (x : PortV4FaceChain R C) (F : PortFaceCell R C) :
     (v4FaceChainEquiv x).2 F = (x F).2 := rfl
 
+/-- V4-valued first boundary, obtained by summing endpoint labels. -/
 def portV4Boundary1 {P : PortNetwork} (C : PortCrossing P) :
     PortV4EdgeChain C →ₗ[PortF2] PortV4VertexChain P :=
   { toFun := fun x r =>
@@ -96,6 +114,7 @@ def portV4Boundary1 {P : PortNetwork} (C : PortCrossing P) :
       funext r
       simp [smul_smul, Finset.smul_sum, mul_comm] }
 
+/-- V4-valued second boundary, obtained by summing face boundaries. -/
 def portV4Boundary2 {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) :
     PortV4FaceChain R C →ₗ[PortF2] PortV4EdgeChain C :=
@@ -110,6 +129,7 @@ def portV4Boundary2 {P : PortNetwork} (R : PortLocalRotation P)
       funext E
       simp [smul_smul, Finset.smul_sum, mul_comm] }
 
+/-- The first V4 boundary's first coordinate is the F₂ boundary. -/
 theorem portV4Boundary1_fst {P : PortNetwork} (C : PortCrossing P)
     (x : PortV4EdgeChain C) :
     (v4VertexChainEquiv (portV4Boundary1 C x)).1 =
@@ -122,6 +142,7 @@ theorem portV4Boundary1_fst {P : PortNetwork} (C : PortCrossing P)
   intro E hE
   simp [smul_eq_mul, mul_comm]
 
+/-- The first V4 boundary's second coordinate is the F₂ boundary. -/
 theorem portV4Boundary1_snd {P : PortNetwork} (C : PortCrossing P)
     (x : PortV4EdgeChain C) :
     (v4VertexChainEquiv (portV4Boundary1 C x)).2 =
@@ -134,6 +155,7 @@ theorem portV4Boundary1_snd {P : PortNetwork} (C : PortCrossing P)
   intro E hE
   simp [smul_eq_mul, mul_comm]
 
+/-- The second V4 boundary's first coordinate is the F₂ boundary. -/
 theorem portV4Boundary2_fst {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (y : PortV4FaceChain R C) :
     (v4EdgeChainEquiv (portV4Boundary2 R C y)).1 =
@@ -146,6 +168,7 @@ theorem portV4Boundary2_fst {P : PortNetwork} (R : PortLocalRotation P)
   intro F hF
   simp [smul_eq_mul, mul_comm]
 
+/-- The second V4 boundary's second coordinate is the F₂ boundary. -/
 theorem portV4Boundary2_snd {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (y : PortV4FaceChain R C) :
     (v4EdgeChainEquiv (portV4Boundary2 R C y)).2 =
@@ -158,13 +181,16 @@ theorem portV4Boundary2_snd {P : PortNetwork} (R : PortLocalRotation P)
   intro F hF
   simp [smul_eq_mul, mul_comm]
 
+/-- The kernel of the V4 first boundary. -/
 def PortV4CycleSpace {P : PortNetwork} (C : PortCrossing P) :
     Submodule PortF2 (PortV4EdgeChain C) := LinearMap.ker (portV4Boundary1 C)
 
+/-- The image of the V4 second boundary. -/
 def PortV4FaceBoundarySpace {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) : Submodule PortF2 (PortV4EdgeChain C) :=
   LinearMap.range (portV4Boundary2 R C)
 
+/-- The V4 chain-complex identity `∂₁ ∘ ∂₂ = 0`. -/
 theorem portV4Boundary1_boundary2 {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P) :
     (portV4Boundary1 C).comp (portV4Boundary2 R C) = 0 := by
@@ -184,6 +210,7 @@ theorem portV4Boundary1_boundary2 {P : PortNetwork}
         ((v4FaceChainEquiv y).2)) (portBoundary1_boundary2 R C)
     simpa using h
 
+/-- Membership in the V4 cycle space is equivalent to zero divergence. -/
 theorem mem_portV4CycleSpace_iff {P : PortNetwork} (C : PortCrossing P)
     (x : PortV4EdgeChain C) :
     x ∈ PortV4CycleSpace C ↔
@@ -214,6 +241,7 @@ theorem mem_portV4CycleSpace_iff {P : PortNetwork} (C : PortCrossing P)
     · rw [portV4Boundary1_snd]
       simpa using hsnd
 
+/-- Every V4 face boundary is a V4 cycle. -/
 theorem portV4FaceBoundarySpace_le_cycleSpace {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P) :
     PortV4FaceBoundarySpace R C ≤ PortV4CycleSpace C := by

@@ -21,17 +21,20 @@ can be transported to and from the earlier flow-network presentation.
 
 namespace DkMath.Tromino
 
+/-- Inductive validity condition for a list of crossing darts. -/
 def PortRegionWalk.Valid {P : PortNetwork} (C : PortCrossing P)
     (r s : Fin P.regionCount) :
     List (PortNetworkPort P) → Prop
   | [] => r = s
   | p :: ps => p.1 = r ∧ PortRegionWalk.Valid C (C.cross p).1 s ps
 
+/-- A valid finite walk between two region indices. -/
 structure PortRegionWalk {P : PortNetwork} (C : PortCrossing P)
     (r s : Fin P.regionCount) where
   edges : List (PortNetworkPort P)
   valid : PortRegionWalk.Valid C r s edges
 
+/-- Flow-walk validity descends to the port presentation. -/
 theorem flowValid_toPort {N : FlowNetwork} {C : FlowCrossing N}
     {r s : Fin N.regionCount} {xs : List (FlowNetworkPort N)}
     (h : FlowRegionWalk.Valid C r s xs) :
@@ -45,6 +48,7 @@ theorem flowValid_toPort {N : FlowNetwork} {C : FlowCrossing N}
     simp only [PortRegionWalk.Valid]
     exact ⟨h.1, ih h.2⟩
 
+/-- Port-walk validity lifts to the flow presentation under an assignment. -/
 theorem portValid_toFlow {P : PortNetwork} {C : PortCrossing P}
     {r s : Fin P.regionCount} {xs : List (PortNetworkPort P)}
     (h : PortRegionWalk.Valid C r s xs) (A : V4FlowAssignment C) :
@@ -60,6 +64,7 @@ theorem portValid_toFlow {P : PortNetwork} {C : PortCrossing P}
 
 namespace PortRegionWalk
 
+/-- A port walk is determined by its dart list. -/
 theorem ext {P : PortNetwork} {C : PortCrossing P}
     {r s : Fin P.regionCount} {w₁ w₂ : PortRegionWalk C r s}
     (h : w₁.edges = w₂.edges) : w₁ = w₂ := by
@@ -68,14 +73,17 @@ theorem ext {P : PortNetwork} {C : PortCrossing P}
   cases h
   rfl
 
+/-- The empty walk between equal regions. -/
 def nil {P : PortNetwork} (C : PortCrossing P)
     (r : Fin P.regionCount) : PortRegionWalk C r r :=
   ⟨[], rfl⟩
 
+/-- Number of crossing darts in a walk. -/
 def length {P : PortNetwork} {C : PortCrossing P}
     {r s : Fin P.regionCount} (w : PortRegionWalk C r s) : Nat :=
   w.edges.length
 
+/-- Appending composable valid walks yields a valid walk. -/
 theorem valid_append {P : PortNetwork} {C : PortCrossing P}
     {r s t : Fin P.regionCount} {xs : List (PortNetworkPort P)}
     (hxs : PortRegionWalk.Valid C r s xs) {ys : List (PortNetworkPort P)}
@@ -90,6 +98,7 @@ theorem valid_append {P : PortNetwork} {C : PortCrossing P}
     simp only [PortRegionWalk.Valid] at hxs ⊢
     exact ⟨hxs.1, ih hxs.2 hys⟩
 
+/-- Concatenate two walks whose endpoint and start agree. -/
 def append {P : PortNetwork} {C : PortCrossing P}
     {r s t : Fin P.regionCount}
     (w₁ : PortRegionWalk C r s) (w₂ : PortRegionWalk C s t) :
@@ -108,6 +117,7 @@ def append {P : PortNetwork} {C : PortCrossing P}
   apply PortRegionWalk.ext
   simp [append, nil]
 
+/-- Walk concatenation is associative. -/
 theorem append_assoc {P : PortNetwork} {C : PortCrossing P}
     {r s t u : Fin P.regionCount}
     (w₁ : PortRegionWalk C r s) (w₂ : PortRegionWalk C s t)
@@ -116,14 +126,17 @@ theorem append_assoc {P : PortNetwork} {C : PortCrossing P}
   apply PortRegionWalk.ext
   simp [append, List.append_assoc]
 
+/-- The one-dart walk starting at a port's source region. -/
 def singleton {P : PortNetwork} (C : PortCrossing P)
     (p : PortNetworkPort P) : PortRegionWalk C p.1 (C.cross p).1 :=
   ⟨[p], by simp [PortRegionWalk.Valid]⟩
 
+/-- Reverse the order and crossing direction of a dart list. -/
 def reverseEdges {P : PortNetwork} (C : PortCrossing P) :
     List (PortNetworkPort P) → List (PortNetworkPort P) :=
   fun xs => xs.reverse.map C.cross
 
+/-- Reversing edges turns a valid walk around. -/
 theorem valid_reverseEdges {P : PortNetwork} {C : PortCrossing P}
     {r s : Fin P.regionCount} {xs : List (PortNetworkPort P)}
     (hxs : PortRegionWalk.Valid C r s xs) :
@@ -143,6 +156,7 @@ theorem valid_reverseEdges {P : PortNetwork} {C : PortCrossing P}
     simpa only [reverseEdges, List.reverse_cons, List.map_append,
       List.map_singleton, hxs.1] using happ
 
+/-- Reverse a valid walk and exchange its endpoints. -/
 def reverse {P : PortNetwork} {C : PortCrossing P}
     {r s : Fin P.regionCount} (w : PortRegionWalk C r s) :
     PortRegionWalk C s r :=
@@ -154,6 +168,7 @@ def reverse {P : PortNetwork} {C : PortCrossing P}
   apply PortRegionWalk.ext
   rfl
 
+/-- Reversal changes an appended walk into reversed append order. -/
 theorem reverse_append {P : PortNetwork} {C : PortCrossing P}
     {r s t : Fin P.regionCount}
     (w₁ : PortRegionWalk C r s) (w₂ : PortRegionWalk C s t) :
@@ -161,6 +176,7 @@ theorem reverse_append {P : PortNetwork} {C : PortCrossing P}
   apply PortRegionWalk.ext
   simp [reverse, append, reverseEdges, List.map_append]
 
+/-- Reversing twice recovers the original walk. -/
 theorem reverse_reverse {P : PortNetwork} {C : PortCrossing P}
     {r s : Fin P.regionCount} (w : PortRegionWalk C r s) :
     reverse (reverse w) = w := by
@@ -169,20 +185,24 @@ theorem reverse_reverse {P : PortNetwork} {C : PortCrossing P}
 
 end PortRegionWalk
 
+/-- Region reachability generated by finite valid walks. -/
 def PortRegionReachable {P : PortNetwork} (C : PortCrossing P)
     (r s : Fin P.regionCount) : Prop :=
   Nonempty (PortRegionWalk C r s)
 
+/-- Region reachability is reflexive. -/
 theorem portRegionReachable_refl {P : PortNetwork} (C : PortCrossing P)
     (r : Fin P.regionCount) : PortRegionReachable C r r :=
   ⟨PortRegionWalk.nil C r⟩
 
+/-- Region reachability is symmetric. -/
 theorem portRegionReachable_symm {P : PortNetwork} (C : PortCrossing P)
     {r s : Fin P.regionCount} :
     PortRegionReachable C r s → PortRegionReachable C s r := by
   rintro ⟨W⟩
   exact ⟨PortRegionWalk.reverse W⟩
 
+/-- Region reachability is transitive. -/
 theorem portRegionReachable_trans {P : PortNetwork} (C : PortCrossing P)
     {r s t : Fin P.regionCount} :
     PortRegionReachable C r s → PortRegionReachable C s t →
@@ -190,18 +210,22 @@ theorem portRegionReachable_trans {P : PortNetwork} (C : PortCrossing P)
   rintro ⟨W₁⟩ ⟨W₂⟩
   exact ⟨PortRegionWalk.append W₁ W₂⟩
 
+/-- Every region is reachable from a designated root region. -/
 def PortRootedRegionConnected {P : PortNetwork} (C : PortCrossing P)
     (base : Fin P.regionCount) : Prop :=
   ∀ s, PortRegionReachable C base s
 
+/-- Every pair of regions is connected by a valid port walk. -/
 def PortRegionConnected {P : PortNetwork} (C : PortCrossing P) : Prop :=
   ∀ r s, PortRegionReachable C r s
 
+/-- Pairwise connectedness implies rooted connectedness. -/
 theorem portRegionConnected_rooted {P : PortNetwork} (C : PortCrossing P)
     (h : PortRegionConnected C) (base : Fin P.regionCount) :
     PortRootedRegionConnected C base :=
   fun s => h base s
 
+/-- Rooted connectedness implies pairwise connectedness. -/
 theorem portRegionConnected_of_rooted {P : PortNetwork}
     (C : PortCrossing P) (base : Fin P.regionCount)
     (h : PortRootedRegionConnected C base) :
@@ -210,6 +234,7 @@ theorem portRegionConnected_of_rooted {P : PortNetwork}
   exact portRegionReachable_trans C
     (portRegionReachable_symm C (h r)) (h s)
 
+/-- Forget flow labels from a valid flow region walk. -/
 def FlowRegionWalk.toPortRegionWalk {N : FlowNetwork}
     {C : FlowCrossing N} {r s : Fin N.regionCount}
   (W : FlowRegionWalk C r s) :
@@ -221,6 +246,7 @@ def FlowRegionWalk.toPortRegionWalk {N : FlowNetwork}
     (W : FlowRegionWalk C r s) :
     W.toPortRegionWalk.edges = W.edges := rfl
 
+/-- Restore flow labels on a port region walk. -/
 def PortRegionWalk.toFlowRegionWalk {P : PortNetwork}
     {C : PortCrossing P} {r s : Fin P.regionCount}
   (A : V4FlowAssignment C) (W : PortRegionWalk C r s) :
@@ -262,6 +288,7 @@ def PortRegionWalk.toFlowRegionWalk {P : PortNetwork}
   apply FlowRegionWalk.ext
   rfl
 
+/-- Flow-to-port conversion commutes with walk append. -/
 theorem FlowRegionWalk.toPortRegionWalk_append {N : FlowNetwork}
     {C : FlowCrossing N} {r s t : Fin N.regionCount}
     (W₁ : FlowRegionWalk C r s) (W₂ : FlowRegionWalk C s t) :
@@ -270,6 +297,7 @@ theorem FlowRegionWalk.toPortRegionWalk_append {N : FlowNetwork}
   apply PortRegionWalk.ext
   rfl
 
+/-- Port-to-flow conversion commutes with walk append. -/
 theorem PortRegionWalk.toFlowRegionWalk_append {P : PortNetwork}
     {C : PortCrossing P} {r s t : Fin P.regionCount}
     (A : V4FlowAssignment C) (W₁ : PortRegionWalk C r s)
@@ -279,6 +307,7 @@ theorem PortRegionWalk.toFlowRegionWalk_append {P : PortNetwork}
   apply FlowRegionWalk.ext
   rfl
 
+/-- Flow-to-port conversion commutes with reversal. -/
 theorem FlowRegionWalk.toPortRegionWalk_reverse {N : FlowNetwork}
     {C : FlowCrossing N} {r s : Fin N.regionCount}
     (W : FlowRegionWalk C r s) :
@@ -287,6 +316,7 @@ theorem FlowRegionWalk.toPortRegionWalk_reverse {N : FlowNetwork}
   apply PortRegionWalk.ext
   rfl
 
+/-- Port-to-flow conversion commutes with reversal. -/
 theorem PortRegionWalk.toFlowRegionWalk_reverse {P : PortNetwork}
     {C : PortCrossing P} {r s : Fin P.regionCount}
     (A : V4FlowAssignment C) (W : PortRegionWalk C r s) :
@@ -295,6 +325,7 @@ theorem PortRegionWalk.toFlowRegionWalk_reverse {P : PortNetwork}
   apply FlowRegionWalk.ext
   rfl
 
+/-- Flow region reachability implies port region reachability. -/
 theorem flowRegionReachable_imp_port {N : FlowNetwork}
     (C : FlowCrossing N) {r s : Fin N.regionCount}
     (h : RegionReachable C r s) :
@@ -302,6 +333,7 @@ theorem flowRegionReachable_imp_port {N : FlowNetwork}
   rcases h with ⟨W⟩
   exact ⟨W.toPortRegionWalk⟩
 
+/-- Port and flow region reachability agree after lifting labels. -/
 theorem portRegionReachable_iff_flow_lift {P : PortNetwork}
     {C : PortCrossing P} (A : V4FlowAssignment C)
     {r s : Fin P.regionCount} :
@@ -313,6 +345,7 @@ theorem portRegionReachable_iff_flow_lift {P : PortNetwork}
   · rintro ⟨W⟩
     exact ⟨W.toPortRegionWalk⟩
 
+/-- Reachability does not depend on the chosen V4 assignment. -/
 theorem regionReachable_assignment_independent {P : PortNetwork}
     {C : PortCrossing P} (A B : V4FlowAssignment C)
     {r s : Fin P.regionCount} :
@@ -326,6 +359,7 @@ theorem regionReachable_assignment_independent {P : PortNetwork}
     exact (portRegionReachable_iff_flow_lift A).mp
       ((portRegionReachable_iff_flow_lift B).mpr h)
 
+/-- Rooted connectedness is invariant under port/flow lifting. -/
 theorem portRootedRegionConnected_iff_flow_lift {P : PortNetwork}
     {C : PortCrossing P} (A : V4FlowAssignment C)
     (base : Fin P.regionCount) :
@@ -337,6 +371,7 @@ theorem portRootedRegionConnected_iff_flow_lift {P : PortNetwork}
   · intro h s
     exact (portRegionReachable_iff_flow_lift A).mpr (h s)
 
+/-- Pairwise connectedness is invariant under port/flow lifting. -/
 theorem portRegionConnected_iff_flow_lift {P : PortNetwork}
     {C : PortCrossing P} (A : V4FlowAssignment C) :
     PortRegionConnected C ↔
@@ -347,6 +382,7 @@ theorem portRegionConnected_iff_flow_lift {P : PortNetwork}
   · intro h r s
     exact (portRegionReachable_iff_flow_lift A).mpr (h r s)
 
+/-- Connectedness is independent of the V4 assignment. -/
 theorem regionConnected_assignment_independent {P : PortNetwork}
     {C : PortCrossing P} (A B : V4FlowAssignment C) :
     (∀ r s, RegionReachable A.toFlowCrossing r s) ↔
@@ -357,6 +393,7 @@ theorem regionConnected_assignment_independent {P : PortNetwork}
   · intro h r s
     exact (regionReachable_assignment_independent A B).mpr (h r s)
 
+/-- Flow-to-port-to-flow recovers the original dart list and validity. -/
 theorem FlowRegionWalk.toPortRegionWalk_toFlowRegionWalk
     {N : FlowNetwork} {C : FlowCrossing N}
     {r s : Fin N.regionCount} (W : FlowRegionWalk C r s) :
@@ -364,6 +401,7 @@ theorem FlowRegionWalk.toPortRegionWalk_toFlowRegionWalk
   apply FlowRegionWalk.ext
   rfl
 
+/-- Port-to-flow-to-port recovers the original dart list and validity. -/
 theorem PortRegionWalk.toFlowRegionWalk_toPortRegionWalk
     {P : PortNetwork} {C : PortCrossing P}
     {r s : Fin P.regionCount} (A : V4FlowAssignment C)
