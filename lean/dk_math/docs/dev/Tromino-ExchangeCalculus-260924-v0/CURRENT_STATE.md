@@ -9,11 +9,11 @@ Current branch:
 
 Current active checkpoint:
 
-    TRM-047 — Packaged triangulation and coloring restriction
+    TRM-048 — Universal triangular reduction / branch closure
 
 Current instruction:
 
-    instruction-046.md
+    instruction-047.md
 
 Last fully accepted theorem checkpoints:
 
@@ -24,54 +24,43 @@ Last fully accepted theorem checkpoints:
 - TRM-044: cyclic rotation and every face cell card = 3
 - TRM-045: connected face-star PortCombinatorialMap packaging
 - TRM-046: count identities, Euler/genus preservation, faceStarGenusZero
+- TRM-047: all-triangular packaging, old adjacency embedding, coloring pullback,
+  and tetrahedral-assignment -> original-colorability reduction
 
-Face-star status now verified:
+Face-star reduction status now verified:
 
-- actual connected PortCombinatorialMap;
-- every face cell has cardinality 3;
+- any connected genus-zero Port map admits face-star indexing;
+- face-star produces a connected all-triangular genus-zero Port map;
 - D' = 3D;
 - F' = D;
 - E' = 3E = E + D;
 - V' = V + F;
 - chi' = chi;
-- arbitrary stated combinatorial genus is preserved;
-- faceStarGenusZero is available.
+- any coloring of the face-star map restricts to a coloring of the original map;
+- any tetrahedral assignment on the face-star map yields a coloring of the
+  original map.
 
 Current target:
 
-1. expose PortAllFacesTriangular for the packaged map;
-2. embed original adjacency through oldRegion;
-3. restrict any face-star four-state coloring to original regions;
-4. prove face-star colorable -> original colorable;
-5. combine with TRM-039 to obtain:
-       face-star tetrahedral assignment -> original colorable.
+1. define PortGenusZeroTriangularFourColorTarget;
+2. prove it equivalent to PortGenusZeroFourColorTarget;
+3. define PortGenusZeroTriangularTetrahedralTarget;
+4. prove it equivalent to the triangular four-color target;
+5. therefore prove it equivalent to the general four-color target;
+6. state the exact remaining Gap and close the branch.
 
-Do NOT prove universal target equivalence in TRM-047.
-
-After TRM-047:
-
-TRM-048 final reduction layer:
-
-1. use exists_portFaceStarIndexing;
-2. define PortGenusZeroTriangularFourColorTarget;
-3. prove triangular target <-> general PortGenusZeroFourColorTarget;
-4. define PortGenusZeroTriangularTetrahedralTarget;
-5. prove triangular tetrahedral target <-> general four-color target;
-6. state exact remaining Gap: universal tetrahedral assignment existence;
-7. close the ExchangeCalculus branch.
-
-Then begin a new branch for:
-
-    triangular Port map -> Eisenstein lattice / parity texture realization.
+Do NOT prove any universal target.
 
 Four Color theorem status:
 
     NOT PROVED.
 
-Current exact remaining mathematical existence problem after reduction:
+Exact remaining Gap after successful TRM-048:
 
-    every all-triangular genus-zero Port map
-    admits a tetrahedral A/B/C face assignment.
+    PortGenusZeroTriangularTetrahedralTarget
+
+i.e. prove that every all-triangular genus-zero Port map admits a tetrahedral
+A/B/C face assignment.
 
 Eisenstein status:
 
@@ -79,6 +68,13 @@ Eisenstein status:
 - canonical nonzero Eisenstein directions reduce to {A,B,C};
 - tetrahedral roll transport is V4 addition;
 - global triangular-Port -> Eisenstein-lattice realization NOT YET constructed.
+
+After TRM-048:
+
+1. close / merge this deep ExchangeCalculus branch;
+2. start a new branch dedicated to:
+       triangular Port map -> Eisenstein lattice / parity texture realization;
+3. keep the universal tetrahedral existence problem explicit and separate.
 
 ## Agent completion rule
 
