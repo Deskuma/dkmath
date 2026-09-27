@@ -18,7 +18,9 @@ only by the indexing existence theorem.
 
 The carrier has one old-region copy for each original region and one
 face-center copy for each original face. Each old port contributes one old
-edge dart and two radial darts.
+edge dart and two radial darts.  The indexing package separates this
+semantic disjoint-union description from the dependent `Fin` representation
+used by executable constructors.
 -/
 
 #print "file: DkMath.Tromino.PortFaceStarSubdivision"
@@ -28,7 +30,11 @@ namespace DkMath.Tromino
 /-! ## Explicit indexing of old face cells and their boundary ports -/
 
 /-- Finite enumerations needed to turn the semantic face-star carrier into a
-computable dependent `Fin` carrier. -/
+computable dependent `Fin` carrier.
+
+`faceEquiv` numbers face cells, while `facePortEquiv` numbers the ports in a
+particular face.  These are the only choices needed to turn orbit subtypes
+into local `Fin` slots. -/
 structure PortFaceStarIndexing {P : PortNetwork} (M : PortCombinatorialMap P) where
   /-- Enumeration of the old face cells by Fin M.faceCount. -/
   faceEquiv : PortFaceCell M.localRotation M.crossing ≃ Fin M.faceCount
@@ -37,7 +43,10 @@ structure PortFaceStarIndexing {P : PortNetwork} (M : PortCombinatorialMap P) wh
     {p : PortNetworkPort P // p ∈ F.val} ≃ Fin F.val.card
 
 /-- Every finite map admits an explicit face-star indexing package; the
-classical choice is confined to this existence proof. -/
+classical choice is confined to this existence proof.
+
+Finite enumeration is used to obtain computable-looking indices, while the
+mathematical carrier remains the canonical old-region/face-center sum. -/
 theorem exists_portFaceStarIndexing {P : PortNetwork} (M : PortCombinatorialMap P) :
     Nonempty (PortFaceStarIndexing M) := by
   classical
@@ -51,7 +60,10 @@ theorem exists_portFaceStarIndexing {P : PortNetwork} (M : PortCombinatorialMap 
 /-! ## Semantic port descriptor -/
 
 /-- Semantic classification of a new dart into old-edge, radial-old, or
-radial-center type. -/
+radial-center type.
+
+The three constructors describe the old edge itself and the two ends of a
+new radial edge from an old region to a face center. -/
 inductive FaceStarPortDesc {P : PortNetwork} (M : PortCombinatorialMap P)
   | oldEdge (p : PortNetworkPort P)
   | radialOld (p : PortNetworkPort P)
@@ -101,14 +113,21 @@ end FaceStarPortDesc
 /-! ## New regions and their local arities -/
 
 /-- The local arity is doubled at old regions and equals the old face length
-at a face center. -/
+at a face center.
+
+Each old port receives two local slots, one for the old edge and one for its
+radial edge; a center receives one slot for each boundary port of its face.
+-/
 def faceStarRegionArity {P : PortNetwork} (M : PortCombinatorialMap P)
     (I : PortFaceStarIndexing M) :
     Fin M.vertexCount ⊕ Fin M.faceCount → Nat
   | Sum.inl r => 2 * P.arity r
   | Sum.inr F => (I.faceEquiv.symm F).val.card
 
-/-- The finite port network underlying the face-star subdivision. -/
+/-- The finite port network underlying the face-star subdivision.
+
+Its regions are the disjoint union of old regions and one center per old
+face, with the arities prescribed by `faceStarRegionArity`. -/
 def faceStarNetwork {P : PortNetwork} (M : PortCombinatorialMap P)
     (I : PortFaceStarIndexing M) : PortNetwork where
   regionCount := M.vertexCount + M.faceCount
@@ -121,13 +140,19 @@ def faceStarRegionEquiv {P : PortNetwork} (M : PortCombinatorialMap P)
       Fin (faceStarNetwork M I).regionCount :=
   finSumFinEquiv
 
-/-- The old-region part of the new region index. -/
+/-- The old-region part of the new region index.
+
+This is the canonical embedding of the original vertex carrier into the
+subdivision carrier. -/
 def oldRegion {P : PortNetwork} {M : PortCombinatorialMap P}
     (I : PortFaceStarIndexing M) (r : Fin M.vertexCount) :
     Fin (faceStarNetwork M I).regionCount :=
   faceStarRegionEquiv M I (.inl r)
 
-/-- The center-region part of the new region index. -/
+/-- The center-region part of the new region index.
+
+The face indexing chooses the corresponding summand and therefore makes
+distinct old faces distinct new regions. -/
 def faceCenterRegion {P : PortNetwork} {M : PortCombinatorialMap P}
     (I : PortFaceStarIndexing M)
     (F : PortFaceCell M.localRotation M.crossing) :
@@ -174,7 +199,10 @@ The following constructors realize the three semantic dart types in the
 dependent `Fin` representation of the new network.
 -/
 
-/-- A two-slot old-region encoding: slot 0 is old-edge, slot 1 is radial-old. -/
+/-- A two-slot old-region encoding: slot 0 is old-edge, slot 1 is radial-old.
+
+The product equivalence separates the semantic dart type from the local
+`Fin` index used by the dependent port carrier. -/
 def oldPortFin {P : PortNetwork} {M : PortCombinatorialMap P}
     (I : PortFaceStarIndexing M) (p : PortNetworkPort P) (b : Fin 2) :
     Fin ((faceStarNetwork M I).arity (oldRegion I p.1)) := by
@@ -196,19 +224,26 @@ def centerPortFin {P : PortNetwork} {M : PortCombinatorialMap P}
   rw [Equiv.symm_apply_apply]
   simp [faceStarRegionArity]
 
-/-- The old-edge port associated with an old port p. -/
+/-- The old-edge port associated with an old port `p`.
+
+It uses slot zero at the old copy of `p`'s source region. -/
 def faceStarOldEdgePort {P : PortNetwork} {M : PortCombinatorialMap P}
     (I : PortFaceStarIndexing M) (p : PortNetworkPort P) :
     PortNetworkPort (faceStarNetwork M I) :=
   ⟨oldRegion I p.1, oldPortFin I p 0⟩
 
-/-- The old-region endpoint of the radial edge associated with p. -/
+/-- The old-region endpoint of the radial edge associated with `p`.
+
+It uses slot one, leaving slot zero for the original edge. -/
 def faceStarRadialOldPort {P : PortNetwork} {M : PortCombinatorialMap P}
     (I : PortFaceStarIndexing M) (p : PortNetworkPort P) :
     PortNetworkPort (faceStarNetwork M I) :=
   ⟨oldRegion I p.1, oldPortFin I p 1⟩
 
-/-- The center-region endpoint of the radial edge associated with p. -/
+/-- The center-region endpoint of the radial edge associated with `p`.
+
+The face orbit containing `p` determines the center, and the face-port
+indexing determines the corresponding center slot. -/
 def faceStarRadialCenterPort {P : PortNetwork} {M : PortCombinatorialMap P}
     (I : PortFaceStarIndexing M) (p : PortNetworkPort P) :
     PortNetworkPort (faceStarNetwork M I) :=
