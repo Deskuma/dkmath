@@ -10,12 +10,24 @@ import DkMath.Tromino.RegionWalk
 
 namespace DkMath.Tromino
 
+/-!
+# Region potentials and exact tensions
+
+A `RegionPotential` assigns a V4 state to every region and requires each
+crossing label to be the difference (addition in characteristic two) of the
+potentials at its endpoints.  Integrating this edge law along a walk gives
+the telescoping identity used to pass between zero holonomy and a coloring.
+The potential is unique only up to a global additive translation.
+-/
+
+/-- A V4-valued potential whose edge differences equal the crossing labels. -/
 structure RegionPotential {N : FlowNetwork} (C : FlowCrossing N) where
   state : Fin N.regionCount → TrominoState
   edgeLaw : ∀ p : FlowNetworkPort N,
     state (flowEdgeTarget C p) =
       state (flowEdgeSource C p) + flowEdgeLabel C p
 
+/-- Integrate the edge law along any valid walk. -/
 theorem regionPotential_integrates_valid
     {N : FlowNetwork} {C : FlowCrossing N}
     (P : RegionPotential C) {r s : Fin N.regionCount}
@@ -46,6 +58,7 @@ theorem regionPotential_integrates_valid
         rw [hvalid.1]
         rfl
 
+/-- Potential difference along a packaged walk equals its label XOR. -/
 theorem regionPotential_integrates
     {N : FlowNetwork} {C : FlowCrossing N}
     (P : RegionPotential C) {r s : Fin N.regionCount}
@@ -53,12 +66,14 @@ theorem regionPotential_integrates
     P.state s = P.state r + regionWalkXor W := by
   exact regionPotential_integrates_valid P W.edges W.valid
 
+/-- The integration identity for the empty walk. -/
 theorem regionPotential_integrates_nil
     {N : FlowNetwork} {C : FlowCrossing N}
     (P : RegionPotential C) (r : Fin N.regionCount) :
     P.state r = P.state r + regionWalkXor (FlowRegionWalk.nil C r) := by
   simp [regionWalkXor_nil]
 
+/-- The integration identity for one crossing edge. -/
 theorem regionPotential_integrates_singleton
     {N : FlowNetwork} {C : FlowCrossing N}
     (P : RegionPotential C) (p : FlowNetworkPort N) :
@@ -67,6 +82,7 @@ theorem regionPotential_integrates_singleton
         regionWalkXor (FlowRegionWalk.singleton C p) := by
   simpa [regionWalkXor_singleton] using P.edgeLaw p
 
+/-- Every exact potential has zero holonomy around closed walks. -/
 theorem regionPotential_regionZeroHolonomy
     {N : FlowNetwork} {C : FlowCrossing N}
     (P : RegionPotential C) :
@@ -81,10 +97,12 @@ theorem regionPotential_regionZeroHolonomy
     _ = P.state r + P.state r := by rw [← h]
     _ = 0 := state_add_self _
 
+/-- Every region is reachable from a chosen base region. -/
 def RootedRegionConnected {N : FlowNetwork}
     (C : FlowCrossing N) (base : Fin N.regionCount) : Prop :=
   ∀ s, RegionReachable C base s
 
+/-- On a rooted network, zero holonomy integrates to a potential. -/
 theorem regionPotential_exists_of_zeroHolonomy
     {N : FlowNetwork} {C : FlowCrossing N}
     (base : Fin N.regionCount) (baseState : TrominoState)
@@ -128,6 +146,7 @@ theorem regionPotential_exists_of_zeroHolonomy
     regionWalkXor baseWalk = baseState
   rw [add_assoc, state_add_self, add_zero]
 
+/-- Potentials with the same base value agree everywhere. -/
 theorem regionPotential_eq_of_same_base
     {N : FlowNetwork} {C : FlowCrossing N}
     (base : Fin N.regionCount) (hreach : RootedRegionConnected C base)
@@ -142,6 +161,7 @@ theorem regionPotential_eq_of_same_base
     _ = Q.state base + regionWalkXor W := by rw [hbase]
     _ = Q.state s := (regionPotential_integrates Q W).symm
 
+/-- A potential is determined by its state function. -/
 theorem regionPotential_ext
     {N : FlowNetwork} {C : FlowCrossing N}
     {P Q : RegionPotential C}
@@ -155,6 +175,7 @@ theorem regionPotential_ext
       funext r
       exact h r
 
+/-- Translate every potential value by one global V4 state. -/
 def translateRegionPotential
     {N : FlowNetwork} {C : FlowCrossing N}
     (gamma : TrominoState) (P : RegionPotential C) : RegionPotential C where
@@ -164,12 +185,14 @@ def translateRegionPotential
     rw [P.edgeLaw p]
     ac_rfl
 
+/-- Pointwise formula for a translated potential. -/
 theorem translateRegionPotential_state
     {N : FlowNetwork} {C : FlowCrossing N}
     (gamma : TrominoState) (P : RegionPotential C)
     (r : Fin N.regionCount) :
     (translateRegionPotential gamma P).state r = P.state r + gamma := rfl
 
+/-- Any two potentials differ by one global additive gauge. -/
 theorem regionPotential_gauge
     {N : FlowNetwork} {C : FlowCrossing N}
     (base : Fin N.regionCount) (hreach : RootedRegionConnected C base)
@@ -190,6 +213,7 @@ theorem regionPotential_gauge
         (P.state base + Q.state base) := by ac_rfl
     _ = P.state s + (P.state base + Q.state base) := by rw [← hp]
 
+/-- Edge labels are the sum of the endpoint potentials. -/
 theorem regionPotential_edgeLabel
     {N : FlowNetwork} {C : FlowCrossing N}
     (P : RegionPotential C) (p : FlowNetworkPort N) :
@@ -198,6 +222,7 @@ theorem regionPotential_edgeLabel
   rw [P.edgeLaw p]
   rw [← add_assoc, state_add_self, zero_add]
 
+/-- Nonzero edge labels force distinct endpoint potentials. -/
 theorem regionPotential_adjacent_ne
     {N : FlowNetwork} {C : FlowCrossing N}
     (P : RegionPotential C) (p : FlowNetworkPort N) :
@@ -207,12 +232,14 @@ theorem regionPotential_adjacent_ne
   rw [heq, state_add_self] at hlabel
   exact (N.signature p.1).nonzero p.2 hlabel.symm
 
+/-- A region potential is proper on every crossing edge. -/
 theorem regionPotential_proper_on_crossing
     {N : FlowNetwork} {C : FlowCrossing N}
     (P : RegionPotential C) (p : FlowNetworkPort N) :
     P.state (flowEdgeSource C p) ≠ P.state (flowEdgeTarget C p) :=
   regionPotential_adjacent_ne P p
 
+/-- Under rooted reachability, zero holonomy is equivalent to a potential. -/
 theorem regionZeroHolonomy_iff_regionPotential
     {N : FlowNetwork} {C : FlowCrossing N}
     (base : Fin N.regionCount) (baseState : TrominoState)

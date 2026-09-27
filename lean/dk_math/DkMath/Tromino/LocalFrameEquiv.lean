@@ -12,8 +12,17 @@ namespace DkMath.Tromino
 open DkMath.Polyomino
 open DkMath.Polyomino.Tromino
 
-/-! A finite 3+1 frame over the additive V4 carrier. -/
+/-!
+# Finite exchange frames
 
+An exchange frame is a four-element panel with one distinguished gap.  The
+remaining three panels form the nonzero V4 directions after translating by
+the gap color.  The Gaussian and Eisenstein realizations below are concrete
+coordinate models of the same finite frame, and the equivalences record only
+this local combinatorial correspondence.
+-/
+
+/-- A finite four-panel frame with one distinguished gap. -/
 structure TrominoExchangeFrame where
   Panel : Type
   instFintype : Fintype Panel
@@ -24,15 +33,19 @@ structure TrominoExchangeFrame where
 instance (F : TrominoExchangeFrame) : Fintype F.Panel := F.instFintype
 instance (F : TrominoExchangeFrame) : DecidableEq F.Panel := F.instDecidableEq
 
+/-- The V4 color assigned to a panel. -/
 def frameColor (F : TrominoExchangeFrame) (p : F.Panel) : TrominoState :=
   F.colorEquiv p
 
+/-- The three non-gap panels of a frame. -/
 def frameBody (F : TrominoExchangeFrame) : Finset F.Panel :=
   Finset.univ.erase F.gap
 
+/-- Translate a panel color by the distinguished gap color. -/
 def frameDelta (F : TrominoExchangeFrame) (p : F.Panel) : TrominoState :=
   frameColor F F.gap + frameColor F p
 
+/-- Every exchange frame has four panels. -/
 theorem frame_panel_card (F : TrominoExchangeFrame) :
     Fintype.card F.Panel = 4 := by
   calc
@@ -41,15 +54,18 @@ theorem frame_panel_card (F : TrominoExchangeFrame) :
     _ = Nat.card TrominoState := Fintype.card_eq_nat_card
     _ = 4 := card_state
 
+/-- Removing the gap leaves exactly three body panels. -/
 theorem frame_body_card (F : TrominoExchangeFrame) :
     (frameBody F).card = 3 := by
   rw [frameBody, Finset.card_erase_of_mem (Finset.mem_univ F.gap)]
   simp [frame_panel_card F]
 
+/-- The distinguished gap is not in the frame body. -/
 theorem frame_gap_not_mem_body (F : TrominoExchangeFrame) :
     F.gap ∉ frameBody F := by
   simp [frameBody]
 
+/-- The translated delta vanishes exactly at the gap panel. -/
 theorem frame_delta_eq_zero_iff (F : TrominoExchangeFrame) (p : F.Panel) :
     frameDelta F p = 0 ↔ p = F.gap := by
   constructor
@@ -64,12 +80,14 @@ theorem frame_delta_eq_zero_iff (F : TrominoExchangeFrame) (p : F.Panel) :
     subst p
     exact state_add_self _
 
+/-- Body membership is equivalent to having a nonzero translated delta. -/
 theorem frame_mem_body_iff_delta_ne_zero (F : TrominoExchangeFrame)
     (p : F.Panel) :
     p ∈ frameBody F ↔ frameDelta F p ≠ 0 := by
   rw [frameBody, Finset.mem_erase]
   simp [frame_delta_eq_zero_iff F p]
 
+/-- The body realizes precisely the three nonzero V4 states. -/
 theorem frame_delta_image_body (F : TrominoExchangeFrame) :
     (frameBody F).image (frameDelta F) =
       Finset.filter (fun x : TrominoState => x ≠ 0) Finset.univ := by
@@ -89,6 +107,7 @@ theorem frame_delta_image_body (F : TrominoExchangeFrame) :
     refine Finset.mem_image.mpr ⟨p, ?_, hpdelta⟩
     exact (frame_mem_body_iff_delta_ne_zero F p).2 (by simpa [hpdelta] using hx0)
 
+/-- Every body panel has nonzero delta. -/
 theorem frame_delta_body_is_nonzero (F : TrominoExchangeFrame)
     {p : F.Panel} (hp : p ∈ frameBody F) :
     frameDelta F p = deltaA ∨ frameDelta F p = deltaB ∨
@@ -96,17 +115,20 @@ theorem frame_delta_body_is_nonzero (F : TrominoExchangeFrame)
   exact nonzeroState_eq_deltaA_or_deltaB_or_deltaC _
     ((frame_mem_body_iff_delta_ne_zero F p).1 hp)
 
+/-- An equivalence of exchange frames preserving gap and delta structure. -/
 structure TrominoExchangeFrameEquiv (G E : TrominoExchangeFrame) where
   panelEquiv : G.Panel ≃ E.Panel
   map_gap : panelEquiv G.gap = E.gap
   map_delta : ∀ p, frameDelta E (panelEquiv p) = frameDelta G p
 
+/-- A frame equivalence preserves body membership. -/
 theorem frame_equiv_mem_body_iff (φ : TrominoExchangeFrameEquiv G E)
     (p : G.Panel) :
     φ.panelEquiv p ∈ frameBody E ↔ p ∈ frameBody G := by
   rw [frame_mem_body_iff_delta_ne_zero E, frame_mem_body_iff_delta_ne_zero G]
   rw [φ.map_delta]
 
+/-- A frame equivalence preserves the translated delta classification. -/
 theorem frame_equiv_delta_classification (φ : TrominoExchangeFrameEquiv G E)
     {p : G.Panel} (hp : p ∈ frameBody G) :
     frameDelta E (φ.panelEquiv p) = deltaA ∨
@@ -115,10 +137,12 @@ theorem frame_equiv_delta_classification (φ : TrominoExchangeFrameEquiv G E)
   rw [φ.map_delta]
   exact frame_delta_body_is_nonzero G hp
 
+/-- The local exchange swaps a panel with the distinguished gap. -/
 def localExchange (F : TrominoExchangeFrame) (p : F.Panel)
     (x : TrominoState) : TrominoState :=
   exchange (frameDelta F p) x
 
+/-- Local exchange commutes with a frame equivalence. -/
 theorem localExchange_conjugate (φ : TrominoExchangeFrameEquiv G E)
     (p : G.Panel) (x : TrominoState) :
     localExchange E (φ.panelEquiv p) x = localExchange G p x := by
