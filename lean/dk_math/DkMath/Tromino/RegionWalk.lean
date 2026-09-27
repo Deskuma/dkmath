@@ -307,6 +307,7 @@ theorem regionReachable_trans {N : FlowNetwork} (C : FlowCrossing N)
   rintro ⟨W₁⟩ ⟨W₂⟩
   exact ⟨FlowRegionWalk.append W₁ W₂⟩
 
+/-- The walk traced by iterating the closed-network transition step. -/
 def transitionRegionWalk (N : ClosedFlowNetwork)
     (p : FlowNetworkPort N.toFlowNetwork) :
     (n : Nat) →
@@ -323,6 +324,7 @@ def transitionRegionWalk (N : ClosedFlowNetwork)
         rfl
       ⟨W.edges, by simpa [htarget] using W.valid⟩
 
+/-- One further transition adds the label of the current crossing port. -/
 theorem flowTransitionXor_succ (N : ClosedFlowNetwork)
     (p : FlowNetworkPort N.toFlowNetwork) (n : Nat) :
     flowTransitionXor N p (n + 1) =
@@ -331,6 +333,7 @@ theorem flowTransitionXor_succ (N : ClosedFlowNetwork)
   rw [flowTransitionXor, Finset.sum_range_succ]
   rfl
 
+/-- The XOR of a transition walk equals the accumulated transition XOR. -/
 theorem transitionRegionWalk_xor (N : ClosedFlowNetwork)
     (p : FlowNetworkPort N.toFlowNetwork) (n : Nat) :
     regionWalkXor (transitionRegionWalk N p n) =
@@ -349,6 +352,7 @@ theorem transitionRegionWalk_xor (N : ClosedFlowNetwork)
     rw [regionWalkXor_append, regionWalkXor_singleton, ih,
       flowTransitionXor_succ]
 
+/-- A transition walk contains exactly as many edges as iterations. -/
 theorem transitionRegionWalk_endpoint (N : ClosedFlowNetwork)
     (p : FlowNetworkPort N.toFlowNetwork) (n : Nat) :
     (transitionRegionWalk N p n).edges.length = n := by
@@ -357,6 +361,7 @@ theorem transitionRegionWalk_endpoint (N : ClosedFlowNetwork)
   | succ n ih =>
     simp [transitionRegionWalk, FlowRegionWalk.append, FlowRegionWalk.singleton, ih]
 
+/-- A returned transition orbit produces a closed region walk. -/
 def transitionRegionWalk_closed_of_return (N : ClosedFlowNetwork)
     (p : FlowNetworkPort N.toFlowNetwork) (n : Nat)
     (hreturn : FlowTransitionReturn N p n) :
@@ -365,6 +370,7 @@ def transitionRegionWalk_closed_of_return (N : ClosedFlowNetwork)
   refine ⟨W.edges, ?_⟩
   simpa [hreturn.2] using W.valid
 
+/-- Zero region holonomy forces every returned transition XOR to vanish. -/
 theorem flowTransitionXor_eq_zero_of_regionZeroHolonomy
     (N : ClosedFlowNetwork) (p : FlowNetworkPort N.toFlowNetwork) (n : Nat)
     (hzero : RegionZeroHolonomy N.crossing)
@@ -373,6 +379,7 @@ theorem flowTransitionXor_eq_zero_of_regionZeroHolonomy
   rw [← transitionRegionWalk_xor N p n]
   exact hzero p.1 (transitionRegionWalk_closed_of_return N p n hreturn)
 
+/-- Under zero holonomy, every primitive transition return has even length. -/
 theorem primitiveFlowTransitionReturn_even_of_regionZeroHolonomy
     (N : ClosedFlowNetwork) (p : FlowNetworkPort N.toFlowNetwork) (n : Nat)
     (hzero : RegionZeroHolonomy N.crossing)

@@ -43,20 +43,33 @@ def deltaB : TrominoState := (0, 1)
 /-- The sum of the first two nonzero V4 directions. -/
 def deltaC : TrominoState := (1, 1)
 
+/-- The first nonzero V4 direction is distinct from zero. -/
 theorem deltaA_ne_zero : deltaA ≠ 0 := by decide
+/-- The second nonzero V4 direction is distinct from zero. -/
 theorem deltaB_ne_zero : deltaB ≠ 0 := by decide
+/-- The third nonzero V4 direction is distinct from zero. -/
 theorem deltaC_ne_zero : deltaC ≠ 0 := by decide
+/-- The first two named directions are distinct. -/
 theorem deltaA_ne_deltaB : deltaA ≠ deltaB := by decide
+/-- The first and third named directions are distinct. -/
 theorem deltaA_ne_deltaC : deltaA ≠ deltaC := by decide
+/-- The second and third named directions are distinct. -/
 theorem deltaB_ne_deltaC : deltaB ≠ deltaC := by decide
+/-- The second direction is distinct from the first. -/
 theorem deltaB_ne_deltaA : deltaB ≠ deltaA := by decide
+/-- The third direction is distinct from the first. -/
 theorem deltaC_ne_deltaA : deltaC ≠ deltaA := by decide
+/-- The third direction is distinct from the second. -/
 theorem deltaC_ne_deltaB : deltaC ≠ deltaB := by decide
 
+/-- The sum of the first two directions is the third direction. -/
 theorem deltaA_add_deltaB : deltaA + deltaB = deltaC := by decide
+/-- The sum of the second and third directions is the first direction. -/
 theorem deltaB_add_deltaC : deltaB + deltaC = deltaA := by decide
+/-- The sum of the third and first directions is the second direction. -/
 theorem deltaC_add_deltaA : deltaC + deltaA = deltaB := by decide
 
+/-- The three nonzero V4 directions sum to zero. -/
 theorem deltaA_add_deltaB_add_deltaC : deltaA + deltaB + deltaC = 0 := by
   rw [deltaA_add_deltaB]
   exact state_add_self deltaC

@@ -394,27 +394,33 @@ theorem flowPairedPorts_toFlowPairing {S : BoundarySignature}
     (P : BoundaryPairing S) :
     flowPairedPorts P.toFlowPairing = pairedPorts P := rfl
 
+/-- The canonical flow mate agrees with the canonical boundary mate. -/
 theorem canonicalFlowMate_toFlowSignature (S : BoundarySignature)
     (i : Fin S.arity) :
     canonicalFlowMate S.toFlowSignature i = canonicalMate S i := by
   rfl
 
+/-- The transported boundary pairing has the canonical flow mate action. -/
 theorem canonicalBoundaryPairing_mate_eq_canonicalFlowPairing_mate
     (S : BoundarySignature) (i : Fin S.arity) :
     (canonicalBoundaryPairing S).mate i =
       (canonicalFlowPairing S.toFlowSignature).mate i := by
   rfl
 
+/-- Canonical residual ports agree under the boundary-to-flow presentation. -/
 theorem canonicalFlowResidual_toFlowSignature (S : BoundarySignature) :
     flowResidualPorts (canonicalFlowPairing S.toFlowSignature) =
       residualPorts (canonicalBoundaryPairing S) := by
   rfl
 
+/-- Canonical paired ports agree under the boundary-to-flow presentation. -/
 theorem canonicalFlowPaired_toFlowSignature (S : BoundarySignature) :
     flowPairedPorts (canonicalFlowPairing S.toFlowSignature) =
       pairedPorts (canonicalBoundaryPairing S) := by
   rfl
 
+/-- Canonical residual counts agree fiberwise under the boundary-to-flow
+presentation. -/
 theorem canonicalFlowResidual_card_by_label_toFlowSignature
     (S : BoundarySignature) (delta : TrominoState) :
     (flowResidualPortsWithLabel (canonicalFlowPairing S.toFlowSignature) delta).card =

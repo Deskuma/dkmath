@@ -246,18 +246,21 @@ def PortCombinatorialMap.toFlowCombinatorialMap {P : PortNetwork}
     intro r s
     exact (portRegionReachable_iff_flow_lift A).mp (M.connected r s)
 
+/-- The lifted flow map has the same vertex count as the port map. -/
 theorem PortCombinatorialMap.toFlowCombinatorialMap_vertexCount
     {P : PortNetwork} (M : PortCombinatorialMap P)
     (A : V4FlowAssignment M.crossing) :
     (M.toFlowCombinatorialMap A).vertexCount = M.vertexCount := by
   rfl
 
+/-- The lifted flow map has the same edge count as the port map. -/
 theorem PortCombinatorialMap.toFlowCombinatorialMap_edgeCount
     {P : PortNetwork} (M : PortCombinatorialMap P)
     (A : V4FlowAssignment M.crossing) :
     (M.toFlowCombinatorialMap A).edgeCount = M.edgeCount := by
   rfl
 
+/-- The lifted flow map has the same face count as the port map. -/
 theorem PortCombinatorialMap.toFlowCombinatorialMap_faceCount
     {P : PortNetwork} (M : PortCombinatorialMap P)
     (A : V4FlowAssignment M.crossing) :
@@ -265,12 +268,14 @@ theorem PortCombinatorialMap.toFlowCombinatorialMap_faceCount
   exact (portFaceCount_of_flow_erasure
     (M.rotation.toFlowLocalRotation A) A.toFlowCrossing).symm
 
+/-- The lifted flow map has the same port count as the port map. -/
 theorem PortCombinatorialMap.toFlowCombinatorialMap_portCount
     {P : PortNetwork} (M : PortCombinatorialMap P)
     (A : V4FlowAssignment M.crossing) :
     (M.toFlowCombinatorialMap A).portCount = M.portCount := by
   rfl
 
+/-- The lifted flow map has the same Euler characteristic as the port map. -/
 theorem PortCombinatorialMap.toFlowCombinatorialMap_eulerCharacteristic
     {P : PortNetwork} (M : PortCombinatorialMap P)
     (A : V4FlowAssignment M.crossing) :
@@ -278,6 +283,7 @@ theorem PortCombinatorialMap.toFlowCombinatorialMap_eulerCharacteristic
   exact (portCombinatorialEulerCharacteristic_of_flow_erasure
     (M.rotation.toFlowLocalRotation A) A.toFlowCrossing).symm
 
+/-- Genus certification is preserved by conversion to the port presentation. -/
 theorem FlowCombinatorialMap.toPortCombinatorialMap_genus_iff
     {N : FlowNetwork} (M : FlowCombinatorialMap N) (g : Nat) :
     HasCombinatorialGenus M g ↔
@@ -285,6 +291,7 @@ theorem FlowCombinatorialMap.toPortCombinatorialMap_genus_iff
   unfold HasCombinatorialGenus PortHasCombinatorialGenus
   rw [M.toPortCombinatorialMap_eulerCharacteristic]
 
+/-- Sphere characteristic is preserved by conversion to the port presentation. -/
 theorem FlowCombinatorialMap.toPortCombinatorialMap_sphere_iff
     {N : FlowNetwork} (M : FlowCombinatorialMap N) :
     HasSphereCharacteristic M ↔
@@ -292,6 +299,7 @@ theorem FlowCombinatorialMap.toPortCombinatorialMap_sphere_iff
   unfold HasSphereCharacteristic PortHasSphereCharacteristic
   rw [M.toPortCombinatorialMap_eulerCharacteristic]
 
+/-- Genus certification is preserved by a flow lift of a port map. -/
 theorem PortCombinatorialMap.toFlowCombinatorialMap_genus_iff
     {P : PortNetwork} (M : PortCombinatorialMap P)
     (A : V4FlowAssignment M.crossing) (g : Nat) :
@@ -300,6 +308,7 @@ theorem PortCombinatorialMap.toFlowCombinatorialMap_genus_iff
   unfold PortHasCombinatorialGenus HasCombinatorialGenus
   rw [M.toFlowCombinatorialMap_eulerCharacteristic]
 
+/-- Sphere characteristic is preserved by a flow lift of a port map. -/
 theorem PortCombinatorialMap.toFlowCombinatorialMap_sphere_iff
     {P : PortNetwork} (M : PortCombinatorialMap P)
     (A : V4FlowAssignment M.crossing) :
@@ -308,6 +317,7 @@ theorem PortCombinatorialMap.toFlowCombinatorialMap_sphere_iff
   unfold PortHasSphereCharacteristic HasSphereCharacteristic
   rw [M.toFlowCombinatorialMap_eulerCharacteristic]
 
+/-- All numerical map invariants are independent of the chosen flow assignment. -/
 theorem PortCombinatorialMap.toFlowCombinatorialMap_assignment_independent
     {P : PortNetwork} (M : PortCombinatorialMap P)
     (A B : V4FlowAssignment M.crossing) :
@@ -336,6 +346,7 @@ theorem PortCombinatorialMap.toFlowCombinatorialMap_assignment_independent
   · rw [M.toFlowCombinatorialMap_eulerCharacteristic,
       M.toFlowCombinatorialMap_eulerCharacteristic]
 
+/-- The genus predicate is independent of the chosen flow assignment. -/
 theorem PortCombinatorialMap.toFlowCombinatorialMap_genus_assignment_independent
     {P : PortNetwork} (M : PortCombinatorialMap P)
     (A B : V4FlowAssignment M.crossing) (g : Nat) :
@@ -349,6 +360,7 @@ theorem PortCombinatorialMap.toFlowCombinatorialMap_genus_assignment_independent
     exact (M.toFlowCombinatorialMap_genus_iff A g).mp
       ((M.toFlowCombinatorialMap_genus_iff B g).mpr h)
 
+/-- The sphere predicate is independent of the chosen flow assignment. -/
 theorem PortCombinatorialMap.toFlowCombinatorialMap_sphere_assignment_independent
     {P : PortNetwork} (M : PortCombinatorialMap P)
     (A B : V4FlowAssignment M.crossing) :
@@ -362,23 +374,27 @@ theorem PortCombinatorialMap.toFlowCombinatorialMap_sphere_assignment_independen
     exact (M.toFlowCombinatorialMap_sphere_iff A).mp
       ((M.toFlowCombinatorialMap_sphere_iff B).mpr h)
 
+/-- The crossing involution is unchanged by a flow-to-port round trip. -/
 theorem FlowCombinatorialMap.toPortCombinatorialMap_round_trip_cross
     {N : FlowNetwork} (M : FlowCombinatorialMap N)
     (p : PortNetworkPort N.toPortNetwork) :
     M.toPortCombinatorialMap.crossing.cross p =
       M.crossing.cross p := rfl
 
+/-- The rotation is unchanged by a flow-to-port round trip. -/
 theorem FlowCombinatorialMap.toPortCombinatorialMap_round_trip_rotate
     {N : FlowNetwork} (M : FlowCombinatorialMap N)
     (p : PortNetworkPort N.toPortNetwork) :
     M.toPortCombinatorialMap.rotation.rotate p = M.rotation.rotate p := rfl
 
+/-- The crossing involution is unchanged by a port-to-flow round trip. -/
 theorem PortCombinatorialMap.toFlowCombinatorialMap_round_trip_cross
     {P : PortNetwork} (M : PortCombinatorialMap P)
     (A : V4FlowAssignment M.crossing) (p : PortNetworkPort P) :
     (M.toFlowCombinatorialMap A).crossing.toPortCrossing.cross p =
       M.crossing.cross p := rfl
 
+/-- The rotation is unchanged by a port-to-flow round trip. -/
 theorem PortCombinatorialMap.toFlowCombinatorialMap_round_trip_rotate
     {P : PortNetwork} (M : PortCombinatorialMap P)
     (A : V4FlowAssignment M.crossing) (p : PortNetworkPort P) :

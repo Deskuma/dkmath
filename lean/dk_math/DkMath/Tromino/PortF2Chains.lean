@@ -24,6 +24,7 @@ statement.
 
 namespace DkMath.Tromino
 
+/-- The coefficient field for the finite chain complex. -/
 abbrev PortF2 := ZMod 2
 
 /-- An edge cell is an orbit of the crossing involution. -/
@@ -91,9 +92,12 @@ theorem faceCellOfPort_mem {P : PortNetwork} (R : PortLocalRotation P)
     p ∈ (faceCellOfPort R C p).val := by
   exact portFaceOrbit_contains R C p
 
+/-- F₂-valued chains on the region, or vertex, carrier. -/
 abbrev PortVertexChain (P : PortNetwork) := Fin P.regionCount → PortF2
+/-- F₂-valued chains on crossing-orbit edge cells. -/
 abbrev PortEdgeChain {P : PortNetwork} (C : PortCrossing P) :=
   PortEdgeCell C → PortF2
+/-- F₂-valued chains on face-orbit face cells. -/
 abbrev PortFaceChain {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) := PortFaceCell R C → PortF2
 

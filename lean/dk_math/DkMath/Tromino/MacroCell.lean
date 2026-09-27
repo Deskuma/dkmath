@@ -24,6 +24,7 @@ structure FourColorMacroCell where
   payload : ColoredShape
   complete : CompleteFourState payload
 
+/-- Two macro cells are equal when their certified payloads are equal. -/
 @[ext] theorem FourColorMacroCell.ext'
     {M N : FourColorMacroCell} (hpayload : M.payload = N.payload) : M = N := by
   cases M
@@ -41,12 +42,12 @@ def collapseFourColorCell
 def expandFourColorMacroCell (M : FourColorMacroCell) : ColoredShape :=
   M.payload
 
-/-- Expansion after collapse is definitionally the original payload. -/
+/-- Expanding a collapsed colored shape recovers its original payload. -/
 theorem expand_collapseFourColorCell
     (P : ColoredShape) (hP : CompleteFourState P) :
     expandFourColorMacroCell (collapseFourColorCell P hP) = P := rfl
 
-/-- Collapse after expansion is exact, up to proof irrelevance. -/
+/-- Collapsing an expanded macro cell recovers the original certified cell. -/
 theorem collapse_expandFourColorMacroCell (M : FourColorMacroCell) :
     collapseFourColorCell (expandFourColorMacroCell M) M.complete = M := by
   cases M
@@ -60,10 +61,12 @@ def atomicFourColorMacroCell : FourColorMacroCell :=
     expandFourColorMacroCell atomicFourColorMacroCell = atomicFourColorCell :=
   rfl
 
+/-- The canonical macro cell retains the complete four-state certificate. -/
 theorem atomicFourColorMacroCell_complete :
     CompleteFourState (expandFourColorMacroCell atomicFourColorMacroCell) :=
   atomicFourColorCell_complete
 
+/-- The canonical macro cell expands to a four-cell footprint. -/
 theorem atomicFourColorMacroCell_shape_card :
     (expandFourColorMacroCell atomicFourColorMacroCell).shape.card = 4 :=
   atomicFourColorCell_card
@@ -75,13 +78,16 @@ def macroCount (_M : FourColorMacroCell) : ℕ := 1
 def atomicCellCount (M : FourColorMacroCell) : ℕ :=
   (expandFourColorMacroCell M).shape.card
 
+/-- Every certified level-zero macro cell contains four atomic cells. -/
 theorem atomicCellCount_eq_four (M : FourColorMacroCell) :
     atomicCellCount M = 4 := by
   exact M.complete.1
 
+/-- A level-zero wrapper represents exactly one macro unit. -/
 theorem macroCount_eq_one (M : FourColorMacroCell) :
     macroCount M = 1 := rfl
 
+/-- Atomic mass is four times the number of level-zero macro units. -/
 theorem atomicCellCount_eq_four_mul_macroCount (M : FourColorMacroCell) :
     atomicCellCount M = 4 * macroCount M := by
   rw [atomicCellCount_eq_four, macroCount_eq_one]

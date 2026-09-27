@@ -27,6 +27,7 @@ structure MacroShape where
   shape : Shape
   payload : Cell → FourColorMacroCell
 
+/-- Two macro shapes are equal when their footprints and payload maps agree. -/
 @[ext] theorem MacroShape.ext'
     {P Q : MacroShape} (hshape : P.shape = Q.shape)
     (hpayload : P.payload = Q.payload) : P = Q := by
@@ -91,13 +92,16 @@ def canonicalMacroFrame : MacroShape :=
   { shape := block2
     payload := fun _ => atomicFourColorMacroCell }
 
+/-- The canonical frame has the fixed two-by-two footprint. -/
 @[simp] theorem canonicalMacroFrame_shape :
     canonicalMacroFrame.shape = block2 := rfl
 
+/-- The canonical macro frame occupies four macro coordinates. -/
 theorem canonicalMacroFrame_shape_card :
     canonicalMacroFrame.shape.card = 4 := by
   simpa [canonicalMacroFrame, area] using area_block2
 
+/-- Every coordinate of the canonical frame carries the atomic macro cell. -/
 @[simp] theorem canonicalMacroFrame_payload (c : Cell) :
     canonicalMacroFrame.payload c = atomicFourColorMacroCell := rfl
 
@@ -105,6 +109,7 @@ theorem canonicalMacroFrame_shape_card :
 def canonicalMacroBody : MacroShape :=
   restrictMacroShape canonicalMacroFrame L_tromino
 
+/-- The canonical retained macro body has the L-tromino footprint. -/
 theorem canonicalMacroBody_shape :
     canonicalMacroBody.shape = L_tromino := by
   have hsub : L_tromino ⊆ block2 := by
@@ -113,6 +118,7 @@ theorem canonicalMacroBody_shape :
   change block2 ∩ L_tromino = L_tromino
   exact Finset.inter_eq_right.mpr hsub
 
+/-- Restricting the canonical frame preserves its constant payload. -/
 @[simp] theorem canonicalMacroBody_payload (c : Cell) :
     canonicalMacroBody.payload c = atomicFourColorMacroCell := by
   rfl
@@ -122,12 +128,15 @@ def canonicalMacroGap : MacroGapSlot :=
   { footprint := hole2
     expected := atomicFourColorMacroCell }
 
+/-- The canonical gap is the geometric hole footprint. -/
 @[simp] theorem canonicalMacroGap_footprint :
     canonicalMacroGap.footprint = hole2 := rfl
 
+/-- The canonical gap expects the atomic macro payload. -/
 @[simp] theorem canonicalMacroGap_expected :
     canonicalMacroGap.expected = atomicFourColorMacroCell := rfl
 
+/-- The canonical macro gap footprint has one coordinate. -/
 theorem canonicalMacroGap_footprint_card :
     canonicalMacroGap.footprint.card = 1 := by
   simp [canonicalMacroGap, hole2]
@@ -148,19 +157,23 @@ theorem canonical_macroRestoreRel :
 /-- Number of occupied macro coordinates. -/
 def macroPositionCount (P : MacroShape) : ℕ := P.shape.card
 
+/-- The canonical frame contains four occupied macro positions. -/
 theorem canonicalMacroFrame_macroPositionCount :
     macroPositionCount canonicalMacroFrame = 4 := by
   simpa [macroPositionCount] using canonicalMacroFrame_shape_card
 
+/-- The canonical retained body contains three occupied macro positions. -/
 theorem canonicalMacroBody_macroPositionCount :
     macroPositionCount canonicalMacroBody = 3 := by
   rw [macroPositionCount, canonicalMacroBody_shape]
   simp [L_tromino]
 
+/-- The canonical gap contributes one macro position. -/
 theorem canonicalMacroGap_macroPositionCount :
     canonicalMacroGap.footprint.card = 1 :=
   canonicalMacroGap_footprint_card
 
+/-- The canonical body/gap position counts add to the frame count. -/
 theorem canonical_macro_count_split :
     macroPositionCount canonicalMacroBody +
         canonicalMacroGap.footprint.card =
@@ -173,6 +186,7 @@ theorem canonical_macro_count_split :
 def atomicPayloadMass (P : MacroShape) : ℕ :=
   Finset.sum P.shape (fun c => atomicCellCount (P.payload c))
 
+/-- A constant macro payload contributes four atomic cells per position. -/
 theorem atomicPayloadMass_eq_four_mul_card_of_constant
     (P : MacroShape) (M : FourColorMacroCell)
     (hpayload : ∀ c ∈ P.shape, P.payload c = M) :
@@ -189,6 +203,7 @@ theorem atomicPayloadMass_eq_four_mul_card_of_constant
     _ = 4 * P.shape.card := by
       simp [Nat.mul_comm]
 
+/-- The canonical retained macro body has atomic payload mass `12`. -/
 theorem canonicalMacroBody_atomicPayloadMass :
     atomicPayloadMass canonicalMacroBody = 12 := by
   rw [atomicPayloadMass_eq_four_mul_card_of_constant canonicalMacroBody
@@ -198,10 +213,12 @@ theorem canonicalMacroBody_atomicPayloadMass :
   · intro c hc
     exact canonicalMacroBody_payload c
 
+/-- The payload expected at the canonical gap has atomic mass `4`. -/
 theorem canonicalMacroGap_atomicPayloadMass :
     atomicCellCount canonicalMacroGap.expected = 4 :=
   atomicCellCount_eq_four canonicalMacroGap.expected
 
+/-- The canonical macro frame has total atomic payload mass `16`. -/
 theorem canonicalMacroFrame_atomicPayloadMass :
     atomicPayloadMass canonicalMacroFrame = 16 := by
   rw [atomicPayloadMass_eq_four_mul_card_of_constant canonicalMacroFrame
@@ -210,6 +227,7 @@ theorem canonicalMacroFrame_atomicPayloadMass :
   · intro c hc
     exact canonicalMacroFrame_payload c
 
+/-- The canonical body mass plus gap payload mass equals frame mass. -/
 theorem canonical_atomic_mass_split :
     atomicPayloadMass canonicalMacroBody +
         atomicCellCount canonicalMacroGap.expected =
@@ -218,6 +236,7 @@ theorem canonical_atomic_mass_split :
     canonicalMacroGap_atomicPayloadMass,
     canonicalMacroFrame_atomicPayloadMass]
 
+/-- The canonical frame mass is four times its macro-position count. -/
 theorem canonical_atomic_mass_scale :
     atomicPayloadMass canonicalMacroFrame =
       4 * macroPositionCount canonicalMacroFrame := by

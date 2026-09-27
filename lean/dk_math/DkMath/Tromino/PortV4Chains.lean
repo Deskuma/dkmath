@@ -74,27 +74,33 @@ def v4FaceChainEquiv {P : PortNetwork} {R : PortLocalRotation P}
       (PortFaceChain R C × PortFaceChain R C) :=
   v4FunEquiv (PortFaceCell R C)
 
+/-- The first coordinate of a V4 vertex chain. -/
 @[simp] theorem v4VertexChainEquiv_fst {P : PortNetwork}
     (x : PortV4VertexChain P) (r : Fin P.regionCount) :
     (v4VertexChainEquiv x).1 r = (x r).1 := rfl
 
+/-- The second coordinate of a V4 vertex chain. -/
 @[simp] theorem v4VertexChainEquiv_snd {P : PortNetwork}
     (x : PortV4VertexChain P) (r : Fin P.regionCount) :
     (v4VertexChainEquiv x).2 r = (x r).2 := rfl
 
+/-- The first coordinate of a V4 edge chain. -/
 @[simp] theorem v4EdgeChainEquiv_fst {P : PortNetwork} {C : PortCrossing P}
     (x : PortV4EdgeChain C) (E : PortEdgeCell C) :
     (v4EdgeChainEquiv x).1 E = (x E).1 := rfl
 
+/-- The second coordinate of a V4 edge chain. -/
 @[simp] theorem v4EdgeChainEquiv_snd {P : PortNetwork} {C : PortCrossing P}
     (x : PortV4EdgeChain C) (E : PortEdgeCell C) :
     (v4EdgeChainEquiv x).2 E = (x E).2 := rfl
 
+/-- The first coordinate of a V4 face chain. -/
 @[simp] theorem v4FaceChainEquiv_fst {P : PortNetwork}
     {R : PortLocalRotation P} {C : PortCrossing P}
     (x : PortV4FaceChain R C) (F : PortFaceCell R C) :
     (v4FaceChainEquiv x).1 F = (x F).1 := rfl
 
+/-- The second coordinate of a V4 face chain. -/
 @[simp] theorem v4FaceChainEquiv_snd {P : PortNetwork}
     {R : PortLocalRotation P} {C : PortCrossing P}
     (x : PortV4FaceChain R C) (F : PortFaceCell R C) :
@@ -250,16 +256,22 @@ theorem portV4FaceBoundarySpace_le_cycleSpace {P : PortNetwork}
   change portV4Boundary1 C (portV4Boundary2 R C y) = 0
   simpa using congrArg (fun L => L y) (portV4Boundary1_boundary2 R C)
 
+/-- The first named V4 direction in F₂ coordinates. -/
 theorem deltaA_coordinates : deltaA = ((1 : PortF2), 0) := rfl
+/-- The second named V4 direction in F₂ coordinates. -/
 theorem deltaB_coordinates : deltaB = ((0 : PortF2), 1) := rfl
+/-- The third named V4 direction in F₂ coordinates. -/
 theorem deltaC_coordinates : deltaC = ((1 : PortF2), 1) := rfl
 
+/-- The first two coordinate directions add to the third. -/
 theorem deltaA_add_deltaB_eq_deltaC : deltaA + deltaB = deltaC :=
   deltaA_add_deltaB
 
+/-- The three nonzero coordinate directions sum to zero. -/
 theorem deltaA_add_deltaB_add_deltaC_eq_zero :
     deltaA + deltaB + deltaC = 0 := deltaA_add_deltaB_add_deltaC
 
+/-- A V4 Kirchhoff sum vanishes exactly when both F₂ coordinates vanish. -/
 theorem vertexKirchhoffSum_eq_zero_iff_coordinates
     {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) (r : Fin P.regionCount) :
@@ -272,6 +284,7 @@ theorem vertexKirchhoffSum_eq_zero_iff_coordinates
   · rintro ⟨h₁, h₂⟩
     exact Prod.ext h₁ h₂
 
+/-- The V4 Kirchhoff sum is the flow sum of the assignment signature. -/
 theorem vertexKirchhoffSum_coordinates_are_flow_coordinates
     {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) (r : Fin P.regionCount) :

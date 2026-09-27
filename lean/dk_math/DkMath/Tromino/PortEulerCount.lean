@@ -243,21 +243,26 @@ theorem portCombinatorialEulerCharacteristic_eq {P : PortNetwork}
       (portRegionVertexCount P : Int) - (portCrossingEdgeCount C : Int)
         + (portFaceCount R C : Int) := rfl
 
+/-- Flow erasure preserves the total port count. -/
 theorem portCount_of_flow_erasure {N : FlowNetwork} :
     N.toPortNetwork.portCount = totalPortCount N := rfl
 
+/-- Flow erasure identifies a crossing pair with its port-level pair. -/
 theorem portCrossingEdgePair_of_flow_erasure {N : FlowNetwork}
     (C : FlowCrossing N) (p : PortNetworkPort N.toPortNetwork) :
     portCrossingEdgePair C.toPortCrossing p = crossingEdgePair C p := rfl
 
+/-- Flow erasure identifies port crossing orbits with flow crossing orbits. -/
 theorem portCrossingEdgeOrbits_of_flow_erasure {N : FlowNetwork}
     (C : FlowCrossing N) :
     portCrossingEdgeOrbits C.toPortCrossing = crossingEdgeOrbits C := rfl
 
+/-- Flow erasure preserves the number of crossing edge orbits. -/
 theorem portCrossingEdgeCount_of_flow_erasure {N : FlowNetwork}
     (C : FlowCrossing N) :
     portCrossingEdgeCount C.toPortCrossing = crossingEdgeCount C := rfl
 
+/-- Flow erasure identifies port face orbits with flow face orbits. -/
 theorem portFaceOrbits_of_flow_erasure {N : FlowNetwork}
     (R : FlowLocalRotation N) (C : FlowCrossing N) :
     portFaceOrbits R.toPortLocalRotation C.toPortCrossing = faceOrbits R C := by
@@ -273,6 +278,7 @@ theorem portFaceOrbits_of_flow_erasure {N : FlowNetwork}
     rw [← portFaceOrbit_of_flow_erasure R C p]
     exact portFaceOrbit_mem_orbits R.toPortLocalRotation C.toPortCrossing p
 
+/-- Flow erasure preserves the number of face orbits. -/
 theorem portFaceCount_of_flow_erasure {N : FlowNetwork}
     (R : FlowLocalRotation N) (C : FlowCrossing N) :
     portFaceCount R.toPortLocalRotation C.toPortCrossing = faceCount R C := by
@@ -280,6 +286,7 @@ theorem portFaceCount_of_flow_erasure {N : FlowNetwork}
   rw [portFaceOrbits_of_flow_erasure]
   rfl
 
+/-- The port Euler characteristic agrees with its flow-erased form. -/
 theorem portCombinatorialEulerCharacteristic_of_flow_erasure
     {N : FlowNetwork} (R : FlowLocalRotation N) (C : FlowCrossing N) :
     portCombinatorialEulerCharacteristic R.toPortLocalRotation C.toPortCrossing =
@@ -290,6 +297,7 @@ theorem portCombinatorialEulerCharacteristic_of_flow_erasure
     portFaceCount_of_flow_erasure]
   rfl
 
+/-- A V4 flow lift has the port Euler characteristic of its source map. -/
 theorem combinatorialEulerCharacteristic_of_flow_lift
     {P : PortNetwork} {C : PortCrossing P} (R : PortLocalRotation P)
     (A : V4FlowAssignment C) :
@@ -299,6 +307,7 @@ theorem combinatorialEulerCharacteristic_of_flow_lift
     (R := R.toFlowLocalRotation A) (C := A.toFlowCrossing)]
   rfl
 
+/-- The combinatorial Euler characteristic is independent of the flow assignment. -/
 theorem combinatorialEulerCharacteristic_assignment_independent
     {P : PortNetwork} {C : PortCrossing P} (R : PortLocalRotation P)
     (A B : V4FlowAssignment C) :

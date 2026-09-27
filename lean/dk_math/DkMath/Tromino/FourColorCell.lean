@@ -89,6 +89,7 @@ def PairwiseDistinctOnShape (P : ColoredShape) : Prop :=
   ∀ ⦃c₁ c₂ : Cell⦄,
     c₁ ∈ P.shape → c₂ ∈ P.shape → P.color c₁ = P.color c₂ → c₁ = c₂
 
+/-- Complete four-state data makes the color map injective on the shape. -/
 theorem completeFourState_pairwiseDistinct
     {P : ColoredShape} (hP : CompleteFourState P) :
     PairwiseDistinctOnShape P := by

@@ -109,6 +109,7 @@ theorem tetraEdge_mem_delta_partition (E : TetraEdge) :
   · exact Or.inr (Or.inl (Finset.mem_filter.mpr ⟨Finset.mem_univ _, hB⟩))
   · exact Or.inr (Or.inr (Finset.mem_filter.mpr ⟨Finset.mem_univ _, hC⟩))
 
+/-- Distinct edges in one delta fiber are disjoint as face subsets. -/
 theorem tetraEdgesWithDelta_pairwise_disjoint {d : TrominoState}
     {E F : TetraEdge} (hE : E ∈ tetraEdgesWithDelta d)
     (hF : F ∈ tetraEdgesWithDelta d) (hneq : E ≠ F) :
@@ -178,6 +179,7 @@ theorem tetraEdgesWithDelta_pairwise_disjoint {d : TrominoState}
       rw [hEs, hFs]
       simp [hac]
 
+/-- The finite carrier of nonzero tetrahedral rolling directions. -/
 abbrev TetraDirection := {d : TrominoState // d ≠ 0}
 
 /-- There are three nonzero rolling directions. -/
