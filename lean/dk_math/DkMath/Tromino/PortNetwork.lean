@@ -13,21 +13,32 @@ import DkMath.Tromino.FlowTransition
 
 `PortNetwork` is the finite combinatorial carrier used by the later
 reduction.  A port is a dependent pair consisting of a region and a local
-slot; a `PortCrossing` pairs ports belonging to different regions.  A
-`V4FlowAssignment` labels these paired ports by nonzero elements of the
-Klein four-group and makes the label constant across each crossing.  Thus
-this file separates the finite incidence data from any topological or
-four-colour interpretation.
+slot; a `PortCrossing` pairs ports belonging to different regions by a
+fixed-point-free involution.  A `V4FlowAssignment` decorates those ports by
+nonzero elements of the Klein four-group and makes the decoration constant
+on each crossing edge.  The central bookkeeping principle is that the port
+carrier stores incidence, while the flow presentation stores the same
+incidence together with local labels.  The conversions at the end of the
+file therefore forget or reconstruct packaging without changing the finite
+crossing action.
 -/
 
 namespace DkMath.Tromino
 
-/-- The finite region-and-slot carrier. -/
+/-- The finite region-and-slot carrier.
+
+`regionCount` supplies the finite set of regions, and `arity` supplies the
+number of ports incident with each region.  The dependent type of ports
+below is consequently the disjoint union of all local slot types. -/
 structure PortNetwork where
   regionCount : Nat
   arity : Fin regionCount → Nat
 
-/-- The total number of dependent ports. -/
+/-- The total number of dependent ports.
+
+This is the cardinality of the finite dart carrier, not a new combinatorial
+structure: it is useful when a later argument counts all local incidences
+at once. -/
 abbrev PortNetworkPort (P : PortNetwork) :=
   Sigma (fun r : Fin P.regionCount => Fin (P.arity r))
 
@@ -35,7 +46,11 @@ abbrev PortNetworkPort (P : PortNetwork) :=
 def PortNetwork.portCount (P : PortNetwork) : Nat :=
   Fintype.card (PortNetworkPort P)
 
-/-- A fixed-point-free involution pairing ports into crossing edges. -/
+/-- A fixed-point-free involution pairing ports into crossing edges.
+
+Applying `cross` twice returns to the original port, so every orbit has two
+ends.  `changesRegion` records that the two ends lie in different regions;
+the resulting object is the finite edge relation used by walks and faces. -/
 structure PortCrossing (P : PortNetwork) where
   cross : PortNetworkPort P → PortNetworkPort P
   involutive : Function.Involutive cross
@@ -65,13 +80,21 @@ theorem PortCrossing.reverse_twice {P : PortNetwork} (C : PortCrossing P)
     (p : PortNetworkPort P) : C.cross (C.cross p) = p :=
   C.involutive p
 
-/-- A nowhere-zero V4 label constant on each crossing edge. -/
+/-- A nowhere-zero V4 label constant on each crossing edge.
+
+The label is attached to an incidence rather than to an abstract edge, and
+`cross_sameLabel` says that the two incidences of one crossing carry the
+same state.  The nonzero condition keeps the four-state encoding away from
+the distinguished zero state. -/
 structure V4FlowAssignment {P : PortNetwork} (C : PortCrossing P) where
   label : PortNetworkPort P → TrominoState
   nonzero : ∀ p, label p ≠ 0
   cross_sameLabel : ∀ p, label (C.cross p) = label p
 
-/-- Forget the port packaging and recover the older flow-network signature. -/
+/-- Forget the port packaging and recover the older flow-network signature.
+
+Each dependent port `⟨r, i⟩` becomes the `i`th slot of region `r`; only the
+same arity and label data are repackaged into `FlowNetwork`. -/
 def V4FlowAssignment.toFlowNetwork {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) : FlowNetwork where
   regionCount := P.regionCount
@@ -99,7 +122,11 @@ def V4FlowAssignment.toFlowNetwork {P : PortNetwork} {C : PortCrossing P}
     (r : Fin P.regionCount) (i : Fin (A.toFlowNetwork.signature r).arity) :
     (A.toFlowNetwork.signature r).label i = A.label ⟨r, i⟩ := rfl
 
-/-- Transport the crossing and its label compatibility to a flow crossing. -/
+/-- Transport the crossing and its label compatibility to a flow crossing.
+
+The crossing involution is copied verbatim.  Its `sameLabel` field is
+exactly the port assignment's edge-constancy axiom, so no new combinatorial
+assumption is introduced by the flow view. -/
 def V4FlowAssignment.toFlowCrossing {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) : FlowCrossing A.toFlowNetwork where
   cross := C.cross
@@ -115,7 +142,10 @@ def V4FlowAssignment.toFlowCrossing {P : PortNetwork} {C : PortCrossing P}
     (p : FlowNetworkPort A.toFlowNetwork) :
     A.toFlowCrossing.cross p = C.cross p := rfl
 
-/-- Forget a flow signature down to its region/arity carrier. -/
+/-- Forget a flow signature down to its region/arity carrier.
+
+This operation removes labels but retains precisely the finite dependent
+carrier on which crossings, rotations, and face permutations act. -/
 def FlowNetwork.toPortNetwork (N : FlowNetwork) : PortNetwork where
   regionCount := N.regionCount
   arity := fun r => (N.signature r).arity
@@ -128,7 +158,10 @@ def FlowNetwork.toPortNetwork (N : FlowNetwork) : PortNetwork where
 @[simp] theorem FlowNetwork.toPortNetwork_arity (N : FlowNetwork)
     (r : Fin N.regionCount) : N.toPortNetwork.arity r = (N.signature r).arity := rfl
 
-/-- Forget the common label data from a flow crossing. -/
+/-- Forget the common label data from a flow crossing.
+
+The underlying involution and the fact that it changes regions survive
+unchanged; only the label-compatibility field is discarded. -/
 def FlowCrossing.toPortCrossing {N : FlowNetwork} (C : FlowCrossing N) :
     PortCrossing N.toPortNetwork where
   cross := C.cross
@@ -140,7 +173,11 @@ def FlowCrossing.toPortCrossing {N : FlowNetwork} (C : FlowCrossing N) :
     (C : FlowCrossing N) (p : PortNetworkPort N.toPortNetwork) :
     C.toPortCrossing.cross p = C.cross p := rfl
 
-/-- Reconstruct a port assignment from a flow crossing. -/
+/-- Reconstruct a port assignment from a flow crossing.
+
+The local flow label at `⟨r, i⟩` is read as the label of that port.  The flow
+crossing's `sameLabel` theorem supplies edge constancy, while the local
+signature supplies nonzeroness. -/
 def FlowCrossing.toV4FlowAssignment {N : FlowNetwork} (C : FlowCrossing N) :
     V4FlowAssignment C.toPortCrossing where
   label := fun p => (N.signature p.1).label p.2
@@ -179,7 +216,11 @@ def FlowCrossing.toV4FlowAssignment {N : FlowNetwork} (C : FlowCrossing N) :
     (p : PortNetworkPort N.toPortNetwork) :
     C.toV4FlowAssignment.toFlowCrossing.cross p = C.cross p := rfl
 
-/-- Re-extracting a port assignment returns the original label. -/
+/-- Re-extracting a port assignment returns the original label.
+
+Together with the preceding arity and crossing lemmas, this is the
+label-level part of the port/flow round trip: the two presentations are
+definitionally the same finite data after their wrappers are removed. -/
 @[simp] theorem V4FlowAssignment.toFlowNetwork_toPortNetwork_regionCount
     {P : PortNetwork} {C : PortCrossing P} (A : V4FlowAssignment C) :
     A.toFlowNetwork.toPortNetwork.regionCount = P.regionCount := rfl

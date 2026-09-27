@@ -13,7 +13,9 @@ import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 This file records the finite, multigraph-safe chain spaces attached to a port
 combinatorial map.  Edge cells are crossing orbits and face cells are face
 orbits; in particular, parallel edges are not identified by a `SimpleGraph`.
-The endpoint of this file is the chain condition `im ∂₂ ≤ ker ∂₁`.
+The port carrier is the common incidence set from which both boundaries are
+counted.  The endpoint of this file is the chain condition
+`im ∂₂ ≤ ker ∂₁`.
 
 Here `∂₁` records the two endpoints of each crossing orbit and `∂₂`
 records the edge boundary of each face orbit, all over `ZMod 2`.  Working
@@ -24,14 +26,24 @@ statement.
 
 namespace DkMath.Tromino
 
-/-- The coefficient field for the finite chain complex. -/
+/-- The coefficient field for the finite chain complex.
+
+Working over `ZMod 2` records incidence parity: an edge used twice cancels,
+and orientation signs are unnecessary. -/
 abbrev PortF2 := ZMod 2
 
-/-- An edge cell is an orbit of the crossing involution. -/
+/-- An edge cell is an orbit of the crossing involution.
+
+The subtype remembers that a finite set really occurs among the crossing
+orbits, preserving parallel edges as distinct cells. -/
 def PortEdgeCell {P : PortNetwork} (C : PortCrossing P) :=
   {E : Finset (PortNetworkPort P) // E ∈ portCrossingEdgeOrbits C}
 
-/-- A face cell is an orbit of the face-step permutation. -/
+/-- A face cell is an orbit of the face-step permutation.
+
+The subtype packages the finite face partition as an index type for chains;
+choosing a different starting port of the same orbit does not create a new
+face cell. -/
 def PortFaceCell {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) :=
   {F : Finset (PortNetworkPort P) // F ∈ portFaceOrbits R C}
@@ -65,7 +77,10 @@ theorem PortFaceCell_card {P : PortNetwork} (R : PortLocalRotation P)
     Fintype.card (PortFaceCell R C) = portFaceCount R C := by
   exact Fintype.card_coe (portFaceOrbits R C)
 
-/-- The edge cell represented by a port. -/
+/-- The edge cell represented by a port.
+
+Every incidence selects its two-dart crossing orbit, giving the canonical
+edge basis cell used by incidence formulas. -/
 def edgeCellOfPort {P : PortNetwork} (C : PortCrossing P)
     (p : PortNetworkPort P) : PortEdgeCell C :=
   ⟨portCrossingEdgePair C p, portCrossingEdgePair_mem_orbits C p⟩
@@ -81,7 +96,10 @@ theorem edgeCellOfPort_mem {P : PortNetwork} (C : PortCrossing P)
     (p : PortNetworkPort P) : p ∈ (edgeCellOfPort C p).val :=
   portCrossingEdgePair_mem C p
 
-/-- The face cell represented by a port. -/
+/-- The face cell represented by a port.
+
+Every dart selects its face-step orbit, giving the canonical face basis cell
+used by the second boundary. -/
 def faceCellOfPort {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p : PortNetworkPort P) : PortFaceCell R C :=
   ⟨portFaceOrbit R C p, portFaceOrbit_mem_orbits R C p⟩
@@ -92,12 +110,19 @@ theorem faceCellOfPort_mem {P : PortNetwork} (R : PortLocalRotation P)
     p ∈ (faceCellOfPort R C p).val := by
   exact portFaceOrbit_contains R C p
 
-/-- F₂-valued chains on the region, or vertex, carrier. -/
+/-- F₂-valued chains on the region, or vertex, carrier.
+
+A vertex chain assigns a parity coefficient to each region cell. -/
 abbrev PortVertexChain (P : PortNetwork) := Fin P.regionCount → PortF2
-/-- F₂-valued chains on crossing-orbit edge cells. -/
+/-- F₂-valued chains on crossing-orbit edge cells.
+
+An edge chain assigns a parity coefficient to each crossing orbit, with no
+simple-graph quotienting of parallel edges. -/
 abbrev PortEdgeChain {P : PortNetwork} (C : PortCrossing P) :=
   PortEdgeCell C → PortF2
-/-- F₂-valued chains on face-orbit face cells. -/
+/-- F₂-valued chains on face-orbit face cells.
+
+A face chain assigns a parity coefficient to each finite face orbit. -/
 abbrev PortFaceChain {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) := PortFaceCell R C → PortF2
 
@@ -119,7 +144,10 @@ theorem finrank_portFaceChain {P : PortNetwork} (R : PortLocalRotation P)
   rw [Module.finrank_fintype_fun_eq_card]
   exact PortFaceCell_card R C
 
-/-- F₂ incidence of an edge cell with a vertex. -/
+/-- F₂ incidence of an edge cell with a vertex.
+
+The coefficient is the parity of the ports of the edge cell lying in the
+given region. -/
 def edgeVertexIncidence {P : PortNetwork} {C : PortCrossing P}
     (E : PortEdgeCell C) (r : Fin P.regionCount) : PortF2 :=
   (E.val.filter (fun p => p.1 = r)).card
@@ -164,7 +192,10 @@ theorem edgeVertexIncidence_two_support {P : PortNetwork} (C : PortCrossing P)
   rw [hp, hcp]
   decide
 
-/-- The first boundary sends each edge to its two endpoint vertices. -/
+/-- The first boundary sends each edge to its two endpoint vertices.
+
+`portBoundary1` sums edge coefficients weighted by their vertex incidence;
+over `ZMod 2` this is the usual unoriented endpoint boundary. -/
 def portBoundary1 {P : PortNetwork} (C : PortCrossing P) :
     PortEdgeChain C →ₗ[PortF2] PortVertexChain P :=
   { toFun := fun x r => ∑ E : PortEdgeCell C, x E * edgeVertexIncidence E r
@@ -177,17 +208,26 @@ def portBoundary1 {P : PortNetwork} (C : PortCrossing P) :
       funext r
       simp [smul_eq_mul, mul_assoc, Finset.mul_sum] }
 
-/-- The kernel of the first boundary, i.e. the F₂ cycle space. -/
+/-- The kernel of the first boundary, i.e. the F₂ cycle space.
+
+An edge chain is a cycle exactly when every region receives even total
+incidence. -/
 def PortCycleSpace {P : PortNetwork} (C : PortCrossing P) :
     Submodule PortF2 (PortEdgeChain C) := LinearMap.ker (portBoundary1 C)
 
-/-- Edge-incidence coefficients of a list of crossing darts. -/
+/-- Edge-incidence coefficients of a list of crossing darts.
+
+The recursive sum records how often a walk uses each edge, reduced modulo
+two. -/
 def walkEdgeCoeff {P : PortNetwork} (C : PortCrossing P)
     (E : PortEdgeCell C) : List (PortNetworkPort P) → PortF2
   | [] => 0
   | p :: ps => (if p ∈ E.val then 1 else 0) + walkEdgeCoeff C E ps
 
-/-- Package walk coefficients as an F₂ edge chain. -/
+/-- Package walk coefficients as an F₂ edge chain.
+
+This turns a valid region walk into its unoriented parity chain, forgetting
+the order while retaining exactly the edge support relevant to `∂₁`. -/
 def portWalkEdgeChain {P : PortNetwork} {C : PortCrossing P}
     {r s : Fin P.regionCount} (W : PortRegionWalk C r s) : PortEdgeChain C :=
   fun E => walkEdgeCoeff C E W.edges
@@ -237,7 +277,11 @@ theorem edgeCellOfPort_eq_iff {P : PortNetwork} (C : PortCrossing P)
 def endpointVertexChain {P : PortNetwork} (r s v : Fin P.regionCount) : PortF2 :=
   (if v = r then 1 else 0) + (if v = s then 1 else 0)
 
-/-- The first boundary of a valid walk chain is its endpoint difference. -/
+/-- The first boundary of a valid walk chain is its endpoint difference.
+
+Interior region incidences occur in pairs and cancel in `ZMod 2`; only the
+initial and terminal regions remain.  A closed walk therefore represents a
+cycle. -/
 theorem portBoundary1_walk_of_valid {P : PortNetwork} {C : PortCrossing P}
     {r s : Fin P.regionCount} {xs : List (PortNetworkPort P)}
     (hvalid : PortRegionWalk.Valid C r s xs) (v : Fin P.regionCount) :
@@ -330,7 +374,10 @@ def faceBoundaryEdgeChain {P : PortNetwork} {R : PortLocalRotation P}
     {C : PortCrossing P} (F : PortFaceCell R C) : PortEdgeChain C :=
   fun E => faceEdgeIncidence F E
 
-/-- The second boundary sends face chains to edge chains. -/
+/-- The second boundary sends face chains to edge chains.
+
+Each face coefficient contributes the parity indicator of the crossing
+edges appearing in that face's canonical boundary. -/
 def portBoundary2 {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) : PortFaceChain R C →ₗ[PortF2] PortEdgeChain C :=
   { toFun := fun y E => ∑ F : PortFaceCell R C, y F * faceEdgeIncidence F E
@@ -343,7 +390,10 @@ def portBoundary2 {P : PortNetwork} (R : PortLocalRotation P)
       funext E
       simp [smul_eq_mul, mul_assoc, Finset.mul_sum] }
 
-/-- The span of all face-boundary edge chains. -/
+/-- The span of all face-boundary edge chains.
+
+This is the subspace generated by the columns of `portBoundary2`; it is the
+finite boundary space used in the later exactness comparison. -/
 def PortFaceBoundarySpace {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) : Submodule PortF2 (PortEdgeChain C) :=
   LinearMap.range (portBoundary2 R C)
@@ -393,7 +443,10 @@ theorem faceBoundaryEdgeChain_eq_walk {P : PortNetwork}
   rw [portFaceBoundaryWalk_edges_toFinset]
   rfl
 
-/-- Every face boundary is a cycle. -/
+/-- Every face boundary is a cycle.
+
+The boundary of a closed face walk has no endpoint contribution, so each
+column of `∂₂` lies in the cycle space. -/
 theorem faceBoundaryEdgeChain_cycle {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (F : PortFaceCell R C) :
@@ -483,7 +536,11 @@ theorem portBoundary2_as_sum_basis {P : PortNetwork}
   funext E
   simp [portBoundary2, faceBoundaryEdgeChain, smul_eq_mul, Finset.sum_apply]
 
-/-- The chain-complex identity `∂₁ ∘ ∂₂ = 0`. -/
+/-- The chain-complex identity `∂₁ ∘ ∂₂ = 0`.
+
+Applying the first boundary to a face boundary cancels all region
+incidences in pairs.  Equivalently, the image of `∂₂` is contained in the
+kernel of `∂₁`. -/
 theorem portBoundary1_boundary2 {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) :
     (portBoundary1 C).comp (portBoundary2 R C) = 0 := by
@@ -497,7 +554,11 @@ theorem portBoundary1_boundary2 {P : PortNetwork} (R : PortLocalRotation P)
   rw [map_smul, faceBoundaryEdgeChain_cycle R C F]
   simp
 
-/-- Every face boundary lies in the cycle space. -/
+/-- Every face boundary lies in the cycle space.
+
+This packages the preceding chain identity as the subspace inclusion
+`im ∂₂ ≤ ker ∂₁`, the basic homological invariant needed by subsequent
+arguments. -/
 theorem faceBoundarySpace_le_cycleSpace {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P) :
     PortFaceBoundarySpace R C ≤ PortCycleSpace C := by

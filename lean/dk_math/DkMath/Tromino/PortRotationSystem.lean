@@ -14,14 +14,22 @@ import DkMath.Tromino.RotationSystem
 
 A local rotation is a permutation of the ports in each region.  Its
 iterates describe cyclic vertex boundaries, while composing it with the
-crossing involution gives the face-step permutation.  The conversion
-theorems at the end identify this port language with the corresponding
-flow-network language without changing the finite combinatorics.
+crossing involution gives the face-step permutation.  The cyclicity axiom
+says that one local rotation orbit contains every slot of its region; it is
+the precise finite replacement for an informal “walk around a vertex”.
+The conversion theorems at the end identify this port language with the
+corresponding flow-network language without changing the finite
+permutations.
 -/
 
 namespace DkMath.Tromino
 
-/-- A region-preserving permutation of the finite port carrier. -/
+/-- A region-preserving permutation of the finite port carrier.
+
+The equivalence supplies both forward and inverse local rotation, while
+`preservesRegion` prevents a rotation step from leaving its region.  Thus
+the same carrier can support both local boundary walks and global face
+steps. -/
 structure PortLocalRotation (P : PortNetwork) where
   rotate : PortNetworkPort P ≃ PortNetworkPort P
   preservesRegion : ∀ p, (rotate p).1 = p.1
@@ -56,13 +64,21 @@ theorem PortLocalRotation.symm_iterate_preservesRegion
     rw [Function.iterate_succ_apply']
     exact (R.symm_preservesRegion _).trans ih
 
-/-- Every pair of slots in a region lies on one rotation orbit. -/
+/-- Every pair of slots in a region lies on one rotation orbit.
+
+This predicate expresses cyclicity as reachability by a nonnegative iterate
+of the local permutation.  It does not choose a particular cyclic order;
+the order is supplied by the given equivalence. -/
 def PortRegionRotationCyclic {P : PortNetwork} (R : PortLocalRotation P)
     (r : Fin P.regionCount) : Prop :=
   ∀ i j : Fin (P.arity r),
     ∃ n : Nat, (R.rotate^[n]) ⟨r, i⟩ = ⟨r, j⟩
 
-/-- A rotation system adds cyclicity to a local rotation. -/
+/-- A rotation system adds cyclicity to a local rotation.
+
+It packages the local permutation together with the assertion that each
+region is one cyclic orbit.  Later face arguments use this only through the
+finite permutation structure and its periodicity. -/
 structure PortRotationSystem (P : PortNetwork) extends PortLocalRotation P where
   cyclic : ∀ r, PortRegionRotationCyclic toPortLocalRotation r
 
@@ -81,12 +97,20 @@ def portEdgeSource {P : PortNetwork} (_C : PortCrossing P)
 def portEdgeTarget {P : PortNetwork} (C : PortCrossing P)
     (p : PortNetworkPort P) : Fin P.regionCount := (C.cross p).1
 
-/-- One face step crosses an edge and then rotates at the new region. -/
+/-- One face step crosses an edge and then rotates at the new region.
+
+The order matters: first `cross` moves to the opposite incidence of the
+edge, then `rotate` chooses the next incidence in that region.  Iterating
+this composite is the combinatorial boundary walk of a face. -/
 def portFaceStep {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) : PortNetworkPort P → PortNetworkPort P :=
   fun p => R.rotate (C.cross p)
 
-/-- The face step is a permutation of the finite port carrier. -/
+/-- The face step is a permutation of the finite port carrier.
+
+Its inverse rotates backwards and then crosses.  The two involutive
+identities show that every face step is reversible, so finite face orbits
+can be treated as permutation orbits rather than one-way paths. -/
 def portFaceEquiv {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) : PortNetworkPort P ≃ PortNetworkPort P where
   toFun := portFaceStep R C
@@ -116,7 +140,11 @@ theorem portFaceStep_source {P : PortNetwork} (R : PortLocalRotation P)
     portEdgeSource C (portFaceStep R C p) = portEdgeTarget C p := by
   exact R.preservesRegion (C.cross p)
 
-/-- Finiteness forces every face step orbit to return. -/
+/-- Finiteness forces every face step orbit to return.
+
+The face step is a permutation of a finite type, hence its order gives a
+positive return time for every starting port.  This is the only finiteness
+input needed to define a canonical primitive face boundary. -/
 theorem portFaceStep_periodic {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p : PortNetworkPort P) :
     ∃ n : Nat, 0 < n ∧ (portFaceStep R C)^[n] p = p := by
@@ -134,7 +162,11 @@ def PortFaceReturn {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p : PortNetworkPort P) (n : Nat) : Prop :=
   (portFaceStep R C)^[n] p = p
 
-/-- The least positive face-return time. -/
+/-- The least positive face-return time.
+
+`Nat.find` selects the smallest positive period witnessed by finite
+permutation periodicity.  It is a numerical representative of the face
+orbit, not an additional geometric assumption. -/
 def firstPortFaceReturn {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p : PortNetworkPort P) : Nat :=
   Nat.find (portFaceStep_periodic R C p)
@@ -153,7 +185,11 @@ theorem firstPortFaceReturn_min {P : PortNetwork} (R : PortLocalRotation P)
     firstPortFaceReturn R C p ≤ m := by
   exact Nat.find_min' (portFaceStep_periodic R C p) hm
 
-/-- A return time is primitive when it has no smaller positive return. -/
+/-- A return time is primitive when it has no smaller positive return.
+
+The predicate records positivity, actual return, and minimality together;
+the theorem below shows that `firstPortFaceReturn` satisfies exactly this
+primitive-boundary specification. -/
 def PortFacePrimitiveReturn {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p : PortNetworkPort P) (n : Nat) : Prop :=
   0 < n ∧ PortFaceReturn R C p n ∧
@@ -202,7 +238,11 @@ theorem portFaceStep_of_flow_erasure {N : FlowNetwork}
     portFaceStep R.toPortLocalRotation C.toPortCrossing p =
       faceStep R C p := rfl
 
-/-- Restore a port rotation as a flow rotation using any assignment. -/
+/-- Restore a port rotation as a flow rotation using any assignment.
+
+An assignment supplies the flow wrapper and labels, but the rotation itself
+is copied from the port equivalence.  Therefore the induced permutation is
+independent of which valid labels are chosen. -/
 def PortLocalRotation.toFlowLocalRotation {P : PortNetwork}
     {C : PortCrossing P} (R : PortLocalRotation P)
     (A : V4FlowAssignment C) : FlowLocalRotation A.toFlowNetwork where
@@ -231,7 +271,11 @@ theorem portFaceStep_of_flow_lift {P : PortNetwork} {C : PortCrossing P}
     faceStep (R.toFlowLocalRotation A) A.toFlowCrossing p =
       portFaceStep R C p := rfl
 
-/-- The induced face step does not depend on the chosen labels. -/
+/-- The induced face step does not depend on the chosen labels.
+
+Both assignments lift the same crossing involution and the same local
+rotation, so their flow presentations compute the identical composite
+port permutation. -/
 theorem portFaceStep_assignment_independent {P : PortNetwork}
     {C : PortCrossing P} (R : PortLocalRotation P)
     (A B : V4FlowAssignment C) (p : PortNetworkPort P) :
