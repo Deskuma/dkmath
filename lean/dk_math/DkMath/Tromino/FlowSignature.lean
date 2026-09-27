@@ -12,11 +12,22 @@ namespace DkMath.Tromino
 
 open scoped BigOperators
 
+/-!
+# Flow signatures
+
+A flow signature is the label-only form of a boundary signature: it stores a
+finite family of nonzero V4 labels.  Its sum, label multiplicities, and two
+F₂ coordinate sums provide the algebraic conservation tests used by closed
+flow networks.
+-/
+
+/-- A finite family of nonzero V4 flow labels. -/
 structure FlowSignature where
   arity : Nat
   label : Fin arity → TrominoState
   nonzero : ∀ i, label i ≠ 0
 
+/-- Forget contact representatives and retain their V4 deltas. -/
 def BoundarySignature.toFlowSignature (S : BoundarySignature) : FlowSignature where
   arity := S.arity
   label := boundaryDelta S
@@ -28,16 +39,21 @@ def BoundarySignature.toFlowSignature (S : BoundarySignature) : FlowSignature wh
 @[simp] theorem BoundarySignature.toFlowSignature_label (S : BoundarySignature)
     (i : Fin S.toFlowSignature.arity) : S.toFlowSignature.label i = boundaryDelta S i := rfl
 
+/-- The total V4 sum of a flow signature. -/
 def flowSum (F : FlowSignature) : TrominoState := Finset.sum Finset.univ F.label
+/-- Predicate that a flow signature has zero total label. -/
 def FlowConserved (F : FlowSignature) : Prop := flowSum F = 0
+/-- Number of occurrences of a chosen V4 label. -/
 def flowLabelCount (F : FlowSignature) (delta : TrominoState) : Nat :=
   (Finset.univ.filter (fun i => F.label i = delta)).card
 
+/-- Flow label counts are finite indicator sums. -/
 theorem flowLabelCount_eq_sum_indicator (F : FlowSignature) (delta : TrominoState) :
     flowLabelCount F delta =
       Finset.sum Finset.univ (fun i : Fin F.arity => if F.label i = delta then 1 else 0) := by
   simp [flowLabelCount]
 
+/-- Cast flow label counts to their F₂ parity. -/
 theorem flowLabelCount_cast (F : FlowSignature) (delta : TrominoState) :
     (flowLabelCount F delta : ZMod 2) =
       Finset.sum Finset.univ
@@ -45,17 +61,20 @@ theorem flowLabelCount_cast (F : FlowSignature) (delta : TrominoState) :
   rw [flowLabelCount_eq_sum_indicator]
   norm_cast
 
+/-- The zero label has multiplicity zero in a flow signature. -/
 theorem flowLabelCount_zero (F : FlowSignature) : flowLabelCount F 0 = 0 := by
   unfold flowLabelCount
   apply Finset.card_eq_zero.mpr
   ext i
   simp [F.nonzero i]
 
+/-- Every flow label is one of the three nonzero directions. -/
 theorem flowLabel_eq_deltaA_or_deltaB_or_deltaC (F : FlowSignature)
     (i : Fin F.arity) :
     F.label i = deltaA ∨ F.label i = deltaB ∨ F.label i = deltaC := by
   exact nonzeroState_eq_deltaA_or_deltaB_or_deltaC _ (F.nonzero i)
 
+/-- The three nonzero label multiplicities sum to the arity. -/
 theorem flowLabelCount_sum (F : FlowSignature) :
     flowLabelCount F deltaA + flowLabelCount F deltaB + flowLabelCount F deltaC = F.arity := by
   have hpoint (i : Fin F.arity) :

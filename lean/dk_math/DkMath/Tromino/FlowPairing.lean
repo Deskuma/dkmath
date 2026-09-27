@@ -13,33 +13,51 @@ namespace DkMath.Tromino
 
 open scoped BigOperators
 
+/-!
+# Pairings of flow ports
+
+This is the label-only counterpart of `BoundaryPairing`.  A flow pairing is
+an involution on local ports preserving V4 labels.  The canonical pairing is
+constructed independently in each label fiber; residual ports record odd
+fiber cardinalities, and the decomposition lemmas expose the exact
+conservation/perfectness criterion.
+-/
+
+/-- A label-preserving involution on the ports of a flow signature. -/
 structure FlowPairing (F : FlowSignature) where
   mate : Fin F.arity → Fin F.arity
   involutive : Function.Involutive mate
   sameLabel : ∀ i, F.label (mate i) = F.label i
 
+/-- Ports fixed by a flow pairing. -/
 def flowResidualPorts {F : FlowSignature} (P : FlowPairing F) :
     Finset (Fin F.arity) := Finset.univ.filter (fun i => P.mate i = i)
 
+/-- The non-residual ports of a flow pairing. -/
 def flowPairedPorts {F : FlowSignature} (P : FlowPairing F) :
     Finset (Fin F.arity) := (flowResidualPorts P)ᶜ
 
+/-- Residual membership is equivalent to being fixed by the mate. -/
 theorem mem_flowResidualPorts_iff {F : FlowSignature} (P : FlowPairing F)
     (i : Fin F.arity) : i ∈ flowResidualPorts P ↔ P.mate i = i := by
   simp [flowResidualPorts]
 
+/-- Paired membership is equivalent to having a distinct mate. -/
 theorem mem_flowPairedPorts_iff {F : FlowSignature} (P : FlowPairing F)
     (i : Fin F.arity) : i ∈ flowPairedPorts P ↔ P.mate i ≠ i := by
   simp [flowPairedPorts, mem_flowResidualPorts_iff]
 
+/-- Non-residual membership is equivalent to a non-fixed mate. -/
 theorem not_mem_flowResidualPorts_iff {F : FlowSignature} (P : FlowPairing F)
     (i : Fin F.arity) : i ∉ flowResidualPorts P ↔ P.mate i ≠ i := by
   rw [mem_flowResidualPorts_iff]
 
+/-- A non-residual flow port is not fixed. -/
 theorem flowMate_ne_of_not_mem_residualPorts {F : FlowSignature}
     (P : FlowPairing F) {i : Fin F.arity} (hi : i ∉ flowResidualPorts P) :
     P.mate i ≠ i := (not_mem_flowResidualPorts_iff P i).mp hi
 
+/-- The mate of a non-residual flow port is non-residual. -/
 theorem flowMate_not_mem_residualPorts {F : FlowSignature} (P : FlowPairing F)
     {i : Fin F.arity} (hi : i ∉ flowResidualPorts P) :
     P.mate i ∉ flowResidualPorts P := by
@@ -50,35 +68,43 @@ theorem flowMate_not_mem_residualPorts {F : FlowSignature} (P : FlowPairing F)
   rw [P.involutive i] at hfixed
   exact False.elim ((flowMate_ne_of_not_mem_residualPorts P hi) hfixed.symm)
 
+/-- A flow mate preserves the V4 label. -/
 theorem flowMate_sameLabel {F : FlowSignature} (P : FlowPairing F)
     (i : Fin F.arity) : F.label (P.mate i) = F.label i := P.sameLabel i
 
+/-- The finite fiber of flow ports carrying one label. -/
 def flowPortsWithLabel (F : FlowSignature) (delta : TrominoState) :
     Finset (Fin F.arity) := Finset.univ.filter (fun i => F.label i = delta)
 
+/-- Flow fiber membership is equivalent to label equality. -/
 theorem mem_flowPortsWithLabel_iff (F : FlowSignature) (delta : TrominoState)
     (i : Fin F.arity) : i ∈ flowPortsWithLabel F delta ↔ F.label i = delta := by
   simp [flowPortsWithLabel]
 
+/-- Flow fiber cardinality is the corresponding label count. -/
 theorem flowPortsWithLabel_card (F : FlowSignature) (delta : TrominoState) :
     (flowPortsWithLabel F delta).card = flowLabelCount F delta := rfl
 
+/-- Canonical mate obtained by pairing within one flow label fiber. -/
 def flowFiberMate (F : FlowSignature) (delta : TrominoState)
     (i : Fin F.arity) : Fin F.arity :=
   if hi : i ∈ flowPortsWithLabel F delta then
     (fiberPairing (flowPortsWithLabel F delta) ⟨i, hi⟩).val
   else i
 
+/-- The fiber mate remains in the same label fiber. -/
 theorem flowFiberMate_mem (F : FlowSignature) (delta : TrominoState)
     {i : Fin F.arity} (hi : i ∈ flowPortsWithLabel F delta) :
     flowFiberMate F delta i ∈ flowPortsWithLabel F delta := by
   simp [flowFiberMate, hi]
 
+/-- The fiber mate preserves the selected label. -/
 theorem flowFiberMate_sameLabel (F : FlowSignature) (delta : TrominoState)
     {i : Fin F.arity} (hi : i ∈ flowPortsWithLabel F delta) :
     F.label (flowFiberMate F delta i) = delta :=
   (mem_flowPortsWithLabel_iff F delta _).mp (flowFiberMate_mem F delta hi)
 
+/-- The canonical flow fiber mate is involutive. -/
 theorem flowFiberMate_involutive (F : FlowSignature) (delta : TrominoState)
     {i : Fin F.arity} (hi : i ∈ flowPortsWithLabel F delta) :
     flowFiberMate F delta (flowFiberMate F delta i) = i := by

@@ -12,19 +12,35 @@ namespace DkMath.Tromino
 
 open scoped BigOperators
 
+/-!
+# Boundary signatures and V4 conservation
+
+A boundary signature is a finite cyclic list of contacts whose inside and
+outside states differ.  Each contact therefore determines one of the three
+nonzero V4 deltas.  The boundary sum and its parity/counting reformulations
+are the local conservation interface used by the pairing and transition
+layers.
+-/
+
+/-- The V4 delta forbidden by a contact. -/
 def contactDelta (contact : BoundaryContact) : TrominoState := forbiddenDelta contact
 
+/-- A contact delta vanishes exactly when its two states agree. -/
 theorem contactDelta_eq_zero_iff (contact : BoundaryContact) :
     contactDelta contact = 0 ↔ contact.inside = contact.outside :=
   forbiddenDelta_eq_zero_iff contact
 
+/-- A genuine state change has a nonzero contact delta. -/
 theorem contactDelta_ne_zero_of_ne (contact : BoundaryContact)
     (h : contact.inside ≠ contact.outside) : contactDelta contact ≠ 0 := by
   intro hzero
   exact h ((contactDelta_eq_zero_iff contact).mp hzero)
 
+/-- The first nonzero V4 direction. -/
 def deltaA : TrominoState := (1, 0)
+/-- The second nonzero V4 direction. -/
 def deltaB : TrominoState := (0, 1)
+/-- The sum of the first two nonzero V4 directions. -/
 def deltaC : TrominoState := (1, 1)
 
 theorem deltaA_ne_zero : deltaA ≠ 0 := by decide
@@ -45,6 +61,7 @@ theorem deltaA_add_deltaB_add_deltaC : deltaA + deltaB + deltaC = 0 := by
   rw [deltaA_add_deltaB]
   exact state_add_self deltaC
 
+/-- Every nonzero V4 state is one of the three named directions. -/
 theorem nonzeroState_eq_deltaA_or_deltaB_or_deltaC
     (delta : TrominoState) (hdelta : delta ≠ 0) :
     delta = deltaA ∨ delta = deltaB ∨ delta = deltaC := by
@@ -54,18 +71,22 @@ theorem nonzeroState_eq_deltaA_or_deltaB_or_deltaC
   · exact Or.inl rfl
   · exact Or.inr (Or.inr rfl)
 
+/-- A finite list of pairwise non-identical boundary contacts. -/
 structure BoundarySignature where
   arity : Nat
   contact : Fin arity → BoundaryContact
   proper : ∀ i, (contact i).inside ≠ (contact i).outside
 
+/-- The V4 delta attached to one signature position. -/
 def boundaryDelta (S : BoundarySignature) (i : Fin S.arity) : TrominoState :=
   contactDelta (S.contact i)
 
+/-- Every signature delta is nonzero. -/
 theorem boundaryDelta_ne_zero (S : BoundarySignature)
     (i : Fin S.arity) : boundaryDelta S i ≠ 0 := by
   exact contactDelta_ne_zero_of_ne (S.contact i) (S.proper i)
 
+/-- Every signature delta belongs to the three nonzero directions. -/
 theorem boundaryDelta_eq_deltaA_or_deltaB_or_deltaC (S : BoundarySignature)
     (i : Fin S.arity) :
     boundaryDelta S i = deltaA ∨ boundaryDelta S i = deltaB ∨
@@ -73,14 +94,18 @@ theorem boundaryDelta_eq_deltaA_or_deltaB_or_deltaC (S : BoundarySignature)
   exact nonzeroState_eq_deltaA_or_deltaB_or_deltaC _
     (boundaryDelta_ne_zero S i)
 
+/-- The total V4 delta around a boundary signature. -/
 def boundarySum (S : BoundarySignature) : TrominoState :=
   Finset.sum Finset.univ (fun i : Fin S.arity => boundaryDelta S i)
 
+/-- Predicate that the boundary signature has zero total delta. -/
 def BoundaryConserved (S : BoundarySignature) : Prop := boundarySum S = 0
 
+/-- Number of occurrences of one delta in a boundary signature. -/
 def boundaryLabelCount (S : BoundarySignature) (delta : TrominoState) : Nat :=
   (Finset.univ.filter (fun i : Fin S.arity => boundaryDelta S i = delta)).card
 
+/-- Label counts are finite sums of indicator functions. -/
 theorem boundaryLabelCount_eq_sum_indicator
     (S : BoundarySignature) (delta : TrominoState) :
     boundaryLabelCount S delta =
@@ -88,6 +113,7 @@ theorem boundaryLabelCount_eq_sum_indicator
         (fun i : Fin S.arity => if boundaryDelta S i = delta then 1 else 0) := by
   simp [boundaryLabelCount]
 
+/-- The parity of a label count is its F₂ indicator sum. -/
 theorem boundaryLabelCount_cast
     (S : BoundarySignature) (delta : TrominoState) :
     (boundaryLabelCount S delta : ZMod 2) =
@@ -97,10 +123,12 @@ theorem boundaryLabelCount_cast
   rw [boundaryLabelCount_eq_sum_indicator]
   norm_cast
 
+/-- Zero never occurs among proper boundary deltas. -/
 theorem boundaryLabelCount_zero (S : BoundarySignature) :
     boundaryLabelCount S 0 = 0 := by
   simp [boundaryLabelCount, boundaryDelta_ne_zero S]
 
+/-- The three nonzero label counts sum to the signature arity. -/
 theorem boundaryLabelCount_sum (S : BoundarySignature) :
     boundaryLabelCount S deltaA + boundaryLabelCount S deltaB +
         boundaryLabelCount S deltaC = S.arity := by
