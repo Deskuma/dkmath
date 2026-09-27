@@ -799,3 +799,20 @@ TRM-041 is GREEN only when the actual map and the universal reduction
 theorems are kernel-checked.  The remaining proof-strength gap after GREEN is
 universal tetrahedral A/B/C assignment existence on all-triangular genus-zero
 maps.
+
+### TRM-048 — Universal triangular reduction / branch closure
+
+TRM-048 is complete.  The repository now contains kernel-checked indexing-free
+face-star reductions and the following target equivalences:
+
+- `PortGenusZeroTriangularFourColorTarget` iff
+  `PortGenusZeroFourColorTarget`;
+- `PortGenusZeroTriangularTetrahedralTarget` iff the triangular four-color
+  target;
+- `PortGenusZeroTriangularTetrahedralTarget` iff
+  `PortGenusZeroFourColorTarget`.
+
+These are equivalences of target propositions, not proofs of either target.
+The exact remaining gap is universal tetrahedral A/B/C assignment existence on
+all-triangular genus-zero Port maps.  Four Color theorem status remains
+unproved.

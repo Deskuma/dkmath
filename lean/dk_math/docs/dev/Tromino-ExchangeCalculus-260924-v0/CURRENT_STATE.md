@@ -9,7 +9,7 @@ Current branch:
 
 Current active checkpoint:
 
-    TRM-048 — Universal triangular reduction / branch closure
+    TRM-048 — Universal triangular reduction / branch closure (complete)
 
 Current instruction:
 
@@ -26,6 +26,8 @@ Last fully accepted theorem checkpoints:
 - TRM-046: count identities, Euler/genus preservation, faceStarGenusZero
 - TRM-047: all-triangular packaging, old adjacency embedding, coloring pullback,
   and tetrahedral-assignment -> original-colorability reduction
+- TRM-048: indexing-free face-star reduction and universal triangular target
+  equivalences
 
 Face-star reduction status now verified:
 
@@ -40,27 +42,27 @@ Face-star reduction status now verified:
 - any tetrahedral assignment on the face-star map yields a coloring of the
   original map.
 
-Current target:
+Universal target packaging now verified:
 
-1. define PortGenusZeroTriangularFourColorTarget;
-2. prove it equivalent to PortGenusZeroFourColorTarget;
-3. define PortGenusZeroTriangularTetrahedralTarget;
-4. prove it equivalent to the triangular four-color target;
-5. therefore prove it equivalent to the general four-color target;
-6. state the exact remaining Gap and close the branch.
+- `PortGenusZeroTriangularFourColorTarget` is equivalent to
+  `PortGenusZeroFourColorTarget`;
+- `PortGenusZeroTriangularTetrahedralTarget` is equivalent to the triangular
+  four-color target and to `PortGenusZeroFourColorTarget`;
+- the indexing-free face-star triangulation and tetrahedral reductions are
+  available.
 
-Do NOT prove any universal target.
-
-Four Color theorem status:
-
-    NOT PROVED.
-
-Exact remaining Gap after successful TRM-048:
+Current exact remaining mathematical gap:
 
     PortGenusZeroTriangularTetrahedralTarget
 
 i.e. prove that every all-triangular genus-zero Port map admits a tetrahedral
 A/B/C face assignment.
+
+No universal target itself has been proved.
+
+Four Color theorem status:
+
+    NOT PROVED.
 
 Eisenstein status:
 
