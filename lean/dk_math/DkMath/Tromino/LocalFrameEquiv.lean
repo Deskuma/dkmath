@@ -12,8 +12,17 @@ namespace DkMath.Tromino
 open DkMath.Polyomino
 open DkMath.Polyomino.Tromino
 
-/-! A finite 3+1 frame over the additive V4 carrier. -/
+/-!
+# Finite exchange frames
 
+An exchange frame is a four-element panel with one distinguished gap.  The
+remaining three panels form the nonzero V4 directions after translating by
+the gap color.  The Gaussian and Eisenstein realizations below are concrete
+coordinate models of the same finite frame, and the equivalences record only
+this local combinatorial correspondence.
+-/
+
+/-- A finite four-panel frame with one distinguished gap. -/
 structure TrominoExchangeFrame where
   Panel : Type
   instFintype : Fintype Panel
@@ -24,15 +33,19 @@ structure TrominoExchangeFrame where
 instance (F : TrominoExchangeFrame) : Fintype F.Panel := F.instFintype
 instance (F : TrominoExchangeFrame) : DecidableEq F.Panel := F.instDecidableEq
 
+/-- The V4 color assigned to a panel. -/
 def frameColor (F : TrominoExchangeFrame) (p : F.Panel) : TrominoState :=
   F.colorEquiv p
 
+/-- The three non-gap panels of a frame. -/
 def frameBody (F : TrominoExchangeFrame) : Finset F.Panel :=
   Finset.univ.erase F.gap
 
+/-- Translate a panel color by the distinguished gap color. -/
 def frameDelta (F : TrominoExchangeFrame) (p : F.Panel) : TrominoState :=
   frameColor F F.gap + frameColor F p
 
+/-- Every exchange frame has four panels. -/
 theorem frame_panel_card (F : TrominoExchangeFrame) :
     Fintype.card F.Panel = 4 := by
   calc
@@ -41,15 +54,18 @@ theorem frame_panel_card (F : TrominoExchangeFrame) :
     _ = Nat.card TrominoState := Fintype.card_eq_nat_card
     _ = 4 := card_state
 
+/-- Removing the gap leaves exactly three body panels. -/
 theorem frame_body_card (F : TrominoExchangeFrame) :
     (frameBody F).card = 3 := by
   rw [frameBody, Finset.card_erase_of_mem (Finset.mem_univ F.gap)]
   simp [frame_panel_card F]
 
+/-- The distinguished gap is not in the frame body. -/
 theorem frame_gap_not_mem_body (F : TrominoExchangeFrame) :
     F.gap ∉ frameBody F := by
   simp [frameBody]
 
+/-- The translated delta vanishes exactly at the gap panel. -/
 theorem frame_delta_eq_zero_iff (F : TrominoExchangeFrame) (p : F.Panel) :
     frameDelta F p = 0 ↔ p = F.gap := by
   constructor
@@ -64,12 +80,14 @@ theorem frame_delta_eq_zero_iff (F : TrominoExchangeFrame) (p : F.Panel) :
     subst p
     exact state_add_self _
 
+/-- Body membership is equivalent to having a nonzero translated delta. -/
 theorem frame_mem_body_iff_delta_ne_zero (F : TrominoExchangeFrame)
     (p : F.Panel) :
     p ∈ frameBody F ↔ frameDelta F p ≠ 0 := by
   rw [frameBody, Finset.mem_erase]
   simp [frame_delta_eq_zero_iff F p]
 
+/-- The body realizes precisely the three nonzero V4 states. -/
 theorem frame_delta_image_body (F : TrominoExchangeFrame) :
     (frameBody F).image (frameDelta F) =
       Finset.filter (fun x : TrominoState => x ≠ 0) Finset.univ := by
@@ -89,6 +107,7 @@ theorem frame_delta_image_body (F : TrominoExchangeFrame) :
     refine Finset.mem_image.mpr ⟨p, ?_, hpdelta⟩
     exact (frame_mem_body_iff_delta_ne_zero F p).2 (by simpa [hpdelta] using hx0)
 
+/-- Every body panel has nonzero delta. -/
 theorem frame_delta_body_is_nonzero (F : TrominoExchangeFrame)
     {p : F.Panel} (hp : p ∈ frameBody F) :
     frameDelta F p = deltaA ∨ frameDelta F p = deltaB ∨
@@ -96,17 +115,20 @@ theorem frame_delta_body_is_nonzero (F : TrominoExchangeFrame)
   exact nonzeroState_eq_deltaA_or_deltaB_or_deltaC _
     ((frame_mem_body_iff_delta_ne_zero F p).1 hp)
 
+/-- An equivalence of exchange frames preserving gap and delta structure. -/
 structure TrominoExchangeFrameEquiv (G E : TrominoExchangeFrame) where
   panelEquiv : G.Panel ≃ E.Panel
   map_gap : panelEquiv G.gap = E.gap
   map_delta : ∀ p, frameDelta E (panelEquiv p) = frameDelta G p
 
+/-- A frame equivalence preserves body membership. -/
 theorem frame_equiv_mem_body_iff (φ : TrominoExchangeFrameEquiv G E)
     (p : G.Panel) :
     φ.panelEquiv p ∈ frameBody E ↔ p ∈ frameBody G := by
   rw [frame_mem_body_iff_delta_ne_zero E, frame_mem_body_iff_delta_ne_zero G]
   rw [φ.map_delta]
 
+/-- A frame equivalence preserves the translated delta classification. -/
 theorem frame_equiv_delta_classification (φ : TrominoExchangeFrameEquiv G E)
     {p : G.Panel} (hp : p ∈ frameBody G) :
     frameDelta E (φ.panelEquiv p) = deltaA ∨
@@ -115,32 +137,41 @@ theorem frame_equiv_delta_classification (φ : TrominoExchangeFrameEquiv G E)
   rw [φ.map_delta]
   exact frame_delta_body_is_nonzero G hp
 
+/-- The local exchange swaps a panel with the distinguished gap. -/
 def localExchange (F : TrominoExchangeFrame) (p : F.Panel)
     (x : TrominoState) : TrominoState :=
   exchange (frameDelta F p) x
 
+/-- Local exchange commutes with a frame equivalence. -/
 theorem localExchange_conjugate (φ : TrominoExchangeFrameEquiv G E)
     (p : G.Panel) (x : TrominoState) :
     localExchange E (φ.panelEquiv p) x = localExchange G p x := by
   simp [localExchange, φ.map_delta]
 
+/-- The typed Gaussian panel carrier given by the two-by-two block. -/
 abbrev GaussianPanel := {c : Cell // c ∈ block2}
 
+/-- The distinguished Gaussian gap panel. -/
 def gaussianGap : GaussianPanel :=
   ⟨(1, 1), by simp [block2]⟩
 
+/-- The Gaussian panel at coordinate `(0, 0)`. -/
 def gaussianPanel00 : GaussianPanel :=
   ⟨(0, 0), by simp [block2]⟩
+/-- The Gaussian panel at coordinate `(1, 0)`. -/
 def gaussianPanel10 : GaussianPanel :=
   ⟨(1, 0), by simp [block2]⟩
+/-- The Gaussian panel at coordinate `(0, 1)`. -/
 def gaussianPanel01 : GaussianPanel :=
   ⟨(0, 1), by simp [block2]⟩
 
+/-- The inverse lookup from a V4 color to its Gaussian panel. -/
 def gaussianColorInv (s : TrominoState) : GaussianPanel :=
   if s = 0 then gaussianPanel00 else
     if s = deltaA then gaussianPanel10 else
       if s = deltaB then gaussianPanel01 else gaussianGap
 
+/-- The Gaussian panel colors form an equivalence with the four states. -/
 def gaussianColorEquiv : GaussianPanel ≃ TrominoState where
   toFun := fun c => atomicColor c.1
   invFun := gaussianColorInv
@@ -151,6 +182,7 @@ def gaussianColorEquiv : GaussianPanel ≃ TrominoState where
     intro s
     fin_cases s <;> decide
 
+/-- The concrete exchange frame carried by the Gaussian two-by-two block. -/
 def gaussianExchangeFrame : TrominoExchangeFrame where
   Panel := GaussianPanel
   instFintype := inferInstance
@@ -158,37 +190,47 @@ def gaussianExchangeFrame : TrominoExchangeFrame where
   colorEquiv := gaussianColorEquiv
   gap := gaussianGap
 
+/-- The Gaussian gap has coordinate `(1, 1)`. -/
 theorem gaussian_gap_eq_11 : gaussianGap.1 = (1, 1) := rfl
 
+/-- The `(0, 0)` Gaussian panel has zero frame color. -/
 theorem gaussian_color_00 : frameColor gaussianExchangeFrame gaussianPanel00 = 0 := by
   decide
 
+/-- The `(1, 0)` Gaussian panel has color `deltaA`. -/
 theorem gaussian_color_10 :
     frameColor gaussianExchangeFrame gaussianPanel10 = deltaA := by
   decide
 
+/-- The `(0, 1)` Gaussian panel has color `deltaB`. -/
 theorem gaussian_color_01 :
     frameColor gaussianExchangeFrame gaussianPanel01 = deltaB := by
   decide
 
+/-- The Gaussian gap panel has color `deltaC`. -/
 theorem gaussian_color_gap :
     frameColor gaussianExchangeFrame gaussianExchangeFrame.gap = deltaC := by
   decide
 
+/-- The relative delta of the `(0, 0)` panel is `deltaC`. -/
 theorem gaussian_delta_00 :
     frameDelta gaussianExchangeFrame gaussianPanel00 = deltaC := by
   decide
 
+/-- The relative delta of the `(1, 0)` panel is `deltaB`. -/
 theorem gaussian_delta_10 :
     frameDelta gaussianExchangeFrame gaussianPanel10 = deltaB := by
   decide
 
+/-- The relative delta of the `(0, 1)` panel is `deltaA`. -/
 theorem gaussian_delta_01 :
     frameDelta gaussianExchangeFrame gaussianPanel01 = deltaA := by
   decide
 
+/-- The Eisenstein frame uses the state carrier itself as its panel type. -/
 abbrev eisensteinPanel := TrominoState
 
+/-- The Eisenstein exchange frame has the zero state as its gap. -/
 abbrev eisensteinExchangeFrame : TrominoExchangeFrame :=
   {
   Panel := eisensteinPanel
@@ -198,18 +240,22 @@ abbrev eisensteinExchangeFrame : TrominoExchangeFrame :=
   gap := (0 : eisensteinPanel)
 }
 
+/-- The Eisenstein gap is the zero state. -/
 theorem eisenstein_gap_eq_zero : eisensteinExchangeFrame.gap = (0 : eisensteinPanel) := rfl
 
+/-- The Eisenstein frame delta is the panel state itself. -/
 theorem eisenstein_delta (p : eisensteinPanel) :
     frameDelta eisensteinExchangeFrame p = p := by
   change (0 : TrominoState) + p = p
   simp
 
+/-- The Eisenstein body consists exactly of the nonzero states. -/
 theorem eisenstein_body_iff (p : eisensteinPanel) :
     p ∈ frameBody eisensteinExchangeFrame ↔ p ≠ (0 : eisensteinPanel) := by
   rw [frame_mem_body_iff_delta_ne_zero]
   rw [eisenstein_delta]
 
+/-- Translation by a V4 state is an involutive permutation. -/
 def stateTranslateEquiv (a : TrominoState) : TrominoState ≃ TrominoState where
   toFun := fun x => a + x
   invFun := fun x => a + x
@@ -224,14 +270,17 @@ def stateTranslateEquiv (a : TrominoState) : TrominoState ≃ TrominoState where
       a + (a + x) = (a + a) + x := by rw [add_assoc]
       _ = x := by rw [state_add_self, zero_add]
 
+/-- The panel equivalence obtained by translating Gaussian colors by the gap. -/
 def gaussianEisensteinPanelEquiv :
     gaussianExchangeFrame.Panel ≃ eisensteinExchangeFrame.Panel :=
   gaussianExchangeFrame.colorEquiv.trans
     (stateTranslateEquiv (frameColor gaussianExchangeFrame gaussianExchangeFrame.gap))
 
+/-- Applying the panel equivalence gives the Gaussian relative delta. -/
 theorem gaussianEisensteinPanelEquiv_apply (p : gaussianExchangeFrame.Panel) :
     gaussianEisensteinPanelEquiv p = frameDelta gaussianExchangeFrame p := rfl
 
+/-- The Gaussian and Eisenstein frames are equivalent as delta-preserving frames. -/
 def gaussianEisensteinFrameEquiv :
     TrominoExchangeFrameEquiv gaussianExchangeFrame eisensteinExchangeFrame where
   panelEquiv := gaussianEisensteinPanelEquiv
@@ -244,11 +293,13 @@ def gaussianEisensteinFrameEquiv :
     intro p
     rw [eisenstein_delta, gaussianEisensteinPanelEquiv_apply]
 
+/-- The Gaussian gap maps to the Eisenstein gap. -/
 theorem gaussianEisensteinFrameEquiv_maps_gap :
     gaussianEisensteinFrameEquiv.panelEquiv gaussianExchangeFrame.gap =
       eisensteinExchangeFrame.gap :=
   gaussianEisensteinFrameEquiv.map_gap
 
+/-- The frame equivalence preserves every translated delta. -/
 theorem gaussianEisensteinFrameEquiv_maps_delta (p : gaussianExchangeFrame.Panel) :
     frameDelta eisensteinExchangeFrame
         (gaussianEisensteinFrameEquiv.panelEquiv p) =

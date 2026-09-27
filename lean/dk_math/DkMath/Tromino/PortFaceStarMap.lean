@@ -13,12 +13,17 @@ import DkMath.Tromino.PortTriangulationReduction
 
 This module lifts old region walks through old-edge ports, attaches the new
 face-center regions, and packages the resulting connected map.
+
+Mathematically, the new region set is the disjoint union of old regions and
+one center for each old face. Connectivity is proved by lifting old walks and
+then attaching every center to an old region along a radial edge.
 -/
 
 namespace DkMath.Tromino
 
 /-! ## Region classification -/
 
+/-- Every new region is either an old region or the center of an old face. -/
 theorem faceStar_region_cases {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (x : Fin (faceStarNetwork M I).regionCount) :
@@ -48,6 +53,8 @@ theorem faceStar_region_cases {P : PortNetwork}
 
 /-! ## Old-walk lifting -/
 
+/-- Mapping each edge of an old region walk to its old-edge port preserves
+walk validity in the face-star crossing. -/
 theorem faceStar_oldWalk_valid {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     {r s : Fin P.regionCount} {xs : List (PortNetworkPort P)}
@@ -67,6 +74,8 @@ theorem faceStar_oldWalk_valid {P : PortNetwork}
       · rw [faceStarCross_oldEdge]
         exact ih h.2
 
+/-- Lift an old region walk to a walk between the corresponding old regions
+of the face-star map. -/
 def liftFaceStarOldWalk {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     {r s : Fin P.regionCount}
@@ -75,12 +84,14 @@ def liftFaceStarOldWalk {P : PortNetwork}
       (oldRegion I r) (oldRegion I s) :=
   ⟨W.edges.map (faceStarOldEdgePort I), faceStar_oldWalk_valid I W.valid⟩
 
+/-- The lifted walk has exactly the pointwise image of the old edge list. -/
 @[simp] theorem liftFaceStarOldWalk_edges {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     {r s : Fin P.regionCount} (W : PortRegionWalk M.crossing r s) :
     (liftFaceStarOldWalk I W).edges = W.edges.map (faceStarOldEdgePort I) :=
   rfl
 
+/-- Reachability between old regions is preserved by the face-star lift. -/
 theorem faceStar_oldRegion_reachable {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     {r s : Fin P.regionCount}
@@ -90,6 +101,8 @@ theorem faceStar_oldRegion_reachable {P : PortNetwork}
   rcases h with ⟨W⟩
   exact ⟨liftFaceStarOldWalk I W⟩
 
+/-- The old-region subgraph remains connected because the original map is
+connected. -/
 theorem faceStar_oldRegions_connected {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (r s : Fin P.regionCount) :
@@ -99,6 +112,7 @@ theorem faceStar_oldRegions_connected {P : PortNetwork}
 
 /-! ## Face-center attachment -/
 
+/-- Every old face cell contains a port and therefore has a boundary witness. -/
 theorem faceStar_faceCell_nonempty {P : PortNetwork}
     {M : PortCombinatorialMap P} (F : PortFaceCell M.localRotation M.crossing) :
     ∃ p : PortNetworkPort P, p ∈ F.val := by
@@ -108,12 +122,14 @@ theorem faceStar_faceCell_nonempty {P : PortNetwork}
   rw [hF]
   exact portFaceOrbit_contains M.localRotation M.crossing p
 
+/-- A port lying in a face cell represents that face cell. -/
 theorem faceStar_faceCell_representative {P : PortNetwork}
     {M : PortCombinatorialMap P} (F : PortFaceCell M.localRotation M.crossing)
     (p : PortNetworkPort P) (hp : p ∈ F.val) :
     faceCellOfPort M.localRotation M.crossing p = F :=
   (faceCellOfPort_eq_iff M.localRotation M.crossing p F).2 hp
 
+/-- Each face-center region is attached to an old region by one radial edge. -/
 theorem faceStar_center_attachment {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (F : PortFaceCell M.localRotation M.crossing) :
@@ -134,6 +150,8 @@ theorem faceStar_center_attachment {P : PortNetwork}
 
 /-! ## Global region connectivity -/
 
+/-- Every new region can reach an old region: old regions already do, and
+centers reach an old boundary region by radial attachment. -/
 theorem faceStar_region_reaches_old {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (x : Fin (faceStarNetwork M I).regionCount) :
@@ -150,6 +168,7 @@ theorem faceStar_region_reaches_old {P : PortNetwork}
     rw [hx]
     exact portRegionReachable_symm (faceStarCrossing I) hattach
 
+/-- The entire face-star region graph is connected. -/
 theorem faceStar_regionConnected {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     PortRegionConnected (faceStarCrossing I) := by
@@ -161,6 +180,7 @@ theorem faceStar_regionConnected {P : PortNetwork}
       (faceStar_oldRegions_connected I r s)
       (portRegionReachable_symm (faceStarCrossing I) hys))
 
+/-- The face-star carrier has at least one region. -/
 theorem faceStar_nonemptyRegions {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     0 < (faceStarNetwork M I).regionCount := by
@@ -172,6 +192,8 @@ theorem faceStar_nonemptyRegions {P : PortNetwork}
 
 /-! ## Packaged connected map -/
 
+/-- Package the face-star crossing and rotation system as a connected
+combinatorial map. -/
 def faceStarCombinatorialMap {P : PortNetwork}
     (M : PortCombinatorialMap P) (I : PortFaceStarIndexing M) :
     PortCombinatorialMap (faceStarNetwork M I) where
@@ -180,19 +202,23 @@ def faceStarCombinatorialMap {P : PortNetwork}
   nonemptyRegions := faceStar_nonemptyRegions I
   connected := faceStar_regionConnected I
 
+/-- Calibration of the packaged crossing with the constructed crossing. -/
 @[simp] theorem faceStarCombinatorialMap_crossing {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     (faceStarCombinatorialMap M I).crossing = faceStarCrossing I := rfl
 
+/-- Calibration of the packaged rotation with the constructed rotation. -/
 @[simp] theorem faceStarCombinatorialMap_rotation {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     (faceStarCombinatorialMap M I).rotation = faceStarRotationSystem I := rfl
 
+/-- Calibration of the packaged local rotation. -/
 @[simp] theorem faceStarCombinatorialMap_localRotation {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     (faceStarCombinatorialMap M I).localRotation =
       (faceStarRotationSystem I).toPortLocalRotation := rfl
 
+/-- Every face cell of the packaged map is a triangle. -/
 theorem faceStarCombinatorialMap_everyFaceCell_card_three {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (F : PortFaceCell (faceStarCombinatorialMap M I).localRotation

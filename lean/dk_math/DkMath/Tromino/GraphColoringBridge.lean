@@ -10,16 +10,29 @@ import DkMath.Tromino.RegionPotential
 
 #print "file: DkMath.Tromino.GraphColoringBridge"
 
+/-!
+# Region graphs and coloring reconstruction
+
+The regions of a flow network form a simple graph by joining the two regions
+at each crossing.  A valid region potential is then a proper V4 coloring,
+and conversely zero holonomy supplies such a potential.  This bridge is the
+finite graph-theoretic interface; it does not assert a universal coloring
+theorem.
+-/
+
 namespace DkMath.Tromino
 
+/-- Relation joining regions across a crossing edge. -/
 def regionCrossingRel {N : FlowNetwork} (C : FlowCrossing N)
     (r s : Fin N.regionCount) : Prop :=
   ∃ p : FlowNetworkPort N, p.1 = r ∧ (C.cross p).1 = s
 
+/-- The simple graph of regions induced by the crossing relation. -/
 def regionSimpleGraph {N : FlowNetwork} (C : FlowCrossing N) :
     SimpleGraph (Fin N.regionCount) :=
   SimpleGraph.fromRel (regionCrossingRel C)
 
+/-- Graph adjacency is exactly witnessed by a crossing port. -/
 theorem regionSimpleGraph_adj_iff {N : FlowNetwork} (C : FlowCrossing N)
     (r s : Fin N.regionCount) :
     (regionSimpleGraph C).Adj r s ↔
@@ -43,21 +56,26 @@ theorem regionSimpleGraph_adj_iff {N : FlowNetwork} (C : FlowCrossing N)
         _ = p.1 := hsource.symm
     exact ⟨hne, Or.inl ⟨p, hsource, htarget⟩⟩
 
+/-- Every crossing port gives an edge of the region graph. -/
 theorem regionSimpleGraph_adj_of_port {N : FlowNetwork}
     (C : FlowCrossing N) (p : FlowNetworkPort N) :
     (regionSimpleGraph C).Adj p.1 (C.cross p).1 := by
   exact (regionSimpleGraph_adj_iff C p.1 (C.cross p).1).2 ⟨p, rfl, rfl⟩
 
+/-- Turn a flow port into an oriented graph dart. -/
 def flowPortToDart {N : FlowNetwork} (C : FlowCrossing N)
     (p : FlowNetworkPort N) : (regionSimpleGraph C).Dart :=
   ⟨(flowEdgeSource C p, flowEdgeTarget C p), regionSimpleGraph_adj_of_port C p⟩
 
+/-- The dart source is the port's source region. -/
 @[simp] theorem flowPortToDart_fst {N : FlowNetwork} (C : FlowCrossing N)
     (p : FlowNetworkPort N) : (flowPortToDart C p).fst = flowEdgeSource C p := rfl
 
+/-- The dart target is the port's target region. -/
 @[simp] theorem flowPortToDart_snd {N : FlowNetwork} (C : FlowCrossing N)
     (p : FlowNetworkPort N) : (flowPortToDart C p).snd = flowEdgeTarget C p := rfl
 
+/-- Reversing a port reverses its graph dart. -/
 theorem flowPortToDart_reverse {N : FlowNetwork} (C : FlowCrossing N)
     (p : FlowNetworkPort N) :
     flowPortToDart C (reverseEdge C p) = (flowPortToDart C p).symm := by
@@ -66,17 +84,20 @@ theorem flowPortToDart_reverse {N : FlowNetwork} (C : FlowCrossing N)
   · exact flowEdgeSource_reverseEdge C p
   · exact flowEdgeTarget_reverseEdge C p
 
+/-- Dart reversal preserves the underlying unoriented graph edge. -/
 theorem flowPortToDart_edge_reverse {N : FlowNetwork} (C : FlowCrossing N)
     (p : FlowNetworkPort N) :
     (flowPortToDart C (reverseEdge C p)).edge = (flowPortToDart C p).edge := by
   rw [flowPortToDart_reverse]
   exact SimpleGraph.Dart.edge_symm _
 
+/-- Every graph dart is represented by a flow port. -/
 theorem dart_has_flowPort {N : FlowNetwork} (C : FlowCrossing N)
     (d : (regionSimpleGraph C).Dart) :
     ∃ p : FlowNetworkPort N, p.1 = d.fst ∧ (C.cross p).1 = d.snd := by
   exact (regionSimpleGraph_adj_iff C d.fst d.snd).mp d.adj
 
+/-- Convert a proper region potential into a graph coloring. -/
 def RegionPotential.toColoring {N : FlowNetwork} {C : FlowCrossing N}
     (P : RegionPotential C) : (regionSimpleGraph C).Coloring TrominoState :=
   SimpleGraph.Coloring.mk P.state (by
@@ -86,10 +107,12 @@ def RegionPotential.toColoring {N : FlowNetwork} {C : FlowCrossing N}
     have hne := regionPotential_adjacent_ne P p
     simpa [flowEdgeSource, flowEdgeTarget, hsource, htarget] using hne)
 
+/-- The coloring reads the potential state at each region. -/
 @[simp] theorem RegionPotential.toColoring_apply
     {N : FlowNetwork} {C : FlowCrossing N} (P : RegionPotential C)
     (r : Fin N.regionCount) : P.toColoring r = P.state r := rfl
 
+/-- A potential supplies a four-state coloring of the region graph. -/
 theorem RegionPotential.toColoring_colorable
     {N : FlowNetwork} {C : FlowCrossing N} (P : RegionPotential C) :
     (regionSimpleGraph C).Colorable 4 := by
@@ -100,6 +123,7 @@ theorem RegionPotential.toColoring_colorable
   rw [hcard] at hc
   exact hc
 
+/-- The coloring's endpoint difference recovers each edge label. -/
 theorem RegionPotential.toColoring_edgeLabel
     {N : FlowNetwork} {C : FlowCrossing N} (P : RegionPotential C)
     (p : FlowNetworkPort N) :
@@ -107,6 +131,7 @@ theorem RegionPotential.toColoring_edgeLabel
         P.toColoring (flowEdgeTarget C p) = flowEdgeLabel C p := by
   exact regionPotential_edgeLabel P p
 
+/-- Zero holonomy yields an explicit region coloring. -/
 theorem exists_regionColoring_of_zeroHolonomy
     {N : FlowNetwork} {C : FlowCrossing N}
     (base : Fin N.regionCount)
@@ -116,6 +141,7 @@ theorem exists_regionColoring_of_zeroHolonomy
   obtain ⟨P, _⟩ := regionPotential_exists_of_zeroHolonomy base 0 hreach hzero
   exact ⟨P.toColoring, trivial⟩
 
+/-- Zero holonomy implies four-colorability of the region graph. -/
 theorem regionSimpleGraph_colorable_four_of_zeroHolonomy
     {N : FlowNetwork} {C : FlowCrossing N}
     (base : Fin N.regionCount)

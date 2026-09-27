@@ -19,6 +19,12 @@ open DkMath.Polyomino.Tromino
 
 This module is the first geometric colored layer above the state-only
 exchange calculus. It deliberately stops at one finite 2x2 block.
+
+The algebraic point is that a complete four-state cell is a bijective
+realization of the V4 carrier on four lattice cells. Uniform exchange
+translates all colors simultaneously, preserving multiplicities and local
+properness. This is a finite calibration object, not a coloring theorem for
+arbitrary maps.
 -/
 
 /-- A finite geometric shape with a state assigned to every lattice cell. -/
@@ -26,6 +32,7 @@ structure ColoredShape where
   shape : Shape
   color : Cell → TrominoState
 
+/-- Two colored shapes are equal when their shapes and color functions agree. -/
 @[ext] theorem ColoredShape.ext'
     {P Q : ColoredShape} (hshape : P.shape = Q.shape)
     (hcolor : P.color = Q.color) : P = Q := by
@@ -82,6 +89,7 @@ def PairwiseDistinctOnShape (P : ColoredShape) : Prop :=
   ∀ ⦃c₁ c₂ : Cell⦄,
     c₁ ∈ P.shape → c₂ ∈ P.shape → P.color c₁ = P.color c₂ → c₁ = c₂
 
+/-- Complete four-state data makes the color map injective on the shape. -/
 theorem completeFourState_pairwiseDistinct
     {P : ColoredShape} (hP : CompleteFourState P) :
     PairwiseDistinctOnShape P := by
@@ -99,10 +107,12 @@ def uniformExchangeColoredShape
   { shape := P.shape
     color := fun c => uniformExchange delta P.color c }
 
+/-- Uniform exchange leaves the geometric support unchanged. -/
 @[simp] theorem uniformExchangeColoredShape_shape
     (delta : TrominoState) (P : ColoredShape) :
     (uniformExchangeColoredShape delta P).shape = P.shape := rfl
 
+/-- Uniform exchange applies pointwise to the stored color function. -/
 @[simp] theorem uniformExchangeColoredShape_color
     (delta : TrominoState) (P : ColoredShape) (c : Cell) :
     (uniformExchangeColoredShape delta P).color c =
@@ -177,6 +187,7 @@ def internalProper (P : ColoredShape) : Prop :=
     c₁ ∈ P.shape → c₂ ∈ P.shape → gridAdjacent c₁ c₂ →
       P.color c₁ ≠ P.color c₂
 
+/-- Grid adjacency never relates a cell to itself. -/
 theorem gridAdjacent_ne {c₁ c₂ : Cell} (h : gridAdjacent c₁ c₂) : c₁ ≠ c₂ := by
   intro heq
   subst c₂
@@ -204,22 +215,27 @@ def atomicFourColorCell : ColoredShape :=
   { shape := block2
     color := atomicColor }
 
+/-- The canonical cell has the existing 2x2 support. -/
 @[simp] theorem atomicFourColorCell_shape :
     atomicFourColorCell.shape = block2 := rfl
 
+/-- The canonical cell has four lattice cells. -/
 theorem atomicFourColorCell_card : atomicFourColorCell.shape.card = 4 := by
   simpa [atomicFourColorCell, area] using area_block2
 
+/-- The canonical cell realizes all four V4 states exactly once. -/
 theorem atomicFourColorCell_complete :
     CompleteFourState atomicFourColorCell := by
   refine ⟨by decide, ?_⟩
   ext s
   fin_cases s <;> decide
 
+/-- The canonical cell has pairwise distinct colors. -/
 theorem atomicFourColorCell_pairwiseDistinct :
     PairwiseDistinctOnShape atomicFourColorCell :=
   completeFourState_pairwiseDistinct atomicFourColorCell_complete
 
+/-- Adjacent cells of the canonical block have distinct colors. -/
 theorem atomicFourColorCell_internalProper :
     internalProper atomicFourColorCell := by
   intro c₁ c₂ hc₁ hc₂ hadj hcolor

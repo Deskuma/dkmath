@@ -10,13 +10,24 @@ import DkMath.Tromino.FaceOrbit
 
 #print "file: DkMath.Tromino.PortFaceOrbit"
 
+/-!
+# Face orbits of the dart permutation
+
+The face step is the crossing followed by the local rotation.  Since it is
+a permutation of a finite port type, the orbit of a dart is a finite face
+cell.  This module packages orbit membership, equality or disjointness,
+coverage, and transport across the flow/port encodings.
+-/
+
 namespace DkMath.Tromino
 
+/-- The finite set of darts in the primitive face orbit of a port. -/
 def portFaceOrbit {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p : PortNetworkPort P) : Finset (PortNetworkPort P) :=
   (Finset.range (firstPortFaceReturn R C p)).image
     (fun n => (portFaceStep R C)^[n] p)
 
+/-- An orbit contains its chosen starting dart. -/
 theorem portFaceOrbit_contains {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p : PortNetworkPort P) :
     p ∈ portFaceOrbit R C p := by
@@ -24,6 +35,7 @@ theorem portFaceOrbit_contains {P : PortNetwork} (R : PortLocalRotation P)
   exact ⟨0, Finset.mem_range.mpr (firstPortFaceReturn_spec R C p).1,
     by simp⟩
 
+/-- Every face-step iterate lies in the primitive orbit. -/
 theorem portFaceOrbit_mem_iterate {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p : PortNetworkPort P) (n : Nat) :
     (portFaceStep R C)^[n] p ∈ portFaceOrbit R C p := by
@@ -37,6 +49,7 @@ theorem portFaceOrbit_mem_iterate {P : PortNetwork} (R : PortLocalRotation P)
     Finset.mem_range.mpr (Nat.mod_lt n hk), ?_⟩
   exact hperiod.iterate_mod_apply n
 
+/-- Orbit membership is equivalent to reachability by face steps. -/
 theorem portFaceOrbit_mem_iff_iterate {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p q : PortNetworkPort P) :
@@ -49,6 +62,7 @@ theorem portFaceOrbit_mem_iff_iterate {P : PortNetwork}
   · rintro ⟨n, rfl⟩
     exact portFaceOrbit_mem_iterate R C p n
 
+/-- Distinct indices before the return time give distinct darts. -/
 theorem portFaceOrbit_iterate_distinct
     {P : PortNetwork} (R : PortLocalRotation P) (C : PortCrossing P)
     (p : PortNetworkPort P) {i j : Nat}
@@ -78,6 +92,7 @@ theorem portFaceOrbit_iterate_distinct
       exact False.elim
         ((firstPortFaceReturn_primitive R C p).2.2 (i - j) hpos hlt hcancel)
 
+/-- The orbit cardinality equals the first return time. -/
 theorem portFaceOrbit_card {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p : PortNetworkPort P) :
     (portFaceOrbit R C p).card = firstPortFaceReturn R C p := by
@@ -92,6 +107,7 @@ theorem portFaceOrbit_card {P : PortNetwork} (R : PortLocalRotation P)
             (Finset.mem_range.mp hi) (Finset.mem_range.mp hj) hij
     _ = firstPortFaceReturn R C p := Finset.card_range _
 
+/-- Reversing a face boundary remains in the same orbit. -/
 theorem portFaceOrbit_reverse_mem {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p q : PortNetworkPort P) (hq : q ∈ portFaceOrbit R C p) :
@@ -111,6 +127,7 @@ theorem portFaceOrbit_reverse_mem {P : PortNetwork}
       rw [Nat.sub_add_cancel (Nat.le_of_lt hnlt)]
     _ = p := hperiod
 
+/-- An orbit based at an orbit member is contained in the original orbit. -/
 theorem portFaceOrbit_subset_of_mem {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p q : PortNetworkPort P) (hq : q ∈ portFaceOrbit R C p) :
@@ -123,6 +140,7 @@ theorem portFaceOrbit_subset_of_mem {P : PortNetwork}
   rw [Function.iterate_add_apply, hn]
   exact hmx
 
+/-- Orbits based at members of one orbit are equal. -/
 theorem portFaceOrbit_eq_of_mem {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p q : PortNetworkPort P) (hq : q ∈ portFaceOrbit R C p) :
@@ -132,33 +150,39 @@ theorem portFaceOrbit_eq_of_mem {P : PortNetwork}
   · exact portFaceOrbit_subset_of_mem R C q p
       (portFaceOrbit_reverse_mem R C p q hq)
 
+/-- Equivalence relation of lying in the same face orbit. -/
 def SamePortFaceOrbit {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p q : PortNetworkPort P) : Prop :=
   q ∈ portFaceOrbit R C p
 
+/-- Same-face orbit is reflexive. -/
 theorem samePortFaceOrbit_refl {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p : PortNetworkPort P) :
     SamePortFaceOrbit R C p p :=
   portFaceOrbit_contains R C p
 
+/-- Same-face orbit is symmetric. -/
 theorem samePortFaceOrbit_symm {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) {p q : PortNetworkPort P}
     (hpq : SamePortFaceOrbit R C p q) :
     SamePortFaceOrbit R C q p :=
   portFaceOrbit_reverse_mem R C p q hpq
 
+/-- Same-face orbit is transitive. -/
 theorem samePortFaceOrbit_trans {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) {p q r : PortNetworkPort P}
     (hpq : SamePortFaceOrbit R C p q) (hqr : SamePortFaceOrbit R C q r) :
     SamePortFaceOrbit R C p r := by
   exact portFaceOrbit_subset_of_mem R C p q hpq hqr
 
+/-- Setoid whose classes are the face orbits. -/
 def portFaceOrbitSetoid {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) : Setoid (PortNetworkPort P) where
   r := SamePortFaceOrbit R C
   iseqv := ⟨samePortFaceOrbit_refl R C, @samePortFaceOrbit_symm P R C,
     @samePortFaceOrbit_trans P R C⟩
 
+/-- Two finite face orbits are equal or disjoint. -/
 theorem portFaceOrbit_eq_or_disjoint {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p q : PortNetworkPort P) :
@@ -173,11 +197,13 @@ theorem portFaceOrbit_eq_or_disjoint {P : PortNetwork}
     exact (portFaceOrbit_eq_of_mem R C p x hxp).symm.trans
       (portFaceOrbit_eq_of_mem R C q x hxq)
 
+/-- Every dart belongs to its own face orbit. -/
 theorem portFaceOrbit_coverage {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) :
     ∀ p : PortNetworkPort P, p ∈ portFaceOrbit R C p :=
   fun p => portFaceOrbit_contains R C p
 
+/-- The first return time is constant on a face orbit. -/
 theorem firstPortFaceReturn_eq_of_mem {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p q : PortNetworkPort P) (hq : q ∈ portFaceOrbit R C p) :
@@ -189,6 +215,7 @@ theorem firstPortFaceReturn_eq_of_mem {P : PortNetwork}
       rw [portFaceOrbit_eq_of_mem R C p q hq]
     _ = firstPortFaceReturn R C p := portFaceOrbit_card R C p
 
+/-- Flow and port encodings have the same first face return. -/
 theorem firstPortFaceReturn_of_flow_erasure {N : FlowNetwork}
     (R : FlowLocalRotation N) (C : FlowCrossing N)
     (p : PortNetworkPort N.toPortNetwork) :
@@ -202,6 +229,7 @@ theorem firstPortFaceReturn_of_flow_erasure {N : FlowNetwork}
     exact ⟨(firstPortFaceReturn_spec R.toPortLocalRotation C.toPortCrossing p).1,
       (firstPortFaceReturn_spec R.toPortLocalRotation C.toPortCrossing p).2⟩
 
+/-- Flow face orbits become the corresponding port face orbits. -/
 theorem portFaceOrbit_of_flow_erasure {N : FlowNetwork}
     (R : FlowLocalRotation N) (C : FlowCrossing N)
     (p : PortNetworkPort N.toPortNetwork) :
@@ -211,6 +239,7 @@ theorem portFaceOrbit_of_flow_erasure {N : FlowNetwork}
   rw [firstPortFaceReturn_of_flow_erasure]
   rfl
 
+/-- Restoring a port map in the flow language preserves first return. -/
 theorem firstFaceReturn_of_flow_lift {P : PortNetwork}
     {C : PortCrossing P} (R : PortLocalRotation P)
     (A : V4FlowAssignment C) (p : PortNetworkPort P) :
@@ -226,6 +255,7 @@ theorem firstFaceReturn_of_flow_lift {P : PortNetwork}
       (firstFaceReturn_spec (R.toFlowLocalRotation A)
         A.toFlowCrossing p).2⟩
 
+/-- Restoring a port map in the flow language preserves face orbits. -/
 theorem faceOrbit_of_flow_lift {P : PortNetwork} {C : PortCrossing P}
     (R : PortLocalRotation P) (A : V4FlowAssignment C)
     (p : PortNetworkPort P) :
@@ -235,6 +265,7 @@ theorem faceOrbit_of_flow_lift {P : PortNetwork} {C : PortCrossing P}
   rw [firstFaceReturn_of_flow_lift]
   rfl
 
+/-- Face orbits do not depend on the chosen V4 assignment. -/
 theorem faceOrbit_assignment_independent {P : PortNetwork}
     {C : PortCrossing P} (R : PortLocalRotation P)
     (A B : V4FlowAssignment C) (p : PortNetworkPort P) :

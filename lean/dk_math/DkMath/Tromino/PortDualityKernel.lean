@@ -11,27 +11,42 @@ import DkMath.Tromino.PortRegionWalk
 
 #print "file: DkMath.Tromino.PortDualityKernel"
 
+/-!
+# The dual face-step kernel
+
+The dual rotation is the port face-step permutation, and the raw dual face
+step is rotation after the crossing involution.  This presents the same
+finite dart permutation from the dual viewpoint.  The boundary-walk and
+label-sum lemmas turn dual face conservation into a local algebraic
+condition, while explicitly retaining the possible dual-loop obstruction.
+-/
+
 namespace DkMath.Tromino
 
 open scoped BigOperators
 
+/-- The dual rotation is the permutation obtained from the face step. -/
 def dualRotationEquiv {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) : PortNetworkPort P ≃ PortNetworkPort P :=
   portFaceEquiv R C
 
+/-- The corresponding dual rotation function. -/
 def dualRotationStep {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) : PortNetworkPort P → PortNetworkPort P :=
   dualRotationEquiv R C
 
+/-- Dual rotation and primal face step are definitionally the same map. -/
 theorem dualRotationStep_eq_portFaceStep {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p : PortNetworkPort P) :
     dualRotationStep R C p = portFaceStep R C p := rfl
 
+/-- Raw dual face motion rotates after crossing the current dart. -/
 def dualFaceStepRaw {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) : PortNetworkPort P → PortNetworkPort P :=
   fun p => dualRotationEquiv R C (C.cross p)
 
+/-- Crossing twice cancels, so raw dual face motion is local rotation. -/
 theorem dualFaceStepRaw_eq_rotation {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p : PortNetworkPort P) :
@@ -39,6 +54,7 @@ theorem dualFaceStepRaw_eq_rotation {P : PortNetwork}
   change R.rotate (C.cross (C.cross p)) = R.rotate p
   rw [C.involutive]
 
+/-- Iterated raw dual face motion is iterated local rotation. -/
 theorem dualFaceStepRaw_iterate {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (n : Nat) (p : PortNetworkPort P) :
@@ -49,10 +65,12 @@ theorem dualFaceStepRaw_iterate {P : PortNetwork}
     rw [Function.iterate_succ_apply', Function.iterate_succ_apply', ih]
     exact dualFaceStepRaw_eq_rotation R C _
 
+/-- Equivalence relation identifying darts in one dual-vertex orbit. -/
 def SameDualVertex {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p q : PortNetworkPort P) : Prop :=
   SamePortFaceOrbit R C p q
 
+/-- A dual rotation step remains in the same dual vertex. -/
 theorem dualRotation_preserves_dualVertex {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p : PortNetworkPort P) :
@@ -60,6 +78,7 @@ theorem dualRotation_preserves_dualVertex {P : PortNetwork}
   change portFaceStep R C p ∈ portFaceOrbit R C p
   exact portFaceOrbit_mem_iterate R C p 1
 
+/-- Dual-vertex equivalence is exactly reachability by dual rotation. -/
 theorem sameDualVertex_iff_dualRotation_iterate {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p q : PortNetworkPort P) :
@@ -69,16 +88,19 @@ theorem sameDualVertex_iff_dualRotation_iterate {P : PortNetwork}
     ∃ n : Nat, (portFaceStep R C)^[n] p = q
   exact portFaceOrbit_mem_iff_iterate R C p q
 
+/-- Dual vertex classes have the cardinality of their rotation orbits. -/
 theorem dualVertexClass_card {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p : PortNetworkPort P) :
     (portFaceOrbit R C p).card = firstPortFaceReturn R C p :=
   portFaceOrbit_card R C p
 
+/-- Equivalence relation identifying darts in one dual-face orbit. -/
 def SameDualFace {P : PortNetwork} (_R : PortRotationSystem P)
     (_C : PortCrossing P) (p q : PortNetworkPort P) : Prop :=
   p.1 = q.1
 
+/-- Dual-face equivalence is characterized by iterated dual face motion. -/
 theorem sameDualFace_iff_dualFace_iterate {P : PortNetwork}
     (R : PortRotationSystem P) (C : PortCrossing P)
     (p q : PortNetworkPort P) :
@@ -97,15 +119,21 @@ theorem sameDualFace_iff_dualFace_iterate {P : PortNetwork}
     exact (R.toPortLocalRotation.iterate_preservesRegion n p).symm.trans
       (congrArg Sigma.fst hn)
 
+/-- Dual vertices are primal faces. -/
 def dualVertexCount {P : PortNetwork} (M : PortCombinatorialMap P) : Nat := M.faceCount
+/-- Dual edges are primal edges. -/
 def dualEdgeCount {P : PortNetwork} (M : PortCombinatorialMap P) : Nat := M.edgeCount
+/-- Dual faces are primal regions. -/
 def dualFaceCount {P : PortNetwork} (M : PortCombinatorialMap P) : Nat := M.vertexCount
+/-- The dual construction preserves the dart carrier size. -/
 def dualPortCount {P : PortNetwork} (M : PortCombinatorialMap P) : Nat := M.portCount
 
+/-- The dual Euler characteristic computed from exchanged counts. -/
 def dualEulerCharacteristic {P : PortNetwork}
     (M : PortCombinatorialMap P) : Int :=
   (dualVertexCount M : Int) - (dualEdgeCount M : Int) + (dualFaceCount M : Int)
 
+/-- Duality preserves the combinatorial Euler characteristic. -/
 theorem dualEulerCharacteristic_eq {P : PortNetwork}
     (M : PortCombinatorialMap P) :
     dualEulerCharacteristic M = M.eulerCharacteristic := by
@@ -113,16 +141,19 @@ theorem dualEulerCharacteristic_eq {P : PortNetwork}
     (M.vertexCount : Int) - (M.edgeCount : Int) + (M.faceCount : Int)
   ring
 
+/-- List the successive darts along the face boundary of a port. -/
 def portFaceBoundaryEdges {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p : PortNetworkPort P) : List (PortNetworkPort P) :=
   List.ofFn (fun i : Fin (firstPortFaceReturn R C p) =>
     (portFaceStep R C)^[i.val] p)
 
+/-- The boundary list has the first-return length. -/
 theorem portFaceBoundaryEdges_length {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P) (p : PortNetworkPort P) :
     (portFaceBoundaryEdges R C p).length = firstPortFaceReturn R C p := by
   simp [portFaceBoundaryEdges]
 
+/-- Every prefix of a face boundary is a valid region walk. -/
 theorem portFaceBoundary_prefix_valid {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p : PortNetworkPort P) (n : Nat) :
@@ -144,6 +175,7 @@ theorem portFaceBoundary_prefix_valid {P : PortNetwork}
           (portFaceStep R C)^[i.val] (portFaceStep R C p)
         exact Function.iterate_succ_apply (portFaceStep R C) i.val p
 
+/-- The full face boundary is a closed valid region walk. -/
 theorem portFaceBoundaryWalk_valid {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P) (p : PortNetworkPort P) :
     PortRegionWalk.Valid C p.1 p.1 (portFaceBoundaryEdges R C p) := by
@@ -166,15 +198,18 @@ theorem portFaceBoundaryWalk_valid {P : PortNetwork}
   rw [hend] at h
   exact h
 
+/-- Package a face boundary as a region walk. -/
 def portFaceBoundaryWalk {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p : PortNetworkPort P) : PortRegionWalk C p.1 p.1 :=
   ⟨portFaceBoundaryEdges R C p, portFaceBoundaryWalk_valid R C p⟩
 
+/-- The packaged face boundary has the orbit length. -/
 theorem portFaceBoundaryWalk_length {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P) (p : PortNetworkPort P) :
     (portFaceBoundaryWalk R C p).length = firstPortFaceReturn R C p :=
   portFaceBoundaryEdges_length R C p
 
+/-- Every boundary dart belongs to the same face orbit as the start. -/
 theorem portFaceBoundaryWalk_mem_faceOrbit {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p q : PortNetworkPort P) (hq : q ∈ (portFaceBoundaryWalk R C p).edges) :
@@ -182,6 +217,7 @@ theorem portFaceBoundaryWalk_mem_faceOrbit {P : PortNetwork}
   rcases (List.mem_ofFn.mp hq) with ⟨i, rfl⟩
   exact portFaceOrbit_mem_iterate R C p i.val
 
+/-- The boundary walk's edge list has the expected finite support. -/
 theorem portFaceBoundaryWalk_edges_toFinset {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P) (p : PortNetworkPort P) :
     (portFaceBoundaryWalk R C p).edges.toFinset = portFaceOrbit R C p := by
@@ -200,11 +236,13 @@ theorem portFaceBoundaryWalk_edges_toFinset {P : PortNetwork}
         (firstPortFaceReturn R C p) p := (firstPortFaceReturn_spec R C p).2
     exact (hperiod.iterate_mod_apply n).trans hn
 
+/-- XOR of the labels encountered on one face boundary. -/
 def faceBoundaryLabelSum {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) (R : PortLocalRotation P)
     (p : PortNetworkPort P) : TrominoState :=
   ∑ q ∈ portFaceOrbit R C p, A.label q
 
+/-- A primitive face boundary has no repeated darts. -/
 theorem portFaceBoundaryWalk_edges_nodup {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P) (p : PortNetworkPort P) :
     (portFaceBoundaryWalk R C p).edges.Nodup := by
@@ -213,6 +251,7 @@ theorem portFaceBoundaryWalk_edges_nodup {P : PortNetwork}
   apply Fin.ext
   exact portFaceOrbit_iterate_distinct R C p i.isLt j.isLt hij
 
+/-- The walk XOR equals the face-boundary label sum. -/
 theorem faceBoundaryWalk_xor_eq_labelSum {P : PortNetwork}
     {C : PortCrossing P} (A : V4FlowAssignment C)
     (R : PortLocalRotation P) (p : PortNetworkPort P) :
@@ -225,10 +264,12 @@ theorem faceBoundaryWalk_xor_eq_labelSum {P : PortNetwork}
   rw [hset]
   rfl
 
+/-- Every dual face boundary has zero V4 label sum. -/
 def IsDualFaceKirchhoff {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) (R : PortLocalRotation P) : Prop :=
   ∀ p, faceBoundaryLabelSum A R p = 0
 
+/-- A tension assignment has zero sum around every dual face. -/
 theorem tension_implies_dualFaceKirchhoff {P : PortNetwork}
     {C : PortCrossing P} (A : V4FlowAssignment C)
     (R : PortLocalRotation P) (hzero : IsZeroHolonomyV4Tension A) :
@@ -240,13 +281,16 @@ theorem tension_implies_dualFaceKirchhoff {P : PortNetwork}
   rw [faceBoundaryWalk_xor_eq_labelSum A R p] at h
   exact h
 
+/-- Predicate that a dart lies on a degenerate dual loop. -/
 def IsDualLoopPort {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p : PortNetworkPort P) : Prop :=
   SamePortFaceOrbit R C p (C.cross p)
 
+/-- No port is allowed to lie on a dual loop. -/
 def DualLoopFree {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) : Prop := ∀ p, ¬ IsDualLoopPort R C p
 
+/-- Crossing preserves the dual-loop condition. -/
 theorem isDualLoopPort_cross_iff {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P) (p : PortNetworkPort P) :
     IsDualLoopPort R C p ↔ IsDualLoopPort R C (C.cross p) := by
@@ -262,6 +306,7 @@ theorem isDualLoopPort_cross_iff {P : PortNetwork}
     change SamePortFaceOrbit R C p (C.cross p)
     exact samePortFaceOrbit_symm R C h
 
+/-- A dual loop is detected by its crossing edge pair. -/
 theorem isDualLoopPort_edgePair {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p q : PortNetworkPort P) (hq : q ∈ portCrossingEdgePair C p)
@@ -273,6 +318,7 @@ theorem isDualLoopPort_edgePair {P : PortNetwork}
   · subst q
     exact hloop
 
+/-- A dual-loop edge pair has zero total V4 label. -/
 theorem dualLoop_edgePair_labelSum_zero {P : PortNetwork}
     {C : PortCrossing P} (A : V4FlowAssignment C)
     (p : PortNetworkPort P) (_hloop : ∃ R, IsDualLoopPort R C p) :
@@ -280,6 +326,7 @@ theorem dualLoop_edgePair_labelSum_zero {P : PortNetwork}
   have hne : p ≠ C.cross p := (C.cross_ne p).symm
   simp [portCrossingEdgePair, hne, A.cross_sameLabel, state_add_self]
 
+/-- Applying the raw dual construction twice returns the primal rotation. -/
 theorem dualFaceStepRaw_doubleDual_eq_rotation {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P) (p : PortNetworkPort P) :
     dualFaceStepRaw R C p = R.rotate p := dualFaceStepRaw_eq_rotation R C p

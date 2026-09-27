@@ -33,10 +33,12 @@ open scoped BigOperators
 
 /-! ## Canonical edge labels and scalar evaluation -/
 
+/-- Sum the label of an edge cell once, using a canonical endpoint order. -/
 def assignmentEdgeLabel {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) (E : PortEdgeCell C) : TrominoState :=
   Finset.sum E.val (fun p => if p.1 < (C.cross p).1 then A.label p else 0)
 
+/-- The canonical edge-cell label is the label of either endpoint. -/
 theorem assignmentEdgeLabel_edgeCellOfPort {P : PortNetwork}
     {C : PortCrossing P} (A : V4FlowAssignment C)
     (p : PortNetworkPort P) :
@@ -57,6 +59,7 @@ theorem assignmentEdgeLabel_edgeCellOfPort {P : PortNetwork}
     rw [Finset.sum_singleton, C.involutive]
     simp [hlt, hgt, A.cross_sameLabel]
 
+/-- Crossing to the other endpoint leaves the edge-cell label unchanged. -/
 theorem assignmentEdgeLabel_edgeCellOfPort_cross {P : PortNetwork}
     {C : PortCrossing P} (A : V4FlowAssignment C)
     (p : PortNetworkPort P) :
@@ -64,6 +67,7 @@ theorem assignmentEdgeLabel_edgeCellOfPort_cross {P : PortNetwork}
   rw [edgeCellOfPort_cross]
   exact assignmentEdgeLabel_edgeCellOfPort A p
 
+/-- Evaluate an F₂ edge chain by summing its V4 edge labels. -/
 def portEdgeLabelEval {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) :
     PortEdgeChain C →ₗ[PortF2] TrominoState :=
@@ -75,12 +79,14 @@ def portEdgeLabelEval {P : PortNetwork} {C : PortCrossing P}
       intro a x
       simp [smul_smul, Finset.smul_sum] }
 
+/-- Unfolding the evaluator exposes its finite linear combination. -/
 @[simp] theorem portEdgeLabelEval_apply {P : PortNetwork}
     {C : PortCrossing P} (A : V4FlowAssignment C)
     (x : PortEdgeChain C) :
     portEdgeLabelEval A x =
       ∑ E : PortEdgeCell C, x E • assignmentEdgeLabel A E := rfl
 
+/-- A basis chain supported on one edge evaluates to that edge label. -/
 theorem portEdgeLabelEval_edgeBasis {P : PortNetwork}
     {C : PortCrossing P} (A : V4FlowAssignment C)
     (p : PortNetworkPort P) :
@@ -93,6 +99,7 @@ theorem portEdgeLabelEval_edgeBasis {P : PortNetwork}
     Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte]
   exact assignmentEdgeLabel_edgeCellOfPort A p
 
+/-- A one-edge walk evaluates to the label of its crossing port. -/
 theorem portEdgeLabelEval_singleton {P : PortNetwork}
     {C : PortCrossing P} (A : V4FlowAssignment C)
     (p : PortNetworkPort P) :
@@ -103,6 +110,7 @@ theorem portEdgeLabelEval_singleton {P : PortNetwork}
 
 /-! ## Evaluation of structural walks -/
 
+/-- Evaluation of a walk's incidence chain is the XOR of its labels. -/
 theorem portEdgeLabelEval_walkEdgeCoeff {P : PortNetwork}
     {C : PortCrossing P} (A : V4FlowAssignment C)
     (xs : List (PortNetworkPort P)) :
@@ -127,6 +135,7 @@ theorem portEdgeLabelEval_walkEdgeCoeff {P : PortNetwork}
       rw [hdecomp, map_add, portEdgeLabelEval_edgeBasis, ih]
       rfl
 
+/-- The evaluator agrees with the flow-language walk XOR. -/
 theorem portEdgeLabelEval_portWalkEdgeChain {P : PortNetwork}
     {C : PortCrossing P} (A : V4FlowAssignment C)
     {r s : Fin P.regionCount} (W : PortRegionWalk C r s) :
@@ -134,6 +143,7 @@ theorem portEdgeLabelEval_portWalkEdgeChain {P : PortNetwork}
       regionWalkXor (W.toFlowRegionWalk A) := by
   exact portEdgeLabelEval_walkEdgeCoeff A W.edges
 
+/-- The same evaluation identity holds for a flow-language walk. -/
 theorem portEdgeLabelEval_flowWalk {P : PortNetwork}
     {C : PortCrossing P} (A : V4FlowAssignment C)
     {r s : Fin P.regionCount} (W : FlowRegionWalk A.toFlowCrossing r s) :
@@ -143,11 +153,13 @@ theorem portEdgeLabelEval_flowWalk {P : PortNetwork}
 
 /-! ## Face-cell conservation -/
 
+/-- Sum the V4 labels around one face cell. -/
 def faceCellLabelSum {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) (R : PortLocalRotation P)
     (F : PortFaceCell R C) : TrominoState :=
   portEdgeLabelEval A (faceBoundaryEdgeChain F)
 
+/-- The face-cell sum is the boundary-walk label sum at any representative. -/
 theorem faceCellLabelSum_faceCellOfPort {P : PortNetwork}
     {R : PortLocalRotation P} {C : PortCrossing P}
     (A : V4FlowAssignment C) (p : PortNetworkPort P) :
@@ -156,6 +168,7 @@ theorem faceCellLabelSum_faceCellOfPort {P : PortNetwork}
     portEdgeLabelEval_portWalkEdgeChain,
     faceBoundaryWalk_xor_eq_labelSum]
 
+/-- Face-cell label sums do not depend on the chosen representative port. -/
 theorem faceCellLabelSum_representative_invariant {P : PortNetwork}
     {R : PortLocalRotation P} {C : PortCrossing P}
     (A : V4FlowAssignment C) {p q : PortNetworkPort P}
@@ -164,10 +177,12 @@ theorem faceCellLabelSum_representative_invariant {P : PortNetwork}
   rw [← faceCellLabelSum_faceCellOfPort A p, ←
     faceCellLabelSum_faceCellOfPort A q, h]
 
+/-- Every face cell has zero total V4 boundary label. -/
 def IsFaceCellKirchhoff {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) (R : PortLocalRotation P) : Prop :=
   ∀ F : PortFaceCell R C, faceCellLabelSum A R F = 0
 
+/-- Representative-free face conservation equals dual face conservation. -/
 theorem isFaceCellKirchhoff_iff_dualFaceKirchhoff {P : PortNetwork}
     {R : PortLocalRotation P} {C : PortCrossing P}
     (A : V4FlowAssignment C) :
@@ -184,6 +199,7 @@ theorem isFaceCellKirchhoff_iff_dualFaceKirchhoff {P : PortNetwork}
 
 /-! ## Boundary-two/evaluation adjunction -/
 
+/-- Evaluation turns a face boundary chain into the sum of face labels. -/
 theorem portEdgeLabelEval_boundary2 {P : PortNetwork}
     {R : PortLocalRotation P} {C : PortCrossing P}
     (A : V4FlowAssignment C) (y : PortFaceChain R C) :
@@ -193,6 +209,7 @@ theorem portEdgeLabelEval_boundary2 {P : PortNetwork}
   simp only [map_sum, map_smul]
   rfl
 
+/-- Face conservation annihilates every F₂ face boundary. -/
 theorem portEdgeLabelEval_boundary2_eq_zero_of_faceKirchhoff
     {P : PortNetwork} {R : PortLocalRotation P} {C : PortCrossing P}
     (A : V4FlowAssignment C) (hface : IsFaceCellKirchhoff A R)
@@ -203,6 +220,7 @@ theorem portEdgeLabelEval_boundary2_eq_zero_of_faceKirchhoff
   intro F hF
   rw [hface F, smul_zero]
 
+/-- Dual face conservation also annihilates every face boundary. -/
 theorem portEdgeLabelEval_boundary2_eq_zero_of_dualFaceKirchhoff
     {P : PortNetwork} {R : PortLocalRotation P} {C : PortCrossing P}
     (A : V4FlowAssignment C) (hdual : IsDualFaceKirchhoff A R)
@@ -213,6 +231,7 @@ theorem portEdgeLabelEval_boundary2_eq_zero_of_dualFaceKirchhoff
 
 /-! ## Genus-zero closure -/
 
+/-- On genus zero, a closed walk has zero V4 holonomy under face conservation. -/
 theorem portGenusZero_closedWalk_xor_eq_zero_of_dualFaceKirchhoff
     {P : PortNetwork} (G : PortGenusZeroCombinatorialMap P)
     (A : V4FlowAssignment G.map.crossing)
@@ -229,6 +248,7 @@ theorem portGenusZero_closedWalk_xor_eq_zero_of_dualFaceKirchhoff
       rw [hy]
     _ = 0 := portEdgeLabelEval_boundary2_eq_zero_of_dualFaceKirchhoff A hface y
 
+/-- Dual face conservation implies the zero-holonomy tension condition. -/
 theorem portGenusZero_zeroHolonomy_of_dualFaceKirchhoff
     {P : PortNetwork} (G : PortGenusZeroCombinatorialMap P)
     (A : V4FlowAssignment G.map.crossing)
@@ -240,6 +260,7 @@ theorem portGenusZero_zeroHolonomy_of_dualFaceKirchhoff
   rw [← FlowRegionWalk.toPortRegionWalk_toFlowRegionWalk W]
   exact h
 
+/-- On a genus-zero map, dual face conservation and zero holonomy coincide. -/
 theorem portGenusZero_dualFaceKirchhoff_iff_zeroHolonomy
     {P : PortNetwork} (G : PortGenusZeroCombinatorialMap P)
     (A : V4FlowAssignment G.map.crossing) :
@@ -249,6 +270,7 @@ theorem portGenusZero_dualFaceKirchhoff_iff_zeroHolonomy
   · exact portGenusZero_zeroHolonomy_of_dualFaceKirchhoff G A
   · exact tension_implies_dualFaceKirchhoff A G.map.localRotation
 
+/-- A genus-zero dual-conservative assignment induces a region coloring. -/
 theorem exists_portColoring_of_dualFaceKirchhoff
     {P : PortNetwork} (G : PortGenusZeroCombinatorialMap P)
     (A : V4FlowAssignment G.map.crossing)
@@ -258,6 +280,7 @@ theorem exists_portColoring_of_dualFaceKirchhoff
   exact exists_portColoring_of_zeroHolonomyV4Tension G.map A
     (portGenusZero_zeroHolonomy_of_dualFaceKirchhoff G A hface)
 
+/-- The preceding coloring existence can be exposed without its label equation. -/
 theorem exists_portColoring_of_dualFaceKirchhoff_only
     {P : PortNetwork} (G : PortGenusZeroCombinatorialMap P)
     (A : V4FlowAssignment G.map.crossing)
@@ -266,11 +289,13 @@ theorem exists_portColoring_of_dualFaceKirchhoff_only
   obtain ⟨K, _⟩ := exists_portColoring_of_dualFaceKirchhoff G A hface
   exact ⟨K, trivial⟩
 
+/-- Existence of a dual-face-conservative V4 assignment. -/
 def HasDualFaceKirchhoffV4Assignment {P : PortNetwork}
     (M : PortCombinatorialMap P) : Prop :=
   ∃ A : V4FlowAssignment M.crossing,
     IsDualFaceKirchhoff A M.localRotation
 
+/-- On genus zero, dual conservation is equivalent to four-state colorability. -/
 theorem PortGenusZeroCombinatorialMap.dualFaceKirchhoff_iff_colorable
     {P : PortNetwork} (G : PortGenusZeroCombinatorialMap P) :
     HasDualFaceKirchhoffV4Assignment G.map ↔
@@ -284,10 +309,12 @@ theorem PortGenusZeroCombinatorialMap.dualFaceKirchhoff_iff_colorable
       (coloringToV4Assignment K) G.map.localRotation
       (coloringToV4Assignment_isZeroHolonomy K)
 
+/-- Universal target asserting a conservative assignment on every genus-zero map. -/
 def PortGenusZeroDualFaceKirchhoffTarget : Prop :=
   ∀ (P : PortNetwork) (G : PortGenusZeroCombinatorialMap P),
     HasDualFaceKirchhoffV4Assignment G.map
 
+/-- The conservative-assignment target is exactly the four-color target. -/
 theorem portGenusZeroDualFaceKirchhoffTarget_iff_fourColorTarget :
     PortGenusZeroDualFaceKirchhoffTarget ↔
       PortGenusZeroFourColorTarget := by

@@ -24,6 +24,8 @@ namespace DkMath.Tromino
 
 /-! ## Indexing-free face-star reductions -/
 
+/-- Every genus-zero map has a face-star indexing whose packaged map is
+triangular and whose coloring pulls back to a coloring of the original map. -/
 theorem exists_faceStarGenusZeroTriangulation {P : PortNetwork}
     (G : PortGenusZeroCombinatorialMap P) :
     ∃ I : PortFaceStarIndexing G.map,
@@ -34,6 +36,8 @@ theorem exists_faceStarGenusZeroTriangulation {P : PortNetwork}
   refine ⟨I, faceStarGenusZero_allFacesTriangular G I, ?_⟩
   exact faceStarGenusZero_colorable_imp_original G I
 
+/-- The same indexing gives a one-way reduction from a face-star tetrahedral
+assignment to a four-state coloring of the original map. -/
 theorem exists_faceStarGenusZeroTetrahedralReduction {P : PortNetwork}
     (G : PortGenusZeroCombinatorialMap P) :
     ∃ I : PortFaceStarIndexing G.map,
@@ -46,17 +50,24 @@ theorem exists_faceStarGenusZeroTetrahedralReduction {P : PortNetwork}
 
 /-! ## Universal target schemas -/
 
+/-- The universal four-color assertion restricted to all-triangular
+genus-zero combinatorial maps. This is a target proposition, not a theorem. -/
 def PortGenusZeroTriangularFourColorTarget : Prop :=
   ∀ (P : PortNetwork) (G : PortGenusZeroCombinatorialMap P),
     PortAllFacesTriangular G.map →
       PortFourStateColorable G.map.crossing
 
+/-- A coloring theorem for every genus-zero map immediately applies to the
+subclass whose faces are triangular. -/
 theorem portGenusZeroFourColorTarget_imp_triangular :
     PortGenusZeroFourColorTarget →
       PortGenusZeroTriangularFourColorTarget := by
   intro h P G _
   exact h P G
 
+/-- A triangular coloring target implies the general target by replacing an
+arbitrary map with its all-triangular face-star subdivision and restricting
+the resulting coloring along old regions. -/
 theorem portGenusZeroTriangularFourColorTarget_imp_general :
     PortGenusZeroTriangularFourColorTarget →
       PortGenusZeroFourColorTarget := by
@@ -68,6 +79,8 @@ theorem portGenusZeroTriangularFourColorTarget_imp_general :
       (faceStarGenusZero_allFacesTriangular G I)
   exact faceStarGenusZero_colorable_imp_original G I hstar
 
+/-- The face-star construction identifies the triangular and general
+four-color target propositions. -/
 theorem portGenusZeroTriangularFourColorTarget_iff_fourColorTarget :
     PortGenusZeroTriangularFourColorTarget ↔
       PortGenusZeroFourColorTarget := by
@@ -75,11 +88,15 @@ theorem portGenusZeroTriangularFourColorTarget_iff_fourColorTarget :
   · exact portGenusZeroTriangularFourColorTarget_imp_general
   · exact portGenusZeroFourColorTarget_imp_triangular
 
+/-- The universal existence assertion for tetrahedral A/B/C face assignments
+on all-triangular genus-zero maps. This is the remaining target proposition. -/
 def PortGenusZeroTriangularTetrahedralTarget : Prop :=
   ∀ (P : PortNetwork) (G : PortGenusZeroCombinatorialMap P),
     PortAllFacesTriangular G.map →
       HasTetrahedralFaceAssignment G.map
 
+/-- On a triangular genus-zero map, the local tetrahedral normal form makes a
+tetrahedral assignment equivalent to a four-state region coloring. -/
 theorem portGenusZeroTriangularTetrahedralTarget_iff_triangularFourColorTarget :
     PortGenusZeroTriangularTetrahedralTarget ↔
       PortGenusZeroTriangularFourColorTarget := by
@@ -91,6 +108,8 @@ theorem portGenusZeroTriangularTetrahedralTarget_iff_triangularFourColorTarget :
     exact (hasTetrahedralFaceAssignment_iff_fourStateColorable G htri).mpr
       (h P G htri)
 
+/-- Composing the preceding local equivalence with face-star reduction gives
+the branch-closing equivalence with the general four-color target. -/
 theorem portGenusZeroTriangularTetrahedralTarget_iff_fourColorTarget :
     PortGenusZeroTriangularTetrahedralTarget ↔
       PortGenusZeroFourColorTarget := by

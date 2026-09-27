@@ -34,14 +34,17 @@ noncomputable def stateSplit (x : TrominoState) : BodyGapSplit ℕ where
   split := by
     rw [card_state, card_waitingStates]
 
+/-- The state packet has total size `4`. -/
 @[simp] theorem stateSplit_big (x : TrominoState) :
     (stateSplit x).big = 4 := by
   simp [stateSplit]
 
+/-- The state packet has three waiting slots. -/
 @[simp] theorem stateSplit_body (x : TrominoState) :
     (stateSplit x).body = 3 := by
   simp [stateSplit, card_waitingStates]
 
+/-- The state packet has one current-slot gap. -/
 @[simp] theorem stateSplit_gap (x : TrominoState) :
     (stateSplit x).gap = 1 := by
   rfl
@@ -58,16 +61,19 @@ def geometricSplit : BodyGapSplit ℕ where
   gap := DkMath.Polyomino.area DkMath.Polyomino.Tromino.hole2
   split := DkMath.Polyomino.Tromino.area_block2_eq_area_L_add_area_hole
 
+/-- The geometric block has area `4`. -/
 @[simp] theorem geometricSplit_big :
     geometricSplit.big = 4 := by
   change DkMath.Polyomino.area DkMath.Polyomino.Tromino.block2 = 4
   exact DkMath.Polyomino.Tromino.area_block2
 
+/-- The L-tromino occupies area `3`. -/
 @[simp] theorem geometricSplit_body :
     geometricSplit.body = 3 := by
   change DkMath.Polyomino.area DkMath.Polyomino.Tromino.L_tromino = 3
   exact DkMath.Polyomino.Tromino.area_L_tromino
 
+/-- The geometric hole occupies area `1`. -/
 @[simp] theorem geometricSplit_gap :
     geometricSplit.gap = 1 := by
   change DkMath.Polyomino.area DkMath.Polyomino.Tromino.hole2 = 1
@@ -80,16 +86,19 @@ def cosmicUnitSquareSplit : BodyGapSplit ℕ where
   gap := DkMath.CosmicFormula.CoreBeamGap.Gap (R := ℕ) 2 1
   split := DkMath.CosmicFormula.CoreBeamGap.big_eq_body_add_gap (R := ℕ) 2 1 1
 
+/-- The unit-square CosmicFormula total is `4`. -/
 theorem cosmicUnitSquare_big :
     cosmicUnitSquareSplit.big = 4 := by
   norm_num [cosmicUnitSquareSplit, DkMath.CosmicFormula.CoreBeamGap.Big,
     DkMath.CosmicFormulaBinom.BigN]
 
+/-- The unit-square CosmicFormula gap is `1`. -/
 theorem cosmicUnitSquare_gap :
     cosmicUnitSquareSplit.gap = 1 := by
   norm_num [cosmicUnitSquareSplit, DkMath.CosmicFormula.CoreBeamGap.Gap,
     DkMath.CosmicFormulaBinom.GapN]
 
+/-- The unit-square CosmicFormula body is `3`. -/
 theorem cosmicUnitSquare_body :
     cosmicUnitSquareSplit.body = 3 := by
   have hsplit :=
@@ -111,6 +120,7 @@ The public calibration is componentwise. Equality of the packets themselves
 would also compare their proof fields and would add no mathematical content.
 -/
 
+/-- The three packets agree componentwise on their total size. -/
 theorem threeWay_big (x : TrominoState) :
     (stateSplit x).big = geometricSplit.big ∧
       geometricSplit.big = cosmicUnitSquareSplit.big := by
@@ -118,6 +128,7 @@ theorem threeWay_big (x : TrominoState) :
   · rw [stateSplit_big, geometricSplit_big]
   · rw [geometricSplit_big, cosmicUnitSquare_big]
 
+/-- The three packets agree componentwise on their body size. -/
 theorem threeWay_body (x : TrominoState) :
     (stateSplit x).body = geometricSplit.body ∧
       geometricSplit.body = cosmicUnitSquareSplit.body := by
@@ -125,6 +136,7 @@ theorem threeWay_body (x : TrominoState) :
   · rw [stateSplit_body, geometricSplit_body]
   · rw [geometricSplit_body, cosmicUnitSquare_body]
 
+/-- The three packets agree componentwise on their gap size. -/
 theorem threeWay_gap (x : TrominoState) :
     (stateSplit x).gap = geometricSplit.gap ∧
       geometricSplit.gap = cosmicUnitSquareSplit.gap := by
@@ -132,6 +144,8 @@ theorem threeWay_gap (x : TrominoState) :
   · rw [stateSplit_gap, geometricSplit_gap]
   · rw [geometricSplit_gap, cosmicUnitSquare_gap]
 
+/-- The complete three-way calibration packages the three componentwise
+equalities into one proposition. -/
 theorem threeWay_calibration (x : TrominoState) :
     ((stateSplit x).big = geometricSplit.big ∧
         geometricSplit.big = cosmicUnitSquareSplit.big) ∧

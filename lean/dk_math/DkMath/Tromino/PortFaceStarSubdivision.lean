@@ -15,6 +15,10 @@ The semantic three-way port descriptor is kept separate from the dependent
 Fin encoding of the new regions. An explicit indexing package makes the
 production constructors computable; classical finite equivalences are used
 only by the indexing existence theorem.
+
+The carrier has one old-region copy for each original region and one
+face-center copy for each original face. Each old port contributes one old
+edge dart and two radial darts.
 -/
 
 #print "file: DkMath.Tromino.PortFaceStarSubdivision"
@@ -23,6 +27,8 @@ namespace DkMath.Tromino
 
 /-! ## Explicit indexing of old face cells and their boundary ports -/
 
+/-- Finite enumerations needed to turn the semantic face-star carrier into a
+computable dependent `Fin` carrier. -/
 structure PortFaceStarIndexing {P : PortNetwork} (M : PortCombinatorialMap P) where
   /-- Enumeration of the old face cells by Fin M.faceCount. -/
   faceEquiv : PortFaceCell M.localRotation M.crossing ≃ Fin M.faceCount
@@ -30,7 +36,8 @@ structure PortFaceStarIndexing {P : PortNetwork} (M : PortCombinatorialMap P) wh
   facePortEquiv : ∀ F : PortFaceCell M.localRotation M.crossing,
     {p : PortNetworkPort P // p ∈ F.val} ≃ Fin F.val.card
 
-/-- Every finite map admits an explicit face-star indexing package. -/
+/-- Every finite map admits an explicit face-star indexing package; the
+classical choice is confined to this existence proof. -/
 theorem exists_portFaceStarIndexing {P : PortNetwork} (M : PortCombinatorialMap P) :
     Nonempty (PortFaceStarIndexing M) := by
   classical
@@ -43,13 +50,16 @@ theorem exists_portFaceStarIndexing {P : PortNetwork} (M : PortCombinatorialMap 
 
 /-! ## Semantic port descriptor -/
 
+/-- Semantic classification of a new dart into old-edge, radial-old, or
+radial-center type. -/
 inductive FaceStarPortDesc {P : PortNetwork} (M : PortCombinatorialMap P)
   | oldEdge (p : PortNetworkPort P)
   | radialOld (p : PortNetworkPort P)
   | radialCenter (p : PortNetworkPort P)
 deriving DecidableEq
 
-/-- The descriptor is the disjoint union of three copies of the old ports. -/
+/-- Identify semantic face-star darts with three disjoint copies of the old
+ports. -/
 def faceStarDescSumEquiv {P : PortNetwork} (M : PortCombinatorialMap P) :
     FaceStarPortDesc M ≃
       PortNetworkPort P ⊕ (PortNetworkPort P ⊕ PortNetworkPort P) where
@@ -90,17 +100,21 @@ end FaceStarPortDesc
 
 /-! ## New regions and their local arities -/
 
+/-- The local arity is doubled at old regions and equals the old face length
+at a face center. -/
 def faceStarRegionArity {P : PortNetwork} (M : PortCombinatorialMap P)
     (I : PortFaceStarIndexing M) :
     Fin M.vertexCount ⊕ Fin M.faceCount → Nat
   | Sum.inl r => 2 * P.arity r
   | Sum.inr F => (I.faceEquiv.symm F).val.card
 
+/-- The finite port network underlying the face-star subdivision. -/
 def faceStarNetwork {P : PortNetwork} (M : PortCombinatorialMap P)
     (I : PortFaceStarIndexing M) : PortNetwork where
   regionCount := M.vertexCount + M.faceCount
   arity := fun r => faceStarRegionArity M I (finSumFinEquiv.symm r)
 
+/-- Canonical sum equivalence separating old regions from face centers. -/
 def faceStarRegionEquiv {P : PortNetwork} (M : PortCombinatorialMap P)
     (I : PortFaceStarIndexing M) :
     (Fin M.vertexCount ⊕ Fin M.faceCount) ≃
@@ -120,6 +134,7 @@ def faceCenterRegion {P : PortNetwork} {M : PortCombinatorialMap P}
     Fin (faceStarNetwork M I).regionCount :=
   faceStarRegionEquiv M I (.inr (I.faceEquiv F))
 
+/-- The sum encoding makes the old-region inclusion injective. -/
 theorem oldRegion_injective {P : PortNetwork} {M : PortCombinatorialMap P}
     (I : PortFaceStarIndexing M) :
     Function.Injective (oldRegion I) := by
@@ -129,6 +144,7 @@ theorem oldRegion_injective {P : PortNetwork} {M : PortCombinatorialMap P}
   cases h'
   rfl
 
+/-- Distinct old faces give distinct center regions. -/
 theorem faceCenterRegion_injective {P : PortNetwork} {M : PortCombinatorialMap P}
     (I : PortFaceStarIndexing M) :
     Function.Injective (faceCenterRegion I) := by
@@ -140,6 +156,7 @@ theorem faceCenterRegion_injective {P : PortNetwork} {M : PortCombinatorialMap P
     injection h'
   exact Subtype.ext (congrArg Subtype.val (I.faceEquiv.injective hfg))
 
+/-- Old-region and face-center copies are disjoint summands. -/
 theorem oldRegion_ne_faceCenterRegion
     {P : PortNetwork} {M : PortCombinatorialMap P}
     (I : PortFaceStarIndexing M) (r : Fin M.vertexCount)
@@ -151,7 +168,11 @@ theorem oldRegion_ne_faceCenterRegion
     (faceStarRegionEquiv M I).injective h
   cases h'
 
-/-! ## Actual port constructors -/
+/-! ## Actual port constructors -
+
+The following constructors realize the three semantic dart types in the
+dependent `Fin` representation of the new network.
+-/
 
 /-- A two-slot old-region encoding: slot 0 is old-edge, slot 1 is radial-old. -/
 def oldPortFin {P : PortNetwork} {M : PortCombinatorialMap P}
@@ -196,16 +217,20 @@ def faceStarRadialCenterPort {P : PortNetwork} {M : PortCombinatorialMap P}
     ⟨p, faceCellOfPort_mem _ _ _⟩
   ⟨faceCenterRegion I F, centerPortFin I F q⟩
 
+/-- The old-edge dart starts at the old copy of the source region. -/
 theorem faceStarOldEdgePort_source {P : PortNetwork} {M : PortCombinatorialMap P}
     (I : PortFaceStarIndexing M) (p : PortNetworkPort P) :
     (faceStarOldEdgePort I p).1 = oldRegion I p.1 :=
   rfl
 
+/-- The radial-old dart starts at the old copy of the source region. -/
 theorem faceStarRadialOldPort_source {P : PortNetwork} {M : PortCombinatorialMap P}
     (I : PortFaceStarIndexing M) (p : PortNetworkPort P) :
     (faceStarRadialOldPort I p).1 = oldRegion I p.1 :=
   rfl
 
+/-- The radial-center dart starts at the center of the face containing the
+original port. -/
 theorem faceStarRadialCenterPort_source
     {P : PortNetwork} {M : PortCombinatorialMap P}
     (I : PortFaceStarIndexing M) (p : PortNetworkPort P) :
@@ -213,6 +238,7 @@ theorem faceStarRadialCenterPort_source
       faceCenterRegion I (faceCellOfPort M.localRotation M.crossing p) :=
   rfl
 
+/-- The new region count is the sum of old regions and old faces. -/
 theorem faceStarNetwork_regionCount {P : PortNetwork} {M : PortCombinatorialMap P}
     (I : PortFaceStarIndexing M) :
     (faceStarNetwork M I).regionCount = M.vertexCount + M.faceCount :=

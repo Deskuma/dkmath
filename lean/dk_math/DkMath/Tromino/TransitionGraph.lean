@@ -8,15 +8,28 @@ import DkMath.Tromino.BoundaryPairing
 
 #print "file: DkMath.Tromino.TransitionGraph"
 
+/-!
+# The closed boundary transition graph
+
+A closed boundary network has two fixed-point-free involutions on its ports:
+the crossing involution changes regions, while the local mate involution
+pairs ports inside one region.  Their composition is a permutation whose
+undirected transition graph is 2-regular.  Label preservation under both
+involutions is the invariant used by the later XOR and parity lemmas.
+-/
+
 namespace DkMath.Tromino
 
+/-- A finite boundary network with a signature at every region. -/
 structure BoundaryNetwork where
   regionCount : Nat
   signature : Fin regionCount → BoundarySignature
 
+/-- A dependent region-and-slot port of a boundary network. -/
 abbrev NetworkPort (N : BoundaryNetwork) :=
   Sigma (fun r : Fin N.regionCount => Fin (N.signature r).arity)
 
+/-- A region-changing involution preserving boundary labels. -/
 structure BoundaryCrossing (N : BoundaryNetwork) where
   cross : NetworkPort N → NetworkPort N
   cross_involutive : Function.Involutive cross
@@ -25,32 +38,40 @@ structure BoundaryCrossing (N : BoundaryNetwork) where
     boundaryDelta (N.signature (cross p).1) (cross p).2 =
       boundaryDelta (N.signature p.1) p.2
 
+/-- A boundary network with crossing, local pairings, and no residual ports. -/
 structure ClosedBoundaryNetwork extends BoundaryNetwork where
   crossing : BoundaryCrossing toBoundaryNetwork
   pairing : ∀ r, BoundaryPairing (toBoundaryNetwork.signature r)
   perfect : ∀ r, residualPorts (pairing r) = ∅
 
+/-- The crossing permutation on a closed boundary network. -/
 def crossPort (N : ClosedBoundaryNetwork) :
     NetworkPort N.toBoundaryNetwork → NetworkPort N.toBoundaryNetwork := N.crossing.cross
 
+/-- Crossing twice returns to the original port. -/
 theorem crossPort_involutive (N : ClosedBoundaryNetwork) :
     Function.Involutive (crossPort N) := N.crossing.cross_involutive
 
+/-- Crossing changes the region index. -/
 theorem crossPort_changes_region (N : ClosedBoundaryNetwork) (p : NetworkPort N.toBoundaryNetwork) :
     (crossPort N p).1 ≠ p.1 := N.crossing.cross_changes_region p
 
+/-- Crossing preserves the boundary delta label. -/
 theorem crossPort_sameLabel (N : ClosedBoundaryNetwork) (p : NetworkPort N.toBoundaryNetwork) :
     boundaryDelta (N.toBoundaryNetwork.signature (crossPort N p).1) (crossPort N p).2 =
       boundaryDelta (N.toBoundaryNetwork.signature p.1) p.2 := N.crossing.cross_sameLabel p
 
+/-- A crossing port is not fixed. -/
 theorem crossPort_ne (N : ClosedBoundaryNetwork) (p : NetworkPort N.toBoundaryNetwork) :
     crossPort N p ≠ p := by
   intro h
   exact crossPort_changes_region N p (congrArg Sigma.fst h)
 
+/-- The local pairing involution inside the port's region. -/
 def localMatePort (N : ClosedBoundaryNetwork) (p : NetworkPort N.toBoundaryNetwork) :
     NetworkPort N.toBoundaryNetwork := ⟨p.1, (N.pairing p.1).mate p.2⟩
 
+/-- Local pairing twice returns to the original port. -/
 theorem localMatePort_involutive (N : ClosedBoundaryNetwork) :
     Function.Involutive (localMatePort N) := by
   intro p
@@ -60,14 +81,17 @@ theorem localMatePort_involutive (N : ClosedBoundaryNetwork) :
       NetworkPort N.toBoundaryNetwork) = ⟨r, i⟩
     exact Sigma.ext rfl (heq_of_eq ((N.pairing r).involutive i))
 
+/-- Local pairing preserves the region index. -/
 theorem localMatePort_region (N : ClosedBoundaryNetwork) (p : NetworkPort N.toBoundaryNetwork) :
     (localMatePort N p).1 = p.1 := rfl
 
+/-- Local pairing preserves the boundary delta label. -/
 theorem localMatePort_sameLabel (N : ClosedBoundaryNetwork) (p : NetworkPort N.toBoundaryNetwork) :
     boundaryDelta (N.toBoundaryNetwork.signature p.1) (localMatePort N p).2 =
       boundaryDelta (N.toBoundaryNetwork.signature p.1) p.2 :=
   (N.pairing p.1).sameLabel p.2
 
+/-- Perfect local pairing has no fixed port. -/
 theorem localMatePort_ne (N : ClosedBoundaryNetwork) (p : NetworkPort N.toBoundaryNetwork) :
     localMatePort N p ≠ p := by
   intro h
@@ -77,6 +101,7 @@ theorem localMatePort_ne (N : ClosedBoundaryNetwork) (p : NetworkPort N.toBounda
   apply mate_ne_of_not_mem_residualPorts (N.pairing p.1) hnot
   exact eq_of_heq ((Sigma.mk.inj_iff.mp h).2)
 
+/-- Crossing and local pairing produce distinct neighbors. -/
 theorem crossPort_ne_localMatePort (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) : crossPort N p ≠ localMatePort N p := by
   intro h
@@ -85,28 +110,34 @@ theorem crossPort_ne_localMatePort (N : ClosedBoundaryNetwork)
     (crossPort N p).1 = (localMatePort N p).1 := congrArg Sigma.fst h
     _ = p.1 := rfl
 
+/-- The two neighbors of a port in the transition graph. -/
 def transitionNeighbors (N : ClosedBoundaryNetwork) (p : NetworkPort N.toBoundaryNetwork) :
     Finset (NetworkPort N.toBoundaryNetwork) := {crossPort N p, localMatePort N p}
 
+/-- Every transition vertex has exactly two neighbors. -/
 theorem transitionNeighbors_card (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) : (transitionNeighbors N p).card = 2 := by
   simp [transitionNeighbors, crossPort_ne_localMatePort N p]
 
+/-- Adjacency in the undirected transition graph. -/
 def TransitionAdj (N : ClosedBoundaryNetwork)
     (p q : NetworkPort N.toBoundaryNetwork) : Prop :=
   q = crossPort N p ∨ q = localMatePort N p
 
+/-- Transition adjacency is membership in the two-neighbor set. -/
 theorem transitionAdj_iff_mem_transitionNeighbors (N : ClosedBoundaryNetwork)
     (p q : NetworkPort N.toBoundaryNetwork) :
     TransitionAdj N p q ↔ q ∈ transitionNeighbors N p := by
   simp [TransitionAdj, transitionNeighbors]
 
+/-- Transition adjacency is symmetric. -/
 theorem transitionAdj_symm (N : ClosedBoundaryNetwork)
     {p q : NetworkPort N.toBoundaryNetwork} : TransitionAdj N p q → TransitionAdj N q p := by
   rintro (rfl | rfl)
   · exact Or.inl (crossPort_involutive N p).symm
   · exact Or.inr (localMatePort_involutive N p).symm
 
+/-- Transition adjacency has no loops. -/
 theorem transitionAdj_irrefl (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) : ¬ TransitionAdj N p p := by
   intro h
@@ -114,28 +145,34 @@ theorem transitionAdj_irrefl (N : ClosedBoundaryNetwork)
   · exact crossPort_ne N p h.symm
   · exact localMatePort_ne N p h.symm
 
+/-- The transition graph is 2-regular at every port. -/
 theorem transitionAdj_degree_two (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) : (transitionNeighbors N p).card = 2 :=
   transitionNeighbors_card N p
 
+/-- One directed transition: cross first, then take the local mate. -/
 def transitionStep (N : ClosedBoundaryNetwork) :
     NetworkPort N.toBoundaryNetwork → NetworkPort N.toBoundaryNetwork :=
   fun p => localMatePort N (crossPort N p)
 
+/-- The inverse directed transition. -/
 def transitionStepInv (N : ClosedBoundaryNetwork) :
     NetworkPort N.toBoundaryNetwork → NetworkPort N.toBoundaryNetwork :=
   fun p => crossPort N (localMatePort N p)
 
+/-- The inverse is a left inverse of the transition step. -/
 theorem transitionStepInv_left (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) : transitionStepInv N (transitionStep N p) = p := by
   simp only [transitionStepInv, transitionStep]
   rw [localMatePort_involutive, crossPort_involutive]
 
+/-- The inverse is a right inverse of the transition step. -/
 theorem transitionStepInv_right (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) : transitionStep N (transitionStepInv N p) = p := by
   simp only [transitionStep, transitionStepInv]
   rw [crossPort_involutive, localMatePort_involutive]
 
+/-- The transition step is injective. -/
 theorem transitionStep_injective (N : ClosedBoundaryNetwork) :
     Function.Injective (transitionStep N) := by
   intro p q h
@@ -143,11 +180,13 @@ theorem transitionStep_injective (N : ClosedBoundaryNetwork) :
   rw [transitionStepInv_left N p, transitionStepInv_left N q] at h'
   exact h'
 
+/-- The transition step is surjective. -/
 theorem transitionStep_surjective (N : ClosedBoundaryNetwork) :
     Function.Surjective (transitionStep N) := by
   intro p
   exact ⟨transitionStepInv N p, transitionStepInv_right N p⟩
 
+/-- Package the directed transition as a finite permutation. -/
 def transitionEquiv (N : ClosedBoundaryNetwork) :
     NetworkPort N.toBoundaryNetwork ≃ NetworkPort N.toBoundaryNetwork where
   toFun := transitionStep N
@@ -155,6 +194,7 @@ def transitionEquiv (N : ClosedBoundaryNetwork) :
   left_inv := transitionStepInv_left N
   right_inv := transitionStepInv_right N
 
+/-- One transition preserves the boundary delta label. -/
 theorem transitionStep_sameLabel (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) :
     boundaryDelta (N.toBoundaryNetwork.signature (transitionStep N p).1) (transitionStep N p).2 =
@@ -165,6 +205,7 @@ theorem transitionStep_sameLabel (N : ClosedBoundaryNetwork)
       localMatePort_sameLabel N (crossPort N p)
     _ = boundaryDelta (N.toBoundaryNetwork.signature p.1) p.2 := crossPort_sameLabel N p
 
+/-- Every transition iterate preserves the boundary delta label. -/
 theorem transitionStep_iterate_sameLabel (N : ClosedBoundaryNetwork)
     (n : Nat) (p : NetworkPort N.toBoundaryNetwork) :
     boundaryDelta (N.toBoundaryNetwork.signature ((transitionStep N)^[n] p).1)
@@ -180,6 +221,7 @@ theorem transitionStep_iterate_sameLabel (N : ClosedBoundaryNetwork)
         ih (transitionStep N p)
       _ = boundaryDelta (N.toBoundaryNetwork.signature p.1) p.2 := transitionStep_sameLabel N p
 
+/-- Finiteness of the port permutation gives a positive return time. -/
 theorem transitionStep_periodic (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) :
     ∃ n : Nat, 0 < n ∧ (transitionStep N)^[n] p = p := by
@@ -191,6 +233,7 @@ theorem transitionStep_periodic (N : ClosedBoundaryNetwork)
   change ((transitionStep N)^[orderOf e]) p = p at happly
   exact happly
 
+/-- A periodic transition orbit returns with its label invariant. -/
 theorem transitionStep_periodic_sameLabel (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) :
     ∃ n : Nat, 0 < n ∧ (transitionStep N)^[n] p = p ∧
