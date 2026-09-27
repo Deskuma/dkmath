@@ -16,21 +16,22 @@ open scoped BigOperators
 /-!
 # XOR accumulated along a closed transition orbit
 
-For a closed flow network, the transition preserves the edge label.  Hence
-the XOR accumulated over `n` transition steps is the `n`-fold additive
-multiple of one label.  Nonzero labels make return of the accumulated state
-equivalent to even parity, while the separate return predicates record the
-periodicity of the transition itself.
+For a closed flow network, the transition preserves the edge label. Hence the
+XOR accumulated over `n` transition steps is the `n`-fold additive multiple of
+one label. Nonzero labels make closure of the accumulated state equivalent to
+even parity, while the separate return predicates record the periodicity of
+the transition itself.
 -/
 
-/-- The V4 label accumulated along the first `n` transition steps. -/
+/-- Sum the V4 labels encountered along the first `n` flow-transition steps. -/
 def flowTransitionXor (N : ClosedFlowNetwork)
     (p : FlowNetworkPort N.toFlowNetwork) (n : Nat) : TrominoState :=
   Finset.sum (Finset.range n) (fun j =>
     (N.toFlowNetwork.signature ((flowTransitionStep N)^[j] p).1).label
       ((flowTransitionStep N)^[j] p).2)
 
-/-- Constant transition labels make the accumulated XOR an `n`-fold sum. -/
+/-- Label preservation makes the accumulated flow XOR an `n`-fold sum of the
+starting label. -/
 theorem flowTransitionXor_eq_nsmul (N : ClosedFlowNetwork)
     (p : FlowNetworkPort N.toFlowNetwork) (n : Nat) :
     flowTransitionXor N p n = n •
@@ -44,7 +45,7 @@ theorem flowTransitionXor_eq_nsmul (N : ClosedFlowNetwork)
         ((flowTransitionStep N)^[n] p).2 = _
     rw [ih, flowTransitionStep_iterate_sameLabel, succ_nsmul]
 
-/-- Accumulated XOR is additive under concatenation of transition segments. -/
+/-- Concatenating transition segments adds their two accumulated XOR values. -/
 theorem flowTransitionXor_add (N : ClosedFlowNetwork)
     (p : FlowNetworkPort N.toFlowNetwork) (n m : Nat) :
     flowTransitionXor N p (n + m) =
@@ -56,14 +57,15 @@ theorem flowTransitionXor_add (N : ClosedFlowNetwork)
   intro j hj
   rw [show n + j = j + n by omega, Function.iterate_add_apply]
 
-/-- The accumulated XOR vanishes exactly for a zero label or even length. -/
+/-- The accumulated XOR vanishes exactly for a zero starting label or an even
+number of steps. -/
 theorem flowTransitionXor_eq_zero_iff (N : ClosedFlowNetwork)
     (p : FlowNetworkPort N.toFlowNetwork) (n : Nat) :
     flowTransitionXor N p n = 0 ↔
       (N.toFlowNetwork.signature p.1).label p.2 = 0 ∨ n % 2 = 0 := by
   rw [flowTransitionXor_eq_nsmul, nsmul_state_eq_zero_iff]
 
-/-- Under the nowhere-zero condition, vanishing is exactly even parity. -/
+/-- Since flow labels are nonzero, vanishing flow XOR is exactly even parity. -/
 theorem flowTransitionXor_nonzero_iff_even (N : ClosedFlowNetwork)
     (p : FlowNetworkPort N.toFlowNetwork) (n : Nat) :
     flowTransitionXor N p n = 0 ↔ n % 2 = 0 := by
@@ -75,18 +77,18 @@ theorem flowTransitionXor_nonzero_iff_even (N : ClosedFlowNetwork)
   · intro heven
     exact Or.inr heven
 
-/-- Predicate that a transition orbit returns after a positive length. -/
+/-- Predicate that a flow-transition orbit returns after a positive length. -/
 def FlowTransitionReturn (N : ClosedFlowNetwork)
     (p : FlowNetworkPort N.toFlowNetwork) (n : Nat) : Prop :=
   0 < n ∧ (flowTransitionStep N)^[n] p = p
 
-/-- A return with no earlier positive return. -/
+/-- A primitive flow return has no earlier positive return. -/
 def FlowPrimitiveTransitionReturn (N : ClosedFlowNetwork)
     (p : FlowNetworkPort N.toFlowNetwork) (n : Nat) : Prop :=
   FlowTransitionReturn N p n ∧
     ∀ m, 0 < m → m < n → (flowTransitionStep N)^[m] p ≠ p
 
-/-- The least positive return time of the transition orbit. -/
+/-- The least positive return time selected from the finite flow orbit. -/
 def firstFlowTransitionReturn (N : ClosedFlowNetwork)
     (p : FlowNetworkPort N.toFlowNetwork) : Nat :=
   Nat.find (flowTransitionStep_periodic N p)
@@ -119,7 +121,7 @@ theorem exists_primitiveFlowTransitionReturn (N : ClosedFlowNetwork)
     ∃ n, FlowPrimitiveTransitionReturn N p n := by
   exact ⟨firstFlowTransitionReturn N p, firstFlowTransitionReturn_primitive N p⟩
 
-/-- A primitive transition cycle is compatible when its XOR vanishes. -/
+/-- A primitive flow cycle is compatible when its accumulated XOR vanishes. -/
 def FlowPrimitiveCycleCompatible (N : ClosedFlowNetwork)
     (p : FlowNetworkPort N.toFlowNetwork) (n : Nat) : Prop :=
   FlowPrimitiveTransitionReturn N p n ∧ flowTransitionXor N p n = 0
@@ -142,7 +144,7 @@ theorem flowPrimitiveCycleCompatible_iff_even (N : ClosedFlowNetwork)
   · intro heven
     exact ⟨hprimitive, (flowPrimitiveCycleXor_iff_even N p n hprimitive).mpr heven⟩
 
-/-- Transport a base state by the accumulated transition XOR. -/
+/-- Transport a base state along a flow-transition prefix by adding its XOR. -/
 def flowTransportState (base : TrominoState) (N : ClosedFlowNetwork)
     (p : FlowNetworkPort N.toFlowNetwork) (n : Nat) : TrominoState :=
   base + flowTransitionXor N p n
@@ -153,7 +155,7 @@ def flowTransportState (base : TrominoState) (N : ClosedFlowNetwork)
     flowTransportState base N p 0 = base := by
   simp [flowTransportState, flowTransitionXor]
 
-/-- State transport composes along concatenated transition segments. -/
+/-- Flow state transport composes along concatenated transition segments. -/
 theorem flowTransportState_add (base : TrominoState) (N : ClosedFlowNetwork)
     (p : FlowNetworkPort N.toFlowNetwork) (n m : Nat) :
     flowTransportState base N p (n + m) =
@@ -162,7 +164,7 @@ theorem flowTransportState_add (base : TrominoState) (N : ClosedFlowNetwork)
   rw [flowTransportState, flowTransitionXor_add, flowTransportState, flowTransportState]
   rw [add_assoc]
 
-/-- At a return, transported-state closure is equivalent to zero XOR. -/
+/-- At a flow return, transported-state closure is equivalent to zero XOR. -/
 theorem flowTransportState_return_iff (base : TrominoState) (N : ClosedFlowNetwork)
     (p : FlowNetworkPort N.toFlowNetwork) (n : Nat)
     (_hreturn : FlowTransitionReturn N p n) :
@@ -175,7 +177,7 @@ theorem flowTransportState_return_iff (base : TrominoState) (N : ClosedFlowNetwo
   · intro h
     simp [flowTransportState, h]
 
-/-- On a primitive cycle, state closure is equivalent to even length. -/
+/-- On a primitive flow cycle, state closure is equivalent to even length. -/
 theorem flowPrimitiveTransport_return_iff (base : TrominoState)
     (N : ClosedFlowNetwork) (p : FlowNetworkPort N.toFlowNetwork) (n : Nat)
     (hprimitive : FlowPrimitiveTransitionReturn N p n) :
