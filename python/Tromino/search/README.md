@@ -258,3 +258,71 @@ After a target is found, replay the saved best resolved witness:
 
 Freeze the next observation only after the replay verifies the depth frontier
 and the geometry record is present.
+
+
+## Seeded local W9 -> W10 campaign after OBS-006
+
+OBS-006 established a replay-verified endpoint depth-nine witness at 24
+vertices. Its critical repair footprint has graph radius two.
+
+The next campaign stops restarting from fresh random planted maps. Instead each
+job starts from the frozen W9 witness and explores legal preserving flips from
+that known hard state.
+
+The harness option is:
+
+    --initial-witness PATH
+
+When used, the output directory also receives `initial_witness.json`. Search
+metadata record:
+
+    initial_witness_seed
+    initial_flip_history_length
+    mutation_suffix_length
+
+so a successful W10 witness can be compared directly with its W9 ancestor.
+
+Recommended bounded first run:
+
+    mkdir -p python/Tromino/results/repair-depth/seeded-w9-d10-v24
+
+    python3 python/Tromino/search/repair_depth_search.py search \
+      --vertices 24 \
+      --jobs 64 \
+      --steps 512 \
+      --warmup-flips 0 \
+      --workers "$(nproc)" \
+      --max-depth 11 \
+      --target-depth 10 \
+      --node-limit 3000000 \
+      --base-seed 10000000 \
+      --intermediate-policy endpoint \
+      --search-objective resolved \
+      --stop-on-target \
+      --initial-witness \
+        python/Tromino/results/repair-depth/endpoint-d9-v24/best_resolved_witness.json \
+      --output python/Tromino/results/repair-depth/seeded-w9-d10-v24
+
+This first run is intentionally much smaller than the fresh-random campaigns.
+Every job begins already at a depth-nine hard state, so the goal is local wall
+deepening rather than rediscovery of W9.
+
+If target depth ten is found, replay:
+
+    python3 python/Tromino/search/repair_depth_search.py replay \
+      python/Tromino/results/repair-depth/seeded-w9-d10-v24/best_resolved_witness.json \
+      --min-depth 8 \
+      --max-depth 11 \
+      --node-limit 6000000 \
+      --intermediate-policy endpoint \
+      --trace \
+      --stop-on-success \
+      --output python/Tromino/results/repair-depth/seeded-w9-d10-v24/replay-best-resolved.json
+
+Then compare the final witness flip history against
+`initial_flip_history_length`. The suffix is the concrete mutation path from
+the frozen W9 map toward its W10 descendant.
+
+If the bounded 64 x 512 campaign does not find ten, preserve the result as a
+local-search diagnostic and increase jobs/steps in a new output directory
+rather than silently changing the existing experiment.
