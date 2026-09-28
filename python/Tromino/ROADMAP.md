@@ -529,3 +529,39 @@ or the final DkMath GapSwap definition.
 
 The next long-run campaign should therefore optimize directly for
 `D_endpoint(G)` and search for a verified endpoint-depth hierarchy.
+
+
+### Next campaign — endpoint repair-depth hierarchy
+
+Status: ready to run after OBS-003.
+
+The search harness now supports `--search-objective resolved` and writes
+separate best-resolved and best-unresolved witnesses. This avoids the OBS-003
+long-run issue where an unresolved strict witness could replace the deepest
+verified solved witness in `best_witness.json`.
+
+The first endpoint-primary campaign is:
+
+```text
+vertices            = 24
+jobs                = 2000
+steps               = 2000
+warmup_flips        = 48
+max_depth           = 8
+target_depth        = 6
+node_limit          = 750000
+base_seed           = 7000000
+intermediate_policy = endpoint
+search_objective    = resolved
+```
+
+Primary question:
+
+```text
+How large can verified D_endpoint(G) become while the planted solution
+lineage remains intact?
+```
+
+The campaign should be promoted to the next OBS record only after replay of the
+best resolved witness confirms failure at depth `d-1` and success at depth
+`d`.
