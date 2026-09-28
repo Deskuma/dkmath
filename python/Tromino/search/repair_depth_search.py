@@ -497,6 +497,77 @@ def objective(result: dict) -> tuple[int, int, int, int]:
     return (result["search_ceiling"] + 1, rank, result.get("repairs", 0), 1)
 
 
+
+def resolved_objective(result: dict) -> tuple[int, int, int, int]:
+    if not result["success"]:
+        return (-1, 0, 0, 0)
+    return (
+        int(result["required_depth"]),
+        int(result.get("repairs", 0)),
+        int(result.get("repair_moves_total", 0)),
+        1,
+    )
+
+
+def unresolved_objective(result: dict) -> tuple[int, int, int, int]:
+    if result["success"]:
+        return (-1, 0, 0, 0)
+    rank = {
+        "state_space_exhausted": 4,
+        "depth_limited": 3,
+        "node_limit": 2,
+        "forced_repair": 1,
+        "pre_invariant_broken": 0,
+    }.get(result["classification"], 1)
+    return (
+        rank,
+        int(result.get("repairs", 0)),
+        int(result.get("expanded", 0)),
+        1,
+    )
+
+
+def search_objective(result: dict, mode: str) -> tuple[int, int, int, int]:
+    if mode == "resolved":
+        if result["success"]:
+            return (
+                1,
+                int(result["required_depth"]),
+                int(result.get("repairs", 0)),
+                int(result.get("repair_moves_total", 0)),
+            )
+        # Keep unresolved states traversable, but never let them outrank a
+        # resolved witness in resolved-depth mode.
+        return (
+            0,
+            unresolved_objective(result)[0],
+            int(result.get("repairs", 0)),
+            int(result.get("expanded", 0)),
+        )
+    return objective(result)
+
+
+def search_energy(result: dict, mode: str) -> float:
+    if mode == "resolved":
+        if result["success"]:
+            return (
+                5.0
+                + float(result["required_depth"])
+                + 0.01 * float(result.get("repairs", 0))
+                + 0.001 * float(result.get("repair_moves_total", 0))
+            )
+        # Unresolved states remain reachable under annealing, but a resolved
+        # state is always preferred lexicographically.
+        return float(unresolved_objective(result)[0])
+    score = objective(result)
+    return (
+        10.0 * float(score[0])
+        + float(score[1])
+        + 0.01 * float(score[2])
+        + 0.001 * float(score[3])
+    )
+
+
 def serialize_witness(
     tri: PlantedTriangulation,
     result: dict,
@@ -547,6 +618,7 @@ def one_search_job(job: dict) -> dict:
         "intermediate_policy": str(job["intermediate_policy"]),
     }
     current = evaluate(tri, trace=False, **eval_kwargs)
+    objective_mode = str(job.get("search_objective", "mixed"))
     best_tri = tri.copy()
     best = current
     accepted = 0
@@ -563,12 +635,13 @@ def one_search_job(job: dict) -> dict:
         candidate_tri.apply_flip(rng.choice(moves))
         candidate = evaluate(candidate_tri, trace=False, **eval_kwargs)
 
-        old_score = objective(current)
-        new_score = objective(candidate)
+        old_score = search_objective(current, objective_mode)
+        new_score = search_objective(candidate, objective_mode)
         accept = new_score >= old_score
         if not accept:
-            delta = (new_score[0] - old_score[0]) + 0.02 * (
-                new_score[1] - old_score[1]
+            delta = (
+                search_energy(candidate, objective_mode)
+                - search_energy(current, objective_mode)
             )
             accept = rng.random() < math.exp(delta / max(temperature, 0.05))
 
@@ -577,7 +650,9 @@ def one_search_job(job: dict) -> dict:
             current = candidate
             accepted += 1
 
-        if objective(current) > objective(best):
+        if search_objective(current, objective_mode) > search_objective(
+            best, objective_mode
+        ):
             best_tri = tri.copy()
             best = current
 
@@ -597,10 +672,15 @@ def one_search_job(job: dict) -> dict:
         "intermediate_policy": str(job["intermediate_policy"]),
         "temperature": float(job["temperature"]),
         "cooling": float(job["cooling"]),
+        "search_objective": objective_mode,
     }
     return {
         "job_seed": seed,
         "objective": list(objective(traced)),
+        "search_objective": objective_mode,
+        "search_score": list(search_objective(traced, objective_mode)),
+        "resolved_objective": list(resolved_objective(traced)),
+        "unresolved_objective": list(unresolved_objective(traced)),
         "classification": traced["classification"],
         "success": traced["success"],
         "required_depth": traced.get("required_depth"),
@@ -680,6 +760,8 @@ def cmd_search(args: argparse.Namespace) -> int:
     out.mkdir(parents=True, exist_ok=True)
     runs_path = out / "runs.jsonl"
     best_path = out / "best_witness.json"
+    best_resolved_path = out / "best_resolved_witness.json"
+    best_unresolved_path = out / "best_unresolved_witness.json"
     summary_path = out / "summary.json"
     config_path = out / "config.json"
 
@@ -697,6 +779,7 @@ def cmd_search(args: argparse.Namespace) -> int:
         "intermediate_policy": args.intermediate_policy,
         "temperature": args.temperature,
         "cooling": args.cooling,
+        "search_objective": args.search_objective,
     }
     if not config_path.exists():
         atomic_json(config_path, config)
@@ -710,7 +793,31 @@ def cmd_search(args: argparse.Namespace) -> int:
     rows = read_rows(runs_path)
     best_row = max(
         rows,
-        key=lambda row: tuple(row.get("objective", [0, 0, 0, 0])),
+        key=lambda row: tuple(
+            row.get("search_score", row.get("objective", [0, 0, 0, 0]))
+        ),
+        default=None,
+    )
+    best_resolved_row = max(
+        (row for row in rows if row.get("success")),
+        key=lambda row: tuple(
+            row.get(
+                "resolved_objective",
+                [
+                    row.get("required_depth", -1),
+                    0,
+                    0,
+                    1,
+                ],
+            )
+        ),
+        default=None,
+    )
+    best_unresolved_row = max(
+        (row for row in rows if not row.get("success")),
+        key=lambda row: tuple(
+            row.get("unresolved_objective", [0, 0, 0, 0])
+        ),
         default=None,
     )
 
@@ -732,6 +839,7 @@ def cmd_search(args: argparse.Namespace) -> int:
             "intermediate_policy": args.intermediate_policy,
             "temperature": args.temperature,
             "cooling": args.cooling,
+            "search_objective": args.search_objective,
         }
 
     started = time.time()
@@ -746,9 +854,17 @@ def cmd_search(args: argparse.Namespace) -> int:
             append_jsonl(runs_path, row)
             rows.append(row)
 
-            if best_row is None or tuple(row["objective"]) > tuple(
-                best_row["objective"]
-            ):
+            row_search_score = tuple(
+                row.get("search_score", row["objective"])
+            )
+            best_search_score = (
+                tuple(
+                    best_row.get("search_score", best_row["objective"])
+                )
+                if best_row
+                else None
+            )
+            if best_row is None or row_search_score > best_search_score:
                 best_row = row
                 atomic_json(best_path, row["witness"])
                 print(
@@ -756,9 +872,54 @@ def cmd_search(args: argparse.Namespace) -> int:
                     f"seed={row['job_seed']}",
                     f"class={row['classification']}",
                     f"depth={row.get('required_depth')}",
-                    f"objective={row['objective']}",
+                    f"search_score={list(row_search_score)}",
                     flush=True,
                 )
+
+            if row.get("success"):
+                row_resolved = tuple(
+                    row.get("resolved_objective", [-1, 0, 0, 0])
+                )
+                best_resolved = (
+                    tuple(
+                        best_resolved_row.get(
+                            "resolved_objective", [-1, 0, 0, 0]
+                        )
+                    )
+                    if best_resolved_row
+                    else None
+                )
+                if (
+                    best_resolved_row is None
+                    or row_resolved > best_resolved
+                ):
+                    best_resolved_row = row
+                    atomic_json(best_resolved_path, row["witness"])
+                    print(
+                        "NEW BEST RESOLVED",
+                        f"seed={row['job_seed']}",
+                        f"depth={row.get('required_depth')}",
+                        flush=True,
+                    )
+            else:
+                row_unresolved = tuple(
+                    row.get("unresolved_objective", [0, 0, 0, 0])
+                )
+                best_unresolved = (
+                    tuple(
+                        best_unresolved_row.get(
+                            "unresolved_objective", [0, 0, 0, 0]
+                        )
+                    )
+                    if best_unresolved_row
+                    else None
+                )
+                if (
+                    best_unresolved_row is None
+                    or row_unresolved > best_unresolved
+                ):
+                    best_unresolved_row = row
+                    atomic_json(best_unresolved_path, row["witness"])
 
             if (
                 row["success"]
@@ -777,6 +938,26 @@ def cmd_search(args: argparse.Namespace) -> int:
                             best_row["objective"] if best_row else None
                         ),
                         "best_seed": best_row["job_seed"] if best_row else None,
+                        "best_resolved_seed": (
+                            best_resolved_row["job_seed"]
+                            if best_resolved_row
+                            else None
+                        ),
+                        "best_resolved_depth": (
+                            best_resolved_row.get("required_depth")
+                            if best_resolved_row
+                            else None
+                        ),
+                        "best_unresolved_seed": (
+                            best_unresolved_row["job_seed"]
+                            if best_unresolved_row
+                            else None
+                        ),
+                        "best_unresolved_classification": (
+                            best_unresolved_row.get("classification")
+                            if best_unresolved_row
+                            else None
+                        ),
                     }
                 )
                 atomic_json(summary_path, summary)
@@ -852,6 +1033,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     search.add_argument("--temperature", type=float, default=1.5)
     search.add_argument("--cooling", type=float, default=0.9995)
+    search.add_argument(
+        "--search-objective",
+        choices=("mixed", "resolved"),
+        default="mixed",
+        help=(
+            "mixed preserves the original hard-state objective; resolved "
+            "keeps every solved witness above unresolved states and then "
+            "maximizes verified repair depth"
+        ),
+    )
     search.add_argument("--summary-every", type=int, default=10)
     search.add_argument(
         "--output", default="python/Tromino/results/repair-depth/default"
