@@ -565,3 +565,59 @@ lineage remains intact?
 The campaign should be promoted to the next OBS record only after replay of the
 best resolved witness confirms failure at depth `d-1` and success at depth
 `d`.
+
+
+### OBS-004 — Endpoint Repair Depth Seven
+
+Status: recorded on 2026-09-29.
+
+Files:
+
+```text
+python/Tromino/experiments/OBS-004-EndpointRepairDepthSeven/
+  README.md
+  summary.json
+```
+
+The first endpoint-primary resolved-depth campaign completed 2000/2000 jobs as
+solved and produced a replay-verified depth-seven witness at 24 vertices.
+
+Seed `7001217` fails under endpoint repair ceilings 0 through 6 and succeeds
+at depth 7. The critical repair is at restore step 18, node 21.
+
+Thus the current experimental frontier is:
+
+```text
+D_endpoint(24) >= 7
+```
+
+for the present planted generator, deterministic restore order, locked frame,
+direct-choice rule, and Kempe-component exchange proxy.
+
+This shows that the deep-repair phenomenon does not disappear when
+Missing-Color safety is relaxed from a per-primitive state invariant to a
+composite-repair endpoint condition.
+
+### Next campaign — fixed-size endpoint depth 8
+
+Before increasing graph size, keep `n = 24` and ask whether wall arrangement
+alone can raise the verified endpoint repair depth.
+
+Planned campaign:
+
+```text
+vertices            = 24
+jobs                = 3000
+steps               = 3000
+warmup_flips        = 64
+max_depth           = 10
+target_depth        = 8
+node_limit          = 1500000
+base_seed           = 8000000
+intermediate_policy = endpoint
+search_objective    = resolved
+```
+
+If a depth-eight witness is replay-verified, continue at fixed size before
+moving to larger maps. If the frontier remains at seven after this larger
+search, compare 28- and 32-vertex campaigns to test size dependence.
