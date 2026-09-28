@@ -452,3 +452,37 @@ the smallest depth-four witness rather than merely increasing random instance
 size.
 
 No universal repair-depth bound and no quantum advantage are claimed.
+
+
+### Long-run adversarial repair-depth search
+
+Status: harness prepared on 2026-09-28.
+
+Files:
+
+    python/Tromino/search/README.md
+    python/Tromino/search/repair_depth_search.py
+
+The long-run harness starts from a planted tetrahedral / four-state solution,
+adds resolution by triangular face subdivision, and adds maze-like
+combinatorial walls by solution-preserving diagonal edge flips.
+
+The solver is not given the planted coloring. It restores vertices in birth
+order, attempts to preserve the Missing-Color Invariant, and uses two-color
+Kempe-component exchange as the current GapSwap proxy only when direct lifting
+stalls.
+
+The primary search target is now a verified repair depth 5 witness. Unresolved
+cases are classified separately as depth-limited, node-limited, or exhausted
+under the current strict invariant and proxy move set. An unresolved case is not
+silently promoted to a deeper witness.
+
+The script is designed for development-PC runs with multiprocessing,
+crash-safe JSONL checkpoints, resumable deterministic seeds, best-witness
+serialization, and witness replay at larger depth ceilings. Raw runs.jsonl is
+ignored by default; compact summary and witness files can be committed or
+returned through chat.
+
+A second endpoint repair policy is included specifically to test whether a hard
+case represents a deeper local maze or instead shows that strict intermediate
+Missing-Color preservation is too restrictive.
