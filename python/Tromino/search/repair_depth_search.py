@@ -31,7 +31,7 @@ COLORS = (0, 1, 2, 3)
 SEA = -1
 BOUNDARY = (0, 1, 2)
 LOCKED = frozenset((SEA, 0, 1, 2))
-FORMAT_VERSION = 1
+FORMAT_VERSION = 2
 
 
 def face_key(a: int, b: int, c: int) -> tuple[int, int, int]:
@@ -266,6 +266,51 @@ def state_key(colored: dict[int, int]) -> tuple[tuple[int, int], ...]:
     return tuple(sorted(colored.items()))
 
 
+def graph_distances(
+    adjacency: dict[int, set[int]], start: int
+) -> dict[int, int]:
+    distances = {start: 0}
+    queue = deque([start])
+    while queue:
+        v = queue.popleft()
+        for w in adjacency[v]:
+            if w in distances:
+                continue
+            distances[w] = distances[v] + 1
+            queue.append(w)
+    return distances
+
+
+def repair_geometry(
+    adjacency: dict[int, set[int]],
+    current: int,
+    sequence: list[tuple[int, int, frozenset[int]]],
+) -> dict:
+    components = [set(component) for _, _, component in sequence]
+    footprint: set[int] = set()
+    for component in components:
+        footprint.update(component)
+
+    distances = graph_distances(adjacency, current)
+    footprint_distances = [
+        distances[v] for v in footprint if v in distances
+    ]
+    component_sizes = [len(component) for component in components]
+
+    return {
+        "component_sizes": component_sizes,
+        "max_component_size": max(component_sizes, default=0),
+        "footprint_vertices": sorted(footprint),
+        "footprint_size": len(footprint),
+        "min_distance_from_current": (
+            min(footprint_distances) if footprint_distances else None
+        ),
+        "max_distance_from_current": (
+            max(footprint_distances) if footprint_distances else None
+        ),
+    }
+
+
 def find_repair(
     adjacency: dict[int, set[int]],
     colored: dict[int, int],
@@ -404,6 +449,7 @@ def restore_instance(
                     ],
                     "assigned_color": color,
                     "repair_search": repair_meta,
+                    "geometry": repair_geometry(adjacency, v, sequence),
                 }
             )
 
@@ -780,6 +826,7 @@ def cmd_search(args: argparse.Namespace) -> int:
         "temperature": args.temperature,
         "cooling": args.cooling,
         "search_objective": args.search_objective,
+        "stop_on_target": args.stop_on_target,
     }
     if not config_path.exists():
         atomic_json(config_path, config)
@@ -842,8 +889,53 @@ def cmd_search(args: argparse.Namespace) -> int:
             "search_objective": args.search_objective,
         }
 
+    existing_target = any(
+        row.get("success")
+        and (row.get("required_depth") or 0) >= args.target_depth
+        for row in rows
+    )
+    if args.stop_on_target and existing_target:
+        summary = summary_from_rows(rows)
+        summary.update(
+            {
+                "elapsed_seconds": 0.0,
+                "target_depth": args.target_depth,
+                "target_found": True,
+                "stopped_on_target": True,
+                "best_objective": (
+                    best_row["objective"] if best_row else None
+                ),
+                "best_seed": best_row["job_seed"] if best_row else None,
+                "best_resolved_seed": (
+                    best_resolved_row["job_seed"]
+                    if best_resolved_row
+                    else None
+                ),
+                "best_resolved_depth": (
+                    best_resolved_row.get("required_depth")
+                    if best_resolved_row
+                    else None
+                ),
+                "best_unresolved_seed": (
+                    best_unresolved_row["job_seed"]
+                    if best_unresolved_row
+                    else None
+                ),
+                "best_unresolved_classification": (
+                    best_unresolved_row.get("classification")
+                    if best_unresolved_row
+                    else None
+                ),
+            }
+        )
+        atomic_json(summary_path, summary)
+        print("target already present; --stop-on-target requested")
+        print(json.dumps(summary, indent=2, sort_keys=True))
+        return 0
+
     started = time.time()
     target_found = False
+    stopped_on_target = False
 
     with ProcessPoolExecutor(max_workers=args.workers) as pool:
         futures = {
@@ -926,6 +1018,11 @@ def cmd_search(args: argparse.Namespace) -> int:
                 and (row.get("required_depth") or 0) >= args.target_depth
             ):
                 target_found = True
+                if args.stop_on_target:
+                    stopped_on_target = True
+                    for pending in futures:
+                        if pending is not future:
+                            pending.cancel()
 
             if index % max(1, args.summary_every) == 0 or target_found:
                 summary = summary_from_rows(rows)
@@ -934,6 +1031,7 @@ def cmd_search(args: argparse.Namespace) -> int:
                         "elapsed_seconds": time.time() - started,
                         "target_depth": args.target_depth,
                         "target_found": target_found,
+                        "stopped_on_target": stopped_on_target,
                         "best_objective": (
                             best_row["objective"] if best_row else None
                         ),
@@ -962,12 +1060,20 @@ def cmd_search(args: argparse.Namespace) -> int:
                 )
                 atomic_json(summary_path, summary)
 
+            if stopped_on_target:
+                print(
+                    "TARGET FOUND; pending jobs cancelled where possible",
+                    flush=True,
+                )
+                break
+
     summary = summary_from_rows(rows)
     summary.update(
         {
             "elapsed_seconds": time.time() - started,
             "target_depth": args.target_depth,
             "target_found": target_found,
+            "stopped_on_target": stopped_on_target,
             "best_objective": best_row["objective"] if best_row else None,
             "best_seed": best_row["job_seed"] if best_row else None,
             "best_resolved_seed": (
@@ -1061,6 +1167,14 @@ def build_parser() -> argparse.ArgumentParser:
             "mixed preserves the original hard-state objective; resolved "
             "keeps every solved witness above unresolved states and then "
             "maximizes verified repair depth"
+        ),
+    )
+    search.add_argument(
+        "--stop-on-target",
+        action="store_true",
+        help=(
+            "stop scheduling useful work once a solved witness reaches "
+            "--target-depth; pending futures are cancelled where possible"
         ),
     )
     search.add_argument("--summary-every", type=int, default=10)
