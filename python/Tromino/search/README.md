@@ -202,3 +202,59 @@ After completion, replay it with a larger ceiling:
 
 A new observation should be frozen only after replay confirms failure at
 `d-1` and success at `d`.
+
+
+## Endpoint depth-9 + repair-geometry campaign after OBS-005
+
+OBS-005 fixed a pure endpoint repair-depth eight witness at 24 vertices.
+The next campaign keeps the same vertex count and asks whether the wall
+interaction can be deepened again.
+
+The harness now adds repair-geometry fields to every traced repair:
+
+    component_sizes
+    max_component_size
+    footprint_vertices
+    footprint_size
+    min_distance_from_current
+    max_distance_from_current
+
+These fields distinguish exchange depth from spatial extent.
+
+The search also accepts `--stop-on-target`. Once a solved witness reaches
+the requested target, pending futures are cancelled where possible. Processes
+already executing may still finish before the pool exits.
+
+Recommended run:
+
+    mkdir -p python/Tromino/results/repair-depth/endpoint-d9-v24
+
+    python3 python/Tromino/search/repair_depth_search.py search \
+      --vertices 24 \
+      --jobs 2000 \
+      --steps 3000 \
+      --warmup-flips 64 \
+      --workers "$(nproc)" \
+      --max-depth 10 \
+      --target-depth 9 \
+      --node-limit 1500000 \
+      --base-seed 9000000 \
+      --intermediate-policy endpoint \
+      --search-objective resolved \
+      --stop-on-target \
+      --output python/Tromino/results/repair-depth/endpoint-d9-v24
+
+After a target is found, replay the saved best resolved witness:
+
+    python3 python/Tromino/search/repair_depth_search.py replay \
+      python/Tromino/results/repair-depth/endpoint-d9-v24/best_resolved_witness.json \
+      --min-depth 0 \
+      --max-depth 11 \
+      --node-limit 5000000 \
+      --intermediate-policy endpoint \
+      --trace \
+      --stop-on-success \
+      --output python/Tromino/results/repair-depth/endpoint-d9-v24/replay-best-resolved.json
+
+Freeze the next observation only after the replay verifies the depth frontier
+and the geometry record is present.
