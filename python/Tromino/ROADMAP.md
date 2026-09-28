@@ -408,3 +408,47 @@ would violate it.
 
 OBS-001 is a scratch observation, not a theorem and not yet a claim about
 quantum advantage.
+
+
+### OBS-002 — Missing-Color Invariant with Forced Local Exchange
+
+Status: recorded on 2026-09-28.
+
+Files:
+
+~~~
+python/Tromino/experiments/OBS-002-MissingColorForcedExchange/
+  README.md
+  summary.json
+  scratch_obs002.py
+~~~
+
+OBS-002 modifies the lift rule so that a direct color is accepted only when it
+preserves the Missing-Color Invariant for all not-yet-restored nodes. A
+two-color Kempe-component exchange is used only when no direct safe color
+exists. The exchange is a diagnostic proxy for a future DkMath GapSwap, not an
+identification with the formal exchange law.
+
+Frozen observations:
+
+- direct invariant-preserving lift still stalls as size grows;
+- one exchange layer removes most stalls;
+- depth two solved every recorded instance up through the 200-node batches;
+- in a dedicated 500-node batch, depth two solved 49/50 instances;
+- seed 5200005 is an explicit depth-three witness;
+- depth three solved all 50 instances in that 500-node batch.
+
+The current quantity of interest is therefore not total coloring search-space
+size alone, but the local repair-depth function
+
+~~~
+D(n) = maximum repair depth observed at size n.
+~~~
+
+This weakens the naive quantum-search motivation: a useful structural invariant
+can collapse a large global search into shallow local repair. The next experiment
+should use adversarial / planted tetrahedral refinements and actively search for
+the smallest depth-four witness rather than merely increasing random instance
+size.
+
+No universal repair-depth bound and no quantum advantage are claimed.
