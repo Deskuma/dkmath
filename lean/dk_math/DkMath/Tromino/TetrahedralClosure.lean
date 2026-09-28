@@ -40,7 +40,9 @@ The subtype representation retains the unordered two-face support of an
 edge, so its delta is independent of an ordering of the endpoints. -/
 abbrev TetraEdge := {E : Finset TetraFace // E.card = 2}
 
+/-- The six tetrahedral edges form a finite index type. -/
 instance tetraEdgeFintype : Fintype TetraEdge := inferInstance
+/-- Equality of tetrahedral edges is decidable through their finite supports. -/
 instance tetraEdgeDecidableEq : DecidableEq TetraEdge := inferInstance
 
 /-- Construct the edge joining two distinct tetrahedral faces. -/

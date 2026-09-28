@@ -94,6 +94,7 @@ def faceStarDescSumEquiv {P : PortNetwork} (M : PortCombinatorialMap P) :
 
 namespace FaceStarPortDesc
 
+/-- The semantic face-star descriptor has a finite enumeration. -/
 instance instFintype {P : PortNetwork} (M : PortCombinatorialMap P) :
     Fintype (FaceStarPortDesc M) :=
   Fintype.ofEquiv _ (faceStarDescSumEquiv M).symm

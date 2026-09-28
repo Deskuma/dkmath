@@ -48,19 +48,23 @@ def PortFaceCell {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) :=
   {F : Finset (PortNetworkPort P) // F ∈ portFaceOrbits R C}
 
+/-- Edge cells form a finite index type because crossing orbits are finite. -/
 instance portEdgeCellFintype {P : PortNetwork} (C : PortCrossing P) :
     Fintype (PortEdgeCell C) :=
   Fintype.subtype (portCrossingEdgeOrbits C) (fun _ => Iff.rfl)
 
+/-- Face cells form a finite index type because face orbits are finite. -/
 instance portFaceCellFintype {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) : Fintype (PortFaceCell R C) :=
   Fintype.subtype (portFaceOrbits R C) (fun _ => Iff.rfl)
 
+/-- Equality of edge cells is decided by equality of their orbit finsets. -/
 instance portEdgeCellDecidableEq {P : PortNetwork} (C : PortCrossing P) :
     DecidableEq (PortEdgeCell C) := fun a b =>
   if h : a.val = b.val then isTrue (Subtype.ext h)
   else isFalse (fun hab => h (congrArg Subtype.val hab))
 
+/-- Equality of face cells is decided by equality of their orbit finsets. -/
 instance portFaceCellDecidableEq {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) : DecidableEq (PortFaceCell R C) := fun a b =>
   if h : a.val = b.val then isTrue (Subtype.ext h)
