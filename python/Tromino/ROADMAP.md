@@ -486,3 +486,46 @@ returned through chat.
 A second endpoint repair policy is included specifically to test whether a hard
 case represents a deeper local maze or instead shows that strict intermediate
 Missing-Color preservation is too restrictive.
+
+
+### OBS-003 — Endpoint Gap Restoration
+
+Status: recorded on 2026-09-29.
+
+Files:
+
+```text
+python/Tromino/experiments/OBS-003-EndpointGapRestoration/
+  README.md
+  summary.json
+```
+
+OBS-003 records two complementary witnesses from the long-run planted
+adversarial search.
+
+First, seed `6000915` is a replay-verified strict repair-depth six witness:
+depth ceilings 0 through 5 fail and depth 6 succeeds. Under the present
+generator, restore order, locked frame, and Kempe-component exchange proxy, this
+gives the observation `D_strict(24) >= 6`.
+
+Second, seed `6000596` is `state_space_exhausted` under the strict
+intermediate Missing-Color policy, with `hit_depth_limit = false`, but the
+same saved witness is solved by the endpoint policy at repair depth 3.
+
+This separates two notions:
+
+```text
+strict repair:
+    every primitive exchange state must satisfy Missing-Color safety
+
+endpoint repair:
+    only the composite repair start/end states must satisfy it
+```
+
+The current interpretation is that Missing Color may be a boundary condition of
+a composite Gap repair rather than a state invariant required after every
+primitive exchange. This is an experimental interpretation, not yet a theorem
+or the final DkMath GapSwap definition.
+
+The next long-run campaign should therefore optimize directly for
+`D_endpoint(G)` and search for a verified endpoint-depth hierarchy.
