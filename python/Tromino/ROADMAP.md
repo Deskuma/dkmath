@@ -715,3 +715,97 @@ Primary questions:
 
 The next OBS record should be frozen only after replay confirms failure at
 depth `d-1`, success at depth `d`, and records the repair-geometry metrics.
+
+
+### OBS-006 — Radius-Two Endpoint Repair Depth Nine
+
+Status: recorded on 2026-09-29.
+
+Files:
+
+```text
+python/Tromino/experiments/OBS-006-RadiusTwoEndpointRepairDepthNine/
+  README.md
+  summary.json
+```
+
+Seed `9000035` is replay-verified:
+
+```text
+depth 8 = depth_limited, expanded 202071
+depth 9 = solved,        expanded 202085
+```
+
+The critical depth-nine repair occurs at node `19`, restore step `16`.
+Its geometry is:
+
+```text
+component sizes          = 9,1,2,1,1,1,3,2,2
+max component size       = 9
+footprint size           = 15
+distance from blocker    = 1..2
+```
+
+Thus the current experimental frontier is:
+
+```text
+D_endpoint(24) >= 9
+```
+
+while the entire critical repair footprint still lies within graph radius two
+of the blocked node.
+
+This is evidence for a deep local exchange maze in the present solver model,
+not a universal radius-two theorem.
+
+### Next campaign — seeded W9 -> W10 local deepening
+
+The search harness now accepts:
+
+```text
+--initial-witness PATH
+```
+
+Every job may therefore start from the same verified hard witness instead of a
+fresh planted triangulation. The initial witness is copied into the output
+directory, and the result metadata records the original flip-history length and
+the mutation-suffix length.
+
+The next question is:
+
+```text
+Can local solution-preserving flips deepen the known W9 wall into W10?
+```
+
+Start from:
+
+```text
+python/Tromino/results/repair-depth/endpoint-d9-v24/best_resolved_witness.json
+```
+
+and keep `warmup_flips = 0` so the recorded mutation suffix is directly
+interpretable as a path away from W9.
+
+Initial campaign:
+
+```text
+vertices            = 24
+jobs                = 64
+steps               = 512
+warmup_flips        = 0
+max_depth           = 11
+target_depth        = 10
+node_limit          = 3000000
+base_seed           = 10000000
+intermediate_policy = endpoint
+search_objective    = resolved
+stop_on_target      = true
+initial_witness     = W9 / seed 9000035
+```
+
+If a W10 descendant is found, replay it and inspect the mutation suffix between
+the frozen W9 seed and the first W10 witness. That suffix becomes candidate data
+for a recursive wall-deepening gadget.
+
+If this bounded local campaign does not reach ten, enlarge the local search
+budget before returning to fresh random planted starts.
