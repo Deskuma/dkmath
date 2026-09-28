@@ -362,3 +362,49 @@ scratch experiments determine:
 
 This avoids freezing an implementation strategy before the puzzle mechanics are
 understood.
+
+
+## Recorded scratch observation
+
+### OBS-001 — Missing-Color Lift
+
+Status: recorded on 2026-09-28.
+
+Files:
+
+```text
+python/Tromino/experiments/OBS-001-MissingColorLift/
+  README.md
+  summary.json
+  scratch_obs001.py
+```
+
+The first frozen observation separates three facts:
+
+- a degree-3 restore step automatically leaves at least one of four colors
+  missing, but 3-peeling barely simplifies the tested Delaunay instances;
+- degree 4 is the first local restore threshold where the already-colored
+  boundary can contain all four colors;
+- a heuristic that explicitly protects future missing colors avoids some dead
+  branches that plain greedy enters, but it is not sufficient by itself.
+
+The explicit seed `120001` records a branch where plain greedy chooses one of
+two legal colors and later reaches a node with boundary palette
+`{0,1,2,3}`, while the missing-color-aware branch completes.
+
+This motivates the next experimental invariant:
+
+```text
+for every not-yet-restored node v:
+    |P(v)| <= 3
+```
+
+where `P(v)` is the set of colors already visible on the restored boundary of
+`v`.
+
+The next solver experiment should preserve this invariant whenever a direct
+choice exists and invoke a genuine GapSwap repair only when every direct choice
+would violate it.
+
+OBS-001 is a scratch observation, not a theorem and not yet a claim about
+quantum advantage.
