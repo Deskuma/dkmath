@@ -650,7 +650,21 @@ def triangulation_from_witness(payload: dict) -> PlantedTriangulation:
 def one_search_job(job: dict) -> dict:
     seed = int(job["job_seed"])
     rng = random.Random(seed)
-    tri = generate_planted(int(job["vertices"]), seed)
+
+    initial_witness = job.get("initial_witness")
+    initial_witness_seed = None
+    if initial_witness:
+        payload = json.loads(Path(str(initial_witness)).read_text(encoding="utf-8"))
+        tri = triangulation_from_witness(payload)
+        initial_witness_seed = payload.get("job_seed")
+        if len(tri.planted) != int(job["vertices"]):
+            raise ValueError(
+                "initial witness vertex count does not match --vertices"
+            )
+    else:
+        tri = generate_planted(int(job["vertices"]), seed)
+
+    initial_flip_history_length = len(tri.flip_history)
 
     for _ in range(int(job["warmup_flips"])):
         moves = tri.flippable_preserving()
@@ -719,6 +733,12 @@ def one_search_job(job: dict) -> dict:
         "temperature": float(job["temperature"]),
         "cooling": float(job["cooling"]),
         "search_objective": objective_mode,
+        "initial_witness": str(initial_witness) if initial_witness else None,
+        "initial_witness_seed": initial_witness_seed,
+        "initial_flip_history_length": initial_flip_history_length,
+        "mutation_suffix_length": (
+            len(best_tri.flip_history) - initial_flip_history_length
+        ),
     }
     return {
         "job_seed": seed,
@@ -811,6 +831,25 @@ def cmd_search(args: argparse.Namespace) -> int:
     summary_path = out / "summary.json"
     config_path = out / "config.json"
 
+    initial_payload = None
+    initial_witness_seed = None
+    if args.initial_witness:
+        initial_source = Path(args.initial_witness)
+        initial_payload = json.loads(
+            initial_source.read_text(encoding="utf-8")
+        )
+        initial_tri = triangulation_from_witness(initial_payload)
+        if not initial_tri.planted_is_proper():
+            raise SystemExit("initial witness planted coloring is not proper")
+        if len(initial_tri.planted) != args.vertices:
+            raise SystemExit(
+                "initial witness vertex count does not match --vertices"
+            )
+        initial_witness_seed = initial_payload.get("job_seed")
+        frozen_initial = out / "initial_witness.json"
+        if not frozen_initial.exists():
+            atomic_json(frozen_initial, initial_payload)
+
     config = {
         "format_version": FORMAT_VERSION,
         "vertices": args.vertices,
@@ -827,6 +866,8 @@ def cmd_search(args: argparse.Namespace) -> int:
         "cooling": args.cooling,
         "search_objective": args.search_objective,
         "stop_on_target": args.stop_on_target,
+        "initial_witness": args.initial_witness,
+        "initial_witness_seed": initial_witness_seed,
     }
     if not config_path.exists():
         atomic_json(config_path, config)
@@ -887,6 +928,7 @@ def cmd_search(args: argparse.Namespace) -> int:
             "temperature": args.temperature,
             "cooling": args.cooling,
             "search_objective": args.search_objective,
+            "initial_witness": args.initial_witness,
         }
 
     existing_target = any(
@@ -1145,6 +1187,13 @@ def build_parser() -> argparse.ArgumentParser:
     search.add_argument("--jobs", type=int, default=100)
     search.add_argument("--steps", type=int, default=1000)
     search.add_argument("--warmup-flips", type=int, default=32)
+    search.add_argument(
+        "--initial-witness",
+        help=(
+            "start every search job from this saved witness instead of "
+            "generating a fresh planted triangulation"
+        ),
+    )
     search.add_argument(
         "--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1)
     )
