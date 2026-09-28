@@ -15,20 +15,22 @@ open scoped BigOperators
 /-!
 # XOR accumulated along a closed transition orbit
 
-The transition graph supplies a finite label-preserving permutation.  This
-module sums the labels along its iterates.  Since the V4 carrier has
-characteristic two, the resulting sum depends only on the parity of the
-number of steps once the label is known to be nonzero.
+The transition graph supplies a finite label-preserving permutation. This
+module sums the labels along its iterates. Since the V4 carrier has
+characteristic two, the resulting sum is the repeated addition of one fixed
+nonzero label and therefore depends only on the parity of the number of steps.
+The return predicates keep orbit periodicity separate from XOR compatibility.
 -/
 
-/-- The label at iterate `j` is counted once for each transition step. -/
+/-- Sum the V4 labels encountered during the first `n` transition steps. -/
 def transitionXor (N : ClosedBoundaryNetwork) (p : NetworkPort N.toBoundaryNetwork)
     (n : Nat) : TrominoState :=
   Finset.sum (Finset.range n) (fun j =>
     boundaryDelta (N.toBoundaryNetwork.signature ((transitionStep N)^[j] p).1)
       ((transitionStep N)^[j] p).2)
 
-/-- Label preservation turns the transition XOR into an `n`-fold sum. -/
+/-- Label preservation turns the orbit sum into the `n`-fold scalar multiple of
+the starting label. -/
 theorem transitionXor_eq_nsmul (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) (n : Nat) :
     transitionXor N p n = n •
@@ -42,7 +44,8 @@ theorem transitionXor_eq_nsmul (N : ClosedBoundaryNetwork)
         ((transitionStep N)^[n] p).2 = _
     rw [ih, transitionStep_iterate_sameLabel, succ_nsmul]
 
-/-- Transition XOR is additive when an orbit segment is split. -/
+/-- Splitting an orbit segment at time `n` splits its accumulated XOR into the
+prefix XOR and the XOR of the shifted suffix. -/
 theorem transitionXor_add (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) (n m : Nat) :
     transitionXor N p (n + m) =
@@ -56,7 +59,8 @@ theorem transitionXor_add (N : ClosedBoundaryNetwork)
 
 /-! ### Characteristic-two repeated labels -/
 
-/-- Repeating one V4 state `n` times depends only on `n mod 2`. -/
+/-- Repeating one V4 state `n` times depends only on `n mod 2`, by
+characteristic-two cancellation. -/
 theorem nsmul_state_eq_mod_two (n : Nat) (delta : TrominoState) :
     n • delta = if n % 2 = 0 then 0 else delta := by
   induction n with
@@ -69,7 +73,8 @@ theorem nsmul_state_eq_mod_two (n : Nat) (delta : TrominoState) :
     · have hsucc : (n + 1) % 2 = 0 := by omega
       simp [h, hsucc, state_add_self]
 
-/-- A repeated V4 state sums to zero iff it is zero or repeated evenly. -/
+/-- A repeated V4 state sums to zero exactly when the label is zero or the
+number of repetitions is even. -/
 theorem nsmul_state_eq_zero_iff (n : Nat) (delta : TrominoState) :
     n • delta = 0 ↔ delta = 0 ∨ n % 2 = 0 := by
   rw [nsmul_state_eq_mod_two]
@@ -79,14 +84,16 @@ theorem nsmul_state_eq_zero_iff (n : Nat) (delta : TrominoState) :
     · simp [hparity]
     · simp [hdelta, hparity]
 
-/-- Transition XOR vanishes iff the initial label is zero or the length is even. -/
+/-- Transition XOR vanishes exactly when the starting label is zero or the
+transition length is even. -/
 theorem transitionXor_eq_zero_iff (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) (n : Nat) :
     transitionXor N p n = 0 ↔
       boundaryDelta (N.toBoundaryNetwork.signature p.1) p.2 = 0 ∨ n % 2 = 0 := by
   rw [transitionXor_eq_nsmul, nsmul_state_eq_zero_iff]
 
-/-- For a nowhere-zero network, vanishing transition XOR is even parity. -/
+/-- Properness excludes zero labels, so vanishing transition XOR is equivalent
+to even step parity. -/
 theorem transitionXor_nonzero_iff_even (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) (n : Nat) :
     transitionXor N p n = 0 ↔ n % 2 = 0 := by
@@ -100,18 +107,18 @@ theorem transitionXor_nonzero_iff_even (N : ClosedBoundaryNetwork)
 
 /-! ### Positive and primitive returns -/
 
-/-- A positive return of the directed transition orbit. -/
+/-- A positive return of the directed transition orbit, independent of its XOR. -/
 def TransitionReturn (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) (n : Nat) : Prop :=
   0 < n ∧ (transitionStep N)^[n] p = p
 
-/-- A return with no smaller positive return. -/
+/-- A primitive return is a positive return with no smaller positive return. -/
 def PrimitiveTransitionReturn (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) (n : Nat) : Prop :=
   TransitionReturn N p n ∧
     ∀ m, 0 < m → m < n → (transitionStep N)^[m] p ≠ p
 
-/-- The least positive return time of the transition. -/
+/-- The least positive return time selected from the finite orbit. -/
 def firstTransitionReturn (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) : Nat :=
   Nat.find (transitionStep_periodic N p)
@@ -142,7 +149,8 @@ theorem exists_primitiveTransitionReturn (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) : ∃ n, PrimitiveTransitionReturn N p n := by
   exact ⟨firstTransitionReturn N p, firstTransitionReturn_primitive N p⟩
 
-/-- A primitive return is compatible when its accumulated XOR vanishes. -/
+/-- A primitive cycle is compatible when its accumulated XOR closes the V4
+state. -/
 def PrimitiveCycleCompatible (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) (n : Nat) : Prop :=
   PrimitiveTransitionReturn N p n ∧ transitionXor N p n = 0
@@ -167,7 +175,8 @@ theorem primitiveCycleCompatible_iff_even (N : ClosedBoundaryNetwork)
 
 /-! ### Prefix transport -/
 
-/-- Transport a base state by the XOR accumulated along a prefix. -/
+/-- Transport a base state along a transition prefix by adding the accumulated
+XOR. -/
 def transportState (base : TrominoState) (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) (n : Nat) : TrominoState :=
   base + transitionXor N p n
@@ -185,7 +194,8 @@ theorem transportState_add (base : TrominoState) (N : ClosedBoundaryNetwork)
   rw [transportState, transitionXor_add, transportState, transportState]
   rw [add_assoc]
 
-/-- At a return, transport closure is equivalent to zero accumulated XOR. -/
+/-- At a return, returning the transported state to its base value is equivalent
+to zero accumulated XOR. -/
 theorem transportState_return_iff (base : TrominoState) (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) (n : Nat)
     (_hreturn : TransitionReturn N p n) :
@@ -197,7 +207,8 @@ theorem transportState_return_iff (base : TrominoState) (N : ClosedBoundaryNetwo
   · intro h
     simp [transportState, h]
 
-/-- On a primitive cycle, transport closure is equivalent to even length. -/
+/-- On a primitive cycle in a proper network, transport closure is equivalent to
+even return length. -/
 theorem primitiveTransport_return_iff (base : TrominoState) (N : ClosedBoundaryNetwork)
     (p : NetworkPort N.toBoundaryNetwork) (n : Nat)
     (hprimitive : PrimitiveTransitionReturn N p n) :

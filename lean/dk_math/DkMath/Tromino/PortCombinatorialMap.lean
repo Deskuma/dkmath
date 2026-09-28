@@ -16,36 +16,54 @@ import DkMath.Tromino.CombinatorialMap
 A `PortCombinatorialMap` packages a crossing involution, a cyclic local
 rotation at every region, positivity of the vertex set, and region
 connectedness.  It is the finite rotation-system substitute for a connected
-embedded graph.  Its Euler characteristic and genus-zero predicates are
-therefore combinatorial certificates with no implicit topological
-realization claim.
+embedded graph: regions act as vertices, crossing orbits as edges, and
+face-step orbits as faces.  Its Euler characteristic and genus-zero
+predicates are therefore combinatorial certificates with no implicit
+topological realization claim.
 -/
 
 namespace DkMath.Tromino
 
-/-- A connected finite rotation system on a port network. -/
+/-- A connected finite rotation system on a port network.
+
+The crossing and rotation give the two permutations of the dart model.
+`nonemptyRegions` rules out the empty vertex carrier, while `connected`
+states that every pair of region cells is joined by a finite crossing walk.
+-/
 structure PortCombinatorialMap (P : PortNetwork) where
   crossing : PortCrossing P
   rotation : PortRotationSystem P
   nonemptyRegions : 0 < P.regionCount
   connected : PortRegionConnected crossing
 
-/-- The local rotation component of a port map. -/
+/-- The local rotation component of a port map.
+
+This is the permutation used at a vertex when constructing the global face
+step.  It forgets only the cyclicity proof carried by the larger structure.
+-/
 def PortCombinatorialMap.localRotation {P : PortNetwork}
     (M : PortCombinatorialMap P) : PortLocalRotation P :=
   M.rotation.toPortLocalRotation
 
-/-- Number of vertices, namely the regions of the port network. -/
+/-- Number of vertices, namely the regions of the port network.
+
+The port map's vertex cells are indexed directly by its regions. -/
 def PortCombinatorialMap.vertexCount {P : PortNetwork}
     (_M : PortCombinatorialMap P) : Nat :=
   portRegionVertexCount P
 
-/-- Number of edges, namely crossing orbits. -/
+/-- Number of edges, namely crossing orbits.
+
+An edge is an orbit of the fixed-point-free crossing involution, so each
+edge is represented by its two incident ports. -/
 def PortCombinatorialMap.edgeCount {P : PortNetwork}
     (M : PortCombinatorialMap P) : Nat :=
   portCrossingEdgeCount M.crossing
 
-/-- Number of faces, namely face-step orbits. -/
+/-- Number of faces, namely face-step orbits.
+
+Faces are the finite cyclic orbits of crossing followed by local rotation.
+-/
 def PortCombinatorialMap.faceCount {P : PortNetwork}
     (M : PortCombinatorialMap P) : Nat :=
   portFaceCount M.localRotation M.crossing
@@ -55,7 +73,10 @@ def PortCombinatorialMap.portCount {P : PortNetwork}
     (_M : PortCombinatorialMap P) : Nat :=
   P.portCount
 
-/-- The combinatorial Euler characteristic `V - E + F`. -/
+/-- The combinatorial Euler characteristic `V - E + F`.
+
+This delegates to the partition counts of `PortEulerCount`; it is an
+integer because later genus identities use subtraction. -/
 def PortCombinatorialMap.eulerCharacteristic {P : PortNetwork}
     (M : PortCombinatorialMap P) : Int :=
   portCombinatorialEulerCharacteristic M.localRotation M.crossing
@@ -93,7 +114,10 @@ theorem PortCombinatorialMap.connected_regions {P : PortNetwork}
     PortRegionReachable M.crossing r s :=
   M.connected r s
 
-/-- Genus `g` is encoded by the Euler identity `χ = 2 - 2g`. -/
+/-- Genus `g` is encoded by the Euler identity `χ = 2 - 2g`.
+
+This is a certificate predicate on finite counts.  It does not assert that
+the combinatorial map has already been realized as a surface. -/
 def PortHasCombinatorialGenus {P : PortNetwork}
     (M : PortCombinatorialMap P) (g : Nat) : Prop :=
   M.eulerCharacteristic = (2 : Int) - 2 * (g : Int)
@@ -147,7 +171,10 @@ theorem portHasSphereCharacteristic_iff_genus_zero {P : PortNetwork}
     PortHasSphereCharacteristic M ↔ PortHasCombinatorialGenus M 0 := by
   rw [PortHasSphereCharacteristic, (portCombinatorialGenus_zero_iff M).symm]
 
-/-- A packaged connected map carrying its genus-zero certificate. -/
+/-- A packaged connected map carrying its genus-zero certificate.
+
+The structure keeps the map data and the equation `χ = 2` together, making
+the sphere-characteristic assumption explicit at every later use. -/
 structure PortGenusZeroCombinatorialMap (P : PortNetwork) where
   map : PortCombinatorialMap P
   genusZero : PortHasCombinatorialGenus map 0
@@ -193,7 +220,11 @@ def PortGenusZeroCombinatorialMap.eulerCharacteristic {P : PortNetwork}
     (M : PortGenusZeroCombinatorialMap P) : Int :=
   M.map.eulerCharacteristic
 
-/-- Convert a flow combinatorial map into the port presentation. -/
+/-- Convert a flow combinatorial map into the port presentation.
+
+Labels are erased, but the crossing involution, local rotation, region
+nonemptiness, and connectivity are retained.  Thus the port map exposes
+the finite incidence structure underlying the flow map. -/
 def FlowCombinatorialMap.toPortCombinatorialMap {N : FlowNetwork}
     (M : FlowCombinatorialMap N) :
     PortCombinatorialMap N.toPortNetwork where
@@ -235,7 +266,11 @@ theorem FlowCombinatorialMap.toPortCombinatorialMap_eulerCharacteristic
   exact portCombinatorialEulerCharacteristic_of_flow_erasure
     M.rotation.toFlowLocalRotation M.crossing
 
-/-- Restore a port map as a flow combinatorial map using an assignment. -/
+/-- Restore a port map as a flow combinatorial map using an assignment.
+
+An edge-constant nonzero V4 assignment supplies exactly the label data
+needed to rebuild the flow signature; all map permutations and connectivity
+proofs are lifted from the port map. -/
 def PortCombinatorialMap.toFlowCombinatorialMap {P : PortNetwork}
     (M : PortCombinatorialMap P) (A : V4FlowAssignment M.crossing) :
     FlowCombinatorialMap A.toFlowNetwork where
@@ -317,7 +352,11 @@ theorem PortCombinatorialMap.toFlowCombinatorialMap_sphere_iff
   unfold PortHasSphereCharacteristic HasSphereCharacteristic
   rw [M.toFlowCombinatorialMap_eulerCharacteristic]
 
-/-- All numerical map invariants are independent of the chosen flow assignment. -/
+/-- All numerical map invariants are independent of the chosen flow assignment.
+
+The assignment changes only the decoration of the same finite port map, so
+vertex, edge, face, dart, and Euler counts are identical for any two valid
+choices. -/
 theorem PortCombinatorialMap.toFlowCombinatorialMap_assignment_independent
     {P : PortNetwork} (M : PortCombinatorialMap P)
     (A B : V4FlowAssignment M.crossing) :

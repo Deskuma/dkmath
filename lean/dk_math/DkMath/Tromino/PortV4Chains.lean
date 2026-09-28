@@ -19,7 +19,9 @@ The Klein four-group `TrominoState` is represented by two F₂ coordinates.
 This module transports the port vertex, edge, and face chain spaces into
 that coordinate form, so V4-valued conservation becomes two ordinary F₂
 boundary equations.  The final identities record that the coordinate
-boundary complex still satisfies `∂₁ ∘ ∂₂ = 0`.
+boundary complex still satisfies `∂₁ ∘ ∂₂ = 0`.  Thus the V4 statement is
+not a separate parity calculus: it is the product of two copies of the
+same finite F₂ chain complex.
 -/
 
 /-- V4-valued vertex chains on the region carrier. -/
@@ -34,7 +36,10 @@ abbrev PortV4EdgeChain {P : PortNetwork} (C : PortCrossing P) :=
 abbrev PortV4FaceChain {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) := PortFaceCell R C → TrominoState
 
-/-- Linear equivalence between V4-valued functions and two F₂ functions. -/
+/-- Linear equivalence between V4-valued functions and two F₂ functions.
+
+Pointwise, a V4 coefficient is the pair of its two binary coordinates; the
+equivalence lifts this decomposition to arbitrary finite chain carriers. -/
 def v4FunEquiv (α : Type*) :
     (α → TrominoState) ≃ₗ[PortF2]
       ((α → PortF2) × (α → PortF2)) where
@@ -55,19 +60,28 @@ def v4FunEquiv (α : Type*) :
     intro a x
     apply Prod.ext <;> funext b <;> rfl
 
-/-- Coordinate equivalence for vertex chains. -/
+/-- Coordinate equivalence for vertex chains.
+
+Vertex conservation in V4 coordinates is therefore two equations in the
+region-indexed F₂ vertex chain space. -/
 def v4VertexChainEquiv {P : PortNetwork} :
     PortV4VertexChain P ≃ₗ[PortF2]
       (PortVertexChain P × PortVertexChain P) :=
   v4FunEquiv (Fin P.regionCount)
 
-/-- Coordinate equivalence for edge chains. -/
+/-- Coordinate equivalence for edge chains.
+
+The edge cells remain the original crossing orbits in both coordinates, so
+parallel crossing edges are preserved componentwise. -/
 def v4EdgeChainEquiv {P : PortNetwork} {C : PortCrossing P} :
     PortV4EdgeChain C ≃ₗ[PortF2]
       (PortEdgeChain C × PortEdgeChain C) :=
   v4FunEquiv (PortEdgeCell C)
 
-/-- Coordinate equivalence for face chains. -/
+/-- Coordinate equivalence for face chains.
+
+The face boundary is likewise decomposed into two independent parity chains
+on the same finite face-cell index type. -/
 def v4FaceChainEquiv {P : PortNetwork} {R : PortLocalRotation P}
     {C : PortCrossing P} :
     PortV4FaceChain R C ≃ₗ[PortF2]
@@ -106,7 +120,10 @@ def v4FaceChainEquiv {P : PortNetwork} {R : PortLocalRotation P}
     (x : PortV4FaceChain R C) (F : PortFaceCell R C) :
     (v4FaceChainEquiv x).2 F = (x F).2 := rfl
 
-/-- V4-valued first boundary, obtained by summing endpoint labels. -/
+/-- V4-valued first boundary, obtained by summing endpoint labels.
+
+This is the endpoint boundary with coefficients in the Klein four-group,
+implemented as a linear map over `PortF2`. -/
 def portV4Boundary1 {P : PortNetwork} (C : PortCrossing P) :
     PortV4EdgeChain C →ₗ[PortF2] PortV4VertexChain P :=
   { toFun := fun x r =>
@@ -120,7 +137,10 @@ def portV4Boundary1 {P : PortNetwork} (C : PortCrossing P) :
       funext r
       simp [smul_smul, Finset.smul_sum, mul_comm] }
 
-/-- V4-valued second boundary, obtained by summing face boundaries. -/
+/-- V4-valued second boundary, obtained by summing face boundaries.
+
+Each face coefficient contributes to an edge with its F₂ incidence parity,
+and the V4 value is summed coordinatewise. -/
 def portV4Boundary2 {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) :
     PortV4FaceChain R C →ₗ[PortF2] PortV4EdgeChain C :=
@@ -196,7 +216,10 @@ def PortV4FaceBoundarySpace {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) : Submodule PortF2 (PortV4EdgeChain C) :=
   LinearMap.range (portV4Boundary2 R C)
 
-/-- The V4 chain-complex identity `∂₁ ∘ ∂₂ = 0`. -/
+/-- The V4 chain-complex identity `∂₁ ∘ ∂₂ = 0`.
+
+The identity is inherited coordinate by coordinate from the F₂ complex; no
+new cancellation principle is needed for the V4 packaging. -/
 theorem portV4Boundary1_boundary2 {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P) :
     (portV4Boundary1 C).comp (portV4Boundary2 R C) = 0 := by
@@ -216,7 +239,10 @@ theorem portV4Boundary1_boundary2 {P : PortNetwork}
         ((v4FaceChainEquiv y).2)) (portBoundary1_boundary2 R C)
     simpa using h
 
-/-- Membership in the V4 cycle space is equivalent to zero divergence. -/
+/-- Membership in the V4 cycle space is equivalent to zero divergence.
+
+A V4 edge chain is a cycle exactly when both of its binary coordinate edge
+chains lie in the ordinary F₂ cycle space. -/
 theorem mem_portV4CycleSpace_iff {P : PortNetwork} (C : PortCrossing P)
     (x : PortV4EdgeChain C) :
     x ∈ PortV4CycleSpace C ↔

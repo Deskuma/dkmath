@@ -23,8 +23,10 @@ realization, or a Four Color theorem endpoint.
 The tetrahedral rolling interpretation is that a face boundary records the
 V4 delta accumulated by a rolling route.  TRM-037 and this module show that,
 on a genus-zero combinatorial certificate, face-conservative assignments have
-zero closed-route color holonomy.  Full tetrahedron orientation holonomy is
-stronger and is not represented here.
+zero closed-route color holonomy.  The mechanism is linear: evaluate an
+edge chain by its labels, identify face boundaries with the image of `∂₂`,
+and use genus-zero exactness to place every cycle in that image.  Full
+tetrahedron orientation holonomy is stronger and is not represented here.
 -/
 
 namespace DkMath.Tromino
@@ -33,7 +35,10 @@ open scoped BigOperators
 
 /-! ## Canonical edge labels and scalar evaluation -/
 
-/-- Sum the label of an edge cell once, using a canonical endpoint order. -/
+/-- Sum the label of an edge cell once, using a canonical endpoint order.
+
+The order on region indices chooses one endpoint of each two-dart edge; the
+crossing-invariant label makes the result independent of that choice. -/
 def assignmentEdgeLabel {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) (E : PortEdgeCell C) : TrominoState :=
   Finset.sum E.val (fun p => if p.1 < (C.cross p).1 then A.label p else 0)
@@ -67,7 +72,10 @@ theorem assignmentEdgeLabel_edgeCellOfPort_cross {P : PortNetwork}
   rw [edgeCellOfPort_cross]
   exact assignmentEdgeLabel_edgeCellOfPort A p
 
-/-- Evaluate an F₂ edge chain by summing its V4 edge labels. -/
+/-- Evaluate an F₂ edge chain by summing its V4 edge labels.
+
+The F₂ coefficient selects whether an edge label is present, so this is the
+linear pairing between parity edge chains and the V4 assignment. -/
 def portEdgeLabelEval {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) :
     PortEdgeChain C →ₗ[PortF2] TrominoState :=
@@ -110,7 +118,10 @@ theorem portEdgeLabelEval_singleton {P : PortNetwork}
 
 /-! ## Evaluation of structural walks -/
 
-/-- Evaluation of a walk's incidence chain is the XOR of its labels. -/
+/-- Evaluation of a walk's incidence chain is the XOR of its labels.
+
+The recursive edge coefficients forget order and orientation, while the
+evaluation recovers exactly the accumulated V4 increment of the walk. -/
 theorem portEdgeLabelEval_walkEdgeCoeff {P : PortNetwork}
     {C : PortCrossing P} (A : V4FlowAssignment C)
     (xs : List (PortNetworkPort P)) :
@@ -153,7 +164,10 @@ theorem portEdgeLabelEval_flowWalk {P : PortNetwork}
 
 /-! ## Face-cell conservation -/
 
-/-- Sum the V4 labels around one face cell. -/
+/-- Sum the V4 labels around one face cell.
+
+This is the evaluation of the canonical edge boundary of the finite face
+cell. -/
 def faceCellLabelSum {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) (R : PortLocalRotation P)
     (F : PortFaceCell R C) : TrominoState :=
@@ -177,7 +191,10 @@ theorem faceCellLabelSum_representative_invariant {P : PortNetwork}
   rw [← faceCellLabelSum_faceCellOfPort A p, ←
     faceCellLabelSum_faceCellOfPort A q, h]
 
-/-- Every face cell has zero total V4 boundary label. -/
+/-- Every face cell has zero total V4 boundary label.
+
+The representative-free formulation quantifies over face cells rather than
+over chosen starting ports. -/
 def IsFaceCellKirchhoff {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) (R : PortLocalRotation P) : Prop :=
   ∀ F : PortFaceCell R C, faceCellLabelSum A R F = 0
@@ -199,7 +216,10 @@ theorem isFaceCellKirchhoff_iff_dualFaceKirchhoff {P : PortNetwork}
 
 /-! ## Boundary-two/evaluation adjunction -/
 
-/-- Evaluation turns a face boundary chain into the sum of face labels. -/
+/-- Evaluation turns a face boundary chain into the sum of face labels.
+
+The evaluator and the second boundary form the finite adjunction used to
+annihilate all face boundaries under face conservation. -/
 theorem portEdgeLabelEval_boundary2 {P : PortNetwork}
     {R : PortLocalRotation P} {C : PortCrossing P}
     (A : V4FlowAssignment C) (y : PortFaceChain R C) :
@@ -231,7 +251,10 @@ theorem portEdgeLabelEval_boundary2_eq_zero_of_dualFaceKirchhoff
 
 /-! ## Genus-zero closure -/
 
-/-- On genus zero, a closed walk has zero V4 holonomy under face conservation. -/
+/-- On genus zero, a closed walk has zero V4 holonomy under face conservation.
+
+Exactness writes the closed walk chain as a sum of face boundaries, and the
+face-conservation hypothesis makes the evaluator vanish on every summand. -/
 theorem portGenusZero_closedWalk_xor_eq_zero_of_dualFaceKirchhoff
     {P : PortNetwork} (G : PortGenusZeroCombinatorialMap P)
     (A : V4FlowAssignment G.map.crossing)
@@ -260,7 +283,10 @@ theorem portGenusZero_zeroHolonomy_of_dualFaceKirchhoff
   rw [← FlowRegionWalk.toPortRegionWalk_toFlowRegionWalk W]
   exact h
 
-/-- On a genus-zero map, dual face conservation and zero holonomy coincide. -/
+/-- On a genus-zero map, dual face conservation and zero holonomy coincide.
+
+One direction is the exactness argument above; the reverse direction follows
+by applying zero holonomy to each closed face boundary. -/
 theorem portGenusZero_dualFaceKirchhoff_iff_zeroHolonomy
     {P : PortNetwork} (G : PortGenusZeroCombinatorialMap P)
     (A : V4FlowAssignment G.map.crossing) :
@@ -309,7 +335,10 @@ theorem PortGenusZeroCombinatorialMap.dualFaceKirchhoff_iff_colorable
       (coloringToV4Assignment K) G.map.localRotation
       (coloringToV4Assignment_isZeroHolonomy K)
 
-/-- Universal target asserting a conservative assignment on every genus-zero map. -/
+/-- Universal target asserting a conservative assignment on every genus-zero map.
+
+This is an explicitly quantified target proposition.  Its definition does
+not provide the assignment or claim that the target is already proved. -/
 def PortGenusZeroDualFaceKirchhoffTarget : Prop :=
   ∀ (P : PortNetwork) (G : PortGenusZeroCombinatorialMap P),
     HasDualFaceKirchhoffV4Assignment G.map

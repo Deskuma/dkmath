@@ -13,35 +13,42 @@ namespace DkMath.Tromino
 /-!
 # Additive Tromino exchange
 
-An exchange is translation by a state delta. The laws below are inherited
-from the characteristic-two additive Klein four-group; no color names or
-geometric solver state are built into this kernel.
+An exchange is translation by a state delta in the additive V4 carrier.
+The delta is the displacement between source and target states, so applying
+the same exchange twice cancels it in characteristic two.  The laws below
+are purely algebraic; no color names or geometric solver state are built into
+this kernel.
 -/
 
-/-- Apply the exchange delta to a state. -/
+/-- Translate a state by an exchange delta.
+
+The argument order is chosen so that `exchange delta x` is the target reached
+from source state `x`. -/
 def exchange (delta x : TrominoState) : TrominoState := x + delta
 
-/-- The zero exchange leaves the state unchanged. -/
+/-- The identity delta acts trivially on every source state. -/
 @[simp] theorem exchange_zero (x : TrominoState) :
     exchange 0 x = x := by
   simp [exchange]
 
-/-- Every exchange is self-inverse. -/
+/-- Every exchange is an involution because its delta is self-added to zero. -/
 theorem exchange_self_inverse (delta x : TrominoState) :
     exchange delta (exchange delta x) = x := by
   simp [exchange, add_assoc, state_add_self]
 
-/-- Exchange composition is addition of deltas. -/
+/-- Successive translations compose by adding their deltas.
+
+This gives the exchange kernel its group-action interpretation. -/
 theorem exchange_comp (alpha beta x : TrominoState) :
     exchange alpha (exchange beta x) = exchange (alpha + beta) x := by
   simp [exchange, add_comm, add_left_comm]
 
-/-- Exchanges commute. -/
+/-- Exchanges commute because the underlying V4 addition is commutative. -/
 theorem exchange_commute (alpha beta x : TrominoState) :
     exchange alpha (exchange beta x) = exchange beta (exchange alpha x) := by
   simp [exchange, add_comm, add_left_comm]
 
-/-- A nonzero exchange changes every source state. -/
+/-- A nonzero delta has no fixed source state: it changes every state. -/
 theorem exchange_ne_of_nonzero {delta x : TrominoState} (hdelta : delta ≠ 0) :
     exchange delta x ≠ x := by
   intro h
@@ -49,7 +56,8 @@ theorem exchange_ne_of_nonzero {delta x : TrominoState} (hdelta : delta ≠ 0) :
   apply add_left_cancel (a := x)
   simpa [exchange] using h
 
-/-- A distinct target has a unique nonzero exchange delta from a source. -/
+/-- For distinct source and target states, there is a unique nonzero delta
+carrying the source to the target.  Explicitly, that delta is `x + y`. -/
 theorem existsUnique_nonzero_exchange_to {x y : TrominoState} (hxy : x ≠ y) :
     ∃! delta, delta ≠ 0 ∧ exchange delta x = y := by
   let delta : TrominoState := x + y
@@ -75,7 +83,7 @@ theorem existsUnique_nonzero_exchange_to {x y : TrominoState} (hxy : x ≠ y) :
     _ = x + y := by rw [show x + other = y from hother_target]
     _ = delta := rfl
 
-/-- The exchange delta is nonzero exactly when its source and target differ. -/
+/-- An exchange is nontrivial exactly when its source and target states differ. -/
 theorem exchange_delta_ne_zero_iff {delta x : TrominoState} :
     delta ≠ 0 ↔ exchange delta x ≠ x := by
   constructor
@@ -85,7 +93,8 @@ theorem exchange_delta_ne_zero_iff {delta x : TrominoState} :
     apply add_left_cancel (a := x)
     simpa [exchange] using hzero
 
-/-- The exchange map from deltas to target states is a permutation. -/
+/-- For a fixed source, translating by all deltas permutes the four target
+states. -/
 def exchangeEquiv (x : TrominoState) : TrominoState ≃ TrominoState :=
   Equiv.addRight x
 
@@ -93,7 +102,8 @@ def exchangeEquiv (x : TrominoState) : TrominoState ≃ TrominoState :=
     exchangeEquiv x delta = exchange delta x := by
   simp [exchangeEquiv, exchange, add_comm]
 
-/-- Every target has a unique exchange delta, including the identity delta. -/
+/-- Every target has a unique exchange delta from a fixed source, including
+the identity delta when source and target coincide. -/
 theorem existsUnique_exchange_to (x y : TrominoState) :
     ∃! delta, exchange delta x = y := by
   by_cases hxy : x = y

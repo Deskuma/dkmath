@@ -30,7 +30,9 @@ structure TrominoExchangeFrame where
   colorEquiv : Panel ≃ TrominoState
   gap : Panel
 
+/-- The frame carries its finite panel enumeration as an instance. -/
 instance (F : TrominoExchangeFrame) : Fintype F.Panel := F.instFintype
+/-- The frame carries decidable equality on its panel type. -/
 instance (F : TrominoExchangeFrame) : DecidableEq F.Panel := F.instDecidableEq
 
 /-- The V4 color assigned to a panel. -/

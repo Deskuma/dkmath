@@ -16,24 +16,29 @@ open scoped BigOperators
 /-!
 # Pairings of flow ports
 
-This is the label-only counterpart of `BoundaryPairing`.  A flow pairing is
-an involution on local ports preserving V4 labels.  The canonical pairing is
-constructed independently in each label fiber; residual ports record odd
-fiber cardinalities, and the decomposition lemmas expose the exact
-conservation/perfectness criterion.
+This is the label-only counterpart of `BoundaryPairing`. A flow pairing is an
+involution on local ports preserving V4 labels. The canonical pairing is
+constructed independently in each label fiber by transporting the adjacent
+pairing on a sorted finite set. Residual ports record odd fiber cardinalities,
+and the decomposition lemmas expose the exact conservation/perfectness
+criterion without retaining the original contact representatives.
 -/
 
-/-- A label-preserving involution on the ports of a flow signature. -/
+/-- A label-preserving involution on the ports of a flow signature.
+
+Two-cycles represent paired flow ports; fixed points are the residual
+obstruction to a perfect pairing. -/
 structure FlowPairing (F : FlowSignature) where
   mate : Fin F.arity → Fin F.arity
   involutive : Function.Involutive mate
   sameLabel : ∀ i, F.label (mate i) = F.label i
 
-/-- Ports fixed by a flow pairing. -/
+/-- Ports fixed by a flow pairing, hence left unpaired. -/
 def flowResidualPorts {F : FlowSignature} (P : FlowPairing F) :
     Finset (Fin F.arity) := Finset.univ.filter (fun i => P.mate i = i)
 
-/-- The non-residual ports of a flow pairing. -/
+/-- The complement of the residual ports, consisting of nontrivial pairing
+orbits. -/
 def flowPairedPorts {F : FlowSignature} (P : FlowPairing F) :
     Finset (Fin F.arity) := (flowResidualPorts P)ᶜ
 
@@ -72,7 +77,7 @@ theorem flowMate_not_mem_residualPorts {F : FlowSignature} (P : FlowPairing F)
 theorem flowMate_sameLabel {F : FlowSignature} (P : FlowPairing F)
     (i : Fin F.arity) : F.label (P.mate i) = F.label i := P.sameLabel i
 
-/-- The finite fiber of flow ports carrying one label. -/
+/-- The finite label fiber of all flow ports carrying one chosen V4 delta. -/
 def flowPortsWithLabel (F : FlowSignature) (delta : TrominoState) :
     Finset (Fin F.arity) := Finset.univ.filter (fun i => F.label i = delta)
 
@@ -85,7 +90,8 @@ theorem mem_flowPortsWithLabel_iff (F : FlowSignature) (delta : TrominoState)
 theorem flowPortsWithLabel_card (F : FlowSignature) (delta : TrominoState) :
     (flowPortsWithLabel F delta).card = flowLabelCount F delta := rfl
 
-/-- Canonical mate obtained by pairing within one flow label fiber. -/
+/-- The canonical mate obtained by pairing within the flow port's own label
+fiber. -/
 def flowFiberMate (F : FlowSignature) (delta : TrominoState)
     (i : Fin F.arity) : Fin F.arity :=
   if hi : i ∈ flowPortsWithLabel F delta then
@@ -117,7 +123,7 @@ theorem flowFiberMate_involutive (F : FlowSignature) (delta : TrominoState)
     rfl
   rw [hsub, fiberPairing_involutive]
 
-/-- Pair a flow port with its canonical mate in the same label fiber. -/
+/-- Select the canonical fiber mate using the label of the source port. -/
 def canonicalFlowMate (F : FlowSignature) (i : Fin F.arity) : Fin F.arity :=
   flowFiberMate F (F.label i) i
 
@@ -151,7 +157,7 @@ def canonicalFlowPairing (F : FlowSignature) : FlowPairing F where
 theorem canonicalFlowPairing_mate (F : FlowSignature) (i : Fin F.arity) :
     (canonicalFlowPairing F).mate i = canonicalFlowMate F i := rfl
 
-/-- Residual flow ports filtered by one label. -/
+/-- The residual ports of a pairing restricted to one label fiber. -/
 def flowResidualPortsWithLabel {F : FlowSignature} (P : FlowPairing F)
     (delta : TrominoState) : Finset (Fin F.arity) :=
   (flowResidualPorts P).filter (fun i => F.label i = delta)
@@ -163,18 +169,19 @@ theorem mem_flowResidualPortsWithLabel_iff {F : FlowSignature}
       P.mate i = i ∧ F.label i = delta := by
   simp [flowResidualPortsWithLabel, mem_flowResidualPorts_iff]
 
-/-- Residual indices of an ordered flow label fiber. -/
+/-- Fixed indices of the adjacent pairing on an ordered flow label fiber. -/
 def flowFiberResidualIndices (F : FlowSignature) (delta : TrominoState) :
     Finset (Fin (flowPortsWithLabel F delta).card) :=
   Finset.univ.filter (fun r => adjacentMate _ r = r)
 
-/-- Residual original ports in one flow label fiber. -/
+/-- Residual indices transported back to the original flow-port carrier. -/
 def flowFiberResidualPorts (F : FlowSignature) (delta : TrominoState) :
     Finset (Fin F.arity) :=
   (flowFiberResidualIndices F delta).image
     (fun r => (Finset.orderIsoOfFin (flowPortsWithLabel F delta) rfl r).val)
 
-/-- Fiber residual ports are counted by the label-fiber parity. -/
+/-- The residual count of a flow fiber is exactly its label multiplicity modulo
+two. -/
 theorem flowFiberResidualPorts_card (F : FlowSignature) (delta : TrominoState) :
     (flowFiberResidualPorts F delta).card = flowLabelCount F delta % 2 := by
   unfold flowFiberResidualPorts flowFiberResidualIndices
@@ -185,7 +192,8 @@ theorem flowFiberResidualPorts_card (F : FlowSignature) (delta : TrominoState) :
     apply Subtype.ext
     exact hab
 
-/-- Filtering canonical flow residuals recovers fiber residuals. -/
+/-- Filtering the global canonical residual set by a label recovers the
+residual set constructed directly inside that fiber. -/
 theorem flowResidual_filter_eq_fiberResidual (F : FlowSignature)
     (delta : TrominoState) :
     flowResidualPortsWithLabel (canonicalFlowPairing F) delta =
@@ -238,7 +246,7 @@ theorem flowResidual_filter_eq_fiberResidual (F : FlowSignature)
     exact ⟨by simpa [canonicalFlowPairing_mate, canonicalFlowMate, hlabel] using hmate,
       hlabel⟩
 
-/-- Canonical flow residuals in one label fiber have its parity. -/
+/-- The canonical residual count in one flow label fiber is its parity. -/
 theorem flowResidualPorts_canonical_card_by_label (F : FlowSignature)
     (delta : TrominoState) :
     (flowResidualPortsWithLabel (canonicalFlowPairing F) delta).card =
@@ -246,7 +254,8 @@ theorem flowResidualPorts_canonical_card_by_label (F : FlowSignature)
   rw [flowResidual_filter_eq_fiberResidual]
   exact flowFiberResidualPorts_card F delta
 
-/-- Total canonical flow residual count is the sum of fiber parities. -/
+/-- The total canonical residual count is the sum of the three nonzero fiber
+parities. -/
 theorem canonicalFlowPairing_residual_card (F : FlowSignature) :
     (flowResidualPorts (canonicalFlowPairing F)).card =
       flowLabelCount F deltaA % 2 +
@@ -298,7 +307,8 @@ theorem canonicalFlowPairing_residual_card (F : FlowSignature) :
     Finset.card_union_of_disjoint hab, hAcard, hBcard, hCcard]
   omega
 
-/-- All-even flow label fibers give a perfect canonical pairing. -/
+/-- If all three nonzero flow fibers are even, the canonical pairing is
+perfect. -/
 theorem canonicalFlowPairing_even_perfect (F : FlowSignature)
     (hA : flowLabelCount F deltaA % 2 = 0)
     (hB : flowLabelCount F deltaB % 2 = 0)
@@ -332,7 +342,8 @@ theorem canonicalFlowPairing_even_perfect (F : FlowSignature)
   · intro hi
     simp at hi
 
-/-- All-odd flow label fibers leave exactly three residual ports. -/
+/-- If all three nonzero flow fibers are odd, one residual remains in each,
+giving three residual ports in total. -/
 theorem canonicalFlowPairing_odd_residual_card (F : FlowSignature)
     (hA : flowLabelCount F deltaA % 2 = 1)
     (hB : flowLabelCount F deltaB % 2 = 1)
@@ -353,7 +364,8 @@ theorem canonicalFlowPairing_odd_one_each (F : FlowSignature)
     (flowResidualPorts_canonical_card_by_label F deltaB).trans hB,
     (flowResidualPorts_canonical_card_by_label F deltaC).trans hC⟩
 
-/-- Flow conservation yields either perfect pairing or three residuals. -/
+/-- Flow conservation yields the two canonical cases: a perfect pairing or
+three residual ports. -/
 theorem canonicalFlowPairing_conserved_decomposition (F : FlowSignature)
     (hconserved : FlowConserved F) :
     flowResidualPorts (canonicalFlowPairing F) = ∅ ∨
@@ -362,7 +374,8 @@ theorem canonicalFlowPairing_conserved_decomposition (F : FlowSignature)
   · exact Or.inl (canonicalFlowPairing_even_perfect F hEven.1 hEven.2.1 hEven.2.2)
   · exact Or.inr (canonicalFlowPairing_odd_residual_card F hOdd.1 hOdd.2.1 hOdd.2.2)
 
-/-- A non-residual flow port has a distinct label-preserving involutive mate. -/
+/-- Every non-residual flow port has a distinct same-label mate, and the mate
+operation is involutive. -/
 theorem canonicalFlowPairing_transition_ready (F : FlowSignature)
     (i : Fin F.arity)
     (hi : i ∉ flowResidualPorts (canonicalFlowPairing F)) :

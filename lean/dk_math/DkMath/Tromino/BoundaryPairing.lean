@@ -17,38 +17,45 @@ open scoped BigOperators
 # Canonical pairings of boundary ports
 
 The adjacent pairing on `Fin n` pairs consecutive positions and leaves at
-most one residual position.  Restricting this construction to each equal
-delta fiber produces a canonical label-preserving involution.  Its residual
-ports measure the parity obstruction to a perfect local pairing and connect
-the conservation count with the transition construction.
+most one residual position. Restricting this construction to each equal-delta
+fiber produces a canonical label-preserving involution. Its residual ports
+measure the parity obstruction to a perfect local pairing: an even fiber has
+no residual, while an odd fiber has one. The resulting decomposition connects
+the V4 conservation count with the transition construction.
 -/
 
 /-! ### Ordered finite pairing -/
 
-/-- Pair consecutive elements of `Fin n`; the last element is fixed when `n` is odd. -/
+/-- Pair consecutive elements of `Fin n`.
+
+Even positions point to their successor when it exists; the final position is
+fixed exactly when the fiber cardinality is odd. -/
 def adjacentMate (n : Nat) (i : Fin n) : Fin n :=
   if hi : i.val % 2 = 0 then
     if hnext : i.val + 1 < n then ⟨i.val + 1, by omega⟩ else i
   else ⟨i.val - 1, by omega⟩
 
-/-- An even position pairs with its immediate successor when present. -/
+/-- An even position is paired with its immediate successor whenever that
+successor remains inside `Fin n`. -/
 theorem adjacentMate_even_val (n : Nat) (i : Fin n)
     (hi : i.val % 2 = 0) (hnext : i.val + 1 < n) :
     (adjacentMate n i).val = i.val + 1 := by
   simp [adjacentMate, hi, hnext]
 
-/-- The final even position is the unique possible residual position. -/
+/-- An even position without a successor is fixed by the adjacent pairing and
+therefore is the only possible residual position. -/
 theorem adjacentMate_even_last (n : Nat) (i : Fin n)
     (hi : i.val % 2 = 0) (hnext : ¬ i.val + 1 < n) :
     adjacentMate n i = i := by
   simp [adjacentMate, hi, hnext]
 
-/-- An odd position pairs with its preceding position. -/
+/-- Every odd position is paired with the preceding even position. -/
 theorem adjacentMate_odd_val (n : Nat) (i : Fin n)
     (hi : i.val % 2 ≠ 0) : (adjacentMate n i).val = i.val - 1 := by
   simp [adjacentMate, hi]
 
-/-- The adjacent pairing is an involution. -/
+/-- The adjacent pairing is an involution: each consecutive pair is exchanged
+back and forth, while a possible final residual is fixed. -/
 theorem adjacentMate_involutive (n : Nat) :
     Function.Involutive (adjacentMate n) := by
   intro i
@@ -72,7 +79,8 @@ theorem adjacentMate_involutive (n : Nat) :
     apply Fin.ext
     omega
 
-/-- A position is fixed exactly when it is the final position of odd length. -/
+/-- A position is fixed exactly when it is the final even index of an odd-sized
+finite fiber. -/
 theorem adjacentMate_eq_self_iff (n : Nat) (i : Fin n) :
     adjacentMate n i = i ↔ i.val % 2 = 0 ∧ i.val + 1 = n := by
   constructor
@@ -90,7 +98,7 @@ theorem adjacentMate_eq_self_iff (n : Nat) (i : Fin n) :
   · rintro ⟨hi, hlast⟩
     exact adjacentMate_even_last n i hi (by omega)
 
-/-- The adjacent pairing has `n mod 2` residual positions. -/
+/-- The number of residual positions is the parity `n % 2` of the fiber size. -/
 theorem adjacentMate_card_residual (n : Nat) :
     (Finset.univ.filter (fun i : Fin n => adjacentMate n i = i)).card = n % 2 := by
   by_cases hn : n = 0
@@ -121,13 +129,16 @@ theorem adjacentMate_card_residual (n : Nat) :
         omega
       rw [hset, Finset.card_empty, heven]
 
-/-- A label-preserving involution on the ports of a boundary signature. -/
+/-- A label-preserving involution on boundary ports.
+
+Its two-cycles represent paired contacts, while fixed points are residual
+ports that cannot be paired within the chosen construction. -/
 structure BoundaryPairing (S : BoundarySignature) where
   mate : Fin S.arity → Fin S.arity
   involutive : Function.Involutive mate
   sameLabel : ∀ i, boundaryDelta S (mate i) = boundaryDelta S i
 
-/-- Ports fixed by the pairing, i.e. residual unpaired positions. -/
+/-- The residual ports fixed by the pairing map. -/
 def residualPorts {S : BoundarySignature} (P : BoundaryPairing S) :
     Finset (Fin S.arity) := Finset.univ.filter (fun i => P.mate i = i)
 
@@ -136,7 +147,7 @@ theorem mem_residualPorts_iff {S : BoundarySignature} (P : BoundaryPairing S)
     (i : Fin S.arity) : i ∈ residualPorts P ↔ P.mate i = i := by
   simp [residualPorts]
 
-/-- The complement of the residual ports. -/
+/-- The ports lying in two-cycles rather than fixed points. -/
 def pairedPorts {S : BoundarySignature} (P : BoundaryPairing S) :
     Finset (Fin S.arity) := (residualPorts P)ᶜ
 
@@ -177,11 +188,12 @@ theorem mem_portsWithLabel_iff (S : BoundarySignature) (delta : TrominoState)
 theorem portsWithLabel_card (S : BoundarySignature) (delta : TrominoState) :
     (portsWithLabel S delta).card = boundaryLabelCount S delta := rfl
 
-/-- Pair consecutive elements inside a finite ordered fiber. -/
+/-- Transport the adjacent pairing on `Fin s.card` back to an ordered finite
+fiber `s`. -/
 def fiberPairing {α : Type*} [LinearOrder α] (s : Finset α) (x : s) : s :=
   Finset.orderIsoOfFin s rfl (adjacentMate s.card ((Finset.orderIsoOfFin s rfl).symm x))
 
-/-- The ordered fiber pairing is involutive. -/
+/-- Transporting the adjacent involution preserves involutivity on the fiber. -/
 theorem fiberPairing_involutive {α : Type*} [LinearOrder α]
     (s : Finset α) (x : s) : fiberPairing s (fiberPairing s x) = x := by
   unfold fiberPairing
@@ -190,26 +202,27 @@ theorem fiberPairing_involutive {α : Type*} [LinearOrder α]
   rw [e.symm_apply_apply, adjacentMate_involutive]
   exact e.apply_symm_apply x
 
-/-- The canonical mate obtained by pairing within one delta fiber. -/
+/-- Pair a boundary port with its adjacent mate inside the fiber carrying its
+own delta label. -/
 def fiberMate (S : BoundarySignature) (delta : TrominoState)
     (i : Fin S.arity) : Fin S.arity :=
   if hi : i ∈ portsWithLabel S delta then
     (fiberPairing (portsWithLabel S delta) ⟨i, hi⟩).val
   else i
 
-/-- A fiber mate remains in its original label fiber. -/
+/-- The fiber pairing never leaves the selected delta fiber. -/
 theorem fiberMate_mem (S : BoundarySignature) (delta : TrominoState)
     {i : Fin S.arity} (hi : i ∈ portsWithLabel S delta) :
     fiberMate S delta i ∈ portsWithLabel S delta := by
   simp [fiberMate, hi]
 
-/-- A fiber mate has the selected boundary delta. -/
+/-- Every mate produced inside the selected fiber carries that fiber's delta. -/
 theorem fiberMate_sameLabel (S : BoundarySignature) (delta : TrominoState)
     {i : Fin S.arity} (hi : i ∈ portsWithLabel S delta) :
     boundaryDelta S (fiberMate S delta i) = delta :=
   (mem_portsWithLabel_iff S delta _).mp (fiberMate_mem S delta hi)
 
-/-- The canonical mate inside one label fiber is involutive. -/
+/-- The canonical mate is involutive on each selected label fiber. -/
 theorem fiberMate_involutive (S : BoundarySignature) (delta : TrominoState)
     {i : Fin S.arity} (hi : i ∈ portsWithLabel S delta) :
     fiberMate S delta (fiberMate S delta i) = i := by
@@ -221,7 +234,8 @@ theorem fiberMate_involutive (S : BoundarySignature) (delta : TrominoState)
     rfl
   rw [hsub, fiberPairing_involutive]
 
-/-- Pair a port with its canonical mate in the matching delta fiber. -/
+/-- Select the canonical mate from the fiber determined by the source port's
+boundary delta. -/
 def canonicalMate (S : BoundarySignature) (i : Fin S.arity) : Fin S.arity :=
   fiberMate S (boundaryDelta S i) i
 
@@ -236,7 +250,8 @@ theorem canonicalMate_sameLabel (S : BoundarySignature) (i : Fin S.arity) :
     boundaryDelta S (canonicalMate S i) = boundaryDelta S i :=
   fiberMate_sameLabel S _ ((mem_portsWithLabel_iff S _ _).mpr rfl)
 
-/-- The canonical boundary mate is an involution. -/
+/-- Combining the fiber involutions yields a global involution on all boundary
+ports. -/
 theorem canonicalMate_involutive (S : BoundarySignature) :
     Function.Involutive (canonicalMate S) := by
   intro i
@@ -255,18 +270,19 @@ def canonicalBoundaryPairing (S : BoundarySignature) : BoundaryPairing S where
 theorem canonicalBoundaryPairing_mate (S : BoundarySignature) (i : Fin S.arity) :
     (canonicalBoundaryPairing S).mate i = canonicalMate S i := rfl
 
-/-- Residual indices of the ordered delta fiber. -/
+/-- The fixed indices of the adjacent pairing on an ordered delta fiber. -/
 def fiberResidualIndices (S : BoundarySignature) (delta : TrominoState) :
     Finset (Fin (portsWithLabel S delta).card) :=
   Finset.univ.filter (fun r => adjacentMate _ r = r)
 
-/-- Residual original ports in one delta fiber. -/
+/-- Transport the residual fiber indices back to the original boundary ports. -/
 def fiberResidualPorts (S : BoundarySignature) (delta : TrominoState) :
     Finset (Fin S.arity) :=
   (fiberResidualIndices S delta).image
     (fun r => (Finset.orderIsoOfFin (portsWithLabel S delta) rfl r).val)
 
-/-- Residual ports in a fiber are counted by its parity. -/
+/-- Each delta fiber contributes exactly its cardinality modulo two residual
+ports. -/
 theorem fiberResidualPorts_card (S : BoundarySignature) (delta : TrominoState) :
     (fiberResidualPorts S delta).card = boundaryLabelCount S delta % 2 := by
   unfold fiberResidualPorts fiberResidualIndices
@@ -330,7 +346,8 @@ theorem residual_filter_eq_fiberResidual (S : BoundarySignature)
     exact ⟨by simpa [canonicalBoundaryPairing_mate, canonicalMate, hlabel] using hmate,
       hlabel⟩
 
-/-- The canonical residual count in each label fiber is its parity. -/
+/-- Filtering the global canonical residual set by delta recovers the parity of
+that delta fiber. -/
 theorem residualPorts_canonical_card_by_label (S : BoundarySignature)
     (delta : TrominoState) :
     ((residualPorts (canonicalBoundaryPairing S)).filter
@@ -339,7 +356,7 @@ theorem residualPorts_canonical_card_by_label (S : BoundarySignature)
   rw [residual_filter_eq_fiberResidual]
   exact fiberResidualPorts_card S delta
 
-/-- Total canonical residual count is the sum of the three fiber parities. -/
+/-- The total residual count is the sum of the three nonzero fiber parities. -/
 theorem canonicalBoundaryPairing_residual_card (S : BoundarySignature) :
     (residualPorts (canonicalBoundaryPairing S)).card =
       boundaryLabelCount S deltaA % 2 +
@@ -388,7 +405,8 @@ theorem canonicalBoundaryPairing_residual_card (S : BoundarySignature) :
     Finset.card_union_of_disjoint hab, hAcard, hBcard, hCcard]
   omega
 
-/-- All-even label fibers give a perfect canonical pairing. -/
+/-- If all three nonzero delta fibers are even, the canonical pairing is
+perfect and has no residual ports. -/
 theorem canonicalBoundaryPairing_even_perfect (S : BoundarySignature)
     (hA : boundaryLabelCount S deltaA % 2 = 0)
     (hB : boundaryLabelCount S deltaB % 2 = 0)
@@ -419,7 +437,8 @@ theorem canonicalBoundaryPairing_even_perfect (S : BoundarySignature)
   · intro hi
     simp at hi
 
-/-- All-odd label fibers leave exactly three residual ports. -/
+/-- If all three nonzero delta fibers are odd, the canonical pairing leaves one
+residual port in each fiber, hence three in total. -/
 theorem canonicalBoundaryPairing_odd_residual_card (S : BoundarySignature)
     (hA : boundaryLabelCount S deltaA % 2 = 1)
     (hB : boundaryLabelCount S deltaB % 2 = 1)
@@ -428,7 +447,8 @@ theorem canonicalBoundaryPairing_odd_residual_card (S : BoundarySignature)
   rw [canonicalBoundaryPairing_residual_card]
   omega
 
-/-- Conservation splits canonical pairing into perfect or three-residual cases. -/
+/-- Boundary conservation restricts the canonical pairing to two cases: no
+residual ports or exactly one residual in each nonzero fiber. -/
 theorem canonicalBoundaryPairing_conserved_decomposition (S : BoundarySignature)
     (hconserved : BoundaryConserved S) :
     residualPorts (canonicalBoundaryPairing S) = ∅ ∨
@@ -437,7 +457,8 @@ theorem canonicalBoundaryPairing_conserved_decomposition (S : BoundarySignature)
   · exact Or.inl (canonicalBoundaryPairing_even_perfect S hEven.1 hEven.2.1 hEven.2.2)
   · exact Or.inr (canonicalBoundaryPairing_odd_residual_card S hOdd.1 hOdd.2.1 hOdd.2.2)
 
-/-- A non-residual canonical port has a distinct label-preserving involutive mate. -/
+/-- Every non-residual canonical port has a distinct mate with the same delta,
+and applying the mate map twice returns to the source. -/
 theorem canonicalBoundaryPairing_transition_ready (S : BoundarySignature)
     (i : Fin S.arity)
     (hi : i ∉ residualPorts (canonicalBoundaryPairing S)) :

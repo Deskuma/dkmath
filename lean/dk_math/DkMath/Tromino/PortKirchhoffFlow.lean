@@ -26,7 +26,10 @@ representation: the latter is the tension/zero-holonomy layer, and the two
 notions coincide only after the separate exactness hypotheses are supplied.
 -/
 
-/-- The V4 divergence at a region is the sum of its incident labels. -/
+/-- The V4 divergence at a region is the sum of its incident labels.
+
+This is a local vertex equation: it sums the labels on all ports with first
+component `r`, independently of any rotation system. -/
 def vertexKirchhoffSum {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) (r : Fin P.regionCount) : TrominoState :=
   Finset.sum Finset.univ (fun i : Fin (P.arity r) => A.label ⟨r, i⟩)
@@ -54,12 +57,19 @@ theorem vertexKirchhoffSum_crossing_independent
     vertexKirchhoffSum A r =
       Finset.sum Finset.univ (fun i : Fin (P.arity r) => A.label ⟨r, i⟩) := rfl
 
-/-- A V4 flow is Kirchhoff when every region divergence vanishes. -/
+/-- A V4 flow is Kirchhoff when every region divergence vanishes.
+
+The predicate imposes zero divergence at every region while retaining the
+nonzero and crossing-invariant hypotheses already present in the assignment.
+-/
 def IsKirchhoffV4Flow {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) : Prop :=
   ∀ r, vertexKirchhoffSum A r = 0
 
-/-- Existence of a Kirchhoff V4 flow on a combinatorial map. -/
+/-- Existence of a Kirchhoff V4 flow on a combinatorial map.
+
+This packages the local conservation law with a chosen port map, without
+claiming that the flow is a potential difference or has zero holonomy. -/
 def HasKirchhoffV4Flow {P : PortNetwork}
     (M : PortCombinatorialMap P) : Prop :=
   ∃ A : V4FlowAssignment M.crossing, IsKirchhoffV4Flow A
@@ -91,7 +101,10 @@ def assignmentFlowSignature {P : PortNetwork} {C : PortCrossing P}
     (i : Fin (assignmentFlowSignature A r).arity) :
     (assignmentFlowSignature A r).label i = A.label ⟨r, i⟩ := rfl
 
-/-- Port divergence is the earlier flow-signature sum. -/
+/-- Port divergence is the earlier flow-signature sum.
+
+The port formulation and the historical flow-signature formulation compute
+the same finite sum after labels are repackaged by region. -/
 theorem vertexKirchhoffSum_eq_flowSum
     {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) (r : Fin P.regionCount) :
@@ -105,7 +118,10 @@ theorem isKirchhoffV4Flow_iff_flowConserved
       ∀ r, FlowConserved (assignmentFlowSignature A r) := by
   rfl
 
-/-- V4 zero-sum is equivalent to the two parity equalities. -/
+/-- V4 zero-sum is equivalent to the two parity equalities.
+
+The Klein four-group equation splits into the two parity constraints on the
+counts of the named nonzero directions. -/
 theorem vertexKirchhoffSum_iff_parity
     {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) (r : Fin P.regionCount) :
@@ -123,7 +139,11 @@ theorem isKirchhoffV4Flow_ignores_rotation
     (A : V4FlowAssignment C) :
     IsKirchhoffV4Flow A ↔ IsKirchhoffV4Flow A := Iff.rfl
 
-/-- The flow condition is a local divergence statement, not tension itself. -/
+/-- The flow condition is a local divergence statement, not tension itself.
+
+This restates the semantic boundary: Kirchhoff conservation concerns sums at
+vertices, whereas tension/zero-holonomy concerns differences around cycles.
+-/
 theorem isKirchhoffV4Flow_distinct_from_tension
     {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) :

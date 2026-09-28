@@ -18,7 +18,9 @@ that these operations can be checked without duplicating their mathematics.
 
 The central combinatorial fact is that old-edge, radial-old, and
 radial-center darts form a three-step face orbit. The dependent codecs below
-transport this semantic picture to the finite port network.
+transport this semantic picture to the finite port network.  In particular,
+the semantic description is proved first, and the `Fin` equalities are then
+used only to certify that the executable carrier realizes the same map.
 -/
 
 namespace DkMath.Tromino
@@ -26,7 +28,10 @@ namespace DkMath.Tromino
 /-! ## Semantic crossing -/
 
 /-- The semantic crossing keeps old edges on the old crossing and swaps the
-two darts of each radial edge. -/
+two darts of each radial edge.
+
+This is the involution describing the old edges together with the new
+radial edges before any dependent-index transport. -/
 def faceStarCrossDesc {P : PortNetwork} (M : PortCombinatorialMap P) :
     FaceStarPortDesc M → FaceStarPortDesc M
   | .oldEdge p => .oldEdge (M.crossing.cross p)
@@ -50,7 +55,10 @@ theorem faceStarCrossDesc_involutive {P : PortNetwork}
 /-! ## Semantic rotation -/
 
 /-- Semantic local rotation: old and radial-old darts alternate at old
-regions, while center darts rotate by the inverse old face step. -/
+regions, while center darts rotate by the inverse old face step.
+
+The old-region rotation realizes the two-slot subdivision, while the center
+rotation follows the cyclic boundary of the old face in reverse order. -/
 def faceStarRotateDesc {P : PortNetwork} (M : PortCombinatorialMap P) :
     FaceStarPortDesc M → FaceStarPortDesc M
   | .radialOld p => .oldEdge p
@@ -59,7 +67,10 @@ def faceStarRotateDesc {P : PortNetwork} (M : PortCombinatorialMap P) :
       .radialCenter ((portFaceEquiv M.localRotation M.crossing).symm p)
 
 /-- The semantic rotation has an explicit inverse and is therefore a finite
-permutation of the new darts. -/
+permutation of the new darts.
+
+The inverse formulas separately undo the old-region alternation and the
+inverse face-step motion at centers. -/
 def faceStarRotateDescEquiv {P : PortNetwork} (M : PortCombinatorialMap P) :
     FaceStarPortDesc M ≃ FaceStarPortDesc M where
   toFun := faceStarRotateDesc M
@@ -139,7 +150,10 @@ theorem faceStarCenterArity_eq_sum_index {P : PortNetwork}
   rw [Equiv.symm_apply_apply]
   simp [faceStarRegionArity]
 
-/-- Identify each old-region fiber with two copies of the original fiber. -/
+/-- Identify each old-region fiber with two copies of the original fiber.
+
+The first coordinate records old-edge versus radial-old, and the second
+coordinate records the original port. -/
 def faceStarOldFiberEquiv {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (r : Fin M.vertexCount) :
@@ -174,7 +188,10 @@ def faceStarOldFiberEquiv {P : PortNetwork}
         (Fin.cast (faceStarOldArity_eq_index I r) (finProdFinEquiv bi))) = bi
     rw [hfin, finProdFinEquiv.symm_apply_apply]
 
-/-- Identify a center-region fiber with the boundary ports of its old face. -/
+/-- Identify a center-region fiber with the boundary ports of its old face.
+
+The face-port enumeration turns the center's dependent local slots into the
+subtype of old ports lying on that face. -/
 def faceStarCenterFiberEquiv {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (F : Fin M.faceCount) :
@@ -345,7 +362,10 @@ def faceStarSumDescEquiv {P : PortNetwork} {M : PortCombinatorialMap P} :
     cases d <;> rfl
 
 /-- The complete computable equivalence between actual new ports and semantic
-face-star descriptors. -/
+face-star descriptors.
+
+This is the main codec: it permits all semantic crossing and rotation
+calculations to be transported to the actual dependent port carrier. -/
 def faceStarPortEquiv {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     PortNetworkPort (faceStarNetwork M I) ≃ FaceStarPortDesc M :=
@@ -564,7 +584,10 @@ theorem faceStarPortDecode_source {P : PortNetwork}
   intro d
   cases d <;> rfl
 
-/-- Transport the semantic face-star crossing through the port codec. -/
+/-- Transport the semantic face-star crossing through the port codec.
+
+The actual crossing is defined by decoding, applying the semantic
+involution, and re-encoding. -/
 def faceStarCrossing {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     PortCrossing (faceStarNetwork M I) where
@@ -646,7 +669,10 @@ theorem faceStarRotateDesc_source {P : PortNetwork}
       exact congrArg (faceCenterRegion I)
         (faceStar_faceCell_portFaceEquiv_symm_eq M p)
 
-/-- Transport the semantic rotation to the actual new-port carrier. -/
+/-- Transport the semantic rotation to the actual new-port carrier.
+
+The same decode-apply-encode construction realizes the semantic local
+rotation on dependent `Fin` ports. -/
 def faceStarLocalRotation {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     PortLocalRotation (faceStarNetwork M I) where
@@ -1092,7 +1118,10 @@ dart. -/
       ((faceStarCrossing I).cross (faceStarRadialCenterPort I p)) = _
   rw [faceStarCross_radialCenter, faceStarRotate_radialOld]
 
-/-- Every old-edge face orbit closes after exactly three steps. -/
+/-- Every old-edge face orbit closes after exactly three steps.
+
+The three successive darts are old-edge, radial-old, and radial-center;
+the fourth step is the starting old-edge dart. -/
 theorem faceStarFaceStep_oldEdge_return {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (p : PortNetworkPort P) :
@@ -1309,7 +1338,10 @@ theorem firstPortFaceReturn_faceStar_radialCenter {P : PortNetwork}
     (faceStarOldEdgePort I p) (faceStarRadialCenterPort I p) hmem
   rw [heq, firstPortFaceReturn_faceStar_oldEdge]
 
-/-- The three darts in the face-star triangle generated by an old port. -/
+/-- The three darts in the face-star triangle generated by an old port.
+
+The finset records the complete primitive face orbit of the old-edge dart,
+with the other two darts obtained by one and two face steps. -/
 def faceStarTriangle {P : PortNetwork} (M : PortCombinatorialMap P)
     (I : PortFaceStarIndexing M) (p : PortNetworkPort P) :
     Finset (PortNetworkPort (faceStarNetwork M I)) :=
@@ -1443,7 +1475,10 @@ theorem faceStarTriangle_coverage {P : PortNetwork}
   | radialCenter p =>
       exact ⟨p, by rw [← hqenc]; simp [faceStarTriangle]⟩
 
-/-- Every face orbit of the transported rotation has cardinality three. -/
+/-- Every face orbit of the transported rotation has cardinality three.
+
+The three-step return and the exclusion of one- and two-step returns make
+the primitive orbit cardinality exactly three for every new dart. -/
 theorem faceStar_everyFaceCell_card_three {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (F : PortFaceCell (faceStarRotationSystem I).toPortLocalRotation

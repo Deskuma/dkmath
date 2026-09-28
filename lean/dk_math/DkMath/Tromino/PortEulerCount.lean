@@ -14,17 +14,26 @@ import DkMath.Tromino.EulerCount
 
 Crossing orbits are the edges, local-rotation orbits are the faces, and
 regions are the vertices of a port combinatorial map.  The finite-set
-lemmas here establish the corresponding partitions and define the Euler
-characteristic `V - E + F`; later modules use this integer as the genus-zero
-certificate rather than as a topological assertion.
+lemmas here establish the corresponding partitions of the port carrier:
+each crossing orbit has two darts, while each face orbit is represented by
+the iterates before its first return.  We then define the Euler
+characteristic `V - E + F`; later modules use this integer as a finite
+genus-zero certificate rather than as a topological assertion.
 -/
 
 namespace DkMath.Tromino
 
-/-- The vertex count of a port map is its number of regions. -/
+/-- The vertex count of a port map is its number of regions.
+
+Regions are the vertex cells of the rotation-system presentation, so this
+count is the size of the finite region index type. -/
 def portRegionVertexCount (P : PortNetwork) : Nat := P.regionCount
 
-/-- The two-dart carrier of one crossing edge. -/
+/-- The two-dart carrier of one crossing edge.
+
+The crossing involution identifies the two incidences of an edge.  The
+fixed-point-free hypothesis ensures that the displayed finset has two
+distinct elements. -/
 def portCrossingEdgePair {P : PortNetwork} (C : PortCrossing P)
     (p : PortNetworkPort P) : Finset (PortNetworkPort P) := {p, C.cross p}
 
@@ -61,7 +70,11 @@ theorem portCrossingEdgePair_eq_of_mem {P : PortNetwork}
   · rfl
   · exact portCrossingEdgePair_cross_eq C p
 
-/-- Crossing edge pairs partition the port carrier. -/
+/-- Crossing edge pairs partition the port carrier.
+
+Two pairs are either the same orbit of the involution or disjoint.  This is
+the finite-set form of the edge decomposition and is what permits sums over
+edges to be compared with sums over all ports. -/
 theorem portCrossingEdgePair_eq_or_disjoint {P : PortNetwork}
     (C : PortCrossing P) (p q : PortNetworkPort P) :
     portCrossingEdgePair C p = portCrossingEdgePair C q ∨
@@ -75,7 +88,10 @@ theorem portCrossingEdgePair_eq_or_disjoint {P : PortNetwork}
     exact (portCrossingEdgePair_eq_of_mem C p x hxp).symm.trans
       (portCrossingEdgePair_eq_of_mem C q x hxq)
 
-/-- The finite set of crossing edge orbits. -/
+/-- The finite set of crossing edge orbits.
+
+Taking the image of all ports removes the duplicate representatives of each
+two-dart orbit while retaining every crossing edge exactly once. -/
 def portCrossingEdgeOrbits {P : PortNetwork} (C : PortCrossing P) :
     Finset (Finset (PortNetworkPort P)) :=
   Finset.univ.image (portCrossingEdgePair C)
@@ -140,7 +156,10 @@ theorem portCrossingEdgeSum_card {P : PortNetwork} (C : PortCrossing P) :
     (portCrossingEdgeOrbits_biUnion C)]
   rfl
 
-/-- Port count is twice the crossing-edge count. -/
+/-- Port count is twice the crossing-edge count.
+
+The edge partition has two darts in every cell, hence the total number of
+ports is exactly twice the number of crossing edges. -/
 theorem portCrossingEdgeCount_mul_two {P : PortNetwork}
     (C : PortCrossing P) :
     portCrossingEdgeCount C * 2 = P.portCount := by
@@ -161,7 +180,11 @@ theorem two_mul_portCrossingEdgeCount {P : PortNetwork}
     2 * portCrossingEdgeCount C = P.portCount := by
   simpa [Nat.mul_comm] using portCrossingEdgeCount_mul_two C
 
-/-- The finite set of face-step orbits. -/
+/-- The finite set of face-step orbits.
+
+The image of the port carrier under `portFaceOrbit` is the collection of
+distinct finite face cells; orbit equality makes repeated starting darts
+collapse to one cell. -/
 def portFaceOrbits {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) :
     Finset (Finset (PortNetworkPort P)) :=
@@ -191,7 +214,10 @@ theorem portFaceOrbits_mem_iff {P : PortNetwork} (R : PortLocalRotation P)
   · rintro ⟨p, rfl⟩
     exact portFaceOrbit_mem_orbits R C p
 
-/-- Face orbits cover every port. -/
+/-- Face orbits cover every port.
+
+Every port is the zero-th iterate of its own face permutation orbit, so the
+face cells form a complete cover of the dart carrier. -/
 theorem portFaceOrbits_coverage {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p : PortNetworkPort P) :
     ∃ F ∈ portFaceOrbits R C, p ∈ F :=
@@ -220,7 +246,11 @@ theorem portFaceOrbits_biUnion {P : PortNetwork}
     rcases portFaceOrbits_coverage R C p with ⟨F, hF, hp⟩
     exact Finset.mem_biUnion.mpr ⟨F, hF, hp⟩
 
-/-- The sum of face-orbit cardinalities equals the port count. -/
+/-- The sum of face-orbit cardinalities equals the port count.
+
+Pairwise disjointness and coverage turn the orbit partition into an exact
+finite counting identity.  This is the face analogue of the crossing-edge
+partition above. -/
 theorem portFaceSum_card {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) :
     (∑ F ∈ portFaceOrbits R C, F.card) = P.portCount := by
@@ -229,7 +259,11 @@ theorem portFaceSum_card {P : PortNetwork} (R : PortLocalRotation P)
     (portFaceOrbits_biUnion R C)]
   rfl
 
-/-- The finite Euler characteristic `V - E + F`. -/
+/-- The finite Euler characteristic `V - E + F`.
+
+Here `V` is the region count, `E` the crossing-orbit count, and `F` the
+face-orbit count.  The definition is purely combinatorial; no embedding or
+surface is inferred from the integer alone. -/
 def portCombinatorialEulerCharacteristic {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P) : Int :=
   (portRegionVertexCount P : Int)

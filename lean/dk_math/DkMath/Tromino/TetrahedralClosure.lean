@@ -34,10 +34,15 @@ theorem tetraFace_card : Fintype.card TetraFace = 4 := by
   rw [Fintype.card_eq_nat_card]
   exact card_state
 
-/-- A tetrahedral edge is a pair of distinct faces. -/
+/-- A tetrahedral edge is a pair of distinct faces.
+
+The subtype representation retains the unordered two-face support of an
+edge, so its delta is independent of an ordering of the endpoints. -/
 abbrev TetraEdge := {E : Finset TetraFace // E.card = 2}
 
+/-- The six tetrahedral edges form a finite index type. -/
 instance tetraEdgeFintype : Fintype TetraEdge := inferInstance
+/-- Equality of tetrahedral edges is decidable through their finite supports. -/
 instance tetraEdgeDecidableEq : DecidableEq TetraEdge := inferInstance
 
 /-- Construct the edge joining two distinct tetrahedral faces. -/
@@ -48,7 +53,10 @@ def tetraEdgeBetween (a b : TetraFace) (h : a ≠ b) : TetraEdge :=
 theorem tetraEdge_card : Fintype.card TetraEdge = 6 := by
   decide
 
-/-- The V4 delta assigned to a tetrahedral edge. -/
+/-- The V4 delta assigned to a tetrahedral edge.
+
+The delta is the sum of the two endpoint face colors in the Klein
+four-group. -/
 def tetraEdgeDelta (E : TetraEdge) : TrominoState :=
   Finset.sum E.val id
 
@@ -57,7 +65,10 @@ theorem tetraEdgeDelta_between (a b : TetraFace) (h : a ≠ b) :
     tetraEdgeDelta (tetraEdgeBetween a b h) = a + b := by
   simp [tetraEdgeDelta, tetraEdgeBetween, h]
 
-/-- Every tetrahedral edge has a nonzero V4 delta. -/
+/-- Every tetrahedral edge has a nonzero V4 delta.
+
+Distinct tetrahedral faces cannot have equal colors, and in characteristic
+two a two-element sum vanishes exactly when its endpoints coincide. -/
 theorem tetraEdgeDelta_ne_zero (E : TetraEdge) :
     tetraEdgeDelta E ≠ 0 := by
   rcases Finset.card_eq_two.mp E.property with ⟨a, b, hab, hE⟩
@@ -100,7 +111,10 @@ theorem tetraEdgeDelta_image :
     Finset.univ.image tetraEdgeDelta = {deltaA, deltaB, deltaC} := by
   decide
 
-/-- Every edge belongs to exactly one nonzero-delta fiber. -/
+/-- Every edge belongs to exactly one nonzero-delta fiber.
+
+The three nonzero V4 directions partition the six tetrahedral edges into
+three finite fibers. -/
 theorem tetraEdge_mem_delta_partition (E : TetraEdge) :
     E ∈ tetraEdgesWithDelta deltaA ∨ E ∈ tetraEdgesWithDelta deltaB ∨
       E ∈ tetraEdgesWithDelta deltaC := by

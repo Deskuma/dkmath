@@ -19,10 +19,14 @@ open scoped BigOperators
 On a triangular face, three nonzero V4 labels sum to zero exactly when they
 are the three distinct nonzero states. This turns dual-face conservation into
 the local A/B/C tetrahedral pattern and, in genus zero, into four-state
-colorability.
+colorability.  The no-crossing-pair consequence also explains why a
+conserved triangular face cannot be a dual loop.
 -/
 
-/-- A face is triangular when its boundary port set has cardinality three. -/
+/-- A face is triangular when its boundary port set has cardinality three.
+
+Triangularity is a finite orbit-cardinality condition, not a geometric
+embedding assertion. -/
 def IsTriangularPortFace {P : PortNetwork} {R : PortLocalRotation P}
     {C : PortCrossing P} (F : PortFaceCell R C) : Prop :=
   F.val.card = 3
@@ -33,7 +37,10 @@ def PortAllFacesTriangular {P : PortNetwork}
   ∀ F : PortFaceCell M.localRotation M.crossing,
     IsTriangularPortFace F
 
-/-- The set of V4 labels appearing on a face boundary. -/
+/-- The set of V4 labels appearing on a face boundary.
+
+The image forgets multiplicity; on a three-dart face, the zero-sum theorem
+will recover that all three nonzero states occur exactly once. -/
 def facePortLabelSet {P : PortNetwork} {R : PortLocalRotation P}
     {C : PortCrossing P} (A : V4FlowAssignment C)
     (F : PortFaceCell R C) : Finset TrominoState :=
@@ -62,7 +69,10 @@ theorem faceCellLabelSum_eq_facePortLabelSum {P : PortNetwork}
   rfl
 
 /-- On a triangle, zero boundary sum is equivalent to seeing A, B, and C
-exactly once. -/
+exactly once.
+
+This is the local Klein-four calculation turning an algebraic conservation
+equation into the tetrahedral face pattern. -/
 theorem triangular_faceLabelSet_iff_faceCellLabelSum_zero
     {P : PortNetwork} {R : PortLocalRotation P} {C : PortCrossing P}
     (A : V4FlowAssignment C) (F : PortFaceCell R C)
@@ -82,7 +92,10 @@ theorem triangular_faceLabelSet_iff_faceCellLabelSum_zero
   exact three_nonzero_sum_zero_iff_delta_finset
     (A.nonzero p) (A.nonzero q) (A.nonzero r)
 
-/-- A conserved triangular face has pairwise distinct boundary labels. -/
+/-- A conserved triangular face has pairwise distinct boundary labels.
+
+Since the label image has the same cardinality as the three-element face,
+the label map is injective on that face. -/
 theorem conserved_triangular_face_label_injective
     {P : PortNetwork} {R : PortLocalRotation P} {C : PortCrossing P}
     (A : V4FlowAssignment C) (F : PortFaceCell R C)
@@ -107,7 +120,10 @@ theorem conserved_triangular_face_no_crossing_pair
   have hpc : p = C.cross p := hinj hp hcross heq
   exact C.cross_ne p hpc.symm
 
-/-- The local A/B/C pattern required of a tetrahedral triangular face. -/
+/-- The local A/B/C pattern required of a tetrahedral triangular face.
+
+The predicate packages both the geometric combinatorial condition and the
+three distinct nonzero boundary labels. -/
 def IsTetrahedralFacePattern {P : PortNetwork}
     {R : PortLocalRotation P} {C : PortCrossing P}
     (A : V4FlowAssignment C) (F : PortFaceCell R C) : Prop :=
@@ -115,7 +131,10 @@ def IsTetrahedralFacePattern {P : PortNetwork}
     facePortLabelSet A F = ({deltaA, deltaB, deltaC} : Finset TrominoState)
 
 /-- On an all-triangular map, dual-face Kirchhoff conservation is equivalent
-to the tetrahedral pattern on every face. -/
+to the tetrahedral pattern on every face.
+
+The equivalence is pointwise over face cells, using the local triangle
+calculation above. -/
 theorem isDualFaceKirchhoff_iff_tetrahedralFacePattern
     {P : PortNetwork} (M : PortCombinatorialMap P)
     (htri : PortAllFacesTriangular M) (A : V4FlowAssignment M.crossing) :
@@ -157,7 +176,10 @@ theorem hasTetrahedralFaceAssignment_iff_dualFaceKirchhoff
     exact (isDualFaceKirchhoff_iff_tetrahedralFacePattern G.map htri A).mp hA
 
 /-- The local tetrahedral formulation is equivalent to four-state
-colorability on triangular genus-zero maps. -/
+colorability on triangular genus-zero maps.
+
+This is the finite interface between the tetrahedral face language and the
+region-coloring language. -/
 theorem hasTetrahedralFaceAssignment_iff_fourStateColorable
     {P : PortNetwork} (G : PortGenusZeroCombinatorialMap P)
     (htri : PortAllFacesTriangular G.map) :
@@ -202,7 +224,10 @@ theorem tetraStampColor_append {P : PortNetwork} {C : PortCrossing P}
   ac_rfl
 
 /-- Zero holonomy makes the tetrahedral stamp return to its initial color on
-every closed walk. -/
+every closed walk.
+
+The accumulated V4 increment is zero, so adding it to the base tetrahedron
+color returns the starting color. -/
 theorem tetraStampColor_closed_of_zeroHolonomy
     {P : PortNetwork} {C : PortCrossing P}
     (A : V4FlowAssignment C) (c : TrominoState)

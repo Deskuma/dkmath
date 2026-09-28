@@ -16,14 +16,19 @@ face-center regions, and packages the resulting connected map.
 
 Mathematically, the new region set is the disjoint union of old regions and
 one center for each old face. Connectivity is proved by lifting old walks and
-then attaching every center to an old region along a radial edge.
+then attaching every center to an old region along a radial edge.  Thus the
+subdivision changes the carrier while preserving a visible copy of the old
+connected region graph.
 -/
 
 namespace DkMath.Tromino
 
 /-! ## Region classification -/
 
-/-- Every new region is either an old region or the center of an old face. -/
+/-- Every new region is either an old region or the center of an old face.
+
+The sum equivalence underlying the carrier gives an exhaustive semantic
+classification of new region indices. -/
 theorem faceStar_region_cases {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (x : Fin (faceStarNetwork M I).regionCount) :
@@ -54,7 +59,10 @@ theorem faceStar_region_cases {P : PortNetwork}
 /-! ## Old-walk lifting -/
 
 /-- Mapping each edge of an old region walk to its old-edge port preserves
-walk validity in the face-star crossing. -/
+walk validity in the face-star crossing.
+
+Old crossing darts are copied into the old-region summand, so each step of
+an original walk remains a step of the subdivided map. -/
 theorem faceStar_oldWalk_valid {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     {r s : Fin P.regionCount} {xs : List (PortNetworkPort P)}
@@ -112,7 +120,10 @@ theorem faceStar_oldRegions_connected {P : PortNetwork}
 
 /-! ## Face-center attachment -/
 
-/-- Every old face cell contains a port and therefore has a boundary witness. -/
+/-- Every old face cell contains a port and therefore has a boundary witness.
+
+The face orbit is nonempty because it contains the zero-th iterate of any
+chosen representative. -/
 theorem faceStar_faceCell_nonempty {P : PortNetwork}
     {M : PortCombinatorialMap P} (F : PortFaceCell M.localRotation M.crossing) :
     ∃ p : PortNetworkPort P, p ∈ F.val := by
@@ -129,7 +140,10 @@ theorem faceStar_faceCell_representative {P : PortNetwork}
     faceCellOfPort M.localRotation M.crossing p = F :=
   (faceCellOfPort_eq_iff M.localRotation M.crossing p F).2 hp
 
-/-- Each face-center region is attached to an old region by one radial edge. -/
+/-- Each face-center region is attached to an old region by one radial edge.
+
+Choose a boundary port of the face.  Its radial crossing has the old-region
+copy at one end and the corresponding face center at the other. -/
 theorem faceStar_center_attachment {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M)
     (F : PortFaceCell M.localRotation M.crossing) :
@@ -168,7 +182,11 @@ theorem faceStar_region_reaches_old {P : PortNetwork}
     rw [hx]
     exact portRegionReachable_symm (faceStarCrossing I) hattach
 
-/-- The entire face-star region graph is connected. -/
+/-- The entire face-star region graph is connected.
+
+Every center reaches an old boundary region, and all old regions remain
+connected by lifted original walks; concatenation then connects arbitrary
+new regions. -/
 theorem faceStar_regionConnected {P : PortNetwork}
     {M : PortCombinatorialMap P} (I : PortFaceStarIndexing M) :
     PortRegionConnected (faceStarCrossing I) := by
@@ -193,7 +211,10 @@ theorem faceStar_nonemptyRegions {P : PortNetwork}
 /-! ## Packaged connected map -/
 
 /-- Package the face-star crossing and rotation system as a connected
-combinatorial map. -/
+combinatorial map.
+
+The local construction is now promoted to the common map interface, with
+nonemptiness and connectivity discharged by the preceding finite lemmas. -/
 def faceStarCombinatorialMap {P : PortNetwork}
     (M : PortCombinatorialMap P) (I : PortFaceStarIndexing M) :
     PortCombinatorialMap (faceStarNetwork M I) where

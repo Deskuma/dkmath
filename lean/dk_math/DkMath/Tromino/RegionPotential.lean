@@ -15,19 +15,27 @@ namespace DkMath.Tromino
 
 A `RegionPotential` assigns a V4 state to every region and requires each
 crossing label to be the difference (addition in characteristic two) of the
-potentials at its endpoints.  Integrating this edge law along a walk gives
-the telescoping identity used to pass between zero holonomy and a coloring.
-The potential is unique only up to a global additive translation.
+potentials at its endpoints. Integrating this edge law along a walk gives a
+telescoping identity: the XOR of the traversed labels is the potential
+difference between the endpoints. Thus zero holonomy is exactly the
+path-independence condition needed to construct a potential. The potential is
+unique only up to a global additive translation.
 -/
 
-/-- A V4-valued potential whose edge differences equal the crossing labels. -/
+/-- A V4-valued potential whose edge differences equal the crossing labels.
+
+The equation is written with addition because subtraction and addition agree
+in the characteristic-two state carrier. -/
 structure RegionPotential {N : FlowNetwork} (C : FlowCrossing N) where
   state : Fin N.regionCount → TrominoState
   edgeLaw : ∀ p : FlowNetworkPort N,
     state (flowEdgeTarget C p) =
       state (flowEdgeSource C p) + flowEdgeLabel C p
 
-/-- Integrate the edge law along any valid walk. -/
+/-- Integrate the edge law along any valid walk.
+
+The proof telescopes the edge equations, leaving only the endpoint states and
+the sum of the traversed labels. -/
 theorem regionPotential_integrates_valid
     {N : FlowNetwork} {C : FlowCrossing N}
     (P : RegionPotential C) {r s : Fin N.regionCount}
@@ -58,7 +66,8 @@ theorem regionPotential_integrates_valid
         rw [hvalid.1]
         rfl
 
-/-- Potential difference along a packaged walk equals its label XOR. -/
+/-- The packaged-walk form of the integration identity: endpoint potential
+difference equals the walk XOR. -/
 theorem regionPotential_integrates
     {N : FlowNetwork} {C : FlowCrossing N}
     (P : RegionPotential C) {r s : Fin N.regionCount}
@@ -66,14 +75,15 @@ theorem regionPotential_integrates
     P.state s = P.state r + regionWalkXor W := by
   exact regionPotential_integrates_valid P W.edges W.valid
 
-/-- The integration identity for the empty walk. -/
+/-- The empty walk contributes zero label sum and hence no potential change. -/
 theorem regionPotential_integrates_nil
     {N : FlowNetwork} {C : FlowCrossing N}
     (P : RegionPotential C) (r : Fin N.regionCount) :
     P.state r = P.state r + regionWalkXor (FlowRegionWalk.nil C r) := by
   simp [regionWalkXor_nil]
 
-/-- The integration identity for one crossing edge. -/
+/-- For a singleton walk, the integration identity is exactly the potential
+edge law. -/
 theorem regionPotential_integrates_singleton
     {N : FlowNetwork} {C : FlowCrossing N}
     (P : RegionPotential C) (p : FlowNetworkPort N) :
@@ -82,7 +92,8 @@ theorem regionPotential_integrates_singleton
         regionWalkXor (FlowRegionWalk.singleton C p) := by
   simpa [regionWalkXor_singleton] using P.edgeLaw p
 
-/-- Every exact potential has zero holonomy around closed walks. -/
+/-- Every potential is exact, so integrating around a closed walk returns to
+the starting state and forces zero holonomy. -/
 theorem regionPotential_regionZeroHolonomy
     {N : FlowNetwork} {C : FlowCrossing N}
     (P : RegionPotential C) :
@@ -97,12 +108,17 @@ theorem regionPotential_regionZeroHolonomy
     _ = P.state r + P.state r := by rw [← h]
     _ = 0 := state_add_self _
 
-/-- Every region is reachable from a chosen base region. -/
+/-- Rooted connectivity: every region can be reached from a fixed base by a
+finite valid walk. -/
 def RootedRegionConnected {N : FlowNetwork}
     (C : FlowCrossing N) (base : Fin N.regionCount) : Prop :=
   ∀ s, RegionReachable C base s
 
-/-- On a rooted network, zero holonomy integrates to a potential. -/
+/-- On a rooted network, zero holonomy constructs a potential with prescribed
+base value.
+
+The value at a region is defined by integrating along any chosen base-to-region
+walk; zero holonomy proves that the edge law is independent of the choices. -/
 theorem regionPotential_exists_of_zeroHolonomy
     {N : FlowNetwork} {C : FlowCrossing N}
     (base : Fin N.regionCount) (baseState : TrominoState)
@@ -146,7 +162,8 @@ theorem regionPotential_exists_of_zeroHolonomy
     regionWalkXor baseWalk = baseState
   rw [add_assoc, state_add_self, add_zero]
 
-/-- Potentials with the same base value agree everywhere. -/
+/-- On a rooted network, two potentials with the same base value agree at every
+region. -/
 theorem regionPotential_eq_of_same_base
     {N : FlowNetwork} {C : FlowCrossing N}
     (base : Fin N.regionCount) (hreach : RootedRegionConnected C base)
@@ -161,7 +178,8 @@ theorem regionPotential_eq_of_same_base
     _ = Q.state base + regionWalkXor W := by rw [hbase]
     _ = Q.state s := (regionPotential_integrates Q W).symm
 
-/-- A potential is determined by its state function. -/
+/-- A potential structure is determined by its region-state function; the edge
+law is proof data. -/
 theorem regionPotential_ext
     {N : FlowNetwork} {C : FlowCrossing N}
     {P Q : RegionPotential C}
@@ -175,7 +193,10 @@ theorem regionPotential_ext
       funext r
       exact h r
 
-/-- Translate every potential value by one global V4 state. -/
+/-- Apply one global V4 gauge translation to all potential values.
+
+Because the same translation is added at both endpoints, edge labels remain
+unchanged. -/
 def translateRegionPotential
     {N : FlowNetwork} {C : FlowCrossing N}
     (gamma : TrominoState) (P : RegionPotential C) : RegionPotential C where
@@ -185,14 +206,15 @@ def translateRegionPotential
     rw [P.edgeLaw p]
     ac_rfl
 
-/-- Pointwise formula for a translated potential. -/
+/-- Pointwise evaluation of a globally translated potential. -/
 theorem translateRegionPotential_state
     {N : FlowNetwork} {C : FlowCrossing N}
     (gamma : TrominoState) (P : RegionPotential C)
     (r : Fin N.regionCount) :
     (translateRegionPotential gamma P).state r = P.state r + gamma := rfl
 
-/-- Any two potentials differ by one global additive gauge. -/
+/-- Any two potentials on a rooted network differ by one global additive gauge
+constant. -/
 theorem regionPotential_gauge
     {N : FlowNetwork} {C : FlowCrossing N}
     (base : Fin N.regionCount) (hreach : RootedRegionConnected C base)
@@ -213,7 +235,7 @@ theorem regionPotential_gauge
         (P.state base + Q.state base) := by ac_rfl
     _ = P.state s + (P.state base + Q.state base) := by rw [← hp]
 
-/-- Edge labels are the sum of the endpoint potentials. -/
+/-- Recover the crossing label by adding the two endpoint potential values. -/
 theorem regionPotential_edgeLabel
     {N : FlowNetwork} {C : FlowCrossing N}
     (P : RegionPotential C) (p : FlowNetworkPort N) :
@@ -222,7 +244,8 @@ theorem regionPotential_edgeLabel
   rw [P.edgeLaw p]
   rw [← add_assoc, state_add_self, zero_add]
 
-/-- Nonzero edge labels force distinct endpoint potentials. -/
+/-- Proper nonzero edge labels force adjacent regions to receive distinct
+potential states. -/
 theorem regionPotential_adjacent_ne
     {N : FlowNetwork} {C : FlowCrossing N}
     (P : RegionPotential C) (p : FlowNetworkPort N) :
@@ -232,14 +255,15 @@ theorem regionPotential_adjacent_ne
   rw [heq, state_add_self] at hlabel
   exact (N.signature p.1).nonzero p.2 hlabel.symm
 
-/-- A region potential is proper on every crossing edge. -/
+/-- Every region potential is proper across each crossing edge. -/
 theorem regionPotential_proper_on_crossing
     {N : FlowNetwork} {C : FlowCrossing N}
     (P : RegionPotential C) (p : FlowNetworkPort N) :
     P.state (flowEdgeSource C p) ≠ P.state (flowEdgeTarget C p) :=
   regionPotential_adjacent_ne P p
 
-/-- Under rooted reachability, zero holonomy is equivalent to a potential. -/
+/-- Under rooted reachability, zero holonomy is equivalent to existence of a
+potential with any prescribed base value. -/
 theorem regionZeroHolonomy_iff_regionPotential
     {N : FlowNetwork} {C : FlowCrossing N}
     (base : Fin N.regionCount) (baseState : TrominoState)

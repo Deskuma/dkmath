@@ -15,13 +15,20 @@ import DkMath.Tromino.FaceOrbit
 
 The face step is the crossing followed by the local rotation.  Since it is
 a permutation of a finite port type, the orbit of a dart is a finite face
-cell.  This module packages orbit membership, equality or disjointness,
-coverage, and transport across the flow/port encodings.
+cell.  We represent that cell by the iterates before the least positive
+return, prove that these iterates are distinct and exhaustive, and then
+derive equality-or-disjointness and coverage.  The final theorems transport
+this orbit calculus across the flow/port encodings, showing that labels do
+not affect the underlying face partition.
 -/
 
 namespace DkMath.Tromino
 
-/-- The finite set of darts in the primitive face orbit of a port. -/
+/-- The finite set of darts in the primitive face orbit of a port.
+
+The range stops just before the first positive return.  Thus the image is a
+canonical finite representative of one cyclic face orbit, with no repeated
+dart in its defining list. -/
 def portFaceOrbit {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p : PortNetworkPort P) : Finset (PortNetworkPort P) :=
   (Finset.range (firstPortFaceReturn R C p)).image
@@ -35,7 +42,11 @@ theorem portFaceOrbit_contains {P : PortNetwork} (R : PortLocalRotation P)
   exact ⟨0, Finset.mem_range.mpr (firstPortFaceReturn_spec R C p).1,
     by simp⟩
 
-/-- Every face-step iterate lies in the primitive orbit. -/
+/-- Every face-step iterate lies in the primitive orbit.
+
+Reduce the iterate index modulo the first return time.  Periodicity then
+identifies the original iterate with one of the canonical representatives
+used by `portFaceOrbit`. -/
 theorem portFaceOrbit_mem_iterate {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p : PortNetworkPort P) (n : Nat) :
     (portFaceStep R C)^[n] p ∈ portFaceOrbit R C p := by
@@ -49,7 +60,11 @@ theorem portFaceOrbit_mem_iterate {P : PortNetwork} (R : PortLocalRotation P)
     Finset.mem_range.mpr (Nat.mod_lt n hk), ?_⟩
   exact hperiod.iterate_mod_apply n
 
-/-- Orbit membership is equivalent to reachability by face steps. -/
+/-- Orbit membership is equivalent to reachability by face steps.
+
+This is the bridge between the finite-set presentation and the dynamical
+presentation: a dart is in the face exactly when it is reached by some
+nonnegative iterate of the face permutation. -/
 theorem portFaceOrbit_mem_iff_iterate {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p q : PortNetworkPort P) :
@@ -62,7 +77,11 @@ theorem portFaceOrbit_mem_iff_iterate {P : PortNetwork}
   · rintro ⟨n, rfl⟩
     exact portFaceOrbit_mem_iterate R C p n
 
-/-- Distinct indices before the return time give distinct darts. -/
+/-- Distinct indices before the return time give distinct darts.
+
+Injectivity lets equal iterates be cancelled.  Any remaining positive
+difference would be a smaller return time, contradicting the primitive
+minimality of the first return. -/
 theorem portFaceOrbit_iterate_distinct
     {P : PortNetwork} (R : PortLocalRotation P) (C : PortCrossing P)
     (p : PortNetworkPort P) {i j : Nat}
@@ -92,7 +111,11 @@ theorem portFaceOrbit_iterate_distinct
       exact False.elim
         ((firstPortFaceReturn_primitive R C p).2.2 (i - j) hpos hlt hcancel)
 
-/-- The orbit cardinality equals the first return time. -/
+/-- The orbit cardinality equals the first return time.
+
+The defining range has exactly that many indices, and the preceding
+distinctness theorem makes the iterate map injective on the range.  The
+return time therefore counts the darts on the face boundary. -/
 theorem portFaceOrbit_card {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p : PortNetworkPort P) :
     (portFaceOrbit R C p).card = firstPortFaceReturn R C p := by
@@ -127,7 +150,10 @@ theorem portFaceOrbit_reverse_mem {P : PortNetwork}
       rw [Nat.sub_add_cancel (Nat.le_of_lt hnlt)]
     _ = p := hperiod
 
-/-- An orbit based at an orbit member is contained in the original orbit. -/
+/-- An orbit based at an orbit member is contained in the original orbit.
+
+Starting at an already reached dart merely adds iterates to an existing
+iterate; the iterate-addition law composes the two finite paths. -/
 theorem portFaceOrbit_subset_of_mem {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p q : PortNetworkPort P) (hq : q ∈ portFaceOrbit R C p) :
@@ -140,7 +166,10 @@ theorem portFaceOrbit_subset_of_mem {P : PortNetwork}
   rw [Function.iterate_add_apply, hn]
   exact hmx
 
-/-- Orbits based at members of one orbit are equal. -/
+/-- Orbits based at members of one orbit are equal.
+
+The reverse-iterate lemma gives the opposite inclusion, so changing the
+chosen starting dart changes only the representative, not the face set. -/
 theorem portFaceOrbit_eq_of_mem {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p q : PortNetworkPort P) (hq : q ∈ portFaceOrbit R C p) :
@@ -150,7 +179,10 @@ theorem portFaceOrbit_eq_of_mem {P : PortNetwork}
   · exact portFaceOrbit_subset_of_mem R C q p
       (portFaceOrbit_reverse_mem R C p q hq)
 
-/-- Equivalence relation of lying in the same face orbit. -/
+/-- Equivalence relation of lying in the same face orbit.
+
+Membership in the finite orbit is used as the relation; reflexivity,
+symmetry, and transitivity follow from orbit containment and reversibility. -/
 def SamePortFaceOrbit {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) (p q : PortNetworkPort P) : Prop :=
   q ∈ portFaceOrbit R C p
@@ -182,7 +214,11 @@ def portFaceOrbitSetoid {P : PortNetwork} (R : PortLocalRotation P)
   iseqv := ⟨samePortFaceOrbit_refl R C, @samePortFaceOrbit_symm P R C,
     @samePortFaceOrbit_trans P R C⟩
 
-/-- Two finite face orbits are equal or disjoint. -/
+/-- Two finite face orbits are equal or disjoint.
+
+If the finite representatives are not equal, a common dart would identify
+both with the orbit based at that dart, forcing equality.  Hence face
+orbits form disjoint equivalence classes. -/
 theorem portFaceOrbit_eq_or_disjoint {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p q : PortNetworkPort P) :
@@ -197,13 +233,19 @@ theorem portFaceOrbit_eq_or_disjoint {P : PortNetwork}
     exact (portFaceOrbit_eq_of_mem R C p x hxp).symm.trans
       (portFaceOrbit_eq_of_mem R C q x hxq)
 
-/-- Every dart belongs to its own face orbit. -/
+/-- Every dart belongs to its own face orbit.
+
+Together with equality-or-disjointness, this gives the finite coverage
+statement needed to view the face orbits as a partition of all ports. -/
 theorem portFaceOrbit_coverage {P : PortNetwork} (R : PortLocalRotation P)
     (C : PortCrossing P) :
     ∀ p : PortNetworkPort P, p ∈ portFaceOrbit R C p :=
   fun p => portFaceOrbit_contains R C p
 
-/-- The first return time is constant on a face orbit. -/
+/-- The first return time is constant on a face orbit.
+
+The return time is recovered as the cardinality of the orbit, so changing
+the base dart cannot change the numerical length of the same face. -/
 theorem firstPortFaceReturn_eq_of_mem {P : PortNetwork}
     (R : PortLocalRotation P) (C : PortCrossing P)
     (p q : PortNetworkPort P) (hq : q ∈ portFaceOrbit R C p) :
@@ -265,7 +307,11 @@ theorem faceOrbit_of_flow_lift {P : PortNetwork} {C : PortCrossing P}
   rw [firstFaceReturn_of_flow_lift]
   rfl
 
-/-- Face orbits do not depend on the chosen V4 assignment. -/
+/-- Face orbits do not depend on the chosen V4 assignment.
+
+The assignment only decorates the same port carrier.  Since both lifted
+flow systems induce the same face permutation and first-return time, their
+finite face sets coincide exactly. -/
 theorem faceOrbit_assignment_independent {P : PortNetwork}
     {C : PortCrossing P} (R : PortLocalRotation P)
     (A B : V4FlowAssignment C) (p : PortNetworkPort P) :
