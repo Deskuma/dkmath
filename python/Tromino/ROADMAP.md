@@ -621,3 +621,97 @@ search_objective    = resolved
 If a depth-eight witness is replay-verified, continue at fixed size before
 moving to larger maps. If the frontier remains at seven after this larger
 search, compare 28- and 32-vertex campaigns to test size dependence.
+
+
+### OBS-005 — Pure Endpoint Repair Depth Eight
+
+Status: recorded on 2026-09-29.
+
+Files:
+
+```text
+python/Tromino/experiments/OBS-005-PureEndpointRepairDepthEight/
+  README.md
+  summary.json
+```
+
+Seed `8000005` gives a particularly clean fixed-size witness:
+
+```text
+vertices           = 24
+repair events      = 1
+required depth     = 8
+repair moves total = 8
+depth 7            = depth_limited
+depth 8            = solved
+```
+
+The depth-eight repair uses component sizes:
+
+```text
+2, 1, 1, 2, 2, 1, 4, 4
+```
+
+so the current deepest witness is produced by a composition of several small
+component exchanges rather than one large Kempe component.
+
+The replay-verified frontier is now:
+
+```text
+D_endpoint(24) >= 8
+```
+
+for the current planted generator, deterministic restore order, locked frame,
+direct-choice rule, and Kempe-component proxy.
+
+This motivates separating repair depth from geometric locality.
+
+### Next campaign — endpoint depth nine with repair geometry
+
+The search harness now records geometry for every traced successful repair:
+
+```text
+component_sizes
+max_component_size
+footprint_vertices
+footprint_size
+min_distance_from_current
+max_distance_from_current
+```
+
+It also supports:
+
+```text
+--stop-on-target
+```
+
+which cancels pending jobs where possible once a solved witness reaches the
+requested target depth.
+
+The next fixed-size campaign keeps `n = 24`:
+
+```text
+vertices            = 24
+jobs                = 2000
+steps               = 3000
+warmup_flips        = 64
+max_depth           = 10
+target_depth        = 9
+node_limit          = 1500000
+base_seed           = 9000000
+intermediate_policy = endpoint
+search_objective    = resolved
+stop_on_target      = true
+```
+
+Primary questions:
+
+```text
+1. Can D_endpoint(24) reach 9?
+2. Does deeper repair require larger components?
+3. Does the union footprint grow with depth?
+4. Does the graph radius from the blocked node grow with depth?
+```
+
+The next OBS record should be frozen only after replay confirms failure at
+depth `d-1`, success at depth `d`, and records the repair-geometry metrics.
