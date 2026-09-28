@@ -1,0 +1,885 @@
+#!/usr/bin/env python3
+"""Long-run adversarial repair-depth search for DkMath Tromino experiments.
+
+The generator keeps a planted four-coloring while increasing combinatorial
+complexity by legal diagonal flips. The solver is *not* given the planted
+colors. It restores vertices in their refinement birth order, protects the
+Missing-Color Invariant, and uses two-color Kempe-component swaps as the current
+GapSwap proxy when direct lifting stalls.
+
+This is an experimental search harness, not a proof and not production code.
+It uses only the Python standard library.
+"""
+
+from __future__ import annotations
+
+from collections import deque
+from concurrent.futures import ProcessPoolExecutor, as_completed
+from dataclasses import dataclass
+from pathlib import Path
+import argparse
+import itertools
+import json
+import math
+import os
+import random
+import statistics
+import time
+from typing import Iterable
+
+COLORS = (0, 1, 2, 3)
+SEA = -1
+BOUNDARY = (0, 1, 2)
+LOCKED = frozenset((SEA, 0, 1, 2))
+FORMAT_VERSION = 1
+
+
+def face_key(a: int, b: int, c: int) -> tuple[int, int, int]:
+    return tuple(sorted((int(a), int(b), int(c))))
+
+
+@dataclass
+class PlantedTriangulation:
+    faces: set[tuple[int, int, int]]
+    outer_face: tuple[int, int, int]
+    planted: dict[int, int]
+    birth_order: list[int]
+    flip_history: list[tuple[int, int, int, int]]
+
+    @staticmethod
+    def base() -> "PlantedTriangulation":
+        planted = {0: 1, 1: 2, 2: 3, 3: 0}
+        faces = {
+            face_key(0, 1, 2),
+            face_key(0, 1, 3),
+            face_key(1, 2, 3),
+            face_key(2, 0, 3),
+        }
+        return PlantedTriangulation(
+            faces=faces,
+            outer_face=face_key(0, 1, 2),
+            planted=planted,
+            birth_order=[3],
+            flip_history=[],
+        )
+
+    def copy(self) -> "PlantedTriangulation":
+        return PlantedTriangulation(
+            faces=set(self.faces),
+            outer_face=self.outer_face,
+            planted=dict(self.planted),
+            birth_order=list(self.birth_order),
+            flip_history=list(self.flip_history),
+        )
+
+    def internal_faces(self) -> list[tuple[int, int, int]]:
+        return [face for face in self.faces if face != self.outer_face]
+
+    def edges(self) -> set[tuple[int, int]]:
+        out: set[tuple[int, int]] = set()
+        for a, b, c in self.faces:
+            out.add(tuple(sorted((a, b))))
+            out.add(tuple(sorted((b, c))))
+            out.add(tuple(sorted((c, a))))
+        return out
+
+    def adjacency(self, *, include_sea: bool = True) -> dict[int, set[int]]:
+        vertices: set[int] = set()
+        for face in self.faces:
+            vertices.update(face)
+        adjacency = {v: set() for v in vertices}
+        for u, v in self.edges():
+            adjacency[u].add(v)
+            adjacency[v].add(u)
+        if include_sea:
+            adjacency[SEA] = set(BOUNDARY)
+            for v in BOUNDARY:
+                adjacency[v].add(SEA)
+        return adjacency
+
+    def subdivide_face(self, face: tuple[int, int, int]) -> int:
+        face = face_key(*face)
+        if face == self.outer_face or face not in self.faces:
+            raise ValueError("only an existing internal face may be subdivided")
+        face_colors = {self.planted[v] for v in face}
+        if len(face_colors) != 3:
+            raise ValueError("planted face is not tricolored")
+        missing = next(c for c in COLORS if c not in face_colors)
+        new_vertex = max(self.planted) + 1
+        a, b, c = face
+        self.faces.remove(face)
+        self.faces.update(
+            {
+                face_key(a, b, new_vertex),
+                face_key(b, c, new_vertex),
+                face_key(c, a, new_vertex),
+            }
+        )
+        self.planted[new_vertex] = missing
+        self.birth_order.append(new_vertex)
+        return new_vertex
+
+    def flippable_preserving(self) -> list[tuple[int, int, int, int]]:
+        edge_faces: dict[tuple[int, int], list[tuple[int, int, int]]] = {}
+        for face in self.faces:
+            a, b, c = face
+            for u, v in ((a, b), (b, c), (c, a)):
+                edge_faces.setdefault(tuple(sorted((u, v))), []).append(face)
+
+        current_edges = self.edges()
+        boundary_edges = {(0, 1), (1, 2), (0, 2)}
+        moves: list[tuple[int, int, int, int]] = []
+
+        for (u, v), incident in edge_faces.items():
+            if (u, v) in boundary_edges or len(incident) != 2:
+                continue
+            a = next(x for x in incident[0] if x not in (u, v))
+            b = next(x for x in incident[1] if x not in (u, v))
+            if a == b:
+                continue
+            if tuple(sorted((a, b))) in current_edges:
+                continue
+            if self.planted[a] == self.planted[b]:
+                continue
+            moves.append((u, v, a, b))
+        return moves
+
+    def apply_flip(self, move: tuple[int, int, int, int]) -> None:
+        u, v, a, b = move
+        old_a = face_key(u, v, a)
+        old_b = face_key(u, v, b)
+        if old_a not in self.faces or old_b not in self.faces:
+            raise ValueError(f"stale flip: {move}")
+        self.faces.remove(old_a)
+        self.faces.remove(old_b)
+        self.faces.add(face_key(a, b, u))
+        self.faces.add(face_key(a, b, v))
+        self.flip_history.append(move)
+
+    def planted_is_proper(self) -> bool:
+        adjacency = self.adjacency(include_sea=False)
+        return all(
+            self.planted[u] != self.planted[v]
+            for u in adjacency
+            for v in adjacency[u]
+            if u < v
+        )
+
+
+def generate_planted(vertices: int, seed: int) -> PlantedTriangulation:
+    if vertices < 4:
+        raise ValueError("vertices must be at least 4")
+    rng = random.Random(seed)
+    tri = PlantedTriangulation.base()
+    while len(tri.planted) < vertices:
+        tri.subdivide_face(rng.choice(tri.internal_faces()))
+    if not tri.planted_is_proper():
+        raise AssertionError("generator lost planted proper coloring")
+    return tri
+
+
+def palette(
+    adjacency: dict[int, set[int]], colored: dict[int, int], v: int
+) -> set[int]:
+    return {colored[u] for u in adjacency[v] if u in colored}
+
+
+def invariant_holds(
+    adjacency: dict[int, set[int]], colored: dict[int, int], remaining: set[int]
+) -> bool:
+    return all(len(palette(adjacency, colored, v)) <= 3 for v in remaining)
+
+
+def safe_candidates(
+    adjacency: dict[int, set[int]],
+    colored: dict[int, int],
+    remaining: set[int],
+    v: int,
+) -> list[int]:
+    forbidden = palette(adjacency, colored, v)
+    available = [c for c in COLORS if c not in forbidden]
+    future = remaining - {v}
+    scored: list[tuple[tuple[int, int, int], int]] = []
+
+    for color in available:
+        safe = True
+        for w in adjacency[v]:
+            if w not in future:
+                continue
+            before = palette(adjacency, colored, w)
+            if len(before) >= 3 and color not in before:
+                safe = False
+                break
+        if not safe:
+            continue
+
+        critical = 0
+        square_sum = 0
+        for w in adjacency[v]:
+            if w not in future:
+                continue
+            after = palette(adjacency, colored, w) | {color}
+            critical += int(len(after) == 3)
+            square_sum += len(after) ** 2
+        scored.append(((critical, square_sum, color), color))
+
+    scored.sort()
+    return [color for _, color in scored]
+
+
+def kempe_components(
+    adjacency: dict[int, set[int]], colored: dict[int, int]
+) -> Iterable[tuple[int, int, frozenset[int]]]:
+    nodes = set(colored)
+    for a, b in itertools.combinations(COLORS, 2):
+        allowed = {v for v in nodes if colored[v] in (a, b)}
+        seen: set[int] = set()
+        for start in sorted(allowed):
+            if start in seen:
+                continue
+            component = {start}
+            stack = [start]
+            seen.add(start)
+            while stack:
+                x = stack.pop()
+                for y in adjacency[x]:
+                    if y in allowed and y not in seen:
+                        seen.add(y)
+                        component.add(y)
+                        stack.append(y)
+            if component & LOCKED:
+                continue
+            yield (a, b, frozenset(component))
+
+
+def apply_exchange(
+    colored: dict[int, int], move: tuple[int, int, frozenset[int]]
+) -> dict[int, int]:
+    a, b, component = move
+    result = dict(colored)
+    for v in component:
+        result[v] = b if result[v] == a else a
+    return result
+
+
+def state_key(colored: dict[int, int]) -> tuple[tuple[int, int], ...]:
+    return tuple(sorted(colored.items()))
+
+
+def find_repair(
+    adjacency: dict[int, set[int]],
+    colored: dict[int, int],
+    remaining: set[int],
+    v: int,
+    max_depth: int,
+    node_limit: int,
+    intermediate_policy: str,
+):
+    visited = {state_key(colored)}
+    queue = deque([(dict(colored), [])])
+    expanded = 0
+    hit_depth_limit = False
+
+    while queue:
+        state, sequence = queue.popleft()
+        if len(sequence) >= max_depth:
+            hit_depth_limit = True
+            continue
+
+        for move in kempe_components(adjacency, state):
+            next_state = apply_exchange(state, move)
+            key = state_key(next_state)
+            if key in visited:
+                continue
+            visited.add(key)
+            expanded += 1
+
+            if expanded > node_limit:
+                return None, None, None, {
+                    "status": "node_limit",
+                    "expanded": expanded,
+                    "hit_depth_limit": hit_depth_limit,
+                }
+
+            invariant_ok = invariant_holds(adjacency, next_state, remaining)
+            if intermediate_policy == "strict" and not invariant_ok:
+                continue
+
+            candidates = (
+                safe_candidates(adjacency, next_state, remaining, v)
+                if invariant_ok
+                else []
+            )
+            next_sequence = sequence + [move]
+            if candidates:
+                return next_state, next_sequence, candidates, {
+                    "status": "ok",
+                    "expanded": expanded,
+                    "hit_depth_limit": hit_depth_limit,
+                }
+            queue.append((next_state, next_sequence))
+
+    return None, None, None, {
+        "status": "depth_limited" if hit_depth_limit else "state_space_exhausted",
+        "expanded": expanded,
+        "hit_depth_limit": hit_depth_limit,
+    }
+
+
+def restore_instance(
+    tri: PlantedTriangulation,
+    max_repair_depth: int,
+    *,
+    node_limit: int = 200_000,
+    intermediate_policy: str = "strict",
+    trace: bool = False,
+):
+    adjacency = tri.adjacency(include_sea=True)
+    colored = {SEA: 0, 0: 1, 1: 2, 2: 3}
+    remaining = set(tri.birth_order)
+    repairs = 0
+    repair_moves_total = 0
+    max_depth_used = 0
+    repair_log = []
+
+    for step, v in enumerate(tri.birth_order):
+        if not invariant_holds(adjacency, colored, remaining):
+            return False, {
+                "reason": "pre_invariant_broken",
+                "step": step,
+                "node": v,
+            }
+
+        candidates = safe_candidates(adjacency, colored, remaining, v)
+        sequence = []
+        repair_meta = None
+
+        if not candidates:
+            if max_repair_depth == 0:
+                return False, {
+                    "reason": "forced_repair",
+                    "step": step,
+                    "node": v,
+                    "repairs": repairs,
+                }
+
+            next_state, sequence, candidates, repair_meta = find_repair(
+                adjacency,
+                colored,
+                remaining,
+                v,
+                max_repair_depth,
+                node_limit,
+                intermediate_policy,
+            )
+            if next_state is None:
+                return False, {
+                    "reason": "repair_failed",
+                    "repair_status": repair_meta["status"],
+                    "step": step,
+                    "node": v,
+                    "repairs": repairs,
+                    "expanded": repair_meta["expanded"],
+                    "hit_depth_limit": repair_meta["hit_depth_limit"],
+                }
+
+            colored = next_state
+            repairs += 1
+            repair_moves_total += len(sequence)
+            max_depth_used = max(max_depth_used, len(sequence))
+
+        color = candidates[0]
+        colored[v] = color
+        remaining.remove(v)
+
+        if trace and sequence:
+            repair_log.append(
+                {
+                    "step": step,
+                    "node": v,
+                    "repair_depth": len(sequence),
+                    "moves": [
+                        {"colors": [a, b], "component": sorted(component)}
+                        for a, b, component in sequence
+                    ],
+                    "assigned_color": color,
+                    "repair_search": repair_meta,
+                }
+            )
+
+    proper = all(
+        colored[u] != colored[v]
+        for u in adjacency
+        for v in adjacency[u]
+        if u < v
+    )
+    if not proper:
+        raise AssertionError("repair solver produced an improper coloring")
+
+    return True, {
+        "repairs": repairs,
+        "repair_moves_total": repair_moves_total,
+        "max_depth_used": max_depth_used,
+        "repair_log": repair_log,
+    }
+
+
+def evaluate(
+    tri: PlantedTriangulation,
+    max_depth: int,
+    *,
+    node_limit: int,
+    intermediate_policy: str,
+    trace: bool = False,
+):
+    ok, info = restore_instance(
+        tri,
+        max_depth,
+        node_limit=node_limit,
+        intermediate_policy=intermediate_policy,
+        trace=trace,
+    )
+    if not ok:
+        return {
+            "success": False,
+            "classification": info.get("repair_status", info["reason"]),
+            "search_ceiling": max_depth,
+            **info,
+        }
+
+    depth = info["max_depth_used"]
+    verified_lower = depth == 0
+    lower_result = None
+    if depth > 0:
+        lower_ok, lower_info = restore_instance(
+            tri,
+            depth - 1,
+            node_limit=node_limit,
+            intermediate_policy=intermediate_policy,
+            trace=False,
+        )
+        verified_lower = not lower_ok
+        lower_result = {
+            "success": lower_ok,
+            "classification": (
+                "solved"
+                if lower_ok
+                else lower_info.get("repair_status", lower_info["reason"])
+            ),
+            "info": lower_info,
+        }
+
+    return {
+        "success": True,
+        "classification": "solved",
+        "required_depth": depth,
+        "verified_against_depth_minus_one": verified_lower,
+        "depth_minus_one_result": lower_result,
+        **info,
+    }
+
+
+def objective(result: dict) -> tuple[int, int, int, int]:
+    if result["success"]:
+        return (
+            result["required_depth"],
+            result.get("repairs", 0),
+            result.get("repair_moves_total", 0),
+            0,
+        )
+    rank = {
+        "depth_limited": 3,
+        "node_limit": 2,
+        "state_space_exhausted": 4,
+        "forced_repair": 1,
+        "pre_invariant_broken": 0,
+    }.get(result["classification"], 1)
+    return (result["search_ceiling"] + 1, rank, result.get("repairs", 0), 1)
+
+
+def serialize_witness(
+    tri: PlantedTriangulation,
+    result: dict,
+    *,
+    job_seed: int,
+    search_meta: dict,
+) -> dict:
+    return {
+        "format_version": FORMAT_VERSION,
+        "job_seed": job_seed,
+        "vertices": len(tri.planted),
+        "outer_face": list(tri.outer_face),
+        "faces": [list(face) for face in sorted(tri.faces)],
+        "planted_colors": {str(k): v for k, v in sorted(tri.planted.items())},
+        "birth_order": list(tri.birth_order),
+        "flip_history": [list(move) for move in tri.flip_history],
+        "evaluation": result,
+        "search_meta": search_meta,
+    }
+
+
+def triangulation_from_witness(payload: dict) -> PlantedTriangulation:
+    return PlantedTriangulation(
+        faces={face_key(*face) for face in payload["faces"]},
+        outer_face=face_key(*payload.get("outer_face", BOUNDARY)),
+        planted={int(k): int(v) for k, v in payload["planted_colors"].items()},
+        birth_order=[int(v) for v in payload["birth_order"]],
+        flip_history=[
+            tuple(map(int, move)) for move in payload.get("flip_history", [])
+        ],
+    )
+
+
+def one_search_job(job: dict) -> dict:
+    seed = int(job["job_seed"])
+    rng = random.Random(seed)
+    tri = generate_planted(int(job["vertices"]), seed)
+
+    for _ in range(int(job["warmup_flips"])):
+        moves = tri.flippable_preserving()
+        if not moves:
+            break
+        tri.apply_flip(rng.choice(moves))
+
+    eval_kwargs = {
+        "max_depth": int(job["max_depth"]),
+        "node_limit": int(job["node_limit"]),
+        "intermediate_policy": str(job["intermediate_policy"]),
+    }
+    current = evaluate(tri, trace=False, **eval_kwargs)
+    best_tri = tri.copy()
+    best = current
+    accepted = 0
+    temperature = float(job["temperature"])
+    steps_done = 0
+
+    for step in range(int(job["steps"])):
+        steps_done = step + 1
+        moves = tri.flippable_preserving()
+        if not moves:
+            break
+
+        candidate_tri = tri.copy()
+        candidate_tri.apply_flip(rng.choice(moves))
+        candidate = evaluate(candidate_tri, trace=False, **eval_kwargs)
+
+        old_score = objective(current)
+        new_score = objective(candidate)
+        accept = new_score >= old_score
+        if not accept:
+            delta = (new_score[0] - old_score[0]) + 0.02 * (
+                new_score[1] - old_score[1]
+            )
+            accept = rng.random() < math.exp(delta / max(temperature, 0.05))
+
+        if accept:
+            tri = candidate_tri
+            current = candidate
+            accepted += 1
+
+        if objective(current) > objective(best):
+            best_tri = tri.copy()
+            best = current
+
+        temperature *= float(job["cooling"])
+
+        if best["success"] and best["required_depth"] >= int(job["target_depth"]):
+            break
+
+    traced = evaluate(best_tri, trace=True, **eval_kwargs)
+    search_meta = {
+        "steps_requested": int(job["steps"]),
+        "steps_done": steps_done,
+        "accepted_mutations": accepted,
+        "warmup_flips": int(job["warmup_flips"]),
+        "max_depth": int(job["max_depth"]),
+        "node_limit": int(job["node_limit"]),
+        "intermediate_policy": str(job["intermediate_policy"]),
+        "temperature": float(job["temperature"]),
+        "cooling": float(job["cooling"]),
+    }
+    return {
+        "job_seed": seed,
+        "objective": list(objective(traced)),
+        "classification": traced["classification"],
+        "success": traced["success"],
+        "required_depth": traced.get("required_depth"),
+        "witness": serialize_witness(
+            best_tri, traced, job_seed=seed, search_meta=search_meta
+        ),
+    }
+
+
+def atomic_json(path: Path, payload: dict) -> None:
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(
+        json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    tmp.replace(path)
+
+
+def append_jsonl(path: Path, payload: dict) -> None:
+    with path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(payload, sort_keys=True) + "\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+
+
+def completed_seeds(path: Path) -> set[int]:
+    if not path.exists():
+        return set()
+    done = set()
+    with path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                done.add(int(json.loads(line)["job_seed"]))
+            except (json.JSONDecodeError, KeyError, ValueError):
+                continue
+    return done
+
+
+def read_rows(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    rows = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        try:
+            rows.append(json.loads(line))
+        except json.JSONDecodeError:
+            pass
+    return rows
+
+
+def summary_from_rows(rows: list[dict]) -> dict:
+    resolved = [row for row in rows if row.get("success")]
+    depths = [
+        int(row["required_depth"])
+        for row in resolved
+        if row.get("required_depth") is not None
+    ]
+    counts: dict[str, int] = {}
+    for row in rows:
+        key = row.get("classification", "unknown")
+        counts[key] = counts.get(key, 0) + 1
+    return {
+        "jobs_completed": len(rows),
+        "classifications": counts,
+        "resolved_jobs": len(resolved),
+        "max_resolved_depth": max(depths) if depths else None,
+        "mean_resolved_depth": statistics.mean(depths) if depths else None,
+    }
+
+
+def cmd_search(args: argparse.Namespace) -> int:
+    out = Path(args.output)
+    out.mkdir(parents=True, exist_ok=True)
+    runs_path = out / "runs.jsonl"
+    best_path = out / "best_witness.json"
+    summary_path = out / "summary.json"
+    config_path = out / "config.json"
+
+    config = {
+        "format_version": FORMAT_VERSION,
+        "vertices": args.vertices,
+        "jobs": args.jobs,
+        "steps": args.steps,
+        "warmup_flips": args.warmup_flips,
+        "workers": args.workers,
+        "max_depth": args.max_depth,
+        "target_depth": args.target_depth,
+        "node_limit": args.node_limit,
+        "base_seed": args.base_seed,
+        "intermediate_policy": args.intermediate_policy,
+        "temperature": args.temperature,
+        "cooling": args.cooling,
+    }
+    if not config_path.exists():
+        atomic_json(config_path, config)
+
+    done = completed_seeds(runs_path)
+    seeds = [
+        args.base_seed + i
+        for i in range(args.jobs)
+        if args.base_seed + i not in done
+    ]
+    rows = read_rows(runs_path)
+    best_row = max(
+        rows,
+        key=lambda row: tuple(row.get("objective", [0, 0, 0, 0])),
+        default=None,
+    )
+
+    print(f"output={out}")
+    print(
+        f"already_completed={len(done)} pending={len(seeds)} "
+        f"workers={args.workers}"
+    )
+
+    def job_for(seed: int) -> dict:
+        return {
+            "job_seed": seed,
+            "vertices": args.vertices,
+            "steps": args.steps,
+            "warmup_flips": args.warmup_flips,
+            "max_depth": args.max_depth,
+            "target_depth": args.target_depth,
+            "node_limit": args.node_limit,
+            "intermediate_policy": args.intermediate_policy,
+            "temperature": args.temperature,
+            "cooling": args.cooling,
+        }
+
+    started = time.time()
+    target_found = False
+
+    with ProcessPoolExecutor(max_workers=args.workers) as pool:
+        futures = {
+            pool.submit(one_search_job, job_for(seed)): seed for seed in seeds
+        }
+        for index, future in enumerate(as_completed(futures), start=1):
+            row = future.result()
+            append_jsonl(runs_path, row)
+            rows.append(row)
+
+            if best_row is None or tuple(row["objective"]) > tuple(
+                best_row["objective"]
+            ):
+                best_row = row
+                atomic_json(best_path, row["witness"])
+                print(
+                    "NEW BEST",
+                    f"seed={row['job_seed']}",
+                    f"class={row['classification']}",
+                    f"depth={row.get('required_depth')}",
+                    f"objective={row['objective']}",
+                    flush=True,
+                )
+
+            if (
+                row["success"]
+                and (row.get("required_depth") or 0) >= args.target_depth
+            ):
+                target_found = True
+
+            if index % max(1, args.summary_every) == 0 or target_found:
+                summary = summary_from_rows(rows)
+                summary.update(
+                    {
+                        "elapsed_seconds": time.time() - started,
+                        "target_depth": args.target_depth,
+                        "target_found": target_found,
+                        "best_objective": (
+                            best_row["objective"] if best_row else None
+                        ),
+                        "best_seed": best_row["job_seed"] if best_row else None,
+                    }
+                )
+                atomic_json(summary_path, summary)
+
+    summary = summary_from_rows(rows)
+    summary.update(
+        {
+            "elapsed_seconds": time.time() - started,
+            "target_depth": args.target_depth,
+            "target_found": target_found,
+            "best_objective": best_row["objective"] if best_row else None,
+            "best_seed": best_row["job_seed"] if best_row else None,
+        }
+    )
+    atomic_json(summary_path, summary)
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
+def cmd_replay(args: argparse.Namespace) -> int:
+    payload = json.loads(Path(args.witness).read_text(encoding="utf-8"))
+    tri = triangulation_from_witness(payload)
+    if not tri.planted_is_proper():
+        raise SystemExit("witness planted coloring is not proper")
+
+    results = []
+    for depth in range(args.min_depth, args.max_depth + 1):
+        result = evaluate(
+            tri,
+            depth,
+            node_limit=args.node_limit,
+            intermediate_policy=args.intermediate_policy,
+            trace=args.trace,
+        )
+        results.append({"depth_ceiling": depth, "result": result})
+        print(
+            f"depth={depth} success={result['success']} "
+            f"class={result['classification']} "
+            f"required={result.get('required_depth')}",
+            flush=True,
+        )
+        if result["success"] and args.stop_on_success:
+            break
+
+    payload_out = {"witness": args.witness, "results": results}
+    if args.output:
+        atomic_json(Path(args.output), payload_out)
+    else:
+        print(json.dumps(payload_out, indent=2, sort_keys=True))
+    return 0
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description=__doc__)
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    search = sub.add_parser("search", help="run parallel adversarial flip search")
+    search.add_argument("--vertices", type=int, default=24)
+    search.add_argument("--jobs", type=int, default=100)
+    search.add_argument("--steps", type=int, default=1000)
+    search.add_argument("--warmup-flips", type=int, default=32)
+    search.add_argument(
+        "--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1)
+    )
+    search.add_argument("--max-depth", type=int, default=6)
+    search.add_argument("--target-depth", type=int, default=5)
+    search.add_argument("--node-limit", type=int, default=250_000)
+    search.add_argument("--base-seed", type=int, default=6_000_000)
+    search.add_argument(
+        "--intermediate-policy",
+        choices=("strict", "endpoint"),
+        default="strict",
+    )
+    search.add_argument("--temperature", type=float, default=1.5)
+    search.add_argument("--cooling", type=float, default=0.9995)
+    search.add_argument("--summary-every", type=int, default=10)
+    search.add_argument(
+        "--output", default="python/Tromino/results/repair-depth/default"
+    )
+    search.set_defaults(func=cmd_search)
+
+    replay = sub.add_parser("replay", help="re-evaluate one saved witness")
+    replay.add_argument("witness")
+    replay.add_argument("--min-depth", type=int, default=0)
+    replay.add_argument("--max-depth", type=int, default=8)
+    replay.add_argument("--node-limit", type=int, default=1_000_000)
+    replay.add_argument(
+        "--intermediate-policy",
+        choices=("strict", "endpoint"),
+        default="strict",
+    )
+    replay.add_argument("--trace", action="store_true")
+    replay.add_argument("--stop-on-success", action="store_true")
+    replay.add_argument("--output")
+    replay.set_defaults(func=cmd_replay)
+
+    return parser
+
+
+def main() -> int:
+    args = build_parser().parse_args()
+    return int(args.func(args))
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
