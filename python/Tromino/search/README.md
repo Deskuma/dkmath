@@ -96,3 +96,65 @@ For repository-side preservation, commit the small result files into a named res
 The immediate target is a verified depth-5 witness. More importantly, classify the first hard examples as one of three cases: genuinely solved only after depth 5 or greater, merely depth-limited by the configured ceiling, or blocked by the strict Missing-Color invariant even though the planted coloring proves that a global proper coloring exists.
 
 The third case is especially valuable because it means the present invariant or proxy move set is too restrictive rather than merely revealing a deeper maze.
+
+
+## Endpoint-depth campaign after OBS-003
+
+OBS-003 showed that a witness exhausted under strict intermediate
+Missing-Color preservation can be solved when only the repair endpoint is
+required to restore the invariant.
+
+The next campaign therefore makes endpoint repair the primary policy and asks
+for the largest **verified solved** repair depth rather than allowing unresolved
+states to dominate the search objective.
+
+Recommended first run:
+
+    mkdir -p python/Tromino/results/repair-depth/endpoint-d6-v24
+
+    python3 python/Tromino/search/repair_depth_search.py search \
+      --vertices 24 \
+      --jobs 2000 \
+      --steps 2000 \
+      --warmup-flips 48 \
+      --workers "$(nproc)" \
+      --max-depth 8 \
+      --target-depth 6 \
+      --node-limit 750000 \
+      --base-seed 7000000 \
+      --intermediate-policy endpoint \
+      --search-objective resolved \
+      --output python/Tromino/results/repair-depth/endpoint-d6-v24
+
+The search now maintains separate frontier files:
+
+    best_witness.json
+    best_resolved_witness.json
+    best_unresolved_witness.json
+
+For this campaign, the primary record is best_resolved_witness.json.
+
+best_unresolved_witness.json remains diagnostically useful, but unresolved
+states no longer outrank resolved states in --search-objective resolved mode.
+
+The summary records both frontiers independently.
+
+If the endpoint run reaches verified depth 6 quickly, rerun with a fresh
+output directory and target depth 7 before increasing the vertex count. If
+depth 6 is not found, keep n=24 and increase jobs/steps first; this helps
+separate insufficient search effort from size-dependent difficulty.
+
+After the run, replay the best resolved witness from depth 0 upward:
+
+    python3 python/Tromino/search/repair_depth_search.py replay \
+      python/Tromino/results/repair-depth/endpoint-d6-v24/best_resolved_witness.json \
+      --min-depth 0 \
+      --max-depth 10 \
+      --node-limit 3000000 \
+      --intermediate-policy endpoint \
+      --trace \
+      --stop-on-success \
+      --output python/Tromino/results/repair-depth/endpoint-d6-v24/replay-best-resolved.json
+
+The next observation should be recorded only after this replay confirms the
+depth-minus-one failure and the successful endpoint depth.
