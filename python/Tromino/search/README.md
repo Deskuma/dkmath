@@ -158,3 +158,47 @@ After the run, replay the best resolved witness from depth 0 upward:
 
 The next observation should be recorded only after this replay confirms the
 depth-minus-one failure and the successful endpoint depth.
+
+
+## Fixed-size endpoint depth-8 campaign after OBS-004
+
+OBS-004 established a replay-verified endpoint depth-seven witness at 24
+vertices. The next test keeps the graph size fixed and increases search effort
+before changing `n`.
+
+Recommended run:
+
+    mkdir -p python/Tromino/results/repair-depth/endpoint-d8-v24
+
+    python3 python/Tromino/search/repair_depth_search.py search \
+      --vertices 24 \
+      --jobs 3000 \
+      --steps 3000 \
+      --warmup-flips 64 \
+      --workers "$(nproc)" \
+      --max-depth 10 \
+      --target-depth 8 \
+      --node-limit 1500000 \
+      --base-seed 8000000 \
+      --intermediate-policy endpoint \
+      --search-objective resolved \
+      --output python/Tromino/results/repair-depth/endpoint-d8-v24
+
+The primary output is again:
+
+    best_resolved_witness.json
+
+After completion, replay it with a larger ceiling:
+
+    python3 python/Tromino/search/repair_depth_search.py replay \
+      python/Tromino/results/repair-depth/endpoint-d8-v24/best_resolved_witness.json \
+      --min-depth 0 \
+      --max-depth 12 \
+      --node-limit 5000000 \
+      --intermediate-policy endpoint \
+      --trace \
+      --stop-on-success \
+      --output python/Tromino/results/repair-depth/endpoint-d8-v24/replay-best-resolved.json
+
+A new observation should be frozen only after replay confirms failure at
+`d-1` and success at `d`.
