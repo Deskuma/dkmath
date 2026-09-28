@@ -970,6 +970,26 @@ def cmd_search(args: argparse.Namespace) -> int:
             "target_found": target_found,
             "best_objective": best_row["objective"] if best_row else None,
             "best_seed": best_row["job_seed"] if best_row else None,
+            "best_resolved_seed": (
+                best_resolved_row["job_seed"]
+                if best_resolved_row
+                else None
+            ),
+            "best_resolved_depth": (
+                best_resolved_row.get("required_depth")
+                if best_resolved_row
+                else None
+            ),
+            "best_unresolved_seed": (
+                best_unresolved_row["job_seed"]
+                if best_unresolved_row
+                else None
+            ),
+            "best_unresolved_classification": (
+                best_unresolved_row.get("classification")
+                if best_unresolved_row
+                else None
+            ),
         }
     )
     atomic_json(summary_path, summary)
