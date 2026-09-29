@@ -958,6 +958,183 @@ def replay_parent_exit_path_on_child(
     }
 
 
+def explicit_state_proper_violations(
+    adjacency: dict[int, set[int]],
+    colored: dict[int, int],
+) -> list[dict]:
+    violations = []
+    for u in sorted(colored):
+        for v in sorted(adjacency[u]):
+            if v not in colored or u >= v:
+                continue
+            if colored[u] == colored[v]:
+                violations.append(
+                    {
+                        "edge": [u, v],
+                        "color": colored[u],
+                    }
+                )
+    return violations
+
+
+def repair_maze_from_explicit_state(
+    tri: PlantedTriangulation,
+    *,
+    colored: dict[int, int],
+    remaining: set[int],
+    current: int,
+    max_depth: int,
+    node_limit: int,
+    intermediate_policy: str,
+) -> dict:
+    adjacency = tri.adjacency(include_sea=True)
+    violations = explicit_state_proper_violations(adjacency, colored)
+    invariant_ok = invariant_holds(adjacency, colored, remaining)
+    initial_candidates = safe_candidates(
+        adjacency, colored, remaining, current
+    ) if invariant_ok else []
+
+    base = {
+        "node": current,
+        "max_depth": max_depth,
+        "node_limit": node_limit,
+        "intermediate_policy": intermediate_policy,
+        "proper_state": not violations,
+        "proper_violations": violations,
+        "initial_invariant": invariant_ok,
+        "initial_safe_candidates": initial_candidates,
+        "colored_state": {
+            str(v): color for v, color in sorted(colored.items())
+        },
+        "remaining": sorted(remaining),
+        "blocker_neighbors": sorted(adjacency[current]),
+    }
+    if violations:
+        return {
+            **base,
+            "valid_intervention": False,
+            "invalid_reason": "improper_colored_state",
+            "first_exit_depth": None,
+            "exit_counts": {},
+            "expanded_unique_states": 0,
+            "visited_states": 0,
+            "layers": [],
+        }
+    if not invariant_ok:
+        return {
+            **base,
+            "valid_intervention": False,
+            "invalid_reason": "initial_invariant_broken",
+            "first_exit_depth": None,
+            "exit_counts": {},
+            "expanded_unique_states": 0,
+            "visited_states": 0,
+            "layers": [],
+        }
+
+    root_key = state_key(colored)
+    queue = deque([(dict(colored), 0)])
+    visited = {root_key}
+    generated: dict[int, int] = {0: 1}
+    processed: dict[int, int] = {}
+    exits: dict[int, int] = {}
+    invariant_states: dict[int, int] = {0: 1}
+    moves_examined: dict[int, int] = {}
+    duplicates: dict[int, int] = {}
+    expanded = 0
+    truncated = False
+    first_exit_depth = None
+
+    while queue:
+        state, depth = queue.popleft()
+        processed[depth] = processed.get(depth, 0) + 1
+        if depth >= max_depth:
+            continue
+
+        moves = list(kempe_components(adjacency, state))
+        moves_examined[depth] = moves_examined.get(depth, 0) + len(moves)
+
+        for move in moves:
+            next_state = apply_exchange(state, move)
+            key = state_key(next_state)
+            next_depth = depth + 1
+            if key in visited:
+                duplicates[next_depth] = duplicates.get(next_depth, 0) + 1
+                continue
+
+            visited.add(key)
+            expanded += 1
+            generated[next_depth] = generated.get(next_depth, 0) + 1
+
+            if expanded > node_limit:
+                truncated = True
+                queue.clear()
+                break
+
+            next_invariant = invariant_holds(
+                adjacency, next_state, remaining
+            )
+            if next_invariant:
+                invariant_states[next_depth] = (
+                    invariant_states.get(next_depth, 0) + 1
+                )
+                candidates = safe_candidates(
+                    adjacency, next_state, remaining, current
+                )
+            else:
+                candidates = []
+
+            if candidates:
+                exits[next_depth] = exits.get(next_depth, 0) + 1
+                if first_exit_depth is None:
+                    first_exit_depth = next_depth
+                continue
+
+            if intermediate_policy == "strict" and not next_invariant:
+                continue
+            queue.append((next_state, next_depth))
+
+        if truncated:
+            break
+
+    layers = [
+        {
+            "depth": depth,
+            "processed_states": processed.get(depth, 0),
+            "generated_states": generated.get(depth, 0),
+            "invariant_states": invariant_states.get(depth, 0),
+            "exit_states": exits.get(depth, 0),
+            "duplicate_transitions": duplicates.get(depth, 0),
+            "moves_examined_from_layer": moves_examined.get(depth, 0),
+        }
+        for depth in range(0, max_depth + 1)
+    ]
+    root_components = [
+        {
+            "colors": [a, b],
+            "component": sorted(component),
+            "size": len(component),
+        }
+        for a, b, component in kempe_components(adjacency, colored)
+    ]
+
+    return {
+        **base,
+        "valid_intervention": True,
+        "invalid_reason": None,
+        "truncated": truncated,
+        "first_exit_depth": first_exit_depth,
+        "exit_counts": {
+            str(depth): count for depth, count in sorted(exits.items())
+        },
+        "expanded_unique_states": expanded,
+        "visited_states": len(visited),
+        "initial_kempe_component_count": len(root_components),
+        "initial_kempe_components": root_components,
+        "layers": layers,
+    }
+
+
 def evaluate(
     tri: PlantedTriangulation,
     max_depth: int,
@@ -1803,6 +1980,136 @@ def cmd_search(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_intervention_compare(args: argparse.Namespace) -> int:
+    parent_payload = json.loads(
+        Path(args.parent).read_text(encoding="utf-8")
+    )
+    child_payload = json.loads(
+        Path(args.child).read_text(encoding="utf-8")
+    )
+    parent_tri = triangulation_from_witness(parent_payload)
+    child_tri = triangulation_from_witness(child_payload)
+
+    parent_prefix = restore_state_before_step(
+        parent_tri,
+        args.step,
+        max_repair_depth=args.prefix_depth,
+        node_limit=args.node_limit,
+        intermediate_policy=args.intermediate_policy,
+    )
+    child_prefix = restore_state_before_step(
+        child_tri,
+        args.step,
+        max_repair_depth=args.prefix_depth,
+        node_limit=args.node_limit,
+        intermediate_policy=args.intermediate_policy,
+    )
+
+    if parent_prefix["node"] != child_prefix["node"]:
+        raise SystemExit("parent and child blocker nodes differ")
+    if parent_prefix["remaining"] != child_prefix["remaining"]:
+        raise SystemExit("parent and child remaining sets differ")
+
+    current = parent_prefix["node"]
+    remaining = set(parent_prefix["remaining"])
+    parent_state = dict(parent_prefix["colored"])
+    child_state = dict(child_prefix["colored"])
+
+    cases = [
+        ("Pgraph_Pstate", parent_tri, parent_state),
+        ("Pgraph_Cstate", parent_tri, child_state),
+        ("Cgraph_Pstate", child_tri, parent_state),
+        ("Cgraph_Cstate", child_tri, child_state),
+    ]
+
+    out = Path(args.output)
+    out.mkdir(parents=True, exist_ok=True)
+
+    profiles = {}
+    for name, tri, state in cases:
+        profile = repair_maze_from_explicit_state(
+            tri,
+            colored=state,
+            remaining=remaining,
+            current=current,
+            max_depth=args.max_depth,
+            node_limit=args.node_limit,
+            intermediate_policy=args.intermediate_policy,
+        )
+        profiles[name] = profile
+        atomic_json(out / f"{name}.json", profile)
+
+    p_edges = parent_tri.edges()
+    c_edges = child_tri.edges()
+    state_keys = sorted(
+        set(parent_state) | set(child_state)
+    )
+    colored_diff = [
+        {
+            "vertex": v,
+            "parent": parent_state.get(v),
+            "child": child_state.get(v),
+        }
+        for v in state_keys
+        if parent_state.get(v) != child_state.get(v)
+    ]
+
+    summary = {
+        "parent": args.parent,
+        "child": args.child,
+        "parent_seed": parent_payload.get("job_seed"),
+        "child_seed": child_payload.get("job_seed"),
+        "step": args.step,
+        "node": current,
+        "max_depth": args.max_depth,
+        "intermediate_policy": args.intermediate_policy,
+        "edge_removed": [
+            list(edge) for edge in sorted(p_edges - c_edges)
+        ],
+        "edge_added": [
+            list(edge) for edge in sorted(c_edges - p_edges)
+        ],
+        "colored_state_diff": colored_diff,
+        "cases": {
+            name: {
+                "valid_intervention": profile["valid_intervention"],
+                "invalid_reason": profile["invalid_reason"],
+                "proper_violations": profile["proper_violations"],
+                "initial_invariant": profile["initial_invariant"],
+                "first_exit_depth": profile["first_exit_depth"],
+                "exit_counts": profile["exit_counts"],
+                "expanded_unique_states": (
+                    profile["expanded_unique_states"]
+                ),
+                "initial_kempe_component_count": (
+                    profile.get("initial_kempe_component_count")
+                ),
+            }
+            for name, profile in profiles.items()
+        },
+    }
+
+    pp = profiles["Pgraph_Pstate"]
+    pc = profiles["Pgraph_Cstate"]
+    cc = profiles["Cgraph_Cstate"]
+    cp = profiles["Cgraph_Pstate"]
+    summary["state_only_matches_child_exit_depth"] = (
+        pc["valid_intervention"]
+        and pc["first_exit_depth"] == cc["first_exit_depth"]
+    )
+    summary["state_only_raises_parent_exit_depth"] = (
+        pc["valid_intervention"]
+        and pp["first_exit_depth"] is not None
+        and pc["first_exit_depth"] is not None
+        and pc["first_exit_depth"] > pp["first_exit_depth"]
+    )
+    summary["topology_only_valid"] = cp["valid_intervention"]
+
+    atomic_json(out / "comparison.json", summary)
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
 def cmd_exit_compare(args: argparse.Namespace) -> int:
     parent_payload = json.loads(
         Path(args.parent).read_text(encoding="utf-8")
@@ -2238,6 +2545,27 @@ def build_parser() -> argparse.ArgumentParser:
         "--output", default="python/Tromino/results/repair-depth/default"
     )
     search.set_defaults(func=cmd_search)
+
+    intervention = sub.add_parser(
+        "intervention-compare",
+        help="cross parent/child topology and blocker colored state",
+    )
+    intervention.add_argument("parent")
+    intervention.add_argument("child")
+    intervention.add_argument("--step", type=int, default=16)
+    intervention.add_argument("--prefix-depth", type=int, default=10)
+    intervention.add_argument("--max-depth", type=int, default=10)
+    intervention.add_argument("--node-limit", type=int, default=6_000_000)
+    intervention.add_argument(
+        "--intermediate-policy",
+        choices=("strict", "endpoint"),
+        default="endpoint",
+    )
+    intervention.add_argument(
+        "--output",
+        default="python/Tromino/results/repair-depth/intervention-compare",
+    )
+    intervention.set_defaults(func=cmd_intervention_compare)
 
     exit_compare = sub.add_parser(
         "exit-compare",
