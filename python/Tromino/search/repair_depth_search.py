@@ -1980,6 +1980,163 @@ def cmd_search(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_state_subsets(args: argparse.Namespace) -> int:
+    parent_payload = json.loads(
+        Path(args.parent).read_text(encoding="utf-8")
+    )
+    child_payload = json.loads(
+        Path(args.child).read_text(encoding="utf-8")
+    )
+    parent_tri = triangulation_from_witness(parent_payload)
+    child_tri = triangulation_from_witness(child_payload)
+
+    parent_prefix = restore_state_before_step(
+        parent_tri,
+        args.step,
+        max_repair_depth=args.prefix_depth,
+        node_limit=args.node_limit,
+        intermediate_policy=args.intermediate_policy,
+    )
+    child_prefix = restore_state_before_step(
+        child_tri,
+        args.step,
+        max_repair_depth=args.prefix_depth,
+        node_limit=args.node_limit,
+        intermediate_policy=args.intermediate_policy,
+    )
+
+    if parent_prefix["node"] != child_prefix["node"]:
+        raise SystemExit("parent and child blocker nodes differ")
+    if parent_prefix["remaining"] != child_prefix["remaining"]:
+        raise SystemExit("parent and child remaining sets differ")
+
+    parent_state = dict(parent_prefix["colored"])
+    child_state = dict(child_prefix["colored"])
+    current = parent_prefix["node"]
+    remaining = set(parent_prefix["remaining"])
+
+    diff_vertices = sorted(
+        v
+        for v in set(parent_state) | set(child_state)
+        if parent_state.get(v) != child_state.get(v)
+    )
+    if len(diff_vertices) > args.max_differences:
+        raise SystemExit(
+            "too many differing vertices for subset enumeration: "
+            f"{len(diff_vertices)} > {args.max_differences}"
+        )
+
+    out = Path(args.output)
+    out.mkdir(parents=True, exist_ok=True)
+
+    cases = []
+    for mask in range(1 << len(diff_vertices)):
+        changed = [
+            diff_vertices[i]
+            for i in range(len(diff_vertices))
+            if mask & (1 << i)
+        ]
+        state = dict(parent_state)
+        changes = []
+        for v in changed:
+            changes.append(
+                {
+                    "vertex": v,
+                    "parent": parent_state.get(v),
+                    "child": child_state.get(v),
+                }
+            )
+            if v in child_state:
+                state[v] = child_state[v]
+            else:
+                state.pop(v, None)
+
+        profile = repair_maze_from_explicit_state(
+            parent_tri,
+            colored=state,
+            remaining=remaining,
+            current=current,
+            max_depth=args.max_depth,
+            node_limit=args.node_limit,
+            intermediate_policy=args.intermediate_policy,
+        )
+
+        label = "none" if not changed else "-".join(str(v) for v in changed)
+        filename = f"subset-{label}.json"
+        atomic_json(out / filename, profile)
+        cases.append(
+            {
+                "changed_vertices": changed,
+                "changes": changes,
+                "profile_file": filename,
+                "valid_intervention": profile["valid_intervention"],
+                "invalid_reason": profile["invalid_reason"],
+                "proper_violations": profile["proper_violations"],
+                "initial_invariant": profile["initial_invariant"],
+                "first_exit_depth": profile["first_exit_depth"],
+                "exit_counts": profile["exit_counts"],
+                "expanded_unique_states": (
+                    profile["expanded_unique_states"]
+                ),
+                "initial_kempe_component_count": (
+                    profile.get("initial_kempe_component_count")
+                ),
+            }
+        )
+
+    baseline = next(
+        case for case in cases if not case["changed_vertices"]
+    )
+    full = next(
+        case
+        for case in cases
+        if case["changed_vertices"] == diff_vertices
+    )
+
+    summary = {
+        "parent": args.parent,
+        "child": args.child,
+        "parent_seed": parent_payload.get("job_seed"),
+        "child_seed": child_payload.get("job_seed"),
+        "graph": "parent",
+        "step": args.step,
+        "node": current,
+        "max_depth": args.max_depth,
+        "intermediate_policy": args.intermediate_policy,
+        "diff_vertices": diff_vertices,
+        "difference_count": len(diff_vertices),
+        "subset_count": len(cases),
+        "baseline_first_exit_depth": baseline["first_exit_depth"],
+        "full_child_state_first_exit_depth": full["first_exit_depth"],
+        "cases": cases,
+    }
+
+    valid_cases = [
+        case for case in cases if case["valid_intervention"]
+    ]
+    summary["valid_cases"] = len(valid_cases)
+    summary["invalid_cases"] = len(cases) - len(valid_cases)
+    summary["raising_subsets"] = [
+        case["changed_vertices"]
+        for case in valid_cases
+        if baseline["first_exit_depth"] is not None
+        and case["first_exit_depth"] is not None
+        and case["first_exit_depth"] > baseline["first_exit_depth"]
+    ]
+    summary["minimal_raising_subsets"] = [
+        subset
+        for subset in summary["raising_subsets"]
+        if not any(
+            set(other) < set(subset)
+            for other in summary["raising_subsets"]
+        )
+    ]
+
+    atomic_json(out / "summary.json", summary)
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
 def cmd_intervention_compare(args: argparse.Namespace) -> int:
     parent_payload = json.loads(
         Path(args.parent).read_text(encoding="utf-8")
@@ -2545,6 +2702,31 @@ def build_parser() -> argparse.ArgumentParser:
         "--output", default="python/Tromino/results/repair-depth/default"
     )
     search.set_defaults(func=cmd_search)
+
+    state_subsets = sub.add_parser(
+        "state-subsets",
+        help=(
+            "enumerate partial parent-to-child blocker-state interventions "
+            "on the parent graph"
+        ),
+    )
+    state_subsets.add_argument("parent")
+    state_subsets.add_argument("child")
+    state_subsets.add_argument("--step", type=int, default=16)
+    state_subsets.add_argument("--prefix-depth", type=int, default=10)
+    state_subsets.add_argument("--max-depth", type=int, default=10)
+    state_subsets.add_argument("--node-limit", type=int, default=6_000_000)
+    state_subsets.add_argument("--max-differences", type=int, default=8)
+    state_subsets.add_argument(
+        "--intermediate-policy",
+        choices=("strict", "endpoint"),
+        default="endpoint",
+    )
+    state_subsets.add_argument(
+        "--output",
+        default="python/Tromino/results/repair-depth/state-subsets",
+    )
+    state_subsets.set_defaults(func=cmd_state_subsets)
 
     intervention = sub.add_parser(
         "intervention-compare",
