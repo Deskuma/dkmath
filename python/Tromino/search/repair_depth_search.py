@@ -573,7 +573,35 @@ def unresolved_objective(result: dict) -> tuple[int, int, int, int]:
     )
 
 
+def frontier_expanded(result: dict) -> int:
+    if not result.get("success"):
+        return int(result.get("expanded", 0))
+    lower = result.get("depth_minus_one_result")
+    if not lower or lower.get("success"):
+        return 0
+    info = lower.get("info") or {}
+    return int(info.get("expanded", 0))
+
+
+def frontier_objective(result: dict) -> tuple[int, int, int, int]:
+    if not result.get("success"):
+        return (
+            0,
+            unresolved_objective(result)[0],
+            int(result.get("expanded", 0)),
+            0,
+        )
+    return (
+        1,
+        int(result["required_depth"]),
+        frontier_expanded(result),
+        -int(result.get("repair_moves_total", 0)),
+    )
+
+
 def search_objective(result: dict, mode: str) -> tuple[int, int, int, int]:
+    if mode == "frontier":
+        return frontier_objective(result)
     if mode == "resolved":
         if result["success"]:
             return (
@@ -594,6 +622,15 @@ def search_objective(result: dict, mode: str) -> tuple[int, int, int, int]:
 
 
 def search_energy(result: dict, mode: str) -> float:
+    if mode == "frontier":
+        if result.get("success"):
+            return (
+                5.0
+                + float(result["required_depth"])
+                + 0.1 * math.log1p(float(frontier_expanded(result)))
+                - 0.001 * float(result.get("repair_moves_total", 0))
+            )
+        return float(unresolved_objective(result)[0])
     if mode == "resolved":
         if result["success"]:
             return (
@@ -747,6 +784,8 @@ def one_search_job(job: dict) -> dict:
         "search_score": list(search_objective(traced, objective_mode)),
         "resolved_objective": list(resolved_objective(traced)),
         "unresolved_objective": list(unresolved_objective(traced)),
+        "frontier_expanded": frontier_expanded(traced),
+        "frontier_objective": list(frontier_objective(traced)),
         "classification": traced["classification"],
         "success": traced["success"],
         "required_depth": traced.get("required_depth"),
@@ -828,6 +867,7 @@ def cmd_search(args: argparse.Namespace) -> int:
     best_path = out / "best_witness.json"
     best_resolved_path = out / "best_resolved_witness.json"
     best_unresolved_path = out / "best_unresolved_witness.json"
+    best_frontier_path = out / "best_frontier_witness.json"
     summary_path = out / "summary.json"
     config_path = out / "config.json"
 
@@ -908,6 +948,16 @@ def cmd_search(args: argparse.Namespace) -> int:
         ),
         default=None,
     )
+    best_frontier_row = max(
+        (row for row in rows if row.get("success")),
+        key=lambda row: tuple(
+            row.get(
+                "frontier_objective",
+                frontier_objective(row["witness"]["evaluation"]),
+            )
+        ),
+        default=None,
+    )
 
     print(f"output={out}")
     print(
@@ -966,6 +1016,26 @@ def cmd_search(args: argparse.Namespace) -> int:
                 "best_unresolved_classification": (
                     best_unresolved_row.get("classification")
                     if best_unresolved_row
+                    else None
+                ),
+                "best_frontier_seed": (
+                    best_frontier_row["job_seed"]
+                    if best_frontier_row
+                    else None
+                ),
+                "best_frontier_depth": (
+                    best_frontier_row.get("required_depth")
+                    if best_frontier_row
+                    else None
+                ),
+                "best_frontier_expanded": (
+                    best_frontier_row.get(
+                        "frontier_expanded",
+                        frontier_expanded(
+                            best_frontier_row["witness"]["evaluation"]
+                        ),
+                    )
+                    if best_frontier_row
                     else None
                 ),
             }
@@ -1033,6 +1103,38 @@ def cmd_search(args: argparse.Namespace) -> int:
                         "NEW BEST RESOLVED",
                         f"seed={row['job_seed']}",
                         f"depth={row.get('required_depth')}",
+                        flush=True,
+                    )
+
+                row_frontier = tuple(
+                    row.get(
+                        "frontier_objective",
+                        frontier_objective(row["witness"]["evaluation"]),
+                    )
+                )
+                best_frontier = (
+                    tuple(
+                        best_frontier_row.get(
+                            "frontier_objective",
+                            frontier_objective(
+                                best_frontier_row["witness"]["evaluation"]
+                            ),
+                        )
+                    )
+                    if best_frontier_row
+                    else None
+                )
+                if (
+                    best_frontier_row is None
+                    or row_frontier > best_frontier
+                ):
+                    best_frontier_row = row
+                    atomic_json(best_frontier_path, row["witness"])
+                    print(
+                        "NEW BEST FRONTIER",
+                        f"seed={row['job_seed']}",
+                        f"depth={row.get('required_depth')}",
+                        f"expanded={row.get('frontier_expanded')}",
                         flush=True,
                     )
             else:
@@ -1210,12 +1312,13 @@ def build_parser() -> argparse.ArgumentParser:
     search.add_argument("--cooling", type=float, default=0.9995)
     search.add_argument(
         "--search-objective",
-        choices=("mixed", "resolved"),
+        choices=("mixed", "resolved", "frontier"),
         default="mixed",
         help=(
             "mixed preserves the original hard-state objective; resolved "
             "keeps every solved witness above unresolved states and then "
-            "maximizes verified repair depth"
+            "maximizes verified repair depth; frontier ranks solved states "
+            "by required depth and then by depth-minus-one frontier expansion"
         ),
     )
     search.add_argument(
