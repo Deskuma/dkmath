@@ -1274,3 +1274,69 @@ before repair depth is interpreted.
 
 The main target is the set of minimal valid recoloring subsets that raise the
 first exit depth above nine.
+
+
+### OBS-014 — Single Vertex Recoloring Is Sufficient
+
+Status: recorded on 2026-09-30.
+
+Files:
+
+```text
+python/Tromino/experiments/OBS-014-SingleVertexRecoloringSufficient/
+  README.md
+  summary.json
+```
+
+On the fixed parent W9 graph, the unique minimal valid subset of the blocker
+state differences that raises the first exit depth is:
+
+```text
+{4}
+```
+
+with the single recoloring:
+
+```text
+vertex 4 : 1 -> 0
+```
+
+This alone changes:
+
+```text
+first exit depth: 9 -> 10
+depth-9 exits:     2 -> 0
+depth-10 exits:    4 -> 4
+```
+
+The full-child (0,1) component fusion observed earlier is therefore not
+necessary for the depth jump.
+
+The two parent depth-nine exits are killed differently by the same one-vertex
+change: one path remains executable but fails to open candidate color 0 because
+vertex 4 remains a color-zero blocker neighbor; the other loses a later Kempe
+component after vertex 4 leaves the relevant color pair.
+
+### Next experiment — target-color pin scan
+
+The harness now provides:
+
+```text
+target-pin-scan WITNESS
+```
+
+It keeps the witness graph and blocker state fixed, then recolors each unlocked
+colored blocker neighbor individually to a selected target exit color.
+
+For the current W9 blocker and target color 0, the candidates are the eight
+nonzero unlocked colored neighbors:
+
+```text
+4, 5, 8, 9, 10, 13, 17, 18
+```
+
+Each synthetic state is checked for properness and the Missing-Color invariant.
+
+The experiment asks whether vertex 4 is unique among one-point target-color
+pins, or belongs to a larger family of blocker-neighbor pins that raise the
+first exit depth.
