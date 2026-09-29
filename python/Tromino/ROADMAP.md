@@ -1028,3 +1028,78 @@ unresolved at ceiling 10
 
 and determine whether the known W9 -> W10 flip is unique among all legal
 one-flip moves.
+
+
+### OBS-010 — Unique Ascending Edge in the W9 One-Flip Neighborhood
+
+Status: recorded on 2026-09-29.
+
+Files:
+
+```text
+python/Tromino/experiments/OBS-010-UniqueAscendingEdge/
+  README.md
+  summary.json
+```
+
+The complete legal preserving one-flip neighborhood of the OBS-008 W9 witness
+contains 17 graphs with depth histogram:
+
+```text
+10: 1
+ 9: 0
+ 8: 3
+ 7: 3
+ 6: 6
+ 5: 2
+ 4: 2
+```
+
+The unique ascending edge is:
+
+```text
+[4,21,5,17]
+4-21 -> 5-17
+```
+
+All 17 neighbors retain the same critical restore location:
+
+```text
+node 19 / step 16
+```
+
+so the local flips alter the exchange-state maze depth rather than moving the
+blocker.
+
+The Collatz resemblance is recorded only as a qualitative dynamical analogy:
+local transitions can sharply raise or lower a scalar complexity. No arithmetic
+equivalence is asserted.
+
+### Next experiment — repair-maze parent/child comparison
+
+The harness now provides:
+
+```text
+maze-compare PARENT CHILD
+```
+
+It reconstructs the deterministic restore state immediately before a selected
+step, then explores the Kempe-exchange state graph layer by layer.
+
+Recorded data include:
+
+```text
+generated states per depth
+processed states per depth
+invariant-valid states per depth
+exit states per depth
+duplicate transitions per depth
+Kempe moves examined per depth
+first successful exit depth and path
+prefix repair history
+colored-state difference
+graph edge difference
+blocker-neighbor difference
+```
+
+The next comparison is the unique W9 -> W10 transition at node 19 / step 16.
