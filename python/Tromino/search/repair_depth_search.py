@@ -1464,6 +1464,27 @@ def one_search_job(job: dict) -> dict:
     }
 
 
+def one_component_state_job(job: dict) -> dict:
+    payload = json.loads(Path(str(job["witness"])).read_text(encoding="utf-8"))
+    tri = triangulation_from_witness(payload)
+    colored = {int(k): int(v) for k, v in job["colored_state"].items()}
+    remaining = {int(v) for v in job["remaining"]}
+    profile = repair_maze_from_explicit_state(
+        tri,
+        colored=colored,
+        remaining=remaining,
+        current=int(job["node"]),
+        max_depth=int(job["max_depth"]),
+        node_limit=int(job["node_limit"]),
+        intermediate_policy=str(job["intermediate_policy"]),
+    )
+    return {
+        "index": int(job["index"]),
+        "state_key": str(job["state_key"]),
+        "profile": profile,
+    }
+
+
 def one_recolor_job(job: dict) -> dict:
     payload = json.loads(Path(str(job["witness"])).read_text(encoding="utf-8"))
     tri = triangulation_from_witness(payload)
@@ -2012,6 +2033,225 @@ def cmd_search(args: argparse.Namespace) -> int:
         }
     )
     atomic_json(summary_path, summary)
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
+def cmd_state_component_scan(args: argparse.Namespace) -> int:
+    source = Path(args.witness)
+    payload = json.loads(source.read_text(encoding="utf-8"))
+    tri = triangulation_from_witness(payload)
+
+    prefix = restore_state_before_step(
+        tri,
+        args.step,
+        max_repair_depth=args.prefix_depth,
+        node_limit=args.node_limit,
+        intermediate_policy=args.intermediate_policy,
+    )
+    current = prefix["node"]
+    remaining = set(prefix["remaining"])
+    base_state = dict(prefix["colored"])
+    adjacency = prefix["adjacency"]
+
+    mutable = sorted(
+        v
+        for v in adjacency[current]
+        if v in base_state and v not in LOCKED
+    )
+
+    def projection_key(state: dict[int, int]) -> tuple[int, ...]:
+        return tuple(state[v] for v in mutable)
+
+    def proper_and_invariant(state: dict[int, int]) -> bool:
+        if explicit_state_proper_violations(adjacency, state):
+            return False
+        return invariant_holds(adjacency, state, remaining)
+
+    root_key = projection_key(base_state)
+    states: dict[tuple[int, ...], dict[int, int]] = {
+        root_key: dict(base_state)
+    }
+    queue = deque([root_key])
+    edges: set[tuple[tuple[int, ...], tuple[int, ...]]] = set()
+    truncated = False
+
+    while queue:
+        key = queue.popleft()
+        state = states[key]
+        for v in mutable:
+            old = state[v]
+            for color in COLORS:
+                if color == old:
+                    continue
+                candidate = dict(state)
+                candidate[v] = color
+                if not proper_and_invariant(candidate):
+                    continue
+                next_key = projection_key(candidate)
+                edge = tuple(sorted((key, next_key)))
+                edges.add(edge)
+                if next_key not in states:
+                    if len(states) >= args.state_limit:
+                        truncated = True
+                        continue
+                    states[next_key] = candidate
+                    queue.append(next_key)
+
+    keys = sorted(states)
+    index_of = {key: index for index, key in enumerate(keys)}
+    graph_edges = [
+        [index_of[a], index_of[b]]
+        for a, b in sorted(edges)
+        if a in index_of and b in index_of
+    ]
+
+    degree = [0 for _ in keys]
+    for a, b in graph_edges:
+        degree[a] += 1
+        degree[b] += 1
+
+    jobs = []
+    for index, key in enumerate(keys):
+        state = states[key]
+        jobs.append(
+            {
+                "index": index,
+                "state_key": ",".join(str(x) for x in key),
+                "witness": str(source),
+                "colored_state": {
+                    str(v): int(color)
+                    for v, color in sorted(state.items())
+                },
+                "remaining": sorted(remaining),
+                "node": current,
+                "max_depth": args.max_depth,
+                "node_limit": args.node_limit,
+                "intermediate_policy": args.intermediate_policy,
+            }
+        )
+
+    out = Path(args.output)
+    out.mkdir(parents=True, exist_ok=True)
+
+    rows = []
+    started = time.time()
+    print(
+        f"witness={source} admissible_states={len(jobs)} "
+        f"edges={len(graph_edges)} workers={args.workers}",
+        flush=True,
+    )
+    with ProcessPoolExecutor(max_workers=args.workers) as pool:
+        futures = {
+            pool.submit(one_component_state_job, job): job["index"]
+            for job in jobs
+        }
+        for future in as_completed(futures):
+            row = future.result()
+            rows.append(row)
+            profile = row["profile"]
+            print(
+                "STATE",
+                f"index={row['index']}",
+                f"depth={profile.get('first_exit_depth')}",
+                f"expanded={profile.get('expanded_unique_states')}",
+                flush=True,
+            )
+
+    rows.sort(key=lambda row: row["index"])
+    state_rows = []
+    depth_counts: dict[str, int] = {}
+    for row in rows:
+        index = row["index"]
+        key = keys[index]
+        profile = row["profile"]
+        filename = f"state-{index:03d}.json"
+        atomic_json(out / filename, profile)
+        depth = profile.get("first_exit_depth")
+        depth_key = str(depth) if depth is not None else "unresolved"
+        depth_counts[depth_key] = depth_counts.get(depth_key, 0) + 1
+        state_rows.append(
+            {
+                "index": index,
+                "projection": {
+                    str(v): key[i] for i, v in enumerate(mutable)
+                },
+                "distance_from_baseline": sum(
+                    int(key[i] != root_key[i])
+                    for i in range(len(mutable))
+                ),
+                "degree": degree[index],
+                "first_exit_depth": depth,
+                "exit_counts": profile.get("exit_counts", {}),
+                "expanded_unique_states": profile.get(
+                    "expanded_unique_states", 0
+                ),
+                "profile_file": filename,
+            }
+        )
+
+    baseline_index = index_of[root_key]
+    max_depth_value = max(
+        (
+            row["first_exit_depth"]
+            for row in state_rows
+            if row["first_exit_depth"] is not None
+        ),
+        default=None,
+    )
+    min_depth_value = min(
+        (
+            row["first_exit_depth"]
+            for row in state_rows
+            if row["first_exit_depth"] is not None
+        ),
+        default=None,
+    )
+
+    edge_depth_deltas = []
+    for a, b in graph_edges:
+        da = state_rows[a]["first_exit_depth"]
+        db = state_rows[b]["first_exit_depth"]
+        edge_depth_deltas.append(
+            {
+                "a": a,
+                "b": b,
+                "depth_a": da,
+                "depth_b": db,
+                "delta": (
+                    None if da is None or db is None else db - da
+                ),
+            }
+        )
+
+    summary = {
+        "witness": str(source),
+        "seed": payload.get("job_seed"),
+        "step": args.step,
+        "node": current,
+        "mutable_vertices": mutable,
+        "baseline_projection": {
+            str(v): root_key[i] for i, v in enumerate(mutable)
+        },
+        "baseline_index": baseline_index,
+        "state_limit": args.state_limit,
+        "truncated": truncated,
+        "admissible_states": len(keys),
+        "graph_edges": len(graph_edges),
+        "degree_min": min(degree, default=0),
+        "degree_max": max(degree, default=0),
+        "degree_mean": (
+            statistics.mean(degree) if degree else 0.0
+        ),
+        "depth_counts": depth_counts,
+        "min_first_exit_depth": min_depth_value,
+        "max_first_exit_depth": max_depth_value,
+        "states": state_rows,
+        "edges": graph_edges,
+        "edge_depth_deltas": edge_depth_deltas,
+        "elapsed_seconds": time.time() - started,
+    }
+    atomic_json(out / "summary.json", summary)
     print(json.dumps(summary, indent=2, sort_keys=True))
     return 0
 
@@ -3139,6 +3379,33 @@ def build_parser() -> argparse.ArgumentParser:
         "--output", default="python/Tromino/results/repair-depth/default"
     )
     search.set_defaults(func=cmd_search)
+
+    state_component = sub.add_parser(
+        "state-component-scan",
+        help=(
+            "enumerate the full admissible one-point recolor component and "
+            "evaluate repair depth at every state"
+        ),
+    )
+    state_component.add_argument("witness")
+    state_component.add_argument("--step", type=int, default=16)
+    state_component.add_argument("--prefix-depth", type=int, default=10)
+    state_component.add_argument("--max-depth", type=int, default=10)
+    state_component.add_argument("--node-limit", type=int, default=6_000_000)
+    state_component.add_argument("--state-limit", type=int, default=512)
+    state_component.add_argument(
+        "--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1)
+    )
+    state_component.add_argument(
+        "--intermediate-policy",
+        choices=("strict", "endpoint"),
+        default="endpoint",
+    )
+    state_component.add_argument(
+        "--output",
+        default="python/Tromino/results/repair-depth/state-component-scan",
+    )
+    state_component.set_defaults(func=cmd_state_component_scan)
 
     single_recolor = sub.add_parser(
         "single-recolor-scan",
