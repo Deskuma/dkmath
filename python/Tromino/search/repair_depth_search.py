@@ -722,6 +722,242 @@ def repair_maze_profile(
     }
 
 
+def repair_exit_records(
+    tri: PlantedTriangulation,
+    *,
+    step: int,
+    prefix_depth: int,
+    exit_depth: int,
+    node_limit: int,
+    intermediate_policy: str,
+) -> dict:
+    prefix = restore_state_before_step(
+        tri,
+        step,
+        max_repair_depth=prefix_depth,
+        node_limit=node_limit,
+        intermediate_policy=intermediate_policy,
+    )
+    adjacency = prefix["adjacency"]
+    colored = prefix["colored"]
+    remaining = prefix["remaining"]
+    current = prefix["node"]
+
+    root_key = state_key(colored)
+    queue = deque([(dict(colored), root_key, 0)])
+    visited = {root_key}
+    parent: dict = {}
+    exits: list[dict] = []
+    expanded = 0
+    truncated = False
+
+    while queue:
+        state, key, depth = queue.popleft()
+        if depth >= exit_depth:
+            continue
+
+        for move in kempe_components(adjacency, state):
+            next_state = apply_exchange(state, move)
+            next_key = state_key(next_state)
+            next_depth = depth + 1
+            if next_key in visited:
+                continue
+
+            visited.add(next_key)
+            parent[next_key] = (key, move)
+            expanded += 1
+            if expanded > node_limit:
+                truncated = True
+                queue.clear()
+                break
+
+            invariant_ok = invariant_holds(
+                adjacency, next_state, remaining
+            )
+            candidates = (
+                safe_candidates(
+                    adjacency, next_state, remaining, current
+                )
+                if invariant_ok
+                else []
+            )
+
+            if candidates:
+                if next_depth == exit_depth:
+                    exits.append(
+                        {
+                            "state_key": [
+                                [int(v), int(color)]
+                                for v, color in next_key
+                            ],
+                            "candidates": list(candidates),
+                        }
+                    )
+                continue
+
+            if intermediate_policy == "strict" and not invariant_ok:
+                continue
+            if next_depth < exit_depth:
+                queue.append((next_state, next_key, next_depth))
+
+        if truncated:
+            break
+
+    def path_to(key):
+        path = []
+        while key != root_key:
+            prev, move = parent[key]
+            path.append(
+                {
+                    "colors": [move[0], move[1]],
+                    "component": sorted(move[2]),
+                }
+            )
+            key = prev
+        path.reverse()
+        return path
+
+    for record in exits:
+        key = tuple(
+            (int(v), int(color)) for v, color in record["state_key"]
+        )
+        path = path_to(key)
+        record["path"] = path
+        record["geometry"] = repair_geometry(
+            adjacency,
+            current,
+            [
+                (
+                    item["colors"][0],
+                    item["colors"][1],
+                    frozenset(item["component"]),
+                )
+                for item in path
+            ],
+        )
+
+    return {
+        "step": step,
+        "node": current,
+        "exit_depth": exit_depth,
+        "prefix_depth": prefix_depth,
+        "intermediate_policy": intermediate_policy,
+        "truncated": truncated,
+        "expanded_unique_states": expanded,
+        "visited_states": len(visited),
+        "exit_count": len(exits),
+        "exits": exits,
+        "colored_state": {
+            str(v): color for v, color in sorted(colored.items())
+        },
+        "remaining": sorted(remaining),
+        "prefix_repairs": prefix["repair_log"],
+    }
+
+
+def replay_parent_exit_path_on_child(
+    child_tri: PlantedTriangulation,
+    path: list[dict],
+    *,
+    step: int,
+    prefix_depth: int,
+    node_limit: int,
+    intermediate_policy: str,
+) -> dict:
+    prefix = restore_state_before_step(
+        child_tri,
+        step,
+        max_repair_depth=prefix_depth,
+        node_limit=node_limit,
+        intermediate_policy=intermediate_policy,
+    )
+    adjacency = prefix["adjacency"]
+    state = dict(prefix["colored"])
+    remaining = set(prefix["remaining"])
+    current = prefix["node"]
+    steps = []
+    first_divergence = None
+
+    for index, item in enumerate(path):
+        colors = tuple(int(x) for x in item["colors"])
+        component = frozenset(int(v) for v in item["component"])
+        available = list(kempe_components(adjacency, state))
+        exact = next(
+            (
+                move
+                for move in available
+                if (move[0], move[1]) == colors
+                and move[2] == component
+            ),
+            None,
+        )
+
+        same_pair = [
+            move
+            for move in available
+            if (move[0], move[1]) == colors
+        ]
+        overlaps = [
+            {
+                "component": sorted(move[2]),
+                "size": len(move[2]),
+                "intersection": sorted(move[2] & component),
+                "intersection_size": len(move[2] & component),
+                "contains_parent_component": component <= move[2],
+                "contained_in_parent_component": move[2] <= component,
+            }
+            for move in same_pair
+            if move[2] & component
+        ]
+        overlaps.sort(
+            key=lambda row: (
+                -row["intersection_size"],
+                row["component"],
+            )
+        )
+
+        row = {
+            "index": index,
+            "parent_move": {
+                "colors": list(colors),
+                "component": sorted(component),
+            },
+            "exact_move_available": exact is not None,
+            "same_pair_components": [
+                sorted(move[2]) for move in same_pair
+            ],
+            "overlapping_same_pair_components": overlaps,
+        }
+        steps.append(row)
+
+        if exact is None:
+            first_divergence = row
+            break
+        state = apply_exchange(state, exact)
+
+    invariant_ok = invariant_holds(adjacency, state, remaining)
+    candidates = (
+        safe_candidates(adjacency, state, remaining, current)
+        if invariant_ok
+        else []
+    )
+    return {
+        "step": step,
+        "node": current,
+        "exact_prefix_length": sum(
+            int(row["exact_move_available"]) for row in steps
+        ),
+        "path_length": len(path),
+        "first_divergence": first_divergence,
+        "steps": steps,
+        "state_after_exact_prefix": {
+            str(v): color for v, color in sorted(state.items())
+        },
+        "invariant_after_exact_prefix": invariant_ok,
+        "safe_candidates_after_exact_prefix": candidates,
+    }
+
+
 def evaluate(
     tri: PlantedTriangulation,
     max_depth: int,
@@ -1567,6 +1803,88 @@ def cmd_search(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_exit_compare(args: argparse.Namespace) -> int:
+    parent_payload = json.loads(
+        Path(args.parent).read_text(encoding="utf-8")
+    )
+    child_payload = json.loads(
+        Path(args.child).read_text(encoding="utf-8")
+    )
+    parent_tri = triangulation_from_witness(parent_payload)
+    child_tri = triangulation_from_witness(child_payload)
+
+    parent_exits = repair_exit_records(
+        parent_tri,
+        step=args.step,
+        prefix_depth=args.prefix_depth,
+        exit_depth=args.exit_depth,
+        node_limit=args.node_limit,
+        intermediate_policy=args.intermediate_policy,
+    )
+    child_exits = repair_exit_records(
+        child_tri,
+        step=args.step,
+        prefix_depth=args.prefix_depth,
+        exit_depth=args.exit_depth,
+        node_limit=args.node_limit,
+        intermediate_policy=args.intermediate_policy,
+    )
+
+    comparisons = []
+    for index, exit_record in enumerate(parent_exits["exits"]):
+        replay = replay_parent_exit_path_on_child(
+            child_tri,
+            exit_record["path"],
+            step=args.step,
+            prefix_depth=args.prefix_depth,
+            node_limit=args.node_limit,
+            intermediate_policy=args.intermediate_policy,
+        )
+        comparisons.append(
+            {
+                "parent_exit_index": index,
+                "parent_candidates": exit_record["candidates"],
+                "parent_path": exit_record["path"],
+                "parent_geometry": exit_record["geometry"],
+                "child_replay": replay,
+            }
+        )
+
+    out = Path(args.output)
+    out.mkdir(parents=True, exist_ok=True)
+    atomic_json(out / "parent-exits.json", parent_exits)
+    atomic_json(out / "child-exits.json", child_exits)
+
+    summary = {
+        "parent": args.parent,
+        "child": args.child,
+        "parent_seed": parent_payload.get("job_seed"),
+        "child_seed": child_payload.get("job_seed"),
+        "step": args.step,
+        "exit_depth": args.exit_depth,
+        "parent_exit_count": parent_exits["exit_count"],
+        "child_exit_count": child_exits["exit_count"],
+        "parent_truncated": parent_exits["truncated"],
+        "child_truncated": child_exits["truncated"],
+        "parent_exit_replays_on_child": comparisons,
+        "all_parent_exits_diverge_on_child": all(
+            item["child_replay"]["first_divergence"] is not None
+            for item in comparisons
+        ),
+        "first_divergence_indices": [
+            (
+                item["child_replay"]["first_divergence"]["index"]
+                if item["child_replay"]["first_divergence"] is not None
+                else None
+            )
+            for item in comparisons
+        ],
+    }
+    atomic_json(out / "comparison.json", summary)
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
 def cmd_maze_compare(args: argparse.Namespace) -> int:
     parent_payload = json.loads(
         Path(args.parent).read_text(encoding="utf-8")
@@ -1920,6 +2238,27 @@ def build_parser() -> argparse.ArgumentParser:
         "--output", default="python/Tromino/results/repair-depth/default"
     )
     search.set_defaults(func=cmd_search)
+
+    exit_compare = sub.add_parser(
+        "exit-compare",
+        help="extract parent exits and replay their Kempe paths on a child",
+    )
+    exit_compare.add_argument("parent")
+    exit_compare.add_argument("child")
+    exit_compare.add_argument("--step", type=int, default=16)
+    exit_compare.add_argument("--prefix-depth", type=int, default=10)
+    exit_compare.add_argument("--exit-depth", type=int, default=9)
+    exit_compare.add_argument("--node-limit", type=int, default=6_000_000)
+    exit_compare.add_argument(
+        "--intermediate-policy",
+        choices=("strict", "endpoint"),
+        default="endpoint",
+    )
+    exit_compare.add_argument(
+        "--output",
+        default="python/Tromino/results/repair-depth/exit-compare",
+    )
+    exit_compare.set_defaults(func=cmd_exit_compare)
 
     maze = sub.add_parser(
         "maze-compare",
