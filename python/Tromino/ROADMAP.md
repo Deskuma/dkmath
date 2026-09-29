@@ -968,3 +968,63 @@ Promote the result if either:
 
 The search summary now also records the best frontier seed/depth/expanded fields
 for both periodic and final summaries.
+
+
+### OBS-009 — Single-Flip Depth Jump Nine to Ten
+
+Status: recorded on 2026-09-29.
+
+Files:
+
+```text
+python/Tromino/experiments/OBS-009-SingleFlipDepthJumpNineToTen/
+  README.md
+  summary.json
+```
+
+Starting from the OBS-008 frontier-amplified W9 witness, seed `12000006`
+reaches replay-verified depth ten after one accepted preserving diagonal flip:
+
+```text
+[4,21,5,17]
+```
+
+which replaces diagonal `4-21` by `5-17`.
+
+Replay:
+
+```text
+depth 8  = depth_limited, expanded 264302
+depth 9  = depth_limited, expanded 279278
+depth 10 = solved
+```
+
+The critical depth-ten repair still has graph radius two.
+
+Harness-relative statement:
+
+```text
+D_endpoint^H(G_12000006) = 10
+```
+
+### Next experiment — complete one-flip neighborhood of W9
+
+A new `neighbors` subcommand enumerates every legal
+planted-color-preserving one-flip neighbor of a saved witness and evaluates
+each under the repair harness.
+
+For the OBS-008 W9 frontier witness, the current graph has exactly 17 legal
+preserving one-flip neighbors. The known depth-raising move
+`[4,21,5,17]` is among them.
+
+The experiment should classify the complete local neighborhood:
+
+```text
+depth < 9
+depth = 9
+depth = 10
+unresolved at ceiling 10
+```
+
+and determine whether the known W9 -> W10 flip is unique among all legal
+one-flip moves.
