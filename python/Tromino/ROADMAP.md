@@ -1340,3 +1340,70 @@ Each synthetic state is checked for properness and the Missing-Color invariant.
 The experiment asks whether vertex 4 is unique among one-point target-color
 pins, or belongs to a larger family of blocker-neighbor pins that raise the
 first exit depth.
+
+
+### OBS-015 — Unique Proper Target-Color Pin Site
+
+Status: recorded on 2026-09-30.
+
+Files:
+
+```text
+python/Tromino/experiments/OBS-015-UniqueProperTargetPin/
+  README.md
+  summary.json
+```
+
+For target color 0 at blocker node 19, the tested nonzero unlocked neighbors
+were:
+
+```text
+4, 5, 8, 9, 10, 13, 17, 18
+```
+
+Only vertex 4 can be recolored to 0 while preserving proper coloring.
+That unique valid target-zero pin raises the first exit depth from 9 to 10.
+
+The other seven candidates are rejected before maze dynamics because they are
+adjacent to already-colored zero vertices.
+
+Therefore the current uniqueness is a feasibility uniqueness, not yet a
+dynamical comparison among several valid target-color pins.
+
+### Next experiment — all proper one-point recolorings
+
+The harness now provides:
+
+```text
+single-recolor-scan WITNESS
+```
+
+It enumerates every statically proper alternative color for every unlocked
+colored blocker neighbor, then evaluates each synthetic state.
+
+This broadens the question from:
+
+```text
+which neighbor can be pinned to exit color 0?
+```
+
+to:
+
+```text
+which proper one-point recolorings raise, preserve, or lower repair depth?
+```
+
+For the current W9 blocker the statically proper alternatives include:
+
+```text
+4  : 1 -> 0,2
+5  : 3 -> 2
+9  : 1 -> 2
+10 : 1 -> 2
+13 : 3 -> 1,2
+14 : 0 -> 1,2
+15 : 0 -> 2
+17 : 3 -> 2
+```
+
+Vertices 8, 12, and 18 have no proper alternative color.
