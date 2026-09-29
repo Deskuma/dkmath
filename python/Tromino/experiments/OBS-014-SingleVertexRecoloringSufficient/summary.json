@@ -1,0 +1,35 @@
+{
+  "observation": "OBS-014-SingleVertexRecoloringIsSufficient",
+  "date": "2026-09-30",
+  "source_directory": "python/Tromino/results/repair-depth/w9-w10-state-subsets-v24",
+  "baseline": {
+    "first_exit_depth": 9,
+    "depth9_exits": 2,
+    "depth10_exits": 4
+  },
+  "subset_4": {
+    "change": "vertex 4: 1 -> 0",
+    "valid": true,
+    "first_exit_depth": 10,
+    "depth9_exits": 0,
+    "depth10_exits": 4,
+    "expanded_unique_states": 419795
+  },
+  "subset_17": {
+    "change": "vertex 17: 3 -> 1",
+    "valid": false,
+    "reason": "edge 4-17 becomes monochromatic color 1"
+  },
+  "subset_4_17": {
+    "valid": true,
+    "first_exit_depth": 10,
+    "depth9_exits": 0,
+    "depth10_exits": 4
+  },
+  "minimal_raising_subsets": [[4]],
+  "full_child_01_component_fusion_is_necessary": false,
+  "exit0_mechanism": "target-color occupancy remains at vertex 4 after all nine parent moves",
+  "exit1_mechanism": "later parent (1,3) Kempe component splits after vertex 4 leaves color pair",
+  "next_experiment": "scan all unlocked colored blocker neighbors pinned individually to target exit color 0",
+  "status": "observation_only"
+}
