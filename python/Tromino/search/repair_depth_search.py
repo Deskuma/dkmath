@@ -1464,6 +1464,42 @@ def one_search_job(job: dict) -> dict:
     }
 
 
+def one_recolor_job(job: dict) -> dict:
+    payload = json.loads(Path(str(job["witness"])).read_text(encoding="utf-8"))
+    tri = triangulation_from_witness(payload)
+    prefix = restore_state_before_step(
+        tri,
+        int(job["step"]),
+        max_repair_depth=int(job["prefix_depth"]),
+        node_limit=int(job["node_limit"]),
+        intermediate_policy=str(job["intermediate_policy"]),
+    )
+    current = prefix["node"]
+    remaining = set(prefix["remaining"])
+    state = dict(prefix["colored"])
+    vertex = int(job["vertex"])
+    new_color = int(job["new_color"])
+    old_color = state[vertex]
+    state[vertex] = new_color
+
+    profile = repair_maze_from_explicit_state(
+        tri,
+        colored=state,
+        remaining=remaining,
+        current=current,
+        max_depth=int(job["max_depth"]),
+        node_limit=int(job["node_limit"]),
+        intermediate_policy=str(job["intermediate_policy"]),
+    )
+    return {
+        "index": int(job["index"]),
+        "vertex": vertex,
+        "old_color": old_color,
+        "new_color": new_color,
+        "profile": profile,
+    }
+
+
 def one_neighbor_job(job: dict) -> dict:
     payload = json.loads(Path(str(job["witness"])).read_text(encoding="utf-8"))
     tri = triangulation_from_witness(payload)
@@ -1976,6 +2012,242 @@ def cmd_search(args: argparse.Namespace) -> int:
         }
     )
     atomic_json(summary_path, summary)
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
+def cmd_single_recolor_scan(args: argparse.Namespace) -> int:
+    source = Path(args.witness)
+    payload = json.loads(source.read_text(encoding="utf-8"))
+    tri = triangulation_from_witness(payload)
+
+    prefix = restore_state_before_step(
+        tri,
+        args.step,
+        max_repair_depth=args.prefix_depth,
+        node_limit=args.node_limit,
+        intermediate_policy=args.intermediate_policy,
+    )
+    current = prefix["node"]
+    remaining = set(prefix["remaining"])
+    base_state = dict(prefix["colored"])
+    adjacency = prefix["adjacency"]
+
+    baseline = repair_maze_from_explicit_state(
+        tri,
+        colored=base_state,
+        remaining=remaining,
+        current=current,
+        max_depth=args.max_depth,
+        node_limit=args.node_limit,
+        intermediate_policy=args.intermediate_policy,
+    )
+    if not baseline["valid_intervention"]:
+        raise SystemExit("baseline blocker state is invalid")
+    if baseline["first_exit_depth"] is None:
+        raise SystemExit("baseline has no exit within --max-depth")
+
+    baseline_exits = repair_exit_records(
+        tri,
+        step=args.step,
+        prefix_depth=args.prefix_depth,
+        exit_depth=baseline["first_exit_depth"],
+        node_limit=args.node_limit,
+        intermediate_policy=args.intermediate_policy,
+    )
+    baseline_exit_colors = sorted(
+        {
+            color
+            for record in baseline_exits["exits"]
+            for color in record["candidates"]
+        }
+    )
+
+    colored_neighbors = sorted(
+        v
+        for v in adjacency[current]
+        if v in base_state and v not in LOCKED
+    )
+
+    jobs = []
+    skipped_by_properness = []
+    index = 0
+    for v in colored_neighbors:
+        neighbor_colors = {
+            base_state[u]
+            for u in adjacency[v]
+            if u in base_state
+        }
+        for new_color in COLORS:
+            if new_color == base_state[v]:
+                continue
+            if new_color in neighbor_colors:
+                skipped_by_properness.append(
+                    {
+                        "vertex": v,
+                        "old_color": base_state[v],
+                        "new_color": new_color,
+                        "reason": "adjacent_same_color",
+                    }
+                )
+                continue
+            jobs.append(
+                {
+                    "index": index,
+                    "witness": str(source),
+                    "step": args.step,
+                    "prefix_depth": args.prefix_depth,
+                    "max_depth": args.max_depth,
+                    "node_limit": args.node_limit,
+                    "intermediate_policy": args.intermediate_policy,
+                    "vertex": v,
+                    "new_color": new_color,
+                }
+            )
+            index += 1
+
+    out = Path(args.output)
+    out.mkdir(parents=True, exist_ok=True)
+    atomic_json(out / "baseline.json", baseline)
+    atomic_json(out / "baseline-exits.json", baseline_exits)
+
+    touch_lookup = {}
+    for v in colored_neighbors:
+        touch_lookup[v] = [
+            {
+                "exit_index": exit_index,
+                "first_touch_move": next(
+                    (
+                        move_index
+                        for move_index, move in enumerate(record["path"])
+                        if v in move["component"]
+                    ),
+                    None,
+                ),
+            }
+            for exit_index, record in enumerate(baseline_exits["exits"])
+        ]
+
+    rows = []
+    started = time.time()
+    print(
+        f"witness={source} proper_single_recolors={len(jobs)} "
+        f"workers={args.workers}",
+        flush=True,
+    )
+    with ProcessPoolExecutor(max_workers=args.workers) as pool:
+        futures = {
+            pool.submit(one_recolor_job, job): job["index"]
+            for job in jobs
+        }
+        for future in as_completed(futures):
+            row = future.result()
+            rows.append(row)
+            profile = row["profile"]
+            print(
+                "RECOLOR",
+                f"vertex={row['vertex']}",
+                f"{row['old_color']}->{row['new_color']}",
+                f"valid={profile['valid_intervention']}",
+                f"depth={profile.get('first_exit_depth')}",
+                flush=True,
+            )
+
+    rows.sort(key=lambda row: row["index"])
+    cases = []
+    for row in rows:
+        profile = row["profile"]
+        filename = (
+            f"recolor-{row['vertex']}-"
+            f"{row['old_color']}-to-{row['new_color']}.json"
+        )
+        atomic_json(out / filename, profile)
+        cases.append(
+            {
+                "vertex": row["vertex"],
+                "old_color": row["old_color"],
+                "new_color": row["new_color"],
+                "is_baseline_exit_color": (
+                    row["new_color"] in baseline_exit_colors
+                ),
+                "profile_file": filename,
+                "valid_intervention": profile["valid_intervention"],
+                "invalid_reason": profile["invalid_reason"],
+                "proper_violations": profile["proper_violations"],
+                "initial_invariant": profile["initial_invariant"],
+                "first_exit_depth": profile["first_exit_depth"],
+                "exit_counts": profile["exit_counts"],
+                "expanded_unique_states": (
+                    profile["expanded_unique_states"]
+                ),
+                "initial_kempe_component_count": (
+                    profile.get("initial_kempe_component_count")
+                ),
+                "baseline_exit_path_touch": touch_lookup[row["vertex"]],
+            }
+        )
+
+    valid_cases = [case for case in cases if case["valid_intervention"]]
+    baseline_depth = baseline["first_exit_depth"]
+    raising = [
+        case
+        for case in valid_cases
+        if case["first_exit_depth"] is not None
+        and case["first_exit_depth"] > baseline_depth
+    ]
+    same = [
+        case
+        for case in valid_cases
+        if case["first_exit_depth"] == baseline_depth
+    ]
+    lowering = [
+        case
+        for case in valid_cases
+        if case["first_exit_depth"] is not None
+        and case["first_exit_depth"] < baseline_depth
+    ]
+    unresolved = [
+        case
+        for case in valid_cases
+        if case["first_exit_depth"] is None
+    ]
+
+    summary = {
+        "witness": str(source),
+        "seed": payload.get("job_seed"),
+        "step": args.step,
+        "node": current,
+        "baseline_first_exit_depth": baseline_depth,
+        "baseline_exit_colors": baseline_exit_colors,
+        "baseline_exit_count_at_first_depth": baseline_exits["exit_count"],
+        "colored_unlocked_neighbors": colored_neighbors,
+        "proper_single_recolor_candidates": len(jobs),
+        "skipped_by_static_properness": skipped_by_properness,
+        "cases": cases,
+        "raising_recolors": [
+            [case["vertex"], case["old_color"], case["new_color"]]
+            for case in raising
+        ],
+        "same_depth_recolors": [
+            [case["vertex"], case["old_color"], case["new_color"]]
+            for case in same
+        ],
+        "lowering_recolors": [
+            [case["vertex"], case["old_color"], case["new_color"]]
+            for case in lowering
+        ],
+        "unresolved_recolors": [
+            [case["vertex"], case["old_color"], case["new_color"]]
+            for case in unresolved
+        ],
+        "invalid_after_invariant_check": [
+            [case["vertex"], case["old_color"], case["new_color"]]
+            for case in cases
+            if not case["valid_intervention"]
+        ],
+        "elapsed_seconds": time.time() - started,
+    }
+    atomic_json(out / "summary.json", summary)
     print(json.dumps(summary, indent=2, sort_keys=True))
     return 0
 
@@ -2867,6 +3139,32 @@ def build_parser() -> argparse.ArgumentParser:
         "--output", default="python/Tromino/results/repair-depth/default"
     )
     search.set_defaults(func=cmd_search)
+
+    single_recolor = sub.add_parser(
+        "single-recolor-scan",
+        help=(
+            "evaluate every statically proper one-vertex recoloring of "
+            "unlocked colored blocker neighbors"
+        ),
+    )
+    single_recolor.add_argument("witness")
+    single_recolor.add_argument("--step", type=int, default=16)
+    single_recolor.add_argument("--prefix-depth", type=int, default=10)
+    single_recolor.add_argument("--max-depth", type=int, default=10)
+    single_recolor.add_argument("--node-limit", type=int, default=6_000_000)
+    single_recolor.add_argument(
+        "--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1)
+    )
+    single_recolor.add_argument(
+        "--intermediate-policy",
+        choices=("strict", "endpoint"),
+        default="endpoint",
+    )
+    single_recolor.add_argument(
+        "--output",
+        default="python/Tromino/results/repair-depth/single-recolor-scan",
+    )
+    single_recolor.set_defaults(func=cmd_single_recolor_scan)
 
     target_pin = sub.add_parser(
         "target-pin-scan",
