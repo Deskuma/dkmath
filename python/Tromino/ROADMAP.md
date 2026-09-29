@@ -1103,3 +1103,59 @@ blocker-neighbor difference
 ```
 
 The next comparison is the unique W9 -> W10 transition at node 19 / step 16.
+
+
+### OBS-011 — Preconditioning Repair Deletes the Depth-Nine Exits
+
+Status: recorded on 2026-09-29.
+
+Files:
+
+```text
+python/Tromino/experiments/OBS-011-PreconditioningRepairDeletesDepthNineExits/
+  README.md
+  summary.json
+```
+
+Direct repair-maze comparison across the unique W9 -> W10 flip shows:
+
+```text
+parent first exit depth = 9
+child first exit depth  = 10
+
+depth 9 exits:
+  parent = 2
+  child  = 0
+```
+
+The child exchange-state maze is smaller overall, so the depth increase is
+best described as shallow-exit annihilation rather than maze growth.
+
+The diagonal flip does not change blocker node 19 adjacency. Instead it induces
+an earlier repair at step 14 / node 17, changing colors at vertices 4 and 17
+before the solver reaches node 19. This reconnects several Kempe components,
+including the parent (0,1) components `{4}` and
+`{8,9,10,11,12,15}`.
+
+### Next experiment — replay both parent depth-nine exits on the child
+
+The harness now provides:
+
+```text
+exit-compare PARENT CHILD
+```
+
+It exhaustively extracts all parent exits at a chosen repair depth, reconstructs
+their exact Kempe paths, and attempts to replay those paths against the child
+blocker state.
+
+For each parent path it records the first exact move that is no longer
+available in the child, together with overlapping child components of the same
+color pair.
+
+Primary question:
+
+```text
+Do both parent depth-nine exits die at the same early component
+reconnection, or at distinct obstructions?
+```
