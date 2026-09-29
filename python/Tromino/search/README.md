@@ -605,3 +605,61 @@ wall-deepening mechanism becomes especially sharp:
 
 If the two paths diverge for different reasons, keep the two obstructions
 separate rather than forcing a single-gadget explanation.
+
+
+## Topology/state intervention after OBS-012
+
+OBS-012 showed that both parent depth-nine exits fail in the child because
+their required (0,1) Kempe components are enlarged through vertices 4 and 17.
+
+The next question is sufficiency: is the **child blocker colored state** enough
+to force the deeper repair maze even if the graph topology is reverted to the
+parent W9 graph?
+
+The new command is:
+
+    intervention-compare
+
+Run:
+
+    mkdir -p python/Tromino/results/repair-depth/w9-w10-intervention-v24
+
+    python3 python/Tromino/search/repair_depth_search.py intervention-compare \
+      python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json \
+      python/Tromino/results/repair-depth/seeded-w9-frontier2-d10-v24/best_frontier_witness.json \
+      --step 16 \
+      --prefix-depth 10 \
+      --max-depth 10 \
+      --node-limit 6000000 \
+      --intermediate-policy endpoint \
+      --output python/Tromino/results/repair-depth/w9-w10-intervention-v24
+
+Outputs:
+
+    Pgraph_Pstate.json
+    Pgraph_Cstate.json
+    Cgraph_Pstate.json
+    Cgraph_Cstate.json
+    comparison.json
+
+Interpretation:
+
+    Pgraph + Pstate = real W9 blocker state
+    Cgraph + Cstate = real W10 blocker state
+    Pgraph + Cstate = state-only intervention
+    Cgraph + Pstate = topology-only intervention, only if proper/valid
+
+The command checks each synthetic state before exploration. An improper crossed
+coloring is reported as an invalid intervention rather than assigned a repair
+depth.
+
+The decisive field is:
+
+    state_only_raises_parent_exit_depth
+
+and, more strongly:
+
+    state_only_matches_child_exit_depth
+
+If both are true with first exit depth ten, then the preconditioned colored
+state is sufficient to reproduce the depth jump on the parent topology.
