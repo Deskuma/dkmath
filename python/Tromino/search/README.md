@@ -548,3 +548,60 @@ Kempe-component branching structure.
 This is the first direct attempt to turn the Collatz-like qualitative picture
 into a concrete discrete dynamical-state comparison. It remains an algorithmic
 experiment, not a claim of arithmetic equivalence with the Collatz map.
+
+
+## Parent depth-nine exit replay after OBS-011
+
+OBS-011 showed that the W9 parent has exactly two exits at depth nine while the
+W10 child has none, despite the child having a smaller exchange-state maze.
+
+The new command:
+
+    exit-compare
+
+extracts every parent exit at a selected depth and replays its exact Kempe
+sequence against the child blocker state.
+
+Run:
+
+    mkdir -p python/Tromino/results/repair-depth/w9-w10-exit-compare-v24
+
+    python3 python/Tromino/search/repair_depth_search.py exit-compare \
+      python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json \
+      python/Tromino/results/repair-depth/seeded-w9-frontier2-d10-v24/best_frontier_witness.json \
+      --step 16 \
+      --prefix-depth 10 \
+      --exit-depth 9 \
+      --node-limit 6000000 \
+      --intermediate-policy endpoint \
+      --output python/Tromino/results/repair-depth/w9-w10-exit-compare-v24
+
+Outputs:
+
+    parent-exits.json
+    child-exits.json
+    comparison.json
+
+Expected baseline:
+
+    parent exit count = 2
+    child exit count  = 0
+
+For each parent exit, `comparison.json` records:
+
+    complete parent Kempe path
+    first unavailable exact move in the child
+    same-color-pair child components at that point
+    overlap with the parent component
+    exact-prefix length before divergence
+
+If both parent paths fail immediately for the same merged component, the current
+wall-deepening mechanism becomes especially sharp:
+
+    early preconditioning repair
+    -> component merge
+    -> both shallow exits deleted
+    -> first exit moves from depth 9 to depth 10
+
+If the two paths diverge for different reasons, keep the two obstructions
+separate rather than forcing a single-gadget explanation.
