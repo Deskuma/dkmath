@@ -1,0 +1,44 @@
+{
+  "observation": "OBS-011-PreconditioningRepairDeletesDepthNineExits",
+  "date": "2026-09-29",
+  "source_directory": "python/Tromino/results/repair-depth/w9-w10-maze-compare-v24",
+  "parent": {
+    "seed": 11000009,
+    "required_depth": 9,
+    "first_exit_depth": 9,
+    "expanded_unique_states": 419838,
+    "initial_kempe_component_count": 22
+  },
+  "child": {
+    "seed": 12000006,
+    "required_depth": 10,
+    "first_exit_depth": 10,
+    "expanded_unique_states": 279935,
+    "initial_kempe_component_count": 21
+  },
+  "exit_counts": {
+    "depth9": {"parent": 2, "child": 0},
+    "depth10": {"parent": 4, "child": 5}
+  },
+  "graph_delta": {
+    "removed_edge": [4,21],
+    "added_edge": [5,17],
+    "blocker_neighbors_unchanged": true
+  },
+  "preconditioning": {
+    "new_child_repair_step": 14,
+    "new_child_repair_node": 17,
+    "move": {"colors": [0,1], "component": [4]},
+    "colored_state_diff": {
+      "4": {"parent": 1, "child": 0},
+      "17": {"parent": 3, "child": 1}
+    }
+  },
+  "salient_component_change": {
+    "parent_01_components": [[4],[8,9,10,11,12,15]],
+    "child_01_component": [4,8,9,10,11,12,15,17]
+  },
+  "mechanism_candidate": "early repair induction -> component reconnection -> depth-nine exit annihilation",
+  "next_experiment": "extract both parent depth-nine exits and replay their moves against the child blocker state",
+  "status": "observation_only"
+}
