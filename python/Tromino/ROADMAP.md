@@ -809,3 +809,87 @@ for a recursive wall-deepening gadget.
 
 If this bounded local campaign does not reach ten, enlarge the local search
 budget before returning to fresh random planted starts.
+
+
+### OBS-007 — Stable Depth-Nine Basin under Naive Seeded Objective
+
+Status: recorded on 2026-09-29.
+
+Files:
+
+```text
+python/Tromino/experiments/OBS-007-StableDepthNineBasin/
+  README.md
+  summary.json
+```
+
+The first W9-seeded local campaign completed 64/64 jobs with:
+
+```text
+mean resolved depth = 9
+max resolved depth  = 9
+target depth 10     = not found
+```
+
+The old resolved objective selected seed `10000057` because it increased
+repair count and total repair moves, but its critical depth-eight frontier
+expanded only `194765` states, versus `202071` for the original OBS-006 W9
+seed.
+
+Thus the selected descendant was globally busier but not harder at the
+critical wall.
+
+The next search objective is therefore the **frontier objective**:
+
+```text
+(required depth, depth-minus-one frontier expansion)
+```
+
+with witness cleanliness only as a final tie breaker.
+
+### Next campaign — W9 frontier pressure toward W10
+
+The harness now accepts:
+
+```text
+--search-objective frontier
+```
+
+For a solved witness of required depth `d`, the primary secondary score is the
+number of states expanded when the same map is tested at ceiling `d - 1`.
+
+The search writes:
+
+```text
+best_frontier_witness.json
+```
+
+and records `best_frontier_seed`, `best_frontier_depth`, and
+`best_frontier_expanded` in the summary.
+
+Use the original OBS-006 W9 witness again:
+
+```text
+python/Tromino/results/repair-depth/endpoint-d9-v24/best_resolved_witness.json
+```
+
+Bounded first campaign:
+
+```text
+vertices            = 24
+jobs                = 32
+steps               = 512
+warmup_flips        = 0
+max_depth           = 11
+target_depth        = 10
+node_limit          = 3000000
+base_seed           = 11000000
+intermediate_policy = endpoint
+search_objective    = frontier
+stop_on_target      = true
+initial_witness     = OBS-006 W9 / seed 9000035
+```
+
+Success criterion remains replay-verified depth ten. If no W10 descendant is
+found, compare the best frontier expansion against the W9 baseline `202071`
+before deciding whether to enlarge the local budget.
