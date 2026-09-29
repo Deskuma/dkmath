@@ -580,6 +580,10 @@ def frontier_expanded(result: dict) -> int:
     if not lower or lower.get("success"):
         return 0
     info = lower.get("info") or {}
+    if lower.get("classification") != "depth_limited":
+        return 0
+    if not info.get("hit_depth_limit"):
+        return 0
     return int(info.get("expanded", 0))
 
 
