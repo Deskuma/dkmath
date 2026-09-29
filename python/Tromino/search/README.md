@@ -808,7 +808,7 @@ Run:
       --intermediate-policy endpoint \
       --output python/Tromino/results/repair-depth/w9-single-recolor-scan-v24
 
-The current W9 blocker has ten statically proper one-point recolor candidates:
+The current W9 blocker has eleven statically proper one-point recolor candidates:
 
     4 : 1 -> 0
     4 : 1 -> 2
@@ -822,9 +822,6 @@ The current W9 blocker has ten statically proper one-point recolor candidates:
     15: 0 -> 2
     17: 3 -> 2
 
-Note: the list above contains eleven entries if all displayed alternatives
-remain statically proper in the checked witness; trust the command's
-`proper_single_recolor_candidates` field as authoritative.
 
 Outputs include one profile per recoloring plus:
 
