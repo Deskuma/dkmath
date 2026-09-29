@@ -1159,3 +1159,57 @@ Primary question:
 Do both parent depth-nine exits die at the same early component
 reconnection, or at distinct obstructions?
 ```
+
+
+### OBS-012 — Common (0,1) Component Fusion Kills Both Depth-Nine Exits
+
+Status: recorded on 2026-09-29.
+
+Files:
+
+```text
+python/Tromino/experiments/OBS-012-Common01ComponentFusion/
+  README.md
+  summary.json
+```
+
+Both parent depth-nine exits are destroyed in the W10 child by enlargement of
+a parent (0,1) Kempe component through vertices 4 and 17.
+
+The two exits diverge at different positions:
+
+```text
+exit 0: divergence at move 0
+exit 1: divergence at move 2
+```
+
+but the common obstruction is the same kind of (0,1) component fusion.
+
+### Next experiment — topology/state intervention
+
+The harness now provides:
+
+```text
+intervention-compare PARENT CHILD
+```
+
+At the blocker it crosses parent/child graph topology with parent/child colored
+state:
+
+```text
+Pgraph + Pstate
+Pgraph + Cstate
+Cgraph + Pstate
+Cgraph + Cstate
+```
+
+Each crossed state is checked for properness and the Missing-Color invariant
+before the repair maze is explored.
+
+The key test is whether `Pgraph + Cstate` already has first exit depth ten.
+That would show that the preconditioned blocker state is sufficient, within the
+fixed parent topology, to reproduce the depth jump.
+
+The converse crossed cell `Cgraph + Pstate` is expected to be invalid if the
+added edge `5-17` joins two equally colored parent-state vertices; the command
+records such invalidity rather than interpreting it as a repair-depth result.
