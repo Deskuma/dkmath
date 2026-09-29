@@ -799,6 +799,30 @@ def one_search_job(job: dict) -> dict:
     }
 
 
+def one_neighbor_job(job: dict) -> dict:
+    payload = json.loads(Path(str(job["witness"])).read_text(encoding="utf-8"))
+    tri = triangulation_from_witness(payload)
+    move = tuple(int(x) for x in job["move"])
+    tri.apply_flip(move)
+    result = evaluate(
+        tri,
+        int(job["max_depth"]),
+        node_limit=int(job["node_limit"]),
+        intermediate_policy=str(job["intermediate_policy"]),
+        trace=False,
+    )
+    return {
+        "index": int(job["index"]),
+        "move": list(move),
+        "classification": result["classification"],
+        "success": result["success"],
+        "required_depth": result.get("required_depth"),
+        "frontier_expanded": frontier_expanded(result),
+        "frontier_objective": list(frontier_objective(result)),
+        "result": result,
+    }
+
+
 def atomic_json(path: Path, payload: dict) -> None:
     tmp = path.with_suffix(path.suffix + ".tmp")
     tmp.write_text(
@@ -1291,6 +1315,150 @@ def cmd_search(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_neighbors(args: argparse.Namespace) -> int:
+    source = Path(args.witness)
+    payload = json.loads(source.read_text(encoding="utf-8"))
+    base = triangulation_from_witness(payload)
+    if not base.planted_is_proper():
+        raise SystemExit("witness planted coloring is not proper")
+
+    moves = sorted(base.flippable_preserving())
+    out = Path(args.output)
+    out.mkdir(parents=True, exist_ok=True)
+
+    jobs = [
+        {
+            "index": index,
+            "move": list(move),
+            "witness": str(source),
+            "max_depth": args.max_depth,
+            "node_limit": args.node_limit,
+            "intermediate_policy": args.intermediate_policy,
+        }
+        for index, move in enumerate(moves)
+    ]
+
+    rows: list[dict] = []
+    started = time.time()
+    print(
+        f"witness={source} neighbors={len(jobs)} workers={args.workers}",
+        flush=True,
+    )
+
+    with ProcessPoolExecutor(max_workers=args.workers) as pool:
+        futures = {
+            pool.submit(one_neighbor_job, job): job["index"] for job in jobs
+        }
+        for future in as_completed(futures):
+            row = future.result()
+            rows.append(row)
+            print(
+                "NEIGHBOR",
+                f"index={row['index']}",
+                f"move={row['move']}",
+                f"class={row['classification']}",
+                f"depth={row.get('required_depth')}",
+                f"frontier={row.get('frontier_expanded')}",
+                flush=True,
+            )
+
+    rows.sort(key=lambda row: row["index"])
+    rows_path = out / "neighbors.jsonl"
+    with rows_path.open("w", encoding="utf-8") as handle:
+        for row in rows:
+            handle.write(json.dumps(row, sort_keys=True) + "\n")
+
+    successful = [row for row in rows if row.get("success")]
+    best_depth = max(
+        successful,
+        key=lambda row: (
+            int(row.get("required_depth") or -1),
+            int(row.get("frontier_expanded") or 0),
+        ),
+        default=None,
+    )
+    best_frontier = max(
+        successful,
+        key=lambda row: tuple(row.get("frontier_objective", [0, 0, 0, 0])),
+        default=None,
+    )
+
+    def save_neighbor(row: dict | None, name: str) -> None:
+        if row is None:
+            return
+        tri = base.copy()
+        tri.apply_flip(tuple(int(x) for x in row["move"]))
+        witness = serialize_witness(
+            tri,
+            row["result"],
+            job_seed=int(payload.get("job_seed", -1)),
+            search_meta={
+                "mode": "one_flip_neighbor",
+                "source_witness": str(source),
+                "source_seed": payload.get("job_seed"),
+                "neighbor_index": row["index"],
+                "neighbor_move": row["move"],
+                "max_depth": args.max_depth,
+                "node_limit": args.node_limit,
+                "intermediate_policy": args.intermediate_policy,
+            },
+        )
+        atomic_json(out / name, witness)
+
+    save_neighbor(best_depth, "best_depth_neighbor_witness.json")
+    save_neighbor(best_frontier, "best_frontier_neighbor_witness.json")
+
+    depth_counts: dict[str, int] = {}
+    classification_counts: dict[str, int] = {}
+    for row in rows:
+        depth_key = (
+            str(row["required_depth"]) if row.get("success") else "unresolved"
+        )
+        depth_counts[depth_key] = depth_counts.get(depth_key, 0) + 1
+        cls = str(row.get("classification", "unknown"))
+        classification_counts[cls] = classification_counts.get(cls, 0) + 1
+
+    summary = {
+        "format_version": FORMAT_VERSION,
+        "source_witness": str(source),
+        "source_seed": payload.get("job_seed"),
+        "source_required_depth": payload.get("evaluation", {}).get(
+            "required_depth"
+        ),
+        "legal_preserving_neighbors": len(rows),
+        "resolved_neighbors": len(successful),
+        "depth_counts": depth_counts,
+        "classification_counts": classification_counts,
+        "max_depth_checked": args.max_depth,
+        "node_limit": args.node_limit,
+        "intermediate_policy": args.intermediate_policy,
+        "elapsed_seconds": time.time() - started,
+        "best_depth_index": best_depth["index"] if best_depth else None,
+        "best_depth_move": best_depth["move"] if best_depth else None,
+        "best_depth": best_depth.get("required_depth") if best_depth else None,
+        "best_depth_frontier": (
+            best_depth.get("frontier_expanded") if best_depth else None
+        ),
+        "best_frontier_index": (
+            best_frontier["index"] if best_frontier else None
+        ),
+        "best_frontier_move": (
+            best_frontier["move"] if best_frontier else None
+        ),
+        "best_frontier_depth": (
+            best_frontier.get("required_depth") if best_frontier else None
+        ),
+        "best_frontier_expanded": (
+            best_frontier.get("frontier_expanded")
+            if best_frontier
+            else None
+        ),
+    }
+    atomic_json(out / "summary.json", summary)
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
 def cmd_replay(args: argparse.Namespace) -> int:
     payload = json.loads(Path(args.witness).read_text(encoding="utf-8"))
     tri = triangulation_from_witness(payload)
@@ -1378,6 +1546,27 @@ def build_parser() -> argparse.ArgumentParser:
         "--output", default="python/Tromino/results/repair-depth/default"
     )
     search.set_defaults(func=cmd_search)
+
+    neighbors = sub.add_parser(
+        "neighbors",
+        help="enumerate and evaluate every legal preserving one-flip neighbor",
+    )
+    neighbors.add_argument("witness")
+    neighbors.add_argument("--max-depth", type=int, default=10)
+    neighbors.add_argument("--node-limit", type=int, default=6_000_000)
+    neighbors.add_argument(
+        "--intermediate-policy",
+        choices=("strict", "endpoint"),
+        default="endpoint",
+    )
+    neighbors.add_argument(
+        "--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1)
+    )
+    neighbors.add_argument(
+        "--output",
+        default="python/Tromino/results/repair-depth/one-flip-neighbors",
+    )
+    neighbors.set_defaults(func=cmd_neighbors)
 
     replay = sub.add_parser("replay", help="re-evaluate one saved witness")
     replay.add_argument("witness")
