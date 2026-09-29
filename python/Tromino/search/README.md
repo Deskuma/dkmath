@@ -446,3 +446,57 @@ witness:
 A W10 result is the primary target. A second frontier increase is also useful,
 because it would show that local frontier amplification can be iterated rather
 than occurring only once near the original W9 witness.
+
+
+## Complete one-flip neighborhood census after OBS-009
+
+OBS-009 found a W9 -> W10 transition produced by one preserving diagonal flip.
+The next step is exhaustive over the immediate legal flip neighborhood rather
+than stochastic.
+
+The new command is:
+
+    neighbors
+
+It enumerates every move returned by `flippable_preserving()`, applies each
+move once to the source witness, and evaluates the resulting graph in parallel.
+
+For the OBS-008 source witness there are currently 17 legal preserving
+one-flip neighbors, including the known depth-raising move
+`[4,21,5,17]`.
+
+Run:
+
+    mkdir -p python/Tromino/results/repair-depth/w9-oneflip-neighborhood-v24
+
+    python3 python/Tromino/search/repair_depth_search.py neighbors \
+      python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json \
+      --max-depth 10 \
+      --node-limit 6000000 \
+      --intermediate-policy endpoint \
+      --workers "$(nproc)" \
+      --output python/Tromino/results/repair-depth/w9-oneflip-neighborhood-v24
+
+Outputs:
+
+    neighbors.jsonl
+    summary.json
+    best_depth_neighbor_witness.json
+    best_frontier_neighbor_witness.json
+
+The summary reports the complete depth histogram for resolved neighbors and
+the classification counts for unresolved cases.
+
+Primary checks:
+
+    legal_preserving_neighbors = 17
+    [4,21,5,17] occurs in neighbors.jsonl
+    at least one neighbor has required_depth = 10
+
+The main structural question is whether that depth-ten neighbor is unique. If
+multiple one-flip moves reach ten, compare their affected quadrilaterals. If it
+is unique, the flip `4-21 -> 5-17` becomes a sharper candidate for the local
+wall-deepening gadget.
+
+Any neighbor unresolved at ceiling ten should be replayed separately at a
+higher ceiling before being interpreted as deeper than ten.
