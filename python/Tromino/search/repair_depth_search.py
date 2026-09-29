@@ -470,6 +470,258 @@ def restore_instance(
     }
 
 
+def restore_state_before_step(
+    tri: PlantedTriangulation,
+    stop_step: int,
+    *,
+    max_repair_depth: int,
+    node_limit: int,
+    intermediate_policy: str,
+) -> dict:
+    adjacency = tri.adjacency(include_sea=True)
+    colored = {SEA: 0, 0: 1, 1: 2, 2: 3}
+    remaining = set(tri.birth_order)
+    repair_log = []
+
+    for step, v in enumerate(tri.birth_order):
+        if step == stop_step:
+            return {
+                "adjacency": adjacency,
+                "colored": colored,
+                "remaining": remaining,
+                "step": step,
+                "node": v,
+                "repair_log": repair_log,
+            }
+
+        if not invariant_holds(adjacency, colored, remaining):
+            raise RuntimeError(
+                f"prefix invariant broken at step={step} node={v}"
+            )
+
+        candidates = safe_candidates(adjacency, colored, remaining, v)
+        sequence = []
+        repair_meta = None
+        if not candidates:
+            next_state, sequence, candidates, repair_meta = find_repair(
+                adjacency,
+                colored,
+                remaining,
+                v,
+                max_repair_depth,
+                node_limit,
+                intermediate_policy,
+            )
+            if next_state is None:
+                raise RuntimeError(
+                    "prefix repair failed at "
+                    f"step={step} node={v} status={repair_meta['status']}"
+                )
+            colored = next_state
+
+        color = candidates[0]
+        colored[v] = color
+        remaining.remove(v)
+        if sequence:
+            repair_log.append(
+                {
+                    "step": step,
+                    "node": v,
+                    "repair_depth": len(sequence),
+                    "assigned_color": color,
+                    "moves": [
+                        {
+                            "colors": [a, b],
+                            "component": sorted(component),
+                        }
+                        for a, b, component in sequence
+                    ],
+                }
+            )
+
+    raise ValueError(f"stop step out of range: {stop_step}")
+
+
+def repair_maze_profile(
+    tri: PlantedTriangulation,
+    *,
+    step: int,
+    prefix_depth: int,
+    max_depth: int,
+    node_limit: int,
+    intermediate_policy: str,
+) -> dict:
+    prefix = restore_state_before_step(
+        tri,
+        step,
+        max_repair_depth=prefix_depth,
+        node_limit=node_limit,
+        intermediate_policy=intermediate_policy,
+    )
+    adjacency = prefix["adjacency"]
+    colored = prefix["colored"]
+    remaining = prefix["remaining"]
+    current = prefix["node"]
+
+    root_key = state_key(colored)
+    queue = deque([(dict(colored), root_key, 0)])
+    visited = {root_key}
+    parent: dict = {}
+    processed: dict[int, int] = {}
+    generated: dict[int, int] = {0: 1}
+    exits: dict[int, int] = {}
+    invariant_states: dict[int, int] = {
+        0: int(invariant_holds(adjacency, colored, remaining))
+    }
+    moves_examined: dict[int, int] = {}
+    duplicates: dict[int, int] = {}
+    expanded = 0
+    truncated = False
+    first_exit_key = None
+    first_exit_depth = None
+    first_exit_candidates = None
+
+    while queue:
+        state, key, depth = queue.popleft()
+        processed[depth] = processed.get(depth, 0) + 1
+        if depth >= max_depth:
+            continue
+
+        moves = list(kempe_components(adjacency, state))
+        moves_examined[depth] = moves_examined.get(depth, 0) + len(moves)
+
+        for move in moves:
+            next_state = apply_exchange(state, move)
+            next_key = state_key(next_state)
+            next_depth = depth + 1
+            if next_key in visited:
+                duplicates[next_depth] = duplicates.get(next_depth, 0) + 1
+                continue
+
+            visited.add(next_key)
+            parent[next_key] = (key, move)
+            expanded += 1
+            generated[next_depth] = generated.get(next_depth, 0) + 1
+
+            if expanded > node_limit:
+                truncated = True
+                queue.clear()
+                break
+
+            invariant_ok = invariant_holds(
+                adjacency, next_state, remaining
+            )
+            if invariant_ok:
+                invariant_states[next_depth] = (
+                    invariant_states.get(next_depth, 0) + 1
+                )
+                candidates = safe_candidates(
+                    adjacency, next_state, remaining, current
+                )
+            else:
+                candidates = []
+
+            if candidates:
+                exits[next_depth] = exits.get(next_depth, 0) + 1
+                if first_exit_key is None:
+                    first_exit_key = next_key
+                    first_exit_depth = next_depth
+                    first_exit_candidates = candidates
+                continue
+
+            if intermediate_policy == "strict" and not invariant_ok:
+                continue
+            queue.append((next_state, next_key, next_depth))
+
+        if truncated:
+            break
+
+    first_path = []
+    if first_exit_key is not None:
+        key = first_exit_key
+        while key != root_key:
+            prev, move = parent[key]
+            first_path.append(
+                {
+                    "colors": [move[0], move[1]],
+                    "component": sorted(move[2]),
+                }
+            )
+            key = prev
+        first_path.reverse()
+
+    all_depths = range(0, max_depth + 1)
+    layers = [
+        {
+            "depth": depth,
+            "processed_states": processed.get(depth, 0),
+            "generated_states": generated.get(depth, 0),
+            "invariant_states": invariant_states.get(depth, 0),
+            "exit_states": exits.get(depth, 0),
+            "duplicate_transitions": duplicates.get(depth, 0),
+            "moves_examined_from_layer": moves_examined.get(depth, 0),
+        }
+        for depth in all_depths
+    ]
+
+    root_components = [
+        {
+            "colors": [a, b],
+            "component": sorted(component),
+            "size": len(component),
+        }
+        for a, b, component in kempe_components(adjacency, colored)
+    ]
+
+    distances = graph_distances(adjacency, current)
+    return {
+        "step": step,
+        "node": current,
+        "prefix_depth": prefix_depth,
+        "max_depth": max_depth,
+        "node_limit": node_limit,
+        "intermediate_policy": intermediate_policy,
+        "truncated": truncated,
+        "expanded_unique_states": expanded,
+        "visited_states": len(visited),
+        "initial_safe_candidates": safe_candidates(
+            adjacency, colored, remaining, current
+        ),
+        "initial_palette": sorted(palette(adjacency, colored, current)),
+        "initial_kempe_components": root_components,
+        "initial_kempe_component_count": len(root_components),
+        "blocker_neighbors": sorted(adjacency[current]),
+        "blocker_neighbor_distances": {
+            str(v): distances[v] for v in sorted(adjacency[current])
+        },
+        "colored_state": {
+            str(v): color for v, color in sorted(colored.items())
+        },
+        "remaining": sorted(remaining),
+        "prefix_repairs": prefix["repair_log"],
+        "layers": layers,
+        "first_exit_depth": first_exit_depth,
+        "first_exit_candidates": first_exit_candidates,
+        "first_exit_path": first_path,
+        "first_exit_geometry": (
+            repair_geometry(
+                adjacency,
+                current,
+                [
+                    (
+                        item["colors"][0],
+                        item["colors"][1],
+                        frozenset(item["component"]),
+                    )
+                    for item in first_path
+                ],
+            )
+            if first_path
+            else None
+        ),
+    }
+
+
 def evaluate(
     tri: PlantedTriangulation,
     max_depth: int,
@@ -1315,6 +1567,128 @@ def cmd_search(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_maze_compare(args: argparse.Namespace) -> int:
+    parent_payload = json.loads(
+        Path(args.parent).read_text(encoding="utf-8")
+    )
+    child_payload = json.loads(
+        Path(args.child).read_text(encoding="utf-8")
+    )
+    parent_tri = triangulation_from_witness(parent_payload)
+    child_tri = triangulation_from_witness(child_payload)
+
+    parent_profile = repair_maze_profile(
+        parent_tri,
+        step=args.step,
+        prefix_depth=args.prefix_depth,
+        max_depth=args.max_depth,
+        node_limit=args.node_limit,
+        intermediate_policy=args.intermediate_policy,
+    )
+    child_profile = repair_maze_profile(
+        child_tri,
+        step=args.step,
+        prefix_depth=args.prefix_depth,
+        max_depth=args.max_depth,
+        node_limit=args.node_limit,
+        intermediate_policy=args.intermediate_policy,
+    )
+
+    out = Path(args.output)
+    out.mkdir(parents=True, exist_ok=True)
+    atomic_json(out / "parent-profile.json", parent_profile)
+    atomic_json(out / "child-profile.json", child_profile)
+
+    parent_colored = parent_profile["colored_state"]
+    child_colored = child_profile["colored_state"]
+    color_keys = sorted(
+        set(parent_colored) | set(child_colored),
+        key=lambda x: int(x),
+    )
+    colored_diff = [
+        {
+            "vertex": int(v),
+            "parent": parent_colored.get(v),
+            "child": child_colored.get(v),
+        }
+        for v in color_keys
+        if parent_colored.get(v) != child_colored.get(v)
+    ]
+
+    p_edges = parent_tri.edges()
+    c_edges = child_tri.edges()
+    edge_removed = [list(edge) for edge in sorted(p_edges - c_edges)]
+    edge_added = [list(edge) for edge in sorted(c_edges - p_edges)]
+
+    max_layer = max(
+        len(parent_profile["layers"]),
+        len(child_profile["layers"]),
+    )
+    layer_delta = []
+    for depth in range(max_layer):
+        p = (
+            parent_profile["layers"][depth]
+            if depth < len(parent_profile["layers"])
+            else {}
+        )
+        c = (
+            child_profile["layers"][depth]
+            if depth < len(child_profile["layers"])
+            else {}
+        )
+        layer_delta.append(
+            {
+                "depth": depth,
+                "parent_generated": p.get("generated_states", 0),
+                "child_generated": c.get("generated_states", 0),
+                "generated_delta": (
+                    c.get("generated_states", 0)
+                    - p.get("generated_states", 0)
+                ),
+                "parent_exits": p.get("exit_states", 0),
+                "child_exits": c.get("exit_states", 0),
+                "exit_delta": (
+                    c.get("exit_states", 0) - p.get("exit_states", 0)
+                ),
+                "parent_processed": p.get("processed_states", 0),
+                "child_processed": c.get("processed_states", 0),
+            }
+        )
+
+    comparison = {
+        "parent": args.parent,
+        "child": args.child,
+        "parent_seed": parent_payload.get("job_seed"),
+        "child_seed": child_payload.get("job_seed"),
+        "step": args.step,
+        "parent_node": parent_profile["node"],
+        "child_node": child_profile["node"],
+        "parent_first_exit_depth": parent_profile["first_exit_depth"],
+        "child_first_exit_depth": child_profile["first_exit_depth"],
+        "parent_expanded_unique_states": (
+            parent_profile["expanded_unique_states"]
+        ),
+        "child_expanded_unique_states": (
+            child_profile["expanded_unique_states"]
+        ),
+        "colored_state_diff": colored_diff,
+        "edge_removed": edge_removed,
+        "edge_added": edge_added,
+        "parent_blocker_neighbors": parent_profile["blocker_neighbors"],
+        "child_blocker_neighbors": child_profile["blocker_neighbors"],
+        "parent_initial_kempe_component_count": (
+            parent_profile["initial_kempe_component_count"]
+        ),
+        "child_initial_kempe_component_count": (
+            child_profile["initial_kempe_component_count"]
+        ),
+        "layer_delta": layer_delta,
+    }
+    atomic_json(out / "comparison.json", comparison)
+    print(json.dumps(comparison, indent=2, sort_keys=True))
+    return 0
+
+
 def cmd_neighbors(args: argparse.Namespace) -> int:
     source = Path(args.witness)
     payload = json.loads(source.read_text(encoding="utf-8"))
@@ -1546,6 +1920,27 @@ def build_parser() -> argparse.ArgumentParser:
         "--output", default="python/Tromino/results/repair-depth/default"
     )
     search.set_defaults(func=cmd_search)
+
+    maze = sub.add_parser(
+        "maze-compare",
+        help="compare exchange-state repair mazes for two witnesses",
+    )
+    maze.add_argument("parent")
+    maze.add_argument("child")
+    maze.add_argument("--step", type=int, default=16)
+    maze.add_argument("--prefix-depth", type=int, default=10)
+    maze.add_argument("--max-depth", type=int, default=10)
+    maze.add_argument("--node-limit", type=int, default=6_000_000)
+    maze.add_argument(
+        "--intermediate-policy",
+        choices=("strict", "endpoint"),
+        default="endpoint",
+    )
+    maze.add_argument(
+        "--output",
+        default="python/Tromino/results/repair-depth/maze-compare",
+    )
+    maze.set_defaults(func=cmd_maze_compare)
 
     neighbors = sub.add_parser(
         "neighbors",
