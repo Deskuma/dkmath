@@ -778,3 +778,67 @@ The decisive summary fields are:
 If `raising_vertices == [4]`, the current one-point gadget is unusually
 specific. If several neighbors raise depth, compare their relation to the two
 baseline exit paths before promoting any structural rule.
+
+
+## Full proper single-recolor scan after OBS-015
+
+OBS-015 showed that vertex 4 is the only blocker neighbor that can be
+individually recolored to target color 0 while preserving proper coloring.
+That means the target-zero scan alone cannot tell whether vertex 4 is
+dynamically special among multiple admissible pins.
+
+The next command broadens the intervention space:
+
+    single-recolor-scan
+
+It enumerates every statically proper alternative color for every unlocked
+colored blocker neighbor and evaluates each resulting blocker state.
+
+Run:
+
+    mkdir -p python/Tromino/results/repair-depth/w9-single-recolor-scan-v24
+
+    python3 python/Tromino/search/repair_depth_search.py single-recolor-scan \
+      python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json \
+      --step 16 \
+      --prefix-depth 10 \
+      --max-depth 10 \
+      --node-limit 6000000 \
+      --workers "$(nproc)" \
+      --intermediate-policy endpoint \
+      --output python/Tromino/results/repair-depth/w9-single-recolor-scan-v24
+
+The current W9 blocker has ten statically proper one-point recolor candidates:
+
+    4 : 1 -> 0
+    4 : 1 -> 2
+    5 : 3 -> 2
+    9 : 1 -> 2
+    10: 1 -> 2
+    13: 3 -> 1
+    13: 3 -> 2
+    14: 0 -> 1
+    14: 0 -> 2
+    15: 0 -> 2
+    17: 3 -> 2
+
+Note: the list above contains eleven entries if all displayed alternatives
+remain statically proper in the checked witness; trust the command's
+`proper_single_recolor_candidates` field as authoritative.
+
+Outputs include one profile per recoloring plus:
+
+    baseline.json
+    baseline-exits.json
+    summary.json
+
+The main classification fields are:
+
+    raising_recolors
+    same_depth_recolors
+    lowering_recolors
+    unresolved_recolors
+
+This experiment tests whether the observed 9 -> 10 jump is specific to
+recoloring vertex 4 into the shallow-exit target color, or is part of a broader
+family of one-point blocker-state mutations.
