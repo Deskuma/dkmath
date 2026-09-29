@@ -326,3 +326,70 @@ the frozen W9 map toward its W10 descendant.
 If the bounded 64 x 512 campaign does not find ten, preserve the result as a
 local-search diagnostic and increase jobs/steps in a new output directory
 rather than silently changing the existing experiment.
+
+
+## Frontier-pressure W9 -> W10 campaign after OBS-007
+
+The first seeded W9 campaign showed that `--search-objective resolved` is
+misaligned once the required depth is already fixed at nine: it rewards more
+repairs and more total repair moves, even when the critical depth-minus-one
+frontier becomes easier.
+
+The new mode is:
+
+    --search-objective frontier
+
+For a solved witness with required depth `d`, it ranks states by:
+
+    1. required depth
+    2. expanded states at ceiling d - 1
+    3. fewer total repair moves as a final tie breaker
+
+The depth-minus-one expansion is stored as `frontier_expanded`. The run also
+writes:
+
+    best_frontier_witness.json
+
+Recommended bounded run:
+
+    mkdir -p python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24
+
+    python3 python/Tromino/search/repair_depth_search.py search \
+      --vertices 24 \
+      --jobs 32 \
+      --steps 512 \
+      --warmup-flips 0 \
+      --workers "$(nproc)" \
+      --max-depth 11 \
+      --target-depth 10 \
+      --node-limit 3000000 \
+      --base-seed 11000000 \
+      --intermediate-policy endpoint \
+      --search-objective frontier \
+      --stop-on-target \
+      --initial-witness \
+        python/Tromino/results/repair-depth/endpoint-d9-v24/best_resolved_witness.json \
+      --output python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24
+
+The W9 baseline frontier is:
+
+    required depth = 9
+    depth-8 expanded = 202071
+
+Even if W10 is not reached, an increase beyond `202071` is useful evidence
+that the new objective is pushing in the intended direction.
+
+If W10 is found, replay the frontier witness:
+
+    python3 python/Tromino/search/repair_depth_search.py replay \
+      python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json \
+      --min-depth 8 \
+      --max-depth 11 \
+      --node-limit 6000000 \
+      --intermediate-policy endpoint \
+      --trace \
+      --stop-on-success \
+      --output python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/replay-best-frontier.json
+
+Promotion to the next observation requires either a replay-verified W10 witness
+or a clearly larger W9 frontier that justifies a larger local-search budget.
