@@ -893,3 +893,78 @@ initial_witness     = OBS-006 W9 / seed 9000035
 Success criterion remains replay-verified depth ten. If no W10 descendant is
 found, compare the best frontier expansion against the W9 baseline `202071`
 before deciding whether to enlarge the local budget.
+
+
+### OBS-008 — Two-Flip Frontier Amplification
+
+Status: recorded on 2026-09-29.
+
+Files:
+
+```text
+python/Tromino/experiments/OBS-008-TwoFlipFrontierAmplification/
+  README.md
+  summary.json
+```
+
+Starting from the OBS-006 W9 witness, frontier search found seed `11000009`:
+
+```text
+required depth      = 9
+depth-8 expanded    = 374152
+critical footprint  = 13
+max component size  = 6
+critical radius     = 2
+```
+
+The previous W9 baseline was `202071`, so the critical depth-eight frontier
+increased by `172081`.
+
+The final hard descendant differs from the seed by two net diagonal flips. The
+recorded four-flip suffix contains one immediate inverse pair.
+
+This is the first direct evidence that a very small local map mutation can
+strongly amplify frontier hardness while leaving required depth and graph
+radius unchanged.
+
+### Next campaign — second-generation frontier ascent
+
+Use the OBS-008 best frontier witness as the next initial state:
+
+```text
+python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json
+```
+
+The new baseline is:
+
+```text
+required depth = 9
+frontier       = 374152
+```
+
+Run a smaller second-generation campaign before increasing the budget:
+
+```text
+vertices            = 24
+jobs                = 16
+steps               = 384
+warmup_flips        = 0
+max_depth           = 11
+target_depth        = 10
+node_limit          = 3000000
+base_seed           = 12000000
+intermediate_policy = endpoint
+search_objective    = frontier
+stop_on_target      = true
+initial_witness     = OBS-008 best frontier / seed 11000009
+```
+
+Promote the result if either:
+
+```text
+1. a replay-verified W10 descendant is found, or
+2. the verified W9 frontier exceeds 374152.
+```
+
+The search summary now also records the best frontier seed/depth/expanded fields
+for both periodic and final summaries.
