@@ -1407,3 +1407,60 @@ For the current W9 blocker the statically proper alternatives include:
 ```
 
 Vertices 8, 12, and 18 have no proper alternative color.
+
+
+### OBS-016 — Admissible One-Point State Landscape
+
+Status: recorded on 2026-09-30.
+
+Files:
+
+```text
+python/Tromino/experiments/OBS-016-AdmissibleOnePointStateLandscape/
+  README.md
+  summary.json
+```
+
+The complete statically proper one-point recolor scan around the W9 blocker
+finds only three Missing-Color-valid moves:
+
+```text
+4  : 1 -> 0   depth 9 -> 10
+13 : 3 -> 1   depth 9 -> 8
+14 : 0 -> 1   depth 9 -> 8
+```
+
+All eight other statically proper alternatives are recolorings to color 2 and
+break the Missing-Color invariant.
+
+At the baseline state, every remaining vertex 19..23 has palette `{0,1,3}`.
+Color 2 is therefore the common missing future color.
+
+A static connected-component enumeration under proper + Missing-valid
+one-point recolorings gives exactly 32 states, degree range 1..5, mean degree
+3, and no reachable mutable-neighbor state using color 2.
+
+### Next experiment — full admissible blocker-state component
+
+The harness now provides:
+
+```text
+state-component-scan WITNESS
+```
+
+It enumerates the complete connected component of admissible blocker-neighbor
+colored states reachable by one-point recolorings, then evaluates repair depth
+at every state.
+
+The current W9 component is expected to contain 32 states.
+
+The resulting graph will allow direct inspection of:
+
+```text
+repair-depth distribution
+local minima / maxima
+edge depth changes
+cycles
+distance from the W9 baseline
+whether the observed +/-1 local motion persists globally
+```
