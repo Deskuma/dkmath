@@ -663,3 +663,60 @@ and, more strongly:
 
 If both are true with first exit depth ten, then the preconditioned colored
 state is sufficient to reproduce the depth jump on the parent topology.
+
+
+## Partial blocker-state intervention after OBS-013
+
+OBS-013 showed that the full child blocker state, transplanted onto the parent
+graph, is already sufficient to move the first exit from depth nine to ten.
+
+The remaining question is which part of that state change is necessary.
+
+The new command:
+
+    state-subsets
+
+enumerates every subset of the parent-to-child blocker-state differences while
+keeping the parent graph fixed.
+
+Run:
+
+    mkdir -p python/Tromino/results/repair-depth/w9-w10-state-subsets-v24
+
+    python3 python/Tromino/search/repair_depth_search.py state-subsets \
+      python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json \
+      python/Tromino/results/repair-depth/seeded-w9-frontier2-d10-v24/best_frontier_witness.json \
+      --step 16 \
+      --prefix-depth 10 \
+      --max-depth 10 \
+      --node-limit 6000000 \
+      --intermediate-policy endpoint \
+      --output python/Tromino/results/repair-depth/w9-w10-state-subsets-v24
+
+For the current pair the only differing blocker-state vertices are:
+
+    vertex 4 : 1 -> 0
+    vertex 17: 3 -> 1
+
+so exactly four cases are evaluated:
+
+    subset-none.json
+    subset-4.json
+    subset-17.json
+    subset-4-17.json
+
+The summary records validity, proper-coloring violations, first exit depth,
+exit counts, maze size, and the minimal valid subsets that raise the baseline
+exit depth.
+
+A known static check is that changing only vertex 17 makes the parent coloring
+improper on edge `4-17`; the command should therefore reject that cell rather
+than assign it a repair depth.
+
+The decisive unresolved case is `{4}`:
+
+    if {4} alone raises 9 -> 10,
+       vertex 4 recoloring is sufficient on the parent graph;
+
+    if {4} remains at 9 but {4,17} reaches 10,
+       the valid two-vertex state change is essential in this witness.
