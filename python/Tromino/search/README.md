@@ -839,3 +839,63 @@ The main classification fields are:
 This experiment tests whether the observed 9 -> 10 jump is specific to
 recoloring vertex 4 into the shallow-exit target color, or is part of a broader
 family of one-point blocker-state mutations.
+
+
+## Full admissible blocker-state component after OBS-016
+
+OBS-016 found a three-way valid one-step landscape around the W9 blocker:
+
+    4 : 1 -> 0   depth 9 -> 10
+    13: 3 -> 1   depth 9 -> 8
+    14: 0 -> 1   depth 9 -> 8
+
+Every statically proper recoloring to color 2 breaks the Missing-Color
+invariant because all remaining vertices currently see palette `{0,1,3}`.
+
+The next command explores the entire admissible connected component:
+
+    state-component-scan
+
+Run:
+
+    mkdir -p python/Tromino/results/repair-depth/w9-state-component-v24
+
+    python3 python/Tromino/search/repair_depth_search.py state-component-scan \
+      python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json \
+      --step 16 \
+      --prefix-depth 10 \
+      --max-depth 10 \
+      --node-limit 6000000 \
+      --state-limit 512 \
+      --workers "$(nproc)" \
+      --intermediate-policy endpoint \
+      --output python/Tromino/results/repair-depth/w9-state-component-v24
+
+The command first enumerates every blocker-neighbor state reachable from the
+baseline by one-vertex recolorings that preserve both:
+
+    proper coloring
+    Missing-Color invariant
+
+Then it evaluates the repair maze at every state in parallel.
+
+A static probe of the current witness found:
+
+    admissible states = 32
+    degree min        = 1
+    degree max        = 5
+    degree mean       = 3
+    mutable color-2 states = 0
+
+Outputs:
+
+    state-000.json
+    state-001.json
+    ...
+    summary.json
+
+The summary includes the complete state graph, repair-depth distribution, edge
+depth deltas, component degrees, and Hamming distance from the baseline state.
+
+This is the first experiment that treats the blocker-state mechanism as an
+actual finite dynamical landscape rather than isolated interventions.
