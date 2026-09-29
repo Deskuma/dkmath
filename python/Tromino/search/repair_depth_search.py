@@ -1980,6 +1980,171 @@ def cmd_search(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_target_pin_scan(args: argparse.Namespace) -> int:
+    payload = json.loads(Path(args.witness).read_text(encoding="utf-8"))
+    tri = triangulation_from_witness(payload)
+
+    prefix = restore_state_before_step(
+        tri,
+        args.step,
+        max_repair_depth=args.prefix_depth,
+        node_limit=args.node_limit,
+        intermediate_policy=args.intermediate_policy,
+    )
+    current = prefix["node"]
+    remaining = set(prefix["remaining"])
+    base_state = dict(prefix["colored"])
+    adjacency = prefix["adjacency"]
+
+    baseline = repair_maze_from_explicit_state(
+        tri,
+        colored=base_state,
+        remaining=remaining,
+        current=current,
+        max_depth=args.max_depth,
+        node_limit=args.node_limit,
+        intermediate_policy=args.intermediate_policy,
+    )
+    if not baseline["valid_intervention"]:
+        raise SystemExit("baseline blocker state is invalid")
+    if baseline["first_exit_depth"] is None:
+        raise SystemExit("baseline has no exit within --max-depth")
+
+    exit_depth = baseline["first_exit_depth"]
+    parent_exits = repair_exit_records(
+        tri,
+        step=args.step,
+        prefix_depth=args.prefix_depth,
+        exit_depth=exit_depth,
+        node_limit=args.node_limit,
+        intermediate_policy=args.intermediate_policy,
+    )
+
+    colored_neighbors = sorted(
+        v
+        for v in adjacency[current]
+        if v in base_state and v not in LOCKED
+    )
+    candidates = [
+        v
+        for v in colored_neighbors
+        if base_state[v] != args.target_color
+    ]
+
+    out = Path(args.output)
+    out.mkdir(parents=True, exist_ok=True)
+    atomic_json(out / "baseline.json", baseline)
+    atomic_json(out / "baseline-exits.json", parent_exits)
+
+    cases = []
+    for v in candidates:
+        state = dict(base_state)
+        old_color = state[v]
+        state[v] = args.target_color
+        profile = repair_maze_from_explicit_state(
+            tri,
+            colored=state,
+            remaining=remaining,
+            current=current,
+            max_depth=args.max_depth,
+            node_limit=args.node_limit,
+            intermediate_policy=args.intermediate_policy,
+        )
+
+        touch_rows = []
+        for exit_index, exit_record in enumerate(parent_exits["exits"]):
+            first_touch = next(
+                (
+                    index
+                    for index, move in enumerate(exit_record["path"])
+                    if v in move["component"]
+                ),
+                None,
+            )
+            touch_rows.append(
+                {
+                    "exit_index": exit_index,
+                    "first_touch_move": first_touch,
+                    "touched": first_touch is not None,
+                }
+            )
+
+        filename = f"pin-{v}-to-{args.target_color}.json"
+        atomic_json(out / filename, profile)
+        cases.append(
+            {
+                "vertex": v,
+                "old_color": old_color,
+                "target_color": args.target_color,
+                "profile_file": filename,
+                "valid_intervention": profile["valid_intervention"],
+                "invalid_reason": profile["invalid_reason"],
+                "proper_violations": profile["proper_violations"],
+                "initial_invariant": profile["initial_invariant"],
+                "first_exit_depth": profile["first_exit_depth"],
+                "exit_counts": profile["exit_counts"],
+                "expanded_unique_states": (
+                    profile["expanded_unique_states"]
+                ),
+                "initial_kempe_component_count": (
+                    profile.get("initial_kempe_component_count")
+                ),
+                "baseline_exit_path_touch": touch_rows,
+            }
+        )
+
+    valid_cases = [case for case in cases if case["valid_intervention"]]
+    raising_cases = [
+        case
+        for case in valid_cases
+        if case["first_exit_depth"] is not None
+        and case["first_exit_depth"] > baseline["first_exit_depth"]
+    ]
+    same_depth_cases = [
+        case
+        for case in valid_cases
+        if case["first_exit_depth"] == baseline["first_exit_depth"]
+    ]
+    lowering_cases = [
+        case
+        for case in valid_cases
+        if case["first_exit_depth"] is not None
+        and case["first_exit_depth"] < baseline["first_exit_depth"]
+    ]
+    unresolved_cases = [
+        case
+        for case in valid_cases
+        if case["first_exit_depth"] is None
+    ]
+
+    summary = {
+        "witness": args.witness,
+        "seed": payload.get("job_seed"),
+        "step": args.step,
+        "node": current,
+        "target_color": args.target_color,
+        "baseline_first_exit_depth": baseline["first_exit_depth"],
+        "baseline_exit_counts": baseline["exit_counts"],
+        "baseline_exit_count_at_first_depth": parent_exits["exit_count"],
+        "colored_unlocked_neighbors": colored_neighbors,
+        "candidate_vertices": candidates,
+        "candidate_count": len(candidates),
+        "cases": cases,
+        "raising_vertices": [case["vertex"] for case in raising_cases],
+        "same_depth_vertices": [case["vertex"] for case in same_depth_cases],
+        "lowering_vertices": [case["vertex"] for case in lowering_cases],
+        "unresolved_vertices": [case["vertex"] for case in unresolved_cases],
+        "invalid_vertices": [
+            case["vertex"]
+            for case in cases
+            if not case["valid_intervention"]
+        ],
+    }
+    atomic_json(out / "summary.json", summary)
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
 def cmd_state_subsets(args: argparse.Namespace) -> int:
     parent_payload = json.loads(
         Path(args.parent).read_text(encoding="utf-8")
@@ -2702,6 +2867,30 @@ def build_parser() -> argparse.ArgumentParser:
         "--output", default="python/Tromino/results/repair-depth/default"
     )
     search.set_defaults(func=cmd_search)
+
+    target_pin = sub.add_parser(
+        "target-pin-scan",
+        help=(
+            "recolor each unlocked colored blocker neighbor individually "
+            "to a target color on a fixed witness"
+        ),
+    )
+    target_pin.add_argument("witness")
+    target_pin.add_argument("--step", type=int, default=16)
+    target_pin.add_argument("--prefix-depth", type=int, default=10)
+    target_pin.add_argument("--target-color", type=int, default=0)
+    target_pin.add_argument("--max-depth", type=int, default=10)
+    target_pin.add_argument("--node-limit", type=int, default=6_000_000)
+    target_pin.add_argument(
+        "--intermediate-policy",
+        choices=("strict", "endpoint"),
+        default="endpoint",
+    )
+    target_pin.add_argument(
+        "--output",
+        default="python/Tromino/results/repair-depth/target-pin-scan",
+    )
+    target_pin.set_defaults(func=cmd_target_pin_scan)
 
     state_subsets = sub.add_parser(
         "state-subsets",
