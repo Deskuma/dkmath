@@ -1213,3 +1213,64 @@ fixed parent topology, to reproduce the depth jump.
 The converse crossed cell `Cgraph + Pstate` is expected to be invalid if the
 added edge `5-17` joins two equally colored parent-state vertices; the command
 records such invalidity rather than interpreting it as a repair-depth result.
+
+
+### OBS-013 — Blocker State Alone Reproduces the Depth Jump
+
+Status: recorded on 2026-09-29.
+
+Files:
+
+```text
+python/Tromino/experiments/OBS-013-BlockerStateSufficiency/
+  README.md
+  summary.json
+```
+
+The topology/state intervention gives:
+
+```text
+Pgraph + Pstate -> first exit depth 9
+Pgraph + Cstate -> first exit depth 10
+Cgraph + Cstate -> first exit depth 10
+```
+
+while `Cgraph + Pstate` is invalid because edge `5-17` joins two
+parent-state color-3 vertices.
+
+Thus the child blocker colored state is sufficient, on the fixed parent graph,
+to delete both depth-nine exits and reproduce the depth-ten first exit.
+
+### Next experiment — partial blocker-state subsets
+
+The harness now provides:
+
+```text
+state-subsets PARENT CHILD
+```
+
+It finds every blocker-state vertex whose color differs between parent and
+child, then enumerates every subset of those parent-to-child recolorings on the
+fixed parent graph.
+
+For the current witness pair the differing vertices are exactly:
+
+```text
+4  : 1 -> 0
+17 : 3 -> 1
+```
+
+so the experiment evaluates:
+
+```text
+{}
+{4}
+{17}
+{4,17}
+```
+
+Every synthetic state is checked for properness and the Missing-Color invariant
+before repair depth is interpreted.
+
+The main target is the set of minimal valid recoloring subsets that raise the
+first exit depth above nine.
