@@ -500,3 +500,51 @@ wall-deepening gadget.
 
 Any neighbor unresolved at ceiling ten should be replayed separately at a
 higher ceiling before being interpreted as deeper than ten.
+
+
+## Repair-maze comparison after OBS-010
+
+The one-flip census showed that the W9 source has exactly one ascending legal
+neighbor and no level-nine neighbor. Every immediate neighbor still fails, at
+its own depth-minus-one ceiling, at node 19 / restore step 16.
+
+The next experiment compares the exchange-state maze on the two sides of the
+unique depth-raising diagonal flip.
+
+Run:
+
+    mkdir -p python/Tromino/results/repair-depth/w9-w10-maze-compare-v24
+
+    python3 python/Tromino/search/repair_depth_search.py maze-compare \
+      python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json \
+      python/Tromino/results/repair-depth/seeded-w9-frontier2-d10-v24/best_frontier_witness.json \
+      --step 16 \
+      --prefix-depth 10 \
+      --max-depth 10 \
+      --node-limit 6000000 \
+      --intermediate-policy endpoint \
+      --output python/Tromino/results/repair-depth/w9-w10-maze-compare-v24
+
+Outputs:
+
+    parent-profile.json
+    child-profile.json
+    comparison.json
+
+The profile explores the exchange-state graph by BFS from the deterministic
+colored state immediately before the blocker. Exit states are states in which
+the current blocked vertex again has at least one safe color.
+
+The main checks are:
+
+    parent first exit depth = 9
+    child first exit depth  = 10
+    blocker = node 19 / step 16 on both sides
+
+Then inspect the layer-by-layer differences. The target is to identify the
+first layer at which the child loses parent exits or develops a different
+Kempe-component branching structure.
+
+This is the first direct attempt to turn the Collatz-like qualitative picture
+into a concrete discrete dynamical-state comparison. It remains an algorithmic
+experiment, not a claim of arithmetic equivalence with the Collatz map.
