@@ -1204,6 +1204,26 @@ def cmd_search(args: argparse.Namespace) -> int:
                             if best_unresolved_row
                             else None
                         ),
+                        "best_frontier_seed": (
+                            best_frontier_row["job_seed"]
+                            if best_frontier_row
+                            else None
+                        ),
+                        "best_frontier_depth": (
+                            best_frontier_row.get("required_depth")
+                            if best_frontier_row
+                            else None
+                        ),
+                        "best_frontier_expanded": (
+                            best_frontier_row.get(
+                                "frontier_expanded",
+                                frontier_expanded(
+                                    best_frontier_row["witness"]["evaluation"]
+                                ),
+                            )
+                            if best_frontier_row
+                            else None
+                        ),
                     }
                 )
                 atomic_json(summary_path, summary)
@@ -1242,6 +1262,26 @@ def cmd_search(args: argparse.Namespace) -> int:
             "best_unresolved_classification": (
                 best_unresolved_row.get("classification")
                 if best_unresolved_row
+                else None
+            ),
+            "best_frontier_seed": (
+                best_frontier_row["job_seed"]
+                if best_frontier_row
+                else None
+            ),
+            "best_frontier_depth": (
+                best_frontier_row.get("required_depth")
+                if best_frontier_row
+                else None
+            ),
+            "best_frontier_expanded": (
+                best_frontier_row.get(
+                    "frontier_expanded",
+                    frontier_expanded(
+                        best_frontier_row["witness"]["evaluation"]
+                    ),
+                )
+                if best_frontier_row
                 else None
             ),
         }
