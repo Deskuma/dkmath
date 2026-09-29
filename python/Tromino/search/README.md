@@ -720,3 +720,61 @@ The decisive unresolved case is `{4}`:
 
     if {4} remains at 9 but {4,17} reaches 10,
        the valid two-vertex state change is essential in this witness.
+
+
+## Blocker-neighbor target-color scan after OBS-014
+
+OBS-014 reduced the W9 -> W10 mechanism to a single valid recoloring on the
+fixed parent graph:
+
+    vertex 4 : 1 -> 0
+
+The next question is whether vertex 4 is structurally unique.
+
+The new command:
+
+    target-pin-scan
+
+reconstructs the blocker state, finds every unlocked colored neighbor of the
+blocked vertex whose color differs from the requested target color, recolors
+each candidate individually, validates the synthetic state, and explores its
+repair maze.
+
+Run:
+
+    mkdir -p python/Tromino/results/repair-depth/w9-target0-pin-scan-v24
+
+    python3 python/Tromino/search/repair_depth_search.py target-pin-scan \
+      python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json \
+      --step 16 \
+      --prefix-depth 10 \
+      --target-color 0 \
+      --max-depth 10 \
+      --node-limit 6000000 \
+      --intermediate-policy endpoint \
+      --output python/Tromino/results/repair-depth/w9-target0-pin-scan-v24
+
+For the current blocker node 19, the expected candidate vertices are:
+
+    4, 5, 8, 9, 10, 13, 17, 18
+
+The command also reconstructs the baseline shallow exit paths and records
+whether each pinned vertex occurs in either parent depth-nine path.
+
+Outputs:
+
+    baseline.json
+    baseline-exits.json
+    pin-<vertex>-to-0.json
+    summary.json
+
+The decisive summary fields are:
+
+    raising_vertices
+    same_depth_vertices
+    lowering_vertices
+    invalid_vertices
+
+If `raising_vertices == [4]`, the current one-point gadget is unusually
+specific. If several neighbors raise depth, compare their relation to the two
+baseline exit paths before promoting any structural rule.
