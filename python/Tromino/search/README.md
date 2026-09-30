@@ -947,3 +947,56 @@ especially:
 If a depth-eleven state appears, the state-space mechanism itself has extended
 the earlier 9 -> 10 jump. If not, the result still provides an independent
 test of the observed unit-slope law.
+
+
+## Preserving-flip chamber census after OBS-018
+
+OBS-018 showed that the actual W10 blocker-state component is exactly a
+four-state induced sector of the complete W9 component.
+
+The new command:
+
+    flip-chamber-census
+
+tests whether this kind of chamber sectorization is common across all legal
+preserving one-flip neighbors of W9.
+
+Run:
+
+    mkdir -p python/Tromino/results/repair-depth/w9-flip-chamber-census-v24
+
+    python3 python/Tromino/search/repair_depth_search.py flip-chamber-census \
+      python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json \
+      --source-component-summary python/Tromino/results/repair-depth/w9-state-component-v24/summary.json \
+      --step 16 \
+      --prefix-depth 10 \
+      --node-limit 6000000 \
+      --state-limit 512 \
+      --workers "$(nproc)" \
+      --intermediate-policy endpoint \
+      --output python/Tromino/results/repair-depth/w9-flip-chamber-census-v24
+
+For each preserving flip the command restores the blocker prefix and performs
+only the cheap static admissible-state enumeration. It does not evaluate the
+full repair maze at every child state.
+
+Outputs:
+
+    neighbor-00.json
+    neighbor-01.json
+    ...
+    summary.json
+
+The key aggregate fields are:
+
+    child_projection_subset_count
+    induced_subgraph_match_count
+    predicted_sector_match_count
+    blocker_adjacency_changed_count
+
+Each neighbor record also contains the removed and added edges, blocker-state
+changes, overlap with the 32 W9 states, and the connected sectors obtained by
+filtering the W9 chamber through the new-edge properness constraint.
+
+The W10 move `[4,21,5,17]` should act as the calibration case: its child
+component should match the predicted W9 sector `{8,10,12,14}`.
