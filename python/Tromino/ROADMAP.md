@@ -1572,3 +1572,36 @@ changes the restored blocker coloring
 
 This is a cheap structural census before choosing additional neighbors for
 full repair-depth evaluation.
+
+
+### Flip chamber census correction before OBS-019
+
+The first pushed `w9-flip-chamber-census-v24/summary.json` exposed a bug in
+the **predictor-only** connected-component aggregation.
+
+The queue traversal used a fixed `range(len(queue))`, so newly appended
+vertices were marked seen but not traversed. This corrupted:
+
+```text
+parent_filtered_components
+predicted_parent_sector
+predicted_sector_match_count
+```
+
+It did **not** affect the independently enumerated child chamber files,
+projection overlap counts, or induced-subgraph comparison.
+
+The harness has been fixed and strengthened. The corrected census now also
+tests every W9 projection directly in the full child restore context
+(child graph + fixed prefix colors + Missing invariant), then compares the
+child chamber against the connected sector containing the child baseline.
+
+A local recomputation from the already pushed child chamber files predicts:
+
+```text
+exact child-admissible sector matches:
+neighbors 1, 3, 11, 13, 14, 16
+count = 6 / 17
+```
+
+Rerun the census before freezing OBS-019.
