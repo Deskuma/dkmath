@@ -46,7 +46,7 @@ import DkMath.Hackathon.JacobianCounterexample3
 -- Polyomino Module
 import DkMath.Polyomino  -- Polyomino Basics
 import DkMath.PolyominoPrototype  -- Polyomino Prototype
-import DkMath.Tromino  -- Polyomino: Tromino Basics
+import DkMath.Tromino  -- Tromino package facade
 -- Silver Ratio Module
 import DkMath.SilverRatio  -- Silver Ratio Unit
 -- Silver Ratio Module Tests

@@ -6,7 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Tromino.State
 import DkMath.Tromino.Exchange
-import DkMath.Tromino
+import DkMath.Tromino.Basic
 import DkMath.CosmicFormula.Mass.BodyGapSplit
 import DkMath.CosmicFormula.CoreBeamGap
 
