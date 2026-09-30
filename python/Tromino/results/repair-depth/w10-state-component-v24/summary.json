@@ -1,0 +1,184 @@
+{
+  "admissible_states": 4,
+  "baseline_index": 2,
+  "baseline_projection": {
+    "10": 1,
+    "12": 0,
+    "13": 3,
+    "14": 0,
+    "15": 0,
+    "17": 1,
+    "18": 3,
+    "4": 0,
+    "5": 3,
+    "8": 1,
+    "9": 1
+  },
+  "degree_max": 2,
+  "degree_mean": 1.5,
+  "degree_min": 1,
+  "depth_counts": {
+    "10": 1,
+    "9": 3
+  },
+  "edge_depth_deltas": [
+    {
+      "a": 0,
+      "b": 3,
+      "delta": 0,
+      "depth_a": 9,
+      "depth_b": 9
+    },
+    {
+      "a": 1,
+      "b": 2,
+      "delta": 1,
+      "depth_a": 9,
+      "depth_b": 10
+    },
+    {
+      "a": 2,
+      "b": 3,
+      "delta": -1,
+      "depth_a": 10,
+      "depth_b": 9
+    }
+  ],
+  "edges": [
+    [
+      0,
+      3
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      3
+    ]
+  ],
+  "elapsed_seconds": 43.98194241523743,
+  "graph_edges": 3,
+  "max_first_exit_depth": 10,
+  "min_first_exit_depth": 9,
+  "mutable_vertices": [
+    4,
+    5,
+    8,
+    9,
+    10,
+    12,
+    13,
+    14,
+    15,
+    17,
+    18
+  ],
+  "node": 19,
+  "seed": 12000006,
+  "state_limit": 512,
+  "states": [
+    {
+      "degree": 1,
+      "distance_from_baseline": 2,
+      "exit_counts": {
+        "10": 2,
+        "9": 3
+      },
+      "expanded_unique_states": 279935,
+      "first_exit_depth": 9,
+      "index": 0,
+      "profile_file": "state-000.json",
+      "projection": {
+        "10": 1,
+        "12": 0,
+        "13": 0,
+        "14": 1,
+        "15": 0,
+        "17": 1,
+        "18": 3,
+        "4": 0,
+        "5": 3,
+        "8": 1,
+        "9": 1
+      }
+    },
+    {
+      "degree": 1,
+      "distance_from_baseline": 1,
+      "exit_counts": {
+        "10": 1,
+        "9": 4
+      },
+      "expanded_unique_states": 279935,
+      "first_exit_depth": 9,
+      "index": 1,
+      "profile_file": "state-001.json",
+      "projection": {
+        "10": 1,
+        "12": 0,
+        "13": 1,
+        "14": 0,
+        "15": 0,
+        "17": 1,
+        "18": 3,
+        "4": 0,
+        "5": 3,
+        "8": 1,
+        "9": 1
+      }
+    },
+    {
+      "degree": 2,
+      "distance_from_baseline": 0,
+      "exit_counts": {
+        "10": 5
+      },
+      "expanded_unique_states": 279935,
+      "first_exit_depth": 10,
+      "index": 2,
+      "profile_file": "state-002.json",
+      "projection": {
+        "10": 1,
+        "12": 0,
+        "13": 3,
+        "14": 0,
+        "15": 0,
+        "17": 1,
+        "18": 3,
+        "4": 0,
+        "5": 3,
+        "8": 1,
+        "9": 1
+      }
+    },
+    {
+      "degree": 2,
+      "distance_from_baseline": 1,
+      "exit_counts": {
+        "9": 5
+      },
+      "expanded_unique_states": 279935,
+      "first_exit_depth": 9,
+      "index": 3,
+      "profile_file": "state-003.json",
+      "projection": {
+        "10": 1,
+        "12": 0,
+        "13": 3,
+        "14": 1,
+        "15": 0,
+        "17": 1,
+        "18": 3,
+        "4": 0,
+        "5": 3,
+        "8": 1,
+        "9": 1
+      }
+    }
+  ],
+  "step": 16,
+  "truncated": false,
+  "witness": "python/Tromino/results/repair-depth/seeded-w9-frontier2-d10-v24/best_frontier_witness.json"
+}
