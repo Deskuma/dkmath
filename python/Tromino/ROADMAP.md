@@ -1649,3 +1649,39 @@ edge |delta h|
 depth 11
 repair-maze volume
 ```
+
+
+### OBS-020 — Unit-Slope Is Structural
+
+Status: recorded on 2026-09-30.
+
+Sector-height census:
+
+```text
+6 exact child sectors
+98 state evaluations
+height equal to matched W9 state : 21
+height lower than matched W9     : 77
+height higher than matched W9    : 0
+depth 11                         : none
+unit-slope child chambers        : 6 / 6
+```
+
+Cross-topology height preservation is false in the census, but every tested
+fixed topology satisfies `|delta h| <= 1` on admissible one-point state edges.
+
+A direct structural audit confirms every such state edge is a singleton Kempe
+exchange. All 98 roots are genuinely blocked.
+
+This identifies repair height with shortest distance to the exit set in the
+fixed Kempe-exchange graph, so unit slope is now a graph-distance theorem
+candidate rather than a statistical conjecture.
+
+Lean plan:
+
+```text
+docs/not_implements/Tromino-RepairHeight-Sectorization-LeanPlan-260930.md
+```
+
+Next phase: formalize the generic repair-distance and state-sector kernels
+before expanding the simulation search.
