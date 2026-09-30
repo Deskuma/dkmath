@@ -53,7 +53,7 @@ python/Tromino/ROADMAP.md
 
 ## TRH-001 — generic repair-distance kernel
 
-Status: READY
+Status: COMPLETE / APPROVED — Outcome A
 
 Production target:
 
@@ -93,7 +93,7 @@ no concrete Tromino coloring dependency
 
 ## TRH-002 — generic state-sector kernel
 
-Status: READY
+Status: COMPLETE / APPROVED — Outcome A
 
 Production target:
 
@@ -124,7 +124,7 @@ The theorem must remain independent of the OBS-019 numeric census.
 
 ## TRH-003 — finite calibration and axiom audit
 
-Status: READY AFTER TRH-001/002
+Status: COMPLETE / APPROVED — Outcome A
 
 Add small kernel-checked regressions.
 
@@ -154,7 +154,7 @@ No new axiom is acceptable.
 
 ## TRH-004 — concrete singleton Kempe bridge
 
-Status: DEFERRED / NEXT CHECKPOINT
+Status: READY / ACTIVE NEXT CHECKPOINT
 
 Production target:
 
@@ -220,13 +220,29 @@ Checkpoint 001 may stop before KempeRepair.lean.
 
 ---
 
+## Checkpoint 001 result
+
+See:
+
+```text
+report-001.md
+```
+
+Outcome A established the generic exact-length path kernel, explicit-reachability
+repair height, paired unit-slope theorem, restricted relation, rooted
+sectorization theorem, finite regressions, and focused axiom audits.
+
+The concrete Kempe layer remained intentionally outside checkpoint 001.
+
+---
+
 ## Current queue
 
 ```text
 TRH-000  COMPLETE
-TRH-001  READY
-TRH-002  READY
-TRH-003  READY AFTER CORE
-TRH-004  DEFERRED
+TRH-001  COMPLETE / APPROVED
+TRH-002  COMPLETE / APPROVED
+TRH-003  COMPLETE / APPROVED
+TRH-004  READY
 TRH-005  DEFERRED
 ```
