@@ -7,7 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.Basic
 import DkMath.Polyomino
 import DkMath.CosmicFormula.CosmicFormulaCellDim
-import DkMath.Tromino
+import DkMath.Tromino.Basic
 import DkMath.FLT.PrimeProviderCore
 import DkMath.FLT.MathlibBridge.FLT34
 
