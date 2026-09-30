@@ -1464,6 +1464,144 @@ def one_search_job(job: dict) -> dict:
     }
 
 
+def enumerate_admissible_component_static(
+    tri: PlantedTriangulation,
+    prefix: dict,
+    *,
+    state_limit: int,
+) -> dict:
+    current = prefix["node"]
+    remaining = set(prefix["remaining"])
+    base_state = dict(prefix["colored"])
+    adjacency = prefix["adjacency"]
+
+    mutable = sorted(
+        v
+        for v in adjacency[current]
+        if v in base_state and v not in LOCKED
+    )
+
+    def projection_key(state: dict[int, int]) -> tuple[int, ...]:
+        return tuple(state[v] for v in mutable)
+
+    def admissible(state: dict[int, int]) -> bool:
+        if explicit_state_proper_violations(adjacency, state):
+            return False
+        return invariant_holds(adjacency, state, remaining)
+
+    root_key = projection_key(base_state)
+    states: dict[tuple[int, ...], dict[int, int]] = {
+        root_key: dict(base_state)
+    }
+    queue = deque([root_key])
+    edges: set[tuple[tuple[int, ...], tuple[int, ...]]] = set()
+    truncated = False
+
+    while queue:
+        key = queue.popleft()
+        state = states[key]
+        for v in mutable:
+            old = state[v]
+            for color in COLORS:
+                if color == old:
+                    continue
+                candidate = dict(state)
+                candidate[v] = color
+                if not admissible(candidate):
+                    continue
+                next_key = projection_key(candidate)
+                edges.add(tuple(sorted((key, next_key))))
+                if next_key not in states:
+                    if len(states) >= state_limit:
+                        truncated = True
+                        continue
+                    states[next_key] = candidate
+                    queue.append(next_key)
+
+    keys = sorted(states)
+    index_of = {key: index for index, key in enumerate(keys)}
+    graph_edges = sorted(
+        [
+            [index_of[a], index_of[b]]
+            for a, b in edges
+            if a in index_of and b in index_of
+        ]
+    )
+    degree = [0 for _ in keys]
+    for a, b in graph_edges:
+        degree[a] += 1
+        degree[b] += 1
+
+    return {
+        "node": current,
+        "remaining": sorted(remaining),
+        "mutable_vertices": mutable,
+        "baseline_colored_state": {
+            str(v): color for v, color in sorted(base_state.items())
+        },
+        "baseline_projection": {
+            str(v): root_key[i] for i, v in enumerate(mutable)
+        },
+        "baseline_index": index_of[root_key],
+        "blocker_neighbors": sorted(adjacency[current]),
+        "truncated": truncated,
+        "admissible_states": len(keys),
+        "graph_edges": len(graph_edges),
+        "degree_min": min(degree, default=0),
+        "degree_max": max(degree, default=0),
+        "degree_mean": statistics.mean(degree) if degree else 0.0,
+        "states": [
+            {
+                "index": index,
+                "projection": {
+                    str(v): key[i] for i, v in enumerate(mutable)
+                },
+                "distance_from_baseline": sum(
+                    int(key[i] != root_key[i])
+                    for i in range(len(mutable))
+                ),
+                "degree": degree[index],
+            }
+            for index, key in enumerate(keys)
+        ],
+        "edges": graph_edges,
+    }
+
+
+def one_flip_chamber_job(job: dict) -> dict:
+    payload = json.loads(Path(str(job["witness"])).read_text(encoding="utf-8"))
+    tri = triangulation_from_witness(payload)
+    move = tuple(int(x) for x in job["move"])
+    tri.apply_flip(move)
+    try:
+        prefix = restore_state_before_step(
+            tri,
+            int(job["step"]),
+            max_repair_depth=int(job["prefix_depth"]),
+            node_limit=int(job["node_limit"]),
+            intermediate_policy=str(job["intermediate_policy"]),
+        )
+        component = enumerate_admissible_component_static(
+            tri,
+            prefix,
+            state_limit=int(job["state_limit"]),
+        )
+        error = None
+    except (RuntimeError, ValueError) as exc:
+        component = None
+        error = f"{type(exc).__name__}: {exc}"
+
+    u, v, a, b = move
+    return {
+        "index": int(job["index"]),
+        "move": list(move),
+        "removed_edge": sorted([u, v]),
+        "added_edge": sorted([a, b]),
+        "component": component,
+        "error": error,
+    }
+
+
 def one_component_state_job(job: dict) -> dict:
     payload = json.loads(Path(str(job["witness"])).read_text(encoding="utf-8"))
     tri = triangulation_from_witness(payload)
@@ -2033,6 +2171,285 @@ def cmd_search(args: argparse.Namespace) -> int:
         }
     )
     atomic_json(summary_path, summary)
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
+def cmd_flip_chamber_census(args: argparse.Namespace) -> int:
+    source = Path(args.witness)
+    payload = json.loads(source.read_text(encoding="utf-8"))
+    base = triangulation_from_witness(payload)
+    moves = sorted(base.flippable_preserving())
+
+    parent_summary = json.loads(
+        Path(args.source_component_summary).read_text(encoding="utf-8")
+    )
+    parent_prefix = restore_state_before_step(
+        base,
+        args.step,
+        max_repair_depth=args.prefix_depth,
+        node_limit=args.node_limit,
+        intermediate_policy=args.intermediate_policy,
+    )
+    parent_base_state = dict(parent_prefix["colored"])
+    parent_mutable = [int(v) for v in parent_summary["mutable_vertices"]]
+
+    def projection_key(projection: dict) -> tuple[int, ...]:
+        return tuple(int(projection[str(v)]) for v in parent_mutable)
+
+    parent_by_key = {
+        projection_key(row["projection"]): row
+        for row in parent_summary["states"]
+    }
+    parent_edges = {
+        tuple(sorted((int(a), int(b))))
+        for a, b in parent_summary["edges"]
+    }
+    parent_rows = {
+        int(row["index"]): row for row in parent_summary["states"]
+    }
+
+    jobs = [
+        {
+            "index": index,
+            "move": list(move),
+            "witness": str(source),
+            "step": args.step,
+            "prefix_depth": args.prefix_depth,
+            "node_limit": args.node_limit,
+            "state_limit": args.state_limit,
+            "intermediate_policy": args.intermediate_policy,
+        }
+        for index, move in enumerate(moves)
+    ]
+
+    out = Path(args.output)
+    out.mkdir(parents=True, exist_ok=True)
+    rows = []
+    started = time.time()
+    print(
+        f"witness={source} flip_neighbors={len(jobs)} workers={args.workers}",
+        flush=True,
+    )
+    with ProcessPoolExecutor(max_workers=args.workers) as pool:
+        futures = {
+            pool.submit(one_flip_chamber_job, job): job["index"]
+            for job in jobs
+        }
+        for future in as_completed(futures):
+            row = future.result()
+            rows.append(row)
+            component = row["component"]
+            print(
+                "FLIP_CHAMBER",
+                f"index={row['index']}",
+                f"move={row['move']}",
+                f"states={None if component is None else component['admissible_states']}",
+                f"error={row['error']}",
+                flush=True,
+            )
+
+    rows.sort(key=lambda row: row["index"])
+    comparisons = []
+
+    for row in rows:
+        component = row["component"]
+        if component is None:
+            comparisons.append(
+                {
+                    **row,
+                    "comparison_available": False,
+                }
+            )
+            continue
+
+        child_mutable = [int(v) for v in component["mutable_vertices"]]
+        same_mutable = child_mutable == parent_mutable
+
+        child_base_state = {
+            int(k): int(v)
+            for k, v in component["baseline_colored_state"].items()
+        }
+        baseline_changes = [
+            {
+                "vertex": v,
+                "parent": parent_base_state.get(v),
+                "child": child_base_state.get(v),
+            }
+            for v in sorted(set(parent_base_state) | set(child_base_state))
+            if parent_base_state.get(v) != child_base_state.get(v)
+        ]
+
+        child_blocker_neighbors = set(component["blocker_neighbors"])
+        parent_blocker_neighbors = set(
+            parent_prefix["adjacency"][parent_prefix["node"]]
+        )
+
+        matched = {}
+        overlap = 0
+        matched_parent_ids: set[int] = set()
+        if same_mutable:
+            for child_state in component["states"]:
+                key = projection_key(child_state["projection"])
+                parent_state = parent_by_key.get(key)
+                if parent_state is None:
+                    continue
+                child_index = int(child_state["index"])
+                parent_index = int(parent_state["index"])
+                matched[child_index] = parent_index
+                matched_parent_ids.add(parent_index)
+                overlap += 1
+
+        mapped_child_edges = {
+            tuple(sorted((matched[a], matched[b])))
+            for a, b in component["edges"]
+            if a in matched and b in matched
+        }
+        parent_induced_edges = {
+            edge
+            for edge in parent_edges
+            if edge[0] in matched_parent_ids and edge[1] in matched_parent_ids
+        }
+        induced_subgraph_match = (
+            same_mutable
+            and overlap == component["admissible_states"]
+            and mapped_child_edges == parent_induced_edges
+        )
+
+        added_u, added_v = [int(x) for x in row["added_edge"]]
+
+        def parent_state_color(parent_row: dict, vertex: int):
+            projection = parent_row["projection"]
+            if str(vertex) in projection:
+                return int(projection[str(vertex)])
+            return parent_base_state.get(vertex)
+
+        endpoint_presence = {
+            "u_colored": added_u in parent_base_state,
+            "v_colored": added_v in parent_base_state,
+            "u_remaining": added_u in set(parent_prefix["remaining"]),
+            "v_remaining": added_v in set(parent_prefix["remaining"]),
+        }
+
+        filtered_ids: set[int] = set(parent_rows)
+        if added_u in parent_base_state and added_v in parent_base_state:
+            filtered_ids = {
+                index
+                for index, parent_row in parent_rows.items()
+                if parent_state_color(parent_row, added_u)
+                != parent_state_color(parent_row, added_v)
+            }
+
+        filtered_adj = {index: [] for index in filtered_ids}
+        for a, b in parent_edges:
+            if a in filtered_ids and b in filtered_ids:
+                filtered_adj[a].append(b)
+                filtered_adj[b].append(a)
+
+        filtered_components = []
+        seen: set[int] = set()
+        for index in sorted(filtered_ids):
+            if index in seen:
+                continue
+            queue = [index]
+            seen.add(index)
+            sector = []
+            for q_index in range(len(queue)):
+                state_index = queue[q_index]
+                sector.append(state_index)
+                for neighbor in filtered_adj[state_index]:
+                    if neighbor not in seen:
+                        seen.add(neighbor)
+                        queue.append(neighbor)
+            filtered_components.append(sorted(sector))
+
+        child_baseline_parent_index = None
+        if same_mutable:
+            baseline_key = projection_key(component["baseline_projection"])
+            parent_row = parent_by_key.get(baseline_key)
+            if parent_row is not None:
+                child_baseline_parent_index = int(parent_row["index"])
+
+        predicted_sector = None
+        if child_baseline_parent_index is not None:
+            predicted_sector = next(
+                (
+                    sector
+                    for sector in filtered_components
+                    if child_baseline_parent_index in sector
+                ),
+                None,
+            )
+
+        matched_parent_sorted = sorted(matched_parent_ids)
+        comparison = {
+            "index": row["index"],
+            "move": row["move"],
+            "removed_edge": row["removed_edge"],
+            "added_edge": row["added_edge"],
+            "error": None,
+            "comparison_available": True,
+            "component_file": f"neighbor-{row['index']:02d}.json",
+            "child_states": component["admissible_states"],
+            "child_edges": component["graph_edges"],
+            "child_truncated": component["truncated"],
+            "same_mutable_vertices": same_mutable,
+            "blocker_adjacency_changed": (
+                child_blocker_neighbors != parent_blocker_neighbors
+            ),
+            "baseline_state_changes": baseline_changes,
+            "projection_overlap_count": overlap,
+            "child_projection_subset_of_parent": (
+                same_mutable and overlap == component["admissible_states"]
+            ),
+            "matched_parent_state_ids": matched_parent_sorted,
+            "induced_subgraph_match": induced_subgraph_match,
+            "added_edge_endpoint_status": endpoint_presence,
+            "parent_states_after_added_edge_properness": len(filtered_ids),
+            "parent_filtered_component_count": len(filtered_components),
+            "parent_filtered_components": filtered_components,
+            "child_baseline_parent_index": child_baseline_parent_index,
+            "predicted_parent_sector": predicted_sector,
+            "child_matches_predicted_sector": (
+                predicted_sector is not None
+                and matched_parent_sorted == sorted(predicted_sector)
+                and induced_subgraph_match
+            ),
+        }
+        comparisons.append(comparison)
+        atomic_json(out / comparison["component_file"], component)
+
+    successful = [row for row in comparisons if row["comparison_available"]]
+    summary = {
+        "witness": str(source),
+        "seed": payload.get("job_seed"),
+        "source_component_summary": args.source_component_summary,
+        "step": args.step,
+        "legal_preserving_neighbors": len(rows),
+        "successful_prefix_restores": len(successful),
+        "failed_prefix_restores": len(rows) - len(successful),
+        "source_states": parent_summary["admissible_states"],
+        "source_edges": parent_summary["graph_edges"],
+        "neighbors": comparisons,
+        "child_projection_subset_count": sum(
+            int(row.get("child_projection_subset_of_parent", False))
+            for row in successful
+        ),
+        "induced_subgraph_match_count": sum(
+            int(row.get("induced_subgraph_match", False))
+            for row in successful
+        ),
+        "predicted_sector_match_count": sum(
+            int(row.get("child_matches_predicted_sector", False))
+            for row in successful
+        ),
+        "blocker_adjacency_changed_count": sum(
+            int(row.get("blocker_adjacency_changed", False))
+            for row in successful
+        ),
+        "elapsed_seconds": time.time() - started,
+    }
+    atomic_json(out / "summary.json", summary)
     print(json.dumps(summary, indent=2, sort_keys=True))
     return 0
 
@@ -3379,6 +3796,34 @@ def build_parser() -> argparse.ArgumentParser:
         "--output", default="python/Tromino/results/repair-depth/default"
     )
     search.set_defaults(func=cmd_search)
+
+    flip_chamber = sub.add_parser(
+        "flip-chamber-census",
+        help=(
+            "enumerate static admissible blocker-state chambers for every "
+            "legal preserving one-flip neighbor and compare with a source "
+            "component summary"
+        ),
+    )
+    flip_chamber.add_argument("witness")
+    flip_chamber.add_argument("--source-component-summary", required=True)
+    flip_chamber.add_argument("--step", type=int, default=16)
+    flip_chamber.add_argument("--prefix-depth", type=int, default=10)
+    flip_chamber.add_argument("--node-limit", type=int, default=6_000_000)
+    flip_chamber.add_argument("--state-limit", type=int, default=512)
+    flip_chamber.add_argument(
+        "--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1)
+    )
+    flip_chamber.add_argument(
+        "--intermediate-policy",
+        choices=("strict", "endpoint"),
+        default="endpoint",
+    )
+    flip_chamber.add_argument(
+        "--output",
+        default="python/Tromino/results/repair-depth/flip-chamber-census",
+    )
+    flip_chamber.set_defaults(func=cmd_flip_chamber_census)
 
     state_component = sub.add_parser(
         "state-component-scan",
