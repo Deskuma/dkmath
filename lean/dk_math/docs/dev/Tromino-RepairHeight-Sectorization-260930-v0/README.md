@@ -301,8 +301,13 @@ TRH-006 state projection transport:
   see report-004.md
 
 TRH-007 partial restoration state / Missing-valid:
+  COMPLETE / APPROVED
+  Outcome A
+  see report-005.md
+
+TRH-008 local edge-flip / exact-sector certificate:
   READY / NEXT CHECKPOINT
 
-TRH-008 concrete flip transport provider:
+TRH-009 finite OBS-019 calibration provider:
   DEFERRED
 ```
