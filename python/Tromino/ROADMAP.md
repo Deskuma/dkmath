@@ -1,16 +1,63 @@
 # Tromino Eisenstein Texture Simulation Roadmap
 
-Branch:
+## Current status
+
+Status:
+
+```text
+simulation phase closed at OBS-020
+```
+
+Research branch:
 
 ```text
 research/Tromino-EisensteinTexture-Simulation-260928-v0
 ```
 
-Base:
+Merged into:
 
 ```text
 develop
 ```
+
+Evidence frozen through:
+
+```text
+OBS-019 — Six Exact Child-Admissible Sectors
+OBS-020 — Unit-Slope Is Structural
+```
+
+Next phase:
+
+```text
+Lean formalization
+```
+
+Lean plan:
+
+```text
+docs/not_implements/Tromino-RepairHeight-Sectorization-LeanPlan-260930.md
+```
+
+### Active Lean queue
+
+```text
+LEAN-001  RepairDistance
+LEAN-002  StateSector
+LEAN-003  finite calibration
+LEAN-004  KempeRepair
+```
+
+The Python simulation campaign is now a frozen research record. The
+`EXP-000` through `EXP-008` sections below are retained as the original
+planning scaffold for historical context; their local `Status: planned`
+labels describe that initial plan and are not the current project status.
+
+The active implementation work starts with the generic repair-distance and
+state-sector kernels described in the Lean plan above. Simulation expansion is
+deferred until those structural results have been formalized and calibrated.
+
+## Historical simulation roadmap
 
 ## Scope
 
