@@ -1000,3 +1000,36 @@ filtering the W9 chamber through the new-edge properness constraint.
 
 The W10 move `[4,21,5,17]` should act as the calibration case: its child
 component should match the predicted W9 sector `{8,10,12,14}`.
+
+
+## Correction: rerun the preserving-flip chamber census
+
+The first census run revealed a bug only in the parent-sector predictor:
+the connected-component queue used a fixed-length loop. Child chamber
+enumeration itself was unaffected.
+
+The corrected implementation:
+
+- traverses filtered parent components completely;
+- validates every W9 projection directly in the **full child context**;
+- records `child_admissible_parent_components`;
+- records the sector containing the child baseline;
+- reports `child_matches_child_admissible_sector`;
+- aggregates `child_admissible_sector_match_count`.
+
+Rerun the same command and overwrite:
+
+    python3 python/Tromino/search/repair_depth_search.py flip-chamber-census \
+      python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json \
+      --source-component-summary python/Tromino/results/repair-depth/w9-state-component-v24/summary.json \
+      --step 16 \
+      --prefix-depth 10 \
+      --node-limit 6000000 \
+      --state-limit 512 \
+      --workers "$(nproc)" \
+      --intermediate-policy endpoint \
+      --output python/Tromino/results/repair-depth/w9-flip-chamber-census-v24
+
+A recomputation from the already pushed component files gives six exact
+child-admissible sector matches (neighbor indices 1, 3, 11, 13, 14, 16), so
+the corrected rerun should reproduce that calibration.
