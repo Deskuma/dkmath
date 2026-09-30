@@ -296,8 +296,13 @@ TRH-005 admissible repair chamber:
   see report-003.md
 
 TRH-006 state projection transport:
+  COMPLETE / APPROVED
+  Outcome A
+  see report-004.md
+
+TRH-007 partial restoration state / Missing-valid:
   READY / NEXT CHECKPOINT
 
-TRH-007 concrete Missing-valid / flip provider:
+TRH-008 concrete flip transport provider:
   DEFERRED
 ```
