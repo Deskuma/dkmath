@@ -286,5 +286,10 @@ checkpoint-001:
   see report-001.md
 
 TRH-004 KempeRepair:
+  COMPLETE / APPROVED
+  Outcome A
+  see report-002.md
+
+TRH-005 admissible repair chamber:
   READY / NEXT CHECKPOINT
 ```
