@@ -306,8 +306,10 @@ TRH-007 partial restoration state / Missing-valid:
   see report-005.md
 
 TRH-008 local edge-flip / exact-sector certificate:
-  READY / NEXT CHECKPOINT
+  COMPLETE / APPROVED
+  Outcome A
+  see report-006.md
 
-TRH-009 finite OBS-019 calibration provider:
-  DEFERRED
+TRH-009 frozen OBS-019 neighbor-01 calibration:
+  READY / CLOSEOUT
 ```
