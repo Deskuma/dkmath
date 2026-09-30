@@ -1605,3 +1605,47 @@ count = 6 / 17
 ```
 
 Rerun the census before freezing OBS-019.
+
+
+### OBS-019 — Six Exact Child-Admissible Sectors
+
+Status: recorded on 2026-09-30.
+
+Corrected one-flip census:
+
+```text
+legal preserving neighbors           = 17
+child projection subsets of W9       = 6
+induced subgraph matches              = 6
+exact child-admissible sector matches = 6
+simple added-edge predictor matches   = 5
+```
+
+Exact sector indices:
+
+```text
+1, 3, 11, 13, 14, 16
+```
+
+The full child-context admissibility predicate is the correct abstraction.
+Neighbor 16 is the counterexample to an added-edge-only predictor.
+
+### Next experiment — sector height census
+
+New script:
+
+```text
+python/Tromino/search/sector_height_census.py
+```
+
+It evaluates repair height on every state of the six exact sectors and compares
+each child state with its matched W9 state.
+
+Targets:
+
+```text
+height-label preservation
+edge |delta h|
+depth 11
+repair-maze volume
+```
