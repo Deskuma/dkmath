@@ -291,5 +291,13 @@ TRH-004 KempeRepair:
   see report-002.md
 
 TRH-005 admissible repair chamber:
+  COMPLETE / APPROVED
+  Outcome A
+  see report-003.md
+
+TRH-006 state projection transport:
   READY / NEXT CHECKPOINT
+
+TRH-007 concrete Missing-valid / flip provider:
+  DEFERRED
 ```
