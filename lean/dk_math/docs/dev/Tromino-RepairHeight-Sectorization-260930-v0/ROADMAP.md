@@ -259,7 +259,7 @@ bridge to KempeRepair on the induced colored subgraph
 
 ## TRH-008 — local edge-flip delta / exact-sector transport certificate
 
-Status: READY / ACTIVE NEXT CHECKPOINT
+Status: COMPLETE / APPROVED — Outcome A
 
 Production target:
 
@@ -290,13 +290,26 @@ Exact transport requires an explicit rooted compatibility certificate.
 
 ---
 
-## TRH-009 — concrete finite OBS-019 calibration provider
+## TRH-009 — frozen OBS-019 neighbor-01 calibration / campaign closeout
 
-Status: DEFERRED
+Status: READY / ACTIVE NEXT CHECKPOINT
 
-After TRH-008 fixes the certificate, decide whether to encode one small finite
-transport-compatible witness as a Lean regression/provider or keep the W9
-numeric census exclusively in Python evidence.
+Use the smallest exact transport-compatible frozen case:
+
+```text
+seed:        11000009
+step:        16
+neighbor:    1
+move:        [4,21,5,17]
+child states: 4
+parent ids:  [8,10,12,14]
+baseline:    child 2 -> parent 12
+```
+
+The checkpoint is regression/documentation only. It must not copy the whole W9
+state table into production. Its purpose is to prove that the frozen Python
+observation agrees with the now-formal Lean transport abstraction and then
+close this branch for PR.
 
 No universal preserving-flip theorem is authorized.
 
@@ -423,6 +436,24 @@ is not automatic.
 
 ---
 
+## Checkpoint 006 result
+
+See:
+
+```text
+report-006.md
+```
+
+Outcome A established the local single-edge topology delta, properness and
+MissingAt locality, the rooted exact-sector certificate, exact shared-coordinate
+sector theorem, and a concrete builder into the generic
+`RootedChamberTransport` kernel.
+
+The abstract/formal campaign objective is now complete. The only remaining
+checkpoint is a frozen-data calibration against one actual OBS-019 case.
+
+---
+
 ## Current queue
 
 ```text
@@ -434,6 +465,6 @@ TRH-004  COMPLETE / APPROVED
 TRH-005  COMPLETE / APPROVED
 TRH-006  COMPLETE / APPROVED
 TRH-007  COMPLETE / APPROVED
-TRH-008  READY
-TRH-009  DEFERRED
+TRH-008  COMPLETE / APPROVED
+TRH-009  READY / CLOSEOUT
 ```
