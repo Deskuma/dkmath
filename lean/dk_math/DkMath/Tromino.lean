@@ -11,6 +11,18 @@ import DkMath.Polyomino
 
 #print "file: DkMath.Tromino"
 
+/-! # Tromino geometry and exchange calculus
+
+This module collects the elementary geometric vocabulary used by the
+Tromino development: finite cell shapes, translations, rotations, reflected
+placements, and the area identities of the L-shaped and straight Tromino.
+The separate `DkMath.Tromino.*` modules build the four-state exchange and
+repair/sectorization abstractions on top of this vocabulary.
+
+The geometric identities in this file are finite, kernel-checkable statements.
+They provide notation and local calculations; they are not, by themselves,
+a planar coloring theorem or a triangulation-reduction theorem. -/
+
 set_option linter.style.longLine true
 
 namespace DkMath
