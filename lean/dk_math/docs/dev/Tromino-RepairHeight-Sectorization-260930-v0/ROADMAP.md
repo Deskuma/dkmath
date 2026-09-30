@@ -230,7 +230,7 @@ that every topology-changing flip satisfies the transport hypotheses.
 
 ## TRH-007 — partial restoration state / Missing-valid kernel
 
-Status: READY / ACTIVE NEXT CHECKPOINT
+Status: COMPLETE / APPROVED — Outcome A
 
 The Python repair state is a partial coloring: already-colored vertices carry
 colors while the remaining vertices are still uncolored. Formalize that
@@ -257,15 +257,48 @@ bridge to KempeRepair on the induced colored subgraph
 
 ---
 
-## TRH-008 — concrete flip transport provider
+## TRH-008 — local edge-flip delta / exact-sector transport certificate
+
+Status: READY / ACTIVE NEXT CHECKPOINT
+
+Production target:
+
+```text
+DkMath/Tromino/RestorationFlipTransport.lean
+```
+
+Formalize the Python topology change as a local undirected edge replacement:
+
+```text
+remove (u,v)
+add    (a,b)
+all other adjacencies unchanged
+```
+
+Then package the additional state-space condition that distinguishes the six
+OBS-019 exact transport cases from the eleven state-regenerating cases.
+
+The key point is:
+
+```text
+topology flip alone
+DOES NOT imply
+child chamber projects into parent chamber.
+```
+
+Exact transport requires an explicit rooted compatibility certificate.
+
+---
+
+## TRH-009 — concrete finite OBS-019 calibration provider
 
 Status: DEFERRED
 
-After TRH-007, instantiate the shared-coordinate transport contract for a
-topology-changing parent/child context when the Lean topology layer provides
-the required local flip data.
+After TRH-008 fixes the certificate, decide whether to encode one small finite
+transport-compatible witness as a Lean regression/provider or keep the W9
+numeric census exclusively in Python evidence.
 
-No cross-topology repair-height monotonicity is implied.
+No universal preserving-flip theorem is authorized.
 
 ---
 
@@ -369,6 +402,27 @@ before a sound flip provider can be claimed.
 
 ---
 
+## Checkpoint 005 result
+
+See:
+
+```text
+report-005.md
+```
+
+Outcome A established the partial restoration carrier, realization semantics,
+properness on already-colored vertices, Missing-validity, admissible
+one-coordinate transitions, the induced-colored-graph bridge to
+`OnePointRecolor` / `SingletonKempeMove`, and the combined parent/child
+admissibility filter.
+
+The remaining gap is now sharply localized: describe the actual topology
+delta and certify when the child rooted chamber remains inside the parent
+admissible state space. The simulation already shows that this compatibility
+is not automatic.
+
+---
+
 ## Current queue
 
 ```text
@@ -379,6 +433,7 @@ TRH-003  COMPLETE / APPROVED
 TRH-004  COMPLETE / APPROVED
 TRH-005  COMPLETE / APPROVED
 TRH-006  COMPLETE / APPROVED
-TRH-007  READY
-TRH-008  DEFERRED
+TRH-007  COMPLETE / APPROVED
+TRH-008  READY
+TRH-009  DEFERRED
 ```
