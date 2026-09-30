@@ -1464,3 +1464,53 @@ cycles
 distance from the W9 baseline
 whether the observed +/-1 local motion persists globally
 ```
+
+
+### OBS-017 — Finite Unit-Slope Repair Landscape
+
+Status: recorded on 2026-09-30.
+
+Files:
+
+```text
+python/Tromino/experiments/OBS-017-FiniteUnitSlopeRepairLandscape/
+  README.md
+  summary.json
+```
+
+The complete W9 admissible blocker-state component contains 32 states and 48
+one-point recoloring edges. Repair first-exit depth takes only the values
+8, 9, and 10 with distribution:
+
+```text
+8 : 9 states
+9 : 19 states
+10: 4 states
+```
+
+Every admissible state edge satisfies:
+
+```text
+|delta first-exit-depth| <= 1
+```
+
+with 19 flat edges and 29 unit-slope edges.
+
+This is a complete finite observation for the witness, not yet a general
+theorem.
+
+### Next experiment — W10 complete state component
+
+Repeat `state-component-scan` on the actual W10 child witness with
+`--max-depth 11`.
+
+A static admissibility probe gives only four states and three edges, forming a
+simple path. This sharply contrasts with the cyclic 32-state W9 chamber.
+
+Primary questions:
+
+```text
+does W10 contain depth 11?
+does the unit-slope edge law persist?
+does the height range remain consecutive?
+```
