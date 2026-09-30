@@ -1514,3 +1514,61 @@ does W10 contain depth 11?
 does the unit-slope edge law persist?
 does the height range remain consecutive?
 ```
+
+
+### OBS-018 — Constraint Edge Sectorizes the W9 State Chamber
+
+Status: recorded on 2026-09-30.
+
+Files:
+
+```text
+python/Tromino/experiments/OBS-018-ConstraintEdgeSectorization/
+  README.md
+  summary.json
+```
+
+The complete W10 chamber has four states and three edges with depth labels
+`9,9,10,9`; no depth-eleven state appears.
+
+More strongly, its four state projections and all three transition edges occur
+verbatim as the induced W9 subgraph on parent states:
+
+```text
+8 -- 14 -- 12 -- 10
+9     9     10    9
+```
+
+The added edge `5-17` imposes `c5 != c17` at the blocker state. Among the
+32 W9 states, exactly 16 satisfy this constraint, and they split into four
+disconnected four-state sectors. The W10 restore state lands in sector
+`{8,10,12,14}`.
+
+Thus the observed 32 -> 4 contraction is explained as constraint-edge
+sectorization plus connected-component selection, while first-exit depth is
+preserved on the surviving shared sector.
+
+### Next experiment — preserving-flip chamber census
+
+The harness now provides:
+
+```text
+flip-chamber-census WITNESS
+```
+
+It scans every legal preserving one-flip neighbor of the W9 witness, restores
+the same blocker step, enumerates the static proper + Missing-valid state
+component, and compares that component with the complete W9 chamber.
+
+The experiment records whether each child chamber:
+
+```text
+is a projection subset of W9
+is an induced W9 subgraph
+matches the sector predicted by the added-edge properness constraint
+changes blocker adjacency
+changes the restored blocker coloring
+```
+
+This is a cheap structural census before choosing additional neighbors for
+full repair-depth evaluation.
