@@ -273,14 +273,18 @@ simulation evidence:
   FROZEN THROUGH OBS-020
 
 TRH-001 RepairDistance:
-  NOT IMPLEMENTED
+  COMPLETE / APPROVED
 
 TRH-002 StateSector:
-  NOT IMPLEMENTED
+  COMPLETE / APPROVED
 
 TRH-003 finite calibration:
-  NOT IMPLEMENTED
+  COMPLETE / APPROVED
+
+checkpoint-001:
+  Outcome A
+  see report-001.md
 
 TRH-004 KempeRepair:
-  DEFERRED TO NEXT CHECKPOINT
+  READY / NEXT CHECKPOINT
 ```
