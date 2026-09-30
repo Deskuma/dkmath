@@ -50,7 +50,7 @@ theorem padicValNat_mul_pow
     (ha : a ≠ 0) :
     padicValNat p (n * a ^ d) =
       padicValNat p n + d * padicValNat p a := by
-  haveI : Fact p.Prime := ⟨hp⟩
+  have : Fact p.Prime := ⟨hp⟩
   calc
     padicValNat p (n * a ^ d)
         = padicValNat p n + padicValNat p (a ^ d) := by
