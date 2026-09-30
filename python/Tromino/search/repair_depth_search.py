@@ -2209,6 +2209,33 @@ def cmd_flip_chamber_census(args: argparse.Namespace) -> int:
         int(row["index"]): row for row in parent_summary["states"]
     }
 
+    def parent_components_for_ids(ids: set[int]) -> list[list[int]]:
+        adjacency = {index: [] for index in ids}
+        for a, b in parent_edges:
+            if a in ids and b in ids:
+                adjacency[a].append(b)
+                adjacency[b].append(a)
+
+        components: list[list[int]] = []
+        seen: set[int] = set()
+        for index in sorted(ids):
+            if index in seen:
+                continue
+            queue = [index]
+            seen.add(index)
+            sector: list[int] = []
+            q_index = 0
+            while q_index < len(queue):
+                state_index = queue[q_index]
+                q_index += 1
+                sector.append(state_index)
+                for neighbor in adjacency[state_index]:
+                    if neighbor not in seen:
+                        seen.add(neighbor)
+                        queue.append(neighbor)
+            components.append(sorted(sector))
+        return components
+
     jobs = [
         {
             "index": index,
@@ -2340,28 +2367,7 @@ def cmd_flip_chamber_census(args: argparse.Namespace) -> int:
                 != parent_state_color(parent_row, added_v)
             }
 
-        filtered_adj = {index: [] for index in filtered_ids}
-        for a, b in parent_edges:
-            if a in filtered_ids and b in filtered_ids:
-                filtered_adj[a].append(b)
-                filtered_adj[b].append(a)
-
-        filtered_components = []
-        seen: set[int] = set()
-        for index in sorted(filtered_ids):
-            if index in seen:
-                continue
-            queue = [index]
-            seen.add(index)
-            sector = []
-            for q_index in range(len(queue)):
-                state_index = queue[q_index]
-                sector.append(state_index)
-                for neighbor in filtered_adj[state_index]:
-                    if neighbor not in seen:
-                        seen.add(neighbor)
-                        queue.append(neighbor)
-            filtered_components.append(sorted(sector))
+        filtered_components = parent_components_for_ids(filtered_ids)
 
         child_baseline_parent_index = None
         if same_mutable:
@@ -2380,6 +2386,46 @@ def cmd_flip_chamber_census(args: argparse.Namespace) -> int:
                 ),
                 None,
             )
+
+        # Stronger static predictor: transplant every parent projection into
+        # the child's fixed restore context and validate it against the full
+        # child graph plus Missing-Color invariant. This handles both the
+        # removed and added flip edges and any fixed-color prefix changes.
+        child_admissible_parent_ids: set[int] = set()
+        child_admissible_components: list[list[int]] = []
+        child_admissible_sector = None
+        if same_mutable:
+            child_tri = base.copy()
+            child_tri.apply_flip(tuple(int(x) for x in row["move"]))
+            child_adjacency = child_tri.adjacency(include_sea=True)
+            child_remaining = {int(v) for v in component["remaining"]}
+            for parent_index, parent_row in parent_rows.items():
+                candidate = dict(child_base_state)
+                projection = parent_row["projection"]
+                for v in child_mutable:
+                    candidate[v] = int(projection[str(v)])
+                if explicit_state_proper_violations(
+                    child_adjacency, candidate
+                ):
+                    continue
+                if not invariant_holds(
+                    child_adjacency, candidate, child_remaining
+                ):
+                    continue
+                child_admissible_parent_ids.add(parent_index)
+
+            child_admissible_components = parent_components_for_ids(
+                child_admissible_parent_ids
+            )
+            if child_baseline_parent_index is not None:
+                child_admissible_sector = next(
+                    (
+                        sector
+                        for sector in child_admissible_components
+                        if child_baseline_parent_index in sector
+                    ),
+                    None,
+                )
 
         matched_parent_sorted = sorted(matched_parent_ids)
         comparison = {
@@ -2415,6 +2461,18 @@ def cmd_flip_chamber_census(args: argparse.Namespace) -> int:
                 and matched_parent_sorted == sorted(predicted_sector)
                 and induced_subgraph_match
             ),
+            "child_admissible_parent_state_count": len(
+                child_admissible_parent_ids
+            ),
+            "child_admissible_parent_components": (
+                child_admissible_components
+            ),
+            "child_admissible_parent_sector": child_admissible_sector,
+            "child_matches_child_admissible_sector": (
+                child_admissible_sector is not None
+                and matched_parent_sorted == sorted(child_admissible_sector)
+                and induced_subgraph_match
+            ),
         }
         comparisons.append(comparison)
         atomic_json(out / comparison["component_file"], component)
@@ -2441,6 +2499,10 @@ def cmd_flip_chamber_census(args: argparse.Namespace) -> int:
         ),
         "predicted_sector_match_count": sum(
             int(row.get("child_matches_predicted_sector", False))
+            for row in successful
+        ),
+        "child_admissible_sector_match_count": sum(
+            int(row.get("child_matches_child_admissible_sector", False))
             for row in successful
         ),
         "blocker_adjacency_changed_count": sum(
