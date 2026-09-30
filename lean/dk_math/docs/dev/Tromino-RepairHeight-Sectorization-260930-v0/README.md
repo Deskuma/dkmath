@@ -1,6 +1,6 @@
 # Tromino Repair Height / Sectorization Lean 260930 v0
 
-Status: ACTIVE
+Status: COMPLETE / READY FOR PR
 
 ## Purpose
 
@@ -311,5 +311,10 @@ TRH-008 local edge-flip / exact-sector certificate:
   see report-006.md
 
 TRH-009 frozen OBS-019 neighbor-01 calibration:
-  READY / CLOSEOUT
+  COMPLETE / APPROVED
+  Outcome A
+  see report-007.md
+
+campaign:
+  COMPLETE / READY FOR PR
 ```

@@ -292,7 +292,7 @@ Exact transport requires an explicit rooted compatibility certificate.
 
 ## TRH-009 — frozen OBS-019 neighbor-01 calibration / campaign closeout
 
-Status: READY / ACTIVE NEXT CHECKPOINT
+Status: COMPLETE / APPROVED — Outcome A
 
 Use the smallest exact transport-compatible frozen case:
 
@@ -312,6 +312,20 @@ observation agrees with the now-formal Lean transport abstraction and then
 close this branch for PR.
 
 No universal preserving-flip theorem is authorized.
+
+## TRH-009 result
+
+See:
+
+```text
+report-007.md
+```
+
+Outcome A kernel-calibrated the frozen OBS-019 neighbor-01 child rows against
+the generic rooted chamber transport. The exact four-state child component,
+the mapped parent component `[8, 10, 12, 14]`, the induced edge set, and the
+provenance `(seed 11000009, step 16, move [4,21,5,17])` are recorded in a
+test-only module. No production theorem or module was added in this closeout.
 
 ---
 
@@ -449,8 +463,9 @@ MissingAt locality, the rooted exact-sector certificate, exact shared-coordinate
 sector theorem, and a concrete builder into the generic
 `RootedChamberTransport` kernel.
 
-The abstract/formal campaign objective is now complete. The only remaining
-checkpoint is a frozen-data calibration against one actual OBS-019 case.
+The abstract/formal campaign objective and the frozen-data calibration are
+complete. The branch is ready for PR review, subject to the repository's
+normal review workflow.
 
 ---
 
@@ -466,5 +481,7 @@ TRH-005  COMPLETE / APPROVED
 TRH-006  COMPLETE / APPROVED
 TRH-007  COMPLETE / APPROVED
 TRH-008  COMPLETE / APPROVED
-TRH-009  READY / CLOSEOUT
+TRH-009  COMPLETE / APPROVED
+
+campaign  COMPLETE / READY FOR PR
 ```
