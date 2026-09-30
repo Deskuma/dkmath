@@ -154,7 +154,7 @@ No new axiom is acceptable.
 
 ## TRH-004 — concrete singleton Kempe bridge
 
-Status: READY / ACTIVE NEXT CHECKPOINT
+Status: COMPLETE / APPROVED — Outcome A
 
 Production target:
 
@@ -191,7 +191,7 @@ exchange and feed that edge into TRH-001.
 
 ## TRH-005 — Tromino-facing integration
 
-Status: DEFERRED
+Status: READY / ACTIVE NEXT CHECKPOINT
 
 Only after TRH-004 is stable, expose application-level theorems connecting the
 generic unit-slope result to the repair-state semantics used by the simulation.
@@ -236,6 +236,32 @@ The concrete Kempe layer remained intentionally outside checkpoint 001.
 
 ---
 
+## Checkpoint 002 result
+
+See:
+
+```text
+report-002.md
+```
+
+Outcome A established the concrete one-point recolor predicate, two-color
+support/reachability, singleton Kempe-component theorem, V4 exchange bridge,
+symmetric singleton-Kempe step relation, and its thin repair-height unit-slope
+corollary.
+
+A semantic boundary to preserve in checkpoint 003:
+
+```text
+Reachable (Restricted R A) root root
+```
+
+holds by the zero-step constructor even when `A root` is false. Therefore a
+rooted admissible chamber that is intended to consist only of admissible states
+must carry root admissibility explicitly. The checkpoint-001 production
+theorems remain valid; this is a chamber-semantics refinement.
+
+---
+
 ## Current queue
 
 ```text
@@ -243,6 +269,6 @@ TRH-000  COMPLETE
 TRH-001  COMPLETE / APPROVED
 TRH-002  COMPLETE / APPROVED
 TRH-003  COMPLETE / APPROVED
-TRH-004  READY
-TRH-005  DEFERRED
+TRH-004  COMPLETE / APPROVED
+TRH-005  READY
 ```
