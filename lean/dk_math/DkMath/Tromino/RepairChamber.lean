@@ -12,6 +12,17 @@ namespace DkMath.Tromino
 
 variable {State : Type*}
 
+/-! # Admissible rooted chambers
+
+An unrestricted path relation may leave the state space on which an
+application-level invariant is meaningful. `AdmissibleChamber` therefore
+records both admissibility of the root and reachability through the relation
+restricted to admissible endpoints. This explicit root witness avoids the
+zero-step ambiguity of bare `Reachable`.
+
+The second half of the file specializes this pattern to singleton Kempe
+moves and connects chamber edges to the generic repair-height estimate. -/
+
 /-! ## Explicit admissible chambers -/
 
 /-- Rooted reachability in the restricted relation, with an admissible root. -/
@@ -30,6 +41,8 @@ theorem restricted_reachable_target_admissible
   | prepend hstep hrest ih =>
       exact ih hstep.2.1
 
+/-! At the root, the chamber condition reduces exactly to root admissibility;
+the reachability half is supplied by the zero-step path. -/
 theorem admissibleChamber_root_iff
     {R : State → State → Prop} {A : State → Prop} (root : State) :
     AdmissibleChamber R A root root ↔ A root := by

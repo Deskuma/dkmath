@@ -11,9 +11,27 @@ import DkMath.Tromino.StateProjectionTransport
 
 namespace DkMath.Tromino
 
+/-! # Local flip transport for partial restorations
+
+This module isolates the mathematics of a single undirected edge replacement.
+`SingleEdgeReplacement` says that the child graph is obtained by removing one
+parent edge and adding one new edge; all other adjacency facts are recovered
+from its equivalence field.
+
+The topology delta alone is deliberately not treated as a sector theorem.
+After properness and Missing-Color locality are transported, an explicit
+`ExactRestorationSectorCertificate` is still required to show that every state
+reachable in the child chamber is admissible for the parent. Only then can
+the shared-coordinate sector be packaged as a generic
+`RootedChamberTransport`. -/
+
 /-! ## The local graph delta -/
 
-/-- Equality of two ordered pairs as the same undirected edge. -/
+/-- Equality of two ordered pairs as the same undirected edge.
+
+The disjunction makes the predicate independent of the orientation used to
+write an adjacency pair.
+-/
 def SameUndirectedEdge {V : Type*} (x y u v : V) : Prop :=
   (x = u ∧ y = v) ∨ (x = v ∧ y = u)
 
@@ -43,7 +61,13 @@ theorem sameUndirectedEdge_overlap {V : Type*}
     rcases hxyab with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;>
       simp [SameUndirectedEdge]
 
-/-- The parent edge and the replacement edge cannot be the same edge. -/
+/-- A local graph delta replacing one old edge by one new edge.
+
+The `adj_iff` field is the complete topology specification: an edge survives
+exactly when it was a parent edge different from the removed edge, or it is
+the newly inserted edge. `new_nonedge` guarantees that the replacement is
+genuinely different from the removed edge.
+-/
 structure SingleEdgeReplacement {V : Type*}
     (GParent GChild : SimpleGraph V) (u v a b : V) : Prop where
   old_edge : GParent.Adj u v
@@ -125,6 +149,10 @@ theorem missingAt_flip_locality
     intro x hx hcx
     exact hmissing x ((R.adj_at_unchanged hwu hwv hwa hwb).mpr hx) hcx
 
+/-! Properness changes only at the new and removed edge. Consequently, a
+proper parent assignment crosses to the child when the new edge has distinct
+endpoint values, and a proper child assignment crosses back when the removed
+edge has distinct endpoint values. -/
 /-! ## Properness transport -/
 
 theorem properOnColored_parent_to_child
@@ -166,6 +194,8 @@ structure RestorationFlipContext {V : Type*}
   same_colored : parentContext.colored = childContext.colored
   same_remaining : parentContext.remaining = childContext.remaining
 
+/-! A compatible flip context shares the colored and remaining predicates;
+the ambient graphs may still differ by the local edge replacement. -/
 theorem restorationContext_proper_parent_to_child
     {V : Type*} {GParent GChild : SimpleGraph V} {mutable : V → Prop}
     {u v a b : V}
@@ -230,6 +260,9 @@ structure ExactRestorationSectorCertificate {V : Type*}
     Reachable (AdmissibleRestorationStep childContext) root state →
       RestorationAdmissible parentContext state
 
+/-! The certificate is the missing global ingredient after local topology
+transport: it says that the entire rooted child chamber lies in the parent
+admissible state space. -/
 theorem exactRestorationSector_edge_iff
     {V : Type*} {GParent GChild : SimpleGraph V} {mutable : V → Prop}
     {parentContext : RestorationContext GParent mutable}
@@ -258,6 +291,10 @@ theorem childAdmissibleRestorationStep_iff_transport
 
 /-! ## Exact sector on the shared coordinate carrier -/
 
+/-! Starting from a child-reachable state, every child path can be read as a
+path satisfying both parent and child admissibility. In the reverse direction
+the shared relation forgets only parent-side evidence, so a transport path is
+already a child path. -/
 theorem steps_transport_of_child_reachable
     {V : Type*} {GParent GChild : SimpleGraph V} {mutable : V → Prop}
     {u v a b : V}
@@ -334,6 +371,9 @@ def RootedChildChamber {V : Type*}
     (root : MutableCoordinates mutable) :=
   {state // Reachable (AdmissibleRestorationStep childContext) root state}
 
+/-! The subtype remembers both a child state and its proof of membership in
+the rooted child chamber. This makes the projection to the shared mutable
+carrier injective by construction. -/
 def RootedChildChamberStep {V : Type*}
     {GChild : SimpleGraph V} {mutable : V → Prop}
     (childContext : RestorationContext GChild mutable)

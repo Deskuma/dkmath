@@ -10,6 +10,19 @@ import DkMath.Tromino.StateProjectionTransport
 
 namespace DkMath.Tromino
 
+/-! # Partial restoration states
+
+This module separates the finite mutable coordinates from the partially
+colored graph on which they are interpreted. A `RestorationContext` remembers
+which vertices are colored, which remain uncolored, and which values are
+fixed outside the mutable set. A mutable state is realized as a total ambient
+assignment only for the purpose of checking local conditions.
+
+The admissibility predicate is intentionally local: properness is required on
+colored--colored edges, while every remaining vertex must have a missing
+color. The final bridge identifies an admissible one-coordinate move with a
+singleton Kempe move on the induced colored graph. -/
+
 /-! ## Partial restoration contexts -/
 
 /-- Fixed data for a partial restoration state.
@@ -29,7 +42,11 @@ def ColoredVertex {V : Type*} {G : SimpleGraph V} {mutable : V → Prop}
     (context : RestorationContext G mutable) :=
   {v : V // context.colored v}
 
-/-- The graph induced by the already-colored vertices. -/
+/-- The graph induced by the already-colored vertices.
+
+This is the graph on which a partial assignment becomes an ordinary proper
+coloring; uncolored vertices are not silently assigned constraints.
+-/
 def ColoredGraph {V : Type*} {G : SimpleGraph V} {mutable : V → Prop}
     (context : RestorationContext G mutable) :
     SimpleGraph (ColoredVertex context) :=
@@ -38,7 +55,12 @@ def ColoredGraph {V : Type*} {G : SimpleGraph V} {mutable : V → Prop}
 /-! ## Realizing mutable coordinates -/
 
 /-- Restore a full ambient assignment from fixed outside data and mutable
-coordinates. -/
+coordinates.
+
+Mutable coordinates take precedence on mutable vertices, and `base` supplies
+the fixed context elsewhere. The definition does not assert that the result
+is proper; properness is a separate predicate below.
+-/
 noncomputable def realize {V : Type*} {G : SimpleGraph V} {mutable : V → Prop}
     (context : RestorationContext G mutable)
     (state : MutableCoordinates mutable) (v : V) : TrominoState :=
@@ -74,7 +96,11 @@ theorem realize_injective
 
 /-! ## Properness and Missing-Color validity -/
 
-/-- Properness restricted to edges whose two endpoints are colored. -/
+/-- Properness restricted to edges whose two endpoints are colored.
+
+Edges incident to an uncolored endpoint are intentionally outside this
+predicate.
+-/
 def ProperOnColored {V : Type*} (G : SimpleGraph V) (colored : V → Prop)
     (assignment : V → TrominoState) : Prop :=
   ∀ ⦃u v⦄, G.Adj u v → colored u → colored v → assignment u ≠ assignment v
@@ -93,7 +119,11 @@ def MissingAt {V : Type*} (G : SimpleGraph V) (colored : V → Prop)
     ∀ u, G.Adj u w → colored u → assignment u ≠ missing
 
 /-- Every remaining vertex has at least one color absent from its colored
-neighbors. -/
+neighbors.
+
+This is the local completion condition used by restoration arguments; it is
+not a global extension or coloring theorem.
+-/
 def MissingValid {V : Type*} (G : SimpleGraph V) (colored remaining : V → Prop)
     (assignment : V → TrominoState) : Prop :=
   ∀ w, remaining w → MissingAt G colored assignment w
@@ -105,7 +135,11 @@ def RestorationContext.MissingValid
   DkMath.Tromino.MissingValid G context.colored context.remaining
     (realize context state)
 
-/-- The static restoration admissibility predicate. -/
+/-- The static restoration admissibility predicate.
+
+An admissible mutable state is both proper on the already-colored graph and
+Missing-valid at every remaining vertex.
+-/
 def RestorationAdmissible
     {V : Type*} {G : SimpleGraph V} {mutable : V → Prop}
     (context : RestorationContext G mutable)
@@ -114,7 +148,11 @@ def RestorationAdmissible
 
 /-! ## One-coordinate restoration transitions -/
 
-/-- Two coordinate states differ at exactly one mutable coordinate. -/
+/-- Two coordinate states differ at exactly one mutable coordinate.
+
+The predicate is symmetric, and it is independent of graph adjacency. Graph
+constraints enter only through `AdmissibleRestorationStep`.
+-/
 def CoordinateOnePointStep {V : Type*} (mutable : V → Prop)
     (source target : MutableCoordinates mutable) : Prop :=
   ∃ v, source v ≠ target v ∧ ∀ u, u ≠ v → target u = source u
@@ -127,7 +165,11 @@ theorem coordinateOnePointStep_symmetric
   rcases h with ⟨v, hne, haway⟩
   exact ⟨v, hne.symm, fun u hu => (haway u hu).symm⟩
 
-/-- Admissible one-coordinate restoration transitions. -/
+/-- Admissible one-coordinate restoration transitions.
+
+Both endpoints must satisfy `RestorationAdmissible`, and the underlying move
+must change exactly one mutable coordinate.
+-/
 def AdmissibleRestorationStep
     {V : Type*} {G : SimpleGraph V} {mutable : V → Prop}
     (context : RestorationContext G mutable) :=
@@ -168,7 +210,11 @@ def mutableToColored
   v.2
 
 /-- A proper partial assignment becomes a proper coloring of the induced
-colored graph. -/
+colored graph.
+
+The proof is a change of carrier: the values are still supplied by `realize`,
+but the graph now contains only colored vertices.
+-/
 noncomputable def partialColoring
     {V : Type*} {G : SimpleGraph V} {mutable : V → Prop}
     (context : RestorationContext G mutable)
@@ -243,14 +289,18 @@ theorem admissibleRestorationStep_singletonKempeMove
 
 /-! ## Shared parent/child admissibility -/
 
+/-- Shared admissibility for a parent/child pair of contexts. -/
 def TransportAdmissible
     {V : Type*} {GParent GChild : SimpleGraph V} {mutable : V → Prop}
     (parentContext : RestorationContext GParent mutable)
     (childContext : RestorationContext GChild mutable)
     (state : MutableCoordinates mutable) : Prop :=
-  RestorationAdmissible parentContext state ∧
+    RestorationAdmissible parentContext state ∧
     RestorationAdmissible childContext state
 
+/-! Shared admissibility is the intersection of the parent and child local
+conditions. It is the precise state predicate needed when a topology change
+is compared on a common mutable carrier. -/
 def TransportAdmissibleRestorationStep
     {V : Type*} {GParent GChild : SimpleGraph V} {mutable : V → Prop}
     (parentContext : RestorationContext GParent mutable)

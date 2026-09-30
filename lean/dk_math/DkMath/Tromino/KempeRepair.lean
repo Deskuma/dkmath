@@ -14,6 +14,17 @@ namespace DkMath.Tromino
 
 variable {V : Type*}
 
+/-! # Singleton Kempe repairs
+
+This module turns a one-vertex recoloring into the smallest relevant
+two-color component. If source and target differ only at one mutable vertex,
+properness prevents any other vertex from joining the two-color support of
+that changed vertex. Thus the Kempe component is a singleton, and the unique
+nonzero translation in the four-state carrier records the color change.
+
+The resulting `SingletonKempeMove` is symmetric and can be used directly as
+the step relation in the generic repair-height kernel. -/
+
 /-! ## One-point recoloring -/
 
 /-- Two proper colorings differ at one mutable vertex and agree elsewhere. -/
@@ -69,6 +80,9 @@ theorem not_twoColorStep_at_onePoint
   · have htarget : target u = target v := (haway u huv).trans hub
     exact target.valid hadj htarget.symm
 
+/-! A proper edge incident to the changed vertex cannot lead to a second
+vertex in the source/target two-color support. This is the local obstruction
+from which singleton Kempe components follow. -/
 theorem kempeReachable_singleton_of_onePointRecolor
     {G : SimpleGraph V} {mutable : V → Prop}
     {source target : G.Coloring TrominoState}
@@ -113,6 +127,9 @@ def SingletonKempeMove (G : SimpleGraph V) (mutable : V → Prop)
     (∀ u, KempeReachable G source (source v) (target v) v u ↔ u = v) ∧
     ∃! delta, delta ≠ 0 ∧ exchange delta (source v) = target v
 
+/-! The package stores the same move in three compatible languages: a changed
+mutable vertex, a singleton two-color component, and a unique nonzero V4
+translation. -/
 theorem onePointRecolor_singletonKempeMove
     {G : SimpleGraph V} {mutable : V → Prop}
     {source target : G.Coloring TrominoState}
@@ -170,6 +187,8 @@ theorem singletonKempeMove_symm
     exact hawayReverse u hu
   · exact existsUnique_nonzero_exchange_to hne.symm
 
+/-! The move relation is an undirected graph relation, so the generic
+unit-slope repair-height theorem applies to it. -/
 theorem singletonKempeMove_symmetric
     {G : SimpleGraph V} {mutable : V → Prop} :
     Std.Symm (SingletonKempeMove G mutable) := by

@@ -11,6 +11,13 @@ import DkMathTest.Tromino.OBS019Neighbor01Calibration
 open DkMath.Tromino
 open DkMathTest.Tromino
 
+/-! # OBS-019 neighbor-01 dependency audit
+
+The calibration is intentionally test-local. This file records the dependency
+surface of the generic transport theorems and of the finite witness proofs;
+it does not introduce a production theorem or any new foundational assumption.
+-/
+
 #print axioms DkMath.Tromino.RootedChamberTransport.map_steps
 #print axioms DkMath.Tromino.RootedChamberTransport.lift_steps
 #print axioms DkMath.Tromino.RootedChamberTransport.reachable_iff_admissibleChamber

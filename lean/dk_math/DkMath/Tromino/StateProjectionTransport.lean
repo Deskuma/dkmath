@@ -11,12 +11,28 @@ import Mathlib.Combinatorics.SimpleGraph.Coloring.Vertex
 
 namespace DkMath.Tromino
 
+/-! # Rooted chamber transport and shared coordinates
+
+This module formalizes the abstract situation in which a child state space is
+projected injectively into a parent state space. The parent relation is used
+only inside an admissible chamber. A `RootedChamberTransport` supplies the two
+directions needed for exactness: child paths map to restricted parent paths,
+and every restricted parent edge out of a projected child state lifts back to
+a child edge.
+
+The result is an equality of rooted sectors, not a claim about all parent
+states. The final definitions record the separate, graph-independent idea of
+sharing mutable coordinates between two coloring types. -/
+
 /-! ## Generic rooted chamber transport -/
 
-/--
-A rooted transport between a child relation and a parent relation restricted to
-an admissible chamber. The projection is deliberately a function between
-arbitrary types; no graph or coloring structure is built into this kernel.
+/-- A rooted transport between a child relation and a parent relation
+restricted to an admissible chamber.
+
+The projection is deliberately a function between arbitrary types; no graph
+or coloring structure is built into this kernel. `map_step` gives the forward
+edge map and `lift_step` gives the converse local lifting property. Together
+with injectivity and root alignment they determine the exact rooted sector.
 -/
 structure RootedChamberTransport
     (Child Parent : Type*)
@@ -77,7 +93,11 @@ theorem lift_steps
       exact ⟨d, Steps.prepend hc₁ hpath', hproject'⟩
 
 /-- Reachability in the child relation is exactly membership in the projected
-parent chamber. -/
+parent chamber.
+
+The parent chamber includes root admissibility by definition, so the theorem
+does not silently identify a zero-step path with an admissible state.
+-/
 theorem reachable_iff_admissibleChamber
     (T : RootedChamberTransport Child Parent childStep parentStep
       parentAdmissible project childRoot parentRoot)
@@ -136,7 +156,12 @@ end RootedChamberTransport
 
 /-! ## Shared mutable coordinates for Tromino colorings -/
 
-/-- The coordinates on a mutable carrier, independent of any graph topology. -/
+/-- The coordinates on a mutable carrier, independent of any graph topology.
+
+Only vertices satisfying `mutable` receive values. This is the common carrier
+used when parent and child graphs have different topologies but the same
+mutable vertex set.
+-/
 def MutableCoordinates {V : Type*} (mutable : V → Prop) :=
   {v : V // mutable v} → TrominoState
 
@@ -146,7 +171,11 @@ def mutableColorProjection {V : Type*} (G : SimpleGraph V)
     G.Coloring TrominoState → MutableCoordinates mutable :=
   fun coloring v => coloring v.1
 
-/-- Agreement outside a mutable set, with a graph-independent ambient coloring. -/
+/-- Agreement outside a mutable set, with a graph-independent ambient coloring.
+
+This predicate is the fixed-context hypothesis used to recover a total
+coloring from its mutable projection.
+-/
 def AgreesOutside {V : Type*} (mutable : V → Prop)
     (base c : V → TrominoState) : Prop :=
   ∀ v, ¬ mutable v → c v = base v
@@ -168,7 +197,11 @@ theorem mutableColorProjection_injective_of_agreesOutside
   · exact (hsource v hv).trans (htarget v hv).symm
 
 /-- Equality of mutable coordinates for colorings living on different graphs
-with the same vertex type. -/
+with the same vertex type.
+
+The two coloring types may come from different simple graphs; only their
+vertex type and the selected mutable coordinates are shared.
+-/
 def SameMutableProjection {V : Type*} {GParent GChild : SimpleGraph V}
     (mutable : V → Prop)
     (parentColoring : GParent.Coloring TrominoState)

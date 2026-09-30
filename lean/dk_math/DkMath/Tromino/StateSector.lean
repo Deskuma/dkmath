@@ -12,11 +12,24 @@ namespace DkMath.Tromino
 
 variable {State : Type*}
 
+/-! # Restricted relations and rooted sectors
+
+This module is the abstract sectorization layer. Given a relation `R` and a
+predicate `A`, `Restricted R A` keeps precisely those edges whose two
+endpoints are admissible. A rooted sector is then represented by exact-length
+reachability from a chosen root. The central theorem says that a child
+relation which is pointwise equal to this restriction has exactly the same
+rooted states.
+
+No graph, finiteness assumption, or concrete coloring is used here. -/
+
 /-- Restrict a relation to pairs of admissible states. -/
 def Restricted (R : State → State → Prop) (A : State → Prop)
     (x y : State) : Prop :=
   A x ∧ A y ∧ R x y
 
+/-! Symmetry is inherited by swapping both admissibility witnesses and the
+underlying edge proof. -/
 theorem restricted_symmetric {R : State → State → Prop} {A : State → Prop}
     (hR : Std.Symm R) : Std.Symm (Restricted R A) := by
   constructor
@@ -27,6 +40,8 @@ theorem restricted_symmetric {R : State → State → Prop} {A : State → Prop}
 def Reachable (R : State → State → Prop) (root x : State) : Prop :=
   ∃ n, Steps R n root x
 
+/-! The zero-length path makes every state reachable from itself. This is
+why rooted chamber APIs carry root admissibility separately. -/
 theorem reachable_refl (R : State → State → Prop) (root : State) :
     Reachable R root root :=
   ⟨0, Steps.zero root⟩
@@ -37,6 +52,8 @@ theorem reachable_trans (R : State → State → Prop)
   rintro ⟨n, hrootx⟩ ⟨m, hxy⟩
   exact ⟨n + m, Steps.concat R hrootx hxy⟩
 
+/-! Exact-length paths are invariant under pointwise replacement of the edge
+relation. The induction is on the path length, not on the state space. -/
 theorem steps_iff_of_iff {R S : State → State → Prop}
     (hRS : ∀ x y, R x y ↔ S x y) {n : Nat} {x y : State} :
     Steps R n x y ↔ Steps S n x y := by
@@ -70,6 +87,8 @@ theorem reachable_iff_restricted
   · rintro ⟨n, hpath⟩
     exact ⟨n, (steps_iff_of_iff hchild).mpr hpath⟩
 
+/-! The named sectorization theorem is the same equivalence with the root
+and target made explicit, which makes it convenient at application sites. -/
 theorem chamber_sectorization
     {childStep parentStep : State → State → Prop}
     {childAdmissible : State → Prop}

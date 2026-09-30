@@ -12,15 +12,23 @@ namespace DkMathTest.Tromino
 
 open DkMath.Tromino
 
-/-! ## Frozen OBS-019 neighbor-01 data
+/-! # Frozen OBS-019 neighbor-01 calibration
 
 This file is a kernel-checked calibration of the frozen Python observation.
 The four-state rows below are copied in mutable order
 `[4, 5, 8, 9, 10, 12, 13, 14, 15, 17, 18]` from the committed JSON
 artifacts.  The parent and child names are intentionally local to this test:
 no production theorem is inferred from this finite witness.
+
+The four rows form a child relation with edges `(0,3)`, `(1,2)`, and
+`(2,3)`. Their matched parent rows are named by the Python state ids
+`8, 10, 12, 14`; the baseline child row is `c2`, corresponding to parent
+state `p12`. The calibration proves exact rooted reachability, not a theorem
+about the full W9 state space.
 -/
 
+/-! The decoder is kept explicit so that the finite Python encoding is visible
+in the Lean term rather than hidden behind an untyped numeric convention. -/
 inductive PythonColor
   | zero
   | one
@@ -54,6 +62,7 @@ def parentStateId : ParentState → Nat
   | .p12 => 12
   | .p14 => 14
 
+/-! Each row is indexed by the frozen mutable-vertex order. -/
 def childRow0 : Fin 11 → TrominoState
   | ⟨0, _⟩ => decodePythonColor .zero
   | ⟨1, _⟩ => decodePythonColor .three
@@ -106,18 +115,21 @@ def childRow3 : Fin 11 → TrominoState
   | ⟨9, _⟩ => decodePythonColor .one
   | ⟨10, _⟩ => decodePythonColor .three
 
+/-- The four exact child projections from `neighbor-01.json`. -/
 def childProjection : ChildState → Fin 11 → TrominoState
   | .c0 => childRow0
   | .c1 => childRow1
   | .c2 => childRow2
   | .c3 => childRow3
 
+/-- The four matched parent projections from state ids 8, 10, 12, and 14. -/
 def parentProjection : ParentState → Fin 11 → TrominoState
   | .p8 => childRow0
   | .p10 => childRow1
   | .p12 => childRow2
   | .p14 => childRow3
 
+/-- The frozen child-to-parent state-id matching. -/
 def project : ChildState → ParentState
   | .c0 => .p8
   | .c1 => .p10
@@ -156,6 +168,8 @@ theorem neighbor01_projection_rows : ∀ c, parentProjection (project c) = child
   intro c
   cases c <;> rfl
 
+/-! The local transport packet packages injectivity, root alignment, edge
+mapping, and edge lifting for the four-state frozen case. -/
 theorem neighbor01_transport : RootedChamberTransport
     ChildState ParentState childStep parentStep parentAdmissible project .c2 .p12 where
   project_injective := project_injective
@@ -193,6 +207,7 @@ theorem neighbor01_transport : RootedChamberTransport
         | p12 => exact ⟨.c2, by simp [childStep], rfl⟩
         | p14 => simp [Restricted, project, parentStep, parentAdmissible] at h
 
+/-- The child component rooted at baseline `c2` contains all four rows. -/
 theorem child_root_reaches_all : ∀ c, Reachable childStep .c2 c := by
   have hc23 : childStep .c2 .c3 := by simp [childStep]
   have hc31 : childStep .c3 .c0 := by simp [childStep]
@@ -251,6 +266,8 @@ theorem neighbor01_parent_component_exact :
 theorem neighbor01_child_component_exact :
     ∀ c, Reachable childStep .c2 c := child_root_reaches_all
 
+/-! Provenance and height labels are data copied from the frozen observation;
+they are not used to assert a height-preservation theorem. -/
 def obs019Neighbor01Seed : Nat := 11000009
 def obs019Neighbor01Step : Nat := 16
 def obs019Neighbor01Move : List Nat := [4, 21, 5, 17]
