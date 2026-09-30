@@ -202,7 +202,7 @@ Do not encode Python search policy or finite witness IDs into production.
 
 ## TRH-006 — shared-coordinate state projection / chamber transport
 
-Status: READY / ACTIVE NEXT CHECKPOINT
+Status: COMPLETE / APPROVED — Outcome A
 
 Production targets:
 
@@ -228,23 +228,42 @@ that every topology-changing flip satisfies the transport hypotheses.
 
 ---
 
-## TRH-007 — concrete Missing-valid / flip transport provider
+## TRH-007 — partial restoration state / Missing-valid kernel
+
+Status: READY / ACTIVE NEXT CHECKPOINT
+
+The Python repair state is a partial coloring: already-colored vertices carry
+colors while the remaining vertices are still uncolored. Formalize that
+semantic layer before attempting a concrete flip provider.
+
+Production target:
+
+```text
+DkMath/Tromino/RestorationRepairState.lean
+```
+
+Required structure:
+
+```text
+fixed colored set
+remaining set
+shared mutable coordinates
+fixed outside-mutable color context
+properness only on colored-colored edges
+Missing-valid at every remaining vertex
+one-coordinate state transitions
+bridge to KempeRepair on the induced colored subgraph
+```
+
+---
+
+## TRH-008 — concrete flip transport provider
 
 Status: DEFERRED
 
-Provide application-specific hypotheses for a concrete topology-changing
-Tromino flip only after TRH-006 fixes the abstract transport contract.
-
-The provider may include:
-
-```text
-fixed restore-prefix context
-shared mutable coordinates
-child properness
-Missing-Color invariant
-projection-image closure
-edge compatibility
-```
+After TRH-007, instantiate the shared-coordinate transport contract for a
+topology-changing parent/child context when the Lean topology layer provides
+the required local flip data.
 
 No cross-topology repair-height monotonicity is implied.
 
@@ -330,6 +349,26 @@ different coloring types but share the same mutable-coordinate projection.
 
 ---
 
+## Checkpoint 004 result
+
+See:
+
+```text
+report-004.md
+```
+
+Overall Outcome A established the generic rooted chamber transport packet,
+exact path map/lift, chamber-image equality, induced-edge exactness, and the
+graph-independent mutable-coordinate projection shared across different graph
+coloring types.
+
+A new semantic boundary is now explicit: the Python OBS-019 state is not a
+total graph coloring. It is a partial restoration coloring with an uncolored
+remaining set. Therefore the concrete Missing-valid layer must be modeled
+before a sound flip provider can be claimed.
+
+---
+
 ## Current queue
 
 ```text
@@ -339,6 +378,7 @@ TRH-002  COMPLETE / APPROVED
 TRH-003  COMPLETE / APPROVED
 TRH-004  COMPLETE / APPROVED
 TRH-005  COMPLETE / APPROVED
-TRH-006  READY
-TRH-007  DEFERRED
+TRH-006  COMPLETE / APPROVED
+TRH-007  READY
+TRH-008  DEFERRED
 ```
