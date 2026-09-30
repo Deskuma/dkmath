@@ -899,3 +899,51 @@ depth deltas, component degrees, and Hamming distance from the baseline state.
 
 This is the first experiment that treats the blocker-state mechanism as an
 actual finite dynamical landscape rather than isolated interventions.
+
+
+## W10 admissible state component after OBS-017
+
+OBS-017 completed the W9 blocker-state component and found a finite
+unit-slope repair-depth landscape.
+
+The same generic command can now be run on the actual W10 child witness.
+Use a depth ceiling of 11 so a new depth-eleven state is not hidden.
+
+Run:
+
+    mkdir -p python/Tromino/results/repair-depth/w10-state-component-v24
+
+    python3 python/Tromino/search/repair_depth_search.py state-component-scan \
+      python/Tromino/results/repair-depth/seeded-w9-frontier2-d10-v24/best_frontier_witness.json \
+      --step 16 \
+      --prefix-depth 10 \
+      --max-depth 11 \
+      --node-limit 6000000 \
+      --state-limit 512 \
+      --workers "$(nproc)" \
+      --intermediate-policy endpoint \
+      --output python/Tromino/results/repair-depth/w10-state-component-v24
+
+A static proper + Missing-invariant enumeration of the W10 blocker state gives:
+
+    admissible states = 4
+    edges             = 3
+    degree range      = 1..2
+
+The component is a four-state path. The actual repair-depth evaluation is still
+required.
+
+Compare its `summary.json` against:
+
+    python/Tromino/results/repair-depth/w9-state-component-v24/summary.json
+
+especially:
+
+    depth_counts
+    min_first_exit_depth
+    max_first_exit_depth
+    edge_depth_deltas
+
+If a depth-eleven state appears, the state-space mechanism itself has extended
+the earlier 9 -> 10 jump. If not, the result still provides an independent
+test of the observed unit-slope law.
