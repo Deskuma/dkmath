@@ -189,14 +189,64 @@ exchange and feed that edge into TRH-001.
 
 ---
 
-## TRH-005 — Tromino-facing integration
+## TRH-005 — Tromino-facing admissible-chamber integration
 
-Status: READY / ACTIVE NEXT CHECKPOINT
+Status: COMPLETE / APPROVED — Outcome A
 
 Only after TRH-004 is stable, expose application-level theorems connecting the
 generic unit-slope result to the repair-state semantics used by the simulation.
 
 Do not encode Python search policy or finite witness IDs into production.
+
+---
+
+## TRH-006 — shared-coordinate state projection / chamber transport
+
+Status: READY / ACTIVE NEXT CHECKPOINT
+
+Production targets:
+
+```text
+DkMath/Tromino/StateProjectionTransport.lean
+```
+
+Goals:
+
+```text
+generic injective state projection
++ restricted-parent edge preservation
++ local restricted-edge lifting
+->
+child rooted chamber = projected parent admissible sector
+
+different SimpleGraph colorings on a shared vertex type
+-> common mutable-coordinate projection
+```
+
+This formalizes the transport pattern used in OBS-019/020 without asserting
+that every topology-changing flip satisfies the transport hypotheses.
+
+---
+
+## TRH-007 — concrete Missing-valid / flip transport provider
+
+Status: DEFERRED
+
+Provide application-specific hypotheses for a concrete topology-changing
+Tromino flip only after TRH-006 fixes the abstract transport contract.
+
+The provider may include:
+
+```text
+fixed restore-prefix context
+shared mutable coordinates
+child properness
+Missing-Color invariant
+projection-image closure
+edge compatibility
+```
+
+No cross-topology repair-height monotonicity is implied.
 
 ---
 
@@ -262,6 +312,24 @@ theorems remain valid; this is a chamber-semantics refinement.
 
 ---
 
+## Checkpoint 003 result
+
+See:
+
+```text
+report-003.md
+```
+
+Outcome A established explicit admissible-root chamber semantics, admissible
+singleton-Kempe steps, same-carrier sectorization, and full-repair-graph
+unit slope across chamber edges.
+
+The remaining structural frontier is no longer repair distance or Kempe
+geometry. It is the state transport used when parent and child topologies have
+different coloring types but share the same mutable-coordinate projection.
+
+---
+
 ## Current queue
 
 ```text
@@ -270,5 +338,7 @@ TRH-001  COMPLETE / APPROVED
 TRH-002  COMPLETE / APPROVED
 TRH-003  COMPLETE / APPROVED
 TRH-004  COMPLETE / APPROVED
-TRH-005  READY
+TRH-005  COMPLETE / APPROVED
+TRH-006  READY
+TRH-007  DEFERRED
 ```
