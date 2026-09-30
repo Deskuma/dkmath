@@ -2,6 +2,15 @@
 
 Date: 2026-09-30
 
+## Overall outcome
+
+Outcome A. The complete instruction-004 checkpoint succeeded: generic chamber
+transport, shared mutable-coordinate projection, regressions, audits, and
+validation are all complete.
+
+The A/B/C labels below are work-section labels from the implementation report,
+not separate checkpoint outcome grades.
+
 ## Outcome A — generic rooted chamber transport
 
 Added `DkMath/Tromino/StateProjectionTransport.lean`.
