@@ -1,0 +1,42 @@
+{
+  "observation": "OBS-018-ConstraintEdgeSectorizesW9StateChamber",
+  "date": "2026-09-30",
+  "w9_source": "python/Tromino/results/repair-depth/w9-state-component-v24/summary.json",
+  "w10_source": "python/Tromino/results/repair-depth/w10-state-component-v24/summary.json",
+  "w10": {
+    "truncated": false,
+    "admissible_states": 4,
+    "graph_edges": 3,
+    "depth_counts": {"9": 3, "10": 1},
+    "max_first_exit_depth": 10,
+    "edge_deltas": [0, 1, -1],
+    "depth11_found": false
+  },
+  "shared_state_mapping": [
+    {"w10":0,"w9":8,"depth":9},
+    {"w10":1,"w9":10,"depth":9},
+    {"w10":2,"w9":12,"depth":10},
+    {"w10":3,"w9":14,"depth":9}
+  ],
+  "shared_induced_edges_equal": true,
+  "shared_height_labels_equal": true,
+  "flip": {
+    "removed_edge": [4,21],
+    "added_edge": [5,17]
+  },
+  "w9_states_satisfying_added_edge_properness": 16,
+  "w9_filtered_components": [
+    {"states":[1,3,5,7],"c5_c17":[1,3]},
+    {"states":[8,10,12,14],"c5_c17":[3,1]},
+    {"states":[16,17,18,19],"c5_c17":[0,3]},
+    {"states":[24,25,26,27],"c5_c17":[0,1]}
+  ],
+  "w10_component_matches_w9_sector": [8,10,12,14],
+  "repair_volume": {
+    "w10_expanded_each_state": 279935,
+    "w9_shared_expanded_range": [419841,419874]
+  },
+  "general_theorem_established": false,
+  "next_experiment": "static admissible-chamber census over all 17 preserving one-flip W9 neighbors",
+  "status": "observation_only"
+}

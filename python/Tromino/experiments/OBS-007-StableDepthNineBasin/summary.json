@@ -1,0 +1,53 @@
+{
+  "observation": "OBS-007-StableDepthNineBasinUnderNaiveSeededObjective",
+  "date": "2026-09-29",
+  "source_directory": "python/Tromino/results/repair-depth/seeded-w9-d10-v24",
+  "initial_witness": {
+    "seed": 9000035,
+    "required_depth": 9,
+    "repairs": 2,
+    "repair_moves_total": 10,
+    "depth_minus_one_expanded": 202071,
+    "critical_footprint_size": 15,
+    "critical_max_component_size": 9,
+    "critical_radius": 2
+  },
+  "campaign": {
+    "vertices": 24,
+    "jobs": 64,
+    "steps": 512,
+    "warmup_flips": 0,
+    "workers": 8,
+    "max_depth": 11,
+    "target_depth": 10,
+    "node_limit": 3000000,
+    "base_seed": 10000000,
+    "intermediate_policy": "endpoint",
+    "search_objective": "resolved",
+    "stop_on_target": true
+  },
+  "campaign_summary": {
+    "jobs_completed": 64,
+    "resolved_jobs": 64,
+    "classifications": {"solved": 64},
+    "mean_resolved_depth": 9,
+    "max_resolved_depth": 9,
+    "target_found": false,
+    "stopped_on_target": false,
+    "elapsed_seconds": 6349.466592788696
+  },
+  "old_objective_best": {
+    "seed": 10000057,
+    "required_depth": 9,
+    "repairs": 4,
+    "repair_moves_total": 14,
+    "mutation_suffix_length": 12,
+    "depth_minus_one_expanded": 194765,
+    "critical_footprint_size": 14,
+    "critical_max_component_size": 8,
+    "critical_radius": 2
+  },
+  "diagnosis": "The resolved objective drifted toward more repairs and moves while reducing the critical depth-minus-one frontier expansion.",
+  "next_objective": "frontier",
+  "status": "observation_only"
+}

@@ -1,0 +1,42 @@
+{
+  "observation": "OBS-010-UniqueAscendingEdgeInW9OneFlipNeighborhood",
+  "date": "2026-09-29",
+  "source_directory": "python/Tromino/results/repair-depth/w9-oneflip-neighborhood-v24",
+  "source": {
+    "seed": 11000009,
+    "required_depth": 9,
+    "legal_preserving_neighbors": 17
+  },
+  "census": {
+    "resolved_neighbors": 17,
+    "depth_counts": {
+      "10": 1,
+      "9": 0,
+      "8": 3,
+      "7": 3,
+      "6": 6,
+      "5": 2,
+      "4": 2
+    }
+  },
+  "unique_ascending_edge": {
+    "move": [4,21,5,17],
+    "diagonal_replacement": "4-21 -> 5-17",
+    "source_depth": 9,
+    "target_depth": 10,
+    "blocker_node": 19,
+    "blocker_step": 16,
+    "incident_to_blocker": false,
+    "vertex_distances_from_blocker": {
+      "4": 1,
+      "5": 1,
+      "17": 1,
+      "21": 2
+    }
+  },
+  "all_neighbors_same_blocker": true,
+  "all_preserving_quadrilaterals_use_four_colors": true,
+  "v4_difference_alone_distinguishes_ascending_edge": false,
+  "next_experiment": "compare parent and child exchange-state repair mazes at node 19 step 16",
+  "status": "observation_only"
+}

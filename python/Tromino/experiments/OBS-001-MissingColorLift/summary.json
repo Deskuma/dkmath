@@ -1,0 +1,70 @@
+{
+  "backtracking": [
+    {
+      "max_search_nodes": 321181,
+      "median_search_nodes": 3689.0,
+      "n": 50,
+      "node_limit": 1000000,
+      "search_nodes": [19862, 776, 2820, 12958, 280, 4558, 9394, 248, 321181, 77],
+      "successes": 10,
+      "trials": 10
+    },
+    {
+      "max_search_nodes": 1000059,
+      "median_search_nodes": 1000049.0,
+      "n": 100,
+      "node_limit": 1000000,
+      "search_nodes": [1000055, 9091, 1000054, 1000051, 1000059, 1000047, 359, 1000045, 224584, 1000055],
+      "successes": 3,
+      "trials": 10
+    }
+  ],
+  "colors": [0, 1, 2, 3],
+  "environment": {
+    "numpy": "2.3.5",
+    "python": "3.13.5",
+    "scipy": "1.17.0"
+  },
+  "generator": "uniform random points -> Delaunay triangulation -> outer sea joined to convex hull",
+  "greedy": [
+    {
+      "gap_aware_success": 30,
+      "k3_core_mean": 19.5,
+      "k3_core_median": 20.0,
+      "n": 20,
+      "plain_greedy_success": 15,
+      "trials": 100
+    },
+    {
+      "gap_aware_success": 12,
+      "k3_core_mean": 48.89,
+      "k3_core_median": 49.0,
+      "n": 50,
+      "plain_greedy_success": 2,
+      "trials": 100
+    },
+    {
+      "gap_aware_success": 1,
+      "k3_core_mean": 98.25,
+      "k3_core_median": 98.0,
+      "n": 100,
+      "plain_greedy_success": 0,
+      "trials": 100
+    }
+  ],
+  "observation": "OBS-001-MissingColorLift",
+  "sea_color": 0,
+  "witness": {
+    "colored_neighbors": [[7, 3], [13, 2], [17, 1], [18, 0]],
+    "dead_node": 16,
+    "dead_palette": [0, 1, 2, 3],
+    "first_divergence": {
+      "available": [1, 3],
+      "gap_aware_choice": 3,
+      "node": 17,
+      "plain_choice": 1,
+      "step": 8
+    },
+    "seed": 120001
+  }
+}

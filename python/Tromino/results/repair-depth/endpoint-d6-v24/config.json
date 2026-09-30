@@ -1,0 +1,16 @@
+{
+  "base_seed": 7000000,
+  "cooling": 0.9995,
+  "format_version": 1,
+  "intermediate_policy": "endpoint",
+  "jobs": 2000,
+  "max_depth": 8,
+  "node_limit": 750000,
+  "search_objective": "resolved",
+  "steps": 2000,
+  "target_depth": 6,
+  "temperature": 1.5,
+  "vertices": 24,
+  "warmup_flips": 48,
+  "workers": 8
+}
