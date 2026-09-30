@@ -33,16 +33,22 @@ def tinySource : TinyGraph.Coloring TrominoState :=
     (fun v => if v = 0 then 0 else ⟨0, 1⟩)
     (by
       intro v w h
-      fin_cases v <;> fin_cases w <;> simp_all [TinyGraph]
-      all_goals exact tiny_zero_ne_01)
+      fin_cases v <;> fin_cases w
+      · simp [TinyGraph] at h
+      · exact tiny_zero_ne_01
+      · exact Ne.symm tiny_zero_ne_01
+      · simp [TinyGraph] at h)
 
 def tinyTarget : TinyGraph.Coloring TrominoState :=
   SimpleGraph.Coloring.mk
     (fun v => if v = 0 then ⟨1, 0⟩ else ⟨0, 1⟩)
     (by
       intro v w h
-      fin_cases v <;> fin_cases w <;> simp_all [TinyGraph]
-      all_goals exact tiny_10_ne_01)
+      fin_cases v <;> fin_cases w
+      · simp [TinyGraph] at h
+      · exact tiny_10_ne_01
+      · exact Ne.symm tiny_10_ne_01
+      · simp [TinyGraph] at h)
 
 def tinyMutable : TinyVertex → Prop := fun _ => True
 

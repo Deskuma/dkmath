@@ -49,7 +49,7 @@ theorem transportProject_injective : Function.Injective transportProject := by
   intro c d h
   cases c <;> cases d <;> simp_all [transportProject]
 
-def transportPacket : RootedChamberTransport
+theorem transportPacket : RootedChamberTransport
     TransportChild TransportParent transportChildStep transportParentStep
       transportAdmissible transportProject .root .root where
   project_injective := transportProject_injective
@@ -57,15 +57,34 @@ def transportPacket : RootedChamberTransport
   parent_root_admissible := trivial
   map_step := by
     intro c d h
-    cases c <;> cases d <;> simp_all [transportChildStep, transportProject,
-      Restricted, transportAdmissible, transportParentStep]
+    cases c with
+    | root =>
+        cases d with
+        | root => simp [transportChildStep] at h
+        | moved => exact ⟨trivial, trivial, trivial⟩
+    | moved =>
+        cases d with
+        | root => exact ⟨trivial, trivial, trivial⟩
+        | moved => simp [transportChildStep] at h
   lift_step := by
     intro c p h
-    cases c <;> cases p <;>
-      simp_all [transportProject, Restricted, transportAdmissible,
-        transportParentStep]
-    · exact ⟨.moved, by simp [transportChildStep], rfl⟩
-    · exact ⟨.root, by simp [transportChildStep], rfl⟩
+    cases c with
+    | root =>
+        cases p with
+        | root => simp [Restricted, transportParentStep, transportProject] at h
+        | moved => exact ⟨.moved, by simp [transportChildStep], rfl⟩
+        | extraRoot =>
+            simp [Restricted, transportParentStep, transportProject] at h
+        | extraMoved =>
+            simp [Restricted, transportParentStep, transportProject] at h
+    | moved =>
+        cases p with
+        | root => exact ⟨.root, by simp [transportChildStep], rfl⟩
+        | moved => simp [Restricted, transportParentStep, transportProject] at h
+        | extraRoot =>
+            simp [Restricted, transportParentStep, transportProject] at h
+        | extraMoved =>
+            simp [Restricted, transportParentStep, transportProject] at h
 
 theorem transport_chamber_equivalence :
     ∀ c, Reachable transportChildStep .root c ↔
@@ -161,8 +180,8 @@ theorem tiny_cross_graph_same_mutable_projection :
   fin_cases v
   · change (0 : TrominoState) = 0
     rfl
-  · have hfalse : False := by simpa [tinySingleMutable] using hv
-    exact hfalse.elim
+  · have hfalse := hv
+    simp [tinySingleMutable] at hfalse
 
 theorem tiny_cross_graph_same_mutable_projection_iff :
     SameMutableProjection tinySingleMutable tinySource tinyEmptyColoring ↔

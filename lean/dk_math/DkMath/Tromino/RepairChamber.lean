@@ -61,7 +61,7 @@ def AdmissibleSingletonKempeStep {V : Type*} (G : SimpleGraph V)
 theorem admissibleSingletonKempeStep_symmetric
     {V : Type*} (G : SimpleGraph V) (mutable : V → Prop)
     (admissible : G.Coloring TrominoState → Prop) :
-    Symmetric (AdmissibleSingletonKempeStep G mutable admissible) := by
+    Std.Symm (AdmissibleSingletonKempeStep G mutable admissible) := by
   exact restricted_symmetric (singletonKempeStep_symmetric G mutable)
 
 theorem onePointRecolor_admissibleSingletonKempeStep

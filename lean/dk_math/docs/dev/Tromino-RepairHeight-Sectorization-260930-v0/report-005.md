@@ -121,10 +121,11 @@ was added.
 whitespace diagnostics. The forbidden-token scan found no `sorry`, `admit`,
 `axiom`, or `unsafe` in the added Lean files.
 
-Warnings were recorded separately from failures: the dependency chain retains
-the existing `Symmetric` deprecation warnings, and the regression has local
-unused-simp/unreachable-tactic suggestions. These did not affect successful
-builds.
+The warning cleanup pass migrated the affected relations to `Std.Symm`,
+replaced flexible finite-fixture simplification with explicit case proofs,
+removed unused tactics and simp arguments, and fixed the constructor-name
+linter. The focused production, regression, and audit builds now emit no
+warnings. Axiom-audit `info` lines are dependency reports, not build warnings.
 
 ## Deviations and remaining requirements
 

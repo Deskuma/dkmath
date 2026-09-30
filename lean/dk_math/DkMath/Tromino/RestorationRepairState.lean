@@ -121,7 +121,8 @@ def CoordinateOnePointStep {V : Type*} (mutable : V → Prop)
 
 theorem coordinateOnePointStep_symmetric
     {V : Type*} {mutable : V → Prop} :
-    Symmetric (CoordinateOnePointStep mutable) := by
+    Std.Symm (CoordinateOnePointStep mutable) := by
+  constructor
   intro source target h
   rcases h with ⟨v, hne, haway⟩
   exact ⟨v, hne.symm, fun u hu => (haway u hu).symm⟩
@@ -135,7 +136,7 @@ def AdmissibleRestorationStep
 theorem admissibleRestorationStep_symmetric
     {V : Type*} {G : SimpleGraph V} {mutable : V → Prop}
     (context : RestorationContext G mutable) :
-    Symmetric (AdmissibleRestorationStep context) := by
+    Std.Symm (AdmissibleRestorationStep context) := by
   exact restricted_symmetric coordinateOnePointStep_symmetric
 
 /-! ## The induced total-coloring bridge -/

@@ -24,8 +24,11 @@ def tinyThird : TinyGraph.Coloring TrominoState :=
     (fun v => if v = 0 then 0 else ⟨1, 0⟩)
     (by
       intro v w h
-      fin_cases v <;> fin_cases w <;> simp_all [TinyGraph]
-      all_goals exact tiny_zero_ne_10)
+      fin_cases v <;> fin_cases w
+      · simp [TinyGraph] at h
+      · exact tiny_zero_ne_10
+      · exact Ne.symm tiny_zero_ne_10
+      · simp [TinyGraph] at h)
 
 def tinyAdmissible : TinyGraph.Coloring TrominoState → Prop :=
   fun c => c 1 = ⟨0, 1⟩

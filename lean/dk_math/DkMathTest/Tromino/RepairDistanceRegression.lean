@@ -29,7 +29,8 @@ def pathExit : PathState → Prop
   | .left => True
   | _ => False
 
-theorem pathStep_symmetric : Symmetric pathStep := by
+theorem pathStep_symmetric : Std.Symm pathStep := by
+  constructor
   intro x y h
   cases x <;> cases y <;> simp_all [pathStep]
 

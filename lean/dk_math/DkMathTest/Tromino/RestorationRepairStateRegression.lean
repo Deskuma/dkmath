@@ -72,15 +72,13 @@ theorem restore_source_proper : restoreContext.Proper restoreSource := by
   intro u v huv hu hv
   fin_cases u <;> fin_cases v <;>
     simp_all [RestoreGraph, restoreColored, realize, restoreContext,
-      restoreBase, restoreSource, restoreMutable, restore_zero_ne_01,
-      restore_zero_ne_10, restore_10_ne_01] <;> norm_num at *
+      restoreBase, restoreSource, restoreMutable, restore_zero_ne_01]
 
 theorem restore_target_proper : restoreContext.Proper restoreTarget := by
   intro u v huv hu hv
   fin_cases u <;> fin_cases v <;>
     simp_all [RestoreGraph, restoreColored, realize, restoreContext,
-      restoreBase, restoreTarget, restoreMutable, restore_zero_ne_01,
-      restore_zero_ne_10, restore_10_ne_01]
+      restoreBase, restoreTarget, restoreMutable]
 
 theorem restore_source_missing_valid :
     restoreContext.MissingValid restoreSource := by
@@ -89,8 +87,7 @@ theorem restore_source_missing_valid :
   intro u huw hu
   fin_cases u <;> simp_all [RestoreGraph, restoreColored, realize,
     restoreContext, restoreBase, restoreSource, restoreMutable,
-    restoreRemaining, restore_zero_ne_01, restore_zero_ne_10,
-    restore_10_ne_01] <;> norm_num at *
+    restoreRemaining, restore_zero_ne_10]
 
 theorem restore_target_missing_valid :
     restoreContext.MissingValid restoreTarget := by
@@ -129,7 +126,8 @@ theorem restore_admissible_step :
 
 theorem restore_step_symmetric :
     AdmissibleRestorationStep restoreContext restoreTarget restoreSource :=
-  admissibleRestorationStep_symmetric restoreContext restore_admissible_step
+  (admissibleRestorationStep_symmetric restoreContext).symm _ _
+    restore_admissible_step
 
 theorem restore_step_onePointRecolor :
     OnePointRecolor (ColoredGraph restoreContext) (liftedMutable restoreContext)
@@ -204,9 +202,6 @@ theorem restore_transport_filter_rejects_child :
   have hproper := h.1 (u := 0) (v := 2) (by simp [RestoreGraph])
     (by simp [restoreChildContext, restoreChildColored])
     (by simp [restoreChildContext, restoreChildColored])
-  have hz : (0 : TrominoState) ≠ 0 := by
-    simpa [realize, restoreChildContext, restoreSource, restoreMutable] using
-      hproper
-  exact hz rfl
+  simp [realize, restoreChildContext, restoreSource, restoreMutable] at hproper
 
 end DkMathTest.Tromino

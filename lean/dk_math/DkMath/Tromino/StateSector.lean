@@ -18,9 +18,10 @@ def Restricted (R : State → State → Prop) (A : State → Prop)
   A x ∧ A y ∧ R x y
 
 theorem restricted_symmetric {R : State → State → Prop} {A : State → Prop}
-    (hR : Symmetric R) : Symmetric (Restricted R A) := by
+    (hR : Std.Symm R) : Std.Symm (Restricted R A) := by
+  constructor
   intro x y hxy
-  exact ⟨hxy.2.1, hxy.1, hR hxy.2.2⟩
+  exact ⟨hxy.2.1, hxy.1, symm_of R hxy.2.2⟩
 
 /-- Reachability by a finite exact-length path from a fixed root. -/
 def Reachable (R : State → State → Prop) (root x : State) : Prop :=

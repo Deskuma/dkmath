@@ -47,7 +47,7 @@ theorem add (step : State → State → Prop)
   concat step
 
 theorem reverse_of_symmetric (step : State → State → Prop)
-    (hsymm : Symmetric step) {n : Nat} {x y : State} :
+    (hsymm : Std.Symm step) {n : Nat} {x y : State} :
     Steps step n x y → Steps step n y x := by
   intro hxy
   induction hxy with
@@ -55,7 +55,7 @@ theorem reverse_of_symmetric (step : State → State → Prop)
       exact Steps.zero _
   | @prepend n x y z hxy hrest ih =>
       have hend : Steps step 1 y x := by
-        exact Steps.prepend (hsymm hxy) (Steps.zero x)
+        exact Steps.prepend (symm_of step hxy) (Steps.zero x)
       simpa using Steps.concat step ih hend
 
 end Steps
@@ -108,7 +108,7 @@ theorem repairHeight_le_succ_of_step
 
 theorem repairHeight_unit_slope
     (step : State → State → Prop) (exit : State → Prop)
-    (hsymm : Symmetric step) {x y : State}
+    (hsymm : Std.Symm step) {x y : State}
     (hxy : step x y)
     (hx : ∃ n, CanExitAt step exit n x)
     (hy : ∃ n, CanExitAt step exit n y) :
@@ -117,6 +117,6 @@ theorem repairHeight_unit_slope
   classical
   constructor
   · exact repairHeight_le_succ_of_step step exit hxy hx hy
-  · exact repairHeight_le_succ_of_step step exit (hsymm hxy) hy hx
+  · exact repairHeight_le_succ_of_step step exit (symm_of step hxy) hy hx
 
 end DkMath.Tromino

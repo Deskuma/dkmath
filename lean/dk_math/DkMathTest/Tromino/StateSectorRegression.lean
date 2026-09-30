@@ -50,8 +50,8 @@ theorem allowed_in_root_chamber :
 
 theorem restricted_path_ends_admissible
     {R : SectorState → SectorState → Prop} {A : SectorState → Prop}
-    {root x : SectorState} (hroot : A root) :
-    Reachable (Restricted R A) root x → A x := by
+    {rootState x : SectorState} (hroot : A rootState) :
+    Reachable (Restricted R A) rootState x → A x := by
   rintro ⟨n, hpath⟩
   induction hpath with
   | zero =>
@@ -64,7 +64,7 @@ theorem blocked_outside_root_chamber :
   intro hreach
   have hadm : admissible .blocked :=
     restricted_path_ends_admissible (R := parentStep) (A := admissible)
-      (root := .root) (x := .blocked) trivial
+      (rootState := .root) (x := .blocked) trivial
       ((reachable_iff_restricted childStep_eq_restricted).mp hreach)
   exact hadm
 

@@ -172,7 +172,8 @@ theorem singletonKempeMove_symm
 
 theorem singletonKempeMove_symmetric
     {G : SimpleGraph V} {mutable : V → Prop} :
-    Symmetric (SingletonKempeMove G mutable) := by
+    Std.Symm (SingletonKempeMove G mutable) := by
+  constructor
   intro source target h
   exact singletonKempeMove_symm h
 
@@ -184,7 +185,7 @@ abbrev SingletonKempeStep (G : SimpleGraph V) (mutable : V → Prop) :
 
 theorem singletonKempeStep_symmetric
     (G : SimpleGraph V) (mutable : V → Prop) :
-    Symmetric (SingletonKempeStep G mutable) :=
+    Std.Symm (SingletonKempeStep G mutable) :=
   singletonKempeMove_symmetric
 
 theorem singletonKempe_repairHeight_unit_slope
