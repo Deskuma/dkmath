@@ -1,0 +1,21 @@
+import DkMath.FLT.Seven
+
+namespace DkMathTest.FLT
+
+open DkMath.FLT.Seven
+
+#check directOrbitRotateProjectiveLog
+#check directOrbit_projectiveLog_rotate
+#check directOrbitRotateProjectiveLog_order_three
+#check directOrbitRotateProjectiveLog_norm_zero
+#check directOrbit_pairAxisUnitOne_projectiveLog
+#check directOrbit_twistedExponent_mod_seven
+#check directOrbit_twistedCoeff1_projectiveLog_of_gapClass
+#check directOrbit_twistedCoeff2_projectiveLog_of_gapClass
+#check directOrbit_twistedCoeff_ratio_classes_of_gapClass
+#check directOrbit_twistedCoeff_ratios_not_seventhPower_of_gapClass
+#check weighted_seventh_difference_remainder
+#check DirectRealCubicTransportedTwistedState
+#check directOrbitTransportedTwistedState
+
+end DkMathTest.FLT

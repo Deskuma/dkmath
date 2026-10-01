@@ -1,0 +1,32 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+-/
+
+import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicPrimeAllocation
+
+#print "file: DkMathTest.FLT.SevenPrimeTraceOneDirectRealCubicPrimeAllocationApi"
+
+open DkMath.FLT.Seven
+
+#check SevenRealCubic.gapSquareIdeal
+#check SevenRealCubic.quotientSquareIdeal
+#check SevenRealCubic.directOrbitSquareRefinement_principal_ideal_scalar_split
+#check SevenRealCubic.directOrbitSquareRefinement_ideal_coprime
+#check SevenRealCubic.directOrbitSquareRefinement_common_prime_dvd_scalar
+#check SevenRealCubic.directOrbitSquareRefinement_prime_ideal_allocation_xor
+#check SevenRealCubic.directOrbitGaloisSigma
+#check SevenRealCubic.directOrbitGaloisSigma_three
+#check SevenRealCubic.directOrbitGaloisSigma_ne_one
+#check SevenRealCubic.directOrbitGaloisSigma_element_eq
+#check SevenRealCubic.directOrbitGaloisSigma_ringAction
+#check SevenRealCubic.directOrbitGaloisSigma_model_rotate
+#check SevenRealCubic.directOrbitGaloisSigma_mem_iff
+#check SevenRealCubic.directOrbitGaloisSigma_model_rotate_mem_iff
+#check SevenRealCubic.directOrbitGaloisSigma_sq_model_mem_iff
+#check SevenRealCubic.directOrbit_two_rotated_gap_roots_mem_imp_all_three_mem
+#check SevenRealCubic.directOrbitGalois_distinct_prime_address
+#check SevenRealCubic.directOrbit_two_gap_primes_imp_all_gap
+#check SevenRealCubic.directOrbitSquareRefinement_common_prime_gap_ncard
+#check SevenRealCubic.directOrbitSquareRefinement_common_prime_quotient_ncard
+#check SevenRealCubic.directOrbitGalois_prime_orbit_eq_primesOver

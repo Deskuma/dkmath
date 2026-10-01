@@ -221,4 +221,40 @@ theorem no_nontrivial_cycle_of_strict (h : ∀ s, I (T s) > I s) :
 
 end StrictIncrement
 
+section StrictInvariant
+
+variable {State Value : Type _} [Preorder Value]
+variable {T : State → State} {I : State → Value}
+
+/-- A strictly increasing invariant grows after every positive iterate count. -/
+theorem invariant_lt_iterate_of_strict
+    (h : ∀ s, I s < I (T s)) :
+    ∀ {k s}, 0 < k → I s < I (iterate T k s) := by
+  intro k s hk
+  induction k generalizing s with
+  | zero => exact (Nat.not_lt_zero 0 hk).elim
+  | succ k ih =>
+      cases k with
+      | zero => simpa [iterate] using h s
+      | succ k =>
+          have htail : I (T s) < I (iterate T (Nat.succ k) (T s)) :=
+            ih (s := T s) (Nat.succ_pos k)
+          have hstep : I s < I (T s) := h s
+          exact lt_trans hstep (by simpa [iterate_succ] using htail)
+
+/-- A strictly increasing invariant rules out every nonzero iterate cycle. -/
+theorem no_nontrivial_cycle_of_strict_invariant
+    (h : ∀ s, I s < I (T s)) :
+    ∀ k s, iterate T k s = s → k = 0 := by
+  intro k s hk
+  by_contra hk0
+  have hkpos : 0 < k := Nat.pos_of_ne_zero hk0
+  have hlt : I s < I (iterate T k s) :=
+    invariant_lt_iterate_of_strict (T := T) (I := I) h
+      (k := k) (s := s) hkpos
+  rw [hk] at hlt
+  exact (lt_irrefl _ hlt).elim
+
+end StrictInvariant
+
 end DkMath.UnitCycle

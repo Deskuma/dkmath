@@ -1,0 +1,7 @@
+import DkMath.FLT.Seven.SevenRealCubicThetaSeventhPowerDepth
+
+open DkMath.FLT.Seven
+
+#print axioms thetaNilpotentDepth_pow_seven_drop
+#print axioms unit_is_pow_seven_pow_of_inverse_depth
+#print axioms eisensteinAxis_pow_three_mul_dvd_imp_ofInt_pow

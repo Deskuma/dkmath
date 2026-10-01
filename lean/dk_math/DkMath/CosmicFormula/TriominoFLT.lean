@@ -7,7 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.Basic
 import DkMath.Polyomino
 import DkMath.CosmicFormula.CosmicFormulaCellDim
-import DkMath.Tromino
+import DkMath.Tromino.Basic
 import DkMath.FLT.PrimeProviderCore
 import DkMath.FLT.MathlibBridge.FLT34
 
@@ -62,7 +62,7 @@ set_option linter.style.emptyLine false
 - [TriominoTilingAndFLT.md](./docs/TriominoTilingAndFLT.md)：戦略ドキュメント
 - [CosmicFormulaCellDim.lean](./CosmicFormulaCellDim.lean)：Cell版 Big/Gap/Body定理
 - [Polyomino.lean](../Polyomino.lean)：L型トロミノと敷き詰め定義
-- [Tromino.lean](../Tromino.lean)：トロミノ基本定義
+- [Tromino/Basic.lean](../Tromino/Basic.lean)：トロミノ基本幾何定義
 -/
 
 namespace DkMath

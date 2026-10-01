@@ -79,7 +79,10 @@ theorem traceOne_norm_pow_ramified (a : TraceOneInt (-2)) (n : ℕ) :
   | zero => simp [DkMath.NumberTheory.TraceOneQuadratic.norm]
   | succ n ih => rw [pow_succ, traceOne_norm_mul, ih, pow_succ]
 
-private theorem root_norm_eq_of_residual_power
+/-- Transfer an exact seventh-power residual identity to the norm of its
+quadratic seventh-power root.  This helper is independent of terminal-row
+provenance and is reused by prescribed-carrier summit resolution. -/
+theorem root_norm_eq_of_residual_power
     {root residual : TraceOneInt (-2)} {b : ℕ}
     (hpower : residual = root ^ 7)
     (hnorm : tqNorm residual = (b : ℤ) ^ 7) :

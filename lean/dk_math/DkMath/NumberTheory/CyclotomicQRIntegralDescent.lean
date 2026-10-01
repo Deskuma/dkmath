@@ -95,19 +95,19 @@ theorem Dpoly_integral
 theorem coeff_Rpoly_isIntegral_int
     {L : Type*} [Field L] {p : ℕ} [Fact p.Prime]
     (ζ : L) (hζ : IsPrimitiveRoot ζ p) (d : Fin 2 →₀ ℕ) :
-    IsIntegral ℤ (MvPolynomial.coeff d (Rpoly (p := p) ζ)) :=
+    IsIntegral ℤ ((Rpoly (p := p) ζ).coeff d) :=
   (MvPolynomial.isIntegral_iff_isIntegral_coeff.mp (Rpoly_integral ζ hζ)) d
 
 theorem coeff_Dpoly_sq_isIntegral_int
     {L : Type*} [Field L] {p : ℕ} [Fact p.Prime]
     (ζ : L) (hζ : IsPrimitiveRoot ζ p) (d : Fin 2 →₀ ℕ) :
-    IsIntegral ℤ (MvPolynomial.coeff d (Dpoly (p := p) ζ ^ 2)) :=
+    IsIntegral ℤ ((Dpoly (p := p) ζ ^ 2).coeff d) :=
   (MvPolynomial.isIntegral_iff_isIntegral_coeff.mp (Dpoly_sq_integral ζ hζ)) d
 
 theorem coeff_Dpoly_isIntegral_int
     {L : Type*} [Field L] {p : ℕ} [Fact p.Prime]
     (ζ : L) (hζ : IsPrimitiveRoot ζ p) (d : Fin 2 →₀ ℕ) :
-    IsIntegral ℤ (MvPolynomial.coeff d (Dpoly (p := p) ζ)) :=
+    IsIntegral ℤ ((Dpoly (p := p) ζ).coeff d) :=
   (MvPolynomial.isIntegral_iff_isIntegral_coeff.mp (Dpoly_integral ζ hζ)) d
 
 /-! ## Rational coefficients mapped into an integral cyclotomic extension -/
@@ -117,8 +117,7 @@ theorem isIntegral_rat_of_map_isIntegral
     (q : ℚ) (c : L) (hq : algebraMap ℚ L q = c)
     (hc : IsIntegral ℤ c) :
     IsIntegral ℤ q := by
-  apply (isIntegral_algebraMap_iff
-    (FaithfulSMul.algebraMap_injective ℚ L)).mp
+  apply (isIntegral_algebraMap_iff (R := ℤ) (A := ℚ) (B := L)).mp
   rw [hq]
   exact hc
 
@@ -130,15 +129,15 @@ theorem coeff_R0_isIntegral_int
     (R0 : MvPolynomial (Fin 2) ℚ)
     (hR0 : MvPolynomial.map (algebraMap ℚ L) R0 = Rpoly (p := p) ζ)
     (d : Fin 2 →₀ ℕ) :
-    IsIntegral ℤ (MvPolynomial.coeff d R0) := by
-  apply isIntegral_rat_of_map_isIntegral (L := L) (MvPolynomial.coeff d R0)
-    (MvPolynomial.coeff d (Rpoly (p := p) ζ))
+    IsIntegral ℤ (R0.coeff d) := by
+  apply isIntegral_rat_of_map_isIntegral (L := L) (R0.coeff d)
+    ((Rpoly (p := p) ζ).coeff d)
   · calc
-      algebraMap ℚ L (MvPolynomial.coeff d R0) =
-          MvPolynomial.coeff d (MvPolynomial.map (algebraMap ℚ L) R0) := by
+      algebraMap ℚ L (R0.coeff d) =
+          (MvPolynomial.map (algebraMap ℚ L) R0).coeff d := by
             symm
             exact MvPolynomial.coeff_map (algebraMap ℚ L) R0 d
-      _ = MvPolynomial.coeff d (Rpoly (p := p) ζ) := by rw [hR0]
+      _ = (Rpoly (p := p) ζ).coeff d := by rw [hR0]
   · exact coeff_Rpoly_isIntegral_int ζ hζ d
 
 theorem coeff_D20_isIntegral_int
@@ -150,15 +149,15 @@ theorem coeff_D20_isIntegral_int
     (hD20 : MvPolynomial.map (algebraMap ℚ L) D20 =
       Dpoly (p := p) ζ ^ 2)
     (d : Fin 2 →₀ ℕ) :
-    IsIntegral ℤ (MvPolynomial.coeff d D20) := by
-  apply isIntegral_rat_of_map_isIntegral (L := L) (MvPolynomial.coeff d D20)
-    (MvPolynomial.coeff d (Dpoly (p := p) ζ ^ 2))
+    IsIntegral ℤ (D20.coeff d) := by
+  apply isIntegral_rat_of_map_isIntegral (L := L) (D20.coeff d)
+    ((Dpoly (p := p) ζ ^ 2).coeff d)
   · calc
-      algebraMap ℚ L (MvPolynomial.coeff d D20) =
-          MvPolynomial.coeff d (MvPolynomial.map (algebraMap ℚ L) D20) := by
+      algebraMap ℚ L (D20.coeff d) =
+          (MvPolynomial.map (algebraMap ℚ L) D20).coeff d := by
             symm
             exact MvPolynomial.coeff_map (algebraMap ℚ L) D20 d
-      _ = MvPolynomial.coeff d (Dpoly (p := p) ζ ^ 2) := by rw [hD20]
+      _ = (Dpoly (p := p) ζ ^ 2).coeff d := by rw [hD20]
   · exact coeff_Dpoly_sq_isIntegral_int ζ hζ d
 
 /-! ## Rational integral elements are integer casts -/
@@ -175,7 +174,7 @@ theorem coeff_R0_mem_range_intCast
     (R0 : MvPolynomial (Fin 2) ℚ)
     (hR0 : MvPolynomial.map (algebraMap ℚ L) R0 = Rpoly (p := p) ζ)
     (d : Fin 2 →₀ ℕ) :
-    MvPolynomial.coeff d R0 ∈ Set.range (algebraMap ℤ ℚ) :=
+    R0.coeff d ∈ Set.range (algebraMap ℤ ℚ) :=
   (rat_isIntegral_iff_exists_int _).mp
     (coeff_R0_isIntegral_int ζ hζ R0 hR0 d)
 
@@ -188,7 +187,7 @@ theorem coeff_D20_mem_range_intCast
     (hD20 : MvPolynomial.map (algebraMap ℚ L) D20 =
       Dpoly (p := p) ζ ^ 2)
     (d : Fin 2 →₀ ℕ) :
-    MvPolynomial.coeff d D20 ∈ Set.range (algebraMap ℤ ℚ) :=
+    D20.coeff d ∈ Set.range (algebraMap ℤ ℚ) :=
   (rat_isIntegral_iff_exists_int _).mp
     (coeff_D20_isIntegral_int ζ hζ D20 hD20 d)
 

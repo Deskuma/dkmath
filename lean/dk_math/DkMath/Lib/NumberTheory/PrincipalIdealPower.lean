@@ -38,7 +38,7 @@ theorem exists_unit_mul_pow_of_span_eq_pow_of_isPrincipal
       IsUnit u ∧
       Ideal.span ({gamma} : Set R) = I ∧
       a = u * gamma ^ p := by
-  letI : I.IsPrincipal := hI
+  let : I.IsPrincipal := hI
   let gamma : R := Submodule.IsPrincipal.generator I
   have hgamma : Ideal.span ({gamma} : Set R) = I := by
     exact Ideal.span_singleton_generator I
@@ -66,7 +66,7 @@ theorem exists_associated_pow_of_span_eq_pow_of_isPrincipal
     ∃ gamma : R,
       Ideal.span ({gamma} : Set R) = I ∧
       Associated a (gamma ^ p) := by
-  letI : I.IsPrincipal := hI
+  let : I.IsPrincipal := hI
   let gamma : R := Submodule.IsPrincipal.generator I
   have hgamma : Ideal.span ({gamma} : Set R) = I := by
     exact Ideal.span_singleton_generator I

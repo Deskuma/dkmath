@@ -344,7 +344,7 @@ theorem discrAxisDepth_discrAxis_pow
     (P : PrimeDiscriminantPacket p s) (n : ℕ) :
     discrAxisDepth p (discrAxis s ^ n) = n := by
   rw [discrAxisDepth, P.natAbs_norm_discrAxis_pow]
-  haveI : Fact p.Prime := ⟨P.prime⟩
+  have : Fact p.Prime := ⟨P.prime⟩
   rw [padicValNat.pow]
   simp
 

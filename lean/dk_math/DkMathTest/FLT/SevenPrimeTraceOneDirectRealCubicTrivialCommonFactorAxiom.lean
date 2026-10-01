@@ -1,0 +1,23 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+-/
+
+import DkMath.FLT.Seven
+
+#print "file: DkMathTest.FLT.SevenPrimeTraceOneDirectRealCubicTrivialCommonFactorAxiom"
+
+open DkMath.FLT.Seven
+open DkMath.FLT.Seven.SevenRealCubic
+
+#print axioms directOrbit_norm_coprime_ideal_coprime
+#print axioms directOrbitTrivialCommonFactor_scalarIdealU_absNorm
+#print axioms directOrbitTrivialCommonFactor_scalarIdealV_absNorm
+#print axioms directOrbitTrivialCommonFactor_gapIdeal_absNorm_of_c_eq_one
+#print axioms directOrbitTrivialCommonFactor_quotientIdeal_absNorm_of_c_eq_one
+#print axioms directOrbitTrivialCommonFactor_cross_coprime
+#print axioms directOrbitTrivialCommonFactor_ideal_product_of_c_eq_one
+#print axioms directOrbitTrivialCommonFactor_ideal_eq_scalar_of_c_eq_one
+#print axioms directOrbitTrivialCommonFactor_gap_scalar_unit_of_c_eq_one
+#print axioms directOrbitTrivialCommonFactor_quotient_scalar_unit_of_c_eq_one
+#print axioms directOrbitTrivialCommonFactor_unit_twisted_eq

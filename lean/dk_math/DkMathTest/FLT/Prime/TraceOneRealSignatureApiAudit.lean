@@ -8,7 +8,7 @@ import DkMath.NumberTheory.TraceOneQuadraticField
 import Mathlib.NumberTheory.NumberField.InfinitePlace.TotallyRealComplex
 import Mathlib.NumberTheory.NumberField.Units.DirichletTheorem
 import Mathlib.Algebra.QuadraticAlgebra.Basic
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 
 #print "file: DkMathTest.FLT.Prime.TraceOneRealSignatureApiAudit"
 

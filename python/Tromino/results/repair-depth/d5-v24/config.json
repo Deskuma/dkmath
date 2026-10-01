@@ -1,0 +1,15 @@
+{
+  "base_seed": 6000000,
+  "cooling": 0.9995,
+  "format_version": 1,
+  "intermediate_policy": "strict",
+  "jobs": 2000,
+  "max_depth": 6,
+  "node_limit": 500000,
+  "steps": 2000,
+  "target_depth": 5,
+  "temperature": 1.5,
+  "vertices": 24,
+  "warmup_flips": 48,
+  "workers": 8
+}

@@ -1,0 +1,65 @@
+{
+  "observation": "OBS-003-EndpointGapRestoration",
+  "date": "2026-09-29",
+  "source_directory": "python/Tromino/results/repair-depth/d5-v24",
+  "source_config": {
+    "vertices": 24,
+    "jobs": 2000,
+    "steps": 2000,
+    "warmup_flips": 48,
+    "workers": 8,
+    "max_depth": 6,
+    "target_depth": 5,
+    "node_limit": 500000,
+    "base_seed": 6000000,
+    "intermediate_policy": "strict"
+  },
+  "source_summary": {
+    "jobs_completed": 2000,
+    "resolved_jobs": 160,
+    "max_resolved_depth": 6,
+    "mean_resolved_depth": 5.1375,
+    "state_space_exhausted": 1840,
+    "target_found": true
+  },
+  "strict_depth6_witness": {
+    "seed": 6000915,
+    "source": "python/Tromino/results/repair-depth/d5-v24/best_resolved_witness.json",
+    "replay": "python/Tromino/results/repair-depth/d5-v24/replay-best-resolved.json",
+    "required_depth": 6,
+    "verified_against_depth_minus_one": true,
+    "critical_step": 11,
+    "critical_node": 14,
+    "depth5_expanded": 4734,
+    "depth6_expanded_at_critical_repair": 7348,
+    "repairs": 5,
+    "repair_moves_total": 10
+  },
+  "strict_exhausted_endpoint_depth3_witness": {
+    "seed": 6000596,
+    "strict_source": "python/Tromino/results/repair-depth/d5-v24/best_witness.json",
+    "endpoint_replay": "python/Tromino/results/repair-depth/d5-v24/replay-endpoint.json",
+    "strict": {
+      "classification": "state_space_exhausted",
+      "step": 18,
+      "node": 21,
+      "repairs": 7,
+      "expanded": 23,
+      "hit_depth_limit": false,
+      "search_ceiling": 6
+    },
+    "endpoint": {
+      "required_depth": 3,
+      "verified_against_depth_minus_one": true,
+      "repairs": 8,
+      "repair_moves_total": 12,
+      "critical_step": 18,
+      "critical_node": 21,
+      "critical_repair_depth": 3,
+      "critical_repair_expanded": 319,
+      "assigned_color": 3
+    }
+  },
+  "candidate_interpretation": "Missing-Color safety may be an endpoint condition of a composite repair path rather than a state invariant required after every primitive exchange.",
+  "status": "observation_only"
+}

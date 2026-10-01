@@ -1,0 +1,509 @@
+{
+  "baseline_exit_colors": [
+    0
+  ],
+  "baseline_exit_count_at_first_depth": 2,
+  "baseline_first_exit_depth": 9,
+  "cases": [
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": null
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 4
+        }
+      ],
+      "exit_counts": {
+        "10": 4
+      },
+      "expanded_unique_states": 419795,
+      "first_exit_depth": 10,
+      "initial_invariant": true,
+      "initial_kempe_component_count": 22,
+      "invalid_reason": null,
+      "is_baseline_exit_color": true,
+      "new_color": 0,
+      "old_color": 1,
+      "profile_file": "recolor-4-1-to-0.json",
+      "proper_violations": [],
+      "valid_intervention": true,
+      "vertex": 4
+    },
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": null
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 4
+        }
+      ],
+      "exit_counts": {},
+      "expanded_unique_states": 0,
+      "first_exit_depth": null,
+      "initial_invariant": false,
+      "initial_kempe_component_count": null,
+      "invalid_reason": "initial_invariant_broken",
+      "is_baseline_exit_color": false,
+      "new_color": 2,
+      "old_color": 1,
+      "profile_file": "recolor-4-1-to-2.json",
+      "proper_violations": [],
+      "valid_intervention": false,
+      "vertex": 4
+    },
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": 4
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 4
+        }
+      ],
+      "exit_counts": {},
+      "expanded_unique_states": 0,
+      "first_exit_depth": null,
+      "initial_invariant": false,
+      "initial_kempe_component_count": null,
+      "invalid_reason": "initial_invariant_broken",
+      "is_baseline_exit_color": false,
+      "new_color": 2,
+      "old_color": 3,
+      "profile_file": "recolor-5-3-to-2.json",
+      "proper_violations": [],
+      "valid_intervention": false,
+      "vertex": 5
+    },
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": 0
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 8
+        }
+      ],
+      "exit_counts": {},
+      "expanded_unique_states": 0,
+      "first_exit_depth": null,
+      "initial_invariant": false,
+      "initial_kempe_component_count": null,
+      "invalid_reason": "initial_invariant_broken",
+      "is_baseline_exit_color": false,
+      "new_color": 2,
+      "old_color": 1,
+      "profile_file": "recolor-9-1-to-2.json",
+      "proper_violations": [],
+      "valid_intervention": false,
+      "vertex": 9
+    },
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": 0
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 4
+        }
+      ],
+      "exit_counts": {},
+      "expanded_unique_states": 0,
+      "first_exit_depth": null,
+      "initial_invariant": false,
+      "initial_kempe_component_count": null,
+      "invalid_reason": "initial_invariant_broken",
+      "is_baseline_exit_color": false,
+      "new_color": 2,
+      "old_color": 1,
+      "profile_file": "recolor-10-1-to-2.json",
+      "proper_violations": [],
+      "valid_intervention": false,
+      "vertex": 10
+    },
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": 8
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 4
+        }
+      ],
+      "exit_counts": {
+        "10": 1,
+        "8": 1,
+        "9": 4
+      },
+      "expanded_unique_states": 419850,
+      "first_exit_depth": 8,
+      "initial_invariant": true,
+      "initial_kempe_component_count": 22,
+      "invalid_reason": null,
+      "is_baseline_exit_color": false,
+      "new_color": 1,
+      "old_color": 3,
+      "profile_file": "recolor-13-3-to-1.json",
+      "proper_violations": [],
+      "valid_intervention": true,
+      "vertex": 13
+    },
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": 8
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 4
+        }
+      ],
+      "exit_counts": {},
+      "expanded_unique_states": 0,
+      "first_exit_depth": null,
+      "initial_invariant": false,
+      "initial_kempe_component_count": null,
+      "invalid_reason": "initial_invariant_broken",
+      "is_baseline_exit_color": false,
+      "new_color": 2,
+      "old_color": 3,
+      "profile_file": "recolor-13-3-to-2.json",
+      "proper_violations": [],
+      "valid_intervention": false,
+      "vertex": 13
+    },
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": 1
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 0
+        }
+      ],
+      "exit_counts": {
+        "8": 2,
+        "9": 4
+      },
+      "expanded_unique_states": 419804,
+      "first_exit_depth": 8,
+      "initial_invariant": true,
+      "initial_kempe_component_count": 22,
+      "invalid_reason": null,
+      "is_baseline_exit_color": false,
+      "new_color": 1,
+      "old_color": 0,
+      "profile_file": "recolor-14-0-to-1.json",
+      "proper_violations": [],
+      "valid_intervention": true,
+      "vertex": 14
+    },
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": 1
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 0
+        }
+      ],
+      "exit_counts": {},
+      "expanded_unique_states": 0,
+      "first_exit_depth": null,
+      "initial_invariant": false,
+      "initial_kempe_component_count": null,
+      "invalid_reason": "initial_invariant_broken",
+      "is_baseline_exit_color": false,
+      "new_color": 2,
+      "old_color": 0,
+      "profile_file": "recolor-14-0-to-2.json",
+      "proper_violations": [],
+      "valid_intervention": false,
+      "vertex": 14
+    },
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": 0
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 2
+        }
+      ],
+      "exit_counts": {},
+      "expanded_unique_states": 0,
+      "first_exit_depth": null,
+      "initial_invariant": false,
+      "initial_kempe_component_count": null,
+      "invalid_reason": "initial_invariant_broken",
+      "is_baseline_exit_color": false,
+      "new_color": 2,
+      "old_color": 0,
+      "profile_file": "recolor-15-0-to-2.json",
+      "proper_violations": [],
+      "valid_intervention": false,
+      "vertex": 15
+    },
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": null
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 4
+        }
+      ],
+      "exit_counts": {},
+      "expanded_unique_states": 0,
+      "first_exit_depth": null,
+      "initial_invariant": false,
+      "initial_kempe_component_count": null,
+      "invalid_reason": "initial_invariant_broken",
+      "is_baseline_exit_color": false,
+      "new_color": 2,
+      "old_color": 3,
+      "profile_file": "recolor-17-3-to-2.json",
+      "proper_violations": [],
+      "valid_intervention": false,
+      "vertex": 17
+    }
+  ],
+  "colored_unlocked_neighbors": [
+    4,
+    5,
+    8,
+    9,
+    10,
+    12,
+    13,
+    14,
+    15,
+    17,
+    18
+  ],
+  "elapsed_seconds": 62.82900547981262,
+  "invalid_after_invariant_check": [
+    [
+      4,
+      1,
+      2
+    ],
+    [
+      5,
+      3,
+      2
+    ],
+    [
+      9,
+      1,
+      2
+    ],
+    [
+      10,
+      1,
+      2
+    ],
+    [
+      13,
+      3,
+      2
+    ],
+    [
+      14,
+      0,
+      2
+    ],
+    [
+      15,
+      0,
+      2
+    ],
+    [
+      17,
+      3,
+      2
+    ]
+  ],
+  "lowering_recolors": [
+    [
+      13,
+      3,
+      1
+    ],
+    [
+      14,
+      0,
+      1
+    ]
+  ],
+  "node": 19,
+  "proper_single_recolor_candidates": 11,
+  "raising_recolors": [
+    [
+      4,
+      1,
+      0
+    ]
+  ],
+  "same_depth_recolors": [],
+  "seed": 11000009,
+  "skipped_by_static_properness": [
+    {
+      "new_color": 3,
+      "old_color": 1,
+      "reason": "adjacent_same_color",
+      "vertex": 4
+    },
+    {
+      "new_color": 0,
+      "old_color": 3,
+      "reason": "adjacent_same_color",
+      "vertex": 5
+    },
+    {
+      "new_color": 1,
+      "old_color": 3,
+      "reason": "adjacent_same_color",
+      "vertex": 5
+    },
+    {
+      "new_color": 0,
+      "old_color": 1,
+      "reason": "adjacent_same_color",
+      "vertex": 8
+    },
+    {
+      "new_color": 2,
+      "old_color": 1,
+      "reason": "adjacent_same_color",
+      "vertex": 8
+    },
+    {
+      "new_color": 3,
+      "old_color": 1,
+      "reason": "adjacent_same_color",
+      "vertex": 8
+    },
+    {
+      "new_color": 0,
+      "old_color": 1,
+      "reason": "adjacent_same_color",
+      "vertex": 9
+    },
+    {
+      "new_color": 3,
+      "old_color": 1,
+      "reason": "adjacent_same_color",
+      "vertex": 9
+    },
+    {
+      "new_color": 0,
+      "old_color": 1,
+      "reason": "adjacent_same_color",
+      "vertex": 10
+    },
+    {
+      "new_color": 3,
+      "old_color": 1,
+      "reason": "adjacent_same_color",
+      "vertex": 10
+    },
+    {
+      "new_color": 1,
+      "old_color": 0,
+      "reason": "adjacent_same_color",
+      "vertex": 12
+    },
+    {
+      "new_color": 2,
+      "old_color": 0,
+      "reason": "adjacent_same_color",
+      "vertex": 12
+    },
+    {
+      "new_color": 3,
+      "old_color": 0,
+      "reason": "adjacent_same_color",
+      "vertex": 12
+    },
+    {
+      "new_color": 0,
+      "old_color": 3,
+      "reason": "adjacent_same_color",
+      "vertex": 13
+    },
+    {
+      "new_color": 3,
+      "old_color": 0,
+      "reason": "adjacent_same_color",
+      "vertex": 14
+    },
+    {
+      "new_color": 1,
+      "old_color": 0,
+      "reason": "adjacent_same_color",
+      "vertex": 15
+    },
+    {
+      "new_color": 3,
+      "old_color": 0,
+      "reason": "adjacent_same_color",
+      "vertex": 15
+    },
+    {
+      "new_color": 0,
+      "old_color": 3,
+      "reason": "adjacent_same_color",
+      "vertex": 17
+    },
+    {
+      "new_color": 1,
+      "old_color": 3,
+      "reason": "adjacent_same_color",
+      "vertex": 17
+    },
+    {
+      "new_color": 0,
+      "old_color": 3,
+      "reason": "adjacent_same_color",
+      "vertex": 18
+    },
+    {
+      "new_color": 1,
+      "old_color": 3,
+      "reason": "adjacent_same_color",
+      "vertex": 18
+    },
+    {
+      "new_color": 2,
+      "old_color": 3,
+      "reason": "adjacent_same_color",
+      "vertex": 18
+    }
+  ],
+  "step": 16,
+  "unresolved_recolors": [],
+  "witness": "python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json"
+}

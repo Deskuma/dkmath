@@ -6,7 +6,7 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 import DkMath.CosmicFormula.CosmicFormulaGeom
-import DkMath.Tromino
+import DkMath.Tromino.Basic
 
 #print "file: DkMath.CosmicFormula.CosmicFormulaTrominoLink"
 

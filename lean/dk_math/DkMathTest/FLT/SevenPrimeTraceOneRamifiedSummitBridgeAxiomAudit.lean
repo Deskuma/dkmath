@@ -1,0 +1,6 @@
+import DkMath.FLT.Seven.PrimeTraceOneRamifiedSummitBridge
+
+open DkMath.FLT.Seven
+
+#print axioms SevenQuadraticSeventhPowerPacket.toPrimitiveRamifiedSummitPacket
+#print axioms SevenQuadraticSeventhPowerPacket.rootSnd_padicValNat_exact

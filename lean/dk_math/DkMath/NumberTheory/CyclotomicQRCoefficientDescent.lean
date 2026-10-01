@@ -21,12 +21,12 @@ theorem coeff_fixed_of_map_eq
     {L : Type*} [CommSemiring L]
     (σ : L →+* L) {P : MvPolynomial (Fin 2) L}
     (hP : MvPolynomial.map σ P = P) (d : Fin 2 →₀ ℕ) :
-    σ (MvPolynomial.coeff d P) = MvPolynomial.coeff d P := by
+    σ (P.coeff d) = P.coeff d := by
   calc
-    σ (MvPolynomial.coeff d P) = MvPolynomial.coeff d (MvPolynomial.map σ P) := by
+    σ (P.coeff d) = (MvPolynomial.map σ P).coeff d := by
       symm
       exact MvPolynomial.coeff_map σ P d
-    _ = MvPolynomial.coeff d P := by rw [hP]
+    _ = P.coeff d := by rw [hP]
 
 /-! ## Fixed-field membership of the Phase-9 coefficient targets -/
 
@@ -35,7 +35,7 @@ theorem coeff_Rpoly_mem_fixedField
     {p : ℕ} [Fact p.Prime]
     [IsCyclotomicExtension {p} K L]
     (ζ : L) (hζ : IsPrimitiveRoot ζ p) (d : Fin 2 →₀ ℕ) :
-    MvPolynomial.coeff d (Rpoly (p := p) ζ) ∈
+    (Rpoly (p := p) ζ).coeff d ∈
       IntermediateField.fixedField (⊤ : Subgroup (L ≃ₐ[K] L)) := by
   rw [IntermediateField.mem_fixedField_iff]
   intro σ _
@@ -47,7 +47,7 @@ theorem coeff_Dpoly_sq_mem_fixedField
     {p : ℕ} [Fact p.Prime]
     [IsCyclotomicExtension {p} K L]
     (ζ : L) (hζ : IsPrimitiveRoot ζ p) (d : Fin 2 →₀ ℕ) :
-    MvPolynomial.coeff d (Dpoly (p := p) ζ ^ 2) ∈
+    (Dpoly (p := p) ζ ^ 2).coeff d ∈
       IntermediateField.fixedField (⊤ : Subgroup (L ≃ₐ[K] L)) := by
   rw [IntermediateField.mem_fixedField_iff]
   intro σ _
@@ -68,12 +68,12 @@ theorem coeff_Rpoly_mem_range_algebraMap
     {p : ℕ} [Fact p.Prime]
     [IsCyclotomicExtension {p} K L]
     (ζ : L) (hζ : IsPrimitiveRoot ζ p) (d : Fin 2 →₀ ℕ) :
-    MvPolynomial.coeff d (Rpoly (p := p) ζ) ∈
+    (Rpoly (p := p) ζ).coeff d ∈
       Set.range (algebraMap K L) := by
   let : IsGalois K L := IsCyclotomicExtension.isGalois {p} K L
   let : FiniteDimensional K L := finiteDimensional_cyclotomic (p := p)
   apply (IsGalois.mem_range_algebraMap_iff_fixed
-    (MvPolynomial.coeff d (Rpoly (p := p) ζ))).2
+    ((Rpoly (p := p) ζ).coeff d)).2
   intro σ
   exact coeff_fixed_of_map_eq σ.toRingEquiv.toRingHom
     (map_Rpoly_of_cyclotomicAut ζ hζ σ) d
@@ -83,12 +83,12 @@ theorem coeff_Dpoly_sq_mem_range_algebraMap
     {p : ℕ} [Fact p.Prime]
     [IsCyclotomicExtension {p} K L]
     (ζ : L) (hζ : IsPrimitiveRoot ζ p) (d : Fin 2 →₀ ℕ) :
-    MvPolynomial.coeff d (Dpoly (p := p) ζ ^ 2) ∈
+    (Dpoly (p := p) ζ ^ 2).coeff d ∈
       Set.range (algebraMap K L) := by
   let : IsGalois K L := IsCyclotomicExtension.isGalois {p} K L
   let : FiniteDimensional K L := finiteDimensional_cyclotomic (p := p)
   apply (IsGalois.mem_range_algebraMap_iff_fixed
-    (MvPolynomial.coeff d (Dpoly (p := p) ζ ^ 2))).2
+    ((Dpoly (p := p) ζ ^ 2).coeff d)).2
   intro σ
   exact coeff_fixed_of_map_eq σ.toRingEquiv.toRingHom
     (map_Dpoly_sq_of_cyclotomicAut ζ hζ σ) d

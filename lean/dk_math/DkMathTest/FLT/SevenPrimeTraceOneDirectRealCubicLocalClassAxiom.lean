@@ -1,0 +1,14 @@
+import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicLocalClass
+
+open DkMath.FLT.Seven
+
+#print axioms theta_local_coords_zero_of_axis_cube_dvd
+#print axioms projectiveLog_eq_normalized_theta_coords_of_unit_mul_pow_seven
+#print axioms directOrbitQuotient_eq_axis_cube_mul_canonical
+#print axioms directOrbitQuotientCore_unique
+#print axioms directOrbitPowerSplit_quotientCore_theta_coords
+#print axioms thetaSevenUnit_projectiveLog
+#print axioms directOrbitPowerSplit_quotientUnit_projectiveLog
+#print axioms directOrbitPowerSplit_gapUnit_projectiveLog
+#print axioms directOrbit_twistedCoeff_projectiveLog_unconditional
+#print axioms directOrbit_twistedCoeff_ratio_classes_unconditional

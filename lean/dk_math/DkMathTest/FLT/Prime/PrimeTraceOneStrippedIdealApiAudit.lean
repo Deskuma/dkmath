@@ -41,5 +41,25 @@ the stripped-ideal bridge without introducing a second implementation route. -/
 #check DkMath.NumberTheory.TraceOneQuadratic.span_mul_span_conj_eq_span_norm
 #check DkMath.NumberTheory.TraceOneQuadratic.span_mul_span_conj_eq_pow_of_norm_eq_pow
 #check DkMath.FLT.Prime.PrimeTraceOneStrippedIdealPacket
+#check DkMath.FLT.Prime.PrimeTraceOneStrippedIdealPacket.parent_eq_coord
 #check DkMath.FLT.Prime.nonempty_primeTraceOneStrippedIdealPacket
 #check DkMath.FLT.Prime.primeTraceOneStrippedIdealPacket
+
+open DkMath.FLT.Prime
+open DkMath.NumberTheory.CyclotomicQRTraceOneBridge
+
+section ParentProvenance
+
+variable {L : Type*} [Field L] [Algebra ℚ L]
+variable {p g u x : ℕ} [Fact p.Prime]
+variable [IsCyclotomicExtension {p} ℚ L]
+variable {ζ : L} {hζ : IsPrimitiveRoot ζ p}
+variable (P0 : PrimeAdicFactorPacket p g u x)
+variable (P : PrimeTraceOneCoordinatePacket L p ζ hζ)
+variable (Q : PrimeTraceOneStrippedIdealPacket L P0 P)
+
+example :
+    Q.parent = P.coord (g + u : ℤ) (u : ℤ) :=
+  Q.parent_eq_coord
+
+end ParentProvenance

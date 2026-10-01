@@ -54,6 +54,11 @@ theorem signedPrimeParameter_three :
     signedPrimeParameter 3 = -1 := by
   norm_num [signedPrimeParameter, signedPrimeDiscriminant]
 
+/-- The signed-prime trace-one parameter is `1` at `p = 5`. -/
+theorem signedPrimeParameter_five :
+    signedPrimeParameter 5 = 1 := by
+  norm_num [signedPrimeParameter, signedPrimeDiscriminant]
+
 theorem discr_signedPrimeParameter
     {p : ℕ} (hp : p.Prime) (hp2 : p ≠ 2) :
     discr (signedPrimeParameter p) = signedPrimeDiscriminant p := by

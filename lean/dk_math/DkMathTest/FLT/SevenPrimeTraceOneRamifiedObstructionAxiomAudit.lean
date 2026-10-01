@@ -1,0 +1,9 @@
+import DkMath.FLT.Seven.PrimeTraceOneRamifiedObstruction
+
+open DkMath.FLT.Seven
+
+#print axioms SevenQuadraticSeventhPowerPacket.root_norm_eq
+#print axioms SevenQuadraticSeventhPowerPacket.root_norm_not_seven_dvd
+#print axioms SevenQuadraticSeventhPowerPacket.root_linear_mod_seven_ne_zero
+#print axioms SevenQuadraticSeventhPowerPacket.ramified_coordinates_mod_seven_ne_zero
+#print axioms SevenQuadraticSeventhPowerPacket.seven_pow_five_dvd_root_snd

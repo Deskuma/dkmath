@@ -1,0 +1,41 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+-/
+
+import DkMath.FLT.Seven
+
+#print "file: DkMathTest.FLT.SevenPrimeTraceOneDirectRealCubicTrivialCommonFactorDeepJetAxiom"
+
+open DkMath.FLT.Seven
+open DkMath.FLT.Seven.SevenRealCubic
+open DkMath.FLT.Seven.SevenRealCubicInt
+
+#print axioms directOrbitDeepJet_weighted_trace_eq_zero
+#print axioms directOrbitCyclicTrace_weighted_eq_zero
+#print axioms directOrbitDeepJet_normalization
+#print axioms directOrbitDeepJet_normalized_trace_zero
+#print axioms directOrbitCyclicTrace_theta_coordinate_formula
+#print axioms directOrbitDeepJet_trace_plane
+#print axioms directOrbitDeepJetRho_val
+#print axioms directOrbitDeepJetRho_norm
+#print axioms directOrbitDeepJetRho_projectiveLog
+#print axioms directOrbitDeepJetRho_trace_zero
+#print axioms thetaLinear_pow_seven_mod49_neutral
+#print axioms thetaSquare_pow_seven_mod49_neutral
+#print axioms directOrbitDeepJetThetaUnit_val
+#print axioms directOrbitDeepJetThetaUnit_norm
+#print axioms directOrbitDeepJetThetaUnit_projectiveLog
+#print axioms directOrbitDeepJetXUnit_norm
+#print axioms directOrbitDeepJetXUnit_projectiveLog
+#print axioms directOrbitDeepJetExponent_even
+#print axioms directOrbitDeepJetExponent_mod_seven
+#print axioms directOrbitDeepJetWUnit_norm
+#print axioms directOrbitDeepJetWUnit_projectiveLog
+#print axioms directOrbitDeepJet_global_seventh_correction
+#print axioms directOrbitDeepJet_trace_plane_form
+#print axioms directOrbitTracePlaneForm_rho_mul
+#print axioms directOrbitDeepJet_mod49_trace_plane
+#print axioms directOrbitDeepJet_thetaConst_nonzero_mod_seven
+#print axioms directOrbitDeepJet_thetaLinear_mod_seven
+#print axioms directOrbitDeepJet_global_thetaLinear_mod_seven

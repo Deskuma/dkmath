@@ -1,0 +1,40 @@
+import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicTrivialCommonFactorDeepJet
+
+open DkMath.FLT.Seven
+open DkMath.FLT.Seven.SevenRealCubic
+open DkMath.FLT.Seven.SevenRealCubicInt
+open scoped NumberField Pointwise
+
+namespace DkMath.FLT.Seven.SevenRealCubic
+
+noncomputable section
+
+#check Int.natAbs_eq_iff
+#check Int.eq_one_or_neg_one_of_mul_eq_one
+#check thetaConstModSeven_unit_ne_zero
+#check theta_coordinate_decomposition
+#check directOrbit_squareTwist_coeff_projectiveLog
+#check projectiveLog_pow_seven
+#check unit_isSeventhPower_iff_projectiveLog_eq_zero
+#check map_neg
+#check ofMul_inv
+#check directOrbitDeepJetThetaUnit_val
+#check directOrbitDeepJetThetaUnit_norm
+#check directOrbitDeepJetThetaUnit_projectiveLog
+#check directOrbitDeepJetXUnit_norm
+#check directOrbitDeepJetXUnit_projectiveLog
+#check directOrbitDeepJetExponent_even
+#check directOrbitDeepJetExponent_mod_seven
+#check directOrbitDeepJetWUnit_norm
+#check directOrbitDeepJetWUnit_projectiveLog
+#check directOrbitDeepJet_global_seventh_correction
+#check directOrbitTracePlaneForm
+#check directOrbitDeepJet_trace_plane_form
+#check directOrbitTracePlaneForm_rho_mul
+#check directOrbitDeepJet_mod49_trace_plane
+#check directOrbitDeepJet_thetaConst_nonzero_mod_seven
+#check directOrbitDeepJet_thetaLinear_mod_seven
+#check directOrbitDeepJet_global_thetaLinear_mod_seven
+
+end
+end DkMath.FLT.Seven.SevenRealCubic

@@ -152,5 +152,32 @@ theorem PrimitiveRamifiedSummitPacket.rootSnd_padicValNat
     padicValNat.pow p.gapRoot 7] at hval
   omega
 
+/-- The distinguished coordinate of every primitive ramified summit has one
+visible seven factor, and its remaining seven-adic depth is exactly the gap
+root depth.  No terminal-origin hypothesis is used. -/
+theorem PrimitiveRamifiedSummitPacket.distinguished_padicValNat
+    (p : PrimitiveRamifiedSummitPacket) :
+    padicValNat 7 (Int.natAbs p.distinguished) =
+      1 + padicValNat 7 p.gapRoot := by
+  rw [p.distinguished_eq, Int.natAbs_mul, Int.natAbs_mul]
+  have hgap0 : p.gapRoot ≠ 0 := p.gapRoot_pos.ne'
+  have hres0 : p.residualRoot ≠ 0 := p.residualRoot_pos.ne'
+  change padicValNat 7 (7 * p.gapRoot * p.residualRoot) = _
+  rw [padicValNat.mul (mul_ne_zero (by norm_num) hgap0) hres0,
+    padicValNat.mul (by norm_num) hgap0,
+    padicValNat.self (by norm_num),
+    padicValNat.eq_zero_of_not_dvd p.residualRoot_not_seven_dvd]
+  omega
+
+/-- Eliminating the gap-root depth between the two generic summit valuation
+laws gives a subtraction-free relation between the root second coordinate and
+the distinguished coordinate. -/
+theorem PrimitiveRamifiedSummitPacket.rootSnd_padicValNat_add_two_eq
+    (p : PrimitiveRamifiedSummitPacket) :
+    padicValNat 7 (Int.natAbs p.root.snd) + 2 =
+      7 * padicValNat 7 (Int.natAbs p.distinguished) := by
+  rw [p.rootSnd_padicValNat, p.distinguished_padicValNat]
+  omega
+
 
 end DkMath.FLT.Seven

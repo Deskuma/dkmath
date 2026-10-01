@@ -80,7 +80,7 @@ example {g u x : ℕ}
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
   let : IsDedekindDomain (TraceOneInt (signedPrimeParameter 7)) :=
     traceOneRat_isDedekindDomain (by norm_num) (by norm_num)
-  intro hfree
+  intro _ _ _ _ hfree
   obtain ⟨P⟩ := exists_prime_traceOne_coordinate_packet
     (L := cycloField 7) (p := 7) (by norm_num)
     (cycloZeta 7) (cycloZeta_isPrimitiveRoot 7)
@@ -111,7 +111,7 @@ example {g u x : ℕ}
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
   let : IsDedekindDomain (TraceOneInt (signedPrimeParameter 11)) :=
     traceOneRat_isDedekindDomain (by norm_num) (by norm_num)
-  intro hfree
+  intro _ _ _ _ hfree
   obtain ⟨P⟩ := exists_prime_traceOne_coordinate_packet
     (L := cycloField 11) (p := 11) (by norm_num)
     (cycloZeta 11) (cycloZeta_isPrimitiveRoot 11)
@@ -157,7 +157,7 @@ example {g u x : ℕ}
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
   let : IsDedekindDomain (TraceOneInt (signedPrimeParameter 5)) :=
     traceOneRat_isDedekindDomain (by norm_num) (by norm_num)
-  intro hfree
+  intro _ _ _ _ _ hfree
   obtain ⟨P⟩ := exists_prime_traceOne_coordinate_packet
     (L := cycloField 5) (p := 5) (by norm_num)
     (cycloZeta 5) (cycloZeta_isPrimitiveRoot 5)
@@ -202,7 +202,7 @@ example {g u x : ℕ}
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
   let : IsDedekindDomain (TraceOneInt (signedPrimeParameter 13)) :=
     traceOneRat_isDedekindDomain (by norm_num) (by norm_num)
-  intro hfree
+  intro _ _ _ _ _ hfree
   obtain ⟨P⟩ := exists_prime_traceOne_coordinate_packet
     (L := cycloField 13) (p := 13) (by norm_num)
     (cycloZeta 13) (cycloZeta_isPrimitiveRoot 13)

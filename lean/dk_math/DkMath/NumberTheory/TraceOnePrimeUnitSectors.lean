@@ -8,7 +8,7 @@ import DkMath.NumberTheory.TraceOneQuadraticField
 import DkMath.Lib.NumberTheory.UnitPowerSector
 import Mathlib.NumberTheory.NumberField.InfinitePlace.TotallyRealComplex
 import Mathlib.NumberTheory.NumberField.Units.DirichletTheorem
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 
 #print "file: DkMath.NumberTheory.TraceOnePrimeUnitSectors"
 
@@ -463,6 +463,7 @@ theorem traceOnePrimeReal_exists_sector_mul_pow_of_span_eq_pow
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
   let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
     traceOneRat_isDedekindDomain hp (by omega)
+  dsimp
   intro I a hI0 hfree hspan
   exact exists_sector_mul_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt
     (traceOnePrimeRealFinSectorSystem hp hmod) hI0 hfree hspan
@@ -615,6 +616,7 @@ theorem traceOnePrimeImaginary_exists_eq_pow_of_span_eq_pow
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
   let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
     traceOneRat_isDedekindDomain hp (by omega)
+  dsimp
   intro I a hI0 hfree hspan
   exact exists_eq_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt_of_unit_pow_surjective
     hI0 hfree (traceOnePrimeImaginary_unit_pow_surjective hp hp7 hmod) hspan

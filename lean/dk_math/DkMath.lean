@@ -26,6 +26,7 @@ import DkMath.NumberTheory.PowerSums  -- NumberTheory.PowerSums: Power Sum Filla
 import DkMath.NumberTheory.BinomialPrime  -- NumberTheory.BinomialPrime: prime rows in Pascal's triangle
 import DkMath.NumberTheory.BinomialPrimePower  -- NumberTheory.BinomialPrimePower: prime-power rows in Pascal's triangle
 import DkMath.NumberTheory.PascalPrimeDial  -- NumberTheory.PascalPrimeDial: prime-dial heights on Pascal rows
+import DkMath.NumberTheory.Gauge  -- NumberTheory.Gauge: exponent-side Pascal gauge facade
 import DkMath.NumberTheory.PascalPrimeCoordinateDecoder
 import DkMath.NumberTheory.Primitive
 import DkMath.NumberTheory.PrimorialUniverse
@@ -45,7 +46,7 @@ import DkMath.Hackathon.JacobianCounterexample3
 -- Polyomino Module
 import DkMath.Polyomino  -- Polyomino Basics
 import DkMath.PolyominoPrototype  -- Polyomino Prototype
-import DkMath.Tromino  -- Polyomino: Tromino Basics
+import DkMath.Tromino  -- Tromino package facade
 -- Silver Ratio Module
 import DkMath.SilverRatio  -- Silver Ratio Unit
 -- Silver Ratio Module Tests

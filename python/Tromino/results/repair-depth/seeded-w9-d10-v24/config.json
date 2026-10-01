@@ -1,0 +1,19 @@
+{
+  "base_seed": 10000000,
+  "cooling": 0.9995,
+  "format_version": 2,
+  "initial_witness": "python/Tromino/results/repair-depth/endpoint-d9-v24/best_resolved_witness.json",
+  "initial_witness_seed": 9000035,
+  "intermediate_policy": "endpoint",
+  "jobs": 64,
+  "max_depth": 11,
+  "node_limit": 3000000,
+  "search_objective": "resolved",
+  "steps": 512,
+  "stop_on_target": true,
+  "target_depth": 10,
+  "temperature": 1.5,
+  "vertices": 24,
+  "warmup_flips": 0,
+  "workers": 8
+}

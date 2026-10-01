@@ -1,0 +1,106 @@
+{
+  "observation": "OBS-002-MissingColorForcedExchange",
+  "date": "2026-09-28",
+  "environment": {
+    "python": "3.13.5",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  },
+  "generator": "uniform random points -> Delaunay triangulation -> outer sea joined to convex hull",
+  "sea_color": 0,
+  "colors": [0, 1, 2, 3],
+  "peel_degree": 4,
+  "invariant": "|P(v)| <= 3 for every not-yet-restored node",
+  "repair_proxy": "two-color Kempe-component swap on already-colored nodes; components containing sea forbidden; every intermediate state preserves invariant",
+  "primary_batches": [
+    {
+      "n": 20,
+      "trials": 100,
+      "seed_start": 350000,
+      "direct_success": 40,
+      "depth1_success": 94,
+      "depth2_success": 100,
+      "depth1_mean_repairs_among_successes": 0.851063829787234,
+      "depth2_mean_repairs": 0.94,
+      "depth2_max_depth_used": 2
+    },
+    {
+      "n": 50,
+      "trials": 100,
+      "seed_start": 650000,
+      "direct_success": 12,
+      "depth1_success": 91,
+      "depth2_success": 100,
+      "depth1_mean_repairs_among_successes": 2.3076923076923075,
+      "depth2_mean_repairs": 2.35,
+      "depth2_max_depth_used": 2
+    },
+    {
+      "n": 100,
+      "trials": 100,
+      "seed_start": 1150000,
+      "direct_success": 0,
+      "depth1_success": 88,
+      "depth2_success": 100,
+      "depth1_mean_repairs_among_successes": 4.215909090909091,
+      "depth2_mean_repairs": 4.37,
+      "depth2_max_depth_used": 2
+    },
+    {
+      "n": 200,
+      "trials": 50,
+      "seed_start": 2150000,
+      "direct_success": 0,
+      "depth1_success": 40,
+      "depth2_success": 50,
+      "depth1_mean_repairs_among_successes": 8.1,
+      "depth2_mean_repairs": 8.46,
+      "depth2_max_depth_used": 2
+    }
+  ],
+  "dedicated_500_batch": {
+    "n": 500,
+    "trials": 50,
+    "seed_start": 5200000,
+    "depth1": {
+      "success": 23,
+      "mean_repairs_among_successes": 21.08695652173913,
+      "max_depth_used": 1
+    },
+    "depth2": {
+      "success": 49,
+      "mean_repairs_among_successes": 22.346938775510203,
+      "max_depth_used": 2,
+      "failure_seeds": [5200005]
+    },
+    "depth3": {
+      "success": 50,
+      "mean_repairs": 22.28,
+      "max_depth_used": 3
+    }
+  },
+  "depth3_witness": {
+    "seed": 5200005,
+    "n": 500,
+    "restore_step": 427,
+    "node": 191,
+    "assigned_color_after_repair": 1,
+    "full_run_repairs": 19,
+    "full_run_exchange_moves": 21,
+    "full_run_max_depth": 3,
+    "exchange_sequence": [
+      {
+        "colors": [0, 1],
+        "component": [60, 123, 139, 274, 483]
+      },
+      {
+        "colors": [2, 3],
+        "component": [23, 26, 58, 84, 89, 91, 127, 134, 154, 155, 212, 244, 259, 261, 265, 297, 300, 305, 327, 333, 346, 351, 371, 372, 385, 414, 432, 433, 438, 452, 458]
+      },
+      {
+        "colors": [1, 2],
+        "component": [11, 49, 74, 76, 81, 91, 97, 113, 123, 138, 164, 176, 203, 208, 211, 216, 231, 237, 241, 261, 268, 271, 280, 282, 287, 300, 311, 312, 343, 352, 361, 388, 416, 430, 452, 459, 473, 496, 498]
+      }
+    ]
+  }
+}
