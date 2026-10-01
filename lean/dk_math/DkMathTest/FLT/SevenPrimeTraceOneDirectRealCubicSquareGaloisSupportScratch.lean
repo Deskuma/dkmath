@@ -1,8 +1,8 @@
 import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicSquareGaloisSupport
 import DkMath.FLT.Seven.SevenRealCubicAxisDrop
-import Mathlib.FieldTheory.Galois.Basic
-import Mathlib.NumberTheory.RamificationInertia.Basic
 import Mathlib.NumberTheory.RamificationInertia.Galois
+import Mathlib.FieldTheory.Galois.Basic
+import Mathlib.RingTheory.RamificationInertia.Basic
 import Mathlib.RingTheory.Localization.FractionRing
 
 open scoped NumberField
