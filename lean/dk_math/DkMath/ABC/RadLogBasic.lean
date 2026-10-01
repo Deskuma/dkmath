@@ -21,7 +21,6 @@ namespace DkMath.ABC
 open scoped BigOperators
 
 open Real Rat Filter
-open MeasureTheory ProbabilityTheory
 open _root_.Nat _root_.Finset
 
 /-- For any natural number `n`, the real number `rad n` is at least 1. -/

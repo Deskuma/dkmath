@@ -272,6 +272,7 @@ theorem paritySafeRechargeExactDualBase_pairWitness_false_beam :
         Nat.Prime p ∧ Nat.Prime q ∧ p < q ∧ p * q = 5 := by
   constructor
   · norm_num [paritySafeRechargeOddShellQuotient]
+    exact ⟨2, by norm_num⟩
   · rintro ⟨p, q, hp, hq, hpq, hprod⟩
     have hp2 := hp.two_le
     have hq2 := hq.two_le

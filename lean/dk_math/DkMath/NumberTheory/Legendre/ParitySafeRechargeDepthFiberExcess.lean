@@ -222,8 +222,9 @@ theorem paritySafeRechargeExactDepthFiber_collision_arithmetic_58 :
       paritySafeRechargeExactSeat 58 21 15 = 101 ∧
       paritySafeRechargeOddShellQuotient 58 15 21 = 11 ∧
       paritySafeRechargeOddShellQuotient 58 21 15 = 11 := by
+  have hodd : Odd 11 := ⟨5, by norm_num⟩
   norm_num [paritySafeRechargeExactSeat, paritySafeRechargeExactShellPoint,
-    paritySafeRechargeOddShellQuotient]
+    paritySafeRechargeOddShellQuotient, hodd]
 
 /-- The two concrete n=58 exact depth pairs occupy the same seat. -/
 theorem paritySafeRechargeExactDepthFiber_collision_witness_58 :
@@ -232,6 +233,7 @@ theorem paritySafeRechargeExactDepthFiber_collision_witness_58 :
       paritySafeRechargeExactSeat 58 15 21 = 101 ∧
       paritySafeRechargeExactSeat 58 21 15 = 101 ∧
       2 ≤ (paritySafeRechargeExactDepthPairsAtSeat 58 101).card := by
+  have hodd : Odd 11 := ⟨5, by norm_num⟩
   have hactive3 : 3 ∈ squareAnchorOddActivePrimes 58 := by
     apply mem_squareAnchorOddActivePrimes.mpr
     norm_num
@@ -251,8 +253,10 @@ theorem paritySafeRechargeExactDepthFiber_collision_witness_58 :
     refine ⟨?_, ?_, ?_⟩
     · apply mem_paritySafeFarCofactorBaseOffsets.mpr
       norm_num
+      exact by decide
     · apply mem_paritySafeFarCofactorBaseOffsets.mpr
       norm_num
+      exact by decide
     · norm_num
   have hbase21 : (21, 15) ∈
       paritySafeRechargeOverAnchorDualBasePairs 58 := by
@@ -260,23 +264,25 @@ theorem paritySafeRechargeExactDepthFiber_collision_witness_58 :
     refine ⟨?_, ?_, ?_⟩
     · apply mem_paritySafeFarCofactorBaseOffsets.mpr
       norm_num
+      exact by decide
     · apply mem_paritySafeFarCofactorBaseOffsets.mpr
       norm_num
+      exact by decide
     · norm_num
   have hadmiss15 : (15, 21) ∈
       paritySafeRechargePrimeAdmissibleDualBasePairs 58 := by
     apply mem_paritySafeRechargePrimeAdmissibleDualBasePairs.mpr
     refine ⟨hbase15, ?_⟩
-    norm_num [paritySafeRechargeOddShellQuotient]
+    norm_num [paritySafeRechargeOddShellQuotient, hodd]
   have hadmiss21 : (21, 15) ∈
       paritySafeRechargePrimeAdmissibleDualBasePairs 58 := by
     apply mem_paritySafeRechargePrimeAdmissibleDualBasePairs.mpr
     refine ⟨hbase21, ?_⟩
-    norm_num [paritySafeRechargeOddShellQuotient]
+    norm_num [paritySafeRechargeOddShellQuotient, hodd]
   have hwitness15 :
       ParitySafeRechargeExactPairWitness 58 15 21 3 5 := by
     refine ⟨hgate3, hactive5, by norm_num, by norm_num, ?_, ?_⟩
-    · norm_num [paritySafeRechargeOddShellQuotient]
+    · norm_num [paritySafeRechargeOddShellQuotient, hodd]
     · intro a ha halt hadiv
       have hprime := (mem_squareAnchorOddActivePrimes.mp ha).1
       have hne := (mem_squareAnchorOddActivePrimes.mp ha).2.2.2
@@ -285,7 +291,7 @@ theorem paritySafeRechargeExactDepthFiber_collision_witness_58 :
   have hwitness21 :
       ParitySafeRechargeExactPairWitness 58 21 15 3 7 := by
     refine ⟨hgate3, hactive7, by norm_num, by norm_num, ?_, ?_⟩
-    · norm_num [paritySafeRechargeOddShellQuotient]
+    · norm_num [paritySafeRechargeOddShellQuotient, hodd]
     · intro a ha halt hadiv
       have hprime := (mem_squareAnchorOddActivePrimes.mp ha).1
       have hne := (mem_squareAnchorOddActivePrimes.mp ha).2.2.2
@@ -311,10 +317,10 @@ theorem paritySafeRechargeExactDepthFiber_collision_witness_58 :
     norm_num
   have hseat15 : paritySafeRechargeExactSeat 58 15 21 = 101 := by
     norm_num [paritySafeRechargeExactSeat, paritySafeRechargeExactShellPoint,
-      paritySafeRechargeOddShellQuotient]
+      paritySafeRechargeOddShellQuotient, hodd]
   have hseat21 : paritySafeRechargeExactSeat 58 21 15 = 101 := by
     norm_num [paritySafeRechargeExactSeat, paritySafeRechargeExactShellPoint,
-      paritySafeRechargeOddShellQuotient]
+      paritySafeRechargeOddShellQuotient, hodd]
   have hfiber15 : (15, 21) ∈
       paritySafeRechargeExactDepthPairsAtSeat 58 101 :=
     mem_paritySafeRechargeExactDepthPairsAtSeat.mpr ⟨hdepth15, hseat15⟩

@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.Legendre.OldSupportCapacity
 import DkMath.NumberTheory.Primitive.PeriodicPrimeWorld
+import Mathlib.Tactic.NormNum.Prime
 
 #print "file: DkMath.NumberTheory.Legendre.OldSupportGcd"
 

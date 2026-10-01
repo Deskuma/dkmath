@@ -5,6 +5,8 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.Core
+import Mathlib.NumberTheory.FLT.Four
+import Lean.Elab.Tactic.Omega
 
 #print "file: DkMath.FLT.PrimeProviderCore"
 
