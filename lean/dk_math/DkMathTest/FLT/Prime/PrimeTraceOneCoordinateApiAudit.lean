@@ -24,7 +24,10 @@ routes.  The resultant equivalence in this checkout is the monic-first form
 #check MvPolynomial.aeval
 #check MvPolynomial.rename
 #check MvPolynomial.bind₁
-#check MvPolynomial.coeff
+
+-- Fix: Lean v4.34.0 で MvPolynomial.coeff が削除された模様
+#check fun (P : MvPolynomial (Fin 2) ℤ) (d : Fin 2 →₀ ℕ) => P.coeff d
+
 #check MvPolynomial.map
 #check Ideal.Quotient.mk
 #check Ideal.Quotient.mk_eq_mk_iff_sub_mem

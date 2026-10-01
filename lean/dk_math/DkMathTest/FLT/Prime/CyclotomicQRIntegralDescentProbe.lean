@@ -62,12 +62,12 @@ example {p : ℕ} [Fact p.Prime] (a : ZMod p) :
     (Fact.out : Nat.Prime p).pos).pow _
 
 example {p : ℕ} [Fact p.Prime] (d : Fin 2 →₀ ℕ) :
-    IsIntegral ℤ (MvPolynomial.coeff d (Rpoly (p := p) (cycloZeta p))) := by
+    IsIntegral ℤ ((Rpoly (p := p) (cycloZeta p)).coeff d) := by
   exact coeff_Rpoly_isIntegral_int (cycloZeta p)
     (cycloZeta_isPrimitiveRoot p) d
 
 example {p : ℕ} [Fact p.Prime] (d : Fin 2 →₀ ℕ) :
-    IsIntegral ℤ (MvPolynomial.coeff d (Dpoly (p := p) (cycloZeta p) ^ 2)) := by
+    IsIntegral ℤ ((Dpoly (p := p) (cycloZeta p) ^ 2).coeff d) := by
   exact coeff_Dpoly_sq_isIntegral_int (cycloZeta p)
     (cycloZeta_isPrimitiveRoot p) d
 
