@@ -378,9 +378,9 @@ theorem twoFour_identity_not_cyclic :
         FlowNetworkPort twoFourNetwork) =
       ⟨⟨0, by decide⟩, ⟨1, by decide⟩⟩ := by
     simp [twoFourIdentityRotation] at hn
-  exact (by decide : ¬ ((⟨⟨0, by decide⟩, ⟨0, by decide⟩⟩ :
+  exact (by decide : ¬ ((⟨⟨0, _⟩, ⟨0, _⟩⟩ :
     FlowNetworkPort twoFourNetwork) =
-    ⟨⟨0, by decide⟩, ⟨1, by decide⟩⟩)) hbad
+    ⟨⟨0, _⟩, ⟨1, _⟩⟩)) hbad
 
 #print axioms DkMath.Tromino.FlowCombinatorialMap
 #print axioms DkMath.Tromino.FlowCombinatorialMap.rotation_reaches_same_region

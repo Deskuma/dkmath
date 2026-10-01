@@ -136,7 +136,7 @@ example : (∑ E ∈ portCrossingEdgeOrbits portTwoCrossing, E.card) =
 example : (∑ F ∈ portFaceOrbits portTwoRotation portTwoCrossing, F.card) =
     portTwoNetwork.portCount := portFaceSum_card _ _
 
-example {N : FlowNetwork} (_R : FlowLocalRotation N) (C : FlowCrossing N) :
+example {N : FlowNetwork} (_R : FlowLocalRotation N) (_C : FlowCrossing N) :
     N.toPortNetwork.portCount = totalPortCount N :=
   portCount_of_flow_erasure
 

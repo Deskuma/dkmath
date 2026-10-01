@@ -38,7 +38,6 @@ def calibrationQuintic (a K : ℤ) : ℤ :=
   3*a^5 + 40*a^4*K + 295*a^3*K^2 + 1293*a^2*K^3 +
     3145*a*K^4 + 3278*K^5
 
-set_option maxHeartbeats 800000 in
 theorem calibration_seventh_defect (a K : ℤ) :
     ((⟨a, K, K⟩ : SevenRealCubicInt) ^ 7).snd -
         ((⟨a, K, K⟩ : SevenRealCubicInt) ^ 7).thd =
