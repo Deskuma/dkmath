@@ -57,13 +57,13 @@ example := descent_regression 11
 example := descent_regression 13
 
 example {p : ℕ} [Fact p.Prime] (d : Fin 2 →₀ ℕ) :
-    MvPolynomial.coeff d (Rpoly (p := p) (cycloZeta p)) ∈
+    (Rpoly (p := p) (cycloZeta p)).coeff d ∈
       Set.range (algebraMap ℚ (cycloField p)) := by
   exact coeff_Rpoly_mem_range_algebraMap (cycloZeta p)
     (cycloZeta_isPrimitiveRoot p) d
 
 example {p : ℕ} [Fact p.Prime] (d : Fin 2 →₀ ℕ) :
-    MvPolynomial.coeff d (Dpoly (p := p) (cycloZeta p) ^ 2) ∈
+    (Dpoly (p := p) (cycloZeta p) ^ 2).coeff d ∈
       Set.range (algebraMap ℚ (cycloField p)) := by
   exact coeff_Dpoly_sq_mem_range_algebraMap (cycloZeta p)
     (cycloZeta_isPrimitiveRoot p) d
