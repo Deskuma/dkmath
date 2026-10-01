@@ -57,3 +57,16 @@
    - `git diff --check` 成功。
 3. 結論:
    import diet の今回の実装スライスについて、全体ビルドを通過する状態になった。commit、push、nightly への変更は行っていない。
+
+### 日時: 2026/10/01 JST — DkMathTest import 修正
+
+1. 実施:
+   - `QuadraticConjugateFactor` に `CommRing` と `ring` の direct import を追加した。
+   - FLT/Prime の API audit と probe に、discriminant、cyclotomic number-field、cyclotomic character、prime norm、`GCDMonoid`、`ZMod`、quadratic character、homogenize の必要 import を追加した。
+   - テストの定理・監査対象は変更していない。
+2. 検証:
+   - 失敗していた各 `DkMathTest.FLT.Prime.*` の focused build 成功。
+   - `lake build DkMathTest` 成功。
+   - staged / unstaged の `git diff --check` 成功。
+3. 結論:
+   `DkMathTest.*` の今回の import 起因エラーは解消した。commit、push、nightly への変更は行っていない。
