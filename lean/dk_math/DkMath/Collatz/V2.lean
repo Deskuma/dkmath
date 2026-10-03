@@ -234,7 +234,7 @@ lemma v2_pow2 (k : ℕ) : v2 (pow2 k) = k := by
   | succ k' ih =>
     -- Inductive step: v2(2^(k'+1)) = k' + 1
     unfold pow2
-    show v2 (2 ^ (k' + 1)) = k' + 1
+    change v2 (2 ^ (k' + 1)) = k' + 1
     -- 2^(k'+1) = 2 * 2^k'
     have eq1 : (2 : ℕ) ^ (k' + 1) = 2 * 2 ^ k' := by ring
     rw [eq1]

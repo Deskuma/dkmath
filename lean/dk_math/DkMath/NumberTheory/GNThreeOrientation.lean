@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.GNThreeQuadratic
+import Mathlib.Tactic.NormNum.Prime
 
 #print "file: DkMath.NumberTheory.GNThreeOrientation"
 

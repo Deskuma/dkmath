@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.TraceOneQuadratic
+import Mathlib.RingTheory.Coprime.Basic
 
 #print "file: DkMath.Lib.NumberTheory.EisensteinCoordinates"
 

@@ -5,6 +5,9 @@ Released under MIT license as described in the file LICENSE.
 
 import DkMath.NumberTheory.TraceOneQuadratic
 import DkMath.Lib.NumberTheory.PadicValNat
+import Mathlib.RingTheory.Coprime.Basic
+import Mathlib.RingTheory.Int.Basic
+import Mathlib.Tactic.LinearCombination
 
 #print "file: DkMath.NumberTheory.TraceOneDiscriminantAxis"
 

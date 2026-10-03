@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib
+import DkMath.CosmicFormula.RealCore
 -- import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
 -- import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
 
@@ -13,16 +14,13 @@ namespace CosmicFormulaDim
 
 open scoped BigOperators Real
 
-/-! ### A: 代数レイヤ（d 次元の「実体項」GReal）
+/-! ### A: 解析・幾何レイヤ
 
 [GNZC] This file is currently treated as a separate analytic/geometry-facing
-family, not as the canonical `Defs.GZ` migration target.
+family, not as the canonical `Defs.GZ` migration target.  The shared real
+kernel `GReal` is owned by `CosmicFormula.RealCore` so algebraic consumers do
+not import this analytic module.
 -/
-
-/-- d 次元の「実体項」`GReal` の定義 -/
-noncomputable def GReal (d : ℕ) (x u : ℝ) : ℝ :=
-  ∑ k ∈ Finset.range d,
-    (Nat.choose d (k+1) : ℝ) * x^k * u^(d-1-k)
 
 /--
 cosmic_id : (x + u)^d - x * GReal d x u = u^d に関する数学的説明（日本語）
