@@ -266,9 +266,18 @@ current local ownership
 Do not return to historical/oriented carriers merely because their scalar norms
 match current carriers.
 
-Status: **next checkpoint — final roadmap checkpoint**.
+Status: **completed — Outcome A**.
 
-Implementation instructions: **instruction-008.md**.
+Implementation: **instruction-008.md** / **report-008.md**.
+
+Current FLT7 frontier: for a fixed current carrier ideal, prove that every
+height-one prime in its complete finite support occurs with exponent divisible
+by seven. The selected oriented row has exact exponent `14e`; the complementary
+support is retained explicitly and is the first unresolved aggregation
+obligation. Under complete-support seventh-divisibility, the checked receiver
+gives the current carrier as a unit times a genuine seventh power while
+preserving the original Fermat equation. Unconditional FLT7 and strict descent
+are not claimed.
 
 ## Promotion rule
 
@@ -296,6 +305,12 @@ Stop and report instead of forcing a theorem when:
   sum/ownership theorem;
 - a fixed-prime computation is the only evidence for a generic claim.
 
-## Next document
+## Campaign completion
 
-Proceed with **instruction-008.md** for DRC-008.
+DRC-000 through DRC-008 are complete. DRC-001 through DRC-008 all concluded
+with Outcome A under their stated checkpoint meanings.
+
+The campaign ends at the exact current FLT7 frontier recorded in
+**report-008.md**. Any continuation should begin from that complete-support
+seventh-divisibility problem, not by reverting to historical carriers or by
+assuming away the complementary prime support.
