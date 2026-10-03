@@ -8,6 +8,8 @@ import DkMath.Lib.Cosmic.CyclicDeterminant
 import Mathlib.Data.ZMod.Basic
 import Mathlib.Tactic.NormNum
 
+#print "file: DkMathTest.Lib.Cosmic.CyclicDeterminantCalibration"
+
 namespace DkMathTest.CyclicDeterminant
 
 open DkMath.CosmicFormula Matrix

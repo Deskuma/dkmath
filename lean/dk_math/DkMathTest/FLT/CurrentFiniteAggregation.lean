@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Seven.CurrentFiniteAggregation
 
+#print "file: DkMathTest.FLT.CurrentFiniteAggregation"
+
 open DkMath.FLT.Seven
 open DkMath.FLT.Seven.SevenRealCubic
 open DkMath.FLT.Seven.SevenRealCubic.CurrentAggregation

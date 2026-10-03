@@ -2,6 +2,7 @@
 
 cid: `6ac0a596-64f0-83ee-bca3-723e780ff66d`
 cid: `6ac0ab4e-9cf4-83ee-b4e3-7dedd3e7d6a8`
+cdl: `codex://threads/01a101ab-fa58-7ac3-9bdb-d864215f6ad2`
 
 Branch: **research/DkMath-ResearchConnections-261003-v0**
 

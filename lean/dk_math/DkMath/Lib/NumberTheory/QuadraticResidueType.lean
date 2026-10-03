@@ -1,9 +1,17 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
 import Mathlib.Algebra.QuadraticAlgebra.Discriminant
 import Mathlib.Algebra.QuadraticDiscriminant
 import Mathlib.Data.ZMod.Basic
 import Mathlib.Algebra.Field.ZMod
 import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.FinCases
+
+#print "file: DkMath.Lib.NumberTheory.QuadraticResidueType"
 
 /-! Root-factorization types of the relation `ω² = a + bω`.
 These predicates retain the multiplication parameters; they are not additive

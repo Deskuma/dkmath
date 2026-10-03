@@ -11,6 +11,8 @@ import Mathlib.Logic.Equiv.Fin.Rotate
 import Mathlib.Tactic.Ring
 import Lean.Elab.Tactic.Omega
 
+#print "file: DkMath.Lib.Cosmic.CyclicDeterminant"
+
 /-!
 # Full cyclic determinant carrier
 

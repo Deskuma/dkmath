@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.NumberTheory.PrimeCyclicGlue
 import Mathlib.Tactic.NormNum
 
+#print "file: DkMathTest.NumberTheory.PrimeCyclicGlueCalibration"
+
 namespace DkMathTest.PrimeCyclicGlue
 
 open Polynomial DkMath.NumberTheory

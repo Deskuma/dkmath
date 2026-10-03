@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Lib.Cosmic.CyclicDeterminant
 
+#print "file: DkMathTest.Lib.Cosmic.CyclicDeterminantAxiomAudit"
+
 #print axioms DkMath.CosmicFormula.cyclicShift_apply
 #print axioms DkMath.CosmicFormula.cyclicShift_eq_permMatrix
 #print axioms DkMath.CosmicFormula.cyclicPencil_eq_scalar_sub_shift

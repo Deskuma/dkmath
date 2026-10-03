@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.PrimeShellHensel
 
+#print "file: DkMathTest.NumberTheory.PrimeShellHenselAxiomAudit"
+
 #print axioms DkMath.Lib.NumberTheory.polynomial_powLift_iff
 #print axioms DkMath.Lib.NumberTheory.existsUnique_polynomial_powLift_digit
 #print axioms DkMath.Lib.NumberTheory.polynomial_shift_preserves_dvd

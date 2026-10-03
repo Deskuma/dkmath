@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.PrimeCyclicGlue
 
+#print "file: DkMathTest.NumberTheory.PrimeCyclicGlueAxiomAudit"
+
 #print axioms DkMath.NumberTheory.primeCyclotomicResidue
 #print axioms DkMath.NumberTheory.primeCyclotomicResidue_mk
 #print axioms DkMath.NumberTheory.exists_polynomial_prime_glue_iff

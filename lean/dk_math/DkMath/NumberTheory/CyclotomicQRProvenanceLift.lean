@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
 Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.CyclotomicQRTraceOneBridge
@@ -10,6 +11,8 @@ import Mathlib.FieldTheory.IntermediateField.Basic
 import Mathlib.RingTheory.Norm.Basic
 import Mathlib.RingTheory.Ideal.Maps
 import DkMath.Lib.NumberTheory.ConjugatePrimeIdealOwnership
+
+#print "file: DkMath.NumberTheory.CyclotomicQRProvenanceLift"
 
 /-! The retained Gauss difference identifies the QR element, rather than only
 its scalar norm. The chosen primitive root fixes the sign of the embedding. -/

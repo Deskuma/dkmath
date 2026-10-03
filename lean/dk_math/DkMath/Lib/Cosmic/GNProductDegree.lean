@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.Lib.Cosmic.GTail
 import Mathlib.Algebra.MvPolynomial.Eval
 
+#print "file: DkMath.Lib.Cosmic.GNProductDegree"
+
 /-!
 # Product-degree composition of the gap-normalized kernel
 

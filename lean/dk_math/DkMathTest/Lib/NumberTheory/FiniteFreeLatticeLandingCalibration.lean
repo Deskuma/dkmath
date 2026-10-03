@@ -10,6 +10,8 @@ import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.FinCases
 import Lean.Elab.Tactic.Omega
 
+#print "file: DkMathTest.Lib.NumberTheory.FiniteFreeLatticeLandingCalibration"
+
 namespace DkMathTest.FiniteFreeLatticeLanding
 
 open Matrix DkMath.Lib.NumberTheory

@@ -8,6 +8,8 @@ import DkMath.Lib.NumberTheory.PolynomialHenselDigit
 import DkMath.Lib.Cosmic.GNProductDegree
 import Mathlib.FieldTheory.Finite.Basic
 
+#print "file: DkMath.NumberTheory.PrimeShellHensel"
+
 /-!
 # Prime-shell finite Hensel lifting
 

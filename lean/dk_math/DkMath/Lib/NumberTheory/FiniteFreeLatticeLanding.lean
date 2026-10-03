@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import Mathlib.LinearAlgebra.Matrix.Adjugate
 
+#print "file: DkMath.Lib.NumberTheory.FiniteFreeLatticeLanding"
+
 /-!
 # Integral matrix lattice landing
 

@@ -12,6 +12,8 @@ import Mathlib.Tactic.Ring
 import Mathlib.Tactic.LinearCombination
 import Lean.Elab.Tactic.Omega
 
+#print "file: DkMath.Lib.NumberTheory.PolynomialHenselDigit"
+
 /-!
 # Finite polynomial Hensel digits
 

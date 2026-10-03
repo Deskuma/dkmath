@@ -10,6 +10,8 @@ import DkMath.NumberTheory.GNThreePairedDepth
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.FinCases
 
+#print "file: DkMathTest.NumberTheory.PrimeShellHenselCalibration"
+
 namespace DkMathTest.PrimeShellHensel
 
 open Polynomial DkMath.NumberTheory DkMath.CosmicFormula

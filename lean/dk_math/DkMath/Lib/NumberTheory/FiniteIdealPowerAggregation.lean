@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import Mathlib.RingTheory.DedekindDomain.Factorization
 
+#print "file: DkMath.Lib.NumberTheory.FiniteIdealPowerAggregation"
+
 /-! Exact ideal factorization over its complete finite height-one support.
 Power extraction requires the exponent condition on every prime in that support. -/
 namespace DkMath.Lib.NumberTheory.FiniteIdealPowerAggregation

@@ -9,6 +9,8 @@ import DkMath.NumberTheory.GNDegreeFactorization
 import Mathlib.Data.ZMod.Basic
 import Mathlib.Tactic.NormNum
 
+#print "file: DkMathTest.Lib.Cosmic.GNProductDegreeCalibration"
+
 namespace DkMathTest.GNProductDegree
 
 open DkMath.CosmicFormula

@@ -8,6 +8,8 @@ import DkMath.Lib.NumberTheory.FiniteIdealPowerAggregation
 import DkMath.FLT.Seven.CurrentCarrierCutoff
 import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicDegreeSixPID
 
+#print "file: DkMath.FLT.Seven.CurrentFiniteAggregation"
+
 /-! Aggregation of the current real common-prime rows, and an explicit
 complete-support receiver for the current phase-corrected degree-six carrier.
 The receiver's exponent hypothesis is not supplied by local membership alone. -/

@@ -9,6 +9,8 @@ import Mathlib.RingTheory.AdjoinRoot
 import Mathlib.RingTheory.Polynomial.Cyclotomic.Eval
 import Mathlib.Tactic.Ring
 
+#print "file: DkMath.NumberTheory.PrimeCyclicGlue"
+
 /-!
 # Integral prime cyclic gluing
 
