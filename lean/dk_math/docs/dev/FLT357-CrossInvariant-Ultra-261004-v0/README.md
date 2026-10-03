@@ -86,3 +86,13 @@ The current five-hour usage window may end before a final answer.  Therefore
 `findings-001.md` is the primary deliverable and must be updated continuously.
 
 A partial but precise cross-exponent map is a successful result.
+
+## Completed pre-audit artifacts
+
+- [Report 001](report-001.md): limited Outcome B, production matrix,
+  reverse projections, normalization and p=11/13 forecast.
+- [Findings 001](findings-001.md): continuous checkpoint history.
+- Detailed source maps: [FLT3](flt3-audit-001.md), [FLT5](flt5-audit-001.md),
+  [FLT7](flt7-audit-001.md), [generic architecture](generic-state-audit-001.md).
+- [Focused validation](logs/validation-summary.md): exact commands, axiom
+  output and compiled dependency counts, with saved logs.
