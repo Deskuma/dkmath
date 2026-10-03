@@ -141,9 +141,9 @@ Completion requires:
 - explicit relation to the current GN / GTail API;
 - clear distinction between full cyclic norm and prime cyclotomic shell norm.
 
-Status: **next checkpoint**.
+Status: **completed — Outcome A**.
 
-Implementation instructions: **instruction-003.md**.
+Implementation: **instruction-003.md** / **report-003.md**.
 
 ## DRC-004 — Prime cyclic glue
 
@@ -170,7 +170,9 @@ Targets include:
 Do not advertise a Milnor/Rim square theorem until the exact Lean objects and
 maps have been fixed.
 
-Status: **open**.
+Status: **next checkpoint**.
+
+Implementation instructions: **instruction-004.md**.
 
 ## DRC-005 — General prime-shell Hensel
 
@@ -288,4 +290,4 @@ Stop and report instead of forcing a theorem when:
 
 ## Next document
 
-Proceed with **instruction-003.md** for DRC-003.
+Proceed with **instruction-004.md** for DRC-004.
