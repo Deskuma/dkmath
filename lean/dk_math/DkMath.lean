@@ -32,6 +32,7 @@ import DkMath.NumberTheory.Primitive
 import DkMath.NumberTheory.PrimorialUniverse
 import DkMath.NumberTheory.Legendre
 import DkMath.NumberTheory.AKSBridge  -- NumberTheory.AKSBridge: AKS-facing binomial/Frobenius bridge
+import DkMath.NumberTheory.PrimeCyclicGlue
 import DkMath.NumberTheory.WeightedBinomial  -- NumberTheory.WeightedBinomial: weighted binomial divisibility
 import DkMath.NumberTheory.WeightedGNBridge  -- NumberTheory.WeightedGNBridge: weighted Beam bridge to GN
 import DkMath.NumberTheory.GNPrime  -- NumberTheory.GNPrime: GN prime closure, prime representations, cubic shell, and finite Hensel-depth API
