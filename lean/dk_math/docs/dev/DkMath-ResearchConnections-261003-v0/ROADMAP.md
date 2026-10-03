@@ -65,9 +65,9 @@ Required regression:
 - no refactor of the existing TraceOne theorem unless the new API makes the
   replacement obviously smaller and safer.
 
-Status: **next checkpoint**.
+Status: **completed — Outcome A**.
 
-Implementation instructions: **instruction-001.md**.
+Implementation: **instruction-001.md** / **report-001.md**.
 
 ## DRC-002 — GN product-degree generalization audit
 
@@ -110,7 +110,9 @@ GN (a * b) x u
 
 over the weakest practical commutative semiring assumptions, including x = 0.
 
-Status: **open, conditional on audit**.
+Status: **next checkpoint — audit first**.
+
+Implementation instructions: **instruction-002.md**.
 
 ## DRC-003 — Cyclic determinant norm
 
@@ -284,4 +286,4 @@ Stop and report instead of forcing a theorem when:
 
 ## Next document
 
-Proceed with **instruction-001.md** for DRC-001.
+Proceed with **instruction-002.md** for DRC-002.
