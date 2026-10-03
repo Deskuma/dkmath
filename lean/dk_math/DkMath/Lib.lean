@@ -17,6 +17,7 @@ import DkMath.Lib.NumberTheory.EisensteinLatticeLanding
 import DkMath.Lib.NumberTheory.SquarefreePowerFactor
 import DkMath.Lib.Cosmic.GTail
 import DkMath.Lib.Cosmic.GNProductDegree
+import DkMath.Lib.Cosmic.CyclicDeterminant
 import DkMath.Lib.Cosmic.GTailCyclotomic
 import DkMath.Lib.Cosmic.GTailPascal
 import DkMath.Lib.Cosmic.GTailBoundary
