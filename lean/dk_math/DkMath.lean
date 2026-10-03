@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Basic  -- Basic Definitions and Utilities
+import DkMath.NumberTheory.TraceOneResidueType
 import DkMath.Lib  -- Reusable library components
 import DkMath.Algebra.MetallicRatioCore  -- Signed-unit square and metallic-ratio framework
 import DkMath.Verification  -- Reusable verification certificate layer

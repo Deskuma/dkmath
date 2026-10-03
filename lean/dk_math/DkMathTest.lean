@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMathlib.Basic
+import DkMathTest.NumberTheory.QuadraticResidueType
 import DkMathTest.Algebra.MetallicRatioCore
 import DkMathTest.CosmicFormula.ThreeElement.Basic
 import DkMathTest.CosmicFormula.ThreeElement.MagicCore

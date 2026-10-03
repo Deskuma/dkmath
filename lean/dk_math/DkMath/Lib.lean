@@ -11,6 +11,7 @@ import DkMath.Lib.NumberTheory.HomogeneousPowerQuotient
 import DkMath.Lib.NumberTheory.ClassGroupTorsionBridge
 import DkMath.Lib.NumberTheory.TraceOneLatticeLanding
 import DkMath.Lib.NumberTheory.FiniteFreeLatticeLanding
+import DkMath.Lib.NumberTheory.QuadraticResidueType
 import DkMath.Lib.NumberTheory.PolynomialHenselDigit
 import DkMath.Lib.NumberTheory.TraceOnePowerLanding
 import DkMath.Lib.NumberTheory.EisensteinCoordinates
