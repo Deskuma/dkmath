@@ -1,5 +1,8 @@
 # FLT3/5/7 Cross-Invariant Ultra — pre-audit workspace
 
+cid: `6ac0a596-64f0-83ee-bca3-723e780ff66d`
+cdl: `codex://threads/01a101ab-fa58-7ac3-9bdb-d864215f6ad2`
+
 Branch: **research/FLT357-CrossInvariant-Ultra-261004-v0**
 
 Base provenance:

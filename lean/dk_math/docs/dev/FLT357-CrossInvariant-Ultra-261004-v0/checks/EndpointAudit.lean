@@ -1,3 +1,9 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
 import DkMath.FLT.Three
 import DkMath.FLT.Five
 import DkMath.FLT.Five.TraceOneBridge
