@@ -240,9 +240,9 @@ QR / QNR products
 
 Do not infer element identity from equality of scalar norms.
 
-Status: **next checkpoint**.
+Status: **completed — Outcome A**.
 
-Implementation instructions: **instruction-007.md**.
+Implementation: **instruction-007.md** / **report-007.md**.
 
 ## DRC-008 — FLT7 current aggregation
 
@@ -266,7 +266,9 @@ current local ownership
 Do not return to historical/oriented carriers merely because their scalar norms
 match current carriers.
 
-Status: **open in parallel**.
+Status: **next checkpoint — final roadmap checkpoint**.
+
+Implementation instructions: **instruction-008.md**.
 
 ## Promotion rule
 
@@ -296,4 +298,4 @@ Stop and report instead of forcing a theorem when:
 
 ## Next document
 
-Proceed with **instruction-007.md** for DRC-007.
+Proceed with **instruction-008.md** for DRC-008.
