@@ -1,5 +1,8 @@
 # DkMath Research Connections — 2026-10-03
 
+cid: `6ac0a596-64f0-83ee-bca3-723e780ff66d`
+cid: `6ac0ab4e-9cf4-83ee-b4e3-7dedd3e7d6a8`
+
 Branch: **research/DkMath-ResearchConnections-261003-v0**
 
 Base: **develop** at **f16282e5b44bd5fe5afa1a15d29f1598cae575cd**
