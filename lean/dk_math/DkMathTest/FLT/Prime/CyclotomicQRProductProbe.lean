@@ -5,6 +5,7 @@ Released under MIT license as described in the file LICENSE.
 
 import DkMathTest.FLT.Prime.GaussianPeriodFactorizationProbe
 import DkMath.Lib.Cosmic.GTailCyclotomic
+import Mathlib.Algebra.Polynomial.Homogenize
 
 #print "file: DkMathTest.FLT.Prime.CyclotomicQRProductProbe"
 

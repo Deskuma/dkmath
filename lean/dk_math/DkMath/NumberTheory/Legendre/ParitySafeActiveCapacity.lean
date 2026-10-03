@@ -471,9 +471,11 @@ theorem odd_anchor_five_false_beam :
   have h2 : 2 ∈ squareAnchorOddPointCoprimeOffsets 5 := by
     norm_num [squareAnchorOddPointCoprimeOffsets, squareAnchorCoprimeOffsets,
       squareOffsets, SquareOffset, Nat.Coprime, Odd]
+    exact ⟨13, by norm_num⟩
   have h8 : 8 ∈ squareAnchorOddPointCoprimeOffsets 5 := by
     norm_num [squareAnchorOddPointCoprimeOffsets, squareAnchorCoprimeOffsets,
       squareOffsets, SquareOffset, Nat.Coprime, Odd]
+    exact ⟨16, by norm_num⟩
   have h32 : 3 ∈ squareOffsetAnchorNondivisorSupport 5 2 := by
     apply mem_squareOffsetAnchorNondivisorSupport.mpr
     norm_num [SquareOffsetForbiddenBy]

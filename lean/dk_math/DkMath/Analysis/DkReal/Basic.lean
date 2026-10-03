@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Analysis.DkReal.Interval
+import Mathlib.Topology.Instances.Rat
 
 #print "file: DkMath.Analysis.DkReal.Basic"
 

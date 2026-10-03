@@ -1,4 +1,6 @@
 import DkMath.Basic
+import Mathlib.Data.Nat.Factorization.Basic
+import Mathlib.Tactic
 
 #print "file: DkMath.ABC.Rad"
 

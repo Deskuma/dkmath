@@ -4,7 +4,10 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
+import Mathlib.Data.Nat.PadicValNat
+import Mathlib.NumberTheory.Padics.PadicVal.Basic
+import Mathlib.Tactic.NormNum
+import Lean.Elab.Tactic.Omega
 
 #print "file: DkMath.Lib.NumberTheory.PadicValNat"
 

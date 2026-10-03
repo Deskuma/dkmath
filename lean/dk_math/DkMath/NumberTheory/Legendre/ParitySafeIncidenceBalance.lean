@@ -448,6 +448,7 @@ theorem instruction051_n12_prime_eleven_silent_false_injection :
   have hr : 11 ∈ squareAnchorOddPointCoprimeOffsets 12 := by
     norm_num [squareAnchorOddPointCoprimeOffsets, squareAnchorCoprimeOffsets,
       squareOffsets, SquareOffset, Nat.Coprime, Odd]
+    exact ⟨77, by norm_num⟩
   have h5 : 5 ∈ squareOffsetAnchorNondivisorSupport 12 11 := by
     apply mem_squareOffsetAnchorNondivisorSupport.mpr
     norm_num [SquareOffsetForbiddenBy]

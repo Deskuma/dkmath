@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 -/
 
 import DkMath.NumberTheory.CyclotomicQRCoefficientDescent
+import Mathlib.Tactic.NormNum.Prime
 
 #print "file: DkMathTest.FLT.Prime.CyclotomicQRCoefficientDescentProbe"
 

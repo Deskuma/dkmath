@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.Lib.Cosmic.GTailBoundary
 import DkMath.Lib.Cosmic.GTailCongruence
 import DkMath.Lib.NumberTheory.PadicValNat
+import Mathlib.Algebra.GCDMonoid.Nat
+import Mathlib.Tactic.NormNum.Prime
 
 /-!
 # FLT7 prime-exponent generalization probe

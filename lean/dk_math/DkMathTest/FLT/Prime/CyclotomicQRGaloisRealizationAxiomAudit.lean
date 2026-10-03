@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 -/
 
 import DkMath.NumberTheory.CyclotomicQRGaloisRealization
+import Mathlib.NumberTheory.Cyclotomic.CyclotomicCharacter
 import Mathlib.NumberTheory.Cyclotomic.Gal
 
 #print "file: DkMathTest.FLT.Prime.CyclotomicQRGaloisRealizationAxiomAudit"

@@ -5,6 +5,10 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Lib.Cosmic.GTailNat
+import Mathlib.Data.Nat.ModEq
+import Mathlib.Data.Nat.Choose.Dvd
+import Mathlib.Tactic.Ring
+import Lean.Elab.Tactic.Omega
 
 #print "file: DkMath.Lib.Cosmic.GTailCongruence"
 
