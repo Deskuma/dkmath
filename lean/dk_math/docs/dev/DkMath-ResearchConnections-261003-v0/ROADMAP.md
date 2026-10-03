@@ -110,9 +110,9 @@ GN (a * b) x u
 
 over the weakest practical commutative semiring assumptions, including x = 0.
 
-Status: **next checkpoint — audit first**.
+Status: **completed — Outcome A**.
 
-Implementation instructions: **instruction-002.md**.
+Implementation: **instruction-002.md** / **report-002.md**.
 
 ## DRC-003 — Cyclic determinant norm
 
@@ -141,7 +141,9 @@ Completion requires:
 - explicit relation to the current GN / GTail API;
 - clear distinction between full cyclic norm and prime cyclotomic shell norm.
 
-Status: **open**.
+Status: **next checkpoint**.
+
+Implementation instructions: **instruction-003.md**.
 
 ## DRC-004 — Prime cyclic glue
 
@@ -286,4 +288,4 @@ Stop and report instead of forcing a theorem when:
 
 ## Next document
 
-Proceed with **instruction-002.md** for DRC-002.
+Proceed with **instruction-003.md** for DRC-003.
