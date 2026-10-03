@@ -218,9 +218,9 @@ behavior where existing Mathlib APIs make the statement clean.
 
 The common additive group may be reused; multiplication must remain explicit.
 
-Status: **next checkpoint**.
+Status: **completed — Outcome A**.
 
-Implementation instructions: **instruction-006.md**.
+Implementation: **instruction-006.md** / **report-006.md**.
 
 ## DRC-007 — Cyclotomic QR provenance lift
 
@@ -240,7 +240,9 @@ QR / QNR products
 
 Do not infer element identity from equality of scalar norms.
 
-Status: **open**.
+Status: **next checkpoint**.
+
+Implementation instructions: **instruction-007.md**.
 
 ## DRC-008 — FLT7 current aggregation
 
@@ -294,4 +296,4 @@ Stop and report instead of forcing a theorem when:
 
 ## Next document
 
-Proceed with **instruction-006.md** for DRC-006.
+Proceed with **instruction-007.md** for DRC-007.
