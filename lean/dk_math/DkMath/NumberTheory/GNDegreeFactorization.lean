@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import Mathlib.Data.Nat.Prime.Basic
 import DkMath.NumberTheory.GNRepresentationBounds
+import DkMath.Lib.Cosmic.GNProductDegree
 
 #print "file: DkMath.NumberTheory.GNDegreeFactorization"
 
@@ -24,7 +25,9 @@ This is a necessary-condition API.  It does not assert that prime degree is
 sufficient for primality of a GN value.
 -/
 
-/-- The GN value at a product degree factors by applying the cosmic identity twice. -/
+set_option linter.unusedVariables false in
+/-- Compatibility specialization of the generic semiring product-degree identity.
+The positive-gap argument is retained for existing callers. -/
 theorem GN_mul_degree
     {a b x u : ℕ}
     (hx : 0 < x) :
@@ -32,37 +35,7 @@ theorem GN_mul_degree
       DkMath.CosmicFormulaBinom.GN a x u *
         DkMath.CosmicFormulaBinom.GN b
           (x * DkMath.CosmicFormulaBinom.GN a x u) (u ^ a) := by
-  let A := DkMath.CosmicFormulaBinom.GN a x u
-  let B := DkMath.CosmicFormulaBinom.GN b (x * A) (u ^ a)
-  have ha : (x + u) ^ a = x * A + u ^ a := by
-    simpa [A] using
-      (DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := ℕ) a x u)
-  have hb : (x * A + u ^ a) ^ b = (x * A) * B + (u ^ a) ^ b := by
-    simpa [B] using
-      (DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := ℕ) b (x * A) (u ^ a))
-  have hab : (x + u) ^ (a * b) =
-      x * DkMath.CosmicFormulaBinom.GN (a * b) x u + u ^ (a * b) := by
-    exact DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := ℕ) (a * b) x u
-  have hsum :
-      x * DkMath.CosmicFormulaBinom.GN (a * b) x u + u ^ (a * b) =
-        (x * A) * B + u ^ (a * b) := by
-    calc
-      x * DkMath.CosmicFormulaBinom.GN (a * b) x u + u ^ (a * b) =
-          (x + u) ^ (a * b) := hab.symm
-      _ = ((x + u) ^ a) ^ b := by rw [pow_mul]
-      _ = (x * A + u ^ a) ^ b := by rw [ha]
-      _ = (x * A) * B + (u ^ a) ^ b := hb
-      _ = (x * A) * B + u ^ (a * b) := by rw [pow_mul]
-  have hfactor :
-      x * DkMath.CosmicFormulaBinom.GN (a * b) x u = (x * A) * B :=
-    Nat.add_right_cancel hsum
-  have hfactor' :
-      x * DkMath.CosmicFormulaBinom.GN (a * b) x u = x * (A * B) := by
-    simpa [Nat.mul_assoc] using hfactor
-  have hcancel :
-      DkMath.CosmicFormulaBinom.GN (a * b) x u = A * B :=
-    Nat.eq_of_mul_eq_mul_left hx hfactor'
-  simpa [A, B] using hcancel
+  exact DkMath.CosmicFormula.GN_mul_degree a b x u
 
 private lemma one_lt_GN_of_two_le
     {d x u : ℕ}

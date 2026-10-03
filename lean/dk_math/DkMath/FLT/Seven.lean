@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.FLT.Seven.CurrentFiniteAggregation
 import DkMath.FLT.Seven.QuadraticBridge
 import DkMath.FLT.Seven.AxisDivisibility
 import DkMath.FLT.Seven.AxisPowerRoll

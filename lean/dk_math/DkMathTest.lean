@@ -4,7 +4,10 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMathTest.FLT.CurrentFiniteAggregation
 import DkMathlib.Basic
+import DkMathTest.NumberTheory.QuadraticResidueType
+import DkMathTest.NumberTheory.CyclotomicQRProvenanceLift
 import DkMathTest.Algebra.MetallicRatioCore
 import DkMathTest.CosmicFormula.ThreeElement.Basic
 import DkMathTest.CosmicFormula.ThreeElement.MagicCore

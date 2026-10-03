@@ -4,17 +4,23 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.Lib.NumberTheory.FiniteIdealPowerAggregation
 import DkMath.Lib.Basic
 import DkMath.Lib.TwoChannel
 import DkMath.Lib.NumberTheory.PadicValNat
 import DkMath.Lib.NumberTheory.HomogeneousPowerQuotient
 import DkMath.Lib.NumberTheory.ClassGroupTorsionBridge
 import DkMath.Lib.NumberTheory.TraceOneLatticeLanding
+import DkMath.Lib.NumberTheory.FiniteFreeLatticeLanding
+import DkMath.Lib.NumberTheory.QuadraticResidueType
+import DkMath.Lib.NumberTheory.PolynomialHenselDigit
 import DkMath.Lib.NumberTheory.TraceOnePowerLanding
 import DkMath.Lib.NumberTheory.EisensteinCoordinates
 import DkMath.Lib.NumberTheory.EisensteinLatticeLanding
 import DkMath.Lib.NumberTheory.SquarefreePowerFactor
 import DkMath.Lib.Cosmic.GTail
+import DkMath.Lib.Cosmic.GNProductDegree
+import DkMath.Lib.Cosmic.CyclicDeterminant
 import DkMath.Lib.Cosmic.GTailCyclotomic
 import DkMath.Lib.Cosmic.GTailPascal
 import DkMath.Lib.Cosmic.GTailBoundary
