@@ -196,9 +196,9 @@ DkMath.NumberTheory.GNThreeHenselDepth
 DkMath.NumberTheory.GNThreePairedDepth
 ~~~
 
-Status: **next checkpoint**.
+Status: **completed — Outcome A**.
 
-Implementation instructions: **instruction-005.md**.
+Implementation: **instruction-005.md** / **report-005.md**.
 
 ## DRC-006 — TraceOne residue-type classification
 
@@ -218,7 +218,9 @@ behavior where existing Mathlib APIs make the statement clean.
 
 The common additive group may be reused; multiplication must remain explicit.
 
-Status: **open**.
+Status: **next checkpoint**.
+
+Implementation instructions: **instruction-006.md**.
 
 ## DRC-007 — Cyclotomic QR provenance lift
 
@@ -292,4 +294,4 @@ Stop and report instead of forcing a theorem when:
 
 ## Next document
 
-Proceed with **instruction-005.md** for DRC-005.
+Proceed with **instruction-006.md** for DRC-006.
