@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.Lib.NumberTheory.FiniteIdealPowerAggregation
 import DkMath.Lib.Basic
 import DkMath.Lib.TwoChannel
 import DkMath.Lib.NumberTheory.PadicValNat
