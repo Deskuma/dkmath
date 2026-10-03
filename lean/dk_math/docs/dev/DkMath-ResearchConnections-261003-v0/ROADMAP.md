@@ -170,9 +170,9 @@ Targets include:
 Do not advertise a Milnor/Rim square theorem until the exact Lean objects and
 maps have been fixed.
 
-Status: **next checkpoint**.
+Status: **completed — Outcome A**.
 
-Implementation instructions: **instruction-004.md**.
+Implementation: **instruction-004.md** / **report-004.md**.
 
 ## DRC-005 — General prime-shell Hensel
 
@@ -196,7 +196,9 @@ DkMath.NumberTheory.GNThreeHenselDepth
 DkMath.NumberTheory.GNThreePairedDepth
 ~~~
 
-Status: **open**.
+Status: **next checkpoint**.
+
+Implementation instructions: **instruction-005.md**.
 
 ## DRC-006 — TraceOne residue-type classification
 
@@ -290,4 +292,4 @@ Stop and report instead of forcing a theorem when:
 
 ## Next document
 
-Proceed with **instruction-004.md** for DRC-004.
+Proceed with **instruction-005.md** for DRC-005.
