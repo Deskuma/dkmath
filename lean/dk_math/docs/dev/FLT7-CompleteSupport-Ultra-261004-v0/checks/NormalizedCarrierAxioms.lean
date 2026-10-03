@@ -1,0 +1,13 @@
+import DkMath.FLT.Seven.CurrentCarrierNormalizedPower
+#print axioms DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierPower.six_current_factors_product_direct
+#print axioms DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierPower.prime_eq_ramified_of_mem_current_phases
+#print axioms DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierPower.normalizedPhaseIdeals_pairwise
+#print axioms DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierPower.normalizedPhaseProduct_unit_mul_fourteenth_power
+#print axioms DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierPower.normalizedPhaseIdealProduct_seventh_power
+#print axioms DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierPower.normalizedPhaseIdeal_seventh_power
+#print axioms DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierPower.normalizedCarrierIdeal_ne_zero
+#print axioms DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierPower.normalizedCarrierIdeal_seventh_power
+#print axioms DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierPower.normalizedCarrier_exponent_seven_dvd
+#print axioms DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierPower.normalized_completeSupport_seventh_divisibility
+#print axioms DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierPower.currentCarrier_ramifiedIdeal_mul_seventh_power
+#print axioms DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierPower.currentCarrier_ramified_element_receiver
