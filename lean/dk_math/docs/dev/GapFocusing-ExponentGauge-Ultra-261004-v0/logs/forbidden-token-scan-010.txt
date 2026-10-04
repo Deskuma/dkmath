@@ -1,0 +1,9 @@
+PASS: zero forbidden-token matches.
+DkMath/NumberTheory/Legendre/ParitySafeMergedCRT.lean
+DkMath/NumberTheory/Legendre/ParitySafeMixedCRT.lean
+DkMathTest/NumberTheory/LegendreMergedCRTData.lean
+DkMathTest/NumberTheory/LegendreMergedCRT.lean
+DkMathTest/NumberTheory/LegendreMergedCRTRegression.lean
+DkMath/NumberTheory/Legendre.lean
+DkMathTest/NumberTheory/LegendreMergedCRTInventory.lean
+DkMathTest/NumberTheory/LegendreMergedCRTAxiomAudit.lean

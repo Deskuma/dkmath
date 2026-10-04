@@ -1,0 +1,297 @@
+[
+  {
+    "name": "DkMath.NumberTheory.union_excess_add_inter_card",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMergedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.add_excess_le_union_excess_of_inter_card_le_one",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMergedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mergedSeatWitness",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMergedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mergedSeatCharge",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMergedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mergedSeatWitness_subset_activeSupport",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMergedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mergedSeatCharge_le_supportExcess",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMergedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mergedSeatCharge_le_supportExcess_of_modEq",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMergedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mergedSeatWitness_eq_of_injOn",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMergedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mergedSeatCharge_eq_indexed_of_injOn",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMergedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.uncovered_nonempty_of_merged_certificates",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMergedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.prime_squareCell_of_merged_certificates",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMergedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.two_family_charge_le_supportExcess",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMergedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.exists_support_one_offset_le_period",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMixedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.exists_positive_period_lift_family",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMixedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.candidate_of_two_prime_power_point_modEq_one",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMixedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.active_product_coprime_two_prime",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMixedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.exists_candidate_support_of_mixed_product_le",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMixedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mixed_anchor_period_family_charge_le_supportExcess",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMixedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.exists_prime_anchor_period_support_family",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMixedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.prime_star_pair_charge_le_supportExcess",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMixedCRT.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.prime_star_pair_linear_charge",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeMixedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.controlledBasis",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRTData.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.checkpointData",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRTData.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.comparisonData",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRTData.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.extraCapData",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRTData.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.floorComparisonData",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRTData.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.mixedAnchorData",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRTData.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.familyData",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRTData.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.restrictedWitness",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.checkpoint_families_realized",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.checkpoint_charge_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.checkpoint_restricted_saturation_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.checkpoint_index_and_short_charge_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.extra_caps_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.checkpoint_caps_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.checkpoint_charge_le_excess",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.checkpoint_uncovered_lower",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.checkpoint_prime_of_demand_met",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.survivor_recount_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.all_previous_survivors_prime",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.shell58_uncovered_ge_eight",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.shell68_uncovered_ge_ten",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.shell58_prime",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.shell68_prime",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.shell97_expanded_prime",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.shell107_expanded_prime",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.shell127_expanded_prime",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.mixed_short_period_budget_zero",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.large_checkpoint_charge_deficits",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.prime_checkpoints_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.controlled_basis_prime_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.floorFamilies",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRT.checkpoint_floor_charges_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRT.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRTRegression.local_overlap_charge_cases",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRTRegression.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRTRegression.naive_noninjective_charge_counterexample",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRTRegression.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRTRegression.prime107_two_star_families_charge",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRTRegression.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRTRegression.mixed320_counted_charge",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRTRegression.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRTRegression.mixed320_explicit_lifts",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRTRegression.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreMergedCRTRegression.checkpoint_floor_charge_le_excess",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreMergedCRTRegression.lean"
+  }
+]

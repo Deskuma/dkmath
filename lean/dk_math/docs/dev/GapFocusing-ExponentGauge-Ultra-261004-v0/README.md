@@ -155,3 +155,9 @@ All three outcomes are useful.
 [Report 009](report-009.md) — Outcome A for adaptive certificate providers. Three-seat active-support witnesses prove excess≥6 and uncovered≥2 at41 and91, yielding square-cell primes without whole-shell incidence/excess evaluation. A three-seat/three-witness budget resolves five of the previous30 unresolved shells, leaving25 whose demand exceeds6. The new CRT module proves support transport, parity-adjusted short-window existence, prime-anchor candidate coprimality and distinct same-modulus lift families with charge floor((n−1)/product(Q))·(Q.card−1). It supplies a quantitative infinite-class excess provider; uniform demand sufficiency remains unproved. Next proposals target actual required charge, merging colliding seat witnesses and mixed-anchor CRT.
 
 [Source inventory](source-inventory-009.md) · [Findings](findings-009.md) · [Validation](validation-009.md).
+
+## Instruction 010 checkpoint
+
+[Report 010](report-010.md) — Outcome B for fixed-pool demand scaling. Witness unions at actual image seats provide a reusable excess lower bound without injectivity; a structural counterexample rejects naive family-index summation. Mixed anchors2^a*p^k have a parity/coprimality CRT selector and a counted floor(n/(p*product(Q))) family. Two overlapping prime-anchor pair families prove12(n−1)≤105E+198. A controlled basis7 solves24 of the25 previous survivors, and adding23,29,31 at97 solves the last; the same expansion proves primes at107 and127. Both fixed bases fail the checked demand at211/503. Uniform charge sufficiency remains unproved. Next proposals target growing bases, incremental witness-union charge and all-unit mixed selectors.
+
+[Source inventory](source-inventory-010.md) · [Findings](findings-010.md) · [Validation](validation-010.md).

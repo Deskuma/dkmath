@@ -67,6 +67,8 @@ import DkMath.NumberTheory.Legendre.ParitySafeBlockLocalization
 import DkMath.NumberTheory.Legendre.ParitySafeIncidenceUpper
 import DkMath.NumberTheory.Legendre.ParitySafeExcessCertificate
 import DkMath.NumberTheory.Legendre.ParitySafeCRTSeat
+import DkMath.NumberTheory.Legendre.ParitySafeMergedCRT
+import DkMath.NumberTheory.Legendre.ParitySafeMixedCRT
 import DkMath.NumberTheory.Legendre.PrimorialWheelBridge
 import DkMath.NumberTheory.Legendre.PrimorialWheelSuccessor
 import DkMath.NumberTheory.Legendre.PrimorialWheelSuccessorEscape

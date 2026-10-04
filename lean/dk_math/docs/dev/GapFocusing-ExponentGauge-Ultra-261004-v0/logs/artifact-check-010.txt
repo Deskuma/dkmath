@@ -1,0 +1,2 @@
+PASS: all34 JSON family tables match the Lean certificates.
+PASS: all25 survivor rows and15 prime window/floor rows match the checked data.

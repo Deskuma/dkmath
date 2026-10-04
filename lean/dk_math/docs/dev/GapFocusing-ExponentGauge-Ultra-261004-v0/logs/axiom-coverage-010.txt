@@ -1,0 +1,2 @@
+PASS: 59/59 complete dependency sets; production 21, regression/data 38.
+PASS: every set uses only propext, Classical.choice, Quot.sound.
