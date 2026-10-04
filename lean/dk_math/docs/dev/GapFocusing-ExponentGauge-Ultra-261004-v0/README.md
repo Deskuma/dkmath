@@ -149,3 +149,9 @@ All three outcomes are useful.
 [Report 008](report-008.md) — Outcome A for the hybrid provider. A Nat-safe two-prime inclusion-exclusion cap proves I<=B2<=B and lowers the main cap425 to418. Finite support witnesses at shell29 seats14,56 prove excess>=4, uncovered>=1 and a prime in(841,900), without evaluating whole-shell incidence/excess. With a two-seat/three-prime certificate budget, shells2..100 partition into59 zero-excess successes,10 certificate successes and30 unresolved. The new cap gains77,85,95 under that same budget. A general theorem fixes the limit B2=B on anchors2^a*p^k; no uniform prime-existence provider is proved. Next proposals target certificates whose charge scales with the remaining deficit.
 
 [Source inventory](source-inventory-008.md) · [Findings](findings-008.md) · [Validation](validation-008.md).
+
+## Instruction 009 checkpoint
+
+[Report 009](report-009.md) — Outcome A for adaptive certificate providers. Three-seat active-support witnesses prove excess≥6 and uncovered≥2 at41 and91, yielding square-cell primes without whole-shell incidence/excess evaluation. A three-seat/three-witness budget resolves five of the previous30 unresolved shells, leaving25 whose demand exceeds6. The new CRT module proves support transport, parity-adjusted short-window existence, prime-anchor candidate coprimality and distinct same-modulus lift families with charge floor((n−1)/product(Q))·(Q.card−1). It supplies a quantitative infinite-class excess provider; uniform demand sufficiency remains unproved. Next proposals target actual required charge, merging colliding seat witnesses and mixed-anchor CRT.
+
+[Source inventory](source-inventory-009.md) · [Findings](findings-009.md) · [Validation](validation-009.md).

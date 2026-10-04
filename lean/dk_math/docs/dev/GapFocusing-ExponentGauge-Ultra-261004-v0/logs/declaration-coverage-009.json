@@ -1,0 +1,332 @@
+[
+  {
+    "name": "DkMath.NumberTheory.exists_pos_modEq_le_period",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.exists_pos_modEq_le_window",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.modEq_add_complement_zero",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.exists_parity_offset_le_two_mul_period",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.activeSupport_contains_of_point_modEq",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.activeSupport_contains_of_product_dvd",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.local_excess_ge_of_point_modEq",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.candidate_of_window_coprime_odd",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.exists_windowed_odd_support_of_product_le",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coprime_prime_anchor_of_strict_window_odd",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.exists_candidate_support_of_prime_product_lt",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.witness_charge_le_supportExcess_of_prime_product_lt",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.supportExcess_ge_two_of_prime_gt_105",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.seat_ne_of_distinct_modEq_classes",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.sum_indexed_modEq_charge_le_supportExcess",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.uncovered_nonempty_of_indexed_modEq_certificates",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_indexed_modEq_certificates",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.prime_anchor_period_family_charge_le_supportExcess",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.prime_squareCell_of_prime_period_family_gap",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell41Seats",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell41Witness",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell91Seats",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell91Witness",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell41_candidate_seats",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell41_support_witnesses",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell41_witness_charge",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell41_supportExcess_ge_six",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell41_cap_and_candidate",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell41_uncovered_ge_two",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell41_uncovered_nonempty",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell41_prime",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell91_candidate_seats",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell91_support_witnesses",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell91_witness_charge",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell91_supportExcess_ge_six",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell91_cap_and_candidate",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell91_uncovered_ge_two",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell91_uncovered_nonempty",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveCertificate.shell91_prime",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCRTSeat.zero_residue_positive_endpoint",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCRTSeat.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCRTSeat.raw_period_does_not_guarantee_parity",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCRTSeat.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCRTSeat.parity_period_does_not_guarantee_candidate",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCRTSeat.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCRTSeat.distinct_witness_sets_do_not_separate_seats",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCRTSeat.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCRTSeat.prime107_short_period_candidate",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCRTSeat.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCRTSeat.prime107_structural_charge",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCRTSeat.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCRTSeat.prime211_period_lift_seats",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCRTSeat.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCRTSeat.prime211_structural_family_charge",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCRTSeat.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCRTSeat.prime107_provider_needs_more_charge",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCRTSeat.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCRTSeat.shell41_indexed_CRT_prime",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCRTSeat.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveClassification.diagnosticData",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveClassificationData.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveClassification.diagnosticWitnessData",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveClassificationData.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveClassification.solvedUpToFive",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveClassificationData.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveClassification.solvedAtSix",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveClassificationData.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveClassification.unresolvedShells",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveClassificationData.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveClassification.diagnosticSeats",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveClassification.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveClassification.diagnosticWitness",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveClassification.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveClassification.diagnostic_partition_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveClassification.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveClassification.diagnostic_certificates_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveClassification.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveClassification.diagnostic_caps_match_prior",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveClassification.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveClassification.diagnostic_charge_le_excess",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveClassification.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveClassification.diagnostic_success_condition_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveClassification.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveClassification.diagnostic_solved_uncovered",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveClassification.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveClassification.diagnostic_solved_prime",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveClassification.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveClassification.diagnostic_survivor_budget_obstruction",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveClassification.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveClassification.diagnostic_survivor_charge_ge_six",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveClassification.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreAdaptiveClassification.diagnostic_survivors_have_few_odd_anchor_factors",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreAdaptiveClassification.lean"
+  }
+]

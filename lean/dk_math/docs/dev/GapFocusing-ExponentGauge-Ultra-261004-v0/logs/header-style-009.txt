@@ -1,0 +1,1 @@
+PASS: uniform copyright/import/file-print headers in 8 changed/new Lean files.

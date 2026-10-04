@@ -1,0 +1,5 @@
+Previous Class2: 30 shells.
+Charge<=5 solved: [41, 43, 56, 91].
+Charge6 solved: [44].
+Unresolved: [47, 53, 58, 59, 61, 62, 64, 67, 68, 71, 73, 74, 76, 79, 80, 82, 83, 86, 88, 89, 92, 94, 97, 98, 100].
+Every survivor has an explicit charge6 certificate; the budget, not missing seats, fails.

@@ -1,0 +1,9 @@
+PASS: zero forbidden-token matches.
+DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean
+DkMathTest/NumberTheory/LegendreAdaptiveCertificate.lean
+DkMathTest/NumberTheory/LegendreCRTSeat.lean
+DkMathTest/NumberTheory/LegendreAdaptiveClassificationData.lean
+DkMathTest/NumberTheory/LegendreAdaptiveClassification.lean
+DkMath/NumberTheory/Legendre.lean
+DkMathTest/NumberTheory/LegendreAdaptiveCertificateInventory.lean
+DkMathTest/NumberTheory/LegendreAdaptiveCertificateAxiomAudit.lean

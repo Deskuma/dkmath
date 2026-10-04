@@ -1,0 +1,1244 @@
+[
+  {
+    "n": 41,
+    "upper": 44,
+    "candidate": 40,
+    "required": 5,
+    "available_charge": 6,
+    "certified_charge": 5,
+    "solved": true,
+    "witnesses": [
+      {
+        "seat": 2,
+        "primes": [
+          3,
+          11,
+          17
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 24,
+        "primes": [
+          5,
+          11,
+          31
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 44,
+        "primes": [
+          3,
+          5
+        ],
+        "cost": 1
+      }
+    ],
+    "anchor_prime_factors": [
+      41
+    ]
+  },
+  {
+    "n": 43,
+    "upper": 46,
+    "candidate": 42,
+    "required": 5,
+    "available_charge": 6,
+    "certified_charge": 5,
+    "solved": true,
+    "witnesses": [
+      {
+        "seat": 32,
+        "primes": [
+          3,
+          11,
+          19
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 36,
+        "primes": [
+          5,
+          13,
+          29
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 38,
+        "primes": [
+          3,
+          17
+        ],
+        "cost": 1
+      }
+    ],
+    "anchor_prime_factors": [
+      43
+    ]
+  },
+  {
+    "n": 44,
+    "upper": 45,
+    "candidate": 40,
+    "required": 6,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": true,
+    "witnesses": [
+      {
+        "seat": 17,
+        "primes": [
+          3,
+          7,
+          31
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 19,
+        "primes": [
+          5,
+          17,
+          23
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 53,
+        "primes": [
+          3,
+          13,
+          17
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      2,
+      11
+    ]
+  },
+  {
+    "n": 47,
+    "upper": 54,
+    "candidate": 46,
+    "required": 9,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 14,
+        "primes": [
+          3,
+          13,
+          19
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 24,
+        "primes": [
+          7,
+          11,
+          29
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 46,
+        "primes": [
+          5,
+          11,
+          41
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      47
+    ]
+  },
+  {
+    "n": 53,
+    "upper": 60,
+    "candidate": 52,
+    "required": 9,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 12,
+        "primes": [
+          7,
+          13,
+          31
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 20,
+        "primes": [
+          3,
+          23,
+          41
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 26,
+        "primes": [
+          3,
+          5,
+          7
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      53
+    ]
+  },
+  {
+    "n": 56,
+    "upper": 52,
+    "candidate": 48,
+    "required": 5,
+    "available_charge": 6,
+    "certified_charge": 5,
+    "solved": true,
+    "witnesses": [
+      {
+        "seat": 9,
+        "primes": [
+          5,
+          17,
+          37
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 83,
+        "primes": [
+          3,
+          29,
+          37
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 89,
+        "primes": [
+          3,
+          5
+        ],
+        "cost": 1
+      }
+    ],
+    "anchor_prime_factors": [
+      2,
+      7
+    ]
+  },
+  {
+    "n": 58,
+    "upper": 63,
+    "candidate": 56,
+    "required": 8,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 3,
+        "primes": [
+          7,
+          13,
+          37
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 17,
+        "primes": [
+          3,
+          7,
+          23
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 77,
+        "primes": [
+          3,
+          31,
+          37
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      2,
+      29
+    ]
+  },
+  {
+    "n": 59,
+    "upper": 71,
+    "candidate": 58,
+    "required": 14,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 4,
+        "primes": [
+          5,
+          17,
+          41
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 34,
+        "primes": [
+          5,
+          19,
+          37
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 38,
+        "primes": [
+          3,
+          17,
+          23
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      59
+    ]
+  },
+  {
+    "n": 61,
+    "upper": 74,
+    "candidate": 60,
+    "required": 15,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 10,
+        "primes": [
+          7,
+          13,
+          41
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 20,
+        "primes": [
+          3,
+          29,
+          43
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 74,
+        "primes": [
+          3,
+          5,
+          11
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      61
+    ]
+  },
+  {
+    "n": 62,
+    "upper": 69,
+    "candidate": 60,
+    "required": 10,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 13,
+        "primes": [
+          7,
+          19,
+          29
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 17,
+        "primes": [
+          3,
+          11,
+          13
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 41,
+        "primes": [
+          3,
+          5,
+          7
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      2,
+      31
+    ]
+  },
+  {
+    "n": 64,
+    "upper": 75,
+    "candidate": 64,
+    "required": 12,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 27,
+        "primes": [
+          7,
+          19,
+          31
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 29,
+        "primes": [
+          3,
+          5,
+          11
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 51,
+        "primes": [
+          11,
+          13,
+          29
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      2
+    ]
+  },
+  {
+    "n": 67,
+    "upper": 80,
+    "candidate": 66,
+    "required": 15,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 6,
+        "primes": [
+          5,
+          29,
+          31
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 16,
+        "primes": [
+          5,
+          17,
+          53
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 26,
+        "primes": [
+          3,
+          5,
+          7
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      67
+    ]
+  },
+  {
+    "n": 68,
+    "upper": 70,
+    "candidate": 64,
+    "required": 7,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 29,
+        "primes": [
+          3,
+          11,
+          47
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 31,
+        "primes": [
+          5,
+          7,
+          19
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 45,
+        "primes": [
+          7,
+          23,
+          29
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      2,
+      17
+    ]
+  },
+  {
+    "n": 71,
+    "upper": 85,
+    "candidate": 70,
+    "required": 16,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 8,
+        "primes": [
+          3,
+          11,
+          17
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 34,
+        "primes": [
+          5,
+          7,
+          29
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 42,
+        "primes": [
+          13,
+          17,
+          23
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      71
+    ]
+  },
+  {
+    "n": 73,
+    "upper": 89,
+    "candidate": 72,
+    "required": 18,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 26,
+        "primes": [
+          3,
+          5,
+          7
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 36,
+        "primes": [
+          5,
+          29,
+          37
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 40,
+        "primes": [
+          7,
+          13,
+          59
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      73
+    ]
+  },
+  {
+    "n": 74,
+    "upper": 90,
+    "candidate": 72,
+    "required": 19,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 5,
+        "primes": [
+          3,
+          7,
+          29
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 11,
+        "primes": [
+          3,
+          31,
+          59
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 23,
+        "primes": [
+          3,
+          13,
+          47
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      2,
+      37
+    ]
+  },
+  {
+    "n": 76,
+    "upper": 87,
+    "candidate": 72,
+    "required": 16,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 5,
+        "primes": [
+          3,
+          41,
+          47
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 21,
+        "primes": [
+          11,
+          17,
+          31
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 29,
+        "primes": [
+          3,
+          5,
+          43
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      2,
+      19
+    ]
+  },
+  {
+    "n": 79,
+    "upper": 94,
+    "candidate": 78,
+    "required": 17,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 10,
+        "primes": [
+          7,
+          19,
+          47
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 32,
+        "primes": [
+          3,
+          17,
+          41
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 38,
+        "primes": [
+          3,
+          7,
+          13
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      79
+    ]
+  },
+  {
+    "n": 80,
+    "upper": 72,
+    "candidate": 64,
+    "required": 9,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 9,
+        "primes": [
+          13,
+          17,
+          29
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 17,
+        "primes": [
+          3,
+          23,
+          31
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 61,
+        "primes": [
+          7,
+          13,
+          71
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      2,
+      5
+    ]
+  },
+  {
+    "n": 82,
+    "upper": 99,
+    "candidate": 80,
+    "required": 20,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 21,
+        "primes": [
+          5,
+          19,
+          71
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 47,
+        "primes": [
+          3,
+          37,
+          61
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 59,
+        "primes": [
+          3,
+          7,
+          17
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      2,
+      41
+    ]
+  },
+  {
+    "n": 83,
+    "upper": 107,
+    "candidate": 82,
+    "required": 26,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 8,
+        "primes": [
+          3,
+          11,
+          19
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 14,
+        "primes": [
+          3,
+          13,
+          59
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 20,
+        "primes": [
+          3,
+          7,
+          47
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      83
+    ]
+  },
+  {
+    "n": 86,
+    "upper": 103,
+    "candidate": 84,
+    "required": 20,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 29,
+        "primes": [
+          3,
+          5,
+          11
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 33,
+        "primes": [
+          17,
+          19,
+          23
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 41,
+        "primes": [
+          3,
+          37,
+          67
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      2,
+      43
+    ]
+  },
+  {
+    "n": 88,
+    "upper": 94,
+    "candidate": 80,
+    "required": 15,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 5,
+        "primes": [
+          3,
+          7,
+          41
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 47,
+        "primes": [
+          3,
+          7,
+          53
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 95,
+        "primes": [
+          3,
+          13,
+          67
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      2,
+      11
+    ]
+  },
+  {
+    "n": 89,
+    "upper": 111,
+    "candidate": 88,
+    "required": 24,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 14,
+        "primes": [
+          3,
+          5,
+          23
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 34,
+        "primes": [
+          5,
+          37,
+          43
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 44,
+        "primes": [
+          3,
+          5,
+          59
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      89
+    ]
+  },
+  {
+    "n": 91,
+    "upper": 76,
+    "candidate": 72,
+    "required": 5,
+    "available_charge": 6,
+    "certified_charge": 5,
+    "solved": true,
+    "witnesses": [
+      {
+        "seat": 38,
+        "primes": [
+          3,
+          47,
+          59
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 44,
+        "primes": [
+          3,
+          5,
+          37
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 68,
+        "primes": [
+          3,
+          11
+        ],
+        "cost": 1
+      }
+    ],
+    "anchor_prime_factors": [
+      7,
+      13
+    ]
+  },
+  {
+    "n": 92,
+    "upper": 108,
+    "candidate": 88,
+    "required": 21,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 41,
+        "primes": [
+          3,
+          5,
+          7
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 61,
+        "primes": [
+          5,
+          11,
+          31
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 77,
+        "primes": [
+          3,
+          13,
+          73
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      2,
+      23
+    ]
+  },
+  {
+    "n": 94,
+    "upper": 115,
+    "candidate": 92,
+    "required": 24,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 9,
+        "primes": [
+          5,
+          29,
+          61
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 19,
+        "primes": [
+          5,
+          7,
+          11
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 61,
+        "primes": [
+          7,
+          31,
+          41
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      2,
+      47
+    ]
+  },
+  {
+    "n": 97,
+    "upper": 125,
+    "candidate": 96,
+    "required": 30,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 8,
+        "primes": [
+          3,
+          43,
+          73
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 16,
+        "primes": [
+          5,
+          13,
+          29
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 26,
+        "primes": [
+          3,
+          5,
+          17
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      97
+    ]
+  },
+  {
+    "n": 98,
+    "upper": 95,
+    "candidate": 84,
+    "required": 12,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 29,
+        "primes": [
+          3,
+          13,
+          19
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 31,
+        "primes": [
+          5,
+          41,
+          47
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 53,
+        "primes": [
+          3,
+          29,
+          37
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      2,
+      7
+    ]
+  },
+  {
+    "n": 100,
+    "upper": 90,
+    "candidate": 80,
+    "required": 11,
+    "available_charge": 6,
+    "certified_charge": 6,
+    "solved": false,
+    "witnesses": [
+      {
+        "seat": 11,
+        "primes": [
+          3,
+          47,
+          71
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 13,
+        "primes": [
+          17,
+          19,
+          31
+        ],
+        "cost": 2
+      },
+      {
+        "seat": 17,
+        "primes": [
+          3,
+          7,
+          53
+        ],
+        "cost": 2
+      }
+    ],
+    "anchor_prime_factors": [
+      2,
+      5
+    ]
+  }
+]
