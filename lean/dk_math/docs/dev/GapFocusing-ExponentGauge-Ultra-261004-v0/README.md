@@ -119,3 +119,9 @@ real theorem from an attractive interpretation.
   the essential arithmetic structure begins elsewhere.
 
 All three outcomes are useful.
+
+## Instruction 004 checkpoint
+
+[Report 004](report-004.md) — Outcome B. The lower degree-two cyclotomic/order bridge, complete shell residue class and finite frequency are checked. Fixed-seat divisibility supplies a weighted lower-sector persistence cap and a conditional fresh-incidence bound; a twenty-transition regression forces at least 76 fresh incidences under the existing simultaneous full-cover hypothesis. No strict reduction of an existing residual capacity is proved.
+
+[Source inventory](source-inventory-004.md) · [Findings](findings-004.md) · [Validation](validation-004.md).

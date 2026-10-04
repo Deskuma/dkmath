@@ -1,0 +1,4 @@
+DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean: 0 forbidden-token matches
+DkMath/NumberTheory/Legendre/ParitySafePersistence.lean: 0 forbidden-token matches
+DkMathTest/NumberTheory/LegendreCyclotomicPersistence.lean: 0 forbidden-token matches
+DkMath/NumberTheory/Legendre.lean: 0 forbidden-token matches

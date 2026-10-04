@@ -9,6 +9,7 @@ import DkMath.NumberTheory.Legendre.GnomonBridge
 import DkMath.NumberTheory.Legendre.GnomonSuccessor
 import DkMath.NumberTheory.Legendre.GnomonSupportTurnover
 import DkMath.NumberTheory.Legendre.GnomonPetalTurnover
+import DkMath.NumberTheory.Legendre.CyclotomicPersistence
 import DkMath.NumberTheory.Legendre.CenteredPair
 import DkMath.NumberTheory.Legendre.CenteredPacketTriangle
 import DkMath.NumberTheory.Legendre.CenteredPacketDiamond
@@ -22,6 +23,7 @@ import DkMath.NumberTheory.Legendre.ActivePrimeCapacity
 import DkMath.NumberTheory.Legendre.ParitySafeActiveCapacity
 import DkMath.NumberTheory.Legendre.ParitySafeWavePruning
 import DkMath.NumberTheory.Legendre.ParitySafeIncidenceBalance
+import DkMath.NumberTheory.Legendre.ParitySafePersistence
 import DkMath.NumberTheory.Legendre.ParitySafeReducedResidue
 import DkMath.NumberTheory.Legendre.ParitySafeMobiusWave
 import DkMath.NumberTheory.Legendre.ParitySafeMobiusOddCorrection

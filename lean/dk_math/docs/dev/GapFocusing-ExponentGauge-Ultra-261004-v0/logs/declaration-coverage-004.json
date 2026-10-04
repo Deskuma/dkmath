@@ -1,0 +1,252 @@
+[
+  {
+    "path": "DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.cyclotomicShiftedEval_two_eq_oddGnomon"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.mem_lower_commonSupport_iff_cyclotomic"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.not_dvd_coordinates_of_dvd_oddGnomon"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.dvd_oddGnomon_iff_primeOrder_eq_two"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.dvd_cyclotomic_lower_iff_primeOrder_eq_two"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.mem_lower_commonSupport_iff_primeOrder_eq_two"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.dvd_oddGnomon_iff_modEq_half"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.dvd_oddGnomon_iff_eq_half_add_mul"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.modEq_of_dvd_oddGnomon"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.dvd_oddGnomon_iff_modEq_of_dvd"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.dvd_four_mul_offset_add_one_of_lower_persistence"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.not_dvd_oddGnomon_succ"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerPrimeAddressOffsets"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.shellFrequencyCap"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerPrimeAddressOffsets_card_le"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerPrimeAddressOffsets_period_card_le_one"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lower_successor_not_paritySafeCandidate_of_odd"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.disjoint_upper_oldSupport_paritySafeActiveSupport"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafeCandidates"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafeCandidates_eq_filter_Icc"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafePersistentSupport"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafeFreshSupport"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafeIncidenceCount"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafePersistentCount"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafeFreshCount"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafeIncidenceCount_eq_persistent_add_fresh"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafeIncidenceCount_le_incidence"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafePersistentSupport_subset_addresses"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafeCandidates_card_le"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerPersistentSeatPool"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerPersistentSeatPool_card_le"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafePersistentCount_le_seatWeighted_addresses"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafePersistentCount_le_weighted_addresses"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafePersistenceCap"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafePersistenceCap_le_crude"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.sum_lowerParitySafePersistentCount_le_cap"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.sum_lowerParitySafeIncidenceCount_sub_cap_le_fresh"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafeCandidates_card_le_incidence_of_fullyCovered"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.sum_lowerParitySafeCandidates_sub_cap_le_fresh_of_fullyCovered"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreCyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreCyclotomicPersistence.three_shell_addresses"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreCyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreCyclotomicPersistence.three_order_two_at_shell_ten"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreCyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreCyclotomicPersistence.three_no_next_shell"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreCyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreCyclotomicPersistence.three_run_regression"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreCyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreCyclotomicPersistence.frequency_boundaries"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreCyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreCyclotomicPersistence.shell_ten_two_persistent_three_seats"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreCyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreCyclotomicPersistence.unweighted_single_prime_frequency_bound_false"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreCyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreCyclotomicPersistence.lower_parity_reversal_regression"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreCyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreCyclotomicPersistence.seat_weight_capacity_regression"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreCyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreCyclotomicPersistence.fresh_incidence_without_support_excess"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreCyclotomicPersistence.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreCyclotomicPersistence.twenty_transition_fresh_lower_bound"
+  }
+]
