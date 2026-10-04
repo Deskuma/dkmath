@@ -1,0 +1,307 @@
+[
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafeActiveSupport_card_eq"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafePersistentSupport_subset_primeFactors"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafePersistentSupport_card_le_primeFactors"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafeActiveSupport_sub_primeFactors_le_fresh"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistence.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.sum_fixedSeat_persistentSupport_le_frequency"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistenceParity.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lower_candidate_modEq_two"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistenceParity.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerCandidatePrimeAddressOffsets"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistenceParity.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerCandidatePrimeAddressOffsets_card_le"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistenceParity.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.sum_fixedSeat_persistentSupport_le_parity_frequency"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistenceParity.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafeParityPersistenceCap"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistenceParity.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.sum_lowerPersistentCount_le_parityCap"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistenceParity.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.sum_lowerCandidates_sub_parityCap_le_fresh_of_fullyCovered"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistenceParity.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerPersistenceCap_eq_seatSum"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistenceParity.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.shellFrequencyCap_double_le"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafePersistenceParity.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafeParityPersistenceCap_le_oldCap"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerSingletonFreshSeats"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerMultiFreshCount"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerFreshWithoutPersistentSeats"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerFreshSupportExcessCharge"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerFreshSupportExcessChargeCount"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lower_active_excess_eq_persistent_excess_add_fresh_charge"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lower_singleton_fresh_has_zero_excess"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.mem_lowerSingletonFreshSeats_iff_zero_excess"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerFreshSupportExcessCharge_pos_of_multi"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafeFreshCount_eq_singleton_add_multi"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerMultiFreshCount_le_two_supportExcess"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafeFreshCount_eq_firstSlots_add_excessCharge"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerFreshSupportExcessChargeCount_le_supportExcess"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerFreshCharge_onCollision_le_collisionSupportCost"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerSingletonFreshSeats_subset_firstSlots"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerFreshCount_le_singleton_add_two_supportExcess"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerFreshCount_le_firstSlots_add_supportExcess"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerParitySafeFreshPairs"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.mem_lowerParitySafeFreshPairs_iff"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lower_persistent_upperPairs_subset"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lower_active_pair_eq_persistent_pair_add_fresh_pairs"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerFreshPairs_card_eq_mixed_add_choose_fresh"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerFreshPairs_card_pos_of_multi"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "def",
+    "name": "DkMath.NumberTheory.Legendre.lowerFreshPairOverlapCount"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerFreshPairOverlapCount_le_pairOverlap"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lowerFreshPairs_outsideCollision_le_outsidePairOverlap"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.lower_singleton_not_collision"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.sum_lowerCandidates_sub_persistenceCap_sub_singletons_le_two_excess"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.sum_lowerCandidates_sub_persistenceCap_sub_firstSlots_le_excess"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.sum_lowerCandidates_sub_parityCap_sub_firstSlots_le_excess"
+  },
+  {
+    "path": "DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMath.NumberTheory.Legendre.sum_fullCandidate_add_freshChargeBound_le_incidence"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreFreshCost.activeSupport_eq_filter_range"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreFreshCost.oldSupport_eq_filter_range"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreFreshCost.freshSupport_eq_filter_range"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreFreshCost.mainBlock_singleton_capacity"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreFreshCost.mainBlock_first_slot_capacity"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreFreshCost.mainBlock_parity_capacity"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreFreshCost.mainBlock_required_seats"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreFreshCost.old_fresh_bound_below_singleton_capacity"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreFreshCost.mainBlock_fresh_lower_bound"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreFreshCost.mainBlock_support_excess_lower_bound"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreFreshCost.mainBlock_fullCover_balance_with_positive_charge"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreFreshCost.singletonFresh_not_bounded_by_persistent_prime_labels"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreFreshCost.fresh_with_persistent_has_cost_without_residual"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreFreshCost.fresh_pairs_not_bounded_by_local_residual"
+  },
+  {
+    "path": "DkMathTest/NumberTheory/LegendreFreshCost.lean",
+    "kind": "theorem",
+    "name": "DkMathTest.LegendreFreshCost.candidate_period_regression"
+  }
+]

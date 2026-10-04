@@ -24,6 +24,8 @@ import DkMath.NumberTheory.Legendre.ParitySafeActiveCapacity
 import DkMath.NumberTheory.Legendre.ParitySafeWavePruning
 import DkMath.NumberTheory.Legendre.ParitySafeIncidenceBalance
 import DkMath.NumberTheory.Legendre.ParitySafePersistence
+import DkMath.NumberTheory.Legendre.ParitySafePersistenceParity
+import DkMath.NumberTheory.Legendre.ParitySafeFreshCost
 import DkMath.NumberTheory.Legendre.ParitySafeReducedResidue
 import DkMath.NumberTheory.Legendre.ParitySafeMobiusWave
 import DkMath.NumberTheory.Legendre.ParitySafeMobiusOddCorrection

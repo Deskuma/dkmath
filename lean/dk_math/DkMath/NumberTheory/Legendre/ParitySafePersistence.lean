@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.NumberTheory.Legendre.CyclotomicPersistence
 import DkMath.NumberTheory.Legendre.ParitySafeIncidenceBalance
 
+#print "file: DkMath.NumberTheory.Legendre.ParitySafePersistence"
+
 /-!
 # Lower persistence in the existing parity-safe incidence ledger
 
@@ -294,5 +296,82 @@ theorem sum_lowerParitySafeCandidates_sub_cap_le_fresh_of_fullyCovered
     exact lowerParitySafeCandidates_card_le_incidence_of_fullyCovered (hfull i hi)
   exact (Nat.sub_le_sub_right hneed _).trans
     (sum_lowerParitySafeIncidenceCount_sub_cap_le_fresh N T)
+
+/-- Seat-local form of the existing exact persistent/fresh partition. -/
+theorem lowerParitySafeActiveSupport_card_eq (n r : ℕ) :
+    (paritySafeActiveSupport (n + 1) r).card =
+      (lowerParitySafePersistentSupport n r).card + (lowerParitySafeFreshSupport n r).card := by
+  classical
+  dsimp only [lowerParitySafePersistentSupport, lowerParitySafeFreshSupport]
+  have h := Finset.card_sdiff_add_card_inter
+    (paritySafeActiveSupport (n + 1) r) (squareOffsetPrimeSupport n r)
+  omega
+
+/-- A fixed lower seat has persistent prime labels only among the distinct
+prime factors of `4*r+1`; no new prime-support counting function is required. -/
+theorem lowerParitySafePersistentSupport_subset_primeFactors {n r : ℕ}
+    (hr : r ∈ lowerParitySafeCandidates n) :
+    lowerParitySafePersistentSupport n r ⊆ (4 * r + 1).primeFactors := by
+  classical
+  intro q hq
+  have ha := Finset.mem_filter.mp
+    (lowerParitySafePersistentSupport_subset_addresses hr (le_refl n) hq)
+  have hp := mem_squareOffsetPrimeSupport.mp (Finset.mem_inter.mp hq).2
+  exact Nat.mem_primeFactors.mpr
+    ⟨hp.1, dvd_four_mul_offset_add_one_of_lower_persistence hp.2.2 ha.2, by omega⟩
+
+/-- The fixed-seat persistent-cardinality budget. -/
+theorem lowerParitySafePersistentSupport_card_le_primeFactors {n r : ℕ}
+    (hr : r ∈ lowerParitySafeCandidates n) :
+    (lowerParitySafePersistentSupport n r).card ≤ (4 * r + 1).primeFactors.card :=
+  Finset.card_le_card (lowerParitySafePersistentSupport_subset_primeFactors hr)
+
+/-- Large actual active support forces fresh directions beyond the finite
+fixed-seat persistent-prime budget. -/
+theorem lowerParitySafeActiveSupport_sub_primeFactors_le_fresh {n r : ℕ}
+    (hr : r ∈ lowerParitySafeCandidates n) :
+    (paritySafeActiveSupport (n + 1) r).card - (4 * r + 1).primeFactors.card ≤
+      (lowerParitySafeFreshSupport n r).card := by
+  have hs := lowerParitySafeActiveSupport_card_eq n r
+  have hp := lowerParitySafePersistentSupport_card_le_primeFactors hr
+  omega
+
+/-- Dual seat-weighted temporal bound, using the same offset only when it is
+an actual candidate in the lower canonical reindex sector. -/
+theorem sum_fixedSeat_persistentSupport_le_frequency (r N T : ℕ) :
+    (∑ i ∈ (Finset.range T).filter (fun i => r ∈ lowerParitySafeCandidates (N + i)),
+      (lowerParitySafePersistentSupport (N + i) r).card) ≤
+        ∑ q ∈ (4 * r + 1).primeFactors, shellFrequencyCap q T := by
+  classical
+  let A := (Finset.range T).filter (fun i => r ∈ lowerParitySafeCandidates (N + i))
+  calc
+    (∑ i ∈ A, (lowerParitySafePersistentSupport (N + i) r).card) ≤
+        ∑ i ∈ A, ((4 * r + 1).primeFactors.filter
+          (fun q => q ∣ oddGnomon (N + i))).card := by
+      apply Finset.sum_le_sum
+      intro i hi
+      have hr := (Finset.mem_filter.mp hi).2
+      apply Finset.card_le_card
+      intro q hq
+      exact Finset.mem_filter.mpr
+        ⟨lowerParitySafePersistentSupport_subset_primeFactors hr hq,
+          (Finset.mem_filter.mp
+            (lowerParitySafePersistentSupport_subset_addresses hr (le_refl _) hq)).2⟩
+    _ ≤ ∑ i ∈ Finset.range T, ((4 * r + 1).primeFactors.filter
+        (fun q => q ∣ oddGnomon (N + i))).card :=
+      Finset.sum_le_sum_of_subset_of_nonneg (Finset.filter_subset _ _) (by intros; omega)
+    _ = ∑ q ∈ (4 * r + 1).primeFactors, (lowerPrimeAddressOffsets q N T).card := by
+      simp only [Finset.card_filter, lowerPrimeAddressOffsets]
+      rw [Finset.sum_comm]
+    _ ≤ ∑ q ∈ (4 * r + 1).primeFactors, shellFrequencyCap q T := by
+      apply Finset.sum_le_sum
+      intro q hq
+      have hp := Nat.mem_primeFactors.mp hq
+      have hq2 : q ≠ 2 := by
+        intro heq
+        subst q
+        have hm := Nat.mod_eq_zero_of_dvd hp.2.1
+        omega
+      exact lowerPrimeAddressOffsets_card_le hp.1 hq2 N T
 
 end DkMath.NumberTheory.Legendre

@@ -1,0 +1,5 @@
+DkMath/NumberTheory/Legendre/ParitySafePersistence.lean: 0 forbidden-token matches
+DkMath/NumberTheory/Legendre/ParitySafePersistenceParity.lean: 0 forbidden-token matches
+DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean: 0 forbidden-token matches
+DkMath/NumberTheory/Legendre.lean: 0 forbidden-token matches
+DkMathTest/NumberTheory/LegendreFreshCost.lean: 0 forbidden-token matches

@@ -1,0 +1,52 @@
+DkMath.NumberTheory.Legendre.paritySafeActiveSupport (n r : ℕ) : Finset ℕ
+DkMath.NumberTheory.Legendre.paritySafeSupportExcess (n : ℕ) : ℕ
+DkMath.NumberTheory.Legendre.paritySafePrimePairOverlapCount (n : ℕ) : ℕ
+DkMath.NumberTheory.Legendre.paritySafeLowCostResidualCapacity (n : ℕ) : ℕ
+DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthResidualPairCapacityExcess (n : ℕ) : ℕ
+DkMath.NumberTheory.Legendre.paritySafePairOverlapOutsideDepthCollision (n : ℕ) : ℕ
+DkMath.NumberTheory.Legendre.paritySafeDepthCollisionLocalSupportCost (n : ℕ) : ℕ
+DkMath.NumberTheory.Legendre.lowerParitySafeFreshSupport (n r : ℕ) : Finset ℕ
+DkMath.NumberTheory.Legendre.lowerParitySafeFreshCount (n : ℕ) : ℕ
+DkMath.NumberTheory.Legendre.lowerPersistentSeatPool (q M : ℕ) : Finset ℕ
+DkMath.NumberTheory.Legendre.lowerParitySafePersistenceCap (N T : ℕ) : ℕ
+DkMath.NumberTheory.Legendre.paritySafeCandidate_card_add_supportExcess_eq_incidence_of_fullyCovered {n : ℕ}
+  (hn : 0 < n) (hfull : SquareOffsetsFullyCovered n) :
+  (squareAnchorOddPointCoprimeOffsets n).card + paritySafeSupportExcess n = paritySafeIncidenceCount n
+DkMath.NumberTheory.Legendre.paritySafeLowCostResidualCapacity_eq_mass_add_slack (n : ℕ) :
+  paritySafeLowCostResidualCapacity n = paritySafeLowCostResidualMass n + paritySafeLowCostResidualCapacitySlack n
+DkMath.NumberTheory.Legendre.paritySafeDepthCollisionPairOverlapMass_eq_supportCost_add_collision_add_depthResidualCapacity
+  (n : ℕ) :
+  paritySafeDepthCollisionPairOverlapMass n =
+    paritySafeDepthCollisionLocalSupportCost n + (paritySafeRechargeExactDepthFiberCollisionSeats n).card +
+      paritySafeRechargeExactDepthResidualPairCapacityExcess n
+DkMath.NumberTheory.Legendre.two_mul_outsideCollisionPairOverlap_add_elevenCollision_add_twoFiveDirection_le_threeSupportExcess_add_twoLowCostCapacity
+  (n : ℕ) :
+  2 * paritySafePairOverlapOutsideDepthCollision n + 11 * (paritySafeRechargeExactDepthFiberCollisionSeats n).card +
+      2 * (paritySafeRechargeExactDepthFiveDirectionCollisionSeats n).card ≤
+    3 * paritySafeSupportExcess n + 2 * paritySafeLowCostResidualCapacity n
+DkMath.NumberTheory.Legendre.paritySafePrimePairOverlapCount_eq_supportExcess_add_lowCostMass_add_terminal_add_collision_add_depthFiberExcess
+  (n : ℕ) :
+  paritySafePrimePairOverlapCount n =
+    paritySafeSupportExcess n + paritySafeLowCostResidualMass n + (paritySafeTerminalSurvivingFarProductKeys n).card +
+        (paritySafeRechargeExactDepthFiberCollisionSeats n).card +
+      paritySafeRechargeExactDepthFiberExcess n
+DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiberCollision_support_card_ge_four {n r : ℕ}
+  (hr : r ∈ paritySafeRechargeExactDepthFiberCollisionSeats n) : 4 ≤ (paritySafeActiveSupport n r).card
+DkMath.NumberTheory.Legendre.paritySafeRechargeDepthFiveDirectionCollision_fiveDirection_packet {n r : ℕ}
+  (hr : r ∈ paritySafeRechargeExactDepthFiveDirectionCollisionSeats n) :
+  have p := paritySafeCanonicalSupportPrime n r;
+  ∃ q s u v,
+    p ∈ paritySafeActiveSupport n r ∧
+      q ∈ paritySafeActiveSupport n r ∧
+        s ∈ paritySafeActiveSupport n r ∧
+          u ∈ paritySafeActiveSupport n r ∧
+            v ∈ paritySafeActiveSupport n r ∧
+              p < q ∧
+                p < s ∧ p < u ∧ p < v ∧ q ≠ s ∧ q ≠ u ∧ q ≠ v ∧ s ≠ u ∧ s ≠ v ∧ u ≠ v ∧ p * q * s * u * v ∣ n ^ 2 + r
+DkMath.NumberTheory.Legendre.lowerParitySafePersistentSupport_subset_addresses {n r M : ℕ}
+  (hr : r ∈ lowerParitySafeCandidates n) (hnM : n ≤ M) :
+  lowerParitySafePersistentSupport n r ⊆
+    {q ∈ (DkMath.NumberTheory.Primitive.primeScalesUpTo M).erase 2 | q ∣ DkMath.Gnomon.oddGnomon n}
+DkMath.NumberTheory.Legendre.Internal.card_upperPairs_eq_choose (s : Finset ℕ) :
+  (Internal.upperPairs s).card = s.card.choose 2
+Nat.mem_primeFactors {n p : ℕ} : p ∈ n.primeFactors ↔ Nat.Prime p ∧ p ∣ n ∧ n ≠ 0

@@ -125,3 +125,9 @@ All three outcomes are useful.
 [Report 004](report-004.md) — Outcome B. The lower degree-two cyclotomic/order bridge, complete shell residue class and finite frequency are checked. Fixed-seat divisibility supplies a weighted lower-sector persistence cap and a conditional fresh-incidence bound; a twenty-transition regression forces at least 76 fresh incidences under the existing simultaneous full-cover hypothesis. No strict reduction of an existing residual capacity is proved.
 
 [Source inventory](source-inventory-004.md) · [Findings](findings-004.md) · [Validation](validation-004.md).
+
+## Instruction 005 checkpoint
+
+[Report 005](report-005.md) — Outcome A in the finite support-excess case. Candidate parity doubles the fixed-seat prime-address period to 2q and strictly lowers the main-block temporal cap from 169 to 97. Exact fresh/first-slot cost accounting forces at least 38 units of existing support excess, under the existing simultaneous full-cover hypothesis, and adds +38 to the existing summed candidate/incidence necessary balance. Residual/collision recipient localization and a global full-cover contradiction remain unproved.
+
+[Source inventory](source-inventory-005.md) · [Findings](findings-005.md) · [Validation](validation-005.md).

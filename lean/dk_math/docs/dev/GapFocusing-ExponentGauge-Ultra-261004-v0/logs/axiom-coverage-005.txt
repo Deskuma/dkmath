@@ -1,0 +1,7 @@
+Coverage: 61/61 new public production and named regression declarations
+DkMath/NumberTheory/Legendre/ParitySafePersistence.lean: 5
+DkMath/NumberTheory/Legendre/ParitySafePersistenceParity.lean: 10
+DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean: 31
+DkMathTest/NumberTheory/LegendreFreshCost.lean: 15
+Every dependency set is a subset of {propext, Classical.choice, Quot.sound}.
+No sorryAx or custom axiom dependency.
