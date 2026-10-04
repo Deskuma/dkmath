@@ -1,0 +1,323 @@
+ℹ [1044/1221] Replayed DkMath.Lib.Cosmic.GTail
+info: DkMath/Lib/Cosmic/GTail.lean:10:0: file: DkMath.Lib.Cosmic.GTail
+ℹ [1342/1446] Replayed DkMath.Lib.Cosmic.GNProductDegree
+info: DkMath/Lib/Cosmic/GNProductDegree.lean:10:0: file: DkMath.Lib.Cosmic.GNProductDegree
+ℹ [1389/1446] Replayed DkMath.NumberTheory.GapFocusing.Focus
+info: DkMath/NumberTheory/GapFocusing/Focus.lean:11:0: file: DkMath.NumberTheory.GapFocusing.Focus
+ℹ [2788/2828] Replayed DkMath.NumberTheory.GapFocusing.Phase
+info: DkMath/NumberTheory/GapFocusing/Phase.lean:10:0: file: DkMath.NumberTheory.GapFocusing.Phase
+ℹ [2789/2828] Replayed DkMath.Algebra.BinomTail
+info: DkMath/Algebra/BinomTail.lean:15:0: file: DkMath.Algebra.BinomTail
+ℹ [2790/2828] Replayed DkMath.Lib.Cosmic.GTailNat
+info: DkMath/Lib/Cosmic/GTailNat.lean:10:0: file: DkMath.Lib.Cosmic.GTailNat
+ℹ [2793/2828] Replayed DkMath.Lib.Cosmic.GTailCongruence
+info: DkMath/Lib/Cosmic/GTailCongruence.lean:13:0: file: DkMath.Lib.Cosmic.GTailCongruence
+ℹ [2794/2828] Replayed DkMath.Lib.Cosmic.GTailBoundary
+info: DkMath/Lib/Cosmic/GTailBoundary.lean:10:0: file: DkMath.Lib.Cosmic.GTailBoundary
+ℹ [2796/2828] Replayed DkMath.Lib.NumberTheory.PadicValNat
+info: DkMath/Lib/NumberTheory/PadicValNat.lean:12:0: file: DkMath.Lib.NumberTheory.PadicValNat
+ℹ [2797/2828] Replayed DkMath.Lib.Cosmic.GTailPadic
+info: DkMath/Lib/Cosmic/GTailPadic.lean:12:0: file: DkMath.Lib.Cosmic.GTailPadic
+ℹ [2798/2828] Replayed DkMath.CosmicFormula.GTail
+info: DkMath/CosmicFormula/GTail.lean:10:0: file: DkMath.CosmicFormula.GTail
+ℹ [2799/2828] Replayed DkMath.CosmicFormula.Defs
+info: DkMath/CosmicFormula/Defs.lean:12:0: file: DkMath.CosmicFormula.Defs
+ℹ [2801/2828] Replayed DkMath.ABC.PadicValNat
+info: DkMath/ABC/PadicValNat.lean:9:0: file: DkMath.ABC.PadicValNat
+ℹ [2802/2828] Replayed DkMath.CosmicFormula.CosmicFormulaBinom
+info: DkMath/CosmicFormula/CosmicFormulaBinom.lean:15:0: file: DkMath.CosmicFormula.CosmicFormulaBinom
+ℹ [2803/2828] Replayed DkMath.NumberTheory.GNRepresentationBounds
+info: DkMath/NumberTheory/GNRepresentationBounds.lean:10:0: file: DkMath.NumberTheory.GNRepresentationBounds
+ℹ [2804/2828] Replayed DkMath.NumberTheory.GNDegreeFactorization
+info: DkMath/NumberTheory/GNDegreeFactorization.lean:11:0: file: DkMath.NumberTheory.GNDegreeFactorization
+ℹ [2813/2828] Replayed DkMath.NumberTheory.GapFocusing.Degree
+info: DkMath/NumberTheory/GapFocusing/Degree.lean:11:0: file: DkMath.NumberTheory.GapFocusing.Degree
+ℹ [2815/2828] Replayed DkMath.NumberTheory.GapFocusing.UnitGauge
+info: DkMath/NumberTheory/GapFocusing/UnitGauge.lean:13:0: file: DkMath.NumberTheory.GapFocusing.UnitGauge
+ℹ [2816/2828] Replayed DkMath.Lib.Cosmic.GTailCyclotomic
+info: DkMath/Lib/Cosmic/GTailCyclotomic.lean:10:0: file: DkMath.Lib.Cosmic.GTailCyclotomic
+ℹ [2817/2828] Replayed DkMath.NumberTheory.GapFocusing.Successor
+info: DkMath/NumberTheory/GapFocusing/Successor.lean:10:0: file: DkMath.NumberTheory.GapFocusing.Successor
+ℹ [2818/2828] Replayed DkMath.NumberTheory.GapFocusing.Support
+info: DkMath/NumberTheory/GapFocusing/Support.lean:11:0: file: DkMath.NumberTheory.GapFocusing.Support
+ℹ [2819/2828] Replayed DkMath.NumberTheory.GapFocusing.PolynomialSuccessor
+info: DkMath/NumberTheory/GapFocusing/PolynomialSuccessor.lean:11:0: file: DkMath.NumberTheory.GapFocusing.PolynomialSuccessor
+ℹ [2820/2828] Replayed DkMath.Lib.Algebra.PowerSubgroup
+info: DkMath/Lib/Algebra/PowerSubgroup.lean:10:0: file: DkMath.Lib.Algebra.PowerSubgroup
+ℹ [2821/2828] Replayed DkMath.NumberTheory.GapFocusing.SuccessorGauge
+info: DkMath/NumberTheory/GapFocusing/SuccessorGauge.lean:10:0: file: DkMath.NumberTheory.GapFocusing.SuccessorGauge
+ℹ [2822/2828] Replayed DkMath.NumberTheory.GapFocusing
+info: DkMath/NumberTheory/GapFocusing.lean:16:0: file: DkMath.NumberTheory.GapFocusing
+ℹ [2823/2828] Replayed DkMathTest.GapFocusingSupport
+info: DkMathTest/GapFocusingSupport.lean:67:0: 'DkMath.NumberTheory.GapFocusing.dvd_anchor_pow_of_dvd_adjacent_GN' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingSupport.lean:68:0: 'DkMath.NumberTheory.GapFocusing.dvd_sum_pow_of_dvd_adjacent_GN' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingSupport.lean:69:0: 'DkMath.NumberTheory.GapFocusing.nat_dvd_powers_of_dvd_adjacent_GN' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingSupport.lean:70:0: 'DkMath.NumberTheory.GapFocusing.nat_prime_dvd_coordinates_of_dvd_adjacent_GN' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingSupport.lean:71:0: 'DkMath.NumberTheory.GapFocusing.nat_coprime_adjacent_GN' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/GapFocusingSupport.lean:72:0: 'DkMath.NumberTheory.GapFocusing.nat_one_lt_GN_succ' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/GapFocusingSupport.lean:73:0: 'DkMath.NumberTheory.GapFocusing.nat_exists_prime_dvd_GN_succ_not_dvd_GN' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingSupport.lean:74:0: 'DkMath.NumberTheory.GapFocusing.dvd_GN_of_dvd_coordinates' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/GapFocusingSupport.lean:75:0: 'DkMath.NumberTheory.GapFocusing.nat_prime_dvd_adjacent_GN_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingSupport.lean:76:0: 'DkMath.NumberTheory.GapFocusing.nat_coprime_adjacent_GN_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/GapFocusingSupport.lean:77:0: 'DkMath.NumberTheory.GapFocusing.isCoprime_adjacent_GN' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/GapFocusingSupport.lean:78:0: 'DkMath.NumberTheory.GapFocusing.int_gcd_adjacent_GN_eq_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/GapFocusingSupport.lean:79:0: 'DkMathTest.GapFocusingSupport.degree_six_prime_support_repeats' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+ℹ [2824/2828] Replayed DkMathTest.NumberTheory.GapFocusingSuccessorCalibration
+info: DkMathTest/NumberTheory/GapFocusingSuccessorCalibration.lean:11:0: file: DkMathTest.NumberTheory.GapFocusingSuccessorCalibration
+ℹ [2825/2828] Replayed DkMathTest.NumberTheory.GapFocusingSuccessorAxiomAudit
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:9:0: file: DkMathTest.NumberTheory.GapFocusingSuccessorAxiomAudit
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:11:0: 'DkMath.NumberTheory.GapFocusing.GN_succ_right' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:12:0: 'DkMath.NumberTheory.GapFocusing.GN_succ_left' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:13:0: 'DkMath.NumberTheory.GapFocusing.GN_succ_unit_anchor' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:14:0: 'DkMath.NumberTheory.GapFocusing.GN_succ_bezout' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:15:0: 'DkMath.NumberTheory.GapFocusing.GN_succ_isCoprime_unit_anchor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:16:0: 'DkMath.NumberTheory.GapFocusing.dvd_anchor_pow_of_dvd_adjacent_GN' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:17:0: 'DkMath.NumberTheory.GapFocusing.dvd_sum_pow_of_dvd_adjacent_GN' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:18:0: 'DkMath.NumberTheory.GapFocusing.nat_dvd_powers_of_dvd_adjacent_GN' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:19:0: 'DkMath.NumberTheory.GapFocusing.nat_prime_dvd_coordinates_of_dvd_adjacent_GN' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:20:0: 'DkMath.NumberTheory.GapFocusing.nat_coprime_adjacent_GN' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:21:0: 'DkMath.NumberTheory.GapFocusing.nat_one_lt_GN_succ' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:22:0: 'DkMath.NumberTheory.GapFocusing.nat_exists_prime_dvd_GN_succ_not_dvd_GN' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:23:0: 'DkMath.NumberTheory.GapFocusing.dvd_GN_of_dvd_coordinates' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:24:0: 'DkMath.NumberTheory.GapFocusing.nat_prime_dvd_adjacent_GN_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:25:0: 'DkMath.NumberTheory.GapFocusing.nat_coprime_adjacent_GN_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:26:0: 'DkMath.NumberTheory.GapFocusing.isCoprime_adjacent_GN' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:27:0: 'DkMath.NumberTheory.GapFocusing.int_gcd_adjacent_GN_eq_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:28:0: 'DkMath.NumberTheory.GapFocusing.GN_polynomial_succ_isCoprime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:29:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_succ_bezout' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:30:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_succ_isCoprime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:31:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_successor_interpolation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:32:0: 'DkMath.NumberTheory.GapFocusing.successor_divisor_layers_disjoint' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:33:0: 'DkMath.NumberTheory.GapFocusing.eq_one_of_adjacent_pow_eq_one' does not depend on any axioms
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:34:0: 'DkMath.NumberTheory.GapFocusing.successor_nontrivial_roots_disjoint' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:35:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_common_divisor_isUnit' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:36:0: 'DkMath.NumberTheory.GapFocusing.kernelIdeal' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:37:0: 'DkMath.NumberTheory.GapFocusing.kernelIdeal_succ_isCoprime' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:38:0: 'DkMath.NumberTheory.GapFocusing.kernelQuotientSuccessorCRT' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:39:0: 'DkMath.NumberTheory.GapFocusing.kernelQuotientSuccessorCRT_mk' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:40:0: 'DkMath.NumberTheory.GapFocusing.sameUnitPowerClass_iff_mem_powerSubgroup' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:41:0: 'DkMath.NumberTheory.GapFocusing.sameUnitPowerClass_iff_quotient_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:42:0: 'DkMath.NumberTheory.GapFocusing.sameUnitPowerClass_mul_iff_of_coprime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:43:0: 'DkMath.NumberTheory.GapFocusing.sameUnitPowerClass_successor_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:44:0: 'DkMath.Lib.Algebra.powerSubgroup' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:45:0: 'DkMath.Lib.Algebra.mem_powerSubgroup' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:46:0: 'DkMath.Lib.Algebra.powerSubgroup_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:47:0: 'DkMath.Lib.Algebra.powerSubgroup_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:48:0: 'DkMath.Lib.Algebra.coprime_pow_bezout' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:49:0: 'DkMath.Lib.Algebra.exists_mul_pow_of_coprime' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:50:0: 'DkMath.Lib.Algebra.powerSubgroup_sup_eq_top_of_coprime' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:51:0: 'DkMath.Lib.Algebra.powerSubgroup_mul_le_inf' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:52:0: 'DkMath.Lib.Algebra.powerSubgroup_inf_eq_mul_of_coprime' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:53:0: 'DkMath.Lib.Algebra.powerQuotientPair' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:54:0: 'DkMath.Lib.Algebra.powerQuotientPair_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:55:0: 'DkMath.Lib.Algebra.powerQuotientPair_ker' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:56:0: 'DkMath.Lib.Algebra.powerQuotientPair_surjective' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:57:0: 'DkMath.Lib.Algebra.powerQuotientCRT' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:58:0: 'DkMath.Lib.Algebra.powerQuotientCRT_apply_mk' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:59:0: 'DkMath.Lib.Algebra.powerSubgroup_sup_successor' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:60:0: 'DkMath.Lib.Algebra.powerSubgroup_inf_successor' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:61:0: 'DkMath.Lib.Algebra.exists_mul_pow_successor' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:62:0: 'DkMath.Lib.Algebra.powerQuotientSuccessorCRT' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:63:0: 'DkMath.Lib.Algebra.powerQuotientSuccessorCRT_apply_mk' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:64:0: 'DkMath.Lib.Algebra.unitPowerSubgroup' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:65:0: 'DkMath.Lib.Algebra.unitPowerSubgroup_sup_successor' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:66:0: 'DkMath.Lib.Algebra.unitPowerSubgroup_inf_successor' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:67:0: 'DkMath.Lib.Algebra.unitPowerQuotientSuccessorCRT' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean:68:0: 'DkMath.Lib.Algebra.unitPowerQuotientSuccessorCRT_apply_mk' depends on axioms: [propext, Classical.choice, Quot.sound]
+ℹ [2826/2828] Replayed DkMathTest.NumberTheory.GapFocusingCalibration
+info: DkMathTest/NumberTheory/GapFocusingCalibration.lean:11:0: file: DkMathTest.NumberTheory.GapFocusingCalibration
+ℹ [2827/2828] Built DkMathTest.Lib.Algebra.PowerSubgroup (2.1s)
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:12:0: file: DkMathTest.Lib.Algebra.PowerSubgroup
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:91:0: 'DkMath.Lib.Algebra.powerSubgroup' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:92:0: 'DkMath.Lib.Algebra.mem_powerSubgroup' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:93:0: 'DkMath.Lib.Algebra.powerSubgroup_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:94:0: 'DkMath.Lib.Algebra.powerSubgroup_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:95:0: 'DkMath.Lib.Algebra.coprime_pow_bezout' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:96:0: 'DkMath.Lib.Algebra.exists_mul_pow_of_coprime' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:97:0: 'DkMath.Lib.Algebra.powerSubgroup_sup_eq_top_of_coprime' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:98:0: 'DkMath.Lib.Algebra.powerSubgroup_mul_le_inf' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:99:0: 'DkMath.Lib.Algebra.powerSubgroup_inf_eq_mul_of_coprime' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:100:0: 'DkMath.Lib.Algebra.powerQuotientPair' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:101:0: 'DkMath.Lib.Algebra.powerQuotientPair_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:102:0: 'DkMath.Lib.Algebra.powerQuotientPair_ker' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:103:0: 'DkMath.Lib.Algebra.powerQuotientPair_surjective' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:104:0: 'DkMath.Lib.Algebra.powerQuotientCRT' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:105:0: 'DkMath.Lib.Algebra.powerQuotientCRT_apply_mk' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:106:0: 'DkMath.Lib.Algebra.powerSubgroup_sup_successor' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:107:0: 'DkMath.Lib.Algebra.powerSubgroup_inf_successor' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:108:0: 'DkMath.Lib.Algebra.exists_mul_pow_successor' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:109:0: 'DkMath.Lib.Algebra.powerQuotientSuccessorCRT' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:110:0: 'DkMath.Lib.Algebra.powerQuotientSuccessorCRT_apply_mk' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:111:0: 'DkMath.Lib.Algebra.unitPowerSubgroup' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:112:0: 'DkMath.Lib.Algebra.unitPowerSubgroup_sup_successor' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:113:0: 'DkMath.Lib.Algebra.unitPowerSubgroup_inf_successor' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:114:0: 'DkMath.Lib.Algebra.unitPowerQuotientSuccessorCRT' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:115:0: 'DkMath.Lib.Algebra.unitPowerQuotientSuccessorCRT_apply_mk' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:116:0: 'DkMathTest.Lib.Algebra.PowerSubgroup.zeroBoundaryCRT' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:117:0: 'DkMathTest.Lib.Algebra.PowerSubgroup.integerUnitSquareSubgroup' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:118:0: 'DkMathTest.Lib.Algebra.PowerSubgroup.integerNegativeUnitNotSquare' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:119:0: 'DkMathTest.Lib.Algebra.PowerSubgroup.integerSquareClassNontrivial' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:120:0: 'DkMathTest.Lib.Algebra.PowerSubgroup.integerCubeClassTrivial' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/Lib/Algebra/PowerSubgroup.lean:121:0: 'DkMathTest.Lib.Algebra.PowerSubgroup.noncoprimeIntersectionNeProductPower' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+ℹ [2828/2828] Built DkMathTest.NumberTheory.GapFocusingAxiomAudit (2.7s)
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:9:0: file: DkMathTest.NumberTheory.GapFocusingAxiomAudit
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:11:0: 'DkMath.NumberTheory.GapFocusing.focusCoordinates' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:12:0: 'DkMath.NumberTheory.GapFocusing.focused_pow_sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:13:0: 'DkMath.NumberTheory.GapFocusing.unfocused_pow_sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:14:0: 'DkMath.NumberTheory.GapFocusing.gap_dvd_iff_dvd_defect' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:15:0: 'DkMath.NumberTheory.GapFocusing.focusDefect_cocycle' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:16:0: 'DkMath.NumberTheory.GapFocusing.focusDefect_scale' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:17:0: 'DkMath.NumberTheory.GapFocusing.unfocused_polynomial_remainder' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:18:0: 'DkMath.NumberTheory.GapFocusing.X_dvd_unfocused_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:19:0: 'DkMath.NumberTheory.GapFocusing.focused_quotient_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:20:0: 'DkMath.NumberTheory.GapFocusing.unfocused_constant_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:21:0: 'DkMath.NumberTheory.GapFocusing.focused_quotient_eval_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:22:0: 'DkMath.NumberTheory.GapFocusing.X_sq_dvd_focused_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:23:0: 'DkMath.NumberTheory.GapFocusing.phaseFactor_eq_gap_forall_iff' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:24:0: 'DkMath.NumberTheory.GapFocusing.phaseFactor_polynomial_eq_gap_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:25:0: 'DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:26:0: 'DkMath.NumberTheory.GapFocusing.nthRootsFinset_eq_powers' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:27:0: 'DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod_range' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:28:0: 'DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod_fin' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:29:0: 'DkMath.NumberTheory.GapFocusing.indexed_phase_eq_gap_forall_iff' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:30:0: 'DkMath.NumberTheory.GapFocusing.phaseFactor_eq_gap_iff_of_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:31:0: 'DkMath.NumberTheory.GapFocusing.GN_eq_nontrivial_phase_prod_range' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:32:0: 'DkMath.NumberTheory.GapFocusing.nontrivialRootsFinset_eq_powers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:33:0: 'DkMath.NumberTheory.GapFocusing.GN_eq_nontrivial_phase_prod' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:34:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_eq_geom_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:35:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_eq_prod_cyclotomic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:36:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_monic' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:37:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_map_rat' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:38:0: 'DkMath.NumberTheory.GapFocusing.cyclotomic_layer_dvd_kernelPolynomial' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:39:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:40:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_eval_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:41:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_nonunit_factors' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:42:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_mul_degree' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:43:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_not_irreducible_mul_degree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:44:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_irreducible_iff_prime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:45:0: 'DkMath.NumberTheory.GapFocusing.GN_polynomial_rat_irreducible_iff_prime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:46:0: 'DkMath.NumberTheory.GapFocusing.GN_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:47:0: 'DkMath.NumberTheory.GapFocusing.GN_two_mul_degree_p_then_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:48:0: 'DkMath.NumberTheory.GapFocusing.GN_two_mul_degree_two_then_p' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:49:0: 'DkMath.NumberTheory.GapFocusing.GN_two_mul_degree_orders' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:50:0: 'DkMath.NumberTheory.GapFocusing.two_mul_prime_divisors_erase_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:51:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_two_mul_prime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:52:0: 'DkMath.NumberTheory.GapFocusing.two_mul_prime_cyclotomic_layer_degrees' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:53:0: 'DkMath.NumberTheory.GapFocusing.phase_geometric_sum_rewrite' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:54:0: 'DkMath.NumberTheory.GapFocusing.phase_geometric_sum_unit' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:55:0: 'DkMath.NumberTheory.GapFocusing.phase_polynomial_associated_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:56:0: 'DkMath.NumberTheory.GapFocusing.unitPowerClass_independent' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:57:0: 'DkMath.NumberTheory.GapFocusing.fixedRamifier_unitPowerClass_independent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:58:0: 'DkMath.NumberTheory.GapFocusing.sameUnitPowerClass_of_fixed_extraction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:59:0: 'DkMath.NumberTheory.GapFocusing.ramifier_rescaling' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:60:0: 'DkMath.NumberTheory.GapFocusing.ramifier_rescaling_same_class_iff' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:61:0: 'DkMath.NumberTheory.GapFocusing.ramifier_rescaling_can_change_cube_class' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Build completed successfully (2828 jobs).

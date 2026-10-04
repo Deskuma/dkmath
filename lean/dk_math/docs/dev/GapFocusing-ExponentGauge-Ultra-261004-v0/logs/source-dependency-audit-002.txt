@@ -1,0 +1,21 @@
+Instruction 002 source and dependency audit
+cwd: lean/dk_math
+DkMath/NumberTheory/GapFocusing/Successor.lean: 5 named declarations audited
+DkMath/NumberTheory/GapFocusing/Support.lean: 12 named declarations audited
+DkMath/NumberTheory/GapFocusing/PolynomialSuccessor.lean: 12 named declarations audited
+DkMath/NumberTheory/GapFocusing/SuccessorGauge.lean: 4 named declarations audited
+DkMath/Lib/Algebra/PowerSubgroup.lean: 25 named declarations audited
+production total: 58
+DkMathTest/GapFocusingSupport.lean: 1 named declarations audited
+DkMathTest/Lib/Algebra/PowerSubgroup.lean: 6 named declarations audited
+DkMathTest/NumberTheory/GapFocusingSuccessorAxiomAudit.lean: 0 named declarations audited
+DkMathTest/NumberTheory/GapFocusingSuccessorCalibration.lean: 0 named declarations audited
+docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/PrimitivePrimeAudit002.lean: 5 named declarations audited
+regression total: 12
+Forbidden-token scan: 10 new Lean files; zero matches
+All 58 production and 12 named regression declarations: only standard axioms or no axioms
+Anonymous compiled examples: 16
+Primitive-prime audit: 18 declarations = 5 new regressions + 13 existing endpoints
+Existing research endpoints with sorryAx: exactly 2, deliberately audited separately
+DkMath.NumberTheory.GcdNext.squarefree_implies_padic_val_le_one_research
+DkMath.NumberTheory.PrimitiveBeam.primitive_prime_obstructs_GN_perfect_power_research

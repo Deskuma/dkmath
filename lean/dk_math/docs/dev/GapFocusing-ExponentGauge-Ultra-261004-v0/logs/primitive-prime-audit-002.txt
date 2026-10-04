@@ -1,0 +1,49 @@
+file: GapFocusingSuccessorPrimitiveAudit002
+'GapFocusingSuccessorPrimitiveAudit002.adjacent_base_two_values' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'GapFocusingSuccessorPrimitiveAudit002.adjacent_base_two_coprime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'GapFocusingSuccessorPrimitiveAudit002.degree_six_prime_divisor_already_appeared' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'GapFocusingSuccessorPrimitiveAudit002.no_primitive_prime_base_two_degree_six' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'GapFocusingSuccessorPrimitiveAudit002.production_boundary_hypothesis_not_necessary' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Zsigmondy.exists_primitivePrimeDivisor_prime_exp' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Zsigmondy.exists_primitivePrimeDivisor_kernel_nat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GcdNext.prime_exp_not_dvd_diff_imp_primitive' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.PrimitiveBeam.exists_primitive_prime_factor_as_prop' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.PrimitiveBeam.primitive_prime_dvd_GN_body' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GcdNext.cyclotomic_eval_divides' depends on axioms: [propext]
+'DkMath.NumberTheory.GcdNext.cyclotomic_squarefree' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GcdNext.noLift_GN_of_primitive_prime_factor_is_false' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_of_squarefree_G' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GcdNext.squarefree_implies_padic_val_le_one_research' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.PrimitiveBeam.primitive_prime_obstructs_GN_perfect_power_research' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Primitive.primitiveConservationKernel_dichotomy_of_le_fine_squareBody' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.StructuralArithmetic.freshPrimeDirection_GN_of_primitivePrimeFactor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
