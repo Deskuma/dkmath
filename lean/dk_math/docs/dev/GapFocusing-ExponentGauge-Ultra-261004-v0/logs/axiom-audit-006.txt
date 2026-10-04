@@ -1,0 +1,419 @@
+DkMath.NumberTheory.Legendre.activeSupport_excess_le_pair (n r : ℕ) :
+  (DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r).card - 1 ≤
+    (DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r).card.choose 2
+'DkMath.NumberTheory.Legendre.activeSupport_excess_le_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeSupportExcess_le_pairOverlap (n : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeSupportExcess n ≤
+    DkMath.NumberTheory.Legendre.paritySafePrimePairOverlapCount n
+'DkMath.NumberTheory.Legendre.paritySafeSupportExcess_le_pairOverlap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeSupportExcess_le_outsidePair_add_collisionSupportCost (n : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeSupportExcess n ≤
+    DkMath.NumberTheory.Legendre.paritySafePairOverlapOutsideDepthCollision n +
+      DkMath.NumberTheory.Legendre.paritySafeDepthCollisionLocalSupportCost n
+'DkMath.NumberTheory.Legendre.paritySafeSupportExcess_le_outsidePair_add_collisionSupportCost' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeSupportExcess_le_outsidePair_add_collisionSupport_add_baseline_add_depthResidual
+  (n : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeSupportExcess n ≤
+    DkMath.NumberTheory.Legendre.paritySafePairOverlapOutsideDepthCollision n +
+          DkMath.NumberTheory.Legendre.paritySafeDepthCollisionLocalSupportCost n +
+        (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiberCollisionSeats n).card +
+      DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthResidualPairCapacityExcess n
+'DkMath.NumberTheory.Legendre.paritySafeSupportExcess_le_outsidePair_add_collisionSupport_add_baseline_add_depthResidual' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.sum_supportExcess_eq_outsideSupport_add_collisionSupport (s : Finset ℕ) :
+  ∑ n ∈ s, DkMath.NumberTheory.Legendre.paritySafeSupportExcess n =
+    ∑ n ∈ s, DkMath.NumberTheory.Legendre.paritySafeSupportExcessOutsideDepthCollision n +
+      ∑ n ∈ s, DkMath.NumberTheory.Legendre.paritySafeDepthCollisionLocalSupportCost n
+'DkMath.NumberTheory.Legendre.sum_supportExcess_eq_outsideSupport_add_collisionSupport' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.block_freshBound_le_outsideSupport_add_collisionSupport (N T : ℕ)
+  (hfull : ∀ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered (N + i + 1)) :
+  ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.lowerParitySafeCandidates (N + i)).card -
+        DkMath.NumberTheory.Legendre.lowerParitySafeParityPersistenceCap N T -
+      ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.lowerFreshWithoutPersistentSeats (N + i)).card ≤
+    ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeSupportExcessOutsideDepthCollision (N + i + 1) +
+      ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeDepthCollisionLocalSupportCost (N + i + 1)
+'DkMath.NumberTheory.Legendre.block_freshBound_le_outsideSupport_add_collisionSupport' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.block_freshBound_le_outsidePair_add_collisionSupport (N T : ℕ)
+  (hfull : ∀ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered (N + i + 1)) :
+  ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.lowerParitySafeCandidates (N + i)).card -
+        DkMath.NumberTheory.Legendre.lowerParitySafeParityPersistenceCap N T -
+      ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.lowerFreshWithoutPersistentSeats (N + i)).card ≤
+    ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafePairOverlapOutsideDepthCollision (N + i + 1) +
+      ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeDepthCollisionLocalSupportCost (N + i + 1)
+'DkMath.NumberTheory.Legendre.block_freshBound_le_outsidePair_add_collisionSupport' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.block_candidate_add_supportExcess_eq_incidence (N T : ℕ)
+  (hfull : ∀ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered (N + i + 1)) :
+  ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets (N + i + 1)).card +
+      ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeSupportExcess (N + i + 1) =
+    ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeIncidenceCount (N + i + 1)
+'DkMath.NumberTheory.Legendre.block_candidate_add_supportExcess_eq_incidence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.block_incidence_add_uncovered_eq_candidate_add_supportExcess (N T : ℕ) :
+  ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeIncidenceCount (N + i + 1) +
+      ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.paritySafeUncoveredCandidates (N + i + 1)).card =
+    ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets (N + i + 1)).card +
+      ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeSupportExcess (N + i + 1)
+'DkMath.NumberTheory.Legendre.block_incidence_add_uncovered_eq_candidate_add_supportExcess' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.block_readable_frontier_of_fullyCovered (N T : ℕ)
+  (hfull : ∀ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered (N + i + 1)) :
+  2 * ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafePairOverlapOutsideDepthCollision (N + i + 1) +
+          11 *
+            ∑ i ∈ Finset.range T,
+              (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiberCollisionSeats (N + i + 1)).card +
+        2 *
+          ∑ i ∈ Finset.range T,
+            (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiveDirectionCollisionSeats (N + i + 1)).card +
+      3 * ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets (N + i + 1)).card ≤
+    3 * ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeIncidenceCount (N + i + 1) +
+      2 * ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeLowCostResidualCapacity (N + i + 1)
+'DkMath.NumberTheory.Legendre.block_readable_frontier_of_fullyCovered' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.block_readable_frontier_iff_support_frontier (N T : ℕ)
+  (hfull : ∀ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered (N + i + 1)) :
+  2 * ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafePairOverlapOutsideDepthCollision (N + i + 1) +
+            11 *
+              ∑ i ∈ Finset.range T,
+                (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiberCollisionSeats (N + i + 1)).card +
+          2 *
+            ∑ i ∈ Finset.range T,
+              (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiveDirectionCollisionSeats (N + i + 1)).card +
+        3 * ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets (N + i + 1)).card ≤
+      3 * ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeIncidenceCount (N + i + 1) +
+        2 * ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeLowCostResidualCapacity (N + i + 1) ↔
+    2 * ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafePairOverlapOutsideDepthCollision (N + i + 1) +
+          11 *
+            ∑ i ∈ Finset.range T,
+              (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiberCollisionSeats (N + i + 1)).card +
+        2 *
+          ∑ i ∈ Finset.range T,
+            (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiveDirectionCollisionSeats (N + i + 1)).card ≤
+      3 * ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeSupportExcess (N + i + 1) +
+        2 * ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeLowCostResidualCapacity (N + i + 1)
+'DkMath.NumberTheory.Legendre.block_readable_frontier_iff_support_frontier' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.block_secondCancellation_iff_reducedSupportCharge (s : Finset ℕ) :
+  2 * ∑ n ∈ s, DkMath.NumberTheory.Legendre.paritySafePairOverlapOutsideDepthCollision n +
+          9 * ∑ n ∈ s, (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiberCollisionSeats n).card +
+        3 * ∑ n ∈ s, (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiveDirectionCollisionSeats n).card ≤
+      3 * ∑ n ∈ s, DkMath.NumberTheory.Legendre.paritySafeSupportExcess n +
+        2 * ∑ n ∈ s, DkMath.NumberTheory.Legendre.paritySafeLowCostResidualMassAfterUnused n ↔
+    2 * ∑ n ∈ s, (DkMath.NumberTheory.Legendre.paritySafeTerminalSurvivingFarProductKeys n).card +
+          9 * ∑ n ∈ s, (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiberCollisionSeats n).card +
+        3 * ∑ n ∈ s, (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiveDirectionCollisionSeats n).card ≤
+      ∑ n ∈ s, DkMath.NumberTheory.Legendre.paritySafeSupportExcessOutsideDepthCollision n +
+        3 * ∑ n ∈ s, DkMath.NumberTheory.Legendre.paritySafeDepthCollisionLocalSupportCost n
+'DkMath.NumberTheory.Legendre.block_secondCancellation_iff_reducedSupportCharge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.not_block_fullyCovered_of_localized_capacity_lt_freshBound (N T U : ℕ)
+  (hu :
+    ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafePairOverlapOutsideDepthCollision (N + i + 1) +
+        ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeDepthCollisionLocalSupportCost (N + i + 1) ≤
+      U)
+  (hlt :
+    U <
+      ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.lowerParitySafeCandidates (N + i)).card -
+          DkMath.NumberTheory.Legendre.lowerParitySafeParityPersistenceCap N T -
+        ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.lowerFreshWithoutPersistentSeats (N + i)).card) :
+  ¬∀ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered (N + i + 1)
+'DkMath.NumberTheory.Legendre.not_block_fullyCovered_of_localized_capacity_lt_freshBound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.not_block_fullyCovered_of_incidence_lt_candidate_add_freshBound (N T : ℕ)
+  (hlt :
+    ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeIncidenceCount (N + i + 1) <
+      ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets (N + i + 1)).card +
+        (∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.lowerParitySafeCandidates (N + i)).card -
+            DkMath.NumberTheory.Legendre.lowerParitySafeParityPersistenceCap N T -
+          ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.lowerFreshWithoutPersistentSeats (N + i)).card)) :
+  ¬∀ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered (N + i + 1)
+'DkMath.NumberTheory.Legendre.not_block_fullyCovered_of_incidence_lt_candidate_add_freshBound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_not_block_fullyCovered (N T : ℕ)
+  (hnot : ¬∀ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered (N + i + 1)) :
+  ∃ i ∈ Finset.range T, ∃ p, Nat.Prime p ∧ DkMath.NumberTheory.Legendre.SquareCell (N + i + 1) p
+'DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_not_block_fullyCovered' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.candidate_eq_filter_Icc (n : ℕ) :
+  DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n =
+    {r ∈ Finset.Icc 1 (2 * n) | n.Coprime r ∧ (n ^ 2 + r) % 2 = 1}
+'DkMathTest.LegendreBlockLocalization.candidate_eq_filter_Icc' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_candidate_sum :
+  ∑ i ∈ Finset.range 20, (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets (20 + i + 1)).card = 490
+'DkMathTest.LegendreBlockLocalization.mainBlock_candidate_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_incidence_sum :
+  ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeIncidenceCount (20 + i + 1) = 418
+'DkMathTest.LegendreBlockLocalization.mainBlock_incidence_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_supportExcess_sum :
+  ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeSupportExcess (20 + i + 1) = 106
+'DkMathTest.LegendreBlockLocalization.mainBlock_supportExcess_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_pairOverlap_sum :
+  ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafePrimePairOverlapCount (20 + i + 1) = 137
+'DkMathTest.LegendreBlockLocalization.mainBlock_pairOverlap_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_residualPair_sum :
+  ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeResidualPairMass (20 + i + 1) = 31
+'DkMathTest.LegendreBlockLocalization.mainBlock_residualPair_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_support_card_le_three (i : ℕ) :
+  i ∈ Finset.range 20 →
+    ∀ r ∈ DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets (20 + i + 1),
+      (DkMath.NumberTheory.Legendre.paritySafeActiveSupport (20 + i + 1) r).card ≤ 3
+'DkMathTest.LegendreBlockLocalization.mainBlock_support_card_le_three' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_collision_empty (i : ℕ) (hi : i ∈ Finset.range 20) :
+  DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiberCollisionSeats (20 + i + 1) = ∅
+'DkMathTest.LegendreBlockLocalization.mainBlock_collision_empty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_fifth_empty (i : ℕ) (hi : i ∈ Finset.range 20) :
+  DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiveDirectionCollisionSeats (20 + i + 1) = ∅
+'DkMathTest.LegendreBlockLocalization.mainBlock_fifth_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_collisionSupport_sum :
+  ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeDepthCollisionLocalSupportCost (20 + i + 1) = 0
+'DkMathTest.LegendreBlockLocalization.mainBlock_collisionSupport_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_outsidePair_sum :
+  ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafePairOverlapOutsideDepthCollision (20 + i + 1) = 137
+'DkMathTest.LegendreBlockLocalization.mainBlock_outsidePair_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_outsideSupport_sum :
+  ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeSupportExcessOutsideDepthCollision (20 + i + 1) = 106
+'DkMathTest.LegendreBlockLocalization.mainBlock_outsideSupport_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_localized_38
+  (hfull : ∀ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered (20 + i + 1)) :
+  38 ≤
+    ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeSupportExcessOutsideDepthCollision (20 + i + 1) +
+      ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeDepthCollisionLocalSupportCost (20 + i + 1)
+'DkMathTest.LegendreBlockLocalization.mainBlock_localized_38' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_not_fullyCovered :
+  ¬∀ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered (20 + i + 1)
+'DkMathTest.LegendreBlockLocalization.mainBlock_not_fullyCovered' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_not_fullyCovered_without_freshBound :
+  ¬∀ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered (20 + i + 1)
+'DkMathTest.LegendreBlockLocalization.mainBlock_not_fullyCovered_without_freshBound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_exists_prime_squareCell :
+  ∃ n ∈ Finset.Icc 21 40, ∃ p, Nat.Prime p ∧ DkMath.NumberTheory.Legendre.SquareCell n p
+'DkMathTest.LegendreBlockLocalization.mainBlock_exists_prime_squareCell' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.oddActive_eq_filter_range (n : ℕ) :
+  DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n = {q ∈ Finset.range (n + 1) | Nat.Prime q ∧ ¬q ∣ n ∧ q ≠ 2}
+'DkMathTest.LegendreBlockLocalization.oddActive_eq_filter_range' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.coprimeSeats_eq_filter_Icc (n : ℕ) :
+  DkMath.NumberTheory.Legendre.squareAnchorCoprimeOffsets n = Finset.filter n.Coprime (Finset.Icc 1 (2 * n))
+'DkMathTest.LegendreBlockLocalization.coprimeSeats_eq_filter_Icc' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.nearFirst_eq_finite (n : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeNearFirstPrimes n =
+    {p ∈ {q ∈ Finset.range (n + 1) | Nat.Prime q ∧ ¬q ∣ n ∧ q ≠ 2} | p ^ 3 < n ^ 2 + 2 * n ∧ p ^ 3 < 2 * n}
+'DkMathTest.LegendreBlockLocalization.nearFirst_eq_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreBlockLocalization.nearPairs_eq_finite (n p : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeNearPrimePairsAtFirst n p =
+    {qs ∈
+        {q ∈ Finset.range (n + 1) | Nat.Prime q ∧ ¬q ∣ n ∧ q ≠ 2}.product
+          ({q ∈ Finset.range (n + 1) | Nat.Prime q ∧ ¬q ∣ n ∧ q ≠ 2}) |
+      p < qs.1 ∧ qs.1 < qs.2 ∧ p * qs.1 * qs.2 ≤ 2 * n}
+'DkMathTest.LegendreBlockLocalization.nearPairs_eq_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_nearPairs_empty (i : ℕ) :
+  i ∈ Finset.range 20 →
+    ∀ p ∈ DkMath.NumberTheory.Legendre.paritySafeNearFirstPrimes (20 + i + 1),
+      DkMath.NumberTheory.Legendre.paritySafeNearPrimePairsAtFirst (20 + i + 1) p = ∅
+'DkMathTest.LegendreBlockLocalization.mainBlock_nearPairs_empty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_nearBudget_sum :
+  ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeNearFirstPrimeWaveBudget (20 + i + 1) = 0
+'DkMathTest.LegendreBlockLocalization.mainBlock_nearBudget_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.depthBudget_eq_finite (n : ℕ) :
+  DkMath.NumberTheory.Legendre.squareAnchorCoprimePrimeSquareDepthBudget n =
+    ∑ p ∈ Finset.range (n + 1) with Nat.Prime p ∧ ¬p ∣ n,
+      {r ∈ Finset.filter n.Coprime (Finset.Icc 1 (2 * n)) | p ^ 2 ∣ n ^ 2 + r}.card
+'DkMathTest.LegendreBlockLocalization.depthBudget_eq_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_depthBudget_sum :
+  ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.squareAnchorCoprimePrimeSquareDepthBudget (20 + i + 1) = 209
+'DkMathTest.LegendreBlockLocalization.mainBlock_depthBudget_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.fourthCapacity_eq_finite (n : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeFourthGateDualBasePairs n =
+    {bt ∈
+        {bt ∈ {t ∈ Finset.Icc 1 n | (2 * n).Coprime t}.product ({t ∈ Finset.Icc 1 n | (2 * n).Coprime t}) |
+          n < bt.1 * bt.2} |
+      let k := n ^ 2 / (bt.1 * bt.2) + 1;
+      have s := if k % 2 = 1 then k else k + 1;
+      Nat.Prime s ∧
+        s ≤ n ∧
+          ¬s ∣ n ∧
+            s ≠ 2 ∧
+              n ^ 2 < bt.1 * bt.2 * s ∧
+                bt.1 * bt.2 * s ≤ n ^ 2 + 2 * n ∧
+                  2 * n < bt.1 * s ∧
+                    ∃ p ∈ {p ∈ Finset.range (n + 1) | Nat.Prime p ∧ ¬p ∣ n ∧ p ≠ 2},
+                      ∃ q ∈ {q ∈ Finset.range (n + 1) | Nat.Prime q ∧ ¬q ∣ n ∧ q ≠ 2},
+                        p < q ∧
+                          p * q = bt.1 ∧
+                            q < s ∧
+                              p ^ 3 < n ^ 2 + 2 * n ∧
+                                p ^ 4 < n ^ 2 + 2 * n ∧
+                                  ∀ a ∈ {a ∈ Finset.range (n + 1) | Nat.Prime a ∧ ¬a ∣ n ∧ a ≠ 2}, a < p → ¬a ∣ bt.2}
+'DkMathTest.LegendreBlockLocalization.fourthCapacity_eq_finite' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_fourthCapacity_sum :
+  ∑ i ∈ Finset.range 20, (DkMath.NumberTheory.Legendre.paritySafeFourthGateDualBasePairs (20 + i + 1)).card = 14
+'DkMathTest.LegendreBlockLocalization.mainBlock_fourthCapacity_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_lowCostCapacity_sum :
+  ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeLowCostResidualCapacity (20 + i + 1) = 223
+'DkMathTest.LegendreBlockLocalization.mainBlock_lowCostCapacity_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_collision_terms :
+  ∑ i ∈ Finset.range 20,
+        (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiberCollisionSeats (20 + i + 1)).card =
+      0 ∧
+    ∑ i ∈ Finset.range 20,
+          (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiveDirectionCollisionSeats (20 + i + 1)).card =
+        0 ∧
+      ∑ i ∈ Finset.range 20,
+          DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthResidualPairCapacityExcess (20 + i + 1) =
+        0
+'DkMathTest.LegendreBlockLocalization.mainBlock_collision_terms' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_support_frontier_slack :
+  3 * ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeSupportExcess (20 + i + 1) +
+      2 * ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeLowCostResidualCapacity (20 + i + 1) =
+    2 * ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafePairOverlapOutsideDepthCollision (20 + i + 1) +
+          11 *
+            ∑ i ∈ Finset.range 20,
+              (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiberCollisionSeats (20 + i + 1)).card +
+        2 *
+          ∑ i ∈ Finset.range 20,
+            (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiveDirectionCollisionSeats (20 + i + 1)).card +
+      490
+'DkMathTest.LegendreBlockLocalization.mainBlock_support_frontier_slack' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_fullCover_frontier_deficit :
+  2 * ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafePairOverlapOutsideDepthCollision (20 + i + 1) +
+          11 *
+            ∑ i ∈ Finset.range 20,
+              (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiberCollisionSeats (20 + i + 1)).card +
+        2 *
+          ∑ i ∈ Finset.range 20,
+            (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiveDirectionCollisionSeats (20 + i + 1)).card +
+      3 * ∑ i ∈ Finset.range 20, (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets (20 + i + 1)).card =
+    3 * ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeIncidenceCount (20 + i + 1) +
+        2 * ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeLowCostResidualCapacity (20 + i + 1) +
+      44
+'DkMathTest.LegendreBlockLocalization.mainBlock_fullCover_frontier_deficit' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_not_fullyCovered_from_readable_frontier :
+  ¬∀ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered (20 + i + 1)
+'DkMathTest.LegendreBlockLocalization.mainBlock_not_fullyCovered_from_readable_frontier' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_uncovered_sum :
+  ∑ i ∈ Finset.range 20, (DkMath.NumberTheory.Legendre.paritySafeUncoveredCandidates (20 + i + 1)).card = 178
+'DkMathTest.LegendreBlockLocalization.mainBlock_uncovered_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_excess_not_bounded_by_collisionCost :
+  ¬∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeSupportExcess (20 + i + 1) ≤
+      ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeDepthCollisionLocalSupportCost (20 + i + 1)
+'DkMathTest.LegendreBlockLocalization.mainBlock_excess_not_bounded_by_collisionCost' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.fresh_charge_without_collision :
+  DkMath.NumberTheory.Legendre.lowerFreshSupportExcessCharge 12 6 = 1 ∧
+    6 ∉ DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiberCollisionSeats 13
+'DkMathTest.LegendreBlockLocalization.fresh_charge_without_collision' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.lower_bound_substitution_false : 38 ≤ 40 ∧ 2 * 60 ≤ 3 * 40 ∧ ¬2 * 60 ≤ 3 * 38
+'DkMathTest.LegendreBlockLocalization.lower_bound_substitution_false' does not depend on any axioms
+DkMathTest.LegendreBlockLocalization.terminalKeys_eq_finite (n : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeTerminalSurvivingFarProductKeys n =
+    have active := {p ∈ Finset.range (n + 1) | Nat.Prime p ∧ ¬p ∣ n ∧ p ≠ 2};
+    {key ∈ {p ∈ active | p ^ 3 < n ^ 2 + 2 * n}.product (active.product active) |
+      have m := key.1 * key.2.1 * key.2.2;
+      have t := n ^ 2 / m + 1;
+      key.1 < key.2.1 ∧
+        key.2.1 < key.2.2 ∧
+          2 * n < m ∧
+            m * t ≤ n ^ 2 + 2 * n ∧
+              (2 * n).Coprime t ∧
+                (∀ a ∈ {a ∈ Finset.range (n + 1) | Nat.Prime a ∧ ¬a ∣ n ∧ a ≠ 2}, a < key.1 → ¬a ∣ t) ∧ t = 1}
+'DkMathTest.LegendreBlockLocalization.terminalKeys_eq_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_terminalKeys_sum :
+  ∑ i ∈ Finset.range 20, (DkMath.NumberTheory.Legendre.paritySafeTerminalSurvivingFarProductKeys (20 + i + 1)).card = 17
+'DkMathTest.LegendreBlockLocalization.mainBlock_terminalKeys_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_lowCostAfterUnused_sum :
+  ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeLowCostResidualMassAfterUnused (20 + i + 1) = 14
+'DkMathTest.LegendreBlockLocalization.mainBlock_lowCostAfterUnused_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreBlockLocalization.mainBlock_secondCancellation_slack :
+  ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeSupportExcessOutsideDepthCollision (20 + i + 1) +
+      3 * ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeDepthCollisionLocalSupportCost (20 + i + 1) =
+    2 *
+            ∑ i ∈ Finset.range 20,
+              (DkMath.NumberTheory.Legendre.paritySafeTerminalSurvivingFarProductKeys (20 + i + 1)).card +
+          9 *
+            ∑ i ∈ Finset.range 20,
+              (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiberCollisionSeats (20 + i + 1)).card +
+        3 *
+          ∑ i ∈ Finset.range 20,
+            (DkMath.NumberTheory.Legendre.paritySafeRechargeExactDepthFiveDirectionCollisionSeats (20 + i + 1)).card +
+      72
+'DkMathTest.LegendreBlockLocalization.mainBlock_secondCancellation_slack' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

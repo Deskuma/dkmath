@@ -1,0 +1,3 @@
+git diff --check: exit0; no diagnostics
+New-file whitespace checks: 18 files; no diagnostics (exit1 is normal for a new-content diff)
+All relative links in the four new006 Markdown documents resolve

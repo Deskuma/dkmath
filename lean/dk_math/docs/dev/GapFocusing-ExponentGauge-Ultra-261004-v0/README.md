@@ -131,3 +131,9 @@ All three outcomes are useful.
 [Report 005](report-005.md) — Outcome A in the finite support-excess case. Candidate parity doubles the fixed-seat prime-address period to 2q and strictly lowers the main-block temporal cap from 169 to 97. Exact fresh/first-slot cost accounting forces at least 38 units of existing support excess, under the existing simultaneous full-cover hypothesis, and adds +38 to the existing summed candidate/incidence necessary balance. Residual/collision recipient localization and a global full-cover contradiction remain unproved.
 
 [Source inventory](source-inventory-005.md) · [Findings](findings-005.md) · [Validation](validation-005.md).
+
+## Instruction 006 checkpoint
+
+[Report 006](report-006.md) — Outcome C for the new cancellation question. The checked38 is localized exactly into existing outside support and collision support, but supplies no new obstruction after incidence elimination. The actual main block is refuted and a prime in a square cell with n in21..40 is extracted; the same refutation follows from the mature ledger without38. Exact support-only slack is490, and the strongest second-cancellation support-charge slack is72. Generic block localization and independent-upper-capacity contradiction consumers are exported by the facade.
+
+[Source inventory](source-inventory-006.md) · [Findings](findings-006.md) · [Validation](validation-006.md).

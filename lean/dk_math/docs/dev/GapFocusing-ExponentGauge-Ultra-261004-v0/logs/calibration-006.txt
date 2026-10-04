@@ -1,0 +1,32 @@
+DkMathTest/NumberTheory/LegendreBlockLocalization.lean:155:41: warning: This simp argument is unused:
+  Nat.lt_succ_iff
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [mem_squareAnchorOddActivePrimes, and_left_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+DkMathTest/NumberTheory/LegendreBlockLocalization.lean:161:2: error: No goals to be solved
+DkMathTest/NumberTheory/LegendreBlockLocalization.lean:248:11: error: Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  (n ^ 2).add (2 * n) = (p ^ 4).succ
+at case `Nat.le.refl`
+DkMathTest/NumberTheory/LegendreBlockLocalization.lean:253:13: error: Tactic `rcases` failed: `left✝ : Quot.lift (fun l => (b, t) ∈ l) ⋯
+  ({t ∈ Finset.Icc 1 n | (2 * n).Coprime t}.product
+      ({t ∈ Finset.Icc 1 n | (2 * n).Coprime t})).val` is not an inductive datatype
+DkMathTest/NumberTheory/LegendreBlockLocalization.lean:243:57: warning: This simp argument is unused:
+  Finset.mem_product
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [mem_paritySafeFourthGateDualBasePairs, mem_paritySafeRechargePrimeAdmissibleDualBasePairs,
+    mem_paritySafeRechargeOverAnchorDualBasePairs, paritySafeFarCofactorBaseOffsets, Finset.mem_filter, hs,
+    ParitySafeRechargeExactPairWitness, mem_paritySafeTripleGatePrimes, mem_paritySafeFourDirectionGatePrimes,
+    squareBody, oddActive_eq_filter_range]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+DkMathTest/NumberTheory/LegendreBlockLocalization.lean:246:13: warning: This simp argument is unused:
+  Finset.mem_filter
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Finset.mem_range, Nat.lt_succ_iff]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

@@ -1,0 +1,3 @@
+DkMath/NumberTheory/Legendre/ParitySafeBlockLocalization.lean: 0 forbidden token matches
+DkMath/NumberTheory/Legendre.lean: 0 forbidden token matches
+DkMathTest/NumberTheory/LegendreBlockLocalization.lean: 0 forbidden token matches

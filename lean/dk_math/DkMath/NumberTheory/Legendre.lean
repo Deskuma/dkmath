@@ -63,6 +63,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeActualFiberCancellation
 import DkMath.NumberTheory.Legendre.ParitySafeCollisionResidualPairSlackIncidence
 import DkMath.NumberTheory.Legendre.ParitySafeUnusedResidualPairRouting
 import DkMath.NumberTheory.Legendre.ParitySafeSecondCancellationRedundancyAudit
+import DkMath.NumberTheory.Legendre.ParitySafeBlockLocalization
 import DkMath.NumberTheory.Legendre.PrimorialWheelBridge
 import DkMath.NumberTheory.Legendre.PrimorialWheelSuccessor
 import DkMath.NumberTheory.Legendre.PrimorialWheelSuccessorEscape
