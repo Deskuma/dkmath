@@ -1,0 +1,17 @@
+Instruction 003 source and dependency coverage audit
+cwd: lean/dk_math
+DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean: 8 named declarations; all dependency lists standard-only or empty
+DkMath/NumberTheory/GapFocusing/PrimeOrder.lean: 13 named declarations; all dependency lists standard-only or empty
+DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean: 17 named declarations; all dependency lists standard-only or empty
+DkMath/NumberTheory/GapFocusing/CyclotomicBoundary.lean: 7 named declarations; all dependency lists standard-only or empty
+DkMath/NumberTheory/GapFocusing/LayerValuation.lean: 8 named declarations; all dependency lists standard-only or empty
+production total: 53
+DkMathTest/NumberTheory/CyclotomicAddress.lean: 5 named declarations; all dependency lists standard-only or empty
+DkMathTest/NumberTheory/GapFocusingPrimeOrder.lean: 8 named declarations; all dependency lists standard-only or empty
+DkMathTest/NumberTheory/GapFocusingHomogeneousAddress.lean: 8 named declarations; all dependency lists standard-only or empty
+DkMathTest/NumberTheory/GapFocusingLayerValuation.lean: 8 named declarations; all dependency lists standard-only or empty
+DkMathTest/NumberTheory/GapFocusingAddressAxiomAudit.lean: 0 named declarations; all dependency lists standard-only or empty
+regression total: 29
+Forbidden-token scan: all 10 new Lean files; zero matches
+Anonymous examples compiled: 1
+Three existing Zsigmondy existence endpoints re-audited; all standard-only
