@@ -1,0 +1,19 @@
+def Nat.primeFactors : ℕ → Finset ℕ :=
+fun n => n.primeFactorsList.toFinset
+@[irreducible] def Nat.primeFactorsList : ℕ → List ℕ :=
+WellFounded.Nat.fix (fun x => x) fun a a_1 =>
+  (match (motive := (x : ℕ) → ((y : ℕ) → InvImage (fun x1 x2 => x1 < x2) (fun x => x) y x → List ℕ) → List ℕ) a with
+    | 0 => fun x => []
+    | 1 => fun x => []
+    | k.succ.succ => fun x =>
+      let m := (k + 2).minFac;
+      m :: x ((k + 2) / m) ⋯)
+    a_1
+{ val := Quot.mk List.Perm [3, 7], nodup := ⋯ }
+[3, 7]
+4
+3
+3
+3
+def DkMath.NumberTheory.Legendre.paritySafeOddMultipleFloorDelta : ℕ → ℕ → ℕ → ℕ :=
+fun A B d => B / d - A / d - (B / (2 * d) - A / (2 * d))

@@ -1,0 +1,1 @@
+PASS: git diff --check and 20 new-file whitespace checks.

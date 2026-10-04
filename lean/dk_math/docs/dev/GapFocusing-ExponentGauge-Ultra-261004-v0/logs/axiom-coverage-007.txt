@@ -1,0 +1,2 @@
+PASS: source-derived declarations 48/48; production 22, regression 26.
+PASS: every dependency set uses only propext, Classical.choice, Quot.sound.

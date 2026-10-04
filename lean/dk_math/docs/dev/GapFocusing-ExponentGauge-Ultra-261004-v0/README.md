@@ -137,3 +137,9 @@ All three outcomes are useful.
 [Report 006](report-006.md) — Outcome C for the new cancellation question. The checked38 is localized exactly into existing outside support and collision support, but supplies no new obstruction after incidence elimination. The actual main block is refuted and a prime in a square cell with n in21..40 is extracted; the same refutation follows from the mature ledger without38. Exact support-only slack is490, and the strongest second-cancellation support-charge slack is72. Generic block localization and independent-upper-capacity contradiction consumers are exported by the facade.
 
 [Source inventory](source-inventory-006.md) · [Findings](findings-006.md) · [Validation](validation-006.md).
+
+## Instruction 007 checkpoint
+
+[Report 007](report-007.md) — Outcome A for explicit block width shrinking. A full-cover-independent wave cap combines2q packing, exact odd quotient endpoints and the best single odd-anchor-prime exclusion. The N=20,T=20 cap425 supplies an unconditional uncovered lower bound65 without exact I=418. All prescribed widths down to1 succeed at N=20; shell21 has at least5 uncovered candidates and a square-cell prime. No uniform-in-N result is proved. Two-divisor exclusion and local independent excess certificates are proposed as the next development.
+
+[Source inventory](source-inventory-007.md) · [Findings](findings-007.md) · [Validation](validation-007.md).
