@@ -143,3 +143,9 @@ All three outcomes are useful.
 [Report 007](report-007.md) — Outcome A for explicit block width shrinking. A full-cover-independent wave cap combines2q packing, exact odd quotient endpoints and the best single odd-anchor-prime exclusion. The N=20,T=20 cap425 supplies an unconditional uncovered lower bound65 without exact I=418. All prescribed widths down to1 succeed at N=20; shell21 has at least5 uncovered candidates and a square-cell prime. No uniform-in-N result is proved. Two-divisor exclusion and local independent excess certificates are proposed as the next development.
 
 [Source inventory](source-inventory-007.md) · [Findings](findings-007.md) · [Validation](validation-007.md).
+
+## Instruction 008 checkpoint
+
+[Report 008](report-008.md) — Outcome A for the hybrid provider. A Nat-safe two-prime inclusion-exclusion cap proves I<=B2<=B and lowers the main cap425 to418. Finite support witnesses at shell29 seats14,56 prove excess>=4, uncovered>=1 and a prime in(841,900), without evaluating whole-shell incidence/excess. With a two-seat/three-prime certificate budget, shells2..100 partition into59 zero-excess successes,10 certificate successes and30 unresolved. The new cap gains77,85,95 under that same budget. A general theorem fixes the limit B2=B on anchors2^a*p^k; no uniform prime-existence provider is proved. Next proposals target certificates whose charge scales with the remaining deficit.
+
+[Source inventory](source-inventory-008.md) · [Findings](findings-008.md) · [Validation](validation-008.md).

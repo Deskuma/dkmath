@@ -1,0 +1,461 @@
+DkMath.NumberTheory.card_le_sub_two_exclusions.{u_1} {α : Type u_1} [DecidableEq α] {C S D E : Finset α} (hD : D ⊆ S)
+  (hE : E ⊆ S) (hC : C ⊆ S \ (D ∪ E)) : C.card ≤ S.card + (D ∩ E).card - (D.card + E.card)
+'DkMath.NumberTheory.card_le_sub_two_exclusions' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeOddQuotientUpper (n q : ℕ) : ℕ
+'DkMath.NumberTheory.Legendre.paritySafeOddQuotientUpper' depends on axioms: [propext]
+DkMath.NumberTheory.Legendre.paritySafeDivisorWaveUpper (n q d : ℕ) : ℕ
+'DkMath.NumberTheory.Legendre.paritySafeDivisorWaveUpper' depends on axioms: [propext]
+DkMath.NumberTheory.Legendre.paritySafeQuotientWaveUpper (n q : ℕ) : ℕ
+'DkMath.NumberTheory.Legendre.paritySafeQuotientWaveUpper' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeWaveUpper (n q : ℕ) : ℕ
+'DkMath.NumberTheory.Legendre.paritySafeWaveUpper' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeIncidenceUpper (n : ℕ) : ℕ
+'DkMath.NumberTheory.Legendre.paritySafeIncidenceUpper' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeActiveWave_card_le_spacing {n q : ℕ}
+  (hq : q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n) :
+  (DkMath.NumberTheory.Legendre.paritySafeActiveWaveOffsets n q).card ≤
+    DkMath.NumberTheory.Legendre.shellFrequencyCap (2 * q) (2 * n)
+'DkMath.NumberTheory.Legendre.paritySafeActiveWave_card_le_spacing' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeReducedQuotient_card_le_oddUpper {n q : ℕ} (hqpos : 0 < q) :
+  (DkMath.NumberTheory.Legendre.paritySafeReducedQuotientInterval n q).card ≤
+    DkMath.NumberTheory.Legendre.paritySafeOddQuotientUpper n q
+'DkMath.NumberTheory.Legendre.paritySafeReducedQuotient_card_le_oddUpper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeReducedQuotient_card_le_divisorUpper {n q d : ℕ} (hqpos : 0 < q)
+  (hd : Nat.Prime d) (hd2 : d ≠ 2) (hdn : d ∣ n) :
+  (DkMath.NumberTheory.Legendre.paritySafeReducedQuotientInterval n q).card ≤
+    DkMath.NumberTheory.Legendre.paritySafeDivisorWaveUpper n q d
+'DkMath.NumberTheory.Legendre.paritySafeReducedQuotient_card_le_divisorUpper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeReducedQuotient_card_le_quotientUpper {n q : ℕ} (hqpos : 0 < q) :
+  (DkMath.NumberTheory.Legendre.paritySafeReducedQuotientInterval n q).card ≤
+    DkMath.NumberTheory.Legendre.paritySafeQuotientWaveUpper n q
+'DkMath.NumberTheory.Legendre.paritySafeReducedQuotient_card_le_quotientUpper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeActiveWave_card_le_waveUpper {n q : ℕ}
+  (hq : q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n) :
+  (DkMath.NumberTheory.Legendre.paritySafeActiveWaveOffsets n q).card ≤
+    DkMath.NumberTheory.Legendre.paritySafeWaveUpper n q
+'DkMath.NumberTheory.Legendre.paritySafeActiveWave_card_le_waveUpper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeWaveUpper_le_oddUpper (n q : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeWaveUpper n q ≤ DkMath.NumberTheory.Legendre.paritySafeOddQuotientUpper n q
+'DkMath.NumberTheory.Legendre.paritySafeWaveUpper_le_oddUpper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeIncidenceCount_le_upper (n : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeIncidenceCount n ≤ DkMath.NumberTheory.Legendre.paritySafeIncidenceUpper n
+'DkMath.NumberTheory.Legendre.paritySafeIncidenceCount_le_upper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafePairDivisorWaveUpper (n q d e : ℕ) : ℕ
+'DkMath.NumberTheory.Legendre.paritySafePairDivisorWaveUpper' depends on axioms: [propext]
+DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper (n q : ℕ) : ℕ
+'DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper (n : ℕ) : ℕ
+'DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeReducedQuotient_card_le_pairDivisorUpper {n q d e : ℕ} (hqpos : 0 < q)
+  (hd : Nat.Prime d) (he : Nat.Prime e) (hd2 : d ≠ 2) (he2 : e ≠ 2) (hde : d ≠ e) (hdn : d ∣ n) (hen : e ∣ n) :
+  (DkMath.NumberTheory.Legendre.paritySafeReducedQuotientInterval n q).card ≤
+    DkMath.NumberTheory.Legendre.paritySafePairDivisorWaveUpper n q d e
+'DkMath.NumberTheory.Legendre.paritySafeReducedQuotient_card_le_pairDivisorUpper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeActiveWave_card_le_twoPrimeWaveUpper {n q : ℕ}
+  (hq : q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n) :
+  (DkMath.NumberTheory.Legendre.paritySafeActiveWaveOffsets n q).card ≤
+    DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper n q
+'DkMath.NumberTheory.Legendre.paritySafeActiveWave_card_le_twoPrimeWaveUpper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper_le_waveUpper (n q : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper n q ≤ DkMath.NumberTheory.Legendre.paritySafeWaveUpper n q
+'DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper_le_waveUpper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeIncidenceCount_le_twoPrimeUpper (n : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeIncidenceCount n ≤
+    DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper n
+'DkMath.NumberTheory.Legendre.paritySafeIncidenceCount_le_twoPrimeUpper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper_le_upper (n : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper n ≤
+    DkMath.NumberTheory.Legendre.paritySafeIncidenceUpper n
+'DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper_le_upper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper_eq_waveUpper_of_card_le_one {n : ℕ}
+  (hcard : (n.primeFactors.erase 2).card ≤ 1) (q : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper n q = DkMath.NumberTheory.Legendre.paritySafeWaveUpper n q
+'DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper_eq_waveUpper_of_card_le_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper_eq_upper_of_card_le_one {n : ℕ}
+  (hcard : (n.primeFactors.erase 2).card ≤ 1) :
+  DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper n =
+    DkMath.NumberTheory.Legendre.paritySafeIncidenceUpper n
+'DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper_eq_upper_of_card_le_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper_eq_upper_two_pow_mul_prime_pow {p : ℕ} (hp : Nat.Prime p)
+  (a k : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper (2 ^ a * p ^ k) =
+    DkMath.NumberTheory.Legendre.paritySafeIncidenceUpper (2 ^ a * p ^ k)
+'DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper_eq_upper_two_pow_mul_prime_pow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeActiveSupport_subset_pointPrimeFactors {n r : ℕ}
+  (hr : r ∈ DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n) :
+  DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r ⊆ (n ^ 2 + r).primeFactors
+'DkMath.NumberTheory.Legendre.paritySafeActiveSupport_subset_pointPrimeFactors' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeIncidenceCount_le_pointPrimeFactors_sum (n : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeIncidenceCount n ≤
+    ∑ r ∈ DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n, (n ^ 2 + r).primeFactors.card
+'DkMath.NumberTheory.Legendre.paritySafeIncidenceCount_le_pointPrimeFactors_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.block_candidateSupportSum_eq_reducedQuotientSum (N T : ℕ) :
+  ∑ i ∈ Finset.range T,
+      ∑ r ∈ DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets (N + i + 1),
+        (DkMath.NumberTheory.Legendre.paritySafeActiveSupport (N + i + 1) r).card =
+    ∑ i ∈ Finset.range T,
+      ∑ q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes (N + i + 1),
+        (DkMath.NumberTheory.Legendre.paritySafeReducedQuotientInterval (N + i + 1) q).card
+'DkMath.NumberTheory.Legendre.block_candidateSupportSum_eq_reducedQuotientSum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.block_incidenceCount_le_upper (N T : ℕ) :
+  ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeIncidenceCount (N + i + 1) ≤
+    ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeIncidenceUpper (N + i + 1)
+'DkMath.NumberTheory.Legendre.block_incidenceCount_le_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.not_block_fullyCovered_of_upper_lt_candidate_add_freshBound (N T : ℕ)
+  (hlt :
+    ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeIncidenceUpper (N + i + 1) <
+      ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets (N + i + 1)).card +
+        (∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.lowerParitySafeCandidates (N + i)).card -
+            DkMath.NumberTheory.Legendre.lowerParitySafeParityPersistenceCap N T -
+          ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.lowerFreshWithoutPersistentSeats (N + i)).card)) :
+  ¬∀ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered (N + i + 1)
+'DkMath.NumberTheory.Legendre.not_block_fullyCovered_of_upper_lt_candidate_add_freshBound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeUncovered_card_ge_candidate_add_excess_sub_upper (n e : ℕ)
+  (he : e ≤ DkMath.NumberTheory.Legendre.paritySafeSupportExcess n) :
+  (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n).card + e -
+      DkMath.NumberTheory.Legendre.paritySafeIncidenceUpper n ≤
+    (DkMath.NumberTheory.Legendre.paritySafeUncoveredCandidates n).card
+'DkMath.NumberTheory.Legendre.paritySafeUncovered_card_ge_candidate_add_excess_sub_upper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.block_uncovered_ge_candidate_add_excess_sub_upper (N T e : ℕ)
+  (he : e ≤ ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeSupportExcess (N + i + 1)) :
+  ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets (N + i + 1)).card + e -
+      ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeIncidenceUpper (N + i + 1) ≤
+    ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.paritySafeUncoveredCandidates (N + i + 1)).card
+'DkMath.NumberTheory.Legendre.block_uncovered_ge_candidate_add_excess_sub_upper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_candidate_add_excess_gt_upper {n e : ℕ} (hn : 0 < n)
+  (he : e ≤ DkMath.NumberTheory.Legendre.paritySafeSupportExcess n)
+  (hlt :
+    DkMath.NumberTheory.Legendre.paritySafeIncidenceUpper n <
+      (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n).card + e) :
+  ∃ p, Nat.Prime p ∧ DkMath.NumberTheory.Legendre.SquareCell n p
+'DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_candidate_add_excess_gt_upper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_block_candidate_add_excess_gt_upper (N T e : ℕ)
+  (he : e ≤ ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeSupportExcess (N + i + 1))
+  (hlt :
+    ∑ i ∈ Finset.range T, DkMath.NumberTheory.Legendre.paritySafeIncidenceUpper (N + i + 1) <
+      ∑ i ∈ Finset.range T, (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets (N + i + 1)).card + e) :
+  ∃ i ∈ Finset.range T, ∃ p, Nat.Prime p ∧ DkMath.NumberTheory.Legendre.SquareCell (N + i + 1) p
+'DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_block_candidate_add_excess_gt_upper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.local_support_excess_ge_of_card_ge {n r k : ℕ}
+  (hcard : k + 1 ≤ (DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r).card) :
+  k ≤ (DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r).card - 1
+'DkMath.NumberTheory.Legendre.local_support_excess_ge_of_card_ge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.sum_local_cost_le_supportExcess {n : ℕ} (R : Finset ℕ) (cost : ℕ → ℕ)
+  (hR : R ⊆ DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n)
+  (hcost : ∀ r ∈ R, cost r ≤ (DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r).card - 1) :
+  ∑ r ∈ R, cost r ≤ DkMath.NumberTheory.Legendre.paritySafeSupportExcess n
+'DkMath.NumberTheory.Legendre.sum_local_cost_le_supportExcess' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.sum_witness_support_excess_le_supportExcess {n : ℕ} (R : Finset ℕ) (witness : ℕ → Finset ℕ)
+  (hR : R ⊆ DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n)
+  (hw : ∀ r ∈ R, witness r ⊆ DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r) :
+  ∑ r ∈ R, ((witness r).card - 1) ≤ DkMath.NumberTheory.Legendre.paritySafeSupportExcess n
+'DkMath.NumberTheory.Legendre.sum_witness_support_excess_le_supportExcess' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.two_seat_support_card_lower_le_supportExcess {n r s k l : ℕ}
+  (hr : r ∈ DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n)
+  (hs : s ∈ DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n) (hne : r ≠ s)
+  (hkr : k + 1 ≤ (DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r).card)
+  (hls : l + 1 ≤ (DkMath.NumberTheory.Legendre.paritySafeActiveSupport n s).card) :
+  k + l ≤ DkMath.NumberTheory.Legendre.paritySafeSupportExcess n
+'DkMath.NumberTheory.Legendre.two_seat_support_card_lower_le_supportExcess' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeUncovered_card_ge_candidate_add_excess_sub_twoPrimeUpper (n e : ℕ)
+  (he : e ≤ DkMath.NumberTheory.Legendre.paritySafeSupportExcess n) :
+  (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n).card + e -
+      DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper n ≤
+    (DkMath.NumberTheory.Legendre.paritySafeUncoveredCandidates n).card
+'DkMath.NumberTheory.Legendre.paritySafeUncovered_card_ge_candidate_add_excess_sub_twoPrimeUpper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeUncovered_nonempty_of_twoPrimeUpper_lt_candidate_add_excess {n e : ℕ}
+  (he : e ≤ DkMath.NumberTheory.Legendre.paritySafeSupportExcess n)
+  (hlt :
+    DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper n <
+      (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n).card + e) :
+  (DkMath.NumberTheory.Legendre.paritySafeUncoveredCandidates n).Nonempty
+'DkMath.NumberTheory.Legendre.paritySafeUncovered_nonempty_of_twoPrimeUpper_lt_candidate_add_excess' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.paritySafeUncovered_nonempty_of_local_witnesses {n : ℕ} (R : Finset ℕ)
+  (witness : ℕ → Finset ℕ) (hR : R ⊆ DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n)
+  (hw : ∀ r ∈ R, witness r ⊆ DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r)
+  (hlt :
+    DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper n <
+      (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n).card + ∑ r ∈ R, ((witness r).card - 1)) :
+  (DkMath.NumberTheory.Legendre.paritySafeUncoveredCandidates n).Nonempty
+'DkMath.NumberTheory.Legendre.paritySafeUncovered_nonempty_of_local_witnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_local_witnesses {n : ℕ} (hn : 0 < n) (R : Finset ℕ)
+  (witness : ℕ → Finset ℕ) (hR : R ⊆ DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n)
+  (hw : ∀ r ∈ R, witness r ⊆ DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r)
+  (hlt :
+    DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper n <
+      (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n).card + ∑ r ∈ R, ((witness r).card - 1)) :
+  ∃ p, Nat.Prime p ∧ DkMath.NumberTheory.Legendre.SquareCell n p
+'DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_local_witnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridProvider.twoPrimeUpper_eq_finite (n : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper n =
+    ∑ q ∈ Finset.range (n + 1) with Nat.Prime q ∧ ¬q ∣ n ∧ q ≠ 2,
+      DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper n q
+'DkMathTest.LegendreHybridProvider.twoPrimeUpper_eq_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreHybridProvider.mainBlock_pair_upper :
+  ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper (20 + i + 1) = 418
+'DkMathTest.LegendreHybridProvider.mainBlock_pair_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreHybridProvider.mainBlock_pair_upper_strict_gain :
+  ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper (20 + i + 1) <
+    ∑ i ∈ Finset.range 20, DkMath.NumberTheory.Legendre.paritySafeIncidenceUpper (20 + i + 1)
+'DkMathTest.LegendreHybridProvider.mainBlock_pair_upper_strict_gain' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridProvider.shell21_pair_upper_strict_gain :
+  DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper 21 = 6 ∧
+    DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper 21 <
+      DkMath.NumberTheory.Legendre.paritySafeIncidenceUpper 21
+'DkMathTest.LegendreHybridProvider.shell21_pair_upper_strict_gain' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridProvider.six_residual_waves_pair_corrected (t : ℕ × ℕ × ℕ × ℕ) :
+  t ∈ DkMathTest.LegendreIncidenceUpper.residualWaveCalibration →
+    DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper t.1 t.2.1 = t.2.2.2
+'DkMathTest.LegendreHybridProvider.six_residual_waves_pair_corrected' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridProvider.six_residual_waves_pair_exact_diagnostic (t : ℕ × ℕ × ℕ × ℕ) :
+  t ∈ DkMathTest.LegendreIncidenceUpper.residualWaveCalibration →
+    DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper t.1 t.2.1 =
+      (DkMath.NumberTheory.Legendre.paritySafeActiveWaveOffsets t.1 t.2.1).card
+'DkMathTest.LegendreHybridProvider.six_residual_waves_pair_exact_diagnostic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridProvider.incomplete_pair_exclusion_not_exact :
+  DkMath.NumberTheory.Legendre.paritySafePairDivisorWaveUpper 105 19 3 5 = 4 ∧
+    (DkMath.NumberTheory.Legendre.paritySafeActiveWaveOffsets 105 19).card = 3
+'DkMathTest.LegendreHybridProvider.incomplete_pair_exclusion_not_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridProvider.missing_intersection_credit_not_upper :
+  DkMath.NumberTheory.Legendre.paritySafeOddQuotientUpper 30 7 -
+        (DkMath.NumberTheory.Legendre.paritySafeOddMultipleFloorDelta (30 ^ 2 / 7) ((30 ^ 2 + 2 * 30) / 7) 3 +
+          DkMath.NumberTheory.Legendre.paritySafeOddMultipleFloorDelta (30 ^ 2 / 7) ((30 ^ 2 + 2 * 30) / 7) 5) =
+      2 ∧
+    DkMath.NumberTheory.Legendre.paritySafePairDivisorWaveUpper 30 7 3 5 = 3 ∧
+      (DkMath.NumberTheory.Legendre.paritySafeActiveWaveOffsets 30 7).card = 3
+'DkMathTest.LegendreHybridProvider.missing_intersection_credit_not_upper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridProvider.shell29_point_factorizations :
+  29 ^ 2 + 14 = 3 ^ 2 * 5 * 19 ∧ 29 ^ 2 + 56 = 3 * 13 * 23
+'DkMathTest.LegendreHybridProvider.shell29_point_factorizations' depends on axioms: [propext]
+DkMathTest.LegendreHybridProvider.shell29_candidate_seats :
+  14 ∈ DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets 29 ∧
+    56 ∈ DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets 29
+'DkMathTest.LegendreHybridProvider.shell29_candidate_seats' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreHybridProvider.shell29_support_witnesses :
+  {3, 5, 19} ⊆ DkMath.NumberTheory.Legendre.paritySafeActiveSupport 29 14 ∧
+    {3, 13, 23} ⊆ DkMath.NumberTheory.Legendre.paritySafeActiveSupport 29 56
+'DkMathTest.LegendreHybridProvider.shell29_support_witnesses' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreHybridProvider.shell29_local_card_lower :
+  3 ≤ (DkMath.NumberTheory.Legendre.paritySafeActiveSupport 29 14).card ∧
+    3 ≤ (DkMath.NumberTheory.Legendre.paritySafeActiveSupport 29 56).card
+'DkMathTest.LegendreHybridProvider.shell29_local_card_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreHybridProvider.shell29_local_excess_lower :
+  2 ≤ (DkMath.NumberTheory.Legendre.paritySafeActiveSupport 29 14).card - 1 ∧
+    2 ≤ (DkMath.NumberTheory.Legendre.paritySafeActiveSupport 29 56).card - 1
+'DkMathTest.LegendreHybridProvider.shell29_local_excess_lower' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridProvider.shell29_supportExcess_ge_four :
+  4 ≤ DkMath.NumberTheory.Legendre.paritySafeSupportExcess 29
+'DkMathTest.LegendreHybridProvider.shell29_supportExcess_ge_four' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridProvider.shell29_pair_cap_and_candidate :
+  DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper 29 = 31 ∧
+    (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets 29).card = 28
+'DkMathTest.LegendreHybridProvider.shell29_pair_cap_and_candidate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridProvider.shell29_uncovered_ge_one :
+  1 ≤ (DkMath.NumberTheory.Legendre.paritySafeUncoveredCandidates 29).card
+'DkMathTest.LegendreHybridProvider.shell29_uncovered_ge_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreHybridProvider.shell29_uncovered_nonempty :
+  (DkMath.NumberTheory.Legendre.paritySafeUncoveredCandidates 29).Nonempty
+'DkMathTest.LegendreHybridProvider.shell29_uncovered_nonempty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridProvider.shell29_prime : ∃ p, Nat.Prime p ∧ 29 ^ 2 < p ∧ p < 30 ^ 2
+'DkMathTest.LegendreHybridProvider.shell29_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreHybridClassification.classZeroData : Finset (ℕ × ℕ × ℕ)
+'DkMathTest.LegendreHybridClassification.classZeroData' depends on axioms: [propext, Quot.sound]
+DkMathTest.LegendreHybridClassification.classOneData : Finset (ℕ × ℕ × ℕ)
+'DkMathTest.LegendreHybridClassification.classOneData' depends on axioms: [propext, Quot.sound]
+DkMathTest.LegendreHybridClassification.classTwoData : Finset (ℕ × ℕ × ℕ)
+'DkMathTest.LegendreHybridClassification.classTwoData' depends on axioms: [propext, Quot.sound]
+DkMathTest.LegendreHybridClassification.classOneCertificates : Finset (ℕ × (ℕ × Finset ℕ) × ℕ × Finset ℕ)
+'DkMathTest.LegendreHybridClassification.classOneCertificates' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridClassification.classification_caps_checked (t : ℕ × ℕ × ℕ) :
+  t ∈
+      DkMathTest.LegendreHybridClassification.classZeroData ∪ DkMathTest.LegendreHybridClassification.classOneData ∪
+        DkMathTest.LegendreHybridClassification.classTwoData →
+    DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper t.1 = t.2.1 ∧
+      (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets t.1).card = t.2.2
+'DkMathTest.LegendreHybridClassification.classification_caps_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridClassification.classification_partition_checked :
+  DkMathTest.LegendreHybridClassification.classZeroData.card = 59 ∧
+    DkMathTest.LegendreHybridClassification.classOneData.card = 10 ∧
+      DkMathTest.LegendreHybridClassification.classTwoData.card = 30 ∧
+        Finset.image Prod.fst DkMathTest.LegendreHybridClassification.classZeroData ∪
+                Finset.image Prod.fst DkMathTest.LegendreHybridClassification.classOneData ∪
+              Finset.image Prod.fst DkMathTest.LegendreHybridClassification.classTwoData =
+            Finset.Icc 2 100 ∧
+          Disjoint (Finset.image Prod.fst DkMathTest.LegendreHybridClassification.classZeroData)
+              (Finset.image Prod.fst DkMathTest.LegendreHybridClassification.classOneData) ∧
+            Disjoint
+                (Finset.image Prod.fst DkMathTest.LegendreHybridClassification.classZeroData ∪
+                  Finset.image Prod.fst DkMathTest.LegendreHybridClassification.classOneData)
+                (Finset.image Prod.fst DkMathTest.LegendreHybridClassification.classTwoData) ∧
+              Finset.image Prod.fst DkMathTest.LegendreHybridClassification.classOneCertificates =
+                Finset.image Prod.fst DkMathTest.LegendreHybridClassification.classOneData
+'DkMathTest.LegendreHybridClassification.classification_partition_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridClassification.class_one_certificates_checked (c : ℕ × (ℕ × Finset ℕ) × ℕ × Finset ℕ) :
+  c ∈ DkMathTest.LegendreHybridClassification.classOneCertificates →
+    c.2.1.1 ≠ c.2.2.1 ∧
+      c.2.1.1 ∈ DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets c.1 ∧
+        c.2.2.1 ∈ DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets c.1 ∧
+          c.2.1.2.card = 3 ∧
+            c.2.2.2.card = 3 ∧
+              c.2.1.2 ⊆ DkMath.NumberTheory.Legendre.paritySafeActiveSupport c.1 c.2.1.1 ∧
+                c.2.2.2 ⊆ DkMath.NumberTheory.Legendre.paritySafeActiveSupport c.1 c.2.2.1
+'DkMathTest.LegendreHybridClassification.class_one_certificates_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridClassification.class_one_certified_excess (c : ℕ × (ℕ × Finset ℕ) × ℕ × Finset ℕ) :
+  c ∈ DkMathTest.LegendreHybridClassification.classOneCertificates →
+    4 ≤ DkMath.NumberTheory.Legendre.paritySafeSupportExcess c.1
+'DkMathTest.LegendreHybridClassification.class_one_certified_excess' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridClassification.class_one_gap_checked (c : ℕ × (ℕ × Finset ℕ) × ℕ × Finset ℕ) :
+  c ∈ DkMathTest.LegendreHybridClassification.classOneCertificates →
+    (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets c.1).card ≤
+        DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper c.1 ∧
+      DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper c.1 <
+        (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets c.1).card + 4
+'DkMathTest.LegendreHybridClassification.class_one_gap_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridClassification.class_one_uncovered (c : ℕ × (ℕ × Finset ℕ) × ℕ × Finset ℕ) :
+  c ∈ DkMathTest.LegendreHybridClassification.classOneCertificates →
+    (DkMath.NumberTheory.Legendre.paritySafeUncoveredCandidates c.1).Nonempty
+'DkMathTest.LegendreHybridClassification.class_one_uncovered' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreHybridClassification.class_one_prime (c : ℕ × (ℕ × Finset ℕ) × ℕ × Finset ℕ) :
+  c ∈ DkMathTest.LegendreHybridClassification.classOneCertificates →
+    ∃ p, Nat.Prime p ∧ DkMath.NumberTheory.Legendre.SquareCell c.1 p
+'DkMathTest.LegendreHybridClassification.class_one_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreHybridClassification.class_zero_uncovered (t : ℕ × ℕ × ℕ) :
+  t ∈ DkMathTest.LegendreHybridClassification.classZeroData →
+    (DkMath.NumberTheory.Legendre.paritySafeUncoveredCandidates t.1).Nonempty
+'DkMathTest.LegendreHybridClassification.class_zero_uncovered' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridClassification.class_zero_prime (t : ℕ × ℕ × ℕ) :
+  t ∈ DkMathTest.LegendreHybridClassification.classZeroData →
+    ∃ p, Nat.Prime p ∧ DkMath.NumberTheory.Legendre.SquareCell t.1 p
+'DkMathTest.LegendreHybridClassification.class_zero_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreHybridClassification.gainShellData : Finset (ℕ × ℕ × ℕ × ℕ)
+'DkMathTest.LegendreHybridClassification.gainShellData' depends on axioms: [propext, Quot.sound]
+DkMathTest.LegendreHybridClassification.gain_shells_checked (t : ℕ × ℕ × ℕ × ℕ) :
+  t ∈ DkMathTest.LegendreHybridClassification.gainShellData →
+    DkMath.NumberTheory.Legendre.paritySafeIncidenceUpper t.1 = t.2.1 ∧
+      DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper t.1 = t.2.2.1 ∧
+        (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets t.1).card = t.2.2.2 ∧
+          ¬DkMath.NumberTheory.Legendre.paritySafeIncidenceUpper t.1 <
+                (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets t.1).card + 4 ∧
+            DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper t.1 <
+              (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets t.1).card + 4
+'DkMathTest.LegendreHybridClassification.gain_shells_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreHybridClassification.class_two_budget_obstruction (t : ℕ × ℕ × ℕ) :
+  t ∈ DkMathTest.LegendreHybridClassification.classTwoData →
+    ∀ e ≤ 4,
+      ¬DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper t.1 <
+          (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets t.1).card + e
+'DkMathTest.LegendreHybridClassification.class_two_budget_obstruction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridClassification.two_odd_anchor_primes_zero_excess_counterexample :
+  ((Nat.primeFactors 77).erase 2).card = 2 ∧
+    DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper 77 = 62 ∧
+      (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets 77).card = 60
+'DkMathTest.LegendreHybridClassification.two_odd_anchor_primes_zero_excess_counterexample' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreHybridClassification.two_odd_anchor_primes_small_certificate_counterexample :
+  ((Nat.primeFactors 91).erase 2).card = 2 ∧
+    DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper 91 = 76 ∧
+      (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets 91).card = 72
+'DkMathTest.LegendreHybridClassification.two_odd_anchor_primes_small_certificate_counterexample' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -13,11 +13,27 @@ import Mathlib.Data.Finset.Fold
 /-!
 ## Elementary incidence upper bounds and uncovered deficits
 
-The bounds retain quotient endpoints and remove the odd multiples of one
-anchor prime. Taking the minimum over actual odd anchor primes is independent
+The bounds retain quotient endpoints and remove odd multiples of one or two
+anchor primes. Taking the minimum over actual odd anchor primes is independent
 of full cover. No active incidence is replaced by an exact finite lookup.
 The existing incidence and uncovered-candidate objects are used throughout.
 -/
+
+namespace DkMath.NumberTheory
+
+/-- A neutral two-exclusion bound retaining intersection credit before Nat subtraction. -/
+theorem card_le_sub_two_exclusions {α : Type*} [DecidableEq α]
+    {C S D E : Finset α} (hD : D ⊆ S) (hE : E ⊆ S)
+    (hC : C ⊆ S \ (D ∪ E)) :
+    C.card ≤ S.card + (D ∩ E).card - (D.card + E.card) := by
+  have hU : D ∪ E ⊆ S := Finset.union_subset hD hE
+  have h := Finset.card_le_card hC
+  rw [Finset.card_sdiff_of_subset hU] at h
+  have hcard := Finset.card_union_add_card_inter D E
+  have hle := Finset.card_le_card hU
+  omega
+
+end DkMath.NumberTheory
 
 namespace DkMath.NumberTheory.Legendre
 
@@ -162,6 +178,141 @@ theorem paritySafeIncidenceCount_le_upper (n : ℕ) :
     paritySafeIncidenceCount n ≤ paritySafeIncidenceUpper n := by
   unfold paritySafeIncidenceCount paritySafeIncidenceUpper
   exact Finset.sum_le_sum fun q hq => paritySafeActiveWave_card_le_waveUpper hq
+
+/-- Two odd-divisor exclusions with their common multiples credited before subtraction. -/
+def paritySafePairDivisorWaveUpper (n q d e : ℕ) : ℕ :=
+  (paritySafeOddQuotientUpper n q +
+    paritySafeOddMultipleFloorDelta (n ^ 2 / q) ((n ^ 2 + 2 * n) / q) (d * e)) -
+    (paritySafeOddMultipleFloorDelta (n ^ 2 / q) ((n ^ 2 + 2 * n) / q) d +
+      paritySafeOddMultipleFloorDelta (n ^ 2 / q) ((n ^ 2 + 2 * n) / q) e)
+
+/-- The old cap and all distinct odd-anchor-prime-pair caps are minimized together. -/
+def paritySafeTwoPrimeWaveUpper (n q : ℕ) : ℕ :=
+  (n.primeFactors.erase 2).offDiag.fold min (paritySafeWaveUpper n q)
+    (fun p => paritySafePairDivisorWaveUpper n q p.1 p.2)
+
+/-- The pairwise cap bounds the existing incidence, with the original active-prime index. -/
+noncomputable def paritySafeTwoPrimeIncidenceUpper (n : ℕ) : ℕ :=
+  ∑ q ∈ squareAnchorOddActivePrimes n, paritySafeTwoPrimeWaveUpper n q
+
+private theorem oddRaw_filter_dvd_card {n q d : ℕ} (hd : Odd d) :
+    ((paritySafeOddRawQuotientInterval n q).filter (fun k => d ∣ k)).card =
+      paritySafeOddMultipleFloorDelta (n ^ 2 / q) ((n ^ 2 + 2 * n) / q) d := by
+  have heq : (paritySafeOddRawQuotientInterval n q).filter (fun k => d ∣ k) =
+      (Finset.Ioc (n ^ 2 / q) ((n ^ 2 + 2 * n) / q)).filter
+        (fun k => Odd k ∧ d ∣ k) := by
+    ext k
+    simp [paritySafeOddRawQuotientInterval, and_assoc]
+  rw [heq]
+  exact card_filter_odd_dvd_Ioc_eq_paritySafeDelta hd (Nat.div_le_div_right (by omega))
+
+/-- Distinct odd anchor primes give a full-cover-independent inclusion-exclusion cap. -/
+theorem paritySafeReducedQuotient_card_le_pairDivisorUpper {n q d e : ℕ}
+    (hqpos : 0 < q) (hd : d.Prime) (he : e.Prime) (hd2 : d ≠ 2) (he2 : e ≠ 2)
+    (hde : d ≠ e) (hdn : d ∣ n) (hen : e ∣ n) :
+    (paritySafeReducedQuotientInterval n q).card ≤
+      paritySafePairDivisorWaveUpper n q d e := by
+  classical
+  let raw := paritySafeOddRawQuotientInterval n q
+  let D := raw.filter (fun k => d ∣ k)
+  let E := raw.filter (fun k => e ∣ k)
+  have hsub : paritySafeReducedQuotientInterval n q ⊆ raw \ (D ∪ E) := by
+    intro k hk
+    refine Finset.mem_sdiff.mpr ⟨paritySafeReducedQuotientInterval_subset_oddRaw hk, ?_⟩
+    intro hm
+    have hc := (Finset.mem_filter.mp hk).2
+    rcases Finset.mem_union.mp hm with hm | hm
+    · have hone := Nat.eq_one_of_dvd_coprimes hc (dvd_mul_of_dvd_right hdn 2)
+        (Finset.mem_filter.mp hm).2
+      exact hd.ne_one hone
+    · have hone := Nat.eq_one_of_dvd_coprimes hc (dvd_mul_of_dvd_right hen 2)
+        (Finset.mem_filter.mp hm).2
+      exact he.ne_one hone
+  have hinter : D ∩ E = raw.filter (fun k => d * e ∣ k) := by
+    ext k
+    simp only [D, E, Finset.mem_inter, Finset.mem_filter]
+    constructor
+    · rintro ⟨⟨hk, hdk⟩, ⟨_, hek⟩⟩
+      exact ⟨hk, ((Nat.coprime_primes hd he).mpr hde).mul_dvd_of_dvd_of_dvd hdk hek⟩
+    · rintro ⟨hk, hmul⟩
+      exact ⟨⟨hk, (dvd_mul_right d e).trans hmul⟩,
+        ⟨hk, (dvd_mul_left e d).trans hmul⟩⟩
+  have h := DkMath.NumberTheory.card_le_sub_two_exclusions
+    (Finset.filter_subset _ _) (Finset.filter_subset _ _) hsub
+  rw [hinter, oddRaw_filter_dvd_card ((hd.odd_of_ne_two hd2).mul (he.odd_of_ne_two he2))] at h
+  rw [show D.card = _ from oddRaw_filter_dvd_card (hd.odd_of_ne_two hd2),
+    show E.card = _ from oddRaw_filter_dvd_card (he.odd_of_ne_two he2),
+    show raw.card = _ from paritySafeOddRawQuotientInterval_card_eq hqpos] at h
+  exact h
+
+theorem paritySafeActiveWave_card_le_twoPrimeWaveUpper {n q : ℕ}
+    (hq : q ∈ squareAnchorOddActivePrimes n) :
+    (paritySafeActiveWaveOffsets n q).card ≤ paritySafeTwoPrimeWaveUpper n q := by
+  apply (Finset.le_fold_min _).mpr
+  refine ⟨paritySafeActiveWave_card_le_waveUpper hq, ?_⟩
+  intro p hp
+  obtain ⟨hd, he, hde⟩ := Finset.mem_offDiag.mp hp
+  obtain ⟨hd2, hdf⟩ := Finset.mem_erase.mp hd
+  obtain ⟨he2, hef⟩ := Finset.mem_erase.mp he
+  obtain ⟨hdprime, hdn, _⟩ := Nat.mem_primeFactors.mp hdf
+  obtain ⟨heprime, hen, _⟩ := Nat.mem_primeFactors.mp hef
+  rw [card_paritySafeActiveWaveOffsets_eq_reducedQuotientInterval hq]
+  exact paritySafeReducedQuotient_card_le_pairDivisorUpper
+    (mem_squareAnchorOddActivePrimes.mp hq).1.pos hdprime heprime hd2 he2 hde hdn hen
+
+theorem paritySafeTwoPrimeWaveUpper_le_waveUpper (n q : ℕ) :
+    paritySafeTwoPrimeWaveUpper n q ≤ paritySafeWaveUpper n q :=
+  (Finset.fold_min_le _).mpr (Or.inl (le_refl _))
+
+theorem paritySafeIncidenceCount_le_twoPrimeUpper (n : ℕ) :
+    paritySafeIncidenceCount n ≤ paritySafeTwoPrimeIncidenceUpper n := by
+  unfold paritySafeIncidenceCount paritySafeTwoPrimeIncidenceUpper
+  exact Finset.sum_le_sum fun q hq => paritySafeActiveWave_card_le_twoPrimeWaveUpper hq
+
+theorem paritySafeTwoPrimeIncidenceUpper_le_upper (n : ℕ) :
+    paritySafeTwoPrimeIncidenceUpper n ≤ paritySafeIncidenceUpper n := by
+  unfold paritySafeTwoPrimeIncidenceUpper paritySafeIncidenceUpper
+  exact Finset.sum_le_sum fun q _ => paritySafeTwoPrimeWaveUpper_le_waveUpper n q
+
+/-- With fewer than two distinct odd anchor primes, pair exclusion adds no new cap. -/
+theorem paritySafeTwoPrimeWaveUpper_eq_waveUpper_of_card_le_one {n : ℕ}
+    (hcard : (n.primeFactors.erase 2).card ≤ 1) (q : ℕ) :
+    paritySafeTwoPrimeWaveUpper n q = paritySafeWaveUpper n q := by
+  have hempty : (n.primeFactors.erase 2).offDiag = ∅ := by
+    apply Finset.card_eq_zero.mp
+    rw [Finset.offDiag_card]
+    interval_cases h : (n.primeFactors.erase 2).card <;> simp_all
+  simp [paritySafeTwoPrimeWaveUpper, hempty]
+
+theorem paritySafeTwoPrimeIncidenceUpper_eq_upper_of_card_le_one {n : ℕ}
+    (hcard : (n.primeFactors.erase 2).card ≤ 1) :
+    paritySafeTwoPrimeIncidenceUpper n = paritySafeIncidenceUpper n := by
+  unfold paritySafeTwoPrimeIncidenceUpper paritySafeIncidenceUpper
+  exact Finset.sum_congr rfl fun q _ => paritySafeTwoPrimeWaveUpper_eq_waveUpper_of_card_le_one hcard q
+
+/-- Pair exclusion cannot improve the cap on prime powers or powers of two times a prime power. -/
+theorem paritySafeTwoPrimeIncidenceUpper_eq_upper_two_pow_mul_prime_pow
+    {p : ℕ} (hp : p.Prime) (a k : ℕ) :
+    paritySafeTwoPrimeIncidenceUpper (2 ^ a * p ^ k) =
+      paritySafeIncidenceUpper (2 ^ a * p ^ k) := by
+  have htwo : (2 ^ a).primeFactors ⊆ ({2} : Finset ℕ) := by
+    by_cases ha : a = 0
+    · simp [ha]
+    · rw [Nat.primeFactors_pow 2 ha, Nat.prime_two.primeFactors]
+  have hpPow : (p ^ k).primeFactors ⊆ ({p} : Finset ℕ) := by
+    by_cases hk : k = 0
+    · simp [hk]
+    · rw [Nat.primeFactors_pow p hk, hp.primeFactors]
+  have hsub : ((2 ^ a * p ^ k).primeFactors.erase 2) ⊆ ({p} : Finset ℕ) := by
+    intro q hq
+    obtain ⟨hq2, hqf⟩ := Finset.mem_erase.mp hq
+    rw [Nat.primeFactors_mul (pow_ne_zero _ (by decide : (2 : ℕ) ≠ 0))
+      (pow_ne_zero _ hp.ne_zero)] at hqf
+    rcases Finset.mem_union.mp hqf with hqf | hqf
+    · exact False.elim (hq2 (Finset.mem_singleton.mp (htwo hqf)))
+    · exact hpPow hqf
+  apply paritySafeTwoPrimeIncidenceUpper_eq_upper_of_card_le_one
+  simpa using Finset.card_le_card hsub
 
 /-- The seat-side arithmetic alternative uses distinct prime factors of the actual point. -/
 theorem paritySafeActiveSupport_subset_pointPrimeFactors {n r : ℕ}
