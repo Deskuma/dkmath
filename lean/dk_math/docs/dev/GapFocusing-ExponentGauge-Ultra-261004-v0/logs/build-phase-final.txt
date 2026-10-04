@@ -1,0 +1,50 @@
+ℹ [1044/1159] Replayed DkMath.Lib.Cosmic.GTail
+info: DkMath/Lib/Cosmic/GTail.lean:10:0: file: DkMath.Lib.Cosmic.GTail
+ℹ [1342/1373] Replayed DkMath.Lib.Cosmic.GNProductDegree
+info: DkMath/Lib/Cosmic/GNProductDegree.lean:10:0: file: DkMath.Lib.Cosmic.GNProductDegree
+ℹ [2787/2788] Replayed DkMath.NumberTheory.GapFocusing.Phase
+info: DkMath/NumberTheory/GapFocusing/Phase.lean:10:0: file: DkMath.NumberTheory.GapFocusing.Phase
+ℹ [2788/2788] Built DkMathTest.GapFocusingPhase (2.4s)
+info: DkMathTest/GapFocusingPhase.lean:9:0: file: DkMathTest.GapFocusingPhase
+info: DkMathTest/GapFocusingPhase.lean:15:0: DkMath.NumberTheory.GapFocusing.phaseFactor_eq_gap_forall_iff.{u_1} {R : Type u_1} [CommRing R] (x ζ : R) :
+  (∀ (u : R), x + (1 - ζ) * u = x) ↔ ζ = 1
+info: DkMathTest/GapFocusingPhase.lean:16:0: DkMath.NumberTheory.GapFocusing.phaseFactor_polynomial_eq_gap_iff.{u_1} {R : Type u_1} [CommRing R] (x ζ : R) :
+  Polynomial.C x + Polynomial.C (1 - ζ) * Polynomial.X = Polynomial.C x ↔ ζ = 1
+info: DkMathTest/GapFocusingPhase.lean:17:0: DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod.{u_1} {R : Type u_1} [CommRing R] [IsDomain R] {d : ℕ}
+  {ζ : R} (hd : 0 < d) (hζ : IsPrimitiveRoot ζ d) (x u : R) :
+  (x + u) ^ d - u ^ d = ∏ ξ ∈ Polynomial.nthRootsFinset d 1, (x + (1 - ξ) * u)
+info: DkMathTest/GapFocusingPhase.lean:18:0: DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod_range.{u_1} {R : Type u_1} [CommRing R] [IsDomain R] {d : ℕ}
+  {ζ : R} (hd : 0 < d) (hζ : IsPrimitiveRoot ζ d) (x u : R) :
+  (x + u) ^ d - u ^ d = ∏ i ∈ Finset.range d, (x + (1 - ζ ^ i) * u)
+info: DkMathTest/GapFocusingPhase.lean:19:0: DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod_fin.{u_1} {R : Type u_1} [CommRing R] [IsDomain R] {d : ℕ}
+  {ζ : R} (hd : 0 < d) (hζ : IsPrimitiveRoot ζ d) (x u : R) : (x + u) ^ d - u ^ d = ∏ i, (x + (1 - ζ ^ ↑i) * u)
+info: DkMathTest/GapFocusingPhase.lean:20:0: DkMath.NumberTheory.GapFocusing.indexed_phase_eq_gap_forall_iff.{u_1} {R : Type u_1} [CommRing R] {d : ℕ} {ζ : R}
+  (hζ : IsPrimitiveRoot ζ d) (x : R) (i : Fin d) : (∀ (u : R), x + (1 - ζ ^ ↑i) * u = x) ↔ ↑i = 0
+info: DkMathTest/GapFocusingPhase.lean:21:0: DkMath.NumberTheory.GapFocusing.phaseFactor_eq_gap_iff_of_ne_zero.{u_1} {R : Type u_1} [CommRing R] [IsDomain R]
+  (x ξ u : R) (hu : u ≠ 0) : x + (1 - ξ) * u = x ↔ ξ = 1
+info: DkMathTest/GapFocusingPhase.lean:22:0: DkMath.NumberTheory.GapFocusing.GN_eq_nontrivial_phase_prod_range.{u_1} {R : Type u_1} [CommRing R] [IsDomain R] {d : ℕ}
+  {ζ : R} (hd : 0 < d) (hζ : IsPrimitiveRoot ζ d) (x u : R) :
+  DkMath.CosmicFormula.GTail d 1 x u = ∏ i ∈ (Finset.range d).erase 0, (x + (1 - ζ ^ i) * u)
+info: DkMathTest/GapFocusingPhase.lean:23:0: DkMath.NumberTheory.GapFocusing.GN_eq_nontrivial_phase_prod.{u_1} {R : Type u_1} [CommRing R] [IsDomain R] {d : ℕ}
+  {ζ : R} (hd : 0 < d) (hζ : IsPrimitiveRoot ζ d) (x u : R) :
+  DkMath.CosmicFormula.GTail d 1 x u = ∏ ξ ∈ (Polynomial.nthRootsFinset d 1).erase 1, (x + (1 - ξ) * u)
+info: DkMathTest/GapFocusingPhase.lean:25:0: 'DkMath.NumberTheory.GapFocusing.phaseFactor_eq_gap_forall_iff' depends on axioms: [propext]
+info: DkMathTest/GapFocusingPhase.lean:26:0: 'DkMath.NumberTheory.GapFocusing.phaseFactor_polynomial_eq_gap_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingPhase.lean:27:0: 'DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/GapFocusingPhase.lean:28:0: 'DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod_range' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingPhase.lean:29:0: 'DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod_fin' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingPhase.lean:30:0: 'DkMath.NumberTheory.GapFocusing.indexed_phase_eq_gap_forall_iff' depends on axioms: [propext]
+info: DkMathTest/GapFocusingPhase.lean:31:0: 'DkMath.NumberTheory.GapFocusing.phaseFactor_eq_gap_iff_of_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingPhase.lean:32:0: 'DkMath.NumberTheory.GapFocusing.GN_eq_nontrivial_phase_prod_range' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingPhase.lean:33:0: 'DkMath.NumberTheory.GapFocusing.GN_eq_nontrivial_phase_prod' depends on axioms: [propext, Classical.choice, Quot.sound]
+Build completed successfully (2788 jobs).

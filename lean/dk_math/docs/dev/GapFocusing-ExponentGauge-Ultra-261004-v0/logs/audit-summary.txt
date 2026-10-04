@@ -1,0 +1,13 @@
+New production theorem count: 50
+Aggregate audited declarations: 51 (all public theorems and focusCoordinates)
+Allowed axiom set: propext, Classical.choice, Quot.sound
+Unexpected axiom dependencies: none
+Forbidden constructs: no matches across 10 new Lean files
+Root facade warning count: 5
+Existing root-facade warnings:
+DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+Actual current p7 carrier audit: three declarations; only allowed axioms; no sorryAx

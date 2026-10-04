@@ -1,0 +1,200 @@
+ℹ [1044/1183] Replayed DkMath.Lib.Cosmic.GTail
+info: DkMath/Lib/Cosmic/GTail.lean:10:0: file: DkMath.Lib.Cosmic.GTail
+ℹ [1342/1359] Replayed DkMath.Lib.Cosmic.GNProductDegree
+info: DkMath/Lib/Cosmic/GNProductDegree.lean:10:0: file: DkMath.Lib.Cosmic.GNProductDegree
+ℹ [1389/1572] Replayed DkMath.NumberTheory.GapFocusing.Focus
+info: DkMath/NumberTheory/GapFocusing/Focus.lean:11:0: file: DkMath.NumberTheory.GapFocusing.Focus
+ℹ [2788/2820] Replayed DkMath.Algebra.BinomTail
+info: DkMath/Algebra/BinomTail.lean:15:0: file: DkMath.Algebra.BinomTail
+ℹ [2789/2820] Replayed DkMath.Lib.Cosmic.GTailNat
+info: DkMath/Lib/Cosmic/GTailNat.lean:10:0: file: DkMath.Lib.Cosmic.GTailNat
+ℹ [2792/2820] Replayed DkMath.Lib.Cosmic.GTailCongruence
+info: DkMath/Lib/Cosmic/GTailCongruence.lean:13:0: file: DkMath.Lib.Cosmic.GTailCongruence
+ℹ [2793/2820] Replayed DkMath.Lib.Cosmic.GTailBoundary
+info: DkMath/Lib/Cosmic/GTailBoundary.lean:10:0: file: DkMath.Lib.Cosmic.GTailBoundary
+ℹ [2795/2820] Replayed DkMath.Lib.NumberTheory.PadicValNat
+info: DkMath/Lib/NumberTheory/PadicValNat.lean:12:0: file: DkMath.Lib.NumberTheory.PadicValNat
+ℹ [2796/2820] Replayed DkMath.Lib.Cosmic.GTailPadic
+info: DkMath/Lib/Cosmic/GTailPadic.lean:12:0: file: DkMath.Lib.Cosmic.GTailPadic
+ℹ [2797/2820] Replayed DkMath.CosmicFormula.GTail
+info: DkMath/CosmicFormula/GTail.lean:10:0: file: DkMath.CosmicFormula.GTail
+ℹ [2798/2820] Replayed DkMath.CosmicFormula.Defs
+info: DkMath/CosmicFormula/Defs.lean:12:0: file: DkMath.CosmicFormula.Defs
+ℹ [2800/2820] Replayed DkMath.ABC.PadicValNat
+info: DkMath/ABC/PadicValNat.lean:9:0: file: DkMath.ABC.PadicValNat
+ℹ [2801/2820] Replayed DkMath.CosmicFormula.CosmicFormulaBinom
+info: DkMath/CosmicFormula/CosmicFormulaBinom.lean:15:0: file: DkMath.CosmicFormula.CosmicFormulaBinom
+ℹ [2802/2820] Replayed DkMath.NumberTheory.GNRepresentationBounds
+info: DkMath/NumberTheory/GNRepresentationBounds.lean:10:0: file: DkMath.NumberTheory.GNRepresentationBounds
+ℹ [2803/2820] Replayed DkMath.NumberTheory.GNDegreeFactorization
+info: DkMath/NumberTheory/GNDegreeFactorization.lean:11:0: file: DkMath.NumberTheory.GNDegreeFactorization
+ℹ [2812/2820] Replayed DkMath.NumberTheory.GapFocusing.Degree
+info: DkMath/NumberTheory/GapFocusing/Degree.lean:11:0: file: DkMath.NumberTheory.GapFocusing.Degree
+ℹ [2814/2820] Replayed DkMath.NumberTheory.GapFocusing.UnitGauge
+info: DkMath/NumberTheory/GapFocusing/UnitGauge.lean:13:0: file: DkMath.NumberTheory.GapFocusing.UnitGauge
+ℹ [2815/2820] Replayed DkMathTest.NumberTheory.GapFocusingCalibration
+info: DkMathTest/NumberTheory/GapFocusingCalibration.lean:11:0: file: DkMathTest.NumberTheory.GapFocusingCalibration
+ℹ [2816/2820] Replayed DkMathTest.GapFocusingDegree
+info: DkMathTest/GapFocusingDegree.lean:10:0: file: DkMathTest.GapFocusingDegree
+info: DkMathTest/GapFocusingDegree.lean:52:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_eq_prod_cyclotomic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingDegree.lean:53:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_irreducible_iff_prime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingDegree.lean:54:0: 'DkMath.NumberTheory.GapFocusing.GN_polynomial_rat_irreducible_iff_prime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingDegree.lean:55:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_two_mul_prime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingDegree.lean:56:0: 'DkMath.NumberTheory.GapFocusing.two_mul_prime_cyclotomic_layer_degrees' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingDegree.lean:57:0: 'DkMath.NumberTheory.GapFocusing.GN_two_mul_degree_orders' depends on axioms: [propext, Classical.choice, Quot.sound]
+ℹ [2817/2820] Built DkMath.NumberTheory.GapFocusing.Phase (3.6s)
+info: DkMath/NumberTheory/GapFocusing/Phase.lean:10:0: file: DkMath.NumberTheory.GapFocusing.Phase
+ℹ [2818/2820] Built DkMath.NumberTheory.GapFocusing (2.6s)
+info: DkMath/NumberTheory/GapFocusing.lean:12:0: file: DkMath.NumberTheory.GapFocusing
+ℹ [2819/2820] Built DkMathTest.GapFocusingPhase (2.7s)
+info: DkMathTest/GapFocusingPhase.lean:7:0: DkMath.NumberTheory.GapFocusing.phaseFactor_eq_gap_forall_iff.{u_1} {R : Type u_1} [CommRing R] (x ζ : R) :
+  (∀ (u : R), x + (1 - ζ) * u = x) ↔ ζ = 1
+info: DkMathTest/GapFocusingPhase.lean:8:0: DkMath.NumberTheory.GapFocusing.phaseFactor_polynomial_eq_gap_iff.{u_1} {R : Type u_1} [CommRing R] (x ζ : R) :
+  Polynomial.C x + Polynomial.C (1 - ζ) * Polynomial.X = Polynomial.C x ↔ ζ = 1
+info: DkMathTest/GapFocusingPhase.lean:9:0: DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod.{u_1} {R : Type u_1} [CommRing R] [IsDomain R] {d : ℕ}
+  {ζ : R} (hd : 0 < d) (hζ : IsPrimitiveRoot ζ d) (x u : R) :
+  (x + u) ^ d - u ^ d = ∏ ξ ∈ Polynomial.nthRootsFinset d 1, (x + (1 - ξ) * u)
+info: DkMathTest/GapFocusingPhase.lean:10:0: DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod_range.{u_1} {R : Type u_1} [CommRing R] [IsDomain R] {d : ℕ}
+  {ζ : R} (hd : 0 < d) (hζ : IsPrimitiveRoot ζ d) (x u : R) :
+  (x + u) ^ d - u ^ d = ∏ i ∈ Finset.range d, (x + (1 - ζ ^ i) * u)
+info: DkMathTest/GapFocusingPhase.lean:11:0: DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod_fin.{u_1} {R : Type u_1} [CommRing R] [IsDomain R] {d : ℕ}
+  {ζ : R} (hd : 0 < d) (hζ : IsPrimitiveRoot ζ d) (x u : R) : (x + u) ^ d - u ^ d = ∏ i, (x + (1 - ζ ^ ↑i) * u)
+info: DkMathTest/GapFocusingPhase.lean:12:0: DkMath.NumberTheory.GapFocusing.indexed_phase_eq_gap_forall_iff.{u_1} {R : Type u_1} [CommRing R] {d : ℕ} {ζ : R}
+  (hζ : IsPrimitiveRoot ζ d) (x : R) (i : Fin d) : (∀ (u : R), x + (1 - ζ ^ ↑i) * u = x) ↔ ↑i = 0
+info: DkMathTest/GapFocusingPhase.lean:13:0: DkMath.NumberTheory.GapFocusing.phaseFactor_eq_gap_iff_of_ne_zero.{u_1} {R : Type u_1} [CommRing R] [IsDomain R]
+  (x ξ u : R) (hu : u ≠ 0) : x + (1 - ξ) * u = x ↔ ξ = 1
+info: DkMathTest/GapFocusingPhase.lean:14:0: DkMath.NumberTheory.GapFocusing.GN_eq_nontrivial_phase_prod_range.{u_1} {R : Type u_1} [CommRing R] [IsDomain R] {d : ℕ}
+  {ζ : R} (hd : 0 < d) (hζ : IsPrimitiveRoot ζ d) (x u : R) :
+  DkMath.CosmicFormula.GTail d 1 x u = ∏ i ∈ (Finset.range d).erase 0, (x + (1 - ζ ^ i) * u)
+info: DkMathTest/GapFocusingPhase.lean:15:0: DkMath.NumberTheory.GapFocusing.GN_eq_nontrivial_phase_prod.{u_1} {R : Type u_1} [CommRing R] [IsDomain R] {d : ℕ}
+  {ζ : R} (hd : 0 < d) (hζ : IsPrimitiveRoot ζ d) (x u : R) :
+  DkMath.CosmicFormula.GTail d 1 x u = ∏ ξ ∈ (Polynomial.nthRootsFinset d 1).erase 1, (x + (1 - ξ) * u)
+info: DkMathTest/GapFocusingPhase.lean:17:0: 'DkMath.NumberTheory.GapFocusing.phaseFactor_eq_gap_forall_iff' depends on axioms: [propext]
+info: DkMathTest/GapFocusingPhase.lean:18:0: 'DkMath.NumberTheory.GapFocusing.phaseFactor_polynomial_eq_gap_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingPhase.lean:19:0: 'DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/GapFocusingPhase.lean:20:0: 'DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod_range' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingPhase.lean:21:0: 'DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod_fin' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingPhase.lean:22:0: 'DkMath.NumberTheory.GapFocusing.indexed_phase_eq_gap_forall_iff' depends on axioms: [propext]
+info: DkMathTest/GapFocusingPhase.lean:23:0: 'DkMath.NumberTheory.GapFocusing.phaseFactor_eq_gap_iff_of_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingPhase.lean:24:0: 'DkMath.NumberTheory.GapFocusing.GN_eq_nontrivial_phase_prod_range' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/GapFocusingPhase.lean:25:0: 'DkMath.NumberTheory.GapFocusing.GN_eq_nontrivial_phase_prod' depends on axioms: [propext, Classical.choice, Quot.sound]
+ℹ [2820/2820] Built DkMathTest.NumberTheory.GapFocusingAxiomAudit (2.5s)
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:9:0: file: DkMathTest.NumberTheory.GapFocusingAxiomAudit
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:11:0: 'DkMath.NumberTheory.GapFocusing.focusCoordinates' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:12:0: 'DkMath.NumberTheory.GapFocusing.focused_pow_sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:13:0: 'DkMath.NumberTheory.GapFocusing.unfocused_pow_sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:14:0: 'DkMath.NumberTheory.GapFocusing.gap_dvd_iff_dvd_defect' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:15:0: 'DkMath.NumberTheory.GapFocusing.focusDefect_cocycle' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:16:0: 'DkMath.NumberTheory.GapFocusing.focusDefect_scale' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:17:0: 'DkMath.NumberTheory.GapFocusing.unfocused_polynomial_remainder' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:18:0: 'DkMath.NumberTheory.GapFocusing.X_dvd_unfocused_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:19:0: 'DkMath.NumberTheory.GapFocusing.focused_quotient_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:20:0: 'DkMath.NumberTheory.GapFocusing.unfocused_constant_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:21:0: 'DkMath.NumberTheory.GapFocusing.focused_quotient_eval_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:22:0: 'DkMath.NumberTheory.GapFocusing.X_sq_dvd_focused_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:23:0: 'DkMath.NumberTheory.GapFocusing.phaseFactor_eq_gap_forall_iff' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:24:0: 'DkMath.NumberTheory.GapFocusing.phaseFactor_polynomial_eq_gap_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:25:0: 'DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:26:0: 'DkMath.NumberTheory.GapFocusing.nthRootsFinset_eq_powers' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:27:0: 'DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod_range' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:28:0: 'DkMath.NumberTheory.GapFocusing.focused_pow_sub_pow_eq_prod_fin' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:29:0: 'DkMath.NumberTheory.GapFocusing.indexed_phase_eq_gap_forall_iff' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:30:0: 'DkMath.NumberTheory.GapFocusing.phaseFactor_eq_gap_iff_of_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:31:0: 'DkMath.NumberTheory.GapFocusing.GN_eq_nontrivial_phase_prod_range' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:32:0: 'DkMath.NumberTheory.GapFocusing.nontrivialRootsFinset_eq_powers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:33:0: 'DkMath.NumberTheory.GapFocusing.GN_eq_nontrivial_phase_prod' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:34:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_eq_geom_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:35:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_eq_prod_cyclotomic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:36:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_monic' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:37:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_map_rat' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:38:0: 'DkMath.NumberTheory.GapFocusing.cyclotomic_layer_dvd_kernelPolynomial' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:39:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:40:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_eval_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:41:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_nonunit_factors' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:42:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_mul_degree' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:43:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_not_irreducible_mul_degree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:44:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_irreducible_iff_prime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:45:0: 'DkMath.NumberTheory.GapFocusing.GN_polynomial_rat_irreducible_iff_prime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:46:0: 'DkMath.NumberTheory.GapFocusing.GN_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:47:0: 'DkMath.NumberTheory.GapFocusing.GN_two_mul_degree_p_then_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:48:0: 'DkMath.NumberTheory.GapFocusing.GN_two_mul_degree_two_then_p' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:49:0: 'DkMath.NumberTheory.GapFocusing.GN_two_mul_degree_orders' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:50:0: 'DkMath.NumberTheory.GapFocusing.two_mul_prime_divisors_erase_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:51:0: 'DkMath.NumberTheory.GapFocusing.kernelPolynomial_two_mul_prime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:52:0: 'DkMath.NumberTheory.GapFocusing.two_mul_prime_cyclotomic_layer_degrees' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:53:0: 'DkMath.NumberTheory.GapFocusing.phase_geometric_sum_rewrite' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:54:0: 'DkMath.NumberTheory.GapFocusing.phase_geometric_sum_unit' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:55:0: 'DkMath.NumberTheory.GapFocusing.phase_polynomial_associated_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:56:0: 'DkMath.NumberTheory.GapFocusing.unitPowerClass_independent' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:57:0: 'DkMath.NumberTheory.GapFocusing.fixedRamifier_unitPowerClass_independent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:58:0: 'DkMath.NumberTheory.GapFocusing.sameUnitPowerClass_of_fixed_extraction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:59:0: 'DkMath.NumberTheory.GapFocusing.ramifier_rescaling' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:60:0: 'DkMath.NumberTheory.GapFocusing.ramifier_rescaling_same_class_iff' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/GapFocusingAxiomAudit.lean:61:0: 'DkMath.NumberTheory.GapFocusing.ramifier_rescaling_can_change_cube_class' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Build completed successfully (2820 jobs).

@@ -39,6 +39,7 @@ import DkMath.NumberTheory.PrimeShellHensel
 import DkMath.NumberTheory.WeightedBinomial  -- NumberTheory.WeightedBinomial: weighted binomial divisibility
 import DkMath.NumberTheory.WeightedGNBridge  -- NumberTheory.WeightedGNBridge: weighted Beam bridge to GN
 import DkMath.NumberTheory.GNPrime  -- NumberTheory.GNPrime: GN prime closure, prime representations, cubic shell, and finite Hensel-depth API
+import DkMath.NumberTheory.GapFocusing  -- Unique formal-gap quotient, cyclotomic phases, degree rigidity, and unit normalization
 import DkMath.NumberTheory.Goldbach  -- Fixed-center GN fibers and conditional finite-capacity closure
 import DkMath.Pascal  -- Pascal bridge modules
 import DkMath.Petal  -- Petal: relative polygon and GN bridge surface
