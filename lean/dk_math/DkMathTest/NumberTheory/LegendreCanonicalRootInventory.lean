@@ -1,0 +1,36 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.NumberTheory.Legendre
+
+#print "file: DkMathTest.NumberTheory.LegendreCanonicalRootInventory"
+
+open DkMath.NumberTheory.Legendre
+
+#check paritySafeCanonicalQuotientCoSupportIncidences_card_eq_supportExcess
+#check paritySafeCanonicalQuotientCoSupportIncidence_packet
+#check paritySafeCanonicalSupportPrime_mem_activeSupport
+#check paritySafeCanonicalSupportPrime_packet
+#check erase_squareQuotientSupport_eq_erase_offsetSupport
+#check paritySafePrimePairOverlapCount_eq_supportExcess_add_residual
+#check paritySafeFarProductWave_canonical_eq_iff_no_smaller_active_dvd_cofactor
+#check paritySafeTripleGateNearTriples_card_eq_sum_firstPrime_pairFibers
+#check squarePrimePairOverlapOffsets_eq_squareWaveOffsets_product
+#check card_squareWaveOffsets_eq_div_add_carry
+#check mem_squareWaveOffsets
+#check card_filter_odd_dvd_Ioc_eq_paritySafeDelta
+#check sum_indexed_modEq_charge_le_supportExcess
+#check mergedSeatCharge_le_supportExcess
+#check paritySafeIncidenceCount_le_twoPrimeUpper
+#check mem_squareAnchorOddPointCoprimeOffsets_iff_reducedResidue
+#check Finset.min'_eq_iff
+#check Finset.min'_le
+#check Finset.card_eq_sum_card_fiberwise
+#check Finset.sum_card_fiberwise_eq_card_filter
+#check Finset.card_biUnion_le
+#check Finset.card_union_add_card_inter
+#check Nat.Coprime.mul_dvd_of_dvd_of_dvd
+#check Nat.Prime.coprime_iff_not_dvd

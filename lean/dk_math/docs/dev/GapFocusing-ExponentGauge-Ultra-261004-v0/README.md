@@ -161,3 +161,18 @@ All three outcomes are useful.
 [Report 010](report-010.md) — Outcome B for fixed-pool demand scaling. Witness unions at actual image seats provide a reusable excess lower bound without injectivity; a structural counterexample rejects naive family-index summation. Mixed anchors2^a*p^k have a parity/coprimality CRT selector and a counted floor(n/(p*product(Q))) family. Two overlapping prime-anchor pair families prove12(n−1)≤105E+198. A controlled basis7 solves24 of the25 previous survivors, and adding23,29,31 at97 solves the last; the same expansion proves primes at107 and127. Both fixed bases fail the checked demand at211/503. Uniform charge sufficiency remains unproved. Next proposals target growing bases, incremental witness-union charge and all-unit mixed selectors.
 
 [Source inventory](source-inventory-010.md) · [Findings](findings-010.md) · [Validation](validation-010.md).
+
+## Instruction 011 checkpoint
+
+[Report 011](report-011.md) — Outcome A for the tested fixed-basis barrier.
+The existing exact quotient incidence is partitioned by its minimum actual
+support prime; ordered root-pair fibers are candidate product waves surviving
+the finite smaller-active-prime sieve. Parity and prime-anchor corrections give
+exact floor counts for roots3/5/7. Root3+5 supplies105 against demand98 at211;
+root3+5+7 supplies336 against demand312 at503. Both square-cell prime endpoints
+are kernel-checked through these structural charges, without direct whole E/I
+evaluation. Tested minimal root cutoffs at47/97/127/211/503 are3/5/5/5/7.
+A uniform surviving-wave bound with a controlled cutoff remains unproved.
+
+[Source inventory](source-inventory-011.md) · [Findings](findings-011.md) ·
+[Validation](validation-011.md).

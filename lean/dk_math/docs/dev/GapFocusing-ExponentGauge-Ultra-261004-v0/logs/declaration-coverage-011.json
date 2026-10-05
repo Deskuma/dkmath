@@ -1,0 +1,287 @@
+[
+  {
+    "name": "DkMath.NumberTheory.Legendre.mem_canonicalIncidence_iff",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalSupport_eq_iff_minimal",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalSupport_eq_iff_no_smaller",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalIncidence_root_lt",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalRootFiber",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalRootPairOffsets",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.supportExcess_eq_sum_canonicalRootFiber",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.sum_canonicalRootFiber_le_excess",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalRootFiber_disjoint",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mem_canonicalRootPairOffsets_iff",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalRootFiber_card_eq_sum_pairs",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.supportExcess_eq_sum_canonicalRootPairs",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.paritySafeProductWave_card_le_div_add_carry",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.paritySafeProductWave_eq_filtered_pairOverlap",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.supportedStar_card_le_localExcess",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.card_filter_two_exclusions",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.card_finite_exclusion_lower",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalRootPair_card_ge_finite_sieve",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalRootSieveLower",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalRootSieveLower_le_fiber",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.sum_canonicalRootSieveLower_le_excess",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.activePrimes_coprime",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.productWave_filter_dvd",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.activePrime_small_cases",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.primeAnchor_small_roots",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalRoot3Pair_eq",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalRoot5Pair_eq",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalRoot7Pair_eq",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalRoot5Pair_card",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalRoot7Pair_card",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.card_odd_squareWave_eq_delta",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.primeAnchorProductWaveCount",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.paritySafeProductWave_card_eq_count",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalRootCharge3",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalRootCharge5",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalRootCharge7",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalSmallRootCharges_eq_fibers",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.canonicalSmallRootCharges_le_excess",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.uncoveredCandidates_nonempty_of_canonicalRoots",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.prime_squareCell_of_canonicalRoots",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCanonicalRootCharge.RootRow",
+    "kind": "abbrev",
+    "file": "DkMathTest/NumberTheory/LegendreCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCanonicalRootCharge.rootData",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCanonicalRootCharge.root_charges_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCanonicalRootCharge.caps_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCanonicalRootCharge.cutoff_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCanonicalRootCharge.charges_le_excess",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCanonicalRootCharge.actual_root_fibers_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCanonicalRootCharge.hard_demands_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCanonicalRootCharge.shell211_uncovered",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCanonicalRootCharge.shell503_uncovered",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCanonicalRootCharge.shell211_prime",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCanonicalRootCharge.shell503_prime",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCanonicalRootCharge.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCanonicalRootRegression.raw_odd_candidate_counterexample",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCanonicalRootRegression.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCanonicalRootRegression.common_exclusion_credit_counterexample",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCanonicalRootRegression.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCanonicalRootRegression.common_exclusion_root7_empty",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCanonicalRootRegression.lean"
+  },
+  {
+    "name": "DkMathTest.LegendreCanonicalRootRegression.triangle_is_not_local_excess",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCanonicalRootRegression.lean"
+  }
+]

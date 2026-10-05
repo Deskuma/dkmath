@@ -1,0 +1,9 @@
+PASS: zero forbidden-token matches.
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootCharge.lean
+DkMathTest/NumberTheory/LegendreCanonicalRootCharge.lean
+DkMathTest/NumberTheory/LegendreCanonicalRootRegression.lean
+DkMath/NumberTheory/Legendre.lean
+DkMathTest/NumberTheory/LegendreCanonicalRootInventory.lean
+DkMathTest/NumberTheory/LegendreCanonicalRootAxiomAudit.lean
