@@ -81,6 +81,9 @@ import DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughFactorization
 import DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughCensus
 import DkMath.NumberTheory.Legendre.ParitySafeSqrtQuotientConservation
 
+import DkMath.NumberTheory.Legendre.SquareAnchorCounterexamplePacket
+import DkMath.NumberTheory.Legendre.GnomonPrimorialTransition
+
 #print "file: DkMath.NumberTheory.Legendre"
 
 /-!

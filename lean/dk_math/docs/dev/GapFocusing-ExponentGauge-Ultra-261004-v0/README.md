@@ -239,3 +239,21 @@ The next proposal transports rejection to exact small-prime floor formulas.
 
 [Source inventory](source-inventory-015.md) · [Findings](findings-015.md) ·
 [Validation](validation-015.md).
+
+## Instruction016 — square-anchored residue-cover counterexample packet
+
+[Report](report-016.md): exact forbidden-residue fibers and least-owner partition
+unify whole-shell wheel cover with the sqrt-rough census and corrected quotient
+balance. Injection holds iff `2n≤M_n`, precisely n=0, n=3 or n≥5; an elementary
+Euclidean proof gives `2n+4<M_n` for n≥5. On n≥2 the corrected numerical balance
+is equivalent to full cover. Covered lower least owners must change at every
+transition; this local restriction does not exclude full covers with changing
+owners. The two-level small-quotient wheel identifies Rejected exactly.
+All 300 natural anchors 1..300 and a separate 1031 calibration are recorded;
+kernel regressions include the n=5 near-miss and the inherited 1031 endpoint.
+Outcome B: the uniform strict corrected-balance gap remains an arithmetic
+provider, with a proved conditional consumer and a concrete implementation
+proposal in the report.
+
+[Source inventory](source-inventory-016.md) · [Findings](findings-016.md) ·
+[Validation](validation-016.md).
