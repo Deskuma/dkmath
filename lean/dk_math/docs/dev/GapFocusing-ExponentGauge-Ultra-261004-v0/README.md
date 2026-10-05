@@ -195,3 +195,20 @@ proposals.
 
 [Source inventory](source-inventory-012.md) · [Findings](findings-012.md) ·
 [Validation](validation-012.md).
+
+## Instruction 013 checkpoint
+
+[Report 013](report-013.md) — Outcome A for exact sqrt-rough moment balance and
+product cost refinement. The existing rough carrier's zero class is exactly
+uncovered; U+roughI+M3=R+M2 and tail+M3=M2 hold Nat-safely. Actual ordered
+pair/triple incidences realize M2/M3 and regroup to rough product waves. Raw
+pair/triple occupancy is at most2/1; parity sharpens the actual rough pair bound
+to1. Three-support seats are exactly pqs, so M3 counts actual shell products;
+two-support seats are p²q or pq². Five kernel calibrations through1019 yield
+structural prime endpoints through the product moment consumer. A503 raw
+candidate hit has exact rough triple cost0. No direct-failure prime was found
+in the bounded external scan of430 primes<=3000; a uniform singleton arithmetic
+provider remains a proposed next step.
+
+[Source inventory](source-inventory-013.md) · [Findings](findings-013.md) ·
+[Validation](validation-013.md).
