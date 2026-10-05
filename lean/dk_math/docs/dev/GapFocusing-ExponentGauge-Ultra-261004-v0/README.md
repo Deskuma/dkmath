@@ -257,3 +257,20 @@ proposal in the report.
 
 [Source inventory](source-inventory-016.md) · [Findings](findings-016.md) ·
 [Validation](validation-016.md).
+
+## Instruction017 - centered quadratic shell folding
+
+[Report](report-017.md): exact half-lattice window translation, fixed-point-free
+fold and canonical CenteredPair bijection. Internal gaps are the unit degree-two
+GN ladder. Every fold pair has different least owners by parity; the actual
+same-owner fibers are empty. Common support is instead exactly controlled by
+`n^2+(n+1)^2` and the internal gap. Activated support primes are 1 mod 4, have
+exact floor address counts, and cannot be shared by fold pairs in consecutive
+shells. Fold and successor insertion differ by one seat. These arithmetic
+bridges provide no uniform full-cover contradiction. All natural anchors
+1..300 plus 1031 have bounded diagnostics. The next proposal is the exact
+full-gcd norm-and-gap normal form. Outcome B.
+
+[Source inventory](source-inventory-017.md), [Findings](findings-017.md),
+[Declaration classification](declaration-classification-017.md),
+[Validation](validation-017.md).

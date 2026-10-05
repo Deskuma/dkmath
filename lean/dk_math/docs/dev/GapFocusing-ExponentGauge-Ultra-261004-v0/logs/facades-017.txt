@@ -1,0 +1,557 @@
+ℹ [1334/1359] Replayed DkMath.Algebra.BinomTail
+info: DkMath/Algebra/BinomTail.lean:15:0: file: DkMath.Algebra.BinomTail
+ℹ [1345/1359] Replayed DkMath.Lib.Cosmic.GTail
+info: DkMath/Lib/Cosmic/GTail.lean:10:0: file: DkMath.Lib.Cosmic.GTail
+ℹ [1346/1359] Replayed DkMath.Lib.Cosmic.GTailNat
+info: DkMath/Lib/Cosmic/GTailNat.lean:10:0: file: DkMath.Lib.Cosmic.GTailNat
+ℹ [1349/1359] Replayed DkMath.Lib.Cosmic.GTailCongruence
+info: DkMath/Lib/Cosmic/GTailCongruence.lean:13:0: file: DkMath.Lib.Cosmic.GTailCongruence
+ℹ [1350/1359] Replayed DkMath.Lib.Cosmic.GTailBoundary
+info: DkMath/Lib/Cosmic/GTailBoundary.lean:10:0: file: DkMath.Lib.Cosmic.GTailBoundary
+ℹ [1361/1444] Replayed DkMath.Lib.NumberTheory.PadicValNat
+info: DkMath/Lib/NumberTheory/PadicValNat.lean:12:0: file: DkMath.Lib.NumberTheory.PadicValNat
+ℹ [1362/1444] Replayed DkMath.Lib.Cosmic.GTailPadic
+info: DkMath/Lib/Cosmic/GTailPadic.lean:12:0: file: DkMath.Lib.Cosmic.GTailPadic
+ℹ [1363/1444] Replayed DkMath.CosmicFormula.GTail
+info: DkMath/CosmicFormula/GTail.lean:10:0: file: DkMath.CosmicFormula.GTail
+ℹ [1364/1444] Replayed DkMath.CosmicFormula.Defs
+info: DkMath/CosmicFormula/Defs.lean:12:0: file: DkMath.CosmicFormula.Defs
+ℹ [1366/1444] Replayed DkMath.ABC.PadicValNat
+info: DkMath/ABC/PadicValNat.lean:9:0: file: DkMath.ABC.PadicValNat
+ℹ [1367/1444] Replayed DkMath.CosmicFormula.CosmicFormulaBinom
+info: DkMath/CosmicFormula/CosmicFormulaBinom.lean:15:0: file: DkMath.CosmicFormula.CosmicFormulaBinom
+ℹ [1368/1444] Replayed DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+info: DkMath/NumberTheory/StructuralArithmetic/PrimitiveDirection.lean:10:0: file: DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+ℹ [1369/1444] Replayed DkMath.NumberTheory.Primitive.FinitePrimeWorld
+info: DkMath/NumberTheory/Primitive/FinitePrimeWorld.lean:11:0: file: DkMath.NumberTheory.Primitive.FinitePrimeWorld
+ℹ [1370/1444] Replayed DkMath.NumberTheory.Primitive.SquareBody
+info: DkMath/NumberTheory/Primitive/SquareBody.lean:11:0: file: DkMath.NumberTheory.Primitive.SquareBody
+ℹ [1371/1444] Replayed DkMath.NumberTheory.Legendre.Basic
+info: DkMath/NumberTheory/Legendre/Basic.lean:15:0: file: DkMath.NumberTheory.Legendre.Basic
+ℹ [1372/1444] Replayed DkMath.NumberTheory.Legendre.Wave
+info: DkMath/NumberTheory/Legendre/Wave.lean:9:0: file: DkMath.NumberTheory.Legendre.Wave
+ℹ [1373/1444] Replayed DkMath.NumberTheory.Legendre.Internal.PairCombinatorics
+info: DkMath/NumberTheory/Legendre/Internal/PairCombinatorics.lean:13:0: file: DkMath.NumberTheory.Legendre.Internal.PairCombinatorics
+ℹ [1374/1444] Replayed DkMath.NumberTheory.Legendre.PairOverlap
+info: DkMath/NumberTheory/Legendre/PairOverlap.lean:10:0: file: DkMath.NumberTheory.Legendre.PairOverlap
+ℹ [1375/1444] Replayed DkMath.NumberTheory.Legendre.CoprimePacket
+info: DkMath/NumberTheory/Legendre/CoprimePacket.lean:9:0: file: DkMath.NumberTheory.Legendre.CoprimePacket
+ℹ [1376/1444] Replayed DkMath.NumberTheory.Legendre.Quotient
+info: DkMath/NumberTheory/Legendre/Quotient.lean:8:0: file: DkMath.NumberTheory.Legendre.Quotient
+ℹ [1377/1444] Replayed DkMath.NumberTheory.Legendre.QuotientSupport
+info: DkMath/NumberTheory/Legendre/QuotientSupport.lean:8:0: file: DkMath.NumberTheory.Legendre.QuotientSupport
+ℹ [1378/1444] Replayed DkMath.NumberTheory.Legendre.Obstruction
+info: DkMath/NumberTheory/Legendre/Obstruction.lean:8:0: file: DkMath.NumberTheory.Legendre.Obstruction
+ℹ [1379/1444] Replayed DkMath.NumberTheory.Legendre.LocalizedObstruction
+info: DkMath/NumberTheory/Legendre/LocalizedObstruction.lean:10:0: file: DkMath.NumberTheory.Legendre.LocalizedObstruction
+ℹ [1380/1444] Replayed DkMath.NumberTheory.Legendre.PacketCross
+info: DkMath/NumberTheory/Legendre/PacketCross.lean:8:0: file: DkMath.NumberTheory.Legendre.PacketCross
+ℹ [1381/1444] Replayed DkMath.NumberTheory.Legendre.PacketCoprimality
+info: DkMath/NumberTheory/Legendre/PacketCoprimality.lean:9:0: file: DkMath.NumberTheory.Legendre.PacketCoprimality
+ℹ [1382/1444] Replayed DkMath.NumberTheory.Legendre.PacketUnitResidue
+info: DkMath/NumberTheory/Legendre/PacketUnitResidue.lean:9:0: file: DkMath.NumberTheory.Legendre.PacketUnitResidue
+ℹ [1383/1444] Replayed DkMath.NumberTheory.Legendre.SmallCofactor
+info: DkMath/NumberTheory/Legendre/SmallCofactor.lean:9:0: file: DkMath.NumberTheory.Legendre.SmallCofactor
+ℹ [1384/1444] Replayed DkMath.NumberTheory.Legendre.Frontier
+info: DkMath/NumberTheory/Legendre/Frontier.lean:10:0: file: DkMath.NumberTheory.Legendre.Frontier
+ℹ [3125/3159] Replayed DkMath.Gnomon.Algebra
+info: DkMath/Gnomon/Algebra.lean:11:0: file: DkMath.Gnomon.Algebra
+ℹ [3126/3159] Replayed DkMath.Gnomon.CosmicBridge
+info: DkMath/Gnomon/CosmicBridge.lean:10:0: file: DkMath.Gnomon.CosmicBridge
+ℹ [3127/3159] Replayed DkMath.NumberTheory.Legendre.GnomonBridge
+info: DkMath/NumberTheory/Legendre/GnomonBridge.lean:10:0: file: DkMath.NumberTheory.Legendre.GnomonBridge
+ℹ [3128/3159] Replayed DkMath.NumberTheory.PrimorialUniverse.FiniteReservationEscape
+info: DkMath/NumberTheory/PrimorialUniverse/FiniteReservationEscape.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.FiniteReservationEscape
+ℹ [3129/3159] Replayed DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization
+info: DkMath/NumberTheory/PrimorialUniverse/FinitePrimeSynchronization.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization
+ℹ [3130/3159] Replayed DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor
+info: DkMath/NumberTheory/PrimorialUniverse/WheelSurvivor.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor
+ℹ [3131/3159] Replayed DkMath.NumberTheory.PrimorialUniverse.FreshPrimeLift
+info: DkMath/NumberTheory/PrimorialUniverse/FreshPrimeLift.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.FreshPrimeLift
+ℹ [3132/3159] Replayed DkMath.NumberTheory.PrimorialUniverse.WheelReplication
+info: DkMath/NumberTheory/PrimorialUniverse/WheelReplication.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.WheelReplication
+ℹ [3133/3159] Replayed DkMath.NumberTheory.PrimorialUniverse.WheelProjection
+info: DkMath/NumberTheory/PrimorialUniverse/WheelProjection.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.WheelProjection
+ℹ [3134/3159] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOrbit
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorOrbit.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOrbit
+ℹ [3135/3159] Replayed DkMath.NumberTheory.Legendre.PrimorialWheelBridge
+info: DkMath/NumberTheory/Legendre/PrimorialWheelBridge.lean:11:0: file: DkMath.NumberTheory.Legendre.PrimorialWheelBridge
+ℹ [3136/3159] Replayed DkMath.NumberTheory.Legendre.PrimorialWheelSuccessor
+info: DkMath/NumberTheory/Legendre/PrimorialWheelSuccessor.lean:10:0: file: DkMath.NumberTheory.Legendre.PrimorialWheelSuccessor
+ℹ [3137/3159] Replayed DkMath.NumberTheory.Legendre.GnomonSuccessor
+info: DkMath/NumberTheory/Legendre/GnomonSuccessor.lean:11:0: file: DkMath.NumberTheory.Legendre.GnomonSuccessor
+ℹ [3138/3159] Replayed DkMath.NumberTheory.Legendre.GnomonSupportTurnover
+info: DkMath/NumberTheory/Legendre/GnomonSupportTurnover.lean:9:0: file: DkMath.NumberTheory.Legendre.GnomonSupportTurnover
+ℹ [3139/3159] Replayed DkMath.NumberTheory.MultiGauge.Basic
+info: DkMath/NumberTheory/MultiGauge/Basic.lean:9:0: file: DkMath.NumberTheory.MultiGauge.Basic
+ℹ [3140/3159] Replayed DkMath.NumberTheory.MultiGauge.PrimeTransport
+info: DkMath/NumberTheory/MultiGauge/PrimeTransport.lean:9:0: file: DkMath.NumberTheory.MultiGauge.PrimeTransport
+ℹ [3141/3159] Replayed DkMath.NumberTheory.MultiGauge.GnomonPetalTransition
+info: DkMath/NumberTheory/MultiGauge/GnomonPetalTransition.lean:10:0: file: DkMath.NumberTheory.MultiGauge.GnomonPetalTransition
+info: DkMath/NumberTheory/MultiGauge/GnomonPetalTransition.lean:105:0: 'DkMath.NumberTheory.MultiGauge.oddGnomonGaugeStage_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMath/NumberTheory/MultiGauge/GnomonPetalTransition.lean:106:0: 'DkMath.NumberTheory.MultiGauge.gnomonPetalTransition' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMath/NumberTheory/MultiGauge/GnomonPetalTransition.lean:107:0: 'DkMath.NumberTheory.MultiGauge.prime_dvd_oddGnomon_factor_of_petal_new_capture' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+ℹ [3142/3159] Replayed DkMath.NumberTheory.Legendre.GnomonPetalTurnover
+info: DkMath/NumberTheory/Legendre/GnomonPetalTurnover.lean:10:0: file: DkMath.NumberTheory.Legendre.GnomonPetalTurnover
+info: DkMath/NumberTheory/Legendre/GnomonPetalTurnover.lean:85:0: 'DkMath.NumberTheory.Legendre.mem_reindexed_primeSupport_inter_lower_petalMul_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMath/NumberTheory/Legendre/GnomonPetalTurnover.lean:86:0: 'DkMath.NumberTheory.Legendre.common_lower_dvd_gnomonPetalTransition_numerator_of_not_dvd_first' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+ℹ [3143/3159] Replayed DkMath.CFBRC.Defs
+info: DkMath/CFBRC/Defs.lean:9:0: file: DkMath.CFBRC.Defs
+ℹ [3144/3159] Replayed DkMath.Lib.Cosmic.GTailCyclotomic
+info: DkMath/Lib/Cosmic/GTailCyclotomic.lean:10:0: file: DkMath.Lib.Cosmic.GTailCyclotomic
+ℹ [8971/9002] Replayed DkMath.NumberTheory.GapFocusing.CyclotomicAddress
+info: DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean:11:0: file: DkMath.NumberTheory.GapFocusing.CyclotomicAddress
+ℹ [8972/9002] Replayed DkMath.NumberTheory.Legendre.CenteredPair
+info: DkMath/NumberTheory/Legendre/CenteredPair.lean:9:0: file: DkMath.NumberTheory.Legendre.CenteredPair
+ℹ [8973/9002] Replayed DkMath.NumberTheory.Legendre.CenteredPacketTriangle
+info: DkMath/NumberTheory/Legendre/CenteredPacketTriangle.lean:9:0: file: DkMath.NumberTheory.Legendre.CenteredPacketTriangle
+ℹ [8974/9002] Replayed DkMath.NumberTheory.Legendre.CenteredPacketDiamond
+info: DkMath/NumberTheory/Legendre/CenteredPacketDiamond.lean:10:0: file: DkMath.NumberTheory.Legendre.CenteredPacketDiamond
+ℹ [8975/9002] Replayed DkMath.NumberTheory.Legendre.CenteredPacketClique4
+info: DkMath/NumberTheory/Legendre/CenteredPacketClique4.lean:9:0: file: DkMath.NumberTheory.Legendre.CenteredPacketClique4
+ℹ [8976/9002] Replayed DkMath.NumberTheory.Legendre.CoprimeSeatCapacity
+info: DkMath/NumberTheory/Legendre/CoprimeSeatCapacity.lean:10:0: file: DkMath.NumberTheory.Legendre.CoprimeSeatCapacity
+ℹ [8977/9002] Replayed DkMath.NumberTheory.Legendre.OldSupportCapacity
+info: DkMath/NumberTheory/Legendre/OldSupportCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.OldSupportCapacity
+ℹ [8978/9002] Replayed DkMath.NumberTheory.Primitive.PeriodicPrimeWorld
+info: DkMath/NumberTheory/Primitive/PeriodicPrimeWorld.lean:13:0: file: DkMath.NumberTheory.Primitive.PeriodicPrimeWorld
+ℹ [8979/9002] Replayed DkMath.NumberTheory.Legendre.OldSupportGcd
+info: DkMath/NumberTheory/Legendre/OldSupportGcd.lean:11:0: file: DkMath.NumberTheory.Legendre.OldSupportGcd
+ℹ [8980/9002] Replayed DkMath.NumberTheory.Legendre.FreshCollisionMatching
+info: DkMath/NumberTheory/Legendre/FreshCollisionMatching.lean:10:0: file: DkMath.NumberTheory.Legendre.FreshCollisionMatching
+ℹ [8981/9002] Replayed DkMath.NumberTheory.Legendre.FreshCollisionRepair
+info: DkMath/NumberTheory/Legendre/FreshCollisionRepair.lean:10:0: file: DkMath.NumberTheory.Legendre.FreshCollisionRepair
+ℹ [8982/9002] Replayed DkMath.NumberTheory.Legendre.ActivePrimeCapacity
+info: DkMath/NumberTheory/Legendre/ActivePrimeCapacity.lean:10:0: file: DkMath.NumberTheory.Legendre.ActivePrimeCapacity
+ℹ [8983/9002] Replayed DkMath.NumberTheory.Legendre.ParitySafeActiveCapacity
+info: DkMath/NumberTheory/Legendre/ParitySafeActiveCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeActiveCapacity
+ℹ [8984/9002] Replayed DkMath.NumberTheory.Legendre.ParitySafeWavePruning
+info: DkMath/NumberTheory/Legendre/ParitySafeWavePruning.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeWavePruning
+ℹ [8985/9002] Replayed DkMath.NumberTheory.Legendre.ParitySafeIncidenceBalance
+info: DkMath/NumberTheory/Legendre/ParitySafeIncidenceBalance.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeIncidenceBalance
+ℹ [8986/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeReducedResidue
+info: DkMath/NumberTheory/Legendre/ParitySafeReducedResidue.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeReducedResidue
+ℹ [8987/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeMobiusWave
+info: DkMath/NumberTheory/Legendre/ParitySafeMobiusWave.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeMobiusWave
+ℹ [8988/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeMobiusOddCorrection
+info: DkMath/NumberTheory/Legendre/ParitySafeMobiusOddCorrection.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeMobiusOddCorrection
+ℹ [8989/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeSupportExcessQuotient
+info: DkMath/NumberTheory/Legendre/ParitySafeSupportExcessQuotient.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeSupportExcessQuotient
+ℹ [8990/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafePairResidual
+info: DkMath/NumberTheory/Legendre/ParitySafePairResidual.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafePairResidual
+ℹ [8991/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeTripleProductGate
+info: DkMath/NumberTheory/Legendre/ParitySafeTripleProductGate.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeTripleProductGate
+ℹ [8992/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeTripleFarCofactor
+info: DkMath/NumberTheory/Legendre/ParitySafeTripleFarCofactor.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeTripleFarCofactor
+ℹ [8993/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarTripleRecharge
+info: DkMath/NumberTheory/Legendre/ParitySafeFarTripleRecharge.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarTripleRecharge
+ℹ [8994/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarTripleCofactorSupport
+info: DkMath/NumberTheory/Legendre/ParitySafeFarTripleCofactorSupport.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarTripleCofactorSupport
+ℹ [8995/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarCofactorWave
+info: DkMath/NumberTheory/Legendre/ParitySafeFarCofactorWave.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarCofactorWave
+ℹ [8996/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveSelector
+info: DkMath/NumberTheory/Legendre/ParitySafeFarProductWaveSelector.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveSelector
+ℹ [8997/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveRoughCofactor
+info: DkMath/NumberTheory/Legendre/ParitySafeFarProductWaveRoughCofactor.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveRoughCofactor
+ℹ [8998/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveSurvival
+info: DkMath/NumberTheory/Legendre/ParitySafeFarProductWaveSurvival.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveSurvival
+ℹ [8999/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarProductKeyRecharge
+info: DkMath/NumberTheory/Legendre/ParitySafeFarProductKeyRecharge.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarProductKeyRecharge
+ℹ [9000/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargePairProduct
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargePairProduct.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargePairProduct
+ℹ [9001/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeDualBaseCapacity
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeDualBaseCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeDualBaseCapacity
+ℹ [9002/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeOddShellSelector
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeOddShellSelector.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeOddShellSelector
+ℹ [9003/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeExactDualBase
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeExactDualBase.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeExactDualBase
+ℹ [9004/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFourthSplit
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeDepthFourthSplit.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFourthSplit
+ℹ [9005/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthSeatFiber
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeDepthSeatFiber.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthSeatFiber
+ℹ [9006/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFiberExcess
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeDepthFiberExcess.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFiberExcess
+ℹ [9007/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFiberResidualCapacity
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeDepthFiberResidualCapacity.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFiberResidualCapacity
+ℹ [9008/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeFourDirectionGate
+info: DkMath/NumberTheory/Legendre/ParitySafeFourDirectionGate.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFourDirectionGate
+ℹ [9009/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeTerminalSupportCost
+info: DkMath/NumberTheory/Legendre/ParitySafeTerminalSupportCost.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeTerminalSupportCost
+ℹ [9010/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeChargedResidualLedger
+info: DkMath/NumberTheory/Legendre/ParitySafeChargedResidualLedger.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeChargedResidualLedger
+ℹ [9011/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeLowCostResidualSplit
+info: DkMath/NumberTheory/Legendre/ParitySafeLowCostResidualSplit.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeLowCostResidualSplit
+ℹ [9012/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeNearFirstPrimeWaveCapacity
+info: DkMath/NumberTheory/Legendre/ParitySafeNearFirstPrimeWaveCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeNearFirstPrimeWaveCapacity
+ℹ [9013/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeFourthDualBaseCapacity
+info: DkMath/NumberTheory/Legendre/ParitySafeFourthDualBaseCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFourthDualBaseCapacity
+ℹ [9014/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeFullCoverCapacityFrontier
+info: DkMath/NumberTheory/Legendre/ParitySafeFullCoverCapacityFrontier.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeFullCoverCapacityFrontier
+ℹ [9015/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeDepthResidualFifthTrigger
+info: DkMath/NumberTheory/Legendre/ParitySafeDepthResidualFifthTrigger.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeDepthResidualFifthTrigger
+ℹ [9016/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeFifthDirectionGate
+info: DkMath/NumberTheory/Legendre/ParitySafeFifthDirectionGate.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFifthDirectionGate
+ℹ [9017/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeCollisionPairOverlapCancellation
+info: DkMath/NumberTheory/Legendre/ParitySafeCollisionPairOverlapCancellation.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeCollisionPairOverlapCancellation
+ℹ [9018/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeLowCostCapacitySlack
+info: DkMath/NumberTheory/Legendre/ParitySafeLowCostCapacitySlack.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeLowCostCapacitySlack
+ℹ [9019/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeActualFiberCancellation
+info: DkMath/NumberTheory/Legendre/ParitySafeActualFiberCancellation.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeActualFiberCancellation
+ℹ [9020/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeCollisionResidualPairSlackIncidence
+info: DkMath/NumberTheory/Legendre/ParitySafeCollisionResidualPairSlackIncidence.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeCollisionResidualPairSlackIncidence
+ℹ [9021/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeUnusedResidualPairRouting
+info: DkMath/NumberTheory/Legendre/ParitySafeUnusedResidualPairRouting.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeUnusedResidualPairRouting
+ℹ [9022/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeSecondCancellationRedundancyAudit
+info: DkMath/NumberTheory/Legendre/ParitySafeSecondCancellationRedundancyAudit.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeSecondCancellationRedundancyAudit
+ℹ [9023/9098] Replayed DkMath.NumberTheory.Legendre.PrimorialWheelSuccessorEscape
+info: DkMath/NumberTheory/Legendre/PrimorialWheelSuccessorEscape.lean:10:0: file: DkMath.NumberTheory.Legendre.PrimorialWheelSuccessorEscape
+ℹ [9024/9098] Replayed DkMath.NumberTheory.Legendre.PrimorialWheelTwinThreshold
+info: DkMath/NumberTheory/Legendre/PrimorialWheelTwinThreshold.lean:10:0: file: DkMath.NumberTheory.Legendre.PrimorialWheelTwinThreshold
+ℹ [9025/9098] Replayed DkMath.NumberTheory.Legendre.PrimorialWheelOldEscapeFrontier
+info: DkMath/NumberTheory/Legendre/PrimorialWheelOldEscapeFrontier.lean:10:0: file: DkMath.NumberTheory.Legendre.PrimorialWheelOldEscapeFrontier
+ℹ [9026/9098] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhase
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhase.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhase
+ℹ [9027/9098] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPrimeSign
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPrimeSign.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPrimeSign
+ℹ [9028/9098] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPrimeSignCRT
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPrimeSignCRT.lean:12:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPrimeSignCRT
+ℹ [9029/9098] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseFiber
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseFiber.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseFiber
+ℹ [9030/9098] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseFiberProjection
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseFiberProjection.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseFiberProjection
+ℹ [9031/9098] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSurvivorSubcover
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseSurvivorSubcover.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSurvivorSubcover
+ℹ [9032/9098] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndex
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseLiftIndex.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndex
+ℹ [9033/9098] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexAffine
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseLiftIndexAffine.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexAffine
+ℹ [9034/9098] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexReflection
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseLiftIndexReflection.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexReflection
+ℹ [9035/9098] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexNormalForm
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseLiftIndexNormalForm.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexNormalForm
+ℹ [9036/9098] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexCenterTransport
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseLiftIndexCenterTransport.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexCenterTransport
+ℹ [9037/9098] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSuccessorTransport
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseSuccessorTransport.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSuccessorTransport
+ℹ [9038/9098] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhasePeriodTransport
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhasePeriodTransport.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhasePeriodTransport
+ℹ [9039/9098] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixTransport
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseMixedRadixTransport.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixTransport
+ℹ [9040/9098] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixAudit
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseMixedRadixAudit.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixAudit
+ℹ [9047/9098] Replayed DkMath.NumberTheory.Legendre.MultiGaugeBridge
+info: DkMath/NumberTheory/Legendre/MultiGaugeBridge.lean:10:0: file: DkMath.NumberTheory.Legendre.MultiGaugeBridge
+ℹ [9048/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootFiber
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootFiber
+ℹ [9049/9098] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootSieve
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootSieve
+ℹ [9050/9098] Replayed DkMath.NumberTheory.Legendre.Internal.RoughMomentCombinatorics
+info: DkMath/NumberTheory/Legendre/Internal/RoughMomentCombinatorics.lean:13:0: file: DkMath.NumberTheory.Legendre.Internal.RoughMomentCombinatorics
+ℹ [9051/9098] Replayed DkMath.NumberTheory.Legendre.GnomonResidueCover
+info: DkMath/NumberTheory/Legendre/GnomonResidueCover.lean:9:0: file: DkMath.NumberTheory.Legendre.GnomonResidueCover
+ℹ [9052/9098] Replayed DkMath.NumberTheory.Legendre.SquareShellWheelPeriod
+info: DkMath/NumberTheory/Legendre/SquareShellWheelPeriod.lean:9:0: file: DkMath.NumberTheory.Legendre.SquareShellWheelPeriod
+ℹ [9053/9098] Replayed DkMath.NumberTheory.Legendre.QuadraticGnomonFold
+info: DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean:10:0: file: DkMath.NumberTheory.Legendre.QuadraticGnomonFold
+ℹ [9055/9172] Replayed DkMath.Polyomino
+info: DkMath/Polyomino.lean:10:0: file: DkMath.Polyomino
+ℹ [9056/9172] Replayed DkMath.CellDim
+info: DkMath/CellDim.lean:16:0: file: DkMath.CellDim
+ℹ [9057/9172] Replayed DkMath.CosmicFormula.CosmicTheorems
+info: DkMath/CosmicFormula/CosmicTheorems.lean:10:0: file: DkMath.CosmicFormula.CosmicTheorems
+ℹ [9058/9172] Replayed DkMath.Basic
+info: DkMath/Basic.lean:9:0: file: DkMath.Basic
+info: DkMath/Basic.lean:24:0: "world"
+ℹ [9059/9172] Replayed DkMath.ABC.Rad
+info: DkMath/ABC/Rad.lean:5:0: file: DkMath.ABC.Rad
+ℹ [9060/9172] Replayed DkMath.ABC.Square
+info: DkMath/ABC/Square.lean:9:0: file: DkMath.ABC.Square
+ℹ [9061/9172] Replayed DkMath.Analysis.Basic
+info: DkMath/Analysis/Basic.lean:9:0: file: DkMath.Analysis.Basic
+ℹ [9062/9172] Replayed DkMath.Analysis.GapGN
+info: DkMath/Analysis/GapGN.lean:9:0: file: DkMath.Analysis.GapGN
+ℹ [9063/9172] Replayed DkMath.Analysis.DkReal.Interval
+info: DkMath/Analysis/DkReal/Interval.lean:9:0: file: DkMath.Analysis.DkReal.Interval
+ℹ [9064/9172] Replayed DkMath.Analysis.DkReal.Basic
+info: DkMath/Analysis/DkReal/Basic.lean:10:0: file: DkMath.Analysis.DkReal.Basic
+ℹ [9065/9172] Replayed DkMath.Analysis.DkReal.Pow
+info: DkMath/Analysis/DkReal/Pow.lean:12:0: file: DkMath.Analysis.DkReal.Pow
+ℹ [9066/9172] Replayed DkMath.Analysis.DkReal.PowBound
+info: DkMath/Analysis/DkReal/PowBound.lean:9:0: file: DkMath.Analysis.DkReal.PowBound
+ℹ [9067/9172] Replayed DkMath.Analysis.DkReal.Arithmetic
+info: DkMath/Analysis/DkReal/Arithmetic.lean:9:0: file: DkMath.Analysis.DkReal.Arithmetic
+ℹ [9068/9172] Replayed DkMath.Analysis.DkReal.Equiv
+info: DkMath/Analysis/DkReal/Equiv.lean:10:0: file: DkMath.Analysis.DkReal.Equiv
+ℹ [9069/9172] Replayed DkMath.Analysis.DkReal.DkNNReal
+info: DkMath/Analysis/DkReal/DkNNReal.lean:9:0: file: DkMath.Analysis.DkReal.DkNNReal
+ℹ [9070/9172] Replayed DkMath.Analysis.DkReal.DkNNRealQ
+info: DkMath/Analysis/DkReal/DkNNRealQ.lean:9:0: file: DkMath.Analysis.DkReal.DkNNRealQ
+ℹ [9071/9172] Replayed DkMath.Analysis.DkReal.Order
+info: DkMath/Analysis/DkReal/Order.lean:9:0: file: DkMath.Analysis.DkReal.Order
+ℹ [9072/9172] Replayed DkMath.Analysis.DkReal.CanonicalOrder
+info: DkMath/Analysis/DkReal/CanonicalOrder.lean:9:0: file: DkMath.Analysis.DkReal.CanonicalOrder
+ℹ [9073/9172] Replayed DkMath.Analysis.DkReal.Semantic
+info: DkMath/Analysis/DkReal/Semantic.lean:9:0: file: DkMath.Analysis.DkReal.Semantic
+ℹ [9075/9172] Replayed DkMath.CFBRC.Basic
+info: DkMath/CFBRC/Basic.lean:11:0: file: DkMath.CFBRC.Basic
+ℹ [9077/9172] Replayed DkMath.CosmicFormula.CoreBeamGap
+info: DkMath/CosmicFormula/CoreBeamGap.lean:10:0: file: DkMath.CosmicFormula.CoreBeamGap
+ℹ [9078/9172] Replayed DkMath.CosmicFormula.CosmicDifferenceKernel
+info: DkMath/CosmicFormula/CosmicDifferenceKernel.lean:9:0: file: DkMath.CosmicFormula.CosmicDifferenceKernel
+ℹ [9079/9172] Replayed DkMath.CosmicFormula.CosmicDerivativeBasic
+info: DkMath/CosmicFormula/CosmicDerivativeBasic.lean:10:0: file: DkMath.CosmicFormula.CosmicDerivativeBasic
+ℹ [9080/9172] Replayed DkMath.CosmicFormula.CosmicDerivativePower
+info: DkMath/CosmicFormula/CosmicDerivativePower.lean:11:0: file: DkMath.CosmicFormula.CosmicDerivativePower
+ℹ [9081/9172] Replayed DkMath.CosmicFormula.CosmicDerivativePowerLimit
+info: DkMath/CosmicFormula/CosmicDerivativePowerLimit.lean:11:0: file: DkMath.CosmicFormula.CosmicDerivativePowerLimit
+ℹ [9082/9172] Replayed DkMath.CosmicFormula.CosmicDerivativePolynomial
+info: DkMath/CosmicFormula/CosmicDerivativePolynomial.lean:10:0: file: DkMath.CosmicFormula.CosmicDerivativePolynomial
+ℹ [9083/9172] Replayed DkMath.CosmicFormula.CosmicFormulaBasic
+info: DkMath/CosmicFormula/CosmicFormulaBasic.lean:10:0: file: DkMath.CosmicFormula.CosmicFormulaBasic
+ℹ [9084/9172] Replayed DkMath.CosmicFormula.CosmicFormulaDerivativeBridge
+info: DkMath/CosmicFormula/CosmicFormulaDerivativeBridge.lean:12:0: file: DkMath.CosmicFormula.CosmicFormulaDerivativeBridge
+ℹ [9086/9172] Replayed DkMath.CosmicFormula.CosmicFormulaGeom
+info: DkMath/CosmicFormula/CosmicFormulaGeom.lean:9:0: file: DkMath.CosmicFormula.CosmicFormulaGeom
+ℹ [9087/9172] Replayed DkMath.CosmicFormula.CosmicFormulaLinear
+info: DkMath/CosmicFormula/CosmicFormulaLinear.lean:9:0: file: DkMath.CosmicFormula.CosmicFormulaLinear
+ℹ [9088/9172] Replayed DkMath.Tromino.Basic
+info: DkMath/Tromino/Basic.lean:12:0: file: DkMath.Tromino.Basic
+ℹ [9089/9172] Replayed DkMath.CosmicFormula.CosmicFormulaTrominoLink
+info: DkMath/CosmicFormula/CosmicFormulaTrominoLink.lean:11:0: file: DkMath.CosmicFormula.CosmicFormulaTrominoLink
+ℹ [9090/9172] Replayed DkMath.CosmicFormula.CosmicFormulaCellDim
+info: DkMath/CosmicFormula/CosmicFormulaCellDim.lean:11:0: file: DkMath.CosmicFormula.CosmicFormulaCellDim
+ℹ [9091/9172] Replayed DkMath.CosmicFormula.CosmicFormulaExp
+info: DkMath/CosmicFormula/CosmicFormulaExp.lean:12:0: file: DkMath.CosmicFormula.CosmicFormulaExp
+ℹ [9092/9172] Replayed DkMath.CosmicFormula.ResidualNat
+info: DkMath/CosmicFormula/ResidualNat.lean:12:0: file: DkMath.CosmicFormula.ResidualNat
+ℹ [9093/9172] Replayed DkMath.CosmicFormula.ResidualInt
+info: DkMath/CosmicFormula/ResidualInt.lean:12:0: file: DkMath.CosmicFormula.ResidualInt
+ℹ [9094/9172] Replayed DkMath.CosmicFormula.Mass.BodyGapSplit
+info: DkMath/CosmicFormula/Mass/BodyGapSplit.lean:9:0: file: DkMath.CosmicFormula.Mass.BodyGapSplit
+ℹ [9095/9172] Replayed DkMath.CosmicFormula.CosmicFormulaPythagoras
+info: DkMath/CosmicFormula/CosmicFormulaPythagoras.lean:10:0: file: DkMath.CosmicFormula.CosmicFormulaPythagoras
+ℹ [9096/9172] Replayed DkMath.CosmicFormula.SquareGnomon
+info: DkMath/CosmicFormula/SquareGnomon.lean:10:0: file: DkMath.CosmicFormula.SquareGnomon
+ℹ [9097/9172] Replayed DkMath.CosmicFormula.QuadraticCenteredBridge
+info: DkMath/CosmicFormula/QuadraticCenteredBridge.lean:9:0: file: DkMath.CosmicFormula.QuadraticCenteredBridge
+ℹ [9098/9172] Replayed DkMath.CosmicFormula.ThreeElement.Basic
+info: DkMath/CosmicFormula/ThreeElement/Basic.lean:9:0: file: DkMath.CosmicFormula.ThreeElement.Basic
+ℹ [9099/9172] Replayed DkMath.CosmicFormula.ThreeElement.MagicCore
+info: DkMath/CosmicFormula/ThreeElement/MagicCore.lean:9:0: file: DkMath.CosmicFormula.ThreeElement.MagicCore
+ℹ [9100/9172] Replayed DkMath.CosmicFormula.ThreeElement.Assimilation
+info: DkMath/CosmicFormula/ThreeElement/Assimilation.lean:9:0: file: DkMath.CosmicFormula.ThreeElement.Assimilation
+ℹ [9101/9172] Replayed DkMath.CosmicFormula.ThreeElement.Collision
+info: DkMath/CosmicFormula/ThreeElement/Collision.lean:9:0: file: DkMath.CosmicFormula.ThreeElement.Collision
+ℹ [9102/9172] Replayed DkMath.CosmicFormula.Rotation.CF2D.Basic
+info: DkMath/CosmicFormula/Rotation/CF2D/Basic.lean:9:0: file: DkMath.CosmicFormula.Rotation.CF2D.Basic
+ℹ [9103/9172] Replayed DkMath.CosmicFormula.Rotation.CF2D.ThreeElementBridge
+info: DkMath/CosmicFormula/Rotation/CF2D/ThreeElementBridge.lean:10:0: file: DkMath.CosmicFormula.Rotation.CF2D.ThreeElementBridge
+ℹ [9104/9172] Replayed DkMath.CosmicFormula.Rotation.CF2D.Trig
+info: DkMath/CosmicFormula/Rotation/CF2D/Trig.lean:9:0: file: DkMath.CosmicFormula.Rotation.CF2D.Trig
+ℹ [9105/9172] Replayed DkMath.CosmicFormula.Rotation.CF2D.KernelPower
+info: DkMath/CosmicFormula/Rotation/CF2D/KernelPower.lean:9:0: file: DkMath.CosmicFormula.Rotation.CF2D.KernelPower
+info: DkMath/CosmicFormula/Rotation/CF2D/KernelPower.lean:134:0: 1 : UnitKernel ℝ
+info: DkMath/CosmicFormula/Rotation/CF2D/KernelPower.lean:135:0: fun r ↦ r ^ 5 : UnitKernel ℝ → UnitKernel ℝ
+info: DkMath/CosmicFormula/Rotation/CF2D/KernelPower.lean:136:0: fun r ↦ orderOf r : UnitKernel ℝ → ℕ
+info: DkMath/CosmicFormula/Rotation/CF2D/KernelPower.lean:137:0: DkMath.CosmicFormula.Rotation.CF2D.KernelFamily.kernel_nsmul.{u, v} {T : Type u} {R : Type v} [AddMonoid T] [CommRing R]
+  (F : KernelFamily T R) (n : ℕ) (t : T) : F.kernel (n • t) = F.kernel t ^ n
+info: DkMath/CosmicFormula/Rotation/CF2D/KernelPower.lean:138:0: DkMath.CosmicFormula.Rotation.CF2D.UnitKernel.pow_act.{u} {R : Type u} [CommRing R] (r : UnitKernel R) (n : ℕ)
+  (z : Vec R) : (r ^ n).act z = r.act^[n] z
+info: DkMath/CosmicFormula/Rotation/CF2D/KernelPower.lean:139:0: DkMath.CosmicFormula.Rotation.CF2D.ExactKernelOrder.{u} {R : Type u} [CommRing R] (r : UnitKernel R) (k : ℕ) : Prop
+info: DkMath/CosmicFormula/Rotation/CF2D/KernelPower.lean:140:0: DkMath.CosmicFormula.Rotation.CF2D.exactKernelOrder_iff_orderOf_eq.{u} {R : Type u} [CommRing R] {r : UnitKernel R}
+  {k : ℕ} (hk : 0 < k) : ExactKernelOrder r k ↔ orderOf r = k
+ℹ [9106/9172] Replayed DkMath.CosmicFormula.Rotation.CF2D.CFSinCos
+info: DkMath/CosmicFormula/Rotation/CF2D/CFSinCos.lean:9:0: file: DkMath.CosmicFormula.Rotation.CF2D.CFSinCos
+ℹ [9107/9172] Replayed DkMath.CosmicFormula.Rotation.CF2D.Real
+info: DkMath/CosmicFormula/Rotation/CF2D/Real.lean:9:0: file: DkMath.CosmicFormula.Rotation.CF2D.Real
+ℹ [9108/9172] Replayed DkMath.Analysis.DkReal.SemanticCF2D
+info: DkMath/Analysis/DkReal/SemanticCF2D.lean:10:0: file: DkMath.Analysis.DkReal.SemanticCF2D
+ℹ [9109/9172] Replayed DkMath.Analysis.DkReal.SemanticCF2DPhase
+info: DkMath/Analysis/DkReal/SemanticCF2DPhase.lean:9:0: file: DkMath.Analysis.DkReal.SemanticCF2DPhase
+ℹ [9110/9172] Replayed DkMath.CosmicFormula.Rotation.CF2D.Topology
+info: DkMath/CosmicFormula/Rotation/CF2D/Topology.lean:10:0: file: DkMath.CosmicFormula.Rotation.CF2D.Topology
+ℹ [9111/9172] Replayed DkMath.Analysis.DkReal.SemanticCF2DPath
+info: DkMath/Analysis/DkReal/SemanticCF2DPath.lean:11:0: file: DkMath.Analysis.DkReal.SemanticCF2DPath
+ℹ [9112/9172] Replayed DkMath.Analysis.DkReal.SemanticCF2DNormalize
+info: DkMath/Analysis/DkReal/SemanticCF2DNormalize.lean:10:0: file: DkMath.Analysis.DkReal.SemanticCF2DNormalize
+ℹ [9113/9172] Replayed DkMath.CosmicFormula.Rotation.CF2D.Failure
+info: DkMath/CosmicFormula/Rotation/CF2D/Failure.lean:9:0: file: DkMath.CosmicFormula.Rotation.CF2D.Failure
+ℹ [9114/9172] Replayed DkMath.CFBRC.CyclotomicProduct
+info: DkMath/CFBRC/CyclotomicProduct.lean:10:0: file: DkMath.CFBRC.CyclotomicProduct
+ℹ [9115/9172] Replayed DkMath.NumberTheory.GcdDiffPow
+info: DkMath/NumberTheory/GcdDiffPow.lean:10:0: file: DkMath.NumberTheory.GcdDiffPow
+ℹ [9116/9172] Replayed DkMath.NumberTheory.GcdLemmas
+info: DkMath/NumberTheory/GcdLemmas.lean:10:0: file: DkMath.NumberTheory.GcdLemmas
+ℹ [9117/9172] Replayed DkMath.NumberTheory.GcdNatAbsDivD
+info: DkMath/NumberTheory/GcdNatAbsDivD.lean:10:0: file: DkMath.NumberTheory.GcdNatAbsDivD
+ℹ [9118/9172] Replayed DkMath.NumberTheory.GdcDivD
+info: DkMath/NumberTheory/GdcDivD.lean:11:0: file: DkMath.NumberTheory.GdcDivD
+ℹ [9119/9172] Replayed DkMath.NumberTheory.ZsigmondyCyclotomic
+info: DkMath/NumberTheory/ZsigmondyCyclotomic.lean:24:0: file: DkMath.NumberTheory.ZsigmondyCyclotomic
+ℹ [9120/9172] Replayed DkMath.Zsigmondy
+info: DkMath/Zsigmondy.lean:11:0: file: DkMath.Zsigmondy
+ℹ [9121/9172] Replayed DkMath.NumberTheory.GapFocusing.PrimeOrder
+info: DkMath/NumberTheory/GapFocusing/PrimeOrder.lean:10:0: file: DkMath.NumberTheory.GapFocusing.PrimeOrder
+ℹ [9122/9172] Replayed DkMath.NumberTheory.GapFocusing.HomogeneousAddress
+info: DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean:11:0: file: DkMath.NumberTheory.GapFocusing.HomogeneousAddress
+ℹ [9124/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafePersistence
+info: DkMath/NumberTheory/Legendre/ParitySafePersistence.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafePersistence
+ℹ [9125/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafePersistenceParity
+info: DkMath/NumberTheory/Legendre/ParitySafePersistenceParity.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafePersistenceParity
+ℹ [9126/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeFreshCost
+info: DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeFreshCost
+ℹ [9127/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeBlockLocalization
+info: DkMath/NumberTheory/Legendre/ParitySafeBlockLocalization.lean:11:0: file: DkMath.NumberTheory.Legendre.ParitySafeBlockLocalization
+ℹ [9128/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeIncidenceUpper
+info: DkMath/NumberTheory/Legendre/ParitySafeIncidenceUpper.lean:11:0: file: DkMath.NumberTheory.Legendre.ParitySafeIncidenceUpper
+ℹ [9129/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeExcessCertificate
+info: DkMath/NumberTheory/Legendre/ParitySafeExcessCertificate.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeExcessCertificate
+ℹ [9130/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeCRTSeat
+info: DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean:11:0: file: DkMath.NumberTheory.Legendre.ParitySafeCRTSeat
+ℹ [9131/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeMergedCRT
+info: DkMath/NumberTheory/Legendre/ParitySafeMergedCRT.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeMergedCRT
+ℹ [9132/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeMixedCRT
+info: DkMath/NumberTheory/Legendre/ParitySafeMixedCRT.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeMixedCRT
+ℹ [9133/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootCharge
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootCharge.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootCharge
+ℹ [9134/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootTail
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootTail
+ℹ [9135/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootEleven
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootEleven.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootEleven
+ℹ [9136/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRoughCount
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRoughCount
+ℹ [9137/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafePrimeAnchorCap
+info: DkMath/NumberTheory/Legendre/ParitySafePrimeAnchorCap.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafePrimeAnchorCap
+ℹ [9138/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughMoments
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughMoments.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughMoments
+ℹ [9139/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughProductWaves
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughProductWaves
+ℹ [9140/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughFactorization
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughFactorization.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughFactorization
+ℹ [9141/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughStrata
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughStrata.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughStrata
+ℹ [9142/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughSingleton
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughSingleton.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughSingleton
+ℹ [9143/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughCensus
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughCensus.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughCensus
+ℹ [9144/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtCrossQuotient
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtCrossQuotient.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtCrossQuotient
+ℹ [9145/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtCompositeRouting
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtCompositeRouting.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtCompositeRouting
+ℹ [9146/9172] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtQuotientConservation
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtQuotientConservation.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtQuotientConservation
+ℹ [9147/9172] Replayed DkMath.NumberTheory.Legendre.SquareAnchorCounterexamplePacket
+info: DkMath/NumberTheory/Legendre/SquareAnchorCounterexamplePacket.lean:11:0: file: DkMath.NumberTheory.Legendre.SquareAnchorCounterexamplePacket
+ℹ [9148/9172] Replayed DkMath.NumberTheory.Legendre.GnomonPrimorialTransition
+info: DkMath/NumberTheory/Legendre/GnomonPrimorialTransition.lean:11:0: file: DkMath.NumberTheory.Legendre.GnomonPrimorialTransition
+ℹ [9149/9172] Replayed DkMath.NumberTheory.Legendre.CenteredOwnerFold
+info: DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean:11:0: file: DkMath.NumberTheory.Legendre.CenteredOwnerFold
+ℹ [9150/9172] Replayed DkMath.NumberTheory.Legendre.CenteredFoldSupportNorm
+info: DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean:10:0: file: DkMath.NumberTheory.Legendre.CenteredFoldSupportNorm
+ℹ [9151/9172] Replayed DkMath.NumberTheory.Legendre
+info: DkMath/NumberTheory/Legendre.lean:88:0: file: DkMath.NumberTheory.Legendre
+ℹ [9152/9172] Replayed DkMath.CosmicFormula.Mass.Core
+info: DkMath/CosmicFormula/Mass/Core.lean:12:0: file: DkMath.CosmicFormula.Mass.Core
+ℹ [9153/9172] Replayed DkMath.CosmicFormula.Mass.Decompose
+info: DkMath/CosmicFormula/Mass/Decompose.lean:10:0: file: DkMath.CosmicFormula.Mass.Decompose
+ℹ [9154/9172] Replayed DkMath.CosmicFormula.Mass.Branch
+info: DkMath/CosmicFormula/Mass/Branch.lean:9:0: file: DkMath.CosmicFormula.Mass.Branch
+ℹ [9155/9172] Replayed DkMath.CosmicFormula.Basic
+info: DkMath/CosmicFormula/Basic.lean:29:0: file: DkMath.CosmicFormula.Basic
+ℹ [9156/9172] Replayed DkMath.CosmicFormula.CosmicFormulaPythagorasExamples
+info: DkMath/CosmicFormula/CosmicFormulaPythagorasExamples.lean:10:0: file: DkMath.CosmicFormula.CosmicFormulaPythagorasExamples
+ℹ [9157/9172] Replayed DkMath.CosmicFormula.PowerGapBeam
+info: DkMath/CosmicFormula/PowerGapBeam.lean:11:0: file: DkMath.CosmicFormula.PowerGapBeam
+ℹ [9158/9172] Replayed DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
+info: DkMath/NumberTheory/ZsigmondyCyclotomicSquarefree.lean:11:0: file: DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
+info: DkMath/NumberTheory/ZsigmondyCyclotomicSquarefree.lean:85:0: 'DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_of_squarefree_G' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+ℹ [9159/9172] Replayed DkMath.CosmicFormula.PowerGapBeamGcd
+info: DkMath/CosmicFormula/PowerGapBeamGcd.lean:11:0: file: DkMath.CosmicFormula.PowerGapBeamGcd
+ℹ [9160/9172] Replayed DkMath.CosmicFormula.PowerGapBeamGN
+info: DkMath/CosmicFormula/PowerGapBeamGN.lean:10:0: file: DkMath.CosmicFormula.PowerGapBeamGN
+⚠ [9161/9172] Replayed DkMath.NumberTheory.ZsigmondyCyclotomicResearch
+info: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:9:0: file: DkMath.NumberTheory.ZsigmondyCyclotomicResearch
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+ℹ [9162/9172] Replayed DkMath.NumberTheory.PrimitiveBeam
+info: DkMath/NumberTheory/PrimitiveBeam.lean:10:0: file: DkMath.NumberTheory.PrimitiveBeam
+ℹ [9163/9172] Replayed DkMath.CosmicFormula.PowerGapBeamPrimitive
+info: DkMath/CosmicFormula/PowerGapBeamPrimitive.lean:11:0: file: DkMath.CosmicFormula.PowerGapBeamPrimitive
+ℹ [9164/9172] Replayed DkMath.CosmicFormula.Mass
+info: DkMath/CosmicFormula/Mass.lean:12:0: file: DkMath.CosmicFormula.Mass
+ℹ [9165/9172] Replayed DkMath.Analysis.DkReal.SemanticCF2DPhaseShift
+info: DkMath/Analysis/DkReal/SemanticCF2DPhaseShift.lean:9:0: file: DkMath.Analysis.DkReal.SemanticCF2DPhaseShift
+ℹ [9166/9172] Replayed DkMath.CosmicFormula.Rotation.CF2D.CycleDivision
+info: DkMath/CosmicFormula/Rotation/CF2D/CycleDivision.lean:11:0: file: DkMath.CosmicFormula.Rotation.CF2D.CycleDivision
+info: DkMath/CosmicFormula/Rotation/CF2D/CycleDivision.lean:246:0: DkMath.CosmicFormula.Rotation.CF2D.KernelFamily.kernel_pow_eq_one_of_nsmul_eq_period.{u, v} {T : Type u} {R : Type v}
+  [AddMonoid T] [CommRing R] (F : KernelFamily T R) {k : ℕ} {step period : T} (hstep : k • step = period)
+  (hperiod : F.kernel period = 1) : F.kernel step ^ k = 1
+info: DkMath/CosmicFormula/Rotation/CF2D/CycleDivision.lean:247:0: DkMath.CosmicFormula.Rotation.CF2D.KernelFamily.iterate_act_eq_id_of_nsmul_eq_period.{u, v} {T : Type u} {R : Type v}
+  [AddMonoid T] [CommRing R] (F : KernelFamily T R) {k : ℕ} {step period : T} (hstep : k • step = period)
+  (hperiod : F.kernel period = 1) : (F.kernel step).act^[k] = id
+info: DkMath/CosmicFormula/Rotation/CF2D/CycleDivision.lean:248:0: DkMath.CosmicFormula.Rotation.CF2D.KernelFamily.iterate_actLevel_eq_id_of_nsmul_eq_period.{u, v} {T : Type u}
+  {R : Type v} [AddMonoid T] [CommRing R] (F : KernelFamily T R) {k : ℕ} {step period : T} (hstep : k • step = period)
+  (hperiod : F.kernel period = 1) {rho2 : R} : (F.actLevel step)^[k] = id
+info: DkMath/CosmicFormula/Rotation/CF2D/CycleDivision.lean:249:0: DkMath.CosmicFormula.Rotation.CF2D.normalizedRealKernelFamily : KernelFamily ℝ ℝ
+info: DkMath/CosmicFormula/Rotation/CF2D/CycleDivision.lean:250:0: DkMath.CosmicFormula.Rotation.CF2D.regularKernel (k : ℕ) : UnitKernel ℝ
+info: DkMath/CosmicFormula/Rotation/CF2D/CycleDivision.lean:251:0: DkMath.CosmicFormula.Rotation.CF2D.regularPhaseStep_nsmul_eq_one {k : ℕ} (hk : 0 < k) : k • regularPhaseStep k = 1
+info: DkMath/CosmicFormula/Rotation/CF2D/CycleDivision.lean:252:0: DkMath.CosmicFormula.Rotation.CF2D.regularKernel_pow_eq_one {k : ℕ} (hk : 0 < k) : regularKernel k ^ k = 1
+info: DkMath/CosmicFormula/Rotation/CF2D/CycleDivision.lean:253:0: DkMath.CosmicFormula.Rotation.CF2D.regularKernel_exactOrder {k : ℕ} (hk : 0 < k) : ExactKernelOrder (regularKernel k) k
+info: DkMath/CosmicFormula/Rotation/CF2D/CycleDivision.lean:254:0: DkMath.CosmicFormula.Rotation.CF2D.orderOf_regularKernel {k : ℕ} (hk : 0 < k) : orderOf (regularKernel k) = k
+info: DkMath/CosmicFormula/Rotation/CF2D/CycleDivision.lean:255:0: DkMath.CosmicFormula.Rotation.CF2D.regularKernel_iterate_act_eq_id {k : ℕ} (hk : 0 < k) : (regularKernel k).act^[k] = id
+info: DkMath/CosmicFormula/Rotation/CF2D/CycleDivision.lean:256:0: DkMath.CosmicFormula.Rotation.CF2D.regularKernel_iterate_actLevel_eq_id {k : ℕ} (hk : 0 < k) {rho2 : ℝ} :
+  (LevelSet.act (regularKernel k))^[k] = id
+ℹ [9167/9172] Replayed DkMath.CosmicFormula.Rotation.CF2D.RegularOrbit
+info: DkMath/CosmicFormula/Rotation/CF2D/RegularOrbit.lean:9:0: file: DkMath.CosmicFormula.Rotation.CF2D.RegularOrbit
+info: DkMath/CosmicFormula/Rotation/CF2D/RegularOrbit.lean:146:0: DkMath.CosmicFormula.Rotation.CF2D.kernelOrbitVertex.{u} {R : Type u} [CommRing R] (r : UnitKernel R) (z : Vec R)
+  (j : ℕ) : Vec R
+info: DkMath/CosmicFormula/Rotation/CF2D/RegularOrbit.lean:147:0: DkMath.CosmicFormula.Rotation.CF2D.kernelOrbitVertex_q2.{u} {R : Type u} [CommRing R] (r : UnitKernel R) (z : Vec R)
+  (j : ℕ) : (kernelOrbitVertex r z j).q2 = z.q2
+info: DkMath/CosmicFormula/Rotation/CF2D/RegularOrbit.lean:148:0: DkMath.CosmicFormula.Rotation.CF2D.kernelOrbitVertex_succ.{u} {R : Type u} [CommRing R] (r : UnitKernel R) (z : Vec R)
+  (j : ℕ) : kernelOrbitVertex r z (j + 1) = r.act (kernelOrbitVertex r z j)
+info: DkMath/CosmicFormula/Rotation/CF2D/RegularOrbit.lean:149:0: DkMath.CosmicFormula.Rotation.CF2D.kernelOrbitVertex_add_period.{u} {R : Type u} [CommRing R] (r : UnitKernel R)
+  (z : Vec R) {k : ℕ} (hperiod : r ^ k = 1) (j : ℕ) : kernelOrbitVertex r z (j + k) = kernelOrbitVertex r z j
+info: DkMath/CosmicFormula/Rotation/CF2D/RegularOrbit.lean:150:0: DkMath.CosmicFormula.Rotation.CF2D.regularVertex (k : ℕ) (j : Fin k) : Vec ℝ
+info: DkMath/CosmicFormula/Rotation/CF2D/RegularOrbit.lean:151:0: DkMath.CosmicFormula.Rotation.CF2D.regularVertex_q2 (k : ℕ) (j : Fin k) : (regularVertex k j).q2 = 1
+info: DkMath/CosmicFormula/Rotation/CF2D/RegularOrbit.lean:152:0: DkMath.CosmicFormula.Rotation.CF2D.regularVertex_next {k : ℕ} (hk : 0 < k) (j : Fin k) :
+  regularVertex k (regularVertexNext hk j) = (regularKernel k).act (regularVertex k j)
+info: DkMath/CosmicFormula/Rotation/CF2D/RegularOrbit.lean:153:0: DkMath.CosmicFormula.Rotation.CF2D.regularVertex_injective {k : ℕ} (hk : 0 < k) : Function.Injective (regularVertex k)
+info: DkMath/CosmicFormula/Rotation/CF2D/RegularOrbit.lean:154:0: DkMath.CosmicFormula.Rotation.CF2D.regularVertex_ncard_range {k : ℕ} (hk : 0 < k) :
+  (Set.range (regularVertex k)).ncard = k
+ℹ [9168/9172] Replayed DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase
+info: DkMath/CosmicFormula/Rotation/CF2D/EuclideanPhase.lean:12:0: file: DkMath.CosmicFormula.Rotation.CF2D.EuclideanPhase
+ℹ [9169/9172] Replayed DkMath.CosmicFormula.Rotation.CF2D.EuclideanRegularOrbit
+info: DkMath/CosmicFormula/Rotation/CF2D/EuclideanRegularOrbit.lean:10:0: file: DkMath.CosmicFormula.Rotation.CF2D.EuclideanRegularOrbit
+info: DkMath/CosmicFormula/Rotation/CF2D/EuclideanRegularOrbit.lean:118:0: DkMath.CosmicFormula.Rotation.CF2D.realTrigKernel_act_euclidean_eq_rotation (theta : ℝ) (z : Vec ℝ) :
+  pairToEuclideanPlane ((realTrigKernelFamily.kernel theta).act z).toProd =
+    (euclideanPlaneOrientation.rotation ↑theta) (pairToEuclideanPlane z.toProd)
+info: DkMath/CosmicFormula/Rotation/CF2D/EuclideanRegularOrbit.lean:119:0: DkMath.CosmicFormula.Rotation.CF2D.euclideanRegularVertex (k : ℕ) (j : Fin k) : EuclideanPlane
+info: DkMath/CosmicFormula/Rotation/CF2D/EuclideanRegularOrbit.lean:120:0: DkMath.CosmicFormula.Rotation.CF2D.norm_euclideanRegularVertex (k : ℕ) (j : Fin k) : ‖euclideanRegularVertex k j‖ = 1
+info: DkMath/CosmicFormula/Rotation/CF2D/EuclideanRegularOrbit.lean:121:0: DkMath.CosmicFormula.Rotation.CF2D.euclideanRegularVertex_mem_unitSphere (k : ℕ) (j : Fin k) :
+  euclideanRegularVertex k j ∈ Metric.sphere 0 1
+info: DkMath/CosmicFormula/Rotation/CF2D/EuclideanRegularOrbit.lean:122:0: DkMath.CosmicFormula.Rotation.CF2D.regularStepAngle_eq_two_pi_div (k : ℕ) :
+  normalizedPhaseAngle (regularPhaseStep k) = 2 * Real.pi / ↑k
+info: DkMath/CosmicFormula/Rotation/CF2D/EuclideanRegularOrbit.lean:123:0: DkMath.CosmicFormula.Rotation.CF2D.euclideanRegularVertex_next {k : ℕ} (hk : 0 < k) (j : Fin k) :
+  euclideanRegularVertex k (regularVertexNext hk j) =
+    (euclideanPlaneOrientation.rotation ↑(normalizedPhaseAngle (regularPhaseStep k))) (euclideanRegularVertex k j)
+info: DkMath/CosmicFormula/Rotation/CF2D/EuclideanRegularOrbit.lean:124:0: DkMath.CosmicFormula.Rotation.CF2D.euclideanRegularVertex_next_two_pi_div {k : ℕ} (hk : 0 < k) (j : Fin k) :
+  euclideanRegularVertex k (regularVertexNext hk j) =
+    (euclideanPlaneOrientation.rotation ↑(2 * Real.pi / ↑k)) (euclideanRegularVertex k j)
+info: DkMath/CosmicFormula/Rotation/CF2D/EuclideanRegularOrbit.lean:125:0: DkMath.CosmicFormula.Rotation.CF2D.euclideanRegularVertex_injective {k : ℕ} (hk : 0 < k) :
+  Function.Injective (euclideanRegularVertex k)
+info: DkMath/CosmicFormula/Rotation/CF2D/EuclideanRegularOrbit.lean:126:0: DkMath.CosmicFormula.Rotation.CF2D.euclideanRegularVertex_ncard_range {k : ℕ} (hk : 0 < k) :
+  (Set.range (euclideanRegularVertex k)).ncard = k
+ℹ [9170/9172] Replayed DkMath.CosmicFormula.Rotation.CF2D
+info: DkMath/CosmicFormula/Rotation/CF2D.lean:18:0: file: DkMath.CosmicFormula.Rotation.CF2D
+ℹ [9171/9172] Replayed DkMath.CosmicFormula.Rotation
+info: DkMath/CosmicFormula/Rotation.lean:9:0: file: DkMath.CosmicFormula.Rotation
+ℹ [9172/9172] Built DkMath.CosmicFormula (7.7s)
+info: DkMath/CosmicFormula.lean:24:0: file: DkMath.CosmicFormula
+Build completed successfully (9172 jobs).

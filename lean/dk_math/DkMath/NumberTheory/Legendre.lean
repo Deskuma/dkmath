@@ -83,6 +83,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeSqrtQuotientConservation
 
 import DkMath.NumberTheory.Legendre.SquareAnchorCounterexamplePacket
 import DkMath.NumberTheory.Legendre.GnomonPrimorialTransition
+import DkMath.NumberTheory.Legendre.CenteredFoldSupportNorm
 
 #print "file: DkMath.NumberTheory.Legendre"
 

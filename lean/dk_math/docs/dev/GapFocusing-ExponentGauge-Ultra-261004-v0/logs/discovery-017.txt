@@ -1,0 +1,10 @@
+{"n": 5, "pair_count": 5, "same_owner_covered": 0, "different_owner_covered": 3, "one_covered": 2, "capacity_sum": 3, "common_support_incidence": 0, "norm": 61, "norm_factors": [[61, 1]], "common_support_by_prime": {}}
+{"n": 8, "pair_count": 8, "same_owner_covered": 0, "different_owner_covered": 4, "one_covered": 4, "capacity_sum": 6, "common_support_incidence": 2, "norm": 145, "norm_factors": [[5, 1], [29, 1]], "common_support_by_prime": {"5": 2}}
+{"n": 11, "pair_count": 11, "same_owner_covered": 0, "different_owner_covered": 7, "one_covered": 4, "capacity_sum": 9, "common_support_incidence": 2, "norm": 265, "norm_factors": [[5, 1], [53, 1]], "common_support_by_prime": {"5": 2}}
+{"n": 19, "pair_count": 19, "same_owner_covered": 0, "different_owner_covered": 13, "one_covered": 6, "capacity_sum": 18, "common_support_incidence": 0, "norm": 761, "norm_factors": [[761, 1]], "common_support_by_prime": {}}
+{"n": 29, "pair_count": 29, "same_owner_covered": 0, "different_owner_covered": 21, "one_covered": 8, "capacity_sum": 31, "common_support_incidence": 0, "norm": 1741, "norm_factors": [[1741, 1]], "common_support_by_prime": {}}
+{"n": 297, "pair_count": 297, "same_owner_covered": 0, "different_owner_covered": 252, "one_covered": 45, "capacity_sum": 448, "common_support_incidence": 0, "norm": 177013, "norm_factors": [[177013, 1]], "common_support_by_prime": {}}
+{"n": 1031, "pair_count": 1031, "same_owner_covered": 0, "different_owner_covered": 871, "one_covered": 160, "capacity_sum": 1752, "common_support_incidence": 223, "norm": 2127985, "norm_factors": [[5, 1], [61, 1], [6977, 1]], "common_support_by_prime": {"5": 206, "61": 17}}
+smallest shared support: {'n': 6, 'j': 2, 'left_point': 40, 'right_point': 45, 'gap': 5, 'left_owner': 2, 'right_owner': 3, 'common': [5]}
+smallest false gap-owner rule: {'n': 8, 'j': 7, 'left_point': 65, 'right_point': 80, 'gap': 15, 'left_owner': 5, 'right_owner': 2}
+smallest false translation rule: {'n': 3, 'm': 7, 'p': 2, 'translated': 10}

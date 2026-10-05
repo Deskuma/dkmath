@@ -1,0 +1,674 @@
+[
+  {
+    "name": "DkMath.CosmicFormula.quadratic_forward_factor",
+    "kind": "theorem",
+    "file": "DkMath/CosmicFormula/QuadraticCenteredBridge.lean",
+    "line": 15,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.CosmicFormula.quadratic_forward_backward",
+    "kind": "theorem",
+    "file": "DkMath/CosmicFormula/QuadraticCenteredBridge.lean",
+    "line": 22,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.CosmicFormula.quadratic_forward_div",
+    "kind": "theorem",
+    "file": "DkMath/CosmicFormula/QuadraticCenteredBridge.lean",
+    "line": 30,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.CosmicFormula.quadratic_centered_half",
+    "kind": "theorem",
+    "file": "DkMath/CosmicFormula/QuadraticCenteredBridge.lean",
+    "line": 36,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centered_doubled_square_difference",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 17,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centered_doubled_square_difference_nat",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 21,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centered_doubled_square_difference_div_four",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 27,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centered_window_translation",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 33,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centered_window_card",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 42,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.squareOffsetFold",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 49,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.squareOffsetFold_squareOffset",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 51,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.squareOffsetFold_involutive",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 56,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.squareOffsetFold_sum",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 61,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.squareOffsetFold_no_fixed",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 66,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.squareOffsetFold_orbit_card",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 71,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.squareOffsetFold_centeredLeft",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 75,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.squareOffsetFold_centeredRight",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 80,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredFoldPair",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 86,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.squareOffsetFoldPairs",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 89,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredFoldPair_sum",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 92,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredFoldPair_card",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 97,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredFoldPair_injective",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 102,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.squareOffsetFold_pair_index",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 114,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.squareOffsetFoldPairs_card",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 138,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredFoldPair_disjoint",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 141,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredFoldPairs_union",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 149,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredInternalGaps",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 165,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centered_offset_difference",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 168,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredInternalGaps_eq_odd_interval",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 174,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredInternalGaps_card",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 187,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centered_gap_eq_GTail",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean",
+    "line": 192,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.squareOffsetFold_owner_ne",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 19,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredPair_owner_ne",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 37,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centered_same_owner_dvd_gap",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 44,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centered_prime_gap_support_packet",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 56,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredOwnerGapCapacityIndices",
+    "kind": "abbrev",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 65,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mem_centeredOwnerGapCapacityIndices",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 67,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredOwnerGapCapacityIndices_two",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 71,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredOwnerGapCapacityIndices_eq_residue",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 79,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredOwnerGapCapacityIndices_card",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 89,
+    "category": "C",
+    "reason": "New fold-facing arithmetic/counting bridge; no uniform full-cover obstruction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredSameOwnerIndices",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 116,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredSameOwnerIndices_subset_capacity",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 124,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredSameOwnerIndices_empty",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 133,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredSameOwnerIndices_card_le",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 140,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredSameOwnerIndices_sum",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 145,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredDifferentOwnerIndices",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 149,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredDifferentOwnerIndices_eq_range_of_full",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 157,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredDifferentOwnerIndices_card_of_full",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 166,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.squareOffsetFold_successor_noncommuting",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 171,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.fold_successor_common_divisor_iff",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 178,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.fold_successor_support_disjoint",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 188,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.fold_lower_successor_owner_packet",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean",
+    "line": 199,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredFoldNorm",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean",
+    "line": 17,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredFoldNorm_odd",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean",
+    "line": 19,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredFoldNorm_eq_point_sum",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean",
+    "line": 24,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredFoldNorm_eq_twice_left_add_gap",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean",
+    "line": 32,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_ne_two",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean",
+    "line": 37,
+    "category": "A",
+    "reason": "Thin algebraic adapter or consequence of existing support/parity/owner APIs; no provider."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mem_common_centered_support_iff_norm_and_gap",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean",
+    "line": 43,
+    "category": "C",
+    "reason": "New fold-facing arithmetic/counting bridge; no uniform full-cover obstruction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_not_dvd_succ",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean",
+    "line": 64,
+    "category": "C",
+    "reason": "New fold-facing arithmetic/counting bridge; no uniform full-cover obstruction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_mod_four",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean",
+    "line": 73,
+    "category": "C",
+    "reason": "New fold-facing arithmetic/counting bridge; no uniform full-cover obstruction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.common_centered_support_mod_four",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean",
+    "line": 87,
+    "category": "C",
+    "reason": "New fold-facing arithmetic/counting bridge; no uniform full-cover obstruction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredCommonSupportIndices",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean",
+    "line": 93,
+    "category": "B",
+    "reason": "Exact finite geometry or definition of a finite carrier; no arithmetic restriction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredCommonSupportIndices_eq_capacity",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean",
+    "line": 100,
+    "category": "C",
+    "reason": "New fold-facing arithmetic/counting bridge; no uniform full-cover obstruction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredCommonSupportIndices_card",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean",
+    "line": 119,
+    "category": "C",
+    "reason": "New fold-facing arithmetic/counting bridge; no uniform full-cover obstruction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredFoldNorm_succ_coprime",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean",
+    "line": 127,
+    "category": "C",
+    "reason": "New fold-facing arithmetic/counting bridge; no uniform full-cover obstruction."
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.common_centered_support_no_successor",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean",
+    "line": 142,
+    "category": "C",
+    "reason": "New fold-facing arithmetic/counting bridge; no uniform full-cover obstruction."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.unit_and_second_difference",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 17,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.rational_steps",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 26,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.doubled_and_zero_boundary",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 36,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.fold_and_gap",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 43,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.three_pairs_and_gaps",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 50,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.translation_divisibility_counterexample",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 58,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.six_shared_support",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 64,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.distinct_owner_does_not_imply_disjoint",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 72,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.eight_reverse_owner_counterexample",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 83,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.prime_gap_forces_disjoint",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 89,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.six_capacity_and_actual",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 97,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.fold_insert_smallest_mismatch",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 109,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.norm_successor_packet",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 116,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.near_miss_five",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 125,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.near_miss_297_common_empty",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 131,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.norm1031_support_counts",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 143,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.preserved1031",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 153,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  },
+  {
+    "name": "DkMathTest.LegendreCenteredFoldRegression.compatible_covered_trajectory",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCenteredFoldRegression.lean",
+    "line": 161,
+    "category": "A",
+    "reason": "Kernel calibration or explicit counterexample; applies proved APIs/numeral arithmetic."
+  }
+]
