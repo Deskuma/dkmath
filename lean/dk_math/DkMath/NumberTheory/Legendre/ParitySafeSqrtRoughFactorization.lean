@@ -235,4 +235,100 @@ theorem sqrt_roughTripleMoment_eq_product_count (n : ℕ) :
       Finset.sum_congr rfl (fun _ ha => sqrt_roughTripleWave_card_eq_product_indicator ha)
     _ = _ := by rw [Finset.sum_boole]; rfl
 
+/-- A square-scale divisor leaves at most one prime in its rough complementary quotient. -/
+theorem sqrt_rough_square_quotient_one_or_prime {n r d c : ℕ}
+    (hr : r ∈ canonicalRoughCandidates n (Nat.sqrt n))
+    (hd : (Nat.sqrt n + 1) ^ 2 ≤ d) (hc : n ^ 2 + r = d * c) :
+    c = 1 ∨ (c.Prime ∧ c ≤ n ∧ c ∈ paritySafeActiveSupport n r) := by
+  have hs := squareOffset_of_mem_squareAnchorOddPointCoprimeOffsets (Finset.mem_filter.mp hr).1
+  dsimp only [SquareOffset] at hs
+  have hfour := sqrtCutoff_power_four_gt n
+  have hdsq := sqrt_successor_square_gt n
+  have hdgt : n < d := lt_of_lt_of_le hdsq hd
+  have hcpos : 0 < c := by
+    by_contra hh
+    have hz : c = 0 := by omega
+    rw [hz, Nat.mul_zero] at hc
+    omega
+  have hclt : c < (Nat.sqrt n + 1) ^ 2 := by
+    by_contra hh
+    have hm := Nat.mul_le_mul hd (show (Nat.sqrt n + 1) ^ 2 ≤ c by omega)
+    have he : (Nat.sqrt n + 1) ^ 2 * (Nat.sqrt n + 1) ^ 2 = (Nat.sqrt n + 1) ^ 4 := by ring
+    rw [he, ← hc] at hm
+    omega
+  by_cases h1 : c = 1
+  · exact Or.inl h1
+  · have hprime : c.Prime := by
+      by_contra hh
+      have hu := Nat.minFac_prime h1
+      have hdu : c.minFac ∣ n ^ 2 + r := hc ▸ dvd_mul_of_dvd_right (Nat.minFac_dvd c) d
+      have hmin := sqrt_rough_prime_divisor_gt hr hu hdu
+      have hsquare := Nat.minFac_sq_le_self hcpos hh
+      have hsq := Nat.mul_self_le_mul_self (show Nat.sqrt n + 1 ≤ c.minFac by omega)
+      nlinarith
+    have hcn : c ≤ n := by
+      by_contra hh
+      have hm := Nat.mul_le_mul (show n + 1 ≤ d by omega) (show n + 1 ≤ c by omega)
+      nlinarith
+    have hdc : c ∣ n ^ 2 + r := hc ▸ dvd_mul_left c d
+    exact Or.inr ⟨hprime, hcn, mem_paritySafeActiveSupport_iff_dvd.mpr
+      ⟨prime_dvd_candidate_mem_active (Finset.mem_filter.mp hr).1 hprime hcn hdc, hdc⟩⟩
+
+/-- Singleton rough points are exactly cubes or a small active prime times a prime above n. -/
+theorem sqrt_singleton_point_cube_or_cross {n r p : ℕ}
+    (hr : r ∈ canonicalRoughCandidates n (Nat.sqrt n))
+    (hS : paritySafeActiveSupport n r = {p}) :
+    n ^ 2 + r = p ^ 3 ∨ ∃ q, q.Prime ∧ n < q ∧ n ^ 2 + r = p * q := by
+  have hpS : p ∈ paritySafeActiveSupport n r := by rw [hS]; exact Finset.mem_singleton_self p
+  obtain ⟨hpA, hpd⟩ := mem_paritySafeActiveSupport_iff_dvd.mp hpS
+  have hpP := mem_squareAnchorOddActivePrimes.mp hpA
+  have hpL := (Finset.mem_filter.mp (rough_support_subset_labels hr hpS)).2
+  obtain ⟨c, hc⟩ := hpd
+  have hs := squareOffset_of_mem_squareAnchorOddPointCoprimeOffsets (Finset.mem_filter.mp hr).1
+  dsimp only [SquareOffset] at hs
+  have hcpos : 0 < c := by
+    by_contra hh
+    have hz : c = 0 := by omega
+    rw [hz, Nat.mul_zero] at hc
+    omega
+  have hc1 : c ≠ 1 := by
+    intro h1
+    rw [h1, Nat.mul_one] at hc
+    nlinarith [hpP.2.1]
+  by_cases hcP : c.Prime
+  · right
+    refine ⟨c, hcP, ?_, hc⟩
+    by_contra hh
+    have hd : c ∣ n ^ 2 + r := hc ▸ dvd_mul_left c p
+    have ha := prime_dvd_candidate_mem_active (Finset.mem_filter.mp hr).1 hcP (by omega) hd
+    have hcS := mem_paritySafeActiveSupport_iff_dvd.mpr ⟨ha, hd⟩
+    rw [hS, Finset.mem_singleton] at hcS
+    have hm := Nat.mul_self_le_mul_self hpP.2.1
+    rw [hcS] at hc
+    nlinarith
+  · have huP := Nat.minFac_prime hc1
+    have huD := Nat.minFac_dvd c
+    have huSquare := Nat.minFac_sq_le_self hcpos hcP
+    have huPoint : c.minFac ∣ n ^ 2 + r := hc ▸ dvd_mul_of_dvd_right huD p
+    have hcLe : c ≤ n ^ 2 + r := by
+      rw [hc]
+      exact Nat.le_mul_of_pos_left c hpP.1.pos
+    have huLe : c.minFac ≤ n := by nlinarith
+    have huA := prime_dvd_candidate_mem_active (Finset.mem_filter.mp hr).1 huP huLe huPoint
+    have huS := mem_paritySafeActiveSupport_iff_dvd.mpr ⟨huA, huPoint⟩
+    rw [hS, Finset.mem_singleton] at huS
+    rw [huS] at huD
+    obtain ⟨d, hd⟩ := huD
+    have hpoint : n ^ 2 + r = p ^ 2 * d := by rw [hc, hd]; ring
+    have hlo : (Nat.sqrt n + 1) ^ 2 ≤ p ^ 2 := by
+      simpa only [pow_two] using Nat.mul_self_le_mul_self (show Nat.sqrt n + 1 ≤ p by omega)
+    rcases sqrt_rough_square_quotient_one_or_prime hr hlo hpoint with hd1 | ⟨_, _, hdS⟩
+    · rw [hd1, Nat.mul_one] at hpoint
+      have hm := Nat.mul_self_le_mul_self hpP.2.1
+      nlinarith
+    · rw [hS, Finset.mem_singleton] at hdS
+      left
+      rw [hdS] at hpoint
+      simpa only [← pow_succ] using hpoint
+
 end DkMath.NumberTheory.Legendre

@@ -1,0 +1,159 @@
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughFactorization.lean:14:theorem prime_dvd_candidate_mem_active {n r u : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughFactorization.lean:25:theorem sqrt_rough_prime_divisor_gt {n r u : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughFactorization.lean:34:theorem sqrt_roughPair_product_lower {n p q : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughFactorization.lean:42:theorem sqrt_roughTriple_product_lower {n p q s : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughFactorization.lean:51:theorem sqrt_roughTriple_point_eq_product {n r p q s : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughFactorization.lean:83:theorem sqrt_roughTripleWave_eq_product_seat {n p q s : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughFactorization.lean:95:theorem sqrt_roughPair_quotient_one_or_prime {n r p q c : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughFactorization.lean:132:theorem sqrt_two_support_classification {n r p q : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughFactorization.lean:151:theorem sqrt_two_support_repeated_prime {n r p q : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughFactorization.lean:168:theorem sqrt_roughTriple_product_offset_mem {n p q s : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughFactorization.lean:197:theorem sqrt_roughTripleWave_card_eq_product_indicator {n p q s : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughFactorization.lean:222:noncomputable def sqrtRoughTripleProductsInShell (n : ℕ) : Finset (ℕ × ℕ × ℕ) :=
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughFactorization.lean:227:theorem sqrt_roughTripleMoment_eq_product_count (n : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughFactorization.lean:239:theorem sqrt_rough_square_quotient_one_or_prime {n r d c : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughFactorization.lean:278:theorem sqrt_singleton_point_cube_or_cross {n r p : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafePrimeAnchorCap.lean:15:theorem primeAnchorTwoPrimeWaveUpper_eq_count {n q : ℕ} (hn : n.Prime) (hne : n ≠ 2)
+DkMath/NumberTheory/Legendre/ParitySafePrimeAnchorCap.lean:57:theorem primeAnchorTwoPrimeWaveUpper_eq_card {n q : ℕ} (hn : n.Prime) (hne : n ≠ 2)
+DkMath/NumberTheory/Legendre/ParitySafePrimeAnchorCap.lean:74:theorem primeAnchorTwoPrimeUpper_eq_incidence {n : ℕ} (hn : n.Prime) (hne : n ≠ 2) :
+DkMath/NumberTheory/Legendre/ParitySafePrimeAnchorCap.lean:81:theorem primeAnchorRemainingCap_eq_covered_tail {n : ℕ} (hn : n.Prime) (hne : n ≠ 2) (P : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafePrimeAnchorCap.lean:87:theorem primeAnchorRemainingCap_lt_iff_rough {n : ℕ} (hn : n.Prime) (hne : n ≠ 2) (P : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafePrimeAnchorCap.lean:95:theorem primeAnchorHead_gap_iff_rough {n : ℕ} (hn : n.Prime) (hne : n ≠ 2) (P : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafePrimeAnchorCap.lean:104:theorem sqrtCutoff_power_four_gt (n : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafePrimeAnchorCap.lean:114:theorem sqrtCutoff_support_card_le_three {n r : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafePrimeAnchorCap.lean:123:theorem sqrtCutoff_tail_card_le_two_mul (n : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:19:noncomputable def canonicalRootHead (n P : ℕ) : Finset (ℕ × ℕ) :=
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:23:noncomputable def canonicalRootTail (n P : ℕ) : Finset (ℕ × ℕ) :=
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:28:noncomputable def canonicalRoughCandidates (n P : ℕ) : Finset ℕ :=
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:33:theorem supportExcess_eq_head_add_tail (n P : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:43:theorem canonicalRootHead_card_eq_root_sum (n P : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:59:theorem canonicalRoot_gt_iff_rough {n r P : ℕ} (hc : r ∈ paritySafeCoveredCandidates n) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:75:theorem supportLabel_ne_root_iff_smaller {n r q : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:95:theorem mem_canonicalRootTail_iff {n P r q : ℕ} :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:113:noncomputable def canonicalHeadAtQ (n P q : ℕ) : Finset ℕ :=
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:117:noncomputable def canonicalTailAtQ (n P q : ℕ) : Finset ℕ :=
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:134:theorem canonicalRootHead_card_eq_secondary_sum (n P : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:157:theorem canonicalHeadAtQ_card_eq_pair_sum {n P q : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:183:theorem canonicalHeadAtQ_add_tail_le_cap {n P q : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:200:theorem canonicalTailAtQ_card_le_remaining {n P q : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:207:noncomputable def canonicalRemainingCap (n P : ℕ) : ℕ :=
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:211:theorem canonicalRemainingCap_eq_secondary_sum (n P : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:221:theorem canonicalRemainingCap_eq_covered_tail_slack (n P : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:232:theorem remainingCap_lt_candidate_iff (n P : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:243:theorem uncovered_nonempty_of_remainingCap_lt {n P : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:263:theorem canonicalRootTail_card_eq_rough_support_sum (n P : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:293:theorem activeSupport_prod_dvd_point {n r : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:300:theorem rough_support_pow_le_point {n P r L : ℕ} (hr : r ∈ canonicalRoughCandidates n P)
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:320:theorem rough_support_card_le {n P r L K : ℕ} (hr : r ∈ canonicalRoughCandidates n P)
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:331:theorem canonicalRootTail_card_le_rough_mul {n P L K : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:16:noncomputable def roughActiveLabels (n P : ℕ) : Finset ℕ :=
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:19:theorem rough_support_subset_labels {n P r : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:28:noncomputable def roughPairs (n P : ℕ) : Finset (ℕ × ℕ) :=
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:31:noncomputable def roughTriples (n P : ℕ) : Finset (ℕ × ℕ × ℕ) :=
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:34:@[simp] theorem mem_roughPairs {n P p q : ℕ} :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:42:@[simp] theorem mem_roughTriples {n P p q s : ℕ} :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:47:noncomputable def roughPairIncidences (n P : ℕ) : Finset (ℕ × (ℕ × ℕ)) :=
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:51:noncomputable def roughTripleIncidences (n P : ℕ) : Finset (ℕ × (ℕ × ℕ × ℕ)) :=
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:55:theorem roughPairIncidences_card (n P : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:71:theorem sqrt_roughTripleIncidences_card (n : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:87:noncomputable def roughPairWave (n P p q : ℕ) : Finset ℕ :=
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:90:noncomputable def roughTripleWave (n P p q s : ℕ) : Finset ℕ :=
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:93:theorem active_pair_coprime {n P p q : ℕ} (h : (p, q) ∈ roughPairs n P) : Nat.Coprime p q := by
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:101:theorem roughPair_support_iff_product {n P p q r : ℕ} (h : (p, q) ∈ roughPairs n P) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:115:theorem roughTriple_support_iff_product {n P p q s r : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:138:theorem roughPair_fiber_eq_wave {n P p q : ℕ} (h : (p, q) ∈ roughPairs n P) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:144:theorem roughTriple_fiber_eq_wave {n P p q s : ℕ} (h : (p, q, s) ∈ roughTriples n P) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:150:theorem roughPairMoment_eq_wave_sum (n P : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:163:theorem sqrt_roughTripleMoment_eq_wave_sum (n : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:178:theorem sqrt_successor_square_gt (n : ℕ) : n < (Nat.sqrt n + 1) ^ 2 := by
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:182:theorem sqrt_roughPair_product_gt {n p q : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:192:theorem sqrt_roughTriple_product_gt {n p q s : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:200:theorem roughPairWave_subset_raw (n P p q : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:207:theorem roughTripleWave_subset_raw (n P p q s : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:214:theorem sqrt_roughPair_raw_card_le_two {n p q : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:223:theorem sqrt_roughTriple_raw_card_le_one {n p q s : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:229:theorem sqrt_roughPairWave_card_le_two {n p q : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:234:theorem sqrt_roughTripleWave_card_le_one {n p q s : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:239:theorem roughPairWave_eq_candidate_product_filter (n P p q : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:246:theorem roughTripleWave_eq_candidate_product_filter (n P p q s : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:253:theorem primeAnchor_roughPairWave_card_le_floor {n P p q : ℕ} (hn : n.Prime) (hne : n ≠ 2)
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:265:theorem primeAnchor_roughTripleWave_card_le_floor {n P p q s : ℕ} (hn : n.Prime) (hne : n ≠ 2)
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:280:theorem prime_squareCell_of_sqrt_product_moment {n : ℕ} (hn : 0 < n)
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:291:theorem candidateProductWave_card_le_one_of_anchor_lt {n m : ℕ} (hm : Odd m) (hgt : n < m) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:318:theorem sqrt_roughPairWave_card_le_one {n p q : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:18:theorem mem_uncovered_iff_no_activeSupport {n r : ℕ} :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:26:noncomputable def canonicalRoughWave (n P q : ℕ) : Finset ℕ :=
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:30:theorem roughWave_sum_eq_support_sum (n P : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:45:theorem roughWave_sum_eq_covered_add_tail (n P : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:73:theorem uncovered_nonempty_of_roughWave_sum_lt {n P : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:90:theorem remainingCap_add_rough_eq_candidate_add_roughIncidence (n P : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:116:theorem remainingCap_lt_iff_rough_currency (n P : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:125:theorem roughWave_sum_le_card_mul {n P L K : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:136:theorem roughCriterion_smallCutoff {n P r : ℕ} (hn : n.Prime) (hlt : 11 < n)
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:145:theorem roughCandidates_seven_eq {n : ℕ} (hn : n.Prime) (hlt : 11 < n) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:154:theorem roughWave_seven_eq {n q : ℕ} (hn : n.Prime) (hlt : 11 < n) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:162:theorem candidateAvoidThree_filter_dvd {n a m : ℕ} (ha : Nat.Coprime a m) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:173:theorem roughCandidates_eleven_eq {n : ℕ} (hn : n.Prime) (hlt : 11 < n) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:182:theorem roughWave_eleven_eq {n q : ℕ} (hn : n.Prime) (hlt : 11 < n) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:190:theorem roughCandidates_eleven_card {n : ℕ} (hn : n.Prime) (hlt : 11 < n) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:210:theorem roughWave_eleven_card {n q : ℕ} (hn : n.Prime) (hlt : 11 < n)
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:238:noncomputable def primeAnchorRoughElevenIncidenceCount (n : ℕ) : ℕ :=
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:243:theorem roughWave_eleven_sum_eq_count {n : ℕ} (hn : n.Prime) (hlt : 11 < n) :
+DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:261:theorem prime_squareCell_of_roughEleven_count {n : ℕ} (hn : n.Prime) (hlt : 11 < n)
+DkMath/NumberTheory/Legendre/ParitySafeReducedResidue.lean:32:theorem coprime_two_mul_iff_coprime_and_odd
+DkMath/NumberTheory/Legendre/ParitySafeReducedResidue.lean:43:@[simp] theorem mem_squareAnchorOddPointCoprimeOffsets_iff_reducedResidue
+DkMath/NumberTheory/Legendre/ParitySafeReducedResidue.lean:66:theorem card_squareAnchorOddPointCoprimeOffsets_eq_totient_two_mul
+DkMath/NumberTheory/Legendre/ParitySafeReducedResidue.lean:109:theorem activePrime_reducedResidue_packet
+DkMath/NumberTheory/Legendre/ParitySafeReducedResidue.lean:121:theorem paritySafeActiveWaveOffsets_quotient_properties
+DkMath/NumberTheory/Legendre/ParitySafeReducedResidue.lean:152:noncomputable def paritySafeReducedQuotientInterval
+DkMath/NumberTheory/Legendre/ParitySafeReducedResidue.lean:159:theorem mem_paritySafeReducedQuotientInterval_iff
+DkMath/NumberTheory/Legendre/ParitySafeReducedResidue.lean:176:theorem paritySafeActiveWaveOffsets_quotient_mem_interval
+DkMath/NumberTheory/Legendre/ParitySafeReducedResidue.lean:197:theorem paritySafeReducedQuotientInterval_mem_wave
+DkMath/NumberTheory/Legendre/ParitySafeReducedResidue.lean:244:theorem card_paritySafeActiveWaveOffsets_eq_reducedQuotientInterval
+DkMath/NumberTheory/Legendre/ParitySafeReducedResidue.lean:272:theorem paritySafeActiveWave_same_wave_quotient_rigidity
+DkMath/NumberTheory/Legendre/ParitySafeReducedResidue.lean:320:theorem paritySafeIncidenceCount_eq_reducedQuotientInterval_sum
+DkMath/NumberTheory/Legendre/ParitySafeReducedResidue.lean:334:theorem exists_activePrime_reducedQuotient_factorization_of_fullyCovered
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughMoments.lean:16:theorem rough_empty_eq_uncovered (n P : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughMoments.lean:33:noncomputable def roughPairMoment (n P : ℕ) : ℕ :=
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughMoments.lean:36:noncomputable def roughTripleMoment (n P : ℕ) : ℕ :=
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughMoments.lean:40:theorem rough_moment_balance {n P : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughMoments.lean:52:theorem rough_tail_moment_balance {n P : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughMoments.lean:60:theorem sqrt_rough_moment_balance (n : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughMoments.lean:64:theorem sqrt_tail_moment_balance (n : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughMoments.lean:68:theorem sqrt_uncovered_card_pos_iff_moment (n : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughMoments.lean:75:theorem sqrt_uncovered_nonempty_iff_moment (n : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughMoments.lean:81:theorem sqrt_uncovered_card_eq_moment_margin (n : ℕ) :
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughMoments.lean:87:theorem uncovered_nonempty_of_sqrt_moment {n : ℕ}
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughMoments.lean:93:theorem prime_squareCell_of_sqrt_moment {n : ℕ} (hn : 0 < n)
+DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughMoments.lean:100:theorem sqrt_covered_moment_balance (n : ℕ) :
+DkMath/NumberTheory/Legendre/PairOverlap.lean:26:noncomputable def squareOffsetPrimePairMultiplicity (n r : ℕ) : ℕ :=
+DkMath/NumberTheory/Legendre/PairOverlap.lean:30:theorem primeSupport_sub_one_le_pairMultiplicity
+DkMath/NumberTheory/Legendre/PairOverlap.lean:44:noncomputable def squarePrimePairs (n : ℕ) : Finset (ℕ × ℕ) := by
+DkMath/NumberTheory/Legendre/PairOverlap.lean:50:@[simp] theorem mem_squarePrimePairs
+DkMath/NumberTheory/Legendre/PairOverlap.lean:57:noncomputable def squarePrimePairOverlapCount (n : ℕ) : ℕ :=
+DkMath/NumberTheory/Legendre/PairOverlap.lean:62:theorem squarePrimePairOverlapCount_eq_sum_local_pairMultiplicity
+DkMath/NumberTheory/Legendre/PairOverlap.lean:133:theorem squareCoverOverlapExcess_le_squarePrimePairOverlapCount
+DkMath/NumberTheory/Legendre/PairOverlap.lean:143:theorem baseline_add_carry_le_two_mul_add_pairOverlapCount_of_fullyCovered
+DkMath/NumberTheory/Legendre/PairOverlap.lean:157:theorem squarePrimePairOverlapCount_eq_sum_product_div_add_carry
+DkMath/NumberTheory/Legendre/PairOverlap.lean:177:theorem baseline_add_carry_le_two_mul_add_sum_product_div_add_carry_of_fullyCovered
+DkMath/NumberTheory/Legendre/PairOverlap.lean:198:noncomputable def squarePrimeNearPairs (n : ℕ) : Finset (ℕ × ℕ) := by
+DkMath/NumberTheory/Legendre/PairOverlap.lean:204:noncomputable def squarePrimeFarPairs (n : ℕ) : Finset (ℕ × ℕ) := by
+DkMath/NumberTheory/Legendre/PairOverlap.lean:210:@[simp] theorem mem_squarePrimeNearPairs
+DkMath/NumberTheory/Legendre/PairOverlap.lean:217:@[simp] theorem mem_squarePrimeFarPairs
+DkMath/NumberTheory/Legendre/PairOverlap.lean:224:theorem squarePrimeNearPairs_union_farPairs (n : ℕ) :
+DkMath/NumberTheory/Legendre/PairOverlap.lean:234:theorem disjoint_squarePrimeNearPairs_squarePrimeFarPairs (n : ℕ) :
+DkMath/NumberTheory/Legendre/PairOverlap.lean:243:noncomputable def squarePrimeNearPairOverlapCount (n : ℕ) : ℕ :=
+DkMath/NumberTheory/Legendre/PairOverlap.lean:248:noncomputable def squarePrimeFarPairOverlapCount (n : ℕ) : ℕ :=
+DkMath/NumberTheory/Legendre/PairOverlap.lean:253:theorem squarePrimePairOverlapCount_eq_near_add_far
+DkMath/NumberTheory/Legendre/PairOverlap.lean:267:theorem card_squareWaveOffsets_eq_carry_of_two_mul_lt_modulus
+DkMath/NumberTheory/Legendre/PairOverlap.lean:276:theorem card_squarePrimePairOverlapOffsets_eq_carry_of_mem_far
+DkMath/NumberTheory/Legendre/PairOverlap.lean:288:noncomputable def squarePrimeActiveFarPairs (n : ℕ) : Finset (ℕ × ℕ) := by
+DkMath/NumberTheory/Legendre/PairOverlap.lean:294:@[simp] theorem mem_squarePrimeActiveFarPairs
+DkMath/NumberTheory/Legendre/PairOverlap.lean:302:theorem squarePrimeFarPairOverlapCount_eq_card_activeFarPairs
+DkMath/NumberTheory/Legendre/PairOverlap.lean:333:theorem mem_squarePrimeActiveFarPairs_iff_overlap_nonempty
+DkMath/NumberTheory/Legendre/PairOverlap.lean:357:noncomputable def squarePrimeNearPairBaseline (n : ℕ) : ℕ :=
+DkMath/NumberTheory/Legendre/PairOverlap.lean:362:noncomputable def squarePrimeNearPairCarryCount (n : ℕ) : ℕ :=
+DkMath/NumberTheory/Legendre/PairOverlap.lean:367:theorem squarePrimeNearPairOverlapCount_eq_baseline_add_carry
+DkMath/NumberTheory/Legendre/PairOverlap.lean:388:theorem one_le_card_squarePrimePairOverlapOffsets_of_mem_near
+DkMath/NumberTheory/Legendre/PairOverlap.lean:402:theorem squarePrimePairOverlapCount_eq_nearBaseline_add_nearCarry_add_activeFar
+DkMath/NumberTheory/Legendre/PairOverlap.lean:413:theorem baseline_add_carry_le_two_mul_add_near_far_pair_budget_of_fullyCovered

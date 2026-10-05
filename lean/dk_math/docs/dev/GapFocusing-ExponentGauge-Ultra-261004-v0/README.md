@@ -212,3 +212,14 @@ provider remains a proposed next step.
 
 [Source inventory](source-inventory-013.md) · [Findings](findings-013.md) ·
 [Validation](validation-013.md).
+
+## Instruction014 — complete sqrt-rough factorization census
+
+[Report](report-014.md): singleton rough points are cubes or cross-semiprimes
+with an external prime cofactor above n. Four support strata and exact product
+bijections give `R=U+Cube+Cross+Repeated+Triple`. The explicit per-owner prime
+quotient sum remains the uniform provider obligation. Six kernel calibrations
+include 1021; bounded diagnostics cover 429 odd prime anchors through 3000.
+
+[Source inventory](source-inventory-014.md) · [Findings](findings-014.md) ·
+[Validation](validation-014.md).
