@@ -150,4 +150,118 @@ theorem common_centered_support_no_successor {n j k p : ℕ} (hj : j < n) (hk : 
   have hbad := ((centeredFoldNorm_succ_coprime n).coprime_dvd_left a.2.2.1).eq_one_of_dvd b.2.2.1
   exact a.1.ne_one hbad
 
+
+/-- Exact gcd, including multiplicity and the fresh-prime branch. -/
+theorem centeredPair_gcd_eq_norm_gap {n j : ℕ} (hj : j < n) :
+    Nat.gcd (n ^ 2 + centeredLeftOffset n j) (n ^ 2 + centeredRightOffset n j) =
+      Nat.gcd (centeredFoldNorm n) (2 * j + 1) := by
+  rw [centeredPoint_difference hj, Nat.gcd_self_add_right,
+    centeredFoldNorm_eq_twice_left_add_gap hj, Nat.gcd_add_self_left]
+  exact ((DkMath.Gnomon.oddGnomon_odd j).coprime_two_left.gcd_mul_left_cancel _).symm
+
+theorem centeredFoldNorm_pos (n : ℕ) : 0 < centeredFoldNorm n := by
+  unfold centeredFoldNorm
+  positivity
+
+theorem centeredPair_gcd_dvd_norm {n j : ℕ} (hj : j < n) :
+    Nat.gcd (n ^ 2 + centeredLeftOffset n j) (n ^ 2 + centeredRightOffset n j) ∣
+      centeredFoldNorm n := by
+  rw [centeredPair_gcd_eq_norm_gap hj]
+  exact Nat.gcd_dvd_left _ _
+
+theorem centeredPair_gcd_dvd_gap {n j : ℕ} (hj : j < n) :
+    Nat.gcd (n ^ 2 + centeredLeftOffset n j) (n ^ 2 + centeredRightOffset n j) ∣
+      2 * j + 1 := by
+  rw [centeredPair_gcd_eq_norm_gap hj]
+  exact Nat.gcd_dvd_right _ _
+
+theorem prime_dvd_centeredPair_gcd_mod_four {n j p : ℕ} (hj : j < n) (hp : p.Prime)
+    (hd : p ∣ Nat.gcd (n ^ 2 + centeredLeftOffset n j) (n ^ 2 + centeredRightOffset n j)) :
+    p % 4 = 1 :=
+  prime_dvd_centeredFoldNorm_mod_four hp (dvd_trans hd (centeredPair_gcd_dvd_norm hj))
+
+theorem centeredPair_gcd_odd {n j : ℕ} (hj : j < n) :
+    Odd (Nat.gcd (n ^ 2 + centeredLeftOffset n j) (n ^ 2 + centeredRightOffset n j)) := by
+  apply Nat.not_even_iff_odd.mp
+  intro he
+  exact (centeredFoldNorm_odd n).not_two_dvd_nat
+    (dvd_trans he.two_dvd (centeredPair_gcd_dvd_norm hj))
+
+theorem prime_dvd_centeredPair_gcd_lt_twice {n j p : ℕ} (hj : j < n)
+    (hd : p ∣ Nat.gcd (n ^ 2 + centeredLeftOffset n j) (n ^ 2 + centeredRightOffset n j)) :
+    p < 2 * n := by
+  have hle := Nat.le_of_dvd (by omega : 0 < 2 * j + 1)
+    (dvd_trans hd (centeredPair_gcd_dvd_gap hj))
+  omega
+
+/-- Old-support disjointness retains the 1-or-single-fresh-prime alternative. -/
+theorem centeredPair_oldSupport_disjoint_iff {n j : ℕ} (hj : j < n) :
+    Disjoint (squareOffsetPrimeSupport n (centeredLeftOffset n j))
+      (squareOffsetPrimeSupport n (centeredRightOffset n j)) ↔
+    Nat.gcd (centeredFoldNorm n) (2 * j + 1) = 1 ∨
+      ((Nat.gcd (centeredFoldNorm n) (2 * j + 1)).Prime ∧
+        n < Nat.gcd (centeredFoldNorm n) (2 * j + 1)) := by
+  have hlt : centeredLeftOffset n j < centeredRightOffset n j := by
+    dsimp [centeredLeftOffset, centeredRightOffset]; omega
+  simpa [centeredPair_gcd_eq_norm_gap hj] using
+    disjoint_squareOffsetPrimeSupport_iff_gcd_eq_one_or_fresh_prime
+      (squareOffset_centeredLeftOffset hj) (squareOffset_centeredRightOffset hj) hlt
+
+
+/-- Fixed cyclotomic shape from the existing prime-power geometric-sum API. -/
+theorem centeredFold_cyclotomic_four_shape :
+    Polynomial.cyclotomic 4 ℤ = Polynomial.X ^ 2 + 1 := by
+  have h := Polynomial.cyclotomic_prime_pow_eq_geom_sum (R := ℤ) (n := 1) Nat.prime_two
+  norm_num [Finset.sum_range_succ] at h
+  simpa [add_comm] using h
+
+/-- Homogeneous Phi_4 at consecutive coordinates, using the existing shifted evaluator. -/
+theorem centeredFoldNorm_eq_cyclotomic_four (n : ℕ) :
+    (centeredFoldNorm n : ℤ) = DkMath.CFBRC.cyclotomicShiftedEval 4 (1 : ℤ) n := by
+  simp [DkMath.CFBRC.cyclotomicShiftedEval, centeredFold_cyclotomic_four_shape,
+    Polynomial.homogenize_add, Polynomial.homogenize_X_pow, centeredFoldNorm]
+  ring
+
+/-- Inverse orientation has the same homogeneous norm. -/
+theorem centeredFoldNorm_eq_cyclotomic_four_inverse (n : ℕ) :
+    (centeredFoldNorm n : ℤ) = DkMath.CFBRC.cyclotomicShiftedEval 4 (-1 : ℤ) ((n + 1 : ℕ) : ℤ) := by
+  simp [DkMath.CFBRC.cyclotomicShiftedEval, centeredFold_cyclotomic_four_shape,
+    Polynomial.homogenize_add, Polynomial.homogenize_X_pow, centeredFoldNorm]
+
+/-- The ratio n/(n+1) has square -1 in the residue field. -/
+theorem prime_dvd_centeredFoldNorm_ratio_sq {n p : ℕ} (hp : p.Prime)
+    (hd : p ∣ centeredFoldNorm n) :
+    DkMath.NumberTheory.GapFocusing.primeRatio p n ((n + 1 : ℕ) : ℤ) ^ 2 = -1 := by
+  let : Fact p.Prime := ⟨hp⟩
+  have hb : ((n + 1 : ℕ) : ZMod p) ≠ 0 := by
+    intro hz
+    exact prime_dvd_centeredFoldNorm_not_dvd_succ hp hd
+      ((ZMod.natCast_eq_zero_iff (n + 1) p).mp hz)
+  have hz : (n : ZMod p) ^ 2 + ((n + 1 : ℕ) : ZMod p) ^ 2 = 0 := by
+    have h := (ZMod.natCast_eq_zero_iff (centeredFoldNorm n) p).mpr hd
+    simpa [centeredFoldNorm] using h
+  have he : DkMath.NumberTheory.GapFocusing.primeRatio p n ((n + 1 : ℕ) : ℤ) =
+      (n : ZMod p) / ((n + 1 : ℕ) : ZMod p) := by
+    simp [DkMath.NumberTheory.GapFocusing.primeRatio, div_eq_mul_inv]
+  rw [he, div_pow]
+  apply (div_eq_iff (pow_ne_zero _ hb)).mpr
+  linear_combination hz
+
+/-- Existing primeOrder API supplies the exact order-four address without a field extension. -/
+theorem prime_dvd_centeredFoldNorm_order_four {n p : ℕ} (hp : p.Prime)
+    (hd : p ∣ centeredFoldNorm n) :
+    DkMath.NumberTheory.GapFocusing.primeOrder p n ((n + 1 : ℕ) : ℤ) = 4 := by
+  let : Fact p.Prime := ⟨hp⟩
+  have hb : ¬(p : ℤ) ∣ ((n + 1 : ℕ) : ℤ) := by
+    exact_mod_cast prime_dvd_centeredFoldNorm_not_dvd_succ hp hd
+  have hp4 : ¬p ∣ 4 := by
+    intro h4
+    have h2 := hp.dvd_of_dvd_pow (show p ∣ 2 ^ 2 by norm_num; exact h4)
+    exact prime_dvd_centeredFoldNorm_ne_two hd ((Nat.prime_dvd_prime_iff_eq hp Nat.prime_two).mp h2)
+  have h := DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_primeOrder_eq_of_not_dvd
+    p 4 n ((n + 1 : ℕ) : ℤ) hb hp4
+  have hsub : (n : ℤ) - ((n + 1 : ℕ) : ℤ) = -1 := by omega
+  rw [hsub, ← centeredFoldNorm_eq_cyclotomic_four_inverse n, Int.natCast_dvd_natCast] at h
+  exact h.mp hd
+
 end DkMath.NumberTheory.Legendre

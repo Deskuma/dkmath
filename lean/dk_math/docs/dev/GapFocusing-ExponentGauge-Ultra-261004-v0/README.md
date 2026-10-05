@@ -274,3 +274,20 @@ full-gcd norm-and-gap normal form. Outcome B.
 [Source inventory](source-inventory-017.md), [Findings](findings-017.md),
 [Declaration classification](declaration-classification-017.md),
 [Validation](validation-017.md).
+
+## Instruction018 - exact fold gcd and odd-gap aggregate
+
+[Report](report-018.md): exact local gcd equals gcd of the fold norm and the
+internal odd gap. The existing double factorial supplies the odd product,
+whose radical is the odd bounded primorial below2n. At positive anchors the
+norm is prime iff the visible aggregate gcd is1 iff every fold gcd is1.
+Exact factorization/padic formulas distinguish the visible norm divisor from
+the product of all local gcds. Both aggregates are coprime across consecutive
+shells, and norm primes carry the existing order-four cyclotomic address.
+The fresh-prime branch is retained. No positive full-cover obstruction or
+primitive first-appearance theorem was proved. Diagnostics cover0..300 plus
+1031 without storing huge products. The next proposal is the exact prime-power
+floor-sum valuation contract. Outcome B.
+
+[Source inventory](source-inventory-018.md), [Findings](findings-018.md),
+[Validation](validation-018.md).
