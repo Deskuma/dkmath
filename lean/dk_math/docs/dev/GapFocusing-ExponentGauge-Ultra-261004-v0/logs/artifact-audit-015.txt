@@ -1,0 +1,4 @@
+PASS: 77/77 complete axiom sets; only the three standard logical axioms.
+PASS: 7 uniform headers/markers; scoped forbidden token and whitespace scans.
+PASS: tracked and newly written Lean whitespace checks.
+PASS: 429 complete diagnostics, six exact calibration rows, corrected conservation, counterexamples, and report scope.

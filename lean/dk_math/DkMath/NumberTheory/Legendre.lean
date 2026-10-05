@@ -79,6 +79,7 @@ import DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootCharge
 import DkMath.NumberTheory.Legendre.ParitySafePrimeAnchorCap
 import DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughFactorization
 import DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughCensus
+import DkMath.NumberTheory.Legendre.ParitySafeSqrtQuotientConservation
 
 #print "file: DkMath.NumberTheory.Legendre"
 

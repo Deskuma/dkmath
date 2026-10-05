@@ -223,3 +223,19 @@ include 1021; bounded diagnostics cover 429 odd prime anchors through 3000.
 
 [Source inventory](source-inventory-014.md) · [Findings](findings-014.md) ·
 [Validation](validation-014.md).
+
+## Instruction015 — corrected quotient conservation
+
+[Report](report-015.md): exact reduced owner windows split into Cross and
+composite quotients. Rough composites route to Cube/Repeated/Triple with
+multiplicities 1/2/3; small-prime rejected quotients require the correction
+`Total=Cross+Cube+2Repeated+3Triple+Rejected`. Every owner quotient exceeds n,
+so the proposed variable above-n multiplicity cannot occur. Six kernel
+calibrations and a three-prime rejection lower bound prove structural budgets;
+the new 1031 endpoint additionally guarantees at least 18 uncovered seats.
+Bounded diagnostics preserve 429 prime anchors and smallest counterexamples.
+Outcome C concerns the false uncorrected law; the corrected law is complete.
+The next proposal transports rejection to exact small-prime floor formulas.
+
+[Source inventory](source-inventory-015.md) · [Findings](findings-015.md) ·
+[Validation](validation-015.md).

@@ -1,0 +1,277 @@
+# Source inventory 015
+Live source audit before extension. Exact names and line numbers below.
+
+## ParitySafeSqrtRoughSingleton
+- `theorem sqrt_rough_of_reduced_point {n r ` — line 15
+- `noncomputable def sqrtRoughCubeKeys (n ` — line 25
+- `noncomputable def sqrtRoughCrossFiber (n p ` — line 29
+- `noncomputable def sqrtRoughCrossKeys (n ` — line 32
+- `@[simp] theorem mem_sqrtRoughCrossFiber {n p q ` — line 36
+- `theorem mem_sqrtRoughCrossKeys_fiber {n p q ` — line 42
+- `@[simp] theorem mem_sqrtRoughCrossKeys {n p q ` — line 48
+- `theorem sqrt_cube_offset_packet {n p ` — line 62
+- `theorem sqrt_cross_offset_packet {n p q ` — line 88
+- `theorem sqrt_cross_representation_unique {n p q a b ` — line 128
+- `theorem sqrt_cube_cross_disjoint_products {n p a q ` — line 143
+- `noncomputable def roughCubeSeats (n ` — line 152
+- `noncomputable def roughCrossSeats (n ` — line 155
+- `theorem sqrt_cube_keys_offset_injective (n ` — line 158
+- `theorem sqrt_cross_keys_offset_injective (n ` — line 167
+- `theorem rough_cube_cross_disjoint (n ` — line 177
+- `theorem rough_singleton_eq_cube_union_cross (n ` — line 188
+- `theorem rough_singleton_card_eq_cube_cross (n ` — line 213
+- `theorem sqrtRoughCubeKeys_card_le_one (n ` — line 219
+- `theorem sqrt_cross_count_eq_fiber_sum (n ` — line 238
+- `theorem sqrt_cross_fiber_eq_reduced_quotient_filter {n p ` — line 259
+- `theorem sqrt_cross_fiber_card_le_active_wave {n p ` — line 291
+- `theorem sqrt_cross_fiber_card_le_quotient_span (n p ` — line 299
+- `theorem sqrt_cross_fiber_card_le_div_add_one {n p ` — line 306
+- `theorem sqrt_cross_fiber_parity_spacing {n p q s ` — line 320
+- `theorem primeAnchor_cross_fiber_card_le_floor {n p ` — line 334
+
+## ParitySafeSqrtRoughCensus
+- `theorem sqrt_rough_three_factor_packet {n p q s ` — line 16
+- `def sqrtRepeatedProduct (a ` — line 56
+- `noncomputable def sqrtRoughRepeatedKeys (n ` — line 59
+- `theorem sqrt_repeated_offset_packet {n ` — line 63
+- `theorem sqrt_repeated_keys_offset_injective (n ` — line 87
+- `theorem sqrt_repeated_pair_occupancy {n p q ` — line 134
+- `noncomputable def roughRepeatedSeats (n ` — line 159
+- `theorem rough_double_eq_repeated_seats (n ` — line 162
+- `theorem rough_double_card_eq_repeated (n ` — line 193
+- `theorem sqrt_triple_offset_packet {n ` — line 198
+- `theorem sqrt_triple_keys_offset_injective (n ` — line 207
+- `noncomputable def roughTripleProductSeats (n ` — line 221
+- `theorem rough_triple_eq_product_seats (n ` — line 224
+- `theorem rough_triple_card_eq_products (n ` — line 246
+- `theorem sqrt_product_seats_pairwise_disjoint (n ` — line 252
+- `theorem sqrt_product_seats_union (n ` — line 274
+- `theorem sqrt_zero_point_prime {n r ` — line 282
+- `theorem sqrt_rough_point_factorization {n r ` — line 296
+- `theorem sqrt_rough_factorization_census (n ` — line 329
+- `theorem sqrt_product_pairMoment (n ` — line 337
+- `theorem sqrt_product_incidence (n ` — line 342
+- `theorem sqrt_product_covered (n ` — line 349
+- `theorem sqrt_uncovered_pos_iff_product_census (n ` — line 357
+- `theorem prime_squareCell_of_sqrt_factorization_census {n ` — line 365
+- `theorem prime_squareCell_of_cross_fiber_budget {n ` — line 375
+
+## ParitySafeSqrtRoughFactorization
+- `theorem prime_dvd_candidate_mem_active {n r u ` — line 14
+- `theorem sqrt_rough_prime_divisor_gt {n r u ` — line 25
+- `theorem sqrt_roughPair_product_lower {n p q ` — line 34
+- `theorem sqrt_roughTriple_product_lower {n p q s ` — line 42
+- `theorem sqrt_roughTriple_point_eq_product {n r p q s ` — line 51
+- `theorem sqrt_roughTripleWave_eq_product_seat {n p q s ` — line 83
+- `theorem sqrt_roughPair_quotient_one_or_prime {n r p q c ` — line 95
+- `theorem sqrt_two_support_classification {n r p q ` — line 132
+- `theorem sqrt_two_support_repeated_prime {n r p q ` — line 151
+- `theorem sqrt_roughTriple_product_offset_mem {n p q s ` — line 168
+- `theorem sqrt_roughTripleWave_card_eq_product_indicator {n p q s ` — line 197
+- `noncomputable def sqrtRoughTripleProductsInShell (n ` — line 222
+- `theorem sqrt_roughTripleMoment_eq_product_count (n ` — line 227
+- `theorem sqrt_rough_square_quotient_one_or_prime {n r d c ` — line 239
+- `theorem sqrt_singleton_point_cube_or_cross {n r p ` — line 278
+
+## ParitySafeSqrtRoughStrata
+- `noncomputable def roughZeroSeats (n ` — line 15
+- `noncomputable def roughSingletonSeats (n ` — line 18
+- `noncomputable def roughDoubleSeats (n ` — line 21
+- `noncomputable def roughTripleSeats (n ` — line 24
+- `theorem roughZeroSeats_eq_uncovered (n ` — line 27
+- `theorem rough_strata_pairwise_disjoint (n ` — line 30
+- `theorem rough_strata_union (n ` — line 49
+- `theorem rough_stratum_sum (n ` — line 65
+- `theorem rough_strata_card (n ` — line 84
+- `theorem rough_incidence_eq_strata (n ` — line 90
+- `theorem rough_pairMoment_eq_strata (n ` — line 97
+- `theorem rough_tripleMoment_eq_strata (n ` — line 105
+- `theorem rough_covered_eq_strata (n ` — line 112
+- `theorem rough_covered_add_two_triple_eq_singleton_pair (n ` — line 129
+- `theorem rough_zero_pos_iff_singleton_moment (n ` — line 136
+- `theorem roughSingleton_label_packet {n r ` — line 144
+
+## ParitySafeSqrtRoughProductWaves
+- `noncomputable def roughActiveLabels (n P ` — line 16
+- `theorem rough_support_subset_labels {n P r ` — line 19
+- `noncomputable def roughPairs (n P ` — line 28
+- `noncomputable def roughTriples (n P ` — line 31
+- `@[simp] theorem mem_roughPairs {n P p q ` — line 34
+- `@[simp] theorem mem_roughTriples {n P p q s ` — line 42
+- `noncomputable def roughPairIncidences (n P ` — line 47
+- `noncomputable def roughTripleIncidences (n P ` — line 51
+- `theorem roughPairIncidences_card (n P ` — line 55
+- `theorem sqrt_roughTripleIncidences_card (n ` — line 71
+- `noncomputable def roughPairWave (n P p q ` — line 87
+- `noncomputable def roughTripleWave (n P p q s ` — line 90
+- `theorem active_pair_coprime {n P p q ` — line 93
+- `theorem roughPair_support_iff_product {n P p q r ` — line 101
+- `theorem roughTriple_support_iff_product {n P p q s r ` — line 115
+- `theorem roughPair_fiber_eq_wave {n P p q ` — line 138
+- `theorem roughTriple_fiber_eq_wave {n P p q s ` — line 144
+- `theorem roughPairMoment_eq_wave_sum (n P ` — line 150
+- `theorem sqrt_roughTripleMoment_eq_wave_sum (n ` — line 163
+- `theorem sqrt_successor_square_gt (n ` — line 178
+- `theorem sqrt_roughPair_product_gt {n p q ` — line 182
+- `theorem sqrt_roughTriple_product_gt {n p q s ` — line 192
+- `theorem roughPairWave_subset_raw (n P p q ` — line 200
+- `theorem roughTripleWave_subset_raw (n P p q s ` — line 207
+- `theorem sqrt_roughPair_raw_card_le_two {n p q ` — line 214
+- `theorem sqrt_roughTriple_raw_card_le_one {n p q s ` — line 223
+- `theorem sqrt_roughPairWave_card_le_two {n p q ` — line 229
+- `theorem sqrt_roughTripleWave_card_le_one {n p q s ` — line 234
+- `theorem roughPairWave_eq_candidate_product_filter (n P p q ` — line 239
+- `theorem roughTripleWave_eq_candidate_product_filter (n P p q s ` — line 246
+- `theorem primeAnchor_roughPairWave_card_le_floor {n P p q ` — line 253
+- `theorem primeAnchor_roughTripleWave_card_le_floor {n P p q s ` — line 265
+- `theorem prime_squareCell_of_sqrt_product_moment {n ` — line 280
+- `theorem candidateProductWave_card_le_one_of_anchor_lt {n m ` — line 291
+- `theorem sqrt_roughPairWave_card_le_one {n p q ` — line 318
+
+## ParitySafeReducedResidue
+- `theorem coprime_two_mul_iff_coprime_and_odd` — line 32
+- `@[simp] theorem mem_squareAnchorOddPointCoprimeOffsets_iff_reducedResidue` — line 43
+- `theorem card_squareAnchorOddPointCoprimeOffsets_eq_totient_two_mul` — line 66
+- `theorem activePrime_reducedResidue_packet` — line 109
+- `theorem paritySafeActiveWaveOffsets_quotient_properties` — line 121
+- `noncomputable def paritySafeReducedQuotientInterval` — line 152
+- `theorem mem_paritySafeReducedQuotientInterval_iff` — line 159
+- `theorem paritySafeActiveWaveOffsets_quotient_mem_interval` — line 176
+- `theorem paritySafeReducedQuotientInterval_mem_wave` — line 197
+- `theorem card_paritySafeActiveWaveOffsets_eq_reducedQuotientInterval` — line 244
+- `theorem paritySafeActiveWave_same_wave_quotient_rigidity` — line 272
+- `theorem paritySafeIncidenceCount_eq_reducedQuotientInterval_sum` — line 320
+- `theorem exists_activePrime_reducedQuotient_factorization_of_fullyCovered` — line 334
+
+## ParitySafeCanonicalRootCharge
+- `theorem card_odd_squareWave_eq_delta {n m ` — line 19
+- `def primeAnchorProductWaveCount (n m ` — line 46
+- `theorem paritySafeProductWave_card_eq_count {n m ` — line 51
+- `noncomputable def canonicalRootCharge3 (n ` — line 83
+- `noncomputable def canonicalRootCharge5 (n ` — line 88
+- `noncomputable def canonicalRootCharge7 (n ` — line 93
+- `theorem canonicalSmallRootCharges_eq_fibers {n ` — line 107
+- `theorem canonicalSmallRootCharges_le_excess {n ` — line 158
+- `theorem uncoveredCandidates_nonempty_of_canonicalRoots {n ` — line 173
+- `theorem prime_squareCell_of_canonicalRoots {n ` — line 181
+
+## ParitySafeCanonicalRoughCount
+- `theorem mem_uncovered_iff_no_activeSupport {n r ` — line 18
+- `noncomputable def canonicalRoughWave (n P q ` — line 26
+- `theorem roughWave_sum_eq_support_sum (n P ` — line 30
+- `theorem roughWave_sum_eq_covered_add_tail (n P ` — line 45
+- `theorem uncovered_nonempty_of_roughWave_sum_lt {n P ` — line 73
+- `theorem remainingCap_add_rough_eq_candidate_add_roughIncidence (n P ` — line 90
+- `theorem remainingCap_lt_iff_rough_currency (n P ` — line 116
+- `theorem roughWave_sum_le_card_mul {n P L K ` — line 125
+- `theorem roughCriterion_smallCutoff {n P r ` — line 136
+- `theorem roughCandidates_seven_eq {n ` — line 145
+- `theorem roughWave_seven_eq {n q ` — line 154
+- `theorem candidateAvoidThree_filter_dvd {n a m ` — line 162
+- `theorem roughCandidates_eleven_eq {n ` — line 173
+- `theorem roughWave_eleven_eq {n q ` — line 182
+- `theorem roughCandidates_eleven_card {n ` — line 190
+- `theorem roughWave_eleven_card {n q ` — line 210
+- `noncomputable def primeAnchorRoughElevenIncidenceCount (n ` — line 238
+- `theorem roughWave_eleven_sum_eq_count {n ` — line 243
+- `theorem prime_squareCell_of_roughEleven_count {n ` — line 261
+
+## Wave
+- `noncomputable def squareWaveOffsets (n m ` — line 32
+- `@[simp] theorem mem_squareWaveOffsets` — line 37
+- `noncomputable def squarePrimeWaveOffsets (n q ` — line 46
+- `@[simp] theorem mem_squarePrimeWaveOffsets` — line 50
+- `theorem eq_of_mem_squareWaveOffsets_of_two_mul_lt_modulus` — line 57
+- `theorem card_squareWaveOffsets_le_one_of_two_mul_lt_modulus` — line 80
+- `theorem card_squareWaveOffsets_eq_div_sub_div` — line 95
+- `def squareWaveCarry (n m ` — line 161
+- `theorem squareWaveCarry_le_one` — line 165
+- `theorem squareWaveCarry_eq_one_iff` — line 179
+- `theorem squareWaveCarry_eq_zero_iff` — line 198
+- `theorem card_squareWaveOffsets_eq_div_add_carry` — line 218
+- `theorem squareWaveCarry_eq_zero_of_dvd_anchor` — line 242
+- `theorem card_squareWaveOffsets_eq_div_of_dvd_anchor` — line 252
+- `theorem card_squarePrimeWaveOffsets_eq_div_add_carry` — line 262
+- `theorem card_squarePrimeWaveOffsets_eq_div_of_dvd_anchor` — line 270
+- `theorem card_squarePrimeWaveOffsets_eq_div_sub_div` — line 278
+- `theorem div_le_card_squareWaveOffsets` — line 287
+- `theorem card_squareWaveOffsets_le_div_add_one` — line 296
+- `theorem two_le_card_squarePrimeWaveOffsets_of_mem` — line 305
+- `noncomputable def squarePrimePairOverlapOffsets (n p q ` — line 317
+- `@[simp] theorem mem_squarePrimePairOverlapOffsets` — line 323
+- `theorem squarePrimePairOverlapOffsets_eq_squareWaveOffsets_product` — line 331
+- `theorem card_squarePrimePairOverlapOffsets_eq_div_sub_div` — line 342
+- `theorem card_squarePrimePairOverlapOffsets_le_one_of_two_mul_lt_product` — line 353
+- `noncomputable def coveredSquareOffsets (n ` — line 365
+- `noncomputable def escapingSquareOffsets (n ` — line 370
+- `@[simp] theorem mem_coveredSquareOffsets` — line 375
+- `@[simp] theorem mem_escapingSquareOffsets` — line 383
+- `theorem mem_escapingSquareOffsets_iff_supportDisjointFrom` — line 391
+- `def SquareOffsetsFullyCovered (n ` — line 400
+- `noncomputable def squareCoverIncidenceCount (n ` — line 404
+- `noncomputable def squareCoverBaselineIncidence (n ` — line 408
+- `noncomputable def squareAnchorCarryCount (n ` — line 412
+- `theorem card_squareOffsets_le_squareCoverIncidenceCount_of_fullyCovered` — line 416
+- `theorem two_mul_le_squareCoverIncidenceCount_of_fullyCovered` — line 432
+- `theorem squareCoverIncidenceCount_eq_sum_primeWave_cards` — line 439
+- `theorem squareCoverIncidenceCount_eq_baseline_add_carry` — line 461
+- `theorem squareAnchorCarryCount_le_card_primeScalesUpTo (n ` — line 474
+- `theorem squareCoverIncidenceCount_eq_sum_div_sub_div` — line 486
+- `theorem two_mul_le_sum_div_sub_div_of_fullyCovered` — line 498
+- `noncomputable def squareCoverOverlapExcess (n ` — line 507
+- `theorem squareCoverIncidenceCount_eq_two_mul_add_overlapExcess_of_fullyCovered` — line 512
+- `theorem squareCoverBaselineIncidence_add_squareAnchorCarryCount_eq_two_mul_add_overlapExcess_of_fullyCovered` — line 538
+
+Mathlib APIs: `Finset.card_bij`, `Finset.card_filter_add_card_filter_not`, `Finset.sum_filter_add_sum_filter_not`, `Finset.card_eq_sum_card_fiberwise`, `Nat.div_lt_iff_lt_mul`, `Nat.le_div_iff_mul_le`, `Nat.div_eq_of_eq_mul_left`, `Nat.prime_dvd_mul`, `Nat.prime_dvd_prime_iff_eq`. Existing census already establishes factorization; do not re-factor seats.
+
+## Final extension inventory
+
+All 47 new production declarations and 30 test declarations are covered by [the manifest](logs/declaration-coverage-015.json).
+
+- `sqrtRoughQuotientFiber` — `ParitySafeSqrtCrossQuotient.lean:16`
+- `sqrtRoughCompositeFiber` — `ParitySafeSqrtCrossQuotient.lean:19`
+- `sqrtRoughRoutedFiber` — `ParitySafeSqrtCrossQuotient.lean:23`
+- `sqrtRoughRejectedFiber` — `ParitySafeSqrtCrossQuotient.lean:28`
+- `sqrt_quotient_gt_anchor` — `ParitySafeSqrtCrossQuotient.lean:32`
+- `mem_sqrtRoughQuotientFiber` — `ParitySafeSqrtCrossQuotient.lean:40`
+- `sqrt_quotient_ne_zero_ne_one` — `ParitySafeSqrtCrossQuotient.lean:52`
+- `sqrt_cross_fiber_eq_quotient_prime_filter` — `ParitySafeSqrtCrossQuotient.lean:60`
+- `sqrt_quotient_prime_composite_partition` — `ParitySafeSqrtCrossQuotient.lean:69`
+- `sqrt_quotient_seat_packet` — `ParitySafeSqrtCrossQuotient.lean:83`
+- `sqrt_quotient_seat_rough_iff` — `ParitySafeSqrtCrossQuotient.lean:98`
+- `sqrt_quotient_rejected_iff_small_prime` — `ParitySafeSqrtCrossQuotient.lean:118`
+- `sqrt_quotient_below_empty_above_eq` — `ParitySafeSqrtCrossQuotient.lean:127`
+- `primeAnchor_quotient_fiber_card_eq_floor` — `ParitySafeSqrtCrossQuotient.lean:141`
+- `sqrt_supported_quotient_packet` — `ParitySafeSqrtCompositeRouting.lean:17`
+- `sqrt_quotient_owners_eq_support` — `ParitySafeSqrtCompositeRouting.lean:34`
+- `sqrt_routed_fiber_card_eq_rough_wave` — `ParitySafeSqrtCompositeRouting.lean:51`
+- `sqrt_three_factor_owner_quotients` — `ParitySafeSqrtCompositeRouting.lean:73`
+- `sqrt_cube_owner_quotient` — `ParitySafeSqrtCompositeRouting.lean:106`
+- `sqrt_repeated_owner_quotients` — `ParitySafeSqrtCompositeRouting.lean:115`
+- `sqrt_triple_owner_quotients` — `ParitySafeSqrtCompositeRouting.lean:141`
+- `sqrt_cube_quotient_owner_multiplicity` — `ParitySafeSqrtCompositeRouting.lean:154`
+- `sqrt_repeated_quotient_owner_multiplicity` — `ParitySafeSqrtCompositeRouting.lean:163`
+- `sqrt_triple_quotient_owner_multiplicity` — `ParitySafeSqrtCompositeRouting.lean:173`
+- `sqrt_composite_quotient_routes_to_census` — `ParitySafeSqrtCompositeRouting.lean:184`
+- `sqrt_quotient_owners_above_eq_support` — `ParitySafeSqrtCompositeRouting.lean:216`
+- `sqrt_composite_quotient_normal_forms` — `ParitySafeSqrtCompositeRouting.lean:231`
+- `sqrt_routed_composite_factor_packet` — `ParitySafeSqrtCompositeRouting.lean:293`
+- `sqrt_cross_fiber_eq_routed_prime_filter` — `ParitySafeSqrtQuotientConservation.lean:16`
+- `sqrt_rejected_quotient_not_prime` — `ParitySafeSqrtQuotientConservation.lean:32`
+- `sqrt_quotient_routed_rejected_partition` — `ParitySafeSqrtQuotientConservation.lean:44`
+- `sqrt_composite_fiber_corrected_partition` — `ParitySafeSqrtQuotientConservation.lean:57`
+- `sqrt_routed_quotient_sum_eq_rough_incidence` — `ParitySafeSqrtQuotientConservation.lean:77`
+- `sqrt_quotient_conservation` — `ParitySafeSqrtQuotientConservation.lean:98`
+- `sqrt_routed_composite_sum` — `ParitySafeSqrtQuotientConservation.lean:109`
+- `sqrt_cross_add_composite_eq_total` — `ParitySafeSqrtQuotientConservation.lean:126`
+- `sqrt_composite_sum_corrected` — `ParitySafeSqrtQuotientConservation.lean:133`
+- `sqrt_cross_eq_total_sub_routing` — `ParitySafeSqrtQuotientConservation.lean:144`
+- `sqrt_cross_bound_of_composite_lower` — `ParitySafeSqrtQuotientConservation.lean:154`
+- `sqrt_cross_bound_of_rejected_lower` — `ParitySafeSqrtQuotientConservation.lean:162`
+- `sqrt_rejected_card_lower_of_small_primes` — `ParitySafeSqrtQuotientConservation.lean:172`
+- `sqrt_cross_le_total` — `ParitySafeSqrtQuotientConservation.lean:184`
+- `sqrt_cross_card_le_capacity_sub_routing` — `ParitySafeSqrtQuotientConservation.lean:191`
+- `prime_squareCell_of_quotient_routing_budget` — `ParitySafeSqrtQuotientConservation.lean:201`
+- `sqrt_quotient_sum_split_owner_range` — `ParitySafeSqrtQuotientConservation.lean:212`
+- `primeAnchor_quotient_range_eq_floor` — `ParitySafeSqrtQuotientConservation.lean:221`
+- `sqrt_cross_fiber_card_le_odd_span` — `ParitySafeSqrtQuotientConservation.lean:227`
