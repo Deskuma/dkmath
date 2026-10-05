@@ -1,0 +1,25 @@
+INFO [764/769] Replayed DkMath.Combinatorics.FinsetSupportPacking
+info: DkMath/Combinatorics/FinsetSupportPacking.lean:11:0: file: DkMath.Combinatorics.FinsetSupportPacking
+FAIL [769/769] Building DkMath.Combinatorics.FinsetSupportDirections (1.6s)
+trace: .> LEAN_PATH=/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/Cli/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/batteries/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/Qq/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/aesop/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/importGraph/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/plausible/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/mathlib/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/build/lib/lean /home/deskuma/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean /home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/Combinatorics/FinsetSupportDirections.lean -o /home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/build/lib/lean/DkMath/Combinatorics/FinsetSupportDirections.olean -i /home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/build/lib/lean/DkMath/Combinatorics/FinsetSupportDirections.ilean -c /home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/build/ir/DkMath/Combinatorics/FinsetSupportDirections.c --setup /home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/build/ir/DkMath/Combinatorics/FinsetSupportDirections.setup.json --json
+info: DkMath/Combinatorics/FinsetSupportDirections.lean:11:0: file: DkMath.Combinatorics.FinsetSupportDirections
+error: DkMath/Combinatorics/FinsetSupportDirections.lean:91:83: unexpected token 'open'; expected 'lemma'
+error: DkMath/Combinatorics/FinsetSupportDirections.lean:101:6: Unknown constant `Finset.sum_boole`
+error: DkMath/Combinatorics/FinsetSupportDirections.lean:95:73: unsolved goals
+[U+03B1] : Type u_1
+[U+03B2] : Type u_2
+inst[U+271D] : DecidableEq [U+03B1]
+V : Finset [U+03B1]
+T : Finset [U+03B2]
+G : [U+03B2]  ->  Finset [U+03B1]
+hG : forall  q  in  T, G q [U+2286] V
+q : [U+03B2]
+hq : q  in  T
+[U+22A2] ([U+2211] x  in  V, if x  in  G q then 1 else 0) = (G q).card
+error: DkMath/Combinatorics/FinsetSupportDirections.lean:136:2: 'change' tactic failed, pattern
+  a  in  V  and  a  notin  supportCollisionRightDeletionVertices V f  iff  ?m.36
+is not definitionally equal to target
+  a  in  supportPackingRightRemainder V f  iff  forall  q  in  f a, forall  b  in  V, q  in  f b  ->  a  <=  b
+Some required targets logged failures:
+- DkMath.Combinatorics.FinsetSupportDirections
+error: build failed

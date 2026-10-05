@@ -1,0 +1,190 @@
+INFO [3091/3162] Replayed DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+info: DkMath/NumberTheory/StructuralArithmetic/PrimitiveDirection.lean:10:0: file: DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+INFO [3092/3162] Replayed DkMath.NumberTheory.Primitive.FinitePrimeWorld
+info: DkMath/NumberTheory/Primitive/FinitePrimeWorld.lean:11:0: file: DkMath.NumberTheory.Primitive.FinitePrimeWorld
+INFO [3093/3162] Replayed DkMath.NumberTheory.Primitive.PeriodicPrimeWorld
+info: DkMath/NumberTheory/Primitive/PeriodicPrimeWorld.lean:13:0: file: DkMath.NumberTheory.Primitive.PeriodicPrimeWorld
+INFO [3094/3162] Replayed DkMath.NumberTheory.Primitive.PrimeWorldRefinement
+info: DkMath/NumberTheory/Primitive/PrimeWorldRefinement.lean:14:0: file: DkMath.NumberTheory.Primitive.PrimeWorldRefinement
+INFO [3095/3162] Replayed DkMath.NumberTheory.Primitive.PrimeWorldResidues
+info: DkMath/NumberTheory/Primitive/PrimeWorldResidues.lean:12:0: file: DkMath.NumberTheory.Primitive.PrimeWorldResidues
+INFO [3099/3162] Replayed DkMath.Algebra.BinomTail
+info: DkMath/Algebra/BinomTail.lean:15:0: file: DkMath.Algebra.BinomTail
+INFO [3100/3162] Replayed DkMath.Lib.Cosmic.GTail
+info: DkMath/Lib/Cosmic/GTail.lean:10:0: file: DkMath.Lib.Cosmic.GTail
+INFO [3101/3162] Replayed DkMath.Lib.Cosmic.GTailNat
+info: DkMath/Lib/Cosmic/GTailNat.lean:10:0: file: DkMath.Lib.Cosmic.GTailNat
+INFO [3104/3162] Replayed DkMath.Lib.Cosmic.GTailCongruence
+info: DkMath/Lib/Cosmic/GTailCongruence.lean:13:0: file: DkMath.Lib.Cosmic.GTailCongruence
+INFO [3105/3162] Replayed DkMath.Lib.Cosmic.GTailBoundary
+info: DkMath/Lib/Cosmic/GTailBoundary.lean:10:0: file: DkMath.Lib.Cosmic.GTailBoundary
+INFO [3106/3162] Replayed DkMath.Lib.NumberTheory.PadicValNat
+info: DkMath/Lib/NumberTheory/PadicValNat.lean:12:0: file: DkMath.Lib.NumberTheory.PadicValNat
+INFO [3107/3162] Replayed DkMath.Lib.Cosmic.GTailPadic
+info: DkMath/Lib/Cosmic/GTailPadic.lean:12:0: file: DkMath.Lib.Cosmic.GTailPadic
+INFO [3108/3162] Replayed DkMath.CosmicFormula.GTail
+info: DkMath/CosmicFormula/GTail.lean:10:0: file: DkMath.CosmicFormula.GTail
+INFO [3109/3162] Replayed DkMath.CosmicFormula.Defs
+info: DkMath/CosmicFormula/Defs.lean:12:0: file: DkMath.CosmicFormula.Defs
+INFO [3111/3162] Replayed DkMath.ABC.PadicValNat
+info: DkMath/ABC/PadicValNat.lean:9:0: file: DkMath.ABC.PadicValNat
+INFO [3112/3162] Replayed DkMath.CosmicFormula.CosmicFormulaBinom
+info: DkMath/CosmicFormula/CosmicFormulaBinom.lean:15:0: file: DkMath.CosmicFormula.CosmicFormulaBinom
+INFO [3113/3162] Replayed DkMath.NumberTheory.Primitive.SquareBody
+info: DkMath/NumberTheory/Primitive/SquareBody.lean:11:0: file: DkMath.NumberTheory.Primitive.SquareBody
+INFO [3114/3162] Replayed DkMath.NumberTheory.Legendre.Basic
+info: DkMath/NumberTheory/Legendre/Basic.lean:15:0: file: DkMath.NumberTheory.Legendre.Basic
+INFO [3115/3162] Replayed DkMath.NumberTheory.Legendre.Wave
+info: DkMath/NumberTheory/Legendre/Wave.lean:9:0: file: DkMath.NumberTheory.Legendre.Wave
+INFO [3116/3162] Replayed DkMath.NumberTheory.Legendre.Internal.PairCombinatorics
+info: DkMath/NumberTheory/Legendre/Internal/PairCombinatorics.lean:13:0: file: DkMath.NumberTheory.Legendre.Internal.PairCombinatorics
+INFO [3117/3162] Replayed DkMath.NumberTheory.Legendre.PairOverlap
+info: DkMath/NumberTheory/Legendre/PairOverlap.lean:10:0: file: DkMath.NumberTheory.Legendre.PairOverlap
+INFO [3118/3162] Replayed DkMath.NumberTheory.Legendre.CoprimePacket
+info: DkMath/NumberTheory/Legendre/CoprimePacket.lean:9:0: file: DkMath.NumberTheory.Legendre.CoprimePacket
+INFO [3119/3162] Replayed DkMath.NumberTheory.Legendre.Quotient
+info: DkMath/NumberTheory/Legendre/Quotient.lean:8:0: file: DkMath.NumberTheory.Legendre.Quotient
+INFO [3120/3162] Replayed DkMath.NumberTheory.Primitive.CrossPeriod
+info: DkMath/NumberTheory/Primitive/CrossPeriod.lean:9:0: file: DkMath.NumberTheory.Primitive.CrossPeriod
+WARNING [3121/3162] Replayed DkMath.NumberTheory.Legendre.PacketCross
+info: DkMath/NumberTheory/Legendre/PacketCross.lean:10:0: file: DkMath.NumberTheory.Legendre.PacketCross
+warning: DkMath/NumberTheory/Legendre/PacketCross.lean:285:5: Variable name `hrs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hrs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+INFO [3122/3162] Replayed DkMath.NumberTheory.Legendre.PacketCoprimality
+info: DkMath/NumberTheory/Legendre/PacketCoprimality.lean:9:0: file: DkMath.NumberTheory.Legendre.PacketCoprimality
+INFO [3123/3162] Replayed DkMath.NumberTheory.Legendre.PacketUnitResidue
+info: DkMath/NumberTheory/Legendre/PacketUnitResidue.lean:9:0: file: DkMath.NumberTheory.Legendre.PacketUnitResidue
+INFO [3124/3162] Replayed DkMath.NumberTheory.Legendre.QuotientSupport
+info: DkMath/NumberTheory/Legendre/QuotientSupport.lean:8:0: file: DkMath.NumberTheory.Legendre.QuotientSupport
+INFO [3125/3162] Replayed DkMath.NumberTheory.Legendre.Obstruction
+info: DkMath/NumberTheory/Legendre/Obstruction.lean:8:0: file: DkMath.NumberTheory.Legendre.Obstruction
+INFO [3126/3162] Replayed DkMath.NumberTheory.Legendre.LocalizedObstruction
+info: DkMath/NumberTheory/Legendre/LocalizedObstruction.lean:10:0: file: DkMath.NumberTheory.Legendre.LocalizedObstruction
+INFO [3127/3162] Replayed DkMath.NumberTheory.Legendre.SmallCofactor
+info: DkMath/NumberTheory/Legendre/SmallCofactor.lean:9:0: file: DkMath.NumberTheory.Legendre.SmallCofactor
+INFO [3128/3162] Replayed DkMath.NumberTheory.Legendre.Frontier
+info: DkMath/NumberTheory/Legendre/Frontier.lean:10:0: file: DkMath.NumberTheory.Legendre.Frontier
+INFO [3129/3162] Replayed DkMath.NumberTheory.PrimorialUniverse.FiniteReservationEscape
+info: DkMath/NumberTheory/PrimorialUniverse/FiniteReservationEscape.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.FiniteReservationEscape
+INFO [3130/3162] Replayed DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization
+info: DkMath/NumberTheory/PrimorialUniverse/FinitePrimeSynchronization.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization
+INFO [3131/3162] Replayed DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor
+info: DkMath/NumberTheory/PrimorialUniverse/WheelSurvivor.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor
+INFO [3132/3162] Replayed DkMath.NumberTheory.PrimorialUniverse.FreshPrimeLift
+info: DkMath/NumberTheory/PrimorialUniverse/FreshPrimeLift.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.FreshPrimeLift
+INFO [3133/3162] Replayed DkMath.NumberTheory.PrimorialUniverse.WheelReplication
+info: DkMath/NumberTheory/PrimorialUniverse/WheelReplication.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.WheelReplication
+INFO [3134/3162] Replayed DkMath.NumberTheory.PrimorialUniverse.WheelProjection
+info: DkMath/NumberTheory/PrimorialUniverse/WheelProjection.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.WheelProjection
+INFO [3135/3162] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOrbit
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorOrbit.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOrbit
+INFO [3136/3162] Replayed DkMath.NumberTheory.Legendre.PrimorialWheelBridge
+info: DkMath/NumberTheory/Legendre/PrimorialWheelBridge.lean:11:0: file: DkMath.NumberTheory.Legendre.PrimorialWheelBridge
+INFO [3137/3162] Replayed DkMath.NumberTheory.Legendre.CenteredPair
+info: DkMath/NumberTheory/Legendre/CenteredPair.lean:9:0: file: DkMath.NumberTheory.Legendre.CenteredPair
+INFO [3138/3162] Replayed DkMath.Gnomon.Algebra
+info: DkMath/Gnomon/Algebra.lean:11:0: file: DkMath.Gnomon.Algebra
+INFO [3139/3162] Replayed DkMath.Gnomon.CosmicBridge
+info: DkMath/Gnomon/CosmicBridge.lean:10:0: file: DkMath.Gnomon.CosmicBridge
+INFO [3140/3162] Replayed DkMath.NumberTheory.Legendre.GnomonBridge
+info: DkMath/NumberTheory/Legendre/GnomonBridge.lean:10:0: file: DkMath.NumberTheory.Legendre.GnomonBridge
+INFO [3141/3162] Replayed DkMath.NumberTheory.Legendre.PrimorialWheelSuccessor
+info: DkMath/NumberTheory/Legendre/PrimorialWheelSuccessor.lean:10:0: file: DkMath.NumberTheory.Legendre.PrimorialWheelSuccessor
+INFO [3142/3162] Replayed DkMath.NumberTheory.Legendre.GnomonSuccessor
+info: DkMath/NumberTheory/Legendre/GnomonSuccessor.lean:11:0: file: DkMath.NumberTheory.Legendre.GnomonSuccessor
+INFO [3143/3162] Replayed DkMath.NumberTheory.Legendre.GnomonResidueCover
+info: DkMath/NumberTheory/Legendre/GnomonResidueCover.lean:9:0: file: DkMath.NumberTheory.Legendre.GnomonResidueCover
+INFO [3144/3162] Replayed DkMath.NumberTheory.Legendre.QuadraticGnomonFold
+info: DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean:10:0: file: DkMath.NumberTheory.Legendre.QuadraticGnomonFold
+INFO [3145/3162] Replayed DkMath.NumberTheory.Legendre.GnomonSupportTurnover
+info: DkMath/NumberTheory/Legendre/GnomonSupportTurnover.lean:9:0: file: DkMath.NumberTheory.Legendre.GnomonSupportTurnover
+INFO [3146/3162] Replayed DkMath.CFBRC.Defs
+info: DkMath/CFBRC/Defs.lean:9:0: file: DkMath.CFBRC.Defs
+INFO [3147/3162] Replayed DkMath.Lib.Cosmic.GTailCyclotomic
+info: DkMath/Lib/Cosmic/GTailCyclotomic.lean:10:0: file: DkMath.Lib.Cosmic.GTailCyclotomic
+INFO [8974/9012] Replayed DkMath.NumberTheory.GapFocusing.CyclotomicAddress
+info: DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean:11:0: file: DkMath.NumberTheory.GapFocusing.CyclotomicAddress
+INFO [8975/9012] Replayed DkMath.NumberTheory.Legendre.CenteredPacketTriangle
+info: DkMath/NumberTheory/Legendre/CenteredPacketTriangle.lean:9:0: file: DkMath.NumberTheory.Legendre.CenteredPacketTriangle
+INFO [8976/9012] Replayed DkMath.NumberTheory.Legendre.CoprimeSeatCapacity
+info: DkMath/NumberTheory/Legendre/CoprimeSeatCapacity.lean:10:0: file: DkMath.NumberTheory.Legendre.CoprimeSeatCapacity
+INFO [8977/9012] Replayed DkMath.NumberTheory.Legendre.OldSupportCapacity
+info: DkMath/NumberTheory/Legendre/OldSupportCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.OldSupportCapacity
+INFO [8978/9012] Replayed DkMath.Combinatorics.FinsetSupportPacking
+info: DkMath/Combinatorics/FinsetSupportPacking.lean:11:0: file: DkMath.Combinatorics.FinsetSupportPacking
+INFO [8981/9014] Replayed DkMath.CFBRC.Basic
+info: DkMath/CFBRC/Basic.lean:11:0: file: DkMath.CFBRC.Basic
+INFO [8982/9014] Replayed DkMath.CFBRC.CyclotomicProduct
+info: DkMath/CFBRC/CyclotomicProduct.lean:10:0: file: DkMath.CFBRC.CyclotomicProduct
+INFO [8984/9014] Replayed DkMath.CosmicFormula.CoreBeamGap
+info: DkMath/CosmicFormula/CoreBeamGap.lean:10:0: file: DkMath.CosmicFormula.CoreBeamGap
+INFO [8985/9014] Replayed DkMath.NumberTheory.GcdDiffPow
+info: DkMath/NumberTheory/GcdDiffPow.lean:10:0: file: DkMath.NumberTheory.GcdDiffPow
+INFO [8986/9014] Replayed DkMath.NumberTheory.GcdLemmas
+info: DkMath/NumberTheory/GcdLemmas.lean:10:0: file: DkMath.NumberTheory.GcdLemmas
+INFO [8987/9014] Replayed DkMath.NumberTheory.GcdNatAbsDivD
+info: DkMath/NumberTheory/GcdNatAbsDivD.lean:10:0: file: DkMath.NumberTheory.GcdNatAbsDivD
+INFO [8988/9014] Replayed DkMath.NumberTheory.GdcDivD
+info: DkMath/NumberTheory/GdcDivD.lean:11:0: file: DkMath.NumberTheory.GdcDivD
+INFO [8989/9014] Replayed DkMath.NumberTheory.ZsigmondyCyclotomic
+info: DkMath/NumberTheory/ZsigmondyCyclotomic.lean:24:0: file: DkMath.NumberTheory.ZsigmondyCyclotomic
+INFO [8990/9014] Replayed DkMath.Zsigmondy
+info: DkMath/Zsigmondy.lean:11:0: file: DkMath.Zsigmondy
+INFO [8991/9014] Replayed DkMath.NumberTheory.GapFocusing.PrimeOrder
+info: DkMath/NumberTheory/GapFocusing/PrimeOrder.lean:10:0: file: DkMath.NumberTheory.GapFocusing.PrimeOrder
+INFO [8992/9014] Replayed DkMath.NumberTheory.GapFocusing.HomogeneousAddress
+info: DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean:11:0: file: DkMath.NumberTheory.GapFocusing.HomogeneousAddress
+INFO [8994/9014] Replayed DkMath.NumberTheory.Legendre.GnomonPrimorialTransition
+info: DkMath/NumberTheory/Legendre/GnomonPrimorialTransition.lean:11:0: file: DkMath.NumberTheory.Legendre.GnomonPrimorialTransition
+INFO [8995/9014] Replayed DkMath.NumberTheory.Legendre.OldSupportGcd
+info: DkMath/NumberTheory/Legendre/OldSupportGcd.lean:11:0: file: DkMath.NumberTheory.Legendre.OldSupportGcd
+INFO [8996/9014] Replayed DkMath.NumberTheory.Legendre.CenteredOwnerFold
+info: DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean:11:0: file: DkMath.NumberTheory.Legendre.CenteredOwnerFold
+INFO [8997/9014] Replayed DkMath.NumberTheory.Legendre.CenteredFoldSupportNorm
+info: DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean:10:0: file: DkMath.NumberTheory.Legendre.CenteredFoldSupportNorm
+INFO [8998/9014] Replayed DkMath.NumberTheory.Legendre.CenteredFoldGcdAggregate
+info: DkMath/NumberTheory/Legendre/CenteredFoldGcdAggregate.lean:13:0: file: DkMath.NumberTheory.Legendre.CenteredFoldGcdAggregate
+INFO [8999/9014] Replayed DkMath.NumberTheory.Legendre.PrimeWorldPacketBridge
+info: DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean:12:0: file: DkMath.NumberTheory.Legendre.PrimeWorldPacketBridge
+INFO [9000/9014] Replayed DkMath.NumberTheory.Legendre.CoarsePrimorialTown
+info: DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean:9:0: file: DkMath.NumberTheory.Legendre.CoarsePrimorialTown
+INFO [9001/9014] Replayed DkMath.NumberTheory.Legendre.CoarsePrimeWorldFullTown
+info: DkMath/NumberTheory/Legendre/CoarsePrimeWorldFullTown.lean:9:0: file: DkMath.NumberTheory.Legendre.CoarsePrimeWorldFullTown
+INFO [9002/9014] Replayed DkMath.NumberTheory.Legendre.CoarsePrimeWorldVerticalCapacity
+info: DkMath/NumberTheory/Legendre/CoarsePrimeWorldVerticalCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.CoarsePrimeWorldVerticalCapacity
+INFO [9003/9014] Replayed DkMath.NumberTheory.Legendre.CoarseTownSupportPacking
+info: DkMath/NumberTheory/Legendre/CoarseTownSupportPacking.lean:10:0: file: DkMath.NumberTheory.Legendre.CoarseTownSupportPacking
+INFO [9004/9014] Replayed DkMath.NumberTheory.Legendre.OldSupportCapacityCertificate
+info: DkMath/NumberTheory/Legendre/OldSupportCapacityCertificate.lean:9:0: file: DkMath.NumberTheory.Legendre.OldSupportCapacityCertificate
+INFO [9005/9014] Replayed DkMath.NumberTheory.Legendre.CoarseTownDeletionCapacity
+info: DkMath/NumberTheory/Legendre/CoarseTownDeletionCapacity.lean:11:0: file: DkMath.NumberTheory.Legendre.CoarseTownDeletionCapacity
+INFO [9006/9014] Replayed DkMath.NumberTheory.Legendre.CoarseTownSurvivorCapacity
+info: DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.CoarseTownSurvivorCapacity
+INFO [9007/9014] Replayed DkMath.NumberTheory.Legendre.CoarseTownDeletionConservation
+info: DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean:9:0: file: DkMath.NumberTheory.Legendre.CoarseTownDeletionConservation
+INFO [9008/9014] Replayed DkMathTest.NumberTheory.LegendreSurvivor297Calibration
+info: DkMathTest/NumberTheory/LegendreSurvivor297Calibration.lean:9:0: file: DkMathTest.NumberTheory.LegendreSurvivor297Calibration
+WARNING [9009/9014] Built DkMath.Combinatorics.FinsetSupportDirections (1.9s)
+info: DkMath/Combinatorics/FinsetSupportDirections.lean:11:0: file: DkMath.Combinatorics.FinsetSupportDirections
+warning: DkMath/Combinatorics/FinsetSupportDirections.lean:40:10: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Finset.not_nonempty_iff_eq_empty.mp h]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+INFO [9010/9014] Built DkMath.NumberTheory.Legendre.CoarseTownRetainedDirections (5.9s)
+info: DkMath/NumberTheory/Legendre/CoarseTownRetainedDirections.lean:10:0: file: DkMath.NumberTheory.Legendre.CoarseTownRetainedDirections
+INFO [9011/9014] Built DkMath.NumberTheory.Legendre.CoarseTownSymmetricDeletion (6.5s)
+info: DkMath/NumberTheory/Legendre/CoarseTownSymmetricDeletion.lean:9:0: file: DkMath.NumberTheory.Legendre.CoarseTownSymmetricDeletion
+INFO [9012/9014] Built DkMathTest.NumberTheory.LegendreRetained297Calibration (14s)
+info: DkMathTest/NumberTheory/LegendreRetained297Calibration.lean:10:0: file: DkMathTest.NumberTheory.LegendreRetained297Calibration
+INFO [9013/9014] Built DkMath.NumberTheory.Legendre.CoarseTownPrimeHandoff (17s)
+info: DkMath/NumberTheory/Legendre/CoarseTownPrimeHandoff.lean:9:0: file: DkMath.NumberTheory.Legendre.CoarseTownPrimeHandoff
+INFO [9014/9014] Built DkMathTest.NumberTheory.LegendreHandoffRegression (5.9s)
+info: DkMathTest/NumberTheory/LegendreHandoffRegression.lean:9:0: file: DkMathTest.NumberTheory.LegendreHandoffRegression
+Build completed successfully (9014 jobs).

@@ -94,6 +94,9 @@ import DkMath.NumberTheory.Legendre.OldSupportCapacityCertificate
 import DkMath.NumberTheory.Legendre.CoarseTownDeletionCapacity
 import DkMath.NumberTheory.Legendre.CoarseTownSurvivorCapacity
 import DkMath.NumberTheory.Legendre.CoarseTownDeletionConservation
+import DkMath.NumberTheory.Legendre.CoarseTownRetainedDirections
+import DkMath.NumberTheory.Legendre.CoarseTownSymmetricDeletion
+import DkMath.NumberTheory.Legendre.CoarseTownPrimeHandoff
 
 #print "file: DkMath.NumberTheory.Legendre"
 
