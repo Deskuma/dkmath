@@ -1,0 +1,51 @@
+file: DkMathTest.NumberTheory.LegendreCanonicalTailInventory
+DkMath.NumberTheory.Legendre.canonicalSupport_eq_iff_minimal {n r p : ℕ} (hp : 0 < p) :
+  paritySafeCanonicalSupportPrime n r = p ↔ p ∈ paritySafeActiveSupport n r ∧ ∀ a ∈ paritySafeActiveSupport n r, p ≤ a
+DkMath.NumberTheory.Legendre.canonicalSupport_eq_iff_no_smaller {n r p : ℕ} (hp : p ∈ squareAnchorOddActivePrimes n) :
+  paritySafeCanonicalSupportPrime n r = p ↔ p ∣ n ^ 2 + r ∧ ∀ a ∈ squareAnchorOddActivePrimes n, a < p → ¬a ∣ n ^ 2 + r
+DkMath.NumberTheory.Legendre.canonicalIncidence_root_lt {n r q : ℕ}
+  (h : (r, q) ∈ paritySafeCanonicalQuotientCoSupportIncidences n) : paritySafeCanonicalSupportPrime n r < q
+DkMath.NumberTheory.Legendre.supportExcess_eq_sum_canonicalRootFiber (n : ℕ) :
+  paritySafeSupportExcess n = ∑ p ∈ squareAnchorOddActivePrimes n, (canonicalRootFiber n p).card
+DkMath.NumberTheory.Legendre.canonicalRootFiber_card_eq_sum_pairs {n p : ℕ} (hp : p ∈ squareAnchorOddActivePrimes n) :
+  (canonicalRootFiber n p).card = ∑ q ∈ squareAnchorOddActivePrimes n with p < q, (canonicalRootPairOffsets n p q).card
+DkMath.NumberTheory.Legendre.mem_canonicalRootPairOffsets_iff {n p q r : ℕ} (hp : p ∈ squareAnchorOddActivePrimes n)
+  (hq : q ∈ squareAnchorOddActivePrimes n) (hpq : p < q) :
+  r ∈ canonicalRootPairOffsets n p q ↔ (r, q) ∈ canonicalRootFiber n p
+DkMath.NumberTheory.Legendre.canonicalRootSieveLower_le_fiber {n p : ℕ} (hp : p ∈ squareAnchorOddActivePrimes n) :
+  canonicalRootSieveLower n p ≤ (canonicalRootFiber n p).card
+DkMath.NumberTheory.Legendre.paritySafeProductWave_card_eq_count {n m : ℕ} (hn : Nat.Prime n) (hnOdd : Odd n)
+  (hm : Odd m) (hcop : n.Coprime m) : (paritySafeProductWaveOffsets n m).card = primeAnchorProductWaveCount n m
+DkMath.NumberTheory.Legendre.paritySafeActiveWave_card_le_twoPrimeWaveUpper {n q : ℕ}
+  (hq : q ∈ squareAnchorOddActivePrimes n) : (paritySafeActiveWaveOffsets n q).card ≤ paritySafeTwoPrimeWaveUpper n q
+DkMath.NumberTheory.Legendre.paritySafeIncidenceCount_eq_candidate_support_sum (n : ℕ) :
+  paritySafeIncidenceCount n = ∑ r ∈ squareAnchorOddPointCoprimeOffsets n, (paritySafeActiveSupport n r).card
+DkMath.NumberTheory.Legendre.paritySafeCoveredCandidates_card_add_supportExcess_eq_incidence (n : ℕ) :
+  (paritySafeCoveredCandidates n).card + paritySafeSupportExcess n = paritySafeIncidenceCount n
+DkMath.NumberTheory.Legendre.paritySafeCoveredCandidates_card_add_uncoveredCandidates_card_eq_candidate_card (n : ℕ) :
+  (paritySafeCoveredCandidates n).card + (paritySafeUncoveredCandidates n).card =
+    (squareAnchorOddPointCoprimeOffsets n).card
+DkMath.NumberTheory.Legendre.paritySafeUncovered_nonempty_of_twoPrimeUpper_lt_candidate_add_excess {n e : ℕ}
+  (he : e ≤ paritySafeSupportExcess n)
+  (hlt : paritySafeTwoPrimeIncidenceUpper n < (squareAnchorOddPointCoprimeOffsets n).card + e) :
+  (paritySafeUncoveredCandidates n).Nonempty
+DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_paritySafeUncoveredCandidates_nonempty {n : ℕ} (hn : 0 < n)
+  (huncovered : (paritySafeUncoveredCandidates n).Nonempty) : ∃ p, Nat.Prime p ∧ SquareCell n p
+DkMath.NumberTheory.Legendre.paritySafeFarProductWave_canonical_eq_iff_no_smaller_active_dvd_cofactor {n p q s r : ℕ}
+  (hkey : (p, q, s) ∈ paritySafeTripleGateFarTriples n) (hr : r ∈ squareWaveOffsets n (p * q * s)) :
+  p = paritySafeCanonicalSupportPrime n r ↔
+    ∀ a ∈ squareAnchorOddActivePrimes n, a < p → ¬a ∣ paritySafeFarProductWaveCofactor n (p, q, s) r
+DkMath.NumberTheory.Legendre.paritySafeTripleGateNearTriples_card_eq_sum_firstPrime_pairFibers (n : ℕ) :
+  (paritySafeTripleGateNearTriples n).card =
+    ∑ p ∈ paritySafeNearFirstPrimes n, (paritySafeNearPrimePairsAtFirst n p).card
+DkMath.NumberTheory.Legendre.squarePrimePairOverlapOffsets_eq_squareWaveOffsets_product {n p q : ℕ} (hp : Nat.Prime p)
+  (hq : Nat.Prime q) (hpq : p ≠ q) : squarePrimePairOverlapOffsets n p q = squareWaveOffsets n (p * q)
+DkMath.NumberTheory.Legendre.card_filter_odd_dvd_Ioc_eq_paritySafeDelta {A B d : ℕ} (hdOdd : Odd d) (hAB : A ≤ B) :
+  {k ∈ Finset.Ioc A B | Odd k ∧ d ∣ k}.card = paritySafeOddMultipleFloorDelta A B d
+Finset.pow_card_le_prod.{u_1, u_5} {ι : Type u_1} {N : Type u_5} [CommMonoid N] [Preorder N] [MulLeftMono N]
+  (s : Finset ι) (f : ι → N) (n : N) (h : ∀ x ∈ s, n ≤ f x) : n ^ s.card ≤ s.prod f
+Nat.Coprime (m n : ℕ) : Prop
+Finset.sum_sub_distrib.{u_1, u_5} {ι : Type u_1} {G : Type u_5} {s : Finset ι} [SubtractionCommMonoid G] (f g : ι → G) :
+  ∑ x ∈ s, (f x - g x) = ∑ x ∈ s, f x - ∑ x ∈ s, g x
+Finset.sum_filter.{u_1, u_4} {ι : Type u_1} {M : Type u_4} {s : Finset ι} [AddCommMonoid M] (p : ι → Prop)
+  [DecidablePred p] (f : ι → M) : ∑ a ∈ s with p a, f a = ∑ a ∈ s, if p a then f a else 0

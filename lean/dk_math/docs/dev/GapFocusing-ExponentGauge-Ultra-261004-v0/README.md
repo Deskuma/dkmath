@@ -176,3 +176,22 @@ A uniform surviving-wave bound with a controlled cutoff remains unproved.
 
 [Source inventory](source-inventory-011.md) · [Findings](findings-011.md) ·
 [Validation](validation-011.md).
+
+## Instruction 012 checkpoint
+
+[Report 012](report-012.md) — Outcome A for exact head/rough-tail cancellation.
+Complementary filters partition the old E, preserving canonical erasure in a
+min-free tail characterization. Pointwise head+tail<=cap justifies Nat sum
+subtraction. Root11 has exact three-exclusion IE; structural heads711/748 beat
+demands695/710 at1009/1013. Independent rough floor sums402<419 and382<421
+prove square-cell primes. Odd-prime anchor B2=I is proved from exact candidate
+waves, making the head-gap and rough-gap comparisons equivalent. Support
+product/power multiplicity bounds are formalized; the explicit sqrt cutoff
+uniformly limits support to3 and tail to twice the rough-seat count, with the
+support bound sharp at19. These maximum bounds remain quantitatively coarse.
+Actual four-cutoff tails and candidate counts are separate diagnostics. An
+explicit sqrt cutoff uniform provider and the next implementation steps remain
+proposals.
+
+[Source inventory](source-inventory-012.md) · [Findings](findings-012.md) ·
+[Validation](validation-012.md).

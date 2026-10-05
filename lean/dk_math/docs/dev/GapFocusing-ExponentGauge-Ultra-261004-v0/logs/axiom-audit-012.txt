@@ -1,0 +1,691 @@
+file: DkMathTest.NumberTheory.LegendreCanonicalTailAxiomAudit
+DkMath.NumberTheory.Legendre.canonicalRootHead (n P : ℕ) : Finset (ℕ × ℕ)
+'DkMath.NumberTheory.Legendre.canonicalRootHead' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalRootTail (n P : ℕ) : Finset (ℕ × ℕ)
+'DkMath.NumberTheory.Legendre.canonicalRootTail' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalRoughCandidates (n P : ℕ) : Finset ℕ
+'DkMath.NumberTheory.Legendre.canonicalRoughCandidates' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.supportExcess_eq_head_add_tail (n P : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeSupportExcess n =
+    (DkMath.NumberTheory.Legendre.canonicalRootHead n P).card +
+      (DkMath.NumberTheory.Legendre.canonicalRootTail n P).card
+'DkMath.NumberTheory.Legendre.supportExcess_eq_head_add_tail' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalRootHead_card_eq_root_sum (n P : ℕ) :
+  (DkMath.NumberTheory.Legendre.canonicalRootHead n P).card =
+    ∑ p ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n with p ≤ P,
+      (DkMath.NumberTheory.Legendre.canonicalRootFiber n p).card
+'DkMath.NumberTheory.Legendre.canonicalRootHead_card_eq_root_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalRoot_gt_iff_rough {n r P : ℕ}
+  (hc : r ∈ DkMath.NumberTheory.Legendre.paritySafeCoveredCandidates n) :
+  P < DkMath.NumberTheory.Legendre.paritySafeCanonicalSupportPrime n r ↔
+    ∀ a ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n, a ≤ P → ¬a ∣ n ^ 2 + r
+'DkMath.NumberTheory.Legendre.canonicalRoot_gt_iff_rough' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.supportLabel_ne_root_iff_smaller {n r q : ℕ}
+  (hq : q ∈ DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r) :
+  q ≠ DkMath.NumberTheory.Legendre.paritySafeCanonicalSupportPrime n r ↔
+    ∃ a ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n, a < q ∧ a ∣ n ^ 2 + r
+'DkMath.NumberTheory.Legendre.supportLabel_ne_root_iff_smaller' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.mem_canonicalRootTail_iff {n P r q : ℕ} :
+  (r, q) ∈ DkMath.NumberTheory.Legendre.canonicalRootTail n P ↔
+    r ∈ DkMath.NumberTheory.Legendre.canonicalRoughCandidates n P ∧
+      q ∈ DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r ∧
+        ∃ a ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n, a < q ∧ a ∣ n ^ 2 + r
+'DkMath.NumberTheory.Legendre.mem_canonicalRootTail_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalHeadAtQ (n P q : ℕ) : Finset ℕ
+'DkMath.NumberTheory.Legendre.canonicalHeadAtQ' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalTailAtQ (n P q : ℕ) : Finset ℕ
+'DkMath.NumberTheory.Legendre.canonicalTailAtQ' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalRootHead_card_eq_secondary_sum (n P : ℕ) :
+  (DkMath.NumberTheory.Legendre.canonicalRootHead n P).card =
+    ∑ q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n,
+      (DkMath.NumberTheory.Legendre.canonicalHeadAtQ n P q).card
+'DkMath.NumberTheory.Legendre.canonicalRootHead_card_eq_secondary_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalHeadAtQ_card_eq_pair_sum {n P q : ℕ}
+  (hq : q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n) :
+  (DkMath.NumberTheory.Legendre.canonicalHeadAtQ n P q).card =
+    ∑ p ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n with p ≤ P ∧ p < q,
+      (DkMath.NumberTheory.Legendre.canonicalRootPairOffsets n p q).card
+'DkMath.NumberTheory.Legendre.canonicalHeadAtQ_card_eq_pair_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalHeadAtQ_add_tail_le_cap {n P q : ℕ}
+  (hq : q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n) :
+  (DkMath.NumberTheory.Legendre.canonicalHeadAtQ n P q).card +
+      (DkMath.NumberTheory.Legendre.canonicalTailAtQ n P q).card ≤
+    DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper n q
+'DkMath.NumberTheory.Legendre.canonicalHeadAtQ_add_tail_le_cap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalTailAtQ_card_le_remaining {n P q : ℕ}
+  (hq : q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n) :
+  (DkMath.NumberTheory.Legendre.canonicalTailAtQ n P q).card ≤
+    DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper n q -
+      (DkMath.NumberTheory.Legendre.canonicalHeadAtQ n P q).card
+'DkMath.NumberTheory.Legendre.canonicalTailAtQ_card_le_remaining' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalRemainingCap (n P : ℕ) : ℕ
+'DkMath.NumberTheory.Legendre.canonicalRemainingCap' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalRemainingCap_eq_secondary_sum (n P : ℕ) :
+  DkMath.NumberTheory.Legendre.canonicalRemainingCap n P =
+    ∑ q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n,
+      (DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper n q -
+        (DkMath.NumberTheory.Legendre.canonicalHeadAtQ n P q).card)
+'DkMath.NumberTheory.Legendre.canonicalRemainingCap_eq_secondary_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalRemainingCap_eq_covered_tail_slack (n P : ℕ) :
+  DkMath.NumberTheory.Legendre.canonicalRemainingCap n P =
+    (DkMath.NumberTheory.Legendre.paritySafeCoveredCandidates n).card +
+        (DkMath.NumberTheory.Legendre.canonicalRootTail n P).card +
+      (DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper n -
+        DkMath.NumberTheory.Legendre.paritySafeIncidenceCount n)
+'DkMath.NumberTheory.Legendre.canonicalRemainingCap_eq_covered_tail_slack' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.remainingCap_lt_candidate_iff (n P : ℕ) :
+  DkMath.NumberTheory.Legendre.canonicalRemainingCap n P <
+      (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n).card ↔
+    DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper n <
+      (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n).card +
+        (DkMath.NumberTheory.Legendre.canonicalRootHead n P).card
+'DkMath.NumberTheory.Legendre.remainingCap_lt_candidate_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.uncovered_nonempty_of_remainingCap_lt {n P : ℕ}
+  (h :
+    DkMath.NumberTheory.Legendre.canonicalRemainingCap n P <
+      (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n).card) :
+  (DkMath.NumberTheory.Legendre.paritySafeUncoveredCandidates n).Nonempty
+'DkMath.NumberTheory.Legendre.uncovered_nonempty_of_remainingCap_lt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalRootTail_card_eq_rough_support_sum (n P : ℕ) :
+  (DkMath.NumberTheory.Legendre.canonicalRootTail n P).card =
+    ∑ r ∈ DkMath.NumberTheory.Legendre.canonicalRoughCandidates n P,
+      ((DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r).card - 1)
+'DkMath.NumberTheory.Legendre.canonicalRootTail_card_eq_rough_support_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.activeSupport_prod_dvd_point {n r : ℕ}
+  (hr : r ∈ DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n) :
+  ∏ q ∈ DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r, q ∣ n ^ 2 + r
+'DkMath.NumberTheory.Legendre.activeSupport_prod_dvd_point' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.rough_support_pow_le_point {n P r L : ℕ}
+  (hr : r ∈ DkMath.NumberTheory.Legendre.canonicalRoughCandidates n P)
+  (hL : ∀ a ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n, P < a → L ≤ a) :
+  L ^ (DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r).card ≤ n ^ 2 + r
+'DkMath.NumberTheory.Legendre.rough_support_pow_le_point' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.rough_support_card_le {n P r L K : ℕ}
+  (hr : r ∈ DkMath.NumberTheory.Legendre.canonicalRoughCandidates n P)
+  (hL : ∀ a ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n, P < a → L ≤ a) (hLpos : 1 ≤ L)
+  (hpow : n ^ 2 + 2 * n < L ^ (K + 1)) : (DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r).card ≤ K
+'DkMath.NumberTheory.Legendre.rough_support_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalRootTail_card_le_rough_mul {n P L K : ℕ}
+  (hL : ∀ a ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n, P < a → L ≤ a) (hLpos : 1 ≤ L)
+  (hpow : n ^ 2 + 2 * n < L ^ (K + 1)) :
+  (DkMath.NumberTheory.Legendre.canonicalRootTail n P).card ≤
+    (DkMath.NumberTheory.Legendre.canonicalRoughCandidates n P).card * (K - 1)
+'DkMath.NumberTheory.Legendre.canonicalRootTail_card_le_rough_mul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.card_filter_three_exclusions.{u_1} {α : Type u_1} (S : Finset α) (P Q R : α → Prop)
+  [DecidablePred P] [DecidablePred Q] [DecidablePred R] :
+  {x ∈ S | ¬P x ∧ ¬Q x ∧ ¬R x}.card =
+    S.card + {x ∈ S | P x ∧ Q x}.card + {x ∈ S | P x ∧ R x}.card + {x ∈ S | Q x ∧ R x}.card -
+      ((Finset.filter P S).card + (Finset.filter Q S).card + (Finset.filter R S).card + {x ∈ S | P x ∧ Q x ∧ R x}.card)
+'DkMath.NumberTheory.card_filter_three_exclusions' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.candidateAvoidThree (n m : ℕ) : Finset ℕ
+'DkMath.NumberTheory.Legendre.candidateAvoidThree' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.candidateAvoidThree_card {n m : ℕ} (h3 : Nat.Coprime 3 m) (h5 : Nat.Coprime 5 m)
+  (h7 : Nat.Coprime 7 m) :
+  (DkMath.NumberTheory.Legendre.candidateAvoidThree n m).card =
+    (DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets n m).card +
+            (DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets n (15 * m)).card +
+          (DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets n (21 * m)).card +
+        (DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets n (35 * m)).card -
+      ((DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets n (3 * m)).card +
+            (DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets n (5 * m)).card +
+          (DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets n (7 * m)).card +
+        (DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets n (105 * m)).card)
+'DkMath.NumberTheory.Legendre.candidateAvoidThree_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.activePrime_below_eleven {n a : ℕ}
+  (ha : a ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n) (hlt : a < 11) : a = 3 ∨ a = 5 ∨ a = 7
+'DkMath.NumberTheory.Legendre.activePrime_below_eleven' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalRoot11Pair_eq {n q : ℕ}
+  (h3 : 3 ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n)
+  (h5 : 5 ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n)
+  (h7 : 7 ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n) :
+  DkMath.NumberTheory.Legendre.canonicalRootPairOffsets n 11 q =
+    DkMath.NumberTheory.Legendre.candidateAvoidThree n (11 * q)
+'DkMath.NumberTheory.Legendre.canonicalRoot11Pair_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalRoot11Pair_card {n q : ℕ}
+  (h3 : 3 ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n)
+  (h5 : 5 ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n)
+  (h7 : 7 ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n)
+  (h11 : 11 ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n)
+  (hq : q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n) (hgt : 11 < q) :
+  (DkMath.NumberTheory.Legendre.canonicalRootPairOffsets n 11 q).card =
+    (DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets n (11 * q)).card +
+            (DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets n (165 * q)).card +
+          (DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets n (231 * q)).card +
+        (DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets n (385 * q)).card -
+      ((DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets n (33 * q)).card +
+            (DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets n (55 * q)).card +
+          (DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets n (77 * q)).card +
+        (DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets n (1155 * q)).card)
+'DkMath.NumberTheory.Legendre.canonicalRoot11Pair_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.primeAnchorAvoidThreeCount (n m : ℕ) : ℕ
+'DkMath.NumberTheory.Legendre.primeAnchorAvoidThreeCount' depends on axioms: [propext]
+DkMath.NumberTheory.Legendre.canonicalRootCharge11 (n : ℕ) : ℕ
+'DkMath.NumberTheory.Legendre.canonicalRootCharge11' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.candidateAvoidThree_card_eq_count {n m : ℕ} (hn : Nat.Prime n) (hlarge : 7 < n)
+  (hm : Odd m) (hnm : n.Coprime m) (h3m : Nat.Coprime 3 m) (h5m : Nat.Coprime 5 m) (h7m : Nat.Coprime 7 m) :
+  (DkMath.NumberTheory.Legendre.candidateAvoidThree n m).card =
+    DkMath.NumberTheory.Legendre.primeAnchorAvoidThreeCount n m
+'DkMath.NumberTheory.Legendre.candidateAvoidThree_card_eq_count' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.primeAnchor_root11 {n : ℕ} (hn : Nat.Prime n) (hlt : 11 < n) :
+  11 ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n
+'DkMath.NumberTheory.Legendre.primeAnchor_root11' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalRootCharge11_eq_fiber {n : ℕ} (hn : Nat.Prime n) (hlarge : 11 < n) :
+  DkMath.NumberTheory.Legendre.canonicalRootCharge11 n = (DkMath.NumberTheory.Legendre.canonicalRootFiber n 11).card
+'DkMath.NumberTheory.Legendre.canonicalRootCharge11_eq_fiber' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalFourRootCharges_le_excess {n : ℕ} (hn : Nat.Prime n) (hlt : 11 < n) :
+  DkMath.NumberTheory.Legendre.canonicalRootCharge3 n + DkMath.NumberTheory.Legendre.canonicalRootCharge5 n +
+        DkMath.NumberTheory.Legendre.canonicalRootCharge7 n +
+      DkMath.NumberTheory.Legendre.canonicalRootCharge11 n ≤
+    DkMath.NumberTheory.Legendre.paritySafeSupportExcess n
+'DkMath.NumberTheory.Legendre.canonicalFourRootCharges_le_excess' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.activePrimes_smallCutoff {n P : ℕ} (hn : Nat.Prime n) (hlt : 11 < n)
+  (hP : P ∈ {3, 5, 7, 11}) :
+  {p ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n | p ≤ P} = {p ∈ {3, 5, 7, 11} | p ≤ P}
+'DkMath.NumberTheory.Legendre.activePrimes_smallCutoff' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalSmallHeads_eq_charges {n : ℕ} (hn : Nat.Prime n) (hlt : 11 < n) :
+  (DkMath.NumberTheory.Legendre.canonicalRootHead n 3).card = DkMath.NumberTheory.Legendre.canonicalRootCharge3 n ∧
+    (DkMath.NumberTheory.Legendre.canonicalRootHead n 5).card =
+        DkMath.NumberTheory.Legendre.canonicalRootCharge3 n + DkMath.NumberTheory.Legendre.canonicalRootCharge5 n ∧
+      (DkMath.NumberTheory.Legendre.canonicalRootHead n 7).card =
+          DkMath.NumberTheory.Legendre.canonicalRootCharge3 n + DkMath.NumberTheory.Legendre.canonicalRootCharge5 n +
+            DkMath.NumberTheory.Legendre.canonicalRootCharge7 n ∧
+        (DkMath.NumberTheory.Legendre.canonicalRootHead n 11).card =
+          DkMath.NumberTheory.Legendre.canonicalRootCharge3 n + DkMath.NumberTheory.Legendre.canonicalRootCharge5 n +
+              DkMath.NumberTheory.Legendre.canonicalRootCharge7 n +
+            DkMath.NumberTheory.Legendre.canonicalRootCharge11 n
+'DkMath.NumberTheory.Legendre.canonicalSmallHeads_eq_charges' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.mem_uncovered_iff_no_activeSupport {n r : ℕ} :
+  r ∈ DkMath.NumberTheory.Legendre.paritySafeUncoveredCandidates n ↔
+    r ∈ DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n ∧
+      ¬(DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r).Nonempty
+'DkMath.NumberTheory.Legendre.mem_uncovered_iff_no_activeSupport' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.canonicalRoughWave (n P q : ℕ) : Finset ℕ
+'DkMath.NumberTheory.Legendre.canonicalRoughWave' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.roughWave_sum_eq_support_sum (n P : ℕ) :
+  ∑ q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n,
+      (DkMath.NumberTheory.Legendre.canonicalRoughWave n P q).card =
+    ∑ r ∈ DkMath.NumberTheory.Legendre.canonicalRoughCandidates n P,
+      (DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r).card
+'DkMath.NumberTheory.Legendre.roughWave_sum_eq_support_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.roughWave_sum_eq_covered_add_tail (n P : ℕ) :
+  ∑ q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n,
+      (DkMath.NumberTheory.Legendre.canonicalRoughWave n P q).card =
+    {r ∈ DkMath.NumberTheory.Legendre.canonicalRoughCandidates n P |
+          (DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r).Nonempty}.card +
+      (DkMath.NumberTheory.Legendre.canonicalRootTail n P).card
+'DkMath.NumberTheory.Legendre.roughWave_sum_eq_covered_add_tail' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.uncovered_nonempty_of_roughWave_sum_lt {n P : ℕ}
+  (h :
+    ∑ q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n,
+        (DkMath.NumberTheory.Legendre.canonicalRoughWave n P q).card <
+      (DkMath.NumberTheory.Legendre.canonicalRoughCandidates n P).card) :
+  (DkMath.NumberTheory.Legendre.paritySafeUncoveredCandidates n).Nonempty
+'DkMath.NumberTheory.Legendre.uncovered_nonempty_of_roughWave_sum_lt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.remainingCap_add_rough_eq_candidate_add_roughIncidence (n P : ℕ) :
+  DkMath.NumberTheory.Legendre.canonicalRemainingCap n P +
+      (DkMath.NumberTheory.Legendre.canonicalRoughCandidates n P).card =
+    (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n).card +
+        ∑ q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n,
+          (DkMath.NumberTheory.Legendre.canonicalRoughWave n P q).card +
+      (DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper n -
+        DkMath.NumberTheory.Legendre.paritySafeIncidenceCount n)
+'DkMath.NumberTheory.Legendre.remainingCap_add_rough_eq_candidate_add_roughIncidence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.remainingCap_lt_iff_rough_currency (n P : ℕ) :
+  DkMath.NumberTheory.Legendre.canonicalRemainingCap n P <
+      (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n).card ↔
+    ∑ q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n,
+          (DkMath.NumberTheory.Legendre.canonicalRoughWave n P q).card +
+        (DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper n -
+          DkMath.NumberTheory.Legendre.paritySafeIncidenceCount n) <
+      (DkMath.NumberTheory.Legendre.canonicalRoughCandidates n P).card
+'DkMath.NumberTheory.Legendre.remainingCap_lt_iff_rough_currency' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.roughWave_sum_le_card_mul {n P L K : ℕ}
+  (hL : ∀ a ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n, P < a → L ≤ a) (hLpos : 1 ≤ L)
+  (hpow : n ^ 2 + 2 * n < L ^ (K + 1)) :
+  ∑ q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n,
+      (DkMath.NumberTheory.Legendre.canonicalRoughWave n P q).card ≤
+    (DkMath.NumberTheory.Legendre.canonicalRoughCandidates n P).card * K
+'DkMath.NumberTheory.Legendre.roughWave_sum_le_card_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.roughCriterion_smallCutoff {n P r : ℕ} (hn : Nat.Prime n) (hlt : 11 < n)
+  (hP : P ∈ {3, 5, 7, 11}) :
+  (∀ a ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n, a ≤ P → ¬a ∣ n ^ 2 + r) ↔
+    ∀ a ∈ {a ∈ {3, 5, 7, 11} | a ≤ P}, ¬a ∣ n ^ 2 + r
+'DkMath.NumberTheory.Legendre.roughCriterion_smallCutoff' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.roughCandidates_seven_eq {n : ℕ} (hn : Nat.Prime n) (hlt : 11 < n) :
+  DkMath.NumberTheory.Legendre.canonicalRoughCandidates n 7 = DkMath.NumberTheory.Legendre.candidateAvoidThree n 1
+'DkMath.NumberTheory.Legendre.roughCandidates_seven_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.roughWave_seven_eq {n q : ℕ} (hn : Nat.Prime n) (hlt : 11 < n) :
+  DkMath.NumberTheory.Legendre.canonicalRoughWave n 7 q = DkMath.NumberTheory.Legendre.candidateAvoidThree n q
+'DkMath.NumberTheory.Legendre.roughWave_seven_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.candidateAvoidThree_filter_dvd {n a m : ℕ} (ha : a.Coprime m) :
+  {r ∈ DkMath.NumberTheory.Legendre.candidateAvoidThree n m | a ∣ n ^ 2 + r} =
+    DkMath.NumberTheory.Legendre.candidateAvoidThree n (a * m)
+'DkMath.NumberTheory.Legendre.candidateAvoidThree_filter_dvd' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.roughCandidates_eleven_eq {n : ℕ} (hn : Nat.Prime n) (hlt : 11 < n) :
+  DkMath.NumberTheory.Legendre.canonicalRoughCandidates n 11 =
+    {r ∈ DkMath.NumberTheory.Legendre.candidateAvoidThree n 1 | ¬11 ∣ n ^ 2 + r}
+'DkMath.NumberTheory.Legendre.roughCandidates_eleven_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.roughWave_eleven_eq {n q : ℕ} (hn : Nat.Prime n) (hlt : 11 < n) :
+  DkMath.NumberTheory.Legendre.canonicalRoughWave n 11 q =
+    {r ∈ DkMath.NumberTheory.Legendre.candidateAvoidThree n q | ¬11 ∣ n ^ 2 + r}
+'DkMath.NumberTheory.Legendre.roughWave_eleven_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.roughCandidates_eleven_card {n : ℕ} (hn : Nat.Prime n) (hlt : 11 < n) :
+  (DkMath.NumberTheory.Legendre.canonicalRoughCandidates n 11).card =
+    DkMath.NumberTheory.Legendre.primeAnchorAvoidThreeCount n 1 -
+      DkMath.NumberTheory.Legendre.primeAnchorAvoidThreeCount n 11
+'DkMath.NumberTheory.Legendre.roughCandidates_eleven_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.roughWave_eleven_card {n q : ℕ} (hn : Nat.Prime n) (hlt : 11 < n)
+  (hq : q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n) (hqgt : 11 < q) :
+  (DkMath.NumberTheory.Legendre.canonicalRoughWave n 11 q).card =
+    DkMath.NumberTheory.Legendre.primeAnchorAvoidThreeCount n q -
+      DkMath.NumberTheory.Legendre.primeAnchorAvoidThreeCount n (11 * q)
+'DkMath.NumberTheory.Legendre.roughWave_eleven_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.primeAnchorRoughElevenIncidenceCount (n : ℕ) : ℕ
+'DkMath.NumberTheory.Legendre.primeAnchorRoughElevenIncidenceCount' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.roughWave_eleven_sum_eq_count {n : ℕ} (hn : Nat.Prime n) (hlt : 11 < n) :
+  ∑ q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n,
+      (DkMath.NumberTheory.Legendre.canonicalRoughWave n 11 q).card =
+    DkMath.NumberTheory.Legendre.primeAnchorRoughElevenIncidenceCount n
+'DkMath.NumberTheory.Legendre.roughWave_eleven_sum_eq_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.prime_squareCell_of_roughEleven_count {n : ℕ} (hn : Nat.Prime n) (hlt : 11 < n)
+  (h :
+    DkMath.NumberTheory.Legendre.primeAnchorRoughElevenIncidenceCount n <
+      DkMath.NumberTheory.Legendre.primeAnchorAvoidThreeCount n 1 -
+        DkMath.NumberTheory.Legendre.primeAnchorAvoidThreeCount n 11) :
+  ∃ p, Nat.Prime p ∧ DkMath.NumberTheory.Legendre.SquareCell n p
+'DkMath.NumberTheory.Legendre.prime_squareCell_of_roughEleven_count' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.primeAnchorTwoPrimeWaveUpper_eq_count {n q : ℕ} (hn : Nat.Prime n) (hne : n ≠ 2)
+  (hq : q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n) :
+  DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper n q =
+    DkMath.NumberTheory.Legendre.primeAnchorProductWaveCount n q
+'DkMath.NumberTheory.Legendre.primeAnchorTwoPrimeWaveUpper_eq_count' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.primeAnchorTwoPrimeWaveUpper_eq_card {n q : ℕ} (hn : Nat.Prime n) (hne : n ≠ 2)
+  (hq : q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n) :
+  DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper n q =
+    (DkMath.NumberTheory.Legendre.paritySafeActiveWaveOffsets n q).card
+'DkMath.NumberTheory.Legendre.primeAnchorTwoPrimeWaveUpper_eq_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.primeAnchorTwoPrimeUpper_eq_incidence {n : ℕ} (hn : Nat.Prime n) (hne : n ≠ 2) :
+  DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper n =
+    DkMath.NumberTheory.Legendre.paritySafeIncidenceCount n
+'DkMath.NumberTheory.Legendre.primeAnchorTwoPrimeUpper_eq_incidence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.primeAnchorRemainingCap_eq_covered_tail {n : ℕ} (hn : Nat.Prime n) (hne : n ≠ 2) (P : ℕ) :
+  DkMath.NumberTheory.Legendre.canonicalRemainingCap n P =
+    (DkMath.NumberTheory.Legendre.paritySafeCoveredCandidates n).card +
+      (DkMath.NumberTheory.Legendre.canonicalRootTail n P).card
+'DkMath.NumberTheory.Legendre.primeAnchorRemainingCap_eq_covered_tail' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.primeAnchorRemainingCap_lt_iff_rough {n : ℕ} (hn : Nat.Prime n) (hne : n ≠ 2) (P : ℕ) :
+  DkMath.NumberTheory.Legendre.canonicalRemainingCap n P <
+      (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n).card ↔
+    ∑ q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n,
+        (DkMath.NumberTheory.Legendre.canonicalRoughWave n P q).card <
+      (DkMath.NumberTheory.Legendre.canonicalRoughCandidates n P).card
+'DkMath.NumberTheory.Legendre.primeAnchorRemainingCap_lt_iff_rough' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.primeAnchorHead_gap_iff_rough {n : ℕ} (hn : Nat.Prime n) (hne : n ≠ 2) (P : ℕ) :
+  DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper n <
+      (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets n).card +
+        (DkMath.NumberTheory.Legendre.canonicalRootHead n P).card ↔
+    ∑ q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n,
+        (DkMath.NumberTheory.Legendre.canonicalRoughWave n P q).card <
+      (DkMath.NumberTheory.Legendre.canonicalRoughCandidates n P).card
+'DkMath.NumberTheory.Legendre.primeAnchorHead_gap_iff_rough' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.sqrtCutoff_power_four_gt (n : ℕ) : n ^ 2 + 2 * n < (n.sqrt + 1) ^ 4
+'DkMath.NumberTheory.Legendre.sqrtCutoff_power_four_gt' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.NumberTheory.Legendre.sqrtCutoff_support_card_le_three {n r : ℕ}
+  (hr : r ∈ DkMath.NumberTheory.Legendre.canonicalRoughCandidates n n.sqrt) :
+  (DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r).card ≤ 3
+'DkMath.NumberTheory.Legendre.sqrtCutoff_support_card_le_three' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.NumberTheory.Legendre.sqrtCutoff_tail_card_le_two_mul (n : ℕ) :
+  (DkMath.NumberTheory.Legendre.canonicalRootTail n n.sqrt).card ≤
+    2 * (DkMath.NumberTheory.Legendre.canonicalRoughCandidates n n.sqrt).card
+'DkMath.NumberTheory.Legendre.sqrtCutoff_tail_card_le_two_mul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailCalibration.RootRow : Type
+'DkMathTest.LegendreCanonicalTailCalibration.RootRow' does not depend on any axioms
+DkMathTest.LegendreCanonicalTailCalibration.rootData : Finset DkMathTest.LegendreCanonicalTailCalibration.RootRow
+'DkMathTest.LegendreCanonicalTailCalibration.rootData' depends on axioms: [propext, Quot.sound]
+DkMathTest.LegendreCanonicalTailCalibration.roughData : Finset (ℕ × ℕ × ℕ)
+'DkMathTest.LegendreCanonicalTailCalibration.roughData' depends on axioms: [propext, Quot.sound]
+DkMathTest.LegendreCanonicalTailCalibration.cutoffData : Finset (ℕ × ℕ)
+'DkMathTest.LegendreCanonicalTailCalibration.cutoffData' depends on axioms: [propext, Quot.sound]
+DkMathTest.LegendreCanonicalTailCalibration.root11UnionFloorLower (n : ℕ) : ℕ
+'DkMathTest.LegendreCanonicalTailCalibration.root11UnionFloorLower' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailCalibration.unionData : Finset (ℕ × ℕ × ℕ)
+'DkMathTest.LegendreCanonicalTailCalibration.unionData' depends on axioms: [propext, Quot.sound]
+DkMathTest.LegendreCanonicalTailCalibration.root_charges_checked
+  (t : DkMathTest.LegendreCanonicalTailCalibration.RootRow) :
+  t ∈ DkMathTest.LegendreCanonicalTailCalibration.rootData →
+    DkMath.NumberTheory.Legendre.canonicalRootCharge3 t.1 = t.2.2.2.1 ∧
+      DkMath.NumberTheory.Legendre.canonicalRootCharge5 t.1 = t.2.2.2.2.1 ∧
+        DkMath.NumberTheory.Legendre.canonicalRootCharge7 t.1 = t.2.2.2.2.2.1 ∧
+          DkMath.NumberTheory.Legendre.canonicalRootCharge11 t.1 = t.2.2.2.2.2.2
+'DkMathTest.LegendreCanonicalTailCalibration.root_charges_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailCalibration.caps_checked (t : DkMathTest.LegendreCanonicalTailCalibration.RootRow) :
+  t ∈ DkMathTest.LegendreCanonicalTailCalibration.rootData →
+    Nat.Prime t.1 ∧
+      11 < t.1 ∧
+        (DkMath.NumberTheory.Legendre.squareAnchorOddPointCoprimeOffsets t.1).card = t.2.1 ∧
+          DkMath.NumberTheory.Legendre.paritySafeTwoPrimeIncidenceUpper t.1 = t.2.2.1
+'DkMathTest.LegendreCanonicalTailCalibration.caps_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreCanonicalTailCalibration.rough_floor_counts_checked (t : ℕ × ℕ × ℕ) :
+  t ∈ DkMathTest.LegendreCanonicalTailCalibration.roughData →
+    Nat.Prime t.1 ∧
+      11 < t.1 ∧
+        DkMath.NumberTheory.Legendre.primeAnchorAvoidThreeCount t.1 1 -
+              DkMath.NumberTheory.Legendre.primeAnchorAvoidThreeCount t.1 11 =
+            t.2.1 ∧
+          DkMath.NumberTheory.Legendre.primeAnchorRoughElevenIncidenceCount t.1 = t.2.2 ∧ t.2.2 < t.2.1
+'DkMathTest.LegendreCanonicalTailCalibration.rough_floor_counts_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailCalibration.union_credit_checked (t : ℕ × ℕ × ℕ) :
+  t ∈ DkMathTest.LegendreCanonicalTailCalibration.unionData →
+    DkMathTest.LegendreCanonicalTailCalibration.root11UnionFloorLower t.1 = t.2.1 ∧
+      DkMath.NumberTheory.Legendre.canonicalRootCharge11 t.1 = t.2.1 + t.2.2
+'DkMathTest.LegendreCanonicalTailCalibration.union_credit_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailCalibration.head_charges_checked
+  (t : DkMathTest.LegendreCanonicalTailCalibration.RootRow) :
+  t ∈ DkMathTest.LegendreCanonicalTailCalibration.rootData →
+    (DkMath.NumberTheory.Legendre.canonicalRootHead t.1 3).card = t.2.2.2.1 ∧
+      (DkMath.NumberTheory.Legendre.canonicalRootHead t.1 5).card = t.2.2.2.1 + t.2.2.2.2.1 ∧
+        (DkMath.NumberTheory.Legendre.canonicalRootHead t.1 7).card = t.2.2.2.1 + t.2.2.2.2.1 + t.2.2.2.2.2.1 ∧
+          (DkMath.NumberTheory.Legendre.canonicalRootHead t.1 11).card =
+            t.2.2.2.1 + t.2.2.2.2.1 + t.2.2.2.2.2.1 + t.2.2.2.2.2.2
+'DkMathTest.LegendreCanonicalTailCalibration.head_charges_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailCalibration.cutoff_checked (u : ℕ × ℕ) :
+  u ∈ DkMathTest.LegendreCanonicalTailCalibration.cutoffData →
+    ∃ t ∈ DkMathTest.LegendreCanonicalTailCalibration.rootData,
+      t.1 = u.1 ∧
+        u.2 ^ 2 ≤ u.1 ∧
+          u.2 ≤ u.1 ∧
+            have D := t.2.2.1 - t.2.1 + 1;
+            u.2 = 3 ∧ D ≤ t.2.2.2.1 ∨
+              u.2 = 5 ∧ t.2.2.2.1 < D ∧ D ≤ t.2.2.2.1 + t.2.2.2.2.1 ∨
+                u.2 = 7 ∧ t.2.2.2.1 + t.2.2.2.2.1 < D ∧ D ≤ t.2.2.2.1 + t.2.2.2.2.1 + t.2.2.2.2.2.1 ∨
+                  u.2 = 11 ∧
+                    t.2.2.2.1 + t.2.2.2.2.1 + t.2.2.2.2.2.1 < D ∧
+                      D ≤ t.2.2.2.1 + t.2.2.2.2.1 + t.2.2.2.2.2.1 + t.2.2.2.2.2.2
+'DkMathTest.LegendreCanonicalTailCalibration.cutoff_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreCanonicalTailCalibration.checkpoints_uncovered_from_head
+  (t : DkMathTest.LegendreCanonicalTailCalibration.RootRow) :
+  t ∈ DkMathTest.LegendreCanonicalTailCalibration.rootData →
+    (DkMath.NumberTheory.Legendre.paritySafeUncoveredCandidates t.1).Nonempty
+'DkMathTest.LegendreCanonicalTailCalibration.checkpoints_uncovered_from_head' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailCalibration.checkpoints_prime_from_rough (t : ℕ × ℕ × ℕ) :
+  t ∈ DkMathTest.LegendreCanonicalTailCalibration.roughData →
+    ∃ p, Nat.Prime p ∧ DkMath.NumberTheory.Legendre.SquareCell t.1 p
+'DkMathTest.LegendreCanonicalTailCalibration.checkpoints_prime_from_rough' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailCalibration.shell1009_uncovered :
+  (DkMath.NumberTheory.Legendre.paritySafeUncoveredCandidates 1009).Nonempty
+'DkMathTest.LegendreCanonicalTailCalibration.shell1009_uncovered' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailCalibration.shell1013_uncovered :
+  (DkMath.NumberTheory.Legendre.paritySafeUncoveredCandidates 1013).Nonempty
+'DkMathTest.LegendreCanonicalTailCalibration.shell1013_uncovered' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailCalibration.shell1009_prime :
+  ∃ p, Nat.Prime p ∧ DkMath.NumberTheory.Legendre.SquareCell 1009 p
+'DkMathTest.LegendreCanonicalTailCalibration.shell1009_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreCanonicalTailCalibration.shell1013_prime :
+  ∃ p, Nat.Prime p ∧ DkMath.NumberTheory.Legendre.SquareCell 1013 p
+'DkMathTest.LegendreCanonicalTailCalibration.shell1013_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.diagnostic_support_eq {n r : ℕ}
+  (h :
+    DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n =
+      DkMathTest.LegendreCanonicalTailDiagnostics.diagnosticActivePrimes n) :
+  DkMath.NumberTheory.Legendre.paritySafeActiveSupport n r =
+    {q ∈ DkMathTest.LegendreCanonicalTailDiagnostics.diagnosticActivePrimes n | q ∣ n ^ 2 + r}
+'DkMathTest.LegendreCanonicalTailDiagnostics.diagnostic_support_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.excess_eq_diagnostic
+  (t : DkMathTest.LegendreCanonicalTailCalibration.RootRow) :
+  t ∈ DkMathTest.LegendreCanonicalTailCalibration.rootData →
+    DkMath.NumberTheory.Legendre.paritySafeSupportExcess t.1 =
+      DkMathTest.LegendreCanonicalTailDiagnostics.diagnosticExcess t.1
+'DkMathTest.LegendreCanonicalTailDiagnostics.excess_eq_diagnostic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.rough_covered_eq_diagnostic
+  (t : DkMathTest.LegendreCanonicalTailCalibration.RootRow) :
+  t ∈ DkMathTest.LegendreCanonicalTailCalibration.rootData →
+    {r ∈ DkMath.NumberTheory.Legendre.canonicalRoughCandidates t.1 11 |
+        (DkMath.NumberTheory.Legendre.paritySafeActiveSupport t.1 r).Nonempty} =
+      DkMathTest.LegendreCanonicalTailDiagnostics.diagnosticCoveredEleven t.1
+'DkMathTest.LegendreCanonicalTailDiagnostics.rough_covered_eq_diagnostic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.actual_excess_checked (e : ℕ × ℕ) :
+  e ∈ DkMathTest.LegendreCanonicalTailDiagnostics.excessData →
+    DkMath.NumberTheory.Legendre.paritySafeSupportExcess e.1 = e.2
+'DkMathTest.LegendreCanonicalTailDiagnostics.actual_excess_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.diagnostic_excess_checked (e : ℕ × ℕ) :
+  e ∈ DkMathTest.LegendreCanonicalTailDiagnostics.excessData →
+    DkMathTest.LegendreCanonicalTailDiagnostics.diagnosticExcess e.1 = e.2
+'DkMathTest.LegendreCanonicalTailDiagnostics.diagnostic_excess_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.actual_tail_cards_checked (v : ℕ × ℕ × ℕ × ℕ × ℕ) :
+  v ∈ DkMathTest.LegendreCanonicalTailDiagnostics.tailData →
+    (DkMath.NumberTheory.Legendre.canonicalRootTail v.1 v.2.1).card = v.2.2.2.1
+'DkMathTest.LegendreCanonicalTailDiagnostics.actual_tail_cards_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.actual_rough_seat_cards_checked (v : ℕ × ℕ × ℕ × ℕ × ℕ) :
+  v ∈ DkMathTest.LegendreCanonicalTailDiagnostics.tailData →
+    (DkMath.NumberTheory.Legendre.canonicalRoughCandidates v.1 v.2.1).card = v.2.2.2.2
+'DkMathTest.LegendreCanonicalTailDiagnostics.actual_rough_seat_cards_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.diagnosticActivePrimes (n : ℕ) : Finset ℕ
+'DkMathTest.LegendreCanonicalTailDiagnostics.diagnosticActivePrimes' depends on axioms: [propext, Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.excessData : Finset (ℕ × ℕ)
+'DkMathTest.LegendreCanonicalTailDiagnostics.excessData' depends on axioms: [propext, Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.tailData : Finset (ℕ × ℕ × ℕ × ℕ × ℕ)
+'DkMathTest.LegendreCanonicalTailDiagnostics.tailData' depends on axioms: [propext, Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.prime_inventory_checked
+  (t : DkMathTest.LegendreCanonicalTailCalibration.RootRow) :
+  t ∈ DkMathTest.LegendreCanonicalTailCalibration.rootData →
+    DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes t.1 =
+      DkMathTest.LegendreCanonicalTailDiagnostics.diagnosticActivePrimes t.1
+'DkMathTest.LegendreCanonicalTailDiagnostics.prime_inventory_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.diagnosticExcess (n : ℕ) : ℕ
+'DkMathTest.LegendreCanonicalTailDiagnostics.diagnosticExcess' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.diagnosticRoughSeats (n P : ℕ) : Finset ℕ
+'DkMathTest.LegendreCanonicalTailDiagnostics.diagnosticRoughSeats' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.diagnosticCoveredEleven (n : ℕ) : Finset ℕ
+'DkMathTest.LegendreCanonicalTailDiagnostics.diagnosticCoveredEleven' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.coveredElevenData : Finset (ℕ × ℕ)
+'DkMathTest.LegendreCanonicalTailDiagnostics.coveredElevenData' depends on axioms: [propext, Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.covered_eleven_checked (c : ℕ × ℕ) :
+  c ∈ DkMathTest.LegendreCanonicalTailDiagnostics.coveredElevenData →
+    (DkMathTest.LegendreCanonicalTailDiagnostics.diagnosticCoveredEleven c.1).card = c.2
+'DkMathTest.LegendreCanonicalTailDiagnostics.covered_eleven_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.diagnostic_excess_inputs (e : ℕ × ℕ) :
+  e ∈ DkMathTest.LegendreCanonicalTailDiagnostics.excessData →
+    ∃ t ∈ DkMathTest.LegendreCanonicalTailCalibration.rootData,
+      t.1 = e.1 ∧
+        ∃ r ∈ DkMathTest.LegendreCanonicalTailCalibration.roughData,
+          r.1 = e.1 ∧
+            ∃ c ∈ DkMathTest.LegendreCanonicalTailDiagnostics.coveredElevenData,
+              c.1 = e.1 ∧ e.2 = t.2.2.2.1 + t.2.2.2.2.1 + t.2.2.2.2.2.1 + t.2.2.2.2.2.2 + r.2.2 - c.2
+'DkMathTest.LegendreCanonicalTailDiagnostics.diagnostic_excess_inputs' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.diagnostic_rough_seats_checked (t : ℕ × ℕ × ℕ × ℕ × ℕ) :
+  t ∈ DkMathTest.LegendreCanonicalTailDiagnostics.tailData →
+    (DkMathTest.LegendreCanonicalTailDiagnostics.diagnosticRoughSeats t.1 t.2.1).card = t.2.2.2.2
+'DkMathTest.LegendreCanonicalTailDiagnostics.diagnostic_rough_seats_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailDiagnostics.tail_tables_consistent (v : ℕ × ℕ × ℕ × ℕ × ℕ) :
+  v ∈ DkMathTest.LegendreCanonicalTailDiagnostics.tailData →
+    ∃ t ∈ DkMathTest.LegendreCanonicalTailCalibration.rootData,
+      t.1 = v.1 ∧
+        ∃ e ∈ DkMathTest.LegendreCanonicalTailDiagnostics.excessData,
+          e.1 = v.1 ∧
+            e.2 = v.2.2.1 + v.2.2.2.1 ∧
+              (v.2.1 = 3 ∧ v.2.2.1 = t.2.2.2.1 ∨
+                v.2.1 = 5 ∧ v.2.2.1 = t.2.2.2.1 + t.2.2.2.2.1 ∨
+                  v.2.1 = 7 ∧ v.2.2.1 = t.2.2.2.1 + t.2.2.2.2.1 + t.2.2.2.2.2.1 ∨
+                    v.2.1 = 11 ∧ v.2.2.1 = t.2.2.2.1 + t.2.2.2.2.1 + t.2.2.2.2.2.1 + t.2.2.2.2.2.2)
+'DkMathTest.LegendreCanonicalTailDiagnostics.tail_tables_consistent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailRegression.erased_root_counterexample :
+  5 ∈ DkMath.NumberTheory.Legendre.canonicalRoughCandidates 4 0 ∧
+    3 ∈ DkMath.NumberTheory.Legendre.paritySafeActiveSupport 4 5 ∧
+      (5, 3) ∉ DkMath.NumberTheory.Legendre.canonicalRootTail 4 0
+'DkMathTest.LegendreCanonicalTailRegression.erased_root_counterexample' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailRegression.empty_support_counterexample :
+  1 ∈ DkMath.NumberTheory.Legendre.canonicalRoughCandidates 4 0 ∧
+    DkMath.NumberTheory.Legendre.paritySafeActiveSupport 4 1 = ∅ ∧
+      DkMath.NumberTheory.Legendre.paritySafeCanonicalSupportPrime 4 1 = 0 ∧
+        ¬0 < DkMath.NumberTheory.Legendre.paritySafeCanonicalSupportPrime 4 1
+'DkMathTest.LegendreCanonicalTailRegression.empty_support_counterexample' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailRegression.termwise_cancellation_counterexample :
+  (DkMath.NumberTheory.Legendre.canonicalHeadAtQ 4 3 3).card = 0 ∧
+    (DkMath.NumberTheory.Legendre.canonicalTailAtQ 4 3 3).card = 0 ∧
+      DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper 4 3 = 1 ∧
+        DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper 4 3 -
+            (DkMath.NumberTheory.Legendre.canonicalHeadAtQ 4 3 3).card ≠
+          (DkMath.NumberTheory.Legendre.canonicalTailAtQ 4 3 3).card
+'DkMathTest.LegendreCanonicalTailRegression.termwise_cancellation_counterexample' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailRegression.rough_seat_multiplicity_counterexample :
+  24 ∈ DkMath.NumberTheory.Legendre.canonicalRoughCandidates 19 3 ∧
+    DkMath.NumberTheory.Legendre.paritySafeActiveSupport 19 24 = {5, 7, 11} ∧ {5, 7, 11}.card - 1 = 2
+'DkMathTest.LegendreCanonicalTailRegression.rough_seat_multiplicity_counterexample' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailRegression.sequential_three_exclusion_counterexample :
+  {x ∈ {0} | ¬True ∧ ¬True ∧ ¬True}.card = 0 ∧ 1 + 3 - (3 + 1) = 0 ∧ 1 - 1 - 1 - 1 + 1 + 1 + 1 - 1 = 2
+'DkMathTest.LegendreCanonicalTailRegression.sequential_three_exclusion_counterexample' depends on axioms: [propext,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailRegression.root11_sieve_eq_floor_union {n : ℕ} (hn : Nat.Prime n) (hlt : 11 < n) :
+  DkMath.NumberTheory.Legendre.canonicalRootSieveLower n 11 =
+    ∑ q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n with 11 < q,
+      (DkMath.NumberTheory.Legendre.primeAnchorProductWaveCount n (11 * q) -
+        (DkMath.NumberTheory.Legendre.primeAnchorProductWaveCount n (33 * q) +
+            DkMath.NumberTheory.Legendre.primeAnchorProductWaveCount n (55 * q) +
+          DkMath.NumberTheory.Legendre.primeAnchorProductWaveCount n (77 * q)))
+'DkMathTest.LegendreCanonicalTailRegression.root11_sieve_eq_floor_union' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailRegression.rough_seats_three_floor {n : ℕ} (hn : Nat.Prime n) (hlt : 11 < n) :
+  (DkMath.NumberTheory.Legendre.canonicalRoughCandidates n 3).card =
+    DkMath.NumberTheory.Legendre.primeAnchorProductWaveCount n 1 -
+      DkMath.NumberTheory.Legendre.primeAnchorProductWaveCount n 3
+'DkMathTest.LegendreCanonicalTailRegression.rough_seats_three_floor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailRegression.rough_seats_five_floor {n : ℕ} (hn : Nat.Prime n) (hlt : 11 < n) :
+  (DkMath.NumberTheory.Legendre.canonicalRoughCandidates n 5).card =
+    DkMath.NumberTheory.Legendre.primeAnchorProductWaveCount n 1 +
+        DkMath.NumberTheory.Legendre.primeAnchorProductWaveCount n 15 -
+      (DkMath.NumberTheory.Legendre.primeAnchorProductWaveCount n 3 +
+        DkMath.NumberTheory.Legendre.primeAnchorProductWaveCount n 5)
+'DkMathTest.LegendreCanonicalTailRegression.rough_seats_five_floor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalTailRegression.sqrt_multiplicity_bound_sharp :
+  24 ∈ DkMath.NumberTheory.Legendre.canonicalRoughCandidates 19 (Nat.sqrt 19) ∧
+    (DkMath.NumberTheory.Legendre.paritySafeActiveSupport 19 24).card = 3
+'DkMathTest.LegendreCanonicalTailRegression.sqrt_multiplicity_bound_sharp' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMathTest.LegendreCanonicalPrimeCapCalibration.cap_probe {n q : ℕ} (hn : Nat.Prime n) (hne : n ≠ 2)
+  (hq : q ∈ DkMath.NumberTheory.Legendre.squareAnchorOddActivePrimes n) :
+  DkMath.NumberTheory.Legendre.paritySafeTwoPrimeWaveUpper n q =
+    DkMath.NumberTheory.Legendre.primeAnchorProductWaveCount n q
+'DkMathTest.LegendreCanonicalPrimeCapCalibration.cap_probe' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMathTest.LegendreCanonicalPrimeCapCalibration.old_sieve_credit_checked (t : ℕ × ℕ × ℕ) :
+  t ∈ DkMathTest.LegendreCanonicalTailCalibration.unionData →
+    DkMath.NumberTheory.Legendre.canonicalRootSieveLower t.1 11 = t.2.1 ∧
+      DkMath.NumberTheory.Legendre.canonicalRootCharge11 t.1 = t.2.1 + t.2.2
+'DkMathTest.LegendreCanonicalPrimeCapCalibration.old_sieve_credit_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

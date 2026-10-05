@@ -76,6 +76,7 @@ import DkMath.NumberTheory.Legendre.PrimorialWheelTwinThreshold
 import DkMath.NumberTheory.Legendre.PrimorialWheelOldEscapeFrontier
 import DkMath.NumberTheory.Legendre.MultiGaugeBridge
 import DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootCharge
+import DkMath.NumberTheory.Legendre.ParitySafePrimeAnchorCap
 
 #print "file: DkMath.NumberTheory.Legendre"
 

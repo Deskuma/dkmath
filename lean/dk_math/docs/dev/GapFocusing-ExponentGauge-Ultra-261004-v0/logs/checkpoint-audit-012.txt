@@ -1,0 +1,5 @@
+PASS: 114/114 complete dependency sets; production 66, calibration/regression 48.
+PASS: only propext, Classical.choice, Quot.sound; no sorryAx dependencies.
+PASS: 12 written Lean files; uniform headers and zero forbidden tokens.
+PASS: tracked and new-file whitespace.
+PASS: seven structural and28 diagnostic rows/report arithmetic and local documentation links.

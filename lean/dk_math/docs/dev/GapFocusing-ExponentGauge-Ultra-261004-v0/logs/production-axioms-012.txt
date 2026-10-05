@@ -1,0 +1,120 @@
+'DkMath.NumberTheory.Legendre.canonicalRootHead' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalRootTail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalRoughCandidates' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.supportExcess_eq_head_add_tail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalRootHead_card_eq_root_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalRoot_gt_iff_rough' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.supportLabel_ne_root_iff_smaller' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.mem_canonicalRootTail_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalHeadAtQ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalTailAtQ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalRootHead_card_eq_secondary_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalHeadAtQ_card_eq_pair_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalHeadAtQ_add_tail_le_cap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalTailAtQ_card_le_remaining' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalRemainingCap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalRemainingCap_eq_secondary_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalRemainingCap_eq_covered_tail_slack' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.remainingCap_lt_candidate_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.uncovered_nonempty_of_remainingCap_lt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalRootTail_card_eq_rough_support_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.activeSupport_prod_dvd_point' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.rough_support_pow_le_point' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.rough_support_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalRootTail_card_le_rough_mul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.card_filter_three_exclusions' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.candidateAvoidThree' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.candidateAvoidThree_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.activePrime_below_eleven' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalRoot11Pair_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalRoot11Pair_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.primeAnchorAvoidThreeCount' depends on axioms: [propext]
+'DkMath.NumberTheory.Legendre.canonicalRootCharge11' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.candidateAvoidThree_card_eq_count' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.primeAnchor_root11' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalRootCharge11_eq_fiber' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalFourRootCharges_le_excess' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.activePrimes_smallCutoff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalSmallHeads_eq_charges' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.mem_uncovered_iff_no_activeSupport' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.canonicalRoughWave' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.roughWave_sum_eq_support_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.roughWave_sum_eq_covered_add_tail' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.uncovered_nonempty_of_roughWave_sum_lt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.remainingCap_add_rough_eq_candidate_add_roughIncidence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.remainingCap_lt_iff_rough_currency' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.roughWave_sum_le_card_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.roughCriterion_smallCutoff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.roughCandidates_seven_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.roughWave_seven_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.candidateAvoidThree_filter_dvd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.roughCandidates_eleven_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.roughWave_eleven_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.roughCandidates_eleven_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.roughWave_eleven_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.primeAnchorRoughElevenIncidenceCount' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.roughWave_eleven_sum_eq_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.prime_squareCell_of_roughEleven_count' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.primeAnchorTwoPrimeWaveUpper_eq_count' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.primeAnchorTwoPrimeWaveUpper_eq_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.primeAnchorTwoPrimeUpper_eq_incidence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.primeAnchorRemainingCap_eq_covered_tail' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.primeAnchorRemainingCap_lt_iff_rough' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.primeAnchorHead_gap_iff_rough' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.sqrtCutoff_power_four_gt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.sqrtCutoff_support_card_le_three' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.sqrtCutoff_tail_card_le_two_mul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
