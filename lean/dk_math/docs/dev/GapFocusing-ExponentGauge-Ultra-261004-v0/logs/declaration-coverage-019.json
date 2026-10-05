@@ -1,0 +1,392 @@
+[
+  {
+    "name": "DkMath.NumberTheory.Primitive.crossPeriod_mul_dvd_diff",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Primitive/CrossPeriod.lean",
+    "line": 16
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.primeWorldResidues_eq_packetBase",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 23
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.card_primeWorldResidues_eq_totient",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 44
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.primeWorld_totient_insert",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 51
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.primeWorld_packet_modulus_one_mismatch",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 63
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredOddGapPrimeWorld",
+    "kind": "abbrev",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 70
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.knownPrimeScales_centeredOddGapPrimeWorld",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 73
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredOddGapPrimeWorld_eq_primeFactors",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 78
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredOddGapPrimeWorld_modulus_eq_radical",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 82
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.supportDisjointFrom_iff_squareShell_address",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 89
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarsePrimeWorldBase",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 103
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mem_coarsePrimeWorldBase",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 107
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mem_coarsePrimeWorldBase_iff_survivor",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 113
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.card_coarsePrimeWorldBase",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 120
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.image_coarsePrimeWorldBase_address",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 156
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.existsUnique_coarsePrimeWorldBase_address",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 172
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredOddGapPrimeWorld_residues_eq_packet",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 186
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarsePrimeWorldBase_eq_packet_of_modulus_dvd_anchor",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 193
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.card_coarsePrimeWorldBase_eq_residues",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean",
+    "line": 203
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarsePrimeWorldShift",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 21
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarsePrimeWorldTown",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 25
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarsePrimeWorldBase_squareOffsets",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 28
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.disjoint_coarsePrimeWorldStreets",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 34
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.card_coarsePrimeWorldShift",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 43
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.card_coarsePrimeWorldTown",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 48
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarsePrimeWorldTown_squareOffsets",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 55
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarsePrimeWorld_address_shift",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 64
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarsePrimeWorld_survivor_shift",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 72
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coprime_coarsePrimeWorldPoints",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 80
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.not_prime_dvd_both_coarsePoints",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 88
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coprime_coarsePoint_factors",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 95
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseOutsidePrimes",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 102
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarse_survivor_support_outside",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 104
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.prime_outside_not_dvd_coarseModulus",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 112
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.exists_distinct_coarseOutside_cover_pair",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 121
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseOutsideOrderedPairs",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 140
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseCrossOffsets",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 145
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseCrossCount",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 151
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseCrossCount_eq_support_products",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 155
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.totient_le_coarseCrossCount_of_fullyCovered",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 190
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseCrossOffsets_mul_dvd_diff",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 204
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.card_coarseCrossOffsets_le_one",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 214
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseNearPairs",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 231
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseFarPairs",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 234
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseNear_union_far",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 237
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.disjoint_coarseNear_far",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 244
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseCrossCount_eq_near_add_far",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 250
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseFar_sum_le_card",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 257
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTown_assignment_frontier",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 274
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredOddGap_survivor_covered_only_two",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 285
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarse_packet_oldSupport_family",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 294
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.centeredOddGap_odd_survivor_not_covered",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 314
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarse_visibleNorm_direction",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean",
+    "line": 323
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.squareAnchorPacketCrossOffsets_mul_dvd_diff",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/PacketCross.lean",
+    "line": 280
+  },
+  {
+    "name": "DkMathTest.LegendreCoarseTownRegression.modulus_one_boundary",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCoarseTownRegression.lean",
+    "line": 27
+  },
+  {
+    "name": "DkMathTest.LegendreCoarseTownRegression.phased_base_differs_from_offset_units",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCoarseTownRegression.lean",
+    "line": 31
+  },
+  {
+    "name": "DkMathTest.LegendreCoarseTownRegression.nondivisor_anchor_coarse_pair",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCoarseTownRegression.lean",
+    "line": 38
+  },
+  {
+    "name": "DkMathTest.LegendreCoarseTownRegression.local_pairs_do_not_give_global_support_separation",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCoarseTownRegression.lean",
+    "line": 46
+  },
+  {
+    "name": "DkMathTest.LegendreCoarseTownRegression.coarse_town_not_global_oldSupport_family",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCoarseTownRegression.lean",
+    "line": 53
+  },
+  {
+    "name": "DkMathTest.LegendreCoarseTownRegression.incidence_can_exceed_packet_count",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCoarseTownRegression.lean",
+    "line": 63
+  },
+  {
+    "name": "DkMathTest.LegendreCoarseTownRegression.near_pair_multiple_occupancy",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCoarseTownRegression.lean",
+    "line": 70
+  },
+  {
+    "name": "DkMathTest.LegendreCoarseTownRegression.six_oldSupport_family",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCoarseTownRegression.lean",
+    "line": 80
+  },
+  {
+    "name": "DkMathTest.LegendreCoarseTownRegression.six_prime_via_existing_capacity_consumer",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCoarseTownRegression.lean",
+    "line": 93
+  },
+  {
+    "name": "DkMathTest.LegendreCoarseTownRegression.six_family_is_entire_coarse_town",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCoarseTownRegression.lean",
+    "line": 99
+  },
+  {
+    "name": "DkMathTest.LegendreCoarseTownRegression.odd_gap_world_does_not_fit_three",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCoarseTownRegression.lean",
+    "line": 104
+  }
+]

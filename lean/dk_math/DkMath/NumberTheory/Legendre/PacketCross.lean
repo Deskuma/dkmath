@@ -1,9 +1,11 @@
 /-
 Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
 Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.Legendre.Quotient
+import DkMath.NumberTheory.Primitive.CrossPeriod
 
 #print "file: DkMath.NumberTheory.Legendre.PacketCross"
 
@@ -282,32 +284,13 @@ theorem squareAnchorPacketCrossOffsets_mul_dvd_diff
     (hs : s ∈ squareAnchorPacketCrossOffsets n p q)
     (hrs : r ≤ s) :
     p * q ∣ s - r := by
+  clear hrs
   have hr' := mem_squareAnchorPacketCrossOffsets.mp hr
   have hs' := mem_squareAnchorPacketCrossOffsets.mp hs
   have hpair := mem_squareAnchorNondivisorOrderedPrimePairs.mp hpq
-  have hpdiv : p ∣ s - r := by
-    have hps := (mem_squareOffsetAnchorNondivisorSupport.mp
-      (mem_squareOffsetAnchorNondivisorSupport.mpr
-        ⟨hpair.1, hpair.2.1, hpair.2.2.1, hs'.2.1⟩)).2.2.2
-    have hpr := (mem_squareOffsetAnchorNondivisorSupport.mp
-      (mem_squareOffsetAnchorNondivisorSupport.mpr
-        ⟨hpair.1, hpair.2.1, hpair.2.2.1, hr'.2.1⟩)).2.2.2
-    convert Nat.dvd_sub hps hpr using 1; omega
-  have hqdiv : q ∣ s - r := by
-    have hqs := (mem_squareOffsetAnchorNondivisorSupport.mp
-      (mem_squareOffsetAnchorNondivisorSupport.mpr
-        ⟨hpair.2.2.2.1, hpair.2.2.2.2.1,
-          hpair.2.2.2.2.2.1, hs'.2.2⟩)).2.2.2
-    have hqr := (mem_squareOffsetAnchorNondivisorSupport.mp
-      (mem_squareOffsetAnchorNondivisorSupport.mpr
-        ⟨hpair.2.2.2.1, hpair.2.2.2.2.1,
-          hpair.2.2.2.2.2.1, hr'.2.2⟩)).2.2.2
-    have hqs' : q ∣ n ^ 2 + (n + s) := hqs
-    have hqr' : q ∣ n ^ 2 + (n + r) := hqr
-    convert Nat.dvd_sub hqs' hqr' using 1; omega
-  exact Nat.Coprime.mul_dvd_of_dvd_of_dvd
-    ((Nat.coprime_primes hpair.1 hpair.2.2.2.1).2
-      hpair.2.2.2.2.2.2) hpdiv hqdiv
+  exact crossPeriod_mul_dvd_diff
+    ((Nat.coprime_primes hpair.1 hpair.2.2.2.1).2 hpair.2.2.2.2.2.2)
+    hr'.2.1 hs'.2.1 hr'.2.2 hs'.2.2
 
 /-- If `p*q > n`, one ordered cross pair hits at most one base representative. -/
 theorem card_squareAnchorPacketCrossOffsets_le_one_of_anchor_lt_product
