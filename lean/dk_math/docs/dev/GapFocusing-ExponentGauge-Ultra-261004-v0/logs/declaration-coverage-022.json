@@ -1,0 +1,752 @@
+[
+  {
+    "name": "DkMath.Combinatorics.card_le_supportUniverse",
+    "kind": "theorem",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 18
+  },
+  {
+    "name": "DkMath.Combinatorics.supportCollisionEdges",
+    "kind": "def",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 35
+  },
+  {
+    "name": "DkMath.Combinatorics.mem_supportCollisionEdges",
+    "kind": "theorem",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 39
+  },
+  {
+    "name": "DkMath.Combinatorics.supportCollisionDeletionVertices",
+    "kind": "def",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 46
+  },
+  {
+    "name": "DkMath.Combinatorics.supportPackingRemainder",
+    "kind": "def",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 50
+  },
+  {
+    "name": "DkMath.Combinatorics.mem_supportCollisionDeletionVertices",
+    "kind": "theorem",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 53
+  },
+  {
+    "name": "DkMath.Combinatorics.mem_supportPackingRemainder",
+    "kind": "theorem",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 65
+  },
+  {
+    "name": "DkMath.Combinatorics.supportCollisionDeletionVertices_subset",
+    "kind": "theorem",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 69
+  },
+  {
+    "name": "DkMath.Combinatorics.supportPackingRemainder_subset",
+    "kind": "theorem",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 75
+  },
+  {
+    "name": "DkMath.Combinatorics.disjoint_supportPackingRemainder_deletion",
+    "kind": "theorem",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 78
+  },
+  {
+    "name": "DkMath.Combinatorics.supportPackingRemainder_union_deletion",
+    "kind": "theorem",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 82
+  },
+  {
+    "name": "DkMath.Combinatorics.card_supportPacking_partition",
+    "kind": "theorem",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 86
+  },
+  {
+    "name": "DkMath.Combinatorics.card_supportCollisionDeletionVertices_le_edges",
+    "kind": "theorem",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 90
+  },
+  {
+    "name": "DkMath.Combinatorics.supportPackingRemainder_pairwiseDisjoint",
+    "kind": "theorem",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 95
+  },
+  {
+    "name": "DkMath.Combinatorics.supportPacking_exact_packet",
+    "kind": "theorem",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 108
+  },
+  {
+    "name": "DkMath.Combinatorics.supportCollisionRightDeletionVertices",
+    "kind": "def",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 116
+  },
+  {
+    "name": "DkMath.Combinatorics.supportPackingRightRemainder",
+    "kind": "def",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 119
+  },
+  {
+    "name": "DkMath.Combinatorics.mem_supportCollisionRightDeletionVertices",
+    "kind": "theorem",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 122
+  },
+  {
+    "name": "DkMath.Combinatorics.supportCollisionRightDeletionVertices_subset",
+    "kind": "theorem",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 134
+  },
+  {
+    "name": "DkMath.Combinatorics.card_supportPackingRight_partition",
+    "kind": "theorem",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 140
+  },
+  {
+    "name": "DkMath.Combinatorics.supportPackingRightRemainder_pairwiseDisjoint",
+    "kind": "theorem",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 145
+  },
+  {
+    "name": "DkMath.Combinatorics.exists_supportPacking",
+    "kind": "theorem",
+    "file": "DkMath/Combinatorics/FinsetSupportPacking.lean",
+    "line": 158
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.card_fullTown_pairwiseOldSupportDisjoint_le_outsidePrimes_of_fullyCovered",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean",
+    "line": 18
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.not_fullyCovered_of_fullTown_survivor_capacity",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean",
+    "line": 30
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_not_fullyCovered",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean",
+    "line": 40
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_fullTown_survivor_capacity",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean",
+    "line": 49
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.not_fullyCovered_of_coarseTown_outside_deletion_deficit",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean",
+    "line": 57
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_coarseTown_outside_deletion_deficit",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean",
+    "line": 66
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTown_outside_deletion_deficit_of_old_deficit",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean",
+    "line": 73
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownRightDeletionVertices",
+    "kind": "abbrev",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean",
+    "line": 82
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownRightPackingRemainder",
+    "kind": "abbrev",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean",
+    "line": 85
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownRightPackingRemainder_subset",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean",
+    "line": 88
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownRightDeletionVertices_subset",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean",
+    "line": 91
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownRightPackingRemainder_family",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean",
+    "line": 95
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.card_coarseTownRightDeletion_partition",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean",
+    "line": 102
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.not_fullyCovered_of_coarseTown_outside_right_deletion_deficit",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean",
+    "line": 106
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_coarseTown_outside_right_deletion_deficit",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean",
+    "line": 115
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownRightDeletionByFibers",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean",
+    "line": 123
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownRightDeletionVertices_eq_fibers",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean",
+    "line": 128
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseFullTownActivePrimes",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 18
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mem_coarseFullTownActivePrimes",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 22
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseFullTownActivePrimes_subset",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 28
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.card_coarseFullTownActivePrimes_le",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 31
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseFullTownUncoveredSeats",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 35
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mem_coarseFullTownUncoveredSeats",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 39
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseFullTownUncoveredSeats_eq_empty_of_fullyCovered",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 45
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseFullTownSupportExcess",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 55
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseFullTownIncidence_add_uncovered_eq_card_add_excess",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 58
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownNonmaximumFiberSeats",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 79
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mem_coarseTownNonmaximumFiberSeats",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 84
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.card_coarseTownNonmaximumFiberSeats_add_indicator",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 90
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownDeletionWitnessPrimes",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 113
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownDeletionMultiplicity",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 117
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownDeletionWitnessPrimes_subset_support",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 120
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mem_coarseTownDeletionVertices_iff_multiplicity_pos",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 126
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mem_coarseTownDeletionByFibers_iff_multiplicity_pos",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 154
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownDeletionMass",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 160
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownDeletionMass_eq_nonmaximum_sum",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 163
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownDeletionMass_add_active_eq_incidence",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 183
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownDeletionOverlap",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 192
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.card_deletion_add_overlap_eq_mass",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 195
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownDeletion_primeFiber_conservation",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 216
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTown_remainder_conservation",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 222
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTown_remainder_conservation_of_fullyCovered",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 231
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTown_fullCover_conservation_frontier",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 239
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.not_fullyCovered_of_coarseTown_conservation_deficit",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 248
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_coarseTown_conservation_deficit",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 256
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTown_outside_deficit_iff_conservation_with_uncovered",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 265
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTown_outside_deficit_iff_conservation_of_uncovered_empty",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 276
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownDeletionOverlap_le_supportExcess",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 287
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTown_conservation_frontier_unconditional",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 301
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseFullTownPrimeFiber_eq_divisibility_of_mem",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 308
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseFullTownIncidence_eq_divisibility_sum",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 317
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseFullTownActivePrimes_eq_divisibility_filter",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 324
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.card_coarseTownNonmaximumFiberSeats_of_nonempty",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 332
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownNonmaximumFiberSeats_eq_empty_of_empty",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 337
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.mem_coarseTownDeletionWitnessPrimes",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 342
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTownSupportLoss",
+    "kind": "def",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 349
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTown_overlap_add_loss_eq_excess",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 352
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTown_remainder_add_loss_eq_uncovered_add_active",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 357
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.coarseTown_outside_deficit_iff_loss_add_inactive_lt_uncovered",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 366
+  },
+  {
+    "name": "DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_coarseTown_loss_frontier",
+    "kind": "theorem",
+    "file": "DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean",
+    "line": 378
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.one_base_coordinates",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 20
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.one_conservation_coordinates",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 36
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.one_master_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 52
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.five_base_coordinates",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 60
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.five_conservation_coordinates",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 76
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.five_master_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 92
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.eleven_base_coordinates",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 100
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.eleven_conservation_coordinates",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 116
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.eleven_master_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 132
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.elevenOdd_base_coordinates",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 140
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.elevenOdd_conservation_coordinates",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 156
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.elevenOdd_master_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 172
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.nineteen_base_coordinates",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 180
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.nineteen_conservation_coordinates",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 196
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.nineteen_master_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 212
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.twentynine_base_coordinates",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 220
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.twentynine_conservation_coordinates",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 236
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.twentynine_master_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 252
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.smallest_false_equivalence",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 259
+  },
+  {
+    "name": "DkMathTest.LegendreConservationRegression.five_false_equivalence",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreConservationRegression.lean",
+    "line": 269
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor297Calibration.town297Seats",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor297Calibration.lean",
+    "line": 19
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor297Calibration.oldPrimes297",
+    "kind": "def",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor297Calibration.lean",
+    "line": 21
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor297Calibration.town297Seats_eq_production",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor297Calibration.lean",
+    "line": 25
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor297Calibration.oldPrimes297_eq_production",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor297Calibration.lean",
+    "line": 31
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor297Calibration.geometry297_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor297Calibration.lean",
+    "line": 36
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor297Calibration.deletion297_cards_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor297Calibration.lean",
+    "line": 49
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor297Calibration.remainder297_cards",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor297Calibration.lean",
+    "line": 58
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor297Calibration.survivor297_right_strictness",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor297Calibration.lean",
+    "line": 70
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor297Calibration.exists_prime_squareCell_297_of_right_survivor_deletion",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor297Calibration.lean",
+    "line": 81
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor297Calibration.incidence297_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor297Calibration.lean",
+    "line": 90
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor297Calibration.active297_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor297Calibration.lean",
+    "line": 98
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor297Calibration.uncovered297_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor297Calibration.lean",
+    "line": 106
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor297Calibration.conservation297_coordinates",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor297Calibration.lean",
+    "line": 113
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor297Calibration.master297_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor297Calibration.lean",
+    "line": 128
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor1031Calibration.outside1031_card_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor1031Calibration.lean",
+    "line": 22
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor1031Calibration.exists_prime_squareCell_1031_of_survivor_deletion",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor1031Calibration.lean",
+    "line": 30
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor1031Calibration.incidence1031_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor1031Calibration.lean",
+    "line": 39
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor1031Calibration.active1031_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor1031Calibration.lean",
+    "line": 47
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor1031Calibration.uncovered1031_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor1031Calibration.lean",
+    "line": 55
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor1031Calibration.conservation1031_coordinates",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor1031Calibration.lean",
+    "line": 62
+  },
+  {
+    "name": "DkMathTest.LegendreSurvivor1031Calibration.master1031_checked",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreSurvivor1031Calibration.lean",
+    "line": 78
+  },
+  {
+    "name": "DkMathTest.LegendreCapacity297Calibration.exists_prime_squareCell_297_of_explicitCapacityCertificate",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreCapacity297Calibration.lean",
+    "line": 40
+  },
+  {
+    "name": "DkMathTest.LegendreDeletion1031Calibration.exists_prime_squareCell_1031_of_coarseTownDeletion",
+    "kind": "theorem",
+    "file": "DkMathTest/NumberTheory/LegendreDeletion1031Calibration.lean",
+    "line": 46
+  }
+]

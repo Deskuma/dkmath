@@ -92,6 +92,8 @@ import DkMath.NumberTheory.Legendre.CoarsePrimeWorldVerticalCapacity
 import DkMath.NumberTheory.Legendre.CoarseTownSupportPacking
 import DkMath.NumberTheory.Legendre.OldSupportCapacityCertificate
 import DkMath.NumberTheory.Legendre.CoarseTownDeletionCapacity
+import DkMath.NumberTheory.Legendre.CoarseTownSurvivorCapacity
+import DkMath.NumberTheory.Legendre.CoarseTownDeletionConservation
 
 #print "file: DkMath.NumberTheory.Legendre"
 

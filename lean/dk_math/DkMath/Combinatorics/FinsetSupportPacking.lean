@@ -6,12 +6,28 @@ Authors: D. and Wise Wolf.
 
 import Mathlib.Data.Finset.Prod
 import Mathlib.Data.Finset.Card
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
 
 #print "file: DkMath.Combinatorics.FinsetSupportPacking"
 
 /-! A finite endpoint-deletion certificate for arbitrary support families. -/
 
 namespace DkMath.Combinatorics
+
+/-- Nonempty disjoint supports consume distinct directions in any containing universe. -/
+theorem card_le_supportUniverse {α β : Type*}
+    (R : Finset α) (f : α → Finset β) (T : Finset β)
+    (hne : ∀ a ∈ R, (f a).Nonempty) (hsub : ∀ a ∈ R, f a ⊆ T)
+    (hdisj : (R : Set α).PairwiseDisjoint f) : R.card ≤ T.card := by
+  classical
+  calc
+    R.card = ∑ _a ∈ R, 1 := by simp
+    _ ≤ ∑ a ∈ R, (f a).card := Finset.sum_le_sum (fun a ha => Finset.card_pos.mpr (hne a ha))
+    _ = (R.biUnion f).card := (Finset.card_biUnion hdisj).symm
+    _ ≤ T.card := Finset.card_le_card (by
+      intro q hq
+      obtain ⟨a, ha, hqa⟩ := Finset.mem_biUnion.mp hq
+      exact hsub a ha hqa)
 
 variable {α β : Type*} [LinearOrder α] [DecidableEq β]
 
