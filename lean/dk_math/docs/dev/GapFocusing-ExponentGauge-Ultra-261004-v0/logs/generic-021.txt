@@ -1,0 +1,3 @@
+INFO [677/677] Built DkMath.Combinatorics.FinsetSupportPacking (1.6s)
+info: DkMath/Combinatorics/FinsetSupportPacking.lean:10:0: file: DkMath.Combinatorics.FinsetSupportPacking
+Build completed successfully (677 jobs).

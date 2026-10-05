@@ -90,6 +90,8 @@ import DkMath.NumberTheory.Legendre.CoarsePrimorialTown
 import DkMath.NumberTheory.Legendre.CoarsePrimeWorldFullTown
 import DkMath.NumberTheory.Legendre.CoarsePrimeWorldVerticalCapacity
 import DkMath.NumberTheory.Legendre.CoarseTownSupportPacking
+import DkMath.NumberTheory.Legendre.OldSupportCapacityCertificate
+import DkMath.NumberTheory.Legendre.CoarseTownDeletionCapacity
 
 #print "file: DkMath.NumberTheory.Legendre"
 
