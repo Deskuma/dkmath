@@ -1,0 +1,892 @@
+ℹ [1334/1406] Replayed DkMath.Algebra.BinomTail
+info: DkMath/Algebra/BinomTail.lean:15:0: file: DkMath.Algebra.BinomTail
+ℹ [1345/1406] Replayed DkMath.Lib.Cosmic.GTail
+info: DkMath/Lib/Cosmic/GTail.lean:10:0: file: DkMath.Lib.Cosmic.GTail
+ℹ [1346/1406] Replayed DkMath.Lib.Cosmic.GTailNat
+info: DkMath/Lib/Cosmic/GTailNat.lean:10:0: file: DkMath.Lib.Cosmic.GTailNat
+ℹ [1349/1406] Replayed DkMath.Lib.Cosmic.GTailCongruence
+info: DkMath/Lib/Cosmic/GTailCongruence.lean:13:0: file: DkMath.Lib.Cosmic.GTailCongruence
+ℹ [1350/1406] Replayed DkMath.Lib.Cosmic.GTailBoundary
+info: DkMath/Lib/Cosmic/GTailBoundary.lean:10:0: file: DkMath.Lib.Cosmic.GTailBoundary
+ℹ [1361/1406] Replayed DkMath.Lib.NumberTheory.PadicValNat
+info: DkMath/Lib/NumberTheory/PadicValNat.lean:12:0: file: DkMath.Lib.NumberTheory.PadicValNat
+ℹ [1362/1406] Replayed DkMath.Lib.Cosmic.GTailPadic
+info: DkMath/Lib/Cosmic/GTailPadic.lean:12:0: file: DkMath.Lib.Cosmic.GTailPadic
+ℹ [1363/1406] Replayed DkMath.CosmicFormula.GTail
+info: DkMath/CosmicFormula/GTail.lean:10:0: file: DkMath.CosmicFormula.GTail
+ℹ [1364/1406] Replayed DkMath.CosmicFormula.Defs
+info: DkMath/CosmicFormula/Defs.lean:12:0: file: DkMath.CosmicFormula.Defs
+ℹ [1366/1406] Replayed DkMath.ABC.PadicValNat
+info: DkMath/ABC/PadicValNat.lean:9:0: file: DkMath.ABC.PadicValNat
+ℹ [1367/1406] Replayed DkMath.CosmicFormula.CosmicFormulaBinom
+info: DkMath/CosmicFormula/CosmicFormulaBinom.lean:15:0: file: DkMath.CosmicFormula.CosmicFormulaBinom
+ℹ [1368/1406] Replayed DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+info: DkMath/NumberTheory/StructuralArithmetic/PrimitiveDirection.lean:10:0: file: DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+ℹ [1369/1406] Replayed DkMath.NumberTheory.Primitive.FinitePrimeWorld
+info: DkMath/NumberTheory/Primitive/FinitePrimeWorld.lean:11:0: file: DkMath.NumberTheory.Primitive.FinitePrimeWorld
+ℹ [1370/1406] Replayed DkMath.NumberTheory.Primitive.SquareBody
+info: DkMath/NumberTheory/Primitive/SquareBody.lean:11:0: file: DkMath.NumberTheory.Primitive.SquareBody
+ℹ [1371/1406] Replayed DkMath.NumberTheory.Legendre.Basic
+info: DkMath/NumberTheory/Legendre/Basic.lean:15:0: file: DkMath.NumberTheory.Legendre.Basic
+ℹ [1372/1406] Replayed DkMath.NumberTheory.Legendre.Wave
+info: DkMath/NumberTheory/Legendre/Wave.lean:9:0: file: DkMath.NumberTheory.Legendre.Wave
+ℹ [1373/1406] Replayed DkMath.NumberTheory.Legendre.Internal.PairCombinatorics
+info: DkMath/NumberTheory/Legendre/Internal/PairCombinatorics.lean:13:0: file: DkMath.NumberTheory.Legendre.Internal.PairCombinatorics
+ℹ [1374/1406] Replayed DkMath.NumberTheory.Legendre.PairOverlap
+info: DkMath/NumberTheory/Legendre/PairOverlap.lean:10:0: file: DkMath.NumberTheory.Legendre.PairOverlap
+ℹ [1375/1406] Replayed DkMath.NumberTheory.Legendre.CoprimePacket
+info: DkMath/NumberTheory/Legendre/CoprimePacket.lean:9:0: file: DkMath.NumberTheory.Legendre.CoprimePacket
+ℹ [1376/1406] Replayed DkMath.NumberTheory.Legendre.Quotient
+info: DkMath/NumberTheory/Legendre/Quotient.lean:8:0: file: DkMath.NumberTheory.Legendre.Quotient
+ℹ [1377/1406] Replayed DkMath.NumberTheory.Legendre.QuotientSupport
+info: DkMath/NumberTheory/Legendre/QuotientSupport.lean:8:0: file: DkMath.NumberTheory.Legendre.QuotientSupport
+ℹ [1378/1406] Replayed DkMath.NumberTheory.Legendre.Obstruction
+info: DkMath/NumberTheory/Legendre/Obstruction.lean:8:0: file: DkMath.NumberTheory.Legendre.Obstruction
+ℹ [1379/1406] Replayed DkMath.NumberTheory.Legendre.LocalizedObstruction
+info: DkMath/NumberTheory/Legendre/LocalizedObstruction.lean:10:0: file: DkMath.NumberTheory.Legendre.LocalizedObstruction
+ℹ [1380/1406] Replayed DkMath.NumberTheory.Primitive.CrossPeriod
+info: DkMath/NumberTheory/Primitive/CrossPeriod.lean:9:0: file: DkMath.NumberTheory.Primitive.CrossPeriod
+⚠ [1381/1406] Replayed DkMath.NumberTheory.Legendre.PacketCross
+info: DkMath/NumberTheory/Legendre/PacketCross.lean:10:0: file: DkMath.NumberTheory.Legendre.PacketCross
+warning: DkMath/NumberTheory/Legendre/PacketCross.lean:285:5: Variable name `hrs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hrs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+ℹ [1382/1406] Replayed DkMath.NumberTheory.Legendre.PacketCoprimality
+info: DkMath/NumberTheory/Legendre/PacketCoprimality.lean:9:0: file: DkMath.NumberTheory.Legendre.PacketCoprimality
+ℹ [1383/1406] Replayed DkMath.NumberTheory.Legendre.PacketUnitResidue
+info: DkMath/NumberTheory/Legendre/PacketUnitResidue.lean:9:0: file: DkMath.NumberTheory.Legendre.PacketUnitResidue
+ℹ [1384/1406] Replayed DkMath.NumberTheory.Legendre.SmallCofactor
+info: DkMath/NumberTheory/Legendre/SmallCofactor.lean:9:0: file: DkMath.NumberTheory.Legendre.SmallCofactor
+ℹ [1385/1406] Replayed DkMath.NumberTheory.Legendre.Frontier
+info: DkMath/NumberTheory/Legendre/Frontier.lean:10:0: file: DkMath.NumberTheory.Legendre.Frontier
+ℹ [3126/3238] Replayed DkMath.Gnomon.Algebra
+info: DkMath/Gnomon/Algebra.lean:11:0: file: DkMath.Gnomon.Algebra
+ℹ [3127/3238] Replayed DkMath.Gnomon.CosmicBridge
+info: DkMath/Gnomon/CosmicBridge.lean:10:0: file: DkMath.Gnomon.CosmicBridge
+ℹ [3128/3238] Replayed DkMath.NumberTheory.Legendre.GnomonBridge
+info: DkMath/NumberTheory/Legendre/GnomonBridge.lean:10:0: file: DkMath.NumberTheory.Legendre.GnomonBridge
+ℹ [3129/3238] Replayed DkMath.NumberTheory.PrimorialUniverse.FiniteReservationEscape
+info: DkMath/NumberTheory/PrimorialUniverse/FiniteReservationEscape.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.FiniteReservationEscape
+ℹ [3130/3238] Replayed DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization
+info: DkMath/NumberTheory/PrimorialUniverse/FinitePrimeSynchronization.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization
+ℹ [3131/3238] Replayed DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor
+info: DkMath/NumberTheory/PrimorialUniverse/WheelSurvivor.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor
+ℹ [3132/3238] Replayed DkMath.NumberTheory.PrimorialUniverse.FreshPrimeLift
+info: DkMath/NumberTheory/PrimorialUniverse/FreshPrimeLift.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.FreshPrimeLift
+ℹ [3133/3238] Replayed DkMath.NumberTheory.PrimorialUniverse.WheelReplication
+info: DkMath/NumberTheory/PrimorialUniverse/WheelReplication.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.WheelReplication
+ℹ [3134/3238] Replayed DkMath.NumberTheory.PrimorialUniverse.WheelProjection
+info: DkMath/NumberTheory/PrimorialUniverse/WheelProjection.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.WheelProjection
+ℹ [3135/3238] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOrbit
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorOrbit.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOrbit
+ℹ [3136/3238] Replayed DkMath.NumberTheory.Legendre.PrimorialWheelBridge
+info: DkMath/NumberTheory/Legendre/PrimorialWheelBridge.lean:11:0: file: DkMath.NumberTheory.Legendre.PrimorialWheelBridge
+ℹ [3137/3238] Replayed DkMath.NumberTheory.Legendre.PrimorialWheelSuccessor
+info: DkMath/NumberTheory/Legendre/PrimorialWheelSuccessor.lean:10:0: file: DkMath.NumberTheory.Legendre.PrimorialWheelSuccessor
+ℹ [3138/3238] Replayed DkMath.NumberTheory.Legendre.GnomonSuccessor
+info: DkMath/NumberTheory/Legendre/GnomonSuccessor.lean:11:0: file: DkMath.NumberTheory.Legendre.GnomonSuccessor
+ℹ [3139/3238] Replayed DkMath.NumberTheory.Legendre.GnomonSupportTurnover
+info: DkMath/NumberTheory/Legendre/GnomonSupportTurnover.lean:9:0: file: DkMath.NumberTheory.Legendre.GnomonSupportTurnover
+ℹ [3140/3238] Replayed DkMath.NumberTheory.MultiGauge.Basic
+info: DkMath/NumberTheory/MultiGauge/Basic.lean:9:0: file: DkMath.NumberTheory.MultiGauge.Basic
+ℹ [3141/3238] Replayed DkMath.NumberTheory.MultiGauge.PrimeTransport
+info: DkMath/NumberTheory/MultiGauge/PrimeTransport.lean:9:0: file: DkMath.NumberTheory.MultiGauge.PrimeTransport
+ℹ [3142/3238] Replayed DkMath.NumberTheory.MultiGauge.GnomonPetalTransition
+info: DkMath/NumberTheory/MultiGauge/GnomonPetalTransition.lean:10:0: file: DkMath.NumberTheory.MultiGauge.GnomonPetalTransition
+info: DkMath/NumberTheory/MultiGauge/GnomonPetalTransition.lean:105:0: 'DkMath.NumberTheory.MultiGauge.oddGnomonGaugeStage_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMath/NumberTheory/MultiGauge/GnomonPetalTransition.lean:106:0: 'DkMath.NumberTheory.MultiGauge.gnomonPetalTransition' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMath/NumberTheory/MultiGauge/GnomonPetalTransition.lean:107:0: 'DkMath.NumberTheory.MultiGauge.prime_dvd_oddGnomon_factor_of_petal_new_capture' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+ℹ [3143/3238] Replayed DkMath.NumberTheory.Legendre.GnomonPetalTurnover
+info: DkMath/NumberTheory/Legendre/GnomonPetalTurnover.lean:10:0: file: DkMath.NumberTheory.Legendre.GnomonPetalTurnover
+info: DkMath/NumberTheory/Legendre/GnomonPetalTurnover.lean:85:0: 'DkMath.NumberTheory.Legendre.mem_reindexed_primeSupport_inter_lower_petalMul_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMath/NumberTheory/Legendre/GnomonPetalTurnover.lean:86:0: 'DkMath.NumberTheory.Legendre.common_lower_dvd_gnomonPetalTransition_numerator_of_not_dvd_first' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+ℹ [3144/3238] Replayed DkMath.CFBRC.Defs
+info: DkMath/CFBRC/Defs.lean:9:0: file: DkMath.CFBRC.Defs
+ℹ [3145/3238] Replayed DkMath.Lib.Cosmic.GTailCyclotomic
+info: DkMath/Lib/Cosmic/GTailCyclotomic.lean:10:0: file: DkMath.Lib.Cosmic.GTailCyclotomic
+ℹ [8973/9109] Replayed DkMath.NumberTheory.GapFocusing.CyclotomicAddress
+info: DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean:11:0: file: DkMath.NumberTheory.GapFocusing.CyclotomicAddress
+ℹ [8974/9109] Replayed DkMath.NumberTheory.Legendre.CenteredPair
+info: DkMath/NumberTheory/Legendre/CenteredPair.lean:9:0: file: DkMath.NumberTheory.Legendre.CenteredPair
+ℹ [8975/9109] Replayed DkMath.NumberTheory.Legendre.CenteredPacketTriangle
+info: DkMath/NumberTheory/Legendre/CenteredPacketTriangle.lean:9:0: file: DkMath.NumberTheory.Legendre.CenteredPacketTriangle
+ℹ [8976/9109] Replayed DkMath.NumberTheory.Legendre.CenteredPacketDiamond
+info: DkMath/NumberTheory/Legendre/CenteredPacketDiamond.lean:10:0: file: DkMath.NumberTheory.Legendre.CenteredPacketDiamond
+ℹ [8977/9109] Replayed DkMath.NumberTheory.Legendre.CenteredPacketClique4
+info: DkMath/NumberTheory/Legendre/CenteredPacketClique4.lean:9:0: file: DkMath.NumberTheory.Legendre.CenteredPacketClique4
+ℹ [8978/9109] Replayed DkMath.NumberTheory.Legendre.CoprimeSeatCapacity
+info: DkMath/NumberTheory/Legendre/CoprimeSeatCapacity.lean:10:0: file: DkMath.NumberTheory.Legendre.CoprimeSeatCapacity
+ℹ [8979/9109] Replayed DkMath.NumberTheory.Legendre.OldSupportCapacity
+info: DkMath/NumberTheory/Legendre/OldSupportCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.OldSupportCapacity
+ℹ [8980/9109] Replayed DkMath.NumberTheory.Primitive.PeriodicPrimeWorld
+info: DkMath/NumberTheory/Primitive/PeriodicPrimeWorld.lean:13:0: file: DkMath.NumberTheory.Primitive.PeriodicPrimeWorld
+ℹ [8981/9109] Replayed DkMath.NumberTheory.Legendre.OldSupportGcd
+info: DkMath/NumberTheory/Legendre/OldSupportGcd.lean:11:0: file: DkMath.NumberTheory.Legendre.OldSupportGcd
+ℹ [8982/9109] Replayed DkMath.NumberTheory.Legendre.FreshCollisionMatching
+info: DkMath/NumberTheory/Legendre/FreshCollisionMatching.lean:10:0: file: DkMath.NumberTheory.Legendre.FreshCollisionMatching
+ℹ [8983/9109] Replayed DkMath.NumberTheory.Legendre.FreshCollisionRepair
+info: DkMath/NumberTheory/Legendre/FreshCollisionRepair.lean:10:0: file: DkMath.NumberTheory.Legendre.FreshCollisionRepair
+ℹ [8984/9109] Replayed DkMath.NumberTheory.Legendre.ActivePrimeCapacity
+info: DkMath/NumberTheory/Legendre/ActivePrimeCapacity.lean:10:0: file: DkMath.NumberTheory.Legendre.ActivePrimeCapacity
+ℹ [8985/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeActiveCapacity
+info: DkMath/NumberTheory/Legendre/ParitySafeActiveCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeActiveCapacity
+ℹ [8986/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeWavePruning
+info: DkMath/NumberTheory/Legendre/ParitySafeWavePruning.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeWavePruning
+ℹ [8987/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeIncidenceBalance
+info: DkMath/NumberTheory/Legendre/ParitySafeIncidenceBalance.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeIncidenceBalance
+ℹ [8988/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeReducedResidue
+info: DkMath/NumberTheory/Legendre/ParitySafeReducedResidue.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeReducedResidue
+ℹ [8989/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeMobiusWave
+info: DkMath/NumberTheory/Legendre/ParitySafeMobiusWave.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeMobiusWave
+ℹ [8990/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeMobiusOddCorrection
+info: DkMath/NumberTheory/Legendre/ParitySafeMobiusOddCorrection.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeMobiusOddCorrection
+ℹ [8991/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeSupportExcessQuotient
+info: DkMath/NumberTheory/Legendre/ParitySafeSupportExcessQuotient.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeSupportExcessQuotient
+ℹ [8992/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafePairResidual
+info: DkMath/NumberTheory/Legendre/ParitySafePairResidual.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafePairResidual
+ℹ [8993/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeTripleProductGate
+info: DkMath/NumberTheory/Legendre/ParitySafeTripleProductGate.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeTripleProductGate
+ℹ [8994/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeTripleFarCofactor
+info: DkMath/NumberTheory/Legendre/ParitySafeTripleFarCofactor.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeTripleFarCofactor
+ℹ [8995/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarTripleRecharge
+info: DkMath/NumberTheory/Legendre/ParitySafeFarTripleRecharge.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarTripleRecharge
+ℹ [8996/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarTripleCofactorSupport
+info: DkMath/NumberTheory/Legendre/ParitySafeFarTripleCofactorSupport.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarTripleCofactorSupport
+ℹ [8997/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarCofactorWave
+info: DkMath/NumberTheory/Legendre/ParitySafeFarCofactorWave.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarCofactorWave
+ℹ [8998/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveSelector
+info: DkMath/NumberTheory/Legendre/ParitySafeFarProductWaveSelector.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveSelector
+ℹ [8999/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveRoughCofactor
+info: DkMath/NumberTheory/Legendre/ParitySafeFarProductWaveRoughCofactor.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveRoughCofactor
+ℹ [9000/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveSurvival
+info: DkMath/NumberTheory/Legendre/ParitySafeFarProductWaveSurvival.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveSurvival
+ℹ [9001/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarProductKeyRecharge
+info: DkMath/NumberTheory/Legendre/ParitySafeFarProductKeyRecharge.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarProductKeyRecharge
+ℹ [9002/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargePairProduct
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargePairProduct.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargePairProduct
+ℹ [9003/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeDualBaseCapacity
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeDualBaseCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeDualBaseCapacity
+ℹ [9004/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeOddShellSelector
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeOddShellSelector.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeOddShellSelector
+ℹ [9005/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeExactDualBase
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeExactDualBase.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeExactDualBase
+ℹ [9006/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFourthSplit
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeDepthFourthSplit.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFourthSplit
+ℹ [9007/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthSeatFiber
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeDepthSeatFiber.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthSeatFiber
+ℹ [9008/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFiberExcess
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeDepthFiberExcess.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFiberExcess
+ℹ [9009/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFiberResidualCapacity
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeDepthFiberResidualCapacity.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFiberResidualCapacity
+ℹ [9010/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeFourDirectionGate
+info: DkMath/NumberTheory/Legendre/ParitySafeFourDirectionGate.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFourDirectionGate
+ℹ [9011/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeTerminalSupportCost
+info: DkMath/NumberTheory/Legendre/ParitySafeTerminalSupportCost.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeTerminalSupportCost
+ℹ [9012/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeChargedResidualLedger
+info: DkMath/NumberTheory/Legendre/ParitySafeChargedResidualLedger.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeChargedResidualLedger
+ℹ [9013/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeLowCostResidualSplit
+info: DkMath/NumberTheory/Legendre/ParitySafeLowCostResidualSplit.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeLowCostResidualSplit
+ℹ [9014/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeNearFirstPrimeWaveCapacity
+info: DkMath/NumberTheory/Legendre/ParitySafeNearFirstPrimeWaveCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeNearFirstPrimeWaveCapacity
+ℹ [9015/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeFourthDualBaseCapacity
+info: DkMath/NumberTheory/Legendre/ParitySafeFourthDualBaseCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFourthDualBaseCapacity
+ℹ [9016/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeFullCoverCapacityFrontier
+info: DkMath/NumberTheory/Legendre/ParitySafeFullCoverCapacityFrontier.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeFullCoverCapacityFrontier
+ℹ [9017/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeDepthResidualFifthTrigger
+info: DkMath/NumberTheory/Legendre/ParitySafeDepthResidualFifthTrigger.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeDepthResidualFifthTrigger
+ℹ [9018/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeFifthDirectionGate
+info: DkMath/NumberTheory/Legendre/ParitySafeFifthDirectionGate.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFifthDirectionGate
+ℹ [9019/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeCollisionPairOverlapCancellation
+info: DkMath/NumberTheory/Legendre/ParitySafeCollisionPairOverlapCancellation.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeCollisionPairOverlapCancellation
+ℹ [9020/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeLowCostCapacitySlack
+info: DkMath/NumberTheory/Legendre/ParitySafeLowCostCapacitySlack.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeLowCostCapacitySlack
+ℹ [9021/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeActualFiberCancellation
+info: DkMath/NumberTheory/Legendre/ParitySafeActualFiberCancellation.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeActualFiberCancellation
+ℹ [9022/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeCollisionResidualPairSlackIncidence
+info: DkMath/NumberTheory/Legendre/ParitySafeCollisionResidualPairSlackIncidence.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeCollisionResidualPairSlackIncidence
+ℹ [9023/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeUnusedResidualPairRouting
+info: DkMath/NumberTheory/Legendre/ParitySafeUnusedResidualPairRouting.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeUnusedResidualPairRouting
+ℹ [9024/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeSecondCancellationRedundancyAudit
+info: DkMath/NumberTheory/Legendre/ParitySafeSecondCancellationRedundancyAudit.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeSecondCancellationRedundancyAudit
+ℹ [9025/9109] Replayed DkMath.NumberTheory.Legendre.PrimorialWheelSuccessorEscape
+info: DkMath/NumberTheory/Legendre/PrimorialWheelSuccessorEscape.lean:10:0: file: DkMath.NumberTheory.Legendre.PrimorialWheelSuccessorEscape
+ℹ [9026/9109] Replayed DkMath.NumberTheory.Legendre.PrimorialWheelTwinThreshold
+info: DkMath/NumberTheory/Legendre/PrimorialWheelTwinThreshold.lean:10:0: file: DkMath.NumberTheory.Legendre.PrimorialWheelTwinThreshold
+ℹ [9027/9109] Replayed DkMath.NumberTheory.Legendre.PrimorialWheelOldEscapeFrontier
+info: DkMath/NumberTheory/Legendre/PrimorialWheelOldEscapeFrontier.lean:10:0: file: DkMath.NumberTheory.Legendre.PrimorialWheelOldEscapeFrontier
+ℹ [9028/9109] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhase
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhase.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhase
+ℹ [9029/9109] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPrimeSign
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPrimeSign.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPrimeSign
+ℹ [9030/9109] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPrimeSignCRT
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPrimeSignCRT.lean:12:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPrimeSignCRT
+ℹ [9031/9109] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseFiber
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseFiber.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseFiber
+ℹ [9032/9109] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseFiberProjection
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseFiberProjection.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseFiberProjection
+ℹ [9033/9109] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSurvivorSubcover
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseSurvivorSubcover.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSurvivorSubcover
+ℹ [9034/9109] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndex
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseLiftIndex.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndex
+ℹ [9035/9109] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexAffine
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseLiftIndexAffine.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexAffine
+ℹ [9036/9109] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexReflection
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseLiftIndexReflection.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexReflection
+ℹ [9037/9109] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexNormalForm
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseLiftIndexNormalForm.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexNormalForm
+ℹ [9038/9109] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexCenterTransport
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseLiftIndexCenterTransport.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseLiftIndexCenterTransport
+ℹ [9039/9109] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSuccessorTransport
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseSuccessorTransport.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseSuccessorTransport
+ℹ [9040/9109] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhasePeriodTransport
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhasePeriodTransport.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhasePeriodTransport
+ℹ [9041/9109] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixTransport
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseMixedRadixTransport.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixTransport
+ℹ [9042/9109] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixAudit
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorPhaseMixedRadixAudit.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorPhaseMixedRadixAudit
+ℹ [9049/9109] Replayed DkMath.NumberTheory.Legendre.MultiGaugeBridge
+info: DkMath/NumberTheory/Legendre/MultiGaugeBridge.lean:10:0: file: DkMath.NumberTheory.Legendre.MultiGaugeBridge
+ℹ [9050/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootFiber
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootFiber
+ℹ [9051/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootSieve
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootSieve
+ℹ [9052/9109] Replayed DkMath.NumberTheory.Legendre.Internal.RoughMomentCombinatorics
+info: DkMath/NumberTheory/Legendre/Internal/RoughMomentCombinatorics.lean:13:0: file: DkMath.NumberTheory.Legendre.Internal.RoughMomentCombinatorics
+ℹ [9053/9109] Replayed DkMath.NumberTheory.Legendre.GnomonResidueCover
+info: DkMath/NumberTheory/Legendre/GnomonResidueCover.lean:9:0: file: DkMath.NumberTheory.Legendre.GnomonResidueCover
+ℹ [9054/9109] Replayed DkMath.NumberTheory.Legendre.SquareShellWheelPeriod
+info: DkMath/NumberTheory/Legendre/SquareShellWheelPeriod.lean:9:0: file: DkMath.NumberTheory.Legendre.SquareShellWheelPeriod
+ℹ [9055/9109] Replayed DkMath.NumberTheory.Legendre.QuadraticGnomonFold
+info: DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean:10:0: file: DkMath.NumberTheory.Legendre.QuadraticGnomonFold
+ℹ [9056/9109] Replayed DkMath.NumberTheory.Primitive.PrimeWorldRefinement
+info: DkMath/NumberTheory/Primitive/PrimeWorldRefinement.lean:14:0: file: DkMath.NumberTheory.Primitive.PrimeWorldRefinement
+ℹ [9057/9109] Replayed DkMath.NumberTheory.Primitive.PrimeWorldResidues
+info: DkMath/NumberTheory/Primitive/PrimeWorldResidues.lean:12:0: file: DkMath.NumberTheory.Primitive.PrimeWorldResidues
+ℹ [9058/9109] Replayed DkMath.Combinatorics.FinsetSupportPacking
+info: DkMath/Combinatorics/FinsetSupportPacking.lean:10:0: file: DkMath.Combinatorics.FinsetSupportPacking
+ℹ [9060/9109] Replayed DkMath.CFBRC.Basic
+info: DkMath/CFBRC/Basic.lean:11:0: file: DkMath.CFBRC.Basic
+ℹ [9061/9109] Replayed DkMath.CFBRC.CyclotomicProduct
+info: DkMath/CFBRC/CyclotomicProduct.lean:10:0: file: DkMath.CFBRC.CyclotomicProduct
+ℹ [9063/9109] Replayed DkMath.CosmicFormula.CoreBeamGap
+info: DkMath/CosmicFormula/CoreBeamGap.lean:10:0: file: DkMath.CosmicFormula.CoreBeamGap
+ℹ [9064/9109] Replayed DkMath.NumberTheory.GcdDiffPow
+info: DkMath/NumberTheory/GcdDiffPow.lean:10:0: file: DkMath.NumberTheory.GcdDiffPow
+ℹ [9065/9109] Replayed DkMath.NumberTheory.GcdLemmas
+info: DkMath/NumberTheory/GcdLemmas.lean:10:0: file: DkMath.NumberTheory.GcdLemmas
+ℹ [9066/9109] Replayed DkMath.NumberTheory.GcdNatAbsDivD
+info: DkMath/NumberTheory/GcdNatAbsDivD.lean:10:0: file: DkMath.NumberTheory.GcdNatAbsDivD
+ℹ [9067/9109] Replayed DkMath.NumberTheory.GdcDivD
+info: DkMath/NumberTheory/GdcDivD.lean:11:0: file: DkMath.NumberTheory.GdcDivD
+ℹ [9068/9109] Replayed DkMath.NumberTheory.ZsigmondyCyclotomic
+info: DkMath/NumberTheory/ZsigmondyCyclotomic.lean:24:0: file: DkMath.NumberTheory.ZsigmondyCyclotomic
+ℹ [9069/9109] Replayed DkMath.Zsigmondy
+info: DkMath/Zsigmondy.lean:11:0: file: DkMath.Zsigmondy
+ℹ [9070/9109] Replayed DkMath.NumberTheory.GapFocusing.PrimeOrder
+info: DkMath/NumberTheory/GapFocusing/PrimeOrder.lean:10:0: file: DkMath.NumberTheory.GapFocusing.PrimeOrder
+ℹ [9071/9109] Replayed DkMath.NumberTheory.GapFocusing.HomogeneousAddress
+info: DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean:11:0: file: DkMath.NumberTheory.GapFocusing.HomogeneousAddress
+ℹ [9073/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafePersistence
+info: DkMath/NumberTheory/Legendre/ParitySafePersistence.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafePersistence
+ℹ [9074/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafePersistenceParity
+info: DkMath/NumberTheory/Legendre/ParitySafePersistenceParity.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafePersistenceParity
+ℹ [9075/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeFreshCost
+info: DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeFreshCost
+ℹ [9076/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeBlockLocalization
+info: DkMath/NumberTheory/Legendre/ParitySafeBlockLocalization.lean:11:0: file: DkMath.NumberTheory.Legendre.ParitySafeBlockLocalization
+ℹ [9077/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeIncidenceUpper
+info: DkMath/NumberTheory/Legendre/ParitySafeIncidenceUpper.lean:11:0: file: DkMath.NumberTheory.Legendre.ParitySafeIncidenceUpper
+ℹ [9078/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeExcessCertificate
+info: DkMath/NumberTheory/Legendre/ParitySafeExcessCertificate.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeExcessCertificate
+ℹ [9079/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeCRTSeat
+info: DkMath/NumberTheory/Legendre/ParitySafeCRTSeat.lean:11:0: file: DkMath.NumberTheory.Legendre.ParitySafeCRTSeat
+ℹ [9080/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeMergedCRT
+info: DkMath/NumberTheory/Legendre/ParitySafeMergedCRT.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeMergedCRT
+ℹ [9081/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeMixedCRT
+info: DkMath/NumberTheory/Legendre/ParitySafeMixedCRT.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeMixedCRT
+ℹ [9082/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootCharge
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootCharge.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootCharge
+ℹ [9083/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootTail
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootTail
+ℹ [9084/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootEleven
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootEleven.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootEleven
+ℹ [9085/9109] Replayed DkMath.NumberTheory.Legendre.GnomonPrimorialTransition
+info: DkMath/NumberTheory/Legendre/GnomonPrimorialTransition.lean:11:0: file: DkMath.NumberTheory.Legendre.GnomonPrimorialTransition
+ℹ [9086/9109] Replayed DkMath.NumberTheory.Legendre.CenteredOwnerFold
+info: DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean:11:0: file: DkMath.NumberTheory.Legendre.CenteredOwnerFold
+ℹ [9087/9109] Replayed DkMath.NumberTheory.Legendre.CenteredFoldSupportNorm
+info: DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean:10:0: file: DkMath.NumberTheory.Legendre.CenteredFoldSupportNorm
+ℹ [9088/9109] Replayed DkMath.NumberTheory.Legendre.CenteredFoldGcdAggregate
+info: DkMath/NumberTheory/Legendre/CenteredFoldGcdAggregate.lean:13:0: file: DkMath.NumberTheory.Legendre.CenteredFoldGcdAggregate
+ℹ [9089/9109] Replayed DkMath.NumberTheory.Legendre.PrimeWorldPacketBridge
+info: DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean:12:0: file: DkMath.NumberTheory.Legendre.PrimeWorldPacketBridge
+ℹ [9090/9109] Replayed DkMath.NumberTheory.Legendre.CoarsePrimorialTown
+info: DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean:9:0: file: DkMath.NumberTheory.Legendre.CoarsePrimorialTown
+ℹ [9091/9109] Replayed DkMath.NumberTheory.Legendre.CoarsePrimeWorldFullTown
+info: DkMath/NumberTheory/Legendre/CoarsePrimeWorldFullTown.lean:9:0: file: DkMath.NumberTheory.Legendre.CoarsePrimeWorldFullTown
+ℹ [9092/9109] Replayed DkMath.NumberTheory.Legendre.CoarsePrimeWorldVerticalCapacity
+info: DkMath/NumberTheory/Legendre/CoarsePrimeWorldVerticalCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.CoarsePrimeWorldVerticalCapacity
+ℹ [9093/9109] Replayed DkMathTest.NumberTheory.LegendreCoarseTownRegression
+info: DkMathTest/NumberTheory/LegendreCoarseTownRegression.lean:9:0: file: DkMathTest.NumberTheory.LegendreCoarseTownRegression
+ℹ [9094/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRoughCount
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRoughCount
+ℹ [9095/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafePrimeAnchorCap
+info: DkMath/NumberTheory/Legendre/ParitySafePrimeAnchorCap.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafePrimeAnchorCap
+ℹ [9096/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughMoments
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughMoments.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughMoments
+ℹ [9097/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughProductWaves
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughProductWaves.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughProductWaves
+ℹ [9098/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughFactorization
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughFactorization.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughFactorization
+ℹ [9099/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughStrata
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughStrata.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughStrata
+ℹ [9100/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughSingleton
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughSingleton.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughSingleton
+ℹ [9101/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughCensus
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtRoughCensus.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughCensus
+ℹ [9102/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtCrossQuotient
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtCrossQuotient.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtCrossQuotient
+ℹ [9103/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtCompositeRouting
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtCompositeRouting.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtCompositeRouting
+ℹ [9104/9109] Replayed DkMath.NumberTheory.Legendre.ParitySafeSqrtQuotientConservation
+info: DkMath/NumberTheory/Legendre/ParitySafeSqrtQuotientConservation.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeSqrtQuotientConservation
+ℹ [9105/9109] Replayed DkMath.NumberTheory.Legendre.SquareAnchorCounterexamplePacket
+info: DkMath/NumberTheory/Legendre/SquareAnchorCounterexamplePacket.lean:11:0: file: DkMath.NumberTheory.Legendre.SquareAnchorCounterexamplePacket
+ℹ [9106/9109] Replayed DkMath.NumberTheory.Legendre.CoarseTownSupportPacking
+info: DkMath/NumberTheory/Legendre/CoarseTownSupportPacking.lean:10:0: file: DkMath.NumberTheory.Legendre.CoarseTownSupportPacking
+ℹ [9107/9109] Replayed DkMath.NumberTheory.Legendre
+info: DkMath/NumberTheory/Legendre.lean:94:0: file: DkMath.NumberTheory.Legendre
+ℹ [9108/9109] Replayed DkMathTest.NumberTheory.LegendreFullTownRegression
+info: DkMathTest/NumberTheory/LegendreFullTownRegression.lean:10:0: file: DkMathTest.NumberTheory.LegendreFullTownRegression
+ℹ [9109/9109] Built DkMathTest.NumberTheory.LegendreFullTownAxiomAudit (5.7s)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:10:0: file: DkMathTest.NumberTheory.LegendreFullTownAxiomAudit
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:12:0: DkMath.Combinatorics.supportCollisionEdges.{u_1, u_2} {α : Type u_1} {β : Type u_2} [LinearOrder α] [DecidableEq β]
+  (V : Finset α) (f : α → Finset β) : Finset (α × α)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:13:0: 'DkMath.Combinatorics.supportCollisionEdges' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:14:0: DkMath.Combinatorics.mem_supportCollisionEdges.{u_1, u_2} {α : Type u_1} {β : Type u_2} [LinearOrder α] [DecidableEq β]
+  {V : Finset α} {f : α → Finset β} {a b : α} :
+  (a, b) ∈ DkMath.Combinatorics.supportCollisionEdges V f ↔ a ∈ V ∧ b ∈ V ∧ a < b ∧ ¬Disjoint (f a) (f b)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:15:0: 'DkMath.Combinatorics.mem_supportCollisionEdges' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:16:0: DkMath.Combinatorics.exists_supportPacking.{u_1, u_2} {α : Type u_1} {β : Type u_2} [LinearOrder α] [DecidableEq β]
+  (V : Finset α) (f : α → Finset β) :
+  ∃ R ⊆ V, (↑R).PairwiseDisjoint f ∧ V.card ≤ R.card + (DkMath.Combinatorics.supportCollisionEdges V f).card
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:17:0: 'DkMath.Combinatorics.exists_supportPacking' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:18:0: DkMath.NumberTheory.Legendre.coarsePrimeWorld_modulus_pos {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) :
+  0 < DkMath.NumberTheory.Primitive.primeWorldModulus S
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:19:0: 'DkMath.NumberTheory.Legendre.coarsePrimeWorld_modulus_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:20:0: DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount (S : Finset ℕ) (n : ℕ) : ℕ
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:21:0: 'DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:22:0: DkMath.NumberTheory.Legendre.coarsePeriodCount_zero_modulus {S : Finset ℕ}
+  (hM : DkMath.NumberTheory.Primitive.primeWorldModulus S = 0) (n : ℕ) :
+  DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n = 0
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:23:0: 'DkMath.NumberTheory.Legendre.coarsePeriodCount_zero_modulus' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:24:0: DkMath.NumberTheory.Legendre.coarsePeriodCount_mul_le (S : Finset ℕ) (n : ℕ) :
+  DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n * DkMath.NumberTheory.Primitive.primeWorldModulus S ≤
+    2 * n
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:25:0: 'DkMath.NumberTheory.Legendre.coarsePeriodCount_mul_le' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:26:0: DkMath.NumberTheory.Legendre.coarsePeriodCount_succ_mul_gt {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) (n : ℕ) :
+  2 * n <
+    (DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n + 1) *
+      DkMath.NumberTheory.Primitive.primeWorldModulus S
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:27:0: 'DkMath.NumberTheory.Legendre.coarsePeriodCount_succ_mul_gt' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:28:0: DkMath.NumberTheory.Legendre.two_le_coarsePeriodCount {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) {n : ℕ}
+  (hfit : DkMath.NumberTheory.Primitive.primeWorldModulus S ≤ n) :
+  2 ≤ DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:29:0: 'DkMath.NumberTheory.Legendre.two_le_coarsePeriodCount' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:30:0: DkMath.NumberTheory.Legendre.coarsePrimeWorldGridPairs (S : Finset ℕ) (n : ℕ) : Finset (ℕ × ℕ)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:31:0: 'DkMath.NumberTheory.Legendre.coarsePrimeWorldGridPairs' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:32:0: DkMath.NumberTheory.Legendre.coarsePrimeWorldGridSeat (S : Finset ℕ) (pair : ℕ × ℕ) : ℕ
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:33:0: 'DkMath.NumberTheory.Legendre.coarsePrimeWorldGridSeat' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:34:0: DkMath.NumberTheory.Legendre.mem_coarsePrimeWorldGridPairs {S : Finset ℕ} {n r j : ℕ} :
+  (r, j) ∈ DkMath.NumberTheory.Legendre.coarsePrimeWorldGridPairs S n ↔
+    r ∈ DkMath.NumberTheory.Legendre.coarsePrimeWorldBase S n ∧
+      j < DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:35:0: 'DkMath.NumberTheory.Legendre.mem_coarsePrimeWorldGridPairs' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:36:0: DkMath.NumberTheory.Legendre.coarseGridSeat_squareOffset {S : Finset ℕ} {n : ℕ} {pair : ℕ × ℕ}
+  (hp : pair ∈ DkMath.NumberTheory.Legendre.coarsePrimeWorldGridPairs S n) :
+  DkMath.NumberTheory.Legendre.SquareOffset n (DkMath.NumberTheory.Legendre.coarsePrimeWorldGridSeat S pair)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:37:0: 'DkMath.NumberTheory.Legendre.coarseGridSeat_squareOffset' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:38:0: DkMath.NumberTheory.Legendre.coarseGridSeat_injective {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) (n : ℕ) :
+  Set.InjOn (DkMath.NumberTheory.Legendre.coarsePrimeWorldGridSeat S)
+    ↑(DkMath.NumberTheory.Legendre.coarsePrimeWorldGridPairs S n)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:39:0: 'DkMath.NumberTheory.Legendre.coarseGridSeat_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:40:0: DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown (S : Finset ℕ) (n : ℕ) : Finset ℕ
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:41:0: 'DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:42:0: DkMath.NumberTheory.Legendre.mem_coarsePrimeWorldFullTown {S : Finset ℕ} {n a : ℕ} :
+  a ∈ DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown S n ↔
+    ∃ r ∈ DkMath.NumberTheory.Legendre.coarsePrimeWorldBase S n,
+      ∃ j < DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n,
+        r + j * DkMath.NumberTheory.Primitive.primeWorldModulus S = a
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:43:0: 'DkMath.NumberTheory.Legendre.mem_coarsePrimeWorldFullTown' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:44:0: DkMath.NumberTheory.Legendre.coarseFullTown_subset_squareOffsets (S : Finset ℕ) (n : ℕ) :
+  DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown S n ⊆ DkMath.NumberTheory.Legendre.squareOffsets n
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:45:0: 'DkMath.NumberTheory.Legendre.coarseFullTown_subset_squareOffsets' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:46:0: DkMath.NumberTheory.Legendre.card_coarsePrimeWorldFullTown {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) (n : ℕ) :
+  (DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown S n).card =
+    DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n *
+      (DkMath.NumberTheory.Primitive.primeWorldModulus S).totient
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:47:0: 'DkMath.NumberTheory.Legendre.card_coarsePrimeWorldFullTown' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:48:0: DkMath.NumberTheory.Legendre.coarsePrimeWorldColumn (S : Finset ℕ) (n r : ℕ) : Finset ℕ
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:49:0: 'DkMath.NumberTheory.Legendre.coarsePrimeWorldColumn' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:50:0: DkMath.NumberTheory.Legendre.coarseColumn_subset_fullTown {S : Finset ℕ} {n r : ℕ}
+  (hr : r ∈ DkMath.NumberTheory.Legendre.coarsePrimeWorldBase S n) :
+  DkMath.NumberTheory.Legendre.coarsePrimeWorldColumn S n r ⊆ DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown S n
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:51:0: 'DkMath.NumberTheory.Legendre.coarseColumn_subset_fullTown' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:52:0: DkMath.NumberTheory.Legendre.card_coarsePrimeWorldColumn {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) (n r : ℕ) :
+  (DkMath.NumberTheory.Legendre.coarsePrimeWorldColumn S n r).card =
+    DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:53:0: 'DkMath.NumberTheory.Legendre.card_coarsePrimeWorldColumn' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:54:0: DkMath.NumberTheory.Legendre.coarseFullTown_eq_column_union (S : Finset ℕ) (n : ℕ) :
+  DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown S n =
+    (DkMath.NumberTheory.Legendre.coarsePrimeWorldBase S n).biUnion
+      (DkMath.NumberTheory.Legendre.coarsePrimeWorldColumn S n)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:55:0: 'DkMath.NumberTheory.Legendre.coarseFullTown_eq_column_union' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:56:0: DkMath.NumberTheory.Legendre.disjoint_coarseColumns {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) {n r s : ℕ}
+  (hr : r ∈ DkMath.NumberTheory.Legendre.coarsePrimeWorldBase S n)
+  (hs : s ∈ DkMath.NumberTheory.Legendre.coarsePrimeWorldBase S n) (hne : r ≠ s) :
+  Disjoint (DkMath.NumberTheory.Legendre.coarsePrimeWorldColumn S n r)
+    (DkMath.NumberTheory.Legendre.coarsePrimeWorldColumn S n s)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:57:0: 'DkMath.NumberTheory.Legendre.disjoint_coarseColumns' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:58:0: DkMath.NumberTheory.Legendre.coarseFullTown_address_periodic (S : Finset ℕ) (n r j : ℕ) :
+  DkMath.NumberTheory.PrimorialUniverse.squareShellWheelProjection S n
+      (r + j * DkMath.NumberTheory.Primitive.primeWorldModulus S) =
+    DkMath.NumberTheory.PrimorialUniverse.squareShellWheelProjection S n r
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:59:0: 'DkMath.NumberTheory.Legendre.coarseFullTown_address_periodic' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:60:0: DkMath.NumberTheory.Legendre.coarseFullTown_survivor_periodic (S : Finset ℕ) (n r j : ℕ) :
+  DkMath.NumberTheory.StructuralArithmetic.SupportDisjointFrom S
+      (n ^ 2 + (r + j * DkMath.NumberTheory.Primitive.primeWorldModulus S)) ↔
+    DkMath.NumberTheory.StructuralArithmetic.SupportDisjointFrom S (n ^ 2 + r)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:61:0: 'DkMath.NumberTheory.Legendre.coarseFullTown_survivor_periodic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:62:0: DkMath.NumberTheory.Legendre.coarseFullTown_survivor {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) {n a : ℕ}
+  (ha : a ∈ DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown S n) :
+  DkMath.NumberTheory.StructuralArithmetic.SupportDisjointFrom S (n ^ 2 + a)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:63:0: 'DkMath.NumberTheory.Legendre.coarseFullTown_survivor' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:64:0: DkMath.NumberTheory.Legendre.coarseTwoStreet_subset_fullTown {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) {n : ℕ}
+  (hfit : DkMath.NumberTheory.Primitive.primeWorldModulus S ≤ n) :
+  DkMath.NumberTheory.Legendre.coarsePrimeWorldTown S n ⊆ DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown S n
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:65:0: 'DkMath.NumberTheory.Legendre.coarseTwoStreet_subset_fullTown' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:66:0: DkMath.NumberTheory.Legendre.coarseFullTown_eq_twoStreet_of_periodCount_two {S : Finset ℕ} {n : ℕ}
+  (hK : DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n = 2) :
+  DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown S n = DkMath.NumberTheory.Legendre.coarsePrimeWorldTown S n
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:67:0: 'DkMath.NumberTheory.Legendre.coarseFullTown_eq_twoStreet_of_periodCount_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:68:0: DkMath.NumberTheory.Legendre.coarseColumn_commonPrime_modEq {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) {n r q j k : ℕ} (hq : Nat.Prime q) (hqS : q ∉ S)
+  (hj : q ∣ n ^ 2 + r + j * DkMath.NumberTheory.Primitive.primeWorldModulus S)
+  (hk : q ∣ n ^ 2 + r + k * DkMath.NumberTheory.Primitive.primeWorldModulus S) : j ≡ k [MOD q]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:69:0: 'DkMath.NumberTheory.Legendre.coarseColumn_commonPrime_modEq' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:70:0: DkMath.NumberTheory.Legendre.coarseColumn_commonPrime_dvd_index_gap {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) {n r q j k : ℕ} (hq : Nat.Prime q) (hqS : q ∉ S)
+  (hj : q ∣ n ^ 2 + r + j * DkMath.NumberTheory.Primitive.primeWorldModulus S)
+  (hk : q ∣ n ^ 2 + r + k * DkMath.NumberTheory.Primitive.primeWorldModulus S) : q ∣ k - j
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:71:0: 'DkMath.NumberTheory.Legendre.coarseColumn_commonPrime_dvd_index_gap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:72:0: DkMath.NumberTheory.Legendre.coarseColumn_no_commonPrime_of_small_gap {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) {n r q j k : ℕ} (hq : Nat.Prime q) (hqS : q ∉ S)
+  (hjk : j < k) (hgap : k - j < q) :
+  ¬(q ∣ n ^ 2 + r + j * DkMath.NumberTheory.Primitive.primeWorldModulus S ∧
+      q ∣ n ^ 2 + r + k * DkMath.NumberTheory.Primitive.primeWorldModulus S)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:73:0: 'DkMath.NumberTheory.Legendre.coarseColumn_no_commonPrime_of_small_gap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:74:0: DkMath.NumberTheory.Legendre.coarseColumn_oldSupport_family {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) {n r : ℕ}
+  (hr : r ∈ DkMath.NumberTheory.Legendre.coarsePrimeWorldBase S n)
+  (hlarge :
+    ∀ q ∈ DkMath.NumberTheory.Legendre.coarseOutsidePrimes S n,
+      DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n ≤ q) :
+  DkMath.NumberTheory.Legendre.PairwiseOldSupportDisjointSquareSeatFamily n
+    (DkMath.NumberTheory.Legendre.coarsePrimeWorldColumn S n r)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:75:0: 'DkMath.NumberTheory.Legendre.coarseColumn_oldSupport_family' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:76:0: DkMath.NumberTheory.Legendre.coarseColumn_oldSupport_family_initial {P n r : ℕ}
+  (hr : r ∈ DkMath.NumberTheory.Legendre.coarsePrimeWorldBase (DkMath.NumberTheory.Primitive.primeScalesUpTo P) n)
+  (hK :
+    DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount (DkMath.NumberTheory.Primitive.primeScalesUpTo P) n ≤
+      P + 1) :
+  DkMath.NumberTheory.Legendre.PairwiseOldSupportDisjointSquareSeatFamily n
+    (DkMath.NumberTheory.Legendre.coarsePrimeWorldColumn (DkMath.NumberTheory.Primitive.primeScalesUpTo P) n r)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:77:0: 'DkMath.NumberTheory.Legendre.coarseColumn_oldSupport_family_initial' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:78:0: DkMath.NumberTheory.Legendre.coarseColumnWaveIndices (S : Finset ℕ) (n r q : ℕ) : Finset ℕ
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:79:0: 'DkMath.NumberTheory.Legendre.coarseColumnWaveIndices' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:80:0: DkMath.NumberTheory.Legendre.card_coarseColumnWaveIndices_le_ceil {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) (n r : ℕ) {q : ℕ} (hq : Nat.Prime q)
+  (hqS : q ∉ S) :
+  (DkMath.NumberTheory.Legendre.coarseColumnWaveIndices S n r q).card ≤
+    (DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n + q - 1) / q
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:81:0: 'DkMath.NumberTheory.Legendre.card_coarseColumnWaveIndices_le_ceil' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:82:0: DkMath.NumberTheory.Legendre.coarseColumnPoint_eq_child (S : Finset ℕ) (n r j : ℕ) :
+  n ^ 2 + r + j * DkMath.NumberTheory.Primitive.primeWorldModulus S =
+    DkMath.NumberTheory.Primitive.primeWorldChild S (n ^ 2 + r) j
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:83:0: 'DkMath.NumberTheory.Legendre.coarseColumnPoint_eq_child' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:84:0: DkMath.NumberTheory.Legendre.coarseColumnPoint_eq_canonical_child (S : Finset ℕ) (n r j : ℕ) :
+  n ^ 2 + r + j * DkMath.NumberTheory.Primitive.primeWorldModulus S =
+    DkMath.NumberTheory.Primitive.primeWorldChild S ((n ^ 2 + r) % DkMath.NumberTheory.Primitive.primeWorldModulus S)
+      ((n ^ 2 + r) / DkMath.NumberTheory.Primitive.primeWorldModulus S + j)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:85:0: 'DkMath.NumberTheory.Legendre.coarseColumnPoint_eq_canonical_child' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:86:0: DkMath.NumberTheory.Legendre.coarseColumn_dvd_iff_refinement_target (S : Finset ℕ) (n r j q : ℕ) :
+  q ∣ n ^ 2 + r + j * DkMath.NumberTheory.Primitive.primeWorldModulus S ↔
+    ↑(DkMath.NumberTheory.Primitive.primeWorldChild S ((n ^ 2 + r) % DkMath.NumberTheory.Primitive.primeWorldModulus S)
+          j) =
+      -↑((n ^ 2 + r) / DkMath.NumberTheory.Primitive.primeWorldModulus S *
+            DkMath.NumberTheory.Primitive.primeWorldModulus S)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:87:0: 'DkMath.NumberTheory.Legendre.coarseColumn_dvd_iff_refinement_target' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:88:0: DkMath.NumberTheory.Legendre.existsUnique_coarseColumnWaveIndex_mod_prime {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) (n r : ℕ) {q : ℕ} (hq : Nat.Prime q)
+  (hqS : q ∉ S) : ∃! j, j < q ∧ q ∣ n ^ 2 + r + j * DkMath.NumberTheory.Primitive.primeWorldModulus S
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:89:0: 'DkMath.NumberTheory.Legendre.existsUnique_coarseColumnWaveIndex_mod_prime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:90:0: DkMath.NumberTheory.Legendre.card_coarseColumnWaveIndices_le_one {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) (n r : ℕ) {q : ℕ} (hq : Nat.Prime q) (hqS : q ∉ S)
+  (hK : DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n ≤ q) :
+  (DkMath.NumberTheory.Legendre.coarseColumnWaveIndices S n r q).card ≤ 1
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:91:0: 'DkMath.NumberTheory.Legendre.card_coarseColumnWaveIndices_le_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:92:0: DkMath.NumberTheory.Legendre.coarseCrossColumn_compatible_index_unique {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) {n s q k l : ℕ} (hq : Nat.Prime q) (hqS : q ∉ S)
+  (hK : DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n ≤ q)
+  (hk : k < DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n)
+  (hl : l < DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n)
+  (hkd : q ∣ n ^ 2 + s + k * DkMath.NumberTheory.Primitive.primeWorldModulus S)
+  (hld : q ∣ n ^ 2 + s + l * DkMath.NumberTheory.Primitive.primeWorldModulus S) : k = l
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:93:0: 'DkMath.NumberTheory.Legendre.coarseCrossColumn_compatible_index_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:94:0: DkMath.NumberTheory.Legendre.coarseCrossColumn_commonPrime_signed_gap {S : Finset ℕ} {n r s j k q : ℕ}
+  (hj : q ∣ n ^ 2 + r + j * DkMath.NumberTheory.Primitive.primeWorldModulus S)
+  (hk : q ∣ n ^ 2 + s + k * DkMath.NumberTheory.Primitive.primeWorldModulus S) :
+  ↑q ∣ ↑s - ↑r + (↑k - ↑j) * ↑(DkMath.NumberTheory.Primitive.primeWorldModulus S)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:95:0: 'DkMath.NumberTheory.Legendre.coarseCrossColumn_commonPrime_signed_gap' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:96:0: DkMath.NumberTheory.Legendre.coarseFullTownPrimeFiber (S : Finset ℕ) (n q : ℕ) : Finset ℕ
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:97:0: 'DkMath.NumberTheory.Legendre.coarseFullTownPrimeFiber' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:98:0: DkMath.NumberTheory.Legendre.coarseFullTownPrimeFiber_eq_column_union {S : Finset ℕ} {n q : ℕ}
+  (hq : q ∈ DkMath.NumberTheory.Legendre.coarseOutsidePrimes S n) :
+  DkMath.NumberTheory.Legendre.coarseFullTownPrimeFiber S n q =
+    (DkMath.NumberTheory.Legendre.coarsePrimeWorldBase S n).biUnion fun r ↦
+      Finset.image (fun j ↦ r + j * DkMath.NumberTheory.Primitive.primeWorldModulus S)
+        (DkMath.NumberTheory.Legendre.coarseColumnWaveIndices S n r q)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:99:0: 'DkMath.NumberTheory.Legendre.coarseFullTownPrimeFiber_eq_column_union' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:100:0: DkMath.NumberTheory.Legendre.card_coarseFullTownPrimeFiber_le {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) {n q : ℕ}
+  (hq : q ∈ DkMath.NumberTheory.Legendre.coarseOutsidePrimes S n) :
+  (DkMath.NumberTheory.Legendre.coarseFullTownPrimeFiber S n q).card ≤
+    (DkMath.NumberTheory.Legendre.coarsePrimeWorldBase S n).card *
+      ((DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n + q - 1) / q)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:101:0: 'DkMath.NumberTheory.Legendre.card_coarseFullTownPrimeFiber_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:102:0: DkMath.NumberTheory.Legendre.coarse_ceiling_le_one {K q : ℕ} (hq : 0 < q) (hK : K ≤ q) : (K + q - 1) / q ≤ 1
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:103:0: 'DkMath.NumberTheory.Legendre.coarse_ceiling_le_one' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:104:0: DkMath.NumberTheory.Legendre.card_coarseFullTownPrimeFiber_le_base {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) {n q : ℕ}
+  (hq : q ∈ DkMath.NumberTheory.Legendre.coarseOutsidePrimes S n)
+  (hK : DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n ≤ q) :
+  (DkMath.NumberTheory.Legendre.coarseFullTownPrimeFiber S n q).card ≤
+    (DkMath.NumberTheory.Legendre.coarsePrimeWorldBase S n).card
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:105:0: 'DkMath.NumberTheory.Legendre.card_coarseFullTownPrimeFiber_le_base' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:106:0: DkMath.NumberTheory.Legendre.coarseFullTownIncidence (S : Finset ℕ) (n : ℕ) : ℕ
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:107:0: 'DkMath.NumberTheory.Legendre.coarseFullTownIncidence' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:108:0: DkMath.NumberTheory.Legendre.coarseFullTownIncidence_eq_support_sum {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) (n : ℕ) :
+  DkMath.NumberTheory.Legendre.coarseFullTownIncidence S n =
+    ∑ a ∈ DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown S n,
+      (DkMath.NumberTheory.Legendre.squareOffsetPrimeSupport n a).card
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:109:0: 'DkMath.NumberTheory.Legendre.coarseFullTownIncidence_eq_support_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:110:0: DkMath.NumberTheory.Legendre.card_coarseFullTown_le_incidence_of_fullyCovered {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) {n : ℕ}
+  (hfull : DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered n) :
+  (DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown S n).card ≤
+    DkMath.NumberTheory.Legendre.coarseFullTownIncidence S n
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:111:0: 'DkMath.NumberTheory.Legendre.card_coarseFullTown_le_incidence_of_fullyCovered' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:112:0: DkMath.NumberTheory.Legendre.coarseVerticalCapacity (S : Finset ℕ) (n : ℕ) : ℕ
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:113:0: 'DkMath.NumberTheory.Legendre.coarseVerticalCapacity' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:114:0: DkMath.NumberTheory.Legendre.coarseFullTownIncidence_le_capacity {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) (n : ℕ) :
+  DkMath.NumberTheory.Legendre.coarseFullTownIncidence S n ≤
+    (DkMath.NumberTheory.Legendre.coarsePrimeWorldBase S n).card *
+      DkMath.NumberTheory.Legendre.coarseVerticalCapacity S n
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:115:0: 'DkMath.NumberTheory.Legendre.coarseFullTownIncidence_le_capacity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:116:0: DkMath.NumberTheory.Legendre.coarseFullTown_vertical_frontier {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) {n : ℕ}
+  (hfull : DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered n) :
+  DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n ≤ DkMath.NumberTheory.Legendre.coarseVerticalCapacity S n
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:117:0: 'DkMath.NumberTheory.Legendre.coarseFullTown_vertical_frontier' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:118:0: DkMath.NumberTheory.Legendre.coarseFullTown_uniform_vertical_frontier {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) {n : ℕ}
+  (hlarge :
+    ∀ q ∈ DkMath.NumberTheory.Legendre.coarseOutsidePrimes S n,
+      DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n ≤ q)
+  (hfull : DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered n) :
+  DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n ≤
+    (DkMath.NumberTheory.Legendre.coarseOutsidePrimes S n).card
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:119:0: 'DkMath.NumberTheory.Legendre.coarseFullTown_uniform_vertical_frontier' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:120:0: DkMath.NumberTheory.Legendre.not_fullyCovered_of_coarseVerticalCapacity_deficit {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) {n : ℕ}
+  (hdef :
+    DkMath.NumberTheory.Legendre.coarseVerticalCapacity S n <
+      DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n) :
+  ¬DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered n
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:121:0: 'DkMath.NumberTheory.Legendre.not_fullyCovered_of_coarseVerticalCapacity_deficit' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:122:0: DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_coarseVerticalCapacity_deficit {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) {n : ℕ} (hn : 0 < n)
+  (hdef :
+    DkMath.NumberTheory.Legendre.coarseVerticalCapacity S n <
+      DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n) :
+  ∃ p, Nat.Prime p ∧ DkMath.NumberTheory.Legendre.SquareCell n p
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:123:0: 'DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_coarseVerticalCapacity_deficit' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:124:0: DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges (S : Finset ℕ) (n : ℕ) : Finset (ℕ × ℕ)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:125:0: 'DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:126:0: DkMath.NumberTheory.Legendre.mem_coarseTownSupportCollisionEdges {S : Finset ℕ} {n a b : ℕ} :
+  (a, b) ∈ DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges S n ↔
+    a ∈ DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown S n ∧
+      b ∈ DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown S n ∧
+        a < b ∧
+          ¬Disjoint (DkMath.NumberTheory.Legendre.squareOffsetPrimeSupport n a)
+              (DkMath.NumberTheory.Legendre.squareOffsetPrimeSupport n b)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:127:0: 'DkMath.NumberTheory.Legendre.mem_coarseTownSupportCollisionEdges' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:128:0: DkMath.NumberTheory.Legendre.exists_coarseTown_supportPacking (S : Finset ℕ) (n : ℕ) :
+  ∃ R ⊆ DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown S n,
+    DkMath.NumberTheory.Legendre.PairwiseOldSupportDisjointSquareSeatFamily n R ∧
+      (DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown S n).card ≤
+        R.card + (DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges S n).card
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:129:0: 'DkMath.NumberTheory.Legendre.exists_coarseTown_supportPacking' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:130:0: DkMath.NumberTheory.Legendre.not_fullyCovered_of_coarseTown_edge_deficit (S : Finset ℕ) {n : ℕ}
+  (hdef :
+    (DkMath.NumberTheory.Primitive.primeScalesUpTo n).card +
+        (DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges S n).card <
+      (DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown S n).card) :
+  ¬DkMath.NumberTheory.Legendre.SquareOffsetsFullyCovered n
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:131:0: 'DkMath.NumberTheory.Legendre.not_fullyCovered_of_coarseTown_edge_deficit' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:132:0: DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_coarseTown_edge_deficit (S : Finset ℕ) {n : ℕ} (hn : 0 < n)
+  (hdef :
+    (DkMath.NumberTheory.Primitive.primeScalesUpTo n).card +
+        (DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges S n).card <
+      (DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown S n).card) :
+  ∃ p, Nat.Prime p ∧ DkMath.NumberTheory.Legendre.SquareCell n p
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:133:0: 'DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_coarseTown_edge_deficit' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:134:0: DkMath.NumberTheory.Legendre.coarseTownPrimeCollisionEdges (S : Finset ℕ) (n q : ℕ) : Finset (ℕ × ℕ)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:135:0: 'DkMath.NumberTheory.Legendre.coarseTownPrimeCollisionEdges' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:136:0: DkMath.NumberTheory.Legendre.mem_coarseTownPrimeCollisionEdges {S : Finset ℕ} {n q a b : ℕ} :
+  (a, b) ∈ DkMath.NumberTheory.Legendre.coarseTownPrimeCollisionEdges S n q ↔
+    a ∈ DkMath.NumberTheory.Legendre.coarseFullTownPrimeFiber S n q ∧
+      b ∈ DkMath.NumberTheory.Legendre.coarseFullTownPrimeFiber S n q ∧ a < b
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:137:0: 'DkMath.NumberTheory.Legendre.mem_coarseTownPrimeCollisionEdges' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:138:0: DkMath.NumberTheory.Legendre.card_coarseTownPrimeCollisionEdges (S : Finset ℕ) (n q : ℕ) :
+  (DkMath.NumberTheory.Legendre.coarseTownPrimeCollisionEdges S n q).card =
+    (DkMath.NumberTheory.Legendre.coarseFullTownPrimeFiber S n q).card.choose 2
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:139:0: 'DkMath.NumberTheory.Legendre.card_coarseTownPrimeCollisionEdges' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:140:0: DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges_subset_prime_union {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) (n : ℕ) :
+  DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges S n ⊆
+    (DkMath.NumberTheory.Legendre.coarseOutsidePrimes S n).biUnion
+      (DkMath.NumberTheory.Legendre.coarseTownPrimeCollisionEdges S n)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:141:0: 'DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges_subset_prime_union' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:142:0: DkMath.NumberTheory.Legendre.card_coarseTownSupportCollisionEdges_le_fibers {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) (n : ℕ) :
+  (DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges S n).card ≤
+    ∑ q ∈ DkMath.NumberTheory.Legendre.coarseOutsidePrimes S n,
+      (DkMath.NumberTheory.Legendre.coarseFullTownPrimeFiber S n q).card.choose 2
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:143:0: 'DkMath.NumberTheory.Legendre.card_coarseTownSupportCollisionEdges_le_fibers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:144:0: DkMath.NumberTheory.Legendre.card_coarseTownSupportCollisionEdges_le_ceiling {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) (n : ℕ) :
+  (DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges S n).card ≤
+    ∑ q ∈ DkMath.NumberTheory.Legendre.coarseOutsidePrimes S n,
+      ((DkMath.NumberTheory.Legendre.coarsePrimeWorldBase S n).card *
+            ((DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n + q - 1) / q)).choose
+        2
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:145:0: 'DkMath.NumberTheory.Legendre.card_coarseTownSupportCollisionEdges_le_ceiling' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:146:0: DkMath.NumberTheory.Legendre.card_coarseTownSupportCollisionEdges_le_uniform {S : Finset ℕ}
+  (hS : DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales S) {n : ℕ}
+  (hlarge :
+    ∀ q ∈ DkMath.NumberTheory.Legendre.coarseOutsidePrimes S n,
+      DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount S n ≤ q) :
+  (DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges S n).card ≤
+    (DkMath.NumberTheory.Legendre.coarseOutsidePrimes S n).card *
+      (DkMath.NumberTheory.Legendre.coarsePrimeWorldBase S n).card.choose 2
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:147:0: 'DkMath.NumberTheory.Legendre.card_coarseTownSupportCollisionEdges_le_uniform' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:148:0: DkMathTest.LegendreFullTownRegression.zero_modulus_boundary :
+  DkMath.NumberTheory.Primitive.primeWorldModulus {0} = 0 ∧
+    DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount {0} 5 = 0 ∧
+      DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown {0} 5 = ∅
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:149:0: 'DkMathTest.LegendreFullTownRegression.zero_modulus_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:150:0: DkMathTest.LegendreFullTownRegression.modulus_one_endpoint :
+  DkMath.NumberTheory.Legendre.coarsePrimeWorldBase ∅ 3 = {1} ∧
+    DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown ∅ 3 = {1, 2, 3, 4, 5, 6}
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:151:0: 'DkMathTest.LegendreFullTownRegression.modulus_one_endpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:152:0: DkMathTest.LegendreFullTownRegression.period_two_recovers_previous_town :
+  DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown {2, 3} 8 =
+    DkMath.NumberTheory.Legendre.coarsePrimeWorldTown {2, 3} 8
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:153:0: 'DkMathTest.LegendreFullTownRegression.period_two_recovers_previous_town' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:154:0: DkMathTest.LegendreFullTownRegression.three_fullTown_not_global_family :
+  ¬DkMath.NumberTheory.Legendre.PairwiseOldSupportDisjointSquareSeatFamily 3
+      (DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown {3} 3)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:155:0: 'DkMathTest.LegendreFullTownRegression.three_fullTown_not_global_family' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:156:0: DkMathTest.LegendreFullTownRegression.three_uniform_columns_not_global :
+  (∀ q ∈ DkMath.NumberTheory.Legendre.coarseOutsidePrimes {3} 3,
+      DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount {3} 3 ≤ q) ∧
+    ¬DkMath.NumberTheory.Legendre.PairwiseOldSupportDisjointSquareSeatFamily 3
+        (DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown {3} 3)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:157:0: 'DkMathTest.LegendreFullTownRegression.three_uniform_columns_not_global' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:158:0: DkMathTest.LegendreFullTownRegression.five_vertical_reuse :
+  DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount {2} 5 = 5 ∧
+    3 ∣ 5 ^ 2 + 2 ∧
+      3 ∣ 5 ^ 2 + 2 + 3 * DkMath.NumberTheory.Primitive.primeWorldModulus {2} ∧
+        (DkMath.NumberTheory.Legendre.coarseColumnWaveIndices {2} 5 2 3).card = 2
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:159:0: 'DkMathTest.LegendreFullTownRegression.five_vertical_reuse' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:160:0: DkMathTest.LegendreFullTownRegression.five_strictly_improves_twoStreet :
+  (DkMath.NumberTheory.Primitive.primeWorldModulus {2}).totient ≤
+      ∑ pq ∈ DkMath.NumberTheory.Legendre.coarseNearPairs {2} 5,
+          (DkMath.NumberTheory.Legendre.coarseCrossOffsets {2} 5 pq.1 pq.2).card +
+        (DkMath.NumberTheory.Legendre.coarseFarPairs {2} 5).card ∧
+    DkMath.NumberTheory.Legendre.coarseVerticalCapacity {2} 5 = 3 ∧
+      DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount {2} 5 = 5
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:161:0: 'DkMathTest.LegendreFullTownRegression.five_strictly_improves_twoStreet' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:162:0: DkMathTest.LegendreFullTownRegression.verticalDeficitCalibrations : Finset (ℕ × Finset ℕ)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:163:0: 'DkMathTest.LegendreFullTownRegression.verticalDeficitCalibrations' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:164:0: DkMathTest.LegendreFullTownRegression.verticalDeficitCalibrations_certified (c : ℕ × Finset ℕ) :
+  c ∈ DkMathTest.LegendreFullTownRegression.verticalDeficitCalibrations →
+    0 < c.1 ∧
+      DkMath.NumberTheory.StructuralArithmetic.KnownPrimeScales c.2 ∧
+        DkMath.NumberTheory.Legendre.coarseVerticalCapacity c.2 c.1 <
+          DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount c.2 c.1
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:165:0: 'DkMathTest.LegendreFullTownRegression.verticalDeficitCalibrations_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:166:0: DkMathTest.LegendreFullTownRegression.calibrated_vertical_prime_endpoints {n : ℕ} {S : Finset ℕ}
+  (hc : (n, S) ∈ DkMathTest.LegendreFullTownRegression.verticalDeficitCalibrations) :
+  ∃ p, Nat.Prime p ∧ DkMath.NumberTheory.Legendre.SquareCell n p
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:167:0: 'DkMathTest.LegendreFullTownRegression.calibrated_vertical_prime_endpoints' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:168:0: DkMathTest.LegendreFullTownRegression.five_prime_via_vertical_consumer :
+  ∃ p, Nat.Prime p ∧ DkMath.NumberTheory.Legendre.SquareCell 5 p
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:169:0: 'DkMathTest.LegendreFullTownRegression.five_prime_via_vertical_consumer' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:170:0: DkMathTest.LegendreFullTownRegression.eleven_edge_geometry :
+  DkMath.NumberTheory.Legendre.coarseVerticalCapacity {2, 3} 11 =
+      DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount {2, 3} 11 ∧
+    (DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown {2, 3} 11).card = 6 ∧
+      (DkMath.NumberTheory.Primitive.primeScalesUpTo 11).card = 5 ∧
+        DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges {2, 3} 11 = ∅
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:171:0: 'DkMathTest.LegendreFullTownRegression.eleven_edge_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:172:0: DkMathTest.LegendreFullTownRegression.eleven_prime_via_existing_packing_consumer :
+  ∃ p, Nat.Prime p ∧ DkMath.NumberTheory.Legendre.SquareCell 11 p
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:173:0: 'DkMathTest.LegendreFullTownRegression.eleven_prime_via_existing_packing_consumer' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:174:0: DkMathTest.LegendreFullTownRegression.eleven_multiPrime_edge_overcount :
+  (DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges {3} 11).card = 31 ∧
+    ∑ q ∈ DkMath.NumberTheory.Legendre.coarseOutsidePrimes {3} 11,
+        (DkMath.NumberTheory.Legendre.coarseFullTownPrimeFiber {3} 11 q).card.choose 2 =
+      32
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:175:0: 'DkMathTest.LegendreFullTownRegression.eleven_multiPrime_edge_overcount' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:176:0: DkMathTest.LegendreFullTownRegression.five_refinement_phase :
+  (5 ^ 2 + 2) % DkMath.NumberTheory.Primitive.primeWorldModulus {2} = 1 ∧
+    (5 ^ 2 + 2) / DkMath.NumberTheory.Primitive.primeWorldModulus {2} = 13 ∧
+      DkMath.NumberTheory.Primitive.primeWorldChild {2} 1 3 + 13 * DkMath.NumberTheory.Primitive.primeWorldModulus {2} =
+        5 ^ 2 + 2 + 3 * DkMath.NumberTheory.Primitive.primeWorldModulus {2}
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:177:0: 'DkMathTest.LegendreFullTownRegression.five_refinement_phase' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:178:0: DkMathTest.LegendreFullTownRegression.large_anchor_grid :
+  DkMath.NumberTheory.Primitive.primeScalesUpTo 10 = {2, 3, 5, 7} ∧
+    DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount (DkMath.NumberTheory.Primitive.primeScalesUpTo 10) 1031 =
+        9 ∧
+      (DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown (DkMath.NumberTheory.Primitive.primeScalesUpTo 10)
+            1031).card =
+        432
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:179:0: 'DkMathTest.LegendreFullTownRegression.large_anchor_grid' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:180:0: DkMathTest.LegendreFullTownRegression.large_anchor_column_family {r : ℕ}
+  (hr : r ∈ DkMath.NumberTheory.Legendre.coarsePrimeWorldBase (DkMath.NumberTheory.Primitive.primeScalesUpTo 10) 1031) :
+  DkMath.NumberTheory.Legendre.PairwiseOldSupportDisjointSquareSeatFamily 1031
+    (DkMath.NumberTheory.Legendre.coarsePrimeWorldColumn (DkMath.NumberTheory.Primitive.primeScalesUpTo 10) 1031 r)
+info: DkMathTest/NumberTheory/LegendreFullTownAxiomAudit.lean:181:0: 'DkMathTest.LegendreFullTownRegression.large_anchor_column_family' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Build completed successfully (9109 jobs).

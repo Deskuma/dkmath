@@ -87,6 +87,9 @@ import DkMath.NumberTheory.Legendre.CenteredFoldSupportNorm
 import DkMath.NumberTheory.Legendre.CenteredFoldGcdAggregate
 import DkMath.NumberTheory.Legendre.PrimeWorldPacketBridge
 import DkMath.NumberTheory.Legendre.CoarsePrimorialTown
+import DkMath.NumberTheory.Legendre.CoarsePrimeWorldFullTown
+import DkMath.NumberTheory.Legendre.CoarsePrimeWorldVerticalCapacity
+import DkMath.NumberTheory.Legendre.CoarseTownSupportPacking
 
 #print "file: DkMath.NumberTheory.Legendre"
 
