@@ -1,0 +1,27 @@
+Live historical source inventory for checkpoints 016 through 024.
+Headers, imports and named public declaration inventory; no extra existence provider inferred.
+
+016 | DkMath/NumberTheory/Legendre/GnomonPrimorialTransition.lean | 12 | DkMath.NumberTheory.Legendre.GnomonResidueCover,DkMath.NumberTheory.Legendre.CyclotomicPersistence,Mathlib.Data.Nat.Sqrt
+016 | DkMath/NumberTheory/Legendre/GnomonResidueCover.lean | 20 | DkMath.NumberTheory.Legendre.GnomonSuccessor
+016 | DkMath/NumberTheory/Legendre/SquareAnchorCounterexamplePacket.lean | 24 | DkMath.NumberTheory.Legendre.SquareShellWheelPeriod,DkMath.NumberTheory.Legendre.ParitySafeSqrtQuotientConservation,DkMath.NumberTheory.Legendre.ParitySafeFullCoverCapacityFrontier
+016 | DkMath/NumberTheory/Legendre/SquareShellWheelPeriod.lean | 5 | DkMath.NumberTheory.Legendre.GnomonResidueCover
+017 | DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean | 27 | DkMath.NumberTheory.Legendre.CenteredOwnerFold,Mathlib.NumberTheory.LegendreSymbol.Basic
+017 | DkMath/NumberTheory/Legendre/CenteredOwnerFold.lean | 20 | DkMath.NumberTheory.Legendre.QuadraticGnomonFold,DkMath.NumberTheory.Legendre.GnomonPrimorialTransition,DkMath.NumberTheory.Legendre.OldSupportGcd
+017 | DkMath/NumberTheory/Legendre/QuadraticGnomonFold.lean | 27 | DkMath.NumberTheory.Legendre.CenteredPair,DkMath.NumberTheory.Legendre.GnomonResidueCover
+018 | DkMath/NumberTheory/Legendre/CenteredFoldGcdAggregate.lean | 38 | DkMath.NumberTheory.Legendre.CenteredFoldSupportNorm,DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization,Mathlib.Data.Nat.Factorial.DoubleFactorial,Mathlib.Data.Nat.Factorization.Basic,Mathlib.Data.Nat.GCD.BigOperators
+018 | DkMath/NumberTheory/Legendre/CenteredFoldSupportNorm.lean | 27 | DkMath.NumberTheory.Legendre.CenteredOwnerFold,Mathlib.NumberTheory.LegendreSymbol.Basic
+019 | DkMath/NumberTheory/Legendre/CoarsePrimorialTown.lean | 34 | DkMath.NumberTheory.Legendre.PrimeWorldPacketBridge
+019 | DkMath/NumberTheory/Legendre/PacketCross.lean | 21 | DkMath.NumberTheory.Legendre.Quotient,DkMath.NumberTheory.Primitive.CrossPeriod
+019 | DkMath/NumberTheory/Legendre/PrimeWorldPacketBridge.lean | 17 | DkMath.NumberTheory.Primitive.PrimeWorldResidues,DkMath.NumberTheory.Legendre.PacketUnitResidue,DkMath.NumberTheory.Legendre.PrimorialWheelBridge,DkMath.NumberTheory.Legendre.CenteredFoldGcdAggregate
+020 | DkMath/NumberTheory/Legendre/CoarsePrimeWorldFullTown.lean | 25 | DkMath.NumberTheory.Legendre.CoarsePrimorialTown
+020 | DkMath/NumberTheory/Legendre/CoarsePrimeWorldVerticalCapacity.lean | 28 | DkMath.NumberTheory.Legendre.CoarsePrimeWorldFullTown
+020 | DkMath/NumberTheory/Legendre/CoarseTownSupportPacking.lean | 12 | DkMath.NumberTheory.Legendre.CoarsePrimeWorldVerticalCapacity,DkMath.Combinatorics.FinsetSupportPacking
+021 | DkMath/NumberTheory/Legendre/CoarseTownDeletionCapacity.lean | 17 | DkMath.NumberTheory.Legendre.CoarseTownSupportPacking,DkMath.NumberTheory.Legendre.OldSupportCapacityCertificate,Mathlib.Data.Finset.Lattice.Fold
+021 | DkMath/NumberTheory/Legendre/OldSupportCapacityCertificate.lean | 8 | DkMath.NumberTheory.Legendre.OldSupportCapacity
+022 | DkMath/NumberTheory/Legendre/CoarseTownDeletionConservation.lean | 43 | DkMath.NumberTheory.Legendre.CoarseTownSurvivorCapacity
+022 | DkMath/NumberTheory/Legendre/CoarseTownSurvivorCapacity.lean | 15 | DkMath.NumberTheory.Legendre.CoarseTownDeletionCapacity
+023 | DkMath/NumberTheory/Legendre/CoarseTownPrimeHandoff.lean | 32 | DkMath.NumberTheory.Legendre.CoarseTownSymmetricDeletion,Mathlib.Logic.Relation
+023 | DkMath/NumberTheory/Legendre/CoarseTownRetainedDirections.lean | 25 | DkMath.NumberTheory.Legendre.CoarseTownDeletionConservation,DkMath.Combinatorics.FinsetSupportDirections
+023 | DkMath/NumberTheory/Legendre/CoarseTownSymmetricDeletion.lean | 45 | DkMath.NumberTheory.Legendre.CoarseTownRetainedDirections
+024 | DkMath/NumberTheory/Legendre/CoarseTownSourceMultiplicity.lean | 29 | DkMath.NumberTheory.Legendre.CoarseTownTerminalProduct
+024 | DkMath/NumberTheory/Legendre/CoarseTownTerminalProduct.lean | 35 | DkMath.NumberTheory.Legendre.CoarseTownPrimeHandoff,DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization,Mathlib.Algebra.Order.BigOperators.Group.Finset

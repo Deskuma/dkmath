@@ -30,6 +30,8 @@ import DkMath.NumberTheory.BinomialPrimePower  -- NumberTheory.BinomialPrimePowe
 import DkMath.NumberTheory.PascalPrimeDial  -- NumberTheory.PascalPrimeDial: prime-dial heights on Pascal rows
 import DkMath.NumberTheory.Gauge  -- NumberTheory.Gauge: exponent-side Pascal gauge facade
 import DkMath.NumberTheory.PascalPrimeCoordinateDecoder
+import DkMath.NumberTheory.PascalPrebirthBoundary
+import DkMath.NumberTheory.PascalPrebirthBirth
 import DkMath.NumberTheory.Primitive
 import DkMath.NumberTheory.PrimorialUniverse
 import DkMath.NumberTheory.Legendre

@@ -1,0 +1,359 @@
+INFO [1143/1256] Replayed DkMath.Lib.NumberTheory.PadicValNat
+info: DkMath/Lib/NumberTheory/PadicValNat.lean:12:0: file: DkMath.Lib.NumberTheory.PadicValNat
+INFO [1144/1256] Replayed DkMath.ABC.PadicValNat
+info: DkMath/ABC/PadicValNat.lean:9:0: file: DkMath.ABC.PadicValNat
+INFO [1147/1256] Replayed DkMath.NumberTheory.BinomialPrime
+info: DkMath/NumberTheory/BinomialPrime.lean:9:0: file: DkMath.NumberTheory.BinomialPrime
+INFO [1295/1450] Replayed DkMath.NumberTheory.BinomialPrimePower
+info: DkMath/NumberTheory/BinomialPrimePower.lean:13:0: file: DkMath.NumberTheory.BinomialPrimePower
+INFO [1603/1604] Replayed DkMath.NumberTheory.PascalPrebirthBoundary
+info: DkMath/NumberTheory/PascalPrebirthBoundary.lean:10:0: file: DkMath.NumberTheory.PascalPrebirthBoundary
+INFO [8928/8958] Replayed DkMath.Lib.Cosmic.GTail
+info: DkMath/Lib/Cosmic/GTail.lean:10:0: file: DkMath.Lib.Cosmic.GTail
+INFO [8929/8958] Replayed DkMath.Algebra.BinomTail
+info: DkMath/Algebra/BinomTail.lean:15:0: file: DkMath.Algebra.BinomTail
+INFO [8930/8958] Replayed DkMath.Lib.Cosmic.GTailNat
+info: DkMath/Lib/Cosmic/GTailNat.lean:10:0: file: DkMath.Lib.Cosmic.GTailNat
+INFO [8931/8958] Replayed DkMath.Lib.Cosmic.GTailCongruence
+info: DkMath/Lib/Cosmic/GTailCongruence.lean:13:0: file: DkMath.Lib.Cosmic.GTailCongruence
+INFO [8932/8958] Replayed DkMath.Lib.Cosmic.GTailBoundary
+info: DkMath/Lib/Cosmic/GTailBoundary.lean:10:0: file: DkMath.Lib.Cosmic.GTailBoundary
+INFO [8933/8958] Replayed DkMath.Lib.Cosmic.GTailPadic
+info: DkMath/Lib/Cosmic/GTailPadic.lean:12:0: file: DkMath.Lib.Cosmic.GTailPadic
+INFO [8934/8958] Replayed DkMath.CosmicFormula.GTail
+info: DkMath/CosmicFormula/GTail.lean:10:0: file: DkMath.CosmicFormula.GTail
+INFO [8935/8958] Replayed DkMath.CosmicFormula.Defs
+info: DkMath/CosmicFormula/Defs.lean:12:0: file: DkMath.CosmicFormula.Defs
+INFO [8937/8958] Replayed DkMath.CosmicFormula.CosmicFormulaBinom
+info: DkMath/CosmicFormula/CosmicFormulaBinom.lean:15:0: file: DkMath.CosmicFormula.CosmicFormulaBinom
+INFO [8938/8958] Replayed DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+info: DkMath/NumberTheory/StructuralArithmetic/PrimitiveDirection.lean:10:0: file: DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+INFO [8939/8958] Replayed DkMath.NumberTheory.Primitive.FinitePrimeWorld
+info: DkMath/NumberTheory/Primitive/FinitePrimeWorld.lean:11:0: file: DkMath.NumberTheory.Primitive.FinitePrimeWorld
+INFO [8940/8958] Replayed DkMath.NumberTheory.Primitive.SquareBody
+info: DkMath/NumberTheory/Primitive/SquareBody.lean:11:0: file: DkMath.NumberTheory.Primitive.SquareBody
+INFO [8941/8958] Replayed DkMath.NumberTheory.Legendre.Basic
+info: DkMath/NumberTheory/Legendre/Basic.lean:15:0: file: DkMath.NumberTheory.Legendre.Basic
+INFO [8942/8958] Replayed DkMath.Petal.Counting
+info: DkMath/Petal/Counting.lean:13:0: file: DkMath.Petal.Counting
+INFO [8943/8958] Replayed DkMath.Petal.Factorial
+info: DkMath/Petal/Factorial.lean:9:0: file: DkMath.Petal.Factorial
+INFO [8944/8958] Replayed DkMath.Pascal.WallisCosmicPetalBridge
+info: DkMath/Pascal/WallisCosmicPetalBridge.lean:17:0: file: DkMath.Pascal.WallisCosmicPetalBridge
+INFO [8945/8958] Replayed DkMath.Analysis.DkLimit
+info: DkMath/Analysis/DkLimit.lean:11:0: file: DkMath.Analysis.DkLimit
+INFO [8946/8958] Replayed DkMath.Pascal.WallisLimitBridge
+info: DkMath/Pascal/WallisLimitBridge.lean:14:0: file: DkMath.Pascal.WallisLimitBridge
+INFO [8947/8958] Replayed DkMath.Pascal.WallisGrowthBridge
+info: DkMath/Pascal/WallisGrowthBridge.lean:14:0: file: DkMath.Pascal.WallisGrowthBridge
+INFO [8948/8958] Replayed DkMath.Pascal.WallisCellGrowth
+info: DkMath/Pascal/WallisCellGrowth.lean:16:0: file: DkMath.Pascal.WallisCellGrowth
+INFO [8950/8958] Replayed DkMath.CosmicFormula.Mass.BodyGapSplit
+info: DkMath/CosmicFormula/Mass/BodyGapSplit.lean:9:0: file: DkMath.CosmicFormula.Mass.BodyGapSplit
+INFO [8951/8958] Replayed DkMath.NumberTheory.WeightedBinomial
+info: DkMath/NumberTheory/WeightedBinomial.lean:12:0: file: DkMath.NumberTheory.WeightedBinomial
+INFO [8952/8958] Replayed DkMath.NumberTheory.PascalPrimeDial
+info: DkMath/NumberTheory/PascalPrimeDial.lean:9:0: file: DkMath.NumberTheory.PascalPrimeDial
+INFO [8953/8958] Replayed DkMath.NumberTheory.PascalPrimeCoordinateDecoder
+info: DkMath/NumberTheory/PascalPrimeCoordinateDecoder.lean:10:0: file: DkMath.NumberTheory.PascalPrimeCoordinateDecoder
+INFO [8954/8958] Replayed DkMath.NumberTheory.PascalPrebirthBirth
+info: DkMath/NumberTheory/PascalPrebirthBirth.lean:10:0: file: DkMath.NumberTheory.PascalPrebirthBirth
+INFO [8955/8958] Replayed DkMathTest.NumberTheory.PascalPrebirthRegression
+info: DkMathTest/NumberTheory/PascalPrebirthRegression.lean:9:0: file: DkMathTest.NumberTheory.PascalPrebirthRegression
+INFO [8956/8958] Replayed DkMath.NumberTheory.Legendre.GnomonPascalCell
+info: DkMath/NumberTheory/Legendre/GnomonPascalCell.lean:12:0: file: DkMath.NumberTheory.Legendre.GnomonPascalCell
+INFO [8957/8958] Replayed DkMathTest.NumberTheory.LegendrePascalCellCalibration
+info: DkMathTest/NumberTheory/LegendrePascalCellCalibration.lean:10:0: file: DkMathTest.NumberTheory.LegendrePascalCellCalibration
+INFO [8958/8958] Built DkMathTest.NumberTheory.PascalPrebirthAxiomAudit (4.8s)
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:10:0: file: DkMathTest.NumberTheory.PascalPrebirthAxiomAudit
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:13:0: Choose.lucas_theorem_nat {n k p : Nat} [Fact (Nat.Prime p)] {a : Nat} (ha[U+2081] : n < p ^ a) (ha[U+2082] : k < p ^ a) :
+  n.choose k [U+2261] [U+220F] i  in  Finset.range a, (n / p ^ i % p).choose (k / p ^ i % p) [MOD p]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:14:0: Choose.eq_pow_multiplicity_of_choose_modEq_zero_nat {n p : Nat} [Fact (Nat.Prime p)] (hn : 0 < n)
+  (h : forall  i  in  Finset.Icc 1 (n - 1), n.choose i [U+2261] 0 [MOD p]) : n = p ^ multiplicity p n
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:15:0: Choose.gcd_choose_eq_minFac_of_isPrimePow {n : Nat} (h : IsPrimePow n) : (Finset.Icc 1 (n - 1)).gcd n.choose = n.minFac
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:16:0: Choose.gcd_choose_eq_one_of_not_isPrimePow {n : Nat} (hn : 1 < n) (hpn : not IsPrimePow n) :
+  (Finset.Icc 1 (n - 1)).gcd n.choose = 1
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:17:0: Nat.factorization_choose {p n k b : Nat} (hp : Nat.Prime p) (hkn : k  <=  n) (hnb : Nat.log p n < b) :
+  (n.choose k).factorization p = {i  in  Finset.Ico 1 b | p ^ i  <=  k % p ^ i + (n - k) % p ^ i}.card
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:18:0: Nat.factorization_choose_le_log {p n k : Nat} : (n.choose k).factorization p  <=  Nat.log p n
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:19:0: Nat.factorization_choose_le_one {p n k : Nat} (p_large : n < p ^ 2) : (n.choose k).factorization p  <=  1
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:20:0: Nat.factorization_choose_eq_zero_of_lt {p n k : Nat} (h : n < p) : (n.choose k).factorization p = 0
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:21:0: DkMath.NumberTheory.AllInnerChooseDivisible (d m : Nat) : Prop
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:22:0: DkMath.NumberTheory.InnerRowSupportPrime (d p : Nat) : Prop
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:23:0: DkMath.NumberTheory.RowBirthPrime (d p : Nat) : Prop
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:24:0: DkMath.NumberTheory.PrimePowerRowSupport (p n : Nat) : Prop
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:25:0: DkMath.NumberTheory.PrimePrebirthAlternation (p : Nat) : Prop
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:26:0: DkMath.NumberTheory.prime_prebirthAlternation_step {p k : Nat} (hp : Nat.Prime p) (hk : k + 1 < p) :
+  [U+2191]((p - 1).choose (k + 1)) = -[U+2191]((p - 1).choose k)
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:27:0: DkMath.NumberTheory.prime_prebirthAlternation {p : Nat} (hp : Nat.Prime p) :
+  DkMath.NumberTheory.PrimePrebirthAlternation p
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:28:0: DkMath.NumberTheory.prime_power_allInnerChooseDivisible {p n : Nat} (hp : Nat.Prime p) :
+  DkMath.NumberTheory.AllInnerChooseDivisible (p ^ n) p
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:29:0: DkMath.NumberTheory.prime_power_rowBirthPrime {p n : Nat} (hp : Nat.Prime p) (hn : 0 < n) :
+  DkMath.NumberTheory.RowBirthPrime (p ^ n) p
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:30:0: DkMath.NumberTheory.padicValNat_choose_prime_pow {p n k : Nat} (hp : Nat.Prime p) (hkn : k  <=  p ^ n) (hk0 : k [U+2260] 0) :
+  padicValNat p ((p ^ n).choose k) = n - padicValNat p k
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:31:0: DkMath.NumberTheory.padicValNat_choose_prime_pow_add_index {p n k : Nat} (hp : Nat.Prime p) (hkn : k  <=  p ^ n)
+  (hk0 : k [U+2260] 0) : padicValNat p ((p ^ n).choose k) + padicValNat p k = n
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:32:0: DkMath.NumberTheory.pascalPrimeDialHeight_prime_pow_add_index {p n k : Nat} (hp : Nat.Prime p) (hkn : k  <=  p ^ n)
+  (hk0 : k [U+2260] 0) : DkMath.NumberTheory.pascalPrimeDialHeight p (p ^ n) k + padicValNat p k = n
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:33:0: DkMath.NumberTheory.pascalPrimeDialHeight_prime_pow {p n k : Nat} (hp : Nat.Prime p) (hkn : k  <=  p ^ n) (hk0 : k [U+2260] 0) :
+  DkMath.NumberTheory.pascalPrimeDialHeight p (p ^ n) k = n - padicValNat p k
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:34:0: DkMath.NumberTheory.prime_power_unitFilteredPrimeDialHeight {p n : Nat} (hp : Nat.Prime p) :
+  DkMath.NumberTheory.FilteredPrimeDialHeight (p ^ n) p n fun k [U+21A6] not p [U+2223] k
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:35:0: DkMath.NumberTheory.prime_not_dvd_pascalCoeffMass_of_row_lt {p n k : Nat} (hp : Nat.Prime p) (hnp : n < p) (hkn : k  <=  n) :
+  not p [U+2223] DkMath.NumberTheory.pascalCoeffMass n k
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:36:0: DkMath.NumberTheory.pascalPrimeCoordinateBirthSupport (n : Nat) : Finset Nat
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:37:0: DkMath.NumberTheory.pascalPrimeBirthLogMass (n : Nat) : Real
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:38:0: DkMath.NumberTheory.pascalPrimeBirthLogMass_eq (n : Nat) :
+  DkMath.NumberTheory.pascalPrimeBirthLogMass n = if Nat.Prime n then Real.log [U+2191]n else 0
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:39:0: DkMath.NumberTheory.pascalPrimeCoordinateSupportUpTo_succ (N : Nat) :
+  DkMath.NumberTheory.pascalPrimeCoordinateSupportUpTo (N + 1) =
+    if Nat.Prime (N + 1) then insert (N + 1) (DkMath.NumberTheory.pascalPrimeCoordinateSupportUpTo N)
+    else DkMath.NumberTheory.pascalPrimeCoordinateSupportUpTo N
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:40:0: DkMath.Pascal.WallisGrowthBridge.centralRatioQ_sq_eq_odd_mul_wallisPartialQ (m : Nat) :
+  DkMath.Pascal.WallisCosmicPetalBridge.centralRatioQ m ^ 2 =
+    (2 * [U+2191]m + 1) * DkMath.Pascal.WallisCosmicPetalBridge.wallisPartialQ m
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:41:0: DkMath.Pascal.WallisCellGrowth.pascalCellGrowthQ_eq_cast_choose (n k : Nat) :
+  DkMath.Pascal.WallisCellGrowth.pascalCellGrowthQ n k = [U+2191](n.choose k)
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:44:0: 'DkMath.NumberTheory.AllInnerChooseDivisible' does not depend on any axioms
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:45:0: 'DkMath.NumberTheory.InnerRowSupportPrime' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:46:0: 'DkMath.NumberTheory.RowBirthPrime' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:47:0: 'DkMath.NumberTheory.prime_allInnerChooseDivisible_self' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:48:0: 'DkMath.NumberTheory.prime_dvd_inner_choose' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:49:0: 'DkMath.NumberTheory.allInnerChooseDivisible_dvd_choose' does not depend on any axioms
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:50:0: 'DkMath.NumberTheory.innerRowSupportPrime_dvd_choose' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:51:0: 'DkMath.NumberTheory.innerRowSupportPrime_prime' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:52:0: 'DkMath.NumberTheory.prime_innerRowSupportPrime_self' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:53:0: 'DkMath.NumberTheory.prime_rowBirthPrime_self' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:54:0: 'DkMath.NumberTheory.rowBirthPrime_innerRowSupportPrime' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:55:0: 'DkMath.NumberTheory.rowBirthPrime_prime' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:56:0: 'DkMath.NumberTheory.rowBirthPrime_dvd_row' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:57:0: 'DkMath.NumberTheory.rowBirthPrime_dvd_choose' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:60:0: 'DkMath.NumberTheory.PrimePowerRowSupport' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:61:0: 'DkMath.NumberTheory.UniformBeamHeight' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:62:0: 'DkMath.NumberTheory.FilteredBeamHeight' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:63:0: 'DkMath.NumberTheory.FilteredBeamHeight.dvd_choose_of_height_ge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:64:0: 'DkMath.NumberTheory.UniformBeamHeight.dvd_choose_of_height_ge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:65:0: 'DkMath.NumberTheory.BeamBirthBoundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:66:0: 'DkMath.NumberTheory.BeamBirthBoundaryObstruction' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:67:0: 'DkMath.NumberTheory.PascalPrebirthAlternationMod' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:68:0: 'DkMath.NumberTheory.pascalCancellationDefect' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:69:0: 'DkMath.NumberTheory.pascalCancellationDefect_eq' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:70:0: 'DkMath.NumberTheory.pascalCancellationDefect_eq_zero_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:71:0: 'DkMath.NumberTheory.allInnerChooseDivisible_prebirth_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:72:0: 'DkMath.NumberTheory.pascalPrebirthAlternationMod_iff_allInnerChooseDivisible' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:73:0: 'DkMath.NumberTheory.PrimePrebirthAlternation' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:74:0: 'DkMath.NumberTheory.primePrebirthAlternation_iff' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:75:0: 'DkMath.NumberTheory.prime_power_allInnerChooseDivisible' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:76:0: 'DkMath.NumberTheory.prime_power_innerRowSupportPrime' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:77:0: 'DkMath.NumberTheory.prime_power_rowBirthPrime' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:78:0: 'DkMath.NumberTheory.prime_power_rowSupport' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:79:0: 'DkMath.NumberTheory.padicValNat_choose_prime_pow' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:80:0: 'DkMath.NumberTheory.padicValNat_choose_prime_pow_add_index' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:81:0: 'DkMath.NumberTheory.prime_power_pow_dvd_choose_of_padicValNat_index' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:82:0: 'DkMath.NumberTheory.UniformBeamHeight.allInnerChooseDivisible' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:83:0: 'DkMath.NumberTheory.UniformBeamHeight.innerRowSupportPrime' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:84:0: 'DkMath.NumberTheory.below_prime_uniformBeamHeight_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:85:0: 'DkMath.NumberTheory.below_prime_not_dvd_inner_choose' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:86:0: 'DkMath.NumberTheory.prime_uniformBeamHeight_self' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:87:0: 'DkMath.NumberTheory.prime_beamBirthBoundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:88:0: 'DkMath.NumberTheory.prime_prebirthAlternation_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:89:0: 'DkMath.NumberTheory.prime_prebirthAlternation' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:90:0: 'DkMath.NumberTheory.prime_power_prebirthAlternation' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:91:0: 'DkMath.NumberTheory.prime_power_prebirth_packet' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:92:0: 'DkMath.NumberTheory.BeamBirthBoundary.below' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:93:0: 'DkMath.NumberTheory.BeamBirthBoundary.self' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:94:0: 'DkMath.NumberTheory.BeamBirthBoundary.innerRowSupportPrime' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:95:0: 'DkMath.NumberTheory.not_beamBirthBoundary_of_obstruction' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:96:0: 'DkMath.NumberTheory.not_obstruction_of_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:97:0: 'DkMath.NumberTheory.prime_innerRowSupportPrime_self_of_uniformBeamHeight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:98:0: 'DkMath.NumberTheory.prime_power_unitFilteredBeamHeight' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:99:0: 'DkMath.NumberTheory.prime_power_dvd_choose_of_not_dvd_index' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:100:0: 'DkMath.NumberTheory.prime_power_unitFilteredBeamHeight_dvd_choose' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:103:0: 'DkMath.NumberTheory.pascalInnerCommonDivisor' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:104:0: 'DkMath.NumberTheory.dvd_pascalInnerCommonDivisor_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:105:0: 'DkMath.NumberTheory.pascalPrebirthAlternationMod_iff_dvd_commonDivisor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:106:0: 'DkMath.NumberTheory.allInnerChooseDivisible_prime_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:107:0: 'DkMath.NumberTheory.pascalPrebirthAlternationMod_prime_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:108:0: 'DkMath.NumberTheory.pascalInnerCommonDivisor_eq_minFac' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:109:0: 'DkMath.NumberTheory.pascalInnerCommonDivisor_eq_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:110:0: 'DkMath.NumberTheory.pascalInnerCommonDivisor_eq_self_of_prime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:111:0: 'DkMath.NumberTheory.prime_iff_allInnerChooseDivisible_self' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:112:0: 'DkMath.NumberTheory.pascalInnerCommonDivisor_eq_self_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:113:0: 'DkMath.NumberTheory.prime_iff_prebirthAlternation_self' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:114:0: 'DkMath.NumberTheory.pascalInnerCommonDivisor_prime_pow' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:117:0: 'DkMath.NumberTheory.pascalCancellationDefect_zero_iff_dial_pos' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:118:0: 'DkMath.NumberTheory.pascalCancellationDefect_ne_zero_of_next_row_lt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:119:0: 'DkMath.NumberTheory.prime_prebirth_birth_packet' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:120:0: 'DkMath.NumberTheory.prime_power_coordinate_birth_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:121:0: 'DkMath.NumberTheory.prime_power_resynchronization_packet' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:122:0: 'DkMath.NumberTheory.pascalPrimeBirthLogMass_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:123:0: 'DkMath.NumberTheory.pascalPrimeBirthLogMass_pos_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:124:0: 'DkMath.NumberTheory.pascalPrimePowerLogGauge' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:125:0: 'DkMath.NumberTheory.pascalPrimePowerLogGauge_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:128:0: 'DkMath.NumberTheory.Legendre.GnomonPascalCell' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:129:0: 'DkMath.NumberTheory.Legendre.gnomonPascalCell_mul_factorial' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:130:0: 'DkMath.NumberTheory.Legendre.prime_dvd_gnomonPascalCell_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:131:0: 'DkMath.NumberTheory.Legendre.exists_prime_squareCell_iff_gnomonPascalCell' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:132:0: 'DkMath.NumberTheory.Legendre.gnomonPascalCell_ratio' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:133:0: 'DkMath.NumberTheory.Legendre.gnomonPascalCell_factorization_carries' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:134:0: 'DkMath.NumberTheory.Legendre.gnomonPascalCell_fresh_height_le_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:135:0: 'DkMath.NumberTheory.Legendre.gnomonPascalCell_fresh_height_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:136:0: 'DkMath.NumberTheory.Legendre.gnomonPascalShellBirthLogMass' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:137:0: 'DkMath.NumberTheory.Legendre.gnomonPascalShellBirthLogMass_nonneg' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:138:0: 'DkMath.NumberTheory.Legendre.gnomonPascalShellBirthLogMass_pos_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:139:0: 'DkMath.NumberTheory.Legendre.gnomonPascalCell_fresh_logWeight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:140:0: 'DkMath.NumberTheory.Legendre.gnomonPascalCell_fresh_logLedger' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:141:0: 'DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:142:0: 'DkMath.NumberTheory.Legendre.gnomonPascalCell_log_factorization' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:143:0: 'DkMath.NumberTheory.Legendre.gnomonPascalShellBirthLogMass_eq_range' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:144:0: 'DkMath.NumberTheory.Legendre.gnomonPascalCell_log_eq_old_add_birth' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:145:0: 'DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_lt_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:146:0: 'DkMath.NumberTheory.Legendre.legendreConjecture_iff_pascalOldBudget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:149:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.nonzeroDefectCount' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:150:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.phaseMismatchCount' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:151:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.centeredDefectSum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:152:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.diagnostic_residue_zero_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:153:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.binary_raw_increase_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:154:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.prime_raw_increase_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:155:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.prime_phase_increase_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:156:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.normalized_increase_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:157:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.modulus_two_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:158:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.degenerate_moduli_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:159:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.row2_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:160:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.row3_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:161:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.row5_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:162:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.row7_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:163:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.row4_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:164:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.row8_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:165:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.row9_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:166:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.row25_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:167:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.row27_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:168:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.nonpower_rows_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:169:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.dials_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:170:0: 'DkMathTest.NumberTheory.PascalPrebirthRegression.resynchronization_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:173:0: 'DkMathTest.NumberTheory.LegendrePascalCellCalibration.wallisCellGrowth_bridge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:174:0: 'DkMathTest.NumberTheory.LegendrePascalCellCalibration.report024_arithmetic_checked' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:175:0: 'DkMathTest.NumberTheory.LegendrePascalCellCalibration.anchor5_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:176:0: 'DkMathTest.NumberTheory.LegendrePascalCellCalibration.anchor11_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:177:0: 'DkMathTest.NumberTheory.LegendrePascalCellCalibration.anchor19_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:178:0: 'DkMathTest.NumberTheory.LegendrePascalCellCalibration.anchor29_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:179:0: 'DkMathTest.NumberTheory.LegendrePascalCellCalibration.anchor297_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:180:0: 'DkMathTest.NumberTheory.LegendrePascalCellCalibration.anchor1031_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:181:0: 'DkMathTest.NumberTheory.LegendrePascalCellCalibration.anchor_zero_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:182:0: 'DkMathTest.NumberTheory.LegendrePascalCellCalibration.ratio_zero_obstruction_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/PascalPrebirthAxiomAudit.lean:183:0: 'DkMathTest.NumberTheory.LegendrePascalCellCalibration.old_budget_consumer' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Build completed successfully (8958 jobs).

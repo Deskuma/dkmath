@@ -1,0 +1,16 @@
+{
+  "command": [
+    "lake",
+    "build",
+    "DkMath.NumberTheory.BinomialPrime",
+    "DkMath.NumberTheory.BinomialPrimePower",
+    "DkMath.NumberTheory.PascalPrebirthBoundary",
+    "DkMath.NumberTheory.PascalPrebirthBirth",
+    "DkMath.NumberTheory.Legendre.GnomonPascalCell",
+    "DkMathTest.NumberTheory.PascalPrebirthRegression",
+    "DkMathTest.NumberTheory.LegendrePascalCellCalibration"
+  ],
+  "LEAN_NUM_THREADS": 2,
+  "exit_code": 0,
+  "elapsed_seconds": 12.34
+}

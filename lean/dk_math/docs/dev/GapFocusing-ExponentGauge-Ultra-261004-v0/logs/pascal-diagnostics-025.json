@@ -1,0 +1,846 @@
+{
+  "rows": [
+    {
+      "N": 2,
+      "gcd": 2,
+      "prime": true,
+      "prime_power": true,
+      "base": 2,
+      "exponent": 1,
+      "selected_modulus": 2,
+      "prebirth": true,
+      "common_next": true,
+      "dials": {
+        "1": 1
+      }
+    },
+    {
+      "N": 3,
+      "gcd": 3,
+      "prime": true,
+      "prime_power": true,
+      "base": 3,
+      "exponent": 1,
+      "selected_modulus": 3,
+      "prebirth": true,
+      "common_next": true,
+      "dials": {
+        "1": 1,
+        "2": 1
+      }
+    },
+    {
+      "N": 4,
+      "gcd": 2,
+      "prime": false,
+      "prime_power": true,
+      "base": 2,
+      "exponent": 2,
+      "selected_modulus": 2,
+      "prebirth": true,
+      "common_next": true,
+      "dials": {
+        "1": 2,
+        "2": 1,
+        "3": 2
+      }
+    },
+    {
+      "N": 5,
+      "gcd": 5,
+      "prime": true,
+      "prime_power": true,
+      "base": 5,
+      "exponent": 1,
+      "selected_modulus": 5,
+      "prebirth": true,
+      "common_next": true,
+      "dials": {
+        "1": 1,
+        "2": 1,
+        "4": 1
+      }
+    },
+    {
+      "N": 6,
+      "gcd": 1,
+      "prime": false,
+      "prime_power": false,
+      "base": null,
+      "exponent": null,
+      "selected_modulus": 2,
+      "prebirth": false,
+      "common_next": false,
+      "dials": {
+        "1": 1,
+        "2": 0,
+        "3": 2,
+        "5": 1
+      }
+    },
+    {
+      "N": 7,
+      "gcd": 7,
+      "prime": true,
+      "prime_power": true,
+      "base": 7,
+      "exponent": 1,
+      "selected_modulus": 7,
+      "prebirth": true,
+      "common_next": true,
+      "dials": {
+        "1": 1,
+        "3": 1,
+        "6": 1
+      }
+    },
+    {
+      "N": 8,
+      "gcd": 2,
+      "prime": false,
+      "prime_power": true,
+      "base": 2,
+      "exponent": 3,
+      "selected_modulus": 2,
+      "prebirth": true,
+      "common_next": true,
+      "dials": {
+        "1": 3,
+        "2": 2,
+        "4": 1,
+        "7": 3
+      }
+    },
+    {
+      "N": 9,
+      "gcd": 3,
+      "prime": false,
+      "prime_power": true,
+      "base": 3,
+      "exponent": 2,
+      "selected_modulus": 3,
+      "prebirth": true,
+      "common_next": true,
+      "dials": {
+        "1": 2,
+        "3": 1,
+        "4": 2,
+        "8": 2
+      }
+    },
+    {
+      "N": 10,
+      "gcd": 1,
+      "prime": false,
+      "prime_power": false,
+      "base": null,
+      "exponent": null,
+      "selected_modulus": 2,
+      "prebirth": false,
+      "common_next": false,
+      "dials": {
+        "1": 1,
+        "2": 0,
+        "5": 2,
+        "9": 1
+      }
+    },
+    {
+      "N": 12,
+      "gcd": 1,
+      "prime": false,
+      "prime_power": false,
+      "base": null,
+      "exponent": null,
+      "selected_modulus": 2,
+      "prebirth": false,
+      "common_next": false,
+      "dials": {
+        "1": 2,
+        "2": 1,
+        "6": 2,
+        "11": 2
+      }
+    },
+    {
+      "N": 15,
+      "gcd": 1,
+      "prime": false,
+      "prime_power": false,
+      "base": null,
+      "exponent": null,
+      "selected_modulus": 3,
+      "prebirth": false,
+      "common_next": false,
+      "dials": {
+        "1": 1,
+        "3": 0,
+        "7": 2,
+        "14": 1
+      }
+    },
+    {
+      "N": 25,
+      "gcd": 5,
+      "prime": false,
+      "prime_power": true,
+      "base": 5,
+      "exponent": 2,
+      "selected_modulus": 5,
+      "prebirth": true,
+      "common_next": true,
+      "dials": {
+        "1": 2,
+        "5": 1,
+        "12": 2,
+        "24": 2
+      }
+    },
+    {
+      "N": 27,
+      "gcd": 3,
+      "prime": false,
+      "prime_power": true,
+      "base": 3,
+      "exponent": 3,
+      "selected_modulus": 3,
+      "prebirth": true,
+      "common_next": true,
+      "dials": {
+        "1": 3,
+        "3": 2,
+        "13": 3,
+        "26": 3
+      }
+    }
+  ],
+  "monotonicity": {
+    "prime": {
+      "order": "p ascending, a ascending, row ascending; rows start at one",
+      "targets": [
+        [
+          2,
+          1,
+          2
+        ],
+        [
+          3,
+          1,
+          3
+        ],
+        [
+          5,
+          1,
+          5
+        ],
+        [
+          7,
+          1,
+          7
+        ],
+        [
+          11,
+          1,
+          11
+        ],
+        [
+          13,
+          1,
+          13
+        ],
+        [
+          17,
+          1,
+          17
+        ],
+        [
+          19,
+          1,
+          19
+        ],
+        [
+          23,
+          1,
+          23
+        ],
+        [
+          29,
+          1,
+          29
+        ],
+        [
+          31,
+          1,
+          31
+        ]
+      ],
+      "transitions": 138,
+      "first_increase": {
+        "nonzero_adjacent": {
+          "p": 5,
+          "a": 1,
+          "N": 5,
+          "row": 1,
+          "next_row": 2,
+          "before": 1,
+          "after": 2
+        },
+        "phase_mismatch": {
+          "p": 5,
+          "a": 1,
+          "N": 5,
+          "row": 2,
+          "next_row": 3,
+          "before": 1,
+          "after": 3
+        },
+        "centered_adjacent": {
+          "p": 5,
+          "a": 1,
+          "N": 5,
+          "row": 1,
+          "next_row": 2,
+          "before": 2,
+          "after": 4
+        },
+        "nonzero_adjacent_per_d": null,
+        "phase_mismatch_per_d_plus_one": {
+          "p": 5,
+          "a": 1,
+          "N": 5,
+          "row": 2,
+          "next_row": 3,
+          "before": "1/3",
+          "after": "3/4"
+        },
+        "centered_adjacent_per_d": {
+          "p": 7,
+          "a": 1,
+          "N": 7,
+          "row": 1,
+          "next_row": 2,
+          "before": "2",
+          "after": "3"
+        }
+      }
+    },
+    "prime_power": {
+      "order": "p ascending, a ascending, row ascending; rows start at one",
+      "targets": [
+        [
+          2,
+          2,
+          4
+        ],
+        [
+          2,
+          3,
+          8
+        ],
+        [
+          2,
+          4,
+          16
+        ],
+        [
+          2,
+          5,
+          32
+        ],
+        [
+          2,
+          6,
+          64
+        ],
+        [
+          2,
+          7,
+          128
+        ],
+        [
+          3,
+          2,
+          9
+        ],
+        [
+          3,
+          3,
+          27
+        ],
+        [
+          3,
+          4,
+          81
+        ],
+        [
+          5,
+          2,
+          25
+        ],
+        [
+          5,
+          3,
+          125
+        ],
+        [
+          7,
+          2,
+          49
+        ],
+        [
+          11,
+          2,
+          121
+        ]
+      ],
+      "transitions": 663,
+      "first_increase": {
+        "nonzero_adjacent": {
+          "p": 2,
+          "a": 2,
+          "N": 4,
+          "row": 1,
+          "next_row": 2,
+          "before": 0,
+          "after": 2
+        },
+        "phase_mismatch": {
+          "p": 2,
+          "a": 2,
+          "N": 4,
+          "row": 1,
+          "next_row": 2,
+          "before": 0,
+          "after": 1
+        },
+        "centered_adjacent": {
+          "p": 2,
+          "a": 2,
+          "N": 4,
+          "row": 1,
+          "next_row": 2,
+          "before": 0,
+          "after": 2
+        },
+        "nonzero_adjacent_per_d": {
+          "p": 2,
+          "a": 2,
+          "N": 4,
+          "row": 1,
+          "next_row": 2,
+          "before": "0",
+          "after": "1"
+        },
+        "phase_mismatch_per_d_plus_one": {
+          "p": 2,
+          "a": 2,
+          "N": 4,
+          "row": 1,
+          "next_row": 2,
+          "before": "0",
+          "after": "1/3"
+        },
+        "centered_adjacent_per_d": {
+          "p": 2,
+          "a": 2,
+          "N": 4,
+          "row": 1,
+          "next_row": 2,
+          "before": "0",
+          "after": "1"
+        }
+      }
+    }
+  },
+  "anchors": [
+    {
+      "full_factorization_checked": true,
+      "n": 5,
+      "top": 35,
+      "index": 10,
+      "ratio": "2/7",
+      "support_card": 8,
+      "old_support_card": 6,
+      "max_height": 2,
+      "fresh_count": 2,
+      "fresh_primes": [
+        29,
+        31
+      ],
+      "selected_heights": {
+        "2": 2,
+        "3": 1,
+        "7": 1,
+        "11": 1,
+        "13": 1,
+        "17": 1
+      },
+      "log_cell_approx": 19.028157807631057,
+      "old_log_approx": 12.226874773159437,
+      "shell_birth_log_approx": 6.80128303447162
+    },
+    {
+      "full_factorization_checked": true,
+      "n": 11,
+      "top": 143,
+      "index": 22,
+      "ratio": "2/13",
+      "support_card": 16,
+      "old_support_card": 12,
+      "max_height": 3,
+      "fresh_count": 4,
+      "fresh_primes": [
+        127,
+        131,
+        137,
+        139
+      ],
+      "selected_heights": {
+        "2": 3,
+        "3": 1,
+        "5": 2,
+        "13": 1
+      },
+      "log_cell_approx": 59.008365846424056,
+      "old_log_approx": 39.4345265778055,
+      "shell_birth_log_approx": 19.57383926861856
+    },
+    {
+      "full_factorization_checked": true,
+      "n": 19,
+      "top": 399,
+      "index": 38,
+      "ratio": "2/21",
+      "support_card": 28,
+      "old_support_card": 22,
+      "max_height": 2,
+      "fresh_count": 6,
+      "fresh_primes": [
+        367,
+        373,
+        379,
+        383,
+        389,
+        397
+      ],
+      "selected_heights": {
+        "2": 2,
+        "3": 1,
+        "5": 1,
+        "7": 2,
+        "11": 2,
+        "13": 1
+      },
+      "log_cell_approx": 122.79248351087897,
+      "old_log_approx": 87.13245642461187,
+      "shell_birth_log_approx": 35.66002708626709
+    },
+    {
+      "full_factorization_checked": true,
+      "n": 29,
+      "top": 899,
+      "index": 58,
+      "ratio": "2/31",
+      "support_card": 43,
+      "old_support_card": 35,
+      "max_height": 4,
+      "fresh_count": 8,
+      "fresh_primes": [
+        853,
+        857,
+        859,
+        863,
+        877,
+        881,
+        883,
+        887
+      ],
+      "selected_heights": {
+        "2": 4,
+        "3": 1,
+        "5": 1,
+        "11": 1,
+        "13": 2,
+        "17": 1
+      },
+      "log_cell_approx": 212.13890982964458,
+      "old_log_approx": 157.9917939492655,
+      "shell_birth_log_approx": 54.14711588037905
+    },
+    {
+      "full_factorization_checked": true,
+      "n": 297,
+      "top": 88803,
+      "index": 594,
+      "ratio": "2/299",
+      "support_card": 421,
+      "old_support_card": 376,
+      "max_height": 4,
+      "fresh_count": 45,
+      "fresh_primes": [
+        88211,
+        88223,
+        88237,
+        88241,
+        88259,
+        88261,
+        88289,
+        88301,
+        88321,
+        88327,
+        88337,
+        88339,
+        88379,
+        88397,
+        88411,
+        88423,
+        88427,
+        88463,
+        88469,
+        88471,
+        88493,
+        88499,
+        88513,
+        88523,
+        88547,
+        88589,
+        88591,
+        88607,
+        88609,
+        88643,
+        88651,
+        88657,
+        88661,
+        88663,
+        88667,
+        88681,
+        88721,
+        88729,
+        88741,
+        88747,
+        88771,
+        88789,
+        88793,
+        88799,
+        88801
+      ],
+      "selected_heights": {
+        "2": 1,
+        "5": 4,
+        "7": 1,
+        "13": 2,
+        "17": 2
+      },
+      "log_cell_approx": 3562.2338281394836,
+      "old_log_approx": 3049.6411111805673,
+      "shell_birth_log_approx": 512.5927169589162
+    },
+    {
+      "full_factorization_checked": true,
+      "n": 1031,
+      "top": 1065023,
+      "index": 2062,
+      "ratio": "2/1033",
+      "support_card": 1449,
+      "old_support_card": 1289,
+      "max_height": 3,
+      "fresh_count": 160,
+      "fresh_primes": [
+        1062977,
+        1062979,
+        1062989,
+        1063001,
+        1063009,
+        1063019,
+        1063033,
+        1063039,
+        1063043,
+        1063067,
+        1063079,
+        1063087,
+        1063109,
+        1063123,
+        1063151,
+        1063157,
+        1063159,
+        1063177,
+        1063189,
+        1063193,
+        1063201,
+        1063213,
+        1063219,
+        1063241,
+        1063243,
+        1063273,
+        1063303,
+        1063319,
+        1063351,
+        1063379,
+        1063397,
+        1063399,
+        1063409,
+        1063427,
+        1063441,
+        1063453,
+        1063457,
+        1063463,
+        1063471,
+        1063477,
+        1063483,
+        1063501,
+        1063523,
+        1063529,
+        1063541,
+        1063547,
+        1063553,
+        1063561,
+        1063597,
+        1063609,
+        1063613,
+        1063619,
+        1063627,
+        1063637,
+        1063649,
+        1063661,
+        1063693,
+        1063709,
+        1063721,
+        1063729,
+        1063739,
+        1063747,
+        1063757,
+        1063771,
+        1063781,
+        1063813,
+        1063823,
+        1063831,
+        1063837,
+        1063847,
+        1063849,
+        1063871,
+        1063873,
+        1063891,
+        1063897,
+        1063903,
+        1063913,
+        1063919,
+        1063921,
+        1063927,
+        1063961,
+        1063963,
+        1063967,
+        1063969,
+        1063973,
+        1063987,
+        1063999,
+        1064017,
+        1064029,
+        1064059,
+        1064069,
+        1064087,
+        1064117,
+        1064131,
+        1064153,
+        1064159,
+        1064177,
+        1064179,
+        1064191,
+        1064197,
+        1064201,
+        1064243,
+        1064257,
+        1064263,
+        1064269,
+        1064281,
+        1064311,
+        1064317,
+        1064321,
+        1064333,
+        1064339,
+        1064341,
+        1064359,
+        1064377,
+        1064383,
+        1064407,
+        1064411,
+        1064431,
+        1064467,
+        1064471,
+        1064473,
+        1064477,
+        1064507,
+        1064519,
+        1064521,
+        1064533,
+        1064549,
+        1064587,
+        1064593,
+        1064629,
+        1064653,
+        1064669,
+        1064671,
+        1064681,
+        1064689,
+        1064699,
+        1064731,
+        1064737,
+        1064743,
+        1064753,
+        1064771,
+        1064783,
+        1064801,
+        1064813,
+        1064867,
+        1064873,
+        1064911,
+        1064927,
+        1064933,
+        1064939,
+        1064941,
+        1064951,
+        1064953,
+        1064957,
+        1064977,
+        1064989,
+        1065011,
+        1065013,
+        1065017,
+        1065019
+      ],
+      "selected_heights": {
+        "2": 3,
+        "3": 2,
+        "5": 2,
+        "7": 2,
+        "11": 2,
+        "13": 1,
+        "19": 2
+      },
+      "log_cell_approx": 14936.738101951527,
+      "old_log_approx": 12716.33382603408,
+      "shell_birth_log_approx": 2220.4042759174454
+    }
+  ],
+  "preflight": [
+    {
+      "n": 297,
+      "r": 350,
+      "point": 88559,
+      "factors": [
+        19,
+        59,
+        79
+      ]
+    },
+    {
+      "n": 1031,
+      "r": 90,
+      "point": 1063051,
+      "factors": [
+        11,
+        241,
+        401
+      ]
+    }
+  ]
+}
