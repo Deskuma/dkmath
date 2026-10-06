@@ -103,6 +103,7 @@ import DkMath.NumberTheory.Legendre.GnomonPascalCell
 import DkMath.NumberTheory.Legendre.SquareShellPrimePower
 import DkMath.NumberTheory.Legendre.SquareShellVonMangoldt
 import DkMath.NumberTheory.Legendre.SquareShellPrimePowerGauge
+import DkMath.NumberTheory.Legendre.GnomonDivisorCarry
 
 #print "file: DkMath.NumberTheory.Legendre"
 

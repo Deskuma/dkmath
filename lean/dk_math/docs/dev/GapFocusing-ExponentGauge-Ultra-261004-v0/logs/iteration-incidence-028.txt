@@ -1,0 +1,9 @@
+WARNING [1983/1983] Built DkMath.NumberTheory.DivisorIncidence (2.2s)
+info: DkMath/NumberTheory/DivisorIncidence.lean:11:0: file: DkMath.NumberTheory.DivisorIncidence
+warning: DkMath/NumberTheory/DivisorIncidence.lean:20:39: Variable name `hd` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hd
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Build completed successfully (1983 jobs).
