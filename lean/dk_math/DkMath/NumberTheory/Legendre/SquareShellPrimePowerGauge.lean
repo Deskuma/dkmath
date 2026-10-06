@@ -6,11 +6,13 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.Legendre.SquareShellPrimePower
 import DkMath.NumberTheory.Legendre.SquareShellVonMangoldt
+import DkMath.NumberTheory.OddReciprocal
 
 #print "file: DkMath.NumberTheory.Legendre.SquareShellPrimePowerGauge"
 
-/-! Small higher-power budgets and conditional prime providers.
-The missing ingredient remains a lower bound for the shell von Mangoldt mass. -/
+/-! Canonical depth gauges, finite harmonic correction budgets, and conditional
+prime providers. The missing ingredient remains a lower bound for the shell
+von Mangoldt mass. No asymptotic estimate is asserted by a budget name. -/
 
 namespace DkMath.NumberTheory.Legendre
 
@@ -217,5 +219,225 @@ theorem gnomon_top_innerCommonDivisor_eq_one {n : ℕ} (hn : 3 ≤ n) :
   apply pascalInnerCommonDivisor_eq_one (by nlinarith : 1 < n ^ 2 + 2 * n)
   rw [he]
   exact gnomon_top_not_isPrimePow hn
+
+/-! Odd-depth reciprocal compression. All prime providers retain a strict
+lower shell-mass hypothesis; no asymptotic statement is asserted. -/
+
+/-- Occupied canonical depths, with no inverse-event choice. -/
+def shellHigherPrimePowerDepths (n : ℕ) : Finset ℕ :=
+  (shellHigherPrimePowerEvents n).image (fun q => q.factorization q.minFac)
+
+@[simp] theorem mem_shellHigherPrimePowerDepths {n a : ℕ} :
+    a ∈ shellHigherPrimePowerDepths n ↔
+      ∃ q ∈ shellHigherPrimePowerEvents n, a = q.factorization q.minFac := by
+  simp only [shellHigherPrimePowerDepths, Finset.mem_image, eq_comm]
+
+/-- The canonical image has odd depths from three to the binary cutoff. -/
+theorem shellHigherPrimePowerDepths_bounds {n a : ℕ} (ha : a ∈ shellHigherPrimePowerDepths n) :
+    3 ≤ a ∧ Odd a ∧ a ≤ Nat.log 2 ((n + 1) ^ 2) := by
+  obtain ⟨q, hq, rfl⟩ := mem_shellHigherPrimePowerDepths.mp ha
+  have h := mem_shellHigherPrimePowerEvents.mp hq
+  have c := shell_higher_primePower_canonical h.1 h.2.1 h.2.2
+  refine ⟨c.2.1, c.2.2.1, squareCell_prime_power_exponent_le_log c.1 ?_⟩
+  rw [← c.2.2.2.1]; exact h.1
+
+/-- The injective image preserves the complete event count. -/
+theorem card_shellHigherPrimePowerDepths (n : ℕ) :
+    (shellHigherPrimePowerDepths n).card = (shellHigherPrimePowerEvents n).card := by
+  exact Finset.card_image_iff.mpr (shellHigherPrimePower_depth_injective n)
+
+/-- Admissible depths are exponents, independent of primality. -/
+def shellOddDepths (n : ℕ) : Finset ℕ :=
+  (Finset.Icc 3 (Nat.log 2 ((n + 1) ^ 2))).filter Odd
+
+@[simp] theorem mem_shellOddDepths {n a : ℕ} :
+    a ∈ shellOddDepths n ↔ 3 ≤ a ∧ a ≤ Nat.log 2 ((n + 1) ^ 2) ∧ Odd a := by
+  simp only [shellOddDepths, Finset.mem_filter, Finset.mem_Icc]
+  tauto
+
+/-- Every occupied depth is admissible; the reverse containment is not asserted. -/
+theorem shellHigherPrimePowerDepths_subset_oddDepths (n : ℕ) :
+    shellHigherPrimePowerDepths n ⊆ shellOddDepths n := by
+  intro a ha
+  have h := shellHigherPrimePowerDepths_bounds ha
+  exact mem_shellOddDepths.mpr ⟨h.1, h.2.2, h.2.1⟩
+
+/-- Higher-event weight is exactly its label logarithm divided by canonical depth. -/
+theorem shellHigherPrimePower_weight_eq_log_div_depth {n q : ℕ}
+    (hq : q ∈ shellHigherPrimePowerEvents n) :
+    ArithmeticFunction.vonMangoldt q =
+      Real.log (q : ℝ) / (q.factorization q.minFac : ℝ) := by
+  have h := mem_shellHigherPrimePowerEvents.mp hq
+  have c := shell_higher_primePower_canonical h.1 h.2.1 h.2.2
+  have hp := shellHigherPrimePower_log_packet h.1 h.2.1 h.2.2
+  have ha : (q.factorization q.minFac : ℝ) ≠ 0 := by
+    exact_mod_cast (show q.factorization q.minFac ≠ 0 by omega)
+  rw [hp.1, hp.2]
+  field_simp
+
+/-- Exact shell endpoint provides the pointwise reciprocal upper weight. -/
+theorem shellHigherPrimePower_weight_le_top_log_div_depth {n q : ℕ}
+    (_hn : 3 ≤ n) (hq : q ∈ shellHigherPrimePowerEvents n) :
+    ArithmeticFunction.vonMangoldt q ≤
+      Real.log ((n ^ 2 + 2 * n : ℕ) : ℝ) / (q.factorization q.minFac : ℝ) := by
+  have h := mem_shellHigherPrimePowerEvents.mp hq
+  have c := shell_higher_primePower_canonical h.1 h.2.1 h.2.2
+  have hqpos : (0 : ℝ) < q := by exact_mod_cast h.2.1.pos
+  have htop : q ≤ n ^ 2 + 2 * n := by have := h.1.2; nlinarith
+  have hdepth : (0 : ℝ) < q.factorization q.minFac := by
+    exact_mod_cast (show 0 < q.factorization q.minFac by omega)
+  rw [shellHigherPrimePower_weight_eq_log_div_depth hq]
+  exact div_le_div_of_nonneg_right
+    (Real.log_le_log hqpos (by exact_mod_cast htop)) hdepth.le
+
+/-- Pointwise bounds reindex injectively on occupied depths. -/
+theorem gnomonPascalShellHigherPrimePowerMass_le_depth_sum {n : ℕ} (hn : 3 ≤ n) :
+    gnomonPascalShellHigherPrimePowerMass n ≤
+      ∑ a ∈ shellHigherPrimePowerDepths n,
+        Real.log ((n ^ 2 + 2 * n : ℕ) : ℝ) / (a : ℝ) := by
+  rw [gnomonPascalShellHigherPrimePowerMass_eq_events, shellHigherPrimePowerDepths,
+    Finset.sum_image (shellHigherPrimePower_depth_injective n)]
+  exact Finset.sum_le_sum fun _ hq => shellHigherPrimePower_weight_le_top_log_div_depth hn hq
+
+/-- All omitted admissible depths have nonnegative reciprocal upper weights. -/
+theorem gnomonPascalShellHigherPrimePowerMass_le_oddDepth_sum {n : ℕ} (hn : 3 ≤ n) :
+    gnomonPascalShellHigherPrimePowerMass n ≤
+      ∑ a ∈ shellOddDepths n, Real.log ((n ^ 2 + 2 * n : ℕ) : ℝ) / (a : ℝ) := by
+  apply (gnomonPascalShellHigherPrimePowerMass_le_depth_sum hn).trans
+  apply Finset.sum_le_sum_of_subset_of_nonneg (shellHigherPrimePowerDepths_subset_oddDepths n)
+  intro a _ _
+  apply div_nonneg
+  · apply Real.log_nonneg
+    exact_mod_cast (show 1 ≤ n ^ 2 + 2 * n by nlinarith)
+  · exact Nat.cast_nonneg a
+
+/-- Reciprocal cost of every admissible odd depth. -/
+noncomputable def shellOddDepthReciprocalSum (n : ℕ) : ℝ :=
+  ∑ a ∈ shellOddDepths n, (1 : ℝ) / (a : ℝ)
+
+/-- Exact finite reciprocal budget, before any harmonic approximation. -/
+noncomputable def shellHigherPrimePowerReciprocalBudget (n : ℕ) : ℝ :=
+  Real.log ((n ^ 2 + 2 * n : ℕ) : ℝ) * shellOddDepthReciprocalSum n
+
+/-- Factoring the constant top logarithm gives the primary finite budget. -/
+theorem gnomonPascalShellHigherPrimePowerMass_le_reciprocalBudget {n : ℕ} (hn : 3 ≤ n) :
+    gnomonPascalShellHigherPrimePowerMass n ≤ shellHigherPrimePowerReciprocalBudget n := by
+  have h := gnomonPascalShellHigherPrimePowerMass_le_oddDepth_sum hn
+  have he : (∑ a ∈ shellOddDepths n, Real.log ((n ^ 2 + 2 * n : ℕ) : ℝ) / (a : ℝ)) =
+      shellHigherPrimePowerReciprocalBudget n := by
+    unfold shellHigherPrimePowerReciprocalBudget shellOddDepthReciprocalSum
+    rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro a _
+    ring
+  rw [he] at h
+  exact h
+
+/-- The cutoff is nontrivial throughout the provider domain. -/
+theorem shell_binary_depth_cutoff_ge_three {n : ℕ} (hn : 3 ≤ n) :
+    3 ≤ Nat.log 2 ((n + 1) ^ 2) := by
+  apply Nat.le_log_of_pow_le (by decide)
+  norm_num
+  nlinarith
+
+/-- Harmonic compression applies to the complete admissible odd universe. -/
+theorem shellOddDepthReciprocalSum_le_log_cutoff {n : ℕ} (hn : 3 ≤ n) :
+    shellOddDepthReciprocalSum n ≤ Real.log (Nat.log 2 ((n + 1) ^ 2) : ℝ) :=
+  odd_reciprocal_sum_le_log (shell_binary_depth_cutoff_ge_three hn)
+
+/-- Nested-logarithm scale only; this definition asserts no Big-O theorem. -/
+noncomputable def shellHigherPrimePowerLogLogBudget (n : ℕ) : ℝ :=
+  Real.log ((n ^ 2 + 2 * n : ℕ) : ℝ) * Real.log (Nat.log 2 ((n + 1) ^ 2) : ℝ)
+
+/-- Separate comparison records the harmonic approximation's exact cost. -/
+theorem shellHigherPrimePowerReciprocalBudget_le_logLogBudget {n : ℕ} (hn : 3 ≤ n) :
+    shellHigherPrimePowerReciprocalBudget n ≤ shellHigherPrimePowerLogLogBudget n := by
+  apply mul_le_mul_of_nonneg_left (shellOddDepthReciprocalSum_le_log_cutoff hn)
+  apply Real.log_nonneg
+  exact_mod_cast (show 1 ≤ n ^ 2 + 2 * n by nlinarith)
+
+/-- Main compressed explicit higher correction bound. -/
+theorem gnomonPascalShellHigherPrimePowerMass_le_logLogBudget {n : ℕ} (hn : 3 ≤ n) :
+    gnomonPascalShellHigherPrimePowerMass n ≤ shellHigherPrimePowerLogLogBudget n :=
+  (gnomonPascalShellHigherPrimePowerMass_le_reciprocalBudget hn).trans
+    (shellHigherPrimePowerReciprocalBudget_le_logLogBudget hn)
+
+/-- The exact top logarithm is below the next-square logarithm. -/
+theorem shell_top_log_lt_twice_log_succ {n : ℕ} (hn : 1 ≤ n) :
+    Real.log ((n ^ 2 + 2 * n : ℕ) : ℝ) < 2 * Real.log ((n + 1 : ℕ) : ℝ) := by
+  have htop : (0 : ℝ) < (n ^ 2 + 2 * n : ℕ) := by
+    exact_mod_cast (show 0 < n ^ 2 + 2 * n by nlinarith)
+  have hlt := Real.log_lt_log htop (show ((n ^ 2 + 2 * n : ℕ) : ℝ) < ((n + 1 : ℕ) : ℝ) ^ 2 by
+    push_cast; nlinarith)
+  simpa only [Real.log_pow, Nat.cast_ofNat] using hlt
+
+/-- An optional geometric presentation of the same compressed estimate. -/
+theorem gnomonPascalShellHigherPrimePowerMass_le_geometricLogBudget {n : ℕ} (hn : 3 ≤ n) :
+    gnomonPascalShellHigherPrimePowerMass n ≤
+      2 * Real.log ((n + 1 : ℕ) : ℝ) * Real.log (Nat.log 2 ((n + 1) ^ 2) : ℝ) := by
+  apply (gnomonPascalShellHigherPrimePowerMass_le_logLogBudget hn).trans
+  apply mul_le_mul_of_nonneg_right (shell_top_log_lt_twice_log_succ (by omega)).le
+  exact Real.log_nonneg (by exact_mod_cast (show 1 ≤ Nat.log 2 ((n + 1) ^ 2) from
+    (by have := shell_binary_depth_cutoff_ge_three hn; omega)))
+
+/-- The compressed budget is uniformly no larger than instruction 026's budget. -/
+theorem shellHigherPrimePowerLogLogBudget_le_logBudget {n : ℕ} (hn : 3 ≤ n) :
+    shellHigherPrimePowerLogLogBudget n ≤ shellHigherPrimePowerLogBudget n := by
+  have htpos : (0 : ℝ) < (n ^ 2 + 2 * n : ℕ) := by
+    exact_mod_cast (show 0 < n ^ 2 + 2 * n by nlinarith)
+  have htop : n ^ 2 + 2 * n ≤ n ^ 3 := by
+    have h := Nat.mul_le_mul_left n (show n + 2 ≤ n ^ 2 by nlinarith)
+    nlinarith [h]
+  have ht := Real.log_le_log htpos (show ((n ^ 2 + 2 * n : ℕ) : ℝ) ≤ (n : ℝ) ^ 3 by
+    exact_mod_cast htop)
+  rw [Real.log_pow] at ht
+  have hL := shell_binary_depth_cutoff_ge_three hn
+  have hLpos : (0 : ℝ) < Nat.log 2 ((n + 1) ^ 2) := by
+    exact_mod_cast (show 0 < Nat.log 2 ((n + 1) ^ 2) by omega)
+  have hll := three_mul_log_le_add_one hLpos
+  have hl0 : 0 ≤ Real.log (Nat.log 2 ((n + 1) ^ 2) : ℝ) :=
+    Real.log_nonneg (by exact_mod_cast (show 1 ≤ Nat.log 2 ((n + 1) ^ 2) by omega))
+  have hn0 := Real.log_nonneg (by exact_mod_cast (show 1 ≤ n by omega) : (1 : ℝ) ≤ n)
+  unfold shellHigherPrimePowerLogLogBudget shellHigherPrimePowerLogBudget
+  have hmul := mul_le_mul_of_nonneg_right hll hn0
+  have htopmul := mul_le_mul_of_nonneg_right ht hl0
+  have hresult : Real.log ((n ^ 2 + 2 * n : ℕ) : ℝ) *
+      Real.log (Nat.log 2 ((n + 1) ^ 2) : ℝ) ≤
+      ((Nat.log 2 ((n + 1) ^ 2) : ℝ) + 1) * Real.log (n : ℝ) := by
+    norm_num only [Nat.cast_ofNat] at htopmul
+    nlinarith [htopmul, hmul]
+  simpa only [Nat.cast_add, Nat.cast_one] using hresult
+
+/-- Conditional prime provider from the exact reciprocal upper budget. -/
+theorem exists_prime_squareCell_of_reciprocalBudget_lt {n : ℕ} (hn : 3 ≤ n)
+    (h : shellHigherPrimePowerReciprocalBudget n < gnomonPascalShellVonMangoldtMass n) :
+    ∃ p, p.Prime ∧ SquareCell n p :=
+  exists_prime_squareCell_of_higher_bound
+    (gnomonPascalShellHigherPrimePowerMass_le_reciprocalBudget hn) h
+
+/-- Conditional prime provider from the compressed log-log upper budget. -/
+theorem exists_prime_squareCell_of_logLogBudget_lt {n : ℕ} (hn : 3 ≤ n)
+    (h : shellHigherPrimePowerLogLogBudget n < gnomonPascalShellVonMangoldtMass n) :
+    ∃ p, p.Prime ∧ SquareCell n p :=
+  exists_prime_squareCell_of_higher_bound
+    (gnomonPascalShellHigherPrimePowerMass_le_logLogBudget hn) h
+
+/-- Exact psi-difference version of the reciprocal conditional provider. -/
+theorem exists_prime_squareCell_of_reciprocalBudget_lt_psi_sub {n : ℕ} (hn : 3 ≤ n)
+    (h : shellHigherPrimePowerReciprocalBudget n <
+      Chebyshev.psi ((n ^ 2 + 2 * n : ℕ) : ℝ) - Chebyshev.psi ((n ^ 2 : ℕ) : ℝ)) :
+    ∃ p, p.Prime ∧ SquareCell n p := by
+  apply exists_prime_squareCell_of_reciprocalBudget_lt hn
+  rw [gnomonPascalShellVonMangoldtMass_eq_psi_sub]
+  exact h
+
+/-- Exact psi-difference version of the compressed conditional provider. -/
+theorem exists_prime_squareCell_of_logLogBudget_lt_psi_sub {n : ℕ} (hn : 3 ≤ n)
+    (h : shellHigherPrimePowerLogLogBudget n <
+      Chebyshev.psi ((n ^ 2 + 2 * n : ℕ) : ℝ) - Chebyshev.psi ((n ^ 2 : ℕ) : ℝ)) :
+    ∃ p, p.Prime ∧ SquareCell n p := by
+  apply exists_prime_squareCell_of_logLogBudget_lt hn
+  rw [gnomonPascalShellVonMangoldtMass_eq_psi_sub]
+  exact h
 
 end DkMath.NumberTheory.Legendre

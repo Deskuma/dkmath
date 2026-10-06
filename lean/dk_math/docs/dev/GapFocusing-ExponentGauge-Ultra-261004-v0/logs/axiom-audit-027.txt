@@ -1,0 +1,251 @@
+INFO [1334/1466] Replayed DkMath.Algebra.BinomTail
+info: DkMath/Algebra/BinomTail.lean:15:0: file: DkMath.Algebra.BinomTail
+INFO [1345/1466] Replayed DkMath.Lib.Cosmic.GTail
+info: DkMath/Lib/Cosmic/GTail.lean:10:0: file: DkMath.Lib.Cosmic.GTail
+INFO [1346/1466] Replayed DkMath.Lib.Cosmic.GTailNat
+info: DkMath/Lib/Cosmic/GTailNat.lean:10:0: file: DkMath.Lib.Cosmic.GTailNat
+INFO [1349/1466] Replayed DkMath.Lib.Cosmic.GTailCongruence
+info: DkMath/Lib/Cosmic/GTailCongruence.lean:13:0: file: DkMath.Lib.Cosmic.GTailCongruence
+INFO [1350/1466] Replayed DkMath.Lib.Cosmic.GTailBoundary
+info: DkMath/Lib/Cosmic/GTailBoundary.lean:10:0: file: DkMath.Lib.Cosmic.GTailBoundary
+INFO [1361/1466] Replayed DkMath.Lib.NumberTheory.PadicValNat
+info: DkMath/Lib/NumberTheory/PadicValNat.lean:12:0: file: DkMath.Lib.NumberTheory.PadicValNat
+INFO [1362/1466] Replayed DkMath.Lib.Cosmic.GTailPadic
+info: DkMath/Lib/Cosmic/GTailPadic.lean:12:0: file: DkMath.Lib.Cosmic.GTailPadic
+INFO [1363/1466] Replayed DkMath.CosmicFormula.GTail
+info: DkMath/CosmicFormula/GTail.lean:10:0: file: DkMath.CosmicFormula.GTail
+INFO [1364/1466] Replayed DkMath.CosmicFormula.Defs
+info: DkMath/CosmicFormula/Defs.lean:12:0: file: DkMath.CosmicFormula.Defs
+INFO [1366/1466] Replayed DkMath.ABC.PadicValNat
+info: DkMath/ABC/PadicValNat.lean:9:0: file: DkMath.ABC.PadicValNat
+INFO [1367/1466] Replayed DkMath.CosmicFormula.CosmicFormulaBinom
+info: DkMath/CosmicFormula/CosmicFormulaBinom.lean:15:0: file: DkMath.CosmicFormula.CosmicFormulaBinom
+INFO [1368/1466] Replayed DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+info: DkMath/NumberTheory/StructuralArithmetic/PrimitiveDirection.lean:10:0: file: DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+INFO [1369/1466] Replayed DkMath.NumberTheory.Primitive.FinitePrimeWorld
+info: DkMath/NumberTheory/Primitive/FinitePrimeWorld.lean:11:0: file: DkMath.NumberTheory.Primitive.FinitePrimeWorld
+INFO [1370/1466] Replayed DkMath.NumberTheory.Primitive.SquareBody
+info: DkMath/NumberTheory/Primitive/SquareBody.lean:11:0: file: DkMath.NumberTheory.Primitive.SquareBody
+INFO [1371/1466] Replayed DkMath.NumberTheory.Legendre.Basic
+info: DkMath/NumberTheory/Legendre/Basic.lean:15:0: file: DkMath.NumberTheory.Legendre.Basic
+INFO [3117/3289] Replayed DkMath.NumberTheory.Legendre.SquareShellPrimePower
+info: DkMath/NumberTheory/Legendre/SquareShellPrimePower.lean:14:0: file: DkMath.NumberTheory.Legendre.SquareShellPrimePower
+INFO [3118/3289] Replayed DkMath.NumberTheory.BinomialPrime
+info: DkMath/NumberTheory/BinomialPrime.lean:9:0: file: DkMath.NumberTheory.BinomialPrime
+INFO [3119/3289] Replayed DkMath.NumberTheory.BinomialPrimePower
+info: DkMath/NumberTheory/BinomialPrimePower.lean:13:0: file: DkMath.NumberTheory.BinomialPrimePower
+INFO [3121/3289] Replayed DkMath.NumberTheory.PascalPrebirthBoundary
+info: DkMath/NumberTheory/PascalPrebirthBoundary.lean:10:0: file: DkMath.NumberTheory.PascalPrebirthBoundary
+INFO [8943/8955] Replayed DkMath.NumberTheory.OddReciprocal
+info: DkMath/NumberTheory/OddReciprocal.lean:10:0: file: DkMath.NumberTheory.OddReciprocal
+INFO [8945/8955] Replayed DkMath.CosmicFormula.Mass.BodyGapSplit
+info: DkMath/CosmicFormula/Mass/BodyGapSplit.lean:9:0: file: DkMath.CosmicFormula.Mass.BodyGapSplit
+INFO [8946/8955] Replayed DkMath.NumberTheory.WeightedBinomial
+info: DkMath/NumberTheory/WeightedBinomial.lean:12:0: file: DkMath.NumberTheory.WeightedBinomial
+INFO [8947/8955] Replayed DkMath.NumberTheory.PascalPrimeDial
+info: DkMath/NumberTheory/PascalPrimeDial.lean:9:0: file: DkMath.NumberTheory.PascalPrimeDial
+INFO [8948/8955] Replayed DkMath.NumberTheory.PascalPrimeCoordinateDecoder
+info: DkMath/NumberTheory/PascalPrimeCoordinateDecoder.lean:10:0: file: DkMath.NumberTheory.PascalPrimeCoordinateDecoder
+INFO [8949/8955] Replayed DkMath.NumberTheory.PascalPrebirthBirth
+info: DkMath/NumberTheory/PascalPrebirthBirth.lean:10:0: file: DkMath.NumberTheory.PascalPrebirthBirth
+INFO [8950/8955] Replayed DkMath.NumberTheory.Legendre.GnomonPascalCell
+info: DkMath/NumberTheory/Legendre/GnomonPascalCell.lean:12:0: file: DkMath.NumberTheory.Legendre.GnomonPascalCell
+INFO [8951/8955] Replayed DkMath.NumberTheory.Legendre.SquareShellVonMangoldt
+info: DkMath/NumberTheory/Legendre/SquareShellVonMangoldt.lean:10:0: file: DkMath.NumberTheory.Legendre.SquareShellVonMangoldt
+INFO [8952/8955] Replayed DkMath.NumberTheory.Legendre.SquareShellPrimePowerGauge
+info: DkMath/NumberTheory/Legendre/SquareShellPrimePowerGauge.lean:11:0: file: DkMath.NumberTheory.Legendre.SquareShellPrimePowerGauge
+INFO [8953/8955] Replayed DkMathTest.NumberTheory.SquareShellPrimePowerCalibration
+info: DkMathTest/NumberTheory/SquareShellPrimePowerCalibration.lean:9:0: file: DkMathTest.NumberTheory.SquareShellPrimePowerCalibration
+INFO [8954/8955] Replayed DkMathTest.NumberTheory.SquareShellReciprocalCalibration
+info: DkMathTest/NumberTheory/SquareShellReciprocalCalibration.lean:9:0: file: DkMathTest.NumberTheory.SquareShellReciprocalCalibration
+INFO [8955/8955] Built DkMathTest.NumberTheory.SquareShellReciprocalAxiomAudit (4.9s)
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:9:0: file: DkMathTest.NumberTheory.SquareShellReciprocalAxiomAudit
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:12:0: 'DkMath.NumberTheory.reciprocal_Icc_two_eq_harmonic_sub_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:13:0: 'DkMath.NumberTheory.odd_reciprocal_sum_le_full' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:14:0: 'DkMath.NumberTheory.odd_reciprocal_sum_le_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:15:0: 'DkMath.NumberTheory.three_mul_log_le_add_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:18:0: 'DkMath.NumberTheory.Legendre.shellHigherPrimePower_log_packet' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:19:0: 'DkMath.NumberTheory.Legendre.shellHigherPrimePower_weight_gap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:20:0: 'DkMath.NumberTheory.Legendre.shellHigherPrimePower_logGauge_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:21:0: 'DkMath.NumberTheory.Legendre.shellPrime_weight_eq_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:22:0: 'DkMath.NumberTheory.Legendre.squareOffsets_sum_eq_values' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:23:0: 'DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_eq_events' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:24:0: 'DkMath.NumberTheory.Legendre.shellHigherPrimePowerBases' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:25:0: 'DkMath.NumberTheory.Legendre.shellHigherPrimePowerBases_subset_primesLE' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:26:0: 'DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_eq_base_logs' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:27:0: 'DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_theta' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:28:0: 'DkMath.NumberTheory.Legendre.shellHigherBaseCandidates' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:29:0: 'DkMath.NumberTheory.Legendre.shellHigherPrimePowerBases_subset_candidates' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:30:0: 'DkMath.NumberTheory.Legendre.shellHigherBaseCandidates_log_sum_le_theta' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:31:0: 'DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_candidate_logs' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:32:0: 'DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_card_log' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:33:0: 'DkMath.NumberTheory.Legendre.shellHigherPrimePowerLogBudget' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:34:0: 'DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_logBudget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:35:0: 'DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_higher_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:36:0: 'DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_theta_lt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:37:0: 'DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_logBudget_lt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:38:0: 'DkMath.NumberTheory.Legendre.shellHigherPrimePowerResynchronizationPacket' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:39:0: 'DkMath.NumberTheory.Legendre.shellPrimeBirthPacket' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:40:0: 'DkMath.NumberTheory.Legendre.gnomon_top_innerCommonDivisor_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:41:0: 'DkMath.NumberTheory.Legendre.shellHigherPrimePowerDepths' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:42:0: 'DkMath.NumberTheory.Legendre.mem_shellHigherPrimePowerDepths' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:43:0: 'DkMath.NumberTheory.Legendre.shellHigherPrimePowerDepths_bounds' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:44:0: 'DkMath.NumberTheory.Legendre.card_shellHigherPrimePowerDepths' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:45:0: 'DkMath.NumberTheory.Legendre.shellOddDepths' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:46:0: 'DkMath.NumberTheory.Legendre.mem_shellOddDepths' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:47:0: 'DkMath.NumberTheory.Legendre.shellHigherPrimePowerDepths_subset_oddDepths' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:48:0: 'DkMath.NumberTheory.Legendre.shellHigherPrimePower_weight_eq_log_div_depth' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:49:0: 'DkMath.NumberTheory.Legendre.shellHigherPrimePower_weight_le_top_log_div_depth' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:50:0: 'DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_depth_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:51:0: 'DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_oddDepth_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:52:0: 'DkMath.NumberTheory.Legendre.shellOddDepthReciprocalSum' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:53:0: 'DkMath.NumberTheory.Legendre.shellHigherPrimePowerReciprocalBudget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:54:0: 'DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_reciprocalBudget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:55:0: 'DkMath.NumberTheory.Legendre.shell_binary_depth_cutoff_ge_three' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:56:0: 'DkMath.NumberTheory.Legendre.shellOddDepthReciprocalSum_le_log_cutoff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:57:0: 'DkMath.NumberTheory.Legendre.shellHigherPrimePowerLogLogBudget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:58:0: 'DkMath.NumberTheory.Legendre.shellHigherPrimePowerReciprocalBudget_le_logLogBudget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:59:0: 'DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_logLogBudget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:60:0: 'DkMath.NumberTheory.Legendre.shell_top_log_lt_twice_log_succ' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:61:0: 'DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_geometricLogBudget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:62:0: 'DkMath.NumberTheory.Legendre.shellHigherPrimePowerLogLogBudget_le_logBudget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:63:0: 'DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_reciprocalBudget_lt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:64:0: 'DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_logLogBudget_lt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:65:0: 'DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_reciprocalBudget_lt_psi_sub' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:66:0: 'DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_logLogBudget_lt_psi_sub' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:69:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.event_depth_packet' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:70:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.prime_power_canonical_depth' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:71:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.event8_packet_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:72:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.event27_packet_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:73:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.event32_packet_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:74:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.event125_packet_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:75:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.event128_packet_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:76:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.event8388608_packet_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:77:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor2_depths_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:78:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor5_depths_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:79:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor11_depths_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:80:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor2896_events_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:81:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor2896_depths_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:82:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor297_depths_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:83:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor1031_depths_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:84:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor5_reciprocal_sum_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:85:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor11_reciprocal_sum_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:86:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor11_occupied_ne_admissible_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/SquareShellReciprocalAxiomAudit.lean:87:0: 'DkMathTest.NumberTheory.SquareShellReciprocalCalibration.compressed_psi_consumer' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Build completed successfully (8955 jobs).
