@@ -1,0 +1,54 @@
+[
+  {
+    "example": "first_shared",
+    "n": 11,
+    "a": 19,
+    "complete_point": 140,
+    "difference_product_mod_point": 2,
+    "common_gcd": 2,
+    "proposed_cofactor": 70,
+    "terminal_product": 35,
+    "terminal_card": 2,
+    "power_base": 2,
+    "proposed_source_capacity": 6
+  },
+  {
+    "example": "297_largest_terminal",
+    "n": 297,
+    "a": 350,
+    "complete_point": 88559,
+    "difference_product_mod_point": 82536,
+    "common_gcd": 19,
+    "proposed_cofactor": 4661,
+    "terminal_product": 4661,
+    "terminal_card": 2,
+    "power_base": 11,
+    "proposed_source_capacity": 3
+  },
+  {
+    "example": "297_branching",
+    "n": 297,
+    "a": 44,
+    "complete_point": 88253,
+    "difference_product_mod_point": 78100,
+    "common_gcd": 781,
+    "proposed_cofactor": 113,
+    "terminal_product": 113,
+    "terminal_card": 1,
+    "power_base": 11,
+    "proposed_source_capacity": 1
+  },
+  {
+    "example": "1031_largest_terminal",
+    "n": 1031,
+    "a": 90,
+    "complete_point": 1063051,
+    "difference_product_mod_point": 827717,
+    "common_gcd": 11,
+    "proposed_cofactor": 96641,
+    "terminal_product": 96641,
+    "terminal_card": 2,
+    "power_base": 11,
+    "proposed_source_capacity": 4
+  }
+]

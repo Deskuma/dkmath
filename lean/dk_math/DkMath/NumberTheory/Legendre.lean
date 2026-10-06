@@ -97,6 +97,8 @@ import DkMath.NumberTheory.Legendre.CoarseTownDeletionConservation
 import DkMath.NumberTheory.Legendre.CoarseTownRetainedDirections
 import DkMath.NumberTheory.Legendre.CoarseTownSymmetricDeletion
 import DkMath.NumberTheory.Legendre.CoarseTownPrimeHandoff
+import DkMath.NumberTheory.Legendre.CoarseTownTerminalProduct
+import DkMath.NumberTheory.Legendre.CoarseTownSourceMultiplicity
 
 #print "file: DkMath.NumberTheory.Legendre"
 
