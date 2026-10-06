@@ -1,0 +1,85 @@
+{
+  "scope": "All named public declarations in the new production module and the new calibration module",
+  "production_count": 18,
+  "new_production_count": 18,
+  "calibration_count": 13,
+  "total": 31,
+  "modules": [
+    {
+      "file": "DkMath/NumberTheory/Legendre/GnomonCofactorWindow.lean",
+      "declarations": [
+        "DkMath.NumberTheory.Legendre.gnomonSingletonCarryMass",
+        "DkMath.NumberTheory.Legendre.gnomonRepeatedCarryMass",
+        "DkMath.NumberTheory.Legendre.gnomonPascalLargeCarryMass_eq_repeated_add_singleton",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindowPrimes",
+        "DkMath.NumberTheory.Legendre.mem_gnomonCofactorWindowPrimes",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass",
+        "DkMath.NumberTheory.Legendre.gnomonSingletonCarry_cofactor_window",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindow_unique",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_eq_singleton",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindow_length_lt",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindow_prime_dvd_choose",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorBinomialBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_le_binomialBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorGeometricBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorGeometricBudget_le_binomialBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_le_geometricBudget",
+        "DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_cofactor_excess",
+        "DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_cofactorGeometricBudget_lt"
+      ],
+      "new": [
+        "DkMath.NumberTheory.Legendre.gnomonSingletonCarryMass",
+        "DkMath.NumberTheory.Legendre.gnomonRepeatedCarryMass",
+        "DkMath.NumberTheory.Legendre.gnomonPascalLargeCarryMass_eq_repeated_add_singleton",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindowPrimes",
+        "DkMath.NumberTheory.Legendre.mem_gnomonCofactorWindowPrimes",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass",
+        "DkMath.NumberTheory.Legendre.gnomonSingletonCarry_cofactor_window",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindow_unique",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_eq_singleton",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindow_length_lt",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindow_prime_dvd_choose",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorBinomialBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_le_binomialBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorGeometricBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorGeometricBudget_le_binomialBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_le_geometricBudget",
+        "DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_cofactor_excess",
+        "DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_cofactorGeometricBudget_lt"
+      ]
+    },
+    {
+      "file": "DkMathTest/NumberTheory/GnomonCofactorWindowCalibration.lean",
+      "declarations": [
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.window3_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.no_slack3_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.windows7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.composite_window7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.carry_parts7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.singleton4_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.binomial4_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.geometric4_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.strict_slack4_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.integer_failure7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.consumer_failure7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.consumer_before7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.consumer8_checked"
+      ],
+      "new": [
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.window3_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.no_slack3_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.windows7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.composite_window7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.carry_parts7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.singleton4_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.binomial4_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.geometric4_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.strict_slack4_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.integer_failure7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.consumer_failure7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.consumer_before7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.consumer8_checked"
+      ]
+    }
+  ]
+}

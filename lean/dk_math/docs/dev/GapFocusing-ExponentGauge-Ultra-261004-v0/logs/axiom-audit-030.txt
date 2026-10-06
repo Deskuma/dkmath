@@ -1,0 +1,142 @@
+INFO [1982/2105] Replayed DkMath.NumberTheory.DivisorIncidence
+info: DkMath/NumberTheory/DivisorIncidence.lean:11:0: file: DkMath.NumberTheory.DivisorIncidence
+INFO [1999/2105] Replayed DkMath.Algebra.BinomTail
+info: DkMath/Algebra/BinomTail.lean:15:0: file: DkMath.Algebra.BinomTail
+INFO [2000/2105] Replayed DkMath.Lib.Cosmic.GTail
+info: DkMath/Lib/Cosmic/GTail.lean:10:0: file: DkMath.Lib.Cosmic.GTail
+INFO [2001/2105] Replayed DkMath.Lib.Cosmic.GTailNat
+info: DkMath/Lib/Cosmic/GTailNat.lean:10:0: file: DkMath.Lib.Cosmic.GTailNat
+INFO [2004/2105] Replayed DkMath.Lib.Cosmic.GTailCongruence
+info: DkMath/Lib/Cosmic/GTailCongruence.lean:13:0: file: DkMath.Lib.Cosmic.GTailCongruence
+INFO [2005/2105] Replayed DkMath.Lib.Cosmic.GTailBoundary
+info: DkMath/Lib/Cosmic/GTailBoundary.lean:10:0: file: DkMath.Lib.Cosmic.GTailBoundary
+INFO [2015/2105] Replayed DkMath.Lib.NumberTheory.PadicValNat
+info: DkMath/Lib/NumberTheory/PadicValNat.lean:12:0: file: DkMath.Lib.NumberTheory.PadicValNat
+INFO [2016/2105] Replayed DkMath.Lib.Cosmic.GTailPadic
+info: DkMath/Lib/Cosmic/GTailPadic.lean:12:0: file: DkMath.Lib.Cosmic.GTailPadic
+INFO [2017/2105] Replayed DkMath.CosmicFormula.GTail
+info: DkMath/CosmicFormula/GTail.lean:10:0: file: DkMath.CosmicFormula.GTail
+INFO [2018/2105] Replayed DkMath.CosmicFormula.Defs
+info: DkMath/CosmicFormula/Defs.lean:12:0: file: DkMath.CosmicFormula.Defs
+INFO [2020/2105] Replayed DkMath.ABC.PadicValNat
+info: DkMath/ABC/PadicValNat.lean:9:0: file: DkMath.ABC.PadicValNat
+INFO [2021/2105] Replayed DkMath.CosmicFormula.CosmicFormulaBinom
+info: DkMath/CosmicFormula/CosmicFormulaBinom.lean:15:0: file: DkMath.CosmicFormula.CosmicFormulaBinom
+INFO [2022/2105] Replayed DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+info: DkMath/NumberTheory/StructuralArithmetic/PrimitiveDirection.lean:10:0: file: DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+INFO [2023/2105] Replayed DkMath.NumberTheory.Primitive.FinitePrimeWorld
+info: DkMath/NumberTheory/Primitive/FinitePrimeWorld.lean:11:0: file: DkMath.NumberTheory.Primitive.FinitePrimeWorld
+INFO [2024/2105] Replayed DkMath.NumberTheory.Primitive.SquareBody
+info: DkMath/NumberTheory/Primitive/SquareBody.lean:11:0: file: DkMath.NumberTheory.Primitive.SquareBody
+INFO [2025/2105] Replayed DkMath.NumberTheory.Legendre.Basic
+info: DkMath/NumberTheory/Legendre/Basic.lean:15:0: file: DkMath.NumberTheory.Legendre.Basic
+INFO [3119/3124] Replayed DkMath.NumberTheory.Legendre.SquareShellPrimePower
+info: DkMath/NumberTheory/Legendre/SquareShellPrimePower.lean:14:0: file: DkMath.NumberTheory.Legendre.SquareShellPrimePower
+INFO [3120/3124] Replayed DkMath.NumberTheory.BinomialPrime
+info: DkMath/NumberTheory/BinomialPrime.lean:9:0: file: DkMath.NumberTheory.BinomialPrime
+INFO [3121/3124] Replayed DkMath.NumberTheory.BinomialPrimePower
+info: DkMath/NumberTheory/BinomialPrimePower.lean:13:0: file: DkMath.NumberTheory.BinomialPrimePower
+INFO [3123/3124] Replayed DkMath.NumberTheory.PascalPrebirthBoundary
+info: DkMath/NumberTheory/PascalPrebirthBoundary.lean:10:0: file: DkMath.NumberTheory.PascalPrebirthBoundary
+INFO [8944/8958] Replayed DkMath.NumberTheory.OddReciprocal
+info: DkMath/NumberTheory/OddReciprocal.lean:10:0: file: DkMath.NumberTheory.OddReciprocal
+INFO [8946/8958] Replayed DkMath.CosmicFormula.Mass.BodyGapSplit
+info: DkMath/CosmicFormula/Mass/BodyGapSplit.lean:9:0: file: DkMath.CosmicFormula.Mass.BodyGapSplit
+INFO [8947/8958] Replayed DkMath.NumberTheory.WeightedBinomial
+info: DkMath/NumberTheory/WeightedBinomial.lean:12:0: file: DkMath.NumberTheory.WeightedBinomial
+INFO [8948/8958] Replayed DkMath.NumberTheory.PascalPrimeDial
+info: DkMath/NumberTheory/PascalPrimeDial.lean:9:0: file: DkMath.NumberTheory.PascalPrimeDial
+INFO [8949/8958] Replayed DkMath.NumberTheory.PascalPrimeCoordinateDecoder
+info: DkMath/NumberTheory/PascalPrimeCoordinateDecoder.lean:10:0: file: DkMath.NumberTheory.PascalPrimeCoordinateDecoder
+INFO [8950/8958] Replayed DkMath.NumberTheory.PascalPrebirthBirth
+info: DkMath/NumberTheory/PascalPrebirthBirth.lean:10:0: file: DkMath.NumberTheory.PascalPrebirthBirth
+INFO [8951/8958] Replayed DkMath.NumberTheory.Legendre.GnomonPascalCell
+info: DkMath/NumberTheory/Legendre/GnomonPascalCell.lean:12:0: file: DkMath.NumberTheory.Legendre.GnomonPascalCell
+INFO [8952/8958] Replayed DkMath.NumberTheory.Legendre.SquareShellVonMangoldt
+info: DkMath/NumberTheory/Legendre/SquareShellVonMangoldt.lean:10:0: file: DkMath.NumberTheory.Legendre.SquareShellVonMangoldt
+INFO [8953/8958] Replayed DkMath.NumberTheory.Legendre.SquareShellPrimePowerGauge
+info: DkMath/NumberTheory/Legendre/SquareShellPrimePowerGauge.lean:11:0: file: DkMath.NumberTheory.Legendre.SquareShellPrimePowerGauge
+INFO [8954/8958] Replayed DkMath.NumberTheory.Legendre.GnomonDivisorCarry
+info: DkMath/NumberTheory/Legendre/GnomonDivisorCarry.lean:10:0: file: DkMath.NumberTheory.Legendre.GnomonDivisorCarry
+INFO [8955/8958] Replayed DkMath.NumberTheory.Legendre.GnomonCarryFiber
+info: DkMath/NumberTheory/Legendre/GnomonCarryFiber.lean:9:0: file: DkMath.NumberTheory.Legendre.GnomonCarryFiber
+INFO [8956/8958] Replayed DkMath.NumberTheory.Legendre.GnomonCofactorWindow
+info: DkMath/NumberTheory/Legendre/GnomonCofactorWindow.lean:10:0: file: DkMath.NumberTheory.Legendre.GnomonCofactorWindow
+INFO [8957/8958] Replayed DkMathTest.NumberTheory.GnomonCofactorWindowCalibration
+info: DkMathTest/NumberTheory/GnomonCofactorWindowCalibration.lean:9:0: file: DkMathTest.NumberTheory.GnomonCofactorWindowCalibration
+INFO [8958/8958] Built DkMathTest.NumberTheory.GnomonCofactorWindowAxiomAudit (6.7s)
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:9:0: file: DkMathTest.NumberTheory.GnomonCofactorWindowAxiomAudit
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:12:0: 'DkMath.NumberTheory.Legendre.gnomonSingletonCarryMass' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:13:0: 'DkMath.NumberTheory.Legendre.gnomonRepeatedCarryMass' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:14:0: 'DkMath.NumberTheory.Legendre.gnomonPascalLargeCarryMass_eq_repeated_add_singleton' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:15:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorWindowPrimes' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:16:0: 'DkMath.NumberTheory.Legendre.mem_gnomonCofactorWindowPrimes' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:17:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:18:0: 'DkMath.NumberTheory.Legendre.gnomonSingletonCarry_cofactor_window' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:19:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorWindow_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:20:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_eq_singleton' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:21:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorWindow_length_lt' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:22:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorWindow_prime_dvd_choose' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:23:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorBinomialBudget' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:24:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_le_binomialBudget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:25:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorGeometricBudget' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:26:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorGeometricBudget_le_binomialBudget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:27:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_le_geometricBudget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:28:0: 'DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_cofactor_excess' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:29:0: 'DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_cofactorGeometricBudget_lt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:32:0: 'DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.window3_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:33:0: 'DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.no_slack3_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:34:0: 'DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.windows7_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:35:0: 'DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.composite_window7_checked' depends on axioms: [propext]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:36:0: 'DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.carry_parts7_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:37:0: 'DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.singleton4_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:38:0: 'DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.binomial4_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:39:0: 'DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.geometric4_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:40:0: 'DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.strict_slack4_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:41:0: 'DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.integer_failure7_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:42:0: 'DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.consumer_failure7_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:43:0: 'DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.consumer_before7_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorWindowAxiomAudit.lean:44:0: 'DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.consumer8_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Build completed successfully (8958 jobs).
