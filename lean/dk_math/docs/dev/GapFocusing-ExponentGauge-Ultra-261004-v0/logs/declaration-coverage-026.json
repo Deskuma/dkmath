@@ -1,0 +1,107 @@
+{
+  "scope": "All named public declarations in three new production modules and one calibration module",
+  "production_count": 60,
+  "calibration_count": 19,
+  "total": 79,
+  "modules": [
+    {
+      "file": "DkMath/NumberTheory/Legendre/SquareShellPrimePower.lean",
+      "declarations": [
+        "DkMath.NumberTheory.Legendre.not_squareCell_square",
+        "DkMath.NumberTheory.Legendre.not_squareCell_even_power",
+        "DkMath.NumberTheory.Legendre.shell_nonprime_power_depth",
+        "DkMath.NumberTheory.Legendre.squareCell_power_base_le",
+        "DkMath.NumberTheory.Legendre.shell_higher_primePower_canonical",
+        "DkMath.NumberTheory.Legendre.squareCell_prime_power_exponent_unique",
+        "DkMath.NumberTheory.Legendre.squareCell_primePower_minFac_injective",
+        "DkMath.NumberTheory.Legendre.squareCell_power_previous_gt",
+        "DkMath.NumberTheory.Legendre.squareCell_fixed_exponent_unique",
+        "DkMath.NumberTheory.Legendre.squareCell_prime_power_exponent_le_log",
+        "DkMath.NumberTheory.Legendre.shellHigherPrimePowerEvents",
+        "DkMath.NumberTheory.Legendre.mem_shellHigherPrimePowerEvents",
+        "DkMath.NumberTheory.Legendre.shellPrimePowerBasesAtExponent",
+        "DkMath.NumberTheory.Legendre.mem_shellPrimePowerBasesAtExponent",
+        "DkMath.NumberTheory.Legendre.shellPrimePowerBasesAtExponent_even",
+        "DkMath.NumberTheory.Legendre.shellPrimePowerBasesAtExponent_card_le_one",
+        "DkMath.NumberTheory.Legendre.shellHigherPrimePower_depth_injective",
+        "DkMath.NumberTheory.Legendre.shellHigherPrimePowerEvents_card_le",
+        "DkMath.NumberTheory.Legendre.shellHigherPrimePowerEvents_eq_empty_of_bases_empty",
+        "DkMath.NumberTheory.Legendre.shellHigherPrimePowerEvents_eq_empty_of_bounded_exclusion",
+        "DkMath.NumberTheory.Legendre.gnomon_top_not_isPrimePow"
+      ]
+    },
+    {
+      "file": "DkMath/NumberTheory/Legendre/SquareShellVonMangoldt.lean",
+      "declarations": [
+        "DkMath.NumberTheory.Legendre.gnomonPascalShellVonMangoldtMass",
+        "DkMath.NumberTheory.Legendre.higherPrimePowerWeight",
+        "DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass",
+        "DkMath.NumberTheory.Legendre.higherPrimePowerWeight_nonneg",
+        "DkMath.NumberTheory.Legendre.vonMangoldt_eq_primeBirth_add_higher",
+        "DkMath.NumberTheory.Legendre.gnomonPascalShellVonMangoldtMass_nonneg",
+        "DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_nonneg",
+        "DkMath.NumberTheory.Legendre.gnomonPascalShellVonMangoldtMass_eq_birth_add_higher",
+        "DkMath.NumberTheory.Legendre.squareOffsets_sum_eq_range_sub",
+        "DkMath.NumberTheory.Legendre.psi_nat_eq_sum_range",
+        "DkMath.NumberTheory.Legendre.theta_nat_eq_sum_primeBirth_range",
+        "DkMath.NumberTheory.Legendre.gnomonPascalShellVonMangoldtMass_eq_psi_sub",
+        "DkMath.NumberTheory.Legendre.gnomonPascalShellBirthLogMass_eq_theta_sub",
+        "DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_eq_psi_theta_sub",
+        "DkMath.NumberTheory.Legendre.gnomonPascalShellVonMangoldtMass_zero",
+        "DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_zero"
+      ]
+    },
+    {
+      "file": "DkMath/NumberTheory/Legendre/SquareShellPrimePowerGauge.lean",
+      "declarations": [
+        "DkMath.NumberTheory.Legendre.shellHigherPrimePower_log_packet",
+        "DkMath.NumberTheory.Legendre.shellHigherPrimePower_weight_gap",
+        "DkMath.NumberTheory.Legendre.shellHigherPrimePower_logGauge_le",
+        "DkMath.NumberTheory.Legendre.shellPrime_weight_eq_log",
+        "DkMath.NumberTheory.Legendre.squareOffsets_sum_eq_values",
+        "DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_eq_events",
+        "DkMath.NumberTheory.Legendre.shellHigherPrimePowerBases",
+        "DkMath.NumberTheory.Legendre.shellHigherPrimePowerBases_subset_primesLE",
+        "DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_eq_base_logs",
+        "DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_theta",
+        "DkMath.NumberTheory.Legendre.shellHigherBaseCandidates",
+        "DkMath.NumberTheory.Legendre.shellHigherPrimePowerBases_subset_candidates",
+        "DkMath.NumberTheory.Legendre.shellHigherBaseCandidates_log_sum_le_theta",
+        "DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_candidate_logs",
+        "DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_card_log",
+        "DkMath.NumberTheory.Legendre.shellHigherPrimePowerLogBudget",
+        "DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_logBudget",
+        "DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_higher_bound",
+        "DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_theta_lt",
+        "DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_logBudget_lt",
+        "DkMath.NumberTheory.Legendre.shellHigherPrimePowerResynchronizationPacket",
+        "DkMath.NumberTheory.Legendre.shellPrimeBirthPacket",
+        "DkMath.NumberTheory.Legendre.gnomon_top_innerCommonDivisor_eq_one"
+      ]
+    },
+    {
+      "file": "DkMathTest/NumberTheory/SquareShellPrimePowerCalibration.lean",
+      "declarations": [
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.prime_only_shell_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.first_cube_shell_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor5_events_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor5_depths_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor11_events_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor11_depths_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor19_events_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor29_events_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor297_bounded_powers_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor297_events_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor1031_bounded_powers_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor1031_events_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor5_higher_mass_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor1031_mass_split_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.cube_gauge_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.fifth_gauge_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.even_depth_shell_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor5_top_row_checked",
+        "DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.logarithmic_budget_consumer"
+      ]
+    }
+  ]
+}

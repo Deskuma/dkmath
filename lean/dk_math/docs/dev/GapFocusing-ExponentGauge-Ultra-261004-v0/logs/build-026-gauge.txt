@@ -1,0 +1,60 @@
+INFO [1334/1478] Replayed DkMath.Algebra.BinomTail
+info: DkMath/Algebra/BinomTail.lean:15:0: file: DkMath.Algebra.BinomTail
+INFO [1345/1478] Replayed DkMath.Lib.Cosmic.GTail
+info: DkMath/Lib/Cosmic/GTail.lean:10:0: file: DkMath.Lib.Cosmic.GTail
+INFO [1346/1478] Replayed DkMath.Lib.Cosmic.GTailNat
+info: DkMath/Lib/Cosmic/GTailNat.lean:10:0: file: DkMath.Lib.Cosmic.GTailNat
+INFO [1349/1478] Replayed DkMath.Lib.Cosmic.GTailCongruence
+info: DkMath/Lib/Cosmic/GTailCongruence.lean:13:0: file: DkMath.Lib.Cosmic.GTailCongruence
+INFO [1350/1478] Replayed DkMath.Lib.Cosmic.GTailBoundary
+info: DkMath/Lib/Cosmic/GTailBoundary.lean:10:0: file: DkMath.Lib.Cosmic.GTailBoundary
+INFO [1361/1478] Replayed DkMath.Lib.NumberTheory.PadicValNat
+info: DkMath/Lib/NumberTheory/PadicValNat.lean:12:0: file: DkMath.Lib.NumberTheory.PadicValNat
+INFO [1362/1478] Replayed DkMath.Lib.Cosmic.GTailPadic
+info: DkMath/Lib/Cosmic/GTailPadic.lean:12:0: file: DkMath.Lib.Cosmic.GTailPadic
+INFO [1363/1478] Replayed DkMath.CosmicFormula.GTail
+info: DkMath/CosmicFormula/GTail.lean:10:0: file: DkMath.CosmicFormula.GTail
+INFO [1364/1478] Replayed DkMath.CosmicFormula.Defs
+info: DkMath/CosmicFormula/Defs.lean:12:0: file: DkMath.CosmicFormula.Defs
+INFO [1366/1478] Replayed DkMath.ABC.PadicValNat
+info: DkMath/ABC/PadicValNat.lean:9:0: file: DkMath.ABC.PadicValNat
+INFO [1367/1478] Replayed DkMath.CosmicFormula.CosmicFormulaBinom
+info: DkMath/CosmicFormula/CosmicFormulaBinom.lean:15:0: file: DkMath.CosmicFormula.CosmicFormulaBinom
+INFO [1368/1478] Replayed DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+info: DkMath/NumberTheory/StructuralArithmetic/PrimitiveDirection.lean:10:0: file: DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+INFO [1369/1478] Replayed DkMath.NumberTheory.Primitive.FinitePrimeWorld
+info: DkMath/NumberTheory/Primitive/FinitePrimeWorld.lean:11:0: file: DkMath.NumberTheory.Primitive.FinitePrimeWorld
+INFO [1370/1478] Replayed DkMath.NumberTheory.Primitive.SquareBody
+info: DkMath/NumberTheory/Primitive/SquareBody.lean:11:0: file: DkMath.NumberTheory.Primitive.SquareBody
+INFO [1371/1478] Replayed DkMath.NumberTheory.Legendre.Basic
+info: DkMath/NumberTheory/Legendre/Basic.lean:15:0: file: DkMath.NumberTheory.Legendre.Basic
+INFO [3117/3151] Replayed DkMath.NumberTheory.BinomialPrime
+info: DkMath/NumberTheory/BinomialPrime.lean:9:0: file: DkMath.NumberTheory.BinomialPrime
+INFO [3118/3151] Replayed DkMath.NumberTheory.BinomialPrimePower
+info: DkMath/NumberTheory/BinomialPrimePower.lean:13:0: file: DkMath.NumberTheory.BinomialPrimePower
+INFO [3120/3151] Replayed DkMath.NumberTheory.PascalPrebirthBoundary
+info: DkMath/NumberTheory/PascalPrebirthBoundary.lean:10:0: file: DkMath.NumberTheory.PascalPrebirthBoundary
+FAIL [7175/7267] Building DkMath.NumberTheory.Legendre.SquareShellPrimePower (4.5s)
+trace: .> LEAN_PATH=/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/Cli/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/batteries/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/Qq/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/aesop/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/importGraph/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/plausible/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/packages/mathlib/.lake/build/lib/lean:/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/build/lib/lean /home/deskuma/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean /home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/NumberTheory/Legendre/SquareShellPrimePower.lean -o /home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/build/lib/lean/DkMath/NumberTheory/Legendre/SquareShellPrimePower.olean -i /home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/build/lib/lean/DkMath/NumberTheory/Legendre/SquareShellPrimePower.ilean -c /home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/build/ir/DkMath/NumberTheory/Legendre/SquareShellPrimePower.c --setup /home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/build/ir/DkMath/NumberTheory/Legendre/SquareShellPrimePower.setup.json --json
+info: DkMath/NumberTheory/Legendre/SquareShellPrimePower.lean:14:0: file: DkMath.NumberTheory.Legendre.SquareShellPrimePower
+error: DkMath/NumberTheory/Legendre/SquareShellPrimePower.lean:221:26: Invalid field `dvd_prime_pow`: The environment does not contain `Irreducible.dvd_prime_pow`, so it is not possible to project the field `dvd_prime_pow` from an expression
+  hp
+of type `Irreducible p`
+error: DkMath/NumberTheory/Legendre/SquareShellPrimePower.lean:221:9: Tactic `rcases` failed: `x[U+271D] : ?m.132` is not an inductive datatype
+INFO [8944/8951] Replayed DkMath.CosmicFormula.Mass.BodyGapSplit
+info: DkMath/CosmicFormula/Mass/BodyGapSplit.lean:9:0: file: DkMath.CosmicFormula.Mass.BodyGapSplit
+INFO [8945/8951] Replayed DkMath.NumberTheory.WeightedBinomial
+info: DkMath/NumberTheory/WeightedBinomial.lean:12:0: file: DkMath.NumberTheory.WeightedBinomial
+INFO [8946/8951] Replayed DkMath.NumberTheory.PascalPrimeDial
+info: DkMath/NumberTheory/PascalPrimeDial.lean:9:0: file: DkMath.NumberTheory.PascalPrimeDial
+INFO [8947/8951] Replayed DkMath.NumberTheory.PascalPrimeCoordinateDecoder
+info: DkMath/NumberTheory/PascalPrimeCoordinateDecoder.lean:10:0: file: DkMath.NumberTheory.PascalPrimeCoordinateDecoder
+INFO [8948/8951] Replayed DkMath.NumberTheory.PascalPrebirthBirth
+info: DkMath/NumberTheory/PascalPrebirthBirth.lean:10:0: file: DkMath.NumberTheory.PascalPrebirthBirth
+INFO [8949/8951] Replayed DkMath.NumberTheory.Legendre.GnomonPascalCell
+info: DkMath/NumberTheory/Legendre/GnomonPascalCell.lean:12:0: file: DkMath.NumberTheory.Legendre.GnomonPascalCell
+INFO [8950/8951] Replayed DkMath.NumberTheory.Legendre.SquareShellVonMangoldt
+info: DkMath/NumberTheory/Legendre/SquareShellVonMangoldt.lean:10:0: file: DkMath.NumberTheory.Legendre.SquareShellVonMangoldt
+Some required targets logged failures:
+- DkMath.NumberTheory.Legendre.SquareShellPrimePower
+error: build failed

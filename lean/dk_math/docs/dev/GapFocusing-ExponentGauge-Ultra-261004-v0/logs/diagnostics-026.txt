@@ -1,0 +1,219 @@
+{
+  "range": [
+    1,
+    5000
+  ],
+  "integer_data": "exact sieve and integer powers",
+  "real_data": "floating natural logarithms; diagnostic only",
+  "max_higher_count": 2,
+  "shells_attaining_max": [
+    5,
+    11,
+    46
+  ],
+  "max_exponent": 23,
+  "shared_exponent_shells": [],
+  "shared_base_shells": [],
+  "first_higher_shell": {
+    "n": 2,
+    "prime_count": 2,
+    "higher_count": 1,
+    "events": [
+      {
+        "value": 8,
+        "base": 2,
+        "exponent": 3
+      }
+    ],
+    "von_mangoldt_mass_approx": 4.2484952420493585,
+    "birth_mass_approx": 3.5553480614894135,
+    "higher_mass_approx": 0.6931471805599453,
+    "theta_approx": 0.6931471805599453,
+    "cube_candidate_mass_approx": 0.6931471805599453,
+    "binary_exponent_cutoff": 3,
+    "event_count_bound": 4,
+    "logarithmic_mass_bound_approx": 2.772588722239781
+  },
+  "first_multiple_shell": {
+    "n": 5,
+    "prime_count": 2,
+    "higher_count": 2,
+    "events": [
+      {
+        "value": 27,
+        "base": 3,
+        "exponent": 3
+      },
+      {
+        "value": 32,
+        "base": 2,
+        "exponent": 5
+      }
+    ],
+    "von_mangoldt_mass_approx": 8.593042503699674,
+    "birth_mass_approx": 6.80128303447162,
+    "higher_mass_approx": 1.791759469228055,
+    "theta_approx": 3.401197381662155,
+    "cube_candidate_mass_approx": 1.791759469228055,
+    "binary_exponent_cutoff": 5,
+    "event_count_bound": 6,
+    "logarithmic_mass_bound_approx": 9.656627474604601
+  },
+  "max_higher_over_theta": [
+    1.0,
+    2
+  ],
+  "max_higher_over_log_bound": [
+    0.25,
+    2
+  ],
+  "max_higher_over_cube_bound": [
+    1.0,
+    5
+  ],
+  "theta_criterion_shells": 4998,
+  "logarithmic_criterion_shells": 4994,
+  "anchors": [
+    {
+      "n": 1,
+      "prime_count": 2,
+      "higher_count": 0,
+      "events": [],
+      "von_mangoldt_mass_approx": 1.791759469228055,
+      "birth_mass_approx": 1.791759469228055,
+      "higher_mass_approx": 0,
+      "theta_approx": 0.0,
+      "cube_candidate_mass_approx": 0,
+      "binary_exponent_cutoff": 2,
+      "event_count_bound": 3,
+      "logarithmic_mass_bound_approx": 0.0
+    },
+    {
+      "n": 2,
+      "prime_count": 2,
+      "higher_count": 1,
+      "events": [
+        {
+          "value": 8,
+          "base": 2,
+          "exponent": 3
+        }
+      ],
+      "von_mangoldt_mass_approx": 4.2484952420493585,
+      "birth_mass_approx": 3.5553480614894135,
+      "higher_mass_approx": 0.6931471805599453,
+      "theta_approx": 0.6931471805599453,
+      "cube_candidate_mass_approx": 0.6931471805599453,
+      "binary_exponent_cutoff": 3,
+      "event_count_bound": 4,
+      "logarithmic_mass_bound_approx": 2.772588722239781
+    },
+    {
+      "n": 5,
+      "prime_count": 2,
+      "higher_count": 2,
+      "events": [
+        {
+          "value": 27,
+          "base": 3,
+          "exponent": 3
+        },
+        {
+          "value": 32,
+          "base": 2,
+          "exponent": 5
+        }
+      ],
+      "von_mangoldt_mass_approx": 8.593042503699674,
+      "birth_mass_approx": 6.80128303447162,
+      "higher_mass_approx": 1.791759469228055,
+      "theta_approx": 3.401197381662155,
+      "cube_candidate_mass_approx": 1.791759469228055,
+      "binary_exponent_cutoff": 5,
+      "event_count_bound": 6,
+      "logarithmic_mass_bound_approx": 9.656627474604601
+    },
+    {
+      "n": 11,
+      "prime_count": 4,
+      "higher_count": 2,
+      "events": [
+        {
+          "value": 125,
+          "base": 5,
+          "exponent": 3
+        },
+        {
+          "value": 128,
+          "base": 2,
+          "exponent": 7
+        }
+      ],
+      "von_mangoldt_mass_approx": 21.876424361612603,
+      "birth_mass_approx": 19.573839268618556,
+      "higher_mass_approx": 2.3025850929940455,
+      "theta_approx": 7.745002803515839,
+      "cube_candidate_mass_approx": 3.4011973816621555,
+      "binary_exponent_cutoff": 7,
+      "event_count_bound": 8,
+      "logarithmic_mass_bound_approx": 19.183162182386965
+    },
+    {
+      "n": 19,
+      "prime_count": 6,
+      "higher_count": 0,
+      "events": [],
+      "von_mangoldt_mass_approx": 35.66002708626709,
+      "birth_mass_approx": 35.66002708626709,
+      "higher_mass_approx": 0,
+      "theta_approx": 16.087604484200035,
+      "cube_candidate_mass_approx": 5.3471075307174685,
+      "binary_exponent_cutoff": 8,
+      "event_count_bound": 9,
+      "logarithmic_mass_bound_approx": 26.499950812497964
+    },
+    {
+      "n": 29,
+      "prime_count": 8,
+      "higher_count": 0,
+      "events": [],
+      "von_mangoldt_mass_approx": 54.14711588037905,
+      "birth_mass_approx": 54.14711588037905,
+      "higher_mass_approx": 0,
+      "theta_approx": 22.59039453011566,
+      "cube_candidate_mass_approx": 5.3471075307174685,
+      "binary_exponent_cutoff": 9,
+      "event_count_bound": 10,
+      "logarithmic_mass_bound_approx": 33.67295829986474
+    },
+    {
+      "n": 297,
+      "prime_count": 45,
+      "higher_count": 0,
+      "events": [],
+      "von_mangoldt_mass_approx": 512.5927169589161,
+      "birth_mass_approx": 512.5927169589161,
+      "higher_mass_approx": 0,
+      "theta_approx": 277.02501207533476,
+      "cube_candidate_mass_approx": 37.1100718296429,
+      "binary_exponent_cutoff": 16,
+      "event_count_bound": 17,
+      "logarithmic_mass_bound_approx": 96.7934463596459
+    },
+    {
+      "n": 1031,
+      "prime_count": 160,
+      "higher_count": 0,
+      "events": [],
+      "von_mangoldt_mass_approx": 2220.404275917446,
+      "birth_mass_approx": 2220.404275917446,
+      "higher_mass_approx": 0,
+      "theta_approx": 990.8760509800657,
+      "cube_candidate_mass_approx": 88.34351091590518,
+      "binary_exponent_cutoff": 20,
+      "event_count_bound": 21,
+      "logarithmic_mass_bound_approx": 145.70397416435617
+    }
+  ],
+  "elapsed_seconds": 4.692440962000546
+}

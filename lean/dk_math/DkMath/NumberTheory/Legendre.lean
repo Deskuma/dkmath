@@ -100,6 +100,9 @@ import DkMath.NumberTheory.Legendre.CoarseTownPrimeHandoff
 import DkMath.NumberTheory.Legendre.CoarseTownTerminalProduct
 import DkMath.NumberTheory.Legendre.CoarseTownSourceMultiplicity
 import DkMath.NumberTheory.Legendre.GnomonPascalCell
+import DkMath.NumberTheory.Legendre.SquareShellPrimePower
+import DkMath.NumberTheory.Legendre.SquareShellVonMangoldt
+import DkMath.NumberTheory.Legendre.SquareShellPrimePowerGauge
 
 #print "file: DkMath.NumberTheory.Legendre"
 
