@@ -1,0 +1,28 @@
+{
+  "command": [
+    "lake",
+    "build",
+    "DkMath.NumberTheory.Legendre.GnomonCarryFiber",
+    "DkMathTest.NumberTheory.GnomonCarryFiberCalibration"
+  ],
+  "measurement_command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/deskuma/develop/lean/dkmath/lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/logs/telemetry-focused-029.txt",
+    "--",
+    "lake",
+    "build",
+    "DkMath.NumberTheory.Legendre.GnomonCarryFiber",
+    "DkMathTest.NumberTheory.GnomonCarryFiberCalibration"
+  ],
+  "LEAN_NUM_THREADS": 2,
+  "exit_code": 0,
+  "elapsed_seconds": 20.175,
+  "telemetry_scope": "GNU time resource usage of Lake invocation including waited descendants",
+  "maximum_resident_set_kbytes": 6763740,
+  "major_page_faults": 0,
+  "minor_page_faults": 371758,
+  "swap_count": 0,
+  "failure_classification": "none"
+}
