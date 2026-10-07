@@ -1,0 +1,38 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.NumberTheory.Legendre.GnomonRepeatedBaseAggregate
+
+#print "file: DkMathTest.NumberTheory.GnomonRepeatedBaseAggregateAxiomAudit"
+
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedBaseExponents
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedBaseWeight
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedActiveBases
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedPhaseBudget_eq_base_sum
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedSmallBases
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedSquareWindow
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedAggregateBases
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedAggregateBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedFirstExponent_eq_two
+#print axioms DkMath.NumberTheory.Legendre.mem_gnomonRepeatedSquareWindow
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedActiveBase_square_window
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedActiveBases_subset_aggregate
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedBaseWeight_nonneg
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedSquareWindow_subset_aggregate
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedPhaseBudget_add_extra_le_aggregate
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedPhaseBudget_le_aggregate
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedSquareWindow_subsingleton
+#print axioms DkMath.NumberTheory.Legendre.card_gnomonRepeatedSquareWindow_le_one
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedSquareWindow_weight
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedSquareWindow_quotient
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedSquareWindows_disjoint
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedAggregateBudget_eq_endpoint_sum
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedBaseWeight_le_log_square
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedSmallBaseMass_le_sqrt_log
+#print axioms DkMath.NumberTheory.Legendre.gnomonBaseAggregateCorrectionBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatPhaseCorrectionBudget_le_baseAggregate
+#print axioms DkMath.NumberTheory.Legendre.gnomonNonSingletonCorrection_le_baseAggregate
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_baseAggregateBudget_lt

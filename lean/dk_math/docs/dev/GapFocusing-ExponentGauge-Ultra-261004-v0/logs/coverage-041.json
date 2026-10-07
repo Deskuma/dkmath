@@ -1,0 +1,48 @@
+{
+  "production_declarations": [
+    "gnomonRepeatedBaseExponents",
+    "gnomonRepeatedBaseWeight",
+    "gnomonRepeatedActiveBases",
+    "gnomonRepeatedPhaseBudget_eq_base_sum",
+    "gnomonRepeatedSmallBases",
+    "gnomonRepeatedSquareWindow",
+    "gnomonRepeatedAggregateBases",
+    "gnomonRepeatedAggregateBudget",
+    "gnomonRepeatedFirstExponent_eq_two",
+    "mem_gnomonRepeatedSquareWindow",
+    "gnomonRepeatedActiveBase_square_window",
+    "gnomonRepeatedActiveBases_subset_aggregate",
+    "gnomonRepeatedBaseWeight_nonneg",
+    "gnomonRepeatedSquareWindow_subset_aggregate",
+    "gnomonRepeatedPhaseBudget_add_extra_le_aggregate",
+    "gnomonRepeatedPhaseBudget_le_aggregate",
+    "gnomonRepeatedSquareWindow_subsingleton",
+    "card_gnomonRepeatedSquareWindow_le_one",
+    "gnomonRepeatedSquareWindow_weight",
+    "gnomonRepeatedSquareWindow_quotient",
+    "gnomonRepeatedSquareWindows_disjoint",
+    "gnomonRepeatedAggregateBudget_eq_endpoint_sum",
+    "gnomonRepeatedBaseWeight_le_log_square",
+    "gnomonRepeatedSmallBaseMass_le_sqrt_log",
+    "gnomonBaseAggregateCorrectionBudget",
+    "gnomonRepeatPhaseCorrectionBudget_le_baseAggregate",
+    "gnomonNonSingletonCorrection_le_baseAggregate",
+    "exists_prime_squareCell_of_baseAggregateBudget_lt"
+  ],
+  "private_proof_helpers": [
+    "exponent_bounds",
+    "prime_power_labels"
+  ],
+  "calibration_declarations": [
+    "composite_window69_checked",
+    "composite12_aggregate69",
+    "small_inactive69_checked",
+    "composite12_positive_weight",
+    "strict_aggregate_overcover69",
+    "anchor_windows_checked",
+    "base2_small2896_checked",
+    "base2_ten_exponents2896",
+    "fiber2896_retained",
+    "trivial_anchor3_checked"
+  ]
+}

@@ -1,0 +1,1 @@
+PASS: 28 public declarations; 2 private proof helpers audited transitively; 10 kernel regressions; 4 Lean headers/source scans; 301 endpoint diagnostics; 4 four-thread builds; whitespace.
