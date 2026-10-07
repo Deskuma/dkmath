@@ -1,0 +1,75 @@
+{
+  "scope": "All named public declarations in the new production module and the new calibration module",
+  "production_count": 13,
+  "new_production_count": 13,
+  "calibration_count": 13,
+  "total": 26,
+  "modules": [
+    {
+      "file": "DkMath/NumberTheory/Legendre/GnomonCofactorSieve.lean",
+      "declarations": [
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveCandidates",
+        "DkMath.NumberTheory.Legendre.mem_gnomonCofactorSieveCandidates_iff",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveCandidates_prime_filter",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveMass",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveCompositeError",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveCompositeError_nonneg",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveMass_eq_window_add_error",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_le_sieveBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveBudget_le_geometricBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveBudget_excess",
+        "DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_sieve_excess",
+        "DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_cofactorSieveBudget_lt"
+      ],
+      "new": [
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveCandidates",
+        "DkMath.NumberTheory.Legendre.mem_gnomonCofactorSieveCandidates_iff",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveCandidates_prime_filter",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveMass",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveCompositeError",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveCompositeError_nonneg",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveMass_eq_window_add_error",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_le_sieveBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveBudget_le_geometricBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSieveBudget_excess",
+        "DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_sieve_excess",
+        "DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_cofactorSieveBudget_lt"
+      ]
+    },
+    {
+      "file": "DkMathTest/NumberTheory/GnomonCofactorSieveCalibration.lean",
+      "declarations": [
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.basis30_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.equality3_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.windows7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.no_composites_before9_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.composite_error9_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.compound_composite12_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.products7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.strict_saving7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.consumer7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.products_failure29_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.consumer_failure29_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.density_only_fails3_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.unsafe_basis3_checked"
+      ],
+      "new": [
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.basis30_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.equality3_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.windows7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.no_composites_before9_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.composite_error9_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.compound_composite12_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.products7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.strict_saving7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.consumer7_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.products_failure29_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.consumer_failure29_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.density_only_fails3_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.unsafe_basis3_checked"
+      ]
+    }
+  ]
+}

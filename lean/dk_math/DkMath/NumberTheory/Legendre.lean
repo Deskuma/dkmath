@@ -106,6 +106,7 @@ import DkMath.NumberTheory.Legendre.SquareShellPrimePowerGauge
 import DkMath.NumberTheory.Legendre.GnomonDivisorCarry
 import DkMath.NumberTheory.Legendre.GnomonCarryFiber
 import DkMath.NumberTheory.Legendre.GnomonCofactorWindow
+import DkMath.NumberTheory.Legendre.GnomonCofactorSieve
 
 #print "file: DkMath.NumberTheory.Legendre"
 

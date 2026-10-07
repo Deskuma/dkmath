@@ -1,0 +1,79 @@
+{
+  "range": [
+    3,
+    5000
+  ],
+  "source_sha256": "767cd331861dff9bdb746db546e0fb16f5a2fda42dd0a3b658ccc6c80c4d0927",
+  "basis": [
+    2,
+    3,
+    5
+  ],
+  "modulus": 30,
+  "integer_scope": "All survivor counts use exact prefix counts; anchor windows reconstructed by gcd and factored directly.",
+  "floating_scope": "Kahan prefix differences and direct anchor fsum weights are diagnostics, never proof premises; tolerance 1e-6.",
+  "first_surviving_composite": {
+    "n": 9,
+    "k": 2,
+    "q": 49,
+    "least_divisor": 7
+  },
+  "first_consumer_failure_approx": {
+    "n": 29,
+    "basis": [
+      2,
+      3,
+      5
+    ],
+    "modulus": 30,
+    "survivor_count": 36,
+    "prime_count": 25,
+    "composite_count": 11,
+    "singleton_mass_approx": 128.1196007593773,
+    "raw_sieve_mass_approx": 187.2930698126559,
+    "geometric_budget_approx": 350.33933488180423,
+    "sieve_budget_approx": 187.2930698126559,
+    "raw_composite_error_approx": 59.17346905327858,
+    "capped_excess_approx": 59.17346905327858,
+    "gain_over_030_approx": 163.04626506914835,
+    "consumer_margin_approx": -5.026353172899519,
+    "old_budget_approx": 157.9917939492655,
+    "log_cell_approx": 212.13890982964458
+  },
+  "passing_anchors_approx": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    30,
+    33
+  ],
+  "passing_count": 28,
+  "failure_count": 4970,
+  "raw_above_geometric_anchors_approx": [],
+  "minimum_gain_over_030_approx": 0.0,
+  "minimum_gain_after3_approx": 2.57191802677763,
+  "elapsed_seconds": 15.93
+}
