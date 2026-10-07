@@ -110,6 +110,7 @@ import DkMath.NumberTheory.Legendre.GnomonCofactorSieve
 import DkMath.NumberTheory.Legendre.GnomonCofactorLeastFactor
 import DkMath.NumberTheory.Legendre.GnomonCofactorSemiprime
 import DkMath.NumberTheory.Legendre.GnomonCofactorThreePrime
+import DkMath.NumberTheory.Legendre.GnomonCofactorAdaptiveRoughness
 
 #print "file: DkMath.NumberTheory.Legendre"
 

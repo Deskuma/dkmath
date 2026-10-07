@@ -1,0 +1,330 @@
+i [1982/2131] Replayed DkMath.NumberTheory.DivisorIncidence
+info: DkMath/NumberTheory/DivisorIncidence.lean:11:0: file: DkMath.NumberTheory.DivisorIncidence
+i [1999/2131] Replayed DkMath.Algebra.BinomTail
+info: DkMath/Algebra/BinomTail.lean:15:0: file: DkMath.Algebra.BinomTail
+i [2000/2131] Replayed DkMath.Lib.Cosmic.GTail
+info: DkMath/Lib/Cosmic/GTail.lean:10:0: file: DkMath.Lib.Cosmic.GTail
+i [2001/2131] Replayed DkMath.Lib.Cosmic.GTailNat
+info: DkMath/Lib/Cosmic/GTailNat.lean:10:0: file: DkMath.Lib.Cosmic.GTailNat
+i [2004/2131] Replayed DkMath.Lib.Cosmic.GTailCongruence
+info: DkMath/Lib/Cosmic/GTailCongruence.lean:13:0: file: DkMath.Lib.Cosmic.GTailCongruence
+i [2005/2131] Replayed DkMath.Lib.Cosmic.GTailBoundary
+info: DkMath/Lib/Cosmic/GTailBoundary.lean:10:0: file: DkMath.Lib.Cosmic.GTailBoundary
+i [2015/2131] Replayed DkMath.Lib.NumberTheory.PadicValNat
+info: DkMath/Lib/NumberTheory/PadicValNat.lean:12:0: file: DkMath.Lib.NumberTheory.PadicValNat
+i [2016/2131] Replayed DkMath.Lib.Cosmic.GTailPadic
+info: DkMath/Lib/Cosmic/GTailPadic.lean:12:0: file: DkMath.Lib.Cosmic.GTailPadic
+i [2017/2131] Replayed DkMath.CosmicFormula.GTail
+info: DkMath/CosmicFormula/GTail.lean:10:0: file: DkMath.CosmicFormula.GTail
+i [2018/2131] Replayed DkMath.CosmicFormula.Defs
+info: DkMath/CosmicFormula/Defs.lean:12:0: file: DkMath.CosmicFormula.Defs
+i [2020/2131] Replayed DkMath.ABC.PadicValNat
+info: DkMath/ABC/PadicValNat.lean:9:0: file: DkMath.ABC.PadicValNat
+i [2021/2131] Replayed DkMath.CosmicFormula.CosmicFormulaBinom
+info: DkMath/CosmicFormula/CosmicFormulaBinom.lean:15:0: file: DkMath.CosmicFormula.CosmicFormulaBinom
+i [2022/2131] Replayed DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+info: DkMath/NumberTheory/StructuralArithmetic/PrimitiveDirection.lean:10:0: file: DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection
+i [2023/2131] Replayed DkMath.NumberTheory.Primitive.FinitePrimeWorld
+info: DkMath/NumberTheory/Primitive/FinitePrimeWorld.lean:11:0: file: DkMath.NumberTheory.Primitive.FinitePrimeWorld
+i [2024/2131] Replayed DkMath.NumberTheory.Primitive.SquareBody
+info: DkMath/NumberTheory/Primitive/SquareBody.lean:11:0: file: DkMath.NumberTheory.Primitive.SquareBody
+i [2025/2131] Replayed DkMath.NumberTheory.Legendre.Basic
+info: DkMath/NumberTheory/Legendre/Basic.lean:15:0: file: DkMath.NumberTheory.Legendre.Basic
+i [3119/3208] Replayed DkMath.NumberTheory.Legendre.SquareShellPrimePower
+info: DkMath/NumberTheory/Legendre/SquareShellPrimePower.lean:14:0: file: DkMath.NumberTheory.Legendre.SquareShellPrimePower
+i [3120/3208] Replayed DkMath.NumberTheory.BinomialPrime
+info: DkMath/NumberTheory/BinomialPrime.lean:9:0: file: DkMath.NumberTheory.BinomialPrime
+i [3121/3208] Replayed DkMath.NumberTheory.BinomialPrimePower
+info: DkMath/NumberTheory/BinomialPrimePower.lean:13:0: file: DkMath.NumberTheory.BinomialPrimePower
+i [3123/3208] Replayed DkMath.NumberTheory.PascalPrebirthBoundary
+info: DkMath/NumberTheory/PascalPrebirthBoundary.lean:10:0: file: DkMath.NumberTheory.PascalPrebirthBoundary
+i [8943/9024] Replayed DkMath.NumberTheory.OddReciprocal
+info: DkMath/NumberTheory/OddReciprocal.lean:10:0: file: DkMath.NumberTheory.OddReciprocal
+i [8944/9024] Replayed DkMath.NumberTheory.PrimorialUniverse.FiniteReservationEscape
+info: DkMath/NumberTheory/PrimorialUniverse/FiniteReservationEscape.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.FiniteReservationEscape
+i [8945/9024] Replayed DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization
+info: DkMath/NumberTheory/PrimorialUniverse/FinitePrimeSynchronization.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization
+i [8946/9024] Replayed DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor
+info: DkMath/NumberTheory/PrimorialUniverse/WheelSurvivor.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor
+i [8947/9024] Replayed DkMath.NumberTheory.Legendre.Wave
+info: DkMath/NumberTheory/Legendre/Wave.lean:9:0: file: DkMath.NumberTheory.Legendre.Wave
+i [8948/9024] Replayed DkMath.NumberTheory.Legendre.Internal.PairCombinatorics
+info: DkMath/NumberTheory/Legendre/Internal/PairCombinatorics.lean:13:0: file: DkMath.NumberTheory.Legendre.Internal.PairCombinatorics
+i [8949/9024] Replayed DkMath.NumberTheory.Legendre.PairOverlap
+info: DkMath/NumberTheory/Legendre/PairOverlap.lean:10:0: file: DkMath.NumberTheory.Legendre.PairOverlap
+i [8950/9024] Replayed DkMath.NumberTheory.Legendre.CoprimePacket
+info: DkMath/NumberTheory/Legendre/CoprimePacket.lean:9:0: file: DkMath.NumberTheory.Legendre.CoprimePacket
+i [8951/9024] Replayed DkMath.NumberTheory.Legendre.Quotient
+info: DkMath/NumberTheory/Legendre/Quotient.lean:8:0: file: DkMath.NumberTheory.Legendre.Quotient
+i [8952/9024] Replayed DkMath.NumberTheory.Primitive.CrossPeriod
+info: DkMath/NumberTheory/Primitive/CrossPeriod.lean:9:0: file: DkMath.NumberTheory.Primitive.CrossPeriod
+? [8953/9024] Replayed DkMath.NumberTheory.Legendre.PacketCross
+info: DkMath/NumberTheory/Legendre/PacketCross.lean:10:0: file: DkMath.NumberTheory.Legendre.PacketCross
+warning: DkMath/NumberTheory/Legendre/PacketCross.lean:285:5: Variable name `hrs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hrs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+i [8954/9024] Replayed DkMath.NumberTheory.Legendre.PacketCoprimality
+info: DkMath/NumberTheory/Legendre/PacketCoprimality.lean:9:0: file: DkMath.NumberTheory.Legendre.PacketCoprimality
+i [8955/9024] Replayed DkMath.NumberTheory.Legendre.CenteredPair
+info: DkMath/NumberTheory/Legendre/CenteredPair.lean:9:0: file: DkMath.NumberTheory.Legendre.CenteredPair
+i [8956/9024] Replayed DkMath.NumberTheory.Legendre.CenteredPacketTriangle
+info: DkMath/NumberTheory/Legendre/CenteredPacketTriangle.lean:9:0: file: DkMath.NumberTheory.Legendre.CenteredPacketTriangle
+i [8957/9024] Replayed DkMath.NumberTheory.Legendre.QuotientSupport
+info: DkMath/NumberTheory/Legendre/QuotientSupport.lean:8:0: file: DkMath.NumberTheory.Legendre.QuotientSupport
+i [8958/9024] Replayed DkMath.NumberTheory.Legendre.Obstruction
+info: DkMath/NumberTheory/Legendre/Obstruction.lean:8:0: file: DkMath.NumberTheory.Legendre.Obstruction
+i [8959/9024] Replayed DkMath.NumberTheory.Legendre.LocalizedObstruction
+info: DkMath/NumberTheory/Legendre/LocalizedObstruction.lean:10:0: file: DkMath.NumberTheory.Legendre.LocalizedObstruction
+i [8960/9024] Replayed DkMath.NumberTheory.Legendre.PacketUnitResidue
+info: DkMath/NumberTheory/Legendre/PacketUnitResidue.lean:9:0: file: DkMath.NumberTheory.Legendre.PacketUnitResidue
+i [8961/9024] Replayed DkMath.NumberTheory.Legendre.SmallCofactor
+info: DkMath/NumberTheory/Legendre/SmallCofactor.lean:9:0: file: DkMath.NumberTheory.Legendre.SmallCofactor
+i [8962/9024] Replayed DkMath.NumberTheory.Legendre.Frontier
+info: DkMath/NumberTheory/Legendre/Frontier.lean:10:0: file: DkMath.NumberTheory.Legendre.Frontier
+i [8963/9024] Replayed DkMath.NumberTheory.Legendre.CoprimeSeatCapacity
+info: DkMath/NumberTheory/Legendre/CoprimeSeatCapacity.lean:10:0: file: DkMath.NumberTheory.Legendre.CoprimeSeatCapacity
+i [8964/9024] Replayed DkMath.NumberTheory.Legendre.OldSupportCapacity
+info: DkMath/NumberTheory/Legendre/OldSupportCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.OldSupportCapacity
+i [8965/9024] Replayed DkMath.NumberTheory.Primitive.PeriodicPrimeWorld
+info: DkMath/NumberTheory/Primitive/PeriodicPrimeWorld.lean:13:0: file: DkMath.NumberTheory.Primitive.PeriodicPrimeWorld
+i [8966/9024] Replayed DkMath.NumberTheory.Legendre.OldSupportGcd
+info: DkMath/NumberTheory/Legendre/OldSupportGcd.lean:11:0: file: DkMath.NumberTheory.Legendre.OldSupportGcd
+i [8967/9024] Replayed DkMath.NumberTheory.Legendre.FreshCollisionMatching
+info: DkMath/NumberTheory/Legendre/FreshCollisionMatching.lean:10:0: file: DkMath.NumberTheory.Legendre.FreshCollisionMatching
+i [8968/9024] Replayed DkMath.NumberTheory.Legendre.FreshCollisionRepair
+info: DkMath/NumberTheory/Legendre/FreshCollisionRepair.lean:10:0: file: DkMath.NumberTheory.Legendre.FreshCollisionRepair
+i [8969/9024] Replayed DkMath.NumberTheory.Legendre.ActivePrimeCapacity
+info: DkMath/NumberTheory/Legendre/ActivePrimeCapacity.lean:10:0: file: DkMath.NumberTheory.Legendre.ActivePrimeCapacity
+i [8970/9024] Replayed DkMath.NumberTheory.Legendre.ParitySafeActiveCapacity
+info: DkMath/NumberTheory/Legendre/ParitySafeActiveCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeActiveCapacity
+i [8971/9024] Replayed DkMath.NumberTheory.Legendre.ParitySafeWavePruning
+info: DkMath/NumberTheory/Legendre/ParitySafeWavePruning.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeWavePruning
+i [8972/9024] Replayed DkMath.NumberTheory.Legendre.ParitySafeIncidenceBalance
+info: DkMath/NumberTheory/Legendre/ParitySafeIncidenceBalance.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeIncidenceBalance
+i [8973/9024] Replayed DkMath.NumberTheory.Legendre.ParitySafeReducedResidue
+info: DkMath/NumberTheory/Legendre/ParitySafeReducedResidue.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeReducedResidue
+i [8974/9024] Replayed DkMath.NumberTheory.Legendre.ParitySafeMobiusWave
+info: DkMath/NumberTheory/Legendre/ParitySafeMobiusWave.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeMobiusWave
+i [8975/9024] Replayed DkMath.NumberTheory.Legendre.ParitySafeMobiusOddCorrection
+info: DkMath/NumberTheory/Legendre/ParitySafeMobiusOddCorrection.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeMobiusOddCorrection
+i [8976/9024] Replayed DkMath.NumberTheory.Legendre.ParitySafeSupportExcessQuotient
+info: DkMath/NumberTheory/Legendre/ParitySafeSupportExcessQuotient.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeSupportExcessQuotient
+i [8977/9024] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootFiber
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootFiber.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootFiber
+i [8978/9024] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootSieve
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootSieve.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootSieve
+i [8979/9024] Replayed DkMath.Gnomon.Algebra
+info: DkMath/Gnomon/Algebra.lean:11:0: file: DkMath.Gnomon.Algebra
+i [8980/9024] Replayed DkMath.Gnomon.CosmicBridge
+info: DkMath/Gnomon/CosmicBridge.lean:10:0: file: DkMath.Gnomon.CosmicBridge
+i [8981/9024] Replayed DkMath.NumberTheory.Legendre.GnomonBridge
+info: DkMath/NumberTheory/Legendre/GnomonBridge.lean:10:0: file: DkMath.NumberTheory.Legendre.GnomonBridge
+i [8982/9024] Replayed DkMath.NumberTheory.PrimorialUniverse.FreshPrimeLift
+info: DkMath/NumberTheory/PrimorialUniverse/FreshPrimeLift.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.FreshPrimeLift
+i [8983/9024] Replayed DkMath.NumberTheory.PrimorialUniverse.WheelReplication
+info: DkMath/NumberTheory/PrimorialUniverse/WheelReplication.lean:11:0: file: DkMath.NumberTheory.PrimorialUniverse.WheelReplication
+i [8984/9024] Replayed DkMath.NumberTheory.PrimorialUniverse.WheelProjection
+info: DkMath/NumberTheory/PrimorialUniverse/WheelProjection.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.WheelProjection
+i [8985/9024] Replayed DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOrbit
+info: DkMath/NumberTheory/PrimorialUniverse/SquareAnchorOrbit.lean:10:0: file: DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOrbit
+i [8986/9024] Replayed DkMath.NumberTheory.Legendre.PrimorialWheelBridge
+info: DkMath/NumberTheory/Legendre/PrimorialWheelBridge.lean:11:0: file: DkMath.NumberTheory.Legendre.PrimorialWheelBridge
+i [8987/9024] Replayed DkMath.NumberTheory.Legendre.PrimorialWheelSuccessor
+info: DkMath/NumberTheory/Legendre/PrimorialWheelSuccessor.lean:10:0: file: DkMath.NumberTheory.Legendre.PrimorialWheelSuccessor
+i [8988/9024] Replayed DkMath.NumberTheory.Legendre.GnomonSuccessor
+info: DkMath/NumberTheory/Legendre/GnomonSuccessor.lean:11:0: file: DkMath.NumberTheory.Legendre.GnomonSuccessor
+i [8989/9024] Replayed DkMath.NumberTheory.Legendre.GnomonSupportTurnover
+info: DkMath/NumberTheory/Legendre/GnomonSupportTurnover.lean:9:0: file: DkMath.NumberTheory.Legendre.GnomonSupportTurnover
+i [8990/9024] Replayed DkMath.CFBRC.Defs
+info: DkMath/CFBRC/Defs.lean:9:0: file: DkMath.CFBRC.Defs
+i [8991/9024] Replayed DkMath.Lib.Cosmic.GTailCyclotomic
+info: DkMath/Lib/Cosmic/GTailCyclotomic.lean:10:0: file: DkMath.Lib.Cosmic.GTailCyclotomic
+i [8992/9024] Replayed DkMath.NumberTheory.GapFocusing.CyclotomicAddress
+info: DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean:11:0: file: DkMath.NumberTheory.GapFocusing.CyclotomicAddress
+i [8994/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafePairResidual
+info: DkMath/NumberTheory/Legendre/ParitySafePairResidual.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafePairResidual
+i [8995/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeTripleProductGate
+info: DkMath/NumberTheory/Legendre/ParitySafeTripleProductGate.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeTripleProductGate
+i [8996/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeTripleFarCofactor
+info: DkMath/NumberTheory/Legendre/ParitySafeTripleFarCofactor.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeTripleFarCofactor
+i [8997/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarTripleRecharge
+info: DkMath/NumberTheory/Legendre/ParitySafeFarTripleRecharge.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarTripleRecharge
+i [8998/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarTripleCofactorSupport
+info: DkMath/NumberTheory/Legendre/ParitySafeFarTripleCofactorSupport.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarTripleCofactorSupport
+i [8999/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarCofactorWave
+info: DkMath/NumberTheory/Legendre/ParitySafeFarCofactorWave.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarCofactorWave
+i [9000/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveSelector
+info: DkMath/NumberTheory/Legendre/ParitySafeFarProductWaveSelector.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveSelector
+i [9001/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveRoughCofactor
+info: DkMath/NumberTheory/Legendre/ParitySafeFarProductWaveRoughCofactor.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveRoughCofactor
+i [9002/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveSurvival
+info: DkMath/NumberTheory/Legendre/ParitySafeFarProductWaveSurvival.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarProductWaveSurvival
+i [9003/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeFarProductKeyRecharge
+info: DkMath/NumberTheory/Legendre/ParitySafeFarProductKeyRecharge.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFarProductKeyRecharge
+i [9004/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargePairProduct
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargePairProduct.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargePairProduct
+i [9005/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeDualBaseCapacity
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeDualBaseCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeDualBaseCapacity
+i [9006/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeOddShellSelector
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeOddShellSelector.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeOddShellSelector
+i [9007/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeExactDualBase
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeExactDualBase.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeExactDualBase
+i [9008/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFourthSplit
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeDepthFourthSplit.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFourthSplit
+i [9009/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthSeatFiber
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeDepthSeatFiber.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthSeatFiber
+i [9010/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFiberExcess
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeDepthFiberExcess.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFiberExcess
+i [9011/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFiberResidualCapacity
+info: DkMath/NumberTheory/Legendre/ParitySafeRechargeDepthFiberResidualCapacity.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeRechargeDepthFiberResidualCapacity
+i [9012/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeFourDirectionGate
+info: DkMath/NumberTheory/Legendre/ParitySafeFourDirectionGate.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFourDirectionGate
+i [9013/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeTerminalSupportCost
+info: DkMath/NumberTheory/Legendre/ParitySafeTerminalSupportCost.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeTerminalSupportCost
+i [9014/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeChargedResidualLedger
+info: DkMath/NumberTheory/Legendre/ParitySafeChargedResidualLedger.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeChargedResidualLedger
+i [9015/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeLowCostResidualSplit
+info: DkMath/NumberTheory/Legendre/ParitySafeLowCostResidualSplit.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeLowCostResidualSplit
+i [9016/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeNearFirstPrimeWaveCapacity
+info: DkMath/NumberTheory/Legendre/ParitySafeNearFirstPrimeWaveCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeNearFirstPrimeWaveCapacity
+i [9017/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeFourthDualBaseCapacity
+info: DkMath/NumberTheory/Legendre/ParitySafeFourthDualBaseCapacity.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFourthDualBaseCapacity
+i [9018/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeFullCoverCapacityFrontier
+info: DkMath/NumberTheory/Legendre/ParitySafeFullCoverCapacityFrontier.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeFullCoverCapacityFrontier
+i [9019/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeDepthResidualFifthTrigger
+info: DkMath/NumberTheory/Legendre/ParitySafeDepthResidualFifthTrigger.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeDepthResidualFifthTrigger
+i [9020/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeFifthDirectionGate
+info: DkMath/NumberTheory/Legendre/ParitySafeFifthDirectionGate.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeFifthDirectionGate
+i [9021/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeCollisionPairOverlapCancellation
+info: DkMath/NumberTheory/Legendre/ParitySafeCollisionPairOverlapCancellation.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeCollisionPairOverlapCancellation
+i [9022/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeLowCostCapacitySlack
+info: DkMath/NumberTheory/Legendre/ParitySafeLowCostCapacitySlack.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeLowCostCapacitySlack
+i [9023/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeActualFiberCancellation
+info: DkMath/NumberTheory/Legendre/ParitySafeActualFiberCancellation.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeActualFiberCancellation
+i [9024/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeCollisionResidualPairSlackIncidence
+info: DkMath/NumberTheory/Legendre/ParitySafeCollisionResidualPairSlackIncidence.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeCollisionResidualPairSlackIncidence
+i [9025/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeUnusedResidualPairRouting
+info: DkMath/NumberTheory/Legendre/ParitySafeUnusedResidualPairRouting.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeUnusedResidualPairRouting
+i [9026/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeSecondCancellationRedundancyAudit
+info: DkMath/NumberTheory/Legendre/ParitySafeSecondCancellationRedundancyAudit.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeSecondCancellationRedundancyAudit
+i [9028/9074] Replayed DkMath.CosmicFormula.Mass.BodyGapSplit
+info: DkMath/CosmicFormula/Mass/BodyGapSplit.lean:9:0: file: DkMath.CosmicFormula.Mass.BodyGapSplit
+i [9029/9074] Replayed DkMath.NumberTheory.WeightedBinomial
+info: DkMath/NumberTheory/WeightedBinomial.lean:12:0: file: DkMath.NumberTheory.WeightedBinomial
+i [9030/9074] Replayed DkMath.NumberTheory.PascalPrimeDial
+info: DkMath/NumberTheory/PascalPrimeDial.lean:9:0: file: DkMath.NumberTheory.PascalPrimeDial
+i [9031/9074] Replayed DkMath.NumberTheory.PascalPrimeCoordinateDecoder
+info: DkMath/NumberTheory/PascalPrimeCoordinateDecoder.lean:10:0: file: DkMath.NumberTheory.PascalPrimeCoordinateDecoder
+i [9032/9074] Replayed DkMath.NumberTheory.PascalPrebirthBirth
+info: DkMath/NumberTheory/PascalPrebirthBirth.lean:10:0: file: DkMath.NumberTheory.PascalPrebirthBirth
+i [9033/9074] Replayed DkMath.NumberTheory.Legendre.GnomonPascalCell
+info: DkMath/NumberTheory/Legendre/GnomonPascalCell.lean:12:0: file: DkMath.NumberTheory.Legendre.GnomonPascalCell
+i [9034/9074] Replayed DkMath.NumberTheory.Legendre.SquareShellVonMangoldt
+info: DkMath/NumberTheory/Legendre/SquareShellVonMangoldt.lean:10:0: file: DkMath.NumberTheory.Legendre.SquareShellVonMangoldt
+i [9035/9074] Replayed DkMath.NumberTheory.Legendre.SquareShellPrimePowerGauge
+info: DkMath/NumberTheory/Legendre/SquareShellPrimePowerGauge.lean:11:0: file: DkMath.NumberTheory.Legendre.SquareShellPrimePowerGauge
+i [9036/9074] Replayed DkMath.NumberTheory.Legendre.GnomonDivisorCarry
+info: DkMath/NumberTheory/Legendre/GnomonDivisorCarry.lean:10:0: file: DkMath.NumberTheory.Legendre.GnomonDivisorCarry
+i [9037/9074] Replayed DkMath.NumberTheory.Legendre.GnomonCarryFiber
+info: DkMath/NumberTheory/Legendre/GnomonCarryFiber.lean:9:0: file: DkMath.NumberTheory.Legendre.GnomonCarryFiber
+i [9038/9074] Replayed DkMath.NumberTheory.Legendre.GnomonCofactorWindow
+info: DkMath/NumberTheory/Legendre/GnomonCofactorWindow.lean:10:0: file: DkMath.NumberTheory.Legendre.GnomonCofactorWindow
+i [9039/9074] Replayed DkMath.NumberTheory.Legendre.GnomonCofactorSieve
+info: DkMath/NumberTheory/Legendre/GnomonCofactorSieve.lean:10:0: file: DkMath.NumberTheory.Legendre.GnomonCofactorSieve
+i [9040/9074] Replayed DkMath.NumberTheory.Legendre.GnomonCofactorLeastFactor
+info: DkMath/NumberTheory/Legendre/GnomonCofactorLeastFactor.lean:9:0: file: DkMath.NumberTheory.Legendre.GnomonCofactorLeastFactor
+i [9041/9074] Replayed DkMath.NumberTheory.Legendre.GnomonCofactorSemiprime
+info: DkMath/NumberTheory/Legendre/GnomonCofactorSemiprime.lean:9:0: file: DkMath.NumberTheory.Legendre.GnomonCofactorSemiprime
+i [9042/9074] Replayed DkMath.NumberTheory.Legendre.GnomonCofactorThreePrime
+info: DkMath/NumberTheory/Legendre/GnomonCofactorThreePrime.lean:11:0: file: DkMath.NumberTheory.Legendre.GnomonCofactorThreePrime
+i [9043/9074] Replayed DkMath.CFBRC.Basic
+info: DkMath/CFBRC/Basic.lean:11:0: file: DkMath.CFBRC.Basic
+i [9044/9074] Replayed DkMath.CFBRC.CyclotomicProduct
+info: DkMath/CFBRC/CyclotomicProduct.lean:10:0: file: DkMath.CFBRC.CyclotomicProduct
+i [9046/9074] Replayed DkMath.CosmicFormula.CoreBeamGap
+info: DkMath/CosmicFormula/CoreBeamGap.lean:10:0: file: DkMath.CosmicFormula.CoreBeamGap
+i [9047/9074] Replayed DkMath.NumberTheory.GcdDiffPow
+info: DkMath/NumberTheory/GcdDiffPow.lean:10:0: file: DkMath.NumberTheory.GcdDiffPow
+i [9048/9074] Replayed DkMath.NumberTheory.GcdLemmas
+info: DkMath/NumberTheory/GcdLemmas.lean:10:0: file: DkMath.NumberTheory.GcdLemmas
+i [9049/9074] Replayed DkMath.NumberTheory.GcdNatAbsDivD
+info: DkMath/NumberTheory/GcdNatAbsDivD.lean:10:0: file: DkMath.NumberTheory.GcdNatAbsDivD
+i [9050/9074] Replayed DkMath.NumberTheory.GdcDivD
+info: DkMath/NumberTheory/GdcDivD.lean:11:0: file: DkMath.NumberTheory.GdcDivD
+i [9051/9074] Replayed DkMath.NumberTheory.ZsigmondyCyclotomic
+info: DkMath/NumberTheory/ZsigmondyCyclotomic.lean:24:0: file: DkMath.NumberTheory.ZsigmondyCyclotomic
+i [9052/9074] Replayed DkMath.Zsigmondy
+info: DkMath/Zsigmondy.lean:11:0: file: DkMath.Zsigmondy
+i [9053/9074] Replayed DkMath.NumberTheory.GapFocusing.PrimeOrder
+info: DkMath/NumberTheory/GapFocusing/PrimeOrder.lean:10:0: file: DkMath.NumberTheory.GapFocusing.PrimeOrder
+i [9054/9074] Replayed DkMath.NumberTheory.GapFocusing.HomogeneousAddress
+info: DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean:11:0: file: DkMath.NumberTheory.GapFocusing.HomogeneousAddress
+i [9056/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafePersistence
+info: DkMath/NumberTheory/Legendre/ParitySafePersistence.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafePersistence
+i [9057/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafePersistenceParity
+info: DkMath/NumberTheory/Legendre/ParitySafePersistenceParity.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafePersistenceParity
+i [9058/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeFreshCost
+info: DkMath/NumberTheory/Legendre/ParitySafeFreshCost.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeFreshCost
+i [9059/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeBlockLocalization
+info: DkMath/NumberTheory/Legendre/ParitySafeBlockLocalization.lean:11:0: file: DkMath.NumberTheory.Legendre.ParitySafeBlockLocalization
+i [9060/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeIncidenceUpper
+info: DkMath/NumberTheory/Legendre/ParitySafeIncidenceUpper.lean:11:0: file: DkMath.NumberTheory.Legendre.ParitySafeIncidenceUpper
+i [9061/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeExcessCertificate
+info: DkMath/NumberTheory/Legendre/ParitySafeExcessCertificate.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeExcessCertificate
+i [9062/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootCharge
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootCharge.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootCharge
+i [9063/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootTail
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootTail.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootTail
+i [9064/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootEleven
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRootEleven.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootEleven
+i [9065/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafeCanonicalRoughCount
+info: DkMath/NumberTheory/Legendre/ParitySafeCanonicalRoughCount.lean:9:0: file: DkMath.NumberTheory.Legendre.ParitySafeCanonicalRoughCount
+i [9066/9074] Replayed DkMath.NumberTheory.Legendre.ParitySafePrimeAnchorCap
+info: DkMath/NumberTheory/Legendre/ParitySafePrimeAnchorCap.lean:10:0: file: DkMath.NumberTheory.Legendre.ParitySafePrimeAnchorCap
+i [9067/9074] Replayed DkMath.NumberTheory.Legendre.GnomonCofactorAdaptiveRoughness
+info: DkMath/NumberTheory/Legendre/GnomonCofactorAdaptiveRoughness.lean:10:0: file: DkMath.NumberTheory.Legendre.GnomonCofactorAdaptiveRoughness
+i [9068/9074] Replayed DkMathTest.NumberTheory.GnomonCofactorWindowCalibration
+info: DkMathTest/NumberTheory/GnomonCofactorWindowCalibration.lean:9:0: file: DkMathTest.NumberTheory.GnomonCofactorWindowCalibration
+i [9069/9074] Replayed DkMathTest.NumberTheory.GnomonCofactorSieveCalibration
+info: DkMathTest/NumberTheory/GnomonCofactorSieveCalibration.lean:10:0: file: DkMathTest.NumberTheory.GnomonCofactorSieveCalibration
+i [9070/9074] Replayed DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration
+info: DkMathTest/NumberTheory/GnomonCofactorLeastFactorCalibration.lean:10:0: file: DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration
+i [9071/9074] Replayed DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration
+info: DkMathTest/NumberTheory/GnomonCofactorSemiprimeCalibration.lean:10:0: file: DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration
+i [9072/9074] Replayed DkMathTest.NumberTheory.GnomonCofactorThreePrimeCalibration
+info: DkMathTest/NumberTheory/GnomonCofactorThreePrimeCalibration.lean:10:0: file: DkMathTest.NumberTheory.GnomonCofactorThreePrimeCalibration
+i [9073/9074] Replayed DkMathTest.NumberTheory.GnomonCofactorAdaptiveRoughnessCalibration
+info: DkMathTest/NumberTheory/GnomonCofactorAdaptiveRoughnessCalibration.lean:10:0: file: DkMathTest.NumberTheory.GnomonCofactorAdaptiveRoughnessCalibration
+i [9074/9074] Built DkMathTest.NumberTheory.GnomonCofactorAdaptiveRoughnessAxiomAudit (4.9s)
+info: DkMathTest/NumberTheory/GnomonCofactorAdaptiveRoughnessAxiomAudit.lean:9:0: file: DkMathTest.NumberTheory.GnomonCofactorAdaptiveRoughnessAxiomAudit
+info: DkMathTest/NumberTheory/GnomonCofactorAdaptiveRoughnessAxiomAudit.lean:11:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorAdaptiveBasis' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorAdaptiveRoughnessAxiomAudit.lean:12:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorAdaptiveBasis_prime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorAdaptiveRoughnessAxiomAudit.lean:13:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorAdaptiveBasis_cover' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorAdaptiveRoughnessAxiomAudit.lean:14:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorAdaptiveBasis_safe' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorAdaptiveRoughnessAxiomAudit.lean:15:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorSurvivor_prime_gt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorAdaptiveRoughnessAxiomAudit.lean:16:0: 'DkMath.NumberTheory.Legendre.gnomonCofactor_fourFactor_impossible' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorAdaptiveRoughnessAxiomAudit.lean:17:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorRough_exhaustion' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorAdaptiveRoughnessAxiomAudit.lean:18:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorAdaptive_exhaustion' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorAdaptiveRoughnessAxiomAudit.lean:19:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorAdaptive_mass_eq_error' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorAdaptiveRoughnessAxiomAudit.lean:20:0: 'DkMath.NumberTheory.Legendre.gnomonCofactorAdaptive_budget_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/NumberTheory/GnomonCofactorAdaptiveRoughnessAxiomAudit.lean:21:0: 'DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_adaptive_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Build completed successfully (9074 jobs).
