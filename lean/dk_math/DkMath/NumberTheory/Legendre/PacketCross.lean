@@ -282,9 +282,9 @@ theorem squareAnchorPacketCrossOffsets_mul_dvd_diff
     (hpq : (p, q) ∈ squareAnchorNondivisorOrderedPrimePairs n)
     (hr : r ∈ squareAnchorPacketCrossOffsets n p q)
     (hs : s ∈ squareAnchorPacketCrossOffsets n p q)
-    (hrs : r ≤ s) :
+    (_hrs : r ≤ s) :
     p * q ∣ s - r := by
-  clear hrs
+  clear _hrs
   have hr' := mem_squareAnchorPacketCrossOffsets.mp hr
   have hs' := mem_squareAnchorPacketCrossOffsets.mp hs
   have hpair := mem_squareAnchorNondivisorOrderedPrimePairs.mp hpq
