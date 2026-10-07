@@ -1,0 +1,18 @@
+{
+  "production_declarations": [
+    "gnomonCentralCarryEvents",
+    "gnomonCentralCarry_factorization",
+    "gnomonCentralCarry_log_eq",
+    "gnomonCommonCarryEvents",
+    "gnomonSmallOnlyCarryEvents",
+    "gnomonCentralOnlyCarryEvents",
+    "gnomonCarry_common_split",
+    "gnomonCarry_compensation_defect",
+    "gnomonSmallCarry_le_central_iff_compensation",
+    "gnomonCarry_compensation_iff_product"
+  ],
+  "count": 10,
+  "private_helpers": [
+    "log_base_product"
+  ]
+}

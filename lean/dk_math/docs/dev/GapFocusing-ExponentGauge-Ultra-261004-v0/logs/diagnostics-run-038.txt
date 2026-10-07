@@ -1,0 +1,36 @@
+{
+  "compensation_search_range": [
+    3,
+    10000
+  ],
+  "exact_integer_counterexamples": [],
+  "first_same_base_failure": {
+    "n": 4,
+    "p": 3,
+    "small_count": 1,
+    "central_count": 0
+  },
+  "first_label_matching_failure": null,
+  "first_rank_base_failure": {
+    "n": 27,
+    "small_bases": [
+      23,
+      19,
+      11,
+      5
+    ],
+    "central_bases": [
+      53,
+      47,
+      7,
+      7,
+      2,
+      2,
+      2
+    ]
+  },
+  "recorded_sample_count": 300,
+  "source_sha256": "453f1536d7e2f192dd28c2af72e2bc6f7c69ef5ef8073bb3f35a6dbad5bf271d",
+  "elapsed_seconds": 13.958,
+  "scope": "Exact integer products in the bounded search; logs and margins are floating diagnostics. No finite search is a Lean premise or a universal comparison theorem."
+}
