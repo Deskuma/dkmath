@@ -111,6 +111,7 @@ import DkMath.NumberTheory.Legendre.GnomonCofactorLeastFactor
 import DkMath.NumberTheory.Legendre.GnomonCofactorSemiprime
 import DkMath.NumberTheory.Legendre.GnomonCofactorThreePrime
 import DkMath.NumberTheory.Legendre.GnomonCofactorAdaptiveRoughness
+import DkMath.NumberTheory.Legendre.GnomonNonSingletonCorrection
 
 #print "file: DkMath.NumberTheory.Legendre"
 
