@@ -107,6 +107,7 @@ import DkMath.NumberTheory.Legendre.GnomonDivisorCarry
 import DkMath.NumberTheory.Legendre.GnomonCarryFiber
 import DkMath.NumberTheory.Legendre.GnomonCofactorWindow
 import DkMath.NumberTheory.Legendre.GnomonCofactorSieve
+import DkMath.NumberTheory.Legendre.GnomonCofactorLeastFactor
 
 #print "file: DkMath.NumberTheory.Legendre"
 
