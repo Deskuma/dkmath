@@ -1,0 +1,25 @@
+{
+  "sample_count": 300,
+  "phase_range": [
+    3,
+    300
+  ],
+  "additional_phase_anchors": [
+    1031,
+    5000
+  ],
+  "central_conjecture_range": [
+    3,
+    10000
+  ],
+  "largest_sampled_central_ratio": {
+    "n": 27,
+    "ratio": 0.8947754213634967,
+    "small_approx": 31.50060003445794,
+    "central_approx": 35.20503500918252
+  },
+  "sampled_central_counterexamples": [],
+  "source_sha256": "74aaf2cc56da2ebe503b9f019f9db5443386cff352fe72726cd78b7b82a0e011",
+  "elapsed_seconds": 61.142,
+  "scope": "All logs and inequalities are floating diagnostics; central-binomial bound is unproved. The proved alternative is zero-phase exclusion plus a global nonprime band."
+}

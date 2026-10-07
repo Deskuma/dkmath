@@ -112,6 +112,7 @@ import DkMath.NumberTheory.Legendre.GnomonCofactorSemiprime
 import DkMath.NumberTheory.Legendre.GnomonCofactorThreePrime
 import DkMath.NumberTheory.Legendre.GnomonCofactorAdaptiveRoughness
 import DkMath.NumberTheory.Legendre.GnomonNonSingletonCorrection
+import DkMath.NumberTheory.Legendre.GnomonSmallCarryPhase
 
 #print "file: DkMath.NumberTheory.Legendre"
 
