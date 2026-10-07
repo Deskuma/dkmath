@@ -114,7 +114,7 @@ private theorem nonprime_prefix (N : ℕ) :
   rw [hp] at he
   linarith
 
-private theorem band_prefix_identity {n : ℕ} (hn : 3 ≤ n) :
+theorem gnomonRepeatedCarryBandBudget_prefix_identity {n : ℕ} (hn : 3 ≤ n) :
     Chebyshev.psi (2 * n) + gnomonRepeatedCarryBandBudget n =
       Chebyshev.theta (2 * n) + (Chebyshev.psi ((n : ℝ) ^ 2) -
         Chebyshev.theta ((n : ℝ) ^ 2)) := by
@@ -156,7 +156,7 @@ theorem gnomonNonSingletonCorrection_le_phaseBudget {n : ℕ} (hn : 3 ≤ n) :
   have hs := gnomonPascalSmallCarryMass_le_phasePsi n
   have hr := gnomonRepeatedCarryMass_le_bandBudget n
   have hh := gnomonPascalShellHigherPrimePowerMass_le_reciprocalBudget hn
-  have he := band_prefix_identity hn
+  have he := gnomonRepeatedCarryBandBudget_prefix_identity hn
   unfold gnomonNonSingletonCorrection gnomonPhaseCorrectionBudget gnomonNonSingletonBudget
   linarith
 

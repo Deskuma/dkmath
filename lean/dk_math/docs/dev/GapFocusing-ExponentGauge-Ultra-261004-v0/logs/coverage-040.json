@@ -1,0 +1,23 @@
+{
+  "production_declarations": [
+    "gnomonRepeatedFirstExponent",
+    "gnomonRepeatedBaseActive",
+    "gnomonRepeatedPhaseEnvelope",
+    "gnomonRepeatedPhaseBudget",
+    "gnomonRepeatedCarry_base_active",
+    "gnomonRepeatedCarryEvents_subset_phaseEnvelope",
+    "gnomonRepeatedCarryMass_le_phaseBudget",
+    "gnomonRepeatedPhaseBudget_le_bandBudget",
+    "gnomonRepeatedCarry_zero_of_inactive",
+    "gnomonRepeatedExponentInterval_weight",
+    "gnomonRepeatedPhaseBudget_add_excluded_le_band",
+    "gnomonRepeatPhaseCorrectionBudget",
+    "gnomonNonSingletonCorrection_le_repeatPhaseBudget",
+    "gnomonRepeatPhaseCorrectionBudget_le_phase037",
+    "exists_prime_squareCell_of_repeatPhaseBudget_lt"
+  ],
+  "newly_exposed_previous_declarations": [
+    "gnomonRepeatedCarryBandBudget_prefix_identity"
+  ],
+  "anonymous_instances": 1
+}

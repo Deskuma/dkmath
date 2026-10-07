@@ -1,0 +1,24 @@
+Command exited with non-zero status 1
+	Command being timed: "lake build DkMath.NumberTheory.Legendre.GnomonRepeatedCarryPhase DkMathTest.NumberTheory.GnomonRepeatedCarryPhaseCalibration"
+	User time (seconds): 586.20
+	System time (seconds): 585.12
+	Percent of CPU this job got: 23%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:24:32
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 23072464
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 35321613
+	Minor (reclaiming a frame) page faults: 10782885
+	Voluntary context switches: 35590219
+	Involuntary context switches: 13887
+	Swaps: 0
+	File system inputs: 337328776
+	File system outputs: 13728
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

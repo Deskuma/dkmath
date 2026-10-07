@@ -115,6 +115,7 @@ import DkMath.NumberTheory.Legendre.GnomonNonSingletonCorrection
 import DkMath.NumberTheory.Legendre.GnomonSmallCarryPhase
 import DkMath.NumberTheory.Legendre.GnomonCentralCarryCompensation
 import DkMath.NumberTheory.Legendre.GnomonPooledThresholdAudit
+import DkMath.NumberTheory.Legendre.GnomonRepeatedCarryPhase
 
 #print "file: DkMath.NumberTheory.Legendre"
 
