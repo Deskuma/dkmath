@@ -1,0 +1,37 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMathTest.NumberTheory.GnomonCofactorThreePrimeCalibration
+
+#print "file: DkMathTest.NumberTheory.GnomonCofactorThreePrimeAxiomAudit"
+
+-- Complete named public coverage of DkMath/NumberTheory/Legendre/GnomonCofactorThreePrime.lean
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorThreePrimeTriples
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorThreePrime_product_injective
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorThreePrimeWitnesses
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSemiprime_threePrime_disjoint
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorThreePrimeCombinedWitnesses
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorThreePrimeCombinedMass
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorThreePrimeCombined_subset_error
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorThreePrimeCombinedMass_eq
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorThreePrimeCombinedMass_le_error
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorThreePrimeBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_le_threePrimeBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorThreePrimeBudget_le_semiprimeBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorThreePrimeBudget_excess
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_threePrime_excess
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_threePrimeBudget_lt
+
+-- Complete named public coverage of DkMathTest/NumberTheory/GnomonCofactorThreePrimeCalibration.lean
+#print axioms DkMathTest.NumberTheory.GnomonCofactorThreePrimeCalibration.triples32_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorThreePrimeCalibration.witnesses32_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorThreePrimeCalibration.complete_small_carriers_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorThreePrimeCalibration.exact_small_budgets_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorThreePrimeCalibration.consumer31_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorThreePrimeCalibration.fourth_power69_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorThreePrimeCalibration.products32_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorThreePrimeCalibration.consumer32_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorThreePrimeCalibration.equality3_checked
