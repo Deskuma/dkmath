@@ -1,0 +1,73 @@
+{
+  "scope": "All named public declarations in the new production module and the new calibration module",
+  "production_count": 15,
+  "new_production_count": 15,
+  "calibration_count": 10,
+  "total": 25,
+  "modules": [
+    {
+      "file": "DkMath/NumberTheory/Legendre/GnomonCofactorSemiprime.lean",
+      "declarations": [
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimePairs",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprime_product_injective",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeWitnesses",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeMass",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeMass_eq_pair_sum",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeWitnesses_subset_error",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeMass_le_error",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSquareWitnesses_subset_semiprime",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSquareWitnessMass_le_semiprimeMass",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_le_semiprimeBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeBudget_le_leastFactorBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeBudget_excess",
+        "DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_semiprime_excess",
+        "DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_semiprimeBudget_lt"
+      ],
+      "new": [
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimePairs",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprime_product_injective",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeWitnesses",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeMass",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeMass_eq_pair_sum",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeWitnesses_subset_error",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeMass_le_error",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSquareWitnesses_subset_semiprime",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSquareWitnessMass_le_semiprimeMass",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_le_semiprimeBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeBudget_le_leastFactorBudget",
+        "DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeBudget_excess",
+        "DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_semiprime_excess",
+        "DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_semiprimeBudget_lt"
+      ]
+    },
+    {
+      "file": "DkMathTest/NumberTheory/GnomonCofactorSemiprimeCalibration.lean",
+      "declarations": [
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.witnesses9_12_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.complete_small_carriers_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.exact_small_budgets_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.collision539_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.residual32_carrier_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.consumer29_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.products31_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.consumer31_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.strict_gain31_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.equality3_checked"
+      ],
+      "new": [
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.witnesses9_12_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.complete_small_carriers_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.exact_small_budgets_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.collision539_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.residual32_carrier_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.consumer29_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.products31_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.consumer31_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.strict_gain31_checked",
+        "DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.equality3_checked"
+      ]
+    }
+  ]
+}
