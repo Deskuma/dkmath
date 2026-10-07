@@ -114,6 +114,7 @@ import DkMath.NumberTheory.Legendre.GnomonCofactorAdaptiveRoughness
 import DkMath.NumberTheory.Legendre.GnomonNonSingletonCorrection
 import DkMath.NumberTheory.Legendre.GnomonSmallCarryPhase
 import DkMath.NumberTheory.Legendre.GnomonCentralCarryCompensation
+import DkMath.NumberTheory.Legendre.GnomonPooledThresholdAudit
 
 #print "file: DkMath.NumberTheory.Legendre"
 

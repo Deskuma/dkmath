@@ -1,0 +1,11 @@
+{
+  "production_declarations": [
+    "gnomonResidualThresholdProduct",
+    "gnomonThresholdPooledCompensation",
+    "gnomonResidualThresholdProduct_split",
+    "gnomonResidualThresholdProduct_two",
+    "gnomonSmallCarry_le_central_of_thresholdPooling",
+    "gnomonThresholdPooledCompensation_fails27"
+  ],
+  "count": 6
+}
