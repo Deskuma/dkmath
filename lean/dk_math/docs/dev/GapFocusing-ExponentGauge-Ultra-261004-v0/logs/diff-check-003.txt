@@ -1,4 +1,0 @@
-git diff --check: exit 0
-New text files checked: 19
-Trailing whitespace and final newline: all pass
-Local links in all four report documents: all pass

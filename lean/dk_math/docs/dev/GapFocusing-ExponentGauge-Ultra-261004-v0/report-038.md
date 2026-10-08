@@ -109,7 +109,7 @@ Focused production/calibration, complete Legendre facade, root DkMath, and all-n
 
 Focused, facade and axiom-audit logs contain no warnings. The root reports five pre-existing sorry warnings in TriominoFLT:1919, ZsigmondyCyclotomicResearch:147, TriominoCosmicBranchA:4187, GcdNextResearch:850 and CyclotomicPrincipalization:5389, outside this new-declaration audit. No whole-repository sorry-free claim is made. No memory failure occurred. Timings are incremental measurements rather than clean-build benchmarks.
 
-Artifacts: [source inventory](source-inventory-038.md), [coverage](logs/coverage-038.json), [diagnostics](logs/diagnostics-038.json), [focused](logs/focused-038.txt), [axiom audit](logs/axiom-audit-038.txt), [facade](logs/facade-038.txt), [root](logs/root-038.txt), and [artifact check](logs/artifact-check-038.txt). Reproduce with checks/build-038.py (focused axiom-audit facade root), checks/diagnostics-038.py and checks/check-038.py.
+Artifacts: [source inventory](source-inventory-038.md), [coverage](evidence/MANIFEST.md#log-edee162589f0ac16), [diagnostics](evidence/MANIFEST.md#log-ea95521a7d39fe39), [focused](evidence/MANIFEST.md#log-16625325f8612fc2), [axiom audit](evidence/MANIFEST.md#log-44850286cee7b614), [facade](evidence/MANIFEST.md#log-c3f21ed6eb21def9), [root](evidence/MANIFEST.md#log-e494b4d6fae97e68), and [artifact check](evidence/MANIFEST.md#log-15ca80b9fe794485). Reproduce with checks/build-038.py (focused axiom-audit facade root), checks/diagnostics-038.py and checks/check-038.py.
 
 ## Next natural frontier and implementation proposal
 

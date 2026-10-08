@@ -45,7 +45,7 @@ The source audit reused SevenAdicPowerSplit, generic PrimeAdicPowerSplit,
 `seventh_power_factor_split`, the underlying `power_factor_split`, the
 quadratic-inner-root/norm packet, the existing prescribed-carrier ramified
 resolution, the 043 chart receiver, and the GN/away coordinate ledgers.
-[source-audit-044.json](logs/source-audit-044.json) retains fingerprints of
+[source-audit-044.json](evidence/MANIFEST.md#log-14c0924b8fdf4f80) retains fingerprints of
 15 relevant existing source files. No new factorization framework or packet
 structure was introduced.
 

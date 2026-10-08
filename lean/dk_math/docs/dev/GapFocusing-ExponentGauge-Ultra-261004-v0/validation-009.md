@@ -14,9 +14,9 @@ lake build DkMath.NumberTheory.Legendre.ParitySafeCRTSeat \
   DkMath.NumberTheory.Legendre DkMath
 ```
 
-[Final build log](logs/build-final-009.txt). The new modules have no warnings. Root replay includes five existing unrelated research declarations using `sorry`; the complete dependency inspection below establishes that none is used by the new declarations. A successful root build alone is not treated as proof of global absence of admissions.
+[Final build log](evidence/MANIFEST.md#log-7d27c32ea64a9030). The new modules have no warnings. Root replay includes five existing unrelated research declarations using `sorry`; the complete dependency inspection below establishes that none is used by the new declarations. A successful root build alone is not treated as proof of global absence of admissions.
 
-[Mandatory focused build](logs/build-mandatory-009.txt) checked41/91 without full incidence/excess evaluation. [Classification focused build](logs/build-classification-009.txt) checked all30 previous Class2 shells, actual witnesses, charges, partition, five successful prime conclusions and25 charge-budget obstructions. [CRT development log](logs/build-crt-009.txt) and [earlier CRT regression checkpoint](logs/build-crt-regression-009.txt) retain intermediate failures/warnings for investigation; the final combined log supersedes them for acceptance.
+[Mandatory focused build](evidence/MANIFEST.md#log-138ced6e1b2e55a1) checked41/91 without full incidence/excess evaluation. [Classification focused build](evidence/MANIFEST.md#log-4d50dc4372ffc5bc) checked all30 previous Class2 shells, actual witnesses, charges, partition, five successful prime conclusions and25 charge-budget obstructions. [CRT development log](evidence/MANIFEST.md#log-29f3fcf8ed35bc0d) and [earlier CRT regression checkpoint](evidence/MANIFEST.md#log-9a9894dfd1f2ab04) retain intermediate failures/warnings for investigation; the final combined log supersedes them for acceptance.
 
 Both inventory and axiom probes were executed through `lake env lean` and exited0:
 
@@ -25,11 +25,11 @@ lake env lean DkMathTest/NumberTheory/LegendreAdaptiveCertificateInventory.lean
 lake env lean DkMathTest/NumberTheory/LegendreAdaptiveCertificateAxiomAudit.lean
 ```
 
-[Initial source types](logs/source-inventory-009.txt), [final source types](logs/source-inventory-final-009.txt), [complete axiom output](logs/axiom-audit-009.txt). All numerical proofs use ordinary kernel checking (`decide`, including scoped `decide +kernel`); no native evaluator trust is introduced.
+[Initial source types](evidence/MANIFEST.md#log-8825fb8c9e727d2a), [final source types](evidence/MANIFEST.md#log-bb201df0bed76a5a), [complete axiom output](evidence/MANIFEST.md#log-f89401867e84cb4b). All numerical proofs use ordinary kernel checking (`decide`, including scoped `decide +kernel`); no native evaluator trust is introduced.
 
 ## Complete declaration coverage
 
-[Manifest](logs/declaration-coverage-009.json) enumerates66 new declarations:
+[Manifest](evidence/MANIFEST.md#log-94bb72aed424b8d6) enumerates66 new declarations:
 
 | Source | New public declarations |
 | --- | --- |
@@ -40,15 +40,15 @@ lake env lean DkMathTest/NumberTheory/LegendreAdaptiveCertificateAxiomAudit.lean
 |Classification proofs|2 definitions,10 theorems|
 |Total|66|
 
-The generated [audit probe](../../../DkMathTest/NumberTheory/LegendreAdaptiveCertificateAxiomAudit.lean) performs `#check` and `#print axioms` for every manifest entry. [Coverage result](logs/axiom-coverage-009.txt) verifies all66 complete axiom sets, including all19 production declarations, contain only `propext`, `Classical.choice`, and `Quot.sound` or are empty. No `sorryAx` or additional custom axiom is present.
+The generated [audit probe](../../../DkMathTest/NumberTheory/LegendreAdaptiveCertificateAxiomAudit.lean) performs `#check` and `#print axioms` for every manifest entry. [Coverage result](evidence/MANIFEST.md#log-8231672fdf4774bc) verifies all66 complete axiom sets, including all19 production declarations, contain only `propext`, `Classical.choice`, and `Quot.sound` or are empty. No `sorryAx` or additional custom axiom is present.
 
 ## Source, headers and document checks
 
 `python3 docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-009.py` checks the manifest against source declarations, dependency sets against the full probe output, forbidden tokens, every written Lean header, tracked/new-file whitespace, and local document links.
 
-- [Forbidden-token scan](logs/forbidden-token-scan-009.txt): zero matches for `sorry`, `sorryAx`, `admit`, `axiom`, `native_decide`, `unsafe` in the changed facade and all seven new Lean files.
-- [Header check](logs/header-style-009.txt): all eight changed/new Lean files use the common copyright header, import block, and immediately following `#print "file: Full.Module.Name"`.
-- [Whitespace check](logs/diff-check-009.txt): `git diff --check` plus checks of untracked new files passed.
+- [Forbidden-token scan](evidence/MANIFEST.md#log-67728e4aff5ec685): zero matches for `sorry`, `sorryAx`, `admit`, `axiom`, `native_decide`, `unsafe` in the changed facade and all seven new Lean files.
+- [Header check](evidence/MANIFEST.md#log-1d7a164b6d4702bb): all eight changed/new Lean files use the common copyright header, import block, and immediately following `#print "file: Full.Module.Name"`.
+- [Whitespace check](evidence/MANIFEST.md#log-eed193ad9d1c5df1): `git diff --check` plus checks of untracked new files passed.
 - All links in the009 inventory, findings, report, validation and checkpoint README resolve.
 
 The discovery script [classify-009.py](checks/classify-009.py) restricts input to the previous30 Class2 anchors in2..100, offsets1..2n, at most three distinct actual seats and at most three active witnesses per seat. Its generated data are subsequently proved in Lean; discovery output is not accepted as a proof. The classification reuses the already checked008 cap/candidate values and never evaluates whole-shell incidence/excess.

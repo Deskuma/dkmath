@@ -1,6 +1,6 @@
 # Instruction 008 source inventory
 
-Baseline `a8d0be1e6`,007 implementation `6362ea935`; initial tree clean. The [inventory probe](../../../DkMathTest/NumberTheory/LegendreHybridProviderInventory.lean) was run before adding abstractions. [Checked types](logs/source-inventory-008.txt).
+Baseline `a8d0be1e6`,007 implementation `6362ea935`; initial tree clean. The [inventory probe](../../../DkMathTest/NumberTheory/LegendreHybridProviderInventory.lean) was run before adding abstractions. [Checked types](evidence/MANIFEST.md#log-3070195d1190e582).
 
 | Requested source | Exact interfaces audited and reused |
 | --- | --- |

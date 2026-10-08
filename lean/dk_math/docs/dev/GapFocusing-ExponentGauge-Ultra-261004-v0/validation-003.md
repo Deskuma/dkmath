@@ -21,7 +21,7 @@ exit 0、`Build completed successfully (10372 jobs)`。
 新規 production 全五 module と新規 regression/audit 全五 module、
 公開 `GapFocusing` facade、公開 `DkMath` facade、Instruction 002 の既存
 calibration/audit 二 module を含む。job 数は依存も含み、変更 module 数ではない。
-ログ: [build-final-003](logs/build-final-003.txt)。
+ログ: [build-final-003](evidence/MANIFEST.md#log-2bb204ba1e4a727b)。
 
 最後に既存 Zsigmondy 三つの存在 endpoint の明示的な公理出力を監査へ加え、
 監査 target だけを再実行した。
@@ -31,7 +31,7 @@ lake build DkMathTest.NumberTheory.GapFocusingAddressAxiomAudit
 ```
 
 exit 0、`Build completed successfully (8966 jobs)`、warning/error なし。
-ログ: [axiom-audit-003](logs/axiom-audit-003.txt)。
+ログ: [axiom-audit-003](evidence/MANIFEST.md#log-a94865018a7aad2f)。
 
 ## 公理出力の完全な coverage
 
@@ -45,7 +45,7 @@ source から declaration 名を抽出し、実際の log 出力との対応を�
 `{propext, Classical.choice, Quot.sound}` の部分集合だった。空集合も許容した。
 既存 `exists_primitivePrimeDivisor_prime_exp`, `_body_nat`, `_kernel_nat` の
 三 endpoint も現在の source/import に対して再監査し、標準公理のみだった。
-集計: [source-dependency-audit-003](logs/source-dependency-audit-003.txt)。
+集計: [source-dependency-audit-003](evidence/MANIFEST.md#log-c2bbf18970308ee7)。
 
 **新規 Lean 全十ファイル**（production 五、test/audit 五）の token scan は
 `sorry`, `sorryAx`, `admit`, `axiom`, `native_decide`, `unsafe` の zero matches。
@@ -65,7 +65,7 @@ source から declaration 名を抽出し、実際の log 出力との対応を�
 - 任意 `k` の prime-power load 1 と、unit-anchor first-address の full load。
 
 valuation の独立 focused 実行も exit 0（8952 jobs）。
-[build-layer-valuation-003](logs/build-layer-valuation-003.txt) と
+[build-layer-valuation-003](evidence/MANIFEST.md#log-d71ed47e0291227b) と
 [valuation-audit-003](valuation-audit-003.md) に検証範囲を記録している。
 
 ## 既存全体 warning との分離
@@ -87,7 +87,7 @@ repository 全体の admission-free 性は主張していない。
 
 `git diff --check` は exit 0。新規テキストファイルの末尾空白・final newline と、
 四つの新規報告文書の相対リンクも別途検査した。
-記録: [diff-check-003](logs/diff-check-003.txt)。
+記録: [diff-check-003](evidence/MANIFEST.md#log-13a2fb1b03ca3819)。
 既存 tracked source の変更は `DkMath/NumberTheory/GapFocusing.lean` の五 import と
 facade documentation。実質的な theorem 追加は五つの新規 production module。
 CFBRC の実際の general homogeneous evaluator を再利用し、旧 research の

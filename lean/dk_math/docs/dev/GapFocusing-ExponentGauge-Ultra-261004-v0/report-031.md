@@ -128,7 +128,7 @@ about 16.4136. This does not establish a universal successful choice of basis.
 
 ## Bounded diagnostics and endpoint counterexamples
 
-[Diagnostics](logs/diagnostics-031.json) covers all 4998 anchors n=3..5000,
+[Diagnostics](evidence/MANIFEST.md#log-52fe69656210b928) covers all 4998 anchors n=3..5000,
 with the 030 source digest recorded and checked. Survivor counts use exact
 prefix counts. Weighted sums use compensated floating prefix differences,
 with direct gcd/factor reconstruction and fsum checks at 14 retained anchors.

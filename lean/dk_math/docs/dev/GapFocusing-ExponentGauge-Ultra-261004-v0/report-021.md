@@ -244,7 +244,7 @@ The total 216 happens to be half of 432; this observation has not been
 promoted to a structural half-town theorem. These finer structural counts
 are diagnostics, distinct from the checked total cardinalities.
 
-Complete data: [discovery-021.json](logs/discovery-021.json).
+Complete data: [discovery-021.json](evidence/MANIFEST.md#log-c716d5e1e7b67e3b).
 
 ## 17. Narrowest next symbolic provider
 

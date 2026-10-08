@@ -45,7 +45,7 @@ and axiom-audit-026.txt, with their performance JSON records. The build-026-*.tx
 files retain earlier focused elaboration attempts and are historical logs,
 not final validation status.
 
-[Final checker output](logs/checks-026.txt) records the completed audits.
-[Complete declaration coverage](logs/declaration-coverage-026.json) lists every
+[Final checker output](evidence/MANIFEST.md#log-0816a7d3878c2e9c) records the completed audits.
+[Complete declaration coverage](evidence/MANIFEST.md#log-f24240909179277a) lists every
 printed declaration. [Report](report-026.md) separates the proved small-budget
 criteria from the unresolved universal lower-mass provider and the next proposal.

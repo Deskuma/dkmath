@@ -126,7 +126,7 @@ prime-distribution input, PNT, RH, or short-interval Chebyshev estimate.
 
 ## Diagnostics and kernel evidence
 
-[Diagnostics](logs/diagnostics-029.json) reuse the exact 028 event inventory with
+[Diagnostics](evidence/MANIFEST.md#log-a03dfe6d1efb7518) reuse the exact 028 event inventory with
 its SHA-256 digest. All 4998 anchors n=3..5000 are reconstructed by grouped
 labels, the cutoff/valuation interval, and direct power-divisibility scans.
 Every exponent set and integer cardinal agrees. Log weights, envelope ratios,
@@ -194,7 +194,7 @@ No OOM, process kill, timeout or manual termination was observed. Reported major
 faults and swaps are zero. The facade retains the existing PacketCross warning;
 the root also replays five existing unrelated sorry warnings. New declarations
 have no dependency on those sorry axioms.
-[Validation details](validation-029.md) and [check output](logs/check-029.txt)
+[Validation details](validation-029.md) and [check output](evidence/MANIFEST.md#log-5e6f88e6577a206e)
 retain commands, metrics and audit scope.
 
 ## Next natural frontier and implementation proposal

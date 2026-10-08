@@ -229,8 +229,8 @@ greedy size G, and edge slack=pi(n)+E-seats.
 
 All per-prime fiber cardinalities, actual empty-support seats, both
 concrete families, tail sizes, and old/new slacks are retained in
-[discovery-020.json](logs/discovery-020.json). The diagnostic summary is
-[discovery-summary-020.txt](logs/discovery-summary-020.txt).
+[discovery-020.json](evidence/MANIFEST.md#log-6d74fef675bdfcb6). The diagnostic summary is
+[discovery-summary-020.txt](evidence/MANIFEST.md#log-9a58aa4eadbe55a4).
 
 ## 13. Exact PrimeWorldRefinement adapter
 

@@ -1,7 +1,0 @@
-PASS: zero forbidden-token matches in complete changed production and new Lean probes.
-DkMath/NumberTheory/Legendre.lean
-DkMath/NumberTheory/Legendre/ParitySafeMobiusOddCorrection.lean
-DkMath/NumberTheory/Legendre/ParitySafeIncidenceUpper.lean
-DkMathTest/NumberTheory/LegendreIncidenceUpper.lean
-DkMathTest/NumberTheory/LegendreIncidenceUpperAxiomAudit.lean
-DkMathTest/NumberTheory/LegendreIncidenceUpperInventory.lean

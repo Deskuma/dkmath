@@ -17,19 +17,19 @@ including definitions, semantic theorems, data equalities, finite decisions,
 and all endpoint declarations. The existing facade gained two imports;
 raw calibration data remain under DkMathTest.
 
-[Complete declaration manifest](logs/declaration-coverage-021.json)
+[Complete declaration manifest](evidence/MANIFEST.md#log-360750ede26140a8)
 
 ## Performed builds and dependency audit
 
 - Focused build: all three production modules and all seven new test
-  modules passed, 9087 jobs. [Log](logs/focused-021.txt)
+  modules passed, 9087 jobs. [Log](evidence/MANIFEST.md#log-e166844069f844f7)
 - lake build DkMath.NumberTheory.Legendre passed, 9108 jobs.
-  [Log](logs/facade-021.txt)
+  [Log](evidence/MANIFEST.md#log-c41af1cab68c9d6a)
 - lake build DkMath passed, 10410 jobs.
-  [Log](logs/root-021.txt)
+  [Log](evidence/MANIFEST.md#log-7f4d5b59bfb12f6a)
 - lake build DkMathTest.NumberTheory.LegendreDeletionAxiomAudit passed,
   9125 jobs.
-  [Log](logs/axiom-audit-021.txt)
+  [Log](evidence/MANIFEST.md#log-2de5eec01f8b42f0)
 
 Every manifest entry has both a check and a print-axioms command. All
 resulting dependency sets use only the standard logical axioms propext,
@@ -113,4 +113,4 @@ warnings are retained. Empty interrupted-attempt timing files are not
 used as performance evidence. The existing earlier logs are unchanged.
 
 The artifact checker passed.
-[Checker output](logs/check-021.txt)
+[Checker output](evidence/MANIFEST.md#log-6358d68898dc375f)

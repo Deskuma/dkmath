@@ -18,8 +18,8 @@ below rather than attributed solely to a missing phase choice.
 
 This checkpoint adds this report and a reproducible source/reference audit
 [check-051.py](checks/check-051.py), with
-[source-audit-051.json](logs/source-audit-051.json) and
-[check-051.txt](logs/check-051.txt). No Lean declaration, receiver, filter,
+[source-audit-051.json](evidence/MANIFEST.md#log-9be486761540d1d5) and
+[check-051.txt](evidence/MANIFEST.md#log-7edcc68aab7391dc). No Lean declaration, receiver, filter,
 calibration family, or facade import was added. The 049/050 APIs are
 preserved. The present reconstruction refinement campaign stops here.
 

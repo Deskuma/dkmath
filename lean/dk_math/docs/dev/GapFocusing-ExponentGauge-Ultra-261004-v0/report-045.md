@@ -53,7 +53,7 @@ exposes the missing residual-unit fact. It uses the primitive endpoint,
 by 49. If `7 | b`, the split identity `alt(u,v)=7*b^7` would violate that
 theorem. The existing split constructor and its fields were not changed.
 
-[source-audit-045.json](logs/source-audit-045.json) records 13 relevant existing
+[source-audit-045.json](evidence/MANIFEST.md#log-d6d4c24e4d3431c6) records 13 relevant existing
 sources and verifies their contents against HEAD, including the alternating
 split, primitive cyclotomic depth, 044 receiver, source norm packet, exact
 reconstruction obligation, and away coordinate ledger.

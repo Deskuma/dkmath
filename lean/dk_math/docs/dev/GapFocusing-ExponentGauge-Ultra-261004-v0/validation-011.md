@@ -4,17 +4,17 @@ Lean4.34.1; Lake cwd `/home/deskuma/develop/lean/dkmath/lean/dk_math`.
 
 |Check|Result|Evidence|
 |---|---|---|
-|Three new production targets, focused|Passed|[build-production-011.txt](logs/build-production-011.txt)|
-|Kernel finite calibration: root charges, caps, demand, cutoff,211/503 endpoints|Passed|[build-calibration-011.txt](logs/build-calibration-011.txt), final rebuilt calibration in [build-regression-011.txt](logs/build-regression-011.txt)|
-|Candidate endpoint / shared-exclusion / triangle regressions|Passed|[build-regression-011.txt](logs/build-regression-011.txt)|
-|`lake build DkMath.NumberTheory.Legendre`|Passed|[build-facade-011.txt](logs/build-facade-011.txt)|
-|`lake build DkMath`|Passed, five existing warnings outside new declarations|[build-root-011.txt](logs/build-root-011.txt)|
-|Source inventory probe|Passed|[source-inventory-011.txt](logs/source-inventory-011.txt)|
-|Every new public declaration: `#check`, `#print axioms`|57/57 checked, including41 production declarations and16 calibration/regression/data declarations|[declaration-coverage-011.json](logs/declaration-coverage-011.json), [axiom-audit-011.txt](logs/axiom-audit-011.txt), [axiom-coverage-011.txt](logs/axiom-coverage-011.txt)|
-|Forbidden constructs in all eight written Lean files|Zero matches|[forbidden-token-scan-011.txt](logs/forbidden-token-scan-011.txt)|
-|Uniform copyright/import/post-import file-print headers|Eight/eight checked|[header-style-011.txt](logs/header-style-011.txt)|
-|Tracked/new-file whitespace|Passed|[diff-check-011.txt](logs/diff-check-011.txt)|
-|Independent diagnostics / Lean data / report arithmetic and local links|Passed|[artifact-check-011.txt](logs/artifact-check-011.txt), [checkpoint-audit-011.txt](logs/checkpoint-audit-011.txt)|
+|Three new production targets, focused|Passed|[build-production-011.txt](evidence/MANIFEST.md#log-3678eb5f7b5e685d)|
+|Kernel finite calibration: root charges, caps, demand, cutoff,211/503 endpoints|Passed|[build-calibration-011.txt](evidence/MANIFEST.md#log-9396c6e1fb4ab296), final rebuilt calibration in [build-regression-011.txt](evidence/MANIFEST.md#log-6b7fa5b6a86c1f16)|
+|Candidate endpoint / shared-exclusion / triangle regressions|Passed|[build-regression-011.txt](evidence/MANIFEST.md#log-6b7fa5b6a86c1f16)|
+|`lake build DkMath.NumberTheory.Legendre`|Passed|[build-facade-011.txt](evidence/MANIFEST.md#log-1011544268c4b5b7)|
+|`lake build DkMath`|Passed, five existing warnings outside new declarations|[build-root-011.txt](evidence/MANIFEST.md#log-213af4f98cf418dd)|
+|Source inventory probe|Passed|[source-inventory-011.txt](evidence/MANIFEST.md#log-740686a577b29879)|
+|Every new public declaration: `#check`, `#print axioms`|57/57 checked, including41 production declarations and16 calibration/regression/data declarations|[declaration-coverage-011.json](evidence/MANIFEST.md#log-133d02be71dbc75b), [axiom-audit-011.txt](evidence/MANIFEST.md#log-b9447affc6412d0b), [axiom-coverage-011.txt](evidence/MANIFEST.md#log-9b2e9a6182f6b465)|
+|Forbidden constructs in all eight written Lean files|Zero matches|[forbidden-token-scan-011.txt](evidence/MANIFEST.md#log-9ad24d11d3e65f34)|
+|Uniform copyright/import/post-import file-print headers|Eight/eight checked|[header-style-011.txt](evidence/MANIFEST.md#log-09e030e938fab767)|
+|Tracked/new-file whitespace|Passed|[diff-check-011.txt](evidence/MANIFEST.md#log-0bcb48409cec4d36)|
+|Independent diagnostics / Lean data / report arithmetic and local links|Passed|[artifact-check-011.txt](evidence/MANIFEST.md#log-9519e3500c81a76b), [checkpoint-audit-011.txt](evidence/MANIFEST.md#log-f5d8bd197681485e)|
 
 All complete axiom sets of new public declarations are subsets of
 `{propext, Classical.choice, Quot.sound}`. In particular, the two hard-checkpoint

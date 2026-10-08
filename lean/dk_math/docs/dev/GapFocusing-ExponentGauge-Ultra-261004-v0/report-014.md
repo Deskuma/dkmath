@@ -85,7 +85,7 @@ regression は cube n=5、external-cross n=7、両 repeated side n=13/29、tripl
 
 ## 有限探索から分かったこと
 
-[discovery script](checks/discover-014.py) が奇素数アンカー 3≤n≤3000 の 429 点を調べ、分類の反例を見つけなかった。全行・全非zero fiber は [JSON](logs/discovery-014.json)、全アンカーの要約は [log](logs/discovery-014.txt) に保存した。これは kernel proof の代替ではない。
+[discovery script](checks/discover-014.py) が奇素数アンカー 3≤n≤3000 の 429 点を調べ、分類の反例を見つけなかった。全行・全非zero fiber は [JSON](evidence/MANIFEST.md#log-aef25d1adff56610)、全アンカーの要約は [log](evidence/MANIFEST.md#log-dbbe15ffb1bb3159) に保存した。これは kernel proof の代替ではない。
 
 指定点の N1/R は約 42.7%, 46.2%, 45.0%, 49.5%, 53.5%、追加 1021 は 45.7%。今回の六点の cube は 0、全探索では cube は 7 アンカーに 1 個ずつ存在した。最大 CrossFiber は 13 席。例えば 2083 の p=47、2477 の p=53 が 13 席を持つ。全探索の Repeated の最大値は 7、Triple は 54。2999 では Cross=387、Triple=49、Repeated=0。有限範囲でも Triple は残っており、無視してよいとはいえない。
 

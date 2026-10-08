@@ -51,9 +51,9 @@ The artifact check additionally covers public axiom names, forbidden
 constructs, import direction, headers, immediate file markers, whitespace,
 Markdown links and ASCII logs. Results are scoped to these checks.
 
-Evidence: [focused](logs/focused-032.txt), [facade](logs/facade-032.txt),
-[root](logs/root-032.txt), [axioms](logs/axiom-audit-032.txt),
-[coverage](logs/declaration-coverage-032.json), [diagnostics](logs/diagnostics-032.json),
-[artifact audit](logs/artifact-check-032.txt).
+Evidence: [focused](evidence/MANIFEST.md#log-9d4fbadd8daf3b43), [facade](evidence/MANIFEST.md#log-55d6b42b4aab3d25),
+[root](evidence/MANIFEST.md#log-a60b32de25f3ecbb), [axioms](evidence/MANIFEST.md#log-effba3224231ac5d),
+[coverage](evidence/MANIFEST.md#log-773477a7c71c2eff), [diagnostics](evidence/MANIFEST.md#log-fe03023e0ec1782a),
+[artifact audit](evidence/MANIFEST.md#log-e0a1b2ad6c5e4916).
 
 Outcome B - finite factor bound and local square correction; no global closure.

@@ -1,9 +1,0 @@
-'GapFocusingSevenCarrierAudit.currentLinearCarrier_eq_focusedGap' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]
-'GapFocusingSevenCarrierAudit.currentLinearCarrier_focus_and_extraction' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]
-'GapFocusingSevenCarrierAudit.currentLinearCarrier_unitClass_independent' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]

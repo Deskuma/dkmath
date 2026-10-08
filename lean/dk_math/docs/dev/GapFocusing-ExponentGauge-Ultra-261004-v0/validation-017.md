@@ -13,14 +13,14 @@ totals, not counts of changed or freshly compiled modules.
 
 | Command | Job total | Evidence |
 |---|---|---|
-| lake build DkMath.CosmicFormula.QuadraticCenteredBridge | 8937 | [quadratic-017.txt](logs/quadratic-017.txt) |
-| lake build DkMath.NumberTheory.Legendre.QuadraticGnomonFold | 3141 | [fold-017.txt](logs/fold-017.txt) |
-| lake build DkMath.NumberTheory.Legendre.CenteredOwnerFold | 8992 | [owner-017.txt](logs/owner-017.txt) |
-| lake build DkMath.NumberTheory.Legendre.CenteredFoldSupportNorm | 8993 | [norm-017.txt](logs/norm-017.txt) |
-| lake build DkMathTest.NumberTheory.LegendreCenteredFoldRegression | 9075 | [regression-017.txt](logs/regression-017.txt) |
-| lake build DkMathTest.NumberTheory.LegendreCenteredFoldAxiomAudit | 9111 | [axiom-audit-017.txt](logs/axiom-audit-017.txt) |
-| lake build DkMath.NumberTheory.Legendre DkMath.CosmicFormula | 9172 | [facades-017.txt](logs/facades-017.txt) |
-| lake build DkMath | 10400 | [root-017.txt](logs/root-017.txt) |
+| lake build DkMath.CosmicFormula.QuadraticCenteredBridge | 8937 | [quadratic-017.txt](evidence/MANIFEST.md#log-3c9526db75194969) |
+| lake build DkMath.NumberTheory.Legendre.QuadraticGnomonFold | 3141 | [fold-017.txt](evidence/MANIFEST.md#log-6a647eb0f536892d) |
+| lake build DkMath.NumberTheory.Legendre.CenteredOwnerFold | 8992 | [owner-017.txt](evidence/MANIFEST.md#log-83be497370c20430) |
+| lake build DkMath.NumberTheory.Legendre.CenteredFoldSupportNorm | 8993 | [norm-017.txt](evidence/MANIFEST.md#log-63871bc505cbecad) |
+| lake build DkMathTest.NumberTheory.LegendreCenteredFoldRegression | 9075 | [regression-017.txt](evidence/MANIFEST.md#log-7592e2f77da20ba8) |
+| lake build DkMathTest.NumberTheory.LegendreCenteredFoldAxiomAudit | 9111 | [axiom-audit-017.txt](evidence/MANIFEST.md#log-74518908029db5ba) |
+| lake build DkMath.NumberTheory.Legendre DkMath.CosmicFormula | 9172 | [facades-017.txt](evidence/MANIFEST.md#log-f1b8deec49d7fd27) |
+| lake build DkMath | 10400 | [root-017.txt](evidence/MANIFEST.md#log-fcb53a445653da33) |
 
 Intermediate calibration errors were repaired before the final builds.
 The final new-source builds have no linter warnings. The facade log reports an
@@ -49,7 +49,7 @@ the dependencies of their public declarations.
 The manifest also supplies category A/B/C/D for every new declaration:
 24 A, 33 B and 9 C production declarations; no D. The 18 calibrations are
 listed separately as A applications or explicit finite counterexamples.
-See [declaration-coverage-017.json](logs/declaration-coverage-017.json) and
+See [declaration-coverage-017.json](evidence/MANIFEST.md#log-6ad638207d253912) and
 [declaration-classification-017.md](declaration-classification-017.md).
 
 ## Kernel calibration scope
@@ -98,5 +98,5 @@ imported by the new Legendre sources or its facade.
 
 Raw compiler logs retain Lean's own Unicode output. New prose/checkpoint
 artifacts and diagnostic JSON use ASCII text. The final check output is in
-[check-017.txt](logs/check-017.txt). Validation is scoped to these declarations
+[check-017.txt](evidence/MANIFEST.md#log-a11021b1b305a91c). Validation is scoped to these declarations
 and finite diagnostics; it does not establish a uniform coverage provider.

@@ -167,7 +167,7 @@ receiver や新しい番号を増やさぬ。
 [049](report-049.md) /
 [050](report-050.md) /
 [051](report-051.md) /
-[051 audit](logs/check-051.txt)。
+[051 audit](evidence/MANIFEST.md#log-7edcc68aab7391dc)。
 
 > この旅は未解決を隠して終わるのではない。
 > **未解決の位置を Lean が読める座標に固定して持ち帰る。**

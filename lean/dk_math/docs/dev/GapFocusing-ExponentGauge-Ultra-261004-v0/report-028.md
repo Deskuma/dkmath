@@ -178,8 +178,8 @@ shell-prime theorem.
 
 ## 20. Diagnostics and the 297/1031 anchors
 
-[Full data](logs/diagnostics-028.jsonl) record all n=1..5000; the
-[summary](logs/diagnostics-summary-028.json) gives explicit mandatory-anchor
+[Full data](evidence/MANIFEST.md#log-58dcb65302ec5c1a) record all n=1..5000; the
+[summary](evidence/MANIFEST.md#log-6c789887f609daf1) gives explicit mandatory-anchor
 labels, bases, depths and complete large-image distributions. Prime labels
 are losslessly encoded by prefix-summed positive deltas; each decoded prime
 has base equal to its label and depth one. Higher-power triples explicitly
@@ -271,7 +271,7 @@ base log; sum the fiber bounds. Existing unique-multiple and common-base
 lemmas discharge geometry. Keep the image itself explicit instead of silently
 assuming its card is the label count.
 
-[Candidate diagnostics](logs/fiber-cap-028.json) show cap/large mass from
+[Candidate diagnostics](evidence/MANIFEST.md#log-1ee513fc27f1e38a) show cap/large mass from
 1 to approximately 1.079630 over n=3..5000. At 297 the ratio is approximately
 1.006433, at 1031 approximately 1.003638, and at 5000 approximately 1.000935.
 It accommodates the ten-label chain at 2896. These are diagnostic values only;

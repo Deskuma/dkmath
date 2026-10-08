@@ -1,2 +1,0 @@
-PASS: 114/114 complete dependency sets; production 66, calibration/regression 48.
-PASS: only propext, Classical.choice, Quot.sound; no sorryAx dependencies.

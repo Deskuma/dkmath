@@ -18,7 +18,7 @@ Audited owners and reuse decisions (live checkout `bdc150873`):
 
 The inventory probe and captured signatures are
 [LegendreCanonicalRootInventory.lean](../../../DkMathTest/NumberTheory/LegendreCanonicalRootInventory.lean)
-and [source-inventory-011.txt](logs/source-inventory-011.txt).
+and [source-inventory-011.txt](evidence/MANIFEST.md#log-740686a577b29879).
 
 New production owners:
 

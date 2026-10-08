@@ -1,6 +1,0 @@
-Production coverage: 15/15
-Regression coverage: 39/39
-Total coverage: 54/54
-All axiom sets are subsets of {propext, Classical.choice, Quot.sound}.
-No sorryAx or additional axioms.
-Live source names match the manifest.

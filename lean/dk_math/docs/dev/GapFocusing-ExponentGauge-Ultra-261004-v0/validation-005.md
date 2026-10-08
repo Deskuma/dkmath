@@ -12,11 +12,11 @@ lake build DkMath.NumberTheory.Legendre.ParitySafePersistence \
   DkMath.NumberTheory.Legendre DkMath
 ```
 
-exit 0、10370 Lake jobs。[最終ログ](logs/build-final-005.txt)。jobs は replay を含む依存グラフの件数で、新規 compilation 件数ではない。新規・変更 production の今回の宣言、および回帰ファイルに warning/error はない。
+exit 0、10370 Lake jobs。[最終ログ](evidence/MANIFEST.md#log-eadd72797eab323e)。jobs は replay を含む依存グラフの件数で、新規 compilation 件数ではない。新規・変更 production の今回の宣言、および回帰ファイルに warning/error はない。
 
 全 DkMath build が再表示した既存の五つの未証明研究宣言 warning は、新規証明の dependency と区別している。次の全件公理出力にはその未証明公理がない。
 
-[Source inventory](logs/source-inventory-005.txt) は `lake env lean DkMathTest/NumberTheory/LegendreFreshCostInventory.lean` で実行、exit 0。
+[Source inventory](evidence/MANIFEST.md#log-5b59fc55c59068eb) は `lake env lean DkMathTest/NumberTheory/LegendreFreshCostInventory.lean` で実行、exit 0。
 
 ## 公理監査 coverage
 
@@ -32,13 +32,13 @@ exit 0、10370 Lake jobs。[最終ログ](logs/build-final-005.txt)。jobs は r
 
 全 dependency set は `{propext, Classical.choice, Quot.sound}` の部分集合。空集合も許容した。`sorryAx` と独自公理 dependency はない。
 
-[公理ログ](logs/axiom-audit-005.txt) · [manifest](logs/declaration-coverage-005.json) · [照合結果](logs/axiom-coverage-005.txt)。
+[公理ログ](evidence/MANIFEST.md#log-7eb521d68d51403c) · [manifest](evidence/MANIFEST.md#log-a4e1fa4ef14dfdc0) · [照合結果](evidence/MANIFEST.md#log-52d781f40739b2a0)。
 
 ## 禁止 token / 差分
 
-変更 production 全四ファイル（既存 Persistence、new Parity、new FreshCost、Legendre facade）と回帰を走査。`sorry`, `sorryAx`, `admit`, `axiom`, `native_decide`, `unsafe` は全 zero matches。[scan](logs/forbidden-token-scan-005.txt)。監査ファイルの `#print axioms` は検査コマンドで、追加公理宣言ではない。
+変更 production 全四ファイル（既存 Persistence、new Parity、new FreshCost、Legendre facade）と回帰を走査。`sorry`, `sorryAx`, `admit`, `axiom`, `native_decide`, `unsafe` は全 zero matches。[scan](evidence/MANIFEST.md#log-c162a8351c5c8278)。監査ファイルの `#print axioms` は検査コマンドで、追加公理宣言ではない。
 
-`git diff --check` を実行。未追跡の新規ソース・文書・ログには `git diff --no-index --check /dev/null <file>` を実行し、whitespace diagnostic がないことを確認した。[diff check](logs/diff-check-005.txt)。
+`git diff --check` を実行。未追跡の新規ソース・文書・ログには `git diff --no-index --check /dev/null <file>` を実行し、whitespace diagnostic がないことを確認した。[diff check](evidence/MANIFEST.md#log-be7546b3c76e7458)。
 
 ## 回帰と証明範囲
 

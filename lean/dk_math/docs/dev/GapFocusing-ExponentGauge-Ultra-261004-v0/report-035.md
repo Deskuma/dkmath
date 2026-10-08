@@ -57,7 +57,7 @@ All builds used LEAN_NUM_THREADS=2. The focused build checks production and cali
 
 The imported PacketCross.lean:285 unused-variable warning is retained. The root build also reports pre-existing sorry declarations in ZsigmondyCyclotomicResearch:147, TriominoFLT:1919, TriominoCosmicBranchA:4187, GcdNextResearch:850, and CyclotomicPrincipalization:5389. These are outside the new declaration audit; this report does not claim a repository-wide absence of sorry. No memory failure occurred.
 
-Artifacts: [coverage](logs/coverage-035.json), [diagnostics](logs/diagnostics-035.json), [focused](logs/focused-035.txt), [axiom audit](logs/axiom-audit-035.txt), [facade](logs/facade-035.txt), [root](logs/root-035.txt), and [artifact check](logs/artifact-check-035.txt). Reproduction scripts are checks/build-035.py, checks/diagnostics-035.py, and checks/check-035.py. The build driver takes focused, axiom-audit, facade, and root labels.
+Artifacts: [coverage](evidence/MANIFEST.md#log-577b75707739fbf6), [diagnostics](evidence/MANIFEST.md#log-ea59e1d5ca55edee), [focused](evidence/MANIFEST.md#log-1257924f6bd1f865), [axiom audit](evidence/MANIFEST.md#log-a564301bf2c8fbf3), [facade](evidence/MANIFEST.md#log-7939500315cfb71b), [root](evidence/MANIFEST.md#log-806715f5c54d3156), and [artifact check](evidence/MANIFEST.md#log-5542f6691e78fa80). Reproduction scripts are checks/build-035.py, checks/diagnostics-035.py, and checks/check-035.py. The build driver takes focused, axiom-audit, facade, and root labels.
 
 ## Stopping decision and next implementation proposal
 

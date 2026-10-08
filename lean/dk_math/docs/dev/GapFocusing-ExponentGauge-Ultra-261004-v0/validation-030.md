@@ -43,9 +43,9 @@ git diff --check and untracked Lean whitespace, both source digests,
 bounded diagnostic identities, Markdown links and ASCII artifacts. The
 root build and diagnostics are evidence only for their recorded scopes.
 
-Evidence: [focused](logs/focused-030.txt), [facade](logs/facade-030.txt),
-[root](logs/root-030.txt), [axioms](logs/axiom-audit-030.txt),
-[coverage](logs/declaration-coverage-030.json), [diagnostics](logs/diagnostics-030.json),
-[artifact audit](logs/artifact-check-030.txt).
+Evidence: [focused](evidence/MANIFEST.md#log-083b4d451d1366ff), [facade](evidence/MANIFEST.md#log-6f6a768985c61bce),
+[root](evidence/MANIFEST.md#log-7ebbedc5a426b0d3), [axioms](evidence/MANIFEST.md#log-d0d6959d29e62d15),
+[coverage](evidence/MANIFEST.md#log-abc792d831351a16), [diagnostics](evidence/MANIFEST.md#log-3f2ce7bfefe50584),
+[artifact audit](evidence/MANIFEST.md#log-508b5b84465b3b8e).
 
 Outcome B - independent finite bound; no universal strict budget gain.

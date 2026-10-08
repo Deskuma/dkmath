@@ -51,9 +51,9 @@ only margins. Additional checks cover axiom names, forbidden constructs,
 imports, headers, immediate markers, whitespace, ASCII artifacts and Markdown
 links. Evidence is scoped to these recorded checks.
 
-Evidence: [focused](logs/focused-034.txt), [facade](logs/facade-034.txt),
-[root](logs/root-034.txt), [axioms](logs/axiom-audit-034.txt),
-[coverage](logs/declaration-coverage-034.json), [diagnostics](logs/diagnostics-034.json),
-[artifact audit](logs/artifact-check-034.txt).
+Evidence: [focused](evidence/MANIFEST.md#log-f1143ad26f4decc5), [facade](evidence/MANIFEST.md#log-264cd16c452635c2),
+[root](evidence/MANIFEST.md#log-232ac2c734b1a351), [axioms](evidence/MANIFEST.md#log-0c3ca784ca27fb23),
+[coverage](evidence/MANIFEST.md#log-8331caa9a70bf49a), [diagnostics](evidence/MANIFEST.md#log-c118d0a79c4e1265),
+[artifact audit](evidence/MANIFEST.md#log-2d25b387736de5cf).
 
 Outcome B - material bounded triple correction; stop automatic factor-depth continuation.

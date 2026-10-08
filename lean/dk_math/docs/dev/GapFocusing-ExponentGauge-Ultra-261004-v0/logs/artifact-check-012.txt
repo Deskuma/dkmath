@@ -1,1 +1,0 @@
-PASS: seven structural rows and28 diagnostic rows/Lean/report cutoffs match; all10 report questions answered.

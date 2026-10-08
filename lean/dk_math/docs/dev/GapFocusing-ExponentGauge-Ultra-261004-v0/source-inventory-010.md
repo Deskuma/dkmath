@@ -1,6 +1,6 @@
 # Instruction 010 source inventory
 
-Baseline `cd04ef580`,009 implementation `320b42522`; initial checkout clean. [Lean inventory](../../../DkMathTest/NumberTheory/LegendreMergedCRTInventory.lean), [exact source types](logs/source-inventory-010.txt).
+Baseline `cd04ef580`,009 implementation `320b42522`; initial checkout clean. [Lean inventory](../../../DkMathTest/NumberTheory/LegendreMergedCRTInventory.lean), [exact source types](evidence/MANIFEST.md#log-8875e84603d4b879).
 
 | Required source | Existing interfaces audited before extension |
 | --- | --- |

@@ -146,7 +146,7 @@ ledger is established.
 
 ## Bounded diagnostics and remaining obstruction
 
-[Diagnostics](logs/diagnostics-033.json) contains 300 rows: every n=3..300,
+[Diagnostics](evidence/MANIFEST.md#log-b00f73678067f7c1) contains 300 rows: every n=3..300,
 plus 1031 and 5000. It enumerates endpoint pairs independently and retains
 14 anchor reconstructions, including all required checkpoints and
 210. The product sets are checked for injectivity, composite inclusion and

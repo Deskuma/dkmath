@@ -30,7 +30,7 @@ retain source provenance when passing from exact local data to existence.
 The live checkout was clean before this implementation. The audit reused
 existing APIs rather than introducing another reconstruction packet family.
 The source fingerprint inventory records 23 relevant existing files in
-[source-audit-043.json](logs/source-audit-043.json). The FLT Seven facade has
+[source-audit-043.json](evidence/MANIFEST.md#log-1dbec2ab4a4c5c13). The FLT Seven facade has
 191 direct imports; its build validates the complete import closure, whereas
 the mathematical source audit concerns the named files below.
 

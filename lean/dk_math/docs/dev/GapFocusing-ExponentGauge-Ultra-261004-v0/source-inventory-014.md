@@ -1,6 +1,6 @@
 # Source inventory 014
 
-指定文書を今回の実装契約として読み、singleton の記述は仮定ではなく証明対象とした。既存 checkout の Instruction013、報告書、校正、実装を確認した。新 helper より前に記録した名前は [findings](findings-014.md) の Source checkpoint、最終宣言一覧は [inventory log](logs/source-inventory-014.txt) にある。
+指定文書を今回の実装契約として読み、singleton の記述は仮定ではなく証明対象とした。既存 checkout の Instruction013、報告書、校正、実装を確認した。新 helper より前に記録した名前は [findings](findings-014.md) の Source checkpoint、最終宣言一覧は [inventory log](evidence/MANIFEST.md#log-462e90324848cfa4) にある。
 
 |監査ソース|再利用した正確な名前と判断|
 |---|---|

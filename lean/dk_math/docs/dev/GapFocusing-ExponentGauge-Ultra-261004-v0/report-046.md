@@ -292,7 +292,7 @@ receiver, the fixed-sum/product identity, the combined source receiver,
 and small-core exclusion. The focused build also checks all 13 unchanged
 045 calibration declarations. These checks instantiate no FLT7 counterexample.
 
-[source-audit-046.json](logs/source-audit-046.json) records fingerprints of
+[source-audit-046.json](evidence/MANIFEST.md#log-58c24e74d78fa6d7) records fingerprints of
 16 unchanged repository source files and the Mathlib `add_pow_le` source.
 [check-046.py](checks/check-046.py) verifies all production declaration
 coverage, the four headers, forbidden constructs, source fingerprints,

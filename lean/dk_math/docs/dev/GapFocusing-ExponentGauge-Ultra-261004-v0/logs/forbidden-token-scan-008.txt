@@ -1,9 +1,0 @@
-PASS: zero forbidden-token matches in the complete changed production and008 probes.
-DkMath/NumberTheory/Legendre.lean
-DkMath/NumberTheory/Legendre/ParitySafeIncidenceUpper.lean
-DkMath/NumberTheory/Legendre/ParitySafeExcessCertificate.lean
-DkMathTest/NumberTheory/LegendreHybridProvider.lean
-DkMathTest/NumberTheory/LegendreHybridClassificationData.lean
-DkMathTest/NumberTheory/LegendreHybridClassification.lean
-DkMathTest/NumberTheory/LegendreHybridProviderInventory.lean
-DkMathTest/NumberTheory/LegendreHybridProviderAxiomAudit.lean

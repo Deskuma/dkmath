@@ -131,7 +131,7 @@ No kernel claim of global residual classification by factor count is made.
 
 ## Quantitative stopping test
 
-[Diagnostics](logs/diagnostics-034.json) retains 300 rows: every n=3..300,
+[Diagnostics](evidence/MANIFEST.md#log-c118d0a79c4e1265) retains 300 rows: every n=3..300,
 plus 1031 and 5000, with 15 direct anchor reconstructions. The 033
 and 031 source digests are checked. Ordered triple products are independently
 reconstructed, tested for injection, disjointness from semiprimes, and inclusion

@@ -64,7 +64,7 @@ The audited actual carriers are:
 
 These rings are used as their actual typed carriers. The prior audit checks
 their integrally-closed instances and exponent `3/5/7` specializations.
-It was rerun in this workspace; see [validation](logs/validation-summary.md).
+It was rerun in this workspace; see [validation](evidence/MANIFEST.md#log-2a85498f28567ebe).
 No ring or element equality is inferred from matching scalar norms.
 
 The two historical normalization identities are

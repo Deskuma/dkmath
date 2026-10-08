@@ -12,7 +12,7 @@ lake build DkMath.NumberTheory.Legendre.ParitySafeIncidenceUpper \
   DkMath.NumberTheory.Legendre DkMath
 ```
 
-Exit0; **10378 Lake jobs**, including replayed dependencies, not10378 newly compiled modules. [Authoritative final build log](logs/build-final-008.txt).
+Exit0; **10378 Lake jobs**, including replayed dependencies, not10378 newly compiled modules. [Authoritative final build log](evidence/MANIFEST.md#log-532339d998a07169).
 
 The expanded upper module, new certificate module, mandatory regression, bounded classification/data, facade and root pass. The final008 sources have no warnings/errors. Five existing root research warnings are replayed in `ZsigmondyCyclotomicResearch`, `TriominoCosmicBranchA`, `GcdNextResearch`, `CyclotomicPrincipalization`, `TriominoFLT`; the full new dependency audit below contains no `sorryAx`.
 
@@ -26,7 +26,7 @@ No global I29 or E29 evaluation occurs in the hybrid proof. The certified prime 
 
 [Bounded classification](../../../DkMathTest/NumberTheory/LegendreHybridClassification.lean) checks all99 cap/candidate pairs, the disjoint59/10/30 partition, exact finite certificate sets, all successful uncovered/prime consequences, and all30 budget-obstruction inequalities. It also checks counterexamples77 and91 to two proposed anchor-factor class criteria, and numerical strict gains77,85,95 over the old cap with the same excess budget4.
 
-[Exploration script](checks/classify-008.py) generates finite data in [ClassificationData](../../../DkMathTest/NumberTheory/LegendreHybridClassificationData.lean); generated values are proved separately in Lean using `decide +kernel`. The script is not a trusted oracle. It does not compute whole-shell incidence/excess sums. [JSON data](logs/classification-008.json) · [Summary](logs/classification-summary-008.txt).
+[Exploration script](checks/classify-008.py) generates finite data in [ClassificationData](../../../DkMathTest/NumberTheory/LegendreHybridClassificationData.lean); generated values are proved separately in Lean using `decide +kernel`. The script is not a trusted oracle. It does not compute whole-shell incidence/excess sums. [JSON data](evidence/MANIFEST.md#log-06b786cc4416c28e) · [Summary](evidence/MANIFEST.md#log-049be64e2b4c4056).
 
 ## Inventory and complete dependency audit
 
@@ -38,15 +38,15 @@ python3 docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-008.py
 
 Inventory and axiom commands exit0. The source-derived audit covers **20/20 new public production declarations** (3 definitions,17 theorems). It additionally covers the21 existing public declarations in the changed upper module, so the production audit is41 declarations in total. All36 new named regression/data declarations are also covered: **77/77** declarations have `#check` and `#print axioms` and dependency sets contained in `{propext, Classical.choice, Quot.sound}`.
 
-[Source manifest](logs/declaration-coverage-008.json) · [Raw dependency audit](logs/axiom-audit-008.txt) · [Coverage](logs/axiom-coverage-008.txt) · [Audit Lean](../../../DkMathTest/NumberTheory/LegendreHybridProviderAxiomAudit.lean) · [Exact source types](logs/source-inventory-008.txt).
+[Source manifest](evidence/MANIFEST.md#log-c635a9ef11f97835) · [Raw dependency audit](evidence/MANIFEST.md#log-4fd5a822b5f64237) · [Coverage](evidence/MANIFEST.md#log-ca1d8f021bc84441) · [Audit Lean](../../../DkMathTest/NumberTheory/LegendreHybridProviderAxiomAudit.lean) · [Exact source types](evidence/MANIFEST.md#log-3070195d1190e582).
 
 The private odd-divisor counting helper is reached through the audited public pair theorem; the audit inspects complete theorem dependency sets. The required but absent `ParitySafePrimeSupport` filename is reconciled to actual production modules in [source inventory](source-inventory-008.md).
 
 ## Token, whitespace and document checks
 
-The complete changed production files and all008 Lean probes have zero whole-word matches for `sorry`, `sorryAx`, `admit`, `axiom`, `native_decide`, `unsafe`. [Complete scan scope](logs/forbidden-token-scan-008.txt). Inspection commands `#print axioms` introduce no additional assumptions.
+The complete changed production files and all008 Lean probes have zero whole-word matches for `sorry`, `sorryAx`, `admit`, `axiom`, `native_decide`, `unsafe`. [Complete scan scope](evidence/MANIFEST.md#log-d737fef31c238043). Inspection commands `#print axioms` introduce no additional assumptions.
 
-`git diff --check` and new-file whitespace checks pass. All local links in checkpoint documents resolve. [Whitespace log](logs/diff-check-008.txt). The reproducible [checker](checks/check-008.py) verifies source-derived declaration coverage, trust sets, scan scope and these document checks; `--generate` refreshes only the audit source/manifest.
+`git diff --check` and new-file whitespace checks pass. All local links in checkpoint documents resolve. [Whitespace log](evidence/MANIFEST.md#log-39da13d1a3d1aea5). The reproducible [checker](checks/check-008.py) verifies source-derived declaration coverage, trust sets, scan scope and these document checks; `--generate` refreshes only the audit source/manifest.
 
 ## Semantic scope
 

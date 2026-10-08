@@ -53,9 +53,9 @@ Additional checks cover public axiom names, forbidden constructs, import
 scope, headers, immediate file markers, whitespace, Markdown links and ASCII
 logs. Results are evidence only for these recorded scopes.
 
-Evidence: [focused](logs/focused-033.txt), [facade](logs/facade-033.txt),
-[root](logs/root-033.txt), [axioms](logs/axiom-audit-033.txt),
-[coverage](logs/declaration-coverage-033.json), [diagnostics](logs/diagnostics-033.json),
-[artifact audit](logs/artifact-check-033.txt).
+Evidence: [focused](evidence/MANIFEST.md#log-b482f17c2ceab9f1), [facade](evidence/MANIFEST.md#log-18bb7b707606133e),
+[root](evidence/MANIFEST.md#log-12bda66ec2ee5ae1), [axioms](evidence/MANIFEST.md#log-ed92341eb0d9ed49),
+[coverage](evidence/MANIFEST.md#log-558f80e854573f6e), [diagnostics](evidence/MANIFEST.md#log-b00f73678067f7c1),
+[artifact audit](evidence/MANIFEST.md#log-677d0385b2a07d0b).
 
 Outcome B - distinct semiprime correction; no global closure.

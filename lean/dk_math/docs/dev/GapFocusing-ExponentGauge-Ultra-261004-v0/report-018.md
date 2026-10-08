@@ -307,7 +307,7 @@ records rather than extrapolating that parity convention.
 
 Primality/factorization diagnostics, odd-product support and valuations, local
 gcd records and covered coprime subfamilies are retained in
-[discovery-018.json](logs/discovery-018.json).
+[discovery-018.json](evidence/MANIFEST.md#log-c82016422f1c5ab5).
 The 1031 norm factorization is5*61*6977; prime6977 is invisible because it
 exceeds2*n. Its 223 prime incidences come from206 plus17, while the pair union
 has220 members because three pairs have both common primes. None of these

@@ -1,3 +1,0 @@
-PASS: source-derived dependency coverage 77/77.
-Production 41 including all20 new; regression 36.
-PASS: only propext, Classical.choice, Quot.sound in every dependency set.

@@ -10,7 +10,7 @@ lake build DkMath.NumberTheory.Legendre.ParitySafeBlockLocalization \
   DkMath.NumberTheory.Legendre DkMath
 ```
 
-Exit0; **10372 Lake jobs**, including replayed dependency jobs. This is not a count of newly compiled modules. [Authoritative final build log](logs/build-final-006.txt).
+Exit0; **10372 Lake jobs**, including replayed dependency jobs. This is not a count of newly compiled modules. [Authoritative final build log](evidence/MANIFEST.md#log-3c34f11e81a42d0f).
 
 The changed/new production module, facade, root and regression build successfully. New006 source has no warnings or errors. The root build replays five pre-existing research `sorry` warnings in `ZsigmondyCyclotomicResearch`, `TriominoCosmicBranchA`, `GcdNextResearch`, `TriominoFLT` and `CyclotomicPrincipalization`; the complete new theorem dependency audit below does not contain `sorryAx`.
 
@@ -30,7 +30,7 @@ Checked outputs include the localization of005's38; three separately justified f
 lake env lean DkMathTest/NumberTheory/LegendreBlockLocalizationInventory.lean
 ```
 
-Exit0. [Exact checked types](logs/source-inventory-006.txt). Document spellings which differ from live production names are reconciled in [source inventory](source-inventory-006.md).
+Exit0. [Exact checked types](evidence/MANIFEST.md#log-d084a7c5b4c7874a). Document spellings which differ from live production names are reconciled in [source inventory](source-inventory-006.md).
 
 ## Complete axiom audit
 
@@ -38,17 +38,17 @@ Exit0. [Exact checked types](logs/source-inventory-006.txt). Document spellings 
 lake env lean DkMathTest/NumberTheory/LegendreBlockLocalizationAxiomAudit.lean
 ```
 
-Exit0. Source extraction identifies **15/15 new public production theorems +39/39 named regression declarations =54/54**. Each has both `#check` and `#print axioms`. A machine check matches every printed name against the [source manifest](logs/declaration-coverage-006.json), including the empty-axiom output form, and verifies all axiom sets are subsets of `{propext, Classical.choice, Quot.sound}`.
+Exit0. Source extraction identifies **15/15 new public production theorems +39/39 named regression declarations =54/54**. Each has both `#check` and `#print axioms`. A machine check matches every printed name against the [source manifest](evidence/MANIFEST.md#log-52b32324db9f337f), including the empty-axiom output form, and verifies all axiom sets are subsets of `{propext, Classical.choice, Quot.sound}`.
 
-[Raw audit](logs/axiom-audit-006.txt) · [coverage result](logs/axiom-coverage-006.txt) · [audit Lean](../../../DkMathTest/NumberTheory/LegendreBlockLocalizationAxiomAudit.lean).
+[Raw audit](evidence/MANIFEST.md#log-d298a051c2fbd66c) · [coverage result](evidence/MANIFEST.md#log-4a7c9b94752f66c1) · [audit Lean](../../../DkMathTest/NumberTheory/LegendreBlockLocalizationAxiomAudit.lean).
 
 No new production proof depends on `sorryAx` or an additional axiom. This covers the whole dependency set of each new theorem, not just textual occurrence checks.
 
 ## Forbidden constructs and whitespace
 
-The complete changed production files (`ParitySafeBlockLocalization.lean` and facade `Legendre.lean`) and new main regression source were scanned for whole-word `sorry`, `sorryAx`, `admit`, `axiom`, `native_decide`, `unsafe`: zero matches. The audit's `#print axioms` commands are inspection commands, not axiom declarations. [Scan](logs/forbidden-token-scan-006.txt).
+The complete changed production files (`ParitySafeBlockLocalization.lean` and facade `Legendre.lean`) and new main regression source were scanned for whole-word `sorry`, `sorryAx`, `admit`, `axiom`, `native_decide`, `unsafe`: zero matches. The audit's `#print axioms` commands are inspection commands, not axiom declarations. [Scan](evidence/MANIFEST.md#log-df568e065160ae3f).
 
-`git diff --check` and whitespace checks of each new file against `/dev/null` pass. Relative links in all new006 Markdown files resolve. [Whitespace log](logs/diff-check-006.txt).
+`git diff --check` and whitespace checks of each new file against `/dev/null` pass. Relative links in all new006 Markdown files resolve. [Whitespace log](evidence/MANIFEST.md#log-79fb886e343e24fa).
 
 ## Scope
 

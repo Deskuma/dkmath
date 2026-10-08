@@ -4,7 +4,7 @@ The clean live checkout and the completed011 checkpoint were inspected before
 implementation. The existing E incidence is reused; no replacement excess
 ledger is introduced. Source probes are kept in
 [DkMathTest inventory](../../../DkMathTest/NumberTheory/LegendreCanonicalTailInventory.lean)
-and [its compiler output](logs/source-inventory-012.txt).
+and [its compiler output](evidence/MANIFEST.md#log-e274f086078db255).
 
 |Audited module|Exact existing declarations used or compared|Decision|
 |---|---|---|

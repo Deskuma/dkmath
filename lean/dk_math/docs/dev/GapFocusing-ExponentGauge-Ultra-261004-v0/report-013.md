@@ -154,7 +154,7 @@ point = p*q or p²*q or p*q²
 
 ## 9. direct-failure / moment-success の探索
 
-[discovery script](checks/discover-013.py) で素数 anchor 2≤n≤3000 の430個を昇順に走査した（最終2999）。素数ラベルは篩で列挙し、各 shell の長さ2nと実際の odd/coprime/small-prime avoidance を有限計算した。この範囲は小さな有限 runtime に限定し、実行ログでは9.16秒だった。[discovery JSON](logs/discovery-013.json) と [log](logs/discovery-013.txt) に全430行を残した。
+[discovery script](checks/discover-013.py) で素数 anchor 2≤n≤3000 の430個を昇順に走査した（最終2999）。素数ラベルは篩で列挙し、各 shell の長さ2nと実際の odd/coprime/small-prime avoidance を有限計算した。この範囲は小さな有限 runtime に限定し、実行ログでは9.16秒だった。[discovery JSON](evidence/MANIFEST.md#log-2e97fe715bb50d71) と [log](evidence/MANIFEST.md#log-2054f97fe4b31546) に全430行を残した。
 
 roughI≥roughSeats かつ moment margin>0 の素数 anchor はこの範囲で見つからなかった。したがって該当 anchor の mandatory regression は発生しない。走査結果は Python diagnostics であり全430 anchor の Lean theorem ではない。5校正 anchor の数値と構造的 prime proofs は別途 kernel-check した。
 

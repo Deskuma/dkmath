@@ -88,7 +88,7 @@ This run must not silently strengthen that result.
 
 Bounded exploration complete. The checked checkpoint for future work is
 [report](report-001.md), [source inventory](source-inventory-001.md), and
-[validation](logs/validation-summary.md). Further phase/unit or planar maps
+[validation](evidence/MANIFEST.md#log-2a85498f28567ebe). Further phase/unit or planar maps
 need an explicit source-specific object and its arithmetic hypotheses.
 
 ## Checkpoint history

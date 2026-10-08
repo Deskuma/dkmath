@@ -1,6 +1,0 @@
-Coverage: 50/50 new named declarations
-DkMath/NumberTheory/Legendre/CyclotomicPersistence.lean: 16
-DkMath/NumberTheory/Legendre/ParitySafePersistence.lean: 23
-DkMathTest/NumberTheory/LegendreCyclotomicPersistence.lean: 11
-Every dependency set is a subset of {propext, Classical.choice, Quot.sound}.
-No sorryAx or custom axiom dependency.

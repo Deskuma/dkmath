@@ -19,7 +19,7 @@ lake build DkMath.NumberTheory.GapFocusing \
 exit 0、`Build completed successfully (2828 jobs)`。
 新規 regression/audit 4 module と Instruction 001 の既存 2 module を含む。
 この実行に warning/error はない。
-ログ: [build-successor-focused-002](logs/build-successor-focused-002.txt)。
+ログ: [build-successor-focused-002](evidence/MANIFEST.md#log-40e5a909c6fcf4a1)。
 
 ## public facades
 
@@ -31,7 +31,7 @@ exit 0、`Build completed successfully (10360 jobs)`。
 これは依存を含む Lake job 数であり、変更ファイル数ではない。
 上の focused 実行と合わせて `GapFocusing`, `Lib`, `DkMath` の三つの
 public facades が通った。
-ログ: [build-facades-002](logs/build-facades-002.txt)。
+ログ: [build-facades-002](evidence/MANIFEST.md#log-6e0c314267def892)。
 
 この全体実行では、今回変更していない次の既存 warning が再表示された。
 
@@ -54,7 +54,7 @@ lake env lean \
 ```
 
 exit 0。
-ログ: [primitive-prime-audit-002](logs/primitive-prime-audit-002.txt)。
+ログ: [primitive-prime-audit-002](evidence/MANIFEST.md#log-3047c463082a0fd0)。
 五つの新規 regression と 13 の既存 endpoint、計 18 宣言を個別に監査した。
 五つの新規命題と 11 の既存 safe endpoint は標準公理だけ。
 二つの既存 research endpoint については、意図的に `sorryAx` 境界を確認した。
@@ -82,7 +82,7 @@ source から取得した宣言名をログ内の実際の出力に突き合わ�
 **新規 Lean 10 ファイル**（production 5、test 4、文書内 check 1）全体の
 `sorry`, `sorryAx`, `admit`, `axiom`, `native_decide`, `unsafe` token scan は
 zero matches。`#print axioms` は検査コマンドであり、axiom 宣言ではない。
-機械集計: [source-dependency-audit-002](logs/source-dependency-audit-002.txt)。
+機械集計: [source-dependency-audit-002](evidence/MANIFEST.md#log-868ca85d0030b29c)。
 
 回帰対象は、零次数、非原始座標、負座標、零因子係数環、隣接から全履歴への
 誤った強化、非互いに素な intersection 式、非自明な整数単数 square class。
@@ -91,7 +91,7 @@ zero matches。`#print axioms` は検査コマンドであり、axiom 宣言で�
 ## 差分検査
 
 `git diff --check` は exit 0。新規ファイルにも末尾空白・行末空白がないことを
-別途検査した。記録: [diff-check-002](logs/diff-check-002.txt)。
+別途検査した。記録: [diff-check-002](evidence/MANIFEST.md#log-dd0fb985b815acce)。
 既存 tracked source の変更は `DkMath/Lib.lean` と
 `DkMath/NumberTheory/GapFocusing.lean` の import/facade documentation。
 新規五つの production file が実質的な数学の追加である。

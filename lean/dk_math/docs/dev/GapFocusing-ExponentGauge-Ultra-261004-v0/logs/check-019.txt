@@ -1,4 +1,0 @@
-PASS public axioms: 65 sets; standard logical axioms only
-PASS headers, import markers, forbidden tokens, dependency direction and whitespace
-PASS 602 diagnostic rows and exact finite identities
-PASS ASCII artifacts, sixteen answers, exact outcome and four successful builds

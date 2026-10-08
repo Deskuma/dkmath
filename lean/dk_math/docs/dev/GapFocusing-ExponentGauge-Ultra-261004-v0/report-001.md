@@ -10,7 +10,7 @@ Initial HEAD: `6187a0add`. Lean / Mathlib: `v4.34.1`.
 
 公開入口は [DkMath.NumberTheory.GapFocusing](../../../DkMath/NumberTheory/GapFocusing.lean)。
 既存定理の型と実際の環は [source inventory](source-inventory-001.md)、
-検証の範囲と結果は [validation](logs/validation-summary.md) に固定した。
+検証の範囲と結果は [validation](evidence/MANIFEST.md#log-2a85498f28567ebe) に固定した。
 
 ## 1. 何が canonical なのか
 

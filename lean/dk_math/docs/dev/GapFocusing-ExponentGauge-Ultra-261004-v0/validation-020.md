@@ -19,13 +19,13 @@ public entries, including definitions and their dependencies.
 ## Performed Lean checks
 
 - Focused build of the four modules and LegendreFullTownRegression:
-  passed, 9005 jobs. [Log](logs/focused-020.txt)
+  passed, 9005 jobs. [Log](evidence/MANIFEST.md#log-bf977e3ccb17eb48)
 - lake build DkMath.NumberTheory.Legendre:
-  passed, 9106 jobs. [Log](logs/facade-020.txt)
+  passed, 9106 jobs. [Log](evidence/MANIFEST.md#log-ca35877c28879e10)
 - lake build DkMath:
-  passed, 10408 jobs. [Log](logs/root-020.txt)
+  passed, 10408 jobs. [Log](evidence/MANIFEST.md#log-a4ca4d223187fea1)
 - lake build DkMathTest.NumberTheory.LegendreFullTownAxiomAudit:
-  passed, 9109 jobs. [Log](logs/axiom-audit-020.txt)
+  passed, 9109 jobs. [Log](evidence/MANIFEST.md#log-f5ac6cb90674922c)
 
 The final regression additions only changed test modules. The facade and
 root logs cover the final production sources; the focused and audit logs
@@ -34,7 +34,7 @@ cover the final test sources as well.
 Each manifest entry has both a check command and a print-axioms command.
 All 85 resulting dependency sets are subsets of propext, Classical.choice,
 and Quot.sound. No new declaration depends on a proof-hole axiom.
-[Complete manifest](logs/declaration-coverage-020.json)
+[Complete manifest](evidence/MANIFEST.md#log-f345e5063ca99a33)
 
 The root log retains five existing proof-hole warnings in:
 
@@ -76,4 +76,4 @@ report sections and judgment, successful logs, and whitespace.
 
 The tracked diff and every newly written Lean file pass whitespace checks.
 The complete artifact checker passed; its output is preserved in
-[check-020.txt](logs/check-020.txt).
+[check-020.txt](evidence/MANIFEST.md#log-b78fe00d396cd27d).

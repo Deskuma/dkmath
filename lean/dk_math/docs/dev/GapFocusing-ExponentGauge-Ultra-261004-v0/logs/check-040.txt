@@ -1,1 +1,0 @@
-PASS: 15 named production declarations and 1 exposed identity; 1 decidability instance checked through envelope dependency; 5 Lean headers; source scan; 301 diagnostics; 4 two-thread builds; whitespace.

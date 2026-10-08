@@ -4,16 +4,16 @@ Lean v4.34.1、nested Lake cwd `lean/dk_math` で検証した。
 
 |検証|結果・範囲|
 |---|---|
-|`lake build DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughCensus`|PASS、9051 jobs。Factorization の新 2 定理、Strata、Singleton、Census の最終 production を含む。[log](logs/build-production-014.txt)|
-|`lake build DkMath.NumberTheory.Legendre`|PASS、9086 jobs。[log](logs/build-facade-014.txt)|
-|`lake build DkMath`|PASS、10389 jobs。[log](logs/build-root-014.txt)|
-|`LegendreSqrtRoughCensusRegression`|PASS。両 repeated side、cube、external cofactor、triple、zero anchor を検証。最終 AxiomAudit の import と各宣言監査にも含まれる。[log](logs/axiom-audit-014.txt)。|
-|CensusCounts / CensusCalibration|PASS、9057 jobs、六点の production cards、exact fiber sums、census endpoints。[log](logs/build-calibration-014.txt)|
-|public declaration axioms|PASS、9094 jobs、119/119 項目。許容した依存は `propext`, `Classical.choice`, `Quot.sound` のみ。`sorryAx` なし。[log](logs/axiom-audit-014.txt)|
-|forbidden token / header / whitespace|最終 artifact check PASS。9 Lean ファイルの統一ヘッダー/marker、production/test の禁則語、tracked/new file の whitespace を確認。[log](logs/artifact-audit-014.txt)|
+|`lake build DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughCensus`|PASS、9051 jobs。Factorization の新 2 定理、Strata、Singleton、Census の最終 production を含む。[log](evidence/MANIFEST.md#log-ab5120dde99fc845)|
+|`lake build DkMath.NumberTheory.Legendre`|PASS、9086 jobs。[log](evidence/MANIFEST.md#log-165310ec4d8eb7ec)|
+|`lake build DkMath`|PASS、10389 jobs。[log](evidence/MANIFEST.md#log-4d419de518b556d5)|
+|`LegendreSqrtRoughCensusRegression`|PASS。両 repeated side、cube、external cofactor、triple、zero anchor を検証。最終 AxiomAudit の import と各宣言監査にも含まれる。[log](evidence/MANIFEST.md#log-231144b029c9da44)。|
+|CensusCounts / CensusCalibration|PASS、9057 jobs、六点の production cards、exact fiber sums、census endpoints。[log](evidence/MANIFEST.md#log-8cfc17f954f872c2)|
+|public declaration axioms|PASS、9094 jobs、119/119 項目。許容した依存は `propext`, `Classical.choice`, `Quot.sound` のみ。`sorryAx` なし。[log](evidence/MANIFEST.md#log-231144b029c9da44)|
+|forbidden token / header / whitespace|最終 artifact check PASS。9 Lean ファイルの統一ヘッダー/marker、production/test の禁則語、tracked/new file の whitespace を確認。[log](evidence/MANIFEST.md#log-80cb46f60668a3bf)|
 |bounded discovery|PASS、429 odd prime anchors 3..3000、数学的分類の反例なし。全 rows/fibers を保存。|
 
-production の public 宣言は 69：Factorization の新規 2、Strata 16、Singleton 26、Census 25。校正・regression の明示的宣言と新校正 record の型・constructor・全 10 projection を加えた audit manifest は 119 項目。[manifest](logs/declaration-coverage-014.json) と `LegendreSqrtRoughCensusAxiomAudit.lean` を自動生成し、同一行の `@[simp] theorem` も列挙している。
+production の public 宣言は 69：Factorization の新規 2、Strata 16、Singleton 26、Census 25。校正・regression の明示的宣言と新校正 record の型・constructor・全 10 projection を加えた audit manifest は 119 項目。[manifest](evidence/MANIFEST.md#log-ac11f8dc67161aa0) と `LegendreSqrtRoughCensusAxiomAudit.lean` を自動生成し、同一行の `@[simp] theorem` も列挙している。
 
 root build の既存警告は 5 件：`CosmicFormula/TriominoFLT.lean:1919`、`ZsigmondyCyclotomicResearch.lean:147`、`FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187`、`GcdNextResearch.lean:850`、`FLT/Kummer/CyclotomicPrincipalization.lean:5389`。今回の変更対象ではなく、プロジェクト全体が placeholder-free とは主張しない。新規 production 69 件の transitive axiom 監査は全件 PASS で、これらの placeholder に依存しない。
 

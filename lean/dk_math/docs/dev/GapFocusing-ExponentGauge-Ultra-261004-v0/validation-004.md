@@ -11,11 +11,11 @@ lake build DkMath.NumberTheory.Legendre.CyclotomicPersistence \
   DkMath.NumberTheory.Legendre DkMath.NumberTheory.GapFocusing DkMath
 ```
 
-成功、exit 0、10368 Lake jobs。[最終ログ](logs/build-final-004.txt) を最終ソースに対する検証の正本とする。jobs は依存を含む Lake の件数であり、新規ファイル数・新規 compilation 数ではない。新規 production 2 modules と 11 回帰定理に warning/error はない。
+成功、exit 0、10368 Lake jobs。[最終ログ](evidence/MANIFEST.md#log-be374ec2378c249d) を最終ソースに対する検証の正本とする。jobs は依存を含む Lake の件数であり、新規ファイル数・新規 compilation 数ではない。新規 production 2 modules と 11 回帰定理に warning/error はない。
 
 全 DkMath build は既存の五箇所の未証明宣言 warning を再表示した。新規証明の依存は次の全件公理監査で個別に確認した。これら既存研究 endpoint を今回の証明に使用していない。
 
-`LegendrePersistenceInventory.lean` を `lake env lean` で実行し、[既存 API の型](logs/source-inventory-004.txt) を確認した。
+`LegendrePersistenceInventory.lean` を `lake env lean` で実行し、[既存 API の型](evidence/MANIFEST.md#log-092d8b630e534e97) を確認した。
 
 ## 全件公理監査
 
@@ -28,13 +28,13 @@ lake build DkMath.NumberTheory.Legendre.CyclotomicPersistence \
 - 全依存集合が `{propext, Classical.choice, Quot.sound}` の部分集合。空集合も含む。
 - `sorryAx` と custom axiom dependency はない。
 
-[公理出力](logs/axiom-audit-004.txt)、[coverage manifest](logs/declaration-coverage-004.json)、[照合結果](logs/axiom-coverage-004.txt)。
+[公理出力](evidence/MANIFEST.md#log-44371e66612451b3)、[coverage manifest](evidence/MANIFEST.md#log-bc092a9a9eb50aa0)、[照合結果](evidence/MANIFEST.md#log-241866308ef21892)。
 
 ## 禁止 token と差分
 
-変更 production 全三ファイル（新規二 modules と既存 facade）および名前付き回帰ファイルを走査。`sorry`, `sorryAx`, `admit`, `axiom`, `native_decide`, `unsafe` は全て zero matches。[走査結果](logs/forbidden-token-scan-004.txt)。監査ファイルの `#print axioms` は検査コマンドで、追加公理宣言ではない。
+変更 production 全三ファイル（新規二 modules と既存 facade）および名前付き回帰ファイルを走査。`sorry`, `sorryAx`, `admit`, `axiom`, `native_decide`, `unsafe` は全て zero matches。[走査結果](evidence/MANIFEST.md#log-175f6fe5f72b9b17)。監査ファイルの `#print axioms` は検査コマンドで、追加公理宣言ではない。
 
-`git diff --check` と、新規未追跡ファイルに対する `git diff --no-index --check /dev/null <file>` を実行した。結果は [差分検査ログ](logs/diff-check-004.txt) に記録した。
+`git diff --check` と、新規未追跡ファイルに対する `git diff --no-index --check /dev/null <file>` を実行した。結果は [差分検査ログ](evidence/MANIFEST.md#log-52917bb389756609) に記録した。
 
 ## 回帰の対象
 

@@ -18,10 +18,10 @@ focused build checks the current complete calibration source.
 
 Final build evidence:
 
-- [focused-024.txt](logs/focused-024.txt)
-- [facade-024.txt](logs/facade-024.txt)
-- [root-024.txt](logs/root-024.txt)
-- [axiom-audit-024.txt](logs/axiom-audit-024.txt)
+- [focused-024.txt](evidence/MANIFEST.md#log-89e5736c66a5a917)
+- [facade-024.txt](evidence/MANIFEST.md#log-aaa22daa40625a30)
+- [root-024.txt](evidence/MANIFEST.md#log-5b1a9c191b267bb6)
+- [axiom-audit-024.txt](evidence/MANIFEST.md#log-4f1198bf4af3663b)
 
 The generated audit covers 100 declarations: all 64 public production entries,
 33 new public calibration entries and three preserved 023 branching and 022
@@ -70,7 +70,7 @@ It independently checks all carrier lists and products, exact source sums,
 local and uniform power budgets, global retained-excess contributions and
 all capacity comparison flags.
 
-Final result: [checks-024.txt](logs/checks-024.txt) passes all five groups:
+Final result: [checks-024.txt](evidence/MANIFEST.md#log-fa2124658765013d) passes all five groups:
 complete public dependency coverage, headers/file markers and forbidden/import
 and whitespace checks, independent 602-world and 68813-record reconstruction,
 exact source residuals and capacity comparisons, and report/outcome/ASCII

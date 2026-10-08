@@ -174,7 +174,7 @@ not hold universally. No universal failure threshold is inferred.
 
 ## Independent bounded diagnostics
 
-[Diagnostics](logs/diagnostics-032.json) contains 300 rows: every n=3..300,
+[Diagnostics](evidence/MANIFEST.md#log-fe03023e0ec1782a) contains 300 rows: every n=3..300,
 plus 1031 and 5000. It independently enumerates endpoint factor pairs and
 canonical composites, preserving multiplicity, and checks exact integer
 carriers against prime/coprime tests. A hash links the retained 031 source.

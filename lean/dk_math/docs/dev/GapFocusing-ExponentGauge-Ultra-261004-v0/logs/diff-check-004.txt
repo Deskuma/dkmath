@@ -1,3 +1,0 @@
-git diff --check: exit 0, no whitespace errors
-git diff --no-index --check /dev/null <new file>: 20 files, no whitespace errors
-No-index exit 1 indicates added content; no check diagnostics were emitted.

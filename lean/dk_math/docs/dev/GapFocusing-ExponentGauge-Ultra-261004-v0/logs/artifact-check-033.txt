@@ -1,6 +1,0 @@
-PASS complete axiom coverage: 15 production (15 new) and 10 calibration declarations.
-PASS no sorryAx dependencies; only standard logical axioms occur.
-PASS forbidden constructs, production RH firewall, unified headers, immediate file markers and whitespace checks in 4 affected Lean files.
-PASS focused, Legendre facade, DkMath root and complete axiom builds with LEAN_NUM_THREADS=2.
-PASS 300 endpoint rows, independent prime-pair carriers, product uniqueness, retained regressions, source digests and floating-only margins.
-PASS collision-safe lower mass, exact budget excess, scoped frontier, Outcome B and parser-safe artifacts.

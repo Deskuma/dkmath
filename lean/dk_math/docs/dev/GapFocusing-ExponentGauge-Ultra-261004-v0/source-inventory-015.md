@@ -226,7 +226,7 @@ Mathlib APIs: `Finset.card_bij`, `Finset.card_filter_add_card_filter_not`, `Fins
 
 ## Final extension inventory
 
-All 47 new production declarations and 30 test declarations are covered by [the manifest](logs/declaration-coverage-015.json).
+All 47 new production declarations and 30 test declarations are covered by [the manifest](evidence/MANIFEST.md#log-a3b84fc5ea3bdc4c).
 
 - `sqrtRoughQuotientFiber` — `ParitySafeSqrtCrossQuotient.lean:16`
 - `sqrtRoughCompositeFiber` — `ParitySafeSqrtCrossQuotient.lean:19`

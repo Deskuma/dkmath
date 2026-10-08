@@ -48,9 +48,9 @@ floating-only diagnostics. The artifact audit checks source digest, all rows,
 exact anchor carriers, integer obstructions, public axiom coverage, forbidden
 constructs, headers, file markers, whitespace, Markdown links and ASCII logs.
 
-Evidence: [focused](logs/focused-031.txt), [facade](logs/facade-031.txt),
-[root](logs/root-031.txt), [axioms](logs/axiom-audit-031.txt),
-[coverage](logs/declaration-coverage-031.json), [diagnostics](logs/diagnostics-031.json),
-[artifact audit](logs/artifact-check-031.txt).
+Evidence: [focused](evidence/MANIFEST.md#log-45e3a6ccd33b5708), [facade](evidence/MANIFEST.md#log-9c53c17dcac01b68),
+[root](evidence/MANIFEST.md#log-29cdadffa806ff5b), [axioms](evidence/MANIFEST.md#log-413216b50e5f68fe),
+[coverage](evidence/MANIFEST.md#log-eed5d0b250c34e4e), [diagnostics](evidence/MANIFEST.md#log-52fe69656210b928),
+[artifact audit](evidence/MANIFEST.md#log-f315ce579d0caa41).
 
 Outcome B - independent finite wheel bound; accumulated error remains uncontrolled.

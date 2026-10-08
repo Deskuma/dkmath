@@ -80,4 +80,4 @@ strict provider. The corrected exact loss frontier retains U; no universal
 provider, optimal packing, wave independence or Legendre conjecture is proved.
 
 Final independent checker result: PASS. Evidence:
-[checks-022.txt](logs/checks-022.txt).
+[checks-022.txt](evidence/MANIFEST.md#log-a220191cab9c95fd).

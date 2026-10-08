@@ -2,7 +2,7 @@
 
 指定文書を実装仕様として既存の定義を監査し、production 4 モジュールを追加して Legendre facade に公開した。全被覆、residue union、wheel image、sqrt-rough census、補正付き quotient conservation を同じ仮説へ接続した。投影の完全な単射性分類、初等的な primorial 周期下界、最小 owner の局所遷移制約まで Lean で証明した。uniform な全被覆の排除は得ていない。
 
-新規 production 宣言は **61**、新規 regression/calibration 宣言は **26**。[宣言一覧](logs/declaration-coverage-016.json)の全 87 件を `#check` / `#print axioms` の対象とした。実行結果と検査範囲は[検証記録](validation-016.md)、既存 API の正確な名前は[ソース監査](source-inventory-016.md)、段階ごとの記録は[findings](findings-016.md)に分けた。
+新規 production 宣言は **61**、新規 regression/calibration 宣言は **26**。[宣言一覧](evidence/MANIFEST.md#log-e147a6b777bf1629)の全 87 件を `#check` / `#print axioms` の対象とした。実行結果と検査範囲は[検証記録](validation-016.md)、既存 API の正確な名前は[ソース監査](source-inventory-016.md)、段階ごとの記録は[findings](findings-016.md)に分けた。
 
 以下では `S_n=primeScalesUpTo n`、`M_n=finitePrimeBasisProduct S_n`、`G_n=oddGnomon n` とする。既存の `G_n=2n+1`、開 shell の席数 `2n`、次の gnomon `2n+3` を保持した。`open_shell_card_add_one_eq_oddGnomon` と `three_consecutive_odd_gnomons` が境界席との区別を明示する。
 
@@ -173,7 +173,7 @@ theorem squareAnchor_corrected_gap (n : ℕ) (hn : 5 ≤ n) :
 
 ## 有限探索と calibration の範囲
 
-[探索コード](checks/discovery-016.py)と[完全な 301 行の診断](logs/discovery-016.json)を保存した。範囲は **全 natural anchors 1..300（300 行）と別枠 n=1031（1 行）**。各行に square coordinate、M、2n、image card、distinct projected survivors、canonical owner-fiber card、support-overlap histogram、first escape、census と Q/J、lower/upper common-support histogram、owner persistence を記録した。
+[探索コード](checks/discovery-016.py)と[完全な 301 行の診断](evidence/MANIFEST.md#log-85cf275d729a11b1)を保存した。範囲は **全 natural anchors 1..300（300 行）と別枠 n=1031（1 行）**。各行に square coordinate、M、2n、image card、distinct projected survivors、canonical owner-fiber card、support-overlap histogram、first escape、census と Q/J、lower/upper common-support histogram、owner persistence を記録した。
 
 全探索行で owner-fiber の総和+escape=2n、census、corrected quotient conservation、Q+U balance、投影分類、lower owner persistence=0 を照合した。full cover は観測されなかった。有限探索の結果を全 n に拡張していない。
 

@@ -4,7 +4,7 @@ Noninjective family indices now feed the original support-excess ledger through 
 
 This is a bounded demand-scaling audit with reusable production theorems. It does not prove Legendre's conjecture, uniform charge sufficiency, or analytic growth estimates.
 
-Evidence: [source inventory](source-inventory-010.md), [findings](findings-010.md), [validation](validation-010.md), [merged production](../../../DkMath/NumberTheory/Legendre/ParitySafeMergedCRT.lean), [mixed/scaling production](../../../DkMath/NumberTheory/Legendre/ParitySafeMixedCRT.lean), [bounded data](logs/classification-010.json), [diagnostic proofs](../../../DkMathTest/NumberTheory/LegendreMergedCRT.lean), [counterexamples and lift regressions](../../../DkMathTest/NumberTheory/LegendreMergedCRTRegression.lean).
+Evidence: [source inventory](source-inventory-010.md), [findings](findings-010.md), [validation](validation-010.md), [merged production](../../../DkMath/NumberTheory/Legendre/ParitySafeMergedCRT.lean), [mixed/scaling production](../../../DkMath/NumberTheory/Legendre/ParitySafeMixedCRT.lean), [bounded data](evidence/MANIFEST.md#log-7fc348be1b1902cb), [diagnostic proofs](../../../DkMathTest/NumberTheory/LegendreMergedCRT.lean), [counterexamples and lift regressions](../../../DkMathTest/NumberTheory/LegendreMergedCRTRegression.lean).
 
 ## 1. What exact merged-seat theorem was proved?
 

@@ -1,4 +1,0 @@
-'FLT357CrossInvariantAudit.unitPowerClass_independent' depends on axioms: [propext, Classical.choice, Quot.sound]
-'FLT357CrossInvariantAudit.fixedRamifier_unitPowerClass_independent' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]

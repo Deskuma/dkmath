@@ -4,21 +4,21 @@ Lean4.34.1; Lake cwd `/home/deskuma/develop/lean/dkmath/lean/dk_math`.
 
 |Check|Result|Evidence|
 |---|---|---|
-|All four new production targets, including sqrt-cutoff bounds|Passed|[build-production-012.txt](logs/build-production-012.txt)|
-|Seven anchors: exact four root charges, A/B2, demand, minimal tested cutoffs and direct rough floor proofs|Passed|[build-calibration-012.txt](logs/build-calibration-012.txt)|
-|Erased-root/default-root/cap-tail/sequential-subtraction/multiplicity regressions, exact old union credit, sqrt-bound sharpness|Passed|[build-regression-012.txt](logs/build-regression-012.txt)|
-|Actual E and four-cutoff tail/rough-seat cards, derived using the smaller coverage diagnostic|Passed|[build-diagnostics-012.txt](logs/build-diagnostics-012.txt)|
-|`lake build DkMath.NumberTheory.Legendre`|Passed after final production additions|[build-facade-012.txt](logs/build-facade-012.txt)|
-|`lake build DkMath`|Passed after final production additions; five old research warnings|[build-root-012.txt](logs/build-root-012.txt)|
-|All66 new public production dependency sets|Passed, only standard axioms|[production-axioms-012.txt](logs/production-axioms-012.txt), [production-axiom-coverage-012.txt](logs/production-axiom-coverage-012.txt)|
-|Complete114 public declaration dependency sets|114/114 passed:66 production,48 calibration/diagnostic/regression/data|[declaration-coverage-012.json](logs/declaration-coverage-012.json), [axiom-audit-012.txt](logs/axiom-audit-012.txt), [axiom-coverage-012.txt](logs/axiom-coverage-012.txt)|
-|Source inventory compiler probe|Passed|[source-inventory-012.txt](logs/source-inventory-012.txt)|
-|Forbidden constructs in all12 written Lean files|Zero matches|[forbidden-token-scan-012.txt](logs/forbidden-token-scan-012.txt)|
-|Uniform copyright/import-adjacent module prints|12/12 passed|[header-style-012.txt](logs/header-style-012.txt)|
-|Tracked and new-file whitespace|Passed|[diff-check-012.txt](logs/diff-check-012.txt)|
-|Seven structural rows,28 diagnostics, report arithmetic and local links|Passed|[artifact-check-012.txt](logs/artifact-check-012.txt)|
+|All four new production targets, including sqrt-cutoff bounds|Passed|[build-production-012.txt](evidence/MANIFEST.md#log-c49f63b1f611f21f)|
+|Seven anchors: exact four root charges, A/B2, demand, minimal tested cutoffs and direct rough floor proofs|Passed|[build-calibration-012.txt](evidence/MANIFEST.md#log-cbf90d29755dcde8)|
+|Erased-root/default-root/cap-tail/sequential-subtraction/multiplicity regressions, exact old union credit, sqrt-bound sharpness|Passed|[build-regression-012.txt](evidence/MANIFEST.md#log-db1df8d2ba310ebc)|
+|Actual E and four-cutoff tail/rough-seat cards, derived using the smaller coverage diagnostic|Passed|[build-diagnostics-012.txt](evidence/MANIFEST.md#log-4abe8c31f611031a)|
+|`lake build DkMath.NumberTheory.Legendre`|Passed after final production additions|[build-facade-012.txt](evidence/MANIFEST.md#log-5a50c6c1e0055935)|
+|`lake build DkMath`|Passed after final production additions; five old research warnings|[build-root-012.txt](evidence/MANIFEST.md#log-89427617a0ec8379)|
+|All66 new public production dependency sets|Passed, only standard axioms|[production-axioms-012.txt](evidence/MANIFEST.md#log-cf94fb45fe3ac69f), [production-axiom-coverage-012.txt](evidence/MANIFEST.md#log-d9c0f5fea157800c)|
+|Complete114 public declaration dependency sets|114/114 passed:66 production,48 calibration/diagnostic/regression/data|[declaration-coverage-012.json](evidence/MANIFEST.md#log-e60c09e19e383175), [axiom-audit-012.txt](evidence/MANIFEST.md#log-3fde4290036ee244), [axiom-coverage-012.txt](evidence/MANIFEST.md#log-3c8add0360910b4a)|
+|Source inventory compiler probe|Passed|[source-inventory-012.txt](evidence/MANIFEST.md#log-e274f086078db255)|
+|Forbidden constructs in all12 written Lean files|Zero matches|[forbidden-token-scan-012.txt](evidence/MANIFEST.md#log-de95fedc2184e941)|
+|Uniform copyright/import-adjacent module prints|12/12 passed|[header-style-012.txt](evidence/MANIFEST.md#log-b4166f940afc6c83)|
+|Tracked and new-file whitespace|Passed|[diff-check-012.txt](evidence/MANIFEST.md#log-a716fe03b57e2450)|
+|Seven structural rows,28 diagnostics, report arithmetic and local links|Passed|[artifact-check-012.txt](evidence/MANIFEST.md#log-57bc2882e37f7149)|
 
-The [combined final audit](logs/checkpoint-audit-012.txt) passes all coverage, source and artifact checks.
+The [combined final audit](evidence/MANIFEST.md#log-a1f675351dfdfc4b) passes all coverage, source and artifact checks.
 
 Numerical checks use `decide +kernel`; Python discovery is not imported as a
 Lean proof. The diagnostic module imports structural calibration, with no

@@ -1,6 +1,6 @@
 # Instruction 007 source inventory
 
-Baseline `bed7c6d4b` (006 implementation `e18edcd7b`), initially clean. All eleven requested modules were read before choosing the upper-bound representation. The [inventory probe](../../../DkMathTest/NumberTheory/LegendreIncidenceUpperInventory.lean) records exact live names; its [output](logs/source-inventory-007.txt) records checked types. The [declaration listing](logs/declaration-inventory-007.txt) records the complete requested source set.
+Baseline `bed7c6d4b` (006 implementation `e18edcd7b`), initially clean. All eleven requested modules were read before choosing the upper-bound representation. The [inventory probe](../../../DkMathTest/NumberTheory/LegendreIncidenceUpperInventory.lean) records exact live names; its [output](evidence/MANIFEST.md#log-02b3031ad4e0ee2c) records checked types. The [declaration listing](evidence/MANIFEST.md#log-501b7b6eec0de72a) records the complete requested source set.
 
 | Required module | Existing interfaces and conclusion of audit |
 | --- | --- |

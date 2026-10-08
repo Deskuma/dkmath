@@ -22,11 +22,11 @@ represented counts, not a smaller surrogate.
 
 Successful final evidence:
 
-- [focused-023.txt](logs/focused-023.txt)
-- [facade-023.txt](logs/facade-023.txt)
-- [root-023.txt](logs/root-023.txt)
-- [axiom-audit-023.txt](logs/axiom-audit-023.txt)
-- [1031-023.txt](logs/1031-023.txt)
+- [focused-023.txt](evidence/MANIFEST.md#log-dfdcd9ef41987875)
+- [facade-023.txt](evidence/MANIFEST.md#log-0c725623bacff71c)
+- [root-023.txt](evidence/MANIFEST.md#log-157d43dbc391c65a)
+- [axiom-audit-023.txt](evidence/MANIFEST.md#log-23c9291f819af594)
+- [1031-023.txt](evidence/MANIFEST.md#log-41047c2c9c0b5bec)
 
 The audit has 144 entries: all 116 new public production declarations, 26
 new public regression/calibration declarations and both preserved 022 endpoint
@@ -73,6 +73,6 @@ ASCII text artifacts. Every audited dependency set is a subset of
 and all eight new Lean files pass the whitespace check. The neutral module
 imports no application NumberTheory module.
 
-Final results: [checks-023.txt](logs/checks-023.txt). The existing source modules
+Final results: [checks-023.txt](evidence/MANIFEST.md#log-379c12867dc57fc1). The existing source modules
 from 022 are unchanged; the tracked production change is the three facade
 imports, with new proof and calibration modules added separately.

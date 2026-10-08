@@ -145,7 +145,7 @@ asymptotic argument or RH import.
 
 ## 14. Two-event shells and preserved anchors
 
-The [diagnostics](logs/diagnostics-027.json) extend the verified exact 026
+The [diagnostics](evidence/MANIFEST.md#log-231dc14499195d35) extend the verified exact 026
 integer inventory for all 5000 shells and retain its SHA-256 digest.
 Cutoffs, occupied/admissible depths, and rational reciprocal sums are exact.
 All logarithmic values and strict-comparison flags are floating diagnostics.

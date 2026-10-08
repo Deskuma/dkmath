@@ -14,12 +14,12 @@ tasks, not counts of changed or freshly compiled modules.
 
 | Command | Jobs | Log |
 |---|---|---|
-| lake build DkMath.NumberTheory.Legendre.CenteredFoldSupportNorm | 8993 | [local-gcd-018.txt](logs/local-gcd-018.txt) |
-| lake build DkMath.NumberTheory.Legendre.CenteredFoldGcdAggregate | 8994 | [aggregate-018.txt](logs/aggregate-018.txt) |
-| lake build DkMathTest.NumberTheory.LegendreFoldGcdRegression | 9077 | [regression-018.txt](logs/regression-018.txt) |
-| lake build DkMathTest.NumberTheory.LegendreFoldGcdAxiomAudit | 9113 | [axiom-audit-018.txt](logs/axiom-audit-018.txt) |
-| lake build DkMath.NumberTheory.Legendre | 9097 | [facade-018.txt](logs/facade-018.txt) |
-| lake build DkMath | 10401 | [root-018.txt](logs/root-018.txt) |
+| lake build DkMath.NumberTheory.Legendre.CenteredFoldSupportNorm | 8993 | [local-gcd-018.txt](evidence/MANIFEST.md#log-a7d1b4783c796a56) |
+| lake build DkMath.NumberTheory.Legendre.CenteredFoldGcdAggregate | 8994 | [aggregate-018.txt](evidence/MANIFEST.md#log-59f285493d126103) |
+| lake build DkMathTest.NumberTheory.LegendreFoldGcdRegression | 9077 | [regression-018.txt](evidence/MANIFEST.md#log-692b847e41b16058) |
+| lake build DkMathTest.NumberTheory.LegendreFoldGcdAxiomAudit | 9113 | [axiom-audit-018.txt](evidence/MANIFEST.md#log-5d14760813c48903) |
+| lake build DkMath.NumberTheory.Legendre | 9097 | [facade-018.txt](evidence/MANIFEST.md#log-609daf97d81a813d) |
+| lake build DkMath | 10401 | [root-018.txt](evidence/MANIFEST.md#log-9c1966c529711dfb) |
 
 Intermediate gcd-rewrite, polynomial-name/cast and finite valuation calibration
 errors were repaired before final validation. The final new-source builds have
@@ -43,7 +43,7 @@ and39 in CenteredFoldGcdAggregate. They include49 theorems,2 definitions and
 The audit additionally checks the14 existing declarations in the extended norm
 module, for86 complete public declaration axiom sets.
 
-The manifest [declaration-coverage-018.json](logs/declaration-coverage-018.json)
+The manifest [declaration-coverage-018.json](evidence/MANIFEST.md#log-441fdd5dfd7cd7bd)
 records source names, kinds, positions and whether each declaration is new
 relative to the initial HEAD baseline. Attribute-prefixed declarations are
 included. Every public declaration has both #check and #print axioms in
@@ -101,7 +101,7 @@ not huge decimal integers. The source/check script verifies:
 Raw compiler logs retain Lean's Unicode output. New instruction/findings/report
 artifacts are ASCII text without LaTeX control sequences. Existing reports and
 instructions were not rewritten. The final machine-readable check output is
-[check-018.txt](logs/check-018.txt).
+[check-018.txt](evidence/MANIFEST.md#log-c01f5969a221b95a).
 
 ## Mathematical boundary
 

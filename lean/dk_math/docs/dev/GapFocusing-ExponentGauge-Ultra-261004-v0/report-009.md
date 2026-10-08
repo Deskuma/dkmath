@@ -109,7 +109,7 @@ D=B2−A+1 is a report quantity. All survivors have B2≥A and three actual trip
 |98|95|84|12|6|2·7²|
 |100|90|80|11|6|2²·5²|
 
-There are11 prime anchors,13 mixed anchors2ᵃpᵏ, and one power-of-two anchor. Their at-most-one-distinct-odd-factor property is kernel checked, placing them within008's general B2=B limitation. More two-prime anchor exclusion alone cannot improve their cap. The survivor table is generated from [checked diagnostic data](logs/classification-009.json); [summary](logs/classification-summary-009.txt).
+There are11 prime anchors,13 mixed anchors2ᵃpᵏ, and one power-of-two anchor. Their at-most-one-distinct-odd-factor property is kernel checked, placing them within008's general B2=B limitation. More two-prime anchor exclusion alone cannot improve their cap. The survivor table is generated from [checked diagnostic data](evidence/MANIFEST.md#log-24e965933dfc16c3); [summary](evidence/MANIFEST.md#log-8476b3aaa50f2393).
 
 ## 9. Is there an infinite arithmetic-class provider?
 

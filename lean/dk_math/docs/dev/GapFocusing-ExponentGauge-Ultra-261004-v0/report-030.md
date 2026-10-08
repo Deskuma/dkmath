@@ -171,7 +171,7 @@ The combined envelope still charges odd composite slots and replaces each
 weight by the top-endpoint log. The binomial-only candidate also charges
 prime factors outside the actual window. These are concrete sources of loss.
 
-[Diagnostics](logs/diagnostics-030.json) independently sieve primes through
+[Diagnostics](evidence/MANIFEST.md#log-3f2ce7bfefe50584) independently sieve primes through
 top(5000)/2 and form all cofactor-window pairs for n=3..5000. At all 4998
 anchors, their prime labels equal the hashed 028 inventory and both prime and
 target projections are injective. The old 029 fiber budget is retained for

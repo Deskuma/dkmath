@@ -95,7 +95,7 @@ B2(29)=31、A(29)=28、e=4≤E29 を Nat-safe deficit theorem に渡して
 | 1 | A≤B2<A+4、二座席証明書によりE≥4 | 10 |
 | 2 | B2≥A+4、今回の予算では criterion が失敗 | 30 |
 
-Class1 は **29,31,32,37,38,46,49,52,77,85**。証明書の具体的な座席と素数は [Lean data](../../../DkMathTest/NumberTheory/LegendreHybridClassificationData.lean) と [診断データ](logs/classification-008.json) に記録した。
+Class1 は **29,31,32,37,38,46,49,52,77,85**。証明書の具体的な座席と素数は [Lean data](../../../DkMathTest/NumberTheory/LegendreHybridClassificationData.lean) と [診断データ](evidence/MANIFEST.md#log-06b786cc4416c28e) に記録した。
 
 Class2 は **41,43,44,47,53,56,58,59,61,62,64,67,68,71,73,74,76,79,80,82,83,86,88,89,91,92,94,97,98,100**。
 

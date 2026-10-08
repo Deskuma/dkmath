@@ -1,6 +1,6 @@
 # Instruction 009 source inventory
 
-Baseline `cfd1d5f12`,008 implementation `b88687d79`, initial tree clean. [Inventory Lean](../../../DkMathTest/NumberTheory/LegendreAdaptiveCertificateInventory.lean) was run before adding abstractions; [exact checked types](logs/source-inventory-009.txt).
+Baseline `cfd1d5f12`,008 implementation `b88687d79`, initial tree clean. [Inventory Lean](../../../DkMathTest/NumberTheory/LegendreAdaptiveCertificateInventory.lean) was run before adding abstractions; [exact checked types](evidence/MANIFEST.md#log-8825fb8c9e727d2a).
 
 | Required source | Exact interfaces audited |
 | --- | --- |

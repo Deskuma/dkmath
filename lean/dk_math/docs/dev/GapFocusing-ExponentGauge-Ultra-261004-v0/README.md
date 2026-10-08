@@ -4,6 +4,14 @@ Branch: **research/GapFocusing-ExponentGauge-Ultra-261004-v0**
 
 Base: current `develop`, after merged PR #112.
 
+## Archived validation evidence
+
+The research is frozen at Instruction 051. Historical logs are recoverable
+through the [evidence path index](evidence/MANIFEST.md). Before replaying an
+existing check, restore them with `python3 checks/archive_evidence.py restore`
+from this directory. See [the recovery instructions](evidence/README.md) and
+[the merge preparation report](MERGE-PREP-EVIDENCE-ARCHIVE-REPORT.md).
+
 ## Research question
 
 Study the passage

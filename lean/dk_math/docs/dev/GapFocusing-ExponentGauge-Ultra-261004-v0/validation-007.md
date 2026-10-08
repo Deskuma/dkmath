@@ -11,7 +11,7 @@ lake build DkMath.NumberTheory.Legendre.ParitySafeMobiusOddCorrection \
   DkMath.NumberTheory.Legendre DkMath
 ```
 
-Exit0; **10374 Lake jobs**, including replayed dependencies. This is not a count of newly compiled modules. [Authoritative final log](logs/build-final-007.txt).
+Exit0; **10374 Lake jobs**, including replayed dependencies. This is not a count of newly compiled modules. [Authoritative final log](evidence/MANIFEST.md#log-e5d7018c113ae493).
 
 The changed counting module, new upper module, regression, facade and root all pass. New007 source has no warnings or errors. The root build replays five existing research warnings in `ZsigmondyCyclotomicResearch`, `TriominoFLT`, `TriominoCosmicBranchA`, `GcdNextResearch`, `CyclotomicPrincipalization`; the dependency audit of every new declaration below contains no `sorryAx`.
 
@@ -33,15 +33,15 @@ python3 docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-007.py
 
 Inventory and axiom commands exit0. The source-derived manifest covers **22/22 public production declarations** (5 definitions,16 new theorems and1 publicly exposed existing counting theorem), plus **26/26 regression declarations**. Every declaration has `#check` and `#print axioms`; all48 dependency sets are subsets of `{propext, Classical.choice, Quot.sound}`.
 
-[Manifest](logs/declaration-coverage-007.json) · [Raw audit](logs/axiom-audit-007.txt) · [Coverage](logs/axiom-coverage-007.txt) · [Audit source](../../../DkMathTest/NumberTheory/LegendreIncidenceUpperAxiomAudit.lean) · [Inventory output](logs/source-inventory-007.txt).
+[Manifest](evidence/MANIFEST.md#log-82dd55cdcaac050a) · [Raw audit](evidence/MANIFEST.md#log-7f1b2f8d98eed5f8) · [Coverage](evidence/MANIFEST.md#log-fff71ec587b21f90) · [Audit source](../../../DkMathTest/NumberTheory/LegendreIncidenceUpperAxiomAudit.lean) · [Inventory output](evidence/MANIFEST.md#log-02b3031ad4e0ee2c).
 
 The counting theorem's proof was not replaced: only its visibility/name and one internal reference changed. The existing incidence ledger is unchanged; the new module is exported by the Legendre facade and root.
 
 ## Token, whitespace and document checks
 
-Complete changed production files and all new007 Lean probes have zero whole-word matches for `sorry`, `sorryAx`, `admit`, `axiom`, `native_decide`, `unsafe`. [Scan scope/result](logs/forbidden-token-scan-007.txt). Inspection commands `#print axioms` are not declarations of additional axioms.
+Complete changed production files and all new007 Lean probes have zero whole-word matches for `sorry`, `sorryAx`, `admit`, `axiom`, `native_decide`, `unsafe`. [Scan scope/result](evidence/MANIFEST.md#log-06b5984575cdaa77). Inspection commands `#print axioms` are not declarations of additional axioms.
 
-`git diff --check` and new-file whitespace checks pass. All local links in the checkpoint documents resolve. [Whitespace result](logs/diff-check-007.txt). The reproducible Python check verifies these checks and exact declaration coverage.
+`git diff --check` and new-file whitespace checks pass. All local links in the checkpoint documents resolve. [Whitespace result](evidence/MANIFEST.md#log-e15fa7301e264649). The reproducible Python check verifies these checks and exact declaration coverage.
 
 ## Scope
 

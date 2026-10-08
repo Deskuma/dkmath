@@ -75,7 +75,7 @@ All four builds use LEAN_NUM_THREADS=2. The axiom audit covers all eight public 
 
 The imported PacketCross:285 unused-variable warning remains. The root also reports pre-existing sorry declarations in ZsigmondyCyclotomicResearch:147, TriominoFLT:1919, TriominoCosmicBranchA:4187, GcdNextResearch:850 and CyclotomicPrincipalization:5389. These are outside the new-declaration audit; no repository-wide sorry-free claim is made. No memory failure occurred.
 
-Artifacts: [coverage](logs/coverage-036.json), [diagnostics](logs/diagnostics-036.json), [focused](logs/focused-036.txt), [axiom audit](logs/axiom-audit-036.txt), [facade](logs/facade-036.txt), [root](logs/root-036.txt), [source inventory](source-inventory-036.md), and [artifact check](logs/artifact-check-036.txt). Reproduce with checks/build-036.py (focused axiom-audit facade root), checks/diagnostics-036.py and checks/check-036.py.
+Artifacts: [coverage](evidence/MANIFEST.md#log-5c634e5bc46c278a), [diagnostics](evidence/MANIFEST.md#log-82102c9246eed3cb), [focused](evidence/MANIFEST.md#log-df2fad07355ec18f), [axiom audit](evidence/MANIFEST.md#log-7717d3abe2178051), [facade](evidence/MANIFEST.md#log-a596be65b5eca1d9), [root](evidence/MANIFEST.md#log-ea82df0ce3c2e03c), [source inventory](source-inventory-036.md), and [artifact check](evidence/MANIFEST.md#log-72d84570ff05335b). Reproduce with checks/build-036.py (focused axiom-audit facade root), checks/diagnostics-036.py and checks/check-036.py.
 
 ## Next natural frontier and implementation proposal
 

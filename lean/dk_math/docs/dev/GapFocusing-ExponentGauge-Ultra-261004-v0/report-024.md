@@ -215,9 +215,9 @@ terminal sources, the largest multiplicity found in its initial-world scan.
 
 For all 602 existing worlds, all 68813 oriented deleted-seat records include
 the point, exact carriers/cards, products, lower powers, source capacities
-and comparisons. Records are in [deleted-seats-024.csv](logs/deleted-seats-024.csv);
+and comparisons. Records are in [deleted-seats-024.csv](evidence/MANIFEST.md#log-478421cd64e24ec5);
 aggregate results and preserved examples are in
-[discovery-024.json](logs/discovery-024.json).
+[discovery-024.json](evidence/MANIFEST.md#log-e348150a0a0cf3e4).
 
 The bulk initial-world diagnostics normalize cutoff P=max(S), or P=0 for
 empty S. At both larger anchors this is P=7. Kernel calibrations use P=10,
@@ -317,7 +317,7 @@ give a strict aggregate improvement after retained excess is restored.
 This proposal is not implemented in 024, and no global improvement is claimed.
 
 Exploratory arithmetic in checks/proposal-cofactor-024.py reduces Delta modulo
-m and records [proposed-cofactor-024.json](logs/proposed-cofactor-024.json).
+m and records [proposed-cofactor-024.json](evidence/MANIFEST.md#log-f515e6762c2568c2).
 At 297 seat44 the gcd is 781 and the cofactor is 113. Base11 would then allow
 at most one terminal source since 11<=113<121, recovering the already known
 one-source branching seat without using its continuing-card count. At 297

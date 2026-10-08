@@ -86,7 +86,7 @@ New Lean files retain the unified header and immediate file marker. The forbidde
 
 Focused, facade and axiom-audit logs contain no warnings. The root retains five pre-existing sorry warnings in ZsigmondyCyclotomicResearch:147, TriominoCosmicBranchA:4187, GcdNextResearch:850, TriominoFLT:1919 and CyclotomicPrincipalization:5389, outside the new-declaration audit. No repository-wide sorry-free claim is made. No memory failure occurred.
 
-Artifacts: [source inventory](source-inventory-039.md), [coverage](logs/coverage-039.json), [diagnostics](logs/diagnostics-039.json), [focused](logs/focused-039.txt), [axiom audit](logs/axiom-audit-039.txt), [facade](logs/facade-039.txt), [root](logs/root-039.txt), and [artifact check](logs/artifact-check-039.txt). Reproduce with checks/build-039.py (focused axiom-audit facade root), checks/diagnostics-039.py and checks/check-039.py.
+Artifacts: [source inventory](source-inventory-039.md), [coverage](evidence/MANIFEST.md#log-01e55710cbc243f0), [diagnostics](evidence/MANIFEST.md#log-a0254b04dc3f9cf1), [focused](evidence/MANIFEST.md#log-11ea4ebd1acb780a), [axiom audit](evidence/MANIFEST.md#log-0cc546fb2446777e), [facade](evidence/MANIFEST.md#log-6017ac91057aa383), [root](evidence/MANIFEST.md#log-52e04bb7bfcbb19b), and [artifact check](evidence/MANIFEST.md#log-c2a586da70c32254). Reproduce with checks/build-039.py (focused axiom-audit facade root), checks/diagnostics-039.py and checks/check-039.py.
 
 ## Stopping decision and next natural frontier
 

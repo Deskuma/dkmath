@@ -275,7 +275,7 @@ the residue alone, the filtered-receiver equivalence, and the actual source
 equivalence. The focused build also checks the 15 unchanged 046 regressions.
 No test constructs an FLT7 counterexample.
 
-[source-audit-047.json](logs/source-audit-047.json) retains fingerprints of
+[source-audit-047.json](evidence/MANIFEST.md#log-65cc5fab69166e3c) retains fingerprints of
 18 unchanged repository sources and three inspected Mathlib sources.
 [check-047.py](checks/check-047.py) checks every new production declaration,
 all four headers, forbidden constructs, source fingerprints, final build

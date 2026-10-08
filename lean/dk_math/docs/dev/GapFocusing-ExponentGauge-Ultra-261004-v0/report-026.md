@@ -178,8 +178,8 @@ not imply a fresh factor in a selected cell.
 
 ## 19. Diagnostics and calibration
 
-The [full exact integer scan](logs/diagnostics-026.json) covers n=1 through
-5000; [the summary](logs/diagnostics-summary-026.json) records results.
+The [full exact integer scan](evidence/MANIFEST.md#log-c79c8f5cca11b656) covers n=1 through
+5000; [the summary](evidence/MANIFEST.md#log-eccb85a0735e48e4) records results.
 The scan took approximately 4.7 seconds. Natural logarithms, ratios, and
 strict-budget comparisons are floating diagnostics only.
 

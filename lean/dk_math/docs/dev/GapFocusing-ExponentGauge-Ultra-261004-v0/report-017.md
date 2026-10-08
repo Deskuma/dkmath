@@ -218,7 +218,7 @@ Diagnostics factor every point independently for all natural anchors 1..300
 and extra anchor 1031. Instruction 016 JSON supplies only survivor comparison;
 it is not used to supply current factorization, colors or supports.
 Full colors, prime fibers, capacity ratios and forced-prime-gap lists are in
-[discovery-017.json](logs/discovery-017.json). The prime list reaches 2100,
+[discovery-017.json](evidence/MANIFEST.md#log-7e873d3d844038ff). The prime list reaches 2100,
 so all internal prime gaps up to 2061 at anchor 1031 are covered.
 
 | n | pairs | same covered owners | different covered owners | one covered seat | potential capacity sum | common support incidences |
@@ -298,7 +298,7 @@ arithmetic and an exact common-support equivalence. No theorem is category D.
 
 Every new theorem, definition and calibration is classified individually in
 [declaration-classification-017.md](declaration-classification-017.md), and
-[declaration-coverage-017.json](logs/declaration-coverage-017.json) is the exact
+[declaration-coverage-017.json](evidence/MANIFEST.md#log-6ad638207d253912) is the exact
 source manifest. There are 66 production declarations: 24 category A,
 33 category B and 9 category C. Kernel calibration declarations are listed
 separately as category A applications or explicit numeral counterexamples.

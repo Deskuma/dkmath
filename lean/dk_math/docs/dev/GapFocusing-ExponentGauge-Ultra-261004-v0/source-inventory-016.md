@@ -368,7 +368,7 @@ Mathlib: `Nat.minFac_le_of_dvd`, `Nat.minFac_prime`, `Nat.ModEq.add_left_cancel`
 
 ## New declaration coverage
 
-The generated manifest [declaration coverage](logs/declaration-coverage-016.json) is authoritative for all 61 production and 26 regression/calibration declarations. Exact names and source locations:
+The generated manifest [declaration coverage](evidence/MANIFEST.md#log-e147a6b777bf1629) is authoritative for all 61 production and 26 regression/calibration declarations. Exact names and source locations:
 
 - `DkMath.NumberTheory.Legendre.open_shell_card_add_one_eq_oddGnomon` — `DkMath/NumberTheory/Legendre/GnomonResidueCover.lean:18`
 - `DkMath.NumberTheory.Legendre.three_consecutive_odd_gnomons` — `DkMath/NumberTheory/Legendre/GnomonResidueCover.lean:22`

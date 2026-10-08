@@ -56,10 +56,10 @@ and both the inherited 026 and new 027 calibrations after the module doc edit.
 structured records. The measurements do not give an upper bound for every
 future repository build.
 
-- [focused raw telemetry](logs/telemetry-focused-027.txt), [structured record](logs/performance-focused-027.json), [build log](logs/focused-027.txt).
-- [facade raw telemetry](logs/telemetry-facade-027.txt), [structured record](logs/performance-facade-027.json), [build log](logs/facade-027.txt).
-- [root raw telemetry](logs/telemetry-root-027.txt), [structured record](logs/performance-root-027.json), [build log](logs/root-027.txt).
-- [axiom-audit raw telemetry](logs/telemetry-axiom-audit-027.txt), [structured record](logs/performance-axiom-audit-027.json), [build log](logs/axiom-audit-027.txt).
+- [focused raw telemetry](evidence/MANIFEST.md#log-890faf7f3372c639), [structured record](evidence/MANIFEST.md#log-9ef06a992ac00e8f), [build log](evidence/MANIFEST.md#log-bd81e430b843beef).
+- [facade raw telemetry](evidence/MANIFEST.md#log-0102ab0c92926b24), [structured record](evidence/MANIFEST.md#log-0052bd44af17619e), [build log](evidence/MANIFEST.md#log-0239e671419b4725).
+- [root raw telemetry](evidence/MANIFEST.md#log-db5c45b87d32c2ad), [structured record](evidence/MANIFEST.md#log-2b48e6473f88d19e), [build log](evidence/MANIFEST.md#log-f2d1fc8417f8f9bd).
+- [axiom-audit raw telemetry](evidence/MANIFEST.md#log-46a1341802bdc350), [structured record](evidence/MANIFEST.md#log-9432c6f6d2696126), [build log](evidence/MANIFEST.md#log-544075a45c9cc8c5).
 
 All process exits were zero; no killed process, timeout, manual termination,
 or actual OOM failure occurred. The two-thread choice follows the checkpoint
@@ -81,7 +81,7 @@ approximate and were not used as theorem premises. Structural kernel examples
 cover the requested multiple and high-depth patterns and large preserved anchors.
 The source inventory was written before production changes.
 
-[Final checker output](logs/checks-027.txt) records the completed audits.
-[Declaration coverage](logs/declaration-coverage-027.json) lists every printed
+[Final checker output](evidence/MANIFEST.md#log-03bc5ad309af5451) records the completed audits.
+[Declaration coverage](evidence/MANIFEST.md#log-521551c2a8bb80b5) lists every printed
 declaration. The build-027-*.txt files retain exploratory focused elaborations;
 the final four labeled logs and telemetry records carry current build status.

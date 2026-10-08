@@ -1,6 +1,6 @@
 # Instruction 006 source inventory
 
-Live baseline: `832ef9c3b`. Exact declaration types were checked through the Legendre facade; see [raw inventory](logs/source-inventory-006.txt) and [inventory Lean](../../../DkMathTest/NumberTheory/LegendreBlockLocalizationInventory.lean).
+Live baseline: `832ef9c3b`. Exact declaration types were checked through the Legendre facade; see [raw inventory](evidence/MANIFEST.md#log-d084a7c5b4c7874a) and [inventory Lean](../../../DkMathTest/NumberTheory/LegendreBlockLocalizationInventory.lean).
 
 ## Required modules and quantities
 

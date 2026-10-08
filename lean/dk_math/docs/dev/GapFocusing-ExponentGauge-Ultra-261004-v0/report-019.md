@@ -173,7 +173,7 @@ largest initial product fitting below n, once with 2 included and once with
 M <= n explicitly. A universal selector with maximality and next-refinement
 bounds remains a separate possible adapter, not a capacity theorem.
 
-The [diagnostic data](logs/discovery-019.json) has 602 rows: n=1..300 and 1031,
+The [diagnostic data](evidence/MANIFEST.md#log-bba424f576f97885) has 602 rows: n=1..300 and 1031,
 for both worlds. It records S, cutoff, M, residue and street cards, T card,
 whole-shell and town escapes, actual covered packets, incidences, near/far
 counts and sums, maximum occupancy, coprime pair count, original n-packet

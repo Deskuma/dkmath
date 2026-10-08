@@ -141,7 +141,7 @@ Cross ≤ Qtotal − (Cube + 2·Repeated + 3·Triple + J).
 
 deficit は `Qtotal−Repeated−2Triple−R`。strict inequality に必要な J は deficit+1。J3 は全点でその要求を超える。
 
-owner の有限 range は `sqrt n<p≤2sqrt n` と `2sqrt n<p≤n` の 2 群。`sqrt_quotient_sum_split_owner_range` は任意の Nat-valued contribution の exact split、`primeAnchor_quotient_range_eq_floor` は各群の exact floor sum を証明する。6 点の near/far total は順に 33/96、95/236、148/479、152/490、151/502、153/494。[全 owner 出力](logs/discovery-015.json) を保存した。この regrouping 自体で容量が減るとは主張しない。
+owner の有限 range は `sqrt n<p≤2sqrt n` と `2sqrt n<p≤n` の 2 群。`sqrt_quotient_sum_split_owner_range` は任意の Nat-valued contribution の exact split、`primeAnchor_quotient_range_eq_floor` は各群の exact floor sum を証明する。6 点の near/far total は順に 33/96、95/236、148/479、152/490、151/502、153/494。[全 owner 出力](evidence/MANIFEST.md#log-49301e24aaa80b1b) を保存した。この regrouping 自体で容量が減るとは主張しない。
 
 追加の初等制限として `sqrt_cross_fiber_card_le_odd_span` は
 
@@ -165,11 +165,11 @@ Qtotal < R + Repeated + 2·Triple + J
 
 新アンカー 1031 では、verified active inventory を 1021 から境界更新して再利用し、rough R.card=316、exact odd floor total=661、3/5/7 rejection count=363 を kernel で確認した。`quotient1031_structural_endpoint` は `661<316+363` から prime endpoint を得る。`quotient1031_uncovered_lower` は **U≥18** を conservation と census から導き、U 自体を列挙しない。
 
-429 個の奇素数アンカー `3≤n≤3000` を同じ範囲の 014 と比較した。所有者ごとの quotient interval、reduced condition、素因子による routed/rejected 分類を独立に計算し、全 rows を [JSON](logs/discovery-015.json)、全 aggregate rows を [text](logs/discovery-015.txt) に保存した。有限試行割り算の範囲はこの診断の shell と quotient に十分であり、asymptotics は推論していない。
+429 個の奇素数アンカー `3≤n≤3000` を同じ範囲の 014 と比較した。所有者ごとの quotient interval、reduced condition、素因子による routed/rejected 分類を独立に計算し、全 rows を [JSON](evidence/MANIFEST.md#log-49301e24aaa80b1b)、全 aggregate rows を [text](evidence/MANIFEST.md#log-8b48cbe6d2909b6e) に保存した。有限試行割り算の範囲はこの診断の shell と quotient に十分であり、asymptotics は推論していない。
 
 指定 6 点の Cross/Total は約 27.13%、23.56%、22.01%、23.99%、25.57%、21.95%。Repeated share は約 1.55%、1.81%、1.28%、0.93%、0.31%、0.31%；Triple share は 9.30%、6.34%、6.70%、3.27%、4.13%、8.81%。Repeated/Triple だけでは total の削減が足りず、Rejected share の約62–72%が主要な補正になる。全範囲の largest owner residual は13（2083、2477、2657、2753、2939）。
 
-J=0 の budget が通る範囲内アンカーは 3,5,7,11,13,17,19,23,31,37,41 の 11 点のみ。小素数を cutoff 以下に限定した J3 budget は 410/429 点で通る。最初の失敗は2099。2969 では R807、total1977、Repeated1、Triple43 なので要求 J≥1084 に対し J3=1070 で、strict budget に14足りない。診断した追加集合 {3,5,7,11} は残る19点すべてで budget を満たす。[次基底 probe](logs/next-basis-015.json) は **diagnostic** であり、その19個の kernel endpoint は今回実装していない。
+J=0 の budget が通る範囲内アンカーは 3,5,7,11,13,17,19,23,31,37,41 の 11 点のみ。小素数を cutoff 以下に限定した J3 budget は 410/429 点で通る。最初の失敗は2099。2969 では R807、total1977、Repeated1、Triple43 なので要求 J≥1084 に対し J3=1070 で、strict budget に14足りない。診断した追加集合 {3,5,7,11} は残る19点すべてで budget を満たす。[次基底 probe](evidence/MANIFEST.md#log-b6f09ce8ccd07a15) は **diagnostic** であり、その19個の kernel endpoint は今回実装していない。
 
 ## 10. 残る external-prime arithmetic と次の実装提案
 
@@ -200,7 +200,7 @@ provider target:
 
 production は [CrossQuotient](../../../DkMath/NumberTheory/Legendre/ParitySafeSqrtCrossQuotient.lean)、[CompositeRouting](../../../DkMath/NumberTheory/Legendre/ParitySafeSqrtCompositeRouting.lean)、[QuotientConservation](../../../DkMath/NumberTheory/Legendre/ParitySafeSqrtQuotientConservation.lean)。既存 support/census/moment/uncovered 定義は変更していない。全 Lean ヘッダーと import 直後の `#print "file: ..."` marker を統一した。
 
-[Source inventory](source-inventory-015.md)・[Findings](findings-015.md)・[Validation](validation-015.md)・[declaration manifest](logs/declaration-coverage-015.json)。focused/facade/root build、全新規 public 宣言の axiom check、禁則語・header・whitespace・artifact check の範囲と結果は Validation に記録した。
+[Source inventory](source-inventory-015.md)・[Findings](findings-015.md)・[Validation](validation-015.md)・[declaration manifest](evidence/MANIFEST.md#log-a3b84fc5ea3bdc4c)。focused/facade/root build、全新規 public 宣言の axiom check、禁則語・header・whitespace・artifact check の範囲と結果は Validation に記録した。
 
 判定は、raw carrier に genuine な additional quotient class が存在することによる C である。補正後の分解と summation は完成し、有限な structural gain と新 endpoint も得られたが、Rejected を落とした当初の保存則には戻せない。
 

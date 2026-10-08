@@ -52,4 +52,4 @@ There are no extra fresh cancellation terms. All old repeated-prime contribution
 
 The missing theorem is a strict bound on the old budget. The new global equivalence identifies that strict inequality for every n >= 3 with LegendreConjecture; anchors one and two are separately checked. This names the unresolved problem and does not prove it.
 
-Full diagnostics are [pascal-diagnostics-025.json](logs/pascal-diagnostics-025.json); compact readouts are [pascal-diagnostics-025.txt](logs/pascal-diagnostics-025.txt). All integer factorizations, counts, heights and ratios are exact. Real log readouts are explicitly approximate and are not proof evidence for a strict inequality.
+Full diagnostics are [pascal-diagnostics-025.json](evidence/MANIFEST.md#log-ddd5c41ceba520f1); compact readouts are [pascal-diagnostics-025.txt](evidence/MANIFEST.md#log-5f44a299e149c360). All integer factorizations, counts, heights and ratios are exact. Real log readouts are explicitly approximate and are not proof evidence for a strict inequality.
