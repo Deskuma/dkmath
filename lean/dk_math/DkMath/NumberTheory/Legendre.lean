@@ -117,6 +117,7 @@ import DkMath.NumberTheory.Legendre.GnomonCentralCarryCompensation
 import DkMath.NumberTheory.Legendre.GnomonPooledThresholdAudit
 import DkMath.NumberTheory.Legendre.GnomonRepeatedCarryPhase
 import DkMath.NumberTheory.Legendre.GnomonRepeatedBaseAggregate
+import DkMath.NumberTheory.Legendre.GnomonQFloorPulse
 
 #print "file: DkMath.NumberTheory.Legendre"
 

@@ -1,0 +1,27 @@
+{
+  "command": [
+    "lake",
+    "build",
+    "DkMath"
+  ],
+  "measurement_command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/deskuma/develop/lean/dkmath/lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/logs/telemetry-root-042.txt",
+    "--",
+    "lake",
+    "build",
+    "DkMath"
+  ],
+  "LEAN_NUM_THREADS": null,
+  "LEAN_NUM_THREADS_in_environment": false,
+  "exit_code": 0,
+  "elapsed_seconds": 12.936,
+  "telemetry_scope": "GNU time resource usage of Lake invocation including waited descendants",
+  "maximum_resident_set_kbytes": 7093012,
+  "major_page_faults": 0,
+  "minor_page_faults": 202510,
+  "swap_count": 0,
+  "failure_classification": "none"
+}
