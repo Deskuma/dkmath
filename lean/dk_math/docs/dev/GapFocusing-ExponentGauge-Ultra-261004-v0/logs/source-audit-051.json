@@ -1,0 +1,333 @@
+{
+  "outcome": "C",
+  "HEAD": "fdac826b2e3be97b74db685bf2185b39c41e17c1",
+  "new_Lean_declarations": 0,
+  "Lean_builds_run_for_051": 0,
+  "facade_direct_imports": 198,
+  "source_audit": [
+    {
+      "path": "DkMath/FLT/Seven/Basic.lean",
+      "sha256": "b80eda460b60fff3223cc9e832bbfab12b4c64707925d6ef7e6c92cbc6c7a7bc",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "CounterexamplePack": 18
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenBaseTerminalRamifiedSummit.lean",
+      "sha256": "2e60bf85e404cdd59ee5c666e05726914af68bb9a7eed39db4c1c316ef276385",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "PrimitiveRamifiedSummitPacket": 43
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenBaseTerminalRamifiedCanonicalSplit.lean",
+      "sha256": "1427d33ec86316af525fafda8f99e52896e5bf188621777568c4c5c1f872b1c7",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "RamifiedSecondCoordinateCanonicalSplit": 19
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenBaseTerminalRamifiedQuadraticInnerRoot.lean",
+      "sha256": "75cc0865082bd03b18e06b429c3f2c2c48e3c78215f87f19d70b1d680cd07ad0",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "RamifiedQuadraticInnerRootPacket": 242,
+        "nonempty_quadraticInnerRoot": 258,
+        "coordinate_eq_fortyNine": 290,
+        "innerRoot_coordinates_isCoprime": 304,
+        "innerRoot_norm_eq": 313,
+        "inner_secondCoordinate_product_eq": 405,
+        "innerRootSnd_depth_eq_four": 433,
+        "exists_inner_secondCoordinate_split": 453
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenBaseTerminalRamifiedRealCubicNorm.lean",
+      "sha256": "5432f972fcd9df0327b9401de9caf4b3ce660f3dbf635bf710c941689719ca63",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "RamifiedRealCubicNormPacket": 52,
+        "signedRootGap_seventhPower_eq": 111,
+        "sourceDifference_eq_normalizedAxis_pow_six_mul_pow_seven": 135
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRealCubicInt.lean",
+      "sha256": "28608f3fa7e3c9136ba98a404dbc4a50650e2122ad364dde2aa5fa7d709ac944",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "normalizedAxis": 260,
+        "normalizedWitness": 263,
+        "ramifiedAxis_mul_seven_pow_four_mul_pow_seven": 288
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRealCubicUnitClass.lean",
+      "sha256": "8fb23142cd0ef85c707d7f99bbc8d42242d3ab6ee12a8f31ff48c5269dbd9188",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "RamifiedRealCubicExactPowerPacket": 766
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRealCubicAxisDrop.lean",
+      "sha256": "1e4366193e38c246a030cb430e9a1ac8fe51ffa289ae5f8c9995298853da50c0",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "norm_leftRoot_eq_signedRoot": 533,
+        "norm_rightRoot_eq_signedRoot": 543,
+        "signedRootGap_eq_norm_sub_norm": 556,
+        "RamifiedRealCubicDepthLedgerPacket": 567,
+        "RamifiedRealCubicAxisDropPacket": 840,
+        "RamifiedRealCubicBalancedAxisSplitPacket": 857
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedSignedRootDepth.lean",
+      "sha256": "615b5e7ebc8db8df11e2ae17fbb0278295c966b3eb2a94ea0b07aabdb32298ba",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "RamifiedSignedRootDepthPacket": 49
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedSignedRootRouting.lean",
+      "sha256": "1d4e3ed751aec72d6eadc0bbb0d48b04cc598bd825cc595518f54bccf65dab2a",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "RamifiedSignedRootRoutingPacket": 19,
+        "nonempty_coherent_signedRootRouting": 36
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/CoprimeTripleRouting.lean",
+      "sha256": "54b02ab654868ded7fa37ff51fdfd996605752a63e446261064f0807f03e6dff",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "CoprimeTripleRouting": 59
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionRoutingAudit.lean",
+      "sha256": "c29c0cbdc310ffc6e3f50b54c5744159001f58bb5331705f4842fdfffa7c1950",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "thirdRow_eq_one": 55,
+        "activeCells_not_seven_dvd": 87
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionRealPairCoprimalityNormGate.lean",
+      "sha256": "2562b07dd150e72f1fab9747b1319eb9103ea2029cfefe1bf7763b3419b1803c",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "c21_eq_quotientRoot_innerFst_gcd": 540,
+        "c22_eq_quotientRoot_innerFst_add_innerSnd_gcd": 565,
+        "Col3SeventhPowerSplit": 593,
+        "nonempty_col3SeventhPowerSplit": 604,
+        "exists_row2_twoCellSeventhPowerFactor": 624
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionRealPairLoadAllocation.lean",
+      "sha256": "f69651cdceab133dec8e229ae4e257b4240c224fed9f0c6ec6f828f009ea7200",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "RealPairLoadedPowerSplit": 708,
+        "nonempty_realPairLoadedPowerSplit": 737
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionLoadedCore.lean",
+      "sha256": "dcdad20ad4d8ea10aff955a688c00ec3c74a87300a37d37290f6767e13095be4",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "RamifiedFusionLoadedCorePacket": 66,
+        "natAbs_norm_load21": 165,
+        "natAbs_norm_load22": 175
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionLoadedResidualIdealBridge.lean",
+      "sha256": "316a4ac4c3da6d91587fee3b9ad3ba8fc783b88415b90e5a6d24499aed0900d7",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "row2ResidualNormRoot": 186,
+        "quotientRoot_natAbs_eq_row2Loads_mul_residualNormRoot_pow": 191,
+        "padicValNat_quotientRoot_eq_loads_add_seven_mul_residual": 236
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicDegreeSixCarrier.lean",
+      "sha256": "7e7bc8fb469c7d09ff9e7437723dae5ff5105bbb19c33c0f9ee4f86af0c1f99d",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "zeta_pow_seven": 114,
+        "zeta_ne_one": 121
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionGlobalOrientedPrimeFactorization.lean",
+      "sha256": "af9fe2df0dbfaad82c3b4860704ed93b3edd8cc11ea36b3730a34c9e06039d46",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "GlobalOrientedPrimeFactorizationPacket": 1007
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionSeventhPowerResidualIdealExtraction.lean",
+      "sha256": "e8fecb19bcffd0d852ab9f36efebe4f4a3c5883745bce38244b4e878f7b77815",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "globalOrientedLoadedHalfIdeal": 255,
+        "globalOrientedResidualIdeal": 271,
+        "span_carrier_eq_loadedCarrier_mul_residual_pow": 481
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionElementLevelOrientedPower.lean",
+      "sha256": "589598012953b642e951048a7e84fe198e20ada6bd83e7d6bb4f7794d0b054cd",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "OrientedElementLevelPowerWitness": 84,
+        "orientedElementLevelPowerWitness": 110,
+        "orientedResidualRoot": 122,
+        "cyclotomicDegreeSixCarrier_eq_load_mul_residualRoot_pow": 149
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicAdditiveChartBoundary.lean",
+      "sha256": "db556ae69d2a1491cb6e93fa382c2256b71b0955da0f71a7543026668617986d",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "sixPhaseProduct_eq_ofReal_cyclotomicNorm": 126,
+        "zerothCoordinate_not_multiplicative": 148,
+        "no_ringHom_to_int": 161,
+        "cyclotomicNorm_cyclotomicDegreeSixCarrier": 209,
+        "cyclotomicDegreeSixCarrier_coordinates": 232,
+        "orientedElementLevelPower_additiveBoundary": 394,
+        "orientedResidualRoot_muSevenGaugeBoundary": 503
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionDirectChartObstruction.lean",
+      "sha256": "13247fdf0dd1998faeffa0def961368e6d1dace86e0c9f098f0d5a772e331985",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "no_direct_signedFermatSevenChart": 84
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionStrictDescentFailureBoundary.lean",
+      "sha256": "b7f6f982b262fbddd10cf70629bb50c133a1984f78256166f9a2069077d16bd8",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "internalDepthFourCarrier": 25,
+        "outerDepthFiveCarrier": 32,
+        "InternalDepthFourCounterexampleReconstructionObligation": 70,
+        "internalDepthFourCounterexampleReconstructionObligation_iff_strictDescentCandidate": 90,
+        "exists_strict_awayCounterexample_of_internalDepthFourReconstruction": 110
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionDepthFourReconstructionAudit.lean",
+      "sha256": "81c7dd11716884eb339ef594c268d79945be69dd5afafd031c9cd85a0b884ee3",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "internalDepthFourReconstructedRoute_root_depth": 30,
+        "internalDepthFourReconstructedRoute_root_ne_innerRoot": 42,
+        "no_fullCoordinate_decoder_on_orientedResidualIdeal": 74
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/CoordinateNormalForm.lean",
+      "sha256": "e117fc44f72fa42b453c1afb259be52f99fec24ae0cca7e583be3f6a0c5270b3",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "AwayCoordinateNormalForm": 15,
+        "coordinateCounterexampleRoute_of_pack": 84
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/AwayValuationTransfer.lean",
+      "sha256": "60f7f4c416df1705dad6366488ae7a771d421d98897a35d84da8bdb5085aea98",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "AwayValuationTransferPacket": 69,
+        "nonempty_awayValuationTransferPacket": 79
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionNestedReconstruction.lean",
+      "sha256": "63ae3729f7772bb5238bf793d6c3ae9617850b6c309d96163a1410d19d94d6bb",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "internalDepthFourSeventhCore": 105,
+        "internalDepthFourCarrier_eq_seven_pow_four_mul_core_pow": 108,
+        "internalDepthFourSeventhCore_pos": 123
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionAllocationThreshold.lean",
+      "sha256": "1bfbb380ad466f8211f89089a40a84a897f889084bb380fd36dec970b3551f83",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "internalDepthFourAllocation_strict_branch_selector": 308,
+        "RamifiedRealCubicNormPacket.exists_inner_complementary_seventh_root": 354
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionSixthPowerAllocationSieve.lean",
+      "sha256": "21156641c60027e0f374faed6a15ee3d730f7b740f1a5fc4182e873f946008f9",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "SixthPowerAllocationSieve": 45,
+        "sixthPowerAllocationSieve_mod_one": 48
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionCenteredPolynomial.lean",
+      "sha256": "0978d85ad81cc2447d30192ed48c8d06e4a979b2ad42e14655d812142097e4cd",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "centered_seventh_power_difference": 26,
+        "CenteredNestedAllocationCandidate": 130,
+        "SixthPowerSievedCenteredCondition": 233,
+        "internalDepthFourReconstruction_iff_centered": 259
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven/SevenRamifiedFusionCenteredGnomonGap.lean",
+      "sha256": "4b241c4581a154d67786da5b5587fd9455136b70d0ae839eeab1255608950a97",
+      "unchanged_from_HEAD": true,
+      "declaration_lines": {
+        "internalDepthFourAllocation_excluded_of_perfectSixth": 156,
+        "internalDepthFourReconstruction_excluded_of_perfectSixth_family": 168
+      }
+    },
+    {
+      "path": "DkMath/FLT/Seven.lean",
+      "sha256": "9ac14221b92d153cbc1c3d723c6ac88edbdca6aff7d945ba5870811ebb54da5d",
+      "unchanged_from_HEAD": true
+    },
+    {
+      "path": "DkMath.lean",
+      "sha256": "2896811e6c67f47a56374c8e8857fbff40b818f1803f722c93f9a5ad4e7a9e5e",
+      "unchanged_from_HEAD": true
+    },
+    {
+      "path": "DkMathTest/FLT/Seven/CenteredGnomonGapCalibration.lean",
+      "sha256": "8624cc3bd7f6a35ba480eb935e80f1b79fcae5a9ee50ca5dc8b1bb72c552ecf0",
+      "unchanged_from_HEAD": true
+    },
+    {
+      "path": "DkMathTest/FLT/Seven/CenteredGnomonGapAxiomAudit.lean",
+      "sha256": "88797eda1895c6947c8a53cc48a2b30ef60696e1e4b61f9d9fe08c2ffd01ac0a",
+      "unchanged_from_HEAD": true
+    }
+  ],
+  "scope": "Source locations and preservation only; no entailment or new kernel proof claimed."
+}
