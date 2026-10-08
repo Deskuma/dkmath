@@ -15,16 +15,17 @@ open DkMath.CosmicFormulaBinom
 /-- A second use of the existing coprime power extraction. The extra four
 factors of seven turn the exceptional allocation into a pure seventh power;
 the prime-free residual factor receives no seven. -/
-theorem SevenAdicPowerSplit.exists_nested_seventh_roots {M u v : ℕ}
-    (split : SevenAdicPowerSplit (7 ^ 4 * M ^ 7) u v) :
+theorem exists_nested_seventh_allocation {M a b : ℕ}
+    (haPos : 0 < a) (hbPos : 0 < b) (habCoprime : Nat.Coprime a b)
+    (hb7 : ¬ 7 ∣ b) (hdist : 7 ^ 4 * M ^ 7 = 7 * a * b) :
     ∃ r s : ℕ, 0 < r ∧ 0 < s ∧ Nat.Coprime r s ∧
-      split.a = 7 ^ 3 * r ^ 7 ∧ split.b = s ^ 7 ∧ M = r * s := by
-  have hcop : Nat.Coprime (7 ^ 4 * split.a) split.b :=
+      a = 7 ^ 3 * r ^ 7 ∧ b = s ^ 7 ∧ M = r * s := by
+  have hcop : Nat.Coprime (7 ^ 4 * a) b :=
     (((by norm_num : Nat.Prime 7).coprime_iff_not_dvd.mpr
-      split.seven_not_dvd_b).pow_left 4).mul_left split.coprime_a_b
-  have hab : (7 ^ 4 * split.a) * split.b = (7 * M) ^ 7 := by
-    have h := split.distinguished_eq
-    have hcancel : split.a * split.b = 7 ^ 3 * M ^ 7 := by
+      hb7).pow_left 4).mul_left habCoprime
+  have hab : (7 ^ 4 * a) * b = (7 * M) ^ 7 := by
+    have h := hdist
+    have hcancel : a * b = 7 ^ 3 * M ^ 7 := by
       apply Nat.eq_of_mul_eq_mul_left (by decide : 0 < 7)
       nlinarith [h]
     rw [mul_assoc, hcancel, mul_pow]
@@ -33,14 +34,14 @@ theorem SevenAdicPowerSplit.exists_nested_seventh_roots {M u v : ℕ}
   have h7R : 7 ∣ R := (by norm_num : Nat.Prime 7).dvd_of_dvd_pow
     (by rw [← hR]; exact dvd_mul_of_dvd_left (by norm_num : 7 ∣ 7 ^ 4) _)
   rcases h7R with ⟨r, hr⟩
-  have ha : split.a = 7 ^ 3 * r ^ 7 := by
+  have ha : a = 7 ^ 3 * r ^ 7 := by
     apply Nat.eq_of_mul_eq_mul_left (by decide : 0 < 7 ^ 4)
     rw [hR, hr, mul_pow]
     ring
   have hM : M = r * s := by
     apply Nat.pow_left_injective (by decide : 7 ≠ 0)
     apply Nat.eq_of_mul_eq_mul_left (by decide : 0 < 7 ^ 4)
-    have h := split.distinguished_eq
+    have h := hdist
     rw [ha, hs] at h
     simpa only [mul_pow] using (show 7 ^ 4 * M ^ 7 = 7 ^ 4 * (r * s) ^ 7 by
       calc
@@ -49,19 +50,28 @@ theorem SevenAdicPowerSplit.exists_nested_seventh_roots {M u v : ℕ}
   have hrpos : 0 < r := by
     by_contra hz
     have : r = 0 := Nat.eq_zero_of_not_pos hz
-    have hapos := split.a_pos
+    have hapos := haPos
     rw [ha, this] at hapos
     norm_num at hapos
   have hspos : 0 < s := by
     by_contra hz
     have : s = 0 := Nat.eq_zero_of_not_pos hz
-    have hb := split.b_pos
+    have hb := hbPos
     rw [hs, this] at hb
     norm_num at hb
-  have hrs : Nat.Coprime r s := split.coprime_a_b.of_dvd
+  have hrs : Nat.Coprime r s := habCoprime.of_dvd
     (by rw [ha]; exact dvd_mul_of_dvd_right (dvd_pow_self r (by decide)) _)
     (by rw [hs]; exact dvd_pow_self s (by decide))
   exact ⟨r, s, hrpos, hspos, hrs, ha, hs, hM⟩
+
+/-- The existing GN packet uses the common arithmetic allocation unchanged.
+The same helper also applies to the prescribed-carrier alternating split. -/
+theorem SevenAdicPowerSplit.exists_nested_seventh_roots {M u v : ℕ}
+    (split : SevenAdicPowerSplit (7 ^ 4 * M ^ 7) u v) :
+    ∃ r s : ℕ, 0 < r ∧ 0 < s ∧ Nat.Coprime r s ∧
+      split.a = 7 ^ 3 * r ^ 7 ∧ split.b = s ^ 7 ∧ M = r * s :=
+  exists_nested_seventh_allocation split.a_pos split.b_pos
+    split.coprime_a_b split.seven_not_dvd_b split.distinguished_eq
 
 /-- The nested split makes the gap a seventh power of a seventh power,
 with all twenty-seven factors of seven displayed. -/
