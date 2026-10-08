@@ -201,6 +201,7 @@ import DkMath.FLT.Seven.SevenRamifiedFusionAllocationThreshold
 import DkMath.FLT.Seven.SevenRamifiedFusionAllocationResidueSieve
 import DkMath.FLT.Seven.SevenRamifiedFusionSixthPowerAllocationSieve
 import DkMath.FLT.Seven.SevenRamifiedFusionCenteredPolynomial
+import DkMath.FLT.Seven.SevenRamifiedFusionCenteredGnomonGap
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
 import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
