@@ -1,0 +1,27 @@
+{
+  "command": [
+    "lake",
+    "build",
+    "DkMathTest.FLT.Seven.AllocationThresholdAxiomAudit"
+  ],
+  "measurement_command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/deskuma/develop/lean/dkmath/lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/logs/telemetry-axiom-audit-046.txt",
+    "--",
+    "lake",
+    "build",
+    "DkMathTest.FLT.Seven.AllocationThresholdAxiomAudit"
+  ],
+  "LEAN_NUM_THREADS": null,
+  "LEAN_NUM_THREADS_in_environment": false,
+  "exit_code": 0,
+  "elapsed_seconds": 12.604,
+  "telemetry_scope": "GNU time resource usage of Lake invocation including waited descendants",
+  "maximum_resident_set_kbytes": 6739584,
+  "major_page_faults": 0,
+  "minor_page_faults": 199567,
+  "swap_count": 0,
+  "failure_classification": "none"
+}
