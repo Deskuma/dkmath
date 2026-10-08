@@ -5,6 +5,8 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Basic  -- Basic Definitions and Utilities
+import DkMath.NumberTheory.TraceOneResidueType
+import DkMath.NumberTheory.CyclotomicQRProvenanceLift
 import DkMath.Lib  -- Reusable library components
 import DkMath.Algebra.MetallicRatioCore  -- Signed-unit square and metallic-ratio framework
 import DkMath.Verification  -- Reusable verification certificate layer
@@ -28,13 +30,18 @@ import DkMath.NumberTheory.BinomialPrimePower  -- NumberTheory.BinomialPrimePowe
 import DkMath.NumberTheory.PascalPrimeDial  -- NumberTheory.PascalPrimeDial: prime-dial heights on Pascal rows
 import DkMath.NumberTheory.Gauge  -- NumberTheory.Gauge: exponent-side Pascal gauge facade
 import DkMath.NumberTheory.PascalPrimeCoordinateDecoder
+import DkMath.NumberTheory.PascalPrebirthBoundary
+import DkMath.NumberTheory.PascalPrebirthBirth
 import DkMath.NumberTheory.Primitive
 import DkMath.NumberTheory.PrimorialUniverse
 import DkMath.NumberTheory.Legendre
 import DkMath.NumberTheory.AKSBridge  -- NumberTheory.AKSBridge: AKS-facing binomial/Frobenius bridge
+import DkMath.NumberTheory.PrimeCyclicGlue
+import DkMath.NumberTheory.PrimeShellHensel
 import DkMath.NumberTheory.WeightedBinomial  -- NumberTheory.WeightedBinomial: weighted binomial divisibility
 import DkMath.NumberTheory.WeightedGNBridge  -- NumberTheory.WeightedGNBridge: weighted Beam bridge to GN
 import DkMath.NumberTheory.GNPrime  -- NumberTheory.GNPrime: GN prime closure, prime representations, cubic shell, and finite Hensel-depth API
+import DkMath.NumberTheory.GapFocusing  -- Unique formal-gap quotient, cyclotomic phases, degree rigidity, and unit normalization
 import DkMath.NumberTheory.Goldbach  -- Fixed-center GN fibers and conditional finite-capacity closure
 import DkMath.Pascal  -- Pascal bridge modules
 import DkMath.Petal  -- Petal: relative polygon and GN bridge surface

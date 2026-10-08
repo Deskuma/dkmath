@@ -1,0 +1,38 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration
+
+#print "file: DkMathTest.NumberTheory.GnomonCofactorSemiprimeAxiomAudit"
+
+-- Complete named public coverage of DkMath/NumberTheory/Legendre/GnomonCofactorSemiprime.lean
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimePairs
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSemiprime_product_injective
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeWitnesses
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeMass
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeMass_eq_pair_sum
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeWitnesses_subset_error
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeMass_le_error
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSquareWitnesses_subset_semiprime
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSquareWitnessMass_le_semiprimeMass
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_le_semiprimeBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeBudget_le_leastFactorBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSemiprimeBudget_excess
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_semiprime_excess
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_semiprimeBudget_lt
+
+-- Complete named public coverage of DkMathTest/NumberTheory/GnomonCofactorSemiprimeCalibration.lean
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.witnesses9_12_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.complete_small_carriers_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.exact_small_budgets_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.collision539_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.residual32_carrier_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.consumer29_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.products31_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.consumer31_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.strict_gain31_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSemiprimeCalibration.equality3_checked

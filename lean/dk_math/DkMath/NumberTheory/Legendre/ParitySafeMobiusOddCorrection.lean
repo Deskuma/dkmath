@@ -144,7 +144,9 @@ private theorem filter_odd_dvd_eq_sdiff_two_mul
       ring
     exact ⟨hk, hodd, hdk⟩
 
-private theorem card_filter_odd_dvd_Ioc_eq_delta
+/-- Exact odd-multiple count in a finite interval, also used for partial
+anchor-divisor exclusion in incidence upper bounds. -/
+theorem card_filter_odd_dvd_Ioc_eq_paritySafeDelta
     {A B d : ℕ} (hdOdd : Odd d) (hAB : A ≤ B) :
     ((Finset.Ioc A B).filter (fun k => Odd k ∧ d ∣ k)).card =
       paritySafeOddMultipleFloorDelta A B d := by
@@ -251,7 +253,7 @@ private theorem card_filter_odd_coprime_Ioc_eq_odd_moebius_sum
       rw [hfilter]
       simp only [Finset.sum_const]
       by_cases hdOdd : Odd d
-      · rw [card_filter_odd_dvd_Ioc_eq_delta hdOdd hAB]
+      · rw [card_filter_odd_dvd_Ioc_eq_paritySafeDelta hdOdd hAB]
         simp only [ite_eq_left hdOdd]
         simp only [nsmul_eq_mul]
         ring

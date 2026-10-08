@@ -1,0 +1,33 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.NumberTheory.Legendre
+
+#print "file: DkMathTest.NumberTheory.LegendreFreshCostInventory"
+
+open DkMath.NumberTheory.Legendre
+
+#check paritySafeActiveSupport
+#check paritySafeSupportExcess
+#check paritySafePrimePairOverlapCount
+#check paritySafeLowCostResidualCapacity
+#check paritySafeRechargeExactDepthResidualPairCapacityExcess
+#check paritySafePairOverlapOutsideDepthCollision
+#check paritySafeDepthCollisionLocalSupportCost
+#check lowerParitySafeFreshSupport
+#check lowerParitySafeFreshCount
+#check lowerPersistentSeatPool
+#check lowerParitySafePersistenceCap
+#check paritySafeCandidate_card_add_supportExcess_eq_incidence_of_fullyCovered
+#check paritySafeLowCostResidualCapacity_eq_mass_add_slack
+#check paritySafeDepthCollisionPairOverlapMass_eq_supportCost_add_collision_add_depthResidualCapacity
+#check two_mul_outsideCollisionPairOverlap_add_elevenCollision_add_twoFiveDirection_le_threeSupportExcess_add_twoLowCostCapacity
+#check paritySafePrimePairOverlapCount_eq_supportExcess_add_lowCostMass_add_terminal_add_collision_add_depthFiberExcess
+#check paritySafeRechargeExactDepthFiberCollision_support_card_ge_four
+#check paritySafeRechargeDepthFiveDirectionCollision_fiveDirection_packet
+#check lowerParitySafePersistentSupport_subset_addresses
+#check DkMath.NumberTheory.Legendre.Internal.card_upperPairs_eq_choose
+#check Nat.mem_primeFactors

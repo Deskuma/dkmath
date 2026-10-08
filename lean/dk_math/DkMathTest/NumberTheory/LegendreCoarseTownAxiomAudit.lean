@@ -1,0 +1,141 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.NumberTheory.Legendre
+import DkMathTest.NumberTheory.LegendreCoarseTownRegression
+
+#print "file: DkMathTest.NumberTheory.LegendreCoarseTownAxiomAudit"
+
+#check DkMath.NumberTheory.Primitive.crossPeriod_mul_dvd_diff
+#print axioms DkMath.NumberTheory.Primitive.crossPeriod_mul_dvd_diff
+#check DkMath.NumberTheory.Legendre.primeWorldResidues_eq_packetBase
+#print axioms DkMath.NumberTheory.Legendre.primeWorldResidues_eq_packetBase
+#check DkMath.NumberTheory.Legendre.card_primeWorldResidues_eq_totient
+#print axioms DkMath.NumberTheory.Legendre.card_primeWorldResidues_eq_totient
+#check DkMath.NumberTheory.Legendre.primeWorld_totient_insert
+#print axioms DkMath.NumberTheory.Legendre.primeWorld_totient_insert
+#check DkMath.NumberTheory.Legendre.primeWorld_packet_modulus_one_mismatch
+#print axioms DkMath.NumberTheory.Legendre.primeWorld_packet_modulus_one_mismatch
+#check DkMath.NumberTheory.Legendre.centeredOddGapPrimeWorld
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGapPrimeWorld
+#check DkMath.NumberTheory.Legendre.knownPrimeScales_centeredOddGapPrimeWorld
+#print axioms DkMath.NumberTheory.Legendre.knownPrimeScales_centeredOddGapPrimeWorld
+#check DkMath.NumberTheory.Legendre.centeredOddGapPrimeWorld_eq_primeFactors
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGapPrimeWorld_eq_primeFactors
+#check DkMath.NumberTheory.Legendre.centeredOddGapPrimeWorld_modulus_eq_radical
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGapPrimeWorld_modulus_eq_radical
+#check DkMath.NumberTheory.Legendre.supportDisjointFrom_iff_squareShell_address
+#print axioms DkMath.NumberTheory.Legendre.supportDisjointFrom_iff_squareShell_address
+#check DkMath.NumberTheory.Legendre.coarsePrimeWorldBase
+#print axioms DkMath.NumberTheory.Legendre.coarsePrimeWorldBase
+#check DkMath.NumberTheory.Legendre.mem_coarsePrimeWorldBase
+#print axioms DkMath.NumberTheory.Legendre.mem_coarsePrimeWorldBase
+#check DkMath.NumberTheory.Legendre.mem_coarsePrimeWorldBase_iff_survivor
+#print axioms DkMath.NumberTheory.Legendre.mem_coarsePrimeWorldBase_iff_survivor
+#check DkMath.NumberTheory.Legendre.card_coarsePrimeWorldBase
+#print axioms DkMath.NumberTheory.Legendre.card_coarsePrimeWorldBase
+#check DkMath.NumberTheory.Legendre.image_coarsePrimeWorldBase_address
+#print axioms DkMath.NumberTheory.Legendre.image_coarsePrimeWorldBase_address
+#check DkMath.NumberTheory.Legendre.existsUnique_coarsePrimeWorldBase_address
+#print axioms DkMath.NumberTheory.Legendre.existsUnique_coarsePrimeWorldBase_address
+#check DkMath.NumberTheory.Legendre.centeredOddGapPrimeWorld_residues_eq_packet
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGapPrimeWorld_residues_eq_packet
+#check DkMath.NumberTheory.Legendre.coarsePrimeWorldBase_eq_packet_of_modulus_dvd_anchor
+#print axioms DkMath.NumberTheory.Legendre.coarsePrimeWorldBase_eq_packet_of_modulus_dvd_anchor
+#check DkMath.NumberTheory.Legendre.card_coarsePrimeWorldBase_eq_residues
+#print axioms DkMath.NumberTheory.Legendre.card_coarsePrimeWorldBase_eq_residues
+#check DkMath.NumberTheory.Legendre.coarsePrimeWorldShift
+#print axioms DkMath.NumberTheory.Legendre.coarsePrimeWorldShift
+#check DkMath.NumberTheory.Legendre.coarsePrimeWorldTown
+#print axioms DkMath.NumberTheory.Legendre.coarsePrimeWorldTown
+#check DkMath.NumberTheory.Legendre.coarsePrimeWorldBase_squareOffsets
+#print axioms DkMath.NumberTheory.Legendre.coarsePrimeWorldBase_squareOffsets
+#check DkMath.NumberTheory.Legendre.disjoint_coarsePrimeWorldStreets
+#print axioms DkMath.NumberTheory.Legendre.disjoint_coarsePrimeWorldStreets
+#check DkMath.NumberTheory.Legendre.card_coarsePrimeWorldShift
+#print axioms DkMath.NumberTheory.Legendre.card_coarsePrimeWorldShift
+#check DkMath.NumberTheory.Legendre.card_coarsePrimeWorldTown
+#print axioms DkMath.NumberTheory.Legendre.card_coarsePrimeWorldTown
+#check DkMath.NumberTheory.Legendre.coarsePrimeWorldTown_squareOffsets
+#print axioms DkMath.NumberTheory.Legendre.coarsePrimeWorldTown_squareOffsets
+#check DkMath.NumberTheory.Legendre.coarsePrimeWorld_address_shift
+#print axioms DkMath.NumberTheory.Legendre.coarsePrimeWorld_address_shift
+#check DkMath.NumberTheory.Legendre.coarsePrimeWorld_survivor_shift
+#print axioms DkMath.NumberTheory.Legendre.coarsePrimeWorld_survivor_shift
+#check DkMath.NumberTheory.Legendre.coprime_coarsePrimeWorldPoints
+#print axioms DkMath.NumberTheory.Legendre.coprime_coarsePrimeWorldPoints
+#check DkMath.NumberTheory.Legendre.not_prime_dvd_both_coarsePoints
+#print axioms DkMath.NumberTheory.Legendre.not_prime_dvd_both_coarsePoints
+#check DkMath.NumberTheory.Legendre.coprime_coarsePoint_factors
+#print axioms DkMath.NumberTheory.Legendre.coprime_coarsePoint_factors
+#check DkMath.NumberTheory.Legendre.coarseOutsidePrimes
+#print axioms DkMath.NumberTheory.Legendre.coarseOutsidePrimes
+#check DkMath.NumberTheory.Legendre.coarse_survivor_support_outside
+#print axioms DkMath.NumberTheory.Legendre.coarse_survivor_support_outside
+#check DkMath.NumberTheory.Legendre.prime_outside_not_dvd_coarseModulus
+#print axioms DkMath.NumberTheory.Legendre.prime_outside_not_dvd_coarseModulus
+#check DkMath.NumberTheory.Legendre.exists_distinct_coarseOutside_cover_pair
+#print axioms DkMath.NumberTheory.Legendre.exists_distinct_coarseOutside_cover_pair
+#check DkMath.NumberTheory.Legendre.coarseOutsideOrderedPairs
+#print axioms DkMath.NumberTheory.Legendre.coarseOutsideOrderedPairs
+#check DkMath.NumberTheory.Legendre.coarseCrossOffsets
+#print axioms DkMath.NumberTheory.Legendre.coarseCrossOffsets
+#check DkMath.NumberTheory.Legendre.coarseCrossCount
+#print axioms DkMath.NumberTheory.Legendre.coarseCrossCount
+#check DkMath.NumberTheory.Legendre.coarseCrossCount_eq_support_products
+#print axioms DkMath.NumberTheory.Legendre.coarseCrossCount_eq_support_products
+#check DkMath.NumberTheory.Legendre.totient_le_coarseCrossCount_of_fullyCovered
+#print axioms DkMath.NumberTheory.Legendre.totient_le_coarseCrossCount_of_fullyCovered
+#check DkMath.NumberTheory.Legendre.coarseCrossOffsets_mul_dvd_diff
+#print axioms DkMath.NumberTheory.Legendre.coarseCrossOffsets_mul_dvd_diff
+#check DkMath.NumberTheory.Legendre.card_coarseCrossOffsets_le_one
+#print axioms DkMath.NumberTheory.Legendre.card_coarseCrossOffsets_le_one
+#check DkMath.NumberTheory.Legendre.coarseNearPairs
+#print axioms DkMath.NumberTheory.Legendre.coarseNearPairs
+#check DkMath.NumberTheory.Legendre.coarseFarPairs
+#print axioms DkMath.NumberTheory.Legendre.coarseFarPairs
+#check DkMath.NumberTheory.Legendre.coarseNear_union_far
+#print axioms DkMath.NumberTheory.Legendre.coarseNear_union_far
+#check DkMath.NumberTheory.Legendre.disjoint_coarseNear_far
+#print axioms DkMath.NumberTheory.Legendre.disjoint_coarseNear_far
+#check DkMath.NumberTheory.Legendre.coarseCrossCount_eq_near_add_far
+#print axioms DkMath.NumberTheory.Legendre.coarseCrossCount_eq_near_add_far
+#check DkMath.NumberTheory.Legendre.coarseFar_sum_le_card
+#print axioms DkMath.NumberTheory.Legendre.coarseFar_sum_le_card
+#check DkMath.NumberTheory.Legendre.coarseTown_assignment_frontier
+#print axioms DkMath.NumberTheory.Legendre.coarseTown_assignment_frontier
+#check DkMath.NumberTheory.Legendre.centeredOddGap_survivor_covered_only_two
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGap_survivor_covered_only_two
+#check DkMath.NumberTheory.Legendre.coarse_packet_oldSupport_family
+#print axioms DkMath.NumberTheory.Legendre.coarse_packet_oldSupport_family
+#check DkMath.NumberTheory.Legendre.centeredOddGap_odd_survivor_not_covered
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGap_odd_survivor_not_covered
+#check DkMath.NumberTheory.Legendre.coarse_visibleNorm_direction
+#print axioms DkMath.NumberTheory.Legendre.coarse_visibleNorm_direction
+#check DkMath.NumberTheory.Legendre.squareAnchorPacketCrossOffsets_mul_dvd_diff
+#print axioms DkMath.NumberTheory.Legendre.squareAnchorPacketCrossOffsets_mul_dvd_diff
+#check DkMathTest.LegendreCoarseTownRegression.modulus_one_boundary
+#print axioms DkMathTest.LegendreCoarseTownRegression.modulus_one_boundary
+#check DkMathTest.LegendreCoarseTownRegression.phased_base_differs_from_offset_units
+#print axioms DkMathTest.LegendreCoarseTownRegression.phased_base_differs_from_offset_units
+#check DkMathTest.LegendreCoarseTownRegression.nondivisor_anchor_coarse_pair
+#print axioms DkMathTest.LegendreCoarseTownRegression.nondivisor_anchor_coarse_pair
+#check DkMathTest.LegendreCoarseTownRegression.local_pairs_do_not_give_global_support_separation
+#print axioms DkMathTest.LegendreCoarseTownRegression.local_pairs_do_not_give_global_support_separation
+#check DkMathTest.LegendreCoarseTownRegression.coarse_town_not_global_oldSupport_family
+#print axioms DkMathTest.LegendreCoarseTownRegression.coarse_town_not_global_oldSupport_family
+#check DkMathTest.LegendreCoarseTownRegression.incidence_can_exceed_packet_count
+#print axioms DkMathTest.LegendreCoarseTownRegression.incidence_can_exceed_packet_count
+#check DkMathTest.LegendreCoarseTownRegression.near_pair_multiple_occupancy
+#print axioms DkMathTest.LegendreCoarseTownRegression.near_pair_multiple_occupancy
+#check DkMathTest.LegendreCoarseTownRegression.six_oldSupport_family
+#print axioms DkMathTest.LegendreCoarseTownRegression.six_oldSupport_family
+#check DkMathTest.LegendreCoarseTownRegression.six_prime_via_existing_capacity_consumer
+#print axioms DkMathTest.LegendreCoarseTownRegression.six_prime_via_existing_capacity_consumer
+#check DkMathTest.LegendreCoarseTownRegression.six_family_is_entire_coarse_town
+#print axioms DkMathTest.LegendreCoarseTownRegression.six_family_is_entire_coarse_town
+#check DkMathTest.LegendreCoarseTownRegression.odd_gap_world_does_not_fit_three
+#print axioms DkMathTest.LegendreCoarseTownRegression.odd_gap_world_does_not_fit_three

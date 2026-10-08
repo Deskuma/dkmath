@@ -1,0 +1,21 @@
+# Findings 017
+
+- Previous-audit checkpoint: read the 260825 report; do not redefine delta, a derivative or a power kernel. Existing SquareGnomon also supplies the generic normal form and step law.
+- Generic quadratic bridge: four thin algebraic adapters to existing squareGnomon passed the focused build. They stay in CosmicFormula; no new Real import is added to Legendre by that adapter.
+- Denominator-free checkpoint passed: Int identity valid for every integer n; Nat identity requires n>0 because at n=0 truncated subtraction gives 1, not 0. Exact division by four is proved.
+- Centered window checkpoint passed: the Nat Icc window translates by +n to the open square cell and has card 2n. This translation is geometric; divisibility need not survive.
+- Fold checkpoint passed: reflection preserves offsets, is involutive and fixed-point free, each orbit has card two, canonical index is unique, pairs are disjoint and their union is the whole shell.
+- Gap/GN checkpoint passed: internal gaps are precisely the odd Icc values up to 2n-1, card n; each is the unit GTail at j. They are not the outer gnomon at n or an arbitrary difference of squared complete pair points.
+- Owner checkpoint passed: all least factors on fold partners differ, including total minFac values on uncovered seats. Actual same-covered-owner fibers are empty. The conditional gap-divisibility theorem is therefore vacuous for least owners, though common nonleast support remains possible.
+- Capacity checkpoint passed: for odd prime p, potential gap-address card is (n+(p-1)/2)/p, and p=2 has no addresses. Existing progression APIs are reused. The unique actual same-owner sum is zero; no full-cover contradiction follows.
+- Transport checkpoint passed: fold-after-insert equals insert-after-fold plus one. The two path endpoints are consecutive points in the same successor shell, so common divisors equal one and old supports are disjoint. This remains an adjacent-point consequence.
+- Arithmetic bridge checkpoint passed: common old support equals prime-and-bound-and-norm-and-gap divisibility for Norm(n)=n^2+(n+1)^2. Every prime dividing the norm is 1 mod 4. An activated prime occupies every gap address; an inactive prime occupies none. Consecutive norms are coprime, hence no prime is common to fold pairs in two consecutive shells, for any pair indices. These concern shared support, not the always-distinct least owners.
+
+- Bounded diagnostics checkpoint: all natural anchors 1..300 and extra anchor 1031 were factored independently; previous 016 JSON was used only for survivor comparison. All fold least-owner counts are zero. Full per-pair colors, capacities, common-support incidences and forced-prime-gap examples are retained. No asymptotic conclusion.
+- False strengthening, first shared support by anchor then pair index: n=6,j=2, points 40/45, gap 5, owners 2/3, common old prime 5. Distinct least owners do not imply disjoint support.
+- False reverse implication, first bounded example: n=8,j=7, points 65/80, gap 15, owners 5/2. Left least owner divides the gap without equal owners.
+- Translation divisibility failure: n=3,m=7,p=2, translated point 10. First in ascending bounded anchor/centered-seat/old-prime order. Geometry does not preserve prime divisibility.
+- Smallest map-commutation failure: n=1,r=1, fold-after-insert=4 and insert-after-fold=3. Production displacement theorem covers every valid seat.
+- Kernel calibrations passed: 18 regression theorems, including exact prime-norm exclusion at 297, floor counts 206/17 at 1031, old 1031 endpoint reuse, false stronger rules and a fully covered local trajectory satisfying all local restrictions.
+- Final classification checkpoint: 66 production declarations, individually classified as A=24, B=33, C=9, D=0. Norm/support and exact address-count bridges survive; no full-cover contradiction survives. Outcome B - CENTERED FOLD PRODUCES A NEW EXACT ARITHMETIC BRIDGE.
+- Final validation checkpoint: all focused builds, both facades and DkMath root passed; 84 complete public axiom sets exclude sorryAx. Existing root warnings are documented separately. Uniform headers/markers, scoped forbidden-token and whitespace checks passed. Next proposed contract is the full gcd norm-and-gap equality, explicitly unimplemented in this checkpoint.
