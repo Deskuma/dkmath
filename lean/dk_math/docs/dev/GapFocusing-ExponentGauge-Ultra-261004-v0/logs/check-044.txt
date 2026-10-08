@@ -1,0 +1,1 @@
+PASS: 21 public declarations; 10 kernel regressions; 5 Lean headers; 15 existing source fingerprints; no new packet structures or Legendre imports; 4 successful builds with LEAN_NUM_THREADS unset; standard axioms only; whitespace.
