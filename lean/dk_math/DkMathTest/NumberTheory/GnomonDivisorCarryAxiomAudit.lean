@@ -1,0 +1,104 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMathTest.NumberTheory.GnomonDivisorCarryCalibration
+
+#print "file: DkMathTest.NumberTheory.GnomonDivisorCarryAxiomAudit"
+
+-- Complete named public coverage of DkMath/NumberTheory/DivisorIncidence.lean
+#print axioms DkMath.NumberTheory.card_Icc_filter_dvd
+#print axioms DkMath.NumberTheory.card_shell_filter_dvd
+#print axioms DkMath.NumberTheory.sum_shell_divisors_eq_floor
+#print axioms DkMath.NumberTheory.sum_shell_log_eq_floor
+#print axioms DkMath.NumberTheory.log_shell_prod_eq_floor
+#print axioms DkMath.NumberTheory.log_factorial_eq_floor
+#print axioms DkMath.NumberTheory.log_factorial_eq_floor_cutoff
+
+-- Complete named public coverage of DkMath/NumberTheory/Legendre/GnomonDivisorCarry.lean
+#print axioms DkMath.NumberTheory.Legendre.gnomonShellMultipleCount
+#print axioms DkMath.NumberTheory.Legendre.gnomonShellMultipleCount_eq_card
+#print axioms DkMath.NumberTheory.Legendre.gnomonShell_divisor_incidence
+#print axioms DkMath.NumberTheory.Legendre.gnomonShell_log_sum_eq_divisor_mass
+#print axioms DkMath.NumberTheory.Legendre.gnomonShell_log_prod_eq_divisor_mass
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalCell_mul_factorial_eq_shell_prod
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalCell_log_add_factorial_eq_shell_log
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalLowerDivisorMass
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalLowerDivisorMass_nonneg
+#print axioms DkMath.NumberTheory.Legendre.gnomonShell_high_divisor_packet
+#print axioms DkMath.NumberTheory.Legendre.gnomonShell_divisor_mass_eq_lower_add_shellVM
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalCell_log_add_factorial_eq_shellVM_add_lowerDivisorMass
+#print axioms DkMath.NumberTheory.Legendre.gnomonLowDivisorCarryBit
+#print axioms DkMath.NumberTheory.Legendre.gnomonLowDivisorCarryBit_binary
+#print axioms DkMath.NumberTheory.Legendre.gnomonLowDivisorCarryBit_le_one
+#print axioms DkMath.NumberTheory.Legendre.gnomonLowDivisorCarryBit_eq_one_iff
+#print axioms DkMath.NumberTheory.Legendre.gnomonLowDivisorCarryBit_eq_zero_iff
+#print axioms DkMath.NumberTheory.Legendre.gnomonShellMultipleCount_eq_div_add_carry
+#print axioms DkMath.NumberTheory.Legendre.nextMultipleGap
+#print axioms DkMath.NumberTheory.Legendre.gnomonLowDivisorCarryBit_eq_one_iff_gap
+#print axioms DkMath.NumberTheory.Legendre.gnomonLowDivisorCarryBit_large_gap
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalLowDivisorCarryMass
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalLowDivisorCarryMass_nonneg
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalLowerDivisorMass_eq_factorial_add_carry
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalCell_log_eq_shellVM_add_lowCarryMass
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_eq_higher_add_lowCarryMass
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalLowCarryEvents
+#print axioms DkMath.NumberTheory.Legendre.mem_gnomonPascalLowCarryEvents
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalLowDivisorCarryMass_eq_events
+#print axioms DkMath.NumberTheory.Legendre.gnomonLowDivisorCarryBit_prime_pow_iff
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalSmallCarryEvents
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalLargeCarryEvents
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalSmallCarryMass
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalLargeCarryMass
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalLowCarryMass_eq_small_add_large
+#print axioms DkMath.NumberTheory.Legendre.gnomonNextShellMultiple
+#print axioms DkMath.NumberTheory.Legendre.gnomonNextShellMultiple_packet
+#print axioms DkMath.NumberTheory.Legendre.gnomonNextShellMultiple_unique
+#print axioms DkMath.NumberTheory.Legendre.gnomonNextShellMultiple_collision_iff
+#print axioms DkMath.NumberTheory.Legendre.gnomonNextShellMultiple_cofactor_lt
+#print axioms DkMath.NumberTheory.Legendre.gnomonLarge_prime_power_divisors_same_base
+#print axioms DkMath.NumberTheory.Legendre.gnomonCarry_prime_pow_weight
+#print axioms DkMath.NumberTheory.Legendre.gnomonShellVM_margin_of_carry_bound
+#print axioms DkMath.NumberTheory.Legendre.gnomonShellVM_margin_of_band_bounds
+#print axioms DkMath.NumberTheory.Legendre.gnomonLowCarry_logLog_criterion_iff
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_lowCarry_logLog_lt
+#print axioms DkMath.NumberTheory.Legendre.gnomonLowCarry_exact_higher_criterion_iff
+#print axioms DkMath.NumberTheory.Legendre.gnomonLowCarry_logLog_implies_old_strict
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalCell_mul_factorial_lower
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalCell_log_add_factorial_lower
+
+-- Complete named public coverage of DkMathTest/NumberTheory/GnomonDivisorCarryCalibration.lean
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.carry_packet
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.large_packet
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.events3_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.events5_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.events11_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.carry3_5_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.carry3_7_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.multiple3_7_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.carry5_7_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.carry5_16_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.multiple5_16_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.carry11_13_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.carry11_32_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.multiple11_32_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.carry11_64_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.multiple11_64_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.carry297_25_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.carry297_625_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.multiple297_625_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.carry1031_27_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.carry1031_4096_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.multiple1031_4096_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.collision11_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.large_map11_not_injective
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.earlier_large_maps_injective
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.higher19_zero_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.ledger19_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.higher297_zero_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.ledger297_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.higher1031_zero_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.ledger1031_checked
+#print axioms DkMathTest.NumberTheory.GnomonDivisorCarryCalibration.zero_and_aligned_checked

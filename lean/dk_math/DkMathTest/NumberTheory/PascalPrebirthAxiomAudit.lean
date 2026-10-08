@@ -1,0 +1,183 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMathTest.NumberTheory.PascalPrebirthRegression
+import DkMathTest.NumberTheory.LegendrePascalCellCalibration
+
+#print "file: DkMathTest.NumberTheory.PascalPrebirthAxiomAudit"
+
+-- Installed source API signature checks.
+#check Choose.lucas_theorem_nat
+#check Choose.eq_pow_multiplicity_of_choose_modEq_zero_nat
+#check Choose.gcd_choose_eq_minFac_of_isPrimePow
+#check Choose.gcd_choose_eq_one_of_not_isPrimePow
+#check Nat.factorization_choose
+#check Nat.factorization_choose_le_log
+#check Nat.factorization_choose_le_one
+#check Nat.factorization_choose_eq_zero_of_lt
+#check DkMath.NumberTheory.AllInnerChooseDivisible
+#check DkMath.NumberTheory.InnerRowSupportPrime
+#check DkMath.NumberTheory.RowBirthPrime
+#check DkMath.NumberTheory.PrimePowerRowSupport
+#check DkMath.NumberTheory.PrimePrebirthAlternation
+#check DkMath.NumberTheory.prime_prebirthAlternation_step
+#check DkMath.NumberTheory.prime_prebirthAlternation
+#check DkMath.NumberTheory.prime_power_allInnerChooseDivisible
+#check DkMath.NumberTheory.prime_power_rowBirthPrime
+#check DkMath.NumberTheory.padicValNat_choose_prime_pow
+#check DkMath.NumberTheory.padicValNat_choose_prime_pow_add_index
+#check DkMath.NumberTheory.pascalPrimeDialHeight_prime_pow_add_index
+#check DkMath.NumberTheory.pascalPrimeDialHeight_prime_pow
+#check DkMath.NumberTheory.prime_power_unitFilteredPrimeDialHeight
+#check DkMath.NumberTheory.prime_not_dvd_pascalCoeffMass_of_row_lt
+#check DkMath.NumberTheory.pascalPrimeCoordinateBirthSupport
+#check DkMath.NumberTheory.pascalPrimeBirthLogMass
+#check DkMath.NumberTheory.pascalPrimeBirthLogMass_eq
+#check DkMath.NumberTheory.pascalPrimeCoordinateSupportUpTo_succ
+#check DkMath.Pascal.WallisGrowthBridge.centralRatioQ_sq_eq_odd_mul_wallisPartialQ
+#check DkMath.Pascal.WallisCellGrowth.pascalCellGrowthQ_eq_cast_choose
+
+-- Complete named public coverage of DkMath/NumberTheory/BinomialPrime.lean
+#print axioms DkMath.NumberTheory.AllInnerChooseDivisible
+#print axioms DkMath.NumberTheory.InnerRowSupportPrime
+#print axioms DkMath.NumberTheory.RowBirthPrime
+#print axioms DkMath.NumberTheory.prime_allInnerChooseDivisible_self
+#print axioms DkMath.NumberTheory.prime_dvd_inner_choose
+#print axioms DkMath.NumberTheory.allInnerChooseDivisible_dvd_choose
+#print axioms DkMath.NumberTheory.innerRowSupportPrime_dvd_choose
+#print axioms DkMath.NumberTheory.innerRowSupportPrime_prime
+#print axioms DkMath.NumberTheory.prime_innerRowSupportPrime_self
+#print axioms DkMath.NumberTheory.prime_rowBirthPrime_self
+#print axioms DkMath.NumberTheory.rowBirthPrime_innerRowSupportPrime
+#print axioms DkMath.NumberTheory.rowBirthPrime_prime
+#print axioms DkMath.NumberTheory.rowBirthPrime_dvd_row
+#print axioms DkMath.NumberTheory.rowBirthPrime_dvd_choose
+
+-- Complete named public coverage of DkMath/NumberTheory/BinomialPrimePower.lean
+#print axioms DkMath.NumberTheory.PrimePowerRowSupport
+#print axioms DkMath.NumberTheory.UniformBeamHeight
+#print axioms DkMath.NumberTheory.FilteredBeamHeight
+#print axioms DkMath.NumberTheory.FilteredBeamHeight.dvd_choose_of_height_ge
+#print axioms DkMath.NumberTheory.UniformBeamHeight.dvd_choose_of_height_ge
+#print axioms DkMath.NumberTheory.BeamBirthBoundary
+#print axioms DkMath.NumberTheory.BeamBirthBoundaryObstruction
+#print axioms DkMath.NumberTheory.PascalPrebirthAlternationMod
+#print axioms DkMath.NumberTheory.pascalCancellationDefect
+#print axioms DkMath.NumberTheory.pascalCancellationDefect_eq
+#print axioms DkMath.NumberTheory.pascalCancellationDefect_eq_zero_iff
+#print axioms DkMath.NumberTheory.allInnerChooseDivisible_prebirth_step
+#print axioms DkMath.NumberTheory.pascalPrebirthAlternationMod_iff_allInnerChooseDivisible
+#print axioms DkMath.NumberTheory.PrimePrebirthAlternation
+#print axioms DkMath.NumberTheory.primePrebirthAlternation_iff
+#print axioms DkMath.NumberTheory.prime_power_allInnerChooseDivisible
+#print axioms DkMath.NumberTheory.prime_power_innerRowSupportPrime
+#print axioms DkMath.NumberTheory.prime_power_rowBirthPrime
+#print axioms DkMath.NumberTheory.prime_power_rowSupport
+#print axioms DkMath.NumberTheory.padicValNat_choose_prime_pow
+#print axioms DkMath.NumberTheory.padicValNat_choose_prime_pow_add_index
+#print axioms DkMath.NumberTheory.prime_power_pow_dvd_choose_of_padicValNat_index
+#print axioms DkMath.NumberTheory.UniformBeamHeight.allInnerChooseDivisible
+#print axioms DkMath.NumberTheory.UniformBeamHeight.innerRowSupportPrime
+#print axioms DkMath.NumberTheory.below_prime_uniformBeamHeight_zero
+#print axioms DkMath.NumberTheory.below_prime_not_dvd_inner_choose
+#print axioms DkMath.NumberTheory.prime_uniformBeamHeight_self
+#print axioms DkMath.NumberTheory.prime_beamBirthBoundary
+#print axioms DkMath.NumberTheory.prime_prebirthAlternation_step
+#print axioms DkMath.NumberTheory.prime_prebirthAlternation
+#print axioms DkMath.NumberTheory.prime_power_prebirthAlternation
+#print axioms DkMath.NumberTheory.prime_power_prebirth_packet
+#print axioms DkMath.NumberTheory.BeamBirthBoundary.below
+#print axioms DkMath.NumberTheory.BeamBirthBoundary.self
+#print axioms DkMath.NumberTheory.BeamBirthBoundary.innerRowSupportPrime
+#print axioms DkMath.NumberTheory.not_beamBirthBoundary_of_obstruction
+#print axioms DkMath.NumberTheory.not_obstruction_of_prime
+#print axioms DkMath.NumberTheory.prime_innerRowSupportPrime_self_of_uniformBeamHeight
+#print axioms DkMath.NumberTheory.prime_power_unitFilteredBeamHeight
+#print axioms DkMath.NumberTheory.prime_power_dvd_choose_of_not_dvd_index
+#print axioms DkMath.NumberTheory.prime_power_unitFilteredBeamHeight_dvd_choose
+
+-- Complete named public coverage of DkMath/NumberTheory/PascalPrebirthBoundary.lean
+#print axioms DkMath.NumberTheory.pascalInnerCommonDivisor
+#print axioms DkMath.NumberTheory.dvd_pascalInnerCommonDivisor_iff
+#print axioms DkMath.NumberTheory.pascalPrebirthAlternationMod_iff_dvd_commonDivisor
+#print axioms DkMath.NumberTheory.allInnerChooseDivisible_prime_iff
+#print axioms DkMath.NumberTheory.pascalPrebirthAlternationMod_prime_iff
+#print axioms DkMath.NumberTheory.pascalInnerCommonDivisor_eq_minFac
+#print axioms DkMath.NumberTheory.pascalInnerCommonDivisor_eq_one
+#print axioms DkMath.NumberTheory.pascalInnerCommonDivisor_eq_self_of_prime
+#print axioms DkMath.NumberTheory.prime_iff_allInnerChooseDivisible_self
+#print axioms DkMath.NumberTheory.pascalInnerCommonDivisor_eq_self_iff
+#print axioms DkMath.NumberTheory.prime_iff_prebirthAlternation_self
+#print axioms DkMath.NumberTheory.pascalInnerCommonDivisor_prime_pow
+
+-- Complete named public coverage of DkMath/NumberTheory/PascalPrebirthBirth.lean
+#print axioms DkMath.NumberTheory.pascalCancellationDefect_zero_iff_dial_pos
+#print axioms DkMath.NumberTheory.pascalCancellationDefect_ne_zero_of_next_row_lt
+#print axioms DkMath.NumberTheory.prime_prebirth_birth_packet
+#print axioms DkMath.NumberTheory.prime_power_coordinate_birth_iff
+#print axioms DkMath.NumberTheory.prime_power_resynchronization_packet
+#print axioms DkMath.NumberTheory.pascalPrimeBirthLogMass_nonneg
+#print axioms DkMath.NumberTheory.pascalPrimeBirthLogMass_pos_iff
+#print axioms DkMath.NumberTheory.pascalPrimePowerLogGauge
+#print axioms DkMath.NumberTheory.pascalPrimePowerLogGauge_eq
+
+-- Complete named public coverage of DkMath/NumberTheory/Legendre/GnomonPascalCell.lean
+#print axioms DkMath.NumberTheory.Legendre.GnomonPascalCell
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalCell_mul_factorial
+#print axioms DkMath.NumberTheory.Legendre.prime_dvd_gnomonPascalCell_iff
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_iff_gnomonPascalCell
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalCell_ratio
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalCell_factorization_carries
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalCell_fresh_height_le_one
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalCell_fresh_height_eq_one
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellBirthLogMass
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellBirthLogMass_nonneg
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellBirthLogMass_pos_iff
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalCell_fresh_logWeight
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalCell_fresh_logLedger
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalCell_log_factorization
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellBirthLogMass_eq_range
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalCell_log_eq_old_add_birth
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_lt_iff
+#print axioms DkMath.NumberTheory.Legendre.legendreConjecture_iff_pascalOldBudget
+
+-- Complete named public coverage of DkMathTest/NumberTheory/PascalPrebirthRegression.lean
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.nonzeroDefectCount
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.phaseMismatchCount
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.centeredDefectSum
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.diagnostic_residue_zero_iff
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.binary_raw_increase_checked
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.prime_raw_increase_checked
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.prime_phase_increase_checked
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.normalized_increase_checked
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.modulus_two_checked
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.degenerate_moduli_checked
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.row2_checked
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.row3_checked
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.row5_checked
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.row7_checked
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.row4_checked
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.row8_checked
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.row9_checked
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.row25_checked
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.row27_checked
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.nonpower_rows_checked
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.dials_checked
+#print axioms DkMathTest.NumberTheory.PascalPrebirthRegression.resynchronization_checked
+
+-- Complete named public coverage of DkMathTest/NumberTheory/LegendrePascalCellCalibration.lean
+#print axioms DkMathTest.NumberTheory.LegendrePascalCellCalibration.wallisCellGrowth_bridge
+#print axioms DkMathTest.NumberTheory.LegendrePascalCellCalibration.report024_arithmetic_checked
+#print axioms DkMathTest.NumberTheory.LegendrePascalCellCalibration.anchor5_checked
+#print axioms DkMathTest.NumberTheory.LegendrePascalCellCalibration.anchor11_checked
+#print axioms DkMathTest.NumberTheory.LegendrePascalCellCalibration.anchor19_checked
+#print axioms DkMathTest.NumberTheory.LegendrePascalCellCalibration.anchor29_checked
+#print axioms DkMathTest.NumberTheory.LegendrePascalCellCalibration.anchor297_checked
+#print axioms DkMathTest.NumberTheory.LegendrePascalCellCalibration.anchor1031_checked
+#print axioms DkMathTest.NumberTheory.LegendrePascalCellCalibration.anchor_zero_checked
+#print axioms DkMathTest.NumberTheory.LegendrePascalCellCalibration.ratio_zero_obstruction_checked
+#print axioms DkMathTest.NumberTheory.LegendrePascalCellCalibration.old_budget_consumer

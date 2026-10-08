@@ -1,0 +1,45 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMathTest.NumberTheory.GnomonCarryFiberCalibration
+
+#print "file: DkMathTest.NumberTheory.GnomonCarryFiberAxiomAudit"
+
+-- Complete named public coverage of DkMath/NumberTheory/Legendre/GnomonCarryFiber.lean
+#print axioms DkMath.NumberTheory.Legendre.gnomonLargeCarryExponents
+#print axioms DkMath.NumberTheory.Legendre.gnomonLarge_divisor_carry
+#print axioms DkMath.NumberTheory.Legendre.mem_gnomonLargeCarryExponents_iff_route
+#print axioms DkMath.NumberTheory.Legendre.gnomonLargeCarryExponents_eq_Icc
+#print axioms DkMath.NumberTheory.Legendre.card_gnomonLargeCarryExponents
+#print axioms DkMath.NumberTheory.Legendre.card_gnomonLargeCarryExponents_le_cutoff
+#print axioms DkMath.NumberTheory.Legendre.gnomonLargeCarryExponents_large_base_subset
+#print axioms DkMath.NumberTheory.Legendre.gnomonLargeCarryExponents_weight
+#print axioms DkMath.NumberTheory.Legendre.gnomonLargeCarryTargets
+#print axioms DkMath.NumberTheory.Legendre.gnomonLargeCarryTarget_packet
+#print axioms DkMath.NumberTheory.Legendre.gnomonLargeCarryTargets_target_injective
+#print axioms DkMath.NumberTheory.Legendre.gnomonLargeCarry_label_fiber_weight
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalLargeCarryMass_eq_fibers
+#print axioms DkMath.NumberTheory.Legendre.gnomonLargeCarryFiberBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalLargeCarryMass_le_fiberBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_le_fiber_envelope
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_fiber_excess
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_fiberBudget_lt
+
+-- Complete named public coverage of DkMathTest/NumberTheory/GnomonCarryFiberCalibration.lean
+#print axioms DkMathTest.NumberTheory.GnomonCarryFiberCalibration.fiber11_two_checked
+#print axioms DkMathTest.NumberTheory.GnomonCarryFiberCalibration.fiber6_slack_checked
+#print axioms DkMathTest.NumberTheory.GnomonCarryFiberCalibration.fiber11_weight_checked
+#print axioms DkMathTest.NumberTheory.GnomonCarryFiberCalibration.fiber6_weight_strict_cap_checked
+#print axioms DkMathTest.NumberTheory.GnomonCarryFiberCalibration.fiber5_checked
+#print axioms DkMathTest.NumberTheory.GnomonCarryFiberCalibration.fiber11_three_checked
+#print axioms DkMathTest.NumberTheory.GnomonCarryFiberCalibration.fiber297_checked
+#print axioms DkMathTest.NumberTheory.GnomonCarryFiberCalibration.fiber1031_checked
+#print axioms DkMathTest.NumberTheory.GnomonCarryFiberCalibration.fiber2896_checked
+#print axioms DkMathTest.NumberTheory.GnomonCarryFiberCalibration.fiber2896_card_checked
+#print axioms DkMathTest.NumberTheory.GnomonCarryFiberCalibration.empty_fiber_checked
+#print axioms DkMathTest.NumberTheory.GnomonCarryFiberCalibration.mixed_base7_checked
+#print axioms DkMathTest.NumberTheory.GnomonCarryFiberCalibration.earlier_no_mixed_bases_checked
+#print axioms DkMathTest.NumberTheory.GnomonCarryFiberCalibration.one_weight_per_target_fails_checked

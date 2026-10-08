@@ -1,0 +1,39 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMathTest.NumberTheory.GnomonCofactorSieveCalibration
+
+#print "file: DkMathTest.NumberTheory.GnomonCofactorSieveAxiomAudit"
+
+-- Complete named public coverage of DkMath/NumberTheory/Legendre/GnomonCofactorSieve.lean
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSieveCandidates
+#print axioms DkMath.NumberTheory.Legendre.mem_gnomonCofactorSieveCandidates_iff
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSieveCandidates_prime_filter
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSieveMass
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSieveCompositeError
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSieveCompositeError_nonneg
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSieveMass_eq_window_add_error
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSieveBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_le_sieveBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSieveBudget_le_geometricBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSieveBudget_excess
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_sieve_excess
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_cofactorSieveBudget_lt
+
+-- Complete named public coverage of DkMathTest/NumberTheory/GnomonCofactorSieveCalibration.lean
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.basis30_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.equality3_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.windows7_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.no_composites_before9_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.composite_error9_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.compound_composite12_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.products7_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.strict_saving7_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.consumer7_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.products_failure29_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.consumer_failure29_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.density_only_fails3_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorSieveCalibration.unsafe_basis3_checked

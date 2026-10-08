@@ -1,0 +1,48 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration
+
+#print "file: DkMathTest.NumberTheory.GnomonCofactorLeastFactorAxiomAudit"
+
+-- Complete named public coverage of DkMath/NumberTheory/Legendre/GnomonCofactorLeastFactor.lean
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorFactorPairs
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSieveComposite_normalForm
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSieveComposite_minFac_not_mem
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSieveComposite_minFac_gt
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorLeastFactorPair_injective
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSieveComposite_mem_factorPairs
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorFactorPairBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorFactorPair_weight_nonneg
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSieveCompositeError_le_factorPairBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorFactorPairBudget_prime_lower
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorFactorPairs_product_mem
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSquareWitnesses
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSquareWitnessMass
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorSquareWitnessMass_le_error
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorLeastFactorBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_le_leastFactorBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorLeastFactorBudget_le_sieveBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorLeastFactorBudget_excess
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_leastFactor_excess
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_leastFactorBudget_lt
+
+-- Complete named public coverage of DkMathTest/NumberTheory/GnomonCofactorLeastFactorCalibration.lean
+#print axioms DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration.normal9_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration.normal12_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration.canonical29_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration.noninitial_basis_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration.duplicate32_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration.pairs9_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration.error_bound9_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration.square_error9_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration.corrected9_exact_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration.consumer7_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration.equality3_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration.products29_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration.consumer29_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration.products_failure31_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorLeastFactorCalibration.consumer_failure31_checked

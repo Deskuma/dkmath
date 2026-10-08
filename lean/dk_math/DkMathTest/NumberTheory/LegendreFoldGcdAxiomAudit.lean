@@ -1,0 +1,183 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.NumberTheory.Legendre
+import DkMathTest.NumberTheory.LegendreFoldGcdRegression
+
+#print "file: DkMathTest.NumberTheory.LegendreFoldGcdAxiomAudit"
+
+#check DkMath.NumberTheory.Legendre.centeredFoldNorm
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldNorm
+#check DkMath.NumberTheory.Legendre.centeredFoldNorm_odd
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldNorm_odd
+#check DkMath.NumberTheory.Legendre.centeredFoldNorm_eq_point_sum
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldNorm_eq_point_sum
+#check DkMath.NumberTheory.Legendre.centeredFoldNorm_eq_twice_left_add_gap
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldNorm_eq_twice_left_add_gap
+#check DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_ne_two
+#print axioms DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_ne_two
+#check DkMath.NumberTheory.Legendre.mem_common_centered_support_iff_norm_and_gap
+#print axioms DkMath.NumberTheory.Legendre.mem_common_centered_support_iff_norm_and_gap
+#check DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_not_dvd_succ
+#print axioms DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_not_dvd_succ
+#check DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_mod_four
+#print axioms DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_mod_four
+#check DkMath.NumberTheory.Legendre.common_centered_support_mod_four
+#print axioms DkMath.NumberTheory.Legendre.common_centered_support_mod_four
+#check DkMath.NumberTheory.Legendre.centeredCommonSupportIndices
+#print axioms DkMath.NumberTheory.Legendre.centeredCommonSupportIndices
+#check DkMath.NumberTheory.Legendre.centeredCommonSupportIndices_eq_capacity
+#print axioms DkMath.NumberTheory.Legendre.centeredCommonSupportIndices_eq_capacity
+#check DkMath.NumberTheory.Legendre.centeredCommonSupportIndices_card
+#print axioms DkMath.NumberTheory.Legendre.centeredCommonSupportIndices_card
+#check DkMath.NumberTheory.Legendre.centeredFoldNorm_succ_coprime
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldNorm_succ_coprime
+#check DkMath.NumberTheory.Legendre.common_centered_support_no_successor
+#print axioms DkMath.NumberTheory.Legendre.common_centered_support_no_successor
+#check DkMath.NumberTheory.Legendre.centeredPair_gcd_eq_norm_gap
+#print axioms DkMath.NumberTheory.Legendre.centeredPair_gcd_eq_norm_gap
+#check DkMath.NumberTheory.Legendre.centeredFoldNorm_pos
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldNorm_pos
+#check DkMath.NumberTheory.Legendre.centeredPair_gcd_dvd_norm
+#print axioms DkMath.NumberTheory.Legendre.centeredPair_gcd_dvd_norm
+#check DkMath.NumberTheory.Legendre.centeredPair_gcd_dvd_gap
+#print axioms DkMath.NumberTheory.Legendre.centeredPair_gcd_dvd_gap
+#check DkMath.NumberTheory.Legendre.prime_dvd_centeredPair_gcd_mod_four
+#print axioms DkMath.NumberTheory.Legendre.prime_dvd_centeredPair_gcd_mod_four
+#check DkMath.NumberTheory.Legendre.centeredPair_gcd_odd
+#print axioms DkMath.NumberTheory.Legendre.centeredPair_gcd_odd
+#check DkMath.NumberTheory.Legendre.prime_dvd_centeredPair_gcd_lt_twice
+#print axioms DkMath.NumberTheory.Legendre.prime_dvd_centeredPair_gcd_lt_twice
+#check DkMath.NumberTheory.Legendre.centeredPair_oldSupport_disjoint_iff
+#print axioms DkMath.NumberTheory.Legendre.centeredPair_oldSupport_disjoint_iff
+#check DkMath.NumberTheory.Legendre.centeredFold_cyclotomic_four_shape
+#print axioms DkMath.NumberTheory.Legendre.centeredFold_cyclotomic_four_shape
+#check DkMath.NumberTheory.Legendre.centeredFoldNorm_eq_cyclotomic_four
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldNorm_eq_cyclotomic_four
+#check DkMath.NumberTheory.Legendre.centeredFoldNorm_eq_cyclotomic_four_inverse
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldNorm_eq_cyclotomic_four_inverse
+#check DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_ratio_sq
+#print axioms DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_ratio_sq
+#check DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_order_four
+#print axioms DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_order_four
+#check DkMath.NumberTheory.Legendre.centeredOddGapProduct
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGapProduct
+#check DkMath.NumberTheory.Legendre.centeredOddGapProduct_zero
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGapProduct_zero
+#check DkMath.NumberTheory.Legendre.centeredOddGapProduct_pos
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGapProduct_pos
+#check DkMath.NumberTheory.Legendre.centeredOddGapProduct_succ
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGapProduct_succ
+#check DkMath.NumberTheory.Legendre.centeredOddGapProduct_eq_prod
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGapProduct_eq_prod
+#check DkMath.NumberTheory.Legendre.centeredOddGapProduct_eq_internalGaps_prod
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGapProduct_eq_internalGaps_prod
+#check DkMath.NumberTheory.Legendre.prime_dvd_centeredOddGapProduct_iff
+#print axioms DkMath.NumberTheory.Legendre.prime_dvd_centeredOddGapProduct_iff
+#check DkMath.NumberTheory.Legendre.centeredOddGapProduct_primeFactors
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGapProduct_primeFactors
+#check DkMath.NumberTheory.Legendre.centeredOddGapProduct_radical_eq_primorial
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGapProduct_radical_eq_primorial
+#check DkMath.NumberTheory.Legendre.centeredNormGapGcd
+#print axioms DkMath.NumberTheory.Legendre.centeredNormGapGcd
+#check DkMath.NumberTheory.Legendre.centeredNormGapGcd_pos
+#print axioms DkMath.NumberTheory.Legendre.centeredNormGapGcd_pos
+#check DkMath.NumberTheory.Legendre.centeredNormGapGcd_dvd_norm
+#print axioms DkMath.NumberTheory.Legendre.centeredNormGapGcd_dvd_norm
+#check DkMath.NumberTheory.Legendre.prime_dvd_centeredNormGapGcd_iff
+#print axioms DkMath.NumberTheory.Legendre.prime_dvd_centeredNormGapGcd_iff
+#check DkMath.NumberTheory.Legendre.prime_dvd_centeredNormGapGcd_iff_exists_pair
+#print axioms DkMath.NumberTheory.Legendre.prime_dvd_centeredNormGapGcd_iff_exists_pair
+#check DkMath.NumberTheory.Legendre.old_prime_dvd_centeredNormGapGcd_iff
+#print axioms DkMath.NumberTheory.Legendre.old_prime_dvd_centeredNormGapGcd_iff
+#check DkMath.NumberTheory.Legendre.fresh_prime_centered_pair_packet
+#print axioms DkMath.NumberTheory.Legendre.fresh_prime_centered_pair_packet
+#check DkMath.NumberTheory.Legendre.centeredFoldNorm_prime_iff_normGapGcd_eq_one
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldNorm_prime_iff_normGapGcd_eq_one
+#check DkMath.NumberTheory.Legendre.centeredNormGapGcd_eq_one_iff_all_pairs
+#print axioms DkMath.NumberTheory.Legendre.centeredNormGapGcd_eq_one_iff_all_pairs
+#check DkMath.NumberTheory.Legendre.centeredFoldNorm_prime_iff_all_pairs
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldNorm_prime_iff_all_pairs
+#check DkMath.NumberTheory.Legendre.centeredFoldGcdProduct
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldGcdProduct
+#check DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_eq_norm_gaps
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_eq_norm_gaps
+#check DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_pos
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_pos
+#check DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_dvd_norm_pow
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_dvd_norm_pow
+#check DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_dvd_oddGapProduct
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_dvd_oddGapProduct
+#check DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_factorization
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_factorization
+#check DkMath.NumberTheory.Legendre.centeredNormGapGcd_factorization
+#print axioms DkMath.NumberTheory.Legendre.centeredNormGapGcd_factorization
+#check DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_padicVal
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_padicVal
+#check DkMath.NumberTheory.Legendre.centeredNormGapGcd_padicVal
+#print axioms DkMath.NumberTheory.Legendre.centeredNormGapGcd_padicVal
+#check DkMath.NumberTheory.Legendre.centeredOddGapProduct_factorization
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGapProduct_factorization
+#check DkMath.NumberTheory.Legendre.centeredOddGapProduct_padicVal
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGapProduct_padicVal
+#check DkMath.NumberTheory.Legendre.factorial_twice_eq_even_mul_centeredOddGapProduct
+#print axioms DkMath.NumberTheory.Legendre.factorial_twice_eq_even_mul_centeredOddGapProduct
+#check DkMath.NumberTheory.Legendre.centeredOddGapProduct_factorization_factorial
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGapProduct_factorization_factorial
+#check DkMath.NumberTheory.Legendre.centeredNormGapGcd_succ_coprime
+#print axioms DkMath.NumberTheory.Legendre.centeredNormGapGcd_succ_coprime
+#check DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_succ_coprime
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_succ_coprime
+#check DkMath.NumberTheory.Legendre.centeredOddGapProduct_padicVal_factorial
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGapProduct_padicVal_factorial
+#check DkMath.NumberTheory.Legendre.centeredOddGapProduct_padicVal_factorial_odd
+#print axioms DkMath.NumberTheory.Legendre.centeredOddGapProduct_padicVal_factorial_odd
+#check DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_eq_one_iff_all_pairs
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_eq_one_iff_all_pairs
+#check DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_eq_one_iff_normGapGcd_eq_one
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldGcdProduct_eq_one_iff_normGapGcd_eq_one
+#check DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldGcdProduct_iff
+#print axioms DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldGcdProduct_iff
+#check DkMathTest.LegendreFoldGcdRegression.gap_one
+#print axioms DkMathTest.LegendreFoldGcdRegression.gap_one
+#check DkMathTest.LegendreFoldGcdRegression.empty_boundary
+#print axioms DkMathTest.LegendreFoldGcdRegression.empty_boundary
+#check DkMathTest.LegendreFoldGcdRegression.prime_one_two
+#print axioms DkMathTest.LegendreFoldGcdRegression.prime_one_two
+#check DkMathTest.LegendreFoldGcdRegression.fresh_three
+#print axioms DkMathTest.LegendreFoldGcdRegression.fresh_three
+#check DkMathTest.LegendreFoldGcdRegression.old_six
+#print axioms DkMathTest.LegendreFoldGcdRegression.old_six
+#check DkMathTest.LegendreFoldGcdRegression.repeated_twenty_one
+#print axioms DkMathTest.LegendreFoldGcdRegression.repeated_twenty_one
+#check DkMathTest.LegendreFoldGcdRegression.large_gcd_with_old_support
+#print axioms DkMathTest.LegendreFoldGcdRegression.large_gcd_with_old_support
+#check DkMathTest.LegendreFoldGcdRegression.aggregate_difference_eight
+#print axioms DkMathTest.LegendreFoldGcdRegression.aggregate_difference_eight
+#check DkMathTest.LegendreFoldGcdRegression.eight_valuation_difference
+#print axioms DkMathTest.LegendreFoldGcdRegression.eight_valuation_difference
+#check DkMathTest.LegendreFoldGcdRegression.prime_support_small
+#print axioms DkMathTest.LegendreFoldGcdRegression.prime_support_small
+#check DkMathTest.LegendreFoldGcdRegression.fresh_three_packet
+#print axioms DkMathTest.LegendreFoldGcdRegression.fresh_three_packet
+#check DkMathTest.LegendreFoldGcdRegression.covered_coprime_four
+#print axioms DkMathTest.LegendreFoldGcdRegression.covered_coprime_four
+#check DkMathTest.LegendreFoldGcdRegression.covered_coprime_five_family
+#print axioms DkMathTest.LegendreFoldGcdRegression.covered_coprime_five_family
+#check DkMathTest.LegendreFoldGcdRegression.prime_norm_297
+#print axioms DkMathTest.LegendreFoldGcdRegression.prime_norm_297
+#check DkMathTest.LegendreFoldGcdRegression.visible1031
+#print axioms DkMathTest.LegendreFoldGcdRegression.visible1031
+#check DkMathTest.LegendreFoldGcdRegression.cyclotomic_fresh_address
+#print axioms DkMathTest.LegendreFoldGcdRegression.cyclotomic_fresh_address
+#check DkMathTest.LegendreFoldGcdRegression.aggregate_successor_separation
+#print axioms DkMathTest.LegendreFoldGcdRegression.aggregate_successor_separation
+#check DkMathTest.LegendreFoldGcdRegression.zero_full_cover_counterexample
+#print axioms DkMathTest.LegendreFoldGcdRegression.zero_full_cover_counterexample
+#check DkMathTest.LegendreFoldGcdRegression.nonconsecutive_prime_reappears
+#print axioms DkMathTest.LegendreFoldGcdRegression.nonconsecutive_prime_reappears
+#check DkMathTest.LegendreFoldGcdRegression.prime_norm_does_not_force_full_cover
+#print axioms DkMathTest.LegendreFoldGcdRegression.prime_norm_does_not_force_full_cover

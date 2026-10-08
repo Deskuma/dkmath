@@ -1,0 +1,87 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMathTest.NumberTheory.SquareShellReciprocalCalibration
+
+#print "file: DkMathTest.NumberTheory.SquareShellReciprocalAxiomAudit"
+
+-- Complete named public coverage of DkMath/NumberTheory/OddReciprocal.lean
+#print axioms DkMath.NumberTheory.reciprocal_Icc_two_eq_harmonic_sub_one
+#print axioms DkMath.NumberTheory.odd_reciprocal_sum_le_full
+#print axioms DkMath.NumberTheory.odd_reciprocal_sum_le_log
+#print axioms DkMath.NumberTheory.three_mul_log_le_add_one
+
+-- Complete named public coverage of DkMath/NumberTheory/Legendre/SquareShellPrimePowerGauge.lean
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePower_log_packet
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePower_weight_gap
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePower_logGauge_le
+#print axioms DkMath.NumberTheory.Legendre.shellPrime_weight_eq_log
+#print axioms DkMath.NumberTheory.Legendre.squareOffsets_sum_eq_values
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_eq_events
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerBases
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerBases_subset_primesLE
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_eq_base_logs
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_theta
+#print axioms DkMath.NumberTheory.Legendre.shellHigherBaseCandidates
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerBases_subset_candidates
+#print axioms DkMath.NumberTheory.Legendre.shellHigherBaseCandidates_log_sum_le_theta
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_candidate_logs
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_card_log
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerLogBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_logBudget
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_higher_bound
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_theta_lt
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_logBudget_lt
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerResynchronizationPacket
+#print axioms DkMath.NumberTheory.Legendre.shellPrimeBirthPacket
+#print axioms DkMath.NumberTheory.Legendre.gnomon_top_innerCommonDivisor_eq_one
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerDepths
+#print axioms DkMath.NumberTheory.Legendre.mem_shellHigherPrimePowerDepths
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerDepths_bounds
+#print axioms DkMath.NumberTheory.Legendre.card_shellHigherPrimePowerDepths
+#print axioms DkMath.NumberTheory.Legendre.shellOddDepths
+#print axioms DkMath.NumberTheory.Legendre.mem_shellOddDepths
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerDepths_subset_oddDepths
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePower_weight_eq_log_div_depth
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePower_weight_le_top_log_div_depth
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_depth_sum
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_oddDepth_sum
+#print axioms DkMath.NumberTheory.Legendre.shellOddDepthReciprocalSum
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerReciprocalBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_reciprocalBudget
+#print axioms DkMath.NumberTheory.Legendre.shell_binary_depth_cutoff_ge_three
+#print axioms DkMath.NumberTheory.Legendre.shellOddDepthReciprocalSum_le_log_cutoff
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerLogLogBudget
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerReciprocalBudget_le_logLogBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_logLogBudget
+#print axioms DkMath.NumberTheory.Legendre.shell_top_log_lt_twice_log_succ
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_geometricLogBudget
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerLogLogBudget_le_logBudget
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_reciprocalBudget_lt
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_logLogBudget_lt
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_reciprocalBudget_lt_psi_sub
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_logLogBudget_lt_psi_sub
+
+-- Complete named public coverage of DkMathTest/NumberTheory/SquareShellReciprocalCalibration.lean
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.event_depth_packet
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.prime_power_canonical_depth
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.event8_packet_checked
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.event27_packet_checked
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.event32_packet_checked
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.event125_packet_checked
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.event128_packet_checked
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.event8388608_packet_checked
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor2_depths_checked
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor5_depths_checked
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor11_depths_checked
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor2896_events_checked
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor2896_depths_checked
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor297_depths_checked
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor1031_depths_checked
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor5_reciprocal_sum_checked
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor11_reciprocal_sum_checked
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.anchor11_occupied_ne_admissible_checked
+#print axioms DkMathTest.NumberTheory.SquareShellReciprocalCalibration.compressed_psi_consumer

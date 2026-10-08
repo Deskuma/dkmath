@@ -101,6 +101,50 @@ boundary at a composite row, it suffices to find one inner coefficient whose
 def BeamBirthBoundaryObstruction (p : ℕ) : Prop :=
   ∃ k, 0 < k ∧ k < p ∧ padicValNat p (Nat.choose p k) ≠ 1
 
+/-- Exact alternating unit residues in a Pascal row, for any modulus. -/
+def PascalPrebirthAlternationMod (d m : ℕ) : Prop :=
+  ∀ k, k ≤ d → (Nat.choose d k : ZMod m) = (-1 : ZMod m) ^ k
+
+/-- The additive residue defect of two adjacent Pascal cells. -/
+def pascalCancellationDefect (d m k : ℕ) : ZMod m :=
+  (Nat.choose d k : ZMod m) + (Nat.choose d (k + 1) : ZMod m)
+
+/-- Pascal addition identifies the defect with the next-row cell. -/
+theorem pascalCancellationDefect_eq (d m k : ℕ) :
+    pascalCancellationDefect d m k = (Nat.choose (d + 1) (k + 1) : ZMod m) := by
+  simp only [pascalCancellationDefect, Nat.choose_succ_succ, Nat.cast_add]
+
+/-- Zero defect is exactly divisibility, including moduli zero and one. -/
+theorem pascalCancellationDefect_eq_zero_iff (d m k : ℕ) :
+    pascalCancellationDefect d m k = 0 ↔ m ∣ Nat.choose (d + 1) (k + 1) := by
+  rw [pascalCancellationDefect_eq, ZMod.natCast_eq_zero_iff]
+
+/-- A common next-row modulus forces each adjacent residue to be its negative. -/
+theorem allInnerChooseDivisible_prebirth_step {d m k : ℕ}
+    (H : AllInnerChooseDivisible (d + 1) m) (hk : k < d) :
+    (Nat.choose d (k + 1) : ZMod m) = -(Nat.choose d k : ZMod m) := by
+  have hz := (pascalCancellationDefect_eq_zero_iff d m k).mpr
+    (H (k + 1) (by omega) (by omega))
+  exact eq_neg_of_add_eq_zero_left (by simpa [pascalCancellationDefect, add_comm] using hz)
+
+/-- The exact prebirth boundary is generic in the modulus; no primality is needed. -/
+theorem pascalPrebirthAlternationMod_iff_allInnerChooseDivisible (d m : ℕ) :
+    PascalPrebirthAlternationMod d m ↔ AllInnerChooseDivisible (d + 1) m := by
+  constructor
+  · intro H j hj0 hj
+    obtain ⟨k, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hj0.ne'
+    apply (pascalCancellationDefect_eq_zero_iff d m k).mp
+    dsimp [pascalCancellationDefect]
+    rw [H k (by omega), H (k + 1) (by omega), pow_succ]
+    ring
+  · intro H k
+    induction k with
+    | zero => intro _; simp
+    | succ k ih =>
+      intro hk
+      rw [allInnerChooseDivisible_prebirth_step H (by omega), ih (by omega), pow_succ]
+      ring
+
 /--
 The pre-birth alternation visible just before a prime row.
 
@@ -108,8 +152,11 @@ Row `p - 1` is not a divisibility beam for `p`; instead, when viewed modulo
 `p`, its coefficients alternate as `1, -1, 1, -1, ...`.
 -/
 def PrimePrebirthAlternation (p : ℕ) : Prop :=
-  ∀ k, k ≤ p - 1 →
-    ((Nat.choose (p - 1) k : ZMod p) = (-1 : ZMod p) ^ k)
+  PascalPrebirthAlternationMod (p - 1) p
+
+/-- The old prime carrier is a specialization of the generic carrier. -/
+theorem primePrebirthAlternation_iff (p : ℕ) :
+    PrimePrebirthAlternation p ↔ PascalPrebirthAlternationMod (p - 1) p := Iff.rfl
 
 /--
 Every inner coefficient of row `p^n` is divisible by `p`.
@@ -133,7 +180,10 @@ theorem prime_power_innerRowSupportPrime
   ⟨hp, prime_power_allInnerChooseDivisible hp⟩
 
 /--
-Positive prime-power rows birth their base support prime from the row index.
+Positive prime-power rows carry their base support prime in the row index.
+
+The historical RowBirthPrime carrier means row-index support, not a globally
+new coordinate. Higher powers resynchronize an already existing coordinate.
 -/
 theorem prime_power_rowBirthPrime
     {p n : ℕ} (hp : p.Prime) (hn : 0 < n) :
@@ -293,19 +343,9 @@ theorem prime_prebirthAlternation_step
     {p k : ℕ} (hp : p.Prime) (hk : k + 1 < p) :
     ((Nat.choose (p - 1) (k + 1) : ZMod p) =
       - (Nat.choose (p - 1) k : ZMod p)) := by
-  have hpascal :
-      Nat.choose p (k + 1) =
-        Nat.choose (p - 1) k + Nat.choose (p - 1) (k + 1) := by
-    simpa using Nat.choose_succ_right p k hp.pos
-  have hdiv : p ∣ Nat.choose p (k + 1) :=
-    prime_dvd_inner_choose hp (Nat.succ_pos k) hk
-  have hzero : ((Nat.choose p (k + 1) : ℕ) : ZMod p) = 0 :=
-    (ZMod.natCast_eq_zero_iff _ _).mpr hdiv
-  have hsum :
-      (Nat.choose (p - 1) k : ZMod p) +
-        (Nat.choose (p - 1) (k + 1) : ZMod p) = 0 := by
-    simpa [hpascal, Nat.cast_add] using hzero
-  exact eq_neg_of_add_eq_zero_left (by simpa [add_comm] using hsum)
+  have H : AllInnerChooseDivisible ((p - 1) + 1) p := by
+    simpa [Nat.sub_add_cancel hp.one_le] using prime_allInnerChooseDivisible_self hp
+  exact allInnerChooseDivisible_prebirth_step H (by omega)
 
 /--
 Prime rows have a pre-birth alternation one row below them.
@@ -316,23 +356,20 @@ the `k`-th coefficient is `(-1)^k`.
 theorem prime_prebirthAlternation
     {p : ℕ} (hp : p.Prime) :
     PrimePrebirthAlternation p := by
-  intro k
-  induction k with
-  | zero =>
-      intro _hk
-      simp
-  | succ k ih =>
-      intro hk
-      have hk_prev : k ≤ p - 1 := by omega
-      have hk_lt : k + 1 < p := by omega
-      calc
-        (Nat.choose (p - 1) (k + 1) : ZMod p)
-            = - (Nat.choose (p - 1) k : ZMod p) :=
-              prime_prebirthAlternation_step hp hk_lt
-        _ = - ((-1 : ZMod p) ^ k) := by rw [ih hk_prev]
-        _ = (-1 : ZMod p) ^ (k + 1) := by
-              rw [pow_succ]
-              ring
+  apply (pascalPrebirthAlternationMod_iff_allInnerChooseDivisible (p - 1) p).mpr
+  simpa [Nat.sub_add_cancel hp.one_le] using prime_allInnerChooseDivisible_self hp
+
+/-- Positive prime powers synchronize the preceding alternating row. -/
+theorem prime_power_prebirthAlternation {p a : ℕ} (hp : p.Prime) (_ha : 0 < a) :
+    PascalPrebirthAlternationMod (p ^ a - 1) p := by
+  apply (pascalPrebirthAlternationMod_iff_allInnerChooseDivisible _ _).mpr
+  simpa [Nat.sub_add_cancel (Nat.one_le_pow a p hp.pos)] using
+    (prime_power_allInnerChooseDivisible (n := a) hp)
+
+/-- A packet keeps the prebirth row and common-support row together. -/
+theorem prime_power_prebirth_packet {p a : ℕ} (hp : p.Prime) (ha : 0 < a) :
+    PascalPrebirthAlternationMod (p ^ a - 1) p ∧ AllInnerChooseDivisible (p ^ a) p :=
+  ⟨prime_power_prebirthAlternation hp ha, prime_power_allInnerChooseDivisible hp⟩
 
 /-- The lower side of a packaged beam-birth boundary. -/
 theorem BeamBirthBoundary.below
