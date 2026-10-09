@@ -186,3 +186,11 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Nineteen examples: q=43 inf/product/sup, natural α versus scalar membership, signed coordinates, q=3 failed intersection without separation, q=5 no-root boundary. All10 public axiom checks, two focused targets and Step014 regression pass.
 - Evidence: [source-inventory-015.md](source-inventory-015.md), [report-015.md](report-015.md). Root existence/separation remain explicit; no public facade or FLT owner addition.
 - The previously open split intersection/comaximal product is now checked in the degree-two ring. The q=3 counterexample concerns intersection; its product decomposition is unproved here. Cyclotomic transport, class/unit claims, element-square reconstruction, primitive next packet and descent remain open. Historical owners and ledger remain unchanged.
+
+## Step 016 — ramified three principal kernel
+
+- [x] Step016 COMPLETE / Outcome B: π=1+τ in TraceOneInt(-1), normπ=3, π²=3τ and the explicit inverse τ(1-τ)=1 checked.
+- [x] Arbitrary signed kernel membership iff π-divisibility uses the existing nonzero-norm lattice criterion. The full kernel P=span{π}, and principal-product/generator comparisons prove P*P=(3).
+- [x] Twenty-six examples include P∩P=P≠(3) alongside P²=(3), noncomaximality with itself, signed quotient witnesses and direct ring computations. All17 public axiom checks, two new focused targets and unchanged Step015 regression pass.
+- Evidence: [source-inventory-016.md](source-inventory-016.md), [report-016.md](report-016.md). No facade or FLT owner addition.
+- The formerly unproved ramified product now holds by a separate principal-generator proof; historical intersection failure remains true. General ideal valuations, cyclotomic/unit transport, norm-square inversion, next primitive packet and descent remain open.
