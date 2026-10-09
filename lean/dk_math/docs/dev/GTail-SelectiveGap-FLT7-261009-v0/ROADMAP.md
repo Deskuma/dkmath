@@ -1,7 +1,7 @@
 # ROADMAP — GTail Selective-Gap / FLT7
 
 Branch: **feature/GTail-SelectiveGap-FLT7-261009-v0**  
-Status: **Step 000–004 COMPLETE — Outcome B** (neutral kernels and degree-seven calibration)
+Status: **Step 000–005 COMPLETE — Outcome B** (neutral kernels, degree-seven calibration and nonvacuous conditional bridge)
 
 ## Proof-oriented stages
 
@@ -110,4 +110,7 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Step 004: degree-seven GTail cuts, selected interior residual square and Body factor, balanced reconstruction, separate ring subtraction and calibrated endpoint transport; independent ring/numeric regressions and all 15 public axiom checks.
 - Direct import: `DkMath.Lib.Cosmic.GTailSeven`; no genuine norm-map or FLT7 claim.
 - Evidence: `source-inventory-004.md` and `report-004.md`.
-- [ ] Step 005–007.
+- [x] Step 005: general CommSemiring shell with only the additive coordinate relation, separate CommRing defect, natural Fermat adapter by same-endpoint cancellation, and equation-only candidate-packet adapter; satisfiable numeric and zero-boundary regressions, all 4 public axiom checks.
+- Direct imports: `DkMath.Lib.Cosmic.GTailSeven` and `DkMath.FLT.Seven.Basic`; no façade promotion or closure endpoint.
+- Evidence: `source-inventory-005.md` and `report-005.md`.
+- [ ] Step 006–007.
