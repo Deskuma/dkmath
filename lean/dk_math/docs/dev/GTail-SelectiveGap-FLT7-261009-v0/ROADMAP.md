@@ -202,3 +202,11 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Twenty-two examples compare ramified π/signed z and split q43 α²=⟨-39,144⟩, where norm has43² support but embedded43 does not divide the square. All7 public axiom checks, two new targets and unchanged Step016/015 regressions pass.
 - Evidence: [source-inventory-017.md](source-inventory-017.md), [report-017.md](report-017.md). No optional FLT owner/facade addition.
 - These are actual element/ideal-square support facts, not exact ideal-adic exponents or principal-square equality. GTail-to-cyclotomic carrier maps, normalized unit classes, next primitive tuple and descent remain open. Historical owners/ledger remain unchanged.
+
+## Step 018 — paired roots in a shared finite field
+
+- [x] Step018 COMPLETE / Outcome B: neutral t=−a/b and r=(c+g)/c in the same ZMod q; quadratic relation, seventh power, nontriviality/nonzero and guarded seven-term sum checked.
+- [x] Existing Step014/017 oriented Eisenstein addresses combined in a general test example, without a new ideal wrapper or carrier transfer.
+- [x] Twenty examples cover satisfiable q43 t37/r11 with false Fermat equation, q13 Gap support, q3/q5/q7 boundaries and r1 geometric-sum failure. All6 public axiom checks, two new targets and Step017 plus both Step011 regressions pass.
+- Evidence: [source-inventory-018.md](source-inventory-018.md), [report-018.md](report-018.md). Existing degree-six localEval requires a signed-depth quotient-prime address; this checkpoint does not construct it from natural Q/T hypotheses.
+- Integral carrier maps, cyclotomic ideal/unit identification, next primitive packet and descent remain open. No optional FLT owner or facade promotion; historical ledger and prior owners remain unchanged.
