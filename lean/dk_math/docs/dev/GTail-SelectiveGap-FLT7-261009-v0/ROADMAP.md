@@ -1,7 +1,7 @@
 # ROADMAP — GTail Selective-Gap / FLT7
 
 Branch: **feature/GTail-SelectiveGap-FLT7-261009-v0**  
-Status: **Step 000–003 COMPLETE — Outcome B** (neutral selection, factor and transport kernels)
+Status: **Step 000–004 COMPLETE — Outcome B** (neutral kernels and degree-seven calibration)
 
 ## Proof-oriented stages
 
@@ -107,4 +107,7 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Step 003: single-term and arbitrary active-set movement, no-op boundaries, exact Big conservation, interval/GTail adapter and generic guarded modular conservation; coefficient-content/nonpreservation regressions and all 12 public axiom checks.
 - Direct import: `DkMath.Lib.Cosmic.GTailTransport`; façade promotion remains deferred.
 - Evidence: `source-inventory-003.md` and `report-003.md`.
-- [ ] Step 004–007.
+- [x] Step 004: degree-seven GTail cuts, selected interior residual square and Body factor, balanced reconstruction, separate ring subtraction and calibrated endpoint transport; independent ring/numeric regressions and all 15 public axiom checks.
+- Direct import: `DkMath.Lib.Cosmic.GTailSeven`; no genuine norm-map or FLT7 claim.
+- Evidence: `source-inventory-004.md` and `report-004.md`.
+- [ ] Step 005–007.
