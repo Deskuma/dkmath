@@ -153,3 +153,11 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Complete q=43 modular calibration (5,8,9,4), q=13 gap contrast (14,29,30,13), characteristic-three/seven boundaries; all six new public axiom checks, direct builds and Step 010 regressions pass.
 - Evidence: [source-inventory-011.md](source-inventory-011.md), [report-011.md](report-011.md). No exact Fermat solution, universal order-21 restriction or independent new obstruction claimed.
 - The order-21 candidate is now checked specifically on the tail branch. Historical ledger is unchanged. Typed Norm/unit carrier conversion, constructive next packet and descent remain open. No facade promotion or broad build.
+
+## Step 012 — typed quadratic norm readout
+
+- [x] Step 012 COMPLETE / Outcome B: existing TraceOneInt(-1) coordinate with corrected Eisenstein sign, norm Q, multiplicative norm-square Q², natural/integer norm-value divisor iff and selected Body norm-square identity.
+- [x] Conditional focused product cast to integers preserves the natural GTail term; no stronger element-factorization premise or conclusion.
+- [x] Sign/cast boundaries, Q(5,8)=129, Q²=16641, Body=60573240, signed square coordinate and distinct norm-one pair; all six new public axiom checks, four direct builds and both Step 011 regressions pass.
+- Evidence: [source-inventory-012.md](source-inventory-012.md), [report-012.md](report-012.md). No facade promotion or broad build.
+- Typed quadratic norm-value readout is now checked. Cyclotomic/other-carrier conversion, prime ideals, unit-power extraction, next packet and descent remain open. Historical frontier entries and ledger remain unchanged.
