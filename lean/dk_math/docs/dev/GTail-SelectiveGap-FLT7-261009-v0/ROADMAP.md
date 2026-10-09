@@ -1,7 +1,7 @@
 # ROADMAP — GTail Selective-Gap / FLT7
 
 Branch: **feature/GTail-SelectiveGap-FLT7-261009-v0**  
-Status: **Step 000–005 COMPLETE — Outcome B** (neutral kernels, degree-seven calibration and nonvacuous conditional bridge)
+Status: **Step 000–006 COMPLETE — Outcome B** (neutral kernels, nonvacuous bridge and arithmetic frontier audit)
 
 ## Proof-oriented stages
 
@@ -113,4 +113,7 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Step 005: general CommSemiring shell with only the additive coordinate relation, separate CommRing defect, natural Fermat adapter by same-endpoint cancellation, and equation-only candidate-packet adapter; satisfiable numeric and zero-boundary regressions, all 4 public axiom checks.
 - Direct imports: `DkMath.Lib.Cosmic.GTailSeven` and `DkMath.FLT.Seven.Basic`; no façade promotion or closure endpoint.
 - Evidence: `source-inventory-005.md` and `report-005.md`.
-- [ ] Step 006–007.
+- [x] Step 006: positive focused-gap certificate, known mod-seven condition recovered through GTail, four neutral quadratic coprimality endpoints and explicit endpoint-unit seven-layer receiver; nine axiom checks, missing-premise counterexamples and reconstruction/unit-normalization ledger.
+- Direct imports: `DkMath.FLT.Seven.GTailConstraintAudit` and narrow `DkMath.Lib.Cosmic.GTailSevenArithmetic`; no heavy FLT7 owner or façade promotion.
+- Evidence: `source-inventory-006.md`, `constraint-ledger-006.md`, `report-006.md` (including checked examples, exploratory observations and deferred implementation targets).
+- [ ] Step 007.
