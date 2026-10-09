@@ -120,4 +120,12 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Step 007 focused regressions, Lib/Seven entrances, both public smoke tests, the DkMath root/import-closure build, and `lake lean DkMathTest.lean` for the edited root file; all 66 public endpoint axiom lists use only standard foundations.
 - [ ] Step 007 overall/full-test gate: `lake build DkMathTest` was interrupted after >15 minutes (runner session 130; remaining Lake child terminated during cleanup) of existing unrelated test/calibration work; 400 of 683 test module names logged as completed/replayed. No full-test success is claimed. Edited root-driver file elaboration passed separately; command repair and cleanup are recorded in report-007.
 - Evidence: `source-inventory-007.md`, `report-007.md`; `constraint-ledger-006.md` remains unchanged.
-- Arithmetic frontier remains Outcome B: no new valuation/order-21/Norm-unit transport theorem, next packet, descent or FLT7 closure.
+- At Step 007 closeout the arithmetic frontier remained Outcome B: no new valuation/order-21/Norm-unit transport theorem, next packet, descent or FLT7 closure.
+
+## Post-integration Step 008 — seven-adic calibration
+
+- [x] Step 008 COMPLETE / Outcome B: endpoint-unit residual valuation one, nonzero gap-product valuation, and conditional exact focused-gap balance; three public axiom checks on standard foundations.
+- [x] Separate direct-import tests: (7,2), (14,2), zero-gap boundary, and the missing-endpoint-unit counterexample (7,7); relevant prior focused regressions pass.
+- Evidence: [source-inventory-008.md](source-inventory-008.md), [report-008.md](report-008.md). No facade promotion or broad build in Step 008.
+- Subsequent owner all-test success: `./lb -T` (routes to `lake test`), recorded separately in [validation-addendum-007.md](validation-addendum-007.md). The historical Step 007 interrupted run is unchanged; runtime commit identity was not captured in that owner log.
+- Deferred v7(g) conservation is now proved under the stated endpoint-unit/positive-equation hypotheses. Optional unit-branch 49∣g, q² allocation, order-21, Norm/unit-class transfer and next-packet construction remain open in this checkpoint. The historical [constraint-ledger-006.md](constraint-ledger-006.md) remains intact.

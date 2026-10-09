@@ -1,0 +1,11 @@
+# Validation addendum 007 — subsequent owner test run
+
+Recorded: 2026-10-09 (JST). This supplements, and does not rewrite, report-007's interrupted run.
+
+- Owner command, cwd `lean/dk_math`: `./lb -T`.
+- Actual route checked in the live scripts: `lb -T` calls `lean-test.sh`, which runs `lake --quiet --no-ansi test`. Both scripts preserve the underlying Lake exit status; the displayed `test build succeeded` branch implies **exit 0**. This is owner-supplied terminal evidence, not a Codex rerun or a separately captured `$?`.
+- Configured `testDriver = "DkMathTest"`, library glob `DkMathTest.+`. Installed Lake `Package.test` builds the named library and returns 0 on completion. Coverage is the then-existing **683 test submodule sources and dependencies**, excluding root `DkMathTest.lean` itself. It is not a standalone production-root check, exhaustive production-file audit, or clean rebuild. Root-file elaboration and production entrance success are recorded separately in report-007.
+- Local filtered log: `lean/dk_math/__test_build.log`, 782 bytes, mtime **2026-10-09 16:07:55 +0900**, SHA256 `3ddb59022c3ba76c68d96f8a65c9cdfc8edd5869170d26daeff2a98e5d1d3e39`. It retains five existing research `sorry` warnings with job total 11202; quiet/filtering removes ordinary successful module rows and the terminal success banner. The raw file alone does not independently enumerate 683 successes or store an exit code; coverage/status use the scripts, configuration and supplied terminal together.
+- Inspection HEAD: `eac957324c3fe8aadfff7ce7d8d588f002654d8a`. Step 007 implementation commit: `7d98ba873`. The inspected HEAD's commit time precedes the log mtime and contains Step 007; **the runtime git hash was not captured in this log or supplied terminal**, so the exact tested revision is not independently attested. The inspected HEAD is context, not a claimed runtime hash.
+
+The subsequent all-test success is now recorded with command-specific owner evidence. Step 007's historical PARTIAL report remains intact; this addendum does not claim a new Codex all-suite run, certify a runtime commit absent from evidence, or validate Step 008's new files. No costly broad rerun was initiated. A future reproducibility record should capture `git rev-parse HEAD`, the command and numeric exit status together.
