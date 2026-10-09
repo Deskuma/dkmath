@@ -137,3 +137,11 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Kernel-checked (a,b,c,g)=(8,9,10,7) mod49-only example, explicit exact-equation failure, 49∤g and failure of doubled valuation; all six new public axiom checks, direct test builds and both Step 008 regressions pass.
 - Evidence: [source-inventory-009.md](source-inventory-009.md), [report-009.md](report-009.md). Prior local constraints compared by name/hypotheses; no independent new obstruction claimed.
 - Step 008's then-deferred unit-branch item is now proved under exact hypotheses. Separate q-square allocation, order-21, Norm/unit-class transport and constructive next packet remain open. The historical constraint ledger and earlier reports are unchanged. No facade promotion or full-suite build.
+
+## Step 010 — q-local square budget and exclusive allocation
+
+- [x] Step 010 COMPLETE / Outcome B: head-unit prime exclusion, ordinary-factor q-units, derived local endpoint q-unit and exclusive focused support at prime q≠7 dividing Q.
+- [x] Exact doubled q-budget and exclusive square allocation under positive primitive exact equation/focus hypotheses; no hidden endpoint-unit or global gap-coprimality premise.
+- [x] Actual GTail addresses (13,13,2) and (43,3,1); satisfiable exclusive and mixed abstract products; all eight new public axiom checks, direct tests and Step 009 regressions pass.
+- Evidence: [source-inventory-010.md](source-inventory-010.md), [report-010.md](report-010.md). Existing typed prime-support/cyclotomic interfaces compared by path and hypotheses; no independent new obstruction claimed.
+- The previously deferred q-budget and unsplit-square allocation are now checked under the full exact premises plus proved local exclusion. No universal choice of the left/right branch. Historical ledger remains intact. Order-21, Norm/unit carrier transport and constructive descent remain open. No facade promotion or all-suite build.
