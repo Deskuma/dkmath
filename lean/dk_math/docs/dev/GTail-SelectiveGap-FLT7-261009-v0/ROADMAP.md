@@ -1,7 +1,7 @@
 # ROADMAP — GTail Selective-Gap / FLT7
 
 Branch: **feature/GTail-SelectiveGap-FLT7-261009-v0**  
-Status: **Step 000–006 COMPLETE — Outcome B** (neutral kernels, nonvacuous bridge and arithmetic frontier audit)
+Status: **Step 000–006 COMPLETE; Step 007 PARTIAL — Outcome B** (public integration checked; all-test-submodule gate interrupted for cost)
 
 ## Proof-oriented stages
 
@@ -116,4 +116,8 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Step 006: positive focused-gap certificate, known mod-seven condition recovered through GTail, four neutral quadratic coprimality endpoints and explicit endpoint-unit seven-layer receiver; nine axiom checks, missing-premise counterexamples and reconstruction/unit-normalization ledger.
 - Direct imports: `DkMath.FLT.Seven.GTailConstraintAudit` and narrow `DkMath.Lib.Cosmic.GTailSevenArithmetic`; no heavy FLT7 owner or façade promotion.
 - Evidence: `source-inventory-006.md`, `constraint-ledger-006.md`, `report-006.md` (including checked examples, exploratory observations and deferred implementation targets).
-- [ ] Step 007.
+- [x] Step 007 public imports: five neutral modules explicitly exposed by `DkMath.Lib`; two conditional owners exposed by `DkMath.FLT.Seven`; eight direct test-driver additions and separate public-import smoke tests.
+- [x] Step 007 focused regressions, Lib/Seven entrances, both public smoke tests, the DkMath root/import-closure build, and `lake lean DkMathTest.lean` for the edited root file; all 66 public endpoint axiom lists use only standard foundations.
+- [ ] Step 007 overall/full-test gate: `lake build DkMathTest` was interrupted after >15 minutes (runner session 130; remaining Lake child terminated during cleanup) of existing unrelated test/calibration work; 400 of 683 test module names logged as completed/replayed. No full-test success is claimed. Edited root-driver file elaboration passed separately; command repair and cleanup are recorded in report-007.
+- Evidence: `source-inventory-007.md`, `report-007.md`; `constraint-ledger-006.md` remains unchanged.
+- Arithmetic frontier remains Outcome B: no new valuation/order-21/Norm-unit transport theorem, next packet, descent or FLT7 closure.

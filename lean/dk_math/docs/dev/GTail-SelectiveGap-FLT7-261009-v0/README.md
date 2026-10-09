@@ -1,8 +1,8 @@
 # GTail Selective-Gap / FLT7 Bridge
 
 Branch: **feature/GTail-SelectiveGap-FLT7-261009-v0**  
-Base: **develop** (create a dedicated implementation branch; do not commit to develop)  
-Status: **planning / Codex instruction 001 prepared — no theorem implementation claimed**
+Base: **develop** (dedicated implementation branch)
+Status: **Steps 001–006 checked; Step 007 public integration checked — Outcome B; all-test gate incomplete (>15 min cost stop)**
 
 ## Research purpose
 
@@ -55,7 +55,7 @@ When changing selection `S -> T`, track exactly which terms move and prove the e
 
 ## Degree-seven calibration
 
-Expected exact identities to verify in Lean, without any FLT assumption:
+The following identities are kernel checked without any FLT assumption; the subtraction reading requires a CommRing:
 
 ```text
 GTail 7 6 x y = x + 7*y
@@ -66,7 +66,7 @@ GTail 7 5 x y = x^2 + 7*x*y + 21*y^2
 
 The degree-seven endpoint-removal identity is a polynomial identity; it does **not** imply Fermat's Last Theorem on its own.
 
-## Proposed boundary to FLT7 (later milestone)
+## Checked conditional boundary to FLT7
 
 Assume `a^7 + b^7 = c^7` and independently `c + g = a + b` in naturals (or use a typed integer coordinate with explicit positivity). Derive, without importing an existing FLT7 impossibility endpoint:
 
@@ -75,7 +75,44 @@ g * GTail 7 1 g c
   = 7*a*b*(a+b)*(a^2+a*b+b^2)^2
 ```
 
-Test what *new* arithmetic constraints follow (gcd, prime support, p-adic valuations, normalization/unit gauge). A restatement of an identity is **not** an FLT7 closure.
+Step 005 first proves an independent shell from only `a+b=c+g` in a
+CommSemiring. The Fermat corollary rewrites the equation and cancels the same
+`c^7`. Step 006 proves the positive focused-gap certificate, recovers the
+known condition `7 ∣ g`, and checks neutral Q-coprimality and exact residual
+seven-layer facts. These are Outcome B instruments and necessary conditions;
+no constructive descent or FLT7 closure follows.
+
+## Public API and tests
+
+`import DkMath.Lib` now explicitly exposes the neutral family:
+
+- `GTailSelection`: selective Body/Gap balance; k is the exponent of x and Gap contains the unselected active terms.
+- `GTailFactor`: forced monomial residual, coefficient content and prime interior divisor.
+- `GTailTransport`: exact term movement and modular conservation with moved-term divisibility premises.
+- `GTailSeven`: degree-seven cuts, polynomial square factor and calibrated endpoint transport.
+- `GTailSevenArithmetic`: Q-coprimality from `Nat.Coprime a b`; exact tail layer from `7 ∣ g` and `¬ 7 ∣ c`.
+
+These paths are under `DkMath.Lib.Cosmic`. The hypothesis-bearing
+`DkMath.FLT.Seven.GTailBridge` and `GTailConstraintAudit` are exposed separately
+by `import DkMath.FLT.Seven`. There is no reverse import into Lib; neither
+owner is an unconditional nonexistence theorem.
+
+Existing focused tests plus separate `DkMathTest.CosmicFormula.GTailLibFacade`
+and `DkMathTest.FLT.Seven.GTailFacade` smoke tests are explicitly listed in
+`DkMathTest.lean`. Lake's `DkMathTest.+` glob also discovers the individual
+modules. All smoke proofs apply existing APIs; Step 007 adds no arithmetic
+theorem. The exact build coverage and any broader-build blocker are recorded
+in [report-007.md](report-007.md).
+
+## Arithmetic frontier
+
+[constraint-ledger-006.md](constraint-ledger-006.md) remains the checked/open
+boundary: v7(g), q-adic square allocation, order-21 conditions, typed
+Norm/unit-class transport and next-packet construction are not implemented
+by this integration. Q is a norm-shaped polynomial; no global Norm map to
+FLT7's cyclotomic carrier or normalized unit-class closure is supplied.
+The counterexamples in Step 006 refute weakened neutral hypotheses and do
+not fabricate positive Fermat solutions.
 
 ## Scope discipline
 
@@ -89,6 +126,11 @@ Test what *new* arithmetic constraints follow (gcd, prime support, p-adic valuat
 ## Documents
 
 - [ROADMAP.md](ROADMAP.md): incremental implementation plan and acceptance gates.
-- [instruction-001.md](instruction-001.md): first Codex implementation request.
+- [instruction-007.md](instruction-007.md): bounded integration acceptance contract.
+- [source-inventory-007.md](source-inventory-007.md): source/export/dependency inventory.
+- [report-007.md](report-007.md): integration evidence, theorem family counts and engineering decision.
+- [report-006.md](report-006.md): checked arithmetic, exploratory examples and unproved proposals.
+- [constraint-ledger-006.md](constraint-ledger-006.md): exact premises and remaining reconstruction frontier.
+- `report-001.md` through `report-005.md`, with corresponding reviews: earlier staged proof evidence.
 
 The broad external 13-million-line proof corpus is explicitly **deferred** until this local GTail instrument has been implemented and measured.
