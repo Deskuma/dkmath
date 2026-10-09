@@ -178,3 +178,11 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Twenty examples include q=43 scalar-vs-ideal boundary, conjugate orientation, q=3 coincident kernels and a nonroot multiplication countercheck. All16 public axiom checks, two focused targets and Step013 regression pass.
 - Evidence: [source-inventory-014.md](source-inventory-014.md), [report-014.md](report-014.md). No facade promotion or FLT owner adapter.
 - These are actual ideals in TraceOneInt(-1). Principal scalar ideal product, comaximality, cyclotomic ideal/unit transfer, element-square reconstruction and descent remain unproved in this checkpoint. Historical owners/ledger remain unchanged.
+
+## Step 015 — split scalar-prime ideal factorization
+
+- [x] Step015 COMPLETE / Outcome B, product gate PASSED: arbitrary integral two-slot coordinate reconstruction, general scalar coordinate-divisibility iff, and exact ideal intersection with the scalar principal ideal.
+- [x] Supplied-root separation from prime q≠3, a lifted integral membership witness for distinct kernels, checked comaximality, and product=scalar ideal in TraceOneInt(-1).
+- [x] Nineteen examples: q=43 inf/product/sup, natural α versus scalar membership, signed coordinates, q=3 failed intersection without separation, q=5 no-root boundary. All10 public axiom checks, two focused targets and Step014 regression pass.
+- Evidence: [source-inventory-015.md](source-inventory-015.md), [report-015.md](report-015.md). Root existence/separation remain explicit; no public facade or FLT owner addition.
+- The previously open split intersection/comaximal product is now checked in the degree-two ring. The q=3 counterexample concerns intersection; its product decomposition is unproved here. Cyclotomic transport, class/unit claims, element-square reconstruction, primitive next packet and descent remain open. Historical owners and ledger remain unchanged.
