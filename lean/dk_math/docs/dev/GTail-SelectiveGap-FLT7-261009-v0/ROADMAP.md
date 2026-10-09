@@ -1,7 +1,7 @@
 # ROADMAP — GTail Selective-Gap / FLT7
 
 Branch: **feature/GTail-SelectiveGap-FLT7-261009-v0**  
-Status: **Step 000–002 COMPLETE — Outcome B** (neutral selection and factor kernels)
+Status: **Step 000–003 COMPLETE — Outcome B** (neutral selection, factor and transport kernels)
 
 ## Proof-oriented stages
 
@@ -104,4 +104,7 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Step 002: bounded monomial factor and active min/max adapter, natural coefficient gcd and endpoint content, exact prime interior gcd and `p*x*u` divisor; focused regressions and all 16 axiom checks.
 - Direct import: `DkMath.Lib.Cosmic.GTailFactor`; no façade promotion in Step 002.
 - Evidence: `source-inventory-002.md` and `report-002.md`.
-- [ ] Step 003–007.
+- [x] Step 003: single-term and arbitrary active-set movement, no-op boundaries, exact Big conservation, interval/GTail adapter and generic guarded modular conservation; coefficient-content/nonpreservation regressions and all 12 public axiom checks.
+- Direct import: `DkMath.Lib.Cosmic.GTailTransport`; façade promotion remains deferred.
+- Evidence: `source-inventory-003.md` and `report-003.md`.
+- [ ] Step 004–007.
