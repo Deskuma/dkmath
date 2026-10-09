@@ -129,3 +129,11 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - Evidence: [source-inventory-008.md](source-inventory-008.md), [report-008.md](report-008.md). No facade promotion or broad build in Step 008.
 - Subsequent owner all-test success: `./lb -T` (routes to `lake test`), recorded separately in [validation-addendum-007.md](validation-addendum-007.md). The historical Step 007 interrupted run is unchanged; runtime commit identity was not captured in that owner log.
 - Deferred v7(g) conservation is now proved under the stated endpoint-unit/positive-equation hypotheses. Optional unit-branch 49∣g, q² allocation, order-21, Norm/unit-class transfer and next-packet construction remain open in this checkpoint. The historical [constraint-ledger-006.md](constraint-ledger-006.md) remains intact.
+
+## Step 009 — exact seven-unit branch
+
+- [x] Step 009 COMPLETE / Outcome B: proved endpoint-to-sum unit transfer, v7(g)=2*v7(Q), 7∣Q and 49∣g under the positive exact equation and three coordinate-unit hypotheses.
+- [x] Neutral abstract-product allocation and positive-even valuation conversion; satisfiable (g,T,A,B,C,Q)=(49,7,1,1,1,7) calibration.
+- [x] Kernel-checked (a,b,c,g)=(8,9,10,7) mod49-only example, explicit exact-equation failure, 49∤g and failure of doubled valuation; all six new public axiom checks, direct test builds and both Step 008 regressions pass.
+- Evidence: [source-inventory-009.md](source-inventory-009.md), [report-009.md](report-009.md). Prior local constraints compared by name/hypotheses; no independent new obstruction claimed.
+- Step 008's then-deferred unit-branch item is now proved under exact hypotheses. Separate q-square allocation, order-21, Norm/unit-class transport and constructive next packet remain open. The historical constraint ledger and earlier reports are unchanged. No facade promotion or full-suite build.
