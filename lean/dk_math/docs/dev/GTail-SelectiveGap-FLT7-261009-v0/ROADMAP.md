@@ -169,3 +169,12 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Actual q=43 slots 37/7 with evaluations 0/18, q=3 repeated-root boundary, b=0 conjugation, signed-coordinate checks; all 15 public definition/theorem axiom checks, two new builds and both Step 012 regressions pass.
 - Evidence: [source-inventory-013.md](source-inventory-013.md), [report-013.md](report-013.md). Neutral direct imports only; no optional FLT adapter or facade promotion.
 - Residue orientation is checked without Fermat premises. Prime ideals, other cyclotomic carriers, unit classes, norm-to-element reconstruction, next packet and descent remain open. Historical ledger and prior owners remain unchanged.
+
+## Step 014 — bundled residue kernels
+
+- [x] Step 014 COMPLETE / Outcome B: Step 013 evaluation laws packaged as root-guarded RingHom and actual kernel ideals, with ofInt/tau/conjugation readouts.
+- [x] Arbitrary integral-element residue norm-product and prime-q norm-divisor iff membership in one conjugate kernel. Root existence remains an explicit premise.
+- [x] Scalar modulus membership, surjectivity and optional prime-field kernel maximality checked; q=43 prime consequence tested. Canonical oriented membership/exclusion proves distinct ideals away from q=3.
+- [x] Twenty examples include q=43 scalar-vs-ideal boundary, conjugate orientation, q=3 coincident kernels and a nonroot multiplication countercheck. All16 public axiom checks, two focused targets and Step013 regression pass.
+- Evidence: [source-inventory-014.md](source-inventory-014.md), [report-014.md](report-014.md). No facade promotion or FLT owner adapter.
+- These are actual ideals in TraceOneInt(-1). Principal scalar ideal product, comaximality, cyclotomic ideal/unit transfer, element-square reconstruction and descent remain unproved in this checkpoint. Historical owners/ledger remain unchanged.
