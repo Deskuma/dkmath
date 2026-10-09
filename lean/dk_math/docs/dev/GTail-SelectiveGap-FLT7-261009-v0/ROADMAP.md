@@ -145,3 +145,11 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Actual GTail addresses (13,13,2) and (43,3,1); satisfiable exclusive and mixed abstract products; all eight new public axiom checks, direct tests and Step 009 regressions pass.
 - Evidence: [source-inventory-010.md](source-inventory-010.md), [report-010.md](report-010.md). Existing typed prime-support/cyclotomic interfaces compared by path and hypotheses; no independent new obstruction claimed.
 - The previously deferred q-budget and unsplit-square allocation are now checked under the full exact premises plus proved local exclusion. No universal choice of the left/right branch. Historical ledger remains intact. Order-21, Norm/unit carrier transport and constructive descent remain open. No facade promotion or all-suite build.
+
+## Step 011 — tail-side finite-field order intersection
+
+- [x] Step 011 COMPLETE / Outcome B: independent nontrivial order-seven and order-three neutral mechanisms; derive q≠3 on the tail side; combine coprime orders to prove 21∣q-1.
+- [x] Exact branch-guarded receiver derives all units and q∤g from Step 010 support. Optional non-order-21 routing allocates q² to the gap under positive exact hypotheses.
+- [x] Complete q=43 modular calibration (5,8,9,4), q=13 gap contrast (14,29,30,13), characteristic-three/seven boundaries; all six new public axiom checks, direct builds and Step 010 regressions pass.
+- Evidence: [source-inventory-011.md](source-inventory-011.md), [report-011.md](report-011.md). No exact Fermat solution, universal order-21 restriction or independent new obstruction claimed.
+- The order-21 candidate is now checked specifically on the tail branch. Historical ledger is unchanged. Typed Norm/unit carrier conversion, constructive next packet and descent remain open. No facade promotion or broad build.
