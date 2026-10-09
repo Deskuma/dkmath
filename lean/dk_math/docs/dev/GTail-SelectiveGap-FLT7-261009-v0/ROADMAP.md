@@ -161,3 +161,11 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Sign/cast boundaries, Q(5,8)=129, Q²=16641, Body=60573240, signed square coordinate and distinct norm-one pair; all six new public axiom checks, four direct builds and both Step 011 regressions pass.
 - Evidence: [source-inventory-012.md](source-inventory-012.md), [report-012.md](report-012.md). No facade promotion or broad build.
 - Typed quadratic norm-value readout is now checked. Cyclotomic/other-carrier conversion, prime ideals, unit-power extraction, next packet and descent remain open. Historical frontier entries and ledger remain unchanged.
+
+## Step 013 — oriented Eisenstein residue slots
+
+- [x] Step 013 COMPLETE / Outcome B: existing element conjugation at α, scalar ring q divisibility iff both natural coordinates, and the norm-only scalar-divisibility countercheck.
+- [x] Canonical t=-a/b in prime ZMod q under q∤b, both quadratic root relations, zero first slot, conjugate trace slot, and nonzero/distinct conjugate orientation under q≠3. Evaluation addition/multiplication/conjugation proved.
+- [x] Actual q=43 slots 37/7 with evaluations 0/18, q=3 repeated-root boundary, b=0 conjugation, signed-coordinate checks; all 15 public definition/theorem axiom checks, two new builds and both Step 012 regressions pass.
+- Evidence: [source-inventory-013.md](source-inventory-013.md), [report-013.md](report-013.md). Neutral direct imports only; no optional FLT adapter or facade promotion.
+- Residue orientation is checked without Fermat premises. Prime ideals, other cyclotomic carriers, unit classes, norm-to-element reconstruction, next packet and descent remain open. Historical ledger and prior owners remain unchanged.
