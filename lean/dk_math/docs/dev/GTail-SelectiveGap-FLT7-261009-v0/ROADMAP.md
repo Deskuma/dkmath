@@ -1,7 +1,7 @@
 # ROADMAP — GTail Selective-Gap / FLT7
 
 Branch: **feature/GTail-SelectiveGap-FLT7-261009-v0**  
-Status: **Step 000 / 001 COMPLETE — Outcome B** (neutral selective balance kernel)
+Status: **Step 000–002 COMPLETE — Outcome B** (neutral selection and factor kernels)
 
 ## Proof-oriented stages
 
@@ -101,4 +101,7 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Step 000 source inventory and Step 001 implementation (Codex): exact semiring balance, empty/full/complement/singleton APIs, interval-to-GTail adapters, focused regressions and axiom audit.
 - Direct import: `DkMath.Lib.Cosmic.GTailSelection`; façade promotion remains Step 007.
 - Evidence: `source-inventory-001.md` and `report-001.md`.
-- [ ] Step 002–007.
+- [x] Step 002: bounded monomial factor and active min/max adapter, natural coefficient gcd and endpoint content, exact prime interior gcd and `p*x*u` divisor; focused regressions and all 16 axiom checks.
+- Direct import: `DkMath.Lib.Cosmic.GTailFactor`; no façade promotion in Step 002.
+- Evidence: `source-inventory-002.md` and `report-002.md`.
+- [ ] Step 003–007.
