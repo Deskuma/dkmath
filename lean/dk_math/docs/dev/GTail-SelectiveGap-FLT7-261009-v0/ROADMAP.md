@@ -194,3 +194,11 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Twenty-six examples include P∩P=P≠(3) alongside P²=(3), noncomaximality with itself, signed quotient witnesses and direct ring computations. All17 public axiom checks, two new focused targets and unchanged Step015 regression pass.
 - Evidence: [source-inventory-016.md](source-inventory-016.md), [report-016.md](report-016.md). No facade or FLT owner addition.
 - The formerly unproved ramified product now holds by a separate principal-generator proof; historical intersection failure remains true. General ideal valuations, cyclotomic/unit transport, norm-square inversion, next primitive packet and descent remain open.
+
+## Step 017 — selected-element ideal-square support
+
+- [x] Step017 COMPLETE / Outcome B: arbitrary integral norm3 support iff repeated-root membership, hence embedded scalar3 divides z² via the checked ramified ideal product. Natural selected-element adapter added.
+- [x] Oriented split-square support: square lies in the chosen ideal square, not in its conjugate prime kernel or scalar(q), with explicit root/separation/base orientation. Canonical natural α adapter checked.
+- [x] Twenty-two examples compare ramified π/signed z and split q43 α²=⟨-39,144⟩, where norm has43² support but embedded43 does not divide the square. All7 public axiom checks, two new targets and unchanged Step016/015 regressions pass.
+- Evidence: [source-inventory-017.md](source-inventory-017.md), [report-017.md](report-017.md). No optional FLT owner/facade addition.
+- These are actual element/ideal-square support facts, not exact ideal-adic exponents or principal-square equality. GTail-to-cyclotomic carrier maps, normalized unit classes, next primitive tuple and descent remain open. Historical owners/ledger remain unchanged.
