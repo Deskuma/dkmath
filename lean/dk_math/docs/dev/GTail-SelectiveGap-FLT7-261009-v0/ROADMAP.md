@@ -308,3 +308,12 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] All9 public axiom checks, focused source/test and Step028/027 regressions pass. Import closure adds only the new local owner; earlier sources and historical records are preserved.
 - Evidence: [source-inventory-029.md](source-inventory-029.md), [report-029.md](report-029.md). Scalar43⁴ nondivisibility does not establish selected K⁴ exclusion or exact K-adic depth3.
 - Higher selected powers/valuations, integral transport, signed packets, principalization, unit/class extraction and FLT7 descent remain open. Stop after Step029.
+
+## Step 030 — fourth-power firewall and bounded exact third depth
+
+- [x] Step030 COMPLETE / Outcome B: K⁴∩(q)=(q)K³ and natural scalar K⁴ contraction are checked in the actual signed-coordinate degree-six carrier, without a domain/DVR premise.
+- [x] Actual cofactor maximal-power saturation proves F_i∈assigned K⁴ iff q⁴|GTail. Together with Step029, a bounded K³ membership/K⁴ exclusion corollary is public.
+- [x] Thirty-eight examples verify all six exact bounded third-depth cutoffs at g32598, fourth exclusions at g4/g1165, scalar43⁴ membership versus scalar43³ exclusion, and unchanged ratio11/derivative28/cofactor28.
+- [x] All4 public axiom checks, focused source/test and Step029/028 regressions pass. Historical owners and checkpoint records are preserved.
+- Evidence: [source-inventory-030.md](source-inventory-030.md), [report-030.md](report-030.md). The previous Step029 K⁴ exclusion gap is now closed for the guarded actual factors.
+- Stop after Step030. Recommend a separate source-typed frontier reassessment of Eisenstein Q²/focused GTail readouts versus degree-six prime-root addresses. No K⁵ hierarchy, assumed integral ring map, signed packet, class/unit extraction or FLT7 descent is introduced.
