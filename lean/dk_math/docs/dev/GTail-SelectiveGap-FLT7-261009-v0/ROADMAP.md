@@ -366,3 +366,13 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Thirty examples and all32 public axiom checks pass; final source/test and Step034/033 regressions pass with warnings0. Local DAG171 vertices has cycle0; all27 reachable Lib owners have FLT reachability0.
 - Evidence: [source-inventory-035.md](source-inventory-035.md), [report-035.md](report-035.md), [frontier-035.md](frontier-035.md). Ideal.map_pow is a correct existing API; it does not identify the strict source extensions or their powers with M00 or its powers.
 - Stop after Step035. No full spectrum/rank/domain/field certificate, twelve-way product=(43), all-k depth, canonical pairing from hypothetical Fermat data, signed packet, primitive provider or FLT7 descent is constructed. Historical records remain preserved.
+
+## Step 036 — joint source generation and bounded mixed powers
+
+- [x] Step036 COMPLETE / Outcome B: M(e,j)=A(e)⊔B(j) for every q43 row/column, proved from the actual quadratic coordinate split and source-typed kernel membership.
+- [x] M43=A0⊔B0 agrees with the old receiver kernel; A0<M00 and B0<M00 remain true. Joint sums retain the twelve distinct maximal addresses and both typed contractions.
+- [x] Correct Ideal.map_pow transport is bounded to n:Fin 3 (powers0,1,2), followed by one-way inclusion into M powers. No converse or individual extension-power equality with M powers is asserted.
+- [x] The actual non-Fermat mixed elements iEα·iRF0 and iE(α²)·iRF0 lie in M00³ and M00⁴. These are lower bounds, not exact depths; the source images remain different.
+- [x] Thirty-four examples and all15 public axiom checks pass. Final production/test and Step035/034 direct regressions have warnings0. Local DAG172 vertices has cycle0; all27 reachable Lib owners have FLT reachability0.
+- Evidence: [source-inventory-036.md](source-inventory-036.md), [report-036.md](report-036.md), [frontier-036.md](frontier-036.md). Cast/projection normalization, typed lattice inclusion and root0 test normalization were repaired locally and logged.
+- Stop after Step036. Reassess original scalar/norm balance and nextPack/nextRoute/carrier_match reconstruction; the local join supplies none of those fields. No full spectrum, rank/domain/field/flatness, exact valuations, all-k tower, signed packet or FLT7 descent is constructed. Historical records remain preserved.
