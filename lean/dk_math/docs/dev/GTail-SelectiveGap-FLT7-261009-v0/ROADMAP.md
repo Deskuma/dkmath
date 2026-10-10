@@ -376,3 +376,13 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Thirty-four examples and all15 public axiom checks pass. Final production/test and Step035/034 direct regressions have warnings0. Local DAG172 vertices has cycle0; all27 reachable Lib owners have FLT reachability0.
 - Evidence: [source-inventory-036.md](source-inventory-036.md), [report-036.md](report-036.md), [frontier-036.md](frontier-036.md). Cast/projection normalization, typed lattice inclusion and root0 test normalization were repaired locally and logged.
 - Stop after Step036. Reassess original scalar/norm balance and nextPack/nextRoute/carrier_match reconstruction; the local join supplies none of those fields. No full spectrum, rank/domain/field/flatness, exact valuations, all-k tower, signed packet or FLT7 descent is constructed. Historical records remain preserved.
+
+## Step 037 — generic prime receiver and source-linked native pairing
+
+- [x] Step037 COMPLETE / Outcome B: actual evaluations for an arbitrary prime q and supplied quadratic/seventh roots have commuting source restrictions, surjective maps, maximal/prime kernels and separately typed contractions.
+- [x] Native roots from actual Q/T support give both source and common-receiver memberships and residue zeros without a Fermat equation or additive focus. The q43 specialization equals eval43/M43; q127 roots20/2 provide an independent calibration.
+- [x] The conditional focused adapter derives denominator units and q≠3 from existing guards, and reuses doubled valuation budget, parity and bounded depth readouts. Square and mixed support supply lower bounds in powers2/3/4.
+- [x] Optional generic joint generation is proved for a single root pair: its kernel equals the sum of the two source ideal extensions. No generic grid or exact valuation is asserted.
+- [x] Fifty-nine examples and all24 public axiom checks pass. Final production/test and Step036/035 direct regressions have warnings0. Local DAG173 vertices has cycle0; all27 reachable neutral Lib owners have FLT reachability0.
+- Evidence: [source-inventory-037.md](source-inventory-037.md), [report-037.md](report-037.md), [frontier-037.md](frontier-037.md). Both q43 controls retain their actual focus/budget distinction, source-image inequality and existing strict-extension/no-direct-map boundaries.
+- Stop after Step037. Review whether original hypothetical primitive data can supply an independent global restriction beyond scalar valuation and local root/support data. No full spectrum, field/domain, all-k exact depth, signed reconstruction, nextPack/nextRoute/carrier_match provider or FLT7 descent is constructed. Historical records remain preserved.
