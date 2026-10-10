@@ -356,3 +356,13 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] All23 public declaration axiom checks, final source/test and Step033/032 regressions pass. Local cycle0 and all27 reachable neutral Lib owners have FLT reachability0. Nested-ext and a test-coordinate sign were repaired locally; final warnings0.
 - Evidence: [source-inventory-034.md](source-inventory-034.md), [report-034.md](report-034.md), [frontier-034.md](frontier-034.md). Step033 no-direct-map results and historical Step032 correction remain preserved.
 - Stop after Step034. No field/domain/compositum/rank12/flatness/tensor-isomorphism claim, equal extended ideals, all-k depth, signed packet, next primitive tuple or FLT7 descent is introduced.
+
+## Step 035 — q43 two-by-six prime-address grid
+
+- [x] Step035 COMPLETE / Outcome B: twelve distinct maximal/prime kernels in the unchanged Step034 C, with a proved injective Fin 2 × Fin 6 address map.
+- [x] Actual unital evaluations have both commuting source restrictions; E contractions depend only on the row and R contractions only on the column. evGrid00=eval43 and M00=M43.
+- [x] Both source ideal extensions are strictly smaller than M00, detected by the independent second row/column evaluations.
+- [x] Actual non-Fermat α occupies precisely row0 and F0 precisely column0. Their sole grid intersection is (0,0), while their C-images remain different.
+- [x] Thirty examples and all32 public axiom checks pass; final source/test and Step034/033 regressions pass with warnings0. Local DAG171 vertices has cycle0; all27 reachable Lib owners have FLT reachability0.
+- Evidence: [source-inventory-035.md](source-inventory-035.md), [report-035.md](report-035.md), [frontier-035.md](frontier-035.md). Ideal.map_pow is a correct existing API; it does not identify the strict source extensions or their powers with M00 or its powers.
+- Stop after Step035. No full spectrum/rank/domain/field certificate, twelve-way product=(43), all-k depth, canonical pairing from hypothetical Fermat data, signed packet, primitive provider or FLT7 descent is constructed. Historical records remain preserved.
