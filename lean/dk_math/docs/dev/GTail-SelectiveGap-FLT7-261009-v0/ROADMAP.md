@@ -317,3 +317,13 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] All4 public axiom checks, focused source/test and Step029/028 regressions pass. Historical owners and checkpoint records are preserved.
 - Evidence: [source-inventory-030.md](source-inventory-030.md), [report-030.md](report-030.md). The previous Step029 K⁴ exclusion gap is now closed for the guarded actual factors.
 - Stop after Step030. Recommend a separate source-typed frontier reassessment of Eisenstein Q²/focused GTail readouts versus degree-six prime-root addresses. No K⁵ hierarchy, assumed integral ring map, signed packet, class/unit extraction or FLT7 descent is introduced.
+
+## Step 031 — conditional norm-scalar / ideal-depth synchronization
+
+- [x] Step031 COMPLETE / Outcome B: explicit abstract doubled-valuation budget gives square/fourth scalar readouts and no scalar exact depth3; satisfiable and failed-gap-unit controls are checked first.
+- [x] Full positive primitive hypothetical Fermat7 input derives all coordinate/endpoint/gap units, q≠3 and nonzero values; Step010 budget and square allocation are reused.
+- [x] Separate typed Eisenstein α² split-address and actual cyclotomic K²/K³↔K⁴ endpoints share only scalar q,Q,T. Optional q⁴|T iff integer q²|normα is checked.
+- [x] Twenty-six examples include universal full-contract tests, q43 mixed carriers with false Fermat/balance premises, g32598 outside hsum, gap-unit and zero-value failures, and characteristic boundaries.
+- [x] All7 public axiom checks, focused final source/test and Step030/010/012/017 regressions pass. Local cycle0 and all27 reachable neutral Lib owners have FLT reachability0; historical owners/records remain unchanged.
+- Evidence: [source-inventory-031.md](source-inventory-031.md), [report-031.md](report-031.md). Even-depth compatibility is a direct application of the preexisting Step010 budget, not an independent FLT7 obstruction/descent.
+- Stop after Step031. Integral E→R transport, ideal equality, signed packet reconstruction, K⁵/all-k, unit/class extraction and unconditional FLT7 closure remain outside this checkpoint.
