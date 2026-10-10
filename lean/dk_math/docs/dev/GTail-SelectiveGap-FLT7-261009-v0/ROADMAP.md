@@ -272,3 +272,12 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Twenty-seven examples include all six positive square memberships at q43,c9,g1165, all six negative squares at g4, wrong-slot exclusion, scalar1849 square membership, and selected cofactor residue28 in both cases. All7 public axiom checks, new source/test and Step024/023 regressions pass.
 - Evidence: [source-inventory-025.md](source-inventory-025.md), [report-025.md](report-025.md). The historical Step024 positive sample's unresolved square membership is now closed by the new generic reverse theorem.
 - Membership in cubes and higher powers, individual-factor principalization, signed-packet identification, integral Eisenstein transport, unit/class extraction, smaller primitive tuple and FLT7 descent remain open. No facade promotion; historical owners/ledger preserved; stop after Step025.
+
+## Step 026 — formal shell derivative and uniform selected cofactor
+
+- [x] Step026 COMPLETE / Outcome B: the original seven-term homogeneous GTail shell is an actual polynomial over an arbitrary CommRing; its formal derivative satisfies G+(X-Cc)G′=7X⁶.
+- [x] A genuine polynomial factorization and derivative-of-product proof identify the selected actual five-factor source cofactor evaluation with G′(c+g), using the inverse receiving slot.
+- [x] Under canonical Tail guards, every selected cofactor has the same value 7(c+g)⁶/g≠0. Characteristic q≠7 is proved from the nonidentity seventh root, not assumed.
+- [x] Thirty-three examples verify both q43 derivative/readout values28, with all selected factors outside K² at g4 and inside K² at g1165. q7 and endpoint guards are checked. All17 public axiom checks, new source/test and Step025/024 regressions pass.
+- Evidence: [source-inventory-026.md](source-inventory-026.md), [report-026.md](report-026.md). Finite-field root simplicity does not prohibit deeper source-element square membership.
+- Higher ideal powers, Hensel lifting, individual-factor principalization, integral transport, unit/class extraction, signed packets and FLT7 descent remain open. Historical owners/ledger preserved; stop after Step026.
