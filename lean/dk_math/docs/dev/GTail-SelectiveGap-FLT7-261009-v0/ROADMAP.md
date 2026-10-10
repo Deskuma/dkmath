@@ -299,3 +299,12 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] All10 public axiom checks, focused source/test and Step027/026 regressions pass. Reusing the neutral owner adds two local modules relative to Step027; no additional Mathlib closure modules.
 - Evidence: [source-inventory-028.md](source-inventory-028.md), [report-028.md](report-028.md). The new result is a native adapter to existing finite-depth machinery; scalar depth3 does not establish any K³ statement.
 - All-k ideal valuations, q-adic completion, integral transport, signed packets, principalization, unit/class lifting and FLT7 descent remain open. Historical owners/ledger preserved; stop after Step028.
+
+## Step 029 — actual selected third-power membership
+
+- [x] Step029 COMPLETE / Outcome B: erased five-kernel complement splitting/comaximality gives K²∩(q)=(q)K and K³∩(q)=(q)K² in the actual degree-six carrier.
+- [x] Natural scalar square/cube contractions use existing integral-coordinate scalar injectivity, without a DVR/domain hypothesis. Actual cofactor saturation proves F_i∈assigned K³ iff q³|GTail under canonical Tail guards.
+- [x] Twenty-five examples include all six K³ memberships at g32598, exclusions at g4/g1165, all wrong-slot exclusions, scalar43³ cube membership versus scalar43² exclusion, residue28 and digit17 consistency.
+- [x] All9 public axiom checks, focused source/test and Step028/027 regressions pass. Import closure adds only the new local owner; earlier sources and historical records are preserved.
+- Evidence: [source-inventory-029.md](source-inventory-029.md), [report-029.md](report-029.md). Scalar43⁴ nondivisibility does not establish selected K⁴ exclusion or exact K-adic depth3.
+- Higher selected powers/valuations, integral transport, signed packets, principalization, unit/class extraction and FLT7 descent remain open. Stop after Step029.
