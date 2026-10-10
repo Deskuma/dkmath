@@ -281,3 +281,12 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Thirty-three examples verify both q43 derivative/readout values28, with all selected factors outside K² at g4 and inside K² at g1165. q7 and endpoint guards are checked. All17 public axiom checks, new source/test and Step025/024 regressions pass.
 - Evidence: [source-inventory-026.md](source-inventory-026.md), [report-026.md](report-026.md). Finite-field root simplicity does not prohibit deeper source-element square membership.
 - Higher ideal powers, Hensel lifting, individual-factor principalization, integral transport, unit/class extraction, signed packets and FLT7 descent remain open. Historical owners/ledger preserved; stop after Step026.
+
+## Step 027 — native one-step Taylor correction
+
+- [x] Step027 COMPLETE / Outcome B: original GTail shell has a checked integer first-order remainder divisible by q², including q=0 and zero endpoints.
+- [x] Exact integer cancellation yields q²|T(g+q*d) iff m+d*D=0 mod q. The integer derivative is explicitly transported to the Step026 field derivative.
+- [x] Under canonical Tail unit/support guards, δ=−m/D is the unique residue correction; δ.val gives a verified lift. Shifted gap unit, Tail support, ratio and derivative are preserved.
+- [x] Twenty-five examples explain q43,c9,g4→g1165 via δ=27, reject d0/d26, accept d70, and feed the generic lift into all six actual ideal-square memberships. All16 public axiom checks, focused source/test and Step026/025 regressions pass.
+- Evidence: [source-inventory-027.md](source-inventory-027.md), [report-027.md](report-027.md). Classical Taylor correction overlaps the existing finite PolynomialHenselDigit mechanism; the new contribution is the native GTail adapter.
+- Higher ideal powers/exact valuations, q-adic completion, signed packets, principalization, integral transport, unit/class extraction and FLT7 descent remain open. Historical owners/ledger preserved; stop after Step027.
