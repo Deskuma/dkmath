@@ -327,3 +327,13 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] All7 public axiom checks, focused final source/test and Step030/010/012/017 regressions pass. Local cycle0 and all27 reachable neutral Lib owners have FLT reachability0; historical owners/records remain unchanged.
 - Evidence: [source-inventory-031.md](source-inventory-031.md), [report-031.md](report-031.md). Even-depth compatibility is a direct application of the preexisting Step010 budget, not an independent FLT7 obstruction/descent.
 - Stop after Step031. Integral E→R transport, ideal equality, signed packet reconstruction, K⁵/all-k, unit/class extraction and unconditional FLT7 closure remain outside this checkpoint.
+
+## Step 032 — exact global balance and local-compatibility firewall
+
+- [x] Step032 COMPLETE / Outcome B: under additive focus alone, exact NAT GTail balance and typed INT norm balance are each equivalent to Fermat7Equation.
+- [x] Positive primitive (1166,1857,1858,1165) satisfies strict geometry, focus, all q43 units, exact Q depth1/T depth2 and the doubled budget, but fails Fermat7Equation and both exact balances.
+- [x] Thirty-eight examples include actual E square address, all6 R square memberships/cube exclusions, wrong-slot exclusions, universal iff signatures and historical characteristic/zero controls.
+- [x] Lean corrects the instruction's old-focus claim: (5,8,9,4) already satisfies focus and strict geometry; the new witness adds the missing q43 budget and K² depth. The new witness fails the separate known 7|g condition, so sufficiency findings are limited to the listed q43 contract.
+- [x] Both public axiom checks, final source/test and Step031/030/GTailBridge regressions pass. Local cycle0, all27 reachable neutral Lib owners have FLT reachability0; historical owners/checkpoints are preserved.
+- Evidence: [source-inventory-032.md](source-inventory-032.md), [report-032.md](report-032.md), [frontier-032.md](frontier-032.md). Old descent provider requires next primitive pack, route and actual carrier_match; local values do not construct these fields.
+- Stop after Step032. Exact balance reformulation is a circularity/information firewall, not a new FLT7 descent. No integral E→R map, signed packet, K⁵/all-k or unit/class extraction is introduced.
