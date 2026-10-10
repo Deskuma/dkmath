@@ -236,3 +236,12 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Twenty-four examples check q43 roots[11,35,41,21,16,4], factor values[0,42,31,39,41,20], all six ideal receivers and selective support, q13/q7 and separate degree-two boundaries, and F(0,0) in all slots without the c-unit guard. All18 public axiom checks, two new targets and Step020/019 regressions pass.
 - Evidence: [source-inventory-021.md](source-inventory-021.md), [report-021.md](report-021.md). Optional admissible-root completeness and whole-map Galois covariance deferred; no old global factorization import or facade promotion.
 - Intersection=(q) and six-ideal product remain unproved here. Exact valuations, source-ring transport, class/unit extraction, primitive next tuple and descent remain open. Historical owners/ledger preserved; stop after Step021.
+
+## Step 022 — six-coordinate interpolation and exact scalar ideal recovery
+
+- [x] Step022 COMPLETE / Outcome B: actual signed six-coordinate basis change and both integral inverses checked over arbitrary CommRing; degree≤5 evaluation polynomial agrees with the existing actual RingHoms.
+- [x] Six distinct supplied-root evaluations force all integral coordinate residues to vanish. Arbitrary-element scalar ideal membership iff coordinate divisibility checked using an actual quotient-coordinate element, hence all-six intersection=(q).
+- [x] Optional product gate PASSED after the mandatory intersection build: genuine finite pairwise-IsCoprime product theorem plus Step021 comaximality proves six-ideal product=(q) in the same degree-six ring.
+- [x] Twenty-four examples include signed coordinates and all six values, embedded43 and signed −43+86ζ in every kernel, F(9,4) selective membership but exclusion from intersection/scalar/product, and q13/q7 guards. All15 public axiom checks, two focused new targets and Step021/020 regressions pass.
+- Evidence: [source-inventory-022.md](source-inventory-022.md), [report-022.md](report-022.md). Conditional classical splitting only; supplied nontrivial seventh root remains explicit. No facade promotion or broad build.
+- The historical Step021 intersection/product gap is now closed. Exact valuations, individual-kernel principalization, integral source-ring transport, unit/class extraction, signed-depth packet construction, next primitive tuple and FLT7 descent remain open. Historical owners/ledger preserved; stop after Step022.
