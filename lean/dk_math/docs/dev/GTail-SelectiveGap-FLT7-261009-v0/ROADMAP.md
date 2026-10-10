@@ -245,3 +245,12 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Twenty-four examples include signed coordinates and all six values, embedded43 and signed −43+86ζ in every kernel, F(9,4) selective membership but exclusion from intersection/scalar/product, and q13/q7 guards. All15 public axiom checks, two focused new targets and Step021/020 regressions pass.
 - Evidence: [source-inventory-022.md](source-inventory-022.md), [report-022.md](report-022.md). Conditional classical splitting only; supplied nontrivial seventh root remains explicit. No facade promotion or broad build.
 - The historical Step021 intersection/product gap is now closed. Exact valuations, individual-kernel principalization, integral source-ring transport, unit/class extraction, signed-depth packet construction, next primitive tuple and FLT7 descent remain open. Historical owners/ledger preserved; stop after Step022.
+
+## Step 023 — exact source-element GTail six-factor reconstruction
+
+- [x] Step023 COMPLETE / Outcome B: actual degree-six factors F_i=(c+g)−ζ^(i+1)c, with F0 equal to the existing linear factor. The six-factor product equals the original natural GTail 7 1 g c for arbitrary c,g, including zero gap and endpoints.
+- [x] Homogeneous identity for arbitrary X,Y in the source ring follows from the actual quadratic/cubic relations via explicit polynomial certificates. No cancellation of ζ−1 or g, and no additional Domain/field import.
+- [x] Optional incidence gate PASSED after the element-product build: generic q-local membership iff (i+1)(j+1)%7=1; unique receiver permutation [0,3,4,1,2,5] and its involutivity checked.
+- [x] Thirty-one examples include the full36 actual residue evaluations at q43, scalar GTail=14491387 in all kernels while F0 is outside scalar(43), zero-gap product=7c^6, endpoint products1/7/0, q13/q7 guards and the false Fermat equation. All12 public axiom checks, two new focused targets and Step022/021 regressions pass.
+- Evidence: [source-inventory-023.md](source-inventory-023.md), [report-023.md](report-023.md). Element product and ideal product remain separate typed statements; no facade promotion or broad build.
+- Individual factor/kernel principalization, exact ideal valuations, integral Eisenstein transport, unit/class extraction, signed packet reconstruction, next primitive tuple and FLT7 descent remain open. Historical owners/ledger preserved; stop after Step023.
