@@ -254,3 +254,12 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Thirty-one examples include the full36 actual residue evaluations at q43, scalar GTail=14491387 in all kernels while F0 is outside scalar(43), zero-gap product=7c^6, endpoint products1/7/0, q13/q7 guards and the false Fermat equation. All12 public axiom checks, two new focused targets and Step022/021 regressions pass.
 - Evidence: [source-inventory-023.md](source-inventory-023.md), [report-023.md](report-023.md). Element product and ideal product remain separate typed statements; no facade promotion or broad build.
 - Individual factor/kernel principalization, exact ideal valuations, integral Eisenstein transport, unit/class extraction, signed packet reconstruction, next primitive tuple and FLT7 descent remain open. Historical owners/ledger preserved; stop after Step023.
+
+## Step 024 — guarded native Tail depth-one cutoff
+
+- [x] Step024 COMPLETE / Outcome B: nonzero natural scalar multiplication is injective in the actual signed six-coordinate carrier; scalar n belongs to (q)*K_j iff q² divides n. This is scalar contraction, not equality of (q)*K_j and (q²).
+- [x] Genuine finite-family excess-copy membership and explicit inverse-slot reindexing combine Step023 element reconstruction with Step022 six-kernel splitting. Selected factor square membership forces scalar GTail into (q)*assigned K.
+- [x] With prime q, q∤c,g, q|GTail and the explicit q²∤GTail guard, every factor belongs to its assigned kernel and is excluded from its square. No unconditional cutoff or valuation function is introduced.
+- [x] Thirty examples include q43,c9,g4 six-factor cutoffs, all wrong-slot exclusions, scalar1849 membership versus scalar43 nonmembership in (43)*K, and the valid c9,g1165 Tail case with 43² support where the new guard fails. All7 public axiom checks, new focused source/test and Step023/022 regressions pass.
+- Evidence: [source-inventory-024.md](source-inventory-024.md), [report-024.md](report-024.md). The preexisting July2026 signed-packet exact valuation owner has a different typed contract; no heavy import or packet identification is added.
+- Individual-factor principalization, deeper exact valuations, integral Eisenstein transport, unit/class extraction, signed packet reconstruction, primitive next tuple and FLT7 descent remain open. Historical owners/ledger preserved; stop after Step024.
