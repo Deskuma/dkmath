@@ -290,3 +290,12 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Twenty-five examples explain q43,c9,g4→g1165 via δ=27, reject d0/d26, accept d70, and feed the generic lift into all six actual ideal-square memberships. All16 public axiom checks, focused source/test and Step026/025 regressions pass.
 - Evidence: [source-inventory-027.md](source-inventory-027.md), [report-027.md](report-027.md). Classical Taylor correction overlaps the existing finite PolynomialHenselDigit mechanism; the new contribution is the native GTail adapter.
 - Higher ideal powers/exact valuations, q-adic completion, signed packets, principalization, integral transport, unit/class extraction and FLT7 descent remain open. Historical owners/ledger preserved; stop after Step027.
+
+## Step 028 — native second digit via existing finite polynomial API
+
+- [x] Step028 COMPLETE / Outcome B: checked native evaluation and integer derivative guard adapters specialize the existing PolynomialHenselDigit theorem at k=2 to ∃! t:Fin q, q³|GTail(g+q²*t.val).
+- [x] Optional q³ linear iff uses the existing integer criterion with a genuine integer/natural quotient cast. No second generic Hensel proof or separate digit framework is introduced.
+- [x] Twenty-eight examples verify the second residue17, g1165→g32598, generic q³ support, uniqueness/exclusion in Fin43, natural correction60, ratio11/derivative28 and all six bounded K² memberships. Scalar43⁴ nondivisibility is checked separately.
+- [x] All10 public axiom checks, focused source/test and Step027/026 regressions pass. Reusing the neutral owner adds two local modules relative to Step027; no additional Mathlib closure modules.
+- Evidence: [source-inventory-028.md](source-inventory-028.md), [report-028.md](report-028.md). The new result is a native adapter to existing finite-depth machinery; scalar depth3 does not establish any K³ statement.
+- All-k ideal valuations, q-adic completion, integral transport, signed packets, principalization, unit/class lifting and FLT7 descent remain open. Historical owners/ledger preserved; stop after Step028.
