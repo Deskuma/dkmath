@@ -227,3 +227,12 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] All12 public axiom checks, two new focused targets, both Step019 tests and Step018 regression pass.
 - Evidence: [source-inventory-020.md](source-inventory-020.md), [report-020.md](report-020.md). Existing packet owners, ring definitions and historical ledger remain unchanged; no facade promotion or broad build.
 - Uniqueness concerns the supplied nontrivial root kernels, not all prime ideals. Six-kernel products, source-ring embedding/ideal transfer, exact valuations, unit/class extraction, next primitive tuple and descent remain open. Stop after Step020.
+
+## Step 021 — six explicit root slots and selective Tail support
+
+- [x] Step021 COMPLETE / Outcome B: supplied nontrivial seventh root has order7; its positive proper powers give six genuine distinct/nonzero/nonidentity seventh roots in ascending Fin6 slots.
+- [x] Existing packet-free kernels specialized to six maximal/prime ideals with integer contraction(q), cardinal q, pairwise distinctness and comaximality.
+- [x] Natural Tail factor membership iff slot0, with separate first-slot membership and five-slot exclusion. No Q or Fermat premise.
+- [x] Twenty-four examples check q43 roots[11,35,41,21,16,4], factor values[0,42,31,39,41,20], all six ideal receivers and selective support, q13/q7 and separate degree-two boundaries, and F(0,0) in all slots without the c-unit guard. All18 public axiom checks, two new targets and Step020/019 regressions pass.
+- Evidence: [source-inventory-021.md](source-inventory-021.md), [report-021.md](report-021.md). Optional admissible-root completeness and whole-map Galois covariance deferred; no old global factorization import or facade promotion.
+- Intersection=(q) and six-ideal product remain unproved here. Exact valuations, source-ring transport, class/unit extraction, primitive next tuple and descent remain open. Historical owners/ledger preserved; stop after Step021.
