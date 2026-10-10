@@ -210,3 +210,11 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Twenty examples cover satisfiable q43 t37/r11 with false Fermat equation, q13 Gap support, q3/q5/q7 boundaries and r1 geometric-sum failure. All6 public axiom checks, two new targets and Step017 plus both Step011 regressions pass.
 - Evidence: [source-inventory-018.md](source-inventory-018.md), [report-018.md](report-018.md). Existing degree-six localEval requires a signed-depth quotient-prime address; this checkpoint does not construct it from natural Q/T hypotheses.
 - Integral carrier maps, cyclotomic ideal/unit identification, next primitive packet and descent remain open. No optional FLT owner or facade promotion; historical ledger and prior owners remain unchanged.
+
+## Step 019 — packet-free seventh-cyclotomic evaluation
+
+- [x] Step019 COMPLETE / Outcome B: neutral beta=1+r+r⁻¹ cubic relation and actual signed real-cubic / degree-six RingHoms from a bare nontrivial seventh root, using the existing carriers.
+- [x] Natural Tail ratio evaluation sends the specifically oriented factor ofReal(c+g)−zeta*ofReal(c) to zero and proves actual degree-six kernel membership, without a signed-depth packet.
+- [x] Eight neutral and twenty-two carrier examples check q43 inverse4/beta16/zeta11/zero factor with false Fermat equation, signed coordinates, separate Eisenstein evaluation, q13 Gap and q3/q5/q7 controls. All14 public axiom checks, four final focused targets and Step018/017 regressions pass.
+- Evidence: [source-inventory-019.md](source-inventory-019.md), [report-019.md](report-019.md). Existing packet-indexed APIs remain unchanged; no packet reconstruction or equality with their canonical inputs is claimed.
+- Bare-root evaluation is now checked from the existing degree-six carrier into ZMod q. Eisenstein→cyclotomic integral maps, ideal identification, principalization, unit/class lifting, next primitive packet and descent remain open. No facade promotion or broad build; stop after Step019.
