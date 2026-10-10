@@ -346,3 +346,13 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] All6 public axiom checks, final source/test and Step032/031 regressions pass. Local cycle0, all27 reachable neutral Lib owners have FLT reachability0. One intermediate letI style warning was corrected without overriding options.
 - Evidence: [source-inventory-033.md](source-inventory-033.md), [report-033.md](report-033.md), [frontier-033.md](frontier-033.md). The previously missing direct-map contract is now proved impossible for these exact orders; richer common-target bridges are not ruled out.
 - Stop after Step033. No compositum/tensor/21st-cyclotomic order, ideal-class theory, signed packet, provider reconstruction or FLT7 descent is introduced. Historical Step032 focus correction remains preserved.
+
+## Step 034 — actual common quadratic receiver and q43 contractions
+
+- [x] Step034 COMPLETE / Outcome B: C=QuadraticAlgebra R (-1)1 receives actual unital E→C and R→C maps, with both injections checked by coordinate proofs.
+- [x] The q43 common evaluation has actual commuting triangles to the old root37/root11 RingHoms; both generator images and shared integer residues are checked.
+- [x] Its maximal/prime kernel contracts to P37 in E and seventhRootKernel11 / slot0 in R. These are separately typed contractions, not equality of ideals across rings or extended powers.
+- [x] Thirty-seven examples include the same actual α/F0 q43 witness, source square support, common residue zeros and kernel membership; an extra proof shows their two C-images are different.
+- [x] All23 public declaration axiom checks, final source/test and Step033/032 regressions pass. Local cycle0 and all27 reachable neutral Lib owners have FLT reachability0. Nested-ext and a test-coordinate sign were repaired locally; final warnings0.
+- Evidence: [source-inventory-034.md](source-inventory-034.md), [report-034.md](report-034.md), [frontier-034.md](frontier-034.md). Step033 no-direct-map results and historical Step032 correction remain preserved.
+- Stop after Step034. No field/domain/compositum/rank12/flatness/tensor-isomorphism claim, equal extended ideals, all-k depth, signed packet, next primitive tuple or FLT7 descent is introduced.
