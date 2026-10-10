@@ -337,3 +337,12 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Both public axiom checks, final source/test and Step031/030/GTailBridge regressions pass. Local cycle0, all27 reachable neutral Lib owners have FLT reachability0; historical owners/checkpoints are preserved.
 - Evidence: [source-inventory-032.md](source-inventory-032.md), [report-032.md](report-032.md), [frontier-032.md](frontier-032.md). Old descent provider requires next primitive pack, route and actual carrier_match; local values do not construct these fields.
 - Stop after Step032. Exact balance reformulation is a circularity/information firewall, not a new FLT7 descent. No integral E→R map, signed packet, K⁵/all-k or unit/class extraction is introduced.
+
+## Step 033 — no direct unital Eisenstein/cyclotomic RingHom
+
+- [x] Step033 COMPLETE / Outcome B: no unital E→+*R using the actual R→ZMod29 evaluation and quadratic no-root; no unital R→+*E using actual E→ZMod13 evaluation and complete seventh-cyclotomic no-root.
+- [x] Both proofs use the actual integral τ/ζ relations and preserve map_one. They require no Fermat equation, Tail tuple, prime-support budget or signed packet.
+- [x] Twenty-four examples verify finite root lists, actual evaluations and generator images, both no-hom signatures, q43 separate common-codomain maps, −3/−7 parameter distinction and ramified/Gap contrasts.
+- [x] All6 public axiom checks, final source/test and Step032/031 regressions pass. Local cycle0, all27 reachable neutral Lib owners have FLT reachability0. One intermediate letI style warning was corrected without overriding options.
+- Evidence: [source-inventory-033.md](source-inventory-033.md), [report-033.md](report-033.md), [frontier-033.md](frontier-033.md). The previously missing direct-map contract is now proved impossible for these exact orders; richer common-target bridges are not ruled out.
+- Stop after Step033. No compositum/tensor/21st-cyclotomic order, ideal-class theory, signed packet, provider reconstruction or FLT7 descent is introduced. Historical Step032 focus correction remains preserved.
