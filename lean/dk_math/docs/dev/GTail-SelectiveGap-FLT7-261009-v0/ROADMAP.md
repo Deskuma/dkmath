@@ -218,3 +218,12 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Eight neutral and twenty-two carrier examples check q43 inverse4/beta16/zeta11/zero factor with false Fermat equation, signed coordinates, separate Eisenstein evaluation, q13 Gap and q3/q5/q7 controls. All14 public axiom checks, four final focused targets and Step018/017 regressions pass.
 - Evidence: [source-inventory-019.md](source-inventory-019.md), [report-019.md](report-019.md). Existing packet-indexed APIs remain unchanged; no packet reconstruction or equality with their canonical inputs is claimed.
 - Bare-root evaluation is now checked from the existing degree-six carrier into ZMod q. Eisenstein→cyclotomic integral maps, ideal identification, principalization, unit/class lifting, next primitive packet and descent remain open. No facade promotion or broad build; stop after Step019.
+
+## Step 020 — packet-free maximal kernels and unique Tail root address
+
+- [x] Step020 COMPLETE / Outcome B: actual bare-seventh-root kernels in the existing degree-six ring, surjective evaluation, maximality/primality, integer and real-cubic contractions, and quotient cardinality q.
+- [x] Tail factor zero iff its admissible root equals (c+g)/c under the c-unit premise alone; canonical Tail membership and exclusion of every distinct supplied admissible root checked.
+- [x] Explicit integral witness zeta−ofReal(r.val) separates distinct kernels. Twenty-three examples include q43 K11≠K35, F in K11 but not K35, q13/q7 controls, c=g=0 failure without endpoint unit, and a supplied-old-address evaluation equality example without constructing a packet.
+- [x] All12 public axiom checks, two new focused targets, both Step019 tests and Step018 regression pass.
+- Evidence: [source-inventory-020.md](source-inventory-020.md), [report-020.md](report-020.md). Existing packet owners, ring definitions and historical ledger remain unchanged; no facade promotion or broad build.
+- Uniqueness concerns the supplied nontrivial root kernels, not all prime ideals. Six-kernel products, source-ring embedding/ideal transfer, exact valuations, unit/class extraction, next primitive tuple and descent remain open. Stop after Step020.
