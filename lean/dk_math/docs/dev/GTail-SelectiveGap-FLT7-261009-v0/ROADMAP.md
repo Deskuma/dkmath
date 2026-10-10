@@ -263,3 +263,12 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Thirty examples include q43,c9,g4 six-factor cutoffs, all wrong-slot exclusions, scalar1849 membership versus scalar43 nonmembership in (43)*K, and the valid c9,g1165 Tail case with 43² support where the new guard fails. All7 public axiom checks, new focused source/test and Step023/022 regressions pass.
 - Evidence: [source-inventory-024.md](source-inventory-024.md), [report-024.md](report-024.md). The preexisting July2026 signed-packet exact valuation owner has a different typed contract; no heavy import or packet identification is added.
 - Individual-factor principalization, deeper exact valuations, integral Eisenstein transport, unit/class extraction, signed packet reconstruction, primitive next tuple and FLT7 descent remain open. Historical owners/ledger preserved; stop after Step024.
+
+## Step 025 — exact selected second-power membership
+
+- [x] Step025 COMPLETE / Outcome B: generic maximal-ideal square saturation in a CommRing, using actual Mathlib Bézout power witnesses; no domain or principal-ideal hypothesis.
+- [x] All five other factors lie outside the selected prime kernel, so the cofactor also lies outside. Its product with the selected factor is the actual scalar natural GTail.
+- [x] Under the canonical Tail prime/unit/support contract, q²|GTail implies selected factor square membership. Combined with Step024, F_i∈assigned K² iff q²|GTail; the previous depth-one guard remains unchanged.
+- [x] Twenty-seven examples include all six positive square memberships at q43,c9,g1165, all six negative squares at g4, wrong-slot exclusion, scalar1849 square membership, and selected cofactor residue28 in both cases. All7 public axiom checks, new source/test and Step024/023 regressions pass.
+- Evidence: [source-inventory-025.md](source-inventory-025.md), [report-025.md](report-025.md). The historical Step024 positive sample's unresolved square membership is now closed by the new generic reverse theorem.
+- Membership in cubes and higher powers, individual-factor principalization, signed-packet identification, integral Eisenstein transport, unit/class extraction, smaller primitive tuple and FLT7 descent remain open. No facade promotion; historical owners/ledger preserved; stop after Step025.
