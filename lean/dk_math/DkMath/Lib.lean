@@ -28,6 +28,11 @@ import DkMath.Lib.Cosmic.GTailBoundary
 import DkMath.Lib.Cosmic.GTailNat
 import DkMath.Lib.Cosmic.GTailCongruence
 import DkMath.Lib.Cosmic.GTailPadic
+import DkMath.Lib.Cosmic.GTailSelection
+import DkMath.Lib.Cosmic.GTailFactor
+import DkMath.Lib.Cosmic.GTailTransport
+import DkMath.Lib.Cosmic.GTailSeven
+import DkMath.Lib.Cosmic.GTailSevenArithmetic
 
 #print "file: DkMath.Lib"
 

@@ -29,24 +29,38 @@ research owner
 `DkMath.Lib.lean` currently imports the following promoted families directly:
 
 ```text
+NumberTheory.FiniteIdealPowerAggregation
 Basic
+Algebra.PowerSubgroup
 TwoChannel
 NumberTheory.PadicValNat
+NumberTheory.HomogeneousPowerQuotient
+NumberTheory.ClassGroupTorsionBridge
 NumberTheory.TraceOneLatticeLanding
+NumberTheory.FiniteFreeLatticeLanding
+NumberTheory.QuadraticResidueType
+NumberTheory.PolynomialHenselDigit
 NumberTheory.TraceOnePowerLanding
 NumberTheory.EisensteinCoordinates
 NumberTheory.EisensteinLatticeLanding
 NumberTheory.SquarefreePowerFactor
 Cosmic.GTail
+Cosmic.GNProductDegree
+Cosmic.CyclicDeterminant
 Cosmic.GTailCyclotomic
 Cosmic.GTailPascal
 Cosmic.GTailBoundary
 Cosmic.GTailNat
 Cosmic.GTailCongruence
 Cosmic.GTailPadic
+Cosmic.GTailSelection
+Cosmic.GTailFactor
+Cosmic.GTailTransport
+Cosmic.GTailSeven
+Cosmic.GTailSevenArithmetic
 ```
 
-The following neutral modules exist under `DkMath.Lib.NumberTheory` and are used by current research through direct imports, but are not yet re-exported by `DkMath.Lib.lean` in this snapshot:
+The following neutral modules exist under `DkMath.Lib.NumberTheory` and are used by current research through direct imports, but are not directly listed by `DkMath.Lib.lean` in this snapshot:
 
 ```text
 PowerFactor
@@ -55,7 +69,7 @@ PrincipalIdealPower
 UnitPowerSector
 ```
 
-This is an API/export-state distinction, not a statement that the latter modules are less reusable.
+`IdealPowerFactor` is already transitively reachable through the current aggregator; the other three remain direct-import APIs. This distinguishes direct listing from transitive exposure, not mathematical reusability.
 
 ## 2. Cosmic family: `GTail`
 
@@ -94,6 +108,46 @@ GN_tail_decomposition
 GTail_eval_zero
 GN_zero_eval
 ```
+
+### `GTailSelection`, `GTailFactor`, `GTailTransport`
+
+These three modules are explicitly promoted through `import DkMath.Lib`.
+Term index k is the exponent of x in `(choose d k : R) * x^k * u^(d-k)`.
+Body sums selected active indices in `S ∩ range(d+1)`; Gap sums the other
+indices in `range(d+1)`. Thus `(x+u)^d = selectedGap + selectedBody` in a
+CommSemiring, including empty selections and zero coordinates.
+
+Active lower/upper bounds i,j extract the forced monomial
+`x^i * u^(d-j)` with an explicit residual. The active min/max adapter requires
+a nonempty active set. This factor need not be the maximal evaluated factor.
+`coeffGCD` is the gcd of selected Pascal coefficients, distinct from the gcd
+of evaluated term values. Interior prime rows have coefficient gcd p and a
+joint `p*x*u` divisor. Endpoint insertion can change coefficient content.
+
+Transport tracks exactly the entering/departing terms. The modular observation
+`selected_modEq_of_dvd_moved` requires every moved term to be divisible by
+the modulus; no unconditional gcd or valuation preservation is asserted.
+
+### `GTailSeven`, `GTailSevenArithmetic`
+
+Also explicitly promoted through `DkMath.Lib`. Degree-seven interior balance:
+
+```text
+(x+u)^7 = (u^7+x^7) + 7*x*u*(x+u)*(x^2+x*u+u^2)^2
+```
+
+This is a norm-shaped polynomial identity in a CommSemiring. Its subtraction
+reading uses CommRing; it supplies no map to an FLT7 cyclotomic carrier.
+The degree-seven cuts and endpoint transport reuse the generic layers.
+Over naturals, `Nat.Coprime a b` makes a, b, a+b and their product coprime to
+`a^2+a*b+b^2`. The exact-seven-layer endpoint requires both `7 ∣ g` and
+`¬ 7 ∣ c`, giving `7 ∣ GTail 7 1 g c` and `¬ 49 ∣ GTail 7 1 g c`.
+It does not assume or infer `Nat.Coprime g c`.
+
+The hypothesis-bearing `GTailBridge` and `GTailConstraintAudit` remain
+FLT7 owner APIs, exposed by `import DkMath.FLT.Seven`; they are not imported
+into this neutral entrance. Their conditional results establish neither
+nonexistence nor constructive descent.
 
 ### `GTailBoundary`
 
@@ -315,4 +369,4 @@ The current architecture treats the fixed-degree GN5 project as an important his
 
 ## 7. Current status
 
-As of the 2026-09-16 documentation snapshot, `DkMath.Lib` is an established promoted layer but is still evolving. Some reusable mathematics remains in older owner namespaces and may be migrated in later refactors.
+As of the 2026-10-09 integration snapshot, `DkMath.Lib` is an established promoted layer but is still evolving. Some reusable mathematics remains in older owner namespaces and may be migrated in later refactors.

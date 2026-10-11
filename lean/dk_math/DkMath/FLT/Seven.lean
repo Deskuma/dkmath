@@ -209,6 +209,10 @@ import DkMath.FLT.Seven.SevenBaseTerminalDescentProvider
 import DkMath.FLT.Seven.SevenBaseTerminalDescentSeedExclusion
 import DkMath.FLT.Seven.SevenBaseTerminalAudit
 
+-- Conditional GTail research receivers; no FLT7 closure is asserted.
+import DkMath.FLT.Seven.GTailBridge
+import DkMath.FLT.Seven.GTailConstraintAudit
+
 #print "file: DkMath.FLT.Seven"
 
 /-!

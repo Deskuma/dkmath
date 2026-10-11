@@ -14,6 +14,14 @@ import DkMathTest.Algebra.MetallicRatioCore
 import DkMathTest.CosmicFormula.ThreeElement.Basic
 import DkMathTest.CosmicFormula.ThreeElement.MagicCore
 import DkMathTest.CosmicFormula.ThreeElement.Assimilation
+import DkMathTest.CosmicFormula.GTailSelection
+import DkMathTest.CosmicFormula.GTailFactor
+import DkMathTest.CosmicFormula.GTailTransport
+import DkMathTest.CosmicFormula.GTailSeven
+import DkMathTest.CosmicFormula.GTailLibFacade
+import DkMathTest.FLT.Seven.GTailBridge
+import DkMathTest.FLT.Seven.GTailConstraintAudit
+import DkMathTest.FLT.Seven.GTailFacade
 import DkMathTest.ABC
 import DkMathTest.CFBRC
 import DkMathTest.KUS
