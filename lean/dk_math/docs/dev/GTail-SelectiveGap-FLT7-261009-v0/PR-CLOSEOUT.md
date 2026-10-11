@@ -1,9 +1,9 @@
 # GTail Selective-Gap / FLT7 — research closeout and PR-readiness ledger
 
-Date: 2026-10-11
-Research branch: `feature/GTail-SelectiveGap-FLT7-261009-v0`
-Research status: **STOP042 / Outcomes B**. The implementation results are conditional or structural; **FLT7 remains unproved**.
-Release status: **FACADE STAGED / NOT YET LOCALLY BUILT / NOT YET PR-READY**.
+Date: 2026-10-12  
+Research branch: `feature/GTail-SelectiveGap-FLT7-261009-v0`  
+Research status: **STOP042 / Outcomes B**. The implementation results are conditional or structural; **FLT7 remains unproved**.  
+Release status: **Focused validation complete / full default suite PASS / READY for review**.  
 Evidence: `ROADMAP.md`, `report-001.md`–`report-042.md`, `research-decision-042.md`, `review-041.md`, `review-042.md`, the checked Lean source and focused Codex test reports.
 
 ## Decision in one paragraph
@@ -77,29 +77,28 @@ Step042 is **documentation-only**. It identifies important already existing old 
 - `import DkMath.FLT.Seven`: broad historical FLT7 facade, explicitly imports only `GTailBridge` and `GTailConstraintAudit` from this research family; **not** a convenient explicit public API for the later GTail sequence.
 - Existing Step007 `DkMathTest.FLT.Seven.GTailFacade`: older broad-facade smoke covering only initial API.
 
-**Staged in this PR preparation:**
+**Added in the checked PR scope:**
 - `DkMath/FLT/Seven/GTail.lean`: separate, scoped public `import DkMath.FLT.Seven.GTail` facade, importing the **30 added GTail-specific FLT modules**. This is an aggregator only; no proof, axiom, contrary E↔R hom or FLT7 result is introduced.
 - `DkMathTest/FLT/Seven/GTailResearchFacade.lean`: public smoke with `#check` and selected `#print axioms`, importing ONLY the new scoped facade.
 
-**Critical validation:** Both new files were authored and committed through GitHub without a Lean runtime available in the reviewer environment. They are **UNBUILT, UNVERIFIED BY LEAN** until local Codex executes focused builds. Do not automatically add the scoped facade to the already extremely broad `DkMath.FLT.Seven` until compile cost and import reachability are assessed. If it is appropriate, import it there in a separate, measured change; otherwise retain the explicit lightweight entrance.
+## Final local validation (2026-10-12)
 
-## PR/merge readiness status (honest)
+Validated Lean sources at HEAD `caebaf0ec98c12e1e570b6e2e9aefb2aa2362f7e`, Lean 4.34.1, using process-local `LEAN_NUM_THREADS=2`. No Lean source or test repair was necessary. All five entrance builds and all 49 added test targets exited 0. The new research smoke was actually **Built**; other focused targets reused existing artifacts (**Replayed**). This is a current invocation with cache reuse, not a clean rebuild.
 
-The branch comparison with `develop` immediately before the two Facade additions was **diverged: 128 commits ahead, 1 commit behind**, changing **282 files** (278 additions, 4 existing files modified). These included **30 domain GTail modules**, **17 neutral Lib modules**, **48 new test modules**, and **183 docs**. These figures describe the **pre-closeout comparison snapshot**; counts grow as Facade/closeout files are committed. This is a large research PR and deserves review staging rather than a casual claim of a small patch.
+The complete `LEAN_NUM_THREADS=2 lake test` exited 0 in 9.75 s within a 180 s bound. Its `DkMathTest.+` library glob discovered all 49 added tests, including the new research smoke. The root driver needs no extra imports. Full-suite and old broad-facade success includes existing unrelated `sorry` warnings: 5 in the full suite, four in the old broad smoke. The dedicated GTail, neutral Lib and new-test regressions have warnings 0; scanned added Lean sources have no forbidden placeholders or shortcuts. Selected public axiom outputs use only `propext`, `Classical.choice`, `Quot.sound`.
 
-**Outstanding before marking PR-ready:**
+The source inventory distinguishes 30 specialized owners + one scoped facade, 17 neutral owners and 49 tests. `DkMath.Lib` promotes only five of the 17 added neutral owners. The scoped facade imports all 30 specialized owners exactly once, has no dependency on the old `DkMath.FLT.Seven` aggregator, and introduces no mathematical declaration. The local dependency DAG has 473 vertices and no cycles; neutral owners and Lib have no FLT reachability.
 
-1. Local `LEAN_NUM_THREADS=2 lake build DkMath.FLT.Seven.GTail`, `lake build DkMathTest.FLT.Seven.GTailResearchFacade`, and `lake build DkMath.Lib`. Fix any API smoke or import cycles without inventing axioms. Record exit0/warning0.
-2. Re-run focused tests for **all** newly added production owners or the exact module matrix using Lake, plus Step041/040 and old Step007 facade regressions. Beware the massive `DkMathTest` root: it only gained the early eight initial imports in this branch, while Lake's `DkMathTest.+` glob can discover later tests. Audit the **actual** test driver/configuration; do not claim new tests are automatically in the default suite without proof.
-3. Re-run `#print axioms` on promoted representative endpoints in the new facade smoke, source placeholder/axiom/unsafe scan, neutral Lib→FLT cycle audit, imports DAG, exact provenance, and `git diff --check`.
-4. Perform an actual final import/build smoke on the narrow facade and broad `DkMath.FLT.Seven` if changed; measure import cost to avoid moving heavy research into `DkMath.Lib`.
-5. Reconcile the **one missing develop commit** by inspecting its diff and merge conflict potential, not silently assuming its contents or rebasing without author approval. Run `git fetch` and status checks; choose merge/rebase workflow explicitly before opening PR.
-6. Confirm PR scope: one large research PR vs optional neutral-Lib-first and FLT7-research-second split. No force push, history rewrite, or PR creation performed here; the user requested **preparation**, not the PR submission itself.
-7. Update current summary docs (research README, repository status if allowed) to indicate **Outcome B** and **NO FLT7 closure**; leave the individual historical `report-00N` and `review-00N` records intact. Link this closeout and latest corrected Step042 frontier.
-8. Full `lake test` / `./lb -T` is desirable if resources permit. The Step007 historical full-test run was interrupted; a later addendum reports an owner all-test success on a different recorded occasion. Neither log is a proof that **the current final Facade HEAD** passed all tests. Clearly state any resource/time stop and which exact gates did pass.
+See [source-inventory-043.md](source-inventory-043.md) for complete ownership/test coverage, and [report-043.md](report-043.md) for exact commands, timings, warnings, axiom names and audit exceptions. Local logs live under `.lake/build/gtail-step043/`; these ignored artifacts are not a committed evidence archive.
 
-**Merge rule:** Do not mark PR READY until the new Facade and smoke build pass, the source/test matrix has a recorded regression result, no forbidden axioms/placeholders are found, and README/PR description truthfully distinguishes proven research instruments from absent FLT7 endpoint. Never invent a success line.**
+## Branch and integration handoff
+
+After a successful `git fetch origin`, HEAD is `caebaf0ec98c12e1e570b6e2e9aefb2aa2362f7e` on `feature/GTail-SelectiveGap-FLT7-261009-v0`: **ahead 136 / behind 1** versus `origin/develop`. The HEAD merge-base comparison changes **287 files: 283 added / 4 modified**. Additions comprise 48 production Lean files (30 FLT owners + facade + 17 neutral owners), 49 tests and 186 documents. The four modified existing files are `DkMath/FLT/Seven.lean`, `DkMath/Lib.lean`, `DkMath/Lib/README.md`, `DkMathTest.lean` (paths relative to `lean/dk_math`). These counts exclude the subsequent release-document working changes.
+
+The develop-only commit is `ad8526451` (`docs: propose CF2D multiplicative quadratic norm generalization`), adding only `docs/not_implements/261010-CF2D-Multiplicative-Quadratic-Norm-Generalization.md`. Recommend an ordinary develop merge after separate authorization, then rerun validation against the resulting HEAD; current integration risk appears limited to that independent document, but a merge has not been tested. A split between neutral Lib and FLT7 research could make this large PR easier to review; it has not been performed. Base: `develop`; head: `feature/GTail-SelectiveGap-FLT7-261009-v0`. The final title and body are [PR-DRAFT.md](PR-DRAFT.md).
+
+The preparation verdict is **READY for review**, with existing broad-suite placeholder warnings and branch integration explicitly recorded. Research remains **Outcome B / STOP042**. No PR opening or Git integration is part of this handoff.
 
 ## Reviewer's bottom line
 
-The lasting new deliverables are: (i) a reusable selection/conservation algebra; (ii) correct explicit primitive q-valuation and seventh-root routing; (iii) a genuine common receiver with prime-ideal intersections/joins and clear no-direct-map theorem; (iv) proof-level countermodels to local sufficiency; (v) an exact index of the remaining global hypotheses, with the old Row-Z terminal extraction **corrected to COMPLETE**. The work is partially exploratory and sizeable, but neither mathematically vacuous nor an FLT7 proof. It is ready for **release engineering and validation**, not yet a merge-ready claim.
+The lasting new deliverables are: (i) a reusable selection/conservation algebra; (ii) correct explicit primitive q-valuation and seventh-root routing; (iii) a genuine common receiver with prime-ideal intersections/joins and clear no-direct-map theorem; (iv) proof-level countermodels to local sufficiency; (v) an exact index of the remaining global hypotheses, with the old Row-Z terminal extraction **corrected to COMPLETE**. The work is partially exploratory and sizeable, but neither mathematically vacuous nor an FLT7 proof. The local release gates are complete; Git integration and review remain separate decisions.

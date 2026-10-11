@@ -35,11 +35,11 @@ Use **sequential**, process-local low-memory execution, never a full clean build
 
 ```sh
 cd lean/dk_math
-LEAN_NUM_THREADS=2 lake build DkMath.FLT.Seven.GTail
-LEAN_NUM_THREADS=2 lake build DkMathTest.FLT.Seven.GTailResearchFacade
-LEAN_NUM_THREADS=2 lake build DkMath.Lib
-LEAN_NUM_THREADS=2 lake build DkMathTest.CosmicFormula.GTailLibFacade
-LEAN_NUM_THREADS=2 lake build DkMathTest.FLT.Seven.GTailFacade
+lake build DkMath.FLT.Seven.GTail
+lake build DkMathTest.FLT.Seven.GTailResearchFacade
+lake build DkMath.Lib
+lake build DkMathTest.CosmicFormula.GTailLibFacade
+lake build DkMathTest.FLT.Seven.GTailFacade
 ```
 
 For each command record exact exit code, emitted errors/warnings, elapsed time and memory problems if known, and whether Lake replayed cached artifacts. `#check` names may have **exact namespace corrections**; fix the new smoke only after inspecting actual source symbols. Do not alter theorem types or install assumed axioms to suppress a failing `#check`. Avoid unnecessary Mathlib umbrella imports, broad `DkMath.FLT.Seven` import inside the **new** facade, or resource-limit hacks.
@@ -92,7 +92,7 @@ Produce `report-043.md` and append a **post-042 release-closeout** entry to `ROA
 
 If the only missing gate is an oversized all-suite run, **do not silently claim full success**: label PR as “focused-validation complete / full-suite pending” and explicitly ask the user for review of the risk when they decide to open the PR. If required focused Facade or test build fails, verdict **BLOCKED**.
 
-**DO NOT call \`gh pr create\`, open a GitHub PR, merge/rebase, force-push, retarget the branch, tag a release, or claim CI GREEN** without a separate explicit user request. Here the user asked to **prepare for** a PR.
+**DO NOT call `gh pr create`, open a GitHub PR, merge/rebase, force-push, retarget the branch, tag a release, or claim CI GREEN** without a separate explicit user request. Here the user asked to **prepare for** a PR.
 
 ## Non-goals and STOP
 

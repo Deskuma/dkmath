@@ -1,10 +1,11 @@
 # GTail Selective-Gap / FLT7 Bridge
 
-Branch: **feature/GTail-SelectiveGap-FLT7-261009-v0**  
-Base: **develop** (dedicated implementation branch)
-Status: **Steps 001–041 Outcome B; Step 042 source audit COMPLETE / STOP; scoped Facade staged, local validation pending; FLT7 still open**
+Branch: `feature/GTail-SelectiveGap-FLT7-261009-v0`  
+Base: `develop` (dedicated implementation branch)  
+Status: **Steps 001–041 Outcome B; Step 042 source audit COMPLETE / STOP; Step043 release validation COMPLETE / READY for review; FLT7 still open**  
+cid: `6ac80570-9ebc-83ee-ad09-e39c11197056`
 
-## Current closure status (2026-10-11)
+## Current closure status (2026-10-12)
 
 The original Step007 milestone and its interrupted full-test gate remain historically true;
 subsequent focused tests and research stages extend the result through Step041.
@@ -12,11 +13,15 @@ Step042 corrected the stale Row-Z terminal frontier: the signed `TraceOneInt(-2)
 root extraction and common primitive ramified summit are **already implemented** in
 the old FLT7 tower. There is still **no unconditional exponent-seven theorem**.
 
-A separate `import DkMath.FLT.Seven.GTail` facade now stages 30 checked-before-
-facade GTail research owners, without importing the larger historical FLT7
-facade. Its new direct-import smoke test and final source/axiom/PR gates have
-**not yet been built** at this final HEAD. The project is in release-validation,
-not proof-exploration mode.
+The dedicated `import DkMath.FLT.Seven.GTail` facade and its public API smoke
+are locally validated at HEAD `caebaf0ec98c12e1e570b6e2e9aefb2aa2362f7e`.
+All five entrance builds, all 49 added test targets and the full default
+`LEAN_NUM_THREADS=2 lake test` passed. Cache reuse and existing unrelated
+`sorry` warnings are recorded in [report-043.md](report-043.md); no new Lean
+source or proof was added during this release step. The dedicated entrance
+imports 30 specialized owners without importing the historical FLT7 facade.
+Research remains **Outcome B / STOP042**. Integration with develop and PR
+publication are separate decisions; after fetch, the branch is ahead136/behind1.
 
 Read [PR-CLOSEOUT.md](PR-CLOSEOUT.md) and [PR-DRAFT.md](PR-DRAFT.md) for the
 correct full-scope account rather than this document's old Step007 narrative.
@@ -114,11 +119,11 @@ These paths are under `DkMath.Lib.Cosmic`. The hypothesis-bearing
 by `import DkMath.FLT.Seven`. There is no reverse import into Lib; neither
 owner is an unconditional nonexistence theorem.
 
-The later (Steps008–041) FLT7 conditional research family is newly staged as
+The later (Steps008–041) FLT7 conditional research family is validated through
 `import DkMath.FLT.Seven.GTail`. It directly imports all 30 dedicated GTail
 owners, so use the targeted leaf module when only one theorem is needed.
-The new facade and its smoke test remain **pending focused Lean validation**;
-its existence alone does not certify build success or an FLT7 result.
+The dedicated facade and `DkMathTest.FLT.Seven.GTailResearchFacade` passed
+local Lean validation; this public import exports conditional research results.
 
 Existing focused tests plus separate `DkMathTest.CosmicFormula.GTailLibFacade`
 and `DkMathTest.FLT.Seven.GTailFacade` smoke tests are explicitly listed in
@@ -164,8 +169,10 @@ was selected. See [research-decision-042.md](research-decision-042.md),
 - [ROADMAP.md](ROADMAP.md): incremental implementation plan and acceptance gates.
 - [instruction-007.md](instruction-007.md): bounded integration acceptance contract.
 - [source-inventory-007.md](source-inventory-007.md): original Step007 source/export/dependency inventory.
+- [report-043.md](report-043.md): final release validation and integration handoff.
+- [source-inventory-043.md](source-inventory-043.md): complete source/test and dependency matrix.
 - [PR-CLOSEOUT.md](PR-CLOSEOUT.md): final full-branch mathematical and Facade audit.
-- [PR-DRAFT.md](PR-DRAFT.md): proposed PR description, truth claims and pending validation.
+- [PR-DRAFT.md](PR-DRAFT.md): prepared PR description, truth claims and completed local validation.
 - [research-decision-042.md](research-decision-042.md): source-backed STOP042 decision.
 - [report-007.md](report-007.md): integration evidence, theorem family counts and engineering decision.
 - [report-006.md](report-006.md): checked arithmetic, exploratory examples and unproved proposals.

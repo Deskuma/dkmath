@@ -448,3 +448,15 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [ ] Codex to carry out `instruction-043.md` **release-only**, write `report-043.md`, fill actual commands/exits/warnings and supply a Ready/Blocked PR handoff. No new research Step043 theorem.
 
 **Current PR status:** FACADE-STAGED / VALIDATION-PENDING / NOT YET PR-READY. Mathematical status: Outcomes B, no unconditional FLT7 closure. All prior historical milestones retain their original status and evidence.
+
+
+## Post-042: Step043 local release verification (2026-10-12)
+
+- [x] Release-only COMPLETE / READY for review; mathematical Outcome B / STOP042 remains. No Lean source, theorem, example, driver or historical report was edited.
+- [x] Scoped GTail facade, new public smoke, Lib and both old smokes passed; all 49 added tests and the two corrected old terminal source targets passed explicit focused invocations.
+- [x] Full `LEAN_NUM_THREADS=2 lake test` exit0 in 9.75 s; counter11284/11284, all49 added tests discovered, cache reuse recorded. Five existing unrelated sorry warnings remain; dedicated GTail/Lib and owner-test batches have warnings0.
+- [x] Exact30 facade imports, 17 neutral owners, 473-vertex local dependency DAG without cycles or neutral→FLT reachability; selected public axiom outputs use only ordinary Lean foundations. No root-driver import addition is needed.
+- [x] Current release documents reflect completed validation, Step040 equality direction, focused calibration correction and already-proved Row-Z/common summit; historical validation-pending entry above remains as a prior snapshot.
+- Evidence: [source-inventory-043.md](source-inventory-043.md), [report-043.md](report-043.md), [PR-CLOSEOUT.md](PR-CLOSEOUT.md), [PR-DRAFT.md](PR-DRAFT.md).
+- Git handoff: validated HEAD caebaf0ec98c12e1e570b6e2e9aefb2aa2362f7e, ahead136/behind1; develop-only change is an independent CF2D proposal document. Integration and one-large-PR versus optional split require a separate user decision. User-staged instruction-043 is preserved.
+- STOP: release preparation ends; no new FLT7 research target, primitive reconstruction or global contradiction is selected.
