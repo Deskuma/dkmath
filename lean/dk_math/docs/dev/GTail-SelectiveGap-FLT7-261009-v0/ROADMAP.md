@@ -434,3 +434,17 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Compared all three future routes, original versus centered CRT defects, source types and dependent carry equations in source-inventory-042.md / research-decision-042.md / report-042.md.
 - Research decision: select no Step043 proof target yet. Candidate I is already proved; Candidate II lacks an explicit primitive triple map; Candidate III lacks original-coordinate independent bounds and a surviving-row contradiction. Stop rather than generate a false or circular target.
 - STOP042: no Lean source/test/example, new local catalogue, new build, facade promotion, terminal seed construction or automatic Step043 implementation. Re-entry requires a separately scoped independent arithmetic map, bound, invariant or genuine reconstruction contract.
+
+
+## PR preparation / Step043 release closeout (2026-10-11)
+
+- [x] Research STOP042 honored; no new FLT7 theorem target selected. Terminal Row-Z signed extraction and common ramified summit were **already proved** in old TERM-010 source; the historical false “Row-Z open” claim is superseded by review-042.
+- [x] New dedicated public research import `DkMath.FLT.Seven.GTail` **staged**: explicit list of 30 additional GTail FLT7 owners; neutral `DkMath.Lib` existing curated entrance unchanged.
+- [x] New `DkMathTest.FLT.Seven.GTailResearchFacade` public API smoke and selected axiom checks **staged**. The huge existing `DkMath.FLT.Seven` facade is left alone until import cost is evaluated.
+- [x] `PR-CLOSEOUT.md` summarizes results, local insufficiency countermodels, scientific limits, Step042 source correction and verification scope; `PR-DRAFT.md` stages the PR description and validation checklist.
+- [x] Research `README.md` refreshed with STOP042, the corrected frontier and public Facade entry.
+- [ ] **REQUIRED LOCAL VALIDATION**: new Facade build, new smoke build, neutral Lib and old smoke regressions, source/test matrix, axioms/imports/whitespace review. The newly staged files were created without a Lean runtime and are **not yet kernel-checked at this HEAD**.
+- [ ] Check actual test-suite discovery, full-suite feasibility and `develop` divergence (last known comparison: behind one commit); do not rebase/merge/PR automatically.
+- [ ] Codex to carry out `instruction-043.md` **release-only**, write `report-043.md`, fill actual commands/exits/warnings and supply a Ready/Blocked PR handoff. No new research Step043 theorem.
+
+**Current PR status:** FACADE-STAGED / VALIDATION-PENDING / NOT YET PR-READY. Mathematical status: Outcomes B, no unconditional FLT7 closure. All prior historical milestones retain their original status and evidence.
