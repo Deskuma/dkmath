@@ -4,21 +4,6 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-/-!
-# GTail research facade for exponent seven
-
-Public, explicitly scoped import surface for the GTail selective-gap / FLT7
-research work (Steps 005–041). The general, owner-neutral selection kernels
-remain exposed separately through `DkMath.Lib`.
-
-This facade re-exports **proved identities and conditional research APIs**.
-No unconditional FLT7 no-solution theorem, reconstructed descent provider, or
-new mathematical axiom is asserted by this import aggregator.
-
-Prefer `import DkMath.FLT.Seven.GTail` when consuming this research family,
-rather than the much broader `import DkMath.FLT.Seven` facade.
--/
-
 import DkMath.FLT.Seven.GTailBridge
 import DkMath.FLT.Seven.GTailConstraintAudit
 import DkMath.FLT.Seven.GTailCyclotomicLocalEval
@@ -51,3 +36,18 @@ import DkMath.FLT.Seven.GTailSevenUnitAudit
 import DkMath.FLT.Seven.GTailValuationAudit
 
 #print "file: DkMath.FLT.Seven.GTail"
+
+/-!
+# GTail research facade for exponent seven
+
+Public, explicitly scoped import surface for the GTail selective-gap / FLT7
+research work (Steps 005–041). The general, owner-neutral selection kernels
+remain exposed separately through `DkMath.Lib`.
+
+This facade re-exports **proved identities and conditional research APIs**.
+No unconditional FLT7 no-solution theorem, reconstructed descent provider, or
+new mathematical axiom is asserted by this import aggregator.
+
+Prefer `import DkMath.FLT.Seven.GTail` when consuming this research family,
+rather than the much broader `import DkMath.FLT.Seven` facade.
+-/
