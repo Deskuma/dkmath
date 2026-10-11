@@ -386,3 +386,13 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Fifty-nine examples and all24 public axiom checks pass. Final production/test and Step036/035 direct regressions have warnings0. Local DAG173 vertices has cycle0; all27 reachable neutral Lib owners have FLT reachability0.
 - Evidence: [source-inventory-037.md](source-inventory-037.md), [report-037.md](report-037.md), [frontier-037.md](frontier-037.md). Both q43 controls retain their actual focus/budget distinction, source-image inequality and existing strict-extension/no-direct-map boundaries.
 - Stop after Step037. Review whether original hypothetical primitive data can supply an independent global restriction beyond scalar valuation and local root/support data. No full spectrum, field/domain, all-k exact depth, signed reconstruction, nextPack/nextRoute/carrier_match provider or FLT7 descent is constructed. Historical records remain preserved.
+
+## Step 038 — total focused prime routing with a Tail-only native receiver
+
+- [x] Step038 COMPLETE / Outcome B: every eligible q∣Q under positive primitive focused hEq routes to q² Gap support or q² Tail support, without an entry q∣Tail premise.
+- [x] Coordinate and endpoint units are derived before the split. Gap exposes q²∣g, q∤Tail and the actual canonical ratio=1, so these same data fail the nonidentity Tail-root guard.
+- [x] Only the Tail branch attaches the unchanged Step037 nativeKernel, maximality, separately typed E/R contractions, joint ideal sum, source memberships, conditional doubled valuation/parity and bounded common powers2/3/4.
+- [x] Optional source-image inequality separates the E norm coordinate from every R coefficient image using its actual imaginary coordinate and supplied R evaluation. It supplies no Fermat contradiction.
+- [x] Sixty examples and all7 public theorem axiom checks pass. Final source/test and Step037/036 direct regressions have warnings0. Local DAG174 vertices has cycle0; all27 reachable neutral Lib owners have FLT reachability0.
+- Evidence: [source-inventory-038.md](source-inventory-038.md), [report-038.md](report-038.md), [frontier-038.md](frontier-038.md). q13 canonical Gap ratio and artificial q43 supplied-root controls distinguish native and abstract roots; both q43 non-Fermat controls retain their true focus/budget/global-balance boundaries.
+- Stop after Step038. The live Gap alternative is retained. No Gap-side receiver, added grid/all-k/exact mixed depth, spectrum, signed root packet, principalization, primitive recursive provider or unconditional FLT7 closure is constructed. Evaluate a genuinely new global restriction or explicit primitive reconstruction contract next. Historical records remain preserved.
