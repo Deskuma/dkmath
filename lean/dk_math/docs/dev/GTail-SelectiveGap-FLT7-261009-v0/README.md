@@ -2,7 +2,24 @@
 
 Branch: **feature/GTail-SelectiveGap-FLT7-261009-v0**  
 Base: **develop** (dedicated implementation branch)
-Status: **Steps 001–006 checked; Step 007 public integration checked — Outcome B; all-test gate incomplete (>15 min cost stop)**
+Status: **Steps 001–041 Outcome B; Step 042 source audit COMPLETE / STOP; scoped Facade staged, local validation pending; FLT7 still open**
+
+## Current closure status (2026-10-11)
+
+The original Step007 milestone and its interrupted full-test gate remain historically true;
+subsequent focused tests and research stages extend the result through Step041.
+Step042 corrected the stale Row-Z terminal frontier: the signed `TraceOneInt(-2)`
+root extraction and common primitive ramified summit are **already implemented** in
+the old FLT7 tower. There is still **no unconditional exponent-seven theorem**.
+
+A separate `import DkMath.FLT.Seven.GTail` facade now stages 30 checked-before-
+facade GTail research owners, without importing the larger historical FLT7
+facade. Its new direct-import smoke test and final source/axiom/PR gates have
+**not yet been built** at this final HEAD. The project is in release-validation,
+not proof-exploration mode.
+
+Read [PR-CLOSEOUT.md](PR-CLOSEOUT.md) and [PR-DRAFT.md](PR-DRAFT.md) for the
+correct full-scope account rather than this document's old Step007 narrative.
 
 ## Research purpose
 
@@ -97,6 +114,12 @@ These paths are under `DkMath.Lib.Cosmic`. The hypothesis-bearing
 by `import DkMath.FLT.Seven`. There is no reverse import into Lib; neither
 owner is an unconditional nonexistence theorem.
 
+The later (Steps008–041) FLT7 conditional research family is newly staged as
+`import DkMath.FLT.Seven.GTail`. It directly imports all 30 dedicated GTail
+owners, so use the targeted leaf module when only one theorem is needed.
+The new facade and its smoke test remain **pending focused Lean validation**;
+its existence alone does not certify build success or an FLT7 result.
+
 Existing focused tests plus separate `DkMathTest.CosmicFormula.GTailLibFacade`
 and `DkMathTest.FLT.Seven.GTailFacade` smoke tests are explicitly listed in
 `DkMathTest.lean`. Lake's `DkMathTest.+` glob also discovers the individual
@@ -104,15 +127,28 @@ modules. All smoke proofs apply existing APIs; Step 007 adds no arithmetic
 theorem. The exact build coverage and any broader-build blocker are recorded
 in [report-007.md](report-007.md).
 
-## Arithmetic frontier
+## Arithmetic frontier (corrected post-Step042)
 
-[constraint-ledger-006.md](constraint-ledger-006.md) remains the checked/open
-boundary: v7(g), q-adic square allocation, order-21 conditions, typed
-Norm/unit-class transport and next-packet construction are not implemented
-by this integration. Q is a norm-shaped polynomial; no global Norm map to
-FLT7's cyclotomic carrier or normalized unit-class closure is supplied.
-The counterexamples in Step 006 refute weakened neutral hypotheses and do
-not fabricate positive Fermat solutions.
+The initial Step006 ledger is historical, not the current terminal list.
+Steps008–038 now prove conditional q-adic square allocation, typed quadratic
+and cyclotomic root evaluations, separate injections into a genuine common
+quadratic receiving ring, actual prime-kernel contractions and joint ideal
+sums, and the total conditional Gap/Tail split. These **do not** create the
+old signed primitive next-triple or global contradiction.
+
+Steps039–041 prove that the local square-divisibility routing survives a
+**nonzero signed Fermat defect**. A finite prime-square modulus plus a
+**separately assumed strict defect-size upper bound** can certify an exact
+Fermat equation, not FLT7 impossibility. Positive primitive focused non-Fermat
+witnesses separately satisfy only one of those two missing hypotheses.
+
+Step042 traces the actual older terminal owners: the Row-Z signed root
+extraction and Y/Z ramified summit are **complete**, despite older intermediate
+reports. A terminal exponent-one away seed is **provably impossible**, while
+the lifted next-primitive-triple and the original CRT independent-size/row
+obstruction remain open. No scientifically justified new Step043 FLT7 proof
+was selected. See [research-decision-042.md](research-decision-042.md),
+[review-042.md](review-042.md), and [PR-CLOSEOUT.md](PR-CLOSEOUT.md).
 
 ## Scope discipline
 
@@ -127,7 +163,10 @@ not fabricate positive Fermat solutions.
 
 - [ROADMAP.md](ROADMAP.md): incremental implementation plan and acceptance gates.
 - [instruction-007.md](instruction-007.md): bounded integration acceptance contract.
-- [source-inventory-007.md](source-inventory-007.md): source/export/dependency inventory.
+- [source-inventory-007.md](source-inventory-007.md): original Step007 source/export/dependency inventory.
+- [PR-CLOSEOUT.md](PR-CLOSEOUT.md): final full-branch mathematical and Facade audit.
+- [PR-DRAFT.md](PR-DRAFT.md): proposed PR description, truth claims and pending validation.
+- [research-decision-042.md](research-decision-042.md): source-backed STOP042 decision.
 - [report-007.md](report-007.md): integration evidence, theorem family counts and engineering decision.
 - [report-006.md](report-006.md): checked arithmetic, exploratory examples and unproved proposals.
 - [constraint-ledger-006.md](constraint-ledger-006.md): exact premises and remaining reconstruction frontier.
