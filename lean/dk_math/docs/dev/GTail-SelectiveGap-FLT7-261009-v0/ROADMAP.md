@@ -425,3 +425,12 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Actual A native roots (7,16) select the existing common kernel M (1:Fin2) (4:Fin6); valuation budget fails without the Fermat premise.
 - [x] New source/test and Step040/039 focused regressions, exact signatures/axioms/import/history audits are recorded in report-041.md.
 - STOP041: neither premise alone supplies global zero, signed reconstruction or old descent-provider fields. Next decision requires an independently provable global restriction or genuine provider reconstruction; no further example/depth/grid catalogue is added.
+
+
+## Post-041: Step042 proof-direction / reconstruction decision audit (2026-10-11)
+
+- [x] Step042 COMPLETE / Outcome B (documentation-only): terminal exponent-one seed/provider is proved impossible; lifted seed remains unconstructed; visible signed-root next chart is ruled out, while internal depth5→4 still lacks primitive reconstruction and indexed descent.
+- [x] Corrected stale Row-Z frontier against actual TERM-010: signed TraceOneInt(-2) seventh-root extraction and signed ramified normal form are already constructed; subsequent global ramified closure remains open.
+- [x] Compared all three future routes, original versus centered CRT defects, source types and dependent carry equations in source-inventory-042.md / research-decision-042.md / report-042.md.
+- Research decision: select no Step043 proof target yet. Candidate I is already proved; Candidate II lacks an explicit primitive triple map; Candidate III lacks original-coordinate independent bounds and a surviving-row contradiction. Stop rather than generate a false or circular target.
+- STOP042: no Lean source/test/example, new local catalogue, new build, facade promotion, terminal seed construction or automatic Step043 implementation. Re-entry requires a separately scoped independent arithmetic map, bound, invariant or genuine reconstruction contract.
