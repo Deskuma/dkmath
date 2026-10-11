@@ -416,3 +416,12 @@ Outcome B or C is scientifically useful; never disguise it as A.
 - [x] Fifty-six examples and all13 public declaration axiom checks pass. Final source/test and Step039/038 direct regressions have warnings0. Local DAG176 vertices has cycle0; all27 reachable neutral Lib owners have FLT reachability0. New production closure adds only its own owner.
 - Evidence: [source-inventory-040.md](source-inventory-040.md), [report-040.md](report-040.md), [frontier-040.md](frontier-040.md). Prime-factor/edge proofs use verified source APIs and numeric certificates; intermediate failures and one repaired style warning are recorded. Historical Step032 correction and all prior owners remain preserved.
 - Stop after Step040. This capacity criterion does not derive collective support or a noncircular magnitude bound from primitive inputs, nor construct signed/provider fields. No higher defect hierarchy, ideal grid/spectrum, conjectural ABC inequality, signed reconstruction, primitive next counterexample, away descent or unconditional FLT7 closure is constructed. Reassess an actual new support/magnitude theorem or reconstruction contract next.
+
+
+## Post-040: Step041 actual capacity independence (2026-10-11)
+
+- [x] Step041 COMPLETE / Outcome B: two kernel-checked positive primitive strict focused non-Fermat existential witnesses separate collective prime-square support from strict magnitude.
+- [x] A=(13,35,46,2): Q=43², M=1849<Q²; full support true / size false. B=(1497,2797,2802,1492): Q=37*385171, strict size true / full support false.
+- [x] Actual A native roots (7,16) select the existing common kernel M (1:Fin2) (4:Fin6); valuation budget fails without the Fermat premise.
+- [x] New source/test and Step040/039 focused regressions, exact signatures/axioms/import/history audits are recorded in report-041.md.
+- STOP041: neither premise alone supplies global zero, signed reconstruction or old descent-provider fields. Next decision requires an independently provable global restriction or genuine provider reconstruction; no further example/depth/grid catalogue is added.
