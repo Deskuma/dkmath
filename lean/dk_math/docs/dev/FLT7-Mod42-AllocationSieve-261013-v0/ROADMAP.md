@@ -2,7 +2,7 @@
 
 Branch: `research/FLT7-Mod42-AllocationSieve-261013-v0`
 Base: `develop` (first prepared 2026-10-13).
-Current status: **Gate 001 ACCEPTED (Outcome A); gate 002 AUTHORIZED / implementation pending**. See `review-001.md`.
+Current status: **Gate 001 ACCEPTED (Outcome A); gate 002 IMPLEMENTED (Outcome A) / awaiting review**. See `review-001.md`.
 
 ## Goals and gates
 
@@ -10,7 +10,7 @@ Current status: **Gate 001 ACCEPTED (Outcome A); gate 002 AUTHORIZED / implement
 | --- | --- | --- | --- |
 | 000 | Read live existing receiver APIs; theorem-index duplicate check | Actual declarations and required hypotheses recorded | Source audit done; Codex to reconfirm |
 | 001 | Primitive seventh-order residues modulo 6 | Two focused, kernel-checked lemmas for GN7 and alternating cyclotomic factor; audit | **ACCEPTED — Outcome A** |
-| 002 | Divisor-aware allocation bridge to mod 42 | Both exact branches -> `M/r ≡ 1 (mod 42)`, plus exclusion lemma | **AUTHORIZED — instruction-002.md** |
+| 002 | Divisor-aware allocation bridge to mod 42 | Both exact branches -> `M/r ≡ 1 (mod 42)`, plus exclusion lemma | **IMPLEMENTED — Outcome A, review pending** |
 | 003 | Optional sieve façade and reconstruction integration | Exact conditions preserved; equivalence proof checked | REVIEW GATE |
 | 004 | Math audit, test expansion, reports and PR review | No accidental FLT7 closure claim; audit and replayable logs | PENDING |
 
@@ -31,7 +31,9 @@ implementation instruction. Do not autonomously expand 001 into 003.
 
 No new global FLT7 theorems in gate 001. **Implemented and reviewed**, see `report-001.md` and `evidence/001-verification-summary.md`.
 
-## Gate 002 — authorized via instruction-002.md
+## Gate 002 — implemented via instruction-002.md; review pending
+
+Focused build, test applications and three axiom audits passed; see `report-002.md` and `evidence/002-verification-summary.md`. Gate 003 remains unauthorized.
 
 Re-use gate-001 and existing `nestedAllocation_residue_sieve`:
 

@@ -2,7 +2,7 @@
 
 Branch: **research/FLT7-Mod42-AllocationSieve-261013-v0**  
 Base: **develop** (branch forked 2026-10-13).  
-Status: **Gate 001 ACCEPTED (Outcome A); gate 002 instructed, not yet proved**.
+Status: **Gate 001 ACCEPTED (Outcome A); gate 002 IMPLEMENTED (Outcome A), awaiting review**.
 
 ## Question
 
@@ -84,7 +84,7 @@ soundness trap to check before writing Lean.
 ## Workspace conventions
 
 - Completed gate 001: [instruction-001.md](instruction-001.md), [report-001.md](report-001.md), [review-001.md](review-001.md)
-- Next instruction: [instruction-002.md](instruction-002.md)
+- Implemented gate 002: [instruction-002.md](instruction-002.md), [report-002.md](report-002.md), [evidence](evidence/002-verification-summary.md); awaiting review
 - Evidence policy: [evidence/README.md](evidence/README.md)
 - Progress / proof boundaries: [ROADMAP.md](ROADMAP.md)
 - Working folder is `lean/dk_math`; keep edits narrowly scoped.
