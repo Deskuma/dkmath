@@ -2,7 +2,7 @@
 
 Branch: **research/FLT7-Mod42-AllocationSieve-261013-v0**  
 Base: **develop** (branch forked 2026-10-13).  
-Status: **Gate 001 ACCEPTED (Outcome A); gate 002 IMPLEMENTED (Outcome A), awaiting review**.
+Status: **Gate 001 + gate 002 ACCEPTED (Outcome A); gate 003 AUTHORIZED, implementation pending**.
 
 ## Question
 
@@ -84,7 +84,8 @@ soundness trap to check before writing Lean.
 ## Workspace conventions
 
 - Completed gate 001: [instruction-001.md](instruction-001.md), [report-001.md](report-001.md), [review-001.md](review-001.md)
-- Implemented gate 002: [instruction-002.md](instruction-002.md), [report-002.md](report-002.md), [evidence](evidence/002-verification-summary.md); awaiting review
+- Accepted gate 002: [instruction-002.md](instruction-002.md), [report-002.md](report-002.md), [review-002.md](review-002.md), [evidence](evidence/002-verification-summary.md)
+- Next implementation gate: [instruction-003.md](instruction-003.md) — pre-endpoint independent arithmetic filter
 - Evidence policy: [evidence/README.md](evidence/README.md)
 - Progress / proof boundaries: [ROADMAP.md](ROADMAP.md)
 - Working folder is `lean/dk_math`; keep edits narrowly scoped.
@@ -94,6 +95,7 @@ soundness trap to check before writing Lean.
   whether to extend, repair, or stop the route.
 - `logs/` stays transient and ignored; `evidence/` holds only compact necessary verification data.
 - The implementation environment chooses its own build strategy; do not impose fixed local resource assumptions.
+- **Codex implements, tests and reports only. It must not commit/push/merge or create PRs. Wise Wolf publishes reviewed instructions and review notes to GitHub; the user controls integration.**
 
 ## Success criterion
 
