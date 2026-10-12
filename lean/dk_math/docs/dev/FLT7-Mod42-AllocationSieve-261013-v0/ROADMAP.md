@@ -2,22 +2,22 @@
 
 Branch: `research/FLT7-Mod42-AllocationSieve-261013-v0`
 Base: `develop` (first prepared 2026-10-13).
-Initial status: **0 / audit completed; no Lean implementation yet**.
+Current status: **Gate 001 ACCEPTED (Outcome A); gate 002 AUTHORIZED / implementation pending**. See `review-001.md`.
 
 ## Goals and gates
 
 | Gate | Scope | Exit evidence | Status |
 | --- | --- | --- | --- |
 | 000 | Read live existing receiver APIs; theorem-index duplicate check | Actual declarations and required hypotheses recorded | Source audit done; Codex to reconfirm |
-| 001 | Primitive seventh-order residues modulo 6 | Two focused, kernel-checked lemmas for GN7 and alternating cyclotomic factor; audit | **NEXT** |
-| 002 | Divisor-aware allocation bridge to mod 42 | Both exact branches -> `M/r ≡ 1 (mod 42)`, plus exclusion lemma | BLOCKED on 001 |
+| 001 | Primitive seventh-order residues modulo 6 | Two focused, kernel-checked lemmas for GN7 and alternating cyclotomic factor; audit | **ACCEPTED — Outcome A** |
+| 002 | Divisor-aware allocation bridge to mod 42 | Both exact branches -> `M/r ≡ 1 (mod 42)`, plus exclusion lemma | **AUTHORIZED — instruction-002.md** |
 | 003 | Optional sieve façade and reconstruction integration | Exact conditions preserved; equivalence proof checked | REVIEW GATE |
 | 004 | Math audit, test expansion, reports and PR review | No accidental FLT7 closure claim; audit and replayable logs | PENDING |
 
 After each gate, pause for human/Wise Wolf review before issuing the next
 implementation instruction. Do not autonomously expand 001 into 003.
 
-## Gate 001 — first Codex cycle
+## Gate 001 — completed; approved in review-001.md
 
 1. Search all relevant declarations in current `develop`-derived branch.
 2. Establish the two bare arithmetic facts with correct coprimality:
@@ -29,9 +29,9 @@ implementation instruction. Do not autonomously expand 001 into 003.
    error/failure attempts, and all remaining conditions.
 6. Stop and hand the report back for review.
 
-No new global FLT7 theorems in gate 001.
+No new global FLT7 theorems in gate 001. **Implemented and reviewed**, see `report-001.md` and `evidence/001-verification-summary.md`.
 
-## Gate 002 — proposed next instruction (not yet authorized)
+## Gate 002 — authorized via instruction-002.md
 
 Re-use gate-001 and existing `nestedAllocation_residue_sieve`:
 
@@ -76,6 +76,10 @@ In particular, for `r=1` the modulus `r^49=1` makes the existing
 `SixthPowerAllocationSieve` vacuous; the new mod-42 condition is a
 different necessary filter. The Python slice (`r=1, s=589`) cannot be
 promoted to all `M,r`.
+
+## Records and logs policy
+
+`logs/` is temporary and ignored by Git; do not commit bulk output. Store only compact, decisive, provenance-marked artifacts in `evidence/` (see `evidence/README.md`), and summarize command outcomes in the gate report. Tool/resource choices are left to the executing Codex environment.
 
 ## Deliverables per cycle
 
