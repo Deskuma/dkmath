@@ -2,7 +2,7 @@
 
 Branch: **research/FLT7-Mod42-AllocationSieve-261013-v0**  
 Base: **develop** (branch forked 2026-10-13).  
-Status: **Gates 001–003 ACCEPTED (Outcome A); gate 004 AUTHORIZED, implementation pending**.
+Status: **Gates 001–004 ACCEPTED (Outcome A); gate 005 AUTHORIZED, source-coupling audit pending**.
 
 ## Question
 
@@ -86,7 +86,8 @@ soundness trap to check before writing Lean.
 - Completed gate 001: [instruction-001.md](instruction-001.md), [report-001.md](report-001.md), [review-001.md](review-001.md)
 - Accepted gate 002: [instruction-002.md](instruction-002.md), [report-002.md](report-002.md), [review-002.md](review-002.md), [evidence](evidence/002-verification-summary.md)
 - Accepted gate 003: [instruction-003.md](instruction-003.md), [report-003.md](report-003.md), [review-003.md](review-003.md), [evidence](evidence/003-verification-summary.md)
-- Next implementation gate: [instruction-004.md](instruction-004.md) — global cheap-filter rejection and infinite-survivor audit
+- Accepted gate 004: [instruction-004.md](instruction-004.md), [report-004.md](report-004.md), [review-004.md](review-004.md), [evidence](evidence/004-verification-summary.md)
+- Next gate: [instruction-005.md](instruction-005.md) — same-packet source / allocation / chart compatibility audit
 - Evidence policy: [evidence/README.md](evidence/README.md)
 - Progress / proof boundaries: [ROADMAP.md](ROADMAP.md)
 - Working folder is `lean/dk_math`; keep edits narrowly scoped.
@@ -98,9 +99,14 @@ soundness trap to check before writing Lean.
 - The implementation environment chooses its own build strategy; do not impose fixed local resource assumptions.
 - **Codex implements, tests and reports only. It must not stage/commit/push/merge or create PRs. Wise Wolf publishes reviewed instructions and review notes to GitHub; the user controls integration.**
 
-## Success criterion
+## Current research boundary
 
-A Lean-kernel-checked mod-42 **necessary condition** for both
-allocation branches, including correct divisor/coprimality provenance;
-a checked exclusion consumer may be included. No claim that the finite
-allocation receiver has been proved empty.
+The mod-42 necessary condition, an endpoint-free cheap filter, and its
+positive/negative calibration are completed and reviewed (gates 001–004).
+An unbounded family of abstract cheap candidates survives, with
+trivial sixth-power sieve at divisor one. This does **not** establish
+actual packet cores or endpoint witnesses. Gate 005 asks what additional
+same-packet carrier/norm/chart constraints can cut across that gap;
+it permits a precise negative audit if no existing bridge suffices.
+
+No FLT7 closure, receiver emptiness, or strict descent follows here.
