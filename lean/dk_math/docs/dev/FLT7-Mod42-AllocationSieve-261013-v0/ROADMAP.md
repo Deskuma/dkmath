@@ -2,7 +2,7 @@
 
 Branch: `research/FLT7-Mod42-AllocationSieve-261013-v0`
 Base: `develop` (first prepared 2026-10-13).
-Current status: **Gate 001 ACCEPTED (Outcome A); gate 002 IMPLEMENTED (Outcome A) / awaiting review**. See `review-001.md`.
+Current status: **Gates 001–002 ACCEPTED (Outcome A); gate 003 AUTHORIZED / not yet implemented**. See `review-001.md`, `review-002.md`.
 
 ## Goals and gates
 
@@ -10,8 +10,8 @@ Current status: **Gate 001 ACCEPTED (Outcome A); gate 002 IMPLEMENTED (Outcome A
 | --- | --- | --- | --- |
 | 000 | Read live existing receiver APIs; theorem-index duplicate check | Actual declarations and required hypotheses recorded | Source audit done; Codex to reconfirm |
 | 001 | Primitive seventh-order residues modulo 6 | Two focused, kernel-checked lemmas for GN7 and alternating cyclotomic factor; audit | **ACCEPTED — Outcome A** |
-| 002 | Divisor-aware allocation bridge to mod 42 | Both exact branches -> `M/r ≡ 1 (mod 42)`, plus exclusion lemma | **IMPLEMENTED — Outcome A, review pending** |
-| 003 | Optional sieve façade and reconstruction integration | Exact conditions preserved; equivalence proof checked | REVIEW GATE |
+| 002 | Divisor-aware allocation bridge to mod 42 | Both exact branches -> `M/r ≡ 1 (mod 42)`, plus exclusion lemma | **ACCEPTED — Outcome A** |
+| 003 | Independent pre-endpoint arithmetic filter and discrimination audit | Necessary-only candidate filter, exact-to-cheap implication, strict screening example | **AUTHORIZED — instruction-003.md** |
 | 004 | Math audit, test expansion, reports and PR review | No accidental FLT7 closure claim; audit and replayable logs | PENDING |
 
 After each gate, pause for human/Wise Wolf review before issuing the next
@@ -31,9 +31,9 @@ implementation instruction. Do not autonomously expand 001 into 003.
 
 No new global FLT7 theorems in gate 001. **Implemented and reviewed**, see `report-001.md` and `evidence/001-verification-summary.md`.
 
-## Gate 002 — implemented via instruction-002.md; review pending
+## Gate 002 — implemented and accepted; review-002.md
 
-Focused build, test applications and three axiom audits passed; see `report-002.md` and `evidence/002-verification-summary.md`. Gate 003 remains unauthorized.
+Focused build, test applications and three axiom audits passed; see `report-002.md` and `evidence/002-verification-summary.md`. Gate 003 authorized by review-002.md; implementation not yet started.
 
 Re-use gate-001 and existing `nestedAllocation_residue_sieve`:
 
@@ -50,14 +50,11 @@ Re-use gate-001 and existing `nestedAllocation_residue_sieve`:
 The new theorem must **not** remove a receiver's divisibility guard simply
 because an adjacent existing lemma does not need that guard modulo 7.
 
-## Gate 003 — optional, requires review decision
+## Gate 003 — authorized via instruction-003.md
 
-Consider `ModFortyTwoSievedNestedCondition` and a checked equivalence
-with the existing exact `SixthPowerSievedNestedCondition`. Such an equivalence
-must preserve both endpoint equations, branch thresholds, coprimality and
-all guard conditions; its purpose is API filtering, not new existence.
+Construct a pre-endpoint arithmetic filter independent of the exact receiver predicates. Prove a correct exact-to-cheap implication and check its screening power relative to previous necessary-only guards. Do not merely append mod 42 to a predicate already containing exact endpoint equations. Do not assert that a necessary congruence is sufficient or that all receivers are empty.
 
-Do not introduce the sieve wrapper at all if it adds no consumer value.
+Codex only implements, validates, and reports; **no commit, push, PR, or merge instructions to Codex**. Wise Wolf publishes reviewed instruction/review documents. The user makes repository integration decisions.
 
 ## Explicit non-goals
 
@@ -68,7 +65,7 @@ Do not introduce the sieve wrapper at all if it adds no consumer value.
 - No changing existing production file proofs to conform to a new aesthetic.
 - No `sorry`, `admit`, `axiom`, `unsafe`, `native_decide` as a proof
   substitute, or untracked assumptions.
-- No huge `lake build` across the entire repo for a focused lemma.
+- Build strategy is for the local implementing agent to decide; no hardware-dependent restrictions in instructions.
 
 ## Negative-evidence rule
 
@@ -78,6 +75,10 @@ In particular, for `r=1` the modulus `r^49=1` makes the existing
 `SixthPowerAllocationSieve` vacuous; the new mod-42 condition is a
 different necessary filter. The Python slice (`r=1, s=589`) cannot be
 promoted to all `M,r`.
+
+## Source control roles
+
+Codex is not responsible for Git publication, staging, commits, pushes, PRs, or merges. Review and instructions are published to the research branch by Wise Wolf (ChatGPT); integration decisions remain with the user.
 
 ## Records and logs policy
 
