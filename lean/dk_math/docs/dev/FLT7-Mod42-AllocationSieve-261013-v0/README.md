@@ -2,7 +2,7 @@
 
 Branch: **research/FLT7-Mod42-AllocationSieve-261013-v0**  
 Base: **develop** (branch forked 2026-10-13).  
-Status: **PLANNED / not yet Lean-verified**.
+Status: **Gate 001 ACCEPTED (Outcome A); gate 002 instructed, not yet proved**.
 
 ## Question
 
@@ -83,13 +83,17 @@ soundness trap to check before writing Lean.
 
 ## Workspace conventions
 
-- Instructions: [instruction-001.md](instruction-001.md)
+- Completed gate 001: [instruction-001.md](instruction-001.md), [report-001.md](report-001.md), [review-001.md](review-001.md)
+- Next instruction: [instruction-002.md](instruction-002.md)
+- Evidence policy: [evidence/README.md](evidence/README.md)
 - Progress / proof boundaries: [ROADMAP.md](ROADMAP.md)
 - Working folder is `lean/dk_math`; keep edits narrowly scoped.
 - The Codex implementer is GPT-6.1 Sol (light): keep steps small;
   supply exact theorem statements and validation evidence.
 - After each instruction the reviewer checks results and decides
   whether to extend, repair, or stop the route.
+- `logs/` stays transient and ignored; `evidence/` holds only compact necessary verification data.
+- The implementation environment chooses its own build strategy; do not impose fixed local resource assumptions.
 
 ## Success criterion
 
