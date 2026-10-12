@@ -2,7 +2,7 @@
 
 Branch: `research/FLT7-Mod42-AllocationSieve-261013-v0`
 Base: `develop` (first prepared 2026-10-13).
-Current status: **Gates 001–002 ACCEPTED (Outcome A); gate 003 AUTHORIZED / not yet implemented**. See `review-001.md`, `review-002.md`.
+Current status: **Gates 001–003 ACCEPTED (Outcome A); gate 004 AUTHORIZED / not yet implemented**. See `review-001.md`, `review-002.md`, `review-003.md`.
 
 ## Goals and gates
 
@@ -11,8 +11,8 @@ Current status: **Gates 001–002 ACCEPTED (Outcome A); gate 003 AUTHORIZED / no
 | 000 | Read live existing receiver APIs; theorem-index duplicate check | Actual declarations and required hypotheses recorded | Source audit done; Codex to reconfirm |
 | 001 | Primitive seventh-order residues modulo 6 | Two focused, kernel-checked lemmas for GN7 and alternating cyclotomic factor; audit | **ACCEPTED — Outcome A** |
 | 002 | Divisor-aware allocation bridge to mod 42 | Both exact branches -> `M/r ≡ 1 (mod 42)`, plus exclusion lemma | **ACCEPTED — Outcome A** |
-| 003 | Independent pre-endpoint arithmetic filter and discrimination audit | Necessary-only candidate filter, exact-to-cheap implication, strict screening example | **AUTHORIZED — instruction-003.md** |
-| 004 | Math audit, test expansion, reports and PR review | No accidental FLT7 closure claim; audit and replayable logs | PENDING |
+| 003 | Independent pre-endpoint arithmetic filter and discrimination audit | Necessary-only candidate filter, exact-to-cheap implication, strict screening example | **ACCEPTED — Outcome A** |
+| 004 | Necessity-boundary audit | Globally exclude cheap core 554; prove an infinite cheap-survivor family; preserve exact-vs-cheap distinction | **AUTHORIZED — instruction-004.md** |
 
 After each gate, pause for human/Wise Wolf review before issuing the next
 implementation instruction. Do not autonomously expand 001 into 003.
@@ -50,11 +50,15 @@ Re-use gate-001 and existing `nestedAllocation_residue_sieve`:
 The new theorem must **not** remove a receiver's divisibility guard simply
 because an adjacent existing lemma does not need that guard modulo 7.
 
-## Gate 003 — authorized via instruction-003.md
+## Gate 003 — completed and accepted (review-003.md)
 
 Construct a pre-endpoint arithmetic filter independent of the exact receiver predicates. Prove a correct exact-to-cheap implication and check its screening power relative to previous necessary-only guards. Do not merely append mod 42 to a predicate already containing exact endpoint equations. Do not assert that a necessary congruence is sufficient or that all receivers are empty.
 
 Codex only implements, validates, and reports; **no commit, push, PR, or merge instructions to Codex**. Wise Wolf publishes reviewed instruction/review documents. The user makes repository integration decisions.
+
+## Gate 004 — authorized via instruction-004.md
+
+Audit the global reach and the limitations of the necessary-only arithmetic filter: show a concrete core excluded for *all* divisor allocations, and exhibit an unbounded family that passes the cheap conditions without asserting any endpoint witness. These are structural boundary certificates, not FLT7 closure. Then stop for review and identify whether a source-coupled invariant is the next target.
 
 ## Explicit non-goals
 
@@ -78,7 +82,7 @@ promoted to all `M,r`.
 
 ## Source control roles
 
-Codex is not responsible for Git publication, staging, commits, pushes, PRs, or merges. Review and instructions are published to the research branch by Wise Wolf (ChatGPT); integration decisions remain with the user.
+Codex is not responsible for Git staging, publication, commits, pushes, branch creation, PRs, or merges. Review and instructions are published to the research branch by Wise Wolf (ChatGPT); integration decisions remain with the user.
 
 ## Records and logs policy
 
