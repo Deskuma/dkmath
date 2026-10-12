@@ -2,7 +2,7 @@
 
 Branch: `research/FLT7-Mod42-AllocationSieve-261013-v0`
 Base: `develop` (first prepared 2026-10-13).
-Current status: **Gates 001–003 ACCEPTED (Outcome A); gate 004 AUTHORIZED / not yet implemented**. See `review-001.md`, `review-002.md`, `review-003.md`.
+Current status: **Gates 001–004 ACCEPTED (Outcome A); gate 005 AUTHORIZED / audit pending**. See `review-001.md` through `review-004.md`.
 
 ## Goals and gates
 
@@ -12,7 +12,8 @@ Current status: **Gates 001–003 ACCEPTED (Outcome A); gate 004 AUTHORIZED / no
 | 001 | Primitive seventh-order residues modulo 6 | Two focused, kernel-checked lemmas for GN7 and alternating cyclotomic factor; audit | **ACCEPTED — Outcome A** |
 | 002 | Divisor-aware allocation bridge to mod 42 | Both exact branches -> `M/r ≡ 1 (mod 42)`, plus exclusion lemma | **ACCEPTED — Outcome A** |
 | 003 | Independent pre-endpoint arithmetic filter and discrimination audit | Necessary-only candidate filter, exact-to-cheap implication, strict screening example | **ACCEPTED — Outcome A** |
-| 004 | Necessity-boundary audit | Globally exclude cheap core 554; prove an infinite cheap-survivor family; preserve exact-vs-cheap distinction | **AUTHORIZED — instruction-004.md** |
+| 004 | Necessity-boundary audit | Globally exclude cheap core 554; prove an infinite cheap-survivor family; preserve exact-vs-cheap distinction | **ACCEPTED — Outcome A** |
+| 005 | Same-packet source–allocation–chart audit | Inspect real carrier/norm ledger, divisor-one blind spot, missing chart bridge; optional genuinely new theorem | **AUTHORIZED — instruction-005.md** |
 
 After each gate, pause for human/Wise Wolf review before issuing the next
 implementation instruction. Do not autonomously expand 001 into 003.
@@ -56,9 +57,13 @@ Construct a pre-endpoint arithmetic filter independent of the exact receiver pre
 
 Codex only implements, validates, and reports; **no commit, push, PR, or merge instructions to Codex**. Wise Wolf publishes reviewed instruction/review documents. The user makes repository integration decisions.
 
-## Gate 004 — authorized via instruction-004.md
+## Gate 004 — completed and accepted (review-004.md)
 
 Audit the global reach and the limitations of the necessary-only arithmetic filter: show a concrete core excluded for *all* divisor allocations, and exhibit an unbounded family that passes the cheap conditions without asserting any endpoint witness. These are structural boundary certificates, not FLT7 closure. Then stop for review and identify whether a source-coupled invariant is the next target.
+
+## Gate 005 — authorized via instruction-005.md
+
+Locate the first source-specific condition linking the actual internal carrier and norm ledger to the **same selected allocation** and centered chart. Distinguish known source results from a new restrictive bridge. Explicitly inspect the divisor-one blind spot in the prime-support route. A documented negative result and exact missing theorem are valid outcomes; do not merely repackage existing exact receiver equivalences or add arbitrary modular filters. Codex handles implementation/audit and reporting only, with no Git operations.
 
 ## Explicit non-goals
 
@@ -90,8 +95,10 @@ Codex is not responsible for Git staging, publication, commits, pushes, branch c
 
 ## Deliverables per cycle
 
-Create `findings-001.md` early, update it before any significant proof
-branch change, then `report-001.md` at the stable stopping point.
+For gate N, create and update `findings-NNN.md` early, and write
+`report-NNN.md` at the stable stopping point. Gate 005 additionally
+requires `source-coupling-map-005.md`. Existing reports remain authoritative
+for earlier gates.
 Report status as:
 
 - Outcome A: goal fully kernel-checked with correct premises.
