@@ -2,7 +2,7 @@
 
 Branch: `research/FLT7-Mod42-AllocationSieve-261013-v0`
 Base: `develop` (first prepared 2026-10-13).
-Current status: **Gates 001–004 and 006–012 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 013 AUTHORIZED / proof pending**. See `review-001.md` through `review-012.md`.
+Current status: **Gates 001–004 and 006–013 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 014 AUTHORIZED / proof pending**. See `review-001.md` through `review-013.md`.
 
 ## Goals and gates
 
@@ -21,7 +21,8 @@ Current status: **Gates 001–004 and 006–012 ACCEPTED (Outcome A); gate 005 A
 | 010 | Parametric mixed-obstruction family | Free-s mixed exact exclusion from residues and size; 63,800-core finite bounded progression | **ACCEPTED — Outcome A** |
 | 011 | Unbounded prime-power primitive allocation | Primitivity forces r=1/2 for all M=2*13^n; all k of M=2*13^(6+4*k) have no exact sieve; injectivity | **ACCEPTED — Outcome A** |
 | 012 | Generic prime-power primitive exclusion | Generic p-power primitive divisor theorem, residue-conditional full-sieve exclusion; p=223,n=2 regression | **ACCEPTED — Outcome A** |
-| 013 | Complementary prime-support centered image | Mod13 unit-gap nonvanishing, 13|s and 13∤r exact receiver exclusion, composite r=3 regression | **AUTHORIZED — instruction-013.md** |
+| 013 | Complementary prime-support centered image | Mod13 unit-gap nonvanishing, 13|s and 13∤r exact receiver exclusion, composite r=3 regression | **ACCEPTED — Outcome A** |
+| 014 | Small-coefficient primitive divisor family | For M=c*p^n, c≤343, eligible coprime divisor r must divide c; at c=3,p=13 cover r=1/3 and prove unbounded full-sieve exclusion | **AUTHORIZED — instruction-014.md** |
 
 After each gate, pause for human/Wise Wolf review before issuing the next
 implementation instruction. Do not autonomously expand 001 into 003.
@@ -101,9 +102,13 @@ Look beyond gate 010's finite size window: exploit the existing **Nat.Coprime r 
 
 Separate the structural prime-power ownership proof from the special residue computations for 13. For arbitrary prime p and exponent n, membership plus actual quotient coprimality and coarse size should imply eligible r=1/2. Under additional **explicit** congruences p^n≡1 (mod42) and p^n≡4 (mod5), prove absence of the exact full-sieve at M=2*p^n. Verify p=223,n=2 as a distinct prime-base regression. The assumptions do not hold for all primes/exponents; do not infer arbitrary-M impossibility, source-packet existence, or FLT7 closure. Codex implements, checks and reports only; no Git operations.
 
-## Gate 013 — authorized via instruction-013.md
+## Gate 013 — completed and accepted (Outcome A; review-013.md)
 
 Test a new *factor-support* obstruction rather than another necessary congruence on s alone. For the actual centered sextic, a Python residue enumeration suggests that 13∤D forces its mod13 image to avoid zero. Since D=7^27*r^49, 13∤r and 13|s would then make F(D,q)=448*s^49 impossible, excluding the same chosen exact receiver. Verify this universally in Lean, and check the concrete composite allocation M=3*13^12, r=3: previous cheap, literal-sixth and mod5 image-compatibility tests pass, while the new mod13 obstruction should reject the exact receiver. No full-sieve exclusion follows from a single chosen divisor; no source packet or FLT7 closure is claimed. Codex reports results without Git actions.
+
+## Gate 014 — authorized via instruction-014.md
+
+Investigate a structural coefficient bound: if M=c*p^n with p prime and c≤343, the full-sieve's actual quotient coprimality and coarse inequality should force any eligible r to divide c. At c=3,p=13 this leaves r=1/3; the r=1 exact receiver violates the existing mod42 condition because M is divisible by3, while r=3 violates the gate-013 mod13 prime-support image condition for n>0. If Lean checks both, prove full exact-sieve exclusion for all n>0 and an injective infinite core family M=3*13^(k+1). This is an unproved target until implemented; not actual source packet existence or FLT7 closure. Codex only implements/verifies/reports and never commits or pushes.
 
 ## Explicit non-goals
 
