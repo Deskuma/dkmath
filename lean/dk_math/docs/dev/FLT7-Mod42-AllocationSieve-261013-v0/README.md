@@ -2,7 +2,7 @@
 
 Branch: **research/FLT7-Mod42-AllocationSieve-261013-v0**  
 Base: **develop** (branch forked 2026-10-13).  
-Status: **Gates 001–004 ACCEPTED (Outcome A); gate 005 AUTHORIZED, source-coupling audit pending**.
+Status: **Gates 001–004 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 006 AUTHORIZED, centered-image audit pending**.
 
 ## Question
 
@@ -87,7 +87,8 @@ soundness trap to check before writing Lean.
 - Accepted gate 002: [instruction-002.md](instruction-002.md), [report-002.md](report-002.md), [review-002.md](review-002.md), [evidence](evidence/002-verification-summary.md)
 - Accepted gate 003: [instruction-003.md](instruction-003.md), [report-003.md](report-003.md), [review-003.md](review-003.md), [evidence](evidence/003-verification-summary.md)
 - Accepted gate 004: [instruction-004.md](instruction-004.md), [report-004.md](report-004.md), [review-004.md](review-004.md), [evidence](evidence/004-verification-summary.md)
-- Next gate: [instruction-005.md](instruction-005.md) — same-packet source / allocation / chart compatibility audit
+- Accepted gate 005: [instruction-005.md](instruction-005.md), [source-coupling-map-005.md](source-coupling-map-005.md), [report-005.md](report-005.md), [review-005.md](review-005.md)
+- Next gate: [instruction-006.md](instruction-006.md) — integer centered-sextic gap at cheap survivor M=589
 - Evidence policy: [evidence/README.md](evidence/README.md)
 - Progress / proof boundaries: [ROADMAP.md](ROADMAP.md)
 - Working folder is `lean/dk_math`; keep edits narrowly scoped.
@@ -109,4 +110,4 @@ actual packet cores or endpoint witnesses. Gate 005 asks what additional
 same-packet carrier/norm/chart constraints can cut across that gap;
 it permits a precise negative audit if no existing bridge suffices.
 
-No FLT7 closure, receiver emptiness, or strict descent follows here.
+Gate 005 identified no new source-coupled restriction; an actual-packet bridge to the chosen chart remains unresolved. Gate 006 tests a different route via an exact adjacent-image bracket at one concrete surviving arithmetic core. No global FLT7 closure, receiver emptiness, or strict descent follows.
