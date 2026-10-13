@@ -2,7 +2,7 @@
 
 Branch: `research/FLT7-Mod42-AllocationSieve-261013-v0`
 Base: `develop` (first prepared 2026-10-13).
-Current status: **Gates 001–004 and 006–007 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 008 AUTHORIZED / proof pending**. See `review-001.md` through `review-007.md`.
+Current status: **Gates 001–004 and 006–008 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 009 AUTHORIZED / proof pending**. See `review-001.md` through `review-008.md`.
 
 ## Goals and gates
 
@@ -16,7 +16,8 @@ Current status: **Gates 001–004 and 006–007 ACCEPTED (Outcome A); gate 005 A
 | 005 | Same-packet source–allocation–chart audit | Inspect real carrier/norm ledger, divisor-one blind spot, missing chart bridge; optional genuinely new theorem | **ACCEPTED — Outcome B** |
 | 006 | Centered integer-image bracket at M=589 | Strict adjacent-value bracket, exact centered receiver exclusion, all eligible divisors at M=589 | **ACCEPTED — Outcome A** |
 | 007 | Modular image gap for the centered sextic | Uniform modulo-five missing image; unbounded cheap-but-not-exact family at divisor one | **ACCEPTED — Outcome A** |
-| 008 | Divisor-dependent modulo-five image audit | Test general 5-unit r image obstruction s≡r² mod 5, transport to exact receiver, r=2 cheap + sixth-power discrimination | **AUTHORIZED — instruction-008.md** |
+| 008 | Divisor-dependent modulo-five image audit | General 5-unit r image obstruction s≡r² mod 5; same-r receiver exclusion; r=2 cheap + sixth-power discrimination | **ACCEPTED — Outcome A** |
+| 009 | Mixed-obstruction fixed-core closure | Exhaust eligible divisors at M=9653618; exclude r=1 by mod42 and r=2 by mod5; prove full exact sieve false | **AUTHORIZED — instruction-009.md** |
 
 After each gate, pause for human/Wise Wolf review before issuing the next
 implementation instruction. Do not autonomously expand 001 into 003.
@@ -76,9 +77,13 @@ An independent Python arbitrary-precision check found the centered target for M=
 
 Investigate a uniform **modulo-five image obstruction** of the existing exact centered sextic for r=1. Derive a missing-target-residue theorem for all M≡1 (mod 5), then formally contrast an unbounded family of cheap passing allocations M=631+210*k with absence of exact GN/RHS endpoint witnesses at the **same fixed divisor one**. Do not generalize r=1 exclusion to all divisors for unbounded M, or conflate this local-image test with the adjacent integer bracket at 589. Treat the residue observations as unproved prechecks until Lean accepts them.
 
-## Gate 008 — authorized via instruction-008.md
+## Gate 008 — completed and accepted (Outcome A; review-008.md)
 
 Examine the **actual divisor-dependent centered gap** D=7^27*r^49. A Python-checked residue table suggests that when 5∤r, a complementary factor s≡r² (mod 5) is outside the centered target image. Formalize that statement in Lean, then transport to the exact receiver and verify a concrete fixed allocation with r=2 that still passes both the existing cheap filter and separate sixth-power sieve. Exclusion of the chosen r does not establish absence of all allocations at M. No new general FLT7 or reconstruction conclusion is authorized.
+
+## Gate 009 — authorized via instruction-009.md
+
+Synthesize the already-proved mod42 necessary-condition exclusion and general-gap mod5 exact-image obstruction **without altering the chosen divisor**. At M=9653618, prove the membership+coarse-size premise forces r=1 or r=2, apply different exact receiver exclusions to these cases, and if successful prove the entire fixed-core SixthPowerSievedNestedCondition false. This is *not* a general FLT7 theorem. Codex implements/verifies/reports only and performs no Git actions.
 
 ## Explicit non-goals
 
