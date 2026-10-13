@@ -2,7 +2,7 @@
 
 Branch: **research/FLT7-Mod42-AllocationSieve-261013-v0**  
 Base: **develop** (branch forked 2026-10-13).  
-Status: **Gates 001–004 and 006–009 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 010 AUTHORIZED, parametric mixed-obstruction proof pending**.
+Status: **Gates 001–004 and 006–010 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 011 AUTHORIZED, prime-power primitive-divisor audit pending**.
 
 ## Question
 
@@ -92,7 +92,8 @@ soundness trap to check before writing Lean.
 - Accepted gate 007: [instruction-007.md](instruction-007.md), [report-007.md](report-007.md), [review-007.md](review-007.md), [evidence](evidence/007-verification-summary.md)
 - Accepted gate 008: [instruction-008.md](instruction-008.md), [report-008.md](report-008.md), [review-008.md](review-008.md), [evidence](evidence/008-verification-summary.md)
 - Accepted gate 009: [instruction-009.md](instruction-009.md), [report-009.md](report-009.md), [review-009.md](review-009.md), [evidence](evidence/009-verification-summary.md)
-- Next gate: [instruction-010.md](instruction-010.md) — parameterize the combined mod42/mod5 obstruction across a bounded progression
+- Accepted gate 010: [instruction-010.md](instruction-010.md), [report-010.md](report-010.md), [review-010.md](review-010.md), [evidence](evidence/010-verification-summary.md)
+- Next gate: [instruction-011.md](instruction-011.md) — prime-power primitive-divisor route toward an unbounded full-sieve-excluded family
 - Evidence policy: [evidence/README.md](evidence/README.md)
 - Progress / proof boundaries: [ROADMAP.md](ROADMAP.md)
 - Working folder is `lean/dk_math`; keep edits narrowly scoped.
@@ -114,4 +115,4 @@ actual packet cores or endpoint witnesses. Gate 005 asks what additional
 same-packet carrier/norm/chart constraints can cut across that gap;
 it permits a precise negative audit if no existing bridge suffices.
 
-Gate 005 identified no new source-coupled restriction; an actual-packet bridge to the chosen chart remains unresolved. Gate 006 then **proved** an exact adjacent-image obstruction at the concrete cheap survivor M=589, including all eligible divisors at that fixed core. Gate 007 **proved** a separate uniform local-image obstruction modulo five, showing no exact divisor-one receiver for every M=631+210*k despite cheap and sixth-power screening survival. Gate 008 **proved** the divisor-dependent mod-five no-image theorem for all 5-unit r with s≡r² (mod 5), excluding an exact r=2 allocation at M=9653618 despite passing cheap and sixth-power filters. Gate 009 tests a concrete full-sieve synthesis: only r=1 or r=2 meet the positive-divisor and size guards at this M; existing mod42 excludes r=1, and the new mod5 image excludes r=2. Gate 009 **proved** full exact allocation exclusion at M=9653618 by combining mod42 at r=1 with mod5 at r=2. Gate 010 asks whether a direct parameter theorem extends that mixed mechanism to M=2*(589+210*k), 0≤k≤63799, a finite bounded class. No global FLT7 closure, all-core receiver emptiness, or strict descent follows.
+Gate 005 identified no new source-coupled restriction; an actual-packet bridge to the chosen chart remains unresolved. Gate 006 then **proved** an exact adjacent-image obstruction at the concrete cheap survivor M=589, including all eligible divisors at that fixed core. Gate 007 **proved** a separate uniform local-image obstruction modulo five, showing no exact divisor-one receiver for every M=631+210*k despite cheap and sixth-power screening survival. Gate 008 **proved** the divisor-dependent mod-five no-image theorem for all 5-unit r with s≡r² (mod 5), excluding an exact r=2 allocation at M=9653618 despite passing cheap and sixth-power filters. Gate 009 **proved** full exact allocation exclusion at M=9653618 by combining mod42 at r=1 with mod5 at r=2. Gate 010 **proved** a free-s parameter theorem, and its application to 63,800 distinct cores M=2*(589+210*k) with 0≤k≤63799. The bound is sufficient, not maximal. Gate 011 now investigates whether the **existing coprimality guard** in the full sieve forces only divisors r=1 or 2 for the unbounded prime-power family M=2*13^(6+4*k), eliminating the global M upper bound. This remains a proposed result until Lean checks it. No global FLT7 closure, all-core receiver emptiness, or strict descent follows.
