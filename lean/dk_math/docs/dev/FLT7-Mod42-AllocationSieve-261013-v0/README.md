@@ -2,7 +2,7 @@
 
 Branch: **research/FLT7-Mod42-AllocationSieve-261013-v0**  
 Base: **develop** (branch forked 2026-10-13).  
-Status: **Gates 001–004, 006 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 007 AUTHORIZED, modulo-five image audit pending**.
+Status: **Gates 001–004 and 006–007 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 008 AUTHORIZED, divisor-dependent mod-five audit pending**.
 
 ## Question
 
@@ -89,7 +89,8 @@ soundness trap to check before writing Lean.
 - Accepted gate 004: [instruction-004.md](instruction-004.md), [report-004.md](report-004.md), [review-004.md](review-004.md), [evidence](evidence/004-verification-summary.md)
 - Accepted gate 005: [instruction-005.md](instruction-005.md), [source-coupling-map-005.md](source-coupling-map-005.md), [report-005.md](report-005.md), [review-005.md](review-005.md)
 - Accepted gate 006: [instruction-006.md](instruction-006.md), [report-006.md](report-006.md), [review-006.md](review-006.md), [evidence](evidence/006-verification-summary.md)
-- Next gate: [instruction-007.md](instruction-007.md) — uniform modulo-five centered image-gap at divisor one
+- Accepted gate 007: [instruction-007.md](instruction-007.md), [report-007.md](report-007.md), [review-007.md](review-007.md), [evidence](evidence/007-verification-summary.md)
+- Next gate: [instruction-008.md](instruction-008.md) — divisor-dependent modulo-five centered image exclusion
 - Evidence policy: [evidence/README.md](evidence/README.md)
 - Progress / proof boundaries: [ROADMAP.md](ROADMAP.md)
 - Working folder is `lean/dk_math`; keep edits narrowly scoped.
@@ -111,4 +112,4 @@ actual packet cores or endpoint witnesses. Gate 005 asks what additional
 same-packet carrier/norm/chart constraints can cut across that gap;
 it permits a precise negative audit if no existing bridge suffices.
 
-Gate 005 identified no new source-coupled restriction; an actual-packet bridge to the chosen chart remains unresolved. Gate 006 then **proved** an exact adjacent-image obstruction at the concrete cheap survivor M=589, including all eligible divisors at that fixed core. Gate 007 tests a separate uniform local-image obstruction modulo five, starting with the infinite M=631+210*k family at divisor one. No global FLT7 closure, all-core receiver emptiness, or strict descent follows.
+Gate 005 identified no new source-coupled restriction; an actual-packet bridge to the chosen chart remains unresolved. Gate 006 then **proved** an exact adjacent-image obstruction at the concrete cheap survivor M=589, including all eligible divisors at that fixed core. Gate 007 **proved** a separate uniform local-image obstruction modulo five, showing no exact divisor-one receiver for every M=631+210*k despite cheap and sixth-power screening survival. Gate 008 tests the same polynomial's residue image for general r, with a focused nontrivial r=2 allocation. No global FLT7 closure, all-core receiver emptiness, or strict descent follows.
