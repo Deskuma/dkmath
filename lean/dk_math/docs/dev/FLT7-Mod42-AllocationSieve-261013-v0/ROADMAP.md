@@ -2,7 +2,7 @@
 
 Branch: `research/FLT7-Mod42-AllocationSieve-261013-v0`
 Base: `develop` (first prepared 2026-10-13).
-Current status: **Gates 001–004 and 006–015 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 016 AUTHORIZED / proof pending**. See `review-001.md` through `review-015.md`.
+Current status: **Gates 001–004 and 006–016 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 017 AUTHORIZED / proof pending**. See `review-001.md` through `review-016.md`.
 
 ## Goals and gates
 
@@ -24,7 +24,8 @@ Current status: **Gates 001–004 and 006–015 ACCEPTED (Outcome A); gate 005 A
 | 013 | Complementary prime-support centered image | Mod13 unit-gap nonvanishing, 13|s and 13∤r exact receiver exclusion, composite r=3 regression | **ACCEPTED — Outcome A** |
 | 014 | Small-coefficient primitive divisor family | For M=c*p^n, c≤343, eligible coprime r divides c; full exact sieve absent for all 3*13^n, n>0; injectivity | **ACCEPTED — Outcome A** |
 | 015 | Prime-base avoidance and complement ownership | Eligible p∤r and p|M/r for c≤343,n>0; all c*13^n full-sieve excluded, even if 13|c | **ACCEPTED — Outcome A** |
-| 016 | Seventh-power permutation-prime image frontier | Verify difference-of-seventh-powers identity and generic nonvanishing for odd primes ℓ with gcd(7,ℓ−1)=1; distinct ℓ=11,29 regressions | **AUTHORIZED — instruction-016.md** |
+| 016 | Seventh-power permutation-prime image frontier | Generic seventh-power field injectivity and odd-prime nonvanishing, exact same-r receiver exclusion, c*ℓ^n full-sieve corollary; ℓ=11/13 and 29/2 diagnostics | **ACCEPTED — Outcome A** |
+| 017 | Source-indexed obstruction and chart existence frontier | Transport permutation-prime core obstruction to actual packet under explicit hcore; audit source→finite-chart existence with same-packet provenance | **AUTHORIZED — instruction-017.md** |
 
 After each gate, pause for human/Wise Wolf review before issuing the next
 implementation instruction. Do not autonomously expand 001 into 003.
@@ -116,9 +117,13 @@ Investigate a structural coefficient bound: if M=c*p^n with p prime and c≤343,
 
 Gate 014's proof rules out the p|r branch, a stronger fact than its exported conclusion r|c. Formalize this **prime-base avoidance** for every eligible primitive allocation of c*p^n (prime p, c≤343); when n>0, exact factorization and prime divisibility put p on the quotient M/r side even if p divides c. For p=13 apply gate 013's exact centered image exclusion to the same selected r, aiming to prove ¬SixthPowerSievedNestedCondition (c*13^n) for **all** c≤343 and n>0. Optional n=0 is a separate size-vacuity proof. No actual packet existence, arbitrary-M sieve closure or FLT7 proof is implied. Codex only implements/verifies/reports; no Git operations.
 
-## Gate 016 — authorized via instruction-016.md
+## Gate 016 — completed and accepted (Outcome A; review-016.md)
 
 Explain the mod13 nonvanishing structurally via the identity 2D*F(D,q)=(q+D)^7−(q−D)^7 over a ring and finite-field injectivity of seventh powers. For odd prime ℓ with gcd(7,ℓ−1)=1, test general nonvanishing when ℓ∤D and translate it into a support-based exact receiver exclusion when ℓ≠7, ℓ∤r and ℓ|M/r. Check ℓ=11 as a genuine new positive example and ℓ=29,D=1,q=5 as a counterexample to unrestricted prime generalization. A broad small-coefficient ℓ-power corollary is optional. Keep mathematical prechecks distinct from Lean proofs; do not infer actual source-packet core realization or FLT7. Reassess returning to the gate-005 source bridge after 016. Codex implements/verifies/reports only, with no Git actions.
+
+## Gate 017 — authorized via instruction-017.md
+
+After gate 016's completed structural prime-field theorem, **return to the genuine source-frontier**. For p:RamifiedSignedRootRoutingPacket with explicit equality internalDepthFourSeventhCore p=c*ℓ^n (prime ℓ satisfying odd, non7 and seventh-power permutation conditions; c≤343,n>0), transport the full-sieve obstruction through the proven iff to exclude p's reconstruction obligation and finite additive charts. This is strictly **conditional on the core equality** and does not restrict bare p by itself. Audit the actual same-packet norm roots, complementary factor, real-pair loads, orientation and finite chart construction; identify the first *unsupplied constructive arrow*, without using a reconstruction obligation to prove its own existence. Record a precise missing lemma and honest Outcome B if no further source-side bridge is available. No new modulus hunt or FLT7 claim. Codex implements and reports only, no Git operations.
 
 ## Explicit non-goals
 
