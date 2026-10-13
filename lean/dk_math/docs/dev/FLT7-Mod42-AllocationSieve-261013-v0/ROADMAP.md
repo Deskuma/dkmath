@@ -2,7 +2,7 @@
 
 Branch: `research/FLT7-Mod42-AllocationSieve-261013-v0`
 Base: `develop` (first prepared 2026-10-13).
-Current status: **Gates 001–004 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 006 AUTHORIZED / proof pending**. See `review-001.md` through `review-005.md`.
+Current status: **Gates 001–004 and 006 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 007 AUTHORIZED / proof pending**. See `review-001.md` through `review-006.md`.
 
 ## Goals and gates
 
@@ -14,7 +14,8 @@ Current status: **Gates 001–004 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outco
 | 003 | Independent pre-endpoint arithmetic filter and discrimination audit | Necessary-only candidate filter, exact-to-cheap implication, strict screening example | **ACCEPTED — Outcome A** |
 | 004 | Necessity-boundary audit | Globally exclude cheap core 554; prove an infinite cheap-survivor family; preserve exact-vs-cheap distinction | **ACCEPTED — Outcome A** |
 | 005 | Same-packet source–allocation–chart audit | Inspect real carrier/norm ledger, divisor-one blind spot, missing chart bridge; optional genuinely new theorem | **ACCEPTED — Outcome B** |
-| 006 | Centered integer-image bracket at M=589 | Verify strict adjacent-value bracket, exclude exact centered receiver, and if possible all eligible divisor allocations | **AUTHORIZED — instruction-006.md** |
+| 006 | Centered integer-image bracket at M=589 | Strict adjacent-value bracket, exact centered receiver exclusion, all eligible divisors at M=589 | **ACCEPTED — Outcome A** |
+| 007 | Modular image gap for the centered sextic | Establish uniform modulo-five missing image and infinite cheap-but-not-exact family at divisor one | **AUTHORIZED — instruction-007.md** |
 
 After each gate, pause for human/Wise Wolf review before issuing the next
 implementation instruction. Do not autonomously expand 001 into 003.
@@ -66,9 +67,13 @@ Audit the global reach and the limitations of the necessary-only arithmetic filt
 
 Locate the first source-specific condition linking the actual internal carrier and norm ledger to the **same selected allocation** and centered chart. Distinguish known source results from a new restrictive bridge. Explicitly inspect the divisor-one blind spot in the prime-support route. A documented negative result and exact missing theorem are valid outcomes; do not merely repackage existing exact receiver equivalences or add arbitrary modular filters. Codex handles implementation/audit and reporting only, with no Git operations.
 
-## Gate 006 — authorized via instruction-006.md
+## Gate 006 — completed and accepted (Outcome A; review-006.md)
 
 An independent Python arbitrary-precision check found the centered target for M=589 and r=1 strictly between consecutive integer polynomial values. Formalize that strict bracket in Lean using the already-proved monotone-image exclusion. Then, if the proof succeeds, transport to exact receiver nonexistence at this **single core**, including the full divisor-allocation sieve via the coarse size guard. Do not infer no cheap allocation at 589 (it does pass the cheap filter), arbitrary-core emptiness, or unconditional FLT7. This is a fresh exact-image route, not a forced perfect-sixth conjecture or a repeat of the same-packet audit.
+
+## Gate 007 — authorized via instruction-007.md
+
+Investigate a uniform **modulo-five image obstruction** of the existing exact centered sextic for r=1. Derive a missing-target-residue theorem for all M≡1 (mod 5), then formally contrast an unbounded family of cheap passing allocations M=631+210*k with absence of exact GN/RHS endpoint witnesses at the **same fixed divisor one**. Do not generalize r=1 exclusion to all divisors for unbounded M, or conflate this local-image test with the adjacent integer bracket at 589. Treat the residue observations as unproved prechecks until Lean accepts them.
 
 ## Explicit non-goals
 
