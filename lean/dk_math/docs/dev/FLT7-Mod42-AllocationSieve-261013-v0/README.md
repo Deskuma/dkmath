@@ -2,7 +2,7 @@
 
 Branch: **research/FLT7-Mod42-AllocationSieve-261013-v0**  
 Base: **develop** (branch forked 2026-10-13).  
-Status: **Gates 001–004 and 006–014 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 015 AUTHORIZED, prime-base avoidance proof pending**.
+Status: **Gates 001–004 and 006–015 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 016 AUTHORIZED, seventh-power permutation-prime proof pending**.
 
 ## Question
 
@@ -97,7 +97,8 @@ soundness trap to check before writing Lean.
 - Accepted gate 012: [instruction-012.md](instruction-012.md), [report-012.md](report-012.md), [review-012.md](review-012.md), [evidence](evidence/012-verification-summary.md)
 - Accepted gate 013: [instruction-013.md](instruction-013.md), [report-013.md](report-013.md), [review-013.md](review-013.md), [evidence](evidence/013-verification-summary.md)
 - Accepted gate 014: [instruction-014.md](instruction-014.md), [report-014.md](report-014.md), [review-014.md](review-014.md), [evidence](evidence/014-verification-summary.md)
-- Next gate: [instruction-015.md](instruction-015.md) — stronger prime-base avoidance at small coefficient, generalizing mod13 support exclusion across c≤343
+- Accepted gate 015: [instruction-015.md](instruction-015.md), [report-015.md](report-015.md), [review-015.md](review-015.md), [evidence](evidence/015-verification-summary.md)
+- Next gate: [instruction-016.md](instruction-016.md) — seventh-power permutation-prime explanation of centered sextic nonvanishing
 - Evidence policy: [evidence/README.md](evidence/README.md)
 - Progress / proof boundaries: [ROADMAP.md](ROADMAP.md)
 - Working folder is `lean/dk_math`; keep edits narrowly scoped.
