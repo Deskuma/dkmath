@@ -2,7 +2,7 @@
 
 Branch: `research/FLT7-Mod42-AllocationSieve-261013-v0`
 Base: `develop` (first prepared 2026-10-13).
-Current status: **Gates 001–004 and 006–010 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 011 AUTHORIZED / proof pending**. See `review-001.md` through `review-010.md`.
+Current status: **Gates 001–004 and 006–011 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 012 AUTHORIZED / proof pending**. See `review-001.md` through `review-011.md`.
 
 ## Goals and gates
 
@@ -19,7 +19,8 @@ Current status: **Gates 001–004 and 006–010 ACCEPTED (Outcome A); gate 005 A
 | 008 | Divisor-dependent modulo-five image audit | General 5-unit r image obstruction s≡r² mod 5; same-r receiver exclusion; r=2 cheap + sixth-power discrimination | **ACCEPTED — Outcome A** |
 | 009 | Mixed-obstruction fixed-core closure | Exhaust eligible divisors at M=9653618; exclude r=1 by mod42 and r=2 by mod5; prove full exact sieve false | **ACCEPTED — Outcome A** |
 | 010 | Parametric mixed-obstruction family | Free-s mixed exact exclusion from residues and size; 63,800-core finite bounded progression | **ACCEPTED — Outcome A** |
-| 011 | Unbounded prime-power primitive allocation | Use actual coprimality + prime-power factorization to force eligible r=1 or 2 at M=2*13^(6+4*k), then mixed exact receiver exclusion | **AUTHORIZED — instruction-011.md** |
+| 011 | Unbounded prime-power primitive allocation | Primitivity forces r=1/2 for all M=2*13^n; all k of M=2*13^(6+4*k) have no exact sieve; injectivity | **ACCEPTED — Outcome A** |
+| 012 | Generic prime-power primitive exclusion | Replace special base13 by a prime p; conditional residue theorem modulo42/5; p=223,n=2 regression | **AUTHORIZED — instruction-012.md** |
 
 After each gate, pause for human/Wise Wolf review before issuing the next
 implementation instruction. Do not autonomously expand 001 into 003.
@@ -91,9 +92,13 @@ Synthesize the already-proved mod42 necessary-condition exclusion and general-ga
 
 Generalize the mixed mod42 and mod5 exact allocation obstruction to a parameter s: if s≡1 (mod42), s≡4 (mod5) and 2*s<343*5^7, all eligible divisors of M=2*s should be excluded. Derive this by the actual divisor and coarse bound guards; do not wrap an unproved global exclusion as an assumption. If successful, apply it to M=2*(589+210*k) for k≤63799 (63800 distinct bounded cores). Preserve the finite bound; the same argument does not automatically reach an infinite family or actual source packet values. Codex only implements, checks and reports, with no Git operations.
 
-## Gate 011 — authorized via instruction-011.md
+## Gate 011 — completed and accepted (Outcome A; review-011.md)
 
 Look beyond gate 010's finite size window: exploit the existing **Nat.Coprime r (M/r)** premise in the exact full sieve for M=2*13^n. For an eligible r containing 13, its coprime complement should divide 2, contradicting the coarse size guard; otherwise r divides 2. Formalize this dichotomy, then use the already proved mod42 obstruction at r=1 and mod5 centered-image obstruction at r=2 for every M=2*13^(6+4*k). Check genuine unboundedness/injectivity. This is a proposed source-free arithmetic full-sieve exclusion, not a claim about actual source packet occurrence or FLT7 closure. Codex implements/verifies/reports only; no Git operations.
+
+## Gate 012 — authorized via instruction-012.md
+
+Separate the structural prime-power ownership proof from the special residue computations for 13. For arbitrary prime p and exponent n, membership plus actual quotient coprimality and coarse size should imply eligible r=1/2. Under additional **explicit** congruences p^n≡1 (mod42) and p^n≡4 (mod5), prove absence of the exact full-sieve at M=2*p^n. Verify p=223,n=2 as a distinct prime-base regression. The assumptions do not hold for all primes/exponents; do not infer arbitrary-M impossibility, source-packet existence, or FLT7 closure. Codex implements, checks and reports only; no Git operations.
 
 ## Explicit non-goals
 
