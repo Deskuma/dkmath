@@ -2,7 +2,7 @@
 
 Branch: **research/FLT7-Mod42-AllocationSieve-261013-v0**  
 Base: **develop** (branch forked 2026-10-13).  
-Status: **Gates 001–004 and 006–011 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 012 AUTHORIZED, generic-prime primitive-divisor audit pending**.
+Status: **Gates 001–004 and 006–012 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 013 AUTHORIZED, mod-13 support-image proof pending**.
 
 ## Question
 
@@ -94,7 +94,8 @@ soundness trap to check before writing Lean.
 - Accepted gate 009: [instruction-009.md](instruction-009.md), [report-009.md](report-009.md), [review-009.md](review-009.md), [evidence](evidence/009-verification-summary.md)
 - Accepted gate 010: [instruction-010.md](instruction-010.md), [report-010.md](report-010.md), [review-010.md](review-010.md), [evidence](evidence/010-verification-summary.md)
 - Accepted gate 011: [instruction-011.md](instruction-011.md), [report-011.md](report-011.md), [review-011.md](review-011.md), [evidence](evidence/011-verification-summary.md)
-- Next gate: [instruction-012.md](instruction-012.md) — generic prime-power divisor restriction and residue-conditional exact-sieve exclusion
+- Accepted gate 012: [instruction-012.md](instruction-012.md), [report-012.md](report-012.md), [review-012.md](review-012.md), [evidence](evidence/012-verification-summary.md)
+- Next gate: [instruction-013.md](instruction-013.md) — prime-13 complementary-support obstruction in the actual centered sextic
 - Evidence policy: [evidence/README.md](evidence/README.md)
 - Progress / proof boundaries: [ROADMAP.md](ROADMAP.md)
 - Working folder is `lean/dk_math`; keep edits narrowly scoped.
@@ -116,4 +117,4 @@ actual packet cores or endpoint witnesses. Gate 005 asks what additional
 same-packet carrier/norm/chart constraints can cut across that gap;
 it permits a precise negative audit if no existing bridge suffices.
 
-Gate 005 identified no new source-coupled restriction; an actual-packet bridge to the chosen chart remains unresolved. Gate 006 then **proved** an exact adjacent-image obstruction at the concrete cheap survivor M=589, including all eligible divisors at that fixed core. Gate 007 **proved** a separate uniform local-image obstruction modulo five, showing no exact divisor-one receiver for every M=631+210*k despite cheap and sixth-power screening survival. Gate 008 **proved** the divisor-dependent mod-five no-image theorem for all 5-unit r with s≡r² (mod 5), excluding an exact r=2 allocation at M=9653618 despite passing cheap and sixth-power filters. Gate 009 **proved** full exact allocation exclusion at M=9653618 by combining mod42 at r=1 with mod5 at r=2. Gate 010 **proved** a free-s parameter theorem, and its application to 63,800 distinct cores M=2*(589+210*k) with 0≤k≤63799. The bound is sufficient, not maximal. Gate 011 **proved** that the existing coprimality and size guards force eligible r=1 or 2 for every M=2*13^n, and used this to exclude an infinite family M=2*13^(6+4*k) without a global M bound. Gate 012 examines whether that primitive-prime-power argument is independent of the particular prime 13, under explicit residue conditions modulo 42 and 5. No global FLT7 closure, arbitrary-core receiver emptiness, or strict descent follows.
+Gate 005 identified no new source-coupled restriction; an actual-packet bridge to the chosen chart remains unresolved. Gate 006 then **proved** an exact adjacent-image obstruction at the concrete cheap survivor M=589, including all eligible divisors at that fixed core. Gate 007 **proved** a separate uniform local-image obstruction modulo five, showing no exact divisor-one receiver for every M=631+210*k despite cheap and sixth-power screening survival. Gate 008 **proved** the divisor-dependent mod-five no-image theorem for all 5-unit r with s≡r² (mod 5), excluding an exact r=2 allocation at M=9653618 despite passing cheap and sixth-power filters. Gate 009 **proved** full exact allocation exclusion at M=9653618 by combining mod42 at r=1 with mod5 at r=2. Gate 010 **proved** a free-s parameter theorem, and its application to 63,800 distinct cores M=2*(589+210*k) with 0≤k≤63799. The bound is sufficient, not maximal. Gate 011 **proved** that the existing coprimality and size guards force eligible r=1 or 2 for every M=2*13^n, and used this to exclude an infinite family M=2*13^(6+4*k) without a global M bound. Gate 012 **proved** the prime-power ownership theorem for arbitrary prime p and conditional residues p^n≡1 (mod42), p^n≡4 (mod5), with a distinct p=223,n=2 regression. A two-prime composite diagnostic shows primitive allocations can include r>2. Gate 013 tests a new, unproved **prime-support / polynomial-image** obstruction modulo 13, namely whether 13|s and 13∤r forces the exact center image to be empty. Numerical prechecks are not Lean proof. No global FLT7 closure, arbitrary-core receiver emptiness, or strict descent follows.
