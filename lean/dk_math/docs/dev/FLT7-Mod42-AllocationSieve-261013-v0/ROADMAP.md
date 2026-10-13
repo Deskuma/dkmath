@@ -2,7 +2,7 @@
 
 Branch: `research/FLT7-Mod42-AllocationSieve-261013-v0`
 Base: `develop` (first prepared 2026-10-13).
-Current status: **Gates 001–004 ACCEPTED (Outcome A); gate 005 AUTHORIZED / audit pending**. See `review-001.md` through `review-004.md`.
+Current status: **Gates 001–004 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 006 AUTHORIZED / proof pending**. See `review-001.md` through `review-005.md`.
 
 ## Goals and gates
 
@@ -13,7 +13,8 @@ Current status: **Gates 001–004 ACCEPTED (Outcome A); gate 005 AUTHORIZED / au
 | 002 | Divisor-aware allocation bridge to mod 42 | Both exact branches -> `M/r ≡ 1 (mod 42)`, plus exclusion lemma | **ACCEPTED — Outcome A** |
 | 003 | Independent pre-endpoint arithmetic filter and discrimination audit | Necessary-only candidate filter, exact-to-cheap implication, strict screening example | **ACCEPTED — Outcome A** |
 | 004 | Necessity-boundary audit | Globally exclude cheap core 554; prove an infinite cheap-survivor family; preserve exact-vs-cheap distinction | **ACCEPTED — Outcome A** |
-| 005 | Same-packet source–allocation–chart audit | Inspect real carrier/norm ledger, divisor-one blind spot, missing chart bridge; optional genuinely new theorem | **AUTHORIZED — instruction-005.md** |
+| 005 | Same-packet source–allocation–chart audit | Inspect real carrier/norm ledger, divisor-one blind spot, missing chart bridge; optional genuinely new theorem | **ACCEPTED — Outcome B** |
+| 006 | Centered integer-image bracket at M=589 | Verify strict adjacent-value bracket, exclude exact centered receiver, and if possible all eligible divisor allocations | **AUTHORIZED — instruction-006.md** |
 
 After each gate, pause for human/Wise Wolf review before issuing the next
 implementation instruction. Do not autonomously expand 001 into 003.
@@ -61,9 +62,13 @@ Codex only implements, validates, and reports; **no commit, push, PR, or merge i
 
 Audit the global reach and the limitations of the necessary-only arithmetic filter: show a concrete core excluded for *all* divisor allocations, and exhibit an unbounded family that passes the cheap conditions without asserting any endpoint witness. These are structural boundary certificates, not FLT7 closure. Then stop for review and identify whether a source-coupled invariant is the next target.
 
-## Gate 005 — authorized via instruction-005.md
+## Gate 005 — completed and accepted (Outcome B; review-005.md)
 
 Locate the first source-specific condition linking the actual internal carrier and norm ledger to the **same selected allocation** and centered chart. Distinguish known source results from a new restrictive bridge. Explicitly inspect the divisor-one blind spot in the prime-support route. A documented negative result and exact missing theorem are valid outcomes; do not merely repackage existing exact receiver equivalences or add arbitrary modular filters. Codex handles implementation/audit and reporting only, with no Git operations.
+
+## Gate 006 — authorized via instruction-006.md
+
+An independent Python arbitrary-precision check found the centered target for M=589 and r=1 strictly between consecutive integer polynomial values. Formalize that strict bracket in Lean using the already-proved monotone-image exclusion. Then, if the proof succeeds, transport to exact receiver nonexistence at this **single core**, including the full divisor-allocation sieve via the coarse size guard. Do not infer no cheap allocation at 589 (it does pass the cheap filter), arbitrary-core emptiness, or unconditional FLT7. This is a fresh exact-image route, not a forced perfect-sixth conjecture or a repeat of the same-packet audit.
 
 ## Explicit non-goals
 
