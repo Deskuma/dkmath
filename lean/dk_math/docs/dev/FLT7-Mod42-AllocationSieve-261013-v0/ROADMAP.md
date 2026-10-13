@@ -2,7 +2,7 @@
 
 Branch: `research/FLT7-Mod42-AllocationSieve-261013-v0`
 Base: `develop` (first prepared 2026-10-13).
-Current status: **Gates 001–004 and 006–009 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 010 AUTHORIZED / proof pending**. See `review-001.md` through `review-009.md`.
+Current status: **Gates 001–004 and 006–010 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 011 AUTHORIZED / proof pending**. See `review-001.md` through `review-010.md`.
 
 ## Goals and gates
 
@@ -18,7 +18,8 @@ Current status: **Gates 001–004 and 006–009 ACCEPTED (Outcome A); gate 005 A
 | 007 | Modular image gap for the centered sextic | Uniform modulo-five missing image; unbounded cheap-but-not-exact family at divisor one | **ACCEPTED — Outcome A** |
 | 008 | Divisor-dependent modulo-five image audit | General 5-unit r image obstruction s≡r² mod 5; same-r receiver exclusion; r=2 cheap + sixth-power discrimination | **ACCEPTED — Outcome A** |
 | 009 | Mixed-obstruction fixed-core closure | Exhaust eligible divisors at M=9653618; exclude r=1 by mod42 and r=2 by mod5; prove full exact sieve false | **ACCEPTED — Outcome A** |
-| 010 | Parametric mixed-obstruction family | Establish sufficient residue and finite-bound assumptions on s for full-sieve exclusion at M=2s; prove bounded 63800-core progression | **AUTHORIZED — instruction-010.md** |
+| 010 | Parametric mixed-obstruction family | Free-s mixed exact exclusion from residues and size; 63,800-core finite bounded progression | **ACCEPTED — Outcome A** |
+| 011 | Unbounded prime-power primitive allocation | Use actual coprimality + prime-power factorization to force eligible r=1 or 2 at M=2*13^(6+4*k), then mixed exact receiver exclusion | **AUTHORIZED — instruction-011.md** |
 
 After each gate, pause for human/Wise Wolf review before issuing the next
 implementation instruction. Do not autonomously expand 001 into 003.
@@ -86,9 +87,13 @@ Examine the **actual divisor-dependent centered gap** D=7^27*r^49. A Python-chec
 
 Synthesize the already-proved mod42 necessary-condition exclusion and general-gap mod5 exact-image obstruction **without altering the chosen divisor**. At M=9653618, prove the membership+coarse-size premise forces r=1 or r=2, apply different exact receiver exclusions to these cases, and if successful prove the entire fixed-core SixthPowerSievedNestedCondition false. This is *not* a general FLT7 theorem. Codex implements/verifies/reports only and performs no Git actions.
 
-## Gate 010 — authorized via instruction-010.md
+## Gate 010 — completed and accepted (Outcome A; review-010.md)
 
 Generalize the mixed mod42 and mod5 exact allocation obstruction to a parameter s: if s≡1 (mod42), s≡4 (mod5) and 2*s<343*5^7, all eligible divisors of M=2*s should be excluded. Derive this by the actual divisor and coarse bound guards; do not wrap an unproved global exclusion as an assumption. If successful, apply it to M=2*(589+210*k) for k≤63799 (63800 distinct bounded cores). Preserve the finite bound; the same argument does not automatically reach an infinite family or actual source packet values. Codex only implements, checks and reports, with no Git operations.
+
+## Gate 011 — authorized via instruction-011.md
+
+Look beyond gate 010's finite size window: exploit the existing **Nat.Coprime r (M/r)** premise in the exact full sieve for M=2*13^n. For an eligible r containing 13, its coprime complement should divide 2, contradicting the coarse size guard; otherwise r divides 2. Formalize this dichotomy, then use the already proved mod42 obstruction at r=1 and mod5 centered-image obstruction at r=2 for every M=2*13^(6+4*k). Check genuine unboundedness/injectivity. This is a proposed source-free arithmetic full-sieve exclusion, not a claim about actual source packet occurrence or FLT7 closure. Codex implements/verifies/reports only; no Git operations.
 
 ## Explicit non-goals
 
