@@ -1,5 +1,7 @@
 # Facade / CI integration audit — 2026-10-14
 
+> **2026-10-14 REVISION — USER MAINTENANCE DECISION.** This file preserves the original audit findings, but the proposed mandatory `DkMathTest` integration and PR CI test-suite addition **have been withdrawn**. `DkMathTest` is an opt-in research scratchpad; maintain existing production-only GitHub CI and do not import the 19 old tests into `DkMathTest.lean`. The original CI recommendation below is **historical and superseded**, not an instruction to implement. The authoritative replacement is [instruction-closeout-facade-261014.md](instruction-closeout-facade-261014.md). The **production Facade missing import finding remains valid**.
+
 Branch: `research/FLT7-Mod42-AllocationSieve-261013-v0`
 Comparison basis: `develop...research/FLT7-Mod42-AllocationSieve-261013-v0`, before closing edits.
 Observed base-relative state: ahead 99 commits, behind 0, **139 files added**, including **17 DkMath/FLT/Seven production** modules and **19 DkMathTest/FLT/Seven test** modules. These are facts from the GitHub compare endpoint at the time of audit; the closing documentation commits subsequently advance the branch.
