@@ -49,17 +49,17 @@ https://github.com/anthropics/fermats-last-theorem/tree/6e837e75355538c7f80bab5b
 
 Read `PROOF-PATH.md`, `ATTRIBUTION.md`, and these code portions:
 
-| Source | Approx. lines at reference commit | Question |
-| --- | --- | --- |
-| `P2M/Sol/S_flt_regular.lean` | 48–90 | regular prime and class-group principalization |
-| same | 278–515; 1193–1330 | coprime cyclotomic ideals and Case I |
-| same | 749–954 | cyclotomic unit/conjugation lemmas |
-| same | 2730–3290 | Kummer extension, Hilbert94, unit `p`-th power |
-| same | 3448–4037 | Case II factorization and descent construction |
-| same | 4084–4245 | strict descent contradiction, case split, endpoint |
-| `P2M/Sol/S_fermatLastTheoremSeven.lean` | entire short file | PID -> class number 1 -> `flt_regular` |
-| `Theorems/Thm_flt_regular.lean` | entire file | exact generic signature |
-| `P2M/Sol/S_IsCyclotomicExtension_Rat_seven_pid.lean` | main theorem | what was proved about the seven-cyclotomic ring |
+| Source                                               | Approx. lines at reference commit | Question                                           |
+| ---------------------------------------------------- | --------------------------------- | -------------------------------------------------- |
+| `P2M/Sol/S_flt_regular.lean`                         | 48–90                             | regular prime and class-group principalization     |
+| same                                                 | 278–515; 1193–1330                | coprime cyclotomic ideals and Case I               |
+| same                                                 | 749–954                           | cyclotomic unit/conjugation lemmas                 |
+| same                                                 | 2730–3290                         | Kummer extension, Hilbert94, unit `p`-th power     |
+| same                                                 | 3448–4037                         | Case II factorization and descent construction     |
+| same                                                 | 4084–4245                         | strict descent contradiction, case split, endpoint |
+| `P2M/Sol/S_fermatLastTheoremSeven.lean`              | entire short file                 | PID -> class number 1 -> `flt_regular`             |
+| `Theorems/Thm_flt_regular.lean`                      | entire file                       | exact generic signature                            |
+| `P2M/Sol/S_IsCyclotomicExtension_Rat_seven_pid.lean` | main theorem                      | what was proved about the seven-cyclotomic ring    |
 
 Reference source is external: no importing the completed FLT7 theorem;
 no wholesale transplantation of ~4,200 lines. Note flt-regular
@@ -159,8 +159,6 @@ record source-only conclusions separately and do not mark kernel accepted.
 - Do not claim a general unit-surjectivity result:
   `∀ u : Rˣ, ∃ v, u=v^7` is stronger than Kummer's *congruence-constrained*
   lemma and is generally false.
-- Build one focused target at a time (`LEAN_NUM_THREADS=1` or 2), preserve
-  local changes, record command/exit code and `#print axioms` results.
 - At finish, report whether Gate 002 is ready, blocked by a concrete
   hypothesis, or needs corrected mathematical scope. Keep FLT7 OPEN unless
   an independent contradiction has actually been kernel checked.
