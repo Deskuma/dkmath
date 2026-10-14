@@ -1,0 +1,29 @@
+{
+  "observation": "OBS-015-UniqueProperTargetColorPinSite",
+  "date": "2026-09-30",
+  "source_directory": "python/Tromino/results/repair-depth/w9-target0-pin-scan-v24",
+  "baseline_first_exit_depth": 9,
+  "target_color": 0,
+  "candidate_vertices": [4,5,8,9,10,13,17,18],
+  "raising_vertices": [4],
+  "invalid_vertices": [5,8,9,10,13,17,18],
+  "unique_proper_target_pin_vertex": 4,
+  "invalid_zero_conflicts": {
+    "5": [14],
+    "8": [12,15],
+    "9": [12],
+    "10": [12],
+    "13": [14],
+    "17": [15],
+    "18": [12,15]
+  },
+  "vertex4": {
+    "change": "1 -> 0",
+    "first_exit_depth": 10,
+    "depth9_exits": 0,
+    "depth10_exits": 4
+  },
+  "interpretation": "uniqueness is currently a proper-coloring feasibility uniqueness, not a comparison among multiple valid target-zero pins",
+  "next_experiment": "scan all proper single-vertex recolorings of unlocked colored blocker neighbors",
+  "status": "observation_only"
+}

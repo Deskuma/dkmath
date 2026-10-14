@@ -1,0 +1,41 @@
+{
+  "best_depth": 10,
+  "best_depth_frontier": 279278,
+  "best_depth_index": 1,
+  "best_depth_move": [
+    4,
+    21,
+    5,
+    17
+  ],
+  "best_frontier_depth": 10,
+  "best_frontier_expanded": 279278,
+  "best_frontier_index": 1,
+  "best_frontier_move": [
+    4,
+    21,
+    5,
+    17
+  ],
+  "classification_counts": {
+    "solved": 17
+  },
+  "depth_counts": {
+    "10": 1,
+    "4": 2,
+    "5": 2,
+    "6": 6,
+    "7": 3,
+    "8": 3
+  },
+  "elapsed_seconds": 99.18281507492065,
+  "format_version": 2,
+  "intermediate_policy": "endpoint",
+  "legal_preserving_neighbors": 17,
+  "max_depth_checked": 10,
+  "node_limit": 6000000,
+  "resolved_neighbors": 17,
+  "source_required_depth": 9,
+  "source_seed": 11000009,
+  "source_witness": "python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json"
+}

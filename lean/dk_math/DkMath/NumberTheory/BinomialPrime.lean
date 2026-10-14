@@ -17,9 +17,8 @@ namespace NumberTheory
 This file records the first stable divisibility layer for the binomial roadmap:
 if `p` is prime, then every inner coefficient in row `p` is divisible by `p`.
 
-The converse direction is intentionally left to a later file/checkpoint, where
-we can decide whether to use a mathlib theorem or prove the composite witness
-directly.
+The converse is proved in PascalPrebirthBoundary using Mathlib's common-gcd
+classification. This foundational file retains the low-dependency forward API.
 -/
 
 /-- All inner binomial coefficients in row `d` are divisible by `m`. -/
@@ -36,11 +35,12 @@ def InnerRowSupportPrime (d p : ℕ) : Prop :=
   p.Prime ∧ AllInnerChooseDivisible d p
 
 /--
-A support prime born from the row index itself.
+A historical row-index support carrier.
 
-This deliberately does not assert that `d` is prime. Prime powers can also make
-their base prime appear across all inner coefficients, so the reverse direction
-is kept out of this first observation layer.
+This means common inner support together with divisibility of the row index.
+It does not mean globally new prime-coordinate birth: higher prime powers
+resynchronize an already existing prime direction. The decoder retains the
+separate genuine birth semantics.
 -/
 def RowBirthPrime (d p : ℕ) : Prop :=
   InnerRowSupportPrime d p ∧ p ∣ d

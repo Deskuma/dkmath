@@ -1,0 +1,34 @@
+{
+  "observation": "OBS-020-UnitSlopeStructural",
+  "date": "2026-09-30",
+  "source": "python/Tromino/results/repair-depth/w9-sector-height-census-v24/summary.json",
+  "neighbors_evaluated": 6,
+  "states_evaluated": 98,
+  "height_labels_equal_states": 21,
+  "height_labels_lower_states": 77,
+  "height_labels_higher_states": 0,
+  "height_shift_counts": {
+    "0": 21,
+    "-1": 32,
+    "-2": 29,
+    "-3": 8,
+    "-4": 8
+  },
+  "all_height_labels_preserved_neighbors": [1],
+  "unit_slope_neighbors": [1,3,11,13,14,16],
+  "depth11_neighbors": [],
+  "all_initial_safe_candidate_sets_empty": true,
+  "all_state_edges_singleton_kempe": true,
+  "formalization_ready": [
+    "child-admissibility sectorization",
+    "repair height as distance to exit set",
+    "distance-to-exit unit-slope",
+    "proper one-point recolor implies singleton Kempe exchange"
+  ],
+  "still_empirical": [
+    "child height never exceeds matched parent height",
+    "specific numeric height distributions",
+    "transport compatibility of arbitrary preserving flips"
+  ],
+  "status": "structural-theorem-candidate"
+}

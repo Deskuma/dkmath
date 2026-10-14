@@ -5,6 +5,9 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Analysis.DkReal.Basic
+import Mathlib.Analysis.Normed.Group.Rat
+import Mathlib.Analysis.Normed.Field.Lemmas
+import Mathlib.Analysis.Normed.Ring.Lemmas
 
 #print "file: DkMath.Analysis.DkReal.Pow"
 
@@ -143,8 +146,11 @@ theorem tendsto_powNonnegApprox_width_zero_of_gapGN_bounded
         (fun n =>
           (x.interval n).width *
             gapGN d (x.interval n).lo (x.interval n).width)
-        Filter.atTop (nhds 0) :=
-    x.tendsto_width_zero.zero_mul_isBoundedUnder_le hbounded
+        Filter.atTop (nhds 0) := by
+    exact Filter.Tendsto.zero_mul_isBoundedUnder_le
+      (f := fun n => (x.interval n).width)
+      (g := fun n => gapGN d (x.interval n).lo (x.interval n).width)
+      (l := Filter.atTop) x.tendsto_width_zero hbounded
   simpa only [powNonnegApprox_width_eq] using hmul
 
 /--

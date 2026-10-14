@@ -1,0 +1,32 @@
+{
+  "observation": "OBS-009-SingleFlipDepthJumpNineToTen",
+  "date": "2026-09-29",
+  "source_directory": "python/Tromino/results/repair-depth/seeded-w9-frontier2-d10-v24",
+  "parent_w9": {
+    "seed": 11000009,
+    "required_depth": 9,
+    "depth_minus_one_expanded": 374152
+  },
+  "w10": {
+    "seed": 12000006,
+    "required_depth": 10,
+    "depth9_expanded": 279278,
+    "depth10_expanded": 279308,
+    "repairs": 4,
+    "repair_moves_total": 14,
+    "critical_node": 19,
+    "critical_step": 16,
+    "critical_footprint_size": 15,
+    "critical_max_component_size": 8,
+    "critical_radius": 2
+  },
+  "transition": {
+    "mutation_suffix_length": 1,
+    "move": [4,21,5,17],
+    "removed_faces": [[4,5,21],[4,17,21]],
+    "added_faces": [[4,5,17],[5,17,21]]
+  },
+  "harness_statement": "D_endpoint^H(G_12000006) = 10",
+  "next_experiment": "complete one-flip neighborhood classification of the OBS-008 W9 frontier witness",
+  "status": "observation_only"
+}

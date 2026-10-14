@@ -29,6 +29,7 @@ namespace DkMathTest.CFBRC
 open DkMath.CFBRC
 open DkMath.CFBRC.TrigBridge
 open DkMath.CosmicFormulaBinom
+open ComplexConjugate
 
 -- d=2 三角置換 bridge
 example (a φ : ℝ) :
@@ -73,9 +74,39 @@ example {p x u q : ℕ} (hq : Nat.Prime q) (hqx : ¬ q ∣ x) :
   prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
     (p := p) (x := x) (u := u) (q := q) hq hqx
 
+example {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
+    cyclotomicPrimeCore d x u = DkMath.CosmicFormula.GTail d 1 x u :=
+  cyclotomicPrimeCore_eq_GTail_one d x u
+
+example {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
+    cyclotomicPrimeCore d x u = GN d x u :=
+  cyclotomicPrimeCore_eq_GN d x u
+
+example (d u : ℕ) :
+    cyclotomicPrimeCore d 0 u = GN d 0 u :=
+  cyclotomicPrimeCore_eq_GN d 0 u
+
 example {d x u : ℕ} (hx : 0 < x) :
     cyclotomicPrimeCore d x u = GN d x u :=
   cyclotomicPrimeCore_eq_GN_nat (p := d) (x := x) (u := u) hx
+
+#print axioms DkMath.CFBRC.cyclotomicPrimeCore_eq_GN
+
+example {K : Type*} [Field K] {p : ℕ} [Fact p.Prime]
+    (ζ : K) (hζ : IsPrimitiveRoot ζ p) (x u : K) :
+    x * cyclotomicRootProduct (p := p) ζ x u = (x + u) ^ p - u ^ p :=
+  gap_mul_cyclotomicRootProduct_eq_sub_pow ζ hζ x u
+
+example {p : ℕ} [Fact p.Prime]
+    (ζ : ℂ) (a : ZMod p) (x u : ℂ) :
+    DkMath.NumberTheory.CyclotomicQRProduct.rootFactor ζ a (x + u) u * conj
+          (DkMath.NumberTheory.CyclotomicQRProduct.rootFactor ζ a (x + u) u) =
+      Complex.normSq
+        (DkMath.NumberTheory.CyclotomicQRProduct.rootFactor ζ a (x + u) u) :=
+  complex_rootFactor_mul_conj_eq_normSq ζ a x u
+
+#print axioms DkMath.CFBRC.gap_mul_cyclotomicRootProduct_eq_sub_pow
+#print axioms DkMath.CFBRC.complex_rootFactor_mul_conj_eq_normSq
 
 -- general d の Re/Im 補助
 example (X Θ : ℝ) :
@@ -142,6 +173,7 @@ example (d : ℕ) (X Θ : ℝ) :
     Complex.im (cfbrcClosed d X Θ) = cfbrcImClosed d X Θ := by
   simpa using cfbrcClosed_im_eq_cfbrcImClosed d X Θ
 
+/-- Convert the closed complex real part back to the recursive real API. -/
 private lemma cfbrcClosed_re_eq_cfbrcRe_via_closed (d : ℕ) (X Θ : ℝ) :
     Complex.re (cfbrcClosed d X Θ) = cfbrcRe d X Θ := by
   calc
@@ -150,6 +182,7 @@ private lemma cfbrcClosed_re_eq_cfbrcRe_via_closed (d : ℕ) (X Θ : ℝ) :
     _ = cfbrcRe d X Θ := by
       simpa using (cfbrcRe_eq_cfbrcReClosed d X Θ).symm
 
+/-- Convert the closed complex imaginary part back to the recursive imaginary API. -/
 private lemma cfbrcClosed_im_eq_cfbrcIm_via_closed (d : ℕ) (X Θ : ℝ) :
     Complex.im (cfbrcClosed d X Θ) = cfbrcIm d X Θ := by
   calc
@@ -395,10 +428,12 @@ example (X Θ : ℝ) :
   simpa [cfbrcClosed_im_eq_cfbrcIm_via_closed] using cfbrcIm_twelve_from_template X Θ
 
 -- d=3..12 回帰（`cfbrcReClosed` / `cfbrcImClosed` 主語）
+/-- Orient the real closed-form equality for use in regression examples. -/
 private lemma cfbrcReClosed_eq_cfbrcRe_via_api (d : ℕ) (X Θ : ℝ) :
     cfbrcReClosed d X Θ = cfbrcRe d X Θ := by
   simpa using (cfbrcRe_eq_cfbrcReClosed d X Θ).symm
 
+/-- Orient the imaginary closed-form equality for use in regression examples. -/
 private lemma cfbrcImClosed_eq_cfbrcIm_via_api (d : ℕ) (X Θ : ℝ) :
     cfbrcImClosed d X Θ = cfbrcIm d X Θ := by
   simpa using (cfbrcIm_eq_cfbrcImClosed d X Θ).symm

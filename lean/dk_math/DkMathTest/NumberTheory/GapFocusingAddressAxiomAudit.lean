@@ -1,0 +1,68 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.NumberTheory.GapFocusing
+
+#print "file: DkMathTest.NumberTheory.GapFocusingAddressAxiomAudit"
+
+#print axioms DkMath.NumberTheory.GapFocusing.isRoot_cyclotomic_iff_prime_pow_mul_orderOf
+#print axioms DkMath.NumberTheory.GapFocusing.isRoot_cyclotomic_iff_orderOf_of_not_dvd
+#print axioms DkMath.NumberTheory.GapFocusing.isRoot_cyclotomic_mul_prime_iff
+#print axioms DkMath.NumberTheory.GapFocusing.isRoot_cyclotomic_mul_prime_pow_iff
+#print axioms DkMath.NumberTheory.GapFocusing.prime_dvd_cyclotomicEval_iff_isRoot
+#print axioms DkMath.NumberTheory.GapFocusing.prime_dvd_cyclotomicEval_iff_prime_pow_mul_orderOf
+#print axioms DkMath.NumberTheory.GapFocusing.prime_dvd_cyclotomicEval_iff_orderOf_of_not_dvd
+#print axioms DkMath.NumberTheory.GapFocusing.prime_dvd_cyclotomicEval_mul_prime_pow_iff
+#print axioms DkMath.NumberTheory.GapFocusing.primeRatio
+#print axioms DkMath.NumberTheory.GapFocusing.primeOrder
+#print axioms DkMath.NumberTheory.GapFocusing.primeRatio_ne_zero
+#print axioms DkMath.NumberTheory.GapFocusing.primeOrder_eq_unit_order
+#print axioms DkMath.NumberTheory.GapFocusing.int_dvd_pow_sub_pow_iff_primeOrder_dvd
+#print axioms DkMath.NumberTheory.GapFocusing.nat_dvd_pow_sub_pow_iff_primeOrder_dvd
+#print axioms DkMath.NumberTheory.GapFocusing.primeOrder_dvd_prime_sub_one
+#print axioms DkMath.NumberTheory.GapFocusing.primeOrder_pos
+#print axioms DkMath.NumberTheory.GapFocusing.primeOrder_coprime_prime
+#print axioms DkMath.NumberTheory.GapFocusing.primitivePrimeDivisor_not_dvd_coordinates
+#print axioms DkMath.NumberTheory.GapFocusing.primitivePrimeDivisor_iff_primeOrder_eq
+#print axioms DkMath.NumberTheory.GapFocusing.primitivePrimeDivisor_iff_primeOrder_eq_and_not_dvd
+#print axioms DkMath.NumberTheory.GapFocusing.primitivePrimeDivisor_degree_dvd_prime_sub_one
+#print axioms DkMath.NumberTheory.GapFocusing.map_cyclotomicShiftedEval
+#print axioms DkMath.NumberTheory.GapFocusing.cyclotomicShiftedEval_one_eq_cyclotomicEval
+#print axioms DkMath.NumberTheory.GapFocusing.primeLayerAddresses
+#print axioms DkMath.NumberTheory.GapFocusing.layerPrimeSupport
+#print axioms DkMath.NumberTheory.GapFocusing.primeLayerAddresses_eq_support_fiber
+#print axioms DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_isRoot
+#print axioms DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_prime_pow_mul_orderOf
+#print axioms DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_primeOrder_eq_of_not_dvd
+#print axioms DkMath.NumberTheory.GapFocusing.mem_primeLayerAddresses_iff
+#print axioms DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_mul_prime_iff
+#print axioms DkMath.NumberTheory.GapFocusing.FirstLayerAppearance
+#print axioms DkMath.NumberTheory.GapFocusing.firstLayerAppearance_iff_primeOrder_eq
+#print axioms DkMath.NumberTheory.GapFocusing.primitivePrimeDivisor_iff_firstLayerAppearance
+#print axioms DkMath.NumberTheory.GapFocusing.primitivePrimeDivisor_firstLayerAppearance
+#print axioms DkMath.NumberTheory.GapFocusing.primeLayerAddresses_isLeast_of_one_lt_primeOrder
+#print axioms DkMath.NumberTheory.GapFocusing.primeLayerAddresses_isLeast_of_primeOrder_eq_one
+#print axioms DkMath.NumberTheory.GapFocusing.exists_gt_mem_primeLayerAddresses_of_mem
+#print axioms DkMath.NumberTheory.GapFocusing.eval_homogenize_zero_second
+#print axioms DkMath.NumberTheory.GapFocusing.cyclotomicShiftedEval_zero_anchor
+#print axioms DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_dvd_first_of_dvd_second
+#print axioms DkMath.NumberTheory.GapFocusing.primeLayerAddresses_of_dvd_second
+#print axioms DkMath.NumberTheory.GapFocusing.primeLayerAddresses_eq_empty_of_dvd_second
+#print axioms DkMath.NumberTheory.GapFocusing.primeLayerAddresses_eq_nontrivial_of_dvd_coordinates
+#print axioms DkMath.NumberTheory.GapFocusing.primeLayerAddresses_eq_empty_of_dvd_first
+#print axioms DkMath.NumberTheory.GapFocusing.padicValInt_cyclotomicEval_eq_pow_sub_one_of_orderOf_eq
+#print axioms DkMath.NumberTheory.GapFocusing.padicValNat_pow_sub_pow_mul_prime_pow
+#print axioms DkMath.NumberTheory.GapFocusing.padicValNat_pow_sub_pow_mul_two_pow_succ
+#print axioms DkMath.NumberTheory.GapFocusing.natAbs_cyclotomicEval_prime_pow
+#print axioms DkMath.NumberTheory.GapFocusing.natAbs_cyclotomicEval_prime_pow_mul_sub_one
+#print axioms DkMath.NumberTheory.GapFocusing.padicValNat_cyclotomicEval_prime_pow_eq_one
+#print axioms DkMath.NumberTheory.GapFocusing.padicValNat_cyclotomicEval_two
+#print axioms DkMath.NumberTheory.GapFocusing.padicValNat_cyclotomicEval_two_pow_succ_eq_one
+
+-- Existing existence endpoints retain their explicit sufficient hypotheses.
+#print axioms DkMath.Zsigmondy.exists_primitivePrimeDivisor_prime_exp
+#print axioms DkMath.Zsigmondy.exists_primitivePrimeDivisor_body_nat
+#print axioms DkMath.Zsigmondy.exists_primitivePrimeDivisor_kernel_nat

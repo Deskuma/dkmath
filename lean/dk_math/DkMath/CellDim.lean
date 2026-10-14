@@ -4,7 +4,14 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
+import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+import Mathlib.Data.Finset.Pi
+import Mathlib.Data.Int.Basic
+import Mathlib.Data.Fintype.Basic
+import Mathlib.Data.Fintype.Card
+import Mathlib.Data.Fintype.Fin
+import Mathlib.Data.Fintype.BigOperators
+import Mathlib.Tactic.FinCases
 
 #print "file: DkMath.CellDim"
 

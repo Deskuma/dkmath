@@ -41,6 +41,8 @@ structure PrimeTraceOneStrippedIdealPacket
     (P : PrimeTraceOneCoordinatePacket L p ζ hζ) : Type where
   adicSplit : PrimeAdicPowerSplit p g u x
   parent : TraceOneInt (signedPrimeParameter p)
+  parent_eq_coord :
+    parent = P.coord (g + u : ℤ) (u : ℤ)
   residual : TraceOneInt (signedPrimeParameter p)
   axis_eq : parent = discrAxis (signedPrimeParameter p) * residual
   parent_coordinate_coprime : IsCoprime parent.fst parent.snd
@@ -58,12 +60,13 @@ structure PrimeTraceOneStrippedIdealPacket
   residual_span_eq :
     Ideal.span ({residual} : Set _) = idealRoot ^ p
 
+/-- The parent TraceOne coordinate has the packet residual norm. -/
 private theorem parent_norm_eq_natCast_residual
     {L : Type*} [Field L] [Algebra ℚ L]
     {p g u : ℕ} [Fact p.Prime]
     [IsCyclotomicExtension {p} ℚ L]
     {ζ : L} {hζ : IsPrimitiveRoot ζ p}
-    (P : PrimeTraceOneCoordinatePacket L p ζ hζ) (hg : g ≠ 0) :
+    (P : PrimeTraceOneCoordinatePacket L p ζ hζ) :
     norm (P.coord (g + u : ℤ) (u : ℤ)) =
       ((GTail p 1 g u : ℕ) : ℤ) := by
   rw [P.coord_norm_eq]
@@ -72,9 +75,10 @@ private theorem parent_norm_eq_natCast_residual
   have hnat :
       ((GTail p 1 g u : ℕ) : ℤ) =
         GTailCyclotomicShell p (g : ℤ) (u : ℤ) :=
-    DkMath.CosmicFormula.natCast_GTail_one_eq_GTailCyclotomicShell hg
+    DkMath.CosmicFormula.natCast_GTail_one_eq_GTailCyclotomicShell
   exact hnat.symm
 
+/-- The parent coordinate is nonzero because the ramified residual is positive. -/
 private theorem parent_norm_ne_zero
     {p g u x : ℕ} (P0 : PrimeAdicFactorPacket p g u x)
     {L : Type*} [Field L] [Algebra ℚ L]
@@ -85,7 +89,7 @@ private theorem parent_norm_ne_zero
     norm (P.coord (g + u : ℤ) (u : ℤ)) ≠ 0 := by
   have hnorm : norm (P.coord (g + u : ℤ) (u : ℤ)) =
       ((GTail p 1 g u : ℕ) : ℤ) :=
-    parent_norm_eq_natCast_residual P P0.gap_pos.ne'
+    parent_norm_eq_natCast_residual P
   intro hzero
   have hreszero : GTail p 1 g u = 0 := by
     apply Int.ofNat_eq_zero.mp
@@ -96,8 +100,9 @@ private theorem parent_norm_ne_zero
     Nat.mul_pos P0.prime.pos (Nat.pow_pos S.b_pos)
   omega
 
+/-- The parent norm is the prime times the residual `p`-th power. -/
 private theorem parent_natAbs_norm_eq_split
-    {p g u x : ℕ} (P0 : PrimeAdicFactorPacket p g u x)
+    {p g u x : ℕ} (_P0 : PrimeAdicFactorPacket p g u x)
     {L : Type*} [Field L] [Algebra ℚ L]
     [Fact p.Prime] [IsCyclotomicExtension {p} ℚ L]
     {ζ : L} {hζ : IsPrimitiveRoot ζ p}
@@ -105,15 +110,17 @@ private theorem parent_natAbs_norm_eq_split
     (S : PrimeAdicPowerSplit p g u x) :
     Int.natAbs (norm (P.coord (g + u : ℤ) (u : ℤ))) =
       p * S.b ^ p := by
-  rw [parent_norm_eq_natCast_residual P P0.gap_pos.ne']
+  rw [parent_norm_eq_natCast_residual P]
   rw [Int.natAbs_natCast, S.residual_eq]
 
+/-- A nonzero principal generator gives a non-bottom ideal. -/
 private theorem ideal_ne_bot_of_generator_ne_zero
     {R : Type*} [CommRing R] {r : R} (hr : r ≠ 0) :
     Ideal.span ({r} : Set R) ≠ ⊥ := by
   intro hbot
   exact hr (Ideal.span_singleton_eq_bot.mp hbot)
 
+/-- A nonzero principal ideal that is a positive power has a nonzero root. -/
 private theorem ideal_root_nonzero_of_span_eq_pow
     {R : Type*} [CommRing R] [IsDedekindDomain R]
     {r : R} {I : Ideal R} {p : ℕ}
@@ -126,6 +133,15 @@ private theorem ideal_root_nonzero_of_span_eq_pow
   rw [hspan, hI, zero_pow hp]
   simp only [Ideal.zero_eq_bot]
 
+/-- Every supplied prime-adic packet yields a stripped TraceOne ideal packet.
+
+The construction first removes the discriminant axis from the normalized
+TraceOne coordinate.  Coordinate coprimality and the terminal axis condition
+make the residual and its conjugate ideal-coprime; the residual norm is a
+`p`-th power, so their product is a `p`-th power of a principal ideal.  The
+ideal-power factor lemma then supplies the root.  This theorem packages the
+conditional descent data only: it stops before principalizing that root or
+using a class-group conclusion. -/
 theorem nonempty_primeTraceOneStrippedIdealPacket
     {L : Type*} [Field L] [Algebra ℚ L]
     {p g u x : ℕ} [Fact p.Prime]
@@ -187,6 +203,7 @@ theorem nonempty_primeTraceOneStrippedIdealPacket
   refine ⟨{
     adicSplit := S
     parent := parent
+    parent_eq_coord := by rfl
     residual := residual
     axis_eq := haxis
     parent_coordinate_coprime := hparent_coprime
@@ -199,6 +216,7 @@ theorem nonempty_primeTraceOneStrippedIdealPacket
     idealRoot_nonzero := hroot_nonzero
     residual_span_eq := hres_span }⟩
 
+/-- Choose one stripped ideal packet from the nonemptiness theorem. -/
 noncomputable def primeTraceOneStrippedIdealPacket
     {L : Type*} [Field L] [Algebra ℚ L]
     {p g u x : ℕ} [Fact p.Prime]

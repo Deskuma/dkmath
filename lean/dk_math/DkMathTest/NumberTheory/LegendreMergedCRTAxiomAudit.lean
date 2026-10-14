@@ -1,0 +1,130 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.NumberTheory.Legendre
+import DkMathTest.NumberTheory.LegendreMergedCRT
+import DkMathTest.NumberTheory.LegendreMergedCRTRegression
+
+#print "file: DkMathTest.NumberTheory.LegendreMergedCRTAxiomAudit"
+
+#check DkMath.NumberTheory.union_excess_add_inter_card
+#print axioms DkMath.NumberTheory.union_excess_add_inter_card
+#check DkMath.NumberTheory.add_excess_le_union_excess_of_inter_card_le_one
+#print axioms DkMath.NumberTheory.add_excess_le_union_excess_of_inter_card_le_one
+#check DkMath.NumberTheory.Legendre.mergedSeatWitness
+#print axioms DkMath.NumberTheory.Legendre.mergedSeatWitness
+#check DkMath.NumberTheory.Legendre.mergedSeatCharge
+#print axioms DkMath.NumberTheory.Legendre.mergedSeatCharge
+#check DkMath.NumberTheory.Legendre.mergedSeatWitness_subset_activeSupport
+#print axioms DkMath.NumberTheory.Legendre.mergedSeatWitness_subset_activeSupport
+#check DkMath.NumberTheory.Legendre.mergedSeatCharge_le_supportExcess
+#print axioms DkMath.NumberTheory.Legendre.mergedSeatCharge_le_supportExcess
+#check DkMath.NumberTheory.Legendre.mergedSeatCharge_le_supportExcess_of_modEq
+#print axioms DkMath.NumberTheory.Legendre.mergedSeatCharge_le_supportExcess_of_modEq
+#check DkMath.NumberTheory.Legendre.mergedSeatWitness_eq_of_injOn
+#print axioms DkMath.NumberTheory.Legendre.mergedSeatWitness_eq_of_injOn
+#check DkMath.NumberTheory.Legendre.mergedSeatCharge_eq_indexed_of_injOn
+#print axioms DkMath.NumberTheory.Legendre.mergedSeatCharge_eq_indexed_of_injOn
+#check DkMath.NumberTheory.Legendre.uncovered_nonempty_of_merged_certificates
+#print axioms DkMath.NumberTheory.Legendre.uncovered_nonempty_of_merged_certificates
+#check DkMath.NumberTheory.Legendre.prime_squareCell_of_merged_certificates
+#print axioms DkMath.NumberTheory.Legendre.prime_squareCell_of_merged_certificates
+#check DkMath.NumberTheory.Legendre.two_family_charge_le_supportExcess
+#print axioms DkMath.NumberTheory.Legendre.two_family_charge_le_supportExcess
+#check DkMath.NumberTheory.exists_support_one_offset_le_period
+#print axioms DkMath.NumberTheory.exists_support_one_offset_le_period
+#check DkMath.NumberTheory.exists_positive_period_lift_family
+#print axioms DkMath.NumberTheory.exists_positive_period_lift_family
+#check DkMath.NumberTheory.Legendre.candidate_of_two_prime_power_point_modEq_one
+#print axioms DkMath.NumberTheory.Legendre.candidate_of_two_prime_power_point_modEq_one
+#check DkMath.NumberTheory.Legendre.active_product_coprime_two_prime
+#print axioms DkMath.NumberTheory.Legendre.active_product_coprime_two_prime
+#check DkMath.NumberTheory.Legendre.exists_candidate_support_of_mixed_product_le
+#print axioms DkMath.NumberTheory.Legendre.exists_candidate_support_of_mixed_product_le
+#check DkMath.NumberTheory.Legendre.mixed_anchor_period_family_charge_le_supportExcess
+#print axioms DkMath.NumberTheory.Legendre.mixed_anchor_period_family_charge_le_supportExcess
+#check DkMath.NumberTheory.Legendre.exists_prime_anchor_period_support_family
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_anchor_period_support_family
+#check DkMath.NumberTheory.Legendre.prime_star_pair_charge_le_supportExcess
+#print axioms DkMath.NumberTheory.Legendre.prime_star_pair_charge_le_supportExcess
+#check DkMath.NumberTheory.Legendre.prime_star_pair_linear_charge
+#print axioms DkMath.NumberTheory.Legendre.prime_star_pair_linear_charge
+#check DkMathTest.LegendreMergedCRT.controlledBasis
+#print axioms DkMathTest.LegendreMergedCRT.controlledBasis
+#check DkMathTest.LegendreMergedCRT.checkpointData
+#print axioms DkMathTest.LegendreMergedCRT.checkpointData
+#check DkMathTest.LegendreMergedCRT.comparisonData
+#print axioms DkMathTest.LegendreMergedCRT.comparisonData
+#check DkMathTest.LegendreMergedCRT.extraCapData
+#print axioms DkMathTest.LegendreMergedCRT.extraCapData
+#check DkMathTest.LegendreMergedCRT.floorComparisonData
+#print axioms DkMathTest.LegendreMergedCRT.floorComparisonData
+#check DkMathTest.LegendreMergedCRT.mixedAnchorData
+#print axioms DkMathTest.LegendreMergedCRT.mixedAnchorData
+#check DkMathTest.LegendreMergedCRT.familyData
+#print axioms DkMathTest.LegendreMergedCRT.familyData
+#check DkMathTest.LegendreMergedCRT.restrictedWitness
+#print axioms DkMathTest.LegendreMergedCRT.restrictedWitness
+#check DkMathTest.LegendreMergedCRT.checkpoint_families_realized
+#print axioms DkMathTest.LegendreMergedCRT.checkpoint_families_realized
+#check DkMathTest.LegendreMergedCRT.checkpoint_charge_checked
+#print axioms DkMathTest.LegendreMergedCRT.checkpoint_charge_checked
+#check DkMathTest.LegendreMergedCRT.checkpoint_restricted_saturation_checked
+#print axioms DkMathTest.LegendreMergedCRT.checkpoint_restricted_saturation_checked
+#check DkMathTest.LegendreMergedCRT.checkpoint_index_and_short_charge_checked
+#print axioms DkMathTest.LegendreMergedCRT.checkpoint_index_and_short_charge_checked
+#check DkMathTest.LegendreMergedCRT.extra_caps_checked
+#print axioms DkMathTest.LegendreMergedCRT.extra_caps_checked
+#check DkMathTest.LegendreMergedCRT.checkpoint_caps_checked
+#print axioms DkMathTest.LegendreMergedCRT.checkpoint_caps_checked
+#check DkMathTest.LegendreMergedCRT.checkpoint_charge_le_excess
+#print axioms DkMathTest.LegendreMergedCRT.checkpoint_charge_le_excess
+#check DkMathTest.LegendreMergedCRT.checkpoint_uncovered_lower
+#print axioms DkMathTest.LegendreMergedCRT.checkpoint_uncovered_lower
+#check DkMathTest.LegendreMergedCRT.checkpoint_prime_of_demand_met
+#print axioms DkMathTest.LegendreMergedCRT.checkpoint_prime_of_demand_met
+#check DkMathTest.LegendreMergedCRT.survivor_recount_checked
+#print axioms DkMathTest.LegendreMergedCRT.survivor_recount_checked
+#check DkMathTest.LegendreMergedCRT.all_previous_survivors_prime
+#print axioms DkMathTest.LegendreMergedCRT.all_previous_survivors_prime
+#check DkMathTest.LegendreMergedCRT.shell58_uncovered_ge_eight
+#print axioms DkMathTest.LegendreMergedCRT.shell58_uncovered_ge_eight
+#check DkMathTest.LegendreMergedCRT.shell68_uncovered_ge_ten
+#print axioms DkMathTest.LegendreMergedCRT.shell68_uncovered_ge_ten
+#check DkMathTest.LegendreMergedCRT.shell58_prime
+#print axioms DkMathTest.LegendreMergedCRT.shell58_prime
+#check DkMathTest.LegendreMergedCRT.shell68_prime
+#print axioms DkMathTest.LegendreMergedCRT.shell68_prime
+#check DkMathTest.LegendreMergedCRT.shell97_expanded_prime
+#print axioms DkMathTest.LegendreMergedCRT.shell97_expanded_prime
+#check DkMathTest.LegendreMergedCRT.shell107_expanded_prime
+#print axioms DkMathTest.LegendreMergedCRT.shell107_expanded_prime
+#check DkMathTest.LegendreMergedCRT.shell127_expanded_prime
+#print axioms DkMathTest.LegendreMergedCRT.shell127_expanded_prime
+#check DkMathTest.LegendreMergedCRT.mixed_short_period_budget_zero
+#print axioms DkMathTest.LegendreMergedCRT.mixed_short_period_budget_zero
+#check DkMathTest.LegendreMergedCRT.large_checkpoint_charge_deficits
+#print axioms DkMathTest.LegendreMergedCRT.large_checkpoint_charge_deficits
+#check DkMathTest.LegendreMergedCRT.prime_checkpoints_checked
+#print axioms DkMathTest.LegendreMergedCRT.prime_checkpoints_checked
+#check DkMathTest.LegendreMergedCRT.controlled_basis_prime_checked
+#print axioms DkMathTest.LegendreMergedCRT.controlled_basis_prime_checked
+#check DkMathTest.LegendreMergedCRT.floorFamilies
+#print axioms DkMathTest.LegendreMergedCRT.floorFamilies
+#check DkMathTest.LegendreMergedCRT.checkpoint_floor_charges_checked
+#print axioms DkMathTest.LegendreMergedCRT.checkpoint_floor_charges_checked
+#check DkMathTest.LegendreMergedCRTRegression.local_overlap_charge_cases
+#print axioms DkMathTest.LegendreMergedCRTRegression.local_overlap_charge_cases
+#check DkMathTest.LegendreMergedCRTRegression.naive_noninjective_charge_counterexample
+#print axioms DkMathTest.LegendreMergedCRTRegression.naive_noninjective_charge_counterexample
+#check DkMathTest.LegendreMergedCRTRegression.prime107_two_star_families_charge
+#print axioms DkMathTest.LegendreMergedCRTRegression.prime107_two_star_families_charge
+#check DkMathTest.LegendreMergedCRTRegression.mixed320_counted_charge
+#print axioms DkMathTest.LegendreMergedCRTRegression.mixed320_counted_charge
+#check DkMathTest.LegendreMergedCRTRegression.mixed320_explicit_lifts
+#print axioms DkMathTest.LegendreMergedCRTRegression.mixed320_explicit_lifts
+#check DkMathTest.LegendreMergedCRTRegression.checkpoint_floor_charge_le_excess
+#print axioms DkMathTest.LegendreMergedCRTRegression.checkpoint_floor_charge_le_excess

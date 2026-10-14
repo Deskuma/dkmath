@@ -4,7 +4,8 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
+import Mathlib.Data.Nat.Choose.Sum
+import Lean.Elab.Tactic.Omega
 
 #print "file: DkMath.Lib.Cosmic.GTail"
 

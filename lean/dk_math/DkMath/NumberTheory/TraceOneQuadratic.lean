@@ -5,6 +5,12 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Basic
+import Mathlib.Algebra.Ring.Basic
+import Mathlib.Data.Int.Basic
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Ring
+import Lean.Elab.Tactic.Omega
 
 #print "file: DkMath.NumberTheory.TraceOneQuadratic"
 

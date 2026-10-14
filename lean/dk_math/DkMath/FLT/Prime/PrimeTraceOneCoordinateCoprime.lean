@@ -19,6 +19,8 @@ open DkMath.NumberTheory.TraceOneQuadratic
 
 noncomputable section
 
+/-- If both TraceOne coordinates are divisible by `p`, its norm is divisible
+by `p^2`. -/
 private theorem prime_sq_dvd_traceOne_norm
     {s a b p : ℤ} (ha : p ∣ a) (hb : p ∣ b) :
     p ^ 2 ∣ a ^ 2 + a * b - s * b ^ 2 := by
@@ -27,6 +29,8 @@ private theorem prime_sq_dvd_traceOne_norm
   refine ⟨a' ^ 2 + a' * b' - s * b' ^ 2, ?_⟩
   ring
 
+/-- A common prime divisor of the two coordinates contradicts the packet's
+exact residual valuation. -/
 private theorem coordinate_prime_dvd_residual
     {L : Type*} [Field L] [Algebra ℚ L]
     {p g u x : ℕ} [Fact p.Prime]
@@ -56,14 +60,18 @@ private theorem coordinate_prime_dvd_residual
     have hshell : (p : ℤ) ^ 2 ∣
         GTailCyclotomicShell p (g : ℤ) (u : ℤ) := by
       simpa using hnorm_shell
-    rw [← DkMath.CosmicFormula.natCast_GTail_one_eq_GTailCyclotomicShell
-      P0.gap_pos.ne'] at hshell
+    rw [← DkMath.CosmicFormula.natCast_GTail_one_eq_GTailCyclotomicShell] at hshell
     exact_mod_cast hshell
   exact P0.residual_not_prime_sq (by exact_mod_cast hres)
 
 /-! ## Conditional FLT-side coordinate primitivity -/
 
-/-- The normalized endpoint attached to a prime-adic packet is primitive. -/
+/-- The normalized endpoint attached to a prime-adic packet is primitive.
+
+Any common divisor would contain a prime `q`; the TraceOne discriminant
+identity forces `q = p`, while divisibility of both coordinates would force a
+second `p`-factor in the packet residual.  The packet's exact valuation-one
+fact therefore closes the gcd argument. -/
 theorem prime_packet_coordinate_isCoprime
     {L : Type*} [Field L] [Algebra ℚ L]
     {p g u x : ℕ} [Fact p.Prime]

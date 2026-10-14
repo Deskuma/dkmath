@@ -1,0 +1,14 @@
+import DkMath.FLT.Seven.SevenRealCubicThetaSeventhPowerDepth
+
+open DkMath.FLT.Seven
+open DkMath.FLT.Seven.SevenRealCubic
+
+#check ThetaNilpotentDepth
+#check thetaNilpotentDepth_mono
+#check seventhThetaLinearBFactor_not_seven_dvd
+#check seventhThetaSquareCFactor_not_seven_dvd
+#check eisensteinAxis_pow_three_mul_dvd_imp_ofInt_pow
+#check thetaNilpotentDepth_pow_seven_drop
+#check thetaNilpotentDepth_one_projectiveLog_zero
+#check thetaNilpotentDepth_one_unit_is_seventh_power
+#check unit_is_pow_seven_pow_of_inverse_depth

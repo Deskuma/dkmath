@@ -1,0 +1,134 @@
+{
+  "baseline_first_exit_depth": 9,
+  "cases": [
+    {
+      "changed_vertices": [],
+      "changes": [],
+      "exit_counts": {
+        "10": 4,
+        "9": 2
+      },
+      "expanded_unique_states": 419838,
+      "first_exit_depth": 9,
+      "initial_invariant": true,
+      "initial_kempe_component_count": 22,
+      "invalid_reason": null,
+      "profile_file": "subset-none.json",
+      "proper_violations": [],
+      "valid_intervention": true
+    },
+    {
+      "changed_vertices": [
+        4
+      ],
+      "changes": [
+        {
+          "child": 0,
+          "parent": 1,
+          "vertex": 4
+        }
+      ],
+      "exit_counts": {
+        "10": 4
+      },
+      "expanded_unique_states": 419795,
+      "first_exit_depth": 10,
+      "initial_invariant": true,
+      "initial_kempe_component_count": 22,
+      "invalid_reason": null,
+      "profile_file": "subset-4.json",
+      "proper_violations": [],
+      "valid_intervention": true
+    },
+    {
+      "changed_vertices": [
+        17
+      ],
+      "changes": [
+        {
+          "child": 1,
+          "parent": 3,
+          "vertex": 17
+        }
+      ],
+      "exit_counts": {},
+      "expanded_unique_states": 0,
+      "first_exit_depth": null,
+      "initial_invariant": true,
+      "initial_kempe_component_count": null,
+      "invalid_reason": "improper_colored_state",
+      "profile_file": "subset-17.json",
+      "proper_violations": [
+        {
+          "color": 1,
+          "edge": [
+            4,
+            17
+          ]
+        }
+      ],
+      "valid_intervention": false
+    },
+    {
+      "changed_vertices": [
+        4,
+        17
+      ],
+      "changes": [
+        {
+          "child": 0,
+          "parent": 1,
+          "vertex": 4
+        },
+        {
+          "child": 1,
+          "parent": 3,
+          "vertex": 17
+        }
+      ],
+      "exit_counts": {
+        "10": 4
+      },
+      "expanded_unique_states": 419841,
+      "first_exit_depth": 10,
+      "initial_invariant": true,
+      "initial_kempe_component_count": 22,
+      "invalid_reason": null,
+      "profile_file": "subset-4-17.json",
+      "proper_violations": [],
+      "valid_intervention": true
+    }
+  ],
+  "child": "python/Tromino/results/repair-depth/seeded-w9-frontier2-d10-v24/best_frontier_witness.json",
+  "child_seed": 12000006,
+  "diff_vertices": [
+    4,
+    17
+  ],
+  "difference_count": 2,
+  "full_child_state_first_exit_depth": 10,
+  "graph": "parent",
+  "intermediate_policy": "endpoint",
+  "invalid_cases": 1,
+  "max_depth": 10,
+  "minimal_raising_subsets": [
+    [
+      4
+    ]
+  ],
+  "node": 19,
+  "parent": "python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json",
+  "parent_seed": 11000009,
+  "raising_subsets": [
+    [
+      4
+    ],
+    [
+      4,
+      17
+    ]
+  ],
+  "step": 16,
+  "subset_count": 4,
+  "valid_cases": 3
+}

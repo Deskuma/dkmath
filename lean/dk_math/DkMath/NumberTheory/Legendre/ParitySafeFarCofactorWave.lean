@@ -334,5 +334,6 @@ theorem paritySafeFarCofactorWave_false_beam_62_7 :
       83 ∈ squareWaveOffsets 62 7 := by
   norm_num [paritySafeFarCofactorBaseOffsets, squareWaveOffsets,
     mem_squareOffsets, SquareOffset, SquareOffsetForbiddenBy]
+  exact by decide
 
 end DkMath.NumberTheory.Legendre

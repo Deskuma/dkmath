@@ -5,6 +5,8 @@ Released under MIT license as described in the file LICENSE.
 
 import DkMath.Basic
 import DkMath.Lib.Cosmic.GTailCyclotomic
+import Mathlib.Algebra.Polynomial.Homogenize
+import Mathlib.NumberTheory.LegendreSymbol.QuadraticChar.Basic
 
 #print "file: DkMath.NumberTheory.CyclotomicQRProduct"
 

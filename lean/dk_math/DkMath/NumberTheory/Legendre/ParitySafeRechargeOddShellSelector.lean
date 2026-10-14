@@ -257,6 +257,7 @@ theorem paritySafeRechargeOddShellSelector_composite_false_beam :
       (33 * 3) * 39 ≤ 62 ^ 2 + 2 * 62 ∧
       ¬ Nat.Prime 39 := by
   norm_num [paritySafeRechargeOddShellQuotient]
+  exact ⟨19, by norm_num⟩
 
 end
 end DkMath.NumberTheory.Legendre

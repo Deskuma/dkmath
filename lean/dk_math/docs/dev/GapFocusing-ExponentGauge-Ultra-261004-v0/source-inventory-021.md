@@ -1,0 +1,87 @@
+# Source inventory 021
+
+## Live baseline and audited declarations
+
+The worktree was clean at the start. Instruction 020 sources and its
+602-row discovery are present. No applicable AGENTS.md was found.
+
+### DkMath/Combinatorics/FinsetSupportPacking.lean
+
+supportCollisionEdges, mem_supportCollisionEdges, exists_supportPacking
+
+### DkMath/NumberTheory/Legendre/CoarseTownSupportPacking.lean
+
+coarseTownSupportCollisionEdges, mem_coarseTownSupportCollisionEdges, exists_coarseTown_supportPacking, not_fullyCovered_of_coarseTown_edge_deficit, exists_prime_squareCell_of_coarseTown_edge_deficit, coarseTownPrimeCollisionEdges, mem_coarseTownPrimeCollisionEdges, card_coarseTownPrimeCollisionEdges, coarseTownSupportCollisionEdges_subset_prime_union, card_coarseTownSupportCollisionEdges_le_fibers, card_coarseTownSupportCollisionEdges_le_ceiling, card_coarseTownSupportCollisionEdges_le_uniform
+
+### DkMath/NumberTheory/Legendre/CoarsePrimeWorldFullTown.lean
+
+coarsePrimeWorld_modulus_pos, coarsePrimeWorldPeriodCount, coarsePeriodCount_zero_modulus, coarsePeriodCount_mul_le, coarsePeriodCount_succ_mul_gt, two_le_coarsePeriodCount, coarsePrimeWorldGridPairs, coarsePrimeWorldGridSeat, mem_coarsePrimeWorldGridPairs, coarseGridSeat_squareOffset, coarseGridSeat_injective, coarsePrimeWorldFullTown, mem_coarsePrimeWorldFullTown, coarseFullTown_subset_squareOffsets, card_coarsePrimeWorldFullTown, coarsePrimeWorldColumn, coarseColumn_subset_fullTown, card_coarsePrimeWorldColumn, coarseFullTown_eq_column_union, disjoint_coarseColumns, coarseFullTown_address_periodic, coarseFullTown_survivor_periodic, coarseFullTown_survivor, coarseTwoStreet_subset_fullTown, coarseFullTown_eq_twoStreet_of_periodCount_two
+
+### DkMath/NumberTheory/Legendre/CoarsePrimeWorldVerticalCapacity.lean
+
+coarseColumn_commonPrime_modEq, coarseColumn_commonPrime_dvd_index_gap, coarseColumn_no_commonPrime_of_small_gap, coarseColumn_oldSupport_family, coarseColumn_oldSupport_family_initial, coarseColumnWaveIndices, card_coarseColumnWaveIndices_le_ceil, coarseColumnPoint_eq_child, coarseColumnPoint_eq_canonical_child, coarseColumn_dvd_iff_refinement_target, existsUnique_coarseColumnWaveIndex_mod_prime, card_coarseColumnWaveIndices_le_one, coarseCrossColumn_compatible_index_unique, coarseCrossColumn_commonPrime_signed_gap, coarseFullTownPrimeFiber, coarseFullTownPrimeFiber_eq_column_union, card_coarseFullTownPrimeFiber_le, coarse_ceiling_le_one, card_coarseFullTownPrimeFiber_le_base, coarseFullTownIncidence, coarseFullTownIncidence_eq_support_sum, card_coarseFullTown_le_incidence_of_fullyCovered, coarseVerticalCapacity, coarseFullTownIncidence_le_capacity, coarseFullTown_vertical_frontier, coarseFullTown_uniform_vertical_frontier, not_fullyCovered_of_coarseVerticalCapacity_deficit, exists_prime_squareCell_of_coarseVerticalCapacity_deficit
+
+### DkMath/NumberTheory/Legendre/OldSupportCapacity.lean
+
+PairwiseOldSupportDisjointSquareSeatFamily, pairwiseOldSupportDisjointSquareSeatFamily_of_pairwiseCoprimeSquareSeatFamily, squareOffset_oldSupportCapacity_strictness_left, squareOffset_oldSupportCapacity_strictness_right, not_coprime_oldSupportCapacity_strictness_points, disjoint_oldSupportCapacity_strictness_supports, exists_oldSupportDisjoint_not_completeCoprime_family, disjoint_squareOffsetPrimeSupport_iff_no_bounded_prime_dividing_offset_gap, card_pairwiseOldSupportDisjointSquareSeatFamily_le_primeScalesUpTo_of_fullyCovered, not_fullyCovered_of_primeWorld_card_lt_pairwiseOldSupportDisjointSquareSeatFamilies, exists_prime_squareCell_of_primeWorld_card_lt_pairwiseOldSupportDisjointSquareSeatFamilies, legendreConjecture_of_universal_oldSupportCapacityProvider
+
+### DkMath/NumberTheory/Legendre/OldSupportGcd.lean
+
+gcd_squarePoints_dvd_orderedOffsetGap, disjoint_squareOffsetPrimeSupport_iff_gcd_supportDisjointFrom, disjoint_squareOffsetPrimeSupport_iff_gcd_coprime_primeWorldModulus, gcd_squarePoints_lt_twice_anchor, disjoint_squareOffsetPrimeSupport_iff_gcd_eq_one_or_fresh_prime, prime_and_fresh_of_disjoint_squareOffsetPrimeSupport_of_gcd_ne_one, oldSupportCapacity_strictness_gcd_three_one_six, PairwiseGcdFreshSeparatedSquareSeatFamily, pairwiseGcdFreshSeparatedSquareSeatFamily_iff_oldSupportDisjoint, exists_prime_squareCell_of_pairwiseGcdFreshSeparatedSquareSeatFamily_card_excess
+
+### DkMath/NumberTheory/Legendre/Frontier.lean
+
+squareOffsetsFullyCovered_iff_coveredSquareOffsets_eq, not_squareOffsetsFullyCovered_iff_escaping_nonempty, squareAnchoredSupportEscape_iff_not_fully_covered, squareAnchoredSupportEscape_iff_raw, prime_of_squareAnchoredSupportEscape, legendreConjecture_of_squareAnchoredSupportEscape, is, legendreConjecture_iff_squareAnchoredSupportEscape, legendreConjecture_iff_squareOffsets_not_fully_covered
+
+## Mathlib and repository reuse decisions
+
+Finset.mem_image and image_subset_iff expose deletion membership and
+subset. Finset.card_image_le bounds deletion by edges.
+Finset.sdiff_subset, disjoint_sdiff, sdiff_union_of_subset, and
+card_sdiff_add_card_eq_card supply the exact partition and cardinality.
+Finset.card_sdiff gives the subtraction wrapper.
+Finset.card_le_one provides a decidable prime-fiber occupancy certificate.
+Finset.lt_sup_iff and le_sup can compress first-endpoint deletion to
+prime fibers with their largest seat omitted. This replaces a quadratic
+seat-pair enumeration by bounded arithmetic fiber computation.
+
+The old support observer has a computable normal form:
+primeScalesUpTo n filtered by divisibility of n*n+r.
+The checker will certify actual bounded prime divisibility, not trusted
+precomputed labels. Direct decision of the semantic family predicate
+needs normalization of noncomputable support and Set.PairwiseDisjoint.
+A fiber-card checker is a smaller reduction than pairwise expansion.
+
+Existing large-check patterns include LegendreSqrtQuotientCalibration:
+rejectedThreeCalc, rejectedThree_normal_form, quotient_floor_inputs_checked
+(decide +kernel with a scoped heartbeat budget), and structural consumers.
+LegendreSqrtRoughCensusCalibration supplies explicit finite data and
+symbolic equality bridges. The prior anchor endpoint is
+DkMathTest.LegendreSqrtQuotientCalibration.quotient1031_structural_endpoint;
+LegendreResidueCoverCalibration.residue1031_preserved_endpoint reexports it.
+The new deletion endpoint will retain a separate named proof route.
+
+Finset literals, sorted List.toFinset, range/filter, and smaller-index
+images will be compared against the diagnostic seat lists. Sorted literal
+lists have explicit membership, avoid nested insert duplication, and
+support predictable kernel reduction. A compact mathematical range/filter
+is preferable when it describes the actual symbolic deletion exactly.
+
+## Trust boundaries
+
+Python supplies discovery data only. Finite facts must reduce with
+kernel decision or checked rewrites, and all public declarations will
+receive print-axioms checks. No compiled decision shortcut, additional
+axiom, or proof-hole evaluator is authorized. Root pre-existing proof-hole
+warnings are separate from the new declarations' dependency audit.
+The 018 floor-sum remains deferred. No universal family provider or
+optimality claim is part of this checkpoint.
+
+## Final encoding reuse
+
+The large finite data use List.IsChain.pairwise followed by
+List.Pairwise.nodup, after kernel-checking adjacent strict increases.
+List.mem_flatMap, List.mem_map, and List.mem_range transport the checked
+linear list expansion to exact grid membership. This avoids all-pairs
+membership checks during the final geometric normalization. The smaller
+63-seat family retains the transparent sorted List.toFinset encoding.

@@ -1,0 +1,20 @@
+{
+  "best_objective": [
+    7,
+    4,
+    7,
+    1
+  ],
+  "best_seed": 6000596,
+  "classifications": {
+    "solved": 160,
+    "state_space_exhausted": 1840
+  },
+  "elapsed_seconds": 4144.039519309998,
+  "jobs_completed": 2000,
+  "max_resolved_depth": 6,
+  "mean_resolved_depth": 5.1375,
+  "resolved_jobs": 160,
+  "target_depth": 5,
+  "target_found": true
+}

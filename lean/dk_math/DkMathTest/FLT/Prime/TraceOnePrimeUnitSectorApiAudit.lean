@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.TraceOneQuadraticField
+import Mathlib.NumberTheory.NumberField.Discriminant.Basic
 import Mathlib.NumberTheory.NumberField.InfinitePlace.TotallyRealComplex
 import Mathlib.NumberTheory.NumberField.Units.DirichletTheorem
 

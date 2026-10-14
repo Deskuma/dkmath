@@ -1,0 +1,42 @@
+{
+  "observation": "OBS-017-FiniteUnitSlopeRepairLandscape",
+  "date": "2026-09-30",
+  "source_directory": "python/Tromino/results/repair-depth/w9-state-component-v24",
+  "truncated": false,
+  "admissible_states": 32,
+  "graph_edges": 48,
+  "degree_min": 1,
+  "degree_max": 5,
+  "degree_mean": 3,
+  "cycle_rank": 17,
+  "bipartite": true,
+  "depth_counts": {
+    "8": 9,
+    "9": 19,
+    "10": 4
+  },
+  "min_first_exit_depth": 8,
+  "max_first_exit_depth": 10,
+  "baseline_index": 22,
+  "baseline_depth": 9,
+  "baseline_neighbor_depths": [10,8,8],
+  "edge_absolute_delta_counts": {
+    "0": 19,
+    "1": 29
+  },
+  "max_edge_absolute_depth_delta": 1,
+  "depth10_states": [0,12,13,25],
+  "depth10_plateau_edge": [12,13],
+  "missing_mutable_color": 2,
+  "interpretation": "complete finite witness of a branching cyclic admissible state graph carrying a locally unit-slope repair-depth height",
+  "general_theorem_established": false,
+  "next_experiment": "repeat complete component scan on W10 with max repair depth 11",
+  "static_w10_probe": {
+    "admissible_states": 4,
+    "edges": 3,
+    "degree_min": 1,
+    "degree_max": 2,
+    "graph_shape": "path"
+  },
+  "status": "observation_only"
+}

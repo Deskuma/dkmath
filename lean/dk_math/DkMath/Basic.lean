@@ -4,13 +4,29 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
+import Mathlib.Data.Nat.Choose.Basic
 
 #print "file: DkMath.Basic"
 
+/-! # Example Code Style
+
+This sample code serves as an example of the coding style used
+for Lean implementations within this project.
+
+The `#print "file: <module name>"` line immediately following
+the `import` statement is a convention of this project;
+it ensures the module filename is evident from the code itself,
+even if that information is otherwise missing. Please do not omit it.
+
+For the license notice at the beginning of the module,
+please use the comment at the top of the `License.lean` file
+exactly as it appears.
+
+-/
+
 namespace DkMath.Basic
 
-def hello := "world"
+def hello := "Hello! DkMath world."
 
 class Printable (α : Type) where
   print : α → String

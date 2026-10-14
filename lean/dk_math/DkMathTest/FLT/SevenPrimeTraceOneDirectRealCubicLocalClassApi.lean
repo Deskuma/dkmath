@@ -1,0 +1,24 @@
+import DkMath.FLT.Seven
+
+namespace DkMathTest.FLT
+
+open DkMath.FLT.Seven
+
+#check theta_local_coords_zero_of_axis_cube_dvd
+#check theta_local_coords_zero_of_axis_pow_dvd
+#check projectiveLog_eq_normalized_theta_coords_of_unit_mul_pow_seven
+#check directOrbitQuotientCoreCanonical
+#check directOrbitQuotient_eq_axis_cube_mul_canonical
+#check directOrbitQuotientCore_unique
+#check directOrbit_root_theta_nilpotent_coords_zero
+#check directOrbitPowerSplit_quotientCore_eq_canonical
+#check directOrbitPowerSplit_quotientCore_eq_canonical_axis3
+#check directOrbitQuotientCoreCanonical_theta_coords
+#check directOrbitPowerSplit_quotientCore_theta_coords
+#check thetaSevenUnit_projectiveLog
+#check directOrbitPowerSplit_quotientUnit_projectiveLog
+#check directOrbitPowerSplit_gapUnit_projectiveLog
+#check directOrbit_twistedCoeff_projectiveLog_unconditional
+#check directOrbit_twistedCoeff_ratio_classes_unconditional
+
+end DkMathTest.FLT

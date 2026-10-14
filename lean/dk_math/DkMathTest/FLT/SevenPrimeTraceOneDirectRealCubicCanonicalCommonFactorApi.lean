@@ -1,0 +1,27 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+-/
+
+import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicCanonicalCommonFactor
+
+#print "file: DkMathTest.FLT.SevenPrimeTraceOneDirectRealCubicCanonicalCommonFactorApi"
+
+open DkMath.FLT.Seven
+
+#check DirectOrbitCanonicalCommonFactorPacket
+#check directOrbitCanonicalCommonFactor_commonSupport
+#check directOrbitCanonicalCommonFactor_gapOnlySupport
+#check directOrbitCanonicalCommonFactor_quotientOnlySupport
+#check directOrbitCanonicalCommonFactor_commonProduct
+#check directOrbitCanonicalCommonFactor_gapRoot
+#check directOrbitCanonicalCommonFactor_quotientRoot
+#check SevenRealCubic.directOrbitCanonicalCommonFactor_scalar_ideal_multiplicity
+#check SevenRealCubic.directOrbitCanonicalCommonFactor_allocated_ideal_multiplicities
+#check SevenRealCubic.directOrbitCanonicalCommonFactor_prime_absNorm
+#check SevenRealCubic.directOrbitCanonicalCommonFactor_gap_qPrimary_residual
+#check SevenRealCubic.directOrbitCanonicalCommonFactor_gap_factorization
+#check SevenRealCubic.directOrbitCanonicalCommonFactor_quotient_qPrimary_residual
+#check SevenRealCubic.directOrbitCanonicalCommonFactor_quotient_factorization
+#check SevenRealCubic.directOrbitCanonicalCommonFactor_prime_exponent_table
+#check SevenRealCubic.directOrbitSquareRefinement_canonicalCommonFactor_nonempty

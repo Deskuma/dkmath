@@ -1,0 +1,125 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.NumberTheory.Legendre
+import DkMathTest.NumberTheory.LegendreCanonicalRootRegression
+
+#print "file: DkMathTest.NumberTheory.LegendreCanonicalRootAxiomAudit"
+
+#check DkMath.NumberTheory.Legendre.mem_canonicalIncidence_iff
+#print axioms DkMath.NumberTheory.Legendre.mem_canonicalIncidence_iff
+#check DkMath.NumberTheory.Legendre.canonicalSupport_eq_iff_minimal
+#print axioms DkMath.NumberTheory.Legendre.canonicalSupport_eq_iff_minimal
+#check DkMath.NumberTheory.Legendre.canonicalSupport_eq_iff_no_smaller
+#print axioms DkMath.NumberTheory.Legendre.canonicalSupport_eq_iff_no_smaller
+#check DkMath.NumberTheory.Legendre.canonicalIncidence_root_lt
+#print axioms DkMath.NumberTheory.Legendre.canonicalIncidence_root_lt
+#check DkMath.NumberTheory.Legendre.canonicalRootFiber
+#print axioms DkMath.NumberTheory.Legendre.canonicalRootFiber
+#check DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets
+#print axioms DkMath.NumberTheory.Legendre.paritySafeProductWaveOffsets
+#check DkMath.NumberTheory.Legendre.canonicalRootPairOffsets
+#print axioms DkMath.NumberTheory.Legendre.canonicalRootPairOffsets
+#check DkMath.NumberTheory.Legendre.supportExcess_eq_sum_canonicalRootFiber
+#print axioms DkMath.NumberTheory.Legendre.supportExcess_eq_sum_canonicalRootFiber
+#check DkMath.NumberTheory.Legendre.sum_canonicalRootFiber_le_excess
+#print axioms DkMath.NumberTheory.Legendre.sum_canonicalRootFiber_le_excess
+#check DkMath.NumberTheory.Legendre.canonicalRootFiber_disjoint
+#print axioms DkMath.NumberTheory.Legendre.canonicalRootFiber_disjoint
+#check DkMath.NumberTheory.Legendre.mem_canonicalRootPairOffsets_iff
+#print axioms DkMath.NumberTheory.Legendre.mem_canonicalRootPairOffsets_iff
+#check DkMath.NumberTheory.Legendre.canonicalRootFiber_card_eq_sum_pairs
+#print axioms DkMath.NumberTheory.Legendre.canonicalRootFiber_card_eq_sum_pairs
+#check DkMath.NumberTheory.Legendre.supportExcess_eq_sum_canonicalRootPairs
+#print axioms DkMath.NumberTheory.Legendre.supportExcess_eq_sum_canonicalRootPairs
+#check DkMath.NumberTheory.Legendre.paritySafeProductWave_card_le_div_add_carry
+#print axioms DkMath.NumberTheory.Legendre.paritySafeProductWave_card_le_div_add_carry
+#check DkMath.NumberTheory.Legendre.paritySafeProductWave_eq_filtered_pairOverlap
+#print axioms DkMath.NumberTheory.Legendre.paritySafeProductWave_eq_filtered_pairOverlap
+#check DkMath.NumberTheory.Legendre.supportedStar_card_le_localExcess
+#print axioms DkMath.NumberTheory.Legendre.supportedStar_card_le_localExcess
+#check DkMath.NumberTheory.card_filter_two_exclusions
+#print axioms DkMath.NumberTheory.card_filter_two_exclusions
+#check DkMath.NumberTheory.card_finite_exclusion_lower
+#print axioms DkMath.NumberTheory.card_finite_exclusion_lower
+#check DkMath.NumberTheory.Legendre.canonicalRootPair_card_ge_finite_sieve
+#print axioms DkMath.NumberTheory.Legendre.canonicalRootPair_card_ge_finite_sieve
+#check DkMath.NumberTheory.Legendre.canonicalRootSieveLower
+#print axioms DkMath.NumberTheory.Legendre.canonicalRootSieveLower
+#check DkMath.NumberTheory.Legendre.canonicalRootSieveLower_le_fiber
+#print axioms DkMath.NumberTheory.Legendre.canonicalRootSieveLower_le_fiber
+#check DkMath.NumberTheory.Legendre.sum_canonicalRootSieveLower_le_excess
+#print axioms DkMath.NumberTheory.Legendre.sum_canonicalRootSieveLower_le_excess
+#check DkMath.NumberTheory.Legendre.activePrimes_coprime
+#print axioms DkMath.NumberTheory.Legendre.activePrimes_coprime
+#check DkMath.NumberTheory.Legendre.productWave_filter_dvd
+#print axioms DkMath.NumberTheory.Legendre.productWave_filter_dvd
+#check DkMath.NumberTheory.Legendre.activePrime_small_cases
+#print axioms DkMath.NumberTheory.Legendre.activePrime_small_cases
+#check DkMath.NumberTheory.Legendre.primeAnchor_small_roots
+#print axioms DkMath.NumberTheory.Legendre.primeAnchor_small_roots
+#check DkMath.NumberTheory.Legendre.canonicalRoot3Pair_eq
+#print axioms DkMath.NumberTheory.Legendre.canonicalRoot3Pair_eq
+#check DkMath.NumberTheory.Legendre.canonicalRoot5Pair_eq
+#print axioms DkMath.NumberTheory.Legendre.canonicalRoot5Pair_eq
+#check DkMath.NumberTheory.Legendre.canonicalRoot7Pair_eq
+#print axioms DkMath.NumberTheory.Legendre.canonicalRoot7Pair_eq
+#check DkMath.NumberTheory.Legendre.canonicalRoot5Pair_card
+#print axioms DkMath.NumberTheory.Legendre.canonicalRoot5Pair_card
+#check DkMath.NumberTheory.Legendre.canonicalRoot7Pair_card
+#print axioms DkMath.NumberTheory.Legendre.canonicalRoot7Pair_card
+#check DkMath.NumberTheory.Legendre.card_odd_squareWave_eq_delta
+#print axioms DkMath.NumberTheory.Legendre.card_odd_squareWave_eq_delta
+#check DkMath.NumberTheory.Legendre.primeAnchorProductWaveCount
+#print axioms DkMath.NumberTheory.Legendre.primeAnchorProductWaveCount
+#check DkMath.NumberTheory.Legendre.paritySafeProductWave_card_eq_count
+#print axioms DkMath.NumberTheory.Legendre.paritySafeProductWave_card_eq_count
+#check DkMath.NumberTheory.Legendre.canonicalRootCharge3
+#print axioms DkMath.NumberTheory.Legendre.canonicalRootCharge3
+#check DkMath.NumberTheory.Legendre.canonicalRootCharge5
+#print axioms DkMath.NumberTheory.Legendre.canonicalRootCharge5
+#check DkMath.NumberTheory.Legendre.canonicalRootCharge7
+#print axioms DkMath.NumberTheory.Legendre.canonicalRootCharge7
+#check DkMath.NumberTheory.Legendre.canonicalSmallRootCharges_eq_fibers
+#print axioms DkMath.NumberTheory.Legendre.canonicalSmallRootCharges_eq_fibers
+#check DkMath.NumberTheory.Legendre.canonicalSmallRootCharges_le_excess
+#print axioms DkMath.NumberTheory.Legendre.canonicalSmallRootCharges_le_excess
+#check DkMath.NumberTheory.Legendre.uncoveredCandidates_nonempty_of_canonicalRoots
+#print axioms DkMath.NumberTheory.Legendre.uncoveredCandidates_nonempty_of_canonicalRoots
+#check DkMath.NumberTheory.Legendre.prime_squareCell_of_canonicalRoots
+#print axioms DkMath.NumberTheory.Legendre.prime_squareCell_of_canonicalRoots
+#check DkMathTest.LegendreCanonicalRootCharge.RootRow
+#print axioms DkMathTest.LegendreCanonicalRootCharge.RootRow
+#check DkMathTest.LegendreCanonicalRootCharge.rootData
+#print axioms DkMathTest.LegendreCanonicalRootCharge.rootData
+#check DkMathTest.LegendreCanonicalRootCharge.root_charges_checked
+#print axioms DkMathTest.LegendreCanonicalRootCharge.root_charges_checked
+#check DkMathTest.LegendreCanonicalRootCharge.caps_checked
+#print axioms DkMathTest.LegendreCanonicalRootCharge.caps_checked
+#check DkMathTest.LegendreCanonicalRootCharge.cutoff_checked
+#print axioms DkMathTest.LegendreCanonicalRootCharge.cutoff_checked
+#check DkMathTest.LegendreCanonicalRootCharge.charges_le_excess
+#print axioms DkMathTest.LegendreCanonicalRootCharge.charges_le_excess
+#check DkMathTest.LegendreCanonicalRootCharge.actual_root_fibers_checked
+#print axioms DkMathTest.LegendreCanonicalRootCharge.actual_root_fibers_checked
+#check DkMathTest.LegendreCanonicalRootCharge.hard_demands_checked
+#print axioms DkMathTest.LegendreCanonicalRootCharge.hard_demands_checked
+#check DkMathTest.LegendreCanonicalRootCharge.shell211_uncovered
+#print axioms DkMathTest.LegendreCanonicalRootCharge.shell211_uncovered
+#check DkMathTest.LegendreCanonicalRootCharge.shell503_uncovered
+#print axioms DkMathTest.LegendreCanonicalRootCharge.shell503_uncovered
+#check DkMathTest.LegendreCanonicalRootCharge.shell211_prime
+#print axioms DkMathTest.LegendreCanonicalRootCharge.shell211_prime
+#check DkMathTest.LegendreCanonicalRootCharge.shell503_prime
+#print axioms DkMathTest.LegendreCanonicalRootCharge.shell503_prime
+#check DkMathTest.LegendreCanonicalRootRegression.raw_odd_candidate_counterexample
+#print axioms DkMathTest.LegendreCanonicalRootRegression.raw_odd_candidate_counterexample
+#check DkMathTest.LegendreCanonicalRootRegression.common_exclusion_credit_counterexample
+#print axioms DkMathTest.LegendreCanonicalRootRegression.common_exclusion_credit_counterexample
+#check DkMathTest.LegendreCanonicalRootRegression.common_exclusion_root7_empty
+#print axioms DkMathTest.LegendreCanonicalRootRegression.common_exclusion_root7_empty
+#check DkMathTest.LegendreCanonicalRootRegression.triangle_is_not_local_excess
+#print axioms DkMathTest.LegendreCanonicalRootRegression.triangle_is_not_local_excess

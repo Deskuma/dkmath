@@ -1,0 +1,180 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.NumberTheory.Legendre
+import DkMath.CosmicFormula.QuadraticCenteredBridge
+import DkMathTest.NumberTheory.LegendreCenteredFoldRegression
+
+#print "file: DkMathTest.NumberTheory.LegendreCenteredFoldAxiomAudit"
+
+#check DkMath.CosmicFormula.quadratic_forward_factor
+#print axioms DkMath.CosmicFormula.quadratic_forward_factor
+#check DkMath.CosmicFormula.quadratic_forward_backward
+#print axioms DkMath.CosmicFormula.quadratic_forward_backward
+#check DkMath.CosmicFormula.quadratic_forward_div
+#print axioms DkMath.CosmicFormula.quadratic_forward_div
+#check DkMath.CosmicFormula.quadratic_centered_half
+#print axioms DkMath.CosmicFormula.quadratic_centered_half
+#check DkMath.NumberTheory.Legendre.centered_doubled_square_difference
+#print axioms DkMath.NumberTheory.Legendre.centered_doubled_square_difference
+#check DkMath.NumberTheory.Legendre.centered_doubled_square_difference_nat
+#print axioms DkMath.NumberTheory.Legendre.centered_doubled_square_difference_nat
+#check DkMath.NumberTheory.Legendre.centered_doubled_square_difference_div_four
+#print axioms DkMath.NumberTheory.Legendre.centered_doubled_square_difference_div_four
+#check DkMath.NumberTheory.Legendre.centered_window_translation
+#print axioms DkMath.NumberTheory.Legendre.centered_window_translation
+#check DkMath.NumberTheory.Legendre.centered_window_card
+#print axioms DkMath.NumberTheory.Legendre.centered_window_card
+#check DkMath.NumberTheory.Legendre.squareOffsetFold
+#print axioms DkMath.NumberTheory.Legendre.squareOffsetFold
+#check DkMath.NumberTheory.Legendre.squareOffsetFold_squareOffset
+#print axioms DkMath.NumberTheory.Legendre.squareOffsetFold_squareOffset
+#check DkMath.NumberTheory.Legendre.squareOffsetFold_involutive
+#print axioms DkMath.NumberTheory.Legendre.squareOffsetFold_involutive
+#check DkMath.NumberTheory.Legendre.squareOffsetFold_sum
+#print axioms DkMath.NumberTheory.Legendre.squareOffsetFold_sum
+#check DkMath.NumberTheory.Legendre.squareOffsetFold_no_fixed
+#print axioms DkMath.NumberTheory.Legendre.squareOffsetFold_no_fixed
+#check DkMath.NumberTheory.Legendre.squareOffsetFold_orbit_card
+#print axioms DkMath.NumberTheory.Legendre.squareOffsetFold_orbit_card
+#check DkMath.NumberTheory.Legendre.squareOffsetFold_centeredLeft
+#print axioms DkMath.NumberTheory.Legendre.squareOffsetFold_centeredLeft
+#check DkMath.NumberTheory.Legendre.squareOffsetFold_centeredRight
+#print axioms DkMath.NumberTheory.Legendre.squareOffsetFold_centeredRight
+#check DkMath.NumberTheory.Legendre.centeredFoldPair
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldPair
+#check DkMath.NumberTheory.Legendre.squareOffsetFoldPairs
+#print axioms DkMath.NumberTheory.Legendre.squareOffsetFoldPairs
+#check DkMath.NumberTheory.Legendre.centeredFoldPair_sum
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldPair_sum
+#check DkMath.NumberTheory.Legendre.centeredFoldPair_card
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldPair_card
+#check DkMath.NumberTheory.Legendre.centeredFoldPair_injective
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldPair_injective
+#check DkMath.NumberTheory.Legendre.squareOffsetFold_pair_index
+#print axioms DkMath.NumberTheory.Legendre.squareOffsetFold_pair_index
+#check DkMath.NumberTheory.Legendre.squareOffsetFoldPairs_card
+#print axioms DkMath.NumberTheory.Legendre.squareOffsetFoldPairs_card
+#check DkMath.NumberTheory.Legendre.centeredFoldPair_disjoint
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldPair_disjoint
+#check DkMath.NumberTheory.Legendre.centeredFoldPairs_union
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldPairs_union
+#check DkMath.NumberTheory.Legendre.centeredInternalGaps
+#print axioms DkMath.NumberTheory.Legendre.centeredInternalGaps
+#check DkMath.NumberTheory.Legendre.centered_offset_difference
+#print axioms DkMath.NumberTheory.Legendre.centered_offset_difference
+#check DkMath.NumberTheory.Legendre.centeredInternalGaps_eq_odd_interval
+#print axioms DkMath.NumberTheory.Legendre.centeredInternalGaps_eq_odd_interval
+#check DkMath.NumberTheory.Legendre.centeredInternalGaps_card
+#print axioms DkMath.NumberTheory.Legendre.centeredInternalGaps_card
+#check DkMath.NumberTheory.Legendre.centered_gap_eq_GTail
+#print axioms DkMath.NumberTheory.Legendre.centered_gap_eq_GTail
+#check DkMath.NumberTheory.Legendre.squareOffsetFold_owner_ne
+#print axioms DkMath.NumberTheory.Legendre.squareOffsetFold_owner_ne
+#check DkMath.NumberTheory.Legendre.centeredPair_owner_ne
+#print axioms DkMath.NumberTheory.Legendre.centeredPair_owner_ne
+#check DkMath.NumberTheory.Legendre.centered_same_owner_dvd_gap
+#print axioms DkMath.NumberTheory.Legendre.centered_same_owner_dvd_gap
+#check DkMath.NumberTheory.Legendre.centered_prime_gap_support_packet
+#print axioms DkMath.NumberTheory.Legendre.centered_prime_gap_support_packet
+#check DkMath.NumberTheory.Legendre.centeredOwnerGapCapacityIndices
+#print axioms DkMath.NumberTheory.Legendre.centeredOwnerGapCapacityIndices
+#check DkMath.NumberTheory.Legendre.mem_centeredOwnerGapCapacityIndices
+#print axioms DkMath.NumberTheory.Legendre.mem_centeredOwnerGapCapacityIndices
+#check DkMath.NumberTheory.Legendre.centeredOwnerGapCapacityIndices_two
+#print axioms DkMath.NumberTheory.Legendre.centeredOwnerGapCapacityIndices_two
+#check DkMath.NumberTheory.Legendre.centeredOwnerGapCapacityIndices_eq_residue
+#print axioms DkMath.NumberTheory.Legendre.centeredOwnerGapCapacityIndices_eq_residue
+#check DkMath.NumberTheory.Legendre.centeredOwnerGapCapacityIndices_card
+#print axioms DkMath.NumberTheory.Legendre.centeredOwnerGapCapacityIndices_card
+#check DkMath.NumberTheory.Legendre.centeredSameOwnerIndices
+#print axioms DkMath.NumberTheory.Legendre.centeredSameOwnerIndices
+#check DkMath.NumberTheory.Legendre.centeredSameOwnerIndices_subset_capacity
+#print axioms DkMath.NumberTheory.Legendre.centeredSameOwnerIndices_subset_capacity
+#check DkMath.NumberTheory.Legendre.centeredSameOwnerIndices_empty
+#print axioms DkMath.NumberTheory.Legendre.centeredSameOwnerIndices_empty
+#check DkMath.NumberTheory.Legendre.centeredSameOwnerIndices_card_le
+#print axioms DkMath.NumberTheory.Legendre.centeredSameOwnerIndices_card_le
+#check DkMath.NumberTheory.Legendre.centeredSameOwnerIndices_sum
+#print axioms DkMath.NumberTheory.Legendre.centeredSameOwnerIndices_sum
+#check DkMath.NumberTheory.Legendre.centeredDifferentOwnerIndices
+#print axioms DkMath.NumberTheory.Legendre.centeredDifferentOwnerIndices
+#check DkMath.NumberTheory.Legendre.centeredDifferentOwnerIndices_eq_range_of_full
+#print axioms DkMath.NumberTheory.Legendre.centeredDifferentOwnerIndices_eq_range_of_full
+#check DkMath.NumberTheory.Legendre.centeredDifferentOwnerIndices_card_of_full
+#print axioms DkMath.NumberTheory.Legendre.centeredDifferentOwnerIndices_card_of_full
+#check DkMath.NumberTheory.Legendre.squareOffsetFold_successor_noncommuting
+#print axioms DkMath.NumberTheory.Legendre.squareOffsetFold_successor_noncommuting
+#check DkMath.NumberTheory.Legendre.fold_successor_common_divisor_iff
+#print axioms DkMath.NumberTheory.Legendre.fold_successor_common_divisor_iff
+#check DkMath.NumberTheory.Legendre.fold_successor_support_disjoint
+#print axioms DkMath.NumberTheory.Legendre.fold_successor_support_disjoint
+#check DkMath.NumberTheory.Legendre.fold_lower_successor_owner_packet
+#print axioms DkMath.NumberTheory.Legendre.fold_lower_successor_owner_packet
+#check DkMath.NumberTheory.Legendre.centeredFoldNorm
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldNorm
+#check DkMath.NumberTheory.Legendre.centeredFoldNorm_odd
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldNorm_odd
+#check DkMath.NumberTheory.Legendre.centeredFoldNorm_eq_point_sum
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldNorm_eq_point_sum
+#check DkMath.NumberTheory.Legendre.centeredFoldNorm_eq_twice_left_add_gap
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldNorm_eq_twice_left_add_gap
+#check DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_ne_two
+#print axioms DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_ne_two
+#check DkMath.NumberTheory.Legendre.mem_common_centered_support_iff_norm_and_gap
+#print axioms DkMath.NumberTheory.Legendre.mem_common_centered_support_iff_norm_and_gap
+#check DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_not_dvd_succ
+#print axioms DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_not_dvd_succ
+#check DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_mod_four
+#print axioms DkMath.NumberTheory.Legendre.prime_dvd_centeredFoldNorm_mod_four
+#check DkMath.NumberTheory.Legendre.common_centered_support_mod_four
+#print axioms DkMath.NumberTheory.Legendre.common_centered_support_mod_four
+#check DkMath.NumberTheory.Legendre.centeredCommonSupportIndices
+#print axioms DkMath.NumberTheory.Legendre.centeredCommonSupportIndices
+#check DkMath.NumberTheory.Legendre.centeredCommonSupportIndices_eq_capacity
+#print axioms DkMath.NumberTheory.Legendre.centeredCommonSupportIndices_eq_capacity
+#check DkMath.NumberTheory.Legendre.centeredCommonSupportIndices_card
+#print axioms DkMath.NumberTheory.Legendre.centeredCommonSupportIndices_card
+#check DkMath.NumberTheory.Legendre.centeredFoldNorm_succ_coprime
+#print axioms DkMath.NumberTheory.Legendre.centeredFoldNorm_succ_coprime
+#check DkMath.NumberTheory.Legendre.common_centered_support_no_successor
+#print axioms DkMath.NumberTheory.Legendre.common_centered_support_no_successor
+#check DkMathTest.LegendreCenteredFoldRegression.unit_and_second_difference
+#print axioms DkMathTest.LegendreCenteredFoldRegression.unit_and_second_difference
+#check DkMathTest.LegendreCenteredFoldRegression.rational_steps
+#print axioms DkMathTest.LegendreCenteredFoldRegression.rational_steps
+#check DkMathTest.LegendreCenteredFoldRegression.doubled_and_zero_boundary
+#print axioms DkMathTest.LegendreCenteredFoldRegression.doubled_and_zero_boundary
+#check DkMathTest.LegendreCenteredFoldRegression.fold_and_gap
+#print axioms DkMathTest.LegendreCenteredFoldRegression.fold_and_gap
+#check DkMathTest.LegendreCenteredFoldRegression.three_pairs_and_gaps
+#print axioms DkMathTest.LegendreCenteredFoldRegression.three_pairs_and_gaps
+#check DkMathTest.LegendreCenteredFoldRegression.translation_divisibility_counterexample
+#print axioms DkMathTest.LegendreCenteredFoldRegression.translation_divisibility_counterexample
+#check DkMathTest.LegendreCenteredFoldRegression.six_shared_support
+#print axioms DkMathTest.LegendreCenteredFoldRegression.six_shared_support
+#check DkMathTest.LegendreCenteredFoldRegression.distinct_owner_does_not_imply_disjoint
+#print axioms DkMathTest.LegendreCenteredFoldRegression.distinct_owner_does_not_imply_disjoint
+#check DkMathTest.LegendreCenteredFoldRegression.eight_reverse_owner_counterexample
+#print axioms DkMathTest.LegendreCenteredFoldRegression.eight_reverse_owner_counterexample
+#check DkMathTest.LegendreCenteredFoldRegression.prime_gap_forces_disjoint
+#print axioms DkMathTest.LegendreCenteredFoldRegression.prime_gap_forces_disjoint
+#check DkMathTest.LegendreCenteredFoldRegression.six_capacity_and_actual
+#print axioms DkMathTest.LegendreCenteredFoldRegression.six_capacity_and_actual
+#check DkMathTest.LegendreCenteredFoldRegression.fold_insert_smallest_mismatch
+#print axioms DkMathTest.LegendreCenteredFoldRegression.fold_insert_smallest_mismatch
+#check DkMathTest.LegendreCenteredFoldRegression.norm_successor_packet
+#print axioms DkMathTest.LegendreCenteredFoldRegression.norm_successor_packet
+#check DkMathTest.LegendreCenteredFoldRegression.near_miss_five
+#print axioms DkMathTest.LegendreCenteredFoldRegression.near_miss_five
+#check DkMathTest.LegendreCenteredFoldRegression.near_miss_297_common_empty
+#print axioms DkMathTest.LegendreCenteredFoldRegression.near_miss_297_common_empty
+#check DkMathTest.LegendreCenteredFoldRegression.norm1031_support_counts
+#print axioms DkMathTest.LegendreCenteredFoldRegression.norm1031_support_counts
+#check DkMathTest.LegendreCenteredFoldRegression.preserved1031
+#print axioms DkMathTest.LegendreCenteredFoldRegression.preserved1031
+#check DkMathTest.LegendreCenteredFoldRegression.compatible_covered_trajectory
+#print axioms DkMathTest.LegendreCenteredFoldRegression.compatible_covered_trajectory

@@ -1,0 +1,24 @@
+import DkMath.FLT.Seven.PrimeTraceOneCyclotomicPidBypassAudit
+
+#print "file: DkMathTest.FLT.SevenPrimeTraceOneCyclotomicPidBypassAuditAxiom"
+
+open DkMath.FLT
+open DkMath.FLT.Seven
+
+#print axioms DkMath.FLT.Seven.CyclotomicSeven.classGroupPTorsionFreeAt_ringOfIntegers_seven
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.classGroupPTorsionFreeAt_seven
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.unitMulPowOfSpanEqPow_audit
+#print axioms DkMath.FLT.Seven.RamifiedSignedRootRoutingPacket.QuotientPrimeSupport.directPid_orientedElementLevelPower_audit
+
+#print axioms DkMath.FLT.Seven.CyclotomicSeven.ringOfIntegers_isPrincipalIdealRing
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ringIsPrincipalIdealRing
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.unitMulPowOfSpanEqPow
+
+#print axioms DkMath.FLT.cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree
+#print axioms DkMath.FLT.cyclotomicUnitNormalization_of_firstCase_of_pack_thin_withoutProduct
+#print axioms DkMath.FLT.cyclotomicNormGNPower_of_firstCase_of_pack_thin
+#print axioms DkMath.FLT.triominoNoWieferichBridge_of_provider
+
+/- These are intentionally quarantined legacy/default surfaces. -/
+#print axioms DkMath.FLT.triominoCosmicNoPowOnGN_default
+#print axioms DkMath.FLT.cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree

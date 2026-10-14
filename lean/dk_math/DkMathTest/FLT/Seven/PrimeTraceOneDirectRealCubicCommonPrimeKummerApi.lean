@@ -1,0 +1,19 @@
+import DkMath.FLT.Seven
+
+open DkMath.FLT.Seven
+open DkMath.FLT.Seven.SevenRealCubic
+
+#check directOrbitCommonPrimeEval
+#check directOrbitCommonPrimeTwistRatio21
+#check directOrbitCommonPrimeKummerUnit
+#check directOrbitCanonicalCommonFactor_c_eq_one_or_prime_dvd
+#check directOrbitCanonicalCommonFactor_c_eq_one_arithmetic
+#check directOrbitCommonPrime_dvd_data
+#check directOrbitCommonPrime_q_mod_seven
+#check directOrbitCommonPrimeKummerUnit_projectiveLog
+#check directOrbitCommonPrimeTwistRatio21_projectiveLog
+#check directOrbitCommonPrime_global_seventh_correction
+#check directOrbitCommonPrime_oriented_gap_prime
+#check directOrbitCommonPrime_fourteen_power_ratio
+#check directOrbitCommonPrime_kummer_residue_condition
+#check directOrbitCommonPrime_kummer_beta_form

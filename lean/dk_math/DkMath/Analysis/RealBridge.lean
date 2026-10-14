@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Analysis.ErrorKernel
 import DkMath.Analysis.GapFill
+import Mathlib.Topology.Algebra.Ring.Real
+import Mathlib.Tactic.FunProp
 
 #print "file: DkMath.Analysis.RealBridge"
 

@@ -20,6 +20,15 @@ open scoped NumberField
 
 namespace SevenCyclotomicDegreeSixInt
 
+private theorem natCast_injective :
+    Function.Injective ((↑) : ℕ → Ring) := by
+  intro m n h
+  have hcoord := congrArg (fun x : Ring => x.re.fst) h
+  simpa using hcoord
+
+private instance ringCharZero : CharZero Ring :=
+  ⟨natCast_injective⟩
+
 /-- The displayed inverse root is the sixth power of the oriented primitive
 seventh root. -/
 theorem zetaInv_eq_pow_six :
@@ -122,11 +131,33 @@ def ringOfIntegersToRing :
   abstractIntegralPowerBasis.lift
     zeta zeta_aeval_abstractIntegralPowerBasis_minpoly
 
-/-- The power-basis map from the abstract seventh cyclotomic ring of integers
-onto the explicit degree-six carrier is surjective.
+theorem ringOfIntegersToRing_gen :
+    ringOfIntegersToRing abstractIntegralPowerBasis.gen = zeta := by
+  rw [ringOfIntegersToRing, PowerBasis.lift_gen]
 
-Surjectivity, rather than a full ring-of-integers equivalence, is exactly what
-is needed to transport principality. -/
+/- The chosen integral cyclotomic generator is exposed so downstream
+   conjugation proofs do not need to rely on a hidden `Star` instance. -/
+noncomputable def cyclotomicIntegralGenerator :
+    𝓞 (CyclotomicField 7 ℚ) := abstractIntegralPowerBasis.gen
+
+theorem cyclotomicIntegralGenerator_coe :
+    (cyclotomicIntegralGenerator : CyclotomicField 7 ℚ) =
+      IsCyclotomicExtension.zeta 7 ℚ (CyclotomicField 7 ℚ) := by
+  rw [cyclotomicIntegralGenerator, abstractIntegralPowerBasis,
+    IsPrimitiveRoot.integralPowerBasis_gen]
+  exact abstractZeta_isPrimitiveRoot.coe_toInteger
+
+theorem ringOfIntegersToRing_cyclotomicIntegralGenerator :
+    ringOfIntegersToRing cyclotomicIntegralGenerator = zeta := by
+  exact ringOfIntegersToRing_gen
+
+theorem adjoin_cyclotomicIntegralGenerator_eq_top :
+    Algebra.adjoin ℤ ({cyclotomicIntegralGenerator} :
+      Set (𝓞 (CyclotomicField 7 ℚ))) = ⊤ := by
+  exact abstractIntegralPowerBasis.adjoin_gen_eq_top
+
+/-- The power-basis map from the abstract seventh cyclotomic ring of integers
+onto the explicit degree-six carrier is surjective. -/
 theorem ringOfIntegersToRing_surjective :
     Function.Surjective ringOfIntegersToRing := by
   intro x
@@ -139,11 +170,67 @@ theorem ringOfIntegersToRing_surjective :
   exact abstractIntegralPowerBasis.lift_aeval zeta
     zeta_aeval_abstractIntegralPowerBasis_minpoly f
 
+private noncomputable def concreteIntegralPowerBasis :
+    PowerBasis ℤ Ring :=
+  PowerBasis.ofAdjoinEqTop'
+    (zeta_isPrimitiveRoot.isIntegral (by norm_num))
+    adjoin_zeta_eq_top
+
+private theorem concreteIntegralPowerBasis_gen :
+    concreteIntegralPowerBasis.gen = zeta := by
+  exact PowerBasis.ofAdjoinEqTop'_gen
+    (zeta_isPrimitiveRoot.isIntegral (by norm_num))
+    adjoin_zeta_eq_top
+
+private theorem concreteIntegralPowerBasis_minpoly :
+    minpoly ℤ concreteIntegralPowerBasis.gen = cyclotomic 7 ℤ := by
+  rw [concreteIntegralPowerBasis_gen]
+  let : Algebra ℤ (FractionRing Ring) := Ring.toIntAlgebra _
+  let : IsScalarTower ℤ Ring (FractionRing Ring) :=
+    IsScalarTower.of_algebraMap_eq fun x => by simp
+  have hprim : IsPrimitiveRoot
+      (algebraMap Ring (FractionRing Ring) zeta) 7 :=
+    zeta_isPrimitiveRoot.map_of_injective
+      (IsFractionRing.injective Ring (FractionRing Ring))
+  have hminF := cyclotomic_eq_minpoly hprim (by norm_num)
+  have hminMap :
+      minpoly ℤ (algebraMap Ring (FractionRing Ring) zeta) = minpoly ℤ zeta := by
+    exact minpoly.algebraMap_eq (A := ℤ) (B := Ring)
+      (B' := FractionRing Ring)
+      (IsFractionRing.injective Ring (FractionRing Ring)) zeta
+  have hmin : minpoly ℤ zeta = cyclotomic 7 ℤ :=
+    hminMap.symm.trans hminF.symm
+  exact hmin
+
+theorem ringOfIntegersToRing_injective :
+    Function.Injective ringOfIntegersToRing := by
+  let e :
+      (𝓞 (CyclotomicField 7 ℚ)) ≃ₐ[ℤ] Ring :=
+    abstractIntegralPowerBasis.equivOfMinpoly
+      concreteIntegralPowerBasis
+      (by
+        rw [abstractIntegralPowerBasis_minpoly,
+          concreteIntegralPowerBasis_minpoly])
+  have he : (e : (𝓞 (CyclotomicField 7 ℚ)) →ₐ[ℤ] Ring) =
+      ringOfIntegersToRing := by
+    apply abstractIntegralPowerBasis.algHom_ext
+    change e abstractIntegralPowerBasis.gen =
+      ringOfIntegersToRing abstractIntegralPowerBasis.gen
+    rw [PowerBasis.equivOfMinpoly_gen,
+      concreteIntegralPowerBasis_gen]
+    change zeta =
+      abstractIntegralPowerBasis.lift zeta
+        zeta_aeval_abstractIntegralPowerBasis_minpoly
+        abstractIntegralPowerBasis.gen
+    rw [PowerBasis.lift_gen]
+  exact he ▸ e.injective
+
 /-- The explicit degree-six cyclotomic carrier is a principal ideal ring.
 
 The proof transports the abstract cyclotomic-seven PID theorem along the
-surjective power-basis map above. It does not assert that this map is injective
-or that the concrete carrier is definitionally the full ring of integers. -/
+surjective power-basis map above. The injectivity theorem above upgrades that
+map to an algebra equivalence; no definitional equality of the two carriers is
+asserted. -/
 noncomputable instance ringIsPrincipalIdealRing :
     IsPrincipalIdealRing Ring := by
   let : IsPrincipalIdealRing (𝓞 AbstractField) :=

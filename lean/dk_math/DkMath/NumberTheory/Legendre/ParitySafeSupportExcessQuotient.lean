@@ -268,6 +268,7 @@ theorem paritySafeDirectionDepth_false_beam_five_two :
   have hcandidate : 2 ∈ squareAnchorOddPointCoprimeOffsets 5 := by
     apply mem_squareAnchorOddPointCoprimeOffsets.mpr
     norm_num [mem_squareAnchorCoprimeOffsets, SquareOffset, Odd]
+    exact ⟨⟨2, by norm_num⟩, ⟨13, by norm_num⟩⟩
   have hsupport : paritySafeActiveSupport 5 2 = {3} := by
     ext q
     constructor

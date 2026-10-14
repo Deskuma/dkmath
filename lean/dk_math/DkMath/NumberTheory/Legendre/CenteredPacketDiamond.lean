@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.Legendre.CenteredPacketTriangle
+import Mathlib.Tactic.NormNum.Prime
 
 #print "file: DkMath.NumberTheory.Legendre.CenteredPacketDiamond"
 

@@ -1,0 +1,20 @@
+import DkMath.FLT.Seven.PrimeTraceOneDirectCyclotomicChosenTail
+
+#print "file: DkMathTest.FLT.SevenPrimeTraceOneDirectCyclotomicChosenTailAxiom"
+
+open DkMath.FLT
+open DkMath.FLT.Seven
+
+#print axioms DkMath.FLT.Seven.directCyclotomicPhaseFactor_eq_uniformizer_mul_quotient
+#print axioms DkMath.FLT.Seven.ramifiedEval_directCyclotomicPhaseQuotient
+#print axioms DkMath.FLT.Seven.directCyclotomicPhaseQuotient_not_mem_ramifiedPrime_of_lt_seven
+#print axioms DkMath.FLT.Seven.directCyclotomicPhaseFactor_not_mem_ramifiedPrime_sq_of_lt_seven
+#print axioms DkMath.FLT.Seven.prime_eq_ramified_of_mem_chosen_and_other_phase
+#print axioms DkMath.FLT.Seven.directCyclotomicPhaseQuotients_one_isCoprime_with
+#print axioms DkMath.FLT.Seven.directCyclotomicPhaseQuotient_one_isCoprime_with_tail
+#print axioms DkMath.FLT.Seven.directCyclotomicOtherPhaseProduct_eq_uniformizer_pow_mul_tail
+#print axioms DkMath.FLT.Seven.sixPhaseProduct_directLinearFactor_eq_directCyclotomicSixPhaseProduct
+#print axioms DkMath.FLT.Seven.directCyclotomicQuotientProduct_eq_unit_mul_residual_pow
+#print axioms DkMath.FLT.Seven.directCyclotomicQuotientIdealProduct_eq_residual_pow
+#print axioms DkMath.FLT.Seven.directCyclotomicChosenQuotient_ideal_is_seventh_power
+#print axioms DkMath.FLT.Seven.directLinearFactor_span_eq_ramifiedPrime_mul_seventh_power

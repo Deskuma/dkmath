@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
+import Mathlib.Data.Nat.Basic
 
 #print "file: DkMath.Collatz.Basic"
 

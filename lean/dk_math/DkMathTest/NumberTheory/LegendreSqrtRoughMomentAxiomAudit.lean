@@ -1,0 +1,204 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.NumberTheory.Legendre
+import DkMathTest.NumberTheory.LegendreSqrtRoughMomentCalibration
+import DkMathTest.NumberTheory.LegendreSqrtRoughMomentRegression
+
+#print "file: DkMathTest.NumberTheory.LegendreSqrtRoughMomentAxiomAudit"
+
+#check DkMath.NumberTheory.zero_pair_triple_balance
+#print axioms DkMath.NumberTheory.zero_pair_triple_balance
+#check DkMath.NumberTheory.excess_pair_triple_balance
+#print axioms DkMath.NumberTheory.excess_pair_triple_balance
+#check DkMath.NumberTheory.upperTriples
+#print axioms DkMath.NumberTheory.upperTriples
+#check DkMath.NumberTheory.exists_ordered_triple_of_card_three
+#print axioms DkMath.NumberTheory.exists_ordered_triple_of_card_three
+#check DkMath.NumberTheory.upperTriples_three
+#print axioms DkMath.NumberTheory.upperTriples_three
+#check DkMath.NumberTheory.card_upperTriples_eq_choose_of_le_three
+#print axioms DkMath.NumberTheory.card_upperTriples_eq_choose_of_le_three
+#check DkMath.NumberTheory.card_product_filter_mem
+#print axioms DkMath.NumberTheory.card_product_filter_mem
+#check DkMath.NumberTheory.Legendre.rough_empty_eq_uncovered
+#print axioms DkMath.NumberTheory.Legendre.rough_empty_eq_uncovered
+#check DkMath.NumberTheory.Legendre.roughPairMoment
+#print axioms DkMath.NumberTheory.Legendre.roughPairMoment
+#check DkMath.NumberTheory.Legendre.roughTripleMoment
+#print axioms DkMath.NumberTheory.Legendre.roughTripleMoment
+#check DkMath.NumberTheory.Legendre.rough_moment_balance
+#print axioms DkMath.NumberTheory.Legendre.rough_moment_balance
+#check DkMath.NumberTheory.Legendre.rough_tail_moment_balance
+#print axioms DkMath.NumberTheory.Legendre.rough_tail_moment_balance
+#check DkMath.NumberTheory.Legendre.sqrt_rough_moment_balance
+#print axioms DkMath.NumberTheory.Legendre.sqrt_rough_moment_balance
+#check DkMath.NumberTheory.Legendre.sqrt_tail_moment_balance
+#print axioms DkMath.NumberTheory.Legendre.sqrt_tail_moment_balance
+#check DkMath.NumberTheory.Legendre.sqrt_uncovered_card_pos_iff_moment
+#print axioms DkMath.NumberTheory.Legendre.sqrt_uncovered_card_pos_iff_moment
+#check DkMath.NumberTheory.Legendre.sqrt_uncovered_nonempty_iff_moment
+#print axioms DkMath.NumberTheory.Legendre.sqrt_uncovered_nonempty_iff_moment
+#check DkMath.NumberTheory.Legendre.sqrt_uncovered_card_eq_moment_margin
+#print axioms DkMath.NumberTheory.Legendre.sqrt_uncovered_card_eq_moment_margin
+#check DkMath.NumberTheory.Legendre.uncovered_nonempty_of_sqrt_moment
+#print axioms DkMath.NumberTheory.Legendre.uncovered_nonempty_of_sqrt_moment
+#check DkMath.NumberTheory.Legendre.prime_squareCell_of_sqrt_moment
+#print axioms DkMath.NumberTheory.Legendre.prime_squareCell_of_sqrt_moment
+#check DkMath.NumberTheory.Legendre.sqrt_covered_moment_balance
+#print axioms DkMath.NumberTheory.Legendre.sqrt_covered_moment_balance
+#check DkMath.NumberTheory.Legendre.roughActiveLabels
+#print axioms DkMath.NumberTheory.Legendre.roughActiveLabels
+#check DkMath.NumberTheory.Legendre.rough_support_subset_labels
+#print axioms DkMath.NumberTheory.Legendre.rough_support_subset_labels
+#check DkMath.NumberTheory.Legendre.roughPairs
+#print axioms DkMath.NumberTheory.Legendre.roughPairs
+#check DkMath.NumberTheory.Legendre.roughTriples
+#print axioms DkMath.NumberTheory.Legendre.roughTriples
+#check DkMath.NumberTheory.Legendre.roughPairIncidences
+#print axioms DkMath.NumberTheory.Legendre.roughPairIncidences
+#check DkMath.NumberTheory.Legendre.roughTripleIncidences
+#print axioms DkMath.NumberTheory.Legendre.roughTripleIncidences
+#check DkMath.NumberTheory.Legendre.roughPairIncidences_card
+#print axioms DkMath.NumberTheory.Legendre.roughPairIncidences_card
+#check DkMath.NumberTheory.Legendre.sqrt_roughTripleIncidences_card
+#print axioms DkMath.NumberTheory.Legendre.sqrt_roughTripleIncidences_card
+#check DkMath.NumberTheory.Legendre.roughPairWave
+#print axioms DkMath.NumberTheory.Legendre.roughPairWave
+#check DkMath.NumberTheory.Legendre.roughTripleWave
+#print axioms DkMath.NumberTheory.Legendre.roughTripleWave
+#check DkMath.NumberTheory.Legendre.active_pair_coprime
+#print axioms DkMath.NumberTheory.Legendre.active_pair_coprime
+#check DkMath.NumberTheory.Legendre.roughPair_support_iff_product
+#print axioms DkMath.NumberTheory.Legendre.roughPair_support_iff_product
+#check DkMath.NumberTheory.Legendre.roughTriple_support_iff_product
+#print axioms DkMath.NumberTheory.Legendre.roughTriple_support_iff_product
+#check DkMath.NumberTheory.Legendre.roughPair_fiber_eq_wave
+#print axioms DkMath.NumberTheory.Legendre.roughPair_fiber_eq_wave
+#check DkMath.NumberTheory.Legendre.roughTriple_fiber_eq_wave
+#print axioms DkMath.NumberTheory.Legendre.roughTriple_fiber_eq_wave
+#check DkMath.NumberTheory.Legendre.roughPairMoment_eq_wave_sum
+#print axioms DkMath.NumberTheory.Legendre.roughPairMoment_eq_wave_sum
+#check DkMath.NumberTheory.Legendre.sqrt_roughTripleMoment_eq_wave_sum
+#print axioms DkMath.NumberTheory.Legendre.sqrt_roughTripleMoment_eq_wave_sum
+#check DkMath.NumberTheory.Legendre.sqrt_successor_square_gt
+#print axioms DkMath.NumberTheory.Legendre.sqrt_successor_square_gt
+#check DkMath.NumberTheory.Legendre.sqrt_roughPair_product_gt
+#print axioms DkMath.NumberTheory.Legendre.sqrt_roughPair_product_gt
+#check DkMath.NumberTheory.Legendre.sqrt_roughTriple_product_gt
+#print axioms DkMath.NumberTheory.Legendre.sqrt_roughTriple_product_gt
+#check DkMath.NumberTheory.Legendre.roughPairWave_subset_raw
+#print axioms DkMath.NumberTheory.Legendre.roughPairWave_subset_raw
+#check DkMath.NumberTheory.Legendre.roughTripleWave_subset_raw
+#print axioms DkMath.NumberTheory.Legendre.roughTripleWave_subset_raw
+#check DkMath.NumberTheory.Legendre.sqrt_roughPair_raw_card_le_two
+#print axioms DkMath.NumberTheory.Legendre.sqrt_roughPair_raw_card_le_two
+#check DkMath.NumberTheory.Legendre.sqrt_roughTriple_raw_card_le_one
+#print axioms DkMath.NumberTheory.Legendre.sqrt_roughTriple_raw_card_le_one
+#check DkMath.NumberTheory.Legendre.sqrt_roughPairWave_card_le_two
+#print axioms DkMath.NumberTheory.Legendre.sqrt_roughPairWave_card_le_two
+#check DkMath.NumberTheory.Legendre.sqrt_roughTripleWave_card_le_one
+#print axioms DkMath.NumberTheory.Legendre.sqrt_roughTripleWave_card_le_one
+#check DkMath.NumberTheory.Legendre.roughPairWave_eq_candidate_product_filter
+#print axioms DkMath.NumberTheory.Legendre.roughPairWave_eq_candidate_product_filter
+#check DkMath.NumberTheory.Legendre.roughTripleWave_eq_candidate_product_filter
+#print axioms DkMath.NumberTheory.Legendre.roughTripleWave_eq_candidate_product_filter
+#check DkMath.NumberTheory.Legendre.primeAnchor_roughPairWave_card_le_floor
+#print axioms DkMath.NumberTheory.Legendre.primeAnchor_roughPairWave_card_le_floor
+#check DkMath.NumberTheory.Legendre.primeAnchor_roughTripleWave_card_le_floor
+#print axioms DkMath.NumberTheory.Legendre.primeAnchor_roughTripleWave_card_le_floor
+#check DkMath.NumberTheory.Legendre.prime_squareCell_of_sqrt_product_moment
+#print axioms DkMath.NumberTheory.Legendre.prime_squareCell_of_sqrt_product_moment
+#check DkMath.NumberTheory.Legendre.candidateProductWave_card_le_one_of_anchor_lt
+#print axioms DkMath.NumberTheory.Legendre.candidateProductWave_card_le_one_of_anchor_lt
+#check DkMath.NumberTheory.Legendre.sqrt_roughPairWave_card_le_one
+#print axioms DkMath.NumberTheory.Legendre.sqrt_roughPairWave_card_le_one
+#check DkMath.NumberTheory.Legendre.prime_dvd_candidate_mem_active
+#print axioms DkMath.NumberTheory.Legendre.prime_dvd_candidate_mem_active
+#check DkMath.NumberTheory.Legendre.sqrt_rough_prime_divisor_gt
+#print axioms DkMath.NumberTheory.Legendre.sqrt_rough_prime_divisor_gt
+#check DkMath.NumberTheory.Legendre.sqrt_roughPair_product_lower
+#print axioms DkMath.NumberTheory.Legendre.sqrt_roughPair_product_lower
+#check DkMath.NumberTheory.Legendre.sqrt_roughTriple_product_lower
+#print axioms DkMath.NumberTheory.Legendre.sqrt_roughTriple_product_lower
+#check DkMath.NumberTheory.Legendre.sqrt_roughTriple_point_eq_product
+#print axioms DkMath.NumberTheory.Legendre.sqrt_roughTriple_point_eq_product
+#check DkMath.NumberTheory.Legendre.sqrt_roughTripleWave_eq_product_seat
+#print axioms DkMath.NumberTheory.Legendre.sqrt_roughTripleWave_eq_product_seat
+#check DkMath.NumberTheory.Legendre.sqrt_roughPair_quotient_one_or_prime
+#print axioms DkMath.NumberTheory.Legendre.sqrt_roughPair_quotient_one_or_prime
+#check DkMath.NumberTheory.Legendre.sqrt_two_support_classification
+#print axioms DkMath.NumberTheory.Legendre.sqrt_two_support_classification
+#check DkMath.NumberTheory.Legendre.sqrt_two_support_repeated_prime
+#print axioms DkMath.NumberTheory.Legendre.sqrt_two_support_repeated_prime
+#check DkMath.NumberTheory.Legendre.sqrt_roughTriple_product_offset_mem
+#print axioms DkMath.NumberTheory.Legendre.sqrt_roughTriple_product_offset_mem
+#check DkMath.NumberTheory.Legendre.sqrt_roughTripleWave_card_eq_product_indicator
+#print axioms DkMath.NumberTheory.Legendre.sqrt_roughTripleWave_card_eq_product_indicator
+#check DkMath.NumberTheory.Legendre.sqrtRoughTripleProductsInShell
+#print axioms DkMath.NumberTheory.Legendre.sqrtRoughTripleProductsInShell
+#check DkMath.NumberTheory.Legendre.sqrt_roughTripleMoment_eq_product_count
+#print axioms DkMath.NumberTheory.Legendre.sqrt_roughTripleMoment_eq_product_count
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.MomentRow
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.MomentRow
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.momentData
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.momentData
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationActive
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationActive
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationSmall
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationSmall
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationRough
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationRough
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationSupport
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationSupport
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationRoughI
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationRoughI
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationM2
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationM2
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationM3
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationM3
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.inventories_checked
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.inventories_checked
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.finite_moments_checked
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.finite_moments_checked
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.row_margins_checked
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.row_margins_checked
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationRough_eq
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationRough_eq
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationSupport_eq
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.calibrationSupport_eq
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.moment_inputs_checked
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.moment_inputs_checked
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.recovered_uncovered_checked
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.recovered_uncovered_checked
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.product_regrouping_checked
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.product_regrouping_checked
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.checkpoints_prime_from_moments
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.checkpoints_prime_from_moments
+#check DkMathTest.LegendreSqrtRoughMomentCalibration.shell1019_prime
+#print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.shell1019_prime
+#check DkMathTest.LegendreSqrtRoughMomentRegression.four_labels_break_truncation
+#print axioms DkMathTest.LegendreSqrtRoughMomentRegression.four_labels_break_truncation
+#check DkMathTest.LegendreSqrtRoughMomentRegression.tiny_anchor_zero
+#print axioms DkMathTest.LegendreSqrtRoughMomentRegression.tiny_anchor_zero
+#check DkMathTest.LegendreSqrtRoughMomentRegression.false_raw_triple_key
+#print axioms DkMathTest.LegendreSqrtRoughMomentRegression.false_raw_triple_key
+#check DkMathTest.LegendreSqrtRoughMomentRegression.false_raw_triple_point
+#print axioms DkMathTest.LegendreSqrtRoughMomentRegression.false_raw_triple_point
+#check DkMathTest.LegendreSqrtRoughMomentRegression.false_raw_triple_candidate
+#print axioms DkMathTest.LegendreSqrtRoughMomentRegression.false_raw_triple_candidate
+#check DkMathTest.LegendreSqrtRoughMomentRegression.false_raw_triple_floor_count
+#print axioms DkMathTest.LegendreSqrtRoughMomentRegression.false_raw_triple_floor_count
+#check DkMathTest.LegendreSqrtRoughMomentRegression.false_raw_triple_rough_empty
+#print axioms DkMathTest.LegendreSqrtRoughMomentRegression.false_raw_triple_rough_empty
+#check DkMathTest.LegendreSqrtRoughMomentRegression.triple_bound_sharp
+#print axioms DkMathTest.LegendreSqrtRoughMomentRegression.triple_bound_sharp
+#check DkMathTest.LegendreSqrtRoughMomentRegression.triple_exact_factorization_probe
+#print axioms DkMathTest.LegendreSqrtRoughMomentRegression.triple_exact_factorization_probe
+#check DkMathTest.LegendreSqrtRoughMomentRegression.two_support_lower_repeat
+#print axioms DkMathTest.LegendreSqrtRoughMomentRegression.two_support_lower_repeat
+#check DkMathTest.LegendreSqrtRoughMomentRegression.two_support_upper_repeat
+#print axioms DkMathTest.LegendreSqrtRoughMomentRegression.two_support_upper_repeat

@@ -1,0 +1,15 @@
+import DkMath.FLT.Seven.PrimeTraceOneDirectCyclotomicRootPhaseNormalization
+
+#print "file: DkMathTest.FLT.SevenPrimeTraceOneDirectCyclotomicRootPhaseNormalizationAxiom"
+
+open DkMath.FLT
+open DkMath.FLT.Seven
+
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.cyclotomicNormHom_gamma_pow_eq_residualRoot_pow
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.cyclotomicNormHom_eq_residualRoot_of_pow_eq
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.exists_unique_firstOrderPhaseNormalized
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.firstOrderPhaseIndex_normalized
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.normalizedRootPacket_of_exactRootPacket
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.seventhPower_gain_of_ramifiedPrime_sq
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.fortyNine_dvd_of_intCast_mem_ramifiedPrime_pow_eight
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.endpointRight_eq_scalarLift_pow_mod_fortyNine

@@ -1,0 +1,33 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.NumberTheory.Legendre
+
+#print "file: DkMathTest.NumberTheory.LegendreCanonicalTailInventory"
+
+open DkMath.NumberTheory.Legendre
+#check canonicalSupport_eq_iff_minimal
+#check canonicalSupport_eq_iff_no_smaller
+#check canonicalIncidence_root_lt
+#check supportExcess_eq_sum_canonicalRootFiber
+#check canonicalRootFiber_card_eq_sum_pairs
+#check mem_canonicalRootPairOffsets_iff
+#check canonicalRootSieveLower_le_fiber
+#check paritySafeProductWave_card_eq_count
+#check paritySafeActiveWave_card_le_twoPrimeWaveUpper
+#check paritySafeIncidenceCount_eq_candidate_support_sum
+#check paritySafeCoveredCandidates_card_add_supportExcess_eq_incidence
+#check paritySafeCoveredCandidates_card_add_uncoveredCandidates_card_eq_candidate_card
+#check paritySafeUncovered_nonempty_of_twoPrimeUpper_lt_candidate_add_excess
+#check exists_prime_squareCell_of_paritySafeUncoveredCandidates_nonempty
+#check paritySafeFarProductWave_canonical_eq_iff_no_smaller_active_dvd_cofactor
+#check paritySafeTripleGateNearTriples_card_eq_sum_firstPrime_pairFibers
+#check squarePrimePairOverlapOffsets_eq_squareWaveOffsets_product
+#check card_filter_odd_dvd_Ioc_eq_paritySafeDelta
+#check Finset.pow_card_le_prod
+#check Nat.Coprime
+#check Finset.sum_sub_distrib
+#check Finset.sum_filter

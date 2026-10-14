@@ -1,0 +1,250 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.NumberTheory.Legendre
+import DkMathTest.NumberTheory.LegendreSqrtRoughCensusCalibration
+import DkMathTest.NumberTheory.LegendreSqrtRoughCensusRegression
+
+#print "file: DkMathTest.NumberTheory.LegendreSqrtRoughCensusAxiomAudit"
+
+#check DkMath.NumberTheory.Legendre.sqrt_rough_square_quotient_one_or_prime
+#print axioms DkMath.NumberTheory.Legendre.sqrt_rough_square_quotient_one_or_prime
+#check DkMath.NumberTheory.Legendre.sqrt_singleton_point_cube_or_cross
+#print axioms DkMath.NumberTheory.Legendre.sqrt_singleton_point_cube_or_cross
+#check DkMath.NumberTheory.Legendre.roughZeroSeats
+#print axioms DkMath.NumberTheory.Legendre.roughZeroSeats
+#check DkMath.NumberTheory.Legendre.roughSingletonSeats
+#print axioms DkMath.NumberTheory.Legendre.roughSingletonSeats
+#check DkMath.NumberTheory.Legendre.roughDoubleSeats
+#print axioms DkMath.NumberTheory.Legendre.roughDoubleSeats
+#check DkMath.NumberTheory.Legendre.roughTripleSeats
+#print axioms DkMath.NumberTheory.Legendre.roughTripleSeats
+#check DkMath.NumberTheory.Legendre.roughZeroSeats_eq_uncovered
+#print axioms DkMath.NumberTheory.Legendre.roughZeroSeats_eq_uncovered
+#check DkMath.NumberTheory.Legendre.rough_strata_pairwise_disjoint
+#print axioms DkMath.NumberTheory.Legendre.rough_strata_pairwise_disjoint
+#check DkMath.NumberTheory.Legendre.rough_strata_union
+#print axioms DkMath.NumberTheory.Legendre.rough_strata_union
+#check DkMath.NumberTheory.Legendre.rough_stratum_sum
+#print axioms DkMath.NumberTheory.Legendre.rough_stratum_sum
+#check DkMath.NumberTheory.Legendre.rough_strata_card
+#print axioms DkMath.NumberTheory.Legendre.rough_strata_card
+#check DkMath.NumberTheory.Legendre.rough_incidence_eq_strata
+#print axioms DkMath.NumberTheory.Legendre.rough_incidence_eq_strata
+#check DkMath.NumberTheory.Legendre.rough_pairMoment_eq_strata
+#print axioms DkMath.NumberTheory.Legendre.rough_pairMoment_eq_strata
+#check DkMath.NumberTheory.Legendre.rough_tripleMoment_eq_strata
+#print axioms DkMath.NumberTheory.Legendre.rough_tripleMoment_eq_strata
+#check DkMath.NumberTheory.Legendre.rough_covered_eq_strata
+#print axioms DkMath.NumberTheory.Legendre.rough_covered_eq_strata
+#check DkMath.NumberTheory.Legendre.rough_covered_add_two_triple_eq_singleton_pair
+#print axioms DkMath.NumberTheory.Legendre.rough_covered_add_two_triple_eq_singleton_pair
+#check DkMath.NumberTheory.Legendre.rough_zero_pos_iff_singleton_moment
+#print axioms DkMath.NumberTheory.Legendre.rough_zero_pos_iff_singleton_moment
+#check DkMath.NumberTheory.Legendre.roughSingleton_label_packet
+#print axioms DkMath.NumberTheory.Legendre.roughSingleton_label_packet
+#check DkMath.NumberTheory.Legendre.sqrt_rough_of_reduced_point
+#print axioms DkMath.NumberTheory.Legendre.sqrt_rough_of_reduced_point
+#check DkMath.NumberTheory.Legendre.sqrtRoughCubeKeys
+#print axioms DkMath.NumberTheory.Legendre.sqrtRoughCubeKeys
+#check DkMath.NumberTheory.Legendre.sqrtRoughCrossFiber
+#print axioms DkMath.NumberTheory.Legendre.sqrtRoughCrossFiber
+#check DkMath.NumberTheory.Legendre.sqrtRoughCrossKeys
+#print axioms DkMath.NumberTheory.Legendre.sqrtRoughCrossKeys
+#check DkMath.NumberTheory.Legendre.mem_sqrtRoughCrossFiber
+#print axioms DkMath.NumberTheory.Legendre.mem_sqrtRoughCrossFiber
+#check DkMath.NumberTheory.Legendre.mem_sqrtRoughCrossKeys_fiber
+#print axioms DkMath.NumberTheory.Legendre.mem_sqrtRoughCrossKeys_fiber
+#check DkMath.NumberTheory.Legendre.mem_sqrtRoughCrossKeys
+#print axioms DkMath.NumberTheory.Legendre.mem_sqrtRoughCrossKeys
+#check DkMath.NumberTheory.Legendre.sqrt_cube_offset_packet
+#print axioms DkMath.NumberTheory.Legendre.sqrt_cube_offset_packet
+#check DkMath.NumberTheory.Legendre.sqrt_cross_offset_packet
+#print axioms DkMath.NumberTheory.Legendre.sqrt_cross_offset_packet
+#check DkMath.NumberTheory.Legendre.sqrt_cross_representation_unique
+#print axioms DkMath.NumberTheory.Legendre.sqrt_cross_representation_unique
+#check DkMath.NumberTheory.Legendre.sqrt_cube_cross_disjoint_products
+#print axioms DkMath.NumberTheory.Legendre.sqrt_cube_cross_disjoint_products
+#check DkMath.NumberTheory.Legendre.roughCubeSeats
+#print axioms DkMath.NumberTheory.Legendre.roughCubeSeats
+#check DkMath.NumberTheory.Legendre.roughCrossSeats
+#print axioms DkMath.NumberTheory.Legendre.roughCrossSeats
+#check DkMath.NumberTheory.Legendre.sqrt_cube_keys_offset_injective
+#print axioms DkMath.NumberTheory.Legendre.sqrt_cube_keys_offset_injective
+#check DkMath.NumberTheory.Legendre.sqrt_cross_keys_offset_injective
+#print axioms DkMath.NumberTheory.Legendre.sqrt_cross_keys_offset_injective
+#check DkMath.NumberTheory.Legendre.rough_cube_cross_disjoint
+#print axioms DkMath.NumberTheory.Legendre.rough_cube_cross_disjoint
+#check DkMath.NumberTheory.Legendre.rough_singleton_eq_cube_union_cross
+#print axioms DkMath.NumberTheory.Legendre.rough_singleton_eq_cube_union_cross
+#check DkMath.NumberTheory.Legendre.rough_singleton_card_eq_cube_cross
+#print axioms DkMath.NumberTheory.Legendre.rough_singleton_card_eq_cube_cross
+#check DkMath.NumberTheory.Legendre.sqrtRoughCubeKeys_card_le_one
+#print axioms DkMath.NumberTheory.Legendre.sqrtRoughCubeKeys_card_le_one
+#check DkMath.NumberTheory.Legendre.sqrt_cross_count_eq_fiber_sum
+#print axioms DkMath.NumberTheory.Legendre.sqrt_cross_count_eq_fiber_sum
+#check DkMath.NumberTheory.Legendre.sqrt_cross_fiber_eq_reduced_quotient_filter
+#print axioms DkMath.NumberTheory.Legendre.sqrt_cross_fiber_eq_reduced_quotient_filter
+#check DkMath.NumberTheory.Legendre.sqrt_cross_fiber_card_le_active_wave
+#print axioms DkMath.NumberTheory.Legendre.sqrt_cross_fiber_card_le_active_wave
+#check DkMath.NumberTheory.Legendre.sqrt_cross_fiber_card_le_quotient_span
+#print axioms DkMath.NumberTheory.Legendre.sqrt_cross_fiber_card_le_quotient_span
+#check DkMath.NumberTheory.Legendre.sqrt_cross_fiber_card_le_div_add_one
+#print axioms DkMath.NumberTheory.Legendre.sqrt_cross_fiber_card_le_div_add_one
+#check DkMath.NumberTheory.Legendre.sqrt_cross_fiber_parity_spacing
+#print axioms DkMath.NumberTheory.Legendre.sqrt_cross_fiber_parity_spacing
+#check DkMath.NumberTheory.Legendre.primeAnchor_cross_fiber_card_le_floor
+#print axioms DkMath.NumberTheory.Legendre.primeAnchor_cross_fiber_card_le_floor
+#check DkMath.NumberTheory.Legendre.sqrt_rough_three_factor_packet
+#print axioms DkMath.NumberTheory.Legendre.sqrt_rough_three_factor_packet
+#check DkMath.NumberTheory.Legendre.sqrtRepeatedProduct
+#print axioms DkMath.NumberTheory.Legendre.sqrtRepeatedProduct
+#check DkMath.NumberTheory.Legendre.sqrtRoughRepeatedKeys
+#print axioms DkMath.NumberTheory.Legendre.sqrtRoughRepeatedKeys
+#check DkMath.NumberTheory.Legendre.sqrt_repeated_offset_packet
+#print axioms DkMath.NumberTheory.Legendre.sqrt_repeated_offset_packet
+#check DkMath.NumberTheory.Legendre.sqrt_repeated_keys_offset_injective
+#print axioms DkMath.NumberTheory.Legendre.sqrt_repeated_keys_offset_injective
+#check DkMath.NumberTheory.Legendre.sqrt_repeated_pair_occupancy
+#print axioms DkMath.NumberTheory.Legendre.sqrt_repeated_pair_occupancy
+#check DkMath.NumberTheory.Legendre.roughRepeatedSeats
+#print axioms DkMath.NumberTheory.Legendre.roughRepeatedSeats
+#check DkMath.NumberTheory.Legendre.rough_double_eq_repeated_seats
+#print axioms DkMath.NumberTheory.Legendre.rough_double_eq_repeated_seats
+#check DkMath.NumberTheory.Legendre.rough_double_card_eq_repeated
+#print axioms DkMath.NumberTheory.Legendre.rough_double_card_eq_repeated
+#check DkMath.NumberTheory.Legendre.sqrt_triple_offset_packet
+#print axioms DkMath.NumberTheory.Legendre.sqrt_triple_offset_packet
+#check DkMath.NumberTheory.Legendre.sqrt_triple_keys_offset_injective
+#print axioms DkMath.NumberTheory.Legendre.sqrt_triple_keys_offset_injective
+#check DkMath.NumberTheory.Legendre.roughTripleProductSeats
+#print axioms DkMath.NumberTheory.Legendre.roughTripleProductSeats
+#check DkMath.NumberTheory.Legendre.rough_triple_eq_product_seats
+#print axioms DkMath.NumberTheory.Legendre.rough_triple_eq_product_seats
+#check DkMath.NumberTheory.Legendre.rough_triple_card_eq_products
+#print axioms DkMath.NumberTheory.Legendre.rough_triple_card_eq_products
+#check DkMath.NumberTheory.Legendre.sqrt_product_seats_pairwise_disjoint
+#print axioms DkMath.NumberTheory.Legendre.sqrt_product_seats_pairwise_disjoint
+#check DkMath.NumberTheory.Legendre.sqrt_product_seats_union
+#print axioms DkMath.NumberTheory.Legendre.sqrt_product_seats_union
+#check DkMath.NumberTheory.Legendre.sqrt_zero_point_prime
+#print axioms DkMath.NumberTheory.Legendre.sqrt_zero_point_prime
+#check DkMath.NumberTheory.Legendre.sqrt_rough_point_factorization
+#print axioms DkMath.NumberTheory.Legendre.sqrt_rough_point_factorization
+#check DkMath.NumberTheory.Legendre.sqrt_rough_factorization_census
+#print axioms DkMath.NumberTheory.Legendre.sqrt_rough_factorization_census
+#check DkMath.NumberTheory.Legendre.sqrt_product_pairMoment
+#print axioms DkMath.NumberTheory.Legendre.sqrt_product_pairMoment
+#check DkMath.NumberTheory.Legendre.sqrt_product_incidence
+#print axioms DkMath.NumberTheory.Legendre.sqrt_product_incidence
+#check DkMath.NumberTheory.Legendre.sqrt_product_covered
+#print axioms DkMath.NumberTheory.Legendre.sqrt_product_covered
+#check DkMath.NumberTheory.Legendre.sqrt_uncovered_pos_iff_product_census
+#print axioms DkMath.NumberTheory.Legendre.sqrt_uncovered_pos_iff_product_census
+#check DkMath.NumberTheory.Legendre.prime_squareCell_of_sqrt_factorization_census
+#print axioms DkMath.NumberTheory.Legendre.prime_squareCell_of_sqrt_factorization_census
+#check DkMath.NumberTheory.Legendre.prime_squareCell_of_cross_fiber_budget
+#print axioms DkMath.NumberTheory.Legendre.prime_squareCell_of_cross_fiber_budget
+#check DkMathTest.LegendreSqrtRoughCensus.censusData
+#print axioms DkMathTest.LegendreSqrtRoughCensus.censusData
+#check DkMathTest.LegendreSqrtRoughCensus.active1021
+#print axioms DkMathTest.LegendreSqrtRoughCensus.active1021
+#check DkMathTest.LegendreSqrtRoughCensus.censusActive
+#print axioms DkMathTest.LegendreSqrtRoughCensus.censusActive
+#check DkMathTest.LegendreSqrtRoughCensus.active1021_checked
+#print axioms DkMathTest.LegendreSqrtRoughCensus.active1021_checked
+#check DkMathTest.LegendreSqrtRoughCensus.census_inventory_checked
+#print axioms DkMathTest.LegendreSqrtRoughCensus.census_inventory_checked
+#check DkMathTest.LegendreSqrtRoughCensus.rough1021
+#print axioms DkMathTest.LegendreSqrtRoughCensus.rough1021
+#check DkMathTest.LegendreSqrtRoughCensus.support1021
+#print axioms DkMathTest.LegendreSqrtRoughCensus.support1021
+#check DkMathTest.LegendreSqrtRoughCensus.rough1021_inputs_checked
+#print axioms DkMathTest.LegendreSqrtRoughCensus.rough1021_inputs_checked
+#check DkMathTest.LegendreSqrtRoughCensus.cubeCalc
+#print axioms DkMathTest.LegendreSqrtRoughCensus.cubeCalc
+#check DkMathTest.LegendreSqrtRoughCensus.trialPrime
+#print axioms DkMathTest.LegendreSqrtRoughCensus.trialPrime
+#check DkMathTest.LegendreSqrtRoughCensus.instDecidableTrialPrime
+#print axioms DkMathTest.LegendreSqrtRoughCensus.instDecidableTrialPrime
+#check DkMathTest.LegendreSqrtRoughCensus.trialPrime_iff
+#print axioms DkMathTest.LegendreSqrtRoughCensus.trialPrime_iff
+#check DkMathTest.LegendreSqrtRoughCensus.cube_inputs_checked
+#print axioms DkMathTest.LegendreSqrtRoughCensus.cube_inputs_checked
+#check DkMathTest.LegendreSqrtRoughCensus.fiberCalc
+#print axioms DkMathTest.LegendreSqrtRoughCensus.fiberCalc
+#check DkMathTest.LegendreSqrtRoughCensus.selected_fibers_checked
+#print axioms DkMathTest.LegendreSqrtRoughCensus.selected_fibers_checked
+#check DkMathTest.LegendreSqrtRoughCensus.census_row_arithmetic_checked
+#print axioms DkMathTest.LegendreSqrtRoughCensus.census_row_arithmetic_checked
+#check DkMathTest.LegendreSqrtRoughCensus.rough_inventory_normal_form
+#print axioms DkMathTest.LegendreSqrtRoughCensus.rough_inventory_normal_form
+#check DkMathTest.LegendreSqrtRoughCensus.support_inventory_normal_form
+#print axioms DkMathTest.LegendreSqrtRoughCensus.support_inventory_normal_form
+#check DkMathTest.LegendreSqrtRoughCensus.inputs1021
+#print axioms DkMathTest.LegendreSqrtRoughCensus.inputs1021
+#check DkMathTest.LegendreSqrtRoughCensus.census_moment_inputs
+#print axioms DkMathTest.LegendreSqrtRoughCensus.census_moment_inputs
+#check DkMathTest.LegendreSqrtRoughCensus.census_cube_inputs
+#print axioms DkMathTest.LegendreSqrtRoughCensus.census_cube_inputs
+#check DkMathTest.LegendreSqrtRoughCensus.selected_cross_fibers_checked
+#print axioms DkMathTest.LegendreSqrtRoughCensus.selected_cross_fibers_checked
+#check DkMathTest.LegendreSqrtRoughCensus.full_census_checked
+#print axioms DkMathTest.LegendreSqrtRoughCensus.full_census_checked
+#check DkMathTest.LegendreSqrtRoughCensus.census_cross_fiber_sum_checked
+#print axioms DkMathTest.LegendreSqrtRoughCensus.census_cross_fiber_sum_checked
+#check DkMathTest.LegendreSqrtRoughCensus.census_endpoints
+#print axioms DkMathTest.LegendreSqrtRoughCensus.census_endpoints
+#check DkMathTest.LegendreSqrtRoughCensus.shell1021_prime_from_census
+#print axioms DkMathTest.LegendreSqrtRoughCensus.shell1021_prime_from_census
+#check DkMathTest.LegendreSqrtRoughCensusRegression.cube_key_five
+#print axioms DkMathTest.LegendreSqrtRoughCensusRegression.cube_key_five
+#check DkMathTest.LegendreSqrtRoughCensusRegression.cube_seat_five
+#print axioms DkMathTest.LegendreSqrtRoughCensusRegression.cube_seat_five
+#check DkMathTest.LegendreSqrtRoughCensusRegression.cross_key_seven
+#print axioms DkMathTest.LegendreSqrtRoughCensusRegression.cross_key_seven
+#check DkMathTest.LegendreSqrtRoughCensusRegression.cross_seat_seven
+#print axioms DkMathTest.LegendreSqrtRoughCensusRegression.cross_seat_seven
+#check DkMathTest.LegendreSqrtRoughCensusRegression.external_cofactor_is_not_active
+#print axioms DkMathTest.LegendreSqrtRoughCensusRegression.external_cofactor_is_not_active
+#check DkMathTest.LegendreSqrtRoughCensusRegression.repeated_lower_key
+#print axioms DkMathTest.LegendreSqrtRoughCensusRegression.repeated_lower_key
+#check DkMathTest.LegendreSqrtRoughCensusRegression.repeated_upper_key
+#print axioms DkMathTest.LegendreSqrtRoughCensusRegression.repeated_upper_key
+#check DkMathTest.LegendreSqrtRoughCensusRegression.repeated_lower_seat
+#print axioms DkMathTest.LegendreSqrtRoughCensusRegression.repeated_lower_seat
+#check DkMathTest.LegendreSqrtRoughCensusRegression.repeated_upper_seat
+#print axioms DkMathTest.LegendreSqrtRoughCensusRegression.repeated_upper_seat
+#check DkMathTest.LegendreSqrtRoughCensusRegression.triple_key_nineteen
+#print axioms DkMathTest.LegendreSqrtRoughCensusRegression.triple_key_nineteen
+#check DkMathTest.LegendreSqrtRoughCensusRegression.triple_seat_nineteen
+#print axioms DkMathTest.LegendreSqrtRoughCensusRegression.triple_seat_nineteen
+#check DkMathTest.LegendreSqrtRoughCensusRegression.zero_anchor_census
+#print axioms DkMathTest.LegendreSqrtRoughCensusRegression.zero_anchor_census
+#check DkMathTest.LegendreSqrtRoughCensus.CensusRow
+#print axioms DkMathTest.LegendreSqrtRoughCensus.CensusRow
+#check DkMathTest.LegendreSqrtRoughCensus.CensusRow.mk
+#print axioms DkMathTest.LegendreSqrtRoughCensus.CensusRow.mk
+#check DkMathTest.LegendreSqrtRoughCensus.CensusRow.n
+#print axioms DkMathTest.LegendreSqrtRoughCensus.CensusRow.n
+#check DkMathTest.LegendreSqrtRoughCensus.CensusRow.R
+#print axioms DkMathTest.LegendreSqrtRoughCensus.CensusRow.R
+#check DkMathTest.LegendreSqrtRoughCensus.CensusRow.U
+#print axioms DkMathTest.LegendreSqrtRoughCensus.CensusRow.U
+#check DkMathTest.LegendreSqrtRoughCensus.CensusRow.N1
+#print axioms DkMathTest.LegendreSqrtRoughCensus.CensusRow.N1
+#check DkMathTest.LegendreSqrtRoughCensus.CensusRow.N2
+#print axioms DkMathTest.LegendreSqrtRoughCensus.CensusRow.N2
+#check DkMathTest.LegendreSqrtRoughCensus.CensusRow.N3
+#print axioms DkMathTest.LegendreSqrtRoughCensus.CensusRow.N3
+#check DkMathTest.LegendreSqrtRoughCensus.CensusRow.cube
+#print axioms DkMathTest.LegendreSqrtRoughCensus.CensusRow.cube
+#check DkMathTest.LegendreSqrtRoughCensus.CensusRow.cross
+#print axioms DkMathTest.LegendreSqrtRoughCensus.CensusRow.cross
+#check DkMathTest.LegendreSqrtRoughCensus.CensusRow.repeated
+#print axioms DkMathTest.LegendreSqrtRoughCensus.CensusRow.repeated
+#check DkMathTest.LegendreSqrtRoughCensus.CensusRow.triple
+#print axioms DkMathTest.LegendreSqrtRoughCensus.CensusRow.triple

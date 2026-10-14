@@ -1,0 +1,23 @@
+{
+  "observation": "OBS-012-Common01ComponentFusionKillsBothDepthNineExits",
+  "date": "2026-09-29",
+  "source_directory": "python/Tromino/results/repair-depth/w9-w10-exit-compare-v24",
+  "parent_exit_count_depth9": 2,
+  "child_exit_count_depth9": 0,
+  "all_parent_exits_diverge_on_child": true,
+  "exit0": {
+    "first_divergence_index": 0,
+    "parent_component": [8,9,10,11,12,15],
+    "child_overlapping_component": [4,8,9,10,11,12,15,17]
+  },
+  "exit1": {
+    "exact_prefix_length": 2,
+    "first_divergence_index": 2,
+    "parent_component": [3,8,11,15],
+    "child_overlapping_component": [3,4,8,11,15,17]
+  },
+  "common_obstruction": "(0,1) component enlargement through vertices 4 and 17",
+  "sufficiency_established": false,
+  "next_experiment": "controlled parent/child topology-state intervention at node 19 step 16",
+  "status": "observation_only"
+}

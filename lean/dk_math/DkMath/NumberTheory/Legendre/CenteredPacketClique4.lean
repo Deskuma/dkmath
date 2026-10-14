@@ -279,7 +279,7 @@ theorem exists_four_distinct_centeredPacketClique4_witnesses_of_fullyCovered
 /-- The repaired coprimality condition holds on the unbounded family `k = 15*t + 16`. -/
 theorem coprime_four_mul_periodicClique4_family (t : ℕ) :
     Nat.Coprime (4 * (15 * t + 16) + 3) 15 := by
-  have hbase : Nat.Coprime 67 15 := by norm_num
+  have hbase : Nat.Coprime 67 15 := by decide
   have hperiod : Nat.Coprime (67 + (4 * t) * 15) 15 :=
     (Nat.coprime_add_mul_right_left 67 15 (4 * t)).mpr hbase
   have heq : 4 * (15 * t + 16) + 3 = 67 + (4 * t) * 15 := by

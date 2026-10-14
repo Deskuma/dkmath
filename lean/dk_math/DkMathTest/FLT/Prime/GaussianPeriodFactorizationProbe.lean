@@ -5,6 +5,10 @@ Released under MIT license as described in the file LICENSE.
 
 import DkMath.NumberTheory.QuadraticConjugateFactor
 import DkMath.NumberTheory.TraceOneDiscriminantAxis
+import Mathlib.Data.ZMod.Basic
+import Mathlib.NumberTheory.LegendreSymbol.QuadraticChar.Basic
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.NormNum.Prime
 
 #print "file: DkMathTest.FLT.Prime.GaussianPeriodFactorizationProbe"
 

@@ -1,0 +1,93 @@
+{
+  "all_edges_resolved": true,
+  "all_height_labels_preserved": true,
+  "child_edges": 3,
+  "child_states": 4,
+  "depth11_found": false,
+  "depth_counts": {
+    "10": 1,
+    "9": 3
+  },
+  "edge_depth_deltas": [
+    {
+      "a": 0,
+      "b": 3,
+      "delta": 0,
+      "depth_a": 9,
+      "depth_b": 9
+    },
+    {
+      "a": 1,
+      "b": 2,
+      "delta": 1,
+      "depth_a": 9,
+      "depth_b": 10
+    },
+    {
+      "a": 2,
+      "b": 3,
+      "delta": -1,
+      "depth_a": 10,
+      "depth_b": 9
+    }
+  ],
+  "expanded_unique_state_max": 279935,
+  "expanded_unique_state_min": 279935,
+  "max_edge_absolute_depth_delta": 1,
+  "move": [
+    4,
+    21,
+    5,
+    17
+  ],
+  "neighbor_index": 1,
+  "states": [
+    {
+      "child_depth": 9,
+      "child_index": 0,
+      "exit_counts": {
+        "10": 2,
+        "9": 3
+      },
+      "expanded_unique_states": 279935,
+      "height_equal": true,
+      "parent_depth": 9,
+      "parent_index": 8
+    },
+    {
+      "child_depth": 9,
+      "child_index": 1,
+      "exit_counts": {
+        "10": 1,
+        "9": 4
+      },
+      "expanded_unique_states": 279935,
+      "height_equal": true,
+      "parent_depth": 9,
+      "parent_index": 10
+    },
+    {
+      "child_depth": 10,
+      "child_index": 2,
+      "exit_counts": {
+        "10": 5
+      },
+      "expanded_unique_states": 279935,
+      "height_equal": true,
+      "parent_depth": 10,
+      "parent_index": 12
+    },
+    {
+      "child_depth": 9,
+      "child_index": 3,
+      "exit_counts": {
+        "9": 5
+      },
+      "expanded_unique_states": 279935,
+      "height_equal": true,
+      "parent_depth": 9,
+      "parent_index": 14
+    }
+  ],
+  "unit_slope": true
+}

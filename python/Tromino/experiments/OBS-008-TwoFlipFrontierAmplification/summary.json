@@ -1,0 +1,56 @@
+{
+  "observation": "OBS-008-TwoFlipFrontierAmplification",
+  "date": "2026-09-29",
+  "source_directory": "python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24",
+  "initial_witness": {
+    "seed": 9000035,
+    "required_depth": 9,
+    "depth_minus_one_expanded": 202071,
+    "critical_footprint_size": 15,
+    "critical_max_component_size": 9,
+    "critical_radius": 2
+  },
+  "campaign": {
+    "vertices": 24,
+    "jobs": 32,
+    "steps": 512,
+    "warmup_flips": 0,
+    "workers": 8,
+    "max_depth": 11,
+    "target_depth": 10,
+    "node_limit": 3000000,
+    "base_seed": 11000000,
+    "intermediate_policy": "endpoint",
+    "search_objective": "frontier",
+    "stop_on_target": true
+  },
+  "campaign_summary": {
+    "jobs_completed": 32,
+    "resolved_jobs": 32,
+    "mean_resolved_depth": 9,
+    "max_resolved_depth": 9,
+    "target_found": false,
+    "stopped_on_target": false,
+    "elapsed_seconds": 4239.287391901016
+  },
+  "best_frontier": {
+    "seed": 11000009,
+    "required_depth": 9,
+    "depth_minus_one_expanded": 374152,
+    "depth9_success_expanded": 395940,
+    "repairs": 2,
+    "repair_moves_total": 11,
+    "critical_footprint_size": 13,
+    "critical_max_component_size": 6,
+    "critical_radius": 2,
+    "mutation_suffix_length": 4,
+    "net_flip_count": 2
+  },
+  "frontier_delta": 172081,
+  "net_face_changes": {
+    "removed": [[4,5,14],[4,14,19],[5,6,21],[5,6,22]],
+    "added": [[4,5,19],[5,14,19],[5,21,22],[6,21,22]]
+  },
+  "next_baseline_frontier": 374152,
+  "status": "observation_only"
+}

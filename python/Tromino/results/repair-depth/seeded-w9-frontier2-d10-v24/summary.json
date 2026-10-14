@@ -1,0 +1,27 @@
+{
+  "best_frontier_depth": 10,
+  "best_frontier_expanded": 279278,
+  "best_frontier_seed": 12000006,
+  "best_objective": [
+    10,
+    4,
+    14,
+    0
+  ],
+  "best_resolved_depth": 10,
+  "best_resolved_seed": 12000006,
+  "best_seed": 12000006,
+  "best_unresolved_classification": null,
+  "best_unresolved_seed": null,
+  "classifications": {
+    "solved": 1
+  },
+  "elapsed_seconds": 1950.0171148777008,
+  "jobs_completed": 1,
+  "max_resolved_depth": 10,
+  "mean_resolved_depth": 10,
+  "resolved_jobs": 1,
+  "stopped_on_target": true,
+  "target_depth": 10,
+  "target_found": true
+}

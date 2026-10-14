@@ -1,0 +1,603 @@
+{
+  "blocker_neighbor_distances": {
+    "0": 1,
+    "10": 1,
+    "12": 1,
+    "13": 1,
+    "14": 1,
+    "15": 1,
+    "17": 1,
+    "18": 1,
+    "2": 1,
+    "20": 1,
+    "22": 1,
+    "23": 1,
+    "4": 1,
+    "5": 1,
+    "8": 1,
+    "9": 1
+  },
+  "blocker_neighbors": [
+    0,
+    2,
+    4,
+    5,
+    8,
+    9,
+    10,
+    12,
+    13,
+    14,
+    15,
+    17,
+    18,
+    20,
+    22,
+    23
+  ],
+  "colored_state": {
+    "-1": 0,
+    "0": 1,
+    "1": 2,
+    "10": 1,
+    "11": 1,
+    "12": 0,
+    "13": 3,
+    "14": 0,
+    "15": 0,
+    "16": 0,
+    "17": 1,
+    "18": 3,
+    "2": 3,
+    "3": 2,
+    "4": 0,
+    "5": 3,
+    "6": 3,
+    "7": 3,
+    "8": 1,
+    "9": 1
+  },
+  "expanded_unique_states": 279935,
+  "first_exit_candidates": [
+    0
+  ],
+  "first_exit_depth": 10,
+  "first_exit_geometry": {
+    "component_sizes": [
+      8,
+      1,
+      2,
+      1,
+      1,
+      1,
+      4,
+      2,
+      2,
+      1
+    ],
+    "footprint_size": 15,
+    "footprint_vertices": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      17,
+      18
+    ],
+    "max_component_size": 8,
+    "max_distance_from_current": 2,
+    "min_distance_from_current": 1
+  },
+  "first_exit_path": [
+    {
+      "colors": [
+        0,
+        1
+      ],
+      "component": [
+        4,
+        8,
+        9,
+        10,
+        11,
+        12,
+        15,
+        17
+      ]
+    },
+    {
+      "colors": [
+        0,
+        1
+      ],
+      "component": [
+        14
+      ]
+    },
+    {
+      "colors": [
+        0,
+        2
+      ],
+      "component": [
+        3,
+        8
+      ]
+    },
+    {
+      "colors": [
+        0,
+        2
+      ],
+      "component": [
+        9
+      ]
+    },
+    {
+      "colors": [
+        0,
+        2
+      ],
+      "component": [
+        17
+      ]
+    },
+    {
+      "colors": [
+        0,
+        3
+      ],
+      "component": [
+        6
+      ]
+    },
+    {
+      "colors": [
+        1,
+        3
+      ],
+      "component": [
+        4,
+        5,
+        13,
+        14
+      ]
+    },
+    {
+      "colors": [
+        2,
+        3
+      ],
+      "component": [
+        8,
+        18
+      ]
+    },
+    {
+      "colors": [
+        0,
+        3
+      ],
+      "component": [
+        7,
+        10
+      ]
+    },
+    {
+      "colors": [
+        2,
+        3
+      ],
+      "component": [
+        14
+      ]
+    }
+  ],
+  "initial_kempe_component_count": 21,
+  "initial_kempe_components": [
+    {
+      "colors": [
+        0,
+        1
+      ],
+      "component": [
+        4,
+        8,
+        9,
+        10,
+        11,
+        12,
+        15,
+        17
+      ],
+      "size": 8
+    },
+    {
+      "colors": [
+        0,
+        1
+      ],
+      "component": [
+        14
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        0,
+        2
+      ],
+      "component": [
+        3,
+        12
+      ],
+      "size": 2
+    },
+    {
+      "colors": [
+        0,
+        2
+      ],
+      "component": [
+        4
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        0,
+        2
+      ],
+      "component": [
+        14
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        0,
+        2
+      ],
+      "component": [
+        15
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        0,
+        3
+      ],
+      "component": [
+        4,
+        5,
+        13,
+        14
+      ],
+      "size": 4
+    },
+    {
+      "colors": [
+        1,
+        2
+      ],
+      "component": [
+        3,
+        8
+      ],
+      "size": 2
+    },
+    {
+      "colors": [
+        1,
+        2
+      ],
+      "component": [
+        9
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        1,
+        2
+      ],
+      "component": [
+        10
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        1,
+        2
+      ],
+      "component": [
+        11
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        1,
+        2
+      ],
+      "component": [
+        17
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        1,
+        3
+      ],
+      "component": [
+        5,
+        17
+      ],
+      "size": 2
+    },
+    {
+      "colors": [
+        1,
+        3
+      ],
+      "component": [
+        6
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        1,
+        3
+      ],
+      "component": [
+        7,
+        8,
+        10,
+        11,
+        18
+      ],
+      "size": 5
+    },
+    {
+      "colors": [
+        1,
+        3
+      ],
+      "component": [
+        13
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        2,
+        3
+      ],
+      "component": [
+        3,
+        18
+      ],
+      "size": 2
+    },
+    {
+      "colors": [
+        2,
+        3
+      ],
+      "component": [
+        5
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        2,
+        3
+      ],
+      "component": [
+        6
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        2,
+        3
+      ],
+      "component": [
+        7
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        2,
+        3
+      ],
+      "component": [
+        13
+      ],
+      "size": 1
+    }
+  ],
+  "initial_palette": [
+    0,
+    1,
+    3
+  ],
+  "initial_safe_candidates": [],
+  "intermediate_policy": "endpoint",
+  "layers": [
+    {
+      "depth": 0,
+      "duplicate_transitions": 0,
+      "exit_states": 0,
+      "generated_states": 1,
+      "invariant_states": 1,
+      "moves_examined_from_layer": 21,
+      "processed_states": 1
+    },
+    {
+      "depth": 1,
+      "duplicate_transitions": 0,
+      "exit_states": 0,
+      "generated_states": 21,
+      "invariant_states": 8,
+      "moves_examined_from_layer": 441,
+      "processed_states": 21
+    },
+    {
+      "depth": 2,
+      "duplicate_transitions": 215,
+      "exit_states": 0,
+      "generated_states": 226,
+      "invariant_states": 27,
+      "moves_examined_from_layer": 4746,
+      "processed_states": 226
+    },
+    {
+      "depth": 3,
+      "duplicate_transitions": 3155,
+      "exit_states": 0,
+      "generated_states": 1591,
+      "invariant_states": 50,
+      "moves_examined_from_layer": 33411,
+      "processed_states": 1591
+    },
+    {
+      "depth": 4,
+      "duplicate_transitions": 25479,
+      "exit_states": 0,
+      "generated_states": 7932,
+      "invariant_states": 49,
+      "moves_examined_from_layer": 166572,
+      "processed_states": 7932
+    },
+    {
+      "depth": 5,
+      "duplicate_transitions": 138469,
+      "exit_states": 0,
+      "generated_states": 28103,
+      "invariant_states": 47,
+      "moves_examined_from_layer": 590163,
+      "processed_states": 28103
+    },
+    {
+      "depth": 6,
+      "duplicate_transitions": 523153,
+      "exit_states": 0,
+      "generated_states": 67010,
+      "invariant_states": 58,
+      "moves_examined_from_layer": 1407210,
+      "processed_states": 67010
+    },
+    {
+      "depth": 7,
+      "duplicate_transitions": 1312260,
+      "exit_states": 0,
+      "generated_states": 94950,
+      "invariant_states": 69,
+      "moves_examined_from_layer": 1993950,
+      "processed_states": 94950
+    },
+    {
+      "depth": 8,
+      "duplicate_transitions": 1929481,
+      "exit_states": 0,
+      "generated_states": 64469,
+      "invariant_states": 39,
+      "moves_examined_from_layer": 1353849,
+      "processed_states": 64469
+    },
+    {
+      "depth": 9,
+      "duplicate_transitions": 1338873,
+      "exit_states": 0,
+      "generated_states": 14976,
+      "invariant_states": 17,
+      "moves_examined_from_layer": 314496,
+      "processed_states": 14976
+    },
+    {
+      "depth": 10,
+      "duplicate_transitions": 313839,
+      "exit_states": 5,
+      "generated_states": 657,
+      "invariant_states": 5,
+      "moves_examined_from_layer": 0,
+      "processed_states": 652
+    }
+  ],
+  "max_depth": 10,
+  "node": 19,
+  "node_limit": 6000000,
+  "prefix_depth": 10,
+  "prefix_repairs": [
+    {
+      "assigned_color": 1,
+      "moves": [
+        {
+          "colors": [
+            0,
+            1
+          ],
+          "component": [
+            4
+          ]
+        }
+      ],
+      "node": 17,
+      "repair_depth": 1,
+      "step": 14
+    },
+    {
+      "assigned_color": 3,
+      "moves": [
+        {
+          "colors": [
+            1,
+            3
+          ],
+          "component": [
+            11
+          ]
+        },
+        {
+          "colors": [
+            2,
+            3
+          ],
+          "component": [
+            3
+          ]
+        }
+      ],
+      "node": 18,
+      "repair_depth": 2,
+      "step": 15
+    }
+  ],
+  "remaining": [
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "step": 16,
+  "truncated": false,
+  "visited_states": 279936
+}

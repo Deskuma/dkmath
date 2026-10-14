@@ -5,6 +5,9 @@ Released under MIT license as described in the file LICENSE.
 
 import DkMath.NumberTheory.TraceOneQuadratic
 import DkMath.Lib.NumberTheory.PadicValNat
+import Mathlib.RingTheory.Coprime.Basic
+import Mathlib.RingTheory.Int.Basic
+import Mathlib.Tactic.LinearCombination
 
 #print "file: DkMath.NumberTheory.TraceOneDiscriminantAxis"
 
@@ -344,7 +347,7 @@ theorem discrAxisDepth_discrAxis_pow
     (P : PrimeDiscriminantPacket p s) (n : ℕ) :
     discrAxisDepth p (discrAxis s ^ n) = n := by
   rw [discrAxisDepth, P.natAbs_norm_discrAxis_pow]
-  haveI : Fact p.Prime := ⟨P.prime⟩
+  have : Fact p.Prime := ⟨P.prime⟩
   rw [padicValNat.pow]
   simp
 

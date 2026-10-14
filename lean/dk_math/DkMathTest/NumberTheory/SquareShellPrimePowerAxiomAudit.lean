@@ -1,0 +1,96 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMathTest.NumberTheory.SquareShellPrimePowerCalibration
+
+#print "file: DkMathTest.NumberTheory.SquareShellPrimePowerAxiomAudit"
+
+-- Complete named public coverage of DkMath/NumberTheory/Legendre/SquareShellPrimePower.lean
+#print axioms DkMath.NumberTheory.Legendre.not_squareCell_square
+#print axioms DkMath.NumberTheory.Legendre.not_squareCell_even_power
+#print axioms DkMath.NumberTheory.Legendre.shell_nonprime_power_depth
+#print axioms DkMath.NumberTheory.Legendre.squareCell_power_base_le
+#print axioms DkMath.NumberTheory.Legendre.shell_higher_primePower_canonical
+#print axioms DkMath.NumberTheory.Legendre.squareCell_prime_power_exponent_unique
+#print axioms DkMath.NumberTheory.Legendre.squareCell_primePower_minFac_injective
+#print axioms DkMath.NumberTheory.Legendre.squareCell_power_previous_gt
+#print axioms DkMath.NumberTheory.Legendre.squareCell_fixed_exponent_unique
+#print axioms DkMath.NumberTheory.Legendre.squareCell_prime_power_exponent_le_log
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerEvents
+#print axioms DkMath.NumberTheory.Legendre.mem_shellHigherPrimePowerEvents
+#print axioms DkMath.NumberTheory.Legendre.shellPrimePowerBasesAtExponent
+#print axioms DkMath.NumberTheory.Legendre.mem_shellPrimePowerBasesAtExponent
+#print axioms DkMath.NumberTheory.Legendre.shellPrimePowerBasesAtExponent_even
+#print axioms DkMath.NumberTheory.Legendre.shellPrimePowerBasesAtExponent_card_le_one
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePower_depth_injective
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerEvents_card_le
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerEvents_eq_empty_of_bases_empty
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerEvents_eq_empty_of_bounded_exclusion
+#print axioms DkMath.NumberTheory.Legendre.gnomon_top_not_isPrimePow
+
+-- Complete named public coverage of DkMath/NumberTheory/Legendre/SquareShellVonMangoldt.lean
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellVonMangoldtMass
+#print axioms DkMath.NumberTheory.Legendre.higherPrimePowerWeight
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass
+#print axioms DkMath.NumberTheory.Legendre.higherPrimePowerWeight_nonneg
+#print axioms DkMath.NumberTheory.Legendre.vonMangoldt_eq_primeBirth_add_higher
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellVonMangoldtMass_nonneg
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_nonneg
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellVonMangoldtMass_eq_birth_add_higher
+#print axioms DkMath.NumberTheory.Legendre.squareOffsets_sum_eq_range_sub
+#print axioms DkMath.NumberTheory.Legendre.psi_nat_eq_sum_range
+#print axioms DkMath.NumberTheory.Legendre.theta_nat_eq_sum_primeBirth_range
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellVonMangoldtMass_eq_psi_sub
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellBirthLogMass_eq_theta_sub
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_eq_psi_theta_sub
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellVonMangoldtMass_zero
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_zero
+
+-- Complete named public coverage of DkMath/NumberTheory/Legendre/SquareShellPrimePowerGauge.lean
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePower_log_packet
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePower_weight_gap
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePower_logGauge_le
+#print axioms DkMath.NumberTheory.Legendre.shellPrime_weight_eq_log
+#print axioms DkMath.NumberTheory.Legendre.squareOffsets_sum_eq_values
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_eq_events
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerBases
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerBases_subset_primesLE
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_eq_base_logs
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_theta
+#print axioms DkMath.NumberTheory.Legendre.shellHigherBaseCandidates
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerBases_subset_candidates
+#print axioms DkMath.NumberTheory.Legendre.shellHigherBaseCandidates_log_sum_le_theta
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_candidate_logs
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_card_log
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerLogBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalShellHigherPrimePowerMass_le_logBudget
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_higher_bound
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_theta_lt
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_logBudget_lt
+#print axioms DkMath.NumberTheory.Legendre.shellHigherPrimePowerResynchronizationPacket
+#print axioms DkMath.NumberTheory.Legendre.shellPrimeBirthPacket
+#print axioms DkMath.NumberTheory.Legendre.gnomon_top_innerCommonDivisor_eq_one
+
+-- Complete named public coverage of DkMathTest/NumberTheory/SquareShellPrimePowerCalibration.lean
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.prime_only_shell_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.first_cube_shell_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor5_events_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor5_depths_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor11_events_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor11_depths_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor19_events_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor29_events_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor297_bounded_powers_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor297_events_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor1031_bounded_powers_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor1031_events_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor5_higher_mass_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor1031_mass_split_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.cube_gauge_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.fifth_gauge_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.even_depth_shell_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.anchor5_top_row_checked
+#print axioms DkMathTest.NumberTheory.SquareShellPrimePowerCalibration.logarithmic_budget_consumer

@@ -1,0 +1,37 @@
+{
+  "observation": "OBS-016-AdmissibleOnePointStateLandscape",
+  "date": "2026-09-30",
+  "source_directory": "python/Tromino/results/repair-depth/w9-single-recolor-scan-v24",
+  "baseline_first_exit_depth": 9,
+  "baseline_exit_color": 0,
+  "proper_single_recolor_candidates": 11,
+  "valid_recolors": [
+    {"vertex":4,"old_color":1,"new_color":0,"first_exit_depth":10},
+    {"vertex":13,"old_color":3,"new_color":1,"first_exit_depth":8},
+    {"vertex":14,"old_color":0,"new_color":1,"first_exit_depth":8}
+  ],
+  "raising_recolors": [[4,1,0]],
+  "lowering_recolors": [[13,3,1],[14,0,1]],
+  "same_depth_recolors": [],
+  "invariant_rejected_recolors": [
+    [4,1,2],[5,3,2],[9,1,2],[10,1,2],
+    [13,3,2],[14,0,2],[15,0,2],[17,3,2]
+  ],
+  "future_vertex_palettes": {
+    "19":[0,1,3],
+    "20":[0,1,3],
+    "21":[0,1,3],
+    "22":[0,1,3],
+    "23":[0,1,3]
+  },
+  "missing_future_color": 2,
+  "static_next_component_probe": {
+    "reachable_admissible_states": 32,
+    "degree_min": 1,
+    "degree_max": 5,
+    "degree_mean": 3,
+    "reachable_mutable_color2_states": 0
+  },
+  "next_experiment": "evaluate repair depth on every state in the full admissible one-point recoloring component",
+  "status": "observation_only"
+}

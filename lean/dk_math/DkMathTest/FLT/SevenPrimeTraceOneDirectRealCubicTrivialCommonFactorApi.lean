@@ -1,0 +1,27 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+-/
+
+import DkMath.FLT.Seven
+
+#print "file: DkMathTest.FLT.SevenPrimeTraceOneDirectRealCubicTrivialCommonFactorApi"
+
+open DkMath.FLT.Seven
+open DkMath.FLT.Seven.SevenRealCubic
+
+#check directOrbit_norm_coprime_ideal_coprime
+#check directOrbitTrivialCommonFactor_scalarIdealU
+#check directOrbitTrivialCommonFactor_scalarIdealV
+#check directOrbitTrivialCommonFactor_scalarIdealU_absNorm
+#check directOrbitTrivialCommonFactor_scalarIdealV_absNorm
+#check directOrbitTrivialCommonFactor_gapIdeal_absNorm_of_c_eq_one
+#check directOrbitTrivialCommonFactor_quotientIdeal_absNorm_of_c_eq_one
+#check directOrbitTrivialCommonFactor_cross_coprime
+#check directOrbitTrivialCommonFactor_ideal_product_of_c_eq_one
+#check directOrbitTrivialCommonFactor_ideal_eq_scalar_of_c_eq_one
+#check directOrbitTrivialCommonFactor_gap_scalar_unit_of_c_eq_one
+#check directOrbitTrivialCommonFactor_quotient_scalar_unit_of_c_eq_one
+#check directOrbitTrivialCommonFactor_gap_rotate_scalar_unit
+#check directOrbitTrivialCommonFactor_gap_twice_rotate_scalar_unit
+#check directOrbitTrivialCommonFactor_unit_twisted_eq

@@ -5,6 +5,8 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.Seven.QuadraticBridge
+import Mathlib.Tactic.LinearCombination
+import Mathlib.Tactic.NormNum.Prime
 
 #print "file: DkMath.FLT.Seven.AxisDivisibility"
 

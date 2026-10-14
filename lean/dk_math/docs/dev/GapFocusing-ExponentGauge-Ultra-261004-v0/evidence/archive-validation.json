@@ -1,0 +1,2795 @@
+{
+  "baseline_HEAD": "fce6559a761c9cfc53ebb36114e00bd1cd926f06",
+  "baseline_PR": {
+    "number": 113,
+    "base": "develop",
+    "head": "research/GapFocusing-ExponentGauge-Ultra-261004-v0",
+    "state": "OPEN",
+    "draft": true,
+    "changed_files": 1365,
+    "additions": 2058435,
+    "deletions": 66
+  },
+  "roundtrip": {
+    "files": 753,
+    "bytes": 135114977,
+    "literal_byte_comparison": true,
+    "two_isolated_restorations": true,
+    "reproduced_archives_manifest_index_checksums_identical": true
+  },
+  "references": {
+    "references": [
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/JOURNEY-001-051.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/MERGE-PREP-EVIDENCE-ARCHIVE.md",
+        "occurrences": 15
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-025.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-026.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-027.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-028.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-029.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-030.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-031.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-032.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-033.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-034.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-035.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-036.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-037.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-038.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-039.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-040.py",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-041.py",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-042.py",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-043.py",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-044.py",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-045.py",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-046.py",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-047.py",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-048.py",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-049.py",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/build-050.py",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-007.py",
+        "occurrences": 5
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-008.py",
+        "occurrences": 5
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-009.py",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-010.py",
+        "occurrences": 8
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-011.py",
+        "occurrences": 8
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-012.py",
+        "occurrences": 8
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-013.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-014.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-015.py",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-016.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-017.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-018.py",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-019.py",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-020.py",
+        "occurrences": 5
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-021.py",
+        "occurrences": 5
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-022.py",
+        "occurrences": 5
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-023.py",
+        "occurrences": 5
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-024.py",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-025.py",
+        "occurrences": 5
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-026.py",
+        "occurrences": 5
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-027.py",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-028.py",
+        "occurrences": 9
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-029.py",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-030.py",
+        "occurrences": 8
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-031.py",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-032.py",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-033.py",
+        "occurrences": 8
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-034.py",
+        "occurrences": 8
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-035.py",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-036.py",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-037.py",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-038.py",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-039.py",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-040.py",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-041.py",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-042.py",
+        "occurrences": 8
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-043.py",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-044.py",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-045.py",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-046.py",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-047.py",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-048.py",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-049.py",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-050.py",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-051.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/classify-008.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/classify-009.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/classify-010.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/coverage-025.py",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/coverage-026.py",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/coverage-027.py",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/coverage-028.py",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/coverage-029.py",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/coverage-030.py",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/coverage-031.py",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/coverage-032.py",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/coverage-033.py",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/coverage-034.py",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/diagnostics-026.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/diagnostics-027.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/diagnostics-028.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/diagnostics-029.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/diagnostics-030.py",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/diagnostics-031.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/diagnostics-032.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/diagnostics-033.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/diagnostics-034.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/diagnostics-035.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/diagnostics-036.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/diagnostics-037.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/diagnostics-038.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/diagnostics-039.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/diagnostics-040.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/diagnostics-041.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/diagnostics-042.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/discover-011.py",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/discover-012.py",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/discover-013.py",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/discover-014.py",
+        "occurrences": 0
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/discover-015.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/discover-019.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/discover-020.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/discover-021.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/discover-022.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/discover-023.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/discover-024.py",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/discovery-016.py",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/discovery-017.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/discovery-018.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/fiber-cap-028.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/finish-025.py",
+        "occurrences": 11
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/finish-026.py",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/finish-027.py",
+        "occurrences": 10
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/finish-028.py",
+        "occurrences": 10
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/finish-029.py",
+        "occurrences": 8
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/finish-030.py",
+        "occurrences": 13
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/finish-031.py",
+        "occurrences": 14
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/finish-032.py",
+        "occurrences": 14
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/finish-033.py",
+        "occurrences": 14
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/finish-034.py",
+        "occurrences": 14
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/finish-036.py",
+        "occurrences": 11
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/pascal-025.py",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/plain-logs-022.py",
+        "occurrences": 0
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/plain-logs-023.py",
+        "occurrences": 0
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/plain-logs-024.py",
+        "occurrences": 0
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/plain-logs-025.py",
+        "occurrences": 0
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/plain-logs-026.py",
+        "occurrences": 0
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/plain-logs-027.py",
+        "occurrences": 0
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/plain-logs-028.py",
+        "occurrences": 0
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/plain-logs-029.py",
+        "occurrences": 0
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/plain-logs-030.py",
+        "occurrences": 0
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/plain-logs-031.py",
+        "occurrences": 0
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/plain-logs-032.py",
+        "occurrences": 0
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/plain-logs-033.py",
+        "occurrences": 0
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/plain-logs-034.py",
+        "occurrences": 0
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/proposal-cofactor-024.py",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/source-inventory-025.py",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/findings-001.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/findings-011.md",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/findings-014.md",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/findings-025.md",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/findings-028.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/instruction-021.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-001.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-008.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-009.md",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-010.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-013.md",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-014.md",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-015.md",
+        "occurrences": 5
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-016.md",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-017.md",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-018.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-019.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-020.md",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-021.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-024.md",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-026.md",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-027.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-028.md",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-029.md",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-030.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-031.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-032.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-033.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-034.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-035.md",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-036.md",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-037.md",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-038.md",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-039.md",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-040.md",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-041.md",
+        "occurrences": 4
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-042.md",
+        "occurrences": 3
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-043.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-044.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-045.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-046.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-047.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-048.md",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-049.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-050.md",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-051.md",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-001.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-006.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-007.md",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-008.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-009.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-010.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-011.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-012.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-014.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-015.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-016.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-025.md",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-002.md",
+        "occurrences": 5
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-003.md",
+        "occurrences": 5
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-004.md",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-005.md",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-006.md",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-007.md",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-008.md",
+        "occurrences": 9
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-009.md",
+        "occurrences": 13
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-010.md",
+        "occurrences": 15
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-011.md",
+        "occurrences": 17
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "occurrences": 19
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-013.md",
+        "occurrences": 8
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-014.md",
+        "occurrences": 8
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-015.md",
+        "occurrences": 10
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-016.md",
+        "occurrences": 13
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-017.md",
+        "occurrences": 10
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-018.md",
+        "occurrences": 8
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-019.md",
+        "occurrences": 5
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-020.md",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-021.md",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-022.md",
+        "occurrences": 9
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-023.md",
+        "occurrences": 6
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-024.md",
+        "occurrences": 5
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-025.md",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-026.md",
+        "occurrences": 2
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-027.md",
+        "occurrences": 14
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-028.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-029.md",
+        "occurrences": 1
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-030.md",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-031.md",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-032.md",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-033.md",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-034.md",
+        "occurrences": 7
+      },
+      {
+        "path": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/valuation-audit-003.md",
+        "occurrences": 1
+      }
+    ],
+    "direct_links": [
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/JOURNEY-001-051.md",
+        "target": "logs/check-051.txt",
+        "log": "logs/check-051.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/findings-001.md",
+        "target": "logs/validation-summary.md",
+        "log": "logs/validation-summary.md"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/findings-025.md",
+        "target": "logs/pascal-diagnostics-025.json",
+        "log": "logs/pascal-diagnostics-025.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/findings-025.md",
+        "target": "logs/pascal-diagnostics-025.txt",
+        "log": "logs/pascal-diagnostics-025.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-001.md",
+        "target": "logs/validation-summary.md",
+        "log": "logs/validation-summary.md"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-008.md",
+        "target": "logs/classification-008.json",
+        "log": "logs/classification-008.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-009.md",
+        "target": "logs/classification-009.json",
+        "log": "logs/classification-009.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-009.md",
+        "target": "logs/classification-summary-009.txt",
+        "log": "logs/classification-summary-009.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-010.md",
+        "target": "logs/classification-010.json",
+        "log": "logs/classification-010.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-013.md",
+        "target": "logs/discovery-013.json",
+        "log": "logs/discovery-013.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-013.md",
+        "target": "logs/discovery-013.txt",
+        "log": "logs/discovery-013.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-014.md",
+        "target": "logs/discovery-014.json",
+        "log": "logs/discovery-014.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-014.md",
+        "target": "logs/discovery-014.txt",
+        "log": "logs/discovery-014.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-015.md",
+        "target": "logs/discovery-015.json",
+        "log": "logs/discovery-015.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-015.md",
+        "target": "logs/discovery-015.json",
+        "log": "logs/discovery-015.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-015.md",
+        "target": "logs/discovery-015.txt",
+        "log": "logs/discovery-015.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-015.md",
+        "target": "logs/next-basis-015.json",
+        "log": "logs/next-basis-015.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-015.md",
+        "target": "logs/declaration-coverage-015.json",
+        "log": "logs/declaration-coverage-015.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-016.md",
+        "target": "logs/declaration-coverage-016.json",
+        "log": "logs/declaration-coverage-016.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-016.md",
+        "target": "logs/discovery-016.json",
+        "log": "logs/discovery-016.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-017.md",
+        "target": "logs/discovery-017.json",
+        "log": "logs/discovery-017.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-017.md",
+        "target": "logs/declaration-coverage-017.json",
+        "log": "logs/declaration-coverage-017.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-018.md",
+        "target": "logs/discovery-018.json",
+        "log": "logs/discovery-018.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-019.md",
+        "target": "logs/discovery-019.json",
+        "log": "logs/discovery-019.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-020.md",
+        "target": "logs/discovery-020.json",
+        "log": "logs/discovery-020.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-020.md",
+        "target": "logs/discovery-summary-020.txt",
+        "log": "logs/discovery-summary-020.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-021.md",
+        "target": "logs/discovery-021.json",
+        "log": "logs/discovery-021.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-024.md",
+        "target": "logs/deleted-seats-024.csv",
+        "log": "logs/deleted-seats-024.csv"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-024.md",
+        "target": "logs/discovery-024.json",
+        "log": "logs/discovery-024.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-024.md",
+        "target": "logs/proposed-cofactor-024.json",
+        "log": "logs/proposed-cofactor-024.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-026.md",
+        "target": "logs/diagnostics-026.json",
+        "log": "logs/diagnostics-026.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-026.md",
+        "target": "logs/diagnostics-summary-026.json",
+        "log": "logs/diagnostics-summary-026.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-027.md",
+        "target": "logs/diagnostics-027.json",
+        "log": "logs/diagnostics-027.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-028.md",
+        "target": "logs/diagnostics-028.jsonl",
+        "log": "logs/diagnostics-028.jsonl"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-028.md",
+        "target": "logs/diagnostics-summary-028.json",
+        "log": "logs/diagnostics-summary-028.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-028.md",
+        "target": "logs/fiber-cap-028.json",
+        "log": "logs/fiber-cap-028.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-029.md",
+        "target": "logs/diagnostics-029.json",
+        "log": "logs/diagnostics-029.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-029.md",
+        "target": "logs/check-029.txt",
+        "log": "logs/check-029.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-030.md",
+        "target": "logs/diagnostics-030.json",
+        "log": "logs/diagnostics-030.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-031.md",
+        "target": "logs/diagnostics-031.json",
+        "log": "logs/diagnostics-031.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-032.md",
+        "target": "logs/diagnostics-032.json",
+        "log": "logs/diagnostics-032.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-033.md",
+        "target": "logs/diagnostics-033.json",
+        "log": "logs/diagnostics-033.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-034.md",
+        "target": "logs/diagnostics-034.json",
+        "log": "logs/diagnostics-034.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-035.md",
+        "target": "logs/coverage-035.json",
+        "log": "logs/coverage-035.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-035.md",
+        "target": "logs/diagnostics-035.json",
+        "log": "logs/diagnostics-035.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-035.md",
+        "target": "logs/focused-035.txt",
+        "log": "logs/focused-035.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-035.md",
+        "target": "logs/axiom-audit-035.txt",
+        "log": "logs/axiom-audit-035.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-035.md",
+        "target": "logs/facade-035.txt",
+        "log": "logs/facade-035.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-035.md",
+        "target": "logs/root-035.txt",
+        "log": "logs/root-035.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-035.md",
+        "target": "logs/artifact-check-035.txt",
+        "log": "logs/artifact-check-035.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-036.md",
+        "target": "logs/coverage-036.json",
+        "log": "logs/coverage-036.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-036.md",
+        "target": "logs/diagnostics-036.json",
+        "log": "logs/diagnostics-036.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-036.md",
+        "target": "logs/focused-036.txt",
+        "log": "logs/focused-036.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-036.md",
+        "target": "logs/axiom-audit-036.txt",
+        "log": "logs/axiom-audit-036.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-036.md",
+        "target": "logs/facade-036.txt",
+        "log": "logs/facade-036.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-036.md",
+        "target": "logs/root-036.txt",
+        "log": "logs/root-036.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-036.md",
+        "target": "logs/artifact-check-036.txt",
+        "log": "logs/artifact-check-036.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-037.md",
+        "target": "logs/coverage-037.json",
+        "log": "logs/coverage-037.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-037.md",
+        "target": "logs/diagnostics-037.json",
+        "log": "logs/diagnostics-037.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-037.md",
+        "target": "logs/focused-037.txt",
+        "log": "logs/focused-037.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-037.md",
+        "target": "logs/axiom-audit-037.txt",
+        "log": "logs/axiom-audit-037.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-037.md",
+        "target": "logs/facade-037.txt",
+        "log": "logs/facade-037.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-037.md",
+        "target": "logs/root-037.txt",
+        "log": "logs/root-037.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-037.md",
+        "target": "logs/artifact-check-037.txt",
+        "log": "logs/artifact-check-037.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-038.md",
+        "target": "logs/coverage-038.json",
+        "log": "logs/coverage-038.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-038.md",
+        "target": "logs/diagnostics-038.json",
+        "log": "logs/diagnostics-038.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-038.md",
+        "target": "logs/focused-038.txt",
+        "log": "logs/focused-038.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-038.md",
+        "target": "logs/axiom-audit-038.txt",
+        "log": "logs/axiom-audit-038.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-038.md",
+        "target": "logs/facade-038.txt",
+        "log": "logs/facade-038.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-038.md",
+        "target": "logs/root-038.txt",
+        "log": "logs/root-038.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-038.md",
+        "target": "logs/artifact-check-038.txt",
+        "log": "logs/artifact-check-038.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-039.md",
+        "target": "logs/coverage-039.json",
+        "log": "logs/coverage-039.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-039.md",
+        "target": "logs/diagnostics-039.json",
+        "log": "logs/diagnostics-039.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-039.md",
+        "target": "logs/focused-039.txt",
+        "log": "logs/focused-039.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-039.md",
+        "target": "logs/axiom-audit-039.txt",
+        "log": "logs/axiom-audit-039.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-039.md",
+        "target": "logs/facade-039.txt",
+        "log": "logs/facade-039.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-039.md",
+        "target": "logs/root-039.txt",
+        "log": "logs/root-039.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-039.md",
+        "target": "logs/artifact-check-039.txt",
+        "log": "logs/artifact-check-039.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-043.md",
+        "target": "logs/source-audit-043.json",
+        "log": "logs/source-audit-043.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-044.md",
+        "target": "logs/source-audit-044.json",
+        "log": "logs/source-audit-044.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-045.md",
+        "target": "logs/source-audit-045.json",
+        "log": "logs/source-audit-045.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-046.md",
+        "target": "logs/source-audit-046.json",
+        "log": "logs/source-audit-046.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-047.md",
+        "target": "logs/source-audit-047.json",
+        "log": "logs/source-audit-047.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-051.md",
+        "target": "logs/source-audit-051.json",
+        "log": "logs/source-audit-051.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/report-051.md",
+        "target": "logs/check-051.txt",
+        "log": "logs/check-051.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-001.md",
+        "target": "logs/validation-summary.md",
+        "log": "logs/validation-summary.md"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-006.md",
+        "target": "logs/source-inventory-006.txt",
+        "log": "logs/source-inventory-006.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-007.md",
+        "target": "logs/source-inventory-007.txt",
+        "log": "logs/source-inventory-007.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-007.md",
+        "target": "logs/declaration-inventory-007.txt",
+        "log": "logs/declaration-inventory-007.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-008.md",
+        "target": "logs/source-inventory-008.txt",
+        "log": "logs/source-inventory-008.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-009.md",
+        "target": "logs/source-inventory-009.txt",
+        "log": "logs/source-inventory-009.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-010.md",
+        "target": "logs/source-inventory-010.txt",
+        "log": "logs/source-inventory-010.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-011.md",
+        "target": "logs/source-inventory-011.txt",
+        "log": "logs/source-inventory-011.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-012.md",
+        "target": "logs/source-inventory-012.txt",
+        "log": "logs/source-inventory-012.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-014.md",
+        "target": "logs/source-inventory-014.txt",
+        "log": "logs/source-inventory-014.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-015.md",
+        "target": "logs/declaration-coverage-015.json",
+        "log": "logs/declaration-coverage-015.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-016.md",
+        "target": "logs/declaration-coverage-016.json",
+        "log": "logs/declaration-coverage-016.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-025.md",
+        "target": "logs/prior-source-index-025.txt",
+        "log": "logs/prior-source-index-025.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/source-inventory-025.md",
+        "target": "logs/declaration-coverage-025.json",
+        "log": "logs/declaration-coverage-025.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-002.md",
+        "target": "logs/build-successor-focused-002.txt",
+        "log": "logs/build-successor-focused-002.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-002.md",
+        "target": "logs/build-facades-002.txt",
+        "log": "logs/build-facades-002.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-002.md",
+        "target": "logs/primitive-prime-audit-002.txt",
+        "log": "logs/primitive-prime-audit-002.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-002.md",
+        "target": "logs/source-dependency-audit-002.txt",
+        "log": "logs/source-dependency-audit-002.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-002.md",
+        "target": "logs/diff-check-002.txt",
+        "log": "logs/diff-check-002.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-003.md",
+        "target": "logs/build-final-003.txt",
+        "log": "logs/build-final-003.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-003.md",
+        "target": "logs/axiom-audit-003.txt",
+        "log": "logs/axiom-audit-003.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-003.md",
+        "target": "logs/source-dependency-audit-003.txt",
+        "log": "logs/source-dependency-audit-003.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-003.md",
+        "target": "logs/build-layer-valuation-003.txt",
+        "log": "logs/build-layer-valuation-003.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-003.md",
+        "target": "logs/diff-check-003.txt",
+        "log": "logs/diff-check-003.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-004.md",
+        "target": "logs/build-final-004.txt",
+        "log": "logs/build-final-004.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-004.md",
+        "target": "logs/source-inventory-004.txt",
+        "log": "logs/source-inventory-004.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-004.md",
+        "target": "logs/axiom-audit-004.txt",
+        "log": "logs/axiom-audit-004.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-004.md",
+        "target": "logs/declaration-coverage-004.json",
+        "log": "logs/declaration-coverage-004.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-004.md",
+        "target": "logs/axiom-coverage-004.txt",
+        "log": "logs/axiom-coverage-004.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-004.md",
+        "target": "logs/forbidden-token-scan-004.txt",
+        "log": "logs/forbidden-token-scan-004.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-004.md",
+        "target": "logs/diff-check-004.txt",
+        "log": "logs/diff-check-004.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-005.md",
+        "target": "logs/build-final-005.txt",
+        "log": "logs/build-final-005.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-005.md",
+        "target": "logs/source-inventory-005.txt",
+        "log": "logs/source-inventory-005.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-005.md",
+        "target": "logs/axiom-audit-005.txt",
+        "log": "logs/axiom-audit-005.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-005.md",
+        "target": "logs/declaration-coverage-005.json",
+        "log": "logs/declaration-coverage-005.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-005.md",
+        "target": "logs/axiom-coverage-005.txt",
+        "log": "logs/axiom-coverage-005.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-005.md",
+        "target": "logs/forbidden-token-scan-005.txt",
+        "log": "logs/forbidden-token-scan-005.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-005.md",
+        "target": "logs/diff-check-005.txt",
+        "log": "logs/diff-check-005.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-006.md",
+        "target": "logs/build-final-006.txt",
+        "log": "logs/build-final-006.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-006.md",
+        "target": "logs/source-inventory-006.txt",
+        "log": "logs/source-inventory-006.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-006.md",
+        "target": "logs/declaration-coverage-006.json",
+        "log": "logs/declaration-coverage-006.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-006.md",
+        "target": "logs/axiom-audit-006.txt",
+        "log": "logs/axiom-audit-006.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-006.md",
+        "target": "logs/axiom-coverage-006.txt",
+        "log": "logs/axiom-coverage-006.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-006.md",
+        "target": "logs/forbidden-token-scan-006.txt",
+        "log": "logs/forbidden-token-scan-006.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-006.md",
+        "target": "logs/diff-check-006.txt",
+        "log": "logs/diff-check-006.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-007.md",
+        "target": "logs/build-final-007.txt",
+        "log": "logs/build-final-007.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-007.md",
+        "target": "logs/declaration-coverage-007.json",
+        "log": "logs/declaration-coverage-007.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-007.md",
+        "target": "logs/axiom-audit-007.txt",
+        "log": "logs/axiom-audit-007.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-007.md",
+        "target": "logs/axiom-coverage-007.txt",
+        "log": "logs/axiom-coverage-007.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-007.md",
+        "target": "logs/source-inventory-007.txt",
+        "log": "logs/source-inventory-007.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-007.md",
+        "target": "logs/forbidden-token-scan-007.txt",
+        "log": "logs/forbidden-token-scan-007.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-007.md",
+        "target": "logs/diff-check-007.txt",
+        "log": "logs/diff-check-007.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-008.md",
+        "target": "logs/build-final-008.txt",
+        "log": "logs/build-final-008.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-008.md",
+        "target": "logs/classification-008.json",
+        "log": "logs/classification-008.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-008.md",
+        "target": "logs/classification-summary-008.txt",
+        "log": "logs/classification-summary-008.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-008.md",
+        "target": "logs/declaration-coverage-008.json",
+        "log": "logs/declaration-coverage-008.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-008.md",
+        "target": "logs/axiom-audit-008.txt",
+        "log": "logs/axiom-audit-008.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-008.md",
+        "target": "logs/axiom-coverage-008.txt",
+        "log": "logs/axiom-coverage-008.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-008.md",
+        "target": "logs/source-inventory-008.txt",
+        "log": "logs/source-inventory-008.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-008.md",
+        "target": "logs/forbidden-token-scan-008.txt",
+        "log": "logs/forbidden-token-scan-008.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-008.md",
+        "target": "logs/diff-check-008.txt",
+        "log": "logs/diff-check-008.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-009.md",
+        "target": "logs/build-final-009.txt",
+        "log": "logs/build-final-009.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-009.md",
+        "target": "logs/build-mandatory-009.txt",
+        "log": "logs/build-mandatory-009.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-009.md",
+        "target": "logs/build-classification-009.txt",
+        "log": "logs/build-classification-009.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-009.md",
+        "target": "logs/build-crt-009.txt",
+        "log": "logs/build-crt-009.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-009.md",
+        "target": "logs/build-crt-regression-009.txt",
+        "log": "logs/build-crt-regression-009.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-009.md",
+        "target": "logs/source-inventory-009.txt",
+        "log": "logs/source-inventory-009.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-009.md",
+        "target": "logs/source-inventory-final-009.txt",
+        "log": "logs/source-inventory-final-009.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-009.md",
+        "target": "logs/axiom-audit-009.txt",
+        "log": "logs/axiom-audit-009.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-009.md",
+        "target": "logs/declaration-coverage-009.json",
+        "log": "logs/declaration-coverage-009.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-009.md",
+        "target": "logs/axiom-coverage-009.txt",
+        "log": "logs/axiom-coverage-009.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-009.md",
+        "target": "logs/forbidden-token-scan-009.txt",
+        "log": "logs/forbidden-token-scan-009.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-009.md",
+        "target": "logs/header-style-009.txt",
+        "log": "logs/header-style-009.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-009.md",
+        "target": "logs/diff-check-009.txt",
+        "log": "logs/diff-check-009.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-010.md",
+        "target": "logs/build-merge-010.txt",
+        "log": "logs/build-merge-010.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-010.md",
+        "target": "logs/build-mixed-010.txt",
+        "log": "logs/build-mixed-010.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-010.md",
+        "target": "logs/build-diagnostic-010.txt",
+        "log": "logs/build-diagnostic-010.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-010.md",
+        "target": "logs/build-final-010.txt",
+        "log": "logs/build-final-010.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-010.md",
+        "target": "logs/declaration-coverage-010.json",
+        "log": "logs/declaration-coverage-010.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-010.md",
+        "target": "logs/source-inventory-010.txt",
+        "log": "logs/source-inventory-010.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-010.md",
+        "target": "logs/axiom-audit-010.txt",
+        "log": "logs/axiom-audit-010.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-010.md",
+        "target": "logs/axiom-coverage-010.txt",
+        "log": "logs/axiom-coverage-010.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-010.md",
+        "target": "logs/forbidden-token-scan-010.txt",
+        "log": "logs/forbidden-token-scan-010.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-010.md",
+        "target": "logs/header-style-010.txt",
+        "log": "logs/header-style-010.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-010.md",
+        "target": "logs/diff-check-010.txt",
+        "log": "logs/diff-check-010.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-010.md",
+        "target": "logs/artifact-check-010.txt",
+        "log": "logs/artifact-check-010.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-010.md",
+        "target": "logs/discovery-run-010.txt",
+        "log": "logs/discovery-run-010.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-010.md",
+        "target": "logs/classification-010.json",
+        "log": "logs/classification-010.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-010.md",
+        "target": "logs/classification-summary-010.txt",
+        "log": "logs/classification-summary-010.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-011.md",
+        "target": "logs/build-production-011.txt",
+        "log": "logs/build-production-011.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-011.md",
+        "target": "logs/build-calibration-011.txt",
+        "log": "logs/build-calibration-011.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-011.md",
+        "target": "logs/build-regression-011.txt",
+        "log": "logs/build-regression-011.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-011.md",
+        "target": "logs/build-regression-011.txt",
+        "log": "logs/build-regression-011.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-011.md",
+        "target": "logs/build-facade-011.txt",
+        "log": "logs/build-facade-011.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-011.md",
+        "target": "logs/build-root-011.txt",
+        "log": "logs/build-root-011.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-011.md",
+        "target": "logs/source-inventory-011.txt",
+        "log": "logs/source-inventory-011.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-011.md",
+        "target": "logs/declaration-coverage-011.json",
+        "log": "logs/declaration-coverage-011.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-011.md",
+        "target": "logs/axiom-audit-011.txt",
+        "log": "logs/axiom-audit-011.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-011.md",
+        "target": "logs/axiom-coverage-011.txt",
+        "log": "logs/axiom-coverage-011.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-011.md",
+        "target": "logs/forbidden-token-scan-011.txt",
+        "log": "logs/forbidden-token-scan-011.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-011.md",
+        "target": "logs/header-style-011.txt",
+        "log": "logs/header-style-011.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-011.md",
+        "target": "logs/diff-check-011.txt",
+        "log": "logs/diff-check-011.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-011.md",
+        "target": "logs/artifact-check-011.txt",
+        "log": "logs/artifact-check-011.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-011.md",
+        "target": "logs/checkpoint-audit-011.txt",
+        "log": "logs/checkpoint-audit-011.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "target": "logs/build-production-012.txt",
+        "log": "logs/build-production-012.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "target": "logs/build-calibration-012.txt",
+        "log": "logs/build-calibration-012.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "target": "logs/build-regression-012.txt",
+        "log": "logs/build-regression-012.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "target": "logs/build-diagnostics-012.txt",
+        "log": "logs/build-diagnostics-012.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "target": "logs/build-facade-012.txt",
+        "log": "logs/build-facade-012.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "target": "logs/build-root-012.txt",
+        "log": "logs/build-root-012.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "target": "logs/production-axioms-012.txt",
+        "log": "logs/production-axioms-012.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "target": "logs/production-axiom-coverage-012.txt",
+        "log": "logs/production-axiom-coverage-012.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "target": "logs/declaration-coverage-012.json",
+        "log": "logs/declaration-coverage-012.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "target": "logs/axiom-audit-012.txt",
+        "log": "logs/axiom-audit-012.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "target": "logs/axiom-coverage-012.txt",
+        "log": "logs/axiom-coverage-012.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "target": "logs/source-inventory-012.txt",
+        "log": "logs/source-inventory-012.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "target": "logs/forbidden-token-scan-012.txt",
+        "log": "logs/forbidden-token-scan-012.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "target": "logs/header-style-012.txt",
+        "log": "logs/header-style-012.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "target": "logs/diff-check-012.txt",
+        "log": "logs/diff-check-012.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "target": "logs/artifact-check-012.txt",
+        "log": "logs/artifact-check-012.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-012.md",
+        "target": "logs/checkpoint-audit-012.txt",
+        "log": "logs/checkpoint-audit-012.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-013.md",
+        "target": "logs/build-production-013.txt",
+        "log": "logs/build-production-013.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-013.md",
+        "target": "logs/build-calibration-013.txt",
+        "log": "logs/build-calibration-013.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-013.md",
+        "target": "logs/build-facade-013.txt",
+        "log": "logs/build-facade-013.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-013.md",
+        "target": "logs/build-root-013.txt",
+        "log": "logs/build-root-013.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-013.md",
+        "target": "logs/axiom-audit-013.txt",
+        "log": "logs/axiom-audit-013.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-013.md",
+        "target": "logs/artifact-audit-013.txt",
+        "log": "logs/artifact-audit-013.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-013.md",
+        "target": "logs/declaration-coverage-013.json",
+        "log": "logs/declaration-coverage-013.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-013.md",
+        "target": "logs/discovery-013.json",
+        "log": "logs/discovery-013.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-014.md",
+        "target": "logs/build-production-014.txt",
+        "log": "logs/build-production-014.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-014.md",
+        "target": "logs/build-facade-014.txt",
+        "log": "logs/build-facade-014.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-014.md",
+        "target": "logs/build-root-014.txt",
+        "log": "logs/build-root-014.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-014.md",
+        "target": "logs/axiom-audit-014.txt",
+        "log": "logs/axiom-audit-014.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-014.md",
+        "target": "logs/build-calibration-014.txt",
+        "log": "logs/build-calibration-014.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-014.md",
+        "target": "logs/axiom-audit-014.txt",
+        "log": "logs/axiom-audit-014.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-014.md",
+        "target": "logs/artifact-audit-014.txt",
+        "log": "logs/artifact-audit-014.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-014.md",
+        "target": "logs/declaration-coverage-014.json",
+        "log": "logs/declaration-coverage-014.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-015.md",
+        "target": "logs/focused-015.txt",
+        "log": "logs/focused-015.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-015.md",
+        "target": "logs/regression-015.txt",
+        "log": "logs/regression-015.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-015.md",
+        "target": "logs/build-facade-015.txt",
+        "log": "logs/build-facade-015.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-015.md",
+        "target": "logs/build-root-015.txt",
+        "log": "logs/build-root-015.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-015.md",
+        "target": "logs/axiom-audit-015.txt",
+        "log": "logs/axiom-audit-015.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-015.md",
+        "target": "logs/artifact-audit-015.txt",
+        "log": "logs/artifact-audit-015.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-015.md",
+        "target": "logs/discovery-015.json",
+        "log": "logs/discovery-015.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-015.md",
+        "target": "logs/discovery-015.txt",
+        "log": "logs/discovery-015.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-015.md",
+        "target": "logs/next-basis-015.json",
+        "log": "logs/next-basis-015.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-015.md",
+        "target": "logs/declaration-coverage-015.json",
+        "log": "logs/declaration-coverage-015.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-016.md",
+        "target": "logs/residue-016.txt",
+        "log": "logs/residue-016.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-016.md",
+        "target": "logs/period-016.txt",
+        "log": "logs/period-016.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-016.md",
+        "target": "logs/packet-016.txt",
+        "log": "logs/packet-016.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-016.md",
+        "target": "logs/transition-016.txt",
+        "log": "logs/transition-016.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-016.md",
+        "target": "logs/focused-016.txt",
+        "log": "logs/focused-016.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-016.md",
+        "target": "logs/build-facade-016.txt",
+        "log": "logs/build-facade-016.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-016.md",
+        "target": "logs/build-root-016.txt",
+        "log": "logs/build-root-016.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-016.md",
+        "target": "logs/axiom-audit-016.txt",
+        "log": "logs/axiom-audit-016.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-016.md",
+        "target": "logs/iteration-regression-016.txt",
+        "log": "logs/iteration-regression-016.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-016.md",
+        "target": "logs/declaration-coverage-016.json",
+        "log": "logs/declaration-coverage-016.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-016.md",
+        "target": "logs/check-016.txt",
+        "log": "logs/check-016.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-016.md",
+        "target": "logs/discovery-016.json",
+        "log": "logs/discovery-016.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-016.md",
+        "target": "logs/discovery-016.txt",
+        "log": "logs/discovery-016.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-017.md",
+        "target": "logs/quadratic-017.txt",
+        "log": "logs/quadratic-017.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-017.md",
+        "target": "logs/fold-017.txt",
+        "log": "logs/fold-017.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-017.md",
+        "target": "logs/owner-017.txt",
+        "log": "logs/owner-017.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-017.md",
+        "target": "logs/norm-017.txt",
+        "log": "logs/norm-017.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-017.md",
+        "target": "logs/regression-017.txt",
+        "log": "logs/regression-017.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-017.md",
+        "target": "logs/axiom-audit-017.txt",
+        "log": "logs/axiom-audit-017.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-017.md",
+        "target": "logs/facades-017.txt",
+        "log": "logs/facades-017.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-017.md",
+        "target": "logs/root-017.txt",
+        "log": "logs/root-017.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-017.md",
+        "target": "logs/declaration-coverage-017.json",
+        "log": "logs/declaration-coverage-017.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-017.md",
+        "target": "logs/check-017.txt",
+        "log": "logs/check-017.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-018.md",
+        "target": "logs/local-gcd-018.txt",
+        "log": "logs/local-gcd-018.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-018.md",
+        "target": "logs/aggregate-018.txt",
+        "log": "logs/aggregate-018.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-018.md",
+        "target": "logs/regression-018.txt",
+        "log": "logs/regression-018.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-018.md",
+        "target": "logs/axiom-audit-018.txt",
+        "log": "logs/axiom-audit-018.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-018.md",
+        "target": "logs/facade-018.txt",
+        "log": "logs/facade-018.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-018.md",
+        "target": "logs/root-018.txt",
+        "log": "logs/root-018.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-018.md",
+        "target": "logs/declaration-coverage-018.json",
+        "log": "logs/declaration-coverage-018.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-018.md",
+        "target": "logs/check-018.txt",
+        "log": "logs/check-018.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-020.md",
+        "target": "logs/focused-020.txt",
+        "log": "logs/focused-020.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-020.md",
+        "target": "logs/facade-020.txt",
+        "log": "logs/facade-020.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-020.md",
+        "target": "logs/root-020.txt",
+        "log": "logs/root-020.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-020.md",
+        "target": "logs/axiom-audit-020.txt",
+        "log": "logs/axiom-audit-020.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-020.md",
+        "target": "logs/declaration-coverage-020.json",
+        "log": "logs/declaration-coverage-020.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-020.md",
+        "target": "logs/check-020.txt",
+        "log": "logs/check-020.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-021.md",
+        "target": "logs/declaration-coverage-021.json",
+        "log": "logs/declaration-coverage-021.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-021.md",
+        "target": "logs/focused-021.txt",
+        "log": "logs/focused-021.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-021.md",
+        "target": "logs/facade-021.txt",
+        "log": "logs/facade-021.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-021.md",
+        "target": "logs/root-021.txt",
+        "log": "logs/root-021.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-021.md",
+        "target": "logs/axiom-audit-021.txt",
+        "log": "logs/axiom-audit-021.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-021.md",
+        "target": "logs/check-021.txt",
+        "log": "logs/check-021.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-022.md",
+        "target": "logs/checks-022.txt",
+        "log": "logs/checks-022.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-023.md",
+        "target": "logs/focused-023.txt",
+        "log": "logs/focused-023.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-023.md",
+        "target": "logs/facade-023.txt",
+        "log": "logs/facade-023.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-023.md",
+        "target": "logs/root-023.txt",
+        "log": "logs/root-023.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-023.md",
+        "target": "logs/axiom-audit-023.txt",
+        "log": "logs/axiom-audit-023.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-023.md",
+        "target": "logs/1031-023.txt",
+        "log": "logs/1031-023.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-023.md",
+        "target": "logs/checks-023.txt",
+        "log": "logs/checks-023.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-024.md",
+        "target": "logs/focused-024.txt",
+        "log": "logs/focused-024.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-024.md",
+        "target": "logs/facade-024.txt",
+        "log": "logs/facade-024.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-024.md",
+        "target": "logs/root-024.txt",
+        "log": "logs/root-024.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-024.md",
+        "target": "logs/axiom-audit-024.txt",
+        "log": "logs/axiom-audit-024.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-024.md",
+        "target": "logs/checks-024.txt",
+        "log": "logs/checks-024.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-025.md",
+        "target": "logs/focused-025.txt",
+        "log": "logs/focused-025.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-025.md",
+        "target": "logs/facade-025.txt",
+        "log": "logs/facade-025.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-025.md",
+        "target": "logs/root-025.txt",
+        "log": "logs/root-025.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-025.md",
+        "target": "logs/axiom-audit-025.txt",
+        "log": "logs/axiom-audit-025.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-025.md",
+        "target": "logs/declaration-coverage-025.json",
+        "log": "logs/declaration-coverage-025.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-025.md",
+        "target": "logs/pascal-diagnostics-025.json",
+        "log": "logs/pascal-diagnostics-025.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-025.md",
+        "target": "logs/checks-025.txt",
+        "log": "logs/checks-025.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-026.md",
+        "target": "logs/checks-026.txt",
+        "log": "logs/checks-026.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-026.md",
+        "target": "logs/declaration-coverage-026.json",
+        "log": "logs/declaration-coverage-026.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-027.md",
+        "target": "logs/telemetry-focused-027.txt",
+        "log": "logs/telemetry-focused-027.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-027.md",
+        "target": "logs/performance-focused-027.json",
+        "log": "logs/performance-focused-027.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-027.md",
+        "target": "logs/focused-027.txt",
+        "log": "logs/focused-027.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-027.md",
+        "target": "logs/telemetry-facade-027.txt",
+        "log": "logs/telemetry-facade-027.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-027.md",
+        "target": "logs/performance-facade-027.json",
+        "log": "logs/performance-facade-027.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-027.md",
+        "target": "logs/facade-027.txt",
+        "log": "logs/facade-027.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-027.md",
+        "target": "logs/telemetry-root-027.txt",
+        "log": "logs/telemetry-root-027.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-027.md",
+        "target": "logs/performance-root-027.json",
+        "log": "logs/performance-root-027.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-027.md",
+        "target": "logs/root-027.txt",
+        "log": "logs/root-027.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-027.md",
+        "target": "logs/telemetry-axiom-audit-027.txt",
+        "log": "logs/telemetry-axiom-audit-027.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-027.md",
+        "target": "logs/performance-axiom-audit-027.json",
+        "log": "logs/performance-axiom-audit-027.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-027.md",
+        "target": "logs/axiom-audit-027.txt",
+        "log": "logs/axiom-audit-027.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-027.md",
+        "target": "logs/checks-027.txt",
+        "log": "logs/checks-027.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-027.md",
+        "target": "logs/declaration-coverage-027.json",
+        "log": "logs/declaration-coverage-027.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-030.md",
+        "target": "logs/focused-030.txt",
+        "log": "logs/focused-030.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-030.md",
+        "target": "logs/facade-030.txt",
+        "log": "logs/facade-030.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-030.md",
+        "target": "logs/root-030.txt",
+        "log": "logs/root-030.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-030.md",
+        "target": "logs/axiom-audit-030.txt",
+        "log": "logs/axiom-audit-030.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-030.md",
+        "target": "logs/declaration-coverage-030.json",
+        "log": "logs/declaration-coverage-030.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-030.md",
+        "target": "logs/diagnostics-030.json",
+        "log": "logs/diagnostics-030.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-030.md",
+        "target": "logs/artifact-check-030.txt",
+        "log": "logs/artifact-check-030.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-031.md",
+        "target": "logs/focused-031.txt",
+        "log": "logs/focused-031.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-031.md",
+        "target": "logs/facade-031.txt",
+        "log": "logs/facade-031.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-031.md",
+        "target": "logs/root-031.txt",
+        "log": "logs/root-031.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-031.md",
+        "target": "logs/axiom-audit-031.txt",
+        "log": "logs/axiom-audit-031.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-031.md",
+        "target": "logs/declaration-coverage-031.json",
+        "log": "logs/declaration-coverage-031.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-031.md",
+        "target": "logs/diagnostics-031.json",
+        "log": "logs/diagnostics-031.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-031.md",
+        "target": "logs/artifact-check-031.txt",
+        "log": "logs/artifact-check-031.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-032.md",
+        "target": "logs/focused-032.txt",
+        "log": "logs/focused-032.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-032.md",
+        "target": "logs/facade-032.txt",
+        "log": "logs/facade-032.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-032.md",
+        "target": "logs/root-032.txt",
+        "log": "logs/root-032.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-032.md",
+        "target": "logs/axiom-audit-032.txt",
+        "log": "logs/axiom-audit-032.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-032.md",
+        "target": "logs/declaration-coverage-032.json",
+        "log": "logs/declaration-coverage-032.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-032.md",
+        "target": "logs/diagnostics-032.json",
+        "log": "logs/diagnostics-032.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-032.md",
+        "target": "logs/artifact-check-032.txt",
+        "log": "logs/artifact-check-032.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-033.md",
+        "target": "logs/focused-033.txt",
+        "log": "logs/focused-033.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-033.md",
+        "target": "logs/facade-033.txt",
+        "log": "logs/facade-033.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-033.md",
+        "target": "logs/root-033.txt",
+        "log": "logs/root-033.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-033.md",
+        "target": "logs/axiom-audit-033.txt",
+        "log": "logs/axiom-audit-033.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-033.md",
+        "target": "logs/declaration-coverage-033.json",
+        "log": "logs/declaration-coverage-033.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-033.md",
+        "target": "logs/diagnostics-033.json",
+        "log": "logs/diagnostics-033.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-033.md",
+        "target": "logs/artifact-check-033.txt",
+        "log": "logs/artifact-check-033.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-034.md",
+        "target": "logs/focused-034.txt",
+        "log": "logs/focused-034.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-034.md",
+        "target": "logs/facade-034.txt",
+        "log": "logs/facade-034.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-034.md",
+        "target": "logs/root-034.txt",
+        "log": "logs/root-034.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-034.md",
+        "target": "logs/axiom-audit-034.txt",
+        "log": "logs/axiom-audit-034.txt"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-034.md",
+        "target": "logs/declaration-coverage-034.json",
+        "log": "logs/declaration-coverage-034.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-034.md",
+        "target": "logs/diagnostics-034.json",
+        "log": "logs/diagnostics-034.json"
+      },
+      {
+        "document": "lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/validation-034.md",
+        "target": "logs/artifact-check-034.txt",
+        "log": "logs/artifact-check-034.txt"
+      }
+    ]
+  },
+  "check_replay": [
+    {
+      "check": "010",
+      "exit_code": 1,
+      "seconds": 3.163,
+      "stdout": "PASS: 59/59 complete dependency sets; production 21, regression/data 38.\nPASS: every set uses only propext, Classical.choice, Quot.sound.\nPASS: forbidden-token scan of complete changed production/new probes.\nPASS: all8 Lean headers and exact module prints.\nPASS: tracked/new-file whitespace.\nPASS: discovery artifacts, report arithmetic and all window/floor tables.\n",
+      "stderr": "Traceback (most recent call last):\n  File \"/tmp/dkmath-evidence-archive-39fe0h7o/replay/lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-010.py\", line 149, in <module>\n    assert (document.parent/target.split('#')[0]).exists(), (document, target)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: (PosixPath('/tmp/dkmath-evidence-archive-39fe0h7o/replay/lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/README.md'), 'MERGE-PREP-EVIDENCE-ARCHIVE-REPORT.md')\n"
+    },
+    {
+      "check": "020",
+      "exit_code": 1,
+      "seconds": 0.147,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/tmp/dkmath-evidence-archive-39fe0h7o/replay/lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-020.py\", line 37, in <module>\n    assert json.loads(manifest.read_text())==records\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    {
+      "check": "030",
+      "exit_code": 0,
+      "seconds": 0.867,
+      "stdout": "PASS complete axiom coverage: 18 production (18 new) and 13 calibration declarations.\nPASS no sorryAx dependencies; only standard logical axioms occur.\nPASS forbidden constructs, production RH firewall, unified headers, immediate file markers and whitespace checks in 4 affected Lean files.\nPASS focused, Legendre facade, DkMath root and complete axiom builds with LEAN_NUM_THREADS=2.\nPASS 4998 independent quotient-window rows, inherited source digests, exact carriers, disjointness, integer binomial divisibility and floating-only comparisons.\nPASS exact bridge, independent bound, first failure, scoped next proposal, Outcome B and parser-safe artifacts.\n",
+      "stderr": ""
+    },
+    {
+      "check": "040",
+      "exit_code": 1,
+      "seconds": 0.162,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/tmp/dkmath-evidence-archive-39fe0h7o/replay/lean/dk_math/docs/dev/GapFocusing-ExponentGauge-Ultra-261004-v0/checks/check-040.py\", line 29, in <module>\n    assert stats['exit_code']==0 and stats['LEAN_NUM_THREADS']==2\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    {
+      "check": "050",
+      "exit_code": 0,
+      "seconds": 0.239,
+      "stdout": "PASS: all 15 new production declarations audited; 22 new kernel regressions; 4 Lean headers; 26 unchanged repository source fingerprints and 3 audited Mathlib sources; no new packet structures or Legendre imports; 4 successful builds with LEAN_NUM_THREADS unset; standard axioms only; whitespace.\n",
+      "stderr": ""
+    },
+    {
+      "check": "051",
+      "exit_code": 0,
+      "seconds": 0.359,
+      "stdout": "PASS: Outcome C; 31 referenced production sources and 4 preserved Lean files unchanged from HEAD; 86 declaration locations; 198 facade imports; report links and whitespace. No Lean build or new mathematical proof is claimed.\n",
+      "stderr": ""
+    },
+    {
+      "check": "019",
+      "exit_code": 0,
+      "seconds": 0.811,
+      "stdout": "PASS public axioms: 65 sets; standard logical axioms only\nPASS headers, import markers, forbidden tokens, dependency direction and whitespace\nPASS 602 diagnostic rows and exact finite identities\nPASS ASCII artifacts, sixteen answers, exact outcome and four successful builds\n",
+      "stderr": ""
+    },
+    {
+      "check": "039",
+      "exit_code": 0,
+      "seconds": 0.097,
+      "stdout": "PASS: 6 production declarations; standard axioms only; 3 new Lean headers; source scan; 300 diagnostics; 4 two-thread builds; whitespace.\n",
+      "stderr": ""
+    },
+    {
+      "check": "010",
+      "phase": "final complete document set",
+      "exit_code": 0,
+      "stdout": "PASS: 59/59 complete dependency sets; production 21, regression/data 38.\nPASS: every set uses only propext, Classical.choice, Quot.sound.\nPASS: forbidden-token scan of complete changed production/new probes.\nPASS: all8 Lean headers and exact module prints.\nPASS: tracked/new-file whitespace.\nPASS: discovery artifacts, report arithmetic and all window/floor tables.\nPASS: all checkpoint local links resolve.\n",
+      "stderr": ""
+    }
+  ],
+  "baseline_CI": {
+    "name": "Build DkMath",
+    "conclusion": "SUCCESS",
+    "url": "https://github.com/Deskuma/dkmath/actions/runs/37816121870/job/113445090441"
+  },
+  "fresh_Lean_builds": 0,
+  "notes": [
+    "check-020: historical coverage has 85 records; current inspected declarations have 104 records.",
+    "check-040: archived performance-focused-040.json exit_code=1; focused-040.txt records kernel deterministic timeout and build failed.",
+    "check-051 writes outputs; original archive bytes remain immutable."
+  ],
+  "final_validation": {
+    "Markdown_files_checked": 215,
+    "per_file_index_links": 345,
+    "direct_archived_log_links": 0,
+    "archived_paths": 753,
+    "old_check_sources_unchanged": true,
+    "Lean_sources_unchanged": true,
+    "report_narratives_unchanged_except_README_recovery_section": true,
+    "security_tests": 7,
+    "literal_bytes_restored_after_replay": true,
+    "security_stdout": "PASS: 1 files, 1 archives; all members, lengths and SHA-256 checked.\nPASS: 1 files, 1 archives; all members, lengths and SHA-256 checked.\nPASS: 1 files, 1 archives; all members, lengths and SHA-256 checked.\nPASS: 1 files, 1 archives; all members, lengths and SHA-256 checked.\nPASS: 1 files, 1 archives; all members, lengths and SHA-256 checked.\nPASS: 1 files, 1 archives; all members, lengths and SHA-256 checked.\nPASS: 1 files, 1 archives; all members, lengths and SHA-256 checked.\nPASS: 2 files, 1 archives; all members, lengths and SHA-256 checked.\nPASS: 2 files, 1 archives; all members, lengths and SHA-256 checked.\n",
+    "security_stderr": ".......\n----------------------------------------------------------------------\nRan 7 tests in 0.036s\n\nOK\n",
+    "final_050_and_051_replay_pass": true
+  },
+  "prospective_PR_diff": {
+    "changed_files": 628,
+    "additions": 104822,
+    "deletions": 66,
+    "binary_files": 6
+  }
+}

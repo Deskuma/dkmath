@@ -1,0 +1,35 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.NumberTheory.Legendre
+
+#print "file: DkMathTest.NumberTheory.LegendreIncidenceUpperInventory"
+
+open DkMath.NumberTheory.Legendre
+
+#check paritySafeIncidenceCount_eq_candidate_support_sum
+#check paritySafeIncidenceCount_eq_reducedQuotientInterval_sum
+#check paritySafeCoveredCandidates_card_add_supportExcess_eq_incidence
+#check paritySafeCoveredCandidates_card_add_uncoveredCandidates_card_eq_candidate_card
+#check paritySafeIncidenceConservation
+#check paritySafeActiveWave_same_wave_quotient_rigidity
+#check card_paritySafeActiveWaveOffsets_eq_reducedQuotientInterval
+#check paritySafeOddRawQuotientInterval_card_eq
+#check paritySafeOddMultipleFloorDelta
+#check paritySafeActiveWave_card_eq_oddRaw_add_correction
+#check paritySafeOddMobiusCorrection_nonpos
+#check paritySafeIncidenceCount_le_oddRaw_sum
+#check paritySafeDuplicateDeletionSet_card_le_waveDuplicateBudget
+#check lowerParitySafePersistentSupport_subset_primeFactors
+#check sum_lowerPersistentCount_le_parityCap
+#check sum_lowerCandidates_sub_parityCap_sub_firstSlots_le_excess
+#check block_incidence_add_uncovered_eq_candidate_add_supportExcess
+#check not_block_fullyCovered_of_incidence_lt_candidate_add_freshBound
+#check exists_prime_squareCell_of_paritySafeUncoveredCandidates_nonempty
+#check exists_prime_squareCell_of_not_block_fullyCovered
+#check paritySafeCandidate_card_add_supportExcess_eq_incidence_of_fullyCovered
+#check paritySafeLowCostResidualCapacity_eq_mass_add_slack
+#check paritySafeSecondCancellationFrontier_iff_reducedSupportCharge

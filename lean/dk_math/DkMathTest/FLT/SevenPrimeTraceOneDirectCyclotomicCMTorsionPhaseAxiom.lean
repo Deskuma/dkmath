@@ -1,0 +1,19 @@
+import DkMath.FLT.Seven.PrimeTraceOneDirectCyclotomicCMTorsionPhase
+
+#print "file: DkMathTest.FLT.SevenPrimeTraceOneDirectCyclotomicCMTorsionPhaseAxiom"
+
+open DkMath.FLT
+open DkMath.FLT.Seven
+
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.abstractZeta_complexConj
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.cyclotomicIntegralGenerator_complexConj
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ringOfIntegersToRing_complexConj_coherence
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.cyclotomicTorsionOrder_eq
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.unitsComplexConj_coherence
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.concrete_norm_one_pow_twentyEight
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.concrete_phase_pow_fourteen
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.unit_eq_one_of_pow_twentyEight_eq_one_of_sub_one_mem_sevenIdeal
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.relativeNormOneScalarUnitAtSeven_unconditional
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.DirectCyclotomicChosenQuotientPowerPacket.unit_isSeventhPower_unconditional
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.DirectCyclotomicChosenQuotientPowerPacket.exists_quotient_seventhPower_unconditional
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.DirectCyclotomicChosenQuotientPowerPacket.exists_directLinearFactor_seventhPower_unconditional

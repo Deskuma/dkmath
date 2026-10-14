@@ -4,7 +4,8 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
+import Mathlib.Data.Finset.Union
+import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 
 #print "file: DkMath.Polyomino"
 

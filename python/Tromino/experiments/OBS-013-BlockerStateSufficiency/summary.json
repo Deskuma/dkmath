@@ -1,0 +1,39 @@
+{
+  "observation": "OBS-013-BlockerStateAloneReproducesDepthJump",
+  "date": "2026-09-29",
+  "source_directory": "python/Tromino/results/repair-depth/w9-w10-intervention-v24",
+  "cases": {
+    "Pgraph_Pstate": {
+      "valid": true,
+      "first_exit_depth": 9,
+      "depth9_exits": 2,
+      "depth10_exits": 4,
+      "expanded_unique_states": 419838
+    },
+    "Pgraph_Cstate": {
+      "valid": true,
+      "first_exit_depth": 10,
+      "depth9_exits": 0,
+      "depth10_exits": 4,
+      "expanded_unique_states": 419841
+    },
+    "Cgraph_Pstate": {
+      "valid": false,
+      "reason": "edge 5-17 has color 3 at both endpoints"
+    },
+    "Cgraph_Cstate": {
+      "valid": true,
+      "first_exit_depth": 10,
+      "depth10_exits": 5,
+      "expanded_unique_states": 279935
+    }
+  },
+  "state_diff": {
+    "4": {"parent": 1, "child": 0},
+    "17": {"parent": 3, "child": 1}
+  },
+  "state_only_matches_child_exit_depth": true,
+  "state_only_raises_parent_exit_depth": true,
+  "next_experiment": "enumerate all partial blocker-state interventions on the parent graph",
+  "status": "observation_only"
+}

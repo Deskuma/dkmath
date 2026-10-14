@@ -1,0 +1,295 @@
+{
+  "results": [
+    {
+      "depth_ceiling": 0,
+      "result": {
+        "classification": "forced_repair",
+        "node": 14,
+        "reason": "forced_repair",
+        "repairs": 0,
+        "search_ceiling": 0,
+        "step": 11,
+        "success": false
+      }
+    },
+    {
+      "depth_ceiling": 1,
+      "result": {
+        "classification": "depth_limited",
+        "expanded": 21,
+        "hit_depth_limit": true,
+        "node": 14,
+        "reason": "repair_failed",
+        "repair_status": "depth_limited",
+        "repairs": 0,
+        "search_ceiling": 1,
+        "step": 11,
+        "success": false
+      }
+    },
+    {
+      "depth_ceiling": 2,
+      "result": {
+        "classification": "depth_limited",
+        "expanded": 85,
+        "hit_depth_limit": true,
+        "node": 21,
+        "reason": "repair_failed",
+        "repair_status": "depth_limited",
+        "repairs": 7,
+        "search_ceiling": 2,
+        "step": 18,
+        "success": false
+      }
+    },
+    {
+      "depth_ceiling": 3,
+      "result": {
+        "classification": "solved",
+        "depth_minus_one_result": {
+          "classification": "depth_limited",
+          "info": {
+            "expanded": 85,
+            "hit_depth_limit": true,
+            "node": 21,
+            "reason": "repair_failed",
+            "repair_status": "depth_limited",
+            "repairs": 7,
+            "step": 18
+          },
+          "success": false
+        },
+        "max_depth_used": 3,
+        "repair_log": [
+          {
+            "assigned_color": 1,
+            "moves": [
+              {
+                "colors": [
+                  0,
+                  1
+                ],
+                "component": [
+                  3,
+                  5,
+                  10
+                ]
+              },
+              {
+                "colors": [
+                  1,
+                  2
+                ],
+                "component": [
+                  11
+                ]
+              }
+            ],
+            "node": 14,
+            "repair_depth": 2,
+            "repair_search": {
+              "expanded": 34,
+              "hit_depth_limit": false,
+              "status": "ok"
+            },
+            "step": 11
+          },
+          {
+            "assigned_color": 2,
+            "moves": [
+              {
+                "colors": [
+                  2,
+                  3
+                ],
+                "component": [
+                  11
+                ]
+              }
+            ],
+            "node": 15,
+            "repair_depth": 1,
+            "repair_search": {
+              "expanded": 16,
+              "hit_depth_limit": false,
+              "status": "ok"
+            },
+            "step": 12
+          },
+          {
+            "assigned_color": 0,
+            "moves": [
+              {
+                "colors": [
+                  0,
+                  2
+                ],
+                "component": [
+                  4,
+                  10,
+                  12
+                ]
+              }
+            ],
+            "node": 16,
+            "repair_depth": 1,
+            "repair_search": {
+              "expanded": 1,
+              "hit_depth_limit": false,
+              "status": "ok"
+            },
+            "step": 13
+          },
+          {
+            "assigned_color": 1,
+            "moves": [
+              {
+                "colors": [
+                  1,
+                  3
+                ],
+                "component": [
+                  3
+                ]
+              }
+            ],
+            "node": 17,
+            "repair_depth": 1,
+            "repair_search": {
+              "expanded": 11,
+              "hit_depth_limit": false,
+              "status": "ok"
+            },
+            "step": 14
+          },
+          {
+            "assigned_color": 2,
+            "moves": [
+              {
+                "colors": [
+                  0,
+                  2
+                ],
+                "component": [
+                  6
+                ]
+              },
+              {
+                "colors": [
+                  1,
+                  2
+                ],
+                "component": [
+                  7
+                ]
+              }
+            ],
+            "node": 18,
+            "repair_depth": 2,
+            "repair_search": {
+              "expanded": 38,
+              "hit_depth_limit": false,
+              "status": "ok"
+            },
+            "step": 15
+          },
+          {
+            "assigned_color": 2,
+            "moves": [
+              {
+                "colors": [
+                  2,
+                  3
+                ],
+                "component": [
+                  18
+                ]
+              }
+            ],
+            "node": 19,
+            "repair_depth": 1,
+            "repair_search": {
+              "expanded": 15,
+              "hit_depth_limit": false,
+              "status": "ok"
+            },
+            "step": 16
+          },
+          {
+            "assigned_color": 0,
+            "moves": [
+              {
+                "colors": [
+                  0,
+                  3
+                ],
+                "component": [
+                  9
+                ]
+              }
+            ],
+            "node": 20,
+            "repair_depth": 1,
+            "repair_search": {
+              "expanded": 5,
+              "hit_depth_limit": false,
+              "status": "ok"
+            },
+            "step": 17
+          },
+          {
+            "assigned_color": 3,
+            "moves": [
+              {
+                "colors": [
+                  1,
+                  3
+                ],
+                "component": [
+                  3,
+                  17
+                ]
+              },
+              {
+                "colors": [
+                  1,
+                  3
+                ],
+                "component": [
+                  5
+                ]
+              },
+              {
+                "colors": [
+                  1,
+                  3
+                ],
+                "component": [
+                  7,
+                  9,
+                  11,
+                  14,
+                  18
+                ]
+              }
+            ],
+            "node": 21,
+            "repair_depth": 3,
+            "repair_search": {
+              "expanded": 319,
+              "hit_depth_limit": false,
+              "status": "ok"
+            },
+            "step": 18
+          }
+        ],
+        "repair_moves_total": 12,
+        "repairs": 8,
+        "required_depth": 3,
+        "success": true,
+        "verified_against_depth_minus_one": true
+      }
+    }
+  ],
+  "witness": "python/Tromino/results/repair-depth/d5-v24/best_witness.json"
+}

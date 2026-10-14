@@ -4,6 +4,8 @@ Released under MIT license as described in the file LICENSE.
 -/
 
 import DkMath.Basic
+import Mathlib.Algebra.Ring.Defs
+import Mathlib.Tactic.Ring
 
 #print "file: DkMath.NumberTheory.QuadraticConjugateFactor"
 

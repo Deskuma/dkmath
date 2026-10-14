@@ -1,0 +1,198 @@
+{
+  "child": "python/Tromino/results/repair-depth/seeded-w9-frontier2-d10-v24/best_frontier_witness.json",
+  "child_blocker_neighbors": [
+    0,
+    2,
+    4,
+    5,
+    8,
+    9,
+    10,
+    12,
+    13,
+    14,
+    15,
+    17,
+    18,
+    20,
+    22,
+    23
+  ],
+  "child_expanded_unique_states": 279935,
+  "child_first_exit_depth": 10,
+  "child_initial_kempe_component_count": 21,
+  "child_node": 19,
+  "child_seed": 12000006,
+  "colored_state_diff": [
+    {
+      "child": 0,
+      "parent": 1,
+      "vertex": 4
+    },
+    {
+      "child": 1,
+      "parent": 3,
+      "vertex": 17
+    }
+  ],
+  "edge_added": [
+    [
+      5,
+      17
+    ]
+  ],
+  "edge_removed": [
+    [
+      4,
+      21
+    ]
+  ],
+  "layer_delta": [
+    {
+      "child_exits": 0,
+      "child_generated": 1,
+      "child_processed": 1,
+      "depth": 0,
+      "exit_delta": 0,
+      "generated_delta": 0,
+      "parent_exits": 0,
+      "parent_generated": 1,
+      "parent_processed": 1
+    },
+    {
+      "child_exits": 0,
+      "child_generated": 21,
+      "child_processed": 21,
+      "depth": 1,
+      "exit_delta": 0,
+      "generated_delta": -1,
+      "parent_exits": 0,
+      "parent_generated": 22,
+      "parent_processed": 22
+    },
+    {
+      "child_exits": 0,
+      "child_generated": 226,
+      "child_processed": 226,
+      "depth": 2,
+      "exit_delta": 0,
+      "generated_delta": -19,
+      "parent_exits": 0,
+      "parent_generated": 245,
+      "parent_processed": 245
+    },
+    {
+      "child_exits": 0,
+      "child_generated": 1591,
+      "child_processed": 1591,
+      "depth": 3,
+      "exit_delta": 0,
+      "generated_delta": -175,
+      "parent_exits": 0,
+      "parent_generated": 1766,
+      "parent_processed": 1766
+    },
+    {
+      "child_exits": 0,
+      "child_generated": 7932,
+      "child_processed": 7932,
+      "depth": 4,
+      "exit_delta": 0,
+      "generated_delta": -1078,
+      "parent_exits": 0,
+      "parent_generated": 9010,
+      "parent_processed": 9010
+    },
+    {
+      "child_exits": 0,
+      "child_generated": 28103,
+      "child_processed": 28103,
+      "depth": 5,
+      "exit_delta": 0,
+      "generated_delta": -5003,
+      "parent_exits": 0,
+      "parent_generated": 33106,
+      "parent_processed": 33106
+    },
+    {
+      "child_exits": 0,
+      "child_generated": 67010,
+      "child_processed": 67010,
+      "depth": 6,
+      "exit_delta": 0,
+      "generated_delta": -16966,
+      "parent_exits": 0,
+      "parent_generated": 83976,
+      "parent_processed": 83976
+    },
+    {
+      "child_exits": 0,
+      "child_generated": 94950,
+      "child_processed": 94950,
+      "depth": 7,
+      "exit_delta": 0,
+      "generated_delta": -38309,
+      "parent_exits": 0,
+      "parent_generated": 133259,
+      "parent_processed": 133259
+    },
+    {
+      "child_exits": 0,
+      "child_generated": 64469,
+      "child_processed": 64469,
+      "depth": 8,
+      "exit_delta": 0,
+      "generated_delta": -48299,
+      "parent_exits": 0,
+      "parent_generated": 112768,
+      "parent_processed": 112768
+    },
+    {
+      "child_exits": 0,
+      "child_generated": 14976,
+      "child_processed": 14976,
+      "depth": 9,
+      "exit_delta": -2,
+      "generated_delta": -26109,
+      "parent_exits": 2,
+      "parent_generated": 41085,
+      "parent_processed": 41083
+    },
+    {
+      "child_exits": 5,
+      "child_generated": 657,
+      "child_processed": 652,
+      "depth": 10,
+      "exit_delta": 1,
+      "generated_delta": -3944,
+      "parent_exits": 4,
+      "parent_generated": 4601,
+      "parent_processed": 4597
+    }
+  ],
+  "parent": "python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json",
+  "parent_blocker_neighbors": [
+    0,
+    2,
+    4,
+    5,
+    8,
+    9,
+    10,
+    12,
+    13,
+    14,
+    15,
+    17,
+    18,
+    20,
+    22,
+    23
+  ],
+  "parent_expanded_unique_states": 419838,
+  "parent_first_exit_depth": 9,
+  "parent_initial_kempe_component_count": 22,
+  "parent_node": 19,
+  "parent_seed": 11000009,
+  "step": 16
+}

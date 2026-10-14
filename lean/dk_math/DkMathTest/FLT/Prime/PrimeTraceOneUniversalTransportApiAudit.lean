@@ -6,6 +6,8 @@ Released under MIT license as described in the file LICENSE.
 import DkMath.NumberTheory.CyclotomicQRTraceOneBridge
 import DkMath.NumberTheory.CyclotomicQRProduct
 import DkMath.NumberTheory.CyclotomicQRUniversalTransport
+import Mathlib.NumberTheory.Cyclotomic.CyclotomicCharacter
+import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
 import Mathlib.NumberTheory.Cyclotomic.PrimitiveRoots
 import Mathlib.RingTheory.AdjoinRoot
 import Mathlib.RingTheory.Polynomial.Cyclotomic.Roots

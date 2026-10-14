@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Lib.Cosmic.GTail
+import Mathlib.Data.Nat.Prime.Basic
 
 #print "file: DkMath.Lib.Cosmic.GTailNat"
 

@@ -1,0 +1,44 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMathTest.NumberTheory.GnomonCofactorWindowCalibration
+
+#print "file: DkMathTest.NumberTheory.GnomonCofactorWindowAxiomAudit"
+
+-- Complete named public coverage of DkMath/NumberTheory/Legendre/GnomonCofactorWindow.lean
+#print axioms DkMath.NumberTheory.Legendre.gnomonSingletonCarryMass
+#print axioms DkMath.NumberTheory.Legendre.gnomonRepeatedCarryMass
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalLargeCarryMass_eq_repeated_add_singleton
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorWindowPrimes
+#print axioms DkMath.NumberTheory.Legendre.mem_gnomonCofactorWindowPrimes
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass
+#print axioms DkMath.NumberTheory.Legendre.gnomonSingletonCarry_cofactor_window
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorWindow_unique
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_eq_singleton
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorWindow_length_lt
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorWindow_prime_dvd_choose
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorBinomialBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_le_binomialBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorGeometricBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorGeometricBudget_le_binomialBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonCofactorWindowMass_le_geometricBudget
+#print axioms DkMath.NumberTheory.Legendre.gnomonPascalOldLogBudget_cofactor_excess
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_cofactorGeometricBudget_lt
+
+-- Complete named public coverage of DkMathTest/NumberTheory/GnomonCofactorWindowCalibration.lean
+#print axioms DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.window3_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.no_slack3_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.windows7_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.composite_window7_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.carry_parts7_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.singleton4_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.binomial4_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.geometric4_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.strict_slack4_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.integer_failure7_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.consumer_failure7_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.consumer_before7_checked
+#print axioms DkMathTest.NumberTheory.GnomonCofactorWindowCalibration.consumer8_checked

@@ -1,0 +1,334 @@
+{
+  "baseline_exit_count_at_first_depth": 2,
+  "baseline_exit_counts": {
+    "10": 4,
+    "9": 2
+  },
+  "baseline_first_exit_depth": 9,
+  "candidate_count": 8,
+  "candidate_vertices": [
+    4,
+    5,
+    8,
+    9,
+    10,
+    13,
+    17,
+    18
+  ],
+  "cases": [
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": null,
+          "touched": false
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 4,
+          "touched": true
+        }
+      ],
+      "exit_counts": {
+        "10": 4
+      },
+      "expanded_unique_states": 419795,
+      "first_exit_depth": 10,
+      "initial_invariant": true,
+      "initial_kempe_component_count": 22,
+      "invalid_reason": null,
+      "old_color": 1,
+      "profile_file": "pin-4-to-0.json",
+      "proper_violations": [],
+      "target_color": 0,
+      "valid_intervention": true,
+      "vertex": 4
+    },
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": 4,
+          "touched": true
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 4,
+          "touched": true
+        }
+      ],
+      "exit_counts": {},
+      "expanded_unique_states": 0,
+      "first_exit_depth": null,
+      "initial_invariant": true,
+      "initial_kempe_component_count": null,
+      "invalid_reason": "improper_colored_state",
+      "old_color": 3,
+      "profile_file": "pin-5-to-0.json",
+      "proper_violations": [
+        {
+          "color": 0,
+          "edge": [
+            5,
+            14
+          ]
+        }
+      ],
+      "target_color": 0,
+      "valid_intervention": false,
+      "vertex": 5
+    },
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": 0,
+          "touched": true
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 2,
+          "touched": true
+        }
+      ],
+      "exit_counts": {},
+      "expanded_unique_states": 0,
+      "first_exit_depth": null,
+      "initial_invariant": true,
+      "initial_kempe_component_count": null,
+      "invalid_reason": "improper_colored_state",
+      "old_color": 1,
+      "profile_file": "pin-8-to-0.json",
+      "proper_violations": [
+        {
+          "color": 0,
+          "edge": [
+            8,
+            12
+          ]
+        },
+        {
+          "color": 0,
+          "edge": [
+            8,
+            15
+          ]
+        }
+      ],
+      "target_color": 0,
+      "valid_intervention": false,
+      "vertex": 8
+    },
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": 0,
+          "touched": true
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 8,
+          "touched": true
+        }
+      ],
+      "exit_counts": {},
+      "expanded_unique_states": 0,
+      "first_exit_depth": null,
+      "initial_invariant": true,
+      "initial_kempe_component_count": null,
+      "invalid_reason": "improper_colored_state",
+      "old_color": 1,
+      "profile_file": "pin-9-to-0.json",
+      "proper_violations": [
+        {
+          "color": 0,
+          "edge": [
+            9,
+            12
+          ]
+        }
+      ],
+      "target_color": 0,
+      "valid_intervention": false,
+      "vertex": 9
+    },
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": 0,
+          "touched": true
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 4,
+          "touched": true
+        }
+      ],
+      "exit_counts": {},
+      "expanded_unique_states": 0,
+      "first_exit_depth": null,
+      "initial_invariant": true,
+      "initial_kempe_component_count": null,
+      "invalid_reason": "improper_colored_state",
+      "old_color": 1,
+      "profile_file": "pin-10-to-0.json",
+      "proper_violations": [
+        {
+          "color": 0,
+          "edge": [
+            10,
+            12
+          ]
+        }
+      ],
+      "target_color": 0,
+      "valid_intervention": false,
+      "vertex": 10
+    },
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": 8,
+          "touched": true
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 4,
+          "touched": true
+        }
+      ],
+      "exit_counts": {},
+      "expanded_unique_states": 0,
+      "first_exit_depth": null,
+      "initial_invariant": true,
+      "initial_kempe_component_count": null,
+      "invalid_reason": "improper_colored_state",
+      "old_color": 3,
+      "profile_file": "pin-13-to-0.json",
+      "proper_violations": [
+        {
+          "color": 0,
+          "edge": [
+            13,
+            14
+          ]
+        }
+      ],
+      "target_color": 0,
+      "valid_intervention": false,
+      "vertex": 13
+    },
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": null,
+          "touched": false
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 4,
+          "touched": true
+        }
+      ],
+      "exit_counts": {},
+      "expanded_unique_states": 0,
+      "first_exit_depth": null,
+      "initial_invariant": true,
+      "initial_kempe_component_count": null,
+      "invalid_reason": "improper_colored_state",
+      "old_color": 3,
+      "profile_file": "pin-17-to-0.json",
+      "proper_violations": [
+        {
+          "color": 0,
+          "edge": [
+            15,
+            17
+          ]
+        }
+      ],
+      "target_color": 0,
+      "valid_intervention": false,
+      "vertex": 17
+    },
+    {
+      "baseline_exit_path_touch": [
+        {
+          "exit_index": 0,
+          "first_touch_move": 6,
+          "touched": true
+        },
+        {
+          "exit_index": 1,
+          "first_touch_move": 4,
+          "touched": true
+        }
+      ],
+      "exit_counts": {},
+      "expanded_unique_states": 0,
+      "first_exit_depth": null,
+      "initial_invariant": true,
+      "initial_kempe_component_count": null,
+      "invalid_reason": "improper_colored_state",
+      "old_color": 3,
+      "profile_file": "pin-18-to-0.json",
+      "proper_violations": [
+        {
+          "color": 0,
+          "edge": [
+            12,
+            18
+          ]
+        },
+        {
+          "color": 0,
+          "edge": [
+            15,
+            18
+          ]
+        }
+      ],
+      "target_color": 0,
+      "valid_intervention": false,
+      "vertex": 18
+    }
+  ],
+  "colored_unlocked_neighbors": [
+    4,
+    5,
+    8,
+    9,
+    10,
+    12,
+    13,
+    14,
+    15,
+    17,
+    18
+  ],
+  "invalid_vertices": [
+    5,
+    8,
+    9,
+    10,
+    13,
+    17,
+    18
+  ],
+  "lowering_vertices": [],
+  "node": 19,
+  "raising_vertices": [
+    4
+  ],
+  "same_depth_vertices": [],
+  "seed": 11000009,
+  "step": 16,
+  "target_color": 0,
+  "unresolved_vertices": [],
+  "witness": "python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json"
+}

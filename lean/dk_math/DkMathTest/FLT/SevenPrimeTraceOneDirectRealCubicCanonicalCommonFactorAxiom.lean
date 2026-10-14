@@ -1,0 +1,20 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+-/
+
+import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicCanonicalCommonFactor
+
+#print "file: DkMathTest.FLT.SevenPrimeTraceOneDirectRealCubicCanonicalCommonFactorAxiom"
+
+open DkMath.FLT.Seven
+
+#print axioms SevenRealCubic.directOrbitCanonicalCommonFactor_prime_exponent_table
+#print axioms SevenRealCubic.directOrbitSquareRefinement_canonicalCommonFactor_nonempty
+#print axioms SevenRealCubic.directOrbitCanonicalCommonFactor_scalar_ideal_multiplicity
+#print axioms SevenRealCubic.directOrbitCanonicalCommonFactor_allocated_ideal_multiplicities
+#print axioms SevenRealCubic.directOrbitCanonicalCommonFactor_prime_absNorm
+#print axioms SevenRealCubic.directOrbitCanonicalCommonFactor_gap_qPrimary_residual
+#print axioms SevenRealCubic.directOrbitCanonicalCommonFactor_gap_factorization
+#print axioms SevenRealCubic.directOrbitCanonicalCommonFactor_quotient_qPrimary_residual
+#print axioms SevenRealCubic.directOrbitCanonicalCommonFactor_quotient_factorization

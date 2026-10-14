@@ -1,0 +1,94 @@
+{
+  "cases": {
+    "Cgraph_Cstate": {
+      "exit_counts": {
+        "10": 5
+      },
+      "expanded_unique_states": 279935,
+      "first_exit_depth": 10,
+      "initial_invariant": true,
+      "initial_kempe_component_count": 21,
+      "invalid_reason": null,
+      "proper_violations": [],
+      "valid_intervention": true
+    },
+    "Cgraph_Pstate": {
+      "exit_counts": {},
+      "expanded_unique_states": 0,
+      "first_exit_depth": null,
+      "initial_invariant": true,
+      "initial_kempe_component_count": null,
+      "invalid_reason": "improper_colored_state",
+      "proper_violations": [
+        {
+          "color": 3,
+          "edge": [
+            5,
+            17
+          ]
+        }
+      ],
+      "valid_intervention": false
+    },
+    "Pgraph_Cstate": {
+      "exit_counts": {
+        "10": 4
+      },
+      "expanded_unique_states": 419841,
+      "first_exit_depth": 10,
+      "initial_invariant": true,
+      "initial_kempe_component_count": 22,
+      "invalid_reason": null,
+      "proper_violations": [],
+      "valid_intervention": true
+    },
+    "Pgraph_Pstate": {
+      "exit_counts": {
+        "10": 4,
+        "9": 2
+      },
+      "expanded_unique_states": 419838,
+      "first_exit_depth": 9,
+      "initial_invariant": true,
+      "initial_kempe_component_count": 22,
+      "invalid_reason": null,
+      "proper_violations": [],
+      "valid_intervention": true
+    }
+  },
+  "child": "python/Tromino/results/repair-depth/seeded-w9-frontier2-d10-v24/best_frontier_witness.json",
+  "child_seed": 12000006,
+  "colored_state_diff": [
+    {
+      "child": 0,
+      "parent": 1,
+      "vertex": 4
+    },
+    {
+      "child": 1,
+      "parent": 3,
+      "vertex": 17
+    }
+  ],
+  "edge_added": [
+    [
+      5,
+      17
+    ]
+  ],
+  "edge_removed": [
+    [
+      4,
+      21
+    ]
+  ],
+  "intermediate_policy": "endpoint",
+  "max_depth": 10,
+  "node": 19,
+  "parent": "python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json",
+  "parent_seed": 11000009,
+  "state_only_matches_child_exit_depth": true,
+  "state_only_raises_parent_exit_depth": true,
+  "step": 16,
+  "topology_only_valid": false
+}

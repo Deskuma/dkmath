@@ -4,7 +4,8 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
+import Mathlib.Data.Finset.Basic
+import Mathlib.Tactic.NormNum
 
 #print "file: DkMath.NumberTheory.PrimitiveSet.Basic"
 

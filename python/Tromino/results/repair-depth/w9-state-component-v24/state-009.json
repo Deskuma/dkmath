@@ -1,0 +1,405 @@
+{
+  "blocker_neighbors": [
+    0,
+    2,
+    4,
+    5,
+    8,
+    9,
+    10,
+    12,
+    13,
+    14,
+    15,
+    17,
+    18,
+    20,
+    22,
+    23
+  ],
+  "colored_state": {
+    "-1": 0,
+    "0": 1,
+    "1": 2,
+    "10": 1,
+    "11": 1,
+    "12": 0,
+    "13": 0,
+    "14": 1,
+    "15": 0,
+    "16": 0,
+    "17": 3,
+    "18": 3,
+    "2": 3,
+    "3": 2,
+    "4": 0,
+    "5": 3,
+    "6": 3,
+    "7": 3,
+    "8": 1,
+    "9": 1
+  },
+  "exit_counts": {
+    "10": 3,
+    "9": 3
+  },
+  "expanded_unique_states": 419842,
+  "first_exit_depth": 9,
+  "initial_invariant": true,
+  "initial_kempe_component_count": 22,
+  "initial_kempe_components": [
+    {
+      "colors": [
+        0,
+        1
+      ],
+      "component": [
+        4
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        0,
+        1
+      ],
+      "component": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        15
+      ],
+      "size": 6
+    },
+    {
+      "colors": [
+        0,
+        1
+      ],
+      "component": [
+        13,
+        14
+      ],
+      "size": 2
+    },
+    {
+      "colors": [
+        0,
+        2
+      ],
+      "component": [
+        3,
+        12
+      ],
+      "size": 2
+    },
+    {
+      "colors": [
+        0,
+        2
+      ],
+      "component": [
+        4
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        0,
+        2
+      ],
+      "component": [
+        13
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        0,
+        2
+      ],
+      "component": [
+        15
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        0,
+        3
+      ],
+      "component": [
+        13
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        1,
+        2
+      ],
+      "component": [
+        3,
+        8
+      ],
+      "size": 2
+    },
+    {
+      "colors": [
+        1,
+        2
+      ],
+      "component": [
+        9
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        1,
+        2
+      ],
+      "component": [
+        10
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        1,
+        2
+      ],
+      "component": [
+        11
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        1,
+        2
+      ],
+      "component": [
+        14
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        1,
+        3
+      ],
+      "component": [
+        5,
+        14
+      ],
+      "size": 2
+    },
+    {
+      "colors": [
+        1,
+        3
+      ],
+      "component": [
+        6
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        1,
+        3
+      ],
+      "component": [
+        7,
+        8,
+        10,
+        11,
+        18
+      ],
+      "size": 5
+    },
+    {
+      "colors": [
+        1,
+        3
+      ],
+      "component": [
+        17
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        2,
+        3
+      ],
+      "component": [
+        3,
+        18
+      ],
+      "size": 2
+    },
+    {
+      "colors": [
+        2,
+        3
+      ],
+      "component": [
+        5
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        2,
+        3
+      ],
+      "component": [
+        6
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        2,
+        3
+      ],
+      "component": [
+        7
+      ],
+      "size": 1
+    },
+    {
+      "colors": [
+        2,
+        3
+      ],
+      "component": [
+        17
+      ],
+      "size": 1
+    }
+  ],
+  "initial_safe_candidates": [],
+  "intermediate_policy": "endpoint",
+  "invalid_reason": null,
+  "layers": [
+    {
+      "depth": 0,
+      "duplicate_transitions": 0,
+      "exit_states": 0,
+      "generated_states": 1,
+      "invariant_states": 1,
+      "moves_examined_from_layer": 22,
+      "processed_states": 1
+    },
+    {
+      "depth": 1,
+      "duplicate_transitions": 0,
+      "exit_states": 0,
+      "generated_states": 22,
+      "invariant_states": 8,
+      "moves_examined_from_layer": 484,
+      "processed_states": 22
+    },
+    {
+      "depth": 2,
+      "duplicate_transitions": 243,
+      "exit_states": 0,
+      "generated_states": 241,
+      "invariant_states": 32,
+      "moves_examined_from_layer": 5302,
+      "processed_states": 241
+    },
+    {
+      "depth": 3,
+      "duplicate_transitions": 3578,
+      "exit_states": 0,
+      "generated_states": 1724,
+      "invariant_states": 78,
+      "moves_examined_from_layer": 37928,
+      "processed_states": 1724
+    },
+    {
+      "depth": 4,
+      "duplicate_transitions": 29140,
+      "exit_states": 0,
+      "generated_states": 8788,
+      "invariant_states": 105,
+      "moves_examined_from_layer": 193336,
+      "processed_states": 8788
+    },
+    {
+      "depth": 5,
+      "duplicate_transitions": 161049,
+      "exit_states": 0,
+      "generated_states": 32287,
+      "invariant_states": 101,
+      "moves_examined_from_layer": 710314,
+      "processed_states": 32287
+    },
+    {
+      "depth": 6,
+      "duplicate_transitions": 628474,
+      "exit_states": 0,
+      "generated_states": 81840,
+      "invariant_states": 115,
+      "moves_examined_from_layer": 1800480,
+      "processed_states": 81840
+    },
+    {
+      "depth": 7,
+      "duplicate_transitions": 1669663,
+      "exit_states": 0,
+      "generated_states": 130817,
+      "invariant_states": 122,
+      "moves_examined_from_layer": 2877974,
+      "processed_states": 130817
+    },
+    {
+      "depth": 8,
+      "duplicate_transitions": 2763498,
+      "exit_states": 0,
+      "generated_states": 114476,
+      "invariant_states": 91,
+      "moves_examined_from_layer": 2518472,
+      "processed_states": 114476
+    },
+    {
+      "depth": 9,
+      "duplicate_transitions": 2474050,
+      "exit_states": 3,
+      "generated_states": 44422,
+      "invariant_states": 42,
+      "moves_examined_from_layer": 977218,
+      "processed_states": 44419
+    },
+    {
+      "depth": 10,
+      "duplicate_transitions": 971993,
+      "exit_states": 3,
+      "generated_states": 5225,
+      "invariant_states": 5,
+      "moves_examined_from_layer": 0,
+      "processed_states": 5222
+    }
+  ],
+  "max_depth": 10,
+  "node": 19,
+  "node_limit": 6000000,
+  "proper_state": true,
+  "proper_violations": [],
+  "remaining": [
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "truncated": false,
+  "valid_intervention": true,
+  "visited_states": 419843
+}

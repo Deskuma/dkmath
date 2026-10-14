@@ -1,0 +1,49 @@
+$ git branch --show-current
+research/FLT357-CrossInvariant-Ultra-261004-v0
+exit=0
+
+$ git rev-parse HEAD
+69d44fa3e7291a5d4dfb311884eb41d888dcdb8c
+exit=0
+
+$ git status --short
+ M docs/dev/FLT357-CrossInvariant-Ultra-261004-v0/findings-001.md
+exit=0
+
+$ lake env lean --version
+Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)
+exit=0
+
+$ rg -n ^theorem|^def DkMath/FLT/Three/PrimitiveCubicClosure.lean DkMath/FLT/Three/PositiveCubicNormalization.lean DkMath/FLT/Five/Main.lean DkMath/FLT/Seven/CurrentCarrierNormalizedPower.lean DkMath/FLT/Seven/CurrentSupportObstruction.lean
+DkMath/FLT/Three/PrimitiveCubicClosure.lean:23:theorem primitiveCubicPack_false
+DkMath/FLT/Three/PrimitiveCubicClosure.lean:39:theorem FLT_d3_unconditional
+DkMath/FLT/Three/PositiveCubicNormalization.lean:22:theorem exists_primitiveCubicPack_of_positive_solution
+DkMath/FLT/Three/PositiveCubicNormalization.lean:69:theorem fermatThree_no_positive_solution
+DkMath/FLT/Five/Main.lean:63:theorem flt5Target_of_unitClasses_of_zeroArithmetic
+DkMath/FLT/Five/Main.lean:69:theorem flt5Target_of_zeroArithmetic
+DkMath/FLT/Five/Main.lean:79:theorem flt5Target : FLT5Target :=
+DkMath/FLT/Five/Main.lean:88:theorem fermatFive_no_positive_solution
+DkMath/FLT/Five/Main.lean:94:theorem signedGoldenFiniteUnitSectorCore : SignedGoldenFiniteUnitSectorCore :=
+DkMath/FLT/Five/Main.lean:98:theorem counterexamplePackRefuter_of_zeroArithmetic
+DkMath/FLT/Five/Main.lean:105:theorem positiveFermat5Refuter_of_zeroArithmetic
+DkMath/FLT/Seven/CurrentCarrierNormalizedPower.lean:49:theorem six_current_factors_product_direct (p : DirectRealCubicRootPacket source r) :
+DkMath/FLT/Seven/CurrentCarrierNormalizedPower.lean:55:theorem prime_eq_ramified_of_mem_current_phases
+DkMath/FLT/Seven/CurrentCarrierNormalizedPower.lean:91:theorem normalizedPhaseIdeals_pairwise
+DkMath/FLT/Seven/CurrentCarrierNormalizedPower.lean:113:theorem normalizedPhaseProduct_unit_mul_fourteenth_power
+DkMath/FLT/Seven/CurrentCarrierNormalizedPower.lean:140:theorem normalizedPhaseIdealProduct_seventh_power
+DkMath/FLT/Seven/CurrentCarrierNormalizedPower.lean:151:theorem normalizedPhaseIdeal_seventh_power
+DkMath/FLT/Seven/CurrentCarrierNormalizedPower.lean:177:def normalizedCarrierIdeal (c : CurrentCommonPrimeCyclotomicPacket h q) :
+DkMath/FLT/Seven/CurrentCarrierNormalizedPower.lean:181:theorem normalizedCarrierIdeal_ne_zero (c : CurrentCommonPrimeCyclotomicPacket h q) :
+DkMath/FLT/Seven/CurrentCarrierNormalizedPower.lean:190:theorem normalizedCarrierIdeal_seventh_power (c : CurrentCommonPrimeCyclotomicPacket h q) :
+DkMath/FLT/Seven/CurrentCarrierNormalizedPower.lean:196:theorem normalizedCarrier_exponent_seven_dvd (c : CurrentCommonPrimeCyclotomicPacket h q)
+DkMath/FLT/Seven/CurrentCarrierNormalizedPower.lean:211:theorem normalized_completeSupport_seventh_divisibility
+DkMath/FLT/Seven/CurrentCarrierNormalizedPower.lean:219:theorem currentCarrier_ramifiedIdeal_mul_seventh_power
+DkMath/FLT/Seven/CurrentCarrierNormalizedPower.lean:232:theorem currentCarrier_ramified_element_receiver
+DkMath/FLT/Seven/CurrentSupportObstruction.lean:26:def ramifiedPlace : HeightOneSpectrum Ring :=
+DkMath/FLT/Seven/CurrentSupportObstruction.lean:35:theorem ramifiedPlace_mem_support (c : CurrentCommonPrimeCyclotomicPacket h q) :
+DkMath/FLT/Seven/CurrentSupportObstruction.lean:43:theorem ramifiedPlace_exponent (c : CurrentCommonPrimeCyclotomicPacket h q) :
+DkMath/FLT/Seven/CurrentSupportObstruction.lean:53:theorem ramifiedPlace_in_complement (c : CurrentCommonPrimeCyclotomicPacket h q) :
+DkMath/FLT/Seven/CurrentSupportObstruction.lean:71:theorem away_ramified_exponent_seventh_dvd
+DkMath/FLT/Seven/CurrentSupportObstruction.lean:97:theorem not_completeSupport_seventh_divisibility
+DkMath/FLT/Seven/CurrentSupportObstruction.lean:107:theorem currentCarrier_not_unit_mul_seventh_power
+exit=0

@@ -423,6 +423,7 @@ theorem paritySafeCanonicalResidualTriple_witness_16_17 :
   have hcandidate : 17 ∈ squareAnchorOddPointCoprimeOffsets 16 := by
     apply mem_squareAnchorOddPointCoprimeOffsets.mpr
     norm_num [mem_squareAnchorCoprimeOffsets, SquareOffset, Odd]
+    exact ⟨by decide, ⟨136, by norm_num⟩⟩
   have hsupport : paritySafeActiveSupport 16 17 = {3, 7, 13} := by
     ext q
     constructor

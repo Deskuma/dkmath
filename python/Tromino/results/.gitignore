@@ -1,0 +1,3 @@
+# Long-run raw job streams can be very large.
+**/runs.jsonl
+**/*.tmp

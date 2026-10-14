@@ -1,0 +1,50 @@
+{
+  "observation": "OBS-005-PureEndpointRepairDepthEight",
+  "date": "2026-09-29",
+  "source_directory": "python/Tromino/results/repair-depth/endpoint-d8-v24",
+  "campaign": {
+    "vertices": 24,
+    "jobs_requested": 3000,
+    "jobs_completed_before_stop": 47,
+    "steps": 3000,
+    "warmup_flips": 64,
+    "max_depth": 10,
+    "target_depth": 8,
+    "node_limit": 1500000,
+    "base_seed": 8000000,
+    "intermediate_policy": "endpoint",
+    "search_objective": "resolved"
+  },
+  "campaign_summary": {
+    "classifications": {"solved": 47},
+    "resolved_jobs": 47,
+    "max_resolved_depth": 8,
+    "mean_resolved_depth": 5.638297872340425,
+    "target_found": true,
+    "elapsed_seconds": 1578.9239156246185
+  },
+  "pure_depth8_witness": {
+    "seed": 8000005,
+    "source": "python/Tromino/results/repair-depth/endpoint-d8-v24/witness-8000005.json",
+    "replay": "python/Tromino/results/repair-depth/endpoint-d8-v24/replay-8000005.json",
+    "critical_step": 17,
+    "critical_node": 20,
+    "required_depth": 8,
+    "verified_against_depth_minus_one": true,
+    "repairs": 1,
+    "repair_moves_total": 8,
+    "depth7_expanded": 97056,
+    "depth8_expanded": 119630,
+    "assigned_color": 0,
+    "component_sizes": [2, 1, 1, 2, 2, 1, 4, 4],
+    "max_component_size": 4
+  },
+  "experimental_frontier": "D_endpoint(24) >= 8",
+  "next_target": {
+    "vertices": 24,
+    "target_depth": 9,
+    "instrument_repair_geometry": true,
+    "stop_on_target": true
+  },
+  "status": "observation_only"
+}

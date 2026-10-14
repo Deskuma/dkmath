@@ -77,7 +77,7 @@ example {p : ℕ} (hp : p.Prime) (hp2 : p ≠ 2) :
     (traceOneRatHom_injective _).isDomain (traceOneRatHom _)
   let : IsDedekindDomain (TraceOneInt (signedPrimeParameter p)) :=
     traceOneRat_isDedekindDomain hp hp2
-  intro I a hI0 hfree hunit hspan
+  intro _ _ _ _ I a hI0 hfree hunit hspan
   exact exists_eq_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt
     hI0 hfree hunit hspan
 

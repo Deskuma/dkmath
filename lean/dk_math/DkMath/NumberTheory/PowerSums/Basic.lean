@@ -6,7 +6,9 @@ Authors: D. and Wise Wolf.
 
 -- NumberTheory.PowerSums module: Basic fillability by power sums
 
-import Mathlib
+import Mathlib.Algebra.BigOperators.Fin
+import Mathlib.Data.Fin.VecNotation
+import Mathlib.Tactic.NormNum
 
 #print "file: DkMath.NumberTheory.PowerSums.Basic"
 

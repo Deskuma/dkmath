@@ -1,0 +1,181 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.NumberTheory.Legendre
+import DkMathTest.NumberTheory.LegendreFullTownRegression
+
+#print "file: DkMathTest.NumberTheory.LegendreFullTownAxiomAudit"
+
+#check DkMath.Combinatorics.supportCollisionEdges
+#print axioms DkMath.Combinatorics.supportCollisionEdges
+#check DkMath.Combinatorics.mem_supportCollisionEdges
+#print axioms DkMath.Combinatorics.mem_supportCollisionEdges
+#check DkMath.Combinatorics.exists_supportPacking
+#print axioms DkMath.Combinatorics.exists_supportPacking
+#check DkMath.NumberTheory.Legendre.coarsePrimeWorld_modulus_pos
+#print axioms DkMath.NumberTheory.Legendre.coarsePrimeWorld_modulus_pos
+#check DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount
+#print axioms DkMath.NumberTheory.Legendre.coarsePrimeWorldPeriodCount
+#check DkMath.NumberTheory.Legendre.coarsePeriodCount_zero_modulus
+#print axioms DkMath.NumberTheory.Legendre.coarsePeriodCount_zero_modulus
+#check DkMath.NumberTheory.Legendre.coarsePeriodCount_mul_le
+#print axioms DkMath.NumberTheory.Legendre.coarsePeriodCount_mul_le
+#check DkMath.NumberTheory.Legendre.coarsePeriodCount_succ_mul_gt
+#print axioms DkMath.NumberTheory.Legendre.coarsePeriodCount_succ_mul_gt
+#check DkMath.NumberTheory.Legendre.two_le_coarsePeriodCount
+#print axioms DkMath.NumberTheory.Legendre.two_le_coarsePeriodCount
+#check DkMath.NumberTheory.Legendre.coarsePrimeWorldGridPairs
+#print axioms DkMath.NumberTheory.Legendre.coarsePrimeWorldGridPairs
+#check DkMath.NumberTheory.Legendre.coarsePrimeWorldGridSeat
+#print axioms DkMath.NumberTheory.Legendre.coarsePrimeWorldGridSeat
+#check DkMath.NumberTheory.Legendre.mem_coarsePrimeWorldGridPairs
+#print axioms DkMath.NumberTheory.Legendre.mem_coarsePrimeWorldGridPairs
+#check DkMath.NumberTheory.Legendre.coarseGridSeat_squareOffset
+#print axioms DkMath.NumberTheory.Legendre.coarseGridSeat_squareOffset
+#check DkMath.NumberTheory.Legendre.coarseGridSeat_injective
+#print axioms DkMath.NumberTheory.Legendre.coarseGridSeat_injective
+#check DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown
+#print axioms DkMath.NumberTheory.Legendre.coarsePrimeWorldFullTown
+#check DkMath.NumberTheory.Legendre.mem_coarsePrimeWorldFullTown
+#print axioms DkMath.NumberTheory.Legendre.mem_coarsePrimeWorldFullTown
+#check DkMath.NumberTheory.Legendre.coarseFullTown_subset_squareOffsets
+#print axioms DkMath.NumberTheory.Legendre.coarseFullTown_subset_squareOffsets
+#check DkMath.NumberTheory.Legendre.card_coarsePrimeWorldFullTown
+#print axioms DkMath.NumberTheory.Legendre.card_coarsePrimeWorldFullTown
+#check DkMath.NumberTheory.Legendre.coarsePrimeWorldColumn
+#print axioms DkMath.NumberTheory.Legendre.coarsePrimeWorldColumn
+#check DkMath.NumberTheory.Legendre.coarseColumn_subset_fullTown
+#print axioms DkMath.NumberTheory.Legendre.coarseColumn_subset_fullTown
+#check DkMath.NumberTheory.Legendre.card_coarsePrimeWorldColumn
+#print axioms DkMath.NumberTheory.Legendre.card_coarsePrimeWorldColumn
+#check DkMath.NumberTheory.Legendre.coarseFullTown_eq_column_union
+#print axioms DkMath.NumberTheory.Legendre.coarseFullTown_eq_column_union
+#check DkMath.NumberTheory.Legendre.disjoint_coarseColumns
+#print axioms DkMath.NumberTheory.Legendre.disjoint_coarseColumns
+#check DkMath.NumberTheory.Legendre.coarseFullTown_address_periodic
+#print axioms DkMath.NumberTheory.Legendre.coarseFullTown_address_periodic
+#check DkMath.NumberTheory.Legendre.coarseFullTown_survivor_periodic
+#print axioms DkMath.NumberTheory.Legendre.coarseFullTown_survivor_periodic
+#check DkMath.NumberTheory.Legendre.coarseFullTown_survivor
+#print axioms DkMath.NumberTheory.Legendre.coarseFullTown_survivor
+#check DkMath.NumberTheory.Legendre.coarseTwoStreet_subset_fullTown
+#print axioms DkMath.NumberTheory.Legendre.coarseTwoStreet_subset_fullTown
+#check DkMath.NumberTheory.Legendre.coarseFullTown_eq_twoStreet_of_periodCount_two
+#print axioms DkMath.NumberTheory.Legendre.coarseFullTown_eq_twoStreet_of_periodCount_two
+#check DkMath.NumberTheory.Legendre.coarseColumn_commonPrime_modEq
+#print axioms DkMath.NumberTheory.Legendre.coarseColumn_commonPrime_modEq
+#check DkMath.NumberTheory.Legendre.coarseColumn_commonPrime_dvd_index_gap
+#print axioms DkMath.NumberTheory.Legendre.coarseColumn_commonPrime_dvd_index_gap
+#check DkMath.NumberTheory.Legendre.coarseColumn_no_commonPrime_of_small_gap
+#print axioms DkMath.NumberTheory.Legendre.coarseColumn_no_commonPrime_of_small_gap
+#check DkMath.NumberTheory.Legendre.coarseColumn_oldSupport_family
+#print axioms DkMath.NumberTheory.Legendre.coarseColumn_oldSupport_family
+#check DkMath.NumberTheory.Legendre.coarseColumn_oldSupport_family_initial
+#print axioms DkMath.NumberTheory.Legendre.coarseColumn_oldSupport_family_initial
+#check DkMath.NumberTheory.Legendre.coarseColumnWaveIndices
+#print axioms DkMath.NumberTheory.Legendre.coarseColumnWaveIndices
+#check DkMath.NumberTheory.Legendre.card_coarseColumnWaveIndices_le_ceil
+#print axioms DkMath.NumberTheory.Legendre.card_coarseColumnWaveIndices_le_ceil
+#check DkMath.NumberTheory.Legendre.coarseColumnPoint_eq_child
+#print axioms DkMath.NumberTheory.Legendre.coarseColumnPoint_eq_child
+#check DkMath.NumberTheory.Legendre.coarseColumnPoint_eq_canonical_child
+#print axioms DkMath.NumberTheory.Legendre.coarseColumnPoint_eq_canonical_child
+#check DkMath.NumberTheory.Legendre.coarseColumn_dvd_iff_refinement_target
+#print axioms DkMath.NumberTheory.Legendre.coarseColumn_dvd_iff_refinement_target
+#check DkMath.NumberTheory.Legendre.existsUnique_coarseColumnWaveIndex_mod_prime
+#print axioms DkMath.NumberTheory.Legendre.existsUnique_coarseColumnWaveIndex_mod_prime
+#check DkMath.NumberTheory.Legendre.card_coarseColumnWaveIndices_le_one
+#print axioms DkMath.NumberTheory.Legendre.card_coarseColumnWaveIndices_le_one
+#check DkMath.NumberTheory.Legendre.coarseCrossColumn_compatible_index_unique
+#print axioms DkMath.NumberTheory.Legendre.coarseCrossColumn_compatible_index_unique
+#check DkMath.NumberTheory.Legendre.coarseCrossColumn_commonPrime_signed_gap
+#print axioms DkMath.NumberTheory.Legendre.coarseCrossColumn_commonPrime_signed_gap
+#check DkMath.NumberTheory.Legendre.coarseFullTownPrimeFiber
+#print axioms DkMath.NumberTheory.Legendre.coarseFullTownPrimeFiber
+#check DkMath.NumberTheory.Legendre.coarseFullTownPrimeFiber_eq_column_union
+#print axioms DkMath.NumberTheory.Legendre.coarseFullTownPrimeFiber_eq_column_union
+#check DkMath.NumberTheory.Legendre.card_coarseFullTownPrimeFiber_le
+#print axioms DkMath.NumberTheory.Legendre.card_coarseFullTownPrimeFiber_le
+#check DkMath.NumberTheory.Legendre.coarse_ceiling_le_one
+#print axioms DkMath.NumberTheory.Legendre.coarse_ceiling_le_one
+#check DkMath.NumberTheory.Legendre.card_coarseFullTownPrimeFiber_le_base
+#print axioms DkMath.NumberTheory.Legendre.card_coarseFullTownPrimeFiber_le_base
+#check DkMath.NumberTheory.Legendre.coarseFullTownIncidence
+#print axioms DkMath.NumberTheory.Legendre.coarseFullTownIncidence
+#check DkMath.NumberTheory.Legendre.coarseFullTownIncidence_eq_support_sum
+#print axioms DkMath.NumberTheory.Legendre.coarseFullTownIncidence_eq_support_sum
+#check DkMath.NumberTheory.Legendre.card_coarseFullTown_le_incidence_of_fullyCovered
+#print axioms DkMath.NumberTheory.Legendre.card_coarseFullTown_le_incidence_of_fullyCovered
+#check DkMath.NumberTheory.Legendre.coarseVerticalCapacity
+#print axioms DkMath.NumberTheory.Legendre.coarseVerticalCapacity
+#check DkMath.NumberTheory.Legendre.coarseFullTownIncidence_le_capacity
+#print axioms DkMath.NumberTheory.Legendre.coarseFullTownIncidence_le_capacity
+#check DkMath.NumberTheory.Legendre.coarseFullTown_vertical_frontier
+#print axioms DkMath.NumberTheory.Legendre.coarseFullTown_vertical_frontier
+#check DkMath.NumberTheory.Legendre.coarseFullTown_uniform_vertical_frontier
+#print axioms DkMath.NumberTheory.Legendre.coarseFullTown_uniform_vertical_frontier
+#check DkMath.NumberTheory.Legendre.not_fullyCovered_of_coarseVerticalCapacity_deficit
+#print axioms DkMath.NumberTheory.Legendre.not_fullyCovered_of_coarseVerticalCapacity_deficit
+#check DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_coarseVerticalCapacity_deficit
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_coarseVerticalCapacity_deficit
+#check DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges
+#print axioms DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges
+#check DkMath.NumberTheory.Legendre.mem_coarseTownSupportCollisionEdges
+#print axioms DkMath.NumberTheory.Legendre.mem_coarseTownSupportCollisionEdges
+#check DkMath.NumberTheory.Legendre.exists_coarseTown_supportPacking
+#print axioms DkMath.NumberTheory.Legendre.exists_coarseTown_supportPacking
+#check DkMath.NumberTheory.Legendre.not_fullyCovered_of_coarseTown_edge_deficit
+#print axioms DkMath.NumberTheory.Legendre.not_fullyCovered_of_coarseTown_edge_deficit
+#check DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_coarseTown_edge_deficit
+#print axioms DkMath.NumberTheory.Legendre.exists_prime_squareCell_of_coarseTown_edge_deficit
+#check DkMath.NumberTheory.Legendre.coarseTownPrimeCollisionEdges
+#print axioms DkMath.NumberTheory.Legendre.coarseTownPrimeCollisionEdges
+#check DkMath.NumberTheory.Legendre.mem_coarseTownPrimeCollisionEdges
+#print axioms DkMath.NumberTheory.Legendre.mem_coarseTownPrimeCollisionEdges
+#check DkMath.NumberTheory.Legendre.card_coarseTownPrimeCollisionEdges
+#print axioms DkMath.NumberTheory.Legendre.card_coarseTownPrimeCollisionEdges
+#check DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges_subset_prime_union
+#print axioms DkMath.NumberTheory.Legendre.coarseTownSupportCollisionEdges_subset_prime_union
+#check DkMath.NumberTheory.Legendre.card_coarseTownSupportCollisionEdges_le_fibers
+#print axioms DkMath.NumberTheory.Legendre.card_coarseTownSupportCollisionEdges_le_fibers
+#check DkMath.NumberTheory.Legendre.card_coarseTownSupportCollisionEdges_le_ceiling
+#print axioms DkMath.NumberTheory.Legendre.card_coarseTownSupportCollisionEdges_le_ceiling
+#check DkMath.NumberTheory.Legendre.card_coarseTownSupportCollisionEdges_le_uniform
+#print axioms DkMath.NumberTheory.Legendre.card_coarseTownSupportCollisionEdges_le_uniform
+#check DkMathTest.LegendreFullTownRegression.zero_modulus_boundary
+#print axioms DkMathTest.LegendreFullTownRegression.zero_modulus_boundary
+#check DkMathTest.LegendreFullTownRegression.modulus_one_endpoint
+#print axioms DkMathTest.LegendreFullTownRegression.modulus_one_endpoint
+#check DkMathTest.LegendreFullTownRegression.period_two_recovers_previous_town
+#print axioms DkMathTest.LegendreFullTownRegression.period_two_recovers_previous_town
+#check DkMathTest.LegendreFullTownRegression.three_fullTown_not_global_family
+#print axioms DkMathTest.LegendreFullTownRegression.three_fullTown_not_global_family
+#check DkMathTest.LegendreFullTownRegression.three_uniform_columns_not_global
+#print axioms DkMathTest.LegendreFullTownRegression.three_uniform_columns_not_global
+#check DkMathTest.LegendreFullTownRegression.five_vertical_reuse
+#print axioms DkMathTest.LegendreFullTownRegression.five_vertical_reuse
+#check DkMathTest.LegendreFullTownRegression.five_strictly_improves_twoStreet
+#print axioms DkMathTest.LegendreFullTownRegression.five_strictly_improves_twoStreet
+#check DkMathTest.LegendreFullTownRegression.verticalDeficitCalibrations
+#print axioms DkMathTest.LegendreFullTownRegression.verticalDeficitCalibrations
+#check DkMathTest.LegendreFullTownRegression.verticalDeficitCalibrations_certified
+#print axioms DkMathTest.LegendreFullTownRegression.verticalDeficitCalibrations_certified
+#check DkMathTest.LegendreFullTownRegression.calibrated_vertical_prime_endpoints
+#print axioms DkMathTest.LegendreFullTownRegression.calibrated_vertical_prime_endpoints
+#check DkMathTest.LegendreFullTownRegression.five_prime_via_vertical_consumer
+#print axioms DkMathTest.LegendreFullTownRegression.five_prime_via_vertical_consumer
+#check DkMathTest.LegendreFullTownRegression.eleven_edge_geometry
+#print axioms DkMathTest.LegendreFullTownRegression.eleven_edge_geometry
+#check DkMathTest.LegendreFullTownRegression.eleven_prime_via_existing_packing_consumer
+#print axioms DkMathTest.LegendreFullTownRegression.eleven_prime_via_existing_packing_consumer
+#check DkMathTest.LegendreFullTownRegression.eleven_multiPrime_edge_overcount
+#print axioms DkMathTest.LegendreFullTownRegression.eleven_multiPrime_edge_overcount
+#check DkMathTest.LegendreFullTownRegression.five_refinement_phase
+#print axioms DkMathTest.LegendreFullTownRegression.five_refinement_phase
+#check DkMathTest.LegendreFullTownRegression.large_anchor_grid
+#print axioms DkMathTest.LegendreFullTownRegression.large_anchor_grid
+#check DkMathTest.LegendreFullTownRegression.large_anchor_column_family
+#print axioms DkMathTest.LegendreFullTownRegression.large_anchor_column_family

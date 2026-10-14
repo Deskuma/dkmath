@@ -1,0 +1,29 @@
+import DkMath.FLT.Seven.PrimeTraceOneHigherDepthRamifiedRouting
+
+open DkMath.FLT.Seven
+
+#check RamifiedGapRootPrimaryDecomposition
+#check RamifiedGapRootPrimaryDecomposition.ofSummit
+#check RamifiedGapRootPrimaryDecomposition.depth_eq_zero_iff
+#check PrimitiveRamifiedSummitPacket.rootSnd_mul_sndCore_eq
+#check PrimitiveRamifiedSummitPacket.rootSnd_sndCore_coprime
+#check PrimitiveRamifiedSummitPacket.rootNorm_rootSnd_coprime
+#check PrimitiveRamifiedSummitPacket.rootNorm_sndCore_coprime
+#check PrimitiveRamifiedSummitPacket.gapRoot_endpointRight_coprime
+#check PrimitiveRamifiedSummitPacket.gapRoot_gapQuotient_coprime
+#check PrimitiveRamifiedSummitPacket.secondCoordinate_natAbs_product_eq
+#check RamifiedPrimarySecondCoordinateRoutingPacket
+#check PrimitiveRamifiedSummitPacket.nonempty_primarySecondCoordinateRouting
+#check PrimitiveRamifiedSummitPacket.primarySecondCoordinateRouting_depth_zero_calibration
+#check PrimitiveRamifiedSummitPacket.higher_depth_implies_seven_dvd_gapRoot
+#check PrimitiveCounterexampleRamifiedProvenance.primary_depth_add_one_eq_distinguished_depth
+#check PrimitiveCounterexampleRamifiedProvenance.nonempty_primary_routing
+
+example (p : PrimitiveRamifiedSummitPacket) :
+    Nonempty (RamifiedPrimarySecondCoordinateRoutingPacket p) :=
+  p.nonempty_primarySecondCoordinateRouting
+
+example {x y z : ℕ} {source : CounterexamplePack x y z}
+    (r : PrimitiveCounterexampleRamifiedProvenance source) :
+    Nonempty (RamifiedPrimarySecondCoordinateRoutingPacket r.summit) :=
+  r.nonempty_primary_routing

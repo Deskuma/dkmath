@@ -1,0 +1,19 @@
+{
+  "base_seed": 12000000,
+  "cooling": 0.9995,
+  "format_version": 2,
+  "initial_witness": "python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json",
+  "initial_witness_seed": 11000009,
+  "intermediate_policy": "endpoint",
+  "jobs": 16,
+  "max_depth": 11,
+  "node_limit": 3000000,
+  "search_objective": "frontier",
+  "steps": 384,
+  "stop_on_target": true,
+  "target_depth": 10,
+  "temperature": 1.5,
+  "vertices": 24,
+  "warmup_flips": 0,
+  "workers": 8
+}

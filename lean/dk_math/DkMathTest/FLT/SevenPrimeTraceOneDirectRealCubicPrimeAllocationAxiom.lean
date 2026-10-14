@@ -1,0 +1,24 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+-/
+
+import DkMath.FLT.Seven.PrimeTraceOneDirectRealCubicPrimeAllocation
+
+#print "file: DkMathTest.FLT.SevenPrimeTraceOneDirectRealCubicPrimeAllocationAxiom"
+
+open DkMath.FLT.Seven
+
+#print axioms SevenRealCubic.directOrbitSquareRefinement_principal_ideal_scalar_split
+#print axioms SevenRealCubic.directOrbitSquareRefinement_ideal_coprime
+#print axioms SevenRealCubic.directOrbitSquareRefinement_common_prime_dvd_scalar
+#print axioms SevenRealCubic.directOrbitSquareRefinement_prime_ideal_allocation_xor
+#print axioms SevenRealCubic.directOrbitGaloisSigma_three
+#print axioms SevenRealCubic.directOrbitGaloisSigma_ringAction
+#print axioms SevenRealCubic.directOrbitGaloisSigma_model_rotate_mem_iff
+#print axioms SevenRealCubic.directOrbit_two_rotated_gap_roots_mem_imp_all_three_mem
+#print axioms SevenRealCubic.directOrbitGalois_distinct_prime_address
+#print axioms SevenRealCubic.directOrbit_two_gap_primes_imp_all_gap
+#print axioms SevenRealCubic.directOrbitSquareRefinement_common_prime_gap_ncard
+#print axioms SevenRealCubic.directOrbitSquareRefinement_common_prime_quotient_ncard
+#print axioms SevenRealCubic.directOrbitGalois_prime_orbit_eq_primesOver

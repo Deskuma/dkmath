@@ -1,0 +1,79 @@
+{
+  "blocker_neighbors": [
+    0,
+    2,
+    4,
+    5,
+    8,
+    9,
+    10,
+    12,
+    13,
+    14,
+    15,
+    17,
+    18,
+    20,
+    22,
+    23
+  ],
+  "colored_state": {
+    "-1": 0,
+    "0": 1,
+    "1": 2,
+    "10": 1,
+    "11": 1,
+    "12": 0,
+    "13": 3,
+    "14": 0,
+    "15": 0,
+    "16": 0,
+    "17": 3,
+    "18": 0,
+    "2": 3,
+    "3": 2,
+    "4": 1,
+    "5": 3,
+    "6": 3,
+    "7": 3,
+    "8": 1,
+    "9": 1
+  },
+  "exit_counts": {},
+  "expanded_unique_states": 0,
+  "first_exit_depth": null,
+  "initial_invariant": true,
+  "initial_safe_candidates": [],
+  "intermediate_policy": "endpoint",
+  "invalid_reason": "improper_colored_state",
+  "layers": [],
+  "max_depth": 10,
+  "node": 19,
+  "node_limit": 6000000,
+  "proper_state": false,
+  "proper_violations": [
+    {
+      "color": 0,
+      "edge": [
+        12,
+        18
+      ]
+    },
+    {
+      "color": 0,
+      "edge": [
+        15,
+        18
+      ]
+    }
+  ],
+  "remaining": [
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "valid_intervention": false,
+  "visited_states": 0
+}

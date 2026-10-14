@@ -1,0 +1,73 @@
+{
+  "observation": "OBS-004-EndpointRepairDepthSeven",
+  "date": "2026-09-29",
+  "source_directory": "python/Tromino/results/repair-depth/endpoint-d6-v24",
+  "source_config": {
+    "vertices": 24,
+    "jobs": 2000,
+    "steps": 2000,
+    "warmup_flips": 48,
+    "workers": 8,
+    "max_depth": 8,
+    "target_depth": 6,
+    "node_limit": 750000,
+    "base_seed": 7000000,
+    "intermediate_policy": "endpoint",
+    "search_objective": "resolved"
+  },
+  "source_summary": {
+    "jobs_completed": 2000,
+    "resolved_jobs": 2000,
+    "classifications": {"solved": 2000},
+    "max_resolved_depth": 7,
+    "mean_resolved_depth": 5.218,
+    "best_resolved_seed": 7001217,
+    "target_found": true,
+    "elapsed_seconds": 8228.199981689453
+  },
+  "verified_depth7_witness": {
+    "seed": 7001217,
+    "source": "python/Tromino/results/repair-depth/endpoint-d6-v24/best_resolved_witness.json",
+    "replay": "python/Tromino/results/repair-depth/endpoint-d6-v24/replay-best-resolved.json",
+    "required_depth": 7,
+    "verified_against_depth_minus_one": true,
+    "critical_step": 18,
+    "critical_node": 21,
+    "depth6": {
+      "classification": "depth_limited",
+      "expanded": 20605,
+      "hit_depth_limit": true,
+      "repairs": 5
+    },
+    "depth7": {
+      "classification": "solved",
+      "repair_search_expanded": 25363,
+      "repairs_total": 6,
+      "repair_moves_total": 14,
+      "assigned_color": 1
+    },
+    "critical_exchange_sequence": [
+      {"colors": [0, 1], "component": [12]},
+      {"colors": [0, 1], "component": [16]},
+      {"colors": [0, 3], "component": [3]},
+      {"colors": [0, 3], "component": [14]},
+      {"colors": [0, 1], "component": [7, 9, 14, 20]},
+      {"colors": [0, 3], "component": [18]},
+      {"colors": [2, 3], "component": [4, 11, 17]}
+    ]
+  },
+  "experimental_conclusion": "Endpoint Missing-Color restoration removes strict-policy artifacts but does not collapse local repair depth; a replay-verified depth-seven composite repair occurs at 24 vertices.",
+  "next_target": {
+    "vertices": 24,
+    "target_depth": 8,
+    "max_depth": 10,
+    "jobs": 3000,
+    "steps": 3000,
+    "warmup_flips": 64,
+    "node_limit": 1500000,
+    "base_seed": 8000000,
+    "intermediate_policy": "endpoint",
+    "search_objective": "resolved"
+  },
+  "status": "observation_only"
+}

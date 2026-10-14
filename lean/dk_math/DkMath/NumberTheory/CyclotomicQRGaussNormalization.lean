@@ -252,9 +252,9 @@ private theorem coeff_Dpoly_map_of_power
     (ζ : L) (hζ : IsPrimitiveRoot ζ p) (σ : L ≃ₐ[ℚ] L)
     (ut : (ZMod p)ˣ) (hut0 : (ut : ZMod p) ≠ 0)
     (hσζ : σ ζ = ζ ^ (ut : ZMod p).val) (d : Fin 2 →₀ ℕ) :
-    σ (MvPolynomial.coeff d (Dpoly (p := p) ζ)) =
+    σ ((Dpoly (p := p) ζ).coeff d) =
       algebraMap ℤ L (quadraticChar (ZMod p) (ut : ZMod p)) *
-        MvPolynomial.coeff d (Dpoly (p := p) ζ) := by
+        (Dpoly (p := p) ζ).coeff d := by
   let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   by_cases hsq : IsSquare (ut : ZMod p)
   · have hpoly := map_Dpoly_of_square ζ hζ (ut : ZMod p)
@@ -262,30 +262,28 @@ private theorem coeff_Dpoly_map_of_power
     have hχ : quadraticChar (ZMod p) (ut : ZMod p) = 1 :=
       (quadraticChar_one_iff_isSquare hut0).mpr hsq
     calc
-      σ (MvPolynomial.coeff d (Dpoly (p := p) ζ)) =
-          MvPolynomial.coeff d
-            (MvPolynomial.map σ.toRingEquiv.toRingHom (Dpoly (p := p) ζ)) := by
+      σ ((Dpoly (p := p) ζ).coeff d) =
+          (MvPolynomial.map σ.toRingEquiv.toRingHom (Dpoly (p := p) ζ)).coeff d := by
         symm
         exact MvPolynomial.coeff_map σ.toRingEquiv.toRingHom
           (Dpoly (p := p) ζ) d
-      _ = MvPolynomial.coeff d (Dpoly (p := p) ζ) := by rw [hpoly]
+      _ = (Dpoly (p := p) ζ).coeff d := by rw [hpoly]
       _ = algebraMap ℤ L (quadraticChar (ZMod p) (ut : ZMod p)) *
-          MvPolynomial.coeff d (Dpoly (p := p) ζ) := by simp [hχ]
+          (Dpoly (p := p) ζ).coeff d := by simp [hχ]
   · have hpoly := map_Dpoly_of_nonsquare ζ hζ (ut : ZMod p)
       σ.toRingEquiv hut0 hsq hσζ
     have hχ : quadraticChar (ZMod p) (ut : ZMod p) = -1 :=
       quadraticChar_neg_one_iff_not_isSquare.mpr hsq
     calc
-      σ (MvPolynomial.coeff d (Dpoly (p := p) ζ)) =
-          MvPolynomial.coeff d
-            (MvPolynomial.map σ.toRingEquiv.toRingHom (Dpoly (p := p) ζ)) := by
+      σ ((Dpoly (p := p) ζ).coeff d) =
+          (MvPolynomial.map σ.toRingEquiv.toRingHom (Dpoly (p := p) ζ)).coeff d := by
         symm
         exact MvPolynomial.coeff_map σ.toRingEquiv.toRingHom
           (Dpoly (p := p) ζ) d
-      _ = -MvPolynomial.coeff d (Dpoly (p := p) ζ) := by
+      _ = -(Dpoly (p := p) ζ).coeff d := by
         rw [hpoly, MvPolynomial.coeff_neg]
       _ = algebraMap ℤ L (quadraticChar (ZMod p) (ut : ZMod p)) *
-          MvPolynomial.coeff d (Dpoly (p := p) ζ) := by simp [hχ]
+          (Dpoly (p := p) ζ).coeff d := by simp [hχ]
 
 private theorem coeff_Dpoly_div_quadraticGauss_fixed
     {L : Type*} [Field L] [Algebra ℚ L]
@@ -293,9 +291,9 @@ private theorem coeff_Dpoly_div_quadraticGauss_fixed
     [IsCyclotomicExtension {p} ℚ L]
     (hp2 : p ≠ 2) (ζ : L) (hζ : IsPrimitiveRoot ζ p)
     (d : Fin 2 →₀ ℕ) (σ : L ≃ₐ[ℚ] L) :
-    σ (MvPolynomial.coeff d (Dpoly (p := p) ζ) /
+    σ ((Dpoly (p := p) ζ).coeff d /
       quadraticGauss ζ hζ) =
-      MvPolynomial.coeff d (Dpoly (p := p) ζ) /
+      (Dpoly (p := p) ζ).coeff d /
         quadraticGauss ζ hζ := by
   let : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
   obtain ⟨ut, hut0, hσζ⟩ := cyclotomicAut_power_spec ζ hζ σ
@@ -319,13 +317,13 @@ theorem coeff_Dpoly_eq_gauss_mul_rat
     (hp2 : p ≠ 2) (ζ : L) (hζ : IsPrimitiveRoot ζ p)
     (d : Fin 2 →₀ ℕ) :
     ∃ q : ℚ,
-      MvPolynomial.coeff d (Dpoly (p := p) ζ) =
+      (Dpoly (p := p) ζ).coeff d =
         algebraMap ℚ L q * quadraticGauss ζ hζ := by
   let : IsGalois ℚ L := IsCyclotomicExtension.isGalois {p} ℚ L
   let : FiniteDimensional ℚ L :=
     IsCyclotomicExtension.finiteDimensional {p} ℚ L
   have hrange := (IsGalois.mem_range_algebraMap_iff_fixed
-    (MvPolynomial.coeff d (Dpoly (p := p) ζ) / quadraticGauss ζ hζ)).2
+    ((Dpoly (p := p) ζ).coeff d / quadraticGauss ζ hζ)).2
     (by
       intro σ
       exact coeff_Dpoly_div_quadraticGauss_fixed hp2 ζ hζ d σ)
@@ -334,8 +332,8 @@ theorem coeff_Dpoly_eq_gauss_mul_rat
   have hG : quadraticGauss ζ hζ ≠ 0 :=
     quadraticGauss_ne_zero hp2 ζ hζ
   calc
-    MvPolynomial.coeff d (Dpoly (p := p) ζ) =
-        (MvPolynomial.coeff d (Dpoly (p := p) ζ) /
+    (Dpoly (p := p) ζ).coeff d =
+        ((Dpoly (p := p) ζ).coeff d /
           quadraticGauss ζ hζ) * quadraticGauss ζ hζ := by
       exact (div_mul_cancel₀ _ hG).symm
     _ = algebraMap ℚ L q * quadraticGauss ζ hζ := by rw [← hq]
@@ -347,19 +345,19 @@ private theorem coeff_Dpoly_eq_gauss_mul_int
     (hp2 : p ≠ 2) (ζ : L) (hζ : IsPrimitiveRoot ζ p)
     (d : Fin 2 →₀ ℕ) :
     ∃ a : ℤ,
-      MvPolynomial.coeff d (Dpoly (p := p) ζ) =
+      (Dpoly (p := p) ζ).coeff d =
         algebraMap ℤ L a * quadraticGauss ζ hζ := by
   have hp : p.Prime := Fact.out
   obtain ⟨q, hq⟩ := coeff_Dpoly_eq_gauss_mul_rat hp2 ζ hζ d
   have hcint :
-      IsIntegral ℤ (MvPolynomial.coeff d (Dpoly (p := p) ζ)) :=
+      IsIntegral ℤ ((Dpoly (p := p) ζ).coeff d) :=
     coeff_Dpoly_isIntegral_int ζ hζ d
   have hc2int :
-      IsIntegral ℤ (MvPolynomial.coeff d (Dpoly (p := p) ζ) ^ 2) :=
+      IsIntegral ℤ ((Dpoly (p := p) ζ).coeff d ^ 2) :=
     hcint.pow 2
   let r : ℚ := (signedPrimeDiscriminant p : ℚ) * q ^ 2
   have hmap : algebraMap ℚ L r =
-      MvPolynomial.coeff d (Dpoly (p := p) ζ) ^ 2 := by
+      (Dpoly (p := p) ζ).coeff d ^ 2 := by
     dsimp [r]
     calc
       algebraMap ℚ L ((signedPrimeDiscriminant p : ℚ) * q ^ 2) =
@@ -368,18 +366,18 @@ private theorem coeff_Dpoly_eq_gauss_mul_int
         rw [map_mul, map_pow]
         congr 1
         simp
-      _ = (MvPolynomial.coeff d (Dpoly (p := p) ζ)) ^ 2 := by
+      _ = ((Dpoly (p := p) ζ).coeff d) ^ 2 := by
         rw [hq, mul_pow, quadraticGauss_sq hp2 ζ hζ]
         ring
   have hrint : IsIntegral ℤ r :=
     isIntegral_rat_of_map_isIntegral r
-      (MvPolynomial.coeff d (Dpoly (p := p) ζ) ^ 2) hmap hc2int
+      ((Dpoly (p := p) ζ).coeff d ^ 2) hmap hc2int
   obtain ⟨z, hz⟩ := (rat_isIntegral_iff_exists_int r).mp hrint
   obtain ⟨a, ha⟩ := rat_eq_int_of_signedPrime_mul_sq hp
     (signedPrimeDiscriminant_eq_or_neg p) q ⟨z, by simpa [r] using hz⟩
   refine ⟨a, ?_⟩
   calc
-    MvPolynomial.coeff d (Dpoly (p := p) ζ) =
+    (Dpoly (p := p) ζ).coeff d =
         algebraMap ℚ L q * quadraticGauss ζ hζ := hq
     _ = algebraMap ℚ L (a : ℚ) * quadraticGauss ζ hζ := by rw [ha]
     _ = algebraMap ℤ L a * quadraticGauss ζ hζ := by
@@ -408,23 +406,22 @@ theorem exists_Dpoly_over_gauss_int
     .ofCoeff <| Finsupp.mapRange aOf haOf_zero <|
       AddMonoidAlgebra.coeff (Dpoly (p := p) ζ)
   have hcoeff_SZ (d : Fin 2 →₀ ℕ) :
-      MvPolynomial.coeff d SZ =
-        aOf (MvPolynomial.coeff d (Dpoly (p := p) ζ)) := by
+      SZ.coeff d = aOf ((Dpoly (p := p) ζ).coeff d) := by
     change (Finsupp.mapRange aOf haOf_zero
       (AddMonoidAlgebra.coeff (Dpoly (p := p) ζ))) d = _
     rfl
   have hfactor (d : Fin 2 →₀ ℕ) :
-      MvPolynomial.coeff d (Dpoly (p := p) ζ) =
-        algebraMap ℤ L (aOf (MvPolynomial.coeff d (Dpoly (p := p) ζ))) * G := by
-    by_cases hc0 : MvPolynomial.coeff d (Dpoly (p := p) ζ) = 0
+    (Dpoly (p := p) ζ).coeff d =
+        algebraMap ℤ L (aOf ((Dpoly (p := p) ζ).coeff d)) * G := by
+    by_cases hc0 : (Dpoly (p := p) ζ).coeff d = 0
     · simp [hc0, aOf, G]
     · obtain ⟨a, ha⟩ := coeff_Dpoly_eq_gauss_mul_int hp2 ζ hζ d
       have hc : ∃ a : ℤ,
-          MvPolynomial.coeff d (Dpoly (p := p) ζ) =
+          (Dpoly (p := p) ζ).coeff d =
             algebraMap ℤ L a * G := ⟨a, by simpa [G] using ha⟩
       have hchoose :
-          MvPolynomial.coeff d (Dpoly (p := p) ζ) =
-            algebraMap ℤ L (aOf (MvPolynomial.coeff d (Dpoly (p := p) ζ))) * G := by
+          (Dpoly (p := p) ζ).coeff d =
+            algebraMap ℤ L (aOf ((Dpoly (p := p) ζ).coeff d)) * G := by
         unfold aOf
         split
         · rename_i hzero

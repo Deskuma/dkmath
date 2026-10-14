@@ -4,10 +4,12 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
+import Mathlib.Tactic.Ring
+import Mathlib.Data.Nat.Squarefree
+import Lean.Elab.Tactic.Omega
 import DkMath.Algebra.BinomTail
 import DkMath.CosmicFormula.Defs
-import DkMath.CosmicFormula.CosmicFormulaDim  -- Cosmic Formula Dimensionality
+import DkMath.CosmicFormula.RealCore
 import DkMath.ABC.PadicValNat
 
 #print "file: DkMath.CosmicFormula.CosmicFormulaBinom"

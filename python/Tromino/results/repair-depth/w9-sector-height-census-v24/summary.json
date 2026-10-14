@@ -1,0 +1,161 @@
+{
+  "all_height_labels_preserved_neighbors": [
+    1
+  ],
+  "depth11_neighbors": [],
+  "elapsed_seconds": 1252.610230922699,
+  "flip_census_summary": "python/Tromino/results/repair-depth/w9-flip-chamber-census-v24/summary.json",
+  "height_labels_equal_states": 21,
+  "neighbors": [
+    {
+      "all_height_labels_preserved": true,
+      "child_edges": 3,
+      "child_states": 4,
+      "depth11_found": false,
+      "depth_counts": {
+        "10": 1,
+        "9": 3
+      },
+      "expanded_unique_state_max": 279935,
+      "expanded_unique_state_min": 279935,
+      "max_edge_absolute_depth_delta": 1,
+      "move": [
+        4,
+        21,
+        5,
+        17
+      ],
+      "neighbor_index": 1,
+      "unit_slope": true
+    },
+    {
+      "all_height_labels_preserved": false,
+      "child_edges": 48,
+      "child_states": 32,
+      "depth11_found": false,
+      "depth_counts": {
+        "6": 2,
+        "7": 11,
+        "8": 19
+      },
+      "expanded_unique_state_max": 419903,
+      "expanded_unique_state_min": 419903,
+      "max_edge_absolute_depth_delta": 1,
+      "move": [
+        5,
+        22,
+        21,
+        14
+      ],
+      "neighbor_index": 3,
+      "unit_slope": true
+    },
+    {
+      "all_height_labels_preserved": false,
+      "child_edges": 48,
+      "child_states": 32,
+      "depth11_found": false,
+      "depth_counts": {
+        "5": 2,
+        "6": 10,
+        "7": 18,
+        "8": 2
+      },
+      "expanded_unique_state_max": 279935,
+      "expanded_unique_state_min": 279935,
+      "max_edge_absolute_depth_delta": 1,
+      "move": [
+        15,
+        22,
+        6,
+        11
+      ],
+      "neighbor_index": 11,
+      "unit_slope": true
+    },
+    {
+      "all_height_labels_preserved": false,
+      "child_edges": 8,
+      "child_states": 8,
+      "depth11_found": false,
+      "depth_counts": {
+        "7": 2,
+        "8": 5,
+        "9": 1
+      },
+      "expanded_unique_state_max": 279935,
+      "expanded_unique_state_min": 279935,
+      "max_edge_absolute_depth_delta": 1,
+      "move": [
+        17,
+        21,
+        15,
+        4
+      ],
+      "neighbor_index": 13,
+      "unit_slope": true
+    },
+    {
+      "all_height_labels_preserved": false,
+      "child_edges": 5,
+      "child_states": 6,
+      "depth11_found": false,
+      "depth_counts": {
+        "4": 1,
+        "5": 5
+      },
+      "expanded_unique_state_max": 314495,
+      "expanded_unique_state_min": 314495,
+      "max_edge_absolute_depth_delta": 1,
+      "move": [
+        19,
+        22,
+        13,
+        18
+      ],
+      "neighbor_index": 14,
+      "unit_slope": true
+    },
+    {
+      "all_height_labels_preserved": false,
+      "child_edges": 22,
+      "child_states": 16,
+      "depth11_found": false,
+      "depth_counts": {
+        "8": 9,
+        "9": 7
+      },
+      "expanded_unique_state_max": 311039,
+      "expanded_unique_state_min": 311039,
+      "max_edge_absolute_depth_delta": 1,
+      "move": [
+        21,
+        22,
+        6,
+        5
+      ],
+      "neighbor_index": 16,
+      "unit_slope": true
+    }
+  ],
+  "neighbors_evaluated": 6,
+  "selected_neighbor_indices": [
+    1,
+    3,
+    11,
+    13,
+    14,
+    16
+  ],
+  "source_component_summary": "python/Tromino/results/repair-depth/w9-state-component-v24/summary.json",
+  "states_evaluated": 98,
+  "unit_slope_neighbors": [
+    1,
+    3,
+    11,
+    13,
+    14,
+    16
+  ],
+  "witness": "python/Tromino/results/repair-depth/seeded-w9-frontier-d10-v24/best_frontier_witness.json"
+}

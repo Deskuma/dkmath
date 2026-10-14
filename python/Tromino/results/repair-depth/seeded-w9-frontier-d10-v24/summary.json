@@ -1,0 +1,24 @@
+{
+  "best_objective": [
+    9,
+    2,
+    11,
+    0
+  ],
+  "best_resolved_depth": 9,
+  "best_resolved_seed": 11000029,
+  "best_seed": 11000009,
+  "best_unresolved_classification": null,
+  "best_unresolved_seed": null,
+  "classifications": {
+    "solved": 32
+  },
+  "elapsed_seconds": 4239.287391901016,
+  "jobs_completed": 32,
+  "max_resolved_depth": 9,
+  "mean_resolved_depth": 9,
+  "resolved_jobs": 32,
+  "stopped_on_target": false,
+  "target_depth": 10,
+  "target_found": false
+}

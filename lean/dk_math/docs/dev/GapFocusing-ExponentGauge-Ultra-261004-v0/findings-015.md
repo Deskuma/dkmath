@@ -1,0 +1,17 @@
+# Findings 015
+
+1. Source audit: the nine requested modules were read; exact names are recorded in [source-inventory-015.md](source-inventory-015.md).
+2. Carrier checkpoint: reuse the full reduced quotient interval. Its wave inverse and `paritySafeActiveWaveOffsets_quotient_properties` imply every quotient exceeds n. No below-n prime class exists.
+3. Routing correction: reduced/coprime is weaker than sqrt-rough. At n=11, owner 5, quotient 27 reconstructs point 135, rejected by prime 3. Therefore full composite fibers require an explicit small-prime rejected class.
+4. Above-n conjecture correction: p<=n and point>n² force every complementary quotient>n. Above-n restriction cannot reduce supported-owner multiplicity.
+5. Cross filter / prime-composite / seat checkpoints: `sqrt_cross_fiber_eq_quotient_prime_filter`, `sqrt_quotient_prime_composite_partition`, `sqrt_quotient_seat_packet`, `sqrt_quotient_seat_rough_iff`, and exact odd-anchor floor count compile in the focused quotient module.
+6. Owner normal-form checkpoint: one generic three-factor packet (allowing repeated primes) gives all supported complements, nonprimality, and the strict above-n inequality. The quotient owner relation equals existing actual support.
+7. Multiplicity checkpoint: `sqrt_cube_quotient_owner_multiplicity`, `sqrt_repeated_quotient_owner_multiplicity`, `sqrt_triple_quotient_owner_multiplicity` compile with values 1,2,3. `sqrt_quotient_owners_above_eq_support` proves the proposed variable above-n multiplicity cannot occur.
+8. Global / isolation checkpoints: corrected raw total is Cross+Cube+2Repeated+3Triple+Rejected. Routed total equals existing rough incidence. Composite raw total includes the rejected term. Additive bounds and a census-budget consumer compile.
+9. Calibration checkpoint: all six reduced-floor totals and three-prime rejection lower bounds are kernel checked. Existing census adapters prove exact rejected totals without external primality enumeration.
+10. New endpoint checkpoint: 1031 uses total661, rejection>=363, R316; its endpoint is kernel checked with no whole E/I or Cross evaluation.
+11. Diagnostic checkpoint: all 429 odd prime anchors 3..3000 were scanned with full per-owner counts preserved. Smallest rejected example is n11/p5/q27; smallest multiowner example is n8/point75, and n13/point175 among prime anchors. Kernel bounded minimality tests compile.
+12. Quantitative checkpoint: without rejection, none of the mandatory anchors satisfies the routed census demand. A verified three-prime rejection lower bound makes all six satisfy the corrected budget. The new 1031 certificate additionally proves U>=18 without enumerating U.
+13. Next-basis diagnostic: the three-prime budget passes 410/429 finite anchors; adding 11 to the 19 failures passes all 19 diagnostically. This extra-basis probe is not a Lean theorem or an asymptotic statement.
+14. Judgment checkpoint: the intended raw law without rejection is false, so select Outcome C. All bridges in the corrected law are proved; no owner-multiplicity bridge remains.
+15. Final build checkpoint: focused 9063 jobs, final regression 9058, facade9089, root10392, axiom9099 all PASS. All77 new public declaration axiom sets (production47, tests30) are checked against the standard logical set; no new declaration depends on sorryAx. New Lean headers/markers and artifact checks are recorded in [validation-015.md](validation-015.md).

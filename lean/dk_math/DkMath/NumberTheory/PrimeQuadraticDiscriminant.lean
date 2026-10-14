@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 -/
 
 import DkMath.NumberTheory.TraceOneQuadratic
+import Mathlib.Tactic.NormNum.Prime
 
 #print "file: DkMath.NumberTheory.PrimeQuadraticDiscriminant"
 
@@ -52,6 +53,11 @@ def signedPrimeParameter (p : ℕ) : ℤ :=
 /-- The signed-prime trace-one parameter specializes to `-1` at `p = 3`. -/
 theorem signedPrimeParameter_three :
     signedPrimeParameter 3 = -1 := by
+  norm_num [signedPrimeParameter, signedPrimeDiscriminant]
+
+/-- The signed-prime trace-one parameter is `1` at `p = 5`. -/
+theorem signedPrimeParameter_five :
+    signedPrimeParameter 5 = 1 := by
   norm_num [signedPrimeParameter, signedPrimeDiscriminant]
 
 theorem discr_signedPrimeParameter

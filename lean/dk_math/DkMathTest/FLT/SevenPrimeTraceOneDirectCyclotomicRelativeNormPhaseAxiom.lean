@@ -1,0 +1,15 @@
+import DkMath.FLT.Seven.PrimeTraceOneDirectCyclotomicRelativeNormPhase
+
+#print "file: DkMathTest.FLT.SevenPrimeTraceOneDirectCyclotomicRelativeNormPhaseAxiom"
+
+open DkMath.FLT
+open DkMath.FLT.Seven
+
+#print axioms DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.quadraticNormUnit_star
+#print axioms DkMath.FLT.Seven.directRelativeNormOnePhase_norm_one
+#print axioms DkMath.FLT.Seven.directRelativeNormOnePhase_sub_one_mem_sevenIdeal
+#print axioms DkMath.FLT.Seven.exists_directRelativeNormOnePhasePacket
+#print axioms DkMath.FLT.Seven.directRelativeNormOnePhase_eq_one_of_target
+#print axioms DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket.unit_isSeventhPower_of_phase_target
+#print axioms DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket.exists_quotient_seventhPower_of_phase_target
+#print axioms DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket.exists_directLinearFactor_seventhPower_of_phase_target
