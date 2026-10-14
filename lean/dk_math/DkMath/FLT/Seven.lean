@@ -201,6 +201,7 @@ import DkMath.FLT.Seven.SevenRamifiedFusionAllocationThreshold
 import DkMath.FLT.Seven.SevenRamifiedFusionAllocationResidueSieve
 import DkMath.FLT.Seven.SevenRamifiedFusionSixthPowerAllocationSieve
 import DkMath.FLT.Seven.SevenRamifiedFusionCenteredPolynomial
+import DkMath.FLT.Seven.ModFortyTwoAllocationSieveFacade
 import DkMath.FLT.Seven.SevenRamifiedFusionCenteredGnomonGap
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseCRTDecision
 import DkMath.FLT.Seven.SevenBaseTerminalCellwiseFixedSystem
@@ -208,6 +209,10 @@ import DkMath.FLT.Seven.SevenBaseTerminalCellCarryDependency
 import DkMath.FLT.Seven.SevenBaseTerminalDescentProvider
 import DkMath.FLT.Seven.SevenBaseTerminalDescentSeedExclusion
 import DkMath.FLT.Seven.SevenBaseTerminalAudit
+
+-- Conditional GTail research receivers; no FLT7 closure is asserted.
+import DkMath.FLT.Seven.GTailBridge
+import DkMath.FLT.Seven.GTailConstraintAudit
 
 #print "file: DkMath.FLT.Seven"
 

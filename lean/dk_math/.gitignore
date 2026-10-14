@@ -4,4 +4,6 @@ __*
 
 copilot-instructions.md
 
+*.sqlite3
+
 !docs/lib

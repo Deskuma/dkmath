@@ -6,6 +6,15 @@
 ライブラリ整備・リファクタリング・公開移行の基本方針を定める
 エージェント向け運用マニュアルである。
 
+主たる開発言語は Lean である。
+数学の形式化作業を行い数学検証を行うプロジェクトである。
+
+Lean の project root は [lakefile.toml](/lean/dk_math/lakefile.toml), [lean-toolchain](/lean/dk_math/lean-toolchain) のある場所、
+
+1. `/lean/dk_math`
+
+になる。
+
 本プロジェクトでは、研究中の実験的実装を `DkMath.*` に保持しつつ、
 段階的な整理・抽象化・公開準備を `DkMath.Lib.*` に集約し、
 最終的に公開ライブラリ `DkMathlib.*` として切り出す。
