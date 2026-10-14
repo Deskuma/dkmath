@@ -61,7 +61,7 @@ FLT7 independent closure: **OPEN**.
 **Gate 002: concrete degree-six Kummer unit bridge (G1–G3)**, per
 [instruction-002.md](instruction-002.md). Initial implementation order:
 
-1. From congruence (u \equiv m\pmod 7), prove `u = starUnit u`
+1. From scalar congruence `u ≡ m (mod 7)`, prove `u = starUnit u`
    using the *existing* norm-one phase theorem.
 2. Derive the seventh-power property of `quadraticNormUnit u` by a
    verifiable link to the *existing* real-cubic projective-log criterion.
