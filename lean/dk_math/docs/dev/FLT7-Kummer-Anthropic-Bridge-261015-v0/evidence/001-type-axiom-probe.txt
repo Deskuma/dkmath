@@ -1,0 +1,333 @@
+file: DkMathTest.FLT.Seven.KummerAnthropicBridgeAudit001
+DkMath.FLT.descentExistence_exists_iff_gnReduction_exists (p y xq : ℕ) :
+  (∃ g', g' * DkMath.CosmicFormulaBinom.GN p g' y = xq ^ p) ↔ ∃ z', z' ^ p = xq ^ p + y ^ p
+'DkMath.FLT.descentExistence_exists_iff_gnReduction_exists' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.FLT.PrimeGe5BranchAPrimitiveQAdicGapReductionGapDivisibleBranchTarget : Prop
+'DkMath.FLT.PrimeGe5BranchAPrimitiveQAdicGapReductionGapDivisibleBranchTarget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.CyclotomicClassGroupPTorsionFreeTarget.{u} : Prop
+'DkMath.FLT.CyclotomicClassGroupPTorsionFreeTarget' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.FLT.CyclotomicIdealPthPowerTarget : Prop
+'DkMath.FLT.CyclotomicIdealPthPowerTarget' depends on axioms: [propext]
+DkMath.FLT.CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget : Prop
+'DkMath.FLT.CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree
+  (hCl : DkMath.FLT.CyclotomicClassGroupPTorsionFreeTarget) :
+  DkMath.FLT.CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget
+'DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.cyclotomicPrincipalization_of_classGroupPTorsionFree
+  (hCl : DkMath.FLT.CyclotomicClassGroupPTorsionFreeTarget) : DkMath.FLT.CyclotomicPrincipalizationTarget
+'DkMath.FLT.cyclotomicPrincipalization_of_classGroupPTorsionFree' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute
+  (hPeq : DkMath.FLT.PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+  (hReg : DkMath.FLT.PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+  (hCl : DkMath.FLT.CyclotomicClassGroupPTorsionFreeTarget)
+  (hPFE : DkMath.FLT.PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+  (hNoLift : DkMath.FLT.TriominoCosmicNonLiftableGNBridge) : DkMath.FLT.FLTPrimeGe5Target
+'DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+DkMath.FLT.FLTPrimeGe5Target_of_refinedRegularPrimeRoute.{u_1}
+  (hPeq : DkMath.FLT.PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+  (hRegBranch : DkMath.FLT.PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+  (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → DkMath.FLT.IsRegularPrimeReceiver p)
+  (hCl : DkMath.FLT.CyclotomicClassGroupPTorsionFreeTarget) (hUnit : DkMath.FLT.CyclotomicUnitNormalizationTarget)
+  (hNorm : DkMath.FLT.CyclotomicNormDescentTarget) (hPFE : DkMath.FLT.PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+  (hNoLift : DkMath.FLT.TriominoCosmicNonLiftableGNBridge) : DkMath.FLT.FLTPrimeGe5Target
+'DkMath.FLT.FLTPrimeGe5Target_of_refinedRegularPrimeRoute' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute_of_kernelSplit
+  (hPeq : DkMath.FLT.PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+  (hReg : DkMath.FLT.PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+  (hCl : DkMath.FLT.CyclotomicClassGroupPTorsionFreeTarget)
+  (hPrep : DkMath.FLT.CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+  (hDesc : DkMath.FLT.CyclotomicPrincipalizationNonFirstCaseDescentTarget)
+  (hPFE : DkMath.FLT.PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+  (hNoLift : DkMath.FLT.TriominoCosmicNonLiftableGNBridge) : DkMath.FLT.FLTPrimeGe5Target
+'DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute_of_kernelSplit' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_withoutProduct.{u} {K : Type u} [Field K]
+  [NumberField K] [CharZero K] {p x y z : ℕ} [hp : Fact (Nat.Prime p)] [IsCyclotomicExtension {p} ℚ K] {ζ : K}
+  (hζ : IsPrimitiveRoot ζ p) (hpack : DkMath.FLT.PrimeGe5CounterexamplePack p x y z) {gap : ℕ}
+  (hgap_eq : ↑z - ↑y = ↑gap) (hFirstCase : ¬p ∣ gap)
+  (hLinNe : DkMath.FLT.ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers hζ) :
+  DkMath.FLT.ChosenCyclotomicLinearFactorSpanEqPowInRingOfIntegers hζ
+'DkMath.FLT.chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_withoutProduct' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.cyclotomicUnitNormalization_of_firstCase_of_pack_thin_withoutProduct.{u} {K : Type u} [Field K]
+  [NumberField K] [CharZero K] {p x y z : ℕ} [hp : Fact (Nat.Prime p)] [IsCyclotomicExtension {p} ℚ K] {ζ : K}
+  (hζ : IsPrimitiveRoot ζ p) (hpack : DkMath.FLT.PrimeGe5CounterexamplePack p x y z) {gap : ℕ}
+  (hgap_eq : ↑z - ↑y = ↑gap) (hFirstCase : ¬p ∣ gap)
+  (hLinNe : DkMath.FLT.ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers hζ)
+  (hKill : DkMath.FLT.CyclotomicPTorsionAnnihilationTarget) :
+  ∃ β unitFactor,
+    IsUnit unitFactor ∧ DkMath.FLT.chosenCyclotomicLinearFactorInRingOfIntegers hζ y z = unitFactor * β ^ p
+'DkMath.FLT.cyclotomicUnitNormalization_of_firstCase_of_pack_thin_withoutProduct' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_hzEq {p x y z q t s z' : ℕ}
+  (hpack : DkMath.FLT.PrimeGe5CounterexamplePack p x y z) (hq : Nat.Prime q) (hqx : q ∣ x) (hqne : q ≠ p)
+  (hsx : x = p * (t * s)) (hzEq : z' ^ p = (x / q) ^ p + y ^ p) :
+  DkMath.FLT.PrimeGe5CounterexamplePack p (x / q) y z' ∧ p ∣ z' - y ∧ z' < z
+'DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_hzEq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.Lib.NumberTheory.classGroupPTorsionFreeAt.{u_1} (R : Type u_1) (p : ℕ) [CommRing R] [IsDomain R] : Prop
+'DkMath.Lib.NumberTheory.classGroupPTorsionFreeAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.Lib.NumberTheory.classGroupPTorsionFreeAt_of_isPrincipalIdealRing.{u_1} {R : Type u_1} [CommRing R] [IsDomain R]
+  [IsPrincipalIdealRing R] (p : ℕ) : DkMath.Lib.NumberTheory.classGroupPTorsionFreeAt R p
+'DkMath.Lib.NumberTheory.classGroupPTorsionFreeAt_of_isPrincipalIdealRing' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.Lib.NumberTheory.classGroupPTorsionFreeAt_of_coprime_card.{u_1} {R : Type u_1} [CommRing R] [IsDomain R]
+  [Fintype (ClassGroup R)] {p : ℕ} (hcop : p.Coprime (Fintype.card (ClassGroup R))) :
+  DkMath.Lib.NumberTheory.classGroupPTorsionFreeAt R p
+'DkMath.Lib.NumberTheory.classGroupPTorsionFreeAt_of_coprime_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.Lib.NumberTheory.exists_eq_pow_of_isCoprime_mul_eq_pow.{u_1} {R : Type u_1} [CommRing R] [IsDedekindDomain R]
+  {I J K : Ideal R} {p : ℕ} (hcop : IsCoprime I J) (hpow : I * J = K ^ p) : ∃ A, I = A ^ p
+'DkMath.Lib.NumberTheory.exists_eq_pow_of_isCoprime_mul_eq_pow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.Lib.NumberTheory.ideal_isPrincipal_of_pow_isPrincipal_of_classGroupPTorsionFreeAt.{u_1} {R : Type u_1}
+  [CommRing R] [IsDedekindDomain R] {I : Ideal R} (hI : I ∈ nonZeroDivisors (Ideal R)) {p : ℕ}
+  (hfree : DkMath.Lib.NumberTheory.classGroupPTorsionFreeAt R p) (hIPrincipal : Submodule.IsPrincipal (I ^ p)) :
+  Submodule.IsPrincipal I
+'DkMath.Lib.NumberTheory.ideal_isPrincipal_of_pow_isPrincipal_of_classGroupPTorsionFreeAt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.Lib.NumberTheory.exists_unit_mul_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt.{u_1} {R : Type u_1} [CommRing R]
+  [IsDedekindDomain R] {I : Ideal R} {a : R} {p : ℕ} (hI0 : I ∈ nonZeroDivisors (Ideal R))
+  (hfree : DkMath.Lib.NumberTheory.classGroupPTorsionFreeAt R p) (hspan : Ideal.span {a} = I ^ p) :
+  ∃ u gamma, IsUnit u ∧ Ideal.span {gamma} = I ∧ a = u * gamma ^ p
+'DkMath.Lib.NumberTheory.exists_unit_mul_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.Lib.NumberTheory.exists_eq_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt.{u_1} {R : Type u_1} [CommRing R]
+  [IsDedekindDomain R] {I : Ideal R} {a : R} {p : ℕ} (hI0 : I ∈ nonZeroDivisors (Ideal R))
+  (hfree : DkMath.Lib.NumberTheory.classGroupPTorsionFreeAt R p) (hunit : ∀ (u : Rˣ), ∃ e, u = e ^ p)
+  (hspan : Ideal.span {a} = I ^ p) : ∃ delta, a = delta ^ p
+'DkMath.Lib.NumberTheory.exists_eq_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.Lib.NumberTheory.UnitPowerSectorSystem.{u_1} (R : Type u_1) [CommMonoidWithZero R] (p : ℕ) : Type (max 1 u_1)
+'DkMath.Lib.NumberTheory.UnitPowerSectorSystem' depends on axioms: [propext]
+DkMath.Lib.NumberTheory.exists_sector_mul_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt.{u_1} {R : Type u_1}
+  [CommRing R] [IsDedekindDomain R] {I : Ideal R} {a : R} {p : ℕ}
+  (S : DkMath.Lib.NumberTheory.UnitPowerSectorSystem R p) (hI0 : I ∈ nonZeroDivisors (Ideal R))
+  (hfree : DkMath.Lib.NumberTheory.classGroupPTorsionFreeAt R p) (hspan : Ideal.span {a} = I ^ p) :
+  ∃ s delta, a = ↑(S.rep s) * delta ^ p
+'DkMath.Lib.NumberTheory.exists_sector_mul_pow_of_span_eq_pow_of_classGroupPTorsionFreeAt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.CounterexamplePack (x y z : ℕ) : Prop
+'DkMath.FLT.Seven.CounterexamplePack' depends on axioms: [propext]
+DkMath.FLT.Seven.nonempty_primitiveCounterexampleRamifiedProvenance {x y z : ℕ}
+  (source : DkMath.FLT.Seven.CounterexamplePack x y z) :
+  Nonempty (DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source)
+'DkMath.FLT.Seven.nonempty_primitiveCounterexampleRamifiedProvenance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.CyclotomicSeven.ringOfIntegers_isPrincipalIdealRing.{u_1} (K : Type u_1) [Field K] [NumberField K]
+  [hK : IsCyclotomicExtension {7} ℚ K] : IsPrincipalIdealRing (NumberField.RingOfIntegers K)
+'DkMath.FLT.Seven.CyclotomicSeven.ringOfIntegers_isPrincipalIdealRing' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.CyclotomicSeven.classNumber_eq_one.{u_1} (K : Type u_1) [Field K] [NumberField K]
+  [hK : IsCyclotomicExtension {7} ℚ K] : NumberField.classNumber K = 1
+'DkMath.FLT.Seven.CyclotomicSeven.classNumber_eq_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.FLT.Seven.CyclotomicSeven.classGroupPTorsionFreeAt_ringOfIntegers_seven.{u_1} (K : Type u_1) [Field K]
+  [NumberField K] [hK : IsCyclotomicExtension {7} ℚ K] :
+  DkMath.Lib.NumberTheory.classGroupPTorsionFreeAt (NumberField.RingOfIntegers K) 7
+'DkMath.FLT.Seven.CyclotomicSeven.classGroupPTorsionFreeAt_ringOfIntegers_seven' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ringOfIntegersToRing :
+  NumberField.RingOfIntegers (CyclotomicField 7 ℚ) →ₐ[ℤ] DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.Ring
+'DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ringOfIntegersToRing' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ringOfIntegersToRing_injective :
+  Function.Injective ⇑DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ringOfIntegersToRing
+'DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ringOfIntegersToRing_injective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ringOfIntegersToRingEquiv :
+  NumberField.RingOfIntegers (CyclotomicField 7 ℚ) ≃ₐ[ℤ] DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.Ring
+'DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ringOfIntegersToRingEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ringIsPrincipalIdealRing :
+  IsPrincipalIdealRing DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.Ring
+'DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ringIsPrincipalIdealRing' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.classGroupPTorsionFreeAt_seven :
+  DkMath.Lib.NumberTheory.classGroupPTorsionFreeAt DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.Ring 7
+'DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.classGroupPTorsionFreeAt_seven' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.unitMulPowOfSpanEqPow
+  {I : Ideal DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.Ring} {a : DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.Ring}
+  {n : ℕ} (h : Ideal.span {a} = I ^ n) : ∃ u, IsUnit u ∧ a = u * Submodule.IsPrincipal.generator I ^ n
+'DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.unitMulPowOfSpanEqPow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.sevenIdeal : Ideal DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.Ring
+'DkMath.FLT.Seven.sevenIdeal' depends on axioms: [propext, Quot.sound]
+DkMath.FLT.Seven.DegreeSixUnitCongruentToRationalModSeven (u : DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.Ring) : Prop
+'DkMath.FLT.Seven.DegreeSixUnitCongruentToRationalModSeven' depends on axioms: [propext, Quot.sound]
+DkMath.FLT.Seven.DegreeSixKummerUnitLemmaAtSeven : Prop
+'DkMath.FLT.Seven.DegreeSixKummerUnitLemmaAtSeven' depends on axioms: [propext, Quot.sound]
+DkMath.FLT.Seven.directCyclotomicPhaseQuotient_one_isCoprime_with_tail {x y z : ℕ}
+  {source : DkMath.FLT.Seven.CounterexamplePack x y z}
+  (r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source) :
+  IsCoprime (Ideal.span {DkMath.FLT.Seven.directCyclotomicPhaseQuotient r 1})
+    (Ideal.span {DkMath.FLT.Seven.directCyclotomicTail r})
+'DkMath.FLT.Seven.directCyclotomicPhaseQuotient_one_isCoprime_with_tail' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.directCyclotomicChosenQuotient_ideal_is_seventh_power {x y z : ℕ}
+  {source : DkMath.FLT.Seven.CounterexamplePack x y z}
+  (r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source) :
+  ∃ I, Ideal.span {DkMath.FLT.Seven.directCyclotomicPhaseQuotient r 1} = I ^ 7
+'DkMath.FLT.Seven.directCyclotomicChosenQuotient_ideal_is_seventh_power' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.directLinearFactor_span_eq_ramifiedPrime_mul_seventh_power {x y z : ℕ}
+  {source : DkMath.FLT.Seven.CounterexamplePack x y z}
+  (r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source) :
+  ∃ I,
+    Ideal.span {DkMath.FLT.Seven.directLinearFactor r} =
+      DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ramifiedPrime * I ^ 7
+'DkMath.FLT.Seven.directLinearFactor_span_eq_ramifiedPrime_mul_seventh_power' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.exists_directCyclotomicChosenQuotientPowerPacket {x y z : ℕ}
+  {source : DkMath.FLT.Seven.CounterexamplePack x y z}
+  (r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source) :
+  Nonempty (DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket source r)
+'DkMath.FLT.Seven.exists_directCyclotomicChosenQuotientPowerPacket' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket.unit_congruentToRationalModSeven {x y z : ℕ}
+  {source : DkMath.FLT.Seven.CounterexamplePack x y z}
+  {r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source}
+  (p : DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket source r) :
+  DkMath.FLT.Seven.DegreeSixUnitCongruentToRationalModSeven p.unit
+'DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket.unit_congruentToRationalModSeven' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket.exists_realNormUnit_seventhPower {x y z : ℕ}
+  {source : DkMath.FLT.Seven.CounterexamplePack x y z}
+  {r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source}
+  (p : DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket source r) :
+  ∃ v, DkMath.FLT.Seven.directChosenQuotientNormUnit p = v ^ 7
+'DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket.exists_realNormUnit_seventhPower' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.relativeNormOneScalarUnitAtSeven_unconditional :
+  DkMath.FLT.Seven.RelativeNormOneScalarUnitAtSeven
+'DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.relativeNormOneScalarUnitAtSeven_unconditional' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.DirectCyclotomicChosenQuotientPowerPacket.unit_isSeventhPower_unconditional
+  {x y z : ℕ} {source : DkMath.FLT.Seven.CounterexamplePack x y z}
+  {r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source}
+  (p : DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket source r) : ∃ w, ⋯.unit = w ^ 7
+'DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.DirectCyclotomicChosenQuotientPowerPacket.unit_isSeventhPower_unconditional' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.DirectCyclotomicChosenQuotientPowerPacket.exists_quotient_seventhPower_unconditional
+  {x y z : ℕ} {source : DkMath.FLT.Seven.CounterexamplePack x y z}
+  {r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source}
+  (p : DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket source r) :
+  ∃ gamma, DkMath.FLT.Seven.directCyclotomicPhaseQuotient r 1 = gamma ^ 7
+'DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.DirectCyclotomicChosenQuotientPowerPacket.exists_quotient_seventhPower_unconditional' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.DirectCyclotomicChosenQuotientPowerPacket.exists_directLinearFactor_seventhPower_unconditional
+  {x y z : ℕ} {source : DkMath.FLT.Seven.CounterexamplePack x y z}
+  {r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source}
+  (p : DkMath.FLT.Seven.DirectCyclotomicChosenQuotientPowerPacket source r) :
+  ∃ gamma,
+    DkMath.FLT.Seven.directLinearFactor r = DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ramifiedUniformizer * gamma ^ 7
+'DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.DirectCyclotomicChosenQuotientPowerPacket.exists_directLinearFactor_seventhPower_unconditional' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.SevenRealCubic.unit_isSeventhPower_iff_projectiveLog_eq_zero
+  (u : DkMath.FLT.Seven.SevenRealCubicIntˣ) :
+  (∃ v, u = v ^ 7) ↔ DkMath.FLT.Seven.SevenRealCubicInt.projectiveLog (Additive.ofMul u) = 0
+'DkMath.FLT.Seven.SevenRealCubic.unit_isSeventhPower_iff_projectiveLog_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.SevenRealCubic.directOrbitCommonPrime_kummer_residue_condition {x y z : ℕ}
+  {source : DkMath.FLT.Seven.CounterexamplePack x y z}
+  {r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source}
+  {p : DkMath.FLT.Seven.DirectRealCubicRootPacket source r} (t : DkMath.FLT.Seven.DirectOrbitSquareRefinementPacket p)
+  {P : Ideal DkMath.FLT.Seven.SevenRealCubic.O} (hPprime : P.IsPrime)
+  (h14 :
+    ∃ y_1,
+      y_1 ≠ 0 ∧
+        y_1 ^ 14 =
+          (DkMath.FLT.Seven.SevenRealCubic.directOrbitCommonPrimeEval P)
+            ↑(DkMath.FLT.Seven.SevenRealCubic.directOrbitCommonPrimeTwistRatio21 t)) :
+  ∃ z,
+    z ≠ 0 ∧
+      z ^ 7 =
+        (DkMath.FLT.Seven.SevenRealCubic.directOrbitCommonPrimeEval P)
+          ↑DkMath.FLT.Seven.SevenRealCubic.directOrbitCommonPrimeKummerUnit
+'DkMath.FLT.Seven.SevenRealCubic.directOrbitCommonPrime_kummer_residue_condition' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+DkMath.FLT.Seven.SevenRealCubic.directOrbitCommonPrime_kummer_beta_form {x y z : ℕ}
+  {source : DkMath.FLT.Seven.CounterexamplePack x y z}
+  {r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source}
+  {p : DkMath.FLT.Seven.DirectRealCubicRootPacket source r} (t : DkMath.FLT.Seven.DirectOrbitSquareRefinementPacket p)
+  {P : Ideal DkMath.FLT.Seven.SevenRealCubic.O} (hPprime : P.IsPrime)
+  (h14 :
+    ∃ y_1,
+      y_1 ≠ 0 ∧
+        y_1 ^ 14 =
+          (DkMath.FLT.Seven.SevenRealCubic.directOrbitCommonPrimeEval P)
+            ↑(DkMath.FLT.Seven.SevenRealCubic.directOrbitCommonPrimeTwistRatio21 t)) :
+  ∃ beta z, beta ^ 3 = 2 * beta ^ 2 + beta - 1 ∧ z ≠ 0 ∧ z ^ 7 = beta * (1 + beta)
+'DkMath.FLT.Seven.SevenRealCubic.directOrbitCommonPrime_kummer_beta_form' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+∀ (u : SevenCyclotomicDegreeSixInt.Ringˣ), DegreeSixUnitCongruentToRationalModSeven ↑u → u = starUnit u : Prop
+∀ (u : SevenCyclotomicDegreeSixInt.Ringˣ),
+  DegreeSixUnitCongruentToRationalModSeven ↑u → ∃ v, quadraticNormUnit u = v ^ 7 : Prop
+∀ (u : SevenCyclotomicDegreeSixInt.Ringˣ), DegreeSixUnitCongruentToRationalModSeven ↑u → ∃ v, u = v ^ 7 : Prop
+AUDIT_ROOT DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute; constants=47604
+SORRY_CALLERS [DkMath.FLT.primeGe5BranchANormalFormNePCoprimeKernel_default,
+ DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree,
+ DkMath.NumberTheory.GcdNext.squarefree_implies_padic_val_le_one_research]
+AXIOMS [sorryAx, propext, Quot.sound, Classical.choice]; FINISHED_FLT7_OR_REGULAR []
+MISSING []; UNREADABLE []
+AUDIT_ROOT DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute_of_kernelSplit; constants=47547
+SORRY_CALLERS [DkMath.NumberTheory.GcdNext.squarefree_implies_padic_val_le_one_research]
+AXIOMS [propext, Quot.sound, Classical.choice, sorryAx]; FINISHED_FLT7_OR_REGULAR []
+MISSING []; UNREADABLE []
+AUDIT_ROOT DkMath.FLT.FLTPrimeGe5Target_of_refinedRegularPrimeRoute; constants=16314
+SORRY_CALLERS []
+AXIOMS [propext, Quot.sound, Classical.choice]; FINISHED_FLT7_OR_REGULAR []
+MISSING []; UNREADABLE []
+AUDIT_ROOT DkMath.FLT.Seven.nonempty_primitiveCounterexampleRamifiedProvenance; constants=12798
+SORRY_CALLERS []
+AXIOMS [propext, Quot.sound, Classical.choice]; FINISHED_FLT7_OR_REGULAR []
+MISSING []; UNREADABLE []
+AUDIT_ROOT DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.DirectCyclotomicChosenQuotientPowerPacket.exists_directLinearFactor_seventhPower_unconditional; constants=74756
+SORRY_CALLERS []
+AXIOMS [propext, Quot.sound, Classical.choice]; FINISHED_FLT7_OR_REGULAR []
+MISSING []; UNREADABLE []

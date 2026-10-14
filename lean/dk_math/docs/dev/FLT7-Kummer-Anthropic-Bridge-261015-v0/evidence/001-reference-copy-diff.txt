@@ -1,0 +1,680 @@
+--- attached/__S_flt_regular
++++ pinned/P2M/Sol/S_flt_regular
+@@ -203,7 +203,7 @@
+ theorem p_dvd_c_of_ab_of_anegc {p : ℕ} {a b c : ℤ} (hpri : p.Prime)
+     (hp : p ≠ 3) (h : a ^ p + b ^ p = c ^ p) (hab : a ≡ b [ZMOD p])
+     (hbc : b ≡ -c [ZMOD p]) : ↑p ∣ c := by
+-  let : Fact p.Prime := ⟨hpri⟩
++  letI : Fact p.Prime := ⟨hpri⟩
+   replace h := congrArg (fun n : ℤ => (n : ZMod p)) h
+   simp only [Int.cast_add, Int.cast_pow, ZMod.pow_card] at h
+   rw [← ZMod.intCast_eq_intCast_iff] at hab hbc
+@@ -348,7 +348,7 @@
+ 
+ theorem one_sub_zeta_prime {η : R} (hη : η ∈ nthRootsFinset p (1 : R)) (hne1 : η ≠ 1) :
+     Prime (1 - η) := by
+-  have : NeZero ((p : ℕ) : ℚ) := ⟨by exact_mod_cast (Fact.out : p.Prime).ne_zero⟩
++  haveI : NeZero ((p : ℕ) : ℚ) := ⟨by exact_mod_cast (Fact.out : p.Prime).ne_zero⟩
+   have h : IsPrimitiveRoot ((η : R) : K) p :=
+     IsPrimitiveRoot.coe_submonoidClass_iff.mpr
+       (isPrimitiveRoot_of_mem_nthRootsFinset' hη hne1)
+@@ -364,7 +364,7 @@
+     (hη₂ : η₂ ∈ nthRootsFinset p (1 : R)) (hdiff : η₁ ≠ η₂) (hwlog : η₁ ≠ 1) :
+     ∃ u : Rˣ, η₁ - η₂ = u * (1 - η₁) := by
+   have h : IsPrimitiveRoot η₁ p := isPrimitiveRoot_of_mem_nthRootsFinset' hη₁ hwlog
+-  rcases h.nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
++  rcases h.ntRootsFinset_pairwise_associated_sub_one_sub_of_prime
+     (Fact.out : p.Prime) hη₁ hη₂ hdiff with ⟨u, hu⟩
+   refine ⟨-u, ?_⟩
+   rw [← hu]
+@@ -417,8 +417,8 @@
+   have hprime3 := IsPrime.mem_or_mem hPrime hel22
+   have HC : 1 - η₁ ∈ P → False := by
+     intro h
+-    have : NeZero p := ⟨(Fact.out : p.Prime).ne_zero⟩
+-    have : NeZero ((p : ℕ) : ℚ) := ⟨by exact_mod_cast (Fact.out : p.Prime).ne_zero⟩
++    haveI : NeZero p := ⟨(Fact.out : p.Prime).ne_zero⟩
++    haveI : NeZero ((p : ℕ) : ℚ) := ⟨by exact_mod_cast (Fact.out : p.Prime).ne_zero⟩
+     have eta_sub_one_ne_zero := sub_ne_zero.mpr (Ne.symm hwlog)
+     have hηprime : IsPrime (Ideal.span ({1 - η₁} : Set R)) := by
+       rw [span_singleton_prime eta_sub_one_ne_zero]
+@@ -620,7 +620,7 @@
+ 
+ theorem exists_zeta_sub_one_dvd_sub_Int (a : 𝓞 K) :
+     ∃ b : ℤ, (hζ.toInteger - 1 : 𝓞 K) ∣ a - b := by
+-  have : NeZero p := ⟨hpri.out.ne_zero⟩
++  haveI : NeZero p := ⟨hpri.out.ne_zero⟩
+   simp_rw [← Ideal.Quotient.eq_zero_iff_dvd, ← Ideal.Quotient.mk_eq_mk, Submodule.Quotient.mk_sub,
+     sub_eq_zero, ← SModEq.def]
+   obtain ⟨n, hn⟩ := hζ.subOneIntegralPowerBasis.exists_smodEq a
+@@ -630,12 +630,12 @@
+ 
+ theorem exists_dvd_pow_sub_Int_pow (hp : p ≠ 2) (a : 𝓞 K) :
+     ∃ b : ℤ, ↑p ∣ a ^ p - (b : 𝓞 K) ^ p := by
+-  have : NeZero p := ⟨hpri.out.ne_zero⟩
+-  have := IsCyclotomicExtension.numberField {p} ℚ K
++  haveI : NeZero p := ⟨hpri.out.ne_zero⟩
++  haveI := IsCyclotomicExtension.numberField {p} ℚ K
+   obtain ⟨ζ, hζ⟩ := IsCyclotomicExtension.exists_isPrimitiveRoot ℚ K
+     (Set.mem_singleton p) hpri.1.ne_zero
+   have hassoc : Associated ((hζ.toInteger - 1) ^ (p - 1)) ((p : ℕ) : 𝓞 K) := by
+-    have h0 : IsCyclotomicExtension {p ^ (0 + 1)} ℚ K := by
++    haveI h0 : IsCyclotomicExtension {p ^ (0 + 1)} ℚ K := by
+       simpa using (inferInstance : IsCyclotomicExtension {p} ℚ K)
+     have hζ' : IsPrimitiveRoot ζ (p ^ (0 + 1)) := by simpa using hζ
+     have hmap := IsCyclotomicExtension.Rat.map_eq_span_zeta_sub_one_pow p 0 hζ'
+@@ -849,7 +849,7 @@
+   have h2 : (2 : 𝓞 K) ∉ Iη := by
+     intro hmem
+     rw [Ideal.mem_span_singleton] at hmem
+-    have h0 : IsCyclotomicExtension {p ^ (0 + 1)} ℚ K := by
++    haveI h0 : IsCyclotomicExtension {p ^ (0 + 1)} ℚ K := by
+       simpa using (inferInstance : IsCyclotomicExtension {p} ℚ K)
+     have hζ' : IsPrimitiveRoot ζ (p ^ (0 + 1)) := by simpa using hζ
+     refine hζ'.toInteger_sub_one_not_dvd_two (by omega) ?_
+@@ -864,7 +864,7 @@
+     ∃ m : ℕ, u * (unitsComplexConj K u)⁻¹ =
+       ((hζ.toInteger_isPrimitiveRoot.isUnit (NeZero.ne p)).unit ^ m) ^ 2 := by
+   have hpo : Odd p := (Fact.out : p.Prime).odd_of_ne_two hp.ne'
+-  have : NormedAlgebra ℚ ℂ := normedAlgebraRat
++  haveI : NormedAlgebra ℚ ℂ := normedAlgebraRat
+   have hfin :=
+     @NumberField.Embeddings.pow_eq_one_of_norm_eq_one K _ _ ℂ _ _ _
+       (u * (unitsComplexConj K u)⁻¹ : K) ?_ ?_
+@@ -993,9 +993,9 @@
+     simp [hpri.one_lt, Nat.sub_lt hpri.pos, sub_eq_add_neg]
+   rw [sum_range] at key
+   refine caseI (Dvd.dvd.mul_right (Dvd.dvd.mul_left ?_ _) _)
+-  have : NeZero p := ⟨hpri.ne_zero⟩
+-  have : Fact p.Prime := ⟨hpri⟩
+-  have : IsCyclotomicExtension {p} ℚ K := CyclotomicField.isCyclotomicExtension p ℚ
++  haveI : NeZero p := ⟨hpri.ne_zero⟩
++  haveI : Fact p.Prime := ⟨hpri⟩
++  haveI : IsCyclotomicExtension {p} ℚ K := CyclotomicField.isCyclotomicExtension p ℚ
+   simpa [f0k₁] using dvd_coeff_cycl_integer hζ (auxf0k₁ hp5 b) key ⟨1, hpri.one_lt⟩
+ 
+ include hpri in
+@@ -1023,9 +1023,9 @@
+   refine hab ?_
+   symm
+   rw [← ZMod.intCast_eq_intCast_iff, ZMod.intCast_eq_intCast_iff_dvd_sub]
+-  have : NeZero p := ⟨hpri.ne_zero⟩
+-  have : Fact p.Prime := ⟨hpri⟩
+-  have : IsCyclotomicExtension {p} ℚ K := CyclotomicField.isCyclotomicExtension p ℚ
++  haveI : NeZero p := ⟨hpri.ne_zero⟩
++  haveI : Fact p.Prime := ⟨hpri⟩
++  haveI : IsCyclotomicExtension {p} ℚ K := CyclotomicField.isCyclotomicExtension p ℚ
+   simpa [f0k₂] using dvd_coeff_cycl_integer hζ (auxf0k₂ hp5 a b) key ⟨0, hpri.pos⟩
+ 
+ include hpri in
+@@ -1064,9 +1064,9 @@
+     ring
+   rw [sum_range] at key
+   refine caseI (Dvd.dvd.mul_right (Dvd.dvd.mul_right ?_ _) _)
+-  have : NeZero p := ⟨hpri.ne_zero⟩
+-  have : Fact p.Prime := ⟨hpri⟩
+-  have : IsCyclotomicExtension {p} ℚ K := CyclotomicField.isCyclotomicExtension p ℚ
++  haveI : NeZero p := ⟨hpri.ne_zero⟩
++  haveI : Fact p.Prime := ⟨hpri⟩
++  haveI : IsCyclotomicExtension {p} ℚ K := CyclotomicField.isCyclotomicExtension p ℚ
+   simpa [f1k₂] using dvd_coeff_cycl_integer hζ (auxf1k₂ hpri a) key ⟨0, hpri.pos⟩
+ 
+ end FltRegular.CaseI
+@@ -1153,7 +1153,7 @@
+     simp only [mem_insert, mem_singleton] at hx
+     rcases hx with (H | H | H) <;> simpa [H]
+   rw [hgcd] at Hq
+-  exact hqpri.not_isUnit (isUnit_of_dvd_one Hq)
++  exact hqpri.not_unit (isUnit_of_dvd_one Hq)
+ 
+ def f (a b : ℤ) (k₁ k₂ : ℕ) : ℕ → ℤ := fun x =>
+   if x = 0 then a else if x = 1 then b else if x = k₁ then -a else if x = k₂ then -b else 0
+@@ -1195,7 +1195,7 @@
+     {a b : ℤ} {ζ : 𝓞 K'} (hreg : p.Coprime <| Fintype.card <| ClassGroup (𝓞 K'))
+     {I : Ideal (𝓞 K')} (hI : span ({↑a + ζ * ↑b} : Set (𝓞 K')) = I ^ p) :
+     ∃ (u : (𝓞 K')ˣ) (α : 𝓞 K'), ↑u * α ^ p = ↑a + ζ * ↑b := by
+-  have : NumberField K' := IsCyclotomicExtension.numberField {p} ℚ K'
++  haveI : NumberField K' := IsCyclotomicExtension.numberField {p} ℚ K'
+   obtain ⟨α, hα⟩ : I.IsPrincipal := by
+     apply isPrincipal_of_isPrincipal_pow_of_coprime hreg
+     exact ⟨⟨↑a + ζ * ↑b, by rw [submodule_span_eq, hI]⟩⟩
+@@ -1214,8 +1214,8 @@
+     (caseI : ¬↑p ∣ a * b * c) {ζ : R} (hζ : ζ ∈ nthRootsFinset p (1 : R)) :
+     ∃ I, span ({a + ζ * b} : Set R) = I ^ p := by
+   classical
+-  have : NeZero p := ⟨hpri.out.ne_zero⟩
+-  have : NeZero ((p : ℕ) : ℚ) := ⟨by exact_mod_cast hpri.out.ne_zero⟩
++  haveI : NeZero p := ⟨hpri.out.ne_zero⟩
++  haveI : NeZero ((p : ℕ) : ℚ) := ⟨by exact_mod_cast hpri.out.ne_zero⟩
+   have H₁ := congr_arg (@Int.cast R _) H
+   simp only [Int.cast_add, Int.cast_pow] at H₁
+   have hζ' := (zeta_spec p ℚ K).toInteger_isPrimitiveRoot
+@@ -1233,8 +1233,8 @@
+     (hgcd : ({a, b, c} : Finset ℤ).gcd id = 1) (caseI : ¬↑p ∣ a * b * c)
+     (H : a ^ p + b ^ p = c ^ p) (hζ : IsPrimitiveRoot ζ p) :
+     ∃ (u : Rˣ) (α : R), ↑u * α ^ p = ↑a + ζ * ↑b := by
+-  have : NeZero p := ⟨hpri.out.ne_zero⟩
+-  have : NeZero ((p : ℕ) : ℚ) := ⟨by exact_mod_cast hpri.out.ne_zero⟩
++  haveI : NeZero p := ⟨hpri.out.ne_zero⟩
++  haveI : NeZero ((p : ℕ) : ℚ) := ⟨by exact_mod_cast hpri.out.ne_zero⟩
+   replace hζ := hζ.mem_nthRootsFinset hpri.out.pos
+   obtain ⟨I, hI⟩ := exists_ideal hp5 H hgcd caseI hζ
+   exact is_principal_aux hreg hI
+@@ -1245,10 +1245,10 @@
+     ∃ k₁ k₂ : Fin p,
+       k₂ ≡ k₁ - 1 [ZMOD p] ∧
+         ↑p ∣ ↑a + ↑b * ζ - ↑a * ζ ^ (k₁ : ℕ) - ↑b * ζ ^ (k₂ : ℕ) := by
+-  have : NeZero p := ⟨hpri.out.ne_zero⟩
+-  have : NeZero ((p : ℕ) : ℚ) := ⟨by exact_mod_cast hpri.out.ne_zero⟩
+-  have : IsCyclotomicExtension {p} ℚ K := CyclotomicField.isCyclotomicExtension p ℚ
+-  have : NumberField.IsCMField K :=
++  haveI : NeZero p := ⟨hpri.out.ne_zero⟩
++  haveI : NeZero ((p : ℕ) : ℚ) := ⟨by exact_mod_cast hpri.out.ne_zero⟩
++  haveI : IsCyclotomicExtension {p} ℚ K := CyclotomicField.isCyclotomicExtension p ℚ
++  haveI : NumberField.IsCMField K :=
+     IsCyclotomicExtension.Rat.isCMField (S := {p}) K ⟨p, rfl, by omega⟩
+   let ζ' := (ζ : K)
+   have hζ' : IsPrimitiveRoot ζ' p := IsPrimitiveRoot.coe_submonoidClass_iff.2 hζ
+@@ -1300,9 +1300,9 @@
+     (hgcd : ({a, b, c} : Finset ℤ).gcd id = 1) (hab : ¬a ≡ b [ZMOD p])
+     (caseI : ¬↑p ∣ a * b * c) :
+     a ^ p + b ^ p ≠ c ^ p := by
+-  have : NeZero p := ⟨hpri.out.ne_zero⟩
+-  have : NeZero ((p : ℕ) : ℚ) := ⟨by exact_mod_cast hpri.out.ne_zero⟩
+-  have : IsCyclotomicExtension {p} ℚ K := CyclotomicField.isCyclotomicExtension p ℚ
++  haveI : NeZero p := ⟨hpri.out.ne_zero⟩
++  haveI : NeZero ((p : ℕ) : ℚ) := ⟨by exact_mod_cast hpri.out.ne_zero⟩
++  haveI : IsCyclotomicExtension {p} ℚ K := CyclotomicField.isCyclotomicExtension p ℚ
+   set ζ : R := (zeta_spec p ℚ K).toInteger with hζ_def
+   have hζ : IsPrimitiveRoot ζ p := (zeta_spec p ℚ K).toInteger_isPrimitiveRoot
+   intro H
+@@ -1649,7 +1649,7 @@
+     show (n : ℤ) • x = 0
+     rw [natCast_zsmul]
+     exact Additive.toMul.injective (by simpa using hxn)
+-  rw [← _root_.NumberField.Units.finrank_modTorsion F]
++  rw [← _root_.NumberField.Units.rank_modTorsion F]
+   exact (congr_arg Cardinal.toNat (rank_quotient_eq_of_le_torsion h)).symm
+ 
+ section thm91
+@@ -1684,7 +1684,7 @@
+     (hs : S.IsFundamental) (a : systemOfUnits p G r) [a.IsMaximal] :
+     (Submodule.span A (Set.range S.units)).toAddSubgroup.index ≤
+       (Submodule.span A (Set.range a.units)).toAddSubgroup.index := by
+-  let := hs.choose
++  letI := hs.choose
+   convert hs.choose_spec a ‹_› <;> symm <;> exact Nat.card_eq_fintype_card.symm
+ namespace systemOfUnits
+ namespace IsFundamental
+@@ -1700,7 +1700,7 @@
+ lemma existence [Module.Free ℤ G] [Module A G] :
+     ∃ S : systemOfUnits p G s, S.IsFundamental := by
+   obtain ⟨S⟩ := systemOfUnits.existence p hp G s hf
+-  let := S.isMaximal p hp G hf
++  letI := S.isMaximal p hp G hf
+   have : { a | ∃ (S : systemOfUnits p G s) (_ : S.IsMaximal), a = S.index p G }.Nonempty :=
+     ⟨S.index, S, S.isMaximal p hp G hf, rfl⟩
+   obtain ⟨S', hS', ha⟩ := Nat.sInf_mem this
+@@ -1734,7 +1734,7 @@
+       rw [Finsupp.coe_add, Pi.add_apply, Finsupp.single_apply]
+       have : i = j ↔ j ∉ Set.range (Fin.succAbove i) := by simp [@eq_comm _ i]
+       split_ifs with hij
+-      · rw [Finsupp.mapDomain_of_notMem_range, zero_add, hij]
++      · rw [Finsupp.mapDomain_notin_range, zero_add, hij]
+         rwa [← this]
+       · obtain ⟨j, rfl⟩ := not_imp_comm.mp this.mpr hij
+         rw [Finsupp.mapDomain_apply Fin.succAbove_right_injective, add_zero,
+@@ -2352,7 +2352,8 @@
+                 ← mul_pow] at NE_p_pow
+               apply_fun (fun u : (𝓞 K)ˣ => algebraMap (𝓞 K) K (u : 𝓞 K)) at NE_p_pow
+               simp only [RingHom.toMonoidHom_eq_coe, Units.val_pow_eq_pow_val, Units.val_mul,
+-                Units.coe_map_inv, MonoidHom.coe_coe, Units.val_one, map_pow, map_mul, map_one] at NE_p_pow
++                Units.coe_map_inv, MonoidHom.coe_coe, Units.val_one, map_pow, map_mul, map_one,
++                map_units_inv] at NE_p_pow
+               have : NeZero p := ⟨hp.pos.ne'⟩
+               obtain ⟨i, -, e⟩ := hν''.eq_pow_of_pow_eq_one NE_p_pow
+               use ((ν ^ p ^ h) ^ i * ε')
+@@ -2428,8 +2429,8 @@
+   rw [← Finset.mem_coe, IsDedekindDomain.coe_primesOverFinset hp S] at hP
+   rw [← Ideal.IsDedekindDomain.ramificationIdx'_eq_factors_count hpbot' hP.1
+     (ne_bot_of_mem_primesOver hp hP)]
+-  let : P.IsPrime := hP.1
+-  let : P.LiesOver p := hP.2
++  letI : P.IsPrime := hP.1
++  letI : P.LiesOver p := hP.2
+   rw [Ideal.ramificationIdx'_eq_ramificationIdx (p := p) (q := P) hp]
+   exact Ideal.ramificationIdx_eq_one_of_isUnramifiedAt (R := R) (p := P)
+ 
+@@ -2447,7 +2448,7 @@
+   have := Module.isTorsionFree_iff_algebraMap_injective.mpr hRS
+   by_cases hIbot : I = ⊥
+   · rw [hIbot, Ideal.comap_bot_of_injective _ hRS, Ideal.map_bot]
+-  have : Algebra.IsIntegral R S := IsIntegralClosure.isIntegral_algebra R L
++  haveI : Algebra.IsIntegral R S := IsIntegralClosure.isIntegral_algebra R L
+   have hIbot' : I.comap (algebraMap R S) ≠ ⊥ := mt Ideal.eq_bot_of_comap_eq_bot hIbot
+   have : ∀ p, (p.IsPrime ∧ I.comap (algebraMap R S) ≤ p) →
+       ∃ P ≥ I, P ∈ primesOver p S := by
+@@ -2532,8 +2533,8 @@
+   have := IsIntegralClosure.isNoetherian R K L S
+   have := IsIntegralClosure.isDedekindDomain R K L S
+   have := IsIntegralClosure.isFractionRing_of_finite_extension R K L S
+-  have : Algebra.IsIntegral R S := IsIntegralClosure.isIntegral_algebra R L
+-  have : Module.Finite R S := IsIntegralClosure.finite R K L S
++  haveI : Algebra.IsIntegral R S := IsIntegralClosure.isIntegral_algebra R L
++  haveI : Module.Finite R S := IsIntegralClosure.finite R K L S
+   have := aeval_derivative_mem_differentIdeal R K L x hx'
+   have H : RingHom.comp (algebraMap (FractionRing R) (FractionRing S))
+     (FractionRing.algEquiv R K).symm.toRingEquiv =
+@@ -2552,11 +2553,11 @@
+     (Ideal.dvd_iff_le.mp hPdiv) (aeval_derivative_mem_differentIdeal R K L _ hx')
+   rw [← Ideal.Quotient.eq_zero_iff_mem, ← Ideal.Quotient.algebraMap_eq] at hxP
+   let p : Ideal R := P.under R
+-  have : p.IsPrime := inferInstance
++  haveI : p.IsPrime := inferInstance
+   have hpbot : p ≠ ⊥ := Ideal.under_ne_bot R hPbot
+-  have : p.IsMaximal := (show p.IsPrime from inferInstance).isMaximal hpbot
+-  have : P.IsMaximal := (show P.IsPrime from inferInstance).isMaximal hPbot
+-  let : IsScalarTower S (S ⧸ P) (S ⧸ P) := IsScalarTower.right
++  haveI : p.IsMaximal := (show p.IsPrime from inferInstance).isMaximal hpbot
++  haveI : P.IsMaximal := (show P.IsPrime from inferInstance).isMaximal hPbot
++  letI : IsScalarTower S (S ⧸ P) (S ⧸ P) := IsScalarTower.right
+   have hle : p ≤ P.comap (algebraMap R S) := by
+     change P.under R ≤ P.comap (algebraMap R S)
+     rw [Ideal.under_def]
+@@ -2638,7 +2639,7 @@
+   have := isCyclic_iff_exists_zpowers_eq_top.2 ⟨σ, (Subgroup.eq_top_iff' _).2 hσ⟩
+   obtain ⟨β, hβ_zero, hβ⟩ := groupCohomology.exists_mul_galRestrict_of_norm_eq_one (A := A)
+     (B := B) hσ hη
+-  have : IsDomain B :=
++  haveI : IsDomain B :=
+     (IsIntegralClosure.equiv A B L (integralClosure A L)).toMulEquiv.isDomain (integralClosure A L)
+   have hβ' := comap_map_eq_of_unramified K L _
+     (comap_span_galRestrict_eq_of_cyclic σ hσ (A := A) (B := B) β η hβ)
+@@ -2662,17 +2663,17 @@
+ 
+ theorem Ideal.isPrincipal_pow_finrank_of_isPrincipal_map [IsDedekindDomain A] {I : Ideal A}
+     (hI : (I.map (algebraMap A B)).IsPrincipal) : (I ^ finrank K L).IsPrincipal := by
+-  have : IsDomain B :=
++  haveI : IsDomain B :=
+     (IsIntegralClosure.equiv A B L (integralClosure A L)).toMulEquiv.isDomain (integralClosure A L)
+-  have := IsIntegralClosure.isNoetherian A K L B
+-  have := IsIntegralClosure.isDedekindDomain A K L B
+-  have := IsIntegralClosure.isFractionRing_of_finite_extension A K L B
++  haveI := IsIntegralClosure.isNoetherian A K L B
++  haveI := IsIntegralClosure.isDedekindDomain A K L B
++  haveI := IsIntegralClosure.isFractionRing_of_finite_extension A K L B
+   have hAB : Function.Injective (algebraMap A B) := by
+     refine Function.Injective.of_comp (f := algebraMap B L) ?_
+     rw [← RingHom.coe_comp, ← IsScalarTower.algebraMap_eq, IsScalarTower.algebraMap_eq A K L]
+     exact (algebraMap K L).injective.comp (IsFractionRing.injective _ _)
+   rw [← Module.isTorsionFree_iff_algebraMap_injective] at hAB
+-  let : Algebra (FractionRing A) (FractionRing B) := FractionRing.liftAlgebra _ _
++  letI : Algebra (FractionRing A) (FractionRing B) := FractionRing.liftAlgebra _ _
+   have : IsScalarTower A (FractionRing A) (FractionRing B) :=
+     FractionRing.isScalarTower_liftAlgebra _ _
+   have H : RingHom.comp (algebraMap (FractionRing A) (FractionRing B))
+@@ -2730,7 +2731,7 @@
+ 
+ namespace FltRegular
+ 
+-open scoped _root_.P2MW.S_flt_regular.FltRegular.NumberField
++open scoped NumberField
+ 
+ variable {K : Type*} {p : ℕ} [hpri : Fact p.Prime] [Field K] [NumberField K] (hp : p ≠ 2)
+ 
+@@ -2746,7 +2747,7 @@
+ lemma associated_zeta_sub_one_pow_prime' [IsCyclotomicExtension {p} ℚ K] :
+     Associated ((hζ.toInteger - 1 : 𝓞 K) ^ (p - 1)) (p : 𝓞 K) := by
+   have hζ' : IsPrimitiveRoot ζ (p ^ (0 + 1)) := by rwa [zero_add, pow_one]
+-  have : IsCyclotomicExtension {p ^ (0 + 1)} ℚ K := by rwa [zero_add, pow_one]
++  haveI : IsCyclotomicExtension {p ^ (0 + 1)} ℚ K := by rwa [zero_add, pow_one]
+   have h := IsCyclotomicExtension.Rat.map_eq_span_zeta_sub_one_pow p 0 hζ'
+   rw [IsCyclotomicExtension.Rat.finrank (p ^ (0 + 1)) K,
+     Nat.totient_prime_pow_succ hpri.out, pow_zero, one_mul, Ideal.map_span,
+@@ -2770,7 +2771,7 @@
+ omit [NumberField K] in
+ lemma natDegree_poly_aux :
+     natDegree ((C (hζ.toInteger - 1 : 𝓞 K) * X - 1) ^ p + C (u : 𝓞 K)) = p := by
+-  have : Fact (Nat.Prime p) := hpri
++  haveI : Fact (Nat.Prime p) := hpri
+   rw [natDegree_add_C, natDegree_pow, ← C.map_one, natDegree_sub_C, natDegree_mul_X, natDegree_C,
+     zero_add, mul_one]
+   exact C_ne_zero.mpr (hζ.toInteger_isPrimitiveRoot.sub_one_ne_zero hpri.out.one_lt)
+@@ -2779,7 +2780,7 @@
+ lemma monic_poly_aux :
+     leadingCoeff ((C (hζ.toInteger - 1 : 𝓞 K) * X - 1) ^ p + C (u : 𝓞 K)) =
+       (hζ.toInteger - 1 : 𝓞 K) ^ p := by
+-  have : Fact (Nat.Prime p) := hpri
++  haveI : Fact (Nat.Prime p) := hpri
+   trans leadingCoeff ((C (hζ.toInteger - 1 : 𝓞 K) * X - 1) ^ p)
+   · rw [leadingCoeff, leadingCoeff, coeff_add]
+     nth_rewrite 1 [natDegree_add_C]
+@@ -2799,7 +2800,7 @@
+   (zeta_sub_one_pow_dvd_poly hp hζ u hcong).choose_spec.symm
+ 
+ lemma monic_poly : Monic (poly hp hζ u hcong) := by
+-  have : Fact (Nat.Prime p) := hpri
++  haveI : Fact (Nat.Prime p) := hpri
+   have := congr_arg leadingCoeff (poly_spec hp hζ u hcong)
+   simp only [map_pow, leadingCoeff_mul, leadingCoeff_pow, leadingCoeff_C,
+     monic_poly_aux hζ] at this
+@@ -2807,7 +2808,7 @@
+   exact pow_ne_zero _ (hζ.toInteger_isPrimitiveRoot.sub_one_ne_zero hpri.out.one_lt)
+ 
+ lemma natDegree_poly : natDegree (poly hp hζ u hcong) = p := by
+-  have : Fact (Nat.Prime p) := hpri
++  haveI : Fact (Nat.Prime p) := hpri
+   have := congr_arg natDegree (poly_spec hp hζ u hcong)
+   rwa [natDegree_C_mul, natDegree_poly_aux hζ] at this
+   exact pow_ne_zero _ (hζ.toInteger_isPrimitiveRoot.sub_one_ne_zero hpri.out.one_lt)
+@@ -2972,7 +2973,7 @@
+   apply isCoprime_X_sub_C_of_isUnit_sub
+   obtain ⟨v, hv⟩ : Associated (hζ.toInteger - 1 : 𝓞 K)
+       ((hζ.toInteger : 𝓞 K) ^ j - (hζ.toInteger : 𝓞 K) ^ i) := by
+-    refine hζ.toInteger_isPrimitiveRoot.nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
++    refine hζ.toInteger_isPrimitiveRoot.ntRootsFinset_pairwise_associated_sub_one_sub_of_prime
+       hpri.out ?_ ?_ ?_
+     · rw [Finset.mem_coe, mem_nthRootsFinset (NeZero.pos p), ← pow_mul, mul_comm, pow_mul,
+         hζ.toInteger_isPrimitiveRoot.pow_eq_one, one_pow]
+@@ -3009,7 +3010,7 @@
+   let J := I.map (algebraMap (𝓞 K) (𝓞 L))
+   let i : 𝓞 K ⧸ I →+* 𝓞 L ⧸ J := Ideal.quotientMap _
+     (algebraMap (𝓞 K) (𝓞 L)) Ideal.le_comap_map
+-  have : Nontrivial (𝓞 L ⧸ J) := by
++  haveI : Nontrivial (𝓞 L ⧸ J) := by
+     apply Ideal.Quotient.nontrivial_iff.mpr
+     rw [ne_eq, Ideal.map_eq_top_iff]
+     · exact Ideal.IsMaximal.ne_top ‹_›
+@@ -3043,8 +3044,8 @@
+ lemma isUnramified (L) [Field L] [Algebra K L] [IsSplittingField K L (X ^ p - C (u : K))] :
+     Algebra.Unramified (𝓞 K) (𝓞 L) := by
+   let α := polyRoot hp hζ u hcong _ (rootOfSplitsXPowSubC_pow _ L) 0
+-  have := Polynomial.IsSplittingField.finiteDimensional L (X ^ p - C (u : K))
+-  have : Module.Finite (𝓞 K) (𝓞 L) := IsIntegralClosure.finite (𝓞 K) K L (𝓞 L)
++  haveI := Polynomial.IsSplittingField.finiteDimensional L (X ^ p - C (u : K))
++  haveI : Module.Finite (𝓞 K) (𝓞 L) := IsIntegralClosure.finite (𝓞 K) K L (𝓞 L)
+   have hα : Algebra.adjoin K {(α : L)} = ⊤ := by
+     rw [eq_top_iff, ← Algebra.adjoin_root_eq_top_of_isSplittingField
+       ⟨ζ, (mem_primitiveRoots (NeZero.pos p)).mpr hζ⟩
+@@ -3056,27 +3057,27 @@
+     intro P hP
+     by_cases hPbot : P = ⊥
+     · subst P
+-      have : CharZero L := charZero_of_injective_algebraMap (algebraMap K L).injective
+-      have : FiniteDimensional ℚ L := Module.Finite.trans K L
+-      have : NumberField L := ⟨⟩
+-      have : IsLocalization (𝓞 L)⁰ (Localization.AtPrime (⊥ : Ideal (𝓞 L))) := by
++      haveI : CharZero L := charZero_of_injective_algebraMap (algebraMap K L).injective
++      haveI : FiniteDimensional ℚ L := Module.Finite.trans K L
++      haveI : NumberField L := ⟨⟩
++      haveI : IsLocalization (𝓞 L)⁰ (Localization.AtPrime (⊥ : Ideal (𝓞 L))) := by
+         convert (inferInstance : IsLocalization (⊥ : Ideal (𝓞 L)).primeCompl
+           (Localization.AtPrime (⊥ : Ideal (𝓞 L))))
+         ext; simp [Ideal.primeCompl]
+       refine (Algebra.FormallyUnramified.iff_of_equiv
+         ((IsLocalization.algEquiv (𝓞 L)⁰ L _).restrictScalars (𝓞 K))).mp ?_
+-      have : Algebra.FormallyUnramified (𝓞 K) K :=
++      haveI : Algebra.FormallyUnramified (𝓞 K) K :=
+         Algebra.FormallyUnramified.of_isLocalization (𝓞 K)⁰
+-      have : Algebra.FormallyUnramified K L :=
++      haveI : Algebra.FormallyUnramified K L :=
+         Algebra.FormallyUnramified.of_isSeparable K L
+       exact .comp (𝓞 K) K L
+     · refine isUnramifiedAt_of_Separable_minpoly K L P hPbot α (IsIntegral.tower_top α.prop) hα ?_
+       rw [minpoly_polyRoot' hp hζ u hcong hu]
+       have hPbot' : P.under (𝓞 K) ≠ ⊥ := Ideal.under_ne_bot (𝓞 K) hPbot
+-      have : (P.under (𝓞 K)).IsMaximal :=
++      haveI : (P.under (𝓞 K)).IsMaximal :=
+         (inferInstance : (P.under (𝓞 K)).IsPrime).isMaximal hPbot'
+       exact separable_poly hp hζ u hcong hu (P.under (𝓞 K))
+-  have : Algebra.FormallyUnramified (𝓞 K) (𝓞 L) := by
++  haveI : Algebra.FormallyUnramified (𝓞 K) (𝓞 L) := by
+     rw [← Algebra.unramifiedLocus_eq_univ_iff]
+     exact Set.eq_univ_of_forall fun P ↦ key P.asIdeal
+   exact ⟨inferInstance, inferInstance⟩
+@@ -3106,8 +3107,8 @@
+ theorem associated_zeta_sub_one_pow_prime [IsCyclotomicExtension {p} ℚ K]
+     (hζ : IsPrimitiveRoot ζ p) :
+     Associated ((hζ.toInteger - 1 : 𝓞 K) ^ (p - 1)) (p : 𝓞 K) := by
+-  let := IsCyclotomicExtension.numberField {p} ℚ K
+-  have : IsCyclotomicExtension {p ^ (0 + 1)} ℚ K := by
++  letI := IsCyclotomicExtension.numberField {p} ℚ K
++  haveI : IsCyclotomicExtension {p ^ (0 + 1)} ℚ K := by
+     simpa using (inferInstance : IsCyclotomicExtension {p} ℚ K)
+   have hζ' : IsPrimitiveRoot ζ (p ^ (0 + 1)) := by simpa using hζ
+   have key := IsCyclotomicExtension.Rat.map_eq_span_zeta_sub_one_pow p 0 hζ'
+@@ -3122,7 +3123,7 @@
+ 
+ lemma quotient_zeta_sub_one_comp_aut [IsCyclotomicExtension {p} ℚ K] (σ : 𝓞 K →+* 𝓞 K) :
+     (Ideal.Quotient.mk (Ideal.span {(hζ.toInteger : 𝓞 K) - 1})).comp σ = Ideal.Quotient.mk _ := by
+-  let := IsCyclotomicExtension.numberField {p} ℚ K
++  letI := IsCyclotomicExtension.numberField {p} ℚ K
+   apply RingHom.toIntAlgHom_injective
+   apply hζ.integralPowerBasis.algHom_ext
+   have h : hζ.integralPowerBasis.gen = hζ.toInteger := by
+@@ -3135,7 +3136,7 @@
+   by_cases hne : σ hζ.toInteger = hζ.toInteger
+   · rw [hne, sub_self]
+     exact dvd_zero _
+-  · refine (hζ.toInteger_isPrimitiveRoot.nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
++  · refine (hζ.toInteger_isPrimitiveRoot.ntRootsFinset_pairwise_associated_sub_one_sub_of_prime
+       hpri.out ?_ ?_ hne).dvd
+     · rw [Finset.mem_coe, Polynomial.mem_nthRootsFinset (NeZero.pos p) 1, ← map_pow,
+         hζ.toInteger_isPrimitiveRoot.pow_eq_one, map_one]
+@@ -3146,8 +3147,8 @@
+ 
+ lemma zeta_sub_one_dvd_trace_sub_smul [IsCyclotomicExtension {p} ℚ K] (x : 𝓞 K) :
+     (hζ.toInteger - 1 : 𝓞 K) ∣ Algebra.trace ℤ _ x - (p - 1) • x := by
+-  let := IsCyclotomicExtension.numberField {p} ℚ K
+-  let := IsCyclotomicExtension.isGalois {p} ℚ K
++  letI := IsCyclotomicExtension.numberField {p} ℚ K
++  letI := IsCyclotomicExtension.isGalois {p} ℚ K
+   have : (Algebra.trace ℤ _ x : 𝓞 K) = ∑ σ : K ≃ₐ[ℚ] K, (mapAlgHom σ).toRingHom x := by
+     apply (show Function.Injective (algebraMap (𝓞 K) K) from Subtype.val_injective)
+     rw [← eq_intCast (algebraMap ℤ (𝓞 K)), ← IsScalarTower.algebraMap_apply,
+@@ -3256,7 +3257,7 @@
+       intro h
+       replace h := Int.cast_dvd_cast (α := 𝓞 K) _ _ h
+       simp only [Int.cast_natCast, ← dvd_iff_dvd_of_dvd_sub hn] at h
+-      refine hζ'.zeta_sub_one_prime'.not_isUnit ((isUnit_pow_iff ?_).mp
++      refine hζ'.zeta_sub_one_prime'.not_unit ((isUnit_pow_iff ?_).mp
+         (isUnit_of_dvd_unit ((associated_zeta_sub_one_pow_prime hζ').dvd.trans h) u.isUnit))
+       simpa only [ne_eq, tsub_eq_zero_iff_le, not_le] using hpri.out.one_lt
+     replace hn' := Int.cast_dvd_cast (α := 𝓞 K) _ _ hn'
+@@ -3397,9 +3398,9 @@
+   by_cases h : s = 0
+   · rw [div_eq_iff hJ', h, IsLocalization.mk'_zero, spanSingleton_zero, zero_mul] at ha
+     exact hI' ha
+-  obtain ⟨n, hn⟩ := FiniteMultiplicity.of_not_isUnit hx.not_isUnit h
++  obtain ⟨n, hn⟩ := FiniteMultiplicity.of_not_isUnit hx.not_unit h
+   obtain ⟨m, hm⟩ :=
+-    FiniteMultiplicity.of_not_isUnit hx.not_isUnit (nonZeroDivisors.ne_zero t.prop)
++    FiniteMultiplicity.of_not_isUnit hx.not_unit (nonZeroDivisors.ne_zero t.prop)
+   rw [IsFractionRing.mk'_eq_div] at ha
+   refine this (n + m + 1) (Nat.le_add_left 1 (n + m))
+     ⟨s, t, (fun hs ↦ ?_), (fun ht ↦ ?_), ha.symm⟩
+@@ -3408,7 +3409,7 @@
+ 
+ open UniqueFactorizationMonoid in
+ 
+-theorem pow_dvd_pow_iff_dvd {α : Type*} [CommMonoidWithZero α] -- [IsCancelMulZero α]
++theorem pow_dvd_pow_iff_dvd {α : Type*} [CommMonoidWithZero α] [IsCancelMulZero α]
+     [NormalizationMonoid α] [UniqueFactorizationMonoid α] {n : ℕ} (hn : n ≠ 0) {a b : α} :
+     a ^ n ∣ b ^ n ↔ a ∣ b := by
+   refine ⟨fun h ↦ ?_, fun h ↦ pow_dvd_pow_of_dvd h n⟩
+@@ -3446,7 +3447,7 @@
+ 
+ namespace CaseII
+ 
+-open scoped nonZeroDivisors _root_.P2MW.S_flt_regular.FltRegular.NumberField
++open scoped nonZeroDivisors NumberField
+ open Polynomial IsCyclotomicExtension.Rat
+ 
+ variable {K : Type} {p : ℕ} [NeZero p] [Field K] [NumberField K] (hp : p ≠ 2)
+@@ -3496,7 +3497,7 @@
+     (𝔦 η₁) ⊔ (𝔦 η₂) ∣ 𝔪 * 𝔭 := by
+   have : 𝔭 = Ideal.span (singleton <| (η₁ : 𝓞 K) - η₂) := by
+     rw [Ideal.span_singleton_eq_span_singleton]
+-    exact hζ.toInteger_isPrimitiveRoot.nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
++    exact hζ.toInteger_isPrimitiveRoot.ntRootsFinset_pairwise_associated_sub_one_sub_of_prime
+       hpri.out (Finset.mem_coe.mpr η₁.prop) (Finset.mem_coe.mpr η₂.prop)
+       (Subtype.coe_injective.ne hη)
+   rw [(gcd_mul_right' 𝔭 𝔵 𝔶).symm.dvd_iff_dvd_right, dvd_gcd_iff]
+@@ -3525,8 +3526,8 @@
+ 
+ include e hp in
+ lemma one_sub_zeta_dvd_zeta_pow_sub : π ∣ x + y * η := by
+-  let : Fact (Nat.Prime p) := hpri
+-  let := IsCyclotomicExtension.numberField {p} ℚ K
++  letI : Fact (Nat.Prime p) := hpri
++  letI := IsCyclotomicExtension.numberField {p} ℚ K
+   have h := zeta_sub_one_dvd hζ e
+   have root_eq_one_mod {ξ : 𝓞 K} (hξ : ξ ∈ nthRootsFinset p (1 : 𝓞 K)) :
+       Ideal.Quotient.mk 𝔭 ξ = 1 := by
+@@ -3562,7 +3563,7 @@
+ 
+ lemma div_zeta_sub_one_sub (η₁ η₂) (hη : η₁ ≠ η₂) :
+     Associated y (divZetaSubOne hp hζ e η₁ - divZetaSubOne hp hζ e η₂) := by
+-  let := IsCyclotomicExtension.numberField {p} ℚ K
++  letI := IsCyclotomicExtension.numberField {p} ℚ K
+   apply Associated.of_mul_right _ (Associated.refl (π))
+     (hζ.toInteger_isPrimitiveRoot.sub_one_ne_zero hpri.out.one_lt)
+   have key : (divZetaSubOne hp hζ e η₁ - divZetaSubOne hp hζ e η₂) * (π)
+@@ -3571,14 +3572,14 @@
+     ring
+   rw [key]
+   exact Associated.mul_left _
+-    (hζ.toInteger_isPrimitiveRoot.nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
++    (hζ.toInteger_isPrimitiveRoot.ntRootsFinset_pairwise_associated_sub_one_sub_of_prime
+       hpri.out (Finset.mem_coe.mpr η₁.prop) (Finset.mem_coe.mpr η₂.prop)
+       (Subtype.coe_ne_coe.2 hη))
+ 
+ include hy in
+ lemma div_zeta_sub_one_Injective :
+     Function.Injective (fun η ↦ Ideal.Quotient.mk 𝔭 (divZetaSubOne hp hζ e η)) := by
+-  let : AddGroup (𝓞 K ⧸ 𝔭) := inferInstance
++  letI : AddGroup (𝓞 K ⧸ 𝔭) := inferInstance
+   intros η₁ η₂
+   contrapose
+   intro e₁ e₂
+@@ -3589,15 +3590,15 @@
+     u.isUnit.dvd_mul_right] at e₂
+ 
+ scoped instance : Finite (𝓞 K ⧸ 𝔭) := by
+-  let := IsCyclotomicExtension.numberField {p} ℚ K
++  letI := IsCyclotomicExtension.numberField {p} ℚ K
+   rw [← Ideal.absNorm_ne_zero_iff, Ne, Ideal.absNorm_eq_zero_iff, Ideal.span_singleton_eq_bot]
+   exact hζ.toInteger_isPrimitiveRoot.sub_one_ne_zero hpri.out.one_lt
+ 
+ include hy in
+ lemma div_zeta_sub_one_Bijective :
+     Function.Bijective (fun η ↦ Ideal.Quotient.mk 𝔭 (divZetaSubOne hp hζ e η)) := by
+-  let := Fintype.ofFinite (𝓞 K ⧸ 𝔭)
+-  let := IsCyclotomicExtension.numberField {p} ℚ K
++  letI := Fintype.ofFinite (𝓞 K ⧸ 𝔭)
++  letI := IsCyclotomicExtension.numberField {p} ℚ K
+   rw [Fintype.bijective_iff_injective_and_card]
+   use div_zeta_sub_one_Injective hp hζ e hy
+   simp only [Fintype.card_coe]
+@@ -3760,7 +3761,7 @@
+   classical
+   rw [← one_mul (𝔠 η₀), ← p_pow_dvd_c_eta_zero_aux hp hζ e hy, dvd_gcd_mul_iff_dvd_mul,
+     mul_comm _ (𝔠 η₀)]
+-  rw [← Finset.prod_eq_mul_prod_sdiff_singleton_of_mem (Finset.mem_attach _ η₀) 𝔠,
++  rw [← Finset.prod_eq_mul_prod_diff_singleton_of_mem (Finset.mem_attach _ η₀) 𝔠,
+     prod_c, mul_pow]
+   apply dvd_mul_of_dvd_right
+   rw [pow_mul]
+@@ -3804,7 +3805,7 @@
+   rw [← a_eta_zero_dvd_p_pow_spec, mul_comm, ← dvd_gcd_mul_iff_dvd_mul, ha, one_mul] at this
+   nth_rw 1 [← pow_one 𝔭] at this
+   rwa [← pow_dvd_pow_iff (p_ne_zero hζ)
+-    (Ideal.prime_span_singleton_iff.mpr hζ.zeta_sub_one_prime').not_isUnit]
++    (Ideal.prime_span_singleton_iff.mpr hζ.zeta_sub_one_prime').not_unit]
+ 
+ include hp in
+ lemma exists_solution'_aux {ε₁ ε₂ : (𝓞 K)ˣ} (hx : ¬ π ∣ x)
+@@ -3979,15 +3980,15 @@
+       mul_ne_zero (ne_zero_of_mem_nthRootsFinset one_ne_zero (η₀ : _).prop)
+         (hζ.toInteger_isPrimitiveRoot.ne_zero hpri.out.ne_zero)⟩
+   obtain ⟨u₁, hu₁⟩ :=
+-    hζ.toInteger_isPrimitiveRoot.nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
++    hζ.toInteger_isPrimitiveRoot.ntRootsFinset_pairwise_associated_sub_one_sub_of_prime
+       hpri.out (Finset.mem_coe.mpr η₂.prop) (Finset.mem_coe.mpr (η₀ : _).prop)
+       (Subtype.coe_injective.ne_iff.mpr hη₂)
+   obtain ⟨u₂, hu₂⟩ :=
+-    hζ.toInteger_isPrimitiveRoot.nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
++    hζ.toInteger_isPrimitiveRoot.ntRootsFinset_pairwise_associated_sub_one_sub_of_prime
+       hpri.out (Finset.mem_coe.mpr (η₀ : _).prop) (Finset.mem_coe.mpr η₁.prop)
+       (Subtype.coe_injective.ne_iff.mpr hη₁.symm)
+   obtain ⟨u₃, hu₃⟩ :=
+-    hζ.toInteger_isPrimitiveRoot.nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
++    hζ.toInteger_isPrimitiveRoot.ntRootsFinset_pairwise_associated_sub_one_sub_of_prime
+       hpri.out (Finset.mem_coe.mpr η₂.prop) (Finset.mem_coe.mpr η₁.prop)
+       (Subtype.coe_injective.ne_iff.mpr hη)
+   have := formula hp hζ e hy hz hreg η₁ hη₁ η₂ hη₂
+@@ -4097,15 +4098,15 @@
+ lemma not_exists_solution' :
+     ¬∃ x y z : 𝓞 K, ¬((hζ.toInteger : 𝓞 K) - 1 ∣ y) ∧
+       ((hζ.toInteger : 𝓞 K) - 1 ∣ z) ∧ z ≠ 0 ∧ x ^ p + y ^ p = z ^ p := by
+-  let : Fact (Nat.Prime p) := hpri
+-  let : WfDvdMonoid (𝓞 K) := IsNoetherianRing.wfDvdMonoid
++  letI : Fact (Nat.Prime p) := hpri
++  letI : WfDvdMonoid (𝓞 K) := IsNoetherianRing.wfDvdMonoid
+   rintro ⟨x, y, z, hy, hz, hz', e⟩
+   obtain ⟨m, z, hm, hz'', rfl⟩ :
+       ∃ m z', 1 ≤ m ∧ ¬((hζ.toInteger : 𝓞 K) - 1 ∣ z') ∧
+         z = ((hζ.toInteger : 𝓞 K) - 1) ^ m * z' := by
+     classical
+     have H : FiniteMultiplicity ((hζ.toInteger : 𝓞 K) - 1) z := FiniteMultiplicity.of_not_isUnit
+-      hζ.zeta_sub_one_prime'.not_isUnit hz'
++      hζ.zeta_sub_one_prime'.not_unit hz'
+     obtain ⟨z', h⟩ := pow_multiplicity_dvd ((hζ.toInteger : 𝓞 K) - 1) z
+     refine ⟨_, _, ?_, ?_, h⟩
+     · rwa [← Nat.cast_le (α := ENat), ← FiniteMultiplicity.emultiplicity_eq_multiplicity H,
+@@ -4148,7 +4149,7 @@
+ lemma not_exists_Int_solution {p : ℕ} [hpri : Fact (Nat.Prime p)] (hreg : IsRegularPrime p)
+     (hodd : p ≠ 2) :
+     ¬∃ x y z : ℤ, ¬↑p ∣ y ∧ ↑p ∣ z ∧ z ≠ 0 ∧ x ^ p + y ^ p = z ^ p := by
+-  have := CyclotomicField.isCyclotomicExtension p ℚ
++  haveI := CyclotomicField.isCyclotomicExtension p ℚ
+   obtain ⟨ζ, hζ⟩ := IsCyclotomicExtension.exists_isPrimitiveRoot
+     ℚ (B := (CyclotomicField p ℚ)) (Set.mem_singleton p) hpri.1.ne_zero
+   have := fun n ↦ zeta_sub_one_dvd_intCast_iff (K := CyclotomicField p ℚ) hζ n
+@@ -4170,7 +4171,7 @@
+   have := dvd_sub (dvd_pow hz hpri.out.ne_zero) (dvd_pow hy hpri.out.ne_zero)
+   rw [← e, add_sub_cancel_right] at this
+   replace this := (Nat.prime_iff_prime_int.mp hpri.out).dvd_of_dvd_pow this
+-  apply (Nat.prime_iff_prime_int.mp hpri.out).not_isUnit
++  apply (Nat.prime_iff_prime_int.mp hpri.out).not_unit
+   rw [isUnit_iff_dvd_one, ← hgcd]
+   simp [dvd_gcd_iff, hz, hy, this]
+ 
+
+--- attached/__S_fermatLastTheoremSeven
++++ pinned/P2M/Sol/S_fermatLastTheoremSeven
+@@ -9,7 +9,7 @@
+ 
+ set_option backward.isDefEq.respectTransparency false in
+ theorem solution : FermatLastTheoremFor 7 := by
+-  have : Fact (Nat.Prime 7) := ⟨by norm_num⟩
++  haveI : Fact (Nat.Prime 7) := ⟨by norm_num⟩
+   refine flt_regular (p := 7) ?_ (by norm_num)
+   convert Nat.coprime_one_right _
+   exact classNumber_eq_one_iff.2 (IsCyclotomicExtension.Rat.seven_pid (CyclotomicField 7 ℚ))
+
+--- attached/__S_IsCyclotomicExtension_Rat_seven_pid
++++ pinned/P2M/Sol/S_IsCyclotomicExtension_Rat_seven_pid
+@@ -61,9 +61,9 @@
+     (fun p hple hp P hPmem hle ↦ ?_)
+   exfalso
+   rw [floor_M_seven] at hple hle
+-  have : Fact p.Prime := ⟨hp⟩
+-  have : P.IsPrime := hPmem.1
+-  have : P.LiesOver (span {(p : ℤ)}) := hPmem.2
++  haveI : Fact p.Prime := ⟨hp⟩
++  haveI : P.IsPrime := hPmem.1
++  haveI : P.LiesOver (span {(p : ℤ)}) := hPmem.2
+   obtain ⟨hp1, hp4⟩ := Finset.mem_Icc.mp hple
+   interval_cases p
+   · exact Nat.not_prime_one hp
