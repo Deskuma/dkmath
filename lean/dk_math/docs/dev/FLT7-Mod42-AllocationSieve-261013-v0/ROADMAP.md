@@ -2,7 +2,7 @@
 
 Branch: `research/FLT7-Mod42-AllocationSieve-261013-v0`
 Base: `develop` (first prepared 2026-10-13).
-Current status: **Gates 001–004 and 006–016 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 017 Part A ACCEPTED (Outcome A) / constructive bridge Outcome B; gate 018 ACCEPTED (Outcome A, derived ledger only); gate 019 AUTHORIZED**. See `review-001.md` through `review-018.md`.
+Current status: **Gates 001–004 and 006–016 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 017 Part A Outcome A / constructive bridge Outcome B; gate 018 ACCEPTED (Outcome A, derived ledger); gate 019 ACCEPTED (Outcome B); research PAUSED. No gate 020 authorized.** See `review-001.md` through `review-019.md`.
 
 ## Goals and gates
 
@@ -27,7 +27,7 @@ Current status: **Gates 001–004 and 006–016 ACCEPTED (Outcome A); gate 005 A
 | 016 | Seventh-power permutation-prime image frontier | Generic seventh-power field injectivity and odd-prime nonvanishing, exact same-r receiver exclusion, c*ℓ^n full-sieve corollary; ℓ=11/13 and 29/2 diagnostics | **ACCEPTED — Outcome A** |
 | 017 | Source-indexed obstruction and chart existence frontier | Three conditional actual-core/finite-chart exclusions; no constructive source→primitive endpoints; exact missing formula documented | **Part A ACCEPTED — Outcome A; bridge Outcome B** |
 | 018 | Intrinsic source-prime valuation conservation | Same-packet V/C coprimality, prime valuation conservation, exclusive multiplicity; established as derived readout, no new M bound | **ACCEPTED — Outcome A (derived)** |
-| 019 | Independent source-constraint discrimination | Verify scalar-ledger insufficiency model; audit true source coordinate/norm constraints for a new actual-core restriction; stop if none | **AUTHORIZED — instruction-019.md** |
+| 019 | Independent source-constraint discrimination | Scalar M=29² model verified; genuine source complementary N>1 proved in test; no new M-only restriction or endpoint | **ACCEPTED — Outcome B; PAUSED** |
 
 After each gate, pause for human/Wise Wolf review before issuing the next
 implementation instruction. Do not autonomously expand 001 into 003.
@@ -131,9 +131,13 @@ After gate 016's completed structural prime-field theorem, **return to the genui
 
 The required source-to-chart additive pair remains unavailable and must not be manufactured from bare packet p or a reconstruction iff. Explore a **source-only valuation conservation theorem** for the actual inner core M, its genuinely sourced complementary root N and the product V*C, with M*N=V*C and Coprime M N. For each prime ℓ|M, test ℓ∤N and vℓ(M)=vℓ(V)+vℓ(C) using the correct positive-factor valuation API. Check existing source prime-support theorem for duplicates and distinguish this local conservation from an unsupported small-coefficient factorization or chosen exact receiver divisor. If only a restatement is possible, report Outcome B and reconsider strategy; no FLT7 closure is authorized. Codex implements/verifies/reports only and performs no Git operations.
 
-## Gate 019 — authorized via instruction-019.md
+## Gate 019 — completed (Outcome B); strategic pause (review-019.md)
 
 After gate 018's source valuation readout, test whether the **scalar ledger alone** could imply a gate-016 usable prime-power factorization. A finite arithmetic example M=29², N=1, V=M, C=1 meets positivity, product equality, both coprimality conditions and 7-nondivisibility but has no prime factor satisfying gcd(7,ℓ−1)=1. This is **not** an actual packet or FLT7 witness. Inspect genuinely independent source quadratic-coordinate, cubic-norm, ramified-axis and orientation statements for a stronger necessary condition on actual M. Prove one only if warranted; otherwise record an honest negative frontier, recommend a strategic pause and do not automatically launch 020. Neither this scalar model nor an API failure proves no source-side bridge can ever exist. Codex implements/tests/reports only; no Git actions.
+
+## Research pause after gate 019 — no gate 020 authorization
+
+The gate-019 scalar-ledger model M=841,N=1,V=M,C=1 has no prime satisfying the gate-016 permutation condition, but is **not** an actual source packet. The actual same-coordinate cubic source proves N>1, so that scalar tuple cannot realize the source's complementary root; M=841 with some other source factors is not excluded. The new proof is test-only and proves no M-only factorization bound. Source facts still do not supply primitive natural endpoints at the prescribed carrier or a provable factorization M=c*ℓ^n, c≤343 with a usable prime. Stop adding gates until a concrete independent source-side mechanism and falsifiable target are specified. Potential research redesign topics: eliminate auxiliary A and signed cubic norm roots using their simultaneous equations with B=7^4*m^7, or find a sound orientation/positive-endpoint descent with a proven well-founded measure. These are research directions **not** instructions to Codex. No instruction-020 exists/has been authorized; the user controls a future restart.
 
 ## Explicit non-goals
 
