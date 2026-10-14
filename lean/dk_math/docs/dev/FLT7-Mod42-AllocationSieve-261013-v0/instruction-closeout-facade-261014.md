@@ -1,42 +1,33 @@
-# Closing instruction — FLT7 Mod42 Facade, tests, CI, and develop PR readiness (2026-10-14)
+# Closing instruction — FLT7 Mod42 production Facade and local checks (REVISED 2026-10-14)
 
 Branch: `research/FLT7-Mod42-AllocationSieve-261013-v0`
-Prerequisite: [facade-integration-audit-261014.md](facade-integration-audit-261014.md)
-Owner: local Codex, implementing/testing/reporting ONLY
-Status: **CLOSEOUT REQUIRED; do NOT open a PR before successful validation**
+Owner: local Codex, implementation and verification only
+Status: **Facade closeout required before develop PR; DkMathTest is NOT promoted to CI**
+Revision: **This replaces the original 2026-10-14 instruction, especially former sections 2–4. If Codex already started, take this revision as the current priority; do not throw away completed valid production Facade work.**
 
-## 0. Scope and objective
+## Decision: do not change CI / do not globally integrate DkMathTest
 
-Research gates 001–019 are closed. This instruction is
-**not gate 020** and does **not** authorize more
-number-theory research.
+The user's maintenance concern is valid. The default `.github/workflows/lean_action_ci.yml` intentionally builds the production target with `build: true` and `test: false`. Preserve it **unchanged**.
 
-The implementation branch has 17 added
-`DkMath/FLT/Seven/SevenRamifiedFusion*.lean`
-production modules and 19 added
-`DkMathTest/FLT/Seven/SevenRamifiedFusion*.lean`
-test modules. The current root
-`DkMath.FLT.Seven` does **not** import the new
-production group; `DkMathTest.lean` does not import
-the new tests. The current GitHub workflow builds
-`DkMath` but has `test: false`.
+`DkMathTest` is a research scratchpad of temporary regressions, API probes, mathematical diagnostics, and point-in-time axiom audits. Its historical units may need migration after Lean/Mathlib upgrades. There is no stable maintenance owner or established policy committing every old unit to perpetual compatibility.
 
-Close exactly these integration holes, preserve source
-proofs and their mathematical assumptions, validate
-locally, and report the result. No new FLT7 proof claim.
+**Cancel these requirements from the earlier version:**
 
-## 1. Wire a small dedicated research facade into DkMath.FLT.Seven
+1. **DO NOT** add a targeted test step to `.github/workflows/lean_action_ci.yml`.
+2. **DO NOT** switch `test: false` to `test: true`.
+3. **DO NOT** import the new 19-test suite into the global `DkMathTest.lean`.
+4. **DO NOT** treat any old `DkMathTest` module's failure as a blocker to the **production** Facade/PR, except where it reveals an actual flaw in an exported production theorem.
+5. If you have made any of these changes locally under the old instruction, **revert only those integration changes** while preserving any legitimate production Facade work and existing test source files. Report them accurately.
 
-Create, at a suitable concise filename such as
+Avoid changing unrelated legacy tests or undertaking a large Lean/Mathlib test-package migration merely for this research closeout.
 
-```text
-DkMath/FLT/Seven/ModFortyTwoAllocationSieveFacade.lean
-```
+## 1. Connect the new production results to DkMath.FLT.Seven
 
-an **import-only** module. The nine terminal
-imports below transitively cover all 17 new
-production modules according to the actual current
-branch import graph:
+Create or retain an import-only module, preferably
+
+`DkMath/FLT/Seven/ModFortyTwoAllocationSieveFacade.lean`
+
+with the nine currently sufficient terminal imports:
 
 ```lean
 import DkMath.FLT.Seven.SevenRamifiedFusionCenteredImage589
@@ -50,220 +41,129 @@ import DkMath.FLT.Seven.SevenRamifiedFusionSourcePrimeValuationLedger
 import DkMath.FLT.Seven.SevenRamifiedFusionThirteenPowerPrimitiveExclusion
 ```
 
-Recompute coverage from live imports in the checkout,
-in case new source was added after the audit, and add
-a missing leaf only if needed. Include the normal
-copyright/header marker style. State explicitly that
-the exports are **exact sieves / conditional source
-obstructions**, not an FLT7 closure.
+At the audited HEAD these imports transitively cover all **17**
+new production modules; recheck the current dependency graph
+and do not accidentally omit new production modules.
+Import this facade once from `DkMath/FLT/Seven.lean`
+beside the existing exact-allocation/centered modules.
+The existing `DkMath.FLT` and `DkMath` chains
+already import `DkMath.FLT.Seven`; do not add
+duplicate imports to `DkMath.FLT.Prime`,
+`DkMath.FLT`, `DkMath` or `DkMath.Lib`.
 
-Add ONE import to the existing
-`DkMath/FLT/Seven.lean` near the existing
-`SevenRamifiedFusionCenteredPolynomial` /
-`SevenRamifiedFusionSixthPowerAllocationSieve`
-imports:
+This promotes **already proved conditional sieves and
+source-indexed necessary results**, not unconditional FLT7.
+Avoid proof refactoring or new research.
 
-```lean
-import DkMath.FLT.Seven.ModFortyTwoAllocationSieveFacade
-```
+## 2. Keep research tests independent of default maintenance
 
-Do **not** import `DkMath.FLT.Seven` from its
-own subordinate facade (would create an import cycle).
-Do **not** change `DkMath/FLT/Prime.lean`,
-`DkMath/FLT.lean`, `DkMath.lean` or
-`DkMath.Lib` merely to duplicate the import:
-the existing path `DkMath → DkMath.FLT →
-DkMath.FLT.Seven` already reaches it. Check this
-under the actual current source to confirm.
+Keep all **19** original added `DkMathTest/FLT/Seven` files
+as evidence-bearing research modules; do not delete them.
+Their direct individual imports and per-gate successful
+kernel checks remain documented as *point-in-time* evidence.
 
-Do not promote the branch-specific theorems into
-neutral `DkMath.Lib` simply to make them reachable.
-Keep historical broad aggregator semantics intact.
+A lightweight production import smoke check is useful,
+e.g. a DkMathTest file importing **only**
+`DkMath.FLT.Seven`, containing `#check` probes
+for representative exported declarations from early
+and late gates and a few `#print axioms` audits.
+Build it **explicitly locally**, not via global test
+driver or CI.
 
-## 2. Make tests genuinely accessible and kernel-checked
+A separate local test suite importing all 19 old tests
+is **optional** if useful to demonstrate this branch's
+current test coverage. It must remain **opt-in**:
+not imported by `DkMathTest.lean`, not referenced
+by the GitHub workflow, and not mandatory for the
+production closeout. Prefer the gate-specific
+already-reported builds over a large risky test
+migration. Failures in historical scratch tests
+are documented, not concealed; they do not justify
+modifying proved production declarations solely
+to preserve a transient test harness.
 
-There are **19** added DkMathTest modules, including
-`SevenRamifiedFusionSourceAllocationChartAudit`
-and the gate-019
-`SevenRamifiedFusionSourceConstraintSeparation`.
-They must not be silently dropped just because a
-production module of the same name does not exist.
+This policy is deliberate: tests are independently
+usable, but the main library and its CI do not
+promise that every archived research probe will
+compile indefinitely.
 
-Create a light public-import smoke test, e.g.
+## 3. Local production verification and optional research checks
 
-```text
-DkMathTest/FLT/Seven/ModFortyTwoAllocationSieveFacade.lean
-```
-
-that imports ONLY
-`DkMath.FLT.Seven` (not individual new
-production modules), uses `#check` or simple
-direct-use type probes for representative
-declarations from early, middle and late gates,
-and audits the final exported dependencies
-with `#print axioms`. Suggested smoke endpoints:
-
-- `nestedAllocation_excluded_of_mod_fortyTwo`;
-- `sixthPowerSieved_two_prime_pow_excluded`;
-- `sixthPowerSieved_smallCoefficient_permutation_prime_excluded`;
-- `internalDepthFour_no_reconstruction_of_permutation_prime_core`;
-- `internalDepthFour_source_prime_exclusive_valuation`.
-
-Respect their namespaces and theorem types; the
-point is to check **reachability through
-the actual top-level facade** with no direct
-side imports. A simple `#check` does not
-independently recheck the underlying theorem
-implementation; the full build remains essential.
-
-Create a separate test suite aggregator, e.g.
-
-```text
-DkMathTest/FLT/Seven/ModFortyTwoAllocationSieveSuite.lean
-```
-
-which imports that smoke test and **all 19
-branch-added DkMathTest modules**.
-Use a deterministic 1:1 inventory against the
-actual compare diff; do not rely on only
-the latest gate's tests. Import test-only
-source audit modules into this suite, never into
-production.
-
-Add ONE import of this test suite in
-`DkMathTest.lean`, near the existing
-`DkMathTest.FLT.Seven.GTailFacade`.
-Do not add 19 imports individually to
-`DkMathTest.lean` unless there is a compelling
-compatibility reason.
-
-## 3. Guarantee PR CI checks these Lean tests
-
-The existing `.github/workflows/lean_action_ci.yml`
-runs on `pull_request` and builds the default
-DkMath target, but `test: false` means a
-green build **does not** prove the new tests ran.
-
-After the existing `leanprover/lean-action@v1`
-build step, add a targeted workflow step,
-on the same job/environment, that runs:
-
-```yaml
-- name: Build FLT7 Mod42 allocation-sieve tests
-  working-directory: lean/dk_math
-  run: lake build DkMathTest.FLT.Seven.ModFortyTwoAllocationSieveSuite
-```
-
-Validate exact YAML placement, availability of
-`lake` after lean-action, and current
-repository CI style. If that route is unsupported
-in the installed action, choose a proven
-equivalent that compiles the exact suite; report
-the reason. Avoid globally enabling every
-unrelated test via `test: true` unless baseline
-compatibility is verified and there is a
-clear purpose. Preserve the existing PR trigger,
-job permissions and build stage.
-
-The smoke test must also be a dependency of this
-suite. CI must fail if the new facade or a
-previously added test module no longer elaborates.
-
-This workflow edit **does not itself run GitHub CI**;
-the actual remote CI outcome must be checked
-after the user integrates/pushes the closure and
-the develop PR is opened.
-
-## 4. Local verification — mandatory before asking for PR
-
-Run actual checkout commands and log their
-observed exit codes:
+**Required:**
 
 ```text
 lake build DkMath.FLT.Seven.ModFortyTwoAllocationSieveFacade
 lake build DkMath.FLT.Seven
 lake build DkMath
-lake build DkMathTest.FLT.Seven.ModFortyTwoAllocationSieveSuite
-lake env lean DkMathTest/FLT/Seven/ModFortyTwoAllocationSieveFacade.lean
 ```
 
-Use local resource-aware build choices as needed,
-but do not omit the top facade, root project and
-test suite checks. If a command is too expensive
-or cannot run, report a blocker (Outcome B),
-not a fabricated pass. The CI job will be the
-independent PR-side check, not a substitute for
-the available local audit.
+And run an explicit import-only smoke check
+(e.g. `lake env lean DkMathTest/FLT/Seven/ModFortyTwoAllocationSieveFacade.lean`)
+if a smoke file is created. Confirm that at least
+the following exports resolve from the public facade:
 
-Verify import closure of **17/17 production** and
-**19/19 tests**, correctly distinguishing
-direct from transitive imports. Prefer a small
-mechanically reproduced inventory in the
-report over eyeballing the import list.
+```text
+nestedAllocation_excluded_of_mod_fortyTwo
+sixthPowerSieved_two_prime_pow_excluded
+sixthPowerSieved_smallCoefficient_permutation_prime_excluded
+internalDepthFour_no_reconstruction_of_permutation_prime_core
+internalDepthFour_source_prime_exclusive_valuation
+```
 
-Run `#print axioms` for representative exports,
-check no `sorryAx` or prohibited substitutes,
-`git diff --check`, and validate the YAML
-syntax/step. Do not alter mathematical theorem
-statements to make the Facade build.
+Use correct namespaces and `#print axioms` on
+representative exports. Check `git diff --check`.
+Verify actual production import closure of **17/17**.
+No `sorryAx`, new axioms, `sorry`, `admit`
+or unsafe proof substitutes.
 
-## 5. Final research summary and PR handoff
+**Optional, best-effort local-only:**
+compile individual branch test modules, an opt-in
+19-module suite, or a full `DkMathTest` batch
+*when practical*. Clearly distinguish their
+success/failures from required production checks.
+Do not migrate the whole scratch package solely
+to make optional compilation pass.
 
-Create a concise `branch-closeout-summary-261014.md`
-under the **existing docs/dev branch directory**:
+The **existing GitHub CI** after opening the PR
+will check production `DkMath` by its unchanged
+workflow. That is a real and sufficient PR CI
+claim for this closeout, **not** a claim that
+`DkMathTest` was run in CI.
 
-- origin: mod42 necessity;
-- cheap versus exact countermodels;
-- mod5/mod13 and seventh-power
-  permutation-prime polynomial image obstructions;
-- generic eligible prime-power ownership and
-  unbounded abstract-core exclusion families;
-- conditional source-indexed reconstruction
-  consequences;
-- genuine source-only N>1 / prime valuation
-  facts versus derived readouts;
-- **known open** source→natural additive
-  endpoint bridge, and absence of an unconditional
-  FLT7 closure;
-- list 17 production / 19 test units, Facade
-  links, build/check and axiom audit outcomes;
-- no falsified claim about all actual M.
+## 4. Summary, status, PR handoff
 
-Update this branch's `README.md` and `ROADMAP.md`
-with closure status and link the summary
-only after local validation. Do not erase gate
-005/017/019 Outcome B negative evidence.
-If a programmatic facade closure is blocked,
-mark `CLOSEOUT BLOCKED`, not `READY`.
+Write `branch-closeout-summary-261014.md`:
+briefly summarize gate 001–019 results and accurate
+Outcome B frontiers, describe 17 production/19
+research test files, the Facade path, observed
+production build checks, and this **intentional**
+test/CI maintenance boundary. Do not promise
+future compatibility of all scratch tests.
+Do not assert an unconditional FLT7 result or
+construct a missing additive endpoint.
 
-Report either:
-- **CLOSEOUT READY**: all requested source/test
-  wiring and local checks successful; CI
-  workflow coverage configured. The user can
-  integrate/push and Wise Wolf can create the
-  `develop` PR and check actual CI.
-- **CLOSEOUT BLOCKED**: exact missing import,
-  test/build failure or CI configuration issue,
-  including reproducible error logs and proposed
-  narrow remedy. No PR yet.
+Write `report-closeout-facade-261014.md` and
+compact verification evidence with exact commands
+and exit status. Update project README/ROADMAP
+only after verifying source state.
 
-Create `report-closeout-facade-261014.md`
-and a compact `evidence/closeout-facade-verification.md`
-with exact commands, timings if known, exit status,
-import inventory and observed axiom sets.
-Keep bulky logs ignored, as in prior gates.
+Mark **CLOSEOUT READY** if the production Facade,
+`DkMath.FLT.Seven` and `DkMath` build
+successfully and selected facade exports resolve,
+even if opt-in archived research tests
+remain unmaintained. Mark **CLOSEOUT BLOCKED**
+only for real production build/Facade/axiom
+failures, or unverified mandatory checks.
 
-## Stop and permissions
+Upon a user-controlled push of verified work,
+Wise Wolf can open a `develop` PR and inspect
+the actual **production-only** GitHub CI run.
+Do not claim CI passed before a run exists.
 
-**Codex: code edits, Facade wiring, CI YAML,
-local testing and reporting ONLY.**
+## Stop / permissions
 
-**DO NOT** run `git add`, `git commit`,
-`git push`, create/switch branches, open a PR,
-merge, or change unrelated proof architecture.
-The user handles local integration/push;
-Wise Wolf performs later PR creation and
-independent remote CI review on user request.
-
-No `instruction-020.md` / research gate 020 is
-authorized. Stop here after closeout reporting.
+Codex: source/Facade edits, local testing, report
+and summary only. **No git add/stage/commit/push,
+branch creation, PR or merge.** No
+`instruction-020.md` or new research gate.
+Stop after reporting.
