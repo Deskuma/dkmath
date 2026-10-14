@@ -2,7 +2,7 @@
 
 Branch: `research/FLT7-Mod42-AllocationSieve-261013-v0`
 Base: `develop` (first prepared 2026-10-13).
-Current status: **Gates 001–004 and 006–016 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 017 Part A ACCEPTED (Outcome A) / constructive bridge Outcome B; gate 018 AUTHORIZED**. See `review-001.md` through `review-017.md`.
+Current status: **Gates 001–004 and 006–016 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 017 Part A ACCEPTED (Outcome A) / constructive bridge Outcome B; gate 018 ACCEPTED (Outcome A, derived ledger only); gate 019 AUTHORIZED**. See `review-001.md` through `review-018.md`.
 
 ## Goals and gates
 
@@ -26,7 +26,8 @@ Current status: **Gates 001–004 and 006–016 ACCEPTED (Outcome A); gate 005 A
 | 015 | Prime-base avoidance and complement ownership | Eligible p∤r and p|M/r for c≤343,n>0; all c*13^n full-sieve excluded, even if 13|c | **ACCEPTED — Outcome A** |
 | 016 | Seventh-power permutation-prime image frontier | Generic seventh-power field injectivity and odd-prime nonvanishing, exact same-r receiver exclusion, c*ℓ^n full-sieve corollary; ℓ=11/13 and 29/2 diagnostics | **ACCEPTED — Outcome A** |
 | 017 | Source-indexed obstruction and chart existence frontier | Three conditional actual-core/finite-chart exclusions; no constructive source→primitive endpoints; exact missing formula documented | **Part A ACCEPTED — Outcome A; bridge Outcome B** |
-| 018 | Intrinsic source-prime valuation conservation | From actual same-packet M*N=V*C and coprimality, test vℓ(M)=vℓ(V)+vℓ(C) for primes ℓ|M, with no chart hypotheses | **AUTHORIZED — instruction-018.md** |
+| 018 | Intrinsic source-prime valuation conservation | Same-packet V/C coprimality, prime valuation conservation, exclusive multiplicity; established as derived readout, no new M bound | **ACCEPTED — Outcome A (derived)** |
+| 019 | Independent source-constraint discrimination | Verify scalar-ledger insufficiency model; audit true source coordinate/norm constraints for a new actual-core restriction; stop if none | **AUTHORIZED — instruction-019.md** |
 
 After each gate, pause for human/Wise Wolf review before issuing the next
 implementation instruction. Do not autonomously expand 001 into 003.
@@ -126,9 +127,13 @@ Explain the mod13 nonvanishing structurally via the identity 2D*F(D,q)=(q+D)^7�
 
 After gate 016's completed structural prime-field theorem, **return to the genuine source-frontier**. For p:RamifiedSignedRootRoutingPacket with explicit equality internalDepthFourSeventhCore p=c*ℓ^n (prime ℓ satisfying odd, non7 and seventh-power permutation conditions; c≤343,n>0), transport the full-sieve obstruction through the proven iff to exclude p's reconstruction obligation and finite additive charts. This is strictly **conditional on the core equality** and does not restrict bare p by itself. Audit the actual same-packet norm roots, complementary factor, real-pair loads, orientation and finite chart construction; identify the first *unsupplied constructive arrow*, without using a reconstruction obligation to prove its own existence. Record a precise missing lemma and honest Outcome B if no further source-side bridge is available. No new modulus hunt or FLT7 claim. Codex implements and reports only, no Git operations.
 
-## Gate 018 — authorized via instruction-018.md
+## Gate 018 — accepted as derived source ledger (review-018.md)
 
 The required source-to-chart additive pair remains unavailable and must not be manufactured from bare packet p or a reconstruction iff. Explore a **source-only valuation conservation theorem** for the actual inner core M, its genuinely sourced complementary root N and the product V*C, with M*N=V*C and Coprime M N. For each prime ℓ|M, test ℓ∤N and vℓ(M)=vℓ(V)+vℓ(C) using the correct positive-factor valuation API. Check existing source prime-support theorem for duplicates and distinguish this local conservation from an unsupported small-coefficient factorization or chosen exact receiver divisor. If only a restatement is possible, report Outcome B and reconsider strategy; no FLT7 closure is authorized. Codex implements/verifies/reports only and performs no Git operations.
+
+## Gate 019 — authorized via instruction-019.md
+
+After gate 018's source valuation readout, test whether the **scalar ledger alone** could imply a gate-016 usable prime-power factorization. A finite arithmetic example M=29², N=1, V=M, C=1 meets positivity, product equality, both coprimality conditions and 7-nondivisibility but has no prime factor satisfying gcd(7,ℓ−1)=1. This is **not** an actual packet or FLT7 witness. Inspect genuinely independent source quadratic-coordinate, cubic-norm, ramified-axis and orientation statements for a stronger necessary condition on actual M. Prove one only if warranted; otherwise record an honest negative frontier, recommend a strategic pause and do not automatically launch 020. Neither this scalar model nor an API failure proves no source-side bridge can ever exist. Codex implements/tests/reports only; no Git actions.
 
 ## Explicit non-goals
 
