@@ -2,7 +2,7 @@
 
 Branch: `research/FLT7-Kummer-Anthropic-Bridge-261015-v0`  
 Base: `develop` at `fcbcb43abe062d9f0d49c43e454f259982b995af` (2026-10-15 JST)  
-Status: **Gate 000 / STARTED — reconnaissance and type-level reconciliation; FLT7 independent closure OPEN**  
+Status: **Gate 001 ACCEPTED (Outcome B; see review-001.md); Gate 002 AUTHORIZED; FLT7 independent closure OPEN**  
 Owner: DkMath research / Codex implementation.  
 cid: `6acfa54a-d360-83ee-8c52-2fadfef957d0`
 
@@ -86,13 +86,16 @@ Existing DkMath localized sources:
 
 ## Research protocol
 
-Read `ROADMAP.md` and `instruction-001.md` from this Lean development document directory. Gate 001 must first produce
-`bridge-matrix-001.md` and `report-001.md`, with exact `#check` signatures,
-file:line evidence, definitions unfolded when needed, and a prioritized list of
-minimal lemma contracts. Only subsequent accepted gates should change
-production Lean. Avoid duplicate implementations, `sorry`, extra axioms,
+Read `ROADMAP.md`, `review-001.md`, and `instruction-002.md` from this Lean development document directory. Gate 001 has produced `bridge-matrix-001.md` and `report-001.md` and is accepted as an audit (Outcome B). Gate 002 is limited to the concrete p=7 unit bridge; Codex must stop after its report and independent review. Do not treat any conditional interface or prior proof inventory as FLT7 closure. Avoid duplicate implementations, `sorry`, extra axioms,
 vacuous `True` targets, circular FLT imports, and fabricated build results.
 
 Acceptance requires Lean kernel build, `#print axioms`, and precise report
 of any existing untrusted or unrelated import dependencies. No claim of
 FLT7 closure before an actual independent terminal contradiction exists.
+
+## Gate review and active instruction (2026-10-15)
+
+- [Gate 001 review](review-001.md): **ACCEPTED / Outcome B**. The 17-row matrix, focused builds, and axiom checks validate the reconnaissance only.
+- [Gate 002 instruction](instruction-002.md): prove the congruence-constrained Kummer unit lemma for the concrete degree-six ring (G1–G3), or report an honest blocker.
+- Gate 001's historical comparison-copy provenance needs a reproducibility erratum. **GitHub sources at pinned commits and this repository are authoritative**, not locally available temporary copies.
+- Chosen-factor `L = π * γ^7` is already established under its source packet; the *next cyclotomic integer state with strictly reduced ramifier valuation* remains OPEN. Gate 002 does not undertake that descent.

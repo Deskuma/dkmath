@@ -3,24 +3,23 @@
 Branch: `research/FLT7-Kummer-Anthropic-Bridge-261015-v0`  
 Base: `develop`  
 Document root: `lean/dk_math/docs/dev/FLT7-Kummer-Anthropic-Bridge-261015-v0/`  
-Status: **000 STARTED / 001 ASSIGNED to Codex / 002+ PLANNED**.
+Status: **000 COMPLETE; 001 ACCEPTED (Outcome B, review-001.md); 002 AUTHORIZED (instruction-002.md); 003+ ON HOLD pending review**.
 
 ## Gates
 
 | Gate | Aim | Deliverable | Acceptance |
 | --- | --- | --- | --- |
 | 000 | Baseline, branch, source pointer, scope | `README.md`, `ROADMAP.md`, `instruction-001.md` | this branch exists; no Lean changes |
-| 001 | Workspace-wide source and theorem reconciliation | `bridge-matrix-001.md`, `report-001.md`, optional `evidence/001-*.txt` | exact signatures/provenance; A/B/C statuses; missing contracts identified; audit-only |
-| 002 | Kummer unit lemma at degree seven | new minimal bridge under `DkMath/FLT/Seven/` or reusable lib only if generic | no `sorry` or unproved unit-surjectivity; focused build and axioms |
+| 001 | Workspace-wide source and theorem reconciliation | `bridge-matrix-001.md`, `report-001.md`, `review-001.md`, evidence | **ACCEPTED / Outcome B**; inventory complete, FLT7 OPEN |
+| 002 | Concrete degree-six Kummer unit lemma from mod-7 scalar congruence (G1/G2/G3) | `instruction-002.md`; new source/test if provable; `report-002.md` | **AUTHORIZED**; 3 scoped lemmas, focused build + axioms, otherwise explicit Outcome B/C |
 | 003 | Principalization + chosen-factor integration | minimal constructor/adapter proof | precise source data and unit congruence; no duplication |
 | 004 | Case I vs Gap/chosen orientation mapping | branch transport lemmas, or a documented obstruction | proper hypotheses, no invalid case identification |
 | 005 | Case II strict descent feasibility | witness / well-founded decreasing measure or a rigorous blocker | strict decrease and integer closure, not merely conditional existence |
 | 006 | Independent FLT7 consumer assessment | minimal noncircular integration, or explicit Outcome B/C | no use of external finished FLT7 and no hiding placeholders |
 | 007 | Facade, regression, audit, review | `report-007.md`, compatibility checks, final dependency DAG | green focused builds, standard axioms, reviewed diff |
 
-**Gate 001 is the only authorized execution step of `instruction-001.md`.**
-Following gates require scope adjustment based on the source audit; the table is
-a research plan, not a claim that the listed theorems can be proved.
+**Gate 001 is complete and reviewed. Only Gate 002 is now authorized.**
+Stop after Gate 002 for review; Gates 003+ are illustrative and must be re-scoped to reflect the already-completed chosen packet and missing actual descent. No gate entails that its mathematical obligations are provable.
 
 ## Gate 001 minimum audit rows
 
@@ -54,9 +53,7 @@ and do not claim FLT7 is solved by this roadmap.
 
 ## Build and trust policy
 
-From the repository's `lean/dk_math` Lean project root, run only feasible focused targets and local
-test/audit modules before large builds.  Prefer `LEAN_NUM_THREADS=1` (or 2
-if memory permits); avoid fresh all-Mathlib rebuilds on limited RAM.
+From the repository's `lean/dk_math` Lean project root, run appropriate focused build targets and local test/audit modules before wider builds. Parallelism, resource limits, and build strategy are chosen by Codex and the execution environment; do not prescribe `LEAN_NUM_THREADS`.
 Read root `AGENT.md` for layering: `DkMath.*` research -> `DkMath.Lib.*`
 promoted -> `DkMathlib.*` public. Do not allow reverse dependencies.
 Check `sorry`, `admit`, new `axiom`, and `#print axioms` on every public
