@@ -1,0 +1,47 @@
+name: Lean CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - "lean/dk_math/**"
+      - ".github/workflows/lean_action_ci.yml"
+
+  pull_request:
+    paths:
+      - "lean/dk_math/**"
+      - ".github/workflows/lean_action_ci.yml"
+
+  workflow_dispatch:
+
+concurrency:
+  group: lean-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build DkMath
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Build Lean project
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: lean/dk_math
+          build: true
+          test: false
+          lint: false
+          use-github-cache: true
+          use-mathlib-cache: true
+
+      - name: Build FLT7 Mod42 allocation-sieve tests
+        working-directory: lean/dk_math
+        run: lake build DkMathTest.FLT.Seven.ModFortyTwoAllocationSieveSuite
