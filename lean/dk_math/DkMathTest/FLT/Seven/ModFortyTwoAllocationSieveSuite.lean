@@ -1,0 +1,28 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMathTest.FLT.Seven.ModFortyTwoAllocationSieveFacade
+import DkMathTest.FLT.Seven.SevenRamifiedFusionCenteredImage589
+import DkMathTest.FLT.Seven.SevenRamifiedFusionCenteredModFiveImage
+import DkMathTest.FLT.Seven.SevenRamifiedFusionCenteredThirteenSupport
+import DkMathTest.FLT.Seven.SevenRamifiedFusionCompositeCore9653618
+import DkMathTest.FLT.Seven.SevenRamifiedFusionGeneralGapModFiveImage
+import DkMathTest.FLT.Seven.SevenRamifiedFusionModFortyTwoAllocationSieve
+import DkMathTest.FLT.Seven.SevenRamifiedFusionModFortyTwoCheapAllocation
+import DkMathTest.FLT.Seven.SevenRamifiedFusionModFortyTwoCheapBoundaryAudit
+import DkMathTest.FLT.Seven.SevenRamifiedFusionModSixResidues
+import DkMathTest.FLT.Seven.SevenRamifiedFusionParametricMixedExclusion
+import DkMathTest.FLT.Seven.SevenRamifiedFusionPermutationPrimeSupport
+import DkMathTest.FLT.Seven.SevenRamifiedFusionPrimePowerPrimitiveExclusion
+import DkMathTest.FLT.Seven.SevenRamifiedFusionSmallCoefficientPrimePowerOwnership
+import DkMathTest.FLT.Seven.SevenRamifiedFusionSmallCoefficientPrimeSupport
+import DkMathTest.FLT.Seven.SevenRamifiedFusionSourceAllocationChartAudit
+import DkMathTest.FLT.Seven.SevenRamifiedFusionSourceConstraintSeparation
+import DkMathTest.FLT.Seven.SevenRamifiedFusionSourcePermutationPrimeObstruction
+import DkMathTest.FLT.Seven.SevenRamifiedFusionSourcePrimeValuationLedger
+import DkMathTest.FLT.Seven.SevenRamifiedFusionThirteenPowerPrimitiveExclusion
+
+#print "file: DkMathTest.FLT.Seven.ModFortyTwoAllocationSieveSuite"

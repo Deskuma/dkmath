@@ -3,7 +3,7 @@
 Branch: `research/FLT7-Mod42-AllocationSieve-261013-v0`
 Base: `develop` (first prepared 2026-10-13).
 Current status: **Gates 001–004 and 006–016 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 017 Part A Outcome A / constructive bridge Outcome B; gate 018 ACCEPTED (Outcome A, derived ledger); gate 019 ACCEPTED (Outcome B); research PAUSED. No gate 020 authorized.** See `review-001.md` through `review-019.md`.
-Merge-readiness status: **BLOCKED ON FACADE / TEST / CI WIRING**, per [facade-integration-audit-261014.md](facade-integration-audit-261014.md). Follow [instruction-closeout-facade-261014.md](instruction-closeout-facade-261014.md); do not open the develop PR before local tests verify. This is a non-research integration closeout, not gate 020.
+Local integration status: **CLOSEOUT READY** — Facade 17/17、tests 19/19、必須5 local checks成功、CI suite coverage設定済み。Remote CIは未実行。See [branch closeout summary](branch-closeout-summary-261014.md) and [closeout report](report-closeout-facade-261014.md). Research remains paused; no gate020.
 
 ## Goals and gates
 

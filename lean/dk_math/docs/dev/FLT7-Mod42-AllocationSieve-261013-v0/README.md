@@ -3,7 +3,7 @@
 Branch: **research/FLT7-Mod42-AllocationSieve-261013-v0**  
 Base: **develop** (branch forked 2026-10-13).  
 Status: **Gates 001–004 and 006–016 ACCEPTED (Outcome A); gate 005 ACCEPTED (Outcome B); gate 017 conditional transport Outcome A / constructive bridge Outcome B; gate 018 ACCEPTED (Outcome A, derived ledger); gate 019 ACCEPTED (Outcome B); research gate progression PAUSED — strategic redesign required, no instruction-020**.
-Integration status: **FACADE CLOSEOUT REQUIRED before develop PR — not yet CI verified**. See [Facade audit](facade-integration-audit-261014.md) and [closing instruction](instruction-closeout-facade-261014.md). Research remains paused; the closeout is a wiring/test/CI task, not research gate 020.
+Integration status: **CLOSEOUT READY** — Facade 17/17、tests 19/19、必須5 local checks成功、CI suite coverage設定済み。Remote CIは未実行。See [branch closeout summary](branch-closeout-summary-261014.md) and [closeout report](report-closeout-facade-261014.md). Research remains paused; no gate020.
 
 ## Question
 
