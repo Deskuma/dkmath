@@ -3,7 +3,8 @@
 Branch: `research/FLT7-Kummer-Anthropic-Bridge-261015-v0`  
 Base: `develop` at `fcbcb43abe062d9f0d49c43e454f259982b995af` (2026-10-15 JST)  
 Status: **Gate 000 / STARTED — reconnaissance and type-level reconciliation; FLT7 independent closure OPEN**  
-Owner: DkMath research / Codex implementation.
+Owner: DkMath research / Codex implementation.  
+cid: `6acfa54a-d360-83ee-8c52-2fadfef957d0`
 
 ## Purpose
 
@@ -36,14 +37,14 @@ oracle, not the endpoint of the DkMath-native investigation.
 
 ## Initial source map (candidates, not type-checked equivalences)
 
-| Anthropic entry | DkMath candidate | Current assessment |
-| --- | --- | --- |
-| `IsCyclotomicExtension.Rat.seven_pid` | `DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean` | analogous seven-cyclotomic PID result; verify exact carrier |
-| `isPrincipal_of_isPrincipal_pow_of_coprime` | `DkMath/Lib/NumberTheory/IdealPowerFactor.lean`, `PrincipalIdealPower.lean`, `ClassGroupTorsionBridge.lean` | principalization bridge already available with hypotheses |
-| `FltIdeals.fltIdeals_coprime` / `CaseI.is_principal` | `DkMath/FLT/Kummer/CyclotomicPrincipalization.lean`, FLT7 chosen-linear-factor modules | hypothesis/branch matching not established |
-| `KummersLemma.eq_pow_prime_of_unit_of_congruent` | `DkMath/FLT/Seven/PrimeTraceOneDirectCyclotomicUnitCongruence.lean` | key bridge candidate; DkMath `DegreeSixKummerUnitLemmaAtSeven` is **a Prop target**, not a theorem |
-| `CaseII.exists_solution'` / `not_exists_solution` | `DkMath/FLT/Kummer/CyclotomicPrincipalization.lean` peel/normal-form targets | strict descent witness not established |
-| `flt_regular` | `DkMath/FLT/Kummer/RegularPrimeRoute.lean` | comparison endpoint only; do not use to short-circuit FLT7 |
+| Anthropic entry                                      | DkMath candidate                                                                                            | Current assessment                                                                                 |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `IsCyclotomicExtension.Rat.seven_pid`                | `DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean`                                               | analogous seven-cyclotomic PID result; verify exact carrier                                        |
+| `isPrincipal_of_isPrincipal_pow_of_coprime`          | `DkMath/Lib/NumberTheory/IdealPowerFactor.lean`, `PrincipalIdealPower.lean`, `ClassGroupTorsionBridge.lean` | principalization bridge already available with hypotheses                                          |
+| `FltIdeals.fltIdeals_coprime` / `CaseI.is_principal` | `DkMath/FLT/Kummer/CyclotomicPrincipalization.lean`, FLT7 chosen-linear-factor modules                      | hypothesis/branch matching not established                                                         |
+| `KummersLemma.eq_pow_prime_of_unit_of_congruent`     | `DkMath/FLT/Seven/PrimeTraceOneDirectCyclotomicUnitCongruence.lean`                                         | key bridge candidate; DkMath `DegreeSixKummerUnitLemmaAtSeven` is **a Prop target**, not a theorem |
+| `CaseII.exists_solution'` / `not_exists_solution`    | `DkMath/FLT/Kummer/CyclotomicPrincipalization.lean` peel/normal-form targets                                | strict descent witness not established                                                             |
+| `flt_regular`                                        | `DkMath/FLT/Kummer/RegularPrimeRoute.lean`                                                                  | comparison endpoint only; do not use to short-circuit FLT7                                         |
 
 Existing DkMath localized sources:
 - `DkMath/FLT/Kummer/{Basic,GapDivisibleBranch,CyclotomicPrincipalization,ClassGroupBridge,RegularPrimeRoute}.lean`
