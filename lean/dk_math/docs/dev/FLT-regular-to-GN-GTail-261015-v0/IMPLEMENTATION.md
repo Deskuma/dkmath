@@ -320,3 +320,16 @@ FLT 入口は `GNRamifiedUnitResidue.exists_GN_ramified_residue_normalized_packe
 元の正の自然数以外の追加仮定はなく、従来の FLT3 完成済み終点や
 従来のセクター排除を使用しないことを再帰的依存監査で検査する。
 一般 p の単元補題と降下についての未完の境界は継続する。
+
+## 18. 五次相対ノルム・Kummer 単元補題・FLT5 の再形式化
+
+[FIVE-GN-DESCENT-AND-SEVEN.md](FIVE-GN-DESCENT-AND-SEVEN.md) に実装と研究考察を記録。
+`QuinticGoldenNorm` は整数基底の環同型から相対ノルムを構成し、`Algebra.norm` と一致させる。
+`FiveGoldenRelativeNorm` は既存 GoldenInt に送り、因子と分岐因子の共役規約を固定する。
+`FiveKummerUnit` は CM 共役比の根付き単位と黄金比単元の一般分類から、五次の
+`KummerUnitPowerCriterion` を追加仮定なしで証明する。
+`FiveGNSameBeta` は既存 q の同じ β の五乗根を GN・円分イデアルから復元し、
+`FiveGNDescent` は既存零セクターの一段の厳密降下を、新しい強帰納法で閉じる。
+公開終点は `fermatFive_no_positive_solution_via_GN`。降下内部の lift の五乗再抽出は再利用する。
+FLT7 の実三次単元の整数合同から七乗判定への限定的な接続も回帰検査する。
+六次の現在の単元への合同条件の供給と、次の不変パケットへの再入は別課題である。

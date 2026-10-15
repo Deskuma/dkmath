@@ -6,6 +6,10 @@
 環同型で GN・Kummer の三乗根を既存の同じ Eisenstein 剥離商に戻し、
 既存の座標降下を再利用して、追加仮定のない FLT3 の別証明経路を構成する。
 
+五次の続章は [FIVE-GN-DESCENT-AND-SEVEN.md](FIVE-GN-DESCENT-AND-SEVEN.md)。
+相対ノルム、五次 Kummer 単元補題、同じ GoldenInt の β の五乗根を経て
+既存の黄金比降下へ接続する。実装後の FLT7 への照合と研究考察も記録した。
+
 **研究日：** 2026年10月15日  
 **対象：** DkMath / CosmicFormula / FLT regular  
 **参照正本：** https://github.com/leanprover-community/flt-regular

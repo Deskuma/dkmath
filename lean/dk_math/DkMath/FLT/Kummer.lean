@@ -11,5 +11,6 @@ import DkMath.FLT.Kummer.ClassGroupBridge
 import DkMath.FLT.Kummer.RegularPrimeRoute
 import DkMath.FLT.Kummer.GNKummerUnitAdapter
 import DkMath.FLT.Kummer.ThreeGNDescent
+import DkMath.FLT.Kummer.FiveGNDescent
 
 #print "file: DkMath.FLT.Kummer"
