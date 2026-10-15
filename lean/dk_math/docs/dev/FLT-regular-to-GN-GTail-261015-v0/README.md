@@ -104,3 +104,8 @@ Kummer の証明を完成済みの地図とし、GN・GTail から同じ到達�
 さらに [整数根の剰余条件](RAMIFIED-ROOT-CONGRUENCE.md) を追加。
 `ramified_integral_root_modEq_one` は `GN=p*tᵖ` と mod p² の先頭項から、
 AKSBridge の GN 版 Fermat を使って `t≡1 mod p` を導く。
+
+次章: [分岐剰余体と単元の一次正規化](RAMIFIED-UNIT-RESIDUE.md)。
+`R/(ζ−1)≃𝔽_p`、剥離商 βᵢ≡−i*u、円分単元による γᵢ≡1 への正規化を実装。
+FLT 座標では εᵢ≡i*b となり、同じ商・イデアル根を保持する。
+検証記録: [validation-ramified-unit-residue.txt](evidence/validation-ramified-unit-residue.txt)。

@@ -281,3 +281,12 @@ p=3 の分岐因子の剥離、非分岐側の可除性の否定、p=2 で正確
 整数ノルムによる `GN=p*tᵖ`（p∤t）を公開する。
 整数付値の段階では円分体・正則性を使わず、主イデアル化の段階で類数条件を使う。
 単元合同解析、任意の Case II の向きの正規化、無限降下は残る。
+
+## 14. 分岐剰余体と単元の一次正規化
+
+[RAMIFIED-UNIT-RESIDUE.md](RAMIFIED-UNIT-RESIDUE.md) に、剥離商の一次合同式と
+円分単元による生成元の正規化を記録した。
+`CosmicRamifiedResidue` が分岐剰余体と βᵢ≡−i*u を供給し、
+`CosmicRamifiedUnitNormalization` が同じイデアル根の生成元を γᵢ≡1 に選び直す。
+FLT 入口は `GNRamifiedUnitResidue.exists_GN_ramified_residue_normalized_packet`。
+単元の p 乗剰余類は補償単元の p 乗だけを掛けるため保持され、消去はしていない。
