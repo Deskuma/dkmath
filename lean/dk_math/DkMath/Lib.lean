@@ -17,6 +17,7 @@ import DkMath.Lib.NumberTheory.QuadraticResidueType
 import DkMath.Lib.NumberTheory.PolynomialHenselDigit
 import DkMath.Lib.NumberTheory.TraceOnePowerLanding
 import DkMath.Lib.NumberTheory.EisensteinCoordinates
+import DkMath.Lib.NumberTheory.EisensteinCyclotomic
 import DkMath.Lib.NumberTheory.EisensteinLatticeLanding
 import DkMath.Lib.NumberTheory.SquarefreePowerFactor
 import DkMath.Lib.Cosmic.GTail

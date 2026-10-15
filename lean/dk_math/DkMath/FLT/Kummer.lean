@@ -10,5 +10,6 @@ import DkMath.FLT.Kummer.CyclotomicPrincipalization
 import DkMath.FLT.Kummer.ClassGroupBridge
 import DkMath.FLT.Kummer.RegularPrimeRoute
 import DkMath.FLT.Kummer.GNKummerUnitAdapter
+import DkMath.FLT.Kummer.ThreeGNDescent
 
 #print "file: DkMath.FLT.Kummer"

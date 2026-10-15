@@ -308,3 +308,15 @@ FLT 入口は `GNRamifiedUnitResidue.exists_GN_ramified_residue_normalized_packe
 `GNRamifiedPrimary` は FLT 座標へ接続し、`GNKummerUnitAdapter` は一般 p の
 明示的な単元補題 consumer と、Mathlib から証明した三次 criterion を区別して公開する。
 上流 flt-regular を実 import する候補は通常の production から分離し、未型検査と明記。
+
+## 17. GN・Kummer と既存 FLT3 の降下の実接続
+
+[THREE-GN-DESCENT.md](THREE-GN-DESCENT.md) に再形式化実験を記録。
+`EisensteinCyclotomic` は元を運ぶ環同型を構成する。
+`ThreeEisensteinBridge` は類数条件を解消し、指定された既存剥離商 β そのものの
+三乗表示を GN・円分イデアル・三次 Kummer 単元補題から得る。
+`ThreeGNDescent` は同じ β の座標とノルムを既存の座標降下へ渡す。
+終点は `DkMath.FLT.Kummer.fermatThree_no_positive_solution_via_GN`。
+元の正の自然数以外の追加仮定はなく、従来の FLT3 完成済み終点や
+従来のセクター排除を使用しないことを再帰的依存監査で検査する。
+一般 p の単元補題と降下についての未完の境界は継続する。

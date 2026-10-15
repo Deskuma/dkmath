@@ -2,6 +2,10 @@
 
 実装後の到達点は [IMPLEMENTATION.md](IMPLEMENTATION.md) を参照。以下の研究要旨は実装前の記録として保持する。
 
+三次の再形式化実験は [THREE-GN-DESCENT.md](THREE-GN-DESCENT.md) を参照。
+環同型で GN・Kummer の三乗根を既存の同じ Eisenstein 剥離商に戻し、
+既存の座標降下を再利用して、追加仮定のない FLT3 の別証明経路を構成する。
+
 **研究日：** 2026年10月15日  
 **対象：** DkMath / CosmicFormula / FLT regular  
 **参照正本：** https://github.com/leanprover-community/flt-regular

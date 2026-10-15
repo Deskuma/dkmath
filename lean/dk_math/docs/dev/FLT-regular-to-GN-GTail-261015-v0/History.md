@@ -73,3 +73,13 @@
 - flt-regular の実際の単元補題の型を閲覧し、明示的な criterion の供給に対する条件付き consumer を型検査。上流依存未導入の接続候補は integration に分離し、未検証と明記。
 - 三次は Mathlib の実際の単元補題から criterion を証明。元の類数条件等の下で未解析単元を残さない因子表示を導いた。
 - 解説は `RAMIFIED-PRIMARY-UNIT-KUMMER-BRIDGE.md`。一般 p の単元補題の実接続と無限降下は未完。
+
+### 日時: 2026/10/16 JST・既存 FLT3 への GN・Kummer 接続実験
+
+1. 目的: 完成済み FLT3 定理を呼ばず、GN の円分イデアル経路による三乗抽出を既存の降下へ接続する。
+2. 実施: `TraceOneInt (-1) ≃+* 𝓞 K` を構成。τ↦1+ζ、ζ↦τ² とし、第2位相と分岐因子の二つの符号を固定した。同型で PID 性と類数1を輸送し、三次の類数条件も解消した。
+3. 結論: 既存パケットの同じ β に GN・Kummer 経由の三乗根を与え、第二座標とノルムを既存降下へ渡す。元の三つの向きはパケットの座標恒等式から統一する。厳密減少と強帰納法により、追加仮定のない `fermatThree_no_positive_solution_via_GN` を構成した。
+4. 検証: 回帰例、公理 whitelist、終点からの再帰的依存監査、Kummer・Lib・DkMath 入口の検証を `evidence/validation-three-gn.txt` に記録する。
+5. 失敗事例: 整数環の Fintype が PID 経由と NumberField 経由で異なるため、類数等式を `Fintype.card_eq_nat_card` で合わせた。具体的円分体の Algebra インスタンスの透明性は局所 option で解決した。
+6. 備考: 従来の降下は因子を受け取る入口を切り出して共用する。従来の証明経路も保持する。研究提案と実装済み定理の区別は `THREE-GN-DESCENT.md` に記録した。
+7. 次の課題: 一般 p の Kummer 単元補題の実供給と、一般 p の正規化・降下は別課題。

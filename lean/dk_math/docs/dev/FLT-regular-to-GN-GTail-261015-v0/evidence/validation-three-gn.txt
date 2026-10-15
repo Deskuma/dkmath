@@ -1,0 +1,44 @@
+2026-10-16 JST — FLT3 GN/Kummer bridge validation
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean/Mathlib: v4.34.1
+
+Final build command:
+LEAN_NUM_THREADS=2 lake build DkMathTest.FLT.Kummer.ThreeGNDescent DkMathTest.FLT.Kummer.ThreeGNDependencyAudit DkMathTest.FLT.Kummer.GNRamifiedPrimary DkMathTest.FLT.Prime.PrimeTraceOneThreeSectorClosureApiAudit DkMathTest.FLT.Prime.PrimeTraceOneThreeSectorClosureAxiomAudit DkMath.FLT.Kummer DkMath.Lib DkMath
+Exit code: 0
+Build completed successfully (10512 jobs).
+This is the root build plus the named tests, not the entire DkMathTest suite.
+
+New regression examples: 11, passed.
+New public declarations with axiom whitelist checks: 26, passed.
+Allowed axioms: propext, Classical.choice, Quot.sound.
+
+Recursive final-proof dependency audit:
+ROOT: DkMath.FLT.Kummer.fermatThree_no_positive_solution_via_GN
+reachable constants: 74404; readable bodies: 71748
+axiom leaves: [propext, Quot.sound, Classical.choice]
+PASS: required GN/ideal/unit/equivalence/descent providers present; forbidden, missing, unreadable lists empty.
+Required providers: actual Eisenstein/cyclotomic ring equivalence; stripped-factor ideal-power extraction; cubic Kummer unit lemma; GN cubic factor endpoint; same-beta transfer; new strict descent; shared factor consumer.
+Forbidden: sorryAx; completed Mathlib FLT3 proof families; DkMath FLT3_core; legacy Three closure/endpoint/descent entry points; legacy unit-times-cube extraction and sector exclusion.
+This inspects compiled proof types, readable bodies including opaque bodies, and constructors, not merely imports.
+
+Root import smoke:
+lake env lean docs/dev/FLT-regular-to-GN-GTail-261015-v0/evidence/ThreeGNSmoke.lean
+Exit code: 0
+The public endpoint has no class-number, field, primitive-solution, or unit-power premise.
+Output: three-gn-smoke.txt
+
+Source checks:
+No sorry/admit/new axiom/native_decide in the three new production modules or the changed descent module.
+git diff --check: passed.
+New chapter local links: passed.
+Source hashes: source-three-gn-sha256.txt
+
+Historical build warnings (5; none in the new modules; no dependency from the audited new endpoint):
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+
+Scope:
+The cubic proof reuses existing normalization, integer power allocation, Euclidean structure, coordinate factor allocation, and strict descent arithmetic. The cube of the SAME beta is supplied through GN/cyclotomic ideals/unit congruences. General-prime Kummer's lemma and general-prime descent remain separate work.
