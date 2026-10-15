@@ -100,3 +100,7 @@ Kummer の証明を完成済みの地図とし、GN・GTail から同じ到達�
 `GNRamifiedArithmetic` は `vₚ(a+b)+1=p*vₚ(c)` と、類数条件の下で
 `GN p (a+b) (-b)=p*tᵖ`（p∤t）を返す。
 検証記録: [validation-ramified-arithmetic.txt](evidence/validation-ramified-arithmetic.txt)。
+
+さらに [整数根の剰余条件](RAMIFIED-ROOT-CONGRUENCE.md) を追加。
+`ramified_integral_root_modEq_one` は `GN=p*tᵖ` と mod p² の先頭項から、
+AKSBridge の GN 版 Fermat を使って `t≡1 mod p` を導く。

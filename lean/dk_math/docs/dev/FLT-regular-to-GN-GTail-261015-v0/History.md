@@ -43,3 +43,10 @@
 - GN の零評価から N(ζ−1)=+p を計算し、正則性を加えた分岐側で GN=p*tᵖ と p∤t を復元。
 - `RamifiedIdealPowerPacket` を入力から構成。主イデアル化する拡張は同じ剥離商とイデアル根を保持する。
 - 解説: `RAMIFIED-VALUATION-PACKET.md`。単元合同解析と降下は今回の結論には含まない。
+
+### 同日・整数ノルム根の合同条件
+
+- `GNRamifiedRoot` に、p² の合同式から p を消去する中間定理と `ramified_integral_root_modEq_one` を追加。
+- GN 版 Fermat を u,t に使って t≡1 mod p を証明。p∤t は入力に不要で、円分体・正則性も整数等式 GN=p*tᵖ の後段には不要。
+- 基底パケットと分岐側 FLT の接続を追加。従来の存在定理に根の合同条件を加える強化版を公開。
+- 6例を追加し、新規4定理を含む計19定理の公理 whitelist を設定。解説は `RAMIFIED-ROOT-CONGRUENCE.md`。

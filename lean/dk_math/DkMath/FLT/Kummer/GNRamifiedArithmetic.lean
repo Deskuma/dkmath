@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.GNRamified
 import DkMath.Lib.NumberTheory.CosmicRamifiedPacket
+import DkMath.NumberTheory.GNRamifiedRoot
 
 /-!
 # 分岐側 GN の整数深度とノルム復元
@@ -78,5 +79,35 @@ theorem exists_GN_eq_prime_mul_pow_of_ramified_case
   obtain ⟨P⟩ := nonempty_GN_ramified_packet_of_flt_equation hζ hodd hp3 hc0 heq hprim hcase
   obtain ⟨Q, _⟩ := P.exists_principal_extension hreg
   exact Q.exists_integral_root hodd
+
+/-- 基底パケットの座標に対して `GN=p*t^p` を満たす任意の整数根は 1 mod p。
+正則性や選ばれた主イデアル化には依存せず、同じ座標の整数合同式から得る。 -/
+theorem ramified_packet_integral_root_modEq_one
+    {K : Type*} [Field K] [NumberField K]
+    {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} {hζ : IsPrimitiveRoot ζ p} {x u c t : ℤ}
+    (P : RamifiedIdealPowerPacket hζ x u c)
+    (ht : GTail p 1 x u = (p : ℤ) * t ^ p) :
+    t ≡ 1 [ZMOD (p : ℤ)] :=
+  DkMath.NumberTheory.ramified_integral_root_modEq_one hp.out P.prime_ge_three
+    P.gap_divisible P.parameter_not_divisible ht
+
+/-- 分岐側の整数冪復元を、根の剰余類 `t≡1 mod p` まで強化する。
+元の根・非可除性・例外因子を含む積等式を保ったまま合同条件を追加する。
+整数ノルムの根の条件であり、円分整数環内の単元合同解析とは区別する。 -/
+theorem exists_GN_eq_prime_mul_pow_modEq_one_of_ramified_case
+    {K : Type*} [Field K] [NumberField K]
+    {p : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) (hodd : Odd p) (hp3 : 3 ≤ p)
+    {a b c : ℤ} (hc0 : c ≠ 0) (heq : a ^ p + b ^ p = c ^ p)
+    (hprim : IsCoprime a b) (hcase : (p : ℤ) ∣ c)
+    (hreg : Nat.Coprime p (Fintype.card (ClassGroup (𝓞 K)))) :
+    ∃ t : ℤ, GN p (a + b) (-b) = (p : ℤ) * t ^ p ∧ t ≡ 1 [ZMOD (p : ℤ)] ∧
+      ¬ (p : ℤ) ∣ t ∧ (a + b) * ((p : ℤ) * t ^ p) = c ^ p := by
+  obtain ⟨P⟩ := nonempty_GN_ramified_packet_of_flt_equation hζ hodd hp3 hc0 heq hprim hcase
+  obtain ⟨Q, _⟩ := P.exists_principal_extension hreg
+  obtain ⟨t, ht, hnot, hprod⟩ := Q.exists_integral_root hodd
+  exact ⟨t, ht, ramified_packet_integral_root_modEq_one Q.toRamifiedIdealPowerPacket ht,
+    hnot, hprod⟩
 
 end DkMath.FLT.Kummer

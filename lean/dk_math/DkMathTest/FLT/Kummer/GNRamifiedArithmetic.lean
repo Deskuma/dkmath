@@ -7,7 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.GNRamifiedArithmetic
 
 open scoped NumberField
-open DkMath.CosmicFormula DkMath.Lib.NumberTheory DkMath.FLT.Kummer
+open DkMath.CosmicFormula DkMath.Lib.NumberTheory DkMath.FLT.Kummer DkMath.NumberTheory
 
 -- Signed coordinates and x=0 are admitted by the arithmetic congruence.
 example : GTail 3 1 (-3 : ℤ) (-1) ≡ 3 [ZMOD (3 : ℤ) ^ 2] := by
@@ -58,6 +58,31 @@ example {K : Type*} [Field K] [NumberField K]
   obtain ⟨Q, hQ⟩ := P.exists_principal_extension hreg
   exact ⟨Q, hQ, congrArg RamifiedIdealPowerPacket.idealRoot hQ⟩
 
+-- A nontrivial actual GN value: GN₃(-54,17)=3*7³, hence 7≡1 mod 3.
+example : (7 : ℤ) ≡ 1 [ZMOD (3 : ℤ)] := by
+  exact ramified_integral_root_modEq_one Nat.prime_three (by decide)
+    (x := -54) (u := 17) (by norm_num) (by norm_num) (by norm_num [GTail, Finset.sum_range_succ])
+
+-- Negative parameter and zero gap are also legitimate arithmetic inputs.
+example : (1 : ℤ) ≡ 1 [ZMOD (3 : ℤ)] := by
+  exact ramified_integral_root_modEq_one Nat.prime_three (by decide)
+    (x := 3) (u := -1) (by norm_num) (by norm_num) (by norm_num [GTail, Finset.sum_range_succ])
+
+example : (1 : ℤ) ≡ 1 [ZMOD (5 : ℤ)] := by
+  exact ramified_integral_root_modEq_one (by decide : Nat.Prime 5) (by decide)
+    (x := 0) (u := 1) (by norm_num) (by norm_num) (by rw [GTail_eval_zero]; norm_num)
+
+-- Cancellation mod p² needs no parameter-unit assumption.
+example : (0 : ℤ) ^ 3 ≡ 0 ^ (3 - 1) [ZMOD (3 : ℤ)] := by
+  exact ramified_integral_root_pow_modEq_parameter Nat.prime_three (by decide)
+    (x := 0) (u := 0) (t := 0) (by norm_num) (by rw [GTail_eval_zero]; norm_num)
+
+-- Without p∤u, the root need not be 1 mod p.
+example : GTail 3 1 (0 : ℤ) 0 = 3 * (0 : ℤ) ^ 3 ∧ ¬ (0 : ℤ) ≡ 1 [ZMOD 3] := by decide
+
+-- p=2 does not satisfy the prime-square head formula used here.
+example : GTail 2 1 (6 : ℤ) 1 = 2 * (2 : ℤ) ^ 2 ∧ ¬ (2 : ℤ) ≡ 1 [ZMOD 2] := by decide
+
 #print axioms DkMath.Lib.NumberTheory.nonempty_ramifiedIdealPowerPacket
 #print axioms DkMath.Lib.NumberTheory.RamifiedIdealPowerPacket.exists_principal_extension
 #print axioms DkMath.FLT.Kummer.exists_GN_eq_prime_mul_pow_of_ramified_case
@@ -78,7 +103,11 @@ run_cmd do
     ``padicValInt_gap_add_one_of_ramified_case,
     ``padicValInt_gap_of_ramified_case,
     ``nonempty_GN_ramified_packet_of_flt_equation,
-    ``exists_GN_eq_prime_mul_pow_of_ramified_case] do
+    ``exists_GN_eq_prime_mul_pow_of_ramified_case,
+    ``ramified_integral_root_pow_modEq_parameter,
+    ``ramified_integral_root_modEq_one,
+    ``ramified_packet_integral_root_modEq_one,
+    ``exists_GN_eq_prime_mul_pow_modEq_one_of_ramified_case] do
     for ax in ← Lean.collectAxioms name do
       unless #[``propext, ``Classical.choice, ``Quot.sound].contains ax do
         throwError "Unexpected axiom {ax} in {name}"
