@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.PascalPrimeDial
+import DkMath.CosmicFormula.Defs
 import Mathlib.FieldTheory.Finite.Basic
 import Mathlib.RingTheory.Ideal.Quotient.Basic
 import Mathlib.RingTheory.Polynomial.Basic
@@ -193,6 +194,101 @@ theorem prime_congruent_cosmic_formula_natCast_zmod
     (((x + u) ^ p : ℕ) : ZMod p) = ((x ^ p + u : ℕ) : ZMod p) :=
   (ZMod.natCast_eq_natCast_iff _ _ _).mpr
     (prime_congruent_cosmic_formula hp)
+
+/-!
+### 幅1の GN を累積する Fermat の小定理
+
+内部二項係数の可除性から出発し、有限体の `pow_card` を使わずに
+`GN p 1 n ≡ 1`、望遠和、`u^p ≡ u` の順に構成する。
+合同式で消える量も、自然数上の補正量として保持する。
+-/
+
+/-- 幅1の補正多項式 `H_p(n)`。素数 `p` のとき、各係数の除算は
+`p ∣ choose p (k+1)` により割り切れる。定義自体は任意の `p` に対して全域的。 -/
+def primeGNUnitStepCorrection (p n : ℕ) : ℕ :=
+  ∑ k ∈ Finset.range (p - 1), (Nat.choose p (k + 1) / p) * n ^ (p - (k + 1))
+
+/-- `E_p(u) = ∑ n < u, H_p(n)`。単位幅ごとの補正を、合同式に射影する前に蓄積する。 -/
+def primeGNAccumulatedCorrection (p u : ℕ) : ℕ :=
+  ∑ n ∈ Finset.range u, primeGNUnitStepCorrection p n
+
+/-- GN の幅を1にすると、正の次数では両端のうち右端が1となり、
+残りは既存の weighted inner beam に一致する。 -/
+theorem GN_unit_step_eq_one_add_innerBeam {d n : ℕ} (hd : 0 < d) :
+    CosmicFormula.GN d 1 n = 1 + weightedBinomialInnerBeamSum d 1 n := by
+  have h := weightedBinomialPositiveTailSum_eq_innerBeam_add_right
+    (d := d) (x := 1) (u := n) hd
+  rw [weightedBinomialPositiveTailSum_eq_x_mul_GTail_one] at h
+  simpa [Nat.add_comm] using h
+
+/-- 素数行の各内部係数から `p` を取り出す。単なる商の存在ではなく、
+係数ごとに割った多項式 `H_p` と元の beam の等式である。 -/
+theorem prime_innerBeam_eq_mul_GN_correction {p n : ℕ} (hp : p.Prime) :
+    weightedBinomialInnerBeamSum p 1 n = p * primeGNUnitStepCorrection p n := by
+  unfold weightedBinomialInnerBeamSum primeGNUnitStepCorrection
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro k hk
+  have hklt : k + 1 < p := by
+    have := Finset.mem_range.mp hk
+    omega
+  have hdvd := hp.dvd_choose_self (Nat.succ_ne_zero k) hklt
+  simp only [weightedBinomialTerm, one_pow, mul_one]
+  rw [← mul_assoc, Nat.mul_div_cancel' hdvd]
+
+/-- 幅1の厳密な分解 `GN_p(1,n) = 1 + p H_p(n)`。
+証明の入力は内部二項係数の可除性であり、Fermat の小定理ではない。 -/
+theorem prime_GN_unit_step_eq_one_add_mul_correction {p n : ℕ} (hp : p.Prime) :
+    CosmicFormula.GN p 1 n = 1 + p * primeGNUnitStepCorrection p n := by
+  rw [GN_unit_step_eq_one_add_innerBeam hp.pos, prime_innerBeam_eq_mul_GN_correction hp]
+
+/-- 素数次数では、幅1の GN はどの自然数で評価しても `1 mod p` となる。 -/
+theorem prime_GN_unit_step_modEq_one {p n : ℕ} (hp : p.Prime) :
+    CosmicFormula.GN p 1 n ≡ 1 [MOD p] := by
+  rw [GN_unit_step_eq_one_add_innerBeam hp.pos]
+  simpa using (Nat.ModEq.refl (n := p) 1).add
+    (prime_innerBeam_modEq_zero (x := 1) (u := n) hp)
+
+/-- 正次数の冪は単位幅 GN の望遠和になる。素数性は不要だが、
+次数0では `0^0 = 1` のため空和の境界が一致しない。 -/
+theorem sum_GN_unit_steps_eq_pow {d : ℕ} (hd : 0 < d) (u : ℕ) :
+    (∑ n ∈ Finset.range u, CosmicFormula.GN d 1 n) = u ^ d := by
+  induction u with
+  | zero => simp [hd.ne']
+  | succ u ih =>
+    rw [Finset.sum_range_succ, ih]
+    have h := CosmicFormula.add_pow_eq_mul_GTail_one_add_gap d 1 u
+    simpa [Nat.add_comm] using h.symm
+
+/-- 整数に持ち上げる前から、自然数上で `u^p = u + p E_p(u)` を保持する。
+`E_p` は任意の存在証人ではなく、明示した補正多項式の有限和である。 -/
+theorem prime_pow_eq_self_add_mul_GN_correction {p : ℕ} (hp : p.Prime) (u : ℕ) :
+    u ^ p = u + p * primeGNAccumulatedCorrection p u := by
+  rw [← sum_GN_unit_steps_eq_pow hp.pos u]
+  simp_rw [prime_GN_unit_step_eq_one_add_mul_correction hp]
+  simp [Finset.sum_add_distrib, Finset.mul_sum, primeGNAccumulatedCorrection]
+
+/-- 幅1の GN 合同式を帰納的に積み重ねる Fermat の小定理。
+既存の `prime_pow_modEq_self` や有限体の `ZMod.pow_card` には依存しない。 -/
+theorem prime_pow_modEq_self_via_GN {p u : ℕ} (hp : p.Prime) :
+    u ^ p ≡ u [MOD p] := by
+  induction u with
+  | zero => simpa only [zero_pow hp.ne_zero] using (Nat.ModEq.refl (n := p) 0)
+  | succ u ih =>
+    have h := CosmicFormula.add_pow_eq_mul_GTail_one_add_gap p 1 u
+    have hs := ih.add (prime_GN_unit_step_modEq_one (n := u) hp)
+    rw [show u + 1 = 1 + u by omega, h]
+    simpa only [one_mul, Nat.add_comm] using hs
+
+/-- GN による自然数上の証明を、任意の `ZMod p` の元へ移す。
+各元の自然数代表 `u.val` に GN 版の合同式を適用するため、有限体の
+乗法群の位数や `ZMod.pow_card` を使う経路とは独立である。 -/
+theorem prime_zmod_gap_compress_via_GN
+    {p : ℕ} (hp : p.Prime) (u : ZMod p) : u ^ p = u := by
+  let : NeZero p := ⟨hp.ne_zero⟩
+  have h := (ZMod.natCast_eq_natCast_iff (u.val ^ p) u.val p).mpr
+    (prime_pow_modEq_self_via_GN hp)
+  simpa only [Nat.cast_pow, ZMod.natCast_zmod_val] using h
 
 /--
 Gap compression inside the prime field itself.

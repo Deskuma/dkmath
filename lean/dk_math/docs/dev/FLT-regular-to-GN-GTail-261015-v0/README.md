@@ -91,3 +91,7 @@ Kummer の証明を完成済みの地図とし、GN・GTail から同じ到達�
 検証結果は [validation.txt](evidence/validation.txt) を参照。
 
 今回の検証記録: [validation-ramified-ideal.txt](evidence/validation-ramified-ideal.txt)。
+
+寄り道として、[幅1 GN の累積による Fermat の小定理](AKS-GN-UNIT-STEP.md) を
+`AKSBridge` に追加。`GN p 1 n = 1 + p H_p(n)` と
+`u^p = u + p E_p(u)` を保持し、GN 経由の合同式を独立に構成した。

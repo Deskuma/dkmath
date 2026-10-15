@@ -28,3 +28,10 @@
 5. 失敗事例: 有限積の再結合では `Finset.mul_prod_erase` の関数を明示し、型推論の heartbeat 超過を解消。`Ideal.span_singleton_le_iff_mem` の書換えにより包含を明示した。
 6. 備考: 例外因子 x の分岐冪を残余積に含めるので、商ごとの抽出を指数の数値化より先に実行できる。
 7. 次の課題: 単元の合同解析、分岐指数の数値的追跡、向きの正規化、方程式を保つ無限降下。
+
+### 同日・寄り道: AKSBridge の幅1 GN
+
+- 内部二項係数を p で割った補正多項式 H と累積量 E を追加。
+- 幅1 GN の合同式、正次数の望遠和、`u^p = u + p E_p(u)` を証明。
+- GN の単位幅合同式を帰納的に積み重ねる Fermat の小定理と、その ZMod 版を追加。既存の有限体経由の API は保持。
+- 解説は `AKS-GN-UNIT-STEP.md`、検証記録は `evidence/validation-aks-gn.txt`。

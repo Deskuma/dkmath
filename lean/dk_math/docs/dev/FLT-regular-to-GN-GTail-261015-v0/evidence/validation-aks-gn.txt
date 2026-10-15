@@ -1,0 +1,23 @@
+2026-10-15 JST — AKS GN unit-step bridge
+
+cwd: lean/dk_math
+Command:
+LEAN_NUM_THREADS=2 lake build DkMathTest.NumberTheory.AKSBridgeGN DkMathTest.FLT.Kummer.GNFirstCase DkMath.NumberTheory.PrimeCyclicGlue DkMath
+Exit: 0
+Build completed successfully (10486 jobs).
+
+New module/test warnings: none.
+Existing sorry warnings replayed by root build:
+warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+
+AKSBridgeGN includes 9 regression examples and an axiom whitelist for all 8 new theorems.
+Allowed axioms: propext, Classical.choice, Quot.sound.
+Examples: H3(n)=n^2+n, H2(n)=n, E3(4)=20, exact correction identity,
+empty sum, degree-one telescoping, Nat/ZMod endpoints, composite-degree counterexample.
+
+git diff --check: exit 0.
+No valuation-depth or infinite-descent conclusion is asserted.
