@@ -1,0 +1,12 @@
+Command: lake env lean DkMathTest/FLT/Kummer/GNStructure.lean
+Exit code: 0
+Automated axiom whitelist: passed
+
+'DkMath.Lib.NumberTheory.norm_phaseFactor_eq_GTail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.integral_norm_phaseFactor_eq_GTail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.span_tail_remainder' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.span_GTail_eq_prod_phase_span' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.common_prime_contains_ramified' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.phase_spans_pairwise_isCoprime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.GN_kummer_structure_of_unramified' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Kummer.GN_kummer_structure_of_regular' depends on axioms: [propext, Classical.choice, Quot.sound]

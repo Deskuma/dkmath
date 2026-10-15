@@ -1,5 +1,7 @@
 # Kummer × GN・GTail × イデアル — 研究ノート要旨
 
+実装後の到達点は [IMPLEMENTATION.md](IMPLEMENTATION.md) を参照。以下の研究要旨は実装前の記録として保持する。
+
 **研究日：** 2026年10月15日  
 **対象：** DkMath / CosmicFormula / FLT regular  
 **参照正本：** https://github.com/leanprover-community/flt-regular
@@ -72,3 +74,14 @@ Kummer の桁上がり定理は、桁多項式の加法と正規化の差を計�
 Kummer の証明を完成済みの地図とし、GN・GTail から同じ到達点を目指す。
 
 その過程で、類群・単元・分岐を宇宙式の保存構造との関係で理解することが、この研究の目的である。
+
+## 2026-10-15 Lean 実装の到達点
+
+[実装解説](IMPLEMENTATION.md) に、GN → 円分ノルム → 主イデアル積 →
+共通素イデアル → 類群 → 単元倍 p 乗、の証明を記録した。
+入口は `DkMath.FLT.Kummer.GNStructure`（従来の `DkMath.FLT.Kummer` からも import）。
+日本語 docstring 付きの主定理は `GN_kummer_structure_of_regular`。
+
+**非分岐側の構造定理まで。正則素数に対する FLT 全体の再証明は未完。**
+単元の合同解析と分岐側の降下は残っている。
+検証結果は [validation.txt](evidence/validation.txt) を参照。

@@ -1,0 +1,44 @@
+Date: 2026-10-15 JST
+Base HEAD: d107380f46310b4cfc631750b7ac6932809d3486
+Lake cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: v4.34.1; Mathlib revision configured as v4.34.1
+
+Focused build:
+  lake build DkMathTest.FLT.Kummer.GNStructure DkMathTest.GapFocusingPhase DkMathTest.NumberTheory.GapFocusingAxiomAudit DkMath.FLT.Kummer
+  exit 0; Build completed successfully (9032 jobs).
+  New modules and tests: no warnings.
+  Replayed historical warnings:
+    DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147
+    DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187
+    DkMath/NumberTheory/GcdNextResearch.lean:850
+    DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389
+
+Final source direct test and axiom check:
+  lake env lean DkMathTest/FLT/Kummer/GNStructure.lean
+  exit 0; no warnings; 5 examples and 8 axiom whitelist checks.
+  All 8 audited endpoints depend only on propext, Classical.choice, Quot.sound.
+  See axioms.txt.
+
+Root build:
+  LEAN_NUM_THREADS=2 lake build DkMath
+  RUNNING
+
+Root smoke:
+  Pending root build completion.
+
+Static checks:
+  git diff --check: exit 0.
+  Production additions: no sorry/admit/axiom/native_decide constructs.
+  Promoted Phase source exactly matches the original HEAD proof text,
+  except the #print module label. Existing namespace and declarations retained.
+  source-sha256.txt records the checked source files.
+  kummer-inventory.tsv: current DkMath/**/*.lean, case-sensitive Kummer,
+  excluding tests and documentation; 30 files, 321 occurrences.
+
+Mathematical scope:
+  Proved integer cyclotomic norm = GN, principal ideal products,
+  common-prime ramification support, and the unramified ideal/root/unit theorem.
+  The regularity hypothesis is coprimality with the finite class-group cardinality.
+  The conclusion retains an arbitrary unit factor.
+  This implementation does not yet reprove full regular-prime FLT:
+  unit congruence elimination and ramified descent still need proofs.
