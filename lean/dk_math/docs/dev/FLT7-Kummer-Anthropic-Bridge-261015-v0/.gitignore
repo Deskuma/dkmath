@@ -1,0 +1,4 @@
+# Ephemeral research diagnostics belong outside Git.
+/evidence/
+/logs/
+*.log

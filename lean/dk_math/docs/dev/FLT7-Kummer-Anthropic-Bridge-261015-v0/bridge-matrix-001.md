@@ -34,9 +34,7 @@ Up は [固定版](https://github.com/anthropics/fermats-last-theorem/blob/6e837
 
 Gate 001 の比較に使った temporary copies は Git-tracked の恒久入力ではない。
 本表の参照を固定 upstream commit の path:line に統一した。
-`evidence/001-reference-copy-diff.txt` は当時の比較記録として保存するが、
-そこに記録された copy の存在や再取得をこの文書の入力条件にしない。
-元の Outcome B、型検査・axiom 検査・build 結果は変更していない。
+比較時の一時コピーや raw logs はリポジトリの永続資料ではない。原典は固定 GitHub commit と DkMath の実ソースであり、コピーの存在を入力条件としない。
 以下の `Up:3247` は上表の固定 URL `P2M/Sol/S_flt_regular.lean#L3247` を表す。
 DkMath 側の行番号・定理状態は Gate 001 の冒頭 HEAD における source index。
 Gate 002 で証明された一般単数補題 G1–G3 の現在の状態は [report-002.md](report-002.md) を参照。
@@ -49,15 +47,13 @@ upstream の短名 `FltRegular.*` は原則 `P2MW.S_flt_regular.FltRegular.*`。
 `P2MW.S_flt_regular.FltRegular.fltIdeals_coprime`、
 `P2MW.S_flt_regular.FltRegular.is_principal`、
 `P2MW.S_flt_regular.FltRegular.exists_pow_eq_of_zeta_sub_one_pow_dvd_sub_one`、
-`P2MW.S_flt_regular.FltRegular.eq_pow_prime_of_unit_of_congruent` になる（S）。
+`P2MW.S_flt_regular.FltRegular.eq_pow_prime_of_unit_of_congruent` になる（参照ソースのみ）。
 案内文の `FltIdeals.fltIdeals_coprime` / `CaseI.is_principal` /
 `KummersLemma.eq_pow_prime_of_unit_of_congruent` は概念的ラベルとして読む。
 
 検証区分 **K** = live checkout の型・`#print axioms` を確認、**S** = ソース読解のみ。
 upstream は全て S。upstream 全体の再ビルド・kernel audit は実行していない。
-ローカル49宣言の完全修飾名・展開前の型・axiom sets は
-`evidence/001-type-axiom-probe.txt` と opt-in
-`DkMathTest/FLT/Seven/KummerAnthropicBridgeAudit001.lean` にある。
+Gate 001 では49宣言を調査した。維持する根拠は本表の宣言名・出典と、報告書の重要な axiom 結論に限定する。調査用プローブおよび逐語ログは保存しない。
 Prop 定義への `#print axioms` は、その Prop の証明を与えるものではない。
 
 ## 番号付き行列

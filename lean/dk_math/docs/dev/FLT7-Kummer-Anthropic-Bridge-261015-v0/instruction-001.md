@@ -1,3 +1,5 @@
+> **Historical instruction — COMPLETE.** Later artifact policy supersedes evidence/log retention: do not commit build outputs, raw logs, temporary upstream copies or large proof probes.
+
 # instruction-001 — Codex workspace audit: DkMath × Anthropic Kummer
 
 Date: 2026-10-15  
@@ -141,9 +143,8 @@ Write in **this directory**:
 2. `report-001.md`: source and branch hashes, findings, P0/P1/P2/P3,
    exact status A/B/C, pending obligations, and a concrete implementation
    proposal for instruction-002 (<=3 tightly scoped lemmas).
-3. Optional `evidence/001-*.txt` or a small `DkMathTest` scratch probe
-   ONLY if needed for `#check` / `#print axioms`; if a Lean file is added,
-   keep it opt-in and avoid production imports.
+3. Run optional `#check` / `#print axioms` probes locally, but do not commit
+   raw outputs or audit-only scratch files.
 
 Gate 001 is **audit first**. Do not edit or rewrite production proof files.
 No commit, push, PR or merge in this gate; deliver the changes for review. If Lean build is too expensive or unavailable,

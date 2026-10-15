@@ -2,7 +2,7 @@
 
 Date: 2026-10-15 JST  
 Branch: `research/FLT7-Kummer-Anthropic-Bridge-261015-v0`  
-Reviewed artifacts: [report-001.md](report-001.md), [bridge-matrix-001.md](bridge-matrix-001.md), `evidence/001-*` and relevant live proof bodies.  
+Reviewed artifacts: [report-001.md](report-001.md), [bridge-matrix-001.md](bridge-matrix-001.md), and relevant live proof bodies.  
 Gate 001 decision: **ACCEPTED / Outcome B (research mapping, not new Lean proof)**  
 FLT7 independent closure: **OPEN**.
 
@@ -23,11 +23,9 @@ FLT7 independent closure: **OPEN**.
    a natural-number root with other coordinates fixed. A general adapter is
    neither found nor warranted. Norm is not additive.
 4. **Trust audit: sufficient for the requested source inventory.** Codex
-   reports four focused production targets built successfully, 49 declaration
-   type/axiom probes succeeded, and recursive dependency audits separated
-   existing `sorryAx` routes from clean chosen-factor results. The recorded
-   compiler-option failure on the initial probe was corrected and rerun.
-   All these are *reported local validation*, not a new build by this review.
+   reports 49 declaration probes and recursive axiom dependency auditing separated
+   existing `sorryAx` routes from clean chosen-factor results.
+   These are reported local checks, not a CI verdict.
    `#print axioms` on a `Prop` definition does not prove it.
 5. **Conservative theorem status:** `DegreeSixKummerUnitLemmaAtSeven : Prop`
    remains an uninhabited specification in the surveyed source; the chosen
@@ -82,3 +80,5 @@ case merger, old natural q-peel reconstruction, and any terminal FLT7 theorem.
 Separate mathematical planning after Gate 002 review.
 
 **Review verdict:** ACCEPT Gate 001 Outcome B and authorize ONLY Gate 002.
+
+**Artifact retention update (2026-10-15):** historical raw build logs, evidence dumps, and temporary audit probes are not retained in Git. Review decisions rest on the source-linked matrix and the actual Lean declarations; CI is the final integration check.

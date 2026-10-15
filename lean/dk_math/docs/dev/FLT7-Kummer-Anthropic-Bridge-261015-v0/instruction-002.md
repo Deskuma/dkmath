@@ -1,3 +1,5 @@
+> **Historical instruction — COMPLETE.** The later repository policy forbids committing build logs, raw evidence dumps and disposable probes. Keep only code, useful regression tests and concise mathematical reports.
+
 # instruction-002 — concrete cyclotomic seventh-power unit bridge
 
 Date: 2026-10-15 JST  
@@ -181,10 +183,10 @@ relative to Lean root:
 
 1. `report-002.md`: exact branch/HEAD, source paths:lines, theorem
    statements, proven/blocked status of **each G1/G2/G3**, build commands
-   and exit codes, axiom sets, changed files, source-provenance correction
+   axiom sets, changed files, source-provenance correction
    and any unaddressed obstacle. State Outcome A only for genuinely
    kernel-checked target proofs, otherwise Outcome B/C with evidence.
-2. Optional `evidence/002-*.txt` for focused build and axiom output.
+2. No evidence/log artifacts. Keep local outputs outside Git.
 3. The opt-in test module and new implementation source **only if an
    honest proof is obtained**. Don't leave a public theorem with `sorry`.
 4. Suggested Gate 003 after verification: a **new research design** for
