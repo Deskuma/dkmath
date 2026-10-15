@@ -1,0 +1,10 @@
+Command: lake env lean DkMathTest/FLT/Kummer/GNFirstCase.lean
+Exit code: 0
+Automated axiom whitelist for 12 declarations: passed
+
+'DkMath.FLT.Kummer.GN_kummer_structure_of_first_case' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Kummer.exists_GN_eq_pow_of_first_case' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.ramifiedIdeal_pow_eq_prime_span' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.exists_ramified_phase_quotient_of_dvd_gap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

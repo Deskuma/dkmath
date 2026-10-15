@@ -2,7 +2,8 @@
 
 日付: 2026-10-15 (JST)
 
-今回の到達点は **GN の整数ノルム表示、および非分岐側の Kummer 構造定理**。
+今回の到達点は **GN の整数ノルム表示、標準 Case I 条件からの Kummer 構造定理、
+および分岐側での各非自明因子の一段剥離**。
 正則素数に対する FLT 全体の再証明は未完成である。
 単元の合同解析と分岐側の降下を、証明済みの結論に混ぜない。
 添付研究ノートは数学的な構想・参照資料として読み、実装状態は本書と検証記録で区別する。
@@ -10,7 +11,7 @@
 ## 1. 読む入口
 
 ```lean
-import DkMath.FLT.Kummer.GNStructure
+import DkMath.FLT.Kummer.GNFirstCase
 ```
 
 従来の `import DkMath.FLT.Kummer` からも到達する。
@@ -28,6 +29,8 @@ import DkMath.FLT.Kummer.GNStructure
 | 7 | 同上 | `phase_spans_pairwise_isCoprime` |
 | 8 | 同上 | `GN_kummer_structure_of_unramified` |
 | 9 | `DkMath/FLT/Kummer/GNStructure.lean` | `GN_kummer_structure_of_regular` |
+| 10 | `DkMath/FLT/Kummer/GNFirstCase.lean` | `GN_kummer_structure_of_first_case`、`exists_GN_eq_pow_of_first_case` |
+| 11 | `DkMath/Lib/NumberTheory/CosmicRamification.lean` | `exists_ramified_phase_quotient_of_dvd_gap` |
 
 `GN` は `DkMath.CosmicFormula.Defs` にある `GTail p 1` の略記。
 別の多項式や別の GN を新設してはいない。
@@ -157,7 +160,9 @@ x=a+b,\quad u=-b,\quad (a+b)GN_p(a+b,-b)=a^p+b^p.
 結論は `a+ζⁱb=εγᵖ` とそのイデアル根・生成元の証明。
 イデアル冪の存在、因子の対ごとの互いに素性、最終矛盾を入力に仮定してはいない。
 非分岐条件は整数で検査可能な入力として残っている。
-標準的 Case I の `p∤abc` からこの入力への専用 adapter は今回の API に含めていない。
+追加した `GNFirstCase` は、標準的 Case I の `p∤abc` からこの入力を供給する。
+合同式 `a+b≡c (mod p)` を Fermat の小定理で導き、`p∤c` を使う。
+`GN_kummer_structure_of_first_case` は `p∤abc` を直接受け取る。
 
 ## 7. 任意の GTail にもある、別の橋
 
@@ -186,7 +191,7 @@ x=a+b,\quad u=-b,\quad (a+b)GN_p(a+b,-b)=a^p+b^p.
 
 文字列の棚卸しは [kummer-inventory.tsv](evidence/kummer-inventory.tsv) に保存した。
 対象を現行の `DkMath/**/*.lean`、大文字小文字を区別する `Kummer` に固定すると
-30 ファイル・321 出現（今回の追加を含む）。テスト・文書は含まない。
+31 ファイル・325 出現（今回の追加を含む）。テスト・文書は含まない。
 依頼文の 37 ファイル・410 件とは検索範囲・時点が異なり得るため、件数を証明範囲に換算しない。
 
 旧 `CyclotomicPrincipalization.lean` の
@@ -201,9 +206,9 @@ x=a+b,\quad u=-b,\quad (a+b)GN_p(a+b,-b)=a^p+b^p.
 | KGI-001 | 既存の殻対応と符号付き GN 恒等式を接続 | なし（この恒等式の範囲） |
 | KGI-002 | 整数環ノルムと GN の等式 | 独自の ℤ[ζ] モデルは導入しない |
 | KGI-003 | GN と全因子の主イデアル積 | なし（積の輸送の範囲） |
-| KGI-004 | 原始性の下で共通素イデアルは ζ−1 を含む | 分岐側の正確な付値配分・剥離 |
+| KGI-004 | 共通素イデアルの分類、λ 可除性と p 可除性の同値、非自明因子の正確な一段剥離 | 剥離後のイデアル族全体の冪配分 |
 | KGI-005 | 非分岐側のイデアル p 乗抽出 | 分岐側 |
-| KGI-006 | 類数条件から単元倍 p 乗へ復元 | 単元 sector の具体的消去 |
+| KGI-006 | 類数条件から単元倍 p 乗へ復元。整数ノルムでは符号を吸収し GN=tᵖ | 円分整数環内の単元 sector の具体的消去 |
 | KGI-007 | 未完 | Kummer 補題、Case I の矛盾、Case II の無限降下 |
 | KGI-008 | 全切断の剰余主イデアル等式 | 各切断のノルム・付値・support 分類 |
 | KGI-009 | 未着手 | Carry/wheel。FLT の Kummer 証明と桁上がり定理は別物 |
@@ -219,3 +224,42 @@ x=a+b,\quad u=-b,\quad (a+b)GN_p(a+b,-b)=a^p+b^p.
 ビルド・公理監査・回帰例の実行結果は `evidence/validation.txt` に記録する。
 新層の監査は `propext`, `Classical.choice`, `Quot.sound` 以外の依存を検出すると失敗する。
 回帰例はゼロ差分、三次ノルム 13、負の座標、`9*GN₂(9,8)=15²` のイデアル抽出、r=0 の切断を扱う。
+
+
+## 11. 続行で追加した Case I 接続と分岐の一段剥離
+
+`GNFirstCase` は原始的な仮想反例と標準条件 `p∤abc` を入力として受け取る。
+非分岐条件を別に仮定する段階から一歩進み、合同式から自動的に供給する。
+類数条件を加えると、前段のイデアル構造定理が各 `a+ζⁱb=εγᵖ` を返す。
+
+chosen factor（i=1）に整数ノルムを取れば
+
+\[
+GN_p(a+b,-b)=N(ε)N(γ)^p.
+\]
+
+`N(ε)` は整数の単元、従って ±1。p が奇数なら符号を根に吸収できるため
+`GN_p(a+b,-b)=t^p` を得る。これが `exists_GN_eq_pow_of_first_case`。
+円分整数環の単元 ε 自身が p 乗だとは主張しない。
+GN が p 乗になるという必要条件だけから FLT の矛盾も導かない。
+
+分岐側の新定理は、λ=ζ−1 に対して次を固定する。
+
+1. `λ∣x+(1−ζⁱ)u ↔ λ∣x`（一般の可換環）。
+2. 整数座標では `λ∣x ↔ p∣x`。
+3. 主イデアルでは `(λ)^(p−1)=(p)`。元は単元の違いを持つ同伴関係。
+4. `p∣x` なら `λ^(p−1)∣GN_p(x,u)`。
+5. p≥3、p∣x、p∤u、0<i<p なら、ある β について
+   `x+(1−ζⁱ)u=λβ` かつ `λ∤β`。
+
+最後の点の証明は、`λ²∣p∣x` と `1−ζⁱ` が λ と同伴であることを使う。
+仮に元の因子を λ² が割るなら差を取って λ²∣λu となり、整域で λ を消去すると
+λ∣u が従って矛盾する。**除去するのは数値 x ではなく非零の λ** である。
+
+この一段剥離は実際の円分因子の正確な局所情報である。
+剥離後のイデアルが p 乗であること、単元の合同条件、より小さい反例の構成は
+引き続き未完である。従来の降下核の `sorry` を解消したとは数えない。
+
+続行分のテストは、実際の Pythagoras 数 (3,4,5) の mod 2 接続、
+p=3 の分岐因子の剥離、非分岐側の可除性の否定、p=2 で正確一段が壊れる例を含む。
+公理 whitelist も追加 12 宣言を検査する。

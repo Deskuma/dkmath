@@ -3,6 +3,7 @@ DkMath/CFBRC/CyclotomicNorm.lean	1	1
 DkMath/FLT/Kummer/Basic.lean	6	6
 DkMath/FLT/Kummer/ClassGroupBridge.lean	2	2
 DkMath/FLT/Kummer/CyclotomicPrincipalization.lean	46	46
+DkMath/FLT/Kummer/GNFirstCase.lean	4	4
 DkMath/FLT/Kummer/GNStructure.lean	5	5
 DkMath/FLT/Kummer/GapDivisibleBranch.lean	6	6
 DkMath/FLT/Kummer/RegularPrimeRoute.lean	15	15

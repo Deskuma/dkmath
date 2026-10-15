@@ -79,9 +79,10 @@ Kummer の証明を完成済みの地図とし、GN・GTail から同じ到達�
 
 [実装解説](IMPLEMENTATION.md) に、GN → 円分ノルム → 主イデアル積 →
 共通素イデアル → 類群 → 単元倍 p 乗、の証明を記録した。
-入口は `DkMath.FLT.Kummer.GNStructure`（従来の `DkMath.FLT.Kummer` からも import）。
-日本語 docstring 付きの主定理は `GN_kummer_structure_of_regular`。
+入口は `DkMath.FLT.Kummer.GNFirstCase`（従来の `DkMath.FLT.Kummer` からも import）。
+日本語 docstring 付きの主定理は `GN_kummer_structure_of_first_case`。
+分岐側では `exists_ramified_phase_quotient_of_dvd_gap` が各非自明因子の正確な一段剥離を返す。
 
-**非分岐側の構造定理まで。正則素数に対する FLT 全体の再証明は未完。**
+**Case I の構造定理と、分岐側の一段剥離まで。正則素数に対する FLT 全体の再証明は未完。**
 単元の合同解析と分岐側の降下は残っている。
 検証結果は [validation.txt](evidence/validation.txt) を参照。

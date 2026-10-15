@@ -21,10 +21,11 @@ Final source direct test and axiom check:
 
 Root build:
   LEAN_NUM_THREADS=2 lake build DkMath
-  RUNNING
+  exit 0; Build completed successfully (10480 jobs).
 
 Root smoke:
-  Pending root build completion.
+  lake env lean docs/dev/FLT-regular-to-GN-GTail-261015-v0/evidence/Smoke.lean
+  exit 0; root reachability for the original and continuation APIs checked.
 
 Static checks:
   git diff --check: exit 0.
@@ -33,7 +34,7 @@ Static checks:
   except the #print module label. Existing namespace and declarations retained.
   source-sha256.txt records the checked source files.
   kummer-inventory.tsv: current DkMath/**/*.lean, case-sensitive Kummer,
-  excluding tests and documentation; 30 files, 321 occurrences.
+  excluding tests and documentation; 31 files, 325 occurrences.
 
 Mathematical scope:
   Proved integer cyclotomic norm = GN, principal ideal products,
@@ -42,3 +43,26 @@ Mathematical scope:
   The conclusion retains an arbitrary unit factor.
   This implementation does not yet reprove full regular-prime FLT:
   unit congruence elimination and ramified descent still need proofs.
+
+Continuation validation:
+  Continuation base HEAD: b7cf7f7f9476006e1ead58429ca17ee45f43ec9e
+  lake build DkMathTest.FLT.Kummer.GNFirstCase DkMathTest.FLT.Kummer.GNStructure DkMath
+  exit 0; Build completed successfully (10484 jobs).
+  10 examples total across both new test modules.
+  Automated whitelist checks: 8 original endpoints + 12 continuation declarations.
+  New source/test modules: no warnings.
+  The broad root closure replays the five historical sorry warnings,
+  adding DkMath/CosmicFormula/TriominoFLT.lean:1919 to the four listed above.
+  No new audited declaration depends on those admitted declarations.
+
+  lake env lean DkMathTest/FLT/Kummer/GNFirstCase.lean
+  exit 0; final continuation source direct check and axiom whitelist passed.
+  See axioms-continuation.txt for printed endpoints.
+
+Continuation mathematical scope:
+  Standard p-not-dividing-abc input now supplies the unramified hypothesis.
+  Taking integer norms and absorbing the sign for odd p proves GN = t^p.
+  Each nontrivial ramified factor has a quotient after removing exactly one zeta-1,
+  assuming p>=3, p divides the integer gap, and p does not divide the parameter.
+  The quotient is not divisible by zeta-1.
+  Reconstructing p-th ideal powers after stripping and constructing descent remain unfinished.
