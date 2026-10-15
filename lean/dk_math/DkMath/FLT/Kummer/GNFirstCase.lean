@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.GNStructure
 import DkMath.Lib.NumberTheory.CosmicRamification
+import DkMath.NumberTheory.AKSBridge
 
 /-!
 # 標準 Case I 条件から GN の構造定理へ
@@ -33,6 +34,16 @@ theorem flt_gap_mod_prime
   have h := congrArg (fun n : ℤ => (n : ZMod p)) heq
   have hf (t : ZMod p) : t ^ p = t := by simp
   simpa only [Int.cast_add, Int.cast_pow, hf] using h
+
+/-- DkMath に実装した `prime_zmod_gap_compress` 経由 (その実体は `ZMod.pow_card` ) -/
+theorem flt_gap_mod_prime'
+    {p : ℕ} [Fact p.Prime] {a b c : ℤ} (heq : a ^ p + b ^ p = c ^ p) :
+    ((a + b : ℤ) : ZMod p) = (c : ZMod p) := by
+  have h := congrArg (fun n : ℤ => (n : ZMod p)) heq
+  have _hf (t : ZMod p) : t ^ p = t := by simp only [ZMod.pow_card]
+  have hf' (t : ZMod p) : t ^ p = t :=
+    DkMath.NumberTheory.prime_zmod_gap_compress (Fact.out : p.Prime) t
+  simpa only [Int.cast_add, Int.cast_pow, hf'] using h
 
 /-- `p ∤ c` と FLT 方程式から gap `a+b` の非分岐性が従う。
 正則性や円分体は不要な、整数の合同式の段階である。 -/
