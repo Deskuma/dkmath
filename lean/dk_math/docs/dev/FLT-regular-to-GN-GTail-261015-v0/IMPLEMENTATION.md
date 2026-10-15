@@ -290,3 +290,12 @@ p=3 の分岐因子の剥離、非分岐側の可除性の否定、p=2 で正確
 `CosmicRamifiedUnitNormalization` が同じイデアル根の生成元を γᵢ≡1 に選び直す。
 FLT 入口は `GNRamifiedUnitResidue.exists_GN_ramified_residue_normalized_packet`。
 単元の p 乗剰余類は補償単元の p 乗だけを掛けるため保持され、消去はしていない。
+
+## 15. 正規化単元の mod λ² 展開
+
+[RAMIFIED-QUADRATIC-CONGRUENCE.md](RAMIFIED-QUADRATIC-CONGRUENCE.md) に続章を記録した。
+`CosmicRamifiedQuadratic` は幾何和の choose i 2 係数、既存付値からの p²∣x、
+λ³∣x の供給、および γᵖ≡1 mod λ² を接続する。
+`GNRamifiedQuadratic.exists_GN_ramified_quadratic_normalized_packet` が
+同じ基底パケットを用いて εᵢ≡i*b+choose i 2*λ*b mod λ² を返す。
+剰余環 R/(λ²) の大きさと冪零元も検証した。単元の p 乗性は未結論。

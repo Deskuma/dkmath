@@ -109,3 +109,8 @@ AKSBridge の GN 版 Fermat を使って `t≡1 mod p` を導く。
 `R/(ζ−1)≃𝔽_p`、剥離商 βᵢ≡−i*u、円分単元による γᵢ≡1 への正規化を実装。
 FLT 座標では εᵢ≡i*b となり、同じ商・イデアル根を保持する。
 検証記録: [validation-ramified-unit-residue.txt](evidence/validation-ramified-unit-residue.txt)。
+
+次章: [正規化単元を mod λ² まで読む](RAMIFIED-QUADRATIC-CONGRUENCE.md)。
+既存の付値から p²∣x と λ³∣x を供給し、同じ生成元のまま
+`εᵢ≡i*b+choose i 2*λ*b mod λ²` を証明。p=3 も含む。
+検証記録: [validation-ramified-quadratic.txt](evidence/validation-ramified-quadratic.txt)。

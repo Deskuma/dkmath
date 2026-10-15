@@ -1,0 +1,27 @@
+DkMath.Lib.NumberTheory.card_ramifiedQuadraticResidue_eq_prime_sq.{u_1} {K : Type u_1} [Field K] [NumberField K] {p : ℕ}
+  [Fact (Nat.Prime p)] [IsCyclotomicExtension {p} ℚ K] {ζ : K} (hζ : IsPrimitiveRoot ζ p) (hodd : Odd p) :
+  Nat.card (NumberField.RingOfIntegers K ⧸ Ideal.span {(hζ.toInteger - 1) ^ 2}) = p ^ 2
+DkMath.Lib.NumberTheory.RamifiedIdealPowerPacket.prime_sq_dvd_gap.{u_1} {K : Type u_1} [Field K] [NumberField K] {p : ℕ}
+  [Fact (Nat.Prime p)] [IsCyclotomicExtension {p} ℚ K] {ζ : K} {hζ : IsPrimitiveRoot ζ p} {x u c : ℤ}
+  (P : DkMath.Lib.NumberTheory.RamifiedIdealPowerPacket hζ x u c) : ↑p ^ 2 ∣ x
+DkMath.Lib.NumberTheory.RamifiedPrincipalPowerPacket.unitFactor_quadratic_dvd.{u_1} {K : Type u_1} [Field K]
+  [NumberField K] {p : ℕ} [Fact (Nat.Prime p)] [IsCyclotomicExtension {p} ℚ K] {ζ : K} {hζ : IsPrimitiveRoot ζ p}
+  {x u c : ℤ} (Q : DkMath.Lib.NumberTheory.RamifiedPrincipalPowerPacket hζ x u c) (hodd : Odd p) {i : ℕ}
+  (hi : i ∈ (Finset.range p).erase 0) (hγ : (DkMath.Lib.NumberTheory.ramifiedReduction hζ hodd) (Q.generator i) = 1) :
+  (hζ.toInteger - 1) ^ 2 ∣ Q.unitFactor i + ↑i * ↑u + ↑(i.choose 2) * (hζ.toInteger - 1) * ↑u
+DkMath.FLT.Kummer.exists_GN_ramified_quadratic_normalized_packet.{u_1} {K : Type u_1} [Field K] [NumberField K] {p : ℕ}
+  [Fact (Nat.Prime p)] [IsCyclotomicExtension {p} ℚ K] {ζ : K} (hζ : IsPrimitiveRoot ζ p) (hodd : Odd p) (hp3 : 3 ≤ p)
+  {a b c : ℤ} (hc0 : c ≠ 0) (heq : a ^ p + b ^ p = c ^ p) (hprim : IsCoprime a b) (hcase : ↑p ∣ c)
+  (hreg : p.Coprime (Fintype.card (ClassGroup (NumberField.RingOfIntegers K)))) :
+  ∃ Q,
+    ∀ i ∈ (Finset.range p).erase 0,
+      (DkMath.Lib.NumberTheory.ramifiedReduction hζ hodd) (Q.generator i) = 1 ∧
+        (DkMath.Lib.NumberTheory.ramifiedReduction hζ hodd) (Q.unitFactor i) = ↑i * ↑b ∧
+          (hζ.toInteger - 1) ^ 2 ∣ Q.unitFactor i - ↑i * ↑b - ↑(i.choose 2) * (hζ.toInteger - 1) * ↑b
+'DkMath.Lib.NumberTheory.stripped_phaseFactor_quadratic_dvd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.RamifiedIdealPowerPacket.ramifier_cube_dvd_gap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.exists_GN_ramified_quadratic_normalized_packet' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,41 @@
+2026-10-16 JST — ramified quotient and normalized unit modulo lambda squared
+
+cwd: lean/dk_math
+Command:
+LEAN_NUM_THREADS=2 lake build DkMathTest.FLT.Kummer.GNRamifiedQuadratic DkMathTest.FLT.Kummer.GNRamifiedUnitResidue DkMathTest.FLT.Kummer.GNRamifiedArithmetic DkMathTest.NumberTheory.AKSBridgeGN DkMath
+Exit: 0
+Build completed successfully (10497 jobs).
+
+New source/test warnings: none.
+New regression examples: 15 (including conditional packet API checks).
+Axiom whitelist: all 14 new theorems.
+Allowed axioms: propext, Classical.choice, Quot.sound.
+
+Existing sorry warnings replayed by root build:
+warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+
+Root import smoke:
+lake env lean /tmp/GNRamifiedQuadraticSmoke.lean
+Exit: 0
+Smoke source/output: GNRamifiedQuadraticSmoke.lean / ramified-quadratic-smoke.txt
+
+git diff --check: exit 0.
+New production files: no sorry/admit/axiom declarations.
+New Lib file: no direct research-side DkMath.FLT or DkMath.NumberTheory imports.
+
+SHA256:
+22e7a463cc6cc7dc35bd2a40824a6cf3840774a299b29f1f1843f81b0cace7ad  DkMath/Lib/NumberTheory/CosmicRamifiedQuadratic.lean
+01a080c8e59e7a5706deaf44763094a61a44b02c77f600616bfcc78e172ea964  DkMath/FLT/Kummer/GNRamifiedQuadratic.lean
+d4575de7c493dec253e69a9a1594f9f1d7c0fa564f6fba1c75fa19e8a4a53c26  DkMathTest/FLT/Kummer/GNRamifiedQuadratic.lean
+9153cd2c85e87be20c9518f78f1e82406a8a7977bbaa5ddc534918becc57a986  DkMath/FLT/Kummer.lean
+
+Scope: finite geometric-sum coefficient choose(i,2); quotient modulo lambda^2;
+p^2|x from existing packet valuation balance, hence lambda^3|x including p=3;
+gamma=1 mod lambda implies gamma^p=1 mod lambda^2; normalized unit congruence
+epsilon_i=i*b+choose(i,2)*lambda*b mod lambda^2 in FLT coordinates.
+The same base packet is preserved. R/(lambda^2) has p^2 elements and a nonzero
+square-zero class. No unit-sector elimination, orientation normalization, or descent.
