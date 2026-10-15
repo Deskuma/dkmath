@@ -22,7 +22,7 @@ name = "DkMath"
 
 [[lean_lib]]
 name = "DkMathTest"
-globs = ["DkMathTest.+"]
+globs = ["DkMathTest", "DkMathTest.+"]
 
 [[lean_lib]]
 name = "DkMathlib"

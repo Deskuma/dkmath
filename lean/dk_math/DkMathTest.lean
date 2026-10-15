@@ -23,6 +23,7 @@ import DkMathTest.FLT.Seven.GTailBridge
 import DkMathTest.FLT.Seven.GTailConstraintAudit
 import DkMathTest.FLT.Seven.GTailFacade
 import DkMathTest.FLT.Seven.ModFortyTwoAllocationSieveSuite
+import DkMathTest.FLT.Seven.KummerAnthropicBridgeAudit002
 import DkMathTest.ABC
 import DkMathTest.CFBRC
 import DkMathTest.KUS

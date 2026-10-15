@@ -41,3 +41,7 @@ jobs:
           lint: false
           use-github-cache: true
           use-mathlib-cache: true
+
+      - name: Check DkMathTest entrance
+        working-directory: lean/dk_math
+        run: lake build +DkMathTest
