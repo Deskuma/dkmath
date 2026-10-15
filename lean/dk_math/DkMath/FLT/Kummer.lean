@@ -9,6 +9,6 @@ import DkMath.FLT.Kummer.GapDivisibleBranch
 import DkMath.FLT.Kummer.CyclotomicPrincipalization
 import DkMath.FLT.Kummer.ClassGroupBridge
 import DkMath.FLT.Kummer.RegularPrimeRoute
-import DkMath.FLT.Kummer.GNFirstCase
+import DkMath.FLT.Kummer.GNRamified
 
 #print "file: DkMath.FLT.Kummer"

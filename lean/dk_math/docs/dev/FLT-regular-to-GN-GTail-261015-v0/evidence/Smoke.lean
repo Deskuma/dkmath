@@ -11,3 +11,9 @@ import DkMath
 #check DkMath.FLT.Kummer.exists_GN_eq_pow_of_first_case
 #check DkMath.Lib.NumberTheory.exists_ramified_phase_quotient_of_dvd_gap
 #print axioms DkMath.FLT.Kummer.exists_GN_eq_pow_of_first_case
+
+#check DkMath.FLT.Kummer.GN_ideal_pow_of_ramified_case
+#check DkMath.FLT.Kummer.GN_kummer_structure_of_ramified_case
+#check DkMath.Lib.NumberTheory.exists_ramified_ideal_power_family
+#check DkMath.Lib.NumberTheory.exists_ramified_GTail_ideal_pow
+#print axioms DkMath.FLT.Kummer.GN_kummer_structure_of_ramified_case

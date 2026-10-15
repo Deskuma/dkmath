@@ -66,3 +66,7 @@ Continuation mathematical scope:
   assuming p>=3, p divides the integer gap, and p does not divide the parameter.
   The quotient is not divisible by zeta-1.
   Reconstructing p-th ideal powers after stripping and constructing descent remain unfinished.
+
+Subsequent ramified ideal-power distribution implementation:
+  See validation-ramified-ideal.txt for the current proof scope and fresh checks.
+  The earlier unfinished ideal-allocation statements above are historical stage boundaries.
