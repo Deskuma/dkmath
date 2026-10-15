@@ -299,3 +299,12 @@ FLT 入口は `GNRamifiedUnitResidue.exists_GN_ramified_residue_normalized_packe
 `GNRamifiedQuadratic.exists_GN_ramified_quadratic_normalized_packet` が
 同じ基底パケットを用いて εᵢ≡i*b+choose i 2*λ*b mod λ² を返す。
 剰余環 R/(λ²) の大きさと冪零元も検証した。単元の p 乗性は未結論。
+
+## 16. λ^p 合同と Kummer 単元補題への入力
+
+[RAMIFIED-PRIMARY-UNIT-KUMMER-BRIDGE.md](RAMIFIED-PRIMARY-UNIT-KUMMER-BRIDGE.md) に続章を記録。
+`CosmicRamifiedPrimePower` が生成元と剥離商の λ^p 合同を、
+`CosmicRamifiedPrimaryUnit` が幾何和で除いた実際の単元 δ と整数合同を供給する。
+`GNRamifiedPrimary` は FLT 座標へ接続し、`GNKummerUnitAdapter` は一般 p の
+明示的な単元補題 consumer と、Mathlib から証明した三次 criterion を区別して公開する。
+上流 flt-regular を実 import する候補は通常の production から分離し、未型検査と明記。

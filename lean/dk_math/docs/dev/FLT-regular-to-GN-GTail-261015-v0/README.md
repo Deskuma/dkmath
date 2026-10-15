@@ -114,3 +114,9 @@ FLT 座標では εᵢ≡i*b となり、同じ商・イデアル根を保持す
 既存の付値から p²∣x と λ³∣x を供給し、同じ生成元のまま
 `εᵢ≡i*b+choose i 2*λ*b mod λ²` を証明。p=3 も含む。
 検証記録: [validation-ramified-quadratic.txt](evidence/validation-ramified-quadratic.txt)。
+
+次章: [λ^p の合同から Kummer 単元補題へ](RAMIFIED-PRIMARY-UNIT-KUMMER-BRIDGE.md)。
+`γᵢᵖ≡1`、`εᵢ≡b*Sᵢ mod λ^p` と、単元 δᵢ=εᵢ*Sᵢ⁻¹ の `δᵢ≡b mod p` を証明。
+一般 p は明示的な単元補題を受け取る条件付き adapter、三次は Mathlib の実際の補題から
+単元除去を検証済み。上流 flt-regular の実 import は未接続として区別する。
+検証記録: [validation-ramified-primary.txt](evidence/validation-ramified-primary.txt)。
