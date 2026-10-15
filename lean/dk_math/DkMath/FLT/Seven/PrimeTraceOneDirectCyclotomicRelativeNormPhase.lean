@@ -69,7 +69,8 @@ structure DirectRelativeNormOnePhasePacket
   phase_sub_one_mem_sevenIdeal :
     ((phase : SevenCyclotomicDegreeSixInt.Ring) - 1) ∈ sevenIdeal
 
-private theorem star_sub_int_mem_sevenIdeal
+/-- Quadratic conjugation preserves congruence to an integer modulo seven. -/
+theorem star_sub_int_mem_sevenIdeal
     (a : SevenCyclotomicDegreeSixInt.Ring) (m : ℤ)
     (h : a - (m : SevenCyclotomicDegreeSixInt.Ring) ∈ sevenIdeal) :
     star a - (m : SevenCyclotomicDegreeSixInt.Ring) ∈ sevenIdeal := by
@@ -175,7 +176,9 @@ theorem directRelativeNormOnePhase_eq_one_of_target
 def ofRealUnit : SevenRealCubicIntˣ →* SevenCyclotomicDegreeSixInt.Ringˣ :=
   Units.map SevenCyclotomicDegreeSixInt.ofReal
 
-private theorem unit_sq_eq_ofReal_normUnit_pow
+/-- A conjugation-fixed unit whose relative norm is a seventh power has a
+square that is the corresponding embedded seventh power. -/
+theorem unit_sq_eq_ofReal_normUnit_pow
     (u : SevenCyclotomicDegreeSixInt.Ringˣ)
     (v : SevenRealCubicIntˣ)
     (hstar : u = SevenCyclotomicDegreeSixInt.starUnit u)

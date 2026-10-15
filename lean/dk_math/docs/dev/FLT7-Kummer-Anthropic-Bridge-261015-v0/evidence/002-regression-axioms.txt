@@ -1,0 +1,26 @@
+file: DkMathTest.FLT.Seven.KummerAnthropicBridgeAudit002
+DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.unit_eq_starUnit_of_congruent_mod_seven
+  (u : SevenCyclotomicDegreeSixInt.Ringˣ) (h : DegreeSixUnitCongruentToRationalModSeven ↑u) : u = starUnit u
+DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.exists_normUnit_seventhPower_of_congruent_mod_seven
+  (u : SevenCyclotomicDegreeSixInt.Ringˣ) (h : DegreeSixUnitCongruentToRationalModSeven ↑u) :
+  ∃ v, quadraticNormUnit u = v ^ 7
+DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.degreeSixKummerUnitLemmaAtSeven : DegreeSixKummerUnitLemmaAtSeven
+DkMath.FLT.Seven.DegreeSixKummerUnitLemmaAtSeven : Prop
+DkMath.FLT.Seven.star_sub_int_mem_sevenIdeal (a : SevenCyclotomicDegreeSixInt.Ring) (m : ℤ) (h : a - ↑m ∈ sevenIdeal) :
+  star a - ↑m ∈ sevenIdeal
+DkMath.FLT.Seven.unit_sq_eq_ofReal_normUnit_pow (u : SevenCyclotomicDegreeSixInt.Ringˣ) (v : SevenRealCubicIntˣ)
+  (hstar : u = starUnit u) (hnorm : quadraticNormUnit u = v ^ 7) : u ^ 2 = ofRealUnit v ^ 7
+'DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.unit_eq_starUnit_of_congruent_mod_seven' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.exists_normUnit_seventhPower_of_congruent_mod_seven' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.degreeSixKummerUnitLemmaAtSeven' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Seven.star_sub_int_mem_sevenIdeal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Seven.unit_sq_eq_ofReal_normUnit_pow' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMathTest.FLT.Seven.KummerAnthropicBridgeAudit002.congruentUnit_seventhPower' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

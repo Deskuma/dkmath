@@ -11,6 +11,21 @@ PID・class number=1・具体的次数6環との同型は既存だった。
 完全な照合は [bridge-matrix-001.md](bridge-matrix-001.md) の17行。
 そこでは各行に exact source、carrier、仮定差、restricted theorem、検証範囲と次手を記載した。
 
+## Erratum 002 — source provenance correction（2026-10-15）
+
+Gate 001 の temporary comparison copies は本フォルダの恒久的・Git-tracked な入力ではない。
+この報告の実行履歴・ハッシュ・raw command evidence は当時の記録として維持する。
+後続作業の canonical source は固定 commit の
+[P2M/Sol/S_flt_regular.lean:3247–3288](https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/P2M/Sol/S_flt_regular.lean#L3247-L3288)、
+[P2M/Sol/S_IsCyclotomicExtension_Rat_seven_pid.lean:58](https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/P2M/Sol/S_IsCyclotomicExtension_Rat_seven_pid.lean#L58)、
+[P2M/Sol/S_fermatLastTheoremSeven.lean:11](https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/P2M/Sol/S_fermatLastTheoremSeven.lean#L11)、
+[P2M/Util.lean](https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/P2M/Util.lean)。
+以下の copy に関する記述は Gate 001 実行時の比較対象についての歴史記録であり、
+現在 clone すれば copy が存在するとの主張ではない。
+公開源の path:line への訂正は matrix に反映した。
+Gate 001 の Outcome B と当時の検証結果は変更していない。
+Gate 002 の証明状態と新しい source lines は `report-002.md` を参照。
+
 ## 1. Baseline と scope
 
 | 項目 | 実測 / 確認結果 |
@@ -198,9 +213,9 @@ x^p + y^p = ε * (π^(m+1) * z)^p,  π ∤ y, π ∤ z
 x'^p + y'^p = ε' * (π^m * z')^p,  π ∤ y', π ∤ z'
 ```
 
-を証明する（添付:4010 / fixed:4011）。ideal ratios から三つの root を選び、
+を証明する（固定 upstream `P2M/Sol/S_flt_regular.lean:4011`）。ideal ratios から三つの root を選び、
 3-factor formula を作り、ε₁/ε₂ の整数合同と Kummer unit lemma で左辺の単数を吸収する。
-`one_le_m` と induction による contradiction は添付:4083 / fixed:4084。
+`one_le_m` と induction による contradiction は固定 upstream `P2M/Sol/S_flt_regular.lean:4084`。
 
 local peel は **x/q と y を固定した自然数 z'** を要求する。
 upstream の x',y',z' は全て動き、円分整数のままでよい。

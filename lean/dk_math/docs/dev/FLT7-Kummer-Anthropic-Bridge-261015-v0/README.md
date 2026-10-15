@@ -2,7 +2,7 @@
 
 Branch: `research/FLT7-Kummer-Anthropic-Bridge-261015-v0`  
 Base: `develop` at `fcbcb43abe062d9f0d49c43e454f259982b995af` (2026-10-15 JST)  
-Status: **Gate 001 ACCEPTED (Outcome B; see review-001.md); Gate 002 AUTHORIZED; FLT7 independent closure OPEN**  
+Status: **Gate 001 ACCEPTED (Outcome B; see review-001.md); Gate 002 G1–G3 PROVED locally (Outcome A; review pending); FLT7 independent closure OPEN**
 Owner: DkMath research / Codex implementation.  
 cid: `6acfa54a-d360-83ee-8c52-2fadfef957d0`
 
@@ -41,8 +41,8 @@ oracle, not the endpoint of the DkMath-native investigation.
 | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | `IsCyclotomicExtension.Rat.seven_pid`                | `DkMath/FLT/Seven/SevenRamifiedFusionCyclotomicSevenPID.lean`                                               | analogous seven-cyclotomic PID result; verify exact carrier                                        |
 | `isPrincipal_of_isPrincipal_pow_of_coprime`          | `DkMath/Lib/NumberTheory/IdealPowerFactor.lean`, `PrincipalIdealPower.lean`, `ClassGroupTorsionBridge.lean` | principalization bridge already available with hypotheses                                          |
-| `FltIdeals.fltIdeals_coprime` / `CaseI.is_principal` | `DkMath/FLT/Kummer/CyclotomicPrincipalization.lean`, FLT7 chosen-linear-factor modules                      | hypothesis/branch matching not established                                                         |
-| `KummersLemma.eq_pow_prime_of_unit_of_congruent`     | `DkMath/FLT/Seven/PrimeTraceOneDirectCyclotomicUnitCongruence.lean`                                         | key bridge candidate; DkMath `DegreeSixKummerUnitLemmaAtSeven` is **a Prop target**, not a theorem |
+| `FltRegular.fltIdeals_coprime` / `FltRegular.is_principal` | `DkMath/FLT/Kummer/CyclotomicPrincipalization.lean`, FLT7 chosen-linear-factor modules                      | hypothesis/branch matching not established                                                         |
+| `FltRegular.eq_pow_prime_of_unit_of_congruent`     | `DkMath/FLT/Seven/PrimeTraceOneDirectCyclotomicUnitCongruence.lean`                                         | the Prop specification is now inhabited by `SevenCyclotomicDegreeSixInt.degreeSixKummerUnitLemmaAtSeven` (Gate 002; report-002.md) |
 | `CaseII.exists_solution'` / `not_exists_solution`    | `DkMath/FLT/Kummer/CyclotomicPrincipalization.lean` peel/normal-form targets                                | strict descent witness not established                                                             |
 | `flt_regular`                                        | `DkMath/FLT/Kummer/RegularPrimeRoute.lean`                                                                  | comparison endpoint only; do not use to short-circuit FLT7                                         |
 
@@ -99,3 +99,18 @@ FLT7 closure before an actual independent terminal contradiction exists.
 - [Gate 002 instruction](instruction-002.md): prove the congruence-constrained Kummer unit lemma for the concrete degree-six ring (G1–G3), or report an honest blocker.
 - Gate 001's historical comparison-copy provenance needs a reproducibility erratum. **GitHub sources at pinned commits and this repository are authoritative**, not locally available temporary copies.
 - Chosen-factor `L = π * γ^7` is already established under its source packet; the *next cyclotomic integer state with strictly reduced ramifier valuation* remains OPEN. Gate 002 does not undertake that descent.
+
+## Gate 002 local implementation (2026-10-15)
+
+G1–G3 are proved in `DkMath/FLT/Seven/PrimeTraceOneDirectCyclotomicKummerUnit.lean`.
+The existing `DegreeSixKummerUnitLemmaAtSeven : Prop` now has the theorem
+`DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.degreeSixKummerUnitLemmaAtSeven`.
+The focused production build and arbitrary congruent-unit regression passed;
+all three theorem axiom sets contain only `propext`, `Classical.choice`, `Quot.sound`.
+See [report-002.md](report-002.md) for exact proofs, failed attempts, helper exports,
+and the Gate-001 provenance erratum. Local Outcome A is limited to these three
+unit lemmas; independent review is pending. STOP after Gate 002.
+
+The enlarged cyclotomic descent state and actual strict successor remain OPEN.
+Gate 003 requires new scope after review. No broad facade/default-driver wiring
+was added for this module.
