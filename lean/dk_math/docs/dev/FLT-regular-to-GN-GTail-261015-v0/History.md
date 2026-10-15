@@ -35,3 +35,11 @@
 - 幅1 GN の合同式、正次数の望遠和、`u^p = u + p E_p(u)` を証明。
 - GN の単位幅合同式を帰納的に積み重ねる Fermat の小定理と、その ZMod 版を追加。既存の有限体経由の API は保持。
 - 解説は `AKS-GN-UNIT-STEP.md`、検証記録は `evidence/validation-aks-gn.txt`。
+
+### 同日・分岐深度と保存パケット
+
+- 自然数版の既存 API を確認し、負の座標にも使える整数 GN の p² 合同式と補正等式を追加。LTE を呼ばず GTail 再帰と内部係数の可除性から証明した。
+- p∣x,p∤u,p≥3 から vₚ(GN)=1、非零 c と x*GN=cᵖ から vₚ(x)+1=p*vₚ(c) を導出。FLT の x=a+b,u=−b へ接続。
+- GN の零評価から N(ζ−1)=+p を計算し、正則性を加えた分岐側で GN=p*tᵖ と p∤t を復元。
+- `RamifiedIdealPowerPacket` を入力から構成。主イデアル化する拡張は同じ剥離商とイデアル根を保持する。
+- 解説: `RAMIFIED-VALUATION-PACKET.md`。単元合同解析と降下は今回の結論には含まない。

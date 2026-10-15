@@ -95,3 +95,8 @@ Kummer の証明を完成済みの地図とし、GN・GTail から同じ到達�
 寄り道として、[幅1 GN の累積による Fermat の小定理](AKS-GN-UNIT-STEP.md) を
 `AKSBridge` に追加。`GN p 1 n = 1 + p H_p(n)` と
 `u^p = u + p E_p(u)` を保持し、GN 経由の合同式を独立に構成した。
+
+[整数の分岐深度・ノルム復元・保存パケット](RAMIFIED-VALUATION-PACKET.md) を追加。
+`GNRamifiedArithmetic` は `vₚ(a+b)+1=p*vₚ(c)` と、類数条件の下で
+`GN p (a+b) (-b)=p*tᵖ`（p∤t）を返す。
+検証記録: [validation-ramified-arithmetic.txt](evidence/validation-ramified-arithmetic.txt)。

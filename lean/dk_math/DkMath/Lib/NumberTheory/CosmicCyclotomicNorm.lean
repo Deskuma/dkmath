@@ -98,4 +98,17 @@ theorem integral_norm_phaseFactor_eq_GTail
   have hz : algebraMap (𝓞 K) K hζ.toInteger = ζ := hζ.coe_toInteger
   simpa [map_GN, GTail, hz] using h
 
+/-- 奇素数次数の分岐因子 λ=ζ−1 の整数ノルムは +p。
+GN の x=0, u=−1 評価から計算するので、符号は `(−1)^(p−1)=1` に現れる。
+既存の体ノルムによる計算法とは別に、GN の先頭係数 p を直接観察できる。 -/
+theorem integral_norm_ramifier_eq_prime
+    {K : Type*} [Field K] [NumberField K]
+    {p : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) (hodd : Odd p) :
+    Algebra.norm ℤ (hζ.toInteger - 1) = (p : ℤ) := by
+  have h := integral_norm_phaseFactor_eq_GTail hζ 0 (-1)
+  have heven : Even (p - 1) := Nat.Odd.sub_odd hodd (by decide : Odd (1 : ℕ))
+  simpa only [Int.cast_zero, Int.cast_neg, Int.cast_one, zero_add, mul_neg_one,
+    neg_sub, GTail_eval_zero, Nat.choose_one_right, heven.neg_one_pow, mul_one] using h
+
 end DkMath.Lib.NumberTheory

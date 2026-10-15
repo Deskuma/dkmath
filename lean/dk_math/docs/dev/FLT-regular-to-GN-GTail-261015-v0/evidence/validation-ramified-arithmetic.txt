@@ -1,0 +1,37 @@
+2026-10-15 JST — GN ramified valuation and packet
+
+cwd: lean/dk_math
+Command:
+LEAN_NUM_THREADS=2 lake build DkMathTest.FLT.Kummer.GNRamifiedArithmetic DkMathTest.FLT.Kummer.GNRamified DkMathTest.FLT.Kummer.GNFirstCase DkMathTest.FLT.Kummer.GNStructure DkMath
+Exit: 0
+Build completed successfully (10491 jobs).
+
+New theorem/test warnings: none.
+New regression examples: 10 (including conditional packet preservation).
+New theorem axiom whitelist: 15 declarations; only propext, Classical.choice, Quot.sound allowed.
+Existing sorry warnings replayed by root build:
+warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+
+Root import smoke:
+lake env lean /tmp/GNRamifiedArithmeticSmoke.lean
+Exit: 0
+Smoke source and output: GNRamifiedArithmeticSmoke.lean / ramified-arithmetic-smoke.txt
+
+git diff --check: exit 0.
+New production files: no sorry/admit/axiom declarations.
+
+SHA256:
+60725b17224cb31c0bdb2e74a930b140b35828137241328293fe42ced0183c9f  DkMath/Lib/NumberTheory/CosmicRamifiedValuation.lean
+57ea4fed654a3fafccb48a83a4be0b319d49ae4d7dfe3a2979edef64b7e08f2d  DkMath/Lib/NumberTheory/CosmicRamifiedPacket.lean
+68670f9dc2b75359ec98ea4cc76f62f472df01d702c5c3725adbce2ef833403f  DkMath/FLT/Kummer/GNRamifiedArithmetic.lean
+353489ab838852e8d1217b193af3d6c15ed9b4fe5b9c532262f0a037d1c3c53e  DkMathTest/FLT/Kummer/GNRamifiedArithmetic.lean
+87c07f0091fdb3cc8c423d67c5a772788c02e21afd3bafab20f6a15bb2b44016  DkMath/Lib/NumberTheory/CosmicCyclotomicNorm.lean
+3b9d303448d1b24608775383575c00eca91a03e70f1f1cc42bcf65245027fffc  DkMath/FLT/Kummer.lean
+
+Scope: integer GN congruence and exact-one valuation; valuation balance;
+actual construction of ramified ideal packets and same-data principal extension;
+GN=p*t^p with p not dividing t. No unit congruence analysis or strict descent.

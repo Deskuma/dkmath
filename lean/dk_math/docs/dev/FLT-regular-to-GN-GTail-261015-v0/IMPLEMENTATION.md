@@ -272,3 +272,12 @@ p=3 の分岐因子の剥離、非分岐側の可除性の否定、p=2 で正確
 正則性を使わない `GN_ideal_pow_of_ramified_case` と、正則性から生成元へ戻す
 `GN_kummer_structure_of_ramified_case` を区別する。
 全因子を束ねた `(GN)=(p)J^p` と、例外因子を残した `(x)(p)J^p=(c)^p` も証明する。
+
+## 13. 整数の分岐深度と保存パケット
+
+[RAMIFIED-VALUATION-PACKET.md](RAMIFIED-VALUATION-PACKET.md) に続く証明を記録した。
+`DkMath.FLT.Kummer.GNRamifiedArithmetic` は整数座標 x=a+b,u=−b の付値配分、
+構成可能な `RamifiedIdealPowerPacket`、同じデータの主イデアル化、
+整数ノルムによる `GN=p*tᵖ`（p∤t）を公開する。
+整数付値の段階では円分体・正則性を使わず、主イデアル化の段階で類数条件を使う。
+単元合同解析、任意の Case II の向きの正規化、無限降下は残る。
