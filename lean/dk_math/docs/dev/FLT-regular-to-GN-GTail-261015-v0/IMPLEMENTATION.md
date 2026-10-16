@@ -364,3 +364,13 @@ CM 単元定理から有限位数の共役比を得て、整数合同と六つ�
 第2位相の補正はノルムの対数から非七乗と証明。現在の receiver への適用には
 source 等式を明示的に要求し、その対応の存在や降下の完成を結論しない。
 [教科書](SEVEN-UNIT-POWER-CLASS.md)、[検証](evidence/validation-seven-unit-power-class.txt) を参照。
+
+## 22. GN source の保存と係数環の境界
+
+`Lib/Cosmic/GNSourceTransport` は根と係数を同時に運ぶ source の写像則を与える。
+`SevenGNSource` は現在の carrier を gap=`rotate(rho)-rho`, parameter=`rho` の実三次 GN 因子に接続し、
+全 GN と既存の軌道商の等式を証明する。具体的 Galois 回転と二次共役の位相添字変換も追跡する。
+非自明位相での端点の一意性から、整数 source 表示が存在することと両係数が整数の像であることを同値にした。
+現在の common-prime packet の非自明な剰余比により rho は整数の像でなく、同じ選択位相での整数 GN source 表示は排除される。
+異なる位相を含む全変換経路や FLT7 全体の不可能性を結論しない。
+[教科書](SEVEN-GN-SOURCE-TRANSPORT.md)、[検証](evidence/validation-seven-gn-source.txt) を参照。

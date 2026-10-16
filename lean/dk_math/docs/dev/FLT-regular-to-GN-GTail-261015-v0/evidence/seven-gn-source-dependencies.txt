@@ -1,0 +1,9 @@
+info: DkMathTest/FLT/Kummer/SevenGNSourceDependencyAudit.lean:78:0: ROOT: DkMath.FLT.Kummer.SevenPrimaryNorm.currentLinearCarrier_dvd_real_GN
+info: DkMathTest/FLT/Kummer/SevenGNSourceDependencyAudit.lean:78:0: reachable constants: 36492; readable bodies: 34673
+info: DkMathTest/FLT/Kummer/SevenGNSourceDependencyAudit.lean:78:0: axiom leaves: [propext, Quot.sound, Classical.choice]
+info: DkMathTest/FLT/Kummer/SevenGNSourceDependencyAudit.lean:78:0: PASS: required source/coefficient providers present; forbidden, missing, unreadable lists empty.
+info: DkMathTest/FLT/Kummer/SevenGNSourceDependencyAudit.lean:78:0: ROOT: DkMath.FLT.Kummer.SevenPrimaryNorm.currentLinearCarrier_ne_integer_GN_same_phase
+info: DkMathTest/FLT/Kummer/SevenGNSourceDependencyAudit.lean:78:0: reachable constants: 72902; readable bodies: 70256
+info: DkMathTest/FLT/Kummer/SevenGNSourceDependencyAudit.lean:78:0: axiom leaves: [Quot.sound, propext, Classical.choice]
+info: DkMathTest/FLT/Kummer/SevenGNSourceDependencyAudit.lean:78:0: PASS: required source/coefficient providers present; forbidden, missing, unreadable lists empty.
+Build completed successfully (10522 jobs).

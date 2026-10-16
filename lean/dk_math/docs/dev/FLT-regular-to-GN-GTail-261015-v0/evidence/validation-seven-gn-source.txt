@@ -1,0 +1,79 @@
+2026-10-16 JST — GN source transport / phase and coefficient-ring boundary
+cwd: lean/dk_math
+
+Command:
+LEAN_NUM_THREADS=2 lake build DkMathTest.FLT.Kummer.SevenGNSource DkMathTest.FLT.Kummer.SevenGNSourceDependencyAudit DkMathTest.FLT.Kummer.SevenUnitPowerClassBridge DkMath.FLT.Kummer DkMath.Lib DkMath
+Result: exit 0; Build completed successfully (10522 jobs).
+The prior unit-power-class regression target is included.
+This is validation of the stated targets, not a complete DkMathTest suite run.
+
+After removing a redundant definitional example, rechecked the final test source:
+LEAN_NUM_THREADS=2 lake build DkMathTest.FLT.Kummer.SevenGNSource
+Result: exit 0; Build completed successfully (9231 jobs).
+Final source has 8 regression examples:
+- source base change maps coefficients and root;
+- index multiplication and mod 7 reindexing;
+- changing only the phase is not source preservation;
+- actual Galois transport at alpha;
+- leaving alpha fixed during that transport fails;
+- genuine integer endpoints give the correct integer gap coordinates;
+- alpha endpoints cannot descend to an integer source at phase 1;
+- phase 0 does not satisfy endpoint uniqueness.
+
+All 24 public declarations in GNSourceTransport and SevenGNSource audited
+with Lean.collectAxioms whitelist. Source-to-whitelist coverage: passed.
+Allowed axiom leaves only: propext, Classical.choice, Quot.sound.
+Printed roots:
+currentLinearCarrier_eq_realGNSource
+current_real_GN_eq_orbitQuotient
+current_rho_not_integer
+currentLinearCarrier_ne_integer_GN_same_phase
+All four use only those standard three axioms.
+No sorryAx or new axiom in the checked proof graphs.
+
+Recursive dependency audits (types, opaque bodies, constructors):
+currentLinearCarrier_dvd_real_GN:
+  36492 reachable constants / 34673 readable bodies
+currentLinearCarrier_ne_integer_GN_same_phase:
+  72902 reachable constants / 70256 readable bodies
+Both PASS: required source/coefficient providers present;
+forbidden, missing, unreadable lists empty.
+The positive graph requires the real source equality and actual GN phase-product theorem.
+The boundary graph requires coefficient uniqueness, nonzero phase imaginary coordinate,
+integer-source compatibility, and current rho not integer.
+Forbidden providers include completed FLT endpoints, FltRegular declarations,
+cubic/quintic/septic unit criteria, the previous conditional source-class bridge,
+and the current carrier ramified-power receiver.
+Exact compact output: seven-gn-source-dependencies.txt
+
+Command:
+LEAN_NUM_THREADS=2 lake env lean docs/dev/FLT-regular-to-GN-GTail-261015-v0/evidence/SevenGNSourceSmoke.lean
+Result: exit 0. Root import exposes source transport, Galois transport,
+actual carrier/real GN connection, whole GN/orbit quotient equality,
+integer-source existence criterion, and the same-phase boundary theorem.
+Output: seven-gn-source-smoke.txt
+
+Historical sorry warnings replayed in the combined build:
+DkMath/CosmicFormula/TriominoFLT.lean:1919
+DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147
+DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187
+DkMath/NumberTheory/GcdNextResearch.lean:850
+DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389
+No warnings in the new sources. These sorry declarations are absent from the checked graphs.
+
+Source forbidden-construct scan, complete public-declaration whitelist coverage,
+Lib import direction, git diff --check, source manifest and local textbook links: passed.
+Manifest: source-seven-gn-source-sha256.txt (6 Lean source files).
+
+Scope:
+The actual carrier is a real-cubic-coefficient GN factor at gap=rotate(rho)-rho, parameter=rho.
+The full GN is the embedded existing direct orbit quotient.
+Galois rotation changes real coefficients and doubles the phase; star fixes real coefficients
+and multiplies the phase index by 6. These are identities for the image of the whole source.
+At a nontrivial FIXED phase, an integer-source representation exists iff both endpoints
+are integer images. Under a CURRENT COMMON-PRIME CYCLOTOMIC PACKET, rho is not an integer
+image (otherwise the nontrivial residue ratio would be 1).
+Therefore the current selected phase cannot be identified directly with the integer GN
+source at that SAME phase.
+Not claimed: no correspondence at any different phase/normalization; an unconditional
+FLT7 contradiction; a real-coefficient RamifiedPrincipalPowerPacket; or recurring descent.
