@@ -203,3 +203,13 @@
 5. 失敗事例: Units.mapのcoercionはchangeで明示し、ノルムの具体冪をnorm_numで先に計算せずchangeと指数分割で処理した。テスト入口の初回実行は監査olean生成中で失敗したため、ビルド完了後に再検査した。
 6. 備考: 既存5件のsorry警告と新宣言の公理依存を区別。Sの小さいgapRootとGammaは異なり、Gammaの高さ減少は主張しない。
 7. 次の課題: 六本の共通根付き七乗関係から、再入条件と整礎測度の減少を同時に満たす新しい許容反例状態を構成する。
+
+### 日時: 2026/10/17 JST — FLT7 proof-route audit と軌道修正
+
+1. 目的: Anthropicのローカル4コピーと公開お手本を照合し、最終証明に必要な降下状態を見直す。
+2. 実施: Case I/II、七次PID、単元補題、CaseIIChainを読み、GNの保存等式と対応付けた。docs配下のscratchにState、全primitive反例からの初期状態、GN/GTail翻訳、符号変換、重み付き係数比の正規化、条件付き帰納閉包を実装した。
+3. 結論: 新しい自然数反例を反復ごとに再構成する必要はなく、一般化円分環Stateの深度降下で十分。入口は既存ramified summitから構成できた。深度1の排除と同じ状態の一段遷移は未供給。
+4. 検証: scratchの11宣言公理whitelist、深度0の非空例、既存PID・単元補題・provenance公理probe成功。既存SevenCurrentCorrectionPower focused build成功（9,245 jobs）。詳細はevidence/validation-flt7-proof-route-audit.txt。
+5. 失敗事例: 親名前空間の幾何学点Cとの衝突を具体環notation CCで回避。Stateの右辺単元1はcastとone_mulを明示して消去。Big=Body+Gapという恒等式の否定を目標にしない。
+6. 備考: 入力コピーは変更もimportもせず、productionの変更はない。公開元4.33.1とDkMath4.34.1の違い、upstream commit不明、一部オンライン個別ページcache missを記録。common-primeはq∣h.cの範囲であり全反例の無条件providerと混同しない。
+7. 次の課題: 一般化Stateの全七位相剥離と特別位相、gcd付きイデアル冪配分、三位相formula、係数比の整数合同から深度を1下げる遷移を構成する。

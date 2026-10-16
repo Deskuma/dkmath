@@ -1,0 +1,7 @@
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+ℹ [9245/9245] Replayed DkMath.FLT.Kummer.SevenCurrentCorrectionPower
+info: DkMath/FLT/Kummer/SevenCurrentCorrectionPower.lean:9:0: file: DkMath.FLT.Kummer.SevenCurrentCorrectionPower
+Build completed successfully (9245 jobs).

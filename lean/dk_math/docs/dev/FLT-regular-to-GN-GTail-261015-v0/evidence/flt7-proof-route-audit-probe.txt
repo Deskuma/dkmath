@@ -1,0 +1,21 @@
+DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ramifiedEval_uniformizer : ramifiedEval ramifiedUniformizer = 0
+DkMath.FLT.Kummer.SevenRealGN.uniformizer_six_dvd_seven : ramifiedUniformizer ^ 6 ∣ 7
+FiniteMultiplicity.of_not_isUnit.{u_1} {α : Type u_1} [CommMonoidWithZero α] [IsCancelMulZero α] [WfDvdMonoid α]
+  {a b : α} (ha : ¬IsUnit a) (hb : b ≠ 0) : FiniteMultiplicity a b
+FiniteMultiplicity.exists_eq_pow_mul_and_not_dvd.{u_1} {α : Type u_1} [Monoid α] {a b : α}
+  (hfin : FiniteMultiplicity a b) : ∃ c, b = a ^ multiplicity a b * c ∧ ¬a ∣ c
+UniqueFactorizationMonoid.toWellFounded
+'DkMath.FLT.Seven.seven_dvd_some_endpoint_of_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Seven.nonempty_primitiveCounterexampleRamifiedProvenance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.currentCorrectionPowerPacket' depends on axioms: [propext, Classical.choice, Quot.sound]
+DkMath.FLT.Seven.SevenRealCubicInt.thetaResidue : SevenRealCubicInt →+* ZMod 7
+'DkMath.FLT.Seven.CyclotomicSeven.ringOfIntegers_isPrincipalIdealRing' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.SevenPrimaryNorm.concrete_kummer_unit_power_criterion' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.SevenPrimaryNorm.integralEquiv' depends on axioms: [propext, Classical.choice, Quot.sound]
+Unknown identifier `FltRegular.CaseII.exists_solution'`

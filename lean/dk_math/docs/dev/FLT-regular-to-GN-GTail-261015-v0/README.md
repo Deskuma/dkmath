@@ -191,3 +191,7 @@ lambda² で割れない。根の枝、正確な付値、次の反例の再構�
 ## 11. 六補正項の共通七乗根
 
 [同じ小ノルムパケットから構成する共通根・七乗主イデアル・相対単元](SEVEN-CORRECTION-COMMON-POWER.md)。共通根の高さ減少や新反例再構成は未達。
+
+## 12. FLT7 Proof Route Audit — 降下状態の軌道修正
+
+[Anthropic / flt-regular との照合と検証スクラッチ](FLT7-PROOF-ROUTE-AUDIT.md)。任意のprimitive反例から一般化円分状態への入口を検証。深度1の排除と一段遷移は未供給。

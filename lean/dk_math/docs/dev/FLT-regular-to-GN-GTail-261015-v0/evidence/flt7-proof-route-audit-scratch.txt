@@ -1,0 +1,8 @@
+'DkMath.FLT.Seven.RouteAuditScratch.initial_state_of_counterexample' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Seven.RouteAuditScratch.normalize_weighted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Seven.RouteAuditScratch.no_counterexample_of_base_and_step' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PASS: 11 scratch declarations; standard axiom whitelist only. Base and step remain explicit parameters.
