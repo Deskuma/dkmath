@@ -1,0 +1,16 @@
+ROOT: DkMath.FLT.Seven.SevenRealCubicInt.rotation_fixed_mod_seven_integer
+reachable constants: 1794; readable bodies: 1464
+axiom leaves: [propext, Quot.sound, Classical.choice]
+PASS: required rotation/integer-congruence/same-unit/boundary providers present; forbidden, missing, unreadable lists empty.
+ROOT: DkMath.FLT.Kummer.SevenRealGN.current_primary_packet_obstruction_zero
+reachable constants: 74793; readable bodies: 72123
+axiom leaves: [propext, Quot.sound, Classical.choice]
+PASS: required rotation/integer-congruence/same-unit/boundary providers present; forbidden, missing, unreadable lists empty.
+ROOT: DkMath.FLT.Kummer.SevenRealGN.currentCarrier_unit_free_factor_receiver
+reachable constants: 75878; readable bodies: 73187
+axiom leaves: [propext, Quot.sound, Classical.choice]
+PASS: required rotation/integer-congruence/same-unit/boundary providers present; forbidden, missing, unreadable lists empty.
+ROOT: DkMath.FLT.Kummer.SevenRealGN.current_unit_free_root_not_real
+reachable constants: 28439; readable bodies: 26921
+axiom leaves: [propext, Quot.sound, Classical.choice]
+PASS: required rotation/integer-congruence/same-unit/boundary providers present; forbidden, missing, unreadable lists empty.

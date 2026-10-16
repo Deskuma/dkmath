@@ -1,0 +1,1 @@
+DkMathTest.lean:7:0: error: object file '/home/deskuma/develop/lean/dkmath/lean/dk_math/.lake/build/lib/lean/DkMath/FLT/Seven/SevenRealCubicThetaSeventhPower.olean' of module DkMath.FLT.Seven.SevenRealCubicThetaSeventhPower does not exist

@@ -9,6 +9,7 @@ import DkMathTest.FLT.CompleteSupportDRCBridgeAudit
 import DkMathTest.FLT.CurrentFiniteAggregation
 import DkMathTest.FLT.Kummer.SevenRealGNSuite
 import DkMathTest.FLT.Kummer.SevenCurrentPrimarySuite
+import DkMathTest.FLT.Kummer.SevenCurrentUnitSeventhSuite
 import DkMathlib.Basic
 import DkMathTest.NumberTheory.QuadraticResidueType
 import DkMathTest.NumberTheory.CyclotomicQRProvenanceLift

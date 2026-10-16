@@ -152,6 +152,7 @@ import DkMath.FLT.Seven.SevenRamifiedSignedRootRouting
 import DkMath.FLT.Seven.SevenRealCubicNormFirstVariation
 import DkMath.FLT.Seven.SevenRealCubicSourcePlane
 import DkMath.FLT.Seven.SevenRealCubicThetaCoordinates
+import DkMath.FLT.Seven.SevenRealCubicRotationFixed
 import DkMath.FLT.Seven.SevenRamifiedFusionUnitSector
 /-
 The theta-jet existence branch is proved and remains available through

@@ -1,0 +1,18 @@
+Final source root/Seven/new suite/previous suite/existing depth tests: PASS
+Exit code: 0
+
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+
+ℹ [10524/10538] Built DkMathTest.FLT.SevenRealCubicThetaSeventhPowerDepthAxiom (8.9s)
+ℹ [10526/10538] Built DkMathTest.FLT.SevenRealCubicThetaSeventhPowerDepthApi (8.8s)
+ℹ [10535/10538] Built DkMath.FLT.Seven (24s)
+info: DkMath/FLT/Seven.lean:218:0: file: DkMath.FLT.Seven
+ℹ [10536/10538] Built DkMath.FLT (14s)
+info: DkMath/FLT.lean:16:0: file: DkMath.FLT
+ℹ [10537/10538] Built DkMath (11s)
+info: DkMath.lean:77:0: file: DkMath
+Build completed successfully (10538 jobs).

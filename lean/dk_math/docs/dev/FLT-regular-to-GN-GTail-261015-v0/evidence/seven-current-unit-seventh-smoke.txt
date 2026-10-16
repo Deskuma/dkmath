@@ -1,0 +1,47 @@
+DkMath.FLT.Seven.SevenRealCubicInt.rotation_fixed_mod_seven_fst (x : SevenRealCubicInt) (h : 7 ∣ rotateEquiv x - x) :
+  7 ∣ x - ↑x.fst
+DkMath.FLT.Seven.SevenRealCubicInt.rotation_fixed_mod_seven_integer (x : SevenRealCubicInt)
+  (h : 7 ∣ rotateEquiv x - x) : ∃ n, 7 ∣ x - ↑n
+DkMath.FLT.Seven.SevenRealCubicInt.rotation_fixed_mod_seven_iff_integer (x : SevenRealCubicInt) :
+  7 ∣ rotateEquiv x - x ↔ ∃ n, 7 ∣ x - ↑n
+DkMath.FLT.Kummer.SevenRealGN.current_rho_congruent_integer {a b d : ℕ} {source : CounterexamplePack a b d}
+  {r : PrimitiveCounterexampleRamifiedProvenance source} (p : DirectRealCubicRootPacket source r) : ∃ n, 7 ∣ p.rho - ↑n
+DkMath.FLT.Kummer.SevenRealGN.realPrimary_integer_congruence_of_rotation_fixed (x : R) (hrot : 7 ∣ rotateEquiv x - x)
+  (delta : Cˣ) (hdelta : RealPrimary delta (-x)) : ∃ n, 7 ∣ ↑delta - ↑n
+DkMath.FLT.Kummer.SevenRealGN.current_primary_packet_unit_seventh {a b d : ℕ} {source : CounterexamplePack a b d}
+  {r : PrimitiveCounterexampleRamifiedProvenance source} (p : DirectRealCubicRootPacket source r) (Q : PrimaryPacket)
+  (hparam : Q.parameter = p.rho) : ∃ kappa, Q.delta = kappa ^ 7
+DkMath.FLT.Kummer.SevenRealGN.current_corrected_unit_seventh {a b d : ℕ} {source : CounterexamplePack a b d}
+  {r : PrimitiveCounterexampleRamifiedProvenance source} {p : DirectRealCubicRootPacket source r}
+  {h : DirectOrbitCanonicalCommonFactorPacket p} {q : ℕ} (c : SevenRealCubic.CurrentCommonPrimeCyclotomicPacket h q)
+  (epsilon : Cˣ) (beta : C)
+  (hf :
+    SevenRealCubic.currentLinearCarrier c = SevenCyclotomicDegreeSixInt.ramifiedUniformizer * (↑epsilon * beta ^ 7)) :
+  ∃ kappa, epsilon * (DkMath.FLT.Kummer.SevenPrimaryNorm.GNRamifierTwist ⋯)⁻¹ = kappa ^ 7
+DkMath.FLT.Kummer.SevenRealGN.current_primary_packet_obstruction_zero {a b d : ℕ} {source : CounterexamplePack a b d}
+  {r : PrimitiveCounterexampleRamifiedProvenance source} (p : DirectRealCubicRootPacket source r) (Q : PrimaryPacket)
+  (hparam : Q.parameter = p.rho) : normCoordinates Q.delta = 0 ∧ phaseCharacter Q.delta = 1
+DkMath.FLT.Kummer.SevenRealGN.currentCarrier_unit_free_factor_receiver {a b d : ℕ} {source : CounterexamplePack a b d}
+  {r : PrimitiveCounterexampleRamifiedProvenance source} {p : DirectRealCubicRootPacket source r}
+  {h : DirectOrbitCanonicalCommonFactorPacket p} {q : ℕ} (c : SevenRealCubic.CurrentCommonPrimeCyclotomicPacket h q) :
+  ∃ Q kappa theta,
+    Q.gap = rotateEquiv p.rho - p.rho ∧
+      Q.parameter = p.rho ∧
+        Q.phase = SevenRealCubic.phaseInverseExponent c.phase ∧
+          Q.source = SevenRealCubic.currentLinearCarrier c ∧
+            Q.delta = kappa ^ 7 ∧
+              theta = ↑kappa * Q.gamma ∧
+                SevenRealCubic.currentLinearCarrier c =
+                    (SevenCyclotomicDegreeSixInt.zeta ^ SevenRealCubic.phaseInverseExponent c.phase - 1) * theta ^ 7 ∧
+                  Ideal.span {theta} = Ideal.span {Q.gamma} ∧
+                    ¬SevenCyclotomicDegreeSixInt.ramifiedUniformizer ∣ theta ∧ Fermat7Equation a b d
+DkMath.FLT.Kummer.SevenRealGN.PrimaryPacket.unit_absorption_no_measure_drop (Q : PrimaryPacket) (kappa : Cˣ)
+  (m : Ideal C → ℕ) : ¬m (Ideal.span {↑kappa * Q.gamma}) < m (Ideal.span {Q.gamma})
+DkMath.FLT.Kummer.SevenRealGN.current_unit_free_root_not_real {a b d : ℕ} {source : CounterexamplePack a b d}
+  {r : PrimitiveCounterexampleRamifiedProvenance source} {p : DirectRealCubicRootPacket source r}
+  {h : DirectOrbitCanonicalCommonFactorPacket p} {q : ℕ} (c : SevenRealCubic.CurrentCommonPrimeCyclotomicPacket h q)
+  (theta : C)
+  (hf :
+    SevenRealCubic.currentLinearCarrier c =
+      (SevenCyclotomicDegreeSixInt.zeta ^ SevenRealCubic.phaseInverseExponent c.phase - 1) * theta ^ 7) :
+  ¬∃ v, theta = SevenCyclotomicDegreeSixInt.ofReal v

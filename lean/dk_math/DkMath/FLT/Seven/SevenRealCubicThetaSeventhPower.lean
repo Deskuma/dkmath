@@ -47,27 +47,51 @@ def seventhThetaSquareQuotient (A B C : ℤ) : ℤ :=
   C * seventhThetaSquareCFactor A B C +
     B^2 * seventhThetaSquareBFactor A B
 
+/-- 七乗の逐次展開を避け、二乗・四乗を共有するための有限座標恒等式。 -/
+private theorem theta_pow_two (A B C : ℤ) :
+    (ofThetaCoordinates A B C) ^ 2 = ⟨A^2 - 6*A*B + 18*A*C + 9*B^2 - 56*B*C + 91*C^2,
+      2*A*B - 12*A*C - 6*B^2 + 56*B*C - 119*C^2,
+      2*A*C + B^2 - 14*B*C + 35*C^2⟩ := by
+  ext <;> norm_num [pow_two, ofThetaCoordinates, eisensteinAxis_sq_coordinates] <;> ring
+
+/-- 正規化済みの二乗座標から四乗を計算し、七乗の式膨張を抑える。 -/
+private theorem theta_pow_four (A B C : ℤ) :
+    (ofThetaCoordinates A B C) ^ 4 = ⟨A^4 - 12*A^3*B + 36*A^3*C + 54*A^2*B^2 - 336*A^2*B*C +
+      546*A^2*C^2 - 112*A*B^3 + 1092*A*B^2*C - 3696*A*B*C^2 + 4312*A*C^3 + 91*B^4 - 1232*B^3*C +
+      6468*B^2*C^2 - 15484*B*C^3 + 14161*C^4,
+      4*A^3*B - 24*A^3*C - 36*A^2*B^2 + 336*A^2*B*C - 714*A^2*C^2 + 112*A*B^3 - 1428*A*B^2*C +
+      5796*A*B*C^2 - 7644*A*C^3 - 119*B^4 + 1932*B^3*C - 11466*B^2*C^2 + 29792*B*C^3 - 28763*C^4,
+      4*A^3*C + 6*A^2*B^2 - 84*A^2*B*C + 210*A^2*C^2 - 28*A*B^3 + 420*A*B^2*C - 1848*A*B*C^2 +
+      2548*A*C^3 + 35*B^4 - 616*B^3*C + 3822*B^2*C^2 - 10192*B*C^3 + 9996*C^4⟩ := by
+  rw [show (4 : ℕ) = 2 * 2 from rfl, pow_mul, theta_pow_two]
+  ext <;> norm_num [pow_two] <;> ring
+
 set_option maxHeartbeats 1200000 in
--- The linear coordinate of the seventh power requires a large normalization.
+-- 分割後も七次の整数係数多項式の正規化には既定値を超える計算量が必要。
 set_option maxRecDepth 100000 in
 theorem thetaLinear_pow_seven (A B C : ℤ) :
     thetaLinearInt ((ofThetaCoordinates A B C) ^ 7) =
       7 * seventhThetaLinearQuotient A B C := by
-  norm_num [thetaLinearInt, thetaSquareInt, ofThetaCoordinates,
-    eisensteinAxis_sq_coordinates, seventhThetaLinearQuotient,
-    seventhThetaLinearBFactor, seventhThetaLinearCFactor,
-    pow_succ]
+  have hp : (ofThetaCoordinates A B C)^7 =
+      (ofThetaCoordinates A B C)^4 * (ofThetaCoordinates A B C)^2 *
+        ofThetaCoordinates A B C := by ring
+  rw [hp, theta_pow_four, theta_pow_two]
+  norm_num [thetaLinearInt, ofThetaCoordinates, eisensteinAxis_sq_coordinates,
+    seventhThetaLinearQuotient, seventhThetaLinearBFactor, seventhThetaLinearCFactor]
   ring
 
 set_option maxHeartbeats 1200000 in
--- The square coordinate of the seventh power requires a large normalization.
+-- 二次座標も七次多項式の全係数をカーネルで検証するため上限を増やす。
 set_option maxRecDepth 100000 in
 theorem thetaSquare_pow_seven (A B C : ℤ) :
     thetaSquareInt ((ofThetaCoordinates A B C) ^ 7) =
       7 * seventhThetaSquareQuotient A B C := by
-  norm_num [thetaSquareInt, ofThetaCoordinates,
-    eisensteinAxis_sq_coordinates, seventhThetaSquareQuotient,
-    seventhThetaSquareBFactor, seventhThetaSquareCFactor, pow_succ]
+  have hp : (ofThetaCoordinates A B C)^7 =
+      (ofThetaCoordinates A B C)^4 * (ofThetaCoordinates A B C)^2 *
+        ofThetaCoordinates A B C := by ring
+  rw [hp, theta_pow_four, theta_pow_two]
+  norm_num [thetaSquareInt, ofThetaCoordinates, eisensteinAxis_sq_coordinates,
+    seventhThetaSquareQuotient, seventhThetaSquareBFactor, seventhThetaSquareCFactor]
   ring
 
 theorem seventhThetaLinearBFactor_modSeven (A B C : ℤ) :

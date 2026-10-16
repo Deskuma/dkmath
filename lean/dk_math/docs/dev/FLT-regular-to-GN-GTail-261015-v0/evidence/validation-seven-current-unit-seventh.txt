@@ -1,0 +1,111 @@
+Validation: real-cubic rotation fixed modulo 7 / same current unit seventh power
+Date: 2026-10-16 JST
+Working directory: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: v4.34.1; mathlib: v4.34.1
+
+1. Ordinary focused Lake build: PASS, exit 0, 9313 jobs.
+LAKE_ARTIFACT_CACHE=false LAKE_NO_CACHE=true LEAN_NUM_THREADS=2 lake build \
+  DkMathTest.FLT.Kummer.SevenCurrentUnitSeventhSuite \
+  DkMathTest.FLT.Kummer.SevenCurrentPrimarySuite \
+  DkMath.FLT.Kummer
+
+The new suite includes 11 regression examples, the standard-axiom whitelist
+for all 18 new public theorems, and four recursive proof-dependency audits.
+The previous current-primary suite also passes in this invocation.
+
+2. Public Kummer entrance smoke: PASS, exit 0.
+LAKE_ARTIFACT_CACHE=false LAKE_NO_CACHE=true LEAN_NUM_THREADS=2 lake env lean \
+  docs/dev/FLT-regular-to-GN-GTail-261015-v0/evidence/SevenCurrentUnitSeventhSmoke.lean
+The smoke imports only DkMath.FLT.Kummer. See seven-current-unit-seventh-smoke.txt.
+
+3. Axioms: PASS. Every new public theorem has only standard axiom leaves:
+propext, Classical.choice, Quot.sound. See seven-current-unit-seventh-axioms.txt.
+
+4. Recursive dependency audits: PASS.
+Root                                                reachable / readable bodies
+rotation_fixed_mod_seven_integer                     1794 / 1464
+current_primary_packet_obstruction_zero              74793 / 72123
+currentCarrier_unit_free_factor_receiver             75878 / 73187
+current_unit_free_root_not_real                      28439 / 26921
+All required providers are present; forbidden, missing and unreadable lists
+are empty. Types, proof bodies including opaque bodies, and constructors are
+traversed. No sorryAx, FltRegular endpoint, completed FLT3/5/7 endpoint, or old
+conditional current-source class bridge occurs in these proof graphs.
+The concrete integer-congruence Kummer criterion is required in the two
+unit-power paths, and forbidden in the coordinate and non-real boundary paths.
+See seven-current-unit-seventh-dependencies.txt for the exact root names.
+
+5. Scope of the mathematics.
+The general rotation-fixed lemma has no counterexample assumption.
+For the current factor receiver, CurrentCommonPrimeCyclotomicPacket remains
+an explicit input. Its same Q.delta is seventh; source, phase, parameter,
+root ideal, root nonramification and original Fermat equation are preserved.
+The corrected raw receiver unit epsilon*T_j^-1 is seventh independently of
+root choice; the raw epsilon is not asserted seventh.
+Unit absorption does not lower the root ideal. The resulting current root
+cannot be re-entered directly as an element of the real cubic subring.
+A new arithmetic source transition, next admissible input, and strict decrease
+have NOT been constructed. These results do not establish FLT7 closure.
+
+6. Existing warnings replayed by the focused build (not new source warnings):
+DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147
+DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187
+DkMath/NumberTheory/GcdNextResearch.lean:850
+DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389
+Each is an existing declaration-uses-sorry warning. None is in the audited
+new proof graphs.
+
+7. Broader entrances.
+Ordinary full DkMath root / Seven facade build: PASS, exit 0, 10536 jobs.
+LAKE_ARTIFACT_CACHE=false LAKE_NO_CACHE=true LEAN_NUM_THREADS=2 lake build \
+  DkMath.FLT.Seven DkMath \
+  DkMathTest.FLT.Kummer.SevenCurrentUnitSeventhSuite \
+  DkMathTest.FLT.Kummer.SevenCurrentPrimarySuite
+
+Final source recheck (including the heartbeat-comment fix): PASS, exit 0,
+10538 jobs. The same root/Seven/suite targets plus these two existing tests:
+LAKE_ARTIFACT_CACHE=false LAKE_NO_CACHE=true LEAN_NUM_THREADS=2 lake build \
+  DkMath.FLT.Seven DkMath \
+  DkMathTest.FLT.Kummer.SevenCurrentUnitSeventhSuite \
+  DkMathTest.FLT.Kummer.SevenCurrentPrimarySuite \
+  DkMathTest.FLT.SevenRealCubicThetaSeventhPowerDepthApi \
+  DkMathTest.FLT.SevenRealCubicThetaSeventhPowerDepthAxiom
+The existing depth API and its three axiom probes pass. The fresh build
+has only the five historical sorry warnings, no new source warnings.
+
+DkMathTest entrance: PASS, exit 0.
+LAKE_ARTIFACT_CACHE=false LAKE_NO_CACHE=true LEAN_NUM_THREADS=2 lake env lean DkMathTest.lean
+See seven-current-unit-seventh-test-root.txt. This is the existing root's
+119 explicit imports, not a fresh build of every DkMathTest.+ glob.
+
+DkMath root-only smoke: PASS, exit 0.
+LAKE_ARTIFACT_CACHE=false LAKE_NO_CACHE=true LEAN_NUM_THREADS=2 lake env lean \
+  docs/dev/FLT-regular-to-GN-GTail-261015-v0/evidence/SevenCurrentUnitSeventhRootSmoke.lean
+The smoke imports only DkMath, checks the new public endpoints, and verifies
+the two changed coordinate proofs against the standard axiom whitelist.
+Their exact axiom leaves are propext and Quot.sound.
+See seven-current-unit-seventh-root-smoke.txt and seven-current-unit-seventh-build.txt.
+
+Initially the broad build was interrupted in the existing expensive theta
+seventh-power proof, and the test root reported its missing .olean. See
+seven-current-unit-seventh-test-root-initial.txt. That missing dependency was
+subsequently built successfully. The two existing coordinate proofs now use
+balanced x^7=x^4*x^2*x expansion with private square/fourth-power identities.
+Their public theorem statements and polynomial coefficient definitions are
+unchanged. No full-repository axiom-freedom claim is made; the full root also
+replays the existing sorry warning in CosmicFormula/TriominoFLT.lean:1919.
+
+8. Source manifest and static checks.
+source-seven-current-unit-seventh-sha256.txt identifies the six new Lean
+production/test files, the existing coordinate proof file, three facade files,
+and both Kummer and DkMath root smoke sources (12 files).
+Final whitespace, source-manifest and document-link checks are recorded below.
+
+PASS: git diff --check.
+PASS: sha256sum -c evidence/source-seven-current-unit-seventh-sha256.txt
+      (run with the full docs/dev/... evidence path from the Lake directory).
+PASS: every local link in SEVEN-ROTATION-FIXED-UNIT-SEVENTH.md resolves.
+PASS: 18 public theorem declarations in the two new production modules;
+      no sorry/admit/axiom in those modules or the changed coordinate module.
+PASS: existing coefficient definitions and both seventh-power theorem
+      statements match HEAD exactly; only their proofs have changed.

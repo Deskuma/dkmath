@@ -231,3 +231,6 @@ FLT を仮定しない非零な局所 GN パケットでも、この反例を回
 - [現在の receiver への接続](../../../DkMath/FLT/Kummer/SevenCurrentPrimary.lean)
 - [回帰・公理・依存監査 suite](../../../DkMathTest/FLT/Kummer/SevenCurrentPrimarySuite.lean)
 - [検証記録](evidence/validation-seven-current-primary.txt)
+
+後続章：[回転固定性と現在の単元の七乗根](SEVEN-ROTATION-FIXED-UNIT-SEVENTH.md) で、
+rho の mod 7 整数合同を回復し、本章の同じ一次単元の七乗性へ接続する。
