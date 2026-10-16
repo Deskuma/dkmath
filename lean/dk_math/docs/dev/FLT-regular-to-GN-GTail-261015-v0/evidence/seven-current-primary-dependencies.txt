@@ -1,0 +1,12 @@
+ROOT: DkMath.FLT.Kummer.SevenRealGN.exists_primary_root_gauge_iff_gap_divisible
+reachable constants: 72813; readable bodies: 70199
+axiom leaves: [propext, Quot.sound, Classical.choice]
+PASS: required gap/root-normalization/current-source providers present; forbidden, missing, unreadable lists empty.
+ROOT: DkMath.FLT.Kummer.SevenRealGN.current_gap_seven_phase_dvd
+reachable constants: 73006; readable bodies: 70372
+axiom leaves: [propext, Quot.sound, Classical.choice]
+PASS: required gap/root-normalization/current-source providers present; forbidden, missing, unreadable lists empty.
+ROOT: DkMath.FLT.Kummer.SevenRealGN.currentCarrier_primary_packet_receiver
+reachable constants: 74180; readable bodies: 71523
+axiom leaves: [propext, Quot.sound, Classical.choice]
+PASS: required gap/root-normalization/current-source providers present; forbidden, missing, unreadable lists empty.

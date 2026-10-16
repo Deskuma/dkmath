@@ -1,0 +1,89 @@
+2026-10-16 JST — Current carrier primary congruence, gap criterion, root normalization
+cwd: lean/dk_math
+
+Command:
+LEAN_NUM_THREADS=2 lake build DkMathTest.FLT.Kummer.SevenCurrentPrimarySuite DkMathTest.FLT.Kummer.SevenRealGNSuite DkMath.FLT.Kummer DkMath
+Result: exit 0; Build completed successfully (10534 jobs).
+The new suite imports regression, axiom whitelist, and recursive dependency audits.
+The previous real-GN conservation suite is included.
+This checks the named targets, not every DkMathTest glob target.
+
+Ten regression examples:
+- seventh power of 1+lambda*w is 1 mod 7, without assuming a unit root;
+- root -1 fails this congruence despite being away from lambda;
+- a nonzero residue 2 lifts to a global cyclotomic unit;
+- the concrete root -1 can be normalized to residue 1;
+- AllowedGauge implies residue 1;
+- a nonzero actual local GN packet is primary, but its sign-regauged unit is not;
+- that sign change still preserves the exact source factorization;
+- failure of the gap criterion excludes every root-unit normalization;
+- the actual current gap satisfies the criterion at phase 2;
+- the actual current receiver supplies a primary packet to the previous finite-iteration theorem,
+  retaining the current source and original Fermat equation.
+
+All 27 new public production theorems checked with Lean.collectAxioms:
+only propext, Classical.choice, Quot.sound allowed.
+Source-to-whitelist coverage: exact match, independently checked.
+Six printed roots include the seventh-power congruence, necessity, normalization feasibility,
+current deep-gap condition, current root-choice equivalence, and actual packet receiver.
+No sorryAx or new axiom in the checked proof graphs.
+Compact output: seven-current-primary-axioms.txt
+
+Recursive dependency audits (types, opaque bodies, constructors):
+exists_primary_root_gauge_iff_gap_divisible:
+  72813 reachable constants / 70199 readable bodies
+current_gap_seven_phase_dvd:
+  73006 reachable constants / 70372 readable bodies
+currentCarrier_primary_packet_receiver:
+  74180 reachable constants / 71523 readable bodies
+All PASS: required providers present; forbidden, missing, unreadable lists empty;
+axiom leaves only propext, Quot.sound, Classical.choice.
+Required providers distinguish general necessity/normalization, actual axis^32 depth,
+and the current receiver/source correspondence/root-away proof/initial normalization.
+Forbidden providers include sorryAx, completed FLT endpoints, FltRegular providers,
+the septic/concrete INTEGER-congruence Kummer unit criteria,
+and the previous conditional integer-GN current-source class bridge.
+The actual currentCarrier_ramified_element_receiver is REQUIRED in the last graph.
+Compact output: seven-current-primary-dependencies.txt
+
+Command:
+LEAN_NUM_THREADS=2 lake env lean docs/dev/FLT-regular-to-GN-GTail-261015-v0/evidence/SevenCurrentPrimarySmoke.lean
+Result: exit 0. Root import exposes the congruence, twist, gap criterion,
+current depth, root-choice equivalence, and actual primary-packet receiver.
+Includes the fulfilled necessary condition at phase 4 without assuming primary congruence.
+Output: seven-current-primary-smoke.txt
+
+Command:
+LEAN_NUM_THREADS=2 lake env lean DkMathTest.lean
+Result: exit 0. Normal test root consumes the new suite.
+This is root-source elaboration with compiled dependencies, not a fresh full test build.
+Output: seven-current-primary-test-root.txt
+
+Production forbidden-construct scan: no sorry/admit/axiom/opaque/native_decide/unsafe.
+git diff --check, new-source whitespace, public theorem whitelist coverage,
+textbook local links and source manifest: passed.
+Manifest: source-seven-current-primary-sha256.txt (10 Lean source files).
+
+Historical sorry warnings replayed in the combined build:
+DkMath/CosmicFormula/TriominoFLT.lean:1919
+DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147
+DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187
+DkMath/NumberTheory/GcdNextResearch.lean:850
+DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389
+No warnings in the new sources. Those sorry declarations are absent from checked graphs.
+
+Mathematical scope:
+- General necessity assumes nontrivial phase, lambda^2 | gap, nonzero parameter residue,
+  an exact unit-times-seventh factorization, and RealPrimary of the unit.
+- The normalized-root existence equivalence additionally assumes the root is away from lambda:
+  (exists t, RealPrimary(delta*t^-7,-u)) iff 7*(zeta^i-1) | embedded gap.
+- The current gap already has lambda^64 divisibility from real axis^32; the necessary test passes.
+- For a fixed current receiver factorization, epsilon*T_i^-1 is primary iff beta has residue 1.
+- Initial normalization chooses a global cyclotomic unit lifting the inverse root residue;
+  gamma=t*beta, delta=(epsilon*T_i^-1)*t^-7, with the same source and root ideal.
+- The initial t need not be AllowedGauge; the target packet is constructed with a new primary proof.
+  After normalization, the primary-preserving gauges are exactly residue-one units.
+- The receiver remains conditional on the existing CurrentCommonPrimeCyclotomicPacket.
+  The original epsilon,beta and Fermat equation are retained, not replaced by an existential FLT claim.
+- No gap-based exclusion of the current packet, FLT7 contradiction, new smaller solution,
+  or strict descent is claimed.

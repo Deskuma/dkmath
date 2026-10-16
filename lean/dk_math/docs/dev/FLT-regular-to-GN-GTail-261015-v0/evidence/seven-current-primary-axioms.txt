@@ -1,0 +1,15 @@
+'DkMath.FLT.Kummer.SevenRealGN.seventh_sub_one_dvd_seven_of_residue_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.gap_divisible_of_primary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.exists_primary_root_gauge_iff_gap_divisible' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.current_gap_seven_phase_dvd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.current_primary_iff_root_residue_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.currentCarrier_primary_packet_receiver' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PASS: 27 new public theorems; standard axiom whitelist only.

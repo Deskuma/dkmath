@@ -201,3 +201,7 @@ FLT11・FLT13 へは実部分の単元階数がそれぞれ4、5になるとい�
 - [一般の根・単元補正](../../../DkMath/Lib/Algebra/RootUnitGauge.lean)
 - [回帰・公理・依存監査 suite](../../../DkMathTest/FLT/Kummer/SevenRealGNSuite.lean)
 - [検証記録](evidence/validation-seven-real-primary.txt)
+
+後続章の追記：[現在の carrier の一次合同](SEVEN-CURRENT-PRIMARY-GAP.md) で、
+深い gap と根の剰余正規化を用い、現在の receiver から本章のパケットへの接続を構成した。
+本章時点で未供給だった一次合同はそこで供給される。厳密降下の境界は引き続き残る。
