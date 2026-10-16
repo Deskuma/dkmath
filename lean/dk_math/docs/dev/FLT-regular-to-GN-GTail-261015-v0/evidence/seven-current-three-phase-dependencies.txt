@@ -1,0 +1,24 @@
+ROOT: DkMath.Lib.Cosmic.phaseSource_three_consecutive_power_relation
+reachable constants: 1553; readable bodies: 1252
+axiom leaves: [propext, Quot.sound, Classical.choice]
+PASS: required simultaneous-family/selected-root/additive-relation/boundary providers present; forbidden, missing, unreadable lists empty.
+ROOT: DkMath.FLT.Kummer.SevenRealGN.exists_current_phase_seventh_family
+reachable constants: 75836; readable bodies: 73151
+axiom leaves: [Classical.choice, propext, Quot.sound]
+PASS: required simultaneous-family/selected-root/additive-relation/boundary providers present; forbidden, missing, unreadable lists empty.
+ROOT: DkMath.FLT.Kummer.SevenRealGN.current_three_phase_data_receiver
+reachable constants: 75925; readable bodies: 73232
+axiom leaves: [propext, Quot.sound, Classical.choice]
+PASS: required simultaneous-family/selected-root/additive-relation/boundary providers present; forbidden, missing, unreadable lists empty.
+ROOT: DkMath.FLT.Kummer.SevenRealGN.CurrentPhaseSeventhFamily.real_weighted_seventh_equation
+reachable constants: 36302; readable bodies: 34497
+axiom leaves: [propext, Quot.sound, Classical.choice]
+PASS: required simultaneous-family/selected-root/additive-relation/boundary providers present; forbidden, missing, unreadable lists empty.
+ROOT: DkMath.FLT.Kummer.SevenRealGN.no_common_unit_clears_three_phase_coefficients
+reachable constants: 74508; readable bodies: 71860
+axiom leaves: [propext, Quot.sound, Classical.choice]
+PASS: required simultaneous-family/selected-root/additive-relation/boundary providers present; forbidden, missing, unreadable lists empty.
+ROOT: DkMath.FLT.Kummer.SevenRealGN.CurrentPhaseSeventhFamily.root_not_real
+reachable constants: 28442; readable bodies: 26922
+axiom leaves: [propext, Quot.sound, Classical.choice]
+PASS: required simultaneous-family/selected-root/additive-relation/boundary providers present; forbidden, missing, unreadable lists empty.

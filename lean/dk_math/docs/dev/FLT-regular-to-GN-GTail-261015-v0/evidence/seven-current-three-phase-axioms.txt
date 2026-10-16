@@ -1,0 +1,17 @@
+'DkMath.Lib.Cosmic.phaseSource_three_term_relation' depends on axioms: [propext, Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.exists_current_phase_seventh_family' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.current_three_phase_data_receiver' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.CurrentPhaseSeventhFamily.real_weighted_seventh_equation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.no_common_unit_clears_three_phase_coefficients' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.CurrentPhaseSeventhFamily.root_not_real' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PASS: 24 public theorems, 2 definitions, structure and generated declarations (31 checked); standard axiom whitelist only.

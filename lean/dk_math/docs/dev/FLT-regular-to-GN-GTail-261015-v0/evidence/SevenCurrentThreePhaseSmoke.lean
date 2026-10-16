@@ -1,0 +1,16 @@
+import DkMath
+
+open DkMath.Lib.Cosmic DkMath.FLT.Kummer.SevenRealGN
+
+#check phaseSource_three_term_relation
+#check phaseSource_three_consecutive_power_relation
+#check exists_current_phase_seventh_family
+#check current_phase_family_extending_root
+#check current_three_phase_data_receiver
+#check CurrentPhaseSeventhFamily.real_weighted_seventh_equation
+#check CurrentPhaseSeventhFamily.root_ideals_pairwise
+#check CurrentPhaseSeventhFamily.root_not_real
+#check no_common_unit_clears_three_phase_coefficients
+
+#print axioms current_three_phase_data_receiver
+#print axioms no_common_unit_clears_three_phase_coefficients

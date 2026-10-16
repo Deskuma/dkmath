@@ -19,5 +19,7 @@ import DkMath.FLT.Kummer.SevenGNSource
 import DkMath.FLT.Kummer.SevenRealGNConservation
 import DkMath.FLT.Kummer.SevenCurrentPrimary
 import DkMath.FLT.Kummer.SevenCurrentUnitSeventh
+import DkMath.FLT.Kummer.SevenCurrentPhaseFamily
+import DkMath.FLT.Kummer.SevenCurrentThreePhase
 
 #print "file: DkMath.FLT.Kummer"
