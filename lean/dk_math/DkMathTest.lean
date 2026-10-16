@@ -11,6 +11,7 @@ import DkMathTest.FLT.Kummer.SevenRealGNSuite
 import DkMathTest.FLT.Kummer.SevenCurrentPrimarySuite
 import DkMathTest.FLT.Kummer.SevenCurrentUnitSeventhSuite
 import DkMathTest.FLT.Kummer.SevenCurrentThreePhaseSuite
+import DkMathTest.FLT.Kummer.SevenCurrentRootDepthSuite
 import DkMathlib.Basic
 import DkMathTest.NumberTheory.QuadraticResidueType
 import DkMathTest.NumberTheory.CyclotomicQRProvenanceLift

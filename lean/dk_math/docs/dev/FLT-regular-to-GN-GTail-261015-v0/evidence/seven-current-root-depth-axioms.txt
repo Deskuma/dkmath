@@ -1,0 +1,14 @@
+'DkMath.FLT.Kummer.SevenRealGN.phase_root_seventh_deep' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.phase_roots_seventh_sub_deep' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.phase_root_residue' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.phase_roots_local_global_data' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.exists_common_phase_root_correction_norm' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.phase_roots_weighted_congruence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.phase_root_zeta_difference_not_dvd_sq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PASS: 21 new public theorems and 1 definition (22 checked); standard axiom whitelist only.

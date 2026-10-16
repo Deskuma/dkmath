@@ -21,5 +21,6 @@ import DkMath.FLT.Kummer.SevenCurrentPrimary
 import DkMath.FLT.Kummer.SevenCurrentUnitSeventh
 import DkMath.FLT.Kummer.SevenCurrentPhaseFamily
 import DkMath.FLT.Kummer.SevenCurrentThreePhase
+import DkMath.FLT.Kummer.SevenCurrentRootDepth
 
 #print "file: DkMath.FLT.Kummer"

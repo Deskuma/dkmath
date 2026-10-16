@@ -238,3 +238,7 @@ Kummer・Lib・DkMath 入口と新旧 suite を含む通常ビルドは10,539 jo
 - [三項方程式と係数障害](../../../DkMath/FLT/Kummer/SevenCurrentThreePhase.lean)
 - [回帰・公理・依存監査 suite](../../../DkMathTest/FLT/Kummer/SevenCurrentThreePhaseSuite.lean)
 - [検証記録](evidence/validation-seven-current-three-phase.txt)
+
+次章の [六根の七乗差と共通の深い補正項](SEVEN-CURRENT-ROOT-DEEP-CONGRUENCE.md) では、
+同じ族の各七乗を同じ gap へ戻し、lambda^63 合同、共通の非零な分岐剰余、
+補正項の主イデアルと絶対ノルムの一致を固定した。反例再構成と厳密降下は引き続き未構成。
