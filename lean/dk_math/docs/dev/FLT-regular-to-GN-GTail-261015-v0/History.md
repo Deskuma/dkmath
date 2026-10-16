@@ -193,3 +193,13 @@
 5. 失敗事例: 未修飾eisensteinAxisが暗黙変数になり得るため完全修飾した。ζの大きい冪は指数分割をrwで先に行う。
 6. 備考: 既存5件のsorry警告と新定理の公理依存を区別した。正のMは小ノルムパケットから得られ、追加common-prime引数は不要だった。
 7. 次の課題: 同じgapRootから次の反例source、七乗方程式・原始性・分岐条件とAPI再入を構成し、同じ新状態で測度減少を示す。
+
+### 日時: 2026/10/17 JST — 六補正項の共通七乗根
+
+1. 目的: 固定したF,Sから同じ共通根と六単元を構成し、因子表示・主イデアル七乗性・相対単元・ノルムを束ねる。
+2. 実施: `SevenCurrentCorrectionPower` に6定理・3定義・1構造体を追加。Gamma=lambda^9 ofReal(axis^(6k) gapRoot)、U_i=ζ³ T_i⁻¹ ofReal(gapUnit)とした。
+3. 結論: 全六補正項=U_i Gamma^7、主イデアル=(Gamma)^7、U_i/U_j=T_j/T_i。正の共通根ノルム=7^(9+12k) normRoot²、補正ノルムはその七乗。
+4. 検証: focused build成功（9,247 jobs）、DkMath/Kummer/新回帰/依存監査build成功（10,536 jobs）。10宣言の公理whitelist、3回帰例、3再帰的証明グラフ監査、root smoke。詳しい実行証跡はevidence/validation-seven-current-correction-power.txt。
+5. 失敗事例: Units.mapのcoercionはchangeで明示し、ノルムの具体冪をnorm_numで先に計算せずchangeと指数分割で処理した。テスト入口の初回実行は監査olean生成中で失敗したため、ビルド完了後に再検査した。
+6. 備考: 既存5件のsorry警告と新宣言の公理依存を区別。Sの小さいgapRootとGammaは異なり、Gammaの高さ減少は主張しない。
+7. 次の課題: 六本の共通根付き七乗関係から、再入条件と整礎測度の減少を同時に満たす新しい許容反例状態を構成する。

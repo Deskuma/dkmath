@@ -1,0 +1,12 @@
+info: DkMathTest/FLT/Kummer/SevenCurrentCorrectionPowerDependencyAudit.lean:63:0: ROOT: DkMath.FLT.Kummer.SevenRealGN.correction_common_root_factor
+info: DkMathTest/FLT/Kummer/SevenCurrentCorrectionPowerDependencyAudit.lean:63:0: reachable constants: 73043; readable bodies: 70403
+info: DkMathTest/FLT/Kummer/SevenCurrentCorrectionPowerDependencyAudit.lean:63:0: axiom leaves: [propext, Quot.sound, Classical.choice]
+info: DkMathTest/FLT/Kummer/SevenCurrentCorrectionPowerDependencyAudit.lean:63:0: PASS: required common-quotient/power-split providers present; forbidden, missing, unreadable lists empty.
+info: DkMathTest/FLT/Kummer/SevenCurrentCorrectionPowerDependencyAudit.lean:63:0: ROOT: DkMath.FLT.Kummer.SevenRealGN.correction_phase_unit_ratio
+info: DkMathTest/FLT/Kummer/SevenCurrentCorrectionPowerDependencyAudit.lean:63:0: reachable constants: 72891; readable bodies: 70253
+info: DkMathTest/FLT/Kummer/SevenCurrentCorrectionPowerDependencyAudit.lean:63:0: axiom leaves: [propext, Quot.sound, Classical.choice]
+info: DkMathTest/FLT/Kummer/SevenCurrentCorrectionPowerDependencyAudit.lean:63:0: PASS: required common-quotient/power-split providers present; forbidden, missing, unreadable lists empty.
+info: DkMathTest/FLT/Kummer/SevenCurrentCorrectionPowerDependencyAudit.lean:63:0: ROOT: DkMath.FLT.Kummer.SevenRealGN.currentCorrectionPowerPacket
+info: DkMathTest/FLT/Kummer/SevenCurrentCorrectionPowerDependencyAudit.lean:63:0: reachable constants: 73063; readable bodies: 70421
+info: DkMathTest/FLT/Kummer/SevenCurrentCorrectionPowerDependencyAudit.lean:63:0: axiom leaves: [propext, Quot.sound, Classical.choice]
+info: DkMathTest/FLT/Kummer/SevenCurrentCorrectionPowerDependencyAudit.lean:63:0: PASS: required common-quotient/power-split providers present; forbidden, missing, unreadable lists empty.
