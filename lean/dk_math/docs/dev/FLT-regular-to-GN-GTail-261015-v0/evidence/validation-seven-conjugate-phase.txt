@@ -1,0 +1,72 @@
+2026-10-16 JST — FLT7 conjugate phase / primary-unit seventh power
+cwd: lean/dk_math
+
+Command:
+LEAN_NUM_THREADS=2 lake build DkMathTest.FLT.Kummer.SevenConjugatePhase DkMathTest.FLT.Kummer.SevenConjugatePhaseDependencyAudit DkMathTest.FLT.Kummer.SevenPrimaryNorm DkMath.FLT.Kummer DkMath.Lib DkMath
+Result: exit 0; Build completed successfully (10518 jobs).
+A maxHeartbeats-comment style warning in the audit was then fixed with the explanatory comment.
+Focused recheck of the final audit source:
+LEAN_NUM_THREADS=2 lake build DkMathTest.FLT.Kummer.SevenConjugatePhaseDependencyAudit
+Result: exit 0; Build completed successfully (9099 jobs). No new-source warnings.
+This is validation of the named targets, not a complete DkMathTest suite run.
+
+Regression: 8 examples in SevenConjugatePhase, plus the existing SevenPrimaryNorm target.
+- concrete inverse-root conjugation;
+- no positive nontrivial phase is 1 mod 7;
+- no negative phase is 1 mod 7;
+- finite order and phase-one consumers;
+- concrete primary unit alpha^7 congruent to 3 (with explicit divisor witness);
+- group recovery at degrees 11 and 13.
+
+All 31 new public production declarations audited by Lean.collectAxioms.
+Source-to-whitelist coverage scan: passed.
+Allowed axiom leaves only: propext, Classical.choice, Quot.sound.
+Printed roots:
+  conjugateRatio_eq_one
+  septic_kummer_unit_power_criterion
+  GN_primary_unit_seventh
+  exists_GN_septic_factor_eq_zeta_sub_one_mul_seventh
+All four depend only on those standard three axioms.
+No sorryAx or new axiom in the checked proof graphs.
+
+Recursive kernel dependency audits (types, opaque bodies, constructors):
+  septic_kummer_unit_power_criterion:
+    74497 reachable constants / 71849 readable bodies
+  GN_primary_unit_seventh:
+    74767 reachable constants / 72113 readable bodies
+  exists_GN_septic_factor_eq_zeta_sub_one_mul_seventh:
+    75824 reachable constants / 73161 readable bodies
+All PASS: forbidden, missing, unreadable lists empty.
+Required providers: CM conjugation identification, CM torsion ratio,
+integer-basis phase rigidity, real-cubic seventh-power criterion,
+relative norm root, and general odd-power recovery.
+The factor root additionally requires actual stripped-phase ideal extraction
+and the new septic unit criterion.
+Forbidden named completed FLT endpoints, FltRegular declarations, cubic/quintic unit criteria.
+Exact output: seven-conjugate-phase-dependencies.txt
+
+Command:
+LEAN_NUM_THREADS=2 lake env lean docs/dev/FLT-regular-to-GN-GTail-261015-v0/evidence/SevenConjugatePhaseSmoke.lean
+Result: exit 0. Import DkMath exposes the actual septic criterion and the new endpoints.
+Output: seven-conjugate-phase-smoke.txt
+
+Historical sorry warnings replayed in the combined production build:
+DkMath/CosmicFormula/TriominoFLT.lean:1919
+DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147
+DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187
+DkMath/NumberTheory/GcdNextResearch.lean:850
+DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389
+None occur in the new endpoints' dependency graphs, as checked above.
+
+New-source forbidden-construct scan and git diff --check: passed.
+Source manifest: source-seven-conjugate-phase-sha256.txt (7 Lean source files).
+Textbook local-link checks: passed.
+
+Scope:
+Theorems prove a primary unit's phase is 1 and the SAME primary unit is a seventh power,
+for O(CyclotomicField 7 Q) and its existing concrete degree-six model.
+The normalized GN packet yields a factor with no unresolved unit.
+The FLT-input factor theorem supplies the class-number condition from the existing septic PID.
+No external general-FLT theorem or supplied Kummer criterion is assumed.
+Not proved: currentLinearCarrier's unit has this same provenance/congruence,
+a recurring descent packet, FLT7's contradiction, or unit classification for p=11,13.

@@ -343,3 +343,13 @@ FLT7 の実三次単元の整数合同から七乗判定への限定的な接続
 単元自身の七乗性・現在の carrier の単元との対応・降下の閉包は未証明。
 FLT11・FLT13 の比較を含む [教科書](SEVEN-PRIMARY-NORM.md) と
 [検証記録](evidence/validation-seven-primary-norm.txt) を追加する。
+
+## 20. FLT7 第二段：共役位相の固定と単元の七乗根
+
+`SevenConjugatePhase` が六次モデルの二次共役と CM 共役を同定する。
+CM 単元定理から有限位数の共役比を得て、整数合同と六つの整数冪基底係数で位相1を証明した。
+`SevenKummerUnit` は前章のノルム根と結合して七次の `KummerUnitPowerCriterion` を実供給し、
+同じ GN 一次単元および円分因子を七乗へ復元する。七次の類数条件は既存 PID 定理から供給。
+研究に依存しない奇数冪の根復元は `Lib/Algebra/OddPowerRecovery` に切り出した。
+現在の carrier との同じ来歴の対応および FLT7 の反復降下は未構成。
+[解説](SEVEN-CONJUGATE-PHASE.md)、[検証](evidence/validation-seven-conjugate-phase.txt) を参照。

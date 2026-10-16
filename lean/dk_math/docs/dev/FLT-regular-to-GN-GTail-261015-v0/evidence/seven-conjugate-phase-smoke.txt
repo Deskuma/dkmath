@@ -1,0 +1,15 @@
+DkMath.FLT.Kummer.SevenPrimaryNorm.integralConj_eq_CM [NumberField.IsCMField (CyclotomicField 7 ℚ)] :
+  integralConj.toRingHom = (NumberField.IsCMField.ringOfIntegersComplexConj (CyclotomicField 7 ℚ)).toRingEquiv.toRingHom
+DkMath.FLT.Kummer.SevenPrimaryNorm.unit_square_eq_norm_mul_ratio (u : (𝓞 (CyclotomicField 7 ℚ))ˣ) :
+  integralEquiv ↑u ^ 2 =
+    DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ofReal (integralRelativeNorm ↑u) * integralEquiv ↑(conjugateRatio u)
+DkMath.FLT.Kummer.SevenPrimaryNorm.GN_primary_unit_seventh {ζ : CyclotomicField 7 ℚ} {hζ : IsPrimitiveRoot ζ 7}
+  {x u c : ℤ} (Q : DkMath.Lib.NumberTheory.RamifiedPrincipalPowerPacket hζ x u c) {i : ℕ}
+  (hi : i ∈ (Finset.range 7).erase 0) (hγ : (DkMath.Lib.NumberTheory.ramifiedReduction hζ ⋯) (Q.generator i) = 1) :
+  ∃ κ, Q.primaryUnit hi = κ ^ 7
+DkMath.FLT.Kummer.SevenPrimaryNorm.exists_GN_septic_factor_eq_zeta_sub_one_mul_seventh {ζ : CyclotomicField 7 ℚ}
+  (hζ : IsPrimitiveRoot ζ 7) {a b c : ℤ} (hc0 : c ≠ 0) (heq : a ^ 7 + b ^ 7 = c ^ 7) (hprim : IsCoprime a b)
+  (hcase : 7 ∣ c) {i : ℕ} (hi : i ∈ (Finset.range 7).erase 0) :
+  ∃ θ, ↑a + hζ.toInteger ^ i * ↑b = (hζ.toInteger ^ i - 1) * θ ^ 7
+DkMath.Lib.Algebra.oddPower_root_of_square.{u_1} {G : Type u_1} [CommGroup G] {u v : G} (k : ℕ)
+  (h : u ^ 2 = v ^ (2 * k + 1)) : (u * v⁻¹ ^ k) ^ (2 * k + 1) = u
