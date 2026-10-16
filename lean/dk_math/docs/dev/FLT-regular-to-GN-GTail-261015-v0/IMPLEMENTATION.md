@@ -333,3 +333,13 @@ FLT 入口は `GNRamifiedUnitResidue.exists_GN_ramified_residue_normalized_packe
 公開終点は `fermatFive_no_positive_solution_via_GN`。降下内部の lift の五乗再抽出は再利用する。
 FLT7 の実三次単元の整数合同から七乗判定への限定的な接続も回帰検査する。
 六次の現在の単元への合同条件の供給と、次の不変パケットへの再入は別課題である。
+
+## 19. FLT7 第一段：GN 一次単元の実三次ノルム
+
+`SevenPrimaryNorm` は実三次射影対数の既存七乗判定を実際に消費し、
+六次一次単元 `u` について `N(u)=v^7` と `u*star(u)=ofReal(v)^7` を証明する。
+`SevenPrimaryNormBridge` は整数冪基底の既存単射・全射を環同型に束ね、
+同じ `Q.primaryUnit hi` の整数合同をこの判定へ接続する。
+単元自身の七乗性・現在の carrier の単元との対応・降下の閉包は未証明。
+FLT11・FLT13 の比較を含む [教科書](SEVEN-PRIMARY-NORM.md) と
+[検証記録](evidence/validation-seven-primary-norm.txt) を追加する。

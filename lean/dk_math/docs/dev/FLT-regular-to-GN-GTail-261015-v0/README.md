@@ -128,3 +128,8 @@ FLT 座標では εᵢ≡i*b となり、同じ商・イデアル根を保持す
 一般 p は明示的な単元補題を受け取る条件付き adapter、三次は Mathlib の実際の補題から
 単元除去を検証済み。上流 flt-regular の実 import は未接続として区別する。
 検証記録: [validation-ramified-primary.txt](evidence/validation-ramified-primary.txt)。
+
+FLT7 の第一段として [GN 一次単元の実三次相対ノルム](SEVEN-PRIMARY-NORM.md) を実装。
+円分整数環と既存六次モデルの環同型を介し、同じ GN パケットの一次単元 δᵢ に
+`N(δᵢ)=vᵢ⁷` を与える。単元自身の七乗性・現在の carrier への対応・反復可能な降下は次段。
+FLT11・FLT13 の構造比較は、有限の次数計算と未形式化の見通しを区別した。

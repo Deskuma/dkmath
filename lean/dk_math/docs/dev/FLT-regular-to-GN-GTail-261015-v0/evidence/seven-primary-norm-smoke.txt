@@ -1,0 +1,6 @@
+DkMath.FLT.Kummer.SevenPrimaryNorm.GN_primary_unit_relativeNorm_seventh {ζ : CyclotomicField 7 ℚ}
+  {hζ : IsPrimitiveRoot ζ 7} {x u c : ℤ} (Q : DkMath.Lib.NumberTheory.RamifiedPrincipalPowerPacket hζ x u c) {i : ℕ}
+  (hi : i ∈ (Finset.range 7).erase 0) (hγ : (DkMath.Lib.NumberTheory.ramifiedReduction hζ ⋯) (Q.generator i) = 1) :
+  ∃ v, (Units.map integralRelativeNorm) (Q.primaryUnit hi) = v ^ 7
+DkMath.FLT.Kummer.SevenPrimaryNorm.integralEquiv_generator :
+  integralEquiv SevenCyclotomicDegreeSixInt.cyclotomicIntegralGenerator = SevenCyclotomicDegreeSixInt.zeta

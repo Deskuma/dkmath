@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.Kummer.FiveGNDescent
-import DkMath.FLT.Seven.SevenRealCubicUnitClass
+import DkMath.FLT.Kummer.SevenPrimaryNorm
 
 /-!
 # FLT5 実装後の、既存 FLT7 単元判定への限定的な照合
@@ -20,36 +20,7 @@ namespace DkMathTest.FLT.Kummer.FiveSevenComparison
 
 open DkMath.FLT.Seven DkMath.FLT.Seven.SevenRealCubicInt
 
-local instance : Fact (Nat.Prime 7) := ⟨by decide⟩
-
-/-- 実三次環の整数合同は二成分の射影対数を零にする。 -/
-theorem realCubic_primary_unit_log_zero (u : SevenRealCubicIntˣ) (n : ℤ)
-    (h : (7 : SevenRealCubicInt) ∣ (u : SevenRealCubicInt) - (n : SevenRealCubicInt)) :
-    projectiveLog (Additive.ofMul u) = 0 := by
-  obtain ⟨w, hw⟩ := h
-  have hs : (7 : ℤ) ∣ (u : SevenRealCubicInt).snd := by
-    refine ⟨w.snd, ?_⟩
-    have hs := congrArg SevenRealCubicInt.snd hw
-    simpa [show (7 : SevenRealCubicInt) = ⟨7, 0, 0⟩ from rfl] using hs
-  have ht : (7 : ℤ) ∣ (u : SevenRealCubicInt).thd := by
-    refine ⟨w.thd, ?_⟩
-    have ht := congrArg SevenRealCubicInt.thd hw
-    simpa [show (7 : SevenRealCubicInt) = ⟨7, 0, 0⟩ from rfl] using ht
-  have hs0 : ((u : SevenRealCubicInt).snd : ZMod 7) = 0 :=
-    (ZMod.intCast_zmod_eq_zero_iff_dvd _ 7).mpr hs
-  have ht0 : ((u : SevenRealCubicInt).thd : ZMod 7) = 0 :=
-    (ZMod.intCast_zmod_eq_zero_iff_dvd _ 7).mpr ht
-  rw [projectiveLog_apply]
-  ext <;> simp [unitNilpotentX, unitNilpotentY, thetaLinearModSeven,
-    thetaSquareModSeven, hs0, ht0]
-
-/-- 既存の七乗判定を実際に適用する。追加の類数・単元分類仮定を要求しない。 -/
-theorem realCubic_primary_unit_seventh (u : SevenRealCubicIntˣ)
-    (h : ∃ n : ℤ, (7 : SevenRealCubicInt) ∣ (u : SevenRealCubicInt) - (n : SevenRealCubicInt)) :
-    ∃ v : SevenRealCubicIntˣ, u = v ^ 7 := by
-  obtain ⟨n, hn⟩ := h
-  exact (SevenRealCubic.unit_isSeventhPower_iff_projectiveLog_eq_zero u).mpr
-    (realCubic_primary_unit_log_zero u n hn)
+open DkMath.FLT.Kummer.SevenPrimaryNorm
 
 #print axioms realCubic_primary_unit_log_zero
 #print axioms realCubic_primary_unit_seventh
