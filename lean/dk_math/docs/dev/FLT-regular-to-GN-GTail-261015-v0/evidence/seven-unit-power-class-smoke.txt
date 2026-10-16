@@ -1,0 +1,34 @@
+DkMath.Lib.Algebra.exists_root_and_unit_correction.{u_1} {R : Type u_1} [CommRing R] [IsDomain R] [IsIntegrallyClosed R]
+  {A lambda beta gamma : R} {n : ℕ} (u v : Rˣ) (hn : n ≠ 0) (hA : A ≠ 0) (hlambda : lambda ≠ 0)
+  (hleft : A = lambda * (↑u * beta ^ n)) (hright : A = lambda * (↑v * gamma ^ n)) :
+  ∃ t, beta = ↑t * gamma ∧ v = u * t ^ n
+DkMath.Lib.Algebra.quotient_eq_of_fixed_extraction.{u_1} {R : Type u_1} [CommRing R] [IsDomain R] [IsIntegrallyClosed R]
+  {A lambda beta gamma : R} {n : ℕ} (u v : Rˣ) (hn : n ≠ 0) (hA : A ≠ 0) (hlambda : lambda ≠ 0)
+  (hleft : A = lambda * (↑u * beta ^ n)) (hright : A = lambda * (↑v * gamma ^ n)) : ↑u = ↑v
+DkMath.Lib.Algebra.exists_unit_pow_of_fixed_extraction.{u_1} {R : Type u_1} [CommRing R] [IsDomain R]
+  [IsIntegrallyClosed R] {A lambda beta gamma : R} {n : ℕ} (u v : Rˣ) (hn : n ≠ 0) (hA : A ≠ 0) (hlambda : lambda ≠ 0)
+  (hleft : A = lambda * (↑u * beta ^ n)) (hright : A = lambda * (↑v * gamma ^ n)) (hv : ∃ k, v = k ^ n) : ∃ k, u = k ^ n
+DkMath.FLT.Kummer.SevenPrimaryNorm.currentCarrier_unit_class_of_GN_source {a b d : ℕ}
+  {source : DkMath.FLT.Seven.CounterexamplePack a b d}
+  {r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source}
+  {p : DkMath.FLT.Seven.DirectRealCubicRootPacket source r}
+  {h : DkMath.FLT.Seven.DirectOrbitCanonicalCommonFactorPacket p} {q : ℕ}
+  (c : DkMath.FLT.Seven.SevenRealCubic.CurrentCommonPrimeCyclotomicPacket h q) {x u v : ℤ}
+  (Q : DkMath.Lib.NumberTheory.RamifiedPrincipalPowerPacket septicRoot_spec x u v) {i : ℕ}
+  (hi : i ∈ (Finset.range 7).erase 0)
+  (hγ : (DkMath.Lib.NumberTheory.ramifiedReduction septicRoot_spec ⋯) (Q.generator i) = 1)
+  (hsame : DkMath.FLT.Seven.SevenRealCubic.currentLinearCarrier c = GNPhaseFactor x u i) :
+  ∃ ε β,
+    DkMath.FLT.Seven.SevenRealCubic.currentLinearCarrier c =
+        DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ramifiedUniformizer * (↑ε * β ^ 7) ∧
+      ↑ε = ↑(GNRamifierTwist hi) ∧ DkMath.FLT.Seven.Fermat7Equation a b d
+DkMath.FLT.Kummer.SevenPrimaryNorm.unit_seventh_after_twist_of_GN_source {x u c : ℤ}
+  (Q : DkMath.Lib.NumberTheory.RamifiedPrincipalPowerPacket septicRoot_spec x u c) {i : ℕ}
+  (hi : i ∈ (Finset.range 7).erase 0)
+  (hγ : (DkMath.Lib.NumberTheory.ramifiedReduction septicRoot_spec ⋯) (Q.generator i) = 1)
+  (ε : DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.Ringˣ) (β : DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.Ring)
+  (hA : GNPhaseFactor x u i ≠ 0)
+  (hleft : GNPhaseFactor x u i = DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ramifiedUniformizer * (↑ε * β ^ 7)) :
+  ∃ k, ε * (GNRamifierTwist hi)⁻¹ = k ^ 7
+DkMath.FLT.Kummer.SevenPrimaryNorm.GNRamifierTwist_two_not_seventh (hi : 2 ∈ (Finset.range 7).erase 0) :
+  ¬∃ k, GNRamifierTwist hi = k ^ 7

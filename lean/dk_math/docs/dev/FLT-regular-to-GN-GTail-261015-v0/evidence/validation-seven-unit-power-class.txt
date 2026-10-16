@@ -1,0 +1,74 @@
+2026-10-16 JST — FLT7 unit-power-class comparison
+cwd: lean/dk_math
+
+Command:
+LEAN_NUM_THREADS=2 lake build DkMathTest.FLT.Kummer.SevenUnitPowerClassBridge DkMathTest.FLT.Kummer.SevenUnitPowerClassDependencyAudit DkMathTest.FLT.Kummer.SevenConjugatePhase DkMath.FLT.Kummer DkMath.Lib DkMath
+Result: exit 0; Build completed successfully (10520 jobs).
+This checks the named targets, not a complete DkMathTest suite run.
+The previous conjugate-phase regression target is included.
+
+9 regression examples:
+- the SAME unit witness relates roots and extraction units;
+- equality in the actual seventh-power quotient;
+- transport of seventh-power membership;
+- a nontrivial seventh-power class over ZMod 29;
+- two decompositions with different ramifier representatives;
+- A=0 counterexample to unguarded class independence;
+- compatibility of the previous GapFocusing namespace;
+- phase-one ramifier twist is a seventh power;
+- actual phase-two cyclotomic twist has nontrivial seventh-power class.
+
+All 21 public declarations in Lib/Algebra/UnitPowerClass and
+FLT/Kummer/SevenUnitPowerClassBridge checked with Lean.collectAxioms whitelist.
+These include the neutral API moved from UnitGauge, not 21 new mathematical discoveries.
+All allowed axiom leaves only: propext, Classical.choice, Quot.sound.
+Printed roots: exists_root_and_unit_correction, quotient_eq_of_fixed_extraction,
+GNRamifierTwist_two_not_seventh, currentCarrier_unit_class_of_GN_source.
+All four depend only on the standard three axioms.
+No sorryAx or new axiom in the checked new proof graphs.
+
+Recursive dependency audit (types, opaque bodies, constructors):
+ROOT currentCarrier_unit_class_of_GN_source
+76046 reachable constants / 73351 readable bodies.
+PASS: forbidden, missing, unreadable lists empty.
+Required providers: actual current carrier element receiver,
+Lib fixed-extraction class comparison and quotient theorem,
+GN primary unit seventh root, exact ramifier twist identity,
+and the CM unit-ratio provider.
+Forbidden: named completed FLT endpoints, FltRegular declarations, cubic/quintic unit criteria.
+Exact compact output: seven-unit-power-class-dependencies.txt
+This audit confirms the conditional bridge uses its providers;
+it does not establish the input source equality.
+
+Command:
+LEAN_NUM_THREADS=2 lake env lean docs/dev/FLT-regular-to-GN-GTail-261015-v0/evidence/SevenUnitPowerClassSmoke.lean
+Result: exit 0. Root import exposes the Lib comparison, GN bridge,
+corrected-unit root and phase-two non-seventh-power theorem.
+Output: seven-unit-power-class-smoke.txt
+
+Historical sorry warnings replayed:
+DkMath/CosmicFormula/TriominoFLT.lean:1919
+DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147
+DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187
+DkMath/NumberTheory/GcdNextResearch.lean:850
+DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389
+No warnings in the new sources. These sorry declarations are absent from the checked new graphs.
+
+Source forbidden-construct scan: passed.
+Coverage of all 21 public declarations by the whitelist: passed.
+Lib import direction: UnitPowerClass imports only Lib.PowerSubgroup and Mathlib.
+UnitGauge compatibility wrappers compile and the previous name is regression-tested.
+git diff --check, source SHA256 manifest and textbook local-link checks: passed.
+Manifest: source-seven-unit-power-class-sha256.txt (7 Lean source files).
+
+Scope:
+Fixed nonzero A and ramifier lambda determine a unit class modulo nth powers
+in any integrally closed domain, n != 0. No Dedekind or class-group hypothesis needed.
+For the actual convention lambda=1-zeta, the GN ramifier zeta^i-1 adds twist -S_i.
+The comparison yields [epsilon]=[-S_i]; epsilon*(-S_i)^(-1) is a seventh power.
+At phase 1 the twist is -1 and can be absorbed. At phase 2 the twist is NOT a
+seventh power, proved from its relative norm 1+alpha and projective log (2,5).
+The actual current receiver is connected CONDITIONALLY on an explicit equality
+of its source element with the integer-coordinate GN source.
+That equality is not constructed here. No phase occurrence/exclusion, recurring descent,
+FLT7 contradiction, or general FLT theorem is claimed.

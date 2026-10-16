@@ -353,3 +353,14 @@ CM 単元定理から有限位数の共役比を得て、整数合同と六つ�
 研究に依存しない奇数冪の根復元は `Lib/Algebra/OddPowerRecovery` に切り出した。
 現在の carrier との同じ来歴の対応および FLT7 の反復降下は未構成。
 [解説](SEVEN-CONJUGATE-PHASE.md)、[検証](evidence/validation-seven-conjugate-phase.txt) を参照。
+
+## 21. 単元七乗剰余類の比較と分岐因子の補正
+
+`Lib/Algebra/UnitPowerClass` に既存 UnitGauge の中立な独立性原理を移し、
+実際の商群、同じ証人による根・単元の対応、片側の冪性の輸送を追加した。
+研究側の旧名前空間は互換 wrapper として保持する。
+`SevenUnitPowerClassBridge` は同じ GN source の分解を比較し、現在の分岐因子 `1−ζ` に
+揃えた結論 `[ε]=[−Sᵢ]` と、補正後の単元の七乗性を証明する。
+第2位相の補正はノルムの対数から非七乗と証明。現在の receiver への適用には
+source 等式を明示的に要求し、その対応の存在や降下の完成を結論しない。
+[教科書](SEVEN-UNIT-POWER-CLASS.md)、[検証](evidence/validation-seven-unit-power-class.txt) を参照。

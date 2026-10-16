@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.Lib.NumberTheory.FiniteIdealPowerAggregation
 import DkMath.Lib.Basic
 import DkMath.Lib.Algebra.PowerSubgroup
+import DkMath.Lib.Algebra.UnitPowerClass
 import DkMath.Lib.Algebra.OddPowerRecovery
 import DkMath.Lib.TwoChannel
 import DkMath.Lib.NumberTheory.PadicValNat

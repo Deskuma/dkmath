@@ -14,5 +14,6 @@ import DkMath.FLT.Kummer.ThreeGNDescent
 import DkMath.FLT.Kummer.FiveGNDescent
 import DkMath.FLT.Kummer.SevenPrimaryNormBridge
 import DkMath.FLT.Kummer.SevenKummerUnit
+import DkMath.FLT.Kummer.SevenUnitPowerClassBridge
 
 #print "file: DkMath.FLT.Kummer"
