@@ -1,0 +1,71 @@
+DkMath.FLT.Kummer.SevenRealGN.common_quotient_star {a b d : ℕ} {source : DkMath.FLT.Seven.CounterexamplePack a b d}
+  {r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source}
+  {p : DkMath.FLT.Seven.DirectRealCubicRootPacket source r} {w : C}
+  (hg :
+    DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ofReal (DkMath.FLT.Seven.SevenRealCubicInt.rotateEquiv p.rho - p.rho) =
+      DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ramifiedUniformizer ^ 64 * w) :
+  star w = DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.zeta * w
+DkMath.FLT.Kummer.SevenRealGN.common_quotient_eq_real {a b d : ℕ} {source : DkMath.FLT.Seven.CounterexamplePack a b d}
+  {r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source}
+  {p : DkMath.FLT.Seven.DirectRealCubicRootPacket source r} {w : C}
+  (hg :
+    DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ofReal (DkMath.FLT.Seven.SevenRealCubicInt.rotateEquiv p.rho - p.rho) =
+      DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ramifiedUniformizer ^ 64 * w)
+  (v : R) (hv : DkMath.FLT.Seven.directOrbitGap p = DkMath.FLT.Seven.SevenRealCubicInt.eisensteinAxis ^ 32 * v) :
+  w = DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.zeta ^ 3 * DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ofReal v
+DkMath.FLT.Kummer.SevenRealGN.common_quotient_norm_square {a b d : ℕ}
+  {source : DkMath.FLT.Seven.CounterexamplePack a b d}
+  {r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source}
+  {p : DkMath.FLT.Seven.DirectRealCubicRootPacket source r} {w : C}
+  (hg :
+    DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ofReal (DkMath.FLT.Seven.SevenRealCubicInt.rotateEquiv p.rho - p.rho) =
+      DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ramifiedUniformizer ^ 64 * w)
+  (v : R) (hv : DkMath.FLT.Seven.directOrbitGap p = DkMath.FLT.Seven.SevenRealCubicInt.eisensteinAxis ^ 32 * v) :
+  DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.cyclotomicNormHom w = DkMath.FLT.Seven.SevenRealCubicInt.norm v ^ 2
+DkMath.FLT.Kummer.SevenRealGN.phase_root_correction_norm_seven_square_pos {a b d : ℕ}
+  {source : DkMath.FLT.Seven.CounterexamplePack a b d}
+  {r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source}
+  {p : DkMath.FLT.Seven.DirectRealCubicRootPacket source r} (F : CurrentPhaseSeventhFamily p) :
+  ∃ M,
+    0 < M ∧
+      ∀ (i : Fin 6),
+        (DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.cyclotomicNormHom
+              (F.root i ^ 7 + DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ofReal p.rho)).natAbs =
+          7 * M ^ 2
+DkMath.FLT.Kummer.SevenRealGN.phase_root_correction_norm_valuation_odd {a b d : ℕ}
+  {source : DkMath.FLT.Seven.CounterexamplePack a b d}
+  {r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source}
+  {p : DkMath.FLT.Seven.DirectRealCubicRootPacket source r} (F : CurrentPhaseSeventhFamily p) (i : Fin 6) :
+  Odd
+    (padicValNat 7
+      (DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.cyclotomicNormHom
+          (F.root i ^ 7 + DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ofReal p.rho)).natAbs)
+DkMath.FLT.Kummer.SevenRealGN.common_quotient_smaller_packet {a b d : ℕ}
+  {source : DkMath.FLT.Seven.CounterexamplePack a b d}
+  {r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source}
+  {p : DkMath.FLT.Seven.DirectRealCubicRootPacket source r} {w : C}
+  (hg :
+    DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ofReal (DkMath.FLT.Seven.SevenRealCubicInt.rotateEquiv p.rho - p.rho) =
+      DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ramifiedUniformizer ^ 64 * w)
+  (S : DkMath.FLT.Seven.DirectOrbitSmallerNormPacket p) :
+  w =
+      DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.zeta ^ 3 *
+        DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ofReal
+          (DkMath.FLT.Seven.SevenRealCubicInt.eisensteinAxis ^ (42 * S.powerSplit.gapSplit.k) * ↑S.powerSplit.gapUnit *
+            S.powerSplit.gapRoot ^ 7) ∧
+    S.normRoot = S.powerSplit.gapRoot.norm.natAbs ∧ 0 < S.normRoot ∧ S.normRoot < S.powerSplit.gapSplit.a
+DkMath.FLT.Kummer.SevenRealGN.phase_root_correction_norm_smaller_packet {a b d : ℕ}
+  {source : DkMath.FLT.Seven.CounterexamplePack a b d}
+  {r : DkMath.FLT.Seven.PrimitiveCounterexampleRamifiedProvenance source}
+  {p : DkMath.FLT.Seven.DirectRealCubicRootPacket source r} (F : CurrentPhaseSeventhFamily p)
+  (S : DkMath.FLT.Seven.DirectOrbitSmallerNormPacket p) (i : Fin 6) :
+  (DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.cyclotomicNormHom
+        (F.root i ^ 7 + DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ofReal p.rho)).natAbs =
+    7 * (7 ^ 31 * (7 ^ (42 * S.powerSplit.gapSplit.k) * S.normRoot ^ 7)) ^ 2
+'DkMath.FLT.Kummer.SevenRealGN.common_quotient_star' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.phase_root_correction_norm_seven_square_pos' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.SevenRealGN.common_quotient_smaller_packet' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

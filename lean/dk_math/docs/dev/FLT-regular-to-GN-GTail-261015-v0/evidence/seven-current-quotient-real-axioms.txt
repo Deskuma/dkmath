@@ -1,0 +1,28 @@
+info: DkMathTest/FLT/Kummer/SevenCurrentQuotientReal.lean:3:0: 'DkMath.FLT.Kummer.SevenRealGN.common_quotient_real_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/FLT/Kummer/SevenCurrentQuotientReal.lean:4:0: 'DkMath.FLT.Kummer.SevenRealGN.common_quotient_eq_real' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/FLT/Kummer/SevenCurrentQuotientReal.lean:5:0: 'DkMath.FLT.Kummer.SevenRealGN.common_quotient_star' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/FLT/Kummer/SevenCurrentQuotientReal.lean:6:0: 'DkMath.FLT.Kummer.SevenRealGN.cyclotomicNormHom_ofReal_square' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/FLT/Kummer/SevenCurrentQuotientReal.lean:7:0: 'DkMath.FLT.Kummer.SevenRealGN.cyclotomicNormHom_zeta_one' depends on axioms: [propext, Quot.sound]
+info: DkMathTest/FLT/Kummer/SevenCurrentQuotientReal.lean:8:0: 'DkMath.FLT.Kummer.SevenRealGN.common_quotient_norm_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/FLT/Kummer/SevenCurrentQuotientReal.lean:9:0: 'DkMath.FLT.Kummer.SevenRealGN.phase_root_correction_norm_seven_square' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/FLT/Kummer/SevenCurrentQuotientReal.lean:10:0: 'DkMath.FLT.Kummer.SevenRealGN.smaller_packet_real_quotient' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: DkMathTest/FLT/Kummer/SevenCurrentQuotientReal.lean:11:0: 'DkMath.FLT.Kummer.SevenRealGN.common_quotient_smaller_packet' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/FLT/Kummer/SevenCurrentQuotientReal.lean:12:0: 'DkMath.FLT.Kummer.SevenRealGN.phase_root_correction_norm_smaller_packet' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/FLT/Kummer/SevenCurrentQuotientReal.lean:13:0: 'DkMath.FLT.Kummer.SevenRealGN.phase_root_correction_norm_seven_square_pos' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/FLT/Kummer/SevenCurrentQuotientReal.lean:14:0: 'DkMath.FLT.Kummer.SevenRealGN.phase_root_correction_norm_valuation_odd' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: DkMathTest/FLT/Kummer/SevenCurrentQuotientReal.lean:16:0: PASS: 12 public theorems; standard axiom whitelist only.
+ℹ [10532/10534] Built DkMath.FLT (7.0s)
+info: DkMath/FLT.lean:16:0: file: DkMath.FLT
+ℹ [10533/10534] Built DkMath (8.0s)
+info: DkMath.lean:77:0: file: DkMath
+Build completed successfully (10534 jobs).

@@ -1,0 +1,15 @@
+import DkMath
+
+open DkMath.FLT.Kummer.SevenRealGN
+
+#check common_quotient_star
+#check common_quotient_eq_real
+#check common_quotient_norm_square
+#check phase_root_correction_norm_seven_square_pos
+#check phase_root_correction_norm_valuation_odd
+#check common_quotient_smaller_packet
+#check phase_root_correction_norm_smaller_packet
+
+#print axioms common_quotient_star
+#print axioms phase_root_correction_norm_seven_square_pos
+#print axioms common_quotient_smaller_packet

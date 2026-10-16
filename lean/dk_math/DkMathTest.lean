@@ -126,4 +126,6 @@ import DkMathTest.RH.CFBRCEtaEndpointIncrementDecoder
 import DkMathTest.RH.WeaveEtaPairIntegral
 import DkMathTest.RH.WeaveEtaPairPhaseSpan
 
+import DkMathTest.FLT.Kummer.SevenCurrentQuotientReal
+
 #print "file: DkMathTest"
