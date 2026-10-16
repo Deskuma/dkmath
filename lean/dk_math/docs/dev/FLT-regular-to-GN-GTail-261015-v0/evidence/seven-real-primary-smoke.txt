@@ -1,0 +1,29 @@
+DkMath.Lib.Algebra.root_unit_gauge_identity.{u_1} {R : Type u_1} [CommRing R] (a b : R) (u t : Rˣ) (n : ℕ) :
+  a * (↑u * b ^ n) = a * (↑(u * t⁻¹ ^ n) * (↑t * b) ^ n)
+DkMath.FLT.Kummer.SevenRealGN.phase_target_card : Nat.card ↥(rootsOfUnity 7 C) = 7
+DkMath.FLT.Kummer.SevenRealGN.unit_seventh_iff_obstruction (u : Cˣ) :
+  (∃ k, u = k ^ 7) ↔ normCoordinates u = 0 ∧ phaseCharacter u = 1
+DkMath.FLT.Kummer.SevenRealGN.same_class_iff_unitObstruction_eq (u v : Cˣ) :
+  SameUnitPowerClass 7 u v ↔ unitObstruction u = unitObstruction v
+DkMath.FLT.Kummer.SevenRealGN.realPrimary_seventh_iff_norm_zero (u : Cˣ) (b : R) (h : RealPrimary u b) :
+  (∃ k, u = k ^ 7) ↔ normCoordinates u = 0
+DkMath.FLT.Kummer.SevenRealGN.alphaEmbeddedUnit_not_seventh : ¬∃ k, alphaEmbeddedUnit = k ^ 7
+DkMath.FLT.Kummer.SevenRealGN.PrimaryPacket : Type
+DkMath.FLT.Kummer.SevenRealGN.packetOfRealUnit (b : Rˣ) : PrimaryPacket
+DkMath.FLT.Kummer.SevenRealGN.source_preservation (P : PrimaryPacket) (t : AllowedGauge) :
+  (regauge P t).source = P.source ∧
+    P.source =
+      (DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.zeta ^ (regauge P t).phase - 1) *
+        (↑(regauge P t).delta * (regauge P t).gamma ^ 7)
+DkMath.FLT.Kummer.SevenRealGN.coefficient_ring_preservation (P : PrimaryPacket) (t : AllowedGauge) :
+  (regauge P t).gap = P.gap ∧
+    (regauge P t).parameter = P.parameter ∧
+      (regauge P t).phase = P.phase ∧ RealPrimary (regauge P t).delta (-P.parameter)
+DkMath.FLT.Kummer.SevenRealGN.unit_class_preservation (P : PrimaryPacket) (t : AllowedGauge) :
+  ↑(regauge P t).delta = ↑P.delta ∧ unitObstruction (regauge P t).delta = unitObstruction P.delta
+DkMath.FLT.Kummer.SevenRealGN.iterated_invariant_preservation (P : PrimaryPacket) (ts : List AllowedGauge) :
+  snapshot (iterate P ts) = snapshot P ∧
+    RealPrimary (iterate P ts).delta (-P.parameter) ∧
+      ¬DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ramifiedUniformizer ∣ (iterate P ts).gamma
+DkMath.FLT.Kummer.SevenRealGN.no_ideal_measure_drop (P : PrimaryPacket) (ts : List AllowedGauge) (m : Ideal C → ℕ) :
+  ¬m (Ideal.span {(iterate P ts).gamma}) < m (Ideal.span {P.gamma})

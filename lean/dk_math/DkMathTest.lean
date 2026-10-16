@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMathTest.FLT.CurrentCompleteSupport
 import DkMathTest.FLT.CompleteSupportDRCBridgeAudit
 import DkMathTest.FLT.CurrentFiniteAggregation
+import DkMathTest.FLT.Kummer.SevenRealGNSuite
 import DkMathlib.Basic
 import DkMathTest.NumberTheory.QuadraticResidueType
 import DkMathTest.NumberTheory.CyclotomicQRProvenanceLift

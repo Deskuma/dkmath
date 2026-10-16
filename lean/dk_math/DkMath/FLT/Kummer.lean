@@ -16,5 +16,6 @@ import DkMath.FLT.Kummer.SevenPrimaryNormBridge
 import DkMath.FLT.Kummer.SevenKummerUnit
 import DkMath.FLT.Kummer.SevenUnitPowerClassBridge
 import DkMath.FLT.Kummer.SevenGNSource
+import DkMath.FLT.Kummer.SevenRealGNConservation
 
 #print "file: DkMath.FLT.Kummer"
