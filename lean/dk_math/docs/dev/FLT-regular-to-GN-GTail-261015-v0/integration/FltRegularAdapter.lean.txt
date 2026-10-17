@@ -1,0 +1,28 @@
+/-
+Optional integration candidate, 2026-10-16.
+This file is outside DkMath's normal imports.
+Its proof body has NOT been typechecked with flt-regular in this workspace:
+FltRegular is not an installed Lake dependency. The local import probe records
+that missing dependency; it is not a validation of upstream compatibility.
+Reference:
+https://github.com/leanprover-community/flt-regular/blob/master/FltRegular/NumberTheory/KummersLemma/KummersLemma.lean
+-/
+
+import DkMath.FLT.Kummer.GNKummerUnitAdapter
+import FltRegular.NumberTheory.KummersLemma.KummersLemma
+
+open scoped NumberField
+
+namespace DkMath.FLT.Kummer.FltRegularIntegration
+
+/-- Intended supply of the local, explicitly conditional criterion from the upstream theorem.
+Requires a project environment containing both dependency graphs; not checked here. -/
+theorem criterion_of_fltRegular
+    {K : Type} [Field K] [NumberField K]
+    {p : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    (hp2 : p ≠ 2) (hreg : Nat.Coprime p (Fintype.card (ClassGroup (𝓞 K)))) :
+    DkMath.FLT.Kummer.KummerUnitPowerCriterion (𝓞 K) p := by
+  intro δ hcong
+  exact eq_pow_prime_of_unit_of_congruent (K := K) (p := p) hp2 hreg δ hcong
+
+end DkMath.FLT.Kummer.FltRegularIntegration
