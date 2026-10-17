@@ -18,6 +18,7 @@ import stat
 import subprocess
 import sys
 import tarfile
+import time
 
 
 def git(root: Path, *args: str, output=None) -> bytes:
@@ -84,7 +85,10 @@ def categories(root: Path) -> tuple[dict[str, set[str]], set[str]]:
 def is_excluded(name: str, patterns: list[str]) -> bool:
     clean = name.rstrip("/")
     return any(
-        fnmatch.fnmatchcase(clean, pat) or pat in clean.split("/") for pat in patterns
+        fnmatch.fnmatchcase(clean, pat)
+        or pat in clean.split("/")
+        or clean.startswith(pat.rstrip("/") + "/")
+        for pat in patterns
     )
 
 
@@ -110,39 +114,90 @@ def expanded_inputs(root: Path, candidates: set[str]) -> list[str]:
     return included
 
 
-def archive_one(root: Path, dest: Path, label: str, candidates: set[str]) -> dict:
+def archive_one(
+    root: Path,
+    dest: Path,
+    label: str,
+    candidates: set[str],
+    gzip_level: int,
+    exclude_patterns: list[str],
+    excluded: set[str],
+) -> dict:
     archive_file = dest / f"{label}.tar.gz"
     chosen = expanded_inputs(root, candidates)
+    written: list[str] = []
+    logical_bytes = 0
+    last_report = time.monotonic()
+
+    def record_member(member: tarfile.TarInfo) -> tarfile.TarInfo | None:
+        # Called for recursively discovered children as well as Git-listed paths.
+        nonlocal logical_bytes, last_report
+        if is_excluded(member.name, exclude_patterns):
+            excluded.add(member.name)
+            return None
+        written.append(member.name)
+        if member.isfile():
+            logical_bytes += member.size
+        now = time.monotonic()
+        if now - last_report >= 5:
+            print(
+                f"  [{label}] writing: {len(written):,} members, "
+                f"{logical_bytes / (1024**3):.2f} GiB of file content scanned",
+                flush=True,
+            )
+            last_report = now
+        return member
+
+    # Fast gzip (default 1 instead of 9); retain .tar.gz portability.
     with tarfile.open(
-        archive_file, mode="w:gz", format=tarfile.PAX_FORMAT, dereference=False
+        archive_file,
+        mode="w:gz",
+        format=tarfile.PAX_FORMAT,
+        dereference=False,
+        compresslevel=gzip_level,
     ) as arc:
         for name in chosen:
             src = root / name
             if stat.S_ISSOCK(src.lstat().st_mode):
                 raise RuntimeError(f"Unix socket cannot be archived: {name!r}")
             # recursive=True is intentional for directories containing nested repos.
-            arc.add(str(src), arcname=name, recursive=True)
-        written = [m.name for m in arc.getmembers()]
+            arc.add(str(src), arcname=name, recursive=True, filter=record_member)
     text_list(dest / f"{label}.list.txt", written)
-    # Read the entire archive, including file payloads, to detect gzip/tar damage.
-    with tarfile.open(archive_file, mode="r:gz") as arc:
-        members = arc.getmembers()
-        verified = [m.name for m in members]
-        if verified != written:
-            raise RuntimeError(f"Archive index mismatch: {archive_file}")
-        for m in members:
+    print(f"  [{label}] verifying: {len(written):,} archive members...", flush=True)
+
+    # A sequential scan avoids getmembers() memory overhead and random seeks in gzip.
+    verified: list[str] = []
+    with tarfile.open(archive_file, mode="r|gz") as arc:
+        verified_bytes = 0
+        last_report = time.monotonic()
+        for m in arc:
+            verified.append(m.name)
             if m.isfile():
                 reader = arc.extractfile(m)
                 if reader is None:
                     raise RuntimeError(f"Could not read member {m.name!r}")
                 with reader:
-                    while reader.read(1024 * 1024):
-                        pass
+                    while True:
+                        chunk = reader.read(1024 * 1024)
+                        if not chunk:
+                            break
+                        verified_bytes += len(chunk)
+            now = time.monotonic()
+            if now - last_report >= 5:
+                print(
+                    f"  [{label}] verifying: {len(verified):,} members, "
+                    f"{verified_bytes / (1024**3):.2f} GiB read",
+                    flush=True,
+                )
+                last_report = now
+    if verified != written:
+        raise RuntimeError(f"Archive index mismatch: {archive_file}")
     return {
         "archive": archive_file.name,
         "index": f"{label}.list.txt",
         "git_entries": len(chosen),
         "archive_members": len(written),
+        "uncompressed_file_bytes": logical_bytes,
         "archive_bytes": archive_file.stat().st_size,
     }
 
@@ -180,6 +235,14 @@ def main() -> int:
         default=[],
         metavar="PATTERN",
         help="Optional filename/path pattern; repeated uses allowed (DANGEROUS: skips files)",
+    )
+    parser.add_argument(
+        "--gzip-level",
+        type=int,
+        choices=range(1, 10),
+        default=1,
+        metavar="1..9",
+        help="gzip compression level (default: 1, faster)",
     )
     parser.add_argument(
         "--allow-submodules",
@@ -239,12 +302,20 @@ def main() -> int:
             omitted = {name for name in groups[key] if is_excluded(name, args.exclude)}
             exclusions.update(omitted)
             groups[key] -= omitted
-        text_list(unfinished / "excluded.list.txt", exclusions)
         text_list(unfinished / "tracked-deleted.list.txt", deleted)
         result = {}
         for key in ("tracked-changed", "untracked", "ignored"):
             print(f"Archiving {key}: {len(groups[key])} Git entries", flush=True)
-            result[key] = archive_one(root, unfinished, key, groups[key])
+            result[key] = archive_one(
+                root,
+                unfinished,
+                key,
+                groups[key],
+                args.gzip_level,
+                args.exclude,
+                exclusions,
+            )
+        text_list(unfinished / "excluded.list.txt", exclusions)
 
         write_file_from_git(
             root,
@@ -331,6 +402,7 @@ def main() -> int:
             "exclusions": args.exclude,
             "bundle": bundle_status,
             "submodules": submodules,
+            "gzip_level": args.gzip_level,
         }
         (unfinished / "backup-info.json").write_text(
             json.dumps(info, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
@@ -364,6 +436,7 @@ def main() -> int:
             "重要な私的メモの復元テストを済ませるまで元環境を消さないこと。\n",
             encoding="utf-8",
         )
+        print("Computing SHA-256 checksums...", flush=True)
         write_checksums(unfinished)
         unfinished.rename(finished)
         print(f"SUCCESS: {finished}")
