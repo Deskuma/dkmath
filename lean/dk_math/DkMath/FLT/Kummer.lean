@@ -28,5 +28,8 @@ import DkMath.FLT.Kummer.SevenGNDescent
 import DkMath.FLT.Kummer.RegularStateTransport
 import DkMath.FLT.Kummer.CyclotomicRegularTransport
 import DkMath.FLT.Kummer.SevenRegularTransport
+import DkMath.FLT.Kummer.RegularKummerUnit
+import DkMath.FLT.Kummer.ElevenRegularTransport
+import DkMath.FLT.Kummer.ThirteenRegularTransport
 
 #print "file: DkMath.FLT.Kummer"

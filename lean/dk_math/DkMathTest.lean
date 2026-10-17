@@ -133,5 +133,7 @@ import DkMathTest.FLT.Kummer.SevenGNDescent
 import DkMathTest.FLT.Kummer.SevenGNDescentDependencyAudit
 import DkMathTest.FLT.Kummer.RegularStateTransport
 import DkMathTest.FLT.Kummer.RegularTransportDependencyAudit
+import DkMathTest.FLT.Kummer.ElevenThirteenRegularTransport
+import DkMathTest.FLT.Kummer.ElevenThirteenDependencyAudit
 
 #print "file: DkMathTest"

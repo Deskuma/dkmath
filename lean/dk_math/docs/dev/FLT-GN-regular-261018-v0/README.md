@@ -3,10 +3,12 @@
 cid: `6ad3b3b2-9e6c-83e8-9c41-0a5f32082ac2`
 
 **設計番号:** GN-Nested-State-Transport-261018-v0  
-**状態:** IMPLEMENTED（算術条件付き一般 State 降下まで。NST-006 は部分完了）
+**状態:** IMPLEMENTED（一般 State 降下と3・5・7・11・13の正深度排除。一般 Case I は未接続）
 
 2026-10-18 の実装範囲・条件・未解決境界は
 [実装報告](IMPLEMENTATION-261018.md) に記録した。
+11・13の算術 provider と State 排除の追加実装は
+[続報](IMPLEMENTATION-1113-261018.md) に記録した。
 元の設計書と議事録は設計・検討時点の記録として保持する。
 
 ## 1. 基本目的
