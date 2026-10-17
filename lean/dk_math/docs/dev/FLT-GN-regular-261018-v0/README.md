@@ -1,0 +1,123 @@
+# DkMath 宇宙式入れ子・可換輸送 実装計画
+
+cid: `6ad3b3b2-9e6c-83e8-9c41-0a5f32082ac2`
+
+**設計番号:** GN-Nested-State-Transport-261018-v0  
+**状態:** DESIGN — 新規 Lean 定理は未実装
+
+## 1. 基本目的
+
+宇宙式の Big・Gap・Core 間の分割と再結合を、階層間で輸送できる汎用補題として形式化する。
+
+その上で、GN の分岐情報を失わず Kummer の状態降下へ接続する。
+
+実装は次の三層に分離する。
+
+1. **CoreNested** — 代数的な入れ子・経路独立性
+2. **RamifiedGNPhaseBridge** — Gap・GN・円分位相の分岐情報保存
+3. **RegularStateTransport** — Kummer による条件付き状態再構成と深度降下
+
+## 2. 数学的保存核
+
+差分 Core を
+
+\[
+C_d(t,u)=(t+u)^d-t^d
+\]
+
+とする。
+
+最優先の入れ子恒等式は、
+
+\[
+C_d(t,a+b)=C_d(t,a)+C_d(t+a,b)
+\]
+
+である。
+
+分割順序を交換しても、
+
+\[
+C_d(t,a)+C_d(t+a,b)
+=C_d(t,b)+C_d(t+b,a)
+\]
+
+が成立する。
+
+これを GN に移せば、
+
+\[
+(a+b)GN_d(a+b,t)
+=aGN_d(a,t)+bGN_d(b,t+a)
+\]
+
+を得る。
+
+以上は可換環上の代数定理であり、FLT の仮定を必要としない。
+
+## 3. GN–Kummer 接続
+
+奇素数 \(p\) と円分整数環において、
+
+\[
+x^p+y^p=(x+y)GN_p(x+y,-y)
+\]
+
+を保持する。
+
+分岐素元を \(\lambda=1-\zeta_p\) とし、\(x+y=\lambda q\) と正規化する。
+
+全位相商の中で、\(\lambda\nmid y\) の下では特別な一位相 \(i_0\) を一意に選べる。
+
+その可除性集中を
+
+\[
+\lambda^{p+k}\mid x^p+y^p
+\iff \lambda^k\mid Q_{i_0}
+\]
+
+として定理化する。
+
+ここでは Gap と GN の両方を保持し、位相0に集中した分岐情報を失わない。
+
+## 4. State 輸送
+
+一般化する状態は、
+
+\[
+x^p+y^p=\varepsilon(\lambda^m z)^p
+\]
+
+であり、原始性と非分岐性を保持する。
+
+目標は、
+
+\[
+\operatorname{State}_p(m+1)
+\longrightarrow\operatorname{State}_p(m)
+\]
+
+という一段降下である。
+
+この遷移は単なる等式変形ではない。類群の \(p\)-torsion-free 性、単元の \(p\) 乗化、位相商の互いに素性、三位相再構成を必要とする。
+
+**保存対象は State の成立条件、減少対象は分岐深度** とする。
+
+## 5. 実装順序
+
+- NST-001：`CoreNested.lean` の新設
+- NST-002：既存 `GTailTransport` との接続
+- NST-003：FLT7 における分岐付値集中定理
+- NST-004：一般素数 \(p\) の位相構造
+- NST-005：一般 Kummer State 降下
+- NST-006：FLT5・FLT3・FLT11・FLT13 への適用
+
+## 6. 完成条件
+
+すべての新規核心補題について Lean kernel 検証を行う。
+
+`sorry`・`admit`・独自 `axiom` に依存せず、既存の FLT 完成定理を用いた循環証明を禁止する。
+
+各段階で focused build、回帰検証、`#print axioms` 監査を実施する。
+
+最初は代数的入れ子を独立に完成させ、その後に算術条件付きの状態降下へ進む。
