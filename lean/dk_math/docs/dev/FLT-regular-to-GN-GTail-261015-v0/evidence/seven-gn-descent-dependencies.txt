@@ -1,0 +1,9 @@
+info: DkMathTest/FLT/Kummer/SevenGNDescentDependencyAudit.lean:16:0: file: DkMathTest.FLT.Kummer.SevenGNDescentDependencyAudit
+info: DkMathTest/FLT/Kummer/SevenGNDescentDependencyAudit.lean:70:0: ROOT: DkMath.FLT.Kummer.SevenDescent.fermatLastTheoremFor_seven
+info: DkMathTest/FLT/Kummer/SevenGNDescentDependencyAudit.lean:70:0: reachable constants: 76323; readable bodies: 73608
+info: DkMathTest/FLT/Kummer/SevenGNDescentDependencyAudit.lean:70:0: axiom leaves: [propext, Quot.sound, Classical.choice]
+info: DkMathTest/FLT/Kummer/SevenGNDescentDependencyAudit.lean:70:0: PASS: actual GN descent closure providers present; forbidden, missing, unreadable lists empty.
+info: DkMathTest/FLT/Kummer/SevenGNDescentDependencyAudit.lean:70:0: ROOT: DkMath.FLT.Kummer.SevenDescent.no_state_one
+info: DkMathTest/FLT/Kummer/SevenGNDescentDependencyAudit.lean:70:0: reachable constants: 72825; readable bodies: 70209
+info: DkMathTest/FLT/Kummer/SevenGNDescentDependencyAudit.lean:70:0: axiom leaves: [propext, Quot.sound, Classical.choice]
+info: DkMathTest/FLT/Kummer/SevenGNDescentDependencyAudit.lean:70:0: PASS: actual GN descent closure providers present; forbidden, missing, unreadable lists empty.

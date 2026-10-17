@@ -24,5 +24,6 @@ import DkMath.FLT.Kummer.SevenCurrentThreePhase
 import DkMath.FLT.Kummer.SevenCurrentRootDepth
 import DkMath.FLT.Kummer.SevenCurrentQuotientReal
 import DkMath.FLT.Kummer.SevenCurrentCorrectionPower
+import DkMath.FLT.Kummer.SevenGNDescent
 
 #print "file: DkMath.FLT.Kummer"

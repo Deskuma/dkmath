@@ -129,5 +129,7 @@ import DkMathTest.RH.WeaveEtaPairPhaseSpan
 import DkMathTest.FLT.Kummer.SevenCurrentQuotientReal
 import DkMathTest.FLT.Kummer.SevenCurrentCorrectionPower
 import DkMathTest.FLT.Kummer.SevenCurrentCorrectionPowerDependencyAudit
+import DkMathTest.FLT.Kummer.SevenGNDescent
+import DkMathTest.FLT.Kummer.SevenGNDescentDependencyAudit
 
 #print "file: DkMathTest"

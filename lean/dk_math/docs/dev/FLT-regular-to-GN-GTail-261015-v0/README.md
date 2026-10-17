@@ -1,5 +1,7 @@
 # Kummer × GN・GTail × イデアル — 研究ノート要旨
 
+**2026/10/17追記:** [GN七位相降下によるFLT7の閉包](SEVEN-GN-DESCENT-TEXTBOOK.md) を実装。入口は `DkMath.FLT.Kummer.SevenGNDescent`。以下の旧要旨・各章の未解決記録は、その時点の履歴として保持する。
+
 実装後の到達点は [IMPLEMENTATION.md](IMPLEMENTATION.md) を参照。以下の研究要旨は実装前の記録として保持する。
 
 三次の再形式化実験は [THREE-GN-DESCENT.md](THREE-GN-DESCENT.md) を参照。
@@ -195,3 +197,7 @@ lambda² で割れない。根の枝、正確な付値、次の反例の再構�
 ## 12. FLT7 Proof Route Audit — 降下状態の軌道修正
 
 [Anthropic / flt-regular との照合と検証スクラッチ](FLT7-PROOF-ROUTE-AUDIT.md)。任意のprimitive反例から一般化円分状態への入口を検証。深度1の排除と一段遷移は未供給。
+
+## 13. FLT7 を閉じる新しい教科書
+
+[一般化状態・七位相・底の排除・実際の一段降下・自然数FLT7](SEVEN-GN-DESCENT-TEXTBOOK.md)。底とstepの追加仮定を除き、`FermatLastTheoremFor 7` へ到達。

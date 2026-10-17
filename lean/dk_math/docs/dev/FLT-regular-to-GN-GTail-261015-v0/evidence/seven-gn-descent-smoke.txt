@@ -1,0 +1,13 @@
+DkMath.FLT.Kummer.SevenDescent.no_state_one : ¬Nonempty (State 1)
+DkMath.FLT.Kummer.SevenDescent.descent_step (m : ℕ) : Nonempty (State (m + 1)) → Nonempty (State m)
+DkMath.FLT.Kummer.SevenDescent.State.exists_weighted_successor {m : ℕ} (E : State (m + 1)) :
+  ∃ x y z u v e,
+    IsCoprime x y ∧
+      ¬DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ramifiedUniformizer ∣ x ∧
+        ¬DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ramifiedUniformizer ∣ y ∧
+          ¬DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ramifiedUniformizer ∣ z ∧
+            ↑u * x ^ 7 + ↑v * y ^ 7 =
+              ↑e * (DkMath.FLT.Seven.SevenCyclotomicDegreeSixInt.ramifiedUniformizer ^ m * z) ^ 7
+DkMath.FLT.Kummer.SevenDescent.initial_state_of_counterexample {a b c : ℕ}
+  (source : DkMath.FLT.Seven.CounterexamplePack a b c) : ∃ m, 1 ≤ m ∧ Nonempty (State m)
+'DkMath.FLT.Kummer.SevenDescent.fermatLastTheoremFor_seven' depends on axioms: [propext, Classical.choice, Quot.sound]

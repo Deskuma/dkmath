@@ -213,3 +213,13 @@
 5. 失敗事例: 親名前空間の幾何学点Cとの衝突を具体環notation CCで回避。Stateの右辺単元1はcastとone_mulを明示して消去。Big=Body+Gapという恒等式の否定を目標にしない。
 6. 備考: 入力コピーは変更もimportもせず、productionの変更はない。公開元4.33.1とDkMath4.34.1の違い、upstream commit不明、一部オンライン個別ページcache missを記録。common-primeはq∣h.cの範囲であり全反例の無条件providerと混同しない。
 7. 次の課題: 一般化Stateの全七位相剥離と特別位相、gcd付きイデアル冪配分、三位相formula、係数比の整数合同から深度を1下げる遷移を構成する。
+
+### 日時: 2026/10/17 JST — GN七位相降下によるFLT7の閉包
+
+1. 目的: proof-route auditの一般化状態を教科書のproduction実装へ移し、底と実際の一段降下を証明して自然数FLT7を閉じる。
+2. 実施: SevenDescentState/Phases/Powers/Units/StepとSevenGNDescentを追加。状態に大域的原始性を加え、同じ新しい二根でも保存した。七商のうち特別な位相を剰余の一次式で特定し、底の排除、互いに素なイデアルの七乗抽出、三位相の元の再構成、係数比の整数合同からKummer単元補題の適用まで実装した。
+3. 結論: `DkMath.FLT.Kummer.SevenDescent.fermatLastTheoremFor_seven : FermatLastTheoremFor 7` を追加仮定なしで証明。一般化Stateを降下させ、最後にMathlibのgcd正規化で任意の非零自然数三つへ戻した。
+4. 検証: 公開44宣言（39定理・4定義・1構造体）の標準3公理whitelist、4回帰例、終点と底の2証明グラフ監査が成功。DkMath/Kummer/新回帰/依存監査build成功（10,542 jobs）。詳細はevidence/validation-seven-gn-descent.txt。
+5. 失敗事例: ZModの一次合同はlinear_combinationの符号を固定し、Finの等式はvalへ落とした。IsCoprime.pow_leftの指数は暗黙引数なので型付き補題で固定。Nat.castの7とnumeralの7はNat.cast_ofNatで揃えた。
+6. 備考: 新終点は外部FLT7、旧current補正根、小ノルムパケット、選択common-primeへ依存しない。既存の七次PID・具体的Kummer単元補題・primitive反例正規化は実際に再利用した。既存5件のsorry警告と新宣言の公理依存を区別する。一般正則素数のFLTまで完了したとは主張しない。
+7. 次の課題: 七次で閉じた不変条件と再構成を基準として、他の正則素数へ移せる部分と具体的な単元・PID計算に依存する部分を比較する。
