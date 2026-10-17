@@ -1,5 +1,0 @@
-info: DkMathTest/FLT/Kummer/SevenGNDescent.lean:10:0: 'DkMath.FLT.Kummer.SevenDescent.no_state_one' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: DkMathTest/FLT/Kummer/SevenGNDescent.lean:11:0: 'DkMath.FLT.Kummer.SevenDescent.descent_step' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: DkMathTest/FLT/Kummer/SevenGNDescent.lean:12:0: 'DkMath.FLT.Kummer.SevenDescent.fermatLastTheoremFor_seven' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: DkMathTest/FLT/Kummer/SevenGNDescent.lean:14:0: PASS: all 44 public declarations; standard axiom whitelist only.
-Build completed successfully (10542 jobs).

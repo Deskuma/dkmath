@@ -1,5 +1,0 @@
-info: DkMathTest/FLT/Kummer/SevenUnitPowerClassDependencyAudit.lean:71:0: ROOT: DkMath.FLT.Kummer.SevenPrimaryNorm.currentCarrier_unit_class_of_GN_source
-info: DkMathTest/FLT/Kummer/SevenUnitPowerClassDependencyAudit.lean:71:0: reachable constants: 76046; readable bodies: 73351
-info: DkMathTest/FLT/Kummer/SevenUnitPowerClassDependencyAudit.lean:71:0: axiom leaves: [propext, Quot.sound, Classical.choice]
-info: DkMathTest/FLT/Kummer/SevenUnitPowerClassDependencyAudit.lean:71:0: PASS: required current/GN/class-comparison providers present; forbidden, missing, unreadable lists empty.
-Build completed successfully (10520 jobs).

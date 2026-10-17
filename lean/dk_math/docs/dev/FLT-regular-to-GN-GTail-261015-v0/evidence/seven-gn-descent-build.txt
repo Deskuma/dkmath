@@ -1,6 +1,0 @@
-warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
-warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
-warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
-warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
-warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
-Build completed successfully (10542 jobs).
