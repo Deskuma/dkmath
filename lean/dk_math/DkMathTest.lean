@@ -7,6 +7,11 @@ Authors: D. and Wise Wolf.
 import DkMathTest.FLT.CurrentCompleteSupport
 import DkMathTest.FLT.CompleteSupportDRCBridgeAudit
 import DkMathTest.FLT.CurrentFiniteAggregation
+import DkMathTest.FLT.Kummer.SevenRealGNSuite
+import DkMathTest.FLT.Kummer.SevenCurrentPrimarySuite
+import DkMathTest.FLT.Kummer.SevenCurrentUnitSeventhSuite
+import DkMathTest.FLT.Kummer.SevenCurrentThreePhaseSuite
+import DkMathTest.FLT.Kummer.SevenCurrentRootDepthSuite
 import DkMathlib.Basic
 import DkMathTest.NumberTheory.QuadraticResidueType
 import DkMathTest.NumberTheory.CyclotomicQRProvenanceLift
@@ -120,5 +125,11 @@ import DkMathTest.RH.CFBRCEtaCriticalMirrorPairedFrameMovingLineCollisionRoadmap
 import DkMathTest.RH.CFBRCEtaEndpointIncrementDecoder
 import DkMathTest.RH.WeaveEtaPairIntegral
 import DkMathTest.RH.WeaveEtaPairPhaseSpan
+
+import DkMathTest.FLT.Kummer.SevenCurrentQuotientReal
+import DkMathTest.FLT.Kummer.SevenCurrentCorrectionPower
+import DkMathTest.FLT.Kummer.SevenCurrentCorrectionPowerDependencyAudit
+import DkMathTest.FLT.Kummer.SevenGNDescent
+import DkMathTest.FLT.Kummer.SevenGNDescentDependencyAudit
 
 #print "file: DkMathTest"

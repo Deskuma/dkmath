@@ -172,11 +172,12 @@ structure PrimitiveCubicStrictDescent (a b c : ℕ) : Type where
   next_product_eq : x * y * z = factors.source.A
   measure_lt : x * y * z < a * b * c
 
-private theorem primitiveCubicStrictDescent_nonempty
-    {a b c : ℕ} (source : PrimitiveCubicPack a b c) :
+/-- 指定された同じ元の解に属する因子から、符号を選んで厳密な降下を構成する。
+因子の作成経路を固定しないので、GN・Kummer 経由の三乗根もここへ渡せる。 -/
+theorem nonempty_primitiveCubicStrictDescent_of_factors
+    {a b c : ℕ} (source : PrimitiveCubicPack a b c)
+    (factors : EisensteinSignedCubeFactors a b c) :
     Nonempty (PrimitiveCubicStrictDescent a b c) := by
-  let factors := eisensteinSignedCubeFactors_of_primitive_solution
-    source.hx source.hy source.hz source.coprime_xy source.equation
   rcases signed_cube_roots_route factors with hP | hL | hR
   · let next : PrimitiveCubicPack factors.R factors.S factors.T :=
       { hx := factors.R_pos
@@ -235,6 +236,20 @@ private theorem primitiveCubicStrictDescent_nonempty
       measure_lt := by
         simpa [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm] using
           factors.strict_product_lt source.hx source.hy source.hz }⟩
+
+/-- 供給された因子による降下を選択する。三乗抽出・単元解析を再実行しない。 -/
+noncomputable def primitiveCubicStrictDescent_of_factors
+    {a b c : ℕ} (source : PrimitiveCubicPack a b c)
+    (factors : EisensteinSignedCubeFactors a b c) :
+    PrimitiveCubicStrictDescent a b c :=
+  Classical.choice (nonempty_primitiveCubicStrictDescent_of_factors source factors)
+
+private theorem primitiveCubicStrictDescent_nonempty
+    {a b c : ℕ} (source : PrimitiveCubicPack a b c) :
+    Nonempty (PrimitiveCubicStrictDescent a b c) :=
+  nonempty_primitiveCubicStrictDescent_of_factors source
+    (eisensteinSignedCubeFactors_of_primitive_solution
+      source.hx source.hy source.hz source.coprime_xy source.equation)
 
 /-- Choose the strict descent packet produced from one primitive source. -/
 noncomputable def primitiveCubicStrictDescent
