@@ -25,5 +25,8 @@ import DkMath.FLT.Kummer.SevenCurrentRootDepth
 import DkMath.FLT.Kummer.SevenCurrentQuotientReal
 import DkMath.FLT.Kummer.SevenCurrentCorrectionPower
 import DkMath.FLT.Kummer.SevenGNDescent
+import DkMath.FLT.Kummer.RegularStateTransport
+import DkMath.FLT.Kummer.CyclotomicRegularTransport
+import DkMath.FLT.Kummer.SevenRegularTransport
 
 #print "file: DkMath.FLT.Kummer"

@@ -38,6 +38,10 @@ import DkMath.Lib.Cosmic.GTailPadic
 import DkMath.Lib.Cosmic.GTailSelection
 import DkMath.Lib.Cosmic.GTailFactor
 import DkMath.Lib.Cosmic.GTailTransport
+import DkMath.Lib.Cosmic.CoreNested
+import DkMath.Lib.Cosmic.CoreNestedTransport
+import DkMath.Lib.NumberTheory.RamifiedGNPhaseBridge
+import DkMath.Lib.NumberTheory.CyclotomicRamifiedPhase
 import DkMath.Lib.Cosmic.GTailSeven
 import DkMath.Lib.Cosmic.GTailSevenArithmetic
 
