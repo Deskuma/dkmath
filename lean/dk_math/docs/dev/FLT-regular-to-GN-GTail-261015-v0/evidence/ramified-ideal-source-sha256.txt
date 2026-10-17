@@ -1,5 +1,0 @@
-a421867b8c209ada897d8192c0f38d13f8d049be0e9d458766e74b514a2eb7a9  DkMath/Lib/NumberTheory/CosmicRamifiedIdealPower.lean
-1e31a6a89831b84c5f8764c08b0e8cabbb847d7833d5134a72768e3c77773f6c  DkMath/FLT/Kummer/GNRamified.lean
-b13cd6836ee15d791122a839587316e72860d2af656aaa3ad9acf7189597510e  DkMathTest/FLT/Kummer/GNRamified.lean
-6fc4969e187564068b0233457e1f5e9d95aa49997c7ec98bad7fed32fc8de057  DkMath/FLT/Kummer.lean
-44dc830dec521bc9bee5143aba17e838c465f201f86b815a0ca2623c96ca76a4  docs/dev/FLT-regular-to-GN-GTail-261015-v0/evidence/Smoke.lean

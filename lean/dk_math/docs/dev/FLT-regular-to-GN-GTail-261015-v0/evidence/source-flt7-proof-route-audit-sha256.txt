@@ -1,6 +1,0 @@
-a0f6caa836c414c6dc99444d8f5cce36955fb8537905396145c95aca57bfa338  docs/dev/FLT-regular-to-GN-GTail-261015-v0/scratch/FLT7RouteAudit.lean
-ab21fa6320e08a1bd1d440949d7990c118254a26a659140bc42c4f11f217350c  docs/dev/FLT-regular-to-GN-GTail-261015-v0/scratch/RouteProbe.lean
-247abf893839c7ebe02b8a3728da2ca72e432ece4436c2be92f3ee8b6ce1efb5  docs/dev/FLT7-Kummer-Anthropic-Bridge-261015-v0/__S_IsCyclotomicExtension_Rat_seven_pid.lean.txt
-d4cf981ea2c188eea5437255c49479ab8d4e809aa562f8cf2a326197aab9b587  docs/dev/FLT7-Kummer-Anthropic-Bridge-261015-v0/__S_fermatLastTheoremSeven.lean.txt
-7947202119674b4e46a606a81401b31c68d6cd853e5e4cb46b552be8c87a7c22  docs/dev/FLT7-Kummer-Anthropic-Bridge-261015-v0/__S_flt_regular.lean.txt
-66f62069b83c0cf97531f88e5bd2c249e471df011ad873b0bd034eb959b1d8da  docs/dev/FLT7-Kummer-Anthropic-Bridge-261015-v0/__Util.lean.txt
