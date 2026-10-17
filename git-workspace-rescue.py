@@ -3,6 +3,7 @@
 
 Requires Python 3.9+ and Git. Does not modify the source worktree.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -24,11 +25,15 @@ def git(root: Path, *args: str, output=None) -> bytes:
     if output is None:
         result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if result.returncode:
-            raise RuntimeError(f"git failed: {' '.join(args)}\n{result.stderr.decode(errors='replace')}")
+            raise RuntimeError(
+                f"git failed: {' '.join(args)}\n{result.stderr.decode(errors='replace')}"
+            )
         return result.stdout
     result = subprocess.run(cmd, stdout=output, stderr=subprocess.PIPE)
     if result.returncode:
-        raise RuntimeError(f"git failed: {' '.join(args)}\n{result.stderr.decode(errors='replace')}")
+        raise RuntimeError(
+            f"git failed: {' '.join(args)}\n{result.stderr.decode(errors='replace')}"
+        )
     return b""
 
 
@@ -52,28 +57,42 @@ def text_list(dest: Path, names) -> None:
 def categories(root: Path) -> tuple[dict[str, set[str]], set[str]]:
     # git diff --cached covers staged-only edits; git diff covers unstaged edits.
     # --no-renames ensures that a moved file's new path is archived.
-    diffopts = ("--no-ext-diff", "--no-textconv", "--no-renames", "--name-only",
-                "--diff-filter=ACMRTUXB")
-    changed = (paths(root, "ls-files", "--modified")
-               | paths(root, "diff", *diffopts)
-               | paths(root, "diff", "--cached", *diffopts))
+    diffopts = (
+        "--no-ext-diff",
+        "--no-textconv",
+        "--no-renames",
+        "--name-only",
+        "--diff-filter=ACMRTUXB",
+    )
+    changed = (
+        paths(root, "ls-files", "--modified")
+        | paths(root, "diff", *diffopts)
+        | paths(root, "diff", "--cached", *diffopts)
+    )
     untracked = paths(root, "ls-files", "--others", "--exclude-standard")
     ignored = paths(root, "ls-files", "--others", "--ignored", "--exclude-standard")
-    deleted = (paths(root, "ls-files", "--deleted")
-               | paths(root, "diff", "--cached", "--no-renames", "--name-only",
-                       "--diff-filter=D"))
-    return {"tracked-changed": changed, "untracked": untracked, "ignored": ignored}, deleted
+    deleted = paths(root, "ls-files", "--deleted") | paths(
+        root, "diff", "--cached", "--no-renames", "--name-only", "--diff-filter=D"
+    )
+    return {
+        "tracked-changed": changed,
+        "untracked": untracked,
+        "ignored": ignored,
+    }, deleted
 
 
 def is_excluded(name: str, patterns: list[str]) -> bool:
     clean = name.rstrip("/")
-    return any(fnmatch.fnmatchcase(clean, pat) or pat in clean.split("/")
-               for pat in patterns)
+    return any(
+        fnmatch.fnmatchcase(clean, pat) or pat in clean.split("/") for pat in patterns
+    )
 
 
 def expanded_inputs(root: Path, candidates: set[str]) -> list[str]:
     """Omit vanished files, dedupe entries beneath Git-reported directories."""
-    ordered = sorted((p.rstrip("/") for p in candidates), key=lambda p: (p.count("/"), p))
+    ordered = sorted(
+        (p.rstrip("/") for p in candidates), key=lambda p: (p.count("/"), p)
+    )
     included: list[str] = []
     parents: list[str] = []
     for name in ordered:
@@ -94,8 +113,9 @@ def expanded_inputs(root: Path, candidates: set[str]) -> list[str]:
 def archive_one(root: Path, dest: Path, label: str, candidates: set[str]) -> dict:
     archive_file = dest / f"{label}.tar.gz"
     chosen = expanded_inputs(root, candidates)
-    with tarfile.open(archive_file, mode="w:gz", format=tarfile.PAX_FORMAT,
-                      dereference=False) as arc:
+    with tarfile.open(
+        archive_file, mode="w:gz", format=tarfile.PAX_FORMAT, dereference=False
+    ) as arc:
         for name in chosen:
             src = root / name
             if stat.S_ISSOCK(src.lstat().st_mode):
@@ -118,9 +138,13 @@ def archive_one(root: Path, dest: Path, label: str, candidates: set[str]) -> dic
                 with reader:
                     while reader.read(1024 * 1024):
                         pass
-    return {"archive": archive_file.name, "index": f"{label}.list.txt",
-            "git_entries": len(chosen), "archive_members": len(written),
-            "archive_bytes": archive_file.stat().st_size}
+    return {
+        "archive": archive_file.name,
+        "index": f"{label}.list.txt",
+        "git_entries": len(chosen),
+        "archive_members": len(written),
+        "archive_bytes": archive_file.stat().st_size,
+    }
 
 
 def write_file_from_git(root: Path, dest: Path, filename: str, *args: str) -> None:
@@ -142,21 +166,42 @@ def write_checksums(dest: Path) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Archive tracked changes, untracked files, and ignored files separately.")
-    parser.add_argument("-o", "--output", default="~/workspace-rescue",
-                        help="Destination base (default: ~/workspace-rescue)")
-    parser.add_argument("--exclude", action="append", default=[], metavar="PATTERN",
-                        help="Optional filename/path pattern; repeated uses allowed (DANGEROUS: skips files)")
-    parser.add_argument("--allow-submodules", action="store_true",
-                        help="Continue despite submodules (their own Git state is NOT fully backed up)")
-    parser.add_argument("--no-bundle", action="store_true",
-                        help="Skip git bundle (not safe for local-only Git commits/stashes)")
+        description="Archive tracked changes, untracked files, and ignored files separately."
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        default="~/workspace-rescue",
+        help="Destination base (default: ~/workspace-rescue)",
+    )
+    parser.add_argument(
+        "--exclude",
+        action="append",
+        default=[],
+        metavar="PATTERN",
+        help="Optional filename/path pattern; repeated uses allowed (DANGEROUS: skips files)",
+    )
+    parser.add_argument(
+        "--allow-submodules",
+        action="store_true",
+        help="Continue despite submodules (their own Git state is NOT fully backed up)",
+    )
+    parser.add_argument(
+        "--no-bundle",
+        action="store_true",
+        help="Skip git bundle (not safe for local-only Git commits/stashes)",
+    )
     args = parser.parse_args()
     os.umask(0o077)
 
     try:
-        top = subprocess.run(["git", "rev-parse", "--show-toplevel"], check=True,
-                             capture_output=True).stdout.decode(errors="surrogateescape").strip()
+        top = (
+            subprocess.run(
+                ["git", "rev-parse", "--show-toplevel"], check=True, capture_output=True
+            )
+            .stdout.decode(errors="surrogateescape")
+            .strip()
+        )
     except subprocess.CalledProcessError:
         parser.error("Run this command inside a non-bare Git worktree.")
     root = Path(top).resolve()
@@ -171,9 +216,12 @@ def main() -> int:
         if rec.startswith(b"160000 ") and b"\t" in rec:
             submodules.append(os.fsdecode(rec.split(b"\t", 1)[1]))
     if submodules and not args.allow_submodules:
-        print("ERROR: Submodules found: " + ", ".join(map(displayed, submodules))
-              + ". Back them up separately, then retry with --allow-submodules.",
-              file=sys.stderr)
+        print(
+            "ERROR: Submodules found: "
+            + ", ".join(map(displayed, submodules))
+            + ". Back them up separately, then retry with --allow-submodules.",
+            file=sys.stderr,
+        )
         return 2
 
     now = dt.datetime.now().astimezone()
@@ -198,12 +246,35 @@ def main() -> int:
             print(f"Archiving {key}: {len(groups[key])} Git entries", flush=True)
             result[key] = archive_one(root, unfinished, key, groups[key])
 
-        write_file_from_git(root, unfinished, "staged.patch", "diff", "--cached", "--binary",
-                            "--no-ext-diff", "--no-textconv", "--no-renames")
-        write_file_from_git(root, unfinished, "unstaged.patch", "diff", "--binary",
-                            "--no-ext-diff", "--no-textconv", "--no-renames")
-        write_file_from_git(root, unfinished, "git-status.txt", "status", "--short",
-                            "--untracked-files=all")
+        write_file_from_git(
+            root,
+            unfinished,
+            "staged.patch",
+            "diff",
+            "--cached",
+            "--binary",
+            "--no-ext-diff",
+            "--no-textconv",
+            "--no-renames",
+        )
+        write_file_from_git(
+            root,
+            unfinished,
+            "unstaged.patch",
+            "diff",
+            "--binary",
+            "--no-ext-diff",
+            "--no-textconv",
+            "--no-renames",
+        )
+        write_file_from_git(
+            root,
+            unfinished,
+            "git-status.txt",
+            "status",
+            "--short",
+            "--untracked-files=all",
+        )
         write_file_from_git(root, unfinished, "git-stashes.txt", "stash", "list")
 
         bundle_status = "disabled with --no-bundle"
@@ -212,11 +283,18 @@ def main() -> int:
             refs = git(root, "for-each-ref", "--format=%(refname)").strip()
             if refs:
                 bundle_path = unfinished / "repository.bundle"
-                print("Saving Git refs, commits and stashes in repository.bundle", flush=True)
+                print(
+                    "Saving Git refs, commits and stashes in repository.bundle",
+                    flush=True,
+                )
                 git(root, "bundle", "create", str(bundle_path), "--all")
-                check = subprocess.run(["git", "-C", str(root), "bundle", "verify",
-                                        str(bundle_path)], capture_output=True)
-                (unfinished / "bundle-verify.txt").write_bytes(check.stdout + check.stderr)
+                check = subprocess.run(
+                    ["git", "-C", str(root), "bundle", "verify", str(bundle_path)],
+                    capture_output=True,
+                )
+                (unfinished / "bundle-verify.txt").write_bytes(
+                    check.stdout + check.stderr
+                )
                 if check.returncode:
                     raise RuntimeError("Git bundle verify failed")
                 bundle_status = "created and verified"
@@ -225,22 +303,38 @@ def main() -> int:
         # Detect newly created/removed categories during backup. Content edits
         # without path changes still require the worktree to be quiescent.
         after, after_deleted = categories(root)
-        if any((after[k] - {p for p in after[k] if is_excluded(p, args.exclude)})
-               != groups[k] for k in groups) or after_deleted != deleted:
-            raise RuntimeError("Git path lists changed during backup; retry with a quiet worktree")
+        if (
+            any(
+                (after[k] - {p for p in after[k] if is_excluded(p, args.exclude)})
+                != groups[k]
+                for k in groups
+            )
+            or after_deleted != deleted
+        ):
+            raise RuntimeError(
+                "Git path lists changed during backup; retry with a quiet worktree"
+            )
 
-        head = subprocess.run(["git", "-C", str(root), "rev-parse", "HEAD"],
-                              capture_output=True)
+        head = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "HEAD"], capture_output=True
+        )
         info = {
-            "created_at": now.isoformat(), "source_root": str(root),
+            "created_at": now.isoformat(),
+            "source_root": str(root),
             "git_head": head.stdout.decode().strip() if head.returncode == 0 else None,
-            "git_branch": git(root, "branch", "--show-current").decode(errors="replace").strip(),
-            "categories": result, "deleted_tracked_paths": len(deleted),
-            "excluded_git_entries": len(exclusions), "exclusions": args.exclude,
-            "bundle": bundle_status, "submodules": submodules,
+            "git_branch": git(root, "branch", "--show-current")
+            .decode(errors="replace")
+            .strip(),
+            "categories": result,
+            "deleted_tracked_paths": len(deleted),
+            "excluded_git_entries": len(exclusions),
+            "exclusions": args.exclude,
+            "bundle": bundle_status,
+            "submodules": submodules,
         }
         (unfinished / "backup-info.json").write_text(
-            json.dumps(info, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            json.dumps(info, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
         (unfinished / "README.txt").write_text(
             f"Git ワークスペース救出バックアップ\n対象: {root}\n作成: {now.isoformat()}\n\n"
             "■ 3種類のアーカイブと同名の一覧\n"
@@ -268,14 +362,17 @@ def main() -> int:
             "削除前に元ワークスペースと回収結果を実際に突き合わせてください。\n"
             "元の作業ツリーは本ツールによって削除・復元されません。\n"
             "重要な私的メモの復元テストを済ませるまで元環境を消さないこと。\n",
-            encoding="utf-8")
+            encoding="utf-8",
+        )
         write_checksums(unfinished)
         unfinished.rename(finished)
         print(f"SUCCESS: {finished}")
         print(f"Verify: cd {shlex.quote(str(finished))} && sha256sum -c SHA256SUMS")
         return 0
     except (OSError, RuntimeError, tarfile.TarError) as exc:
-        print(f"FAILED: {exc}\nINCOMPLETE data retained at: {unfinished}", file=sys.stderr)
+        print(
+            f"FAILED: {exc}\nINCOMPLETE data retained at: {unfinished}", file=sys.stderr
+        )
         return 1
 
 
