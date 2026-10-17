@@ -4,7 +4,7 @@
 - 対象: `research/FLT-regular-to-GN-GTail-261015-v0` → `develop`
 - 環境: `lean/dk_math`、Lean / Mathlib v4.34.1
 - 目的: `evidence/` に蓄積した123ファイルの検証記録から、**マージ後に必要な結論・再現手順・監査境界**を残す。
-- 詳細な標準出力、smoke 用 Lean スクリプト、試行時点別ログ、個別 SHA256 manifest は `evidence/` のアーカイブに保存する。本書はその代替ログではなく、要約索引である。
+- 詳細な標準出力、smoke 用 Lean スクリプト、試行時点別ログなどは `evidence/` を tar に固めて保存する。本書はその代替ログではなく、要約索引である。
 
 ## 1. 到達点と証明範囲
 
@@ -83,8 +83,8 @@ LEAN_NUM_THREADS=2 lake build \
 - `FLT7-PROOF-ROUTE-AUDIT.md` の旧 scratch は、その時点で底と step が未解決だった履歴。現在の `SevenGNDescent.lean` と `SEVEN-GN-DESCENT-TEXTBOOK.md` が最終到達点。
 - Anthropic / `flt-regular` は比較・設計参考資料であり、DkMath の新 FLT7 終点に外部の完成証明を import したことにはならない。
 - 本書がまとめるのは **Lean 形式化と既存の検証記録**。独立した数学的査読を完了したという意味ではない。
-- `evidence/` には出力ログ、smoke ソース、依存監査の出力、時点別 `source-*-sha256.txt` manifest が含まれる。manifest はそれぞれの作成時点の入力照合用であり、将来の branch HEAD 全体のハッシュを保証しない。
-- `evidence/` を tar 化したら、その**アーカイブ名・SHA256・生成基準コミット**を別途記録すること。ディレクトリを削除する場合、既存の教科書から `evidence/*.txt` / `evidence/*.lean` への相対リンクは切れるため、参照先をアーカイブまたは本書に更新する必要がある。
+- `evidence/` には出力ログ、smoke ソース、依存監査の出力、当時の入力照合資料が含まれる。これらは実験時点の履歴資料であり、清書後のコード正本を定義するものではない。ソースの状態は **Git のコミット SHA** で固定する。
+- 既存の教科書にある `evidence/*.txt` / `evidence/*.lean` のリンクは**変更しない**。詳細な検証記録が必要なら、同階層に置いた tar アーカイブから `evidence/` ディレクトリを復元して閲覧する。tar 作成時は `tar -cf evidence.tar evidence/`、復元時は `tar -xf evidence.tar` が一例（アーカイブ名は実際の運用に合わせる）。アーカイブと対応するソースの基準コミット SHA を記録すればよく、個別ファイルのハッシュ再計算は要求しない。
 
 ## 6. 読むべき教科書（アーカイブ不要の恒久参照）
 
