@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.Lib.Algebra.UnitPowerClass
 import Mathlib.RingTheory.RootsOfUnity.CyclotomicUnits
 import Mathlib.Algebra.Polynomial.Monic
 import Mathlib.RingTheory.Polynomial.RationalRoot
@@ -64,9 +65,9 @@ theorem phase_polynomial_associated_iff
 
 /-- Equality modulo n-th powers in the unit group, without choosing a quotient
 or assuming any finite or complete system of representatives. -/
-def SameUnitPowerClass
+abbrev SameUnitPowerClass
     {R : Type*} [CommMonoid R] (n : ℕ) (u v : Rˣ) : Prop :=
-  ∃ t : Rˣ, u = v * t ^ n
+  DkMath.Lib.Algebra.SameUnitPowerClass n u v
 
 /-- The residual unit class is independent of the power root in an integrally
 closed domain, for a fixed nonzero normalized element and positive exponent.
@@ -78,21 +79,8 @@ theorem unitPowerClass_independent
     (hu : IsUnit u) (hv : IsUnit v)
     (hleft : alpha = u * beta ^ n)
     (hright : alpha = v * gamma ^ n) :
-    ∃ t : R, IsUnit t ∧ u = v * t ^ n := by
-  have hpowers : Associated (beta ^ n) (gamma ^ n) :=
-    (associated_unit_mul_right (beta ^ n) u hu).trans
-      ((Associated.of_eq (hleft.symm.trans hright)).trans
-        (associated_unit_mul_left (gamma ^ n) v hv))
-  obtain ⟨t, hroot⟩ := (Associated.pow_iff hn).mp hpowers
-  have hbeta : beta ^ n ≠ 0 := by
-    intro hzero
-    apply halpha
-    rw [hleft, hzero, mul_zero]
-  refine ⟨(t : R), t.isUnit, ?_⟩
-  have heq : u * beta ^ n = v * gamma ^ n := hleft.symm.trans hright
-  rw [← hroot, mul_pow] at heq
-  apply mul_right_cancel₀ hbeta
-  simpa only [mul_assoc, mul_comm, mul_left_comm] using heq
+    ∃ t : R, IsUnit t ∧ u = v * t ^ n :=
+  DkMath.Lib.Algebra.unitPowerClass_independent hn halpha hu hv hleft hright
 
 /-- Root-choice independence after cancelling a fixed nonzero ramifier.
 Different ramifier representatives are governed by `ramifier_rescaling`. -/
@@ -103,14 +91,8 @@ theorem fixedRamifier_unitPowerClass_independent
     (hu : IsUnit u) (hv : IsUnit v)
     (hleft : A = lambda * (u * beta ^ n))
     (hright : A = lambda * (v * gamma ^ n)) :
-    ∃ t : R, IsUnit t ∧ u = v * t ^ n := by
-  have hnormalized : u * beta ^ n = v * gamma ^ n :=
-    mul_left_cancel₀ hlambda (hleft.symm.trans hright)
-  have hnonzero : u * beta ^ n ≠ 0 := by
-    intro hzero
-    apply hA
-    rw [hleft, hzero, mul_zero]
-  exact unitPowerClass_independent hn hnonzero hu hv rfl hnormalized
+    ∃ t : R, IsUnit t ∧ u = v * t ^ n :=
+  DkMath.Lib.Algebra.fixedRamifier_unitPowerClass_independent hn hA hlambda hu hv hleft hright
 
 /-- The same fixed-extraction result expressed in the actual unit group. -/
 theorem sameUnitPowerClass_of_fixed_extraction
@@ -119,12 +101,8 @@ theorem sameUnitPowerClass_of_fixed_extraction
     (hn : n ≠ 0) (hA : A ≠ 0) (hlambda : lambda ≠ 0)
     (hleft : A = lambda * ((u : R) * beta ^ n))
     (hright : A = lambda * ((v : R) * gamma ^ n)) :
-    SameUnitPowerClass n u v := by
-  obtain ⟨t, ht, heq⟩ := fixedRamifier_unitPowerClass_independent
-    hn hA hlambda u.isUnit v.isUnit hleft hright
-  refine ⟨ht.unit, ?_⟩
-  apply Units.ext
-  simpa only [Units.val_mul, Units.val_pow_eq_pow_val, ht.unit_spec] using heq
+    SameUnitPowerClass n u v :=
+  DkMath.Lib.Algebra.sameUnitPowerClass_of_fixed_extraction u v hn hA hlambda hleft hright
 
 /-- Rescaling a ramifier by `w` at load `r` changes the residual unit by `w⁻ʳ`.
 The extraction equality is an input; the phase decomposition does not supply it. -/
