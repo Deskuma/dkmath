@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.GNRamifiedPrimary
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Three
 
+#print "file: DkMath.FLT.Kummer.GNKummerUnitAdapter"
+
 /-!
 # Kummer 単元補題への適用境界
 
@@ -18,10 +20,10 @@ import Mathlib.NumberTheory.NumberField.Cyclotomic.Three
 その供給により、三次では未解析単元を残さない因子表示を実際に得る。
 -/
 
+namespace DkMath.FLT.Kummer
+
 open scoped BigOperators NumberField
 open DkMath.Lib.NumberTheory
-
-namespace DkMath.FLT.Kummer
 
 /-- 外部の Kummer 単元補題が供給すべき命題。
 単元群で、整数と mod p で合同な元が p 乗になるという**補題自体**の型である。

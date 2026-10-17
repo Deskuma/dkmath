@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Lib.NumberTheory.CosmicCyclotomicNorm
 
+#print "file: DkMath.Lib.NumberTheory.CosmicRamification"
+
 /-!
 # GN の因子と分岐イデアル
 
@@ -19,10 +21,10 @@ import DkMath.Lib.NumberTheory.CosmicCyclotomicNorm
 剥がせることを示す。剥離後の p 乗性と降下の構成は後続の課題である。
 -/
 
+namespace DkMath.Lib.NumberTheory
+
 open scoped BigOperators NumberField
 open DkMath.CosmicFormula DkMath.NumberTheory.GapFocusing
-
-namespace DkMath.Lib.NumberTheory
 
 /-- 全円分因子は mod `ζ-1` で gap に一致する。
 原始根・素数次数を仮定しない可換環の可除性恒等式である。 -/

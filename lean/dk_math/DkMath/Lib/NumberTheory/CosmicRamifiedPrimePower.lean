@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.Lib.NumberTheory.CosmicRamifiedQuadratic
 import Mathlib.Data.Nat.Choose.Dvd
 
+#print "file: DkMath.Lib.NumberTheory.CosmicRamifiedPrimePower"
+
 /-!
 # 保存パケットから mod λ^p の単元合同へ
 
@@ -16,9 +18,9 @@ import Mathlib.Data.Nat.Choose.Dvd
 従って正規化単元は εᵢ≡−Sᵢ*u mod λ^p を満たす。
 -/
 
-open scoped BigOperators NumberField
-
 namespace DkMath.Lib.NumberTheory
+
+open scoped BigOperators NumberField
 
 /-- 内部二項係数の p 可除性から一気に λ^p へ進む。
 λ^(p−1)∣p, λ∣γ−1 なら λ^p∣γ^p−1。端項 k=p と内部項を分けて証明する。

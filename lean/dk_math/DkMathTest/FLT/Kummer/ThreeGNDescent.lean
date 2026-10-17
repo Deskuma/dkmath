@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.ThreeGNDescent
 
+#print "file: DkMathTest.FLT.Kummer.ThreeGNDescent"
+
 open scoped NumberField
 open DkMath.FLT.Three DkMath.FLT.Kummer
 open DkMath.NumberTheory.TraceOneQuadratic

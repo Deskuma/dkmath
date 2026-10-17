@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.SevenKummerUnit
 import Lean.Util.FoldConsts
 
+#print "file: DkMathTest.FLT.Kummer.SevenConjugatePhaseDependencyAudit"
+
 /-!
 # 共役位相・単元七乗性・GN 因子復元の再帰的依存監査
 
@@ -15,9 +17,9 @@ import Lean.Util.FoldConsts
 実際に消費することを同時に確認する。
 -/
 
-open Lean Elab Command
-
 namespace SevenConjugatePhaseDependencyAudit
+
+open Lean Elab Command
 
 private def forbidden (n : Name) : Bool :=
   let s := n.toString

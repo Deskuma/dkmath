@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.GNRamifiedUnitResidue
 import DkMath.Lib.NumberTheory.CosmicRamifiedQuadratic
 
+#print "file: DkMath.FLT.Kummer.GNRamifiedQuadratic"
+
 /-!
 # FLT 座標の正規化単元を mod λ² まで読む
 
@@ -16,10 +18,10 @@ x=a+b,u=−b では `εᵢ ≡ i*b + choose i 2 * λ*b mod λ²`。
 必要な λ³∣(a+b) は既存パケットの付値保存から導き、追加仮定にはしない。
 -/
 
+namespace DkMath.FLT.Kummer
+
 open scoped BigOperators NumberField
 open DkMath.Lib.NumberTheory
-
-namespace DkMath.FLT.Kummer
 
 /-- 分岐側の正規化単元の二次合同条件。
 一次正規化と同じ基底データを使い、全非自明添字について

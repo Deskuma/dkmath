@@ -9,6 +9,8 @@ import DkMath.Lib.NumberTheory.CosmicIdealBridge
 import DkMath.CosmicFormula.Defs
 import Mathlib.NumberTheory.NumberField.ClassNumber
 
+#print "file: DkMath.FLT.Kummer.GNStructure"
+
 /-!
 # GN 版 Kummer 構造定理への入口
 
@@ -27,10 +29,10 @@ GN の因子分解と共通素イデアル解析から導く。
 分岐側の Kummer 補題・降下をさらに実装する必要がある。
 -/
 
+namespace DkMath.FLT.Kummer
+
 open scoped BigOperators NumberField
 open DkMath.CosmicFormula DkMath.Lib.NumberTheory
-
-namespace DkMath.FLT.Kummer
 
 /-- 奇数次数の FLT 方程式を GN 座標に移す恒等式。
 符号付き座標 `u=-b` を使うので、自然数の切り捨て減算は現れない。

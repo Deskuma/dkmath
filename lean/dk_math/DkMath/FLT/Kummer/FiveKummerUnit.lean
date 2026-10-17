@@ -10,6 +10,8 @@ import DkMath.FLT.Five.SignedGoldenZeroSectorDescent
 import Mathlib.NumberTheory.NumberField.CMField
 import Mathlib.NumberTheory.NumberField.Cyclotomic.PID
 
+#print "file: DkMath.FLT.Kummer.FiveKummerUnit"
+
 /-!
 # 五次の Kummer 単元補題
 
@@ -20,11 +22,10 @@ import Mathlib.NumberTheory.NumberField.Cyclotomic.PID
 既存パケットの五乗抽出は入力にしない。
 -/
 
-open scoped NumberField
-open NumberField
-
 namespace DkMath.FLT.Kummer
 
+open scoped NumberField
+open NumberField
 open DkMath.FLT.Five DkMath.Lib.NumberTheory
 
 /-- 既存の座標単元の定義と Mathlib の `IsUnit` をつなぐ。 -/

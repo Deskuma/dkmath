@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.NumberTheory.TraceOneQuadratic
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
 
+#print "file: DkMath.Lib.NumberTheory.EisensteinCyclotomic"
+
 /-!
 # Eisenstein 座標と三次円分整数環
 
@@ -16,11 +18,9 @@ import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
 元・積・冪・単元を運べる環同型である。FLT の仮定は使用しない。
 -/
 
-open scoped NumberField
-open NumberField
-
 namespace DkMath.Lib.NumberTheory
 
+open NumberField
 open DkMath.NumberTheory.TraceOneQuadratic
 
 /-- 二次関係を満たす元で Eisenstein 座標を評価する。 -/

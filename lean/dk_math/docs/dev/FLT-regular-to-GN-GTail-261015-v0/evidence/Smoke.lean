@@ -1,5 +1,7 @@
 import DkMath
 
+#print "file: docs.dev.FLT-regular-to-GN-GTail-261015-v0.evidence.Smoke"
+
 -- Root reachability is checked independently of the focused module build.
 #check DkMath.FLT.Kummer.GN_eq_integral_norm
 #check DkMath.FLT.Kummer.GN_kummer_structure_of_regular

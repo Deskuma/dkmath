@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.SevenCurrentPrimary
 import DkMath.FLT.Seven.SevenRealCubicRotationFixed
 
+#print "file: DkMath.FLT.Kummer.SevenCurrentUnitSeventh"
+
 /-!
 # 深い Galois gap から、現在の一次単元の七乗根へ
 
@@ -16,14 +18,14 @@ theta=kappa*gamma として同じ source の単元を除くが、根の主イデ
 この操作は厳密降下でも、新しい FLT 解の構成でもない。
 -/
 
+namespace DkMath.FLT.Kummer.SevenRealGN
+
 open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm
 open DkMath.FLT.Seven.SevenRealCubic
 open DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierRamification
-
-namespace DkMath.FLT.Kummer.SevenRealGN
+open SevenCyclotomicDegreeSixInt
 
 noncomputable section
-open SevenCyclotomicDegreeSixInt
 
 /-- 実三次回転固定性があると、RealPrimary の合同先は整数へ降りる。
 delta≡-x と x≡n から delta≡-n を作り、同じ delta を保つ。 -/

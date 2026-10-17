@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.GNRamifiedArithmetic
 
+#print "file: DkMathTest.FLT.Kummer.GNRamifiedArithmetic"
+
 open scoped NumberField
 open DkMath.CosmicFormula DkMath.Lib.NumberTheory DkMath.FLT.Kummer DkMath.NumberTheory
 

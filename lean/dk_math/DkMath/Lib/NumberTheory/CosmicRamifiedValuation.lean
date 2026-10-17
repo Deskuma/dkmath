@@ -12,6 +12,8 @@ import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
 import Lean.Elab.Tactic.Omega
 
+#print "file: DkMath.Lib.NumberTheory.CosmicRamifiedValuation"
+
 /-!
 # 整数 GN の分岐深度
 
@@ -21,9 +23,9 @@ LTE を呼ばず、`GN = p*u^(p-1) + x*GTail p 2 x u` と次の tail の再帰�
 積の付値には零の規約があるため、`x*GN=c^p` の指数配分には c≠0 を要求する。
 -/
 
-open DkMath.CosmicFormula
-
 namespace DkMath.Lib.NumberTheory
+
+open DkMath.CosmicFormula
 
 /-- p≥3 と p∣x なら、整数上で `GN = p*u^(p-1) + p²*M`。
 最初の項を保存し、残りを GTail の再帰で括る。u の原始性はまだ不要。 -/

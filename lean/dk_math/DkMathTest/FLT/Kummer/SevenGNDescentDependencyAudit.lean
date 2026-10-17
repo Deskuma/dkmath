@@ -12,8 +12,9 @@ import Lean.Util.FoldConsts
 /-! FLT7終点の実際の底・遷移・GN因子分解・単元補題の来歴を監査する。
 型、opaque 本文、構造体のコンストラクタを含む再帰的監査である。 -/
 
-open Lean Elab Command
 namespace SevenGNDescentDependencyAudit
+
+open Lean Elab Command
 
 private def forbidden (n : Name) : Bool :=
   let s := n.toString

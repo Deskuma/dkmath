@@ -6,14 +6,16 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenCurrentPrimary
 
+#print "file: DkMathTest.FLT.Kummer.SevenCurrentPrimary"
+
+namespace DkMathTest.FLT.Kummer.SevenCurrentPrimary
+
 open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenRealGN
 open DkMath.FLT.Kummer.SevenPrimaryNorm
 open DkMath.FLT.Seven.SevenRealCubic
 open DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierRamification
 open DkMath.Lib.Algebra
 open SevenCyclotomicDegreeSixInt
-
-namespace DkMathTest.FLT.Kummer.SevenCurrentPrimary
 
 local instance : Fact (Nat.Prime 7) := ⟨by decide⟩
 

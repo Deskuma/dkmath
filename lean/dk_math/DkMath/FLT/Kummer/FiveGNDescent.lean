@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.FiveGNSameBeta
 import DkMath.FLT.Five.SignedGoldenClosure
 
+#print "file: DkMath.FLT.Kummer.FiveGNDescent"
+
 /-!
 # GN・Kummer と黄金比降下による FLT5 再形式化
 

@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.FiveGNDescent
 
+#print "file: DkMathTest.FLT.Kummer.FiveGNDescent"
+
 open scoped NumberField
 open DkMath.FLT.Kummer DkMath.FLT.Five DkMath.Lib.NumberTheory
 

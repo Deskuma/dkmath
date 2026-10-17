@@ -12,8 +12,9 @@ import Lean.Util.FoldConsts
 /-! 固定した F,S の共通七乗因子表示・相対単元・保存パケットの来歴を監査する。
 型、opaque 本文、構造体のコンストラクタを含む再帰的監査である。 -/
 
-open Lean Elab Command
 namespace SevenCurrentCorrectionPowerDependencyAudit
+
+open Lean Elab Command
 
 private def forbidden (n : Name) : Bool :=
   let s := n.toString

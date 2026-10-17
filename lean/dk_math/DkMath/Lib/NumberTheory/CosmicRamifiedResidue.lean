@@ -8,6 +8,8 @@ import DkMath.Lib.NumberTheory.CosmicRamification
 import Mathlib.RingTheory.RootsOfUnity.CyclotomicUnits
 import Mathlib.Data.ZMod.Basic
 
+#print "file: DkMath.Lib.NumberTheory.CosmicRamifiedResidue"
+
 /-!
 # 分岐剰余体と剥離商の一次合同式
 
@@ -17,9 +19,9 @@ import Mathlib.Data.ZMod.Basic
 これは単元倍冪表示を読むための第一段であり、単元の p 乗性は主張しない。
 -/
 
-open scoped BigOperators NumberField
-
 namespace DkMath.Lib.NumberTheory
+
+open scoped BigOperators NumberField
 
 /-- 幾何和は mod ζ−1 で項数 i に一致する。各 ζ^k−1 の可除性を足すだけなので、
 原始根や素数性は不要。この幾何和が円分単元の剰余も計算する。 -/

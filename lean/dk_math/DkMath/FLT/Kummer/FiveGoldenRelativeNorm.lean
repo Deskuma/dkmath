@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.Lib.NumberTheory.QuinticGoldenNorm
 import DkMath.FLT.Five.TraceOneBridge
 
+#print "file: DkMath.FLT.Kummer.FiveGoldenRelativeNorm"
+
 /-!
 # FLT5 の既存 GoldenInt への相対ノルム
 
@@ -15,10 +17,9 @@ import DkMath.FLT.Five.TraceOneBridge
 元の等式が接合点であり、ノルム値5の一致だけから元を同定しない。
 -/
 
-open scoped NumberField
-
 namespace DkMath.FLT.Kummer
 
+open scoped NumberField
 open DkMath.FLT.Five
 open DkMath.Lib.NumberTheory
 

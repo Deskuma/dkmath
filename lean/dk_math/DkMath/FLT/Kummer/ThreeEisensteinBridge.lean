@@ -8,6 +8,8 @@ import DkMath.FLT.Kummer.GNKummerUnitAdapter
 import DkMath.FLT.Three.PrimitiveCubicDescent
 import DkMath.Lib.NumberTheory.EisensteinCyclotomic
 
+#print "file: DkMath.FLT.Kummer.ThreeEisensteinBridge"
+
 /-!
 # GN・Kummer の三乗根を既存 FLT3 の同じ剥離商へ運ぶ
 
@@ -20,10 +22,9 @@ import DkMath.Lib.NumberTheory.EisensteinCyclotomic
 従来の単元セクター排除による `beta_eq_cube` も証明には使用しない。
 -/
 
-open scoped NumberField
-
 namespace DkMath.FLT.Kummer
 
+open scoped NumberField
 open DkMath.FLT.Three DkMath.NumberTheory.TraceOneQuadratic
 
 /-- 六乗根型の基底から三乗根を固定する。 -/

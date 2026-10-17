@@ -9,6 +9,8 @@ import DkMath.Lib.NumberTheory.PrincipalIdealPower
 import DkMath.Lib.NumberTheory.ClassGroupTorsionBridge
 import Mathlib.RingTheory.RootsOfUnity.CyclotomicUnits
 
+#print "file: DkMath.Lib.NumberTheory.CosmicIdealBridge"
+
 /-!
 # 多項式からイデアルへ、そして元へ
 
@@ -23,10 +25,10 @@ import Mathlib.RingTheory.RootsOfUnity.CyclotomicUnits
 非分岐側の構造定理であり、Kummer の単元補題や無限降下を含まない。
 -/
 
+namespace DkMath.Lib.NumberTheory
+
 open scoped BigOperators nonZeroDivisors
 open DkMath.CosmicFormula DkMath.NumberTheory.GapFocusing
-
-namespace DkMath.Lib.NumberTheory
 
 /-- 任意の GTail 切断も、prefix を引いた剰余を介してイデアルに接続する。
 加法分割を直接イデアル和に置き換えるのでなく、剰余の因数分解

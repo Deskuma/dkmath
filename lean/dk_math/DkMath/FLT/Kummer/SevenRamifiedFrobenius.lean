@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenRealGNConservation
 
+#print "file: DkMath.FLT.Kummer.SevenRamifiedFrobenius"
+
 /-!
 # 分岐剰余1の七乗と、円分単元による根の正規化
 
@@ -14,17 +16,16 @@ import DkMath.FLT.Kummer.SevenRealGNConservation
 7=lambda^6*unit から証明する。単元の七乗性の criterion は使わない。
 -/
 
+namespace DkMath.FLT.Kummer.SevenRealGN
+
 open scoped BigOperators
 open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm
 open DkMath.Lib.NumberTheory
-
-namespace DkMath.FLT.Kummer.SevenRealGN
+open SevenCyclotomicDegreeSixInt
 
 noncomputable section
 
 local instance : Fact (Nat.Prime 7) := ⟨by decide⟩
-
-open SevenCyclotomicDegreeSixInt
 
 /-- 具体的な分岐評価の零核を、向きを固定した lambda 可除性として読む。 -/
 theorem ramifiedEval_eq_zero_iff_dvd (x : C) :

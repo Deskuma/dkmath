@@ -7,11 +7,14 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.SevenCurrentThreePhase
 import Lean.Util.FoldConsts
 
+#print "file: DkMathTest.FLT.Kummer.SevenCurrentThreePhaseDependencyAudit"
+
 /-! 同じ六因子の供給、実 receiver の選択根の保存、三項式、係数障害を監査する。
 型・opaque を含む本文・構造体のコンストラクタを再帰的に辿る。 -/
 
-open Lean Elab Command
 namespace SevenCurrentThreePhaseDependencyAudit
+
+open Lean Elab Command
 
 private def forbidden (n : Name) : Bool :=
   let s := n.toString

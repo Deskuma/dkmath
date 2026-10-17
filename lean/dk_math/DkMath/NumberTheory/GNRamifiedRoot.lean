@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.Lib.NumberTheory.CosmicRamifiedValuation
 import DkMath.NumberTheory.AKSBridge
 
+#print "file: DkMath.NumberTheory.GNRamifiedRoot"
+
 /-!
 # 分岐側 GN の整数根の剰余類
 
@@ -15,9 +17,9 @@ import DkMath.NumberTheory.AKSBridge
 正則性が必要なのは、この等式を元の FLT 方程式から構成する前段である。
 -/
 
-open DkMath.CosmicFormula DkMath.Lib.NumberTheory
-
 namespace DkMath.NumberTheory
+
+open DkMath.CosmicFormula DkMath.Lib.NumberTheory
 
 /-- `p*t^p ≡ p*u^(p-1) mod p²` の共通因子 p を消去する。
 両辺だけでなく法も p² から p へ縮小する。p∤u はこの段階では不要。 -/

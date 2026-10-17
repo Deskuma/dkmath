@@ -1,5 +1,7 @@
 import DkMath
 
+#print "file: docs.dev.FLT-regular-to-GN-GTail-261015-v0.evidence.SevenCurrentRootDepthSmoke"
+
 open DkMath.FLT.Kummer.SevenRealGN
 
 #check phase_root_gap_identity

@@ -6,10 +6,12 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenGNSource
 
-open scoped NumberField
-open DkMath.FLT.Seven DkMath.Lib.Cosmic DkMath.FLT.Kummer.SevenPrimaryNorm
+#print "file: DkMathTest.FLT.Kummer.SevenGNSource"
 
 namespace DkMathTest.FLT.Kummer.SevenGNSource
+
+open scoped NumberField
+open DkMath.FLT.Seven DkMath.Lib.Cosmic DkMath.FLT.Kummer.SevenPrimaryNorm
 
 -- Base change sends both coefficients and the root.
 example (ζ x u : ℤ) :

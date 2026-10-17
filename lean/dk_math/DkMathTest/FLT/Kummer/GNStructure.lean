@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.GNStructure
 
+#print "file: DkMathTest.FLT.Kummer.GNStructure"
+
 /-! Boundary and nonvacuous arithmetic checks for the GN to ideal bridge. -/
 
 open scoped NumberField

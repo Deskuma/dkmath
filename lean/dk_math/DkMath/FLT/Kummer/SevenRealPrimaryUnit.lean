@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenRealUnitObstruction
 
+#print "file: DkMath.FLT.Kummer.SevenRealPrimaryUnit"
+
 /-!
 # 実三次係数との一次合同が消す障害、残す障害
 
@@ -13,10 +15,10 @@ import DkMath.FLT.Kummer.SevenRealUnitObstruction
 整数合同による単元補題の入力と混同せず、任意の実三次係数を保持する。
 -/
 
+namespace DkMath.FLT.Kummer.SevenRealGN
+
 open scoped NumberField
 open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm
-
-namespace DkMath.FLT.Kummer.SevenRealGN
 
 noncomputable section
 

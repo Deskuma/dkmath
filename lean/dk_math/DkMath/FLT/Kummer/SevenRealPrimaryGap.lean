@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenRamifiedFrobenius
 
+#print "file: DkMath.FLT.Kummer.SevenRealPrimaryGap"
+
 /-!
 # 実三次一次合同と gap 可除性
 
@@ -14,14 +16,15 @@ lambda^2∣gap と非零な parameter 剰余のもとで、一次単元の根は
 逆にこの深い gap 可除性があれば、根の剰余1から一次合同を構成できる。
 -/
 
-open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm
-open DkMath.Lib.Algebra
-
 namespace DkMath.FLT.Kummer.SevenRealGN
 
-noncomputable section
-local instance : Fact (Nat.Prime 7) := ⟨by decide⟩
+open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm
+open DkMath.Lib.Algebra
 open SevenCyclotomicDegreeSixInt
+
+noncomputable section
+
+local instance : Fact (Nat.Prime 7) := ⟨by decide⟩
 
 /-- 非自明位相の分岐因子は非零。単元 T_i と lambda の積として検証する。 -/
 theorem phaseRamifier_ne_zero {i : ℕ} (hi : i ∈ (Finset.range 7).erase 0) :

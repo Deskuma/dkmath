@@ -7,11 +7,14 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.SevenCurrentPrimary
 import Lean.Util.FoldConsts
 
+#print "file: DkMathTest.FLT.Kummer.SevenCurrentPrimaryDependencyAudit"
+
 /-! 一般の gap 判定、現在の深い gap、実 receiver からの接続を独立に監査する。
 整数合同 Kummer criterion と既存 FLT 終点を使わず、現在の receiver は必要な根で必須とする。 -/
 
-open Lean Elab Command
 namespace SevenCurrentPrimaryDependencyAudit
+
+open Lean Elab Command
 
 private def forbidden (n : Name) : Bool :=
   let s := n.toString

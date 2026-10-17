@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.FiveGNDescent
 import DkMath.FLT.Kummer.SevenPrimaryNorm
 
+#print "file: DkMathTest.FLT.Kummer.FiveSevenComparison"
+
 /-!
 # FLT5 実装後の、既存 FLT7 単元判定への限定的な照合
 

@@ -6,8 +6,9 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenRealPrimaryGap
 
-/-!
-# 現在の carrier の一次合同：必要条件の検査と根の選択
+#print "file: DkMath.FLT.Kummer.SevenCurrentPrimary"
+
+/-! # 現在の carrier の一次合同：必要条件の検査と根の選択
 
 現在の gap は実三次軸の32乗、従って円分分岐因子の64乗で割れる。
 提案された 7*(zeta^j-1)∣gap は満たされ、排除条件にはならない。
@@ -15,16 +16,16 @@ receiver の同じ因子表示を T_j で補正し、根を剰余1に正規化�
 実三次 PrimaryPacket を構成する。元の根・単元・正規化単元を保持する。
 -/
 
+namespace DkMath.FLT.Kummer.SevenRealGN
+
 open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm
 open DkMath.FLT.Seven.SevenRealCubic
 open DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierRamification
 open DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierPower
 open DkMath.Lib.Algebra
-
-namespace DkMath.FLT.Kummer.SevenRealGN
+open SevenCyclotomicDegreeSixInt
 
 noncomputable section
-open SevenCyclotomicDegreeSixInt
 
 variable {a b d : ℕ} {source : CounterexamplePack a b d}
 variable {r : PrimitiveCounterexampleRamifiedProvenance source}

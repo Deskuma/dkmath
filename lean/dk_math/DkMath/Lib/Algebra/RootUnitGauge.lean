@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.Lib.Algebra.UnitPowerClass
 import Mathlib.Tactic.LinearCombination
 
+#print "file: DkMath.Lib.Algebra.RootUnitGauge"
+
 /-!
 # 冪根の単元倍による取り替え
 

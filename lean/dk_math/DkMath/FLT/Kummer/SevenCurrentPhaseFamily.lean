@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenCurrentUnitSeventh
 
+#print "file: DkMath.FLT.Kummer.SevenCurrentPhaseFamily"
+
 /-! # 同じ current 二端点の六因子の同時七乗表示
 
 既存の全六位相のイデアル冪抽出に、各位相の一次合同と整数合同を供給する。
@@ -14,16 +16,16 @@ Galois 回転で係数を動かさず、同じ rotate(rho),rho の因子族を�
 新しい FLT 反例や厳密減少は、これらの因子表示の結論ではない。
 -/
 
+namespace DkMath.FLT.Kummer.SevenRealGN
+
 open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm
 open DkMath.FLT.Seven.SevenRealCubic
 open DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierRamification
 open DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierPower
 open DkMath.Lib.Algebra
-
-namespace DkMath.FLT.Kummer.SevenRealGN
+open SevenCyclotomicDegreeSixInt
 
 noncomputable section
-open SevenCyclotomicDegreeSixInt
 
 variable {a b d : ℕ} {source : CounterexamplePack a b d}
 variable {r : PrimitiveCounterexampleRamifiedProvenance source}

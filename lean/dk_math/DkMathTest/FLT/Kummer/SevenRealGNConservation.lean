@@ -6,9 +6,11 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenRealGNConservation
 
-open DkMath.FLT.Seven DkMath.Lib.Algebra DkMath.FLT.Kummer.SevenRealGN
+#print "file: DkMathTest.FLT.Kummer.SevenRealGNConservation"
 
 namespace DkMathTest.FLT.Kummer.SevenRealGNConservation
+
+open DkMath.FLT.Seven DkMath.Lib.Algebra DkMath.FLT.Kummer.SevenRealGN
 
 -- The phase component takes values in an actual seven-element group.
 example : Nat.card (rootsOfUnity 7 C) = 7 := phase_target_card

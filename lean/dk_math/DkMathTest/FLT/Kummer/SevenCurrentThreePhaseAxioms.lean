@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenCurrentThreePhase
 
+#print "file: DkMathTest.FLT.Kummer.SevenCurrentThreePhaseAxioms"
+
 /-! 公開24定理、2定義、構造体とその生成宣言を標準公理の whitelist で検査する。 -/
 
 #print axioms DkMath.Lib.Cosmic.phaseSource_three_term_relation

@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.SevenCurrentThreePhase
 import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicAdditiveChartBoundary
 
+#print "file: DkMath.FLT.Kummer.SevenCurrentRootDepth"
+
 /-! # 六因子の七乗差と共通の深い補正項
 
 同じ gap の lambda^64 可除性から、各根の七乗の lambda^63 合同を得る。
@@ -15,15 +17,16 @@ import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicAdditiveChartBoundary
 これらは反例再構成や厳密降下を供給しない。63は可除性の下界である。
 -/
 
+namespace DkMath.FLT.Kummer.SevenRealGN
+
 open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm
 open DkMath.FLT.Seven.SevenRealCubic
 open DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierRamification
-
-namespace DkMath.FLT.Kummer.SevenRealGN
+open SevenCyclotomicDegreeSixInt
 
 noncomputable section
+
 local instance : Fact (Nat.Prime 7) := ⟨by decide⟩
-open SevenCyclotomicDegreeSixInt
 
 variable {a b d : ℕ} {source : CounterexamplePack a b d}
 variable {r : PrimitiveCounterexampleRamifiedProvenance source}

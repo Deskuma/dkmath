@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenCurrentRootDepth
 
+#print "file: DkMathTest.FLT.Kummer.SevenCurrentRootDepth"
+
 /-! 六根の深い七乗合同、共通剰余、補正項の保存、根の枝の境界を検査する。 -/
 
 open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm

@@ -8,6 +8,8 @@ import DkMath.NumberTheory.TraceOneQuadratic
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
 import Mathlib.Algebra.QuadraticAlgebra.NormDeterminant
 
+#print "file: DkMath.Lib.NumberTheory.QuinticGoldenNorm"
+
 /-!
 # 五次円分整数の黄金比座標と相対ノルム
 
@@ -17,11 +19,9 @@ import Mathlib.Algebra.QuadraticAlgebra.NormDeterminant
 中立な黄金比整数モデルは `TraceOneInt 1`。FLT の仮定を使用しない。
 -/
 
-open scoped NumberField
-open NumberField
-
 namespace DkMath.Lib.NumberTheory
 
+open NumberField
 open DkMath.NumberTheory.TraceOneQuadratic
 
 variable {K : Type*} [Field K] [NumberField K]

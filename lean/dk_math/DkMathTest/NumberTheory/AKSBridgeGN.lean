@@ -1,4 +1,12 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
 import DkMath.NumberTheory.AKSBridge
+
+#print "file: DkMathTest.NumberTheory.AKSBridgeGN"
 
 open DkMath.NumberTheory DkMath.CosmicFormula
 

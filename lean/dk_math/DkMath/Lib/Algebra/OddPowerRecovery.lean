@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import Mathlib.Tactic.Group
 
+#print "file: DkMath.Lib.Algebra.OddPowerRecovery"
+
 /-!
 # 平方が奇数冪であるときの明示的な冪根
 

@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.GNRamified
 
+#print "file: DkMathTest.FLT.Kummer.GNRamified"
+
 /-!
 Nonvacuous checks of the ideal allocation kernel, independent of an FLT
 counterexample. The generic kernel includes p=2 when exact stripping is supplied.

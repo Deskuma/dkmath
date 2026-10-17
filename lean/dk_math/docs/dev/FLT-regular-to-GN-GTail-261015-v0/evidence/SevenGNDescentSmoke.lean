@@ -1,5 +1,7 @@
 import DkMath
 
+#print "file: docs.dev.FLT-regular-to-GN-GTail-261015-v0.evidence.SevenGNDescentSmoke"
+
 open DkMath.FLT.Kummer.SevenDescent
 
 -- Mathlib's standard statement, independent of any local spelling.

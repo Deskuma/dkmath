@@ -8,6 +8,8 @@ import DkMath.FLT.Kummer.SevenPrimaryNorm
 import DkMath.FLT.Kummer.GNRamifiedPrimary
 import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicDegreeSixPID
 
+#print "file: DkMath.FLT.Kummer.SevenPrimaryNormBridge"
+
 /-!
 # GN の一次単元を六次モデルの相対ノルムへ接続する
 
@@ -16,10 +18,10 @@ import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicDegreeSixPID
 実三次ノルムを取る。この章では単元そのものの七乗性と降下はまだ主張しない。
 -/
 
+namespace DkMath.FLT.Kummer.SevenPrimaryNorm
+
 open scoped NumberField
 open DkMath.FLT.Seven DkMath.Lib.NumberTheory
-
-namespace DkMath.FLT.Kummer.SevenPrimaryNorm
 
 noncomputable section
 

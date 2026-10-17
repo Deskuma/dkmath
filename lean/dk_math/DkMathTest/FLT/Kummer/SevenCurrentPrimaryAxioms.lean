@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenCurrentPrimary
 
+#print "file: DkMathTest.FLT.Kummer.SevenCurrentPrimaryAxioms"
+
 /-! 新規公開定理の全件公理検査。必要条件、根の選択、現在の receiver を監査する。 -/
 
 open DkMath.FLT.Kummer.SevenRealGN

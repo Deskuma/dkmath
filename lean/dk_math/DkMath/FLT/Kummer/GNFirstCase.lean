@@ -8,6 +8,8 @@ import DkMath.FLT.Kummer.GNStructure
 import DkMath.Lib.NumberTheory.CosmicRamification
 import DkMath.NumberTheory.AKSBridge
 
+#print "file: DkMath.FLT.Kummer.GNFirstCase"
+
 /-!
 # 標準 Case I 条件から GN の構造定理へ
 
@@ -21,10 +23,10 @@ GN 自身が整数の p 乗であるという必要条件が得られる。
 円分整数環の単元そのものを p 乗とする主張とは区別する。
 -/
 
+namespace DkMath.FLT.Kummer
+
 open scoped NumberField
 open DkMath.CosmicFormula
-
-namespace DkMath.FLT.Kummer
 
 /-- FLT 方程式を mod p に落とすと `a+b=c` になる。
 各 p 乗を元自身に戻す Fermat の小定理だけを使う。 -/

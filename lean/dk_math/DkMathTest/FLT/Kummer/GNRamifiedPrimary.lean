@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.GNKummerUnitAdapter
 
+#print "file: DkMathTest.FLT.Kummer.GNRamifiedPrimary"
+
 open scoped BigOperators NumberField
 open DkMath.Lib.NumberTheory DkMath.FLT.Kummer
 

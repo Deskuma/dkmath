@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenCurrentRootDepth
 
+#print "file: DkMathTest.FLT.Kummer.SevenCurrentRootDepthAxioms"
+
 /-! 新規21定理と1定義の公理 whitelist。 -/
 
 #print axioms DkMath.FLT.Kummer.SevenRealGN.phase_root_seventh_deep

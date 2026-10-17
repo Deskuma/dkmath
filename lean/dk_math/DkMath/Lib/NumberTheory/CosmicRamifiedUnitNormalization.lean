@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.Lib.NumberTheory.CosmicRamifiedResidue
 import DkMath.Lib.NumberTheory.CosmicRamifiedPacket
 
+#print "file: DkMath.Lib.NumberTheory.CosmicRamifiedUnitNormalization"
+
 /-!
 # 分岐剰余を使う生成元と単元の正規化
 
@@ -19,9 +21,9 @@ import DkMath.Lib.NumberTheory.CosmicRamifiedPacket
 合同条件も主張せず、単元群全体の p 乗写像の全射性も仮定しない。
 -/
 
-open scoped BigOperators NumberField
-
 namespace DkMath.Lib.NumberTheory
+
+open scoped BigOperators NumberField
 
 /-- `β=ε*γ^p` を、同じ β と同伴な生成元のまま γ≡1 mod λ に正規化する。
 非零な剰余 γ の逆数を大域的円分単元 e で持ち上げ、

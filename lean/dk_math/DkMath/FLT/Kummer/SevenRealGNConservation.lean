@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.SevenRealPrimaryUnit
 import DkMath.Lib.Algebra.RootUnitGauge
 
+#print "file: DkMath.FLT.Kummer.SevenRealGNConservation"
+
 /-!
 # 実三次 GN 保存の四定理
 
@@ -15,9 +17,9 @@ source、係数環、単元七乗剰余類、反復可能な不変データを�
 新しい FLT 解の生成や厳密降下の遷移を、この保存定理で代用しない。
 -/
 
-open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm DkMath.Lib.Algebra
-
 namespace DkMath.FLT.Kummer.SevenRealGN
+
+open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm DkMath.Lib.Algebra
 
 noncomputable section
 

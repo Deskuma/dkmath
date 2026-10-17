@@ -7,9 +7,11 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.SevenUnitPowerClassBridge
 import DkMath.NumberTheory.GapFocusing.UnitGauge
 
-open DkMath.Lib.Algebra DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm
+#print "file: DkMathTest.FLT.Kummer.SevenUnitPowerClassBridge"
 
 namespace DkMathTest.FLT.Kummer.SevenUnitPowerClassBridge
+
+open DkMath.Lib.Algebra DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm
 
 -- A nontrivial root correction, keeping the same t for roots and units.
 example : ∃ t : ℤˣ, (-3 : ℤ) = (t : ℤ) * 3 ∧ (1 : ℤˣ) = (-1 : ℤˣ) * t ^ 7 := by

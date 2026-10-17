@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.GNFirstCase
 import DkMath.Lib.NumberTheory.CosmicRamifiedIdealPower
 
+#print "file: DkMath.FLT.Kummer.GNRamified"
+
 /-!
 # GN 版 Kummer 構造定理の分岐側
 
@@ -20,10 +22,10 @@ Fermat の小定理から p は gap `a+b` も割る。`x=a+b, u=-b` とすると
 任意の `p∣abc` からこの向きを選ぶ正規化、単元合同、無限降下は別の段階である。
 -/
 
+namespace DkMath.FLT.Kummer
+
 open scoped NumberField nonZeroDivisors
 open DkMath.CosmicFormula DkMath.Lib.NumberTheory
-
-namespace DkMath.FLT.Kummer
 
 /-- p が c を割る向きの FLT 方程式では、p は gap `a+b` も割る。
 Case I に用いた合同式と同じ `a+b≡c (mod p)` の分岐側である。 -/

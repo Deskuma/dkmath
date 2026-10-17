@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.GNFirstCase
 
+#print "file: DkMathTest.FLT.Kummer.GNFirstCase"
+
 open scoped NumberField
 open DkMath.CosmicFormula DkMath.Lib.NumberTheory DkMath.FLT.Kummer
 

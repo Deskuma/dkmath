@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.GNRamifiedUnitResidue
 
+#print "file: DkMathTest.FLT.Kummer.GNRamifiedUnitResidue"
+
 open scoped NumberField
 open DkMath.Lib.NumberTheory DkMath.FLT.Kummer
 

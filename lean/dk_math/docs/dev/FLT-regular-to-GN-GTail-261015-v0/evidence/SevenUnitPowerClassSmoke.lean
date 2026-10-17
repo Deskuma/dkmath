@@ -1,5 +1,7 @@
 import DkMath
 
+#print "file: docs.dev.FLT-regular-to-GN-GTail-261015-v0.evidence.SevenUnitPowerClassSmoke"
+
 open DkMath.Lib.Algebra DkMath.FLT.Kummer.SevenPrimaryNorm
 
 #check exists_root_and_unit_correction

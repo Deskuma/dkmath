@@ -8,6 +8,8 @@ import DkMath.Lib.Algebra.UnitPowerClass
 import DkMath.FLT.Kummer.SevenKummerUnit
 import DkMath.FLT.Seven.CurrentCarrierNormalizedPower
 
+#print "file: DkMath.FLT.Kummer.SevenUnitPowerClassBridge"
+
 /-!
 # 単元の同一性から、七乗剰余類の比較へ
 
@@ -16,10 +18,10 @@ GN と現在の carrier の根や単元を同一視せず、正確な因子表�
 現在の source と GN source の等式は明示的な入力であり、この章では構成しない。
 -/
 
+namespace DkMath.FLT.Kummer.SevenPrimaryNorm
+
 open scoped BigOperators NumberField
 open DkMath.FLT.Seven DkMath.Lib.NumberTheory DkMath.Lib.Algebra
-
-namespace DkMath.FLT.Kummer.SevenPrimaryNorm
 
 noncomputable section
 

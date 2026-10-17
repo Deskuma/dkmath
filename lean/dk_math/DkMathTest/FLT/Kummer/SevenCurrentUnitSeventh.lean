@@ -6,12 +6,15 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenCurrentUnitSeventh
 
+#print "file: DkMathTest.FLT.Kummer.SevenCurrentUnitSeventh"
+
+namespace DkMathTest.FLT.Kummer.SevenCurrentUnitSeventh
+
 open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenRealGN
 open DkMath.FLT.Kummer.SevenPrimaryNorm
 open DkMath.Lib.Algebra
 open SevenRealCubicInt SevenRealCubic SevenCyclotomicDegreeSixInt
 
-namespace DkMathTest.FLT.Kummer.SevenCurrentUnitSeventh
 
 -- Every genuine integer congruence gives rotation fixedness, for arbitrary ring elements.
 example (n : ℤ) (w : R) : (7 : R) ∣ SevenRealCubicInt.rotateEquiv ((n : R) + 7 * w) - ((n : R) + 7 * w) := by

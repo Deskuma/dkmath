@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Lib.NumberTheory.CosmicRamifiedPrimePower
 
+#print "file: DkMath.Lib.NumberTheory.CosmicRamifiedPrimaryUnit"
+
 /-!
 # 幾何和の単元を除き、整数と mod p で合同な単元を取り出す
 
@@ -16,9 +18,9 @@ FLT 座標 u=−b では、これは Kummer の単元補題の入力 δᵢ≡b m
 ここではその補題自体や δᵢ の p 乗性は仮定も証明もしない。
 -/
 
-open scoped BigOperators NumberField
-
 namespace DkMath.Lib.NumberTheory
+
+open scoped BigOperators NumberField
 
 /-- 非自明添字の幾何和 Sᵢ を、実際の単元群の元として選ぶ。
 以降の逆元は円分整数環の除算ではなく、この単元群の逆元である。 -/

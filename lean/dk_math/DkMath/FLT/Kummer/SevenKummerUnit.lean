@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.SevenConjugatePhase
 import DkMath.Lib.Algebra.OddPowerRecovery
 
+#print "file: DkMath.FLT.Kummer.SevenKummerUnit"
+
 /-!
 # 七次 Kummer 単元補題と同じ GN 因子の七乗復元
 
@@ -15,10 +17,10 @@ import DkMath.Lib.Algebra.OddPowerRecovery
 一般の単元補題や完成した FLT7 を仮定しない。
 -/
 
+namespace DkMath.FLT.Kummer.SevenPrimaryNorm
+
 open scoped NumberField
 open NumberField DkMath.FLT.Seven DkMath.Lib.NumberTheory
-
-namespace DkMath.FLT.Kummer.SevenPrimaryNorm
 
 noncomputable section
 

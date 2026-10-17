@@ -1,5 +1,7 @@
 import DkMath
 
+#print "file: docs.dev.FLT-regular-to-GN-GTail-261015-v0.evidence.SevenCurrentPrimarySmoke"
+
 open DkMath.FLT.Kummer.SevenRealGN DkMath.FLT.Seven
 open SevenRealCubic SevenCyclotomicDegreeSixInt
 

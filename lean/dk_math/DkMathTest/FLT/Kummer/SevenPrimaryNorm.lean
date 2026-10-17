@@ -6,9 +6,11 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenPrimaryNormBridge
 
-open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm
+#print "file: DkMathTest.FLT.Kummer.SevenPrimaryNorm"
 
 namespace DkMathTest.FLT.Kummer.SevenPrimaryNorm
+
+open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm
 
 abbrev R := SevenCyclotomicDegreeSixInt.Ring
 

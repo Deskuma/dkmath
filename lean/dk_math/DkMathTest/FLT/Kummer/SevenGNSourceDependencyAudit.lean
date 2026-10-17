@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.SevenGNSource
 import Lean.Util.FoldConsts
 
+#print "file: DkMathTest.FLT.Kummer.SevenGNSourceDependencyAudit"
+
 /-!
 # GN source 保存と係数環境界の依存監査
 
@@ -14,9 +16,9 @@ import Lean.Util.FoldConsts
 単元 criterion・旧 FLT 終点・前章の条件付き source 比較を使わない。
 -/
 
-open Lean Elab Command
-
 namespace SevenGNSourceDependencyAudit
+
+open Lean Elab Command
 
 private def forbidden (n : Name) : Bool :=
   let s := n.toString

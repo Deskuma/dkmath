@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.Lib.NumberTheory.CosmicIdealBridge
 import DkMath.Lib.NumberTheory.CosmicRamification
 
+#print "file: DkMath.Lib.NumberTheory.CosmicRamifiedIdealPower"
+
 /-!
 # 分岐因子を剥離した後のイデアル冪配分
 
@@ -24,10 +26,10 @@ import DkMath.Lib.NumberTheory.CosmicRamification
 この結果とは別の段階である。
 -/
 
+namespace DkMath.Lib.NumberTheory
+
 open scoped BigOperators NumberField
 open DkMath.CosmicFormula
-
-namespace DkMath.Lib.NumberTheory
 
 private theorem not_mem_prime_of_maximal_span
     {R : Type*} [CommRing R] {ell β : R}

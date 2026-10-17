@@ -1,5 +1,7 @@
 import DkMath
 
+#print "file: docs.dev.FLT-regular-to-GN-GTail-261015-v0.evidence.SevenConjugatePhaseSmoke"
+
 open scoped NumberField
 open DkMath.FLT.Kummer DkMath.FLT.Kummer.SevenPrimaryNorm
 

@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Seven.SevenRealCubicThetaCoordinates
 
+#print "file: DkMath.FLT.Seven.SevenRealCubicRotationFixed"
+
 /-!
 # 実三次環における mod 7 の回転固定性
 

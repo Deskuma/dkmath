@@ -8,6 +8,8 @@ import DkMath.Lib.NumberTheory.CosmicRamifiedIdealPower
 import DkMath.Lib.NumberTheory.CosmicRamifiedValuation
 import Mathlib.NumberTheory.NumberField.ClassNumber
 
+#print "file: DkMath.Lib.NumberTheory.CosmicRamifiedPacket"
+
 /-!
 # 分岐イデアル冪と整数付値を保存するパケット
 
@@ -20,10 +22,10 @@ Iᵢ の生成元と βᵢ の単元倍 p 乗表示を追加する。いずれ�
 フィールドとして仮定せず、降下定理とは区別する。
 -/
 
+namespace DkMath.Lib.NumberTheory
+
 open scoped BigOperators NumberField nonZeroDivisors
 open DkMath.CosmicFormula
-
-namespace DkMath.Lib.NumberTheory
 
 /-- 正則性を使わずに構成できる分岐側の保存データ。
 添字の主張は `1,...,p-1` のみ。範囲外の関数値に数学的意味を課さない。 -/

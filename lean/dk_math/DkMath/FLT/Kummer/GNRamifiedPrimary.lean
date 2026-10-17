@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.GNRamifiedQuadratic
 import DkMath.Lib.NumberTheory.CosmicRamifiedPrimaryUnit
 
+#print "file: DkMath.FLT.Kummer.GNRamifiedPrimary"
+
 /-!
 # GN から Kummer 単元補題の入力へ
 
@@ -15,10 +17,10 @@ import DkMath.Lib.NumberTheory.CosmicRamifiedPrimaryUnit
 ここまでの合同条件は DkMath 内で証明し、一般の Kummer 単元補題は使わない。
 -/
 
+namespace DkMath.FLT.Kummer
+
 open scoped BigOperators NumberField
 open DkMath.Lib.NumberTheory
-
-namespace DkMath.FLT.Kummer
 
 /-- 原始的 FLT 方程式から、単元補題に渡せる単元 δᵢ を持つパケットを構成。
 同じ Q の εᵢ と生成元を保ち、幾何和による既知の単元だけを取り出す。

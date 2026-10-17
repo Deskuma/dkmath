@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Lib.Cosmic.GNSourceTransport
 
+#print "file: DkMath.Lib.Cosmic.GNPhaseThreeTerm"
+
 /-! # 同じ二端点の三位相関係
 
 係数を固定した三つの線形 source の加法関係を扱う。

@@ -1,5 +1,7 @@
 import DkMath
 
+#print "file: docs.dev.FLT-regular-to-GN-GTail-261015-v0.evidence.SevenGNSourceSmoke"
+
 open DkMath.Lib.Cosmic DkMath.FLT.Kummer.SevenPrimaryNorm
 
 #check map_phaseSource_pow

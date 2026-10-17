@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.ThreeGNDescent
 import Lean.Util.FoldConsts
 
+#print "file: DkMathTest.FLT.Kummer.ThreeGNDependencyAudit"
+
 /-!
 # 三次 GN 証明の再帰的依存監査
 
@@ -16,9 +18,9 @@ opaque な定理本体と帰納型の構築子も検査する。既存 FLT3 の�
 環同型、新しい厳密降下が実際の依存先であることも要求する。
 -/
 
-open Lean Elab Command
-
 namespace ThreeGNDependencyAudit
+
+open Lean Elab Command
 
 private def forbidden (n : Name) : Bool :=
   let s := n.toString

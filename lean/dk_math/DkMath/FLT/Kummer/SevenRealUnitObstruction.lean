@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenGNSource
 
+#print "file: DkMath.FLT.Kummer.SevenRealUnitObstruction"
+
 /-!
 # 実三次 GN の単元障害：ノルム二成分と共役位相一成分
 
@@ -14,11 +16,11 @@ import DkMath.FLT.Kummer.SevenGNSource
 整数との合同を仮定せず、任意の六次単元の障害として定義する。
 -/
 
+namespace DkMath.FLT.Kummer.SevenRealGN
+
 open scoped NumberField
 open NumberField DkMath.FLT.Seven
 open DkMath.FLT.Kummer.SevenPrimaryNorm
-
-namespace DkMath.FLT.Kummer.SevenRealGN
 
 noncomputable section
 

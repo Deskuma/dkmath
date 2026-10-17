@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenCurrentThreePhase
 
+#print "file: DkMathTest.FLT.Kummer.SevenCurrentThreePhase"
+
 /-! 三因子の加法関係、全六因子の同時供給、選択根の保存、残留単元障害の回帰例。 -/
 
 open DkMath.Lib.Cosmic DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm

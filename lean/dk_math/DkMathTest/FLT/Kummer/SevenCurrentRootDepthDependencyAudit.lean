@@ -7,11 +7,14 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.SevenCurrentRootDepth
 import Lean.Util.FoldConsts
 
+#print "file: DkMathTest.FLT.Kummer.SevenCurrentRootDepthDependencyAudit"
+
 /-! 与えられた同じ族 F の深い補正項・剰余・局所大域情報と、合同の限界を監査する。
 型、opaque 本文、構造体のコンストラクタを含む再帰的監査である。 -/
 
-open Lean Elab Command
 namespace SevenCurrentRootDepthDependencyAudit
+
+open Lean Elab Command
 
 private def forbidden (n : Name) : Bool :=
   let s := n.toString

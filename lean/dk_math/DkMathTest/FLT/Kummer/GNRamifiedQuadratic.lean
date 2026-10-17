@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.GNRamifiedQuadratic
 
+#print "file: DkMathTest.FLT.Kummer.GNRamifiedQuadratic"
+
 open scoped BigOperators NumberField
 open DkMath.Lib.NumberTheory DkMath.FLT.Kummer
 

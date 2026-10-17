@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Seven.SevenRealCubicUnitClass
 import DkMath.FLT.Seven.SevenRamifiedFusionCyclotomicDegreeSixCarrier
 
+#print "file: DkMath.FLT.Kummer.SevenPrimaryNorm"
+
 /-!
 # FLT7 教科書第一段：一次単元の相対ノルム
 

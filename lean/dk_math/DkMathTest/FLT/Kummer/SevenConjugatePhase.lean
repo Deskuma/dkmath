@@ -6,10 +6,12 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenKummerUnit
 
-open scoped NumberField
-open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm
+#print "file: DkMathTest.FLT.Kummer.SevenConjugatePhase"
 
 namespace DkMathTest.FLT.Kummer.SevenConjugatePhase
+
+open scoped NumberField
+open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm
 
 local instance : Fact (Nat.Prime 7) := ⟨by decide⟩
 local instance : IsCyclotomicExtension {7} ℚ (CyclotomicField 7 ℚ) :=

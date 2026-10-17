@@ -1,5 +1,7 @@
 import DkMath
 
+#print "file: docs.dev.FLT-regular-to-GN-GTail-261015-v0.evidence.SevenRealGNSmoke"
+
 open DkMath.Lib.Algebra DkMath.FLT.Kummer.SevenRealGN
 
 #check root_unit_gauge_identity

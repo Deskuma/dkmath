@@ -8,4 +8,6 @@ import DkMathTest.FLT.Kummer.SevenCurrentPrimary
 import DkMathTest.FLT.Kummer.SevenCurrentPrimaryAxioms
 import DkMathTest.FLT.Kummer.SevenCurrentPrimaryDependencyAudit
 
+#print "file: DkMathTest.FLT.Kummer.SevenCurrentPrimarySuite"
+
 /-! 現在の carrier の一次合同：回帰、公理 whitelist、再帰的依存監査。 -/

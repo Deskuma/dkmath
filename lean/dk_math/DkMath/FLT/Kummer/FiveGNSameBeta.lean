@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.FiveKummerUnit
 
+#print "file: DkMath.FLT.Kummer.FiveGNSameBeta"
+
 /-!
 # GN・Kummer から同じ GoldenInt 剥離商の五乗根へ
 
@@ -14,10 +16,9 @@ import DkMath.FLT.Kummer.FiveKummerUnit
 `2+φ` を消去する。根の存在・単元補題・類数条件は追加仮定にしない。
 -/
 
-open scoped NumberField
-
 namespace DkMath.FLT.Kummer
 
+open scoped NumberField
 open DkMath.FLT.Five
 
 variable {K : Type*} [Field K] [NumberField K]

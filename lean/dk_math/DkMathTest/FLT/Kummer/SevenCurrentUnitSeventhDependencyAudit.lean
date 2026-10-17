@@ -7,11 +7,14 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.SevenCurrentUnitSeventh
 import Lean.Util.FoldConsts
 
+#print "file: DkMathTest.FLT.Kummer.SevenCurrentUnitSeventhDependencyAudit"
+
 /-! 回転固定性、同じ current 単元の障害消滅、実 receiver、実部分への再入境界を監査する。
 整数合同版の concrete criterion は単元橋で必須、座標補題と再入境界では禁止する。 -/
 
-open Lean Elab Command
 namespace SevenCurrentUnitSeventhDependencyAudit
+
+open Lean Elab Command
 
 private def forbidden (n : Name) : Bool :=
   let s := n.toString

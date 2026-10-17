@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.GNRamifiedArithmetic
 import DkMath.Lib.NumberTheory.CosmicRamifiedUnitNormalization
 
+#print "file: DkMath.FLT.Kummer.GNRamifiedUnitResidue"
+
 /-!
 # FLT 座標での単元の一次剰余
 
@@ -16,10 +18,10 @@ x=a+b, u=−b なので、剥離商の先頭項 −i*u は i*b になる。
 この正規化は同じ剥離商・イデアル根を保持し、λ² 以上の単元解析や降下は行わない。
 -/
 
+namespace DkMath.FLT.Kummer
+
 open scoped BigOperators NumberField
 open DkMath.Lib.NumberTheory
-
-namespace DkMath.FLT.Kummer
 
 /-- 分岐側の教科書的な一次単元正規化。
 原始的 FLT 方程式と類数条件から全非自明因子のパケットを実際に構成し、

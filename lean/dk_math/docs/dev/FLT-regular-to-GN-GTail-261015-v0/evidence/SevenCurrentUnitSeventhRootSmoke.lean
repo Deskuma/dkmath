@@ -1,5 +1,7 @@
 import DkMath
 
+#print "file: docs.dev.FLT-regular-to-GN-GTail-261015-v0.evidence.SevenCurrentUnitSeventhRootSmoke"
+
 open DkMath.FLT.Seven.SevenRealCubicInt DkMath.FLT.Kummer.SevenRealGN
 
 #check rotation_fixed_mod_seven_integer

@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.FiveGNDescent
 import Lean.Util.FoldConsts
 
+#print "file: DkMathTest.FLT.Kummer.FiveGNDependencyAudit"
+
 /-!
 # 五次 GN 証明の二つの境界での再帰的依存監査
 
@@ -16,9 +18,9 @@ import Lean.Util.FoldConsts
 型・opaque 本体・帰納型の構築子まで辿り、単なる import 監査とは区別する。
 -/
 
-open Lean Elab Command
-
 namespace FiveGNDependencyAudit
+
+open Lean Elab Command
 
 private def forbidden (n : Name) (allowReentry : Bool) : Bool :=
   let s := n.toString

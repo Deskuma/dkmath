@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.ThreeEisensteinBridge
 import DkMath.FLT.Three.PositiveCubicNormalization
 
+#print "file: DkMath.FLT.Kummer.ThreeGNDescent"
+
 /-!
 # GN・Kummer 経由の FLT3 再形式化実験
 
@@ -16,10 +18,9 @@ import DkMath.FLT.Three.PositiveCubicNormalization
 最後の強帰納法はこの新しい降下を呼ぶ。完成済み FLT3 定理を呼ばない。
 -/
 
-open scoped NumberField
-
 namespace DkMath.FLT.Kummer
 
+open scoped NumberField
 open DkMath.FLT.Three DkMath.NumberTheory.TraceOneQuadratic
 
 /-- 指定された剥離商と三乗根を、既存の exact-cube 型へ組み込む。

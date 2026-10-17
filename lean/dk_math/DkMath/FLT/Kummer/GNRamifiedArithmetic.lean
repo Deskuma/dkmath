@@ -8,6 +8,8 @@ import DkMath.FLT.Kummer.GNRamified
 import DkMath.Lib.NumberTheory.CosmicRamifiedPacket
 import DkMath.NumberTheory.GNRamifiedRoot
 
+#print "file: DkMath.FLT.Kummer.GNRamifiedArithmetic"
+
 /-!
 # 分岐側 GN の整数深度とノルム復元
 
@@ -19,10 +21,10 @@ p∣c の向きの原始的 FLT 方程式を入力し、x=a+b, u=−b に固定�
 イデアル根を保持する。これらの必要条件は、新しい解や無限降下を構成しない。
 -/
 
+namespace DkMath.FLT.Kummer
+
 open scoped NumberField
 open DkMath.CosmicFormula DkMath.Lib.NumberTheory
-
-namespace DkMath.FLT.Kummer
 
 /-- 原始的な分岐側 FLT 方程式の整数付値配分。円分体も正則性も不要。
 p∣(a+b), p∤(−b) を導き、GN の先頭項による exact-one 定理を適用する。 -/

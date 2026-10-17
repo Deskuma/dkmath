@@ -8,6 +8,8 @@ import DkMath.FLT.Kummer.SevenPrimaryNormBridge
 import DkMath.FLT.Kummer.GNKummerUnitAdapter
 import Mathlib.NumberTheory.NumberField.CMField
 
+#print "file: DkMath.FLT.Kummer.SevenConjugatePhase"
+
 /-!
 # 七次一次単元の共役位相を固定する
 
@@ -16,10 +18,10 @@ CM 単元の共役比は有限位数であり、整数合同からその位相�
 前章の相対ノルム七乗性と合わせ、同じ単元の七乗根を構成する。
 -/
 
+namespace DkMath.FLT.Kummer.SevenPrimaryNorm
+
 open scoped NumberField
 open NumberField DkMath.FLT.Seven DkMath.Lib.NumberTheory
-
-namespace DkMath.FLT.Kummer.SevenPrimaryNorm
 
 noncomputable section
 

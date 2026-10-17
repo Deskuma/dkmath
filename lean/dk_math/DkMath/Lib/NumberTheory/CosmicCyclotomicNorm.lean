@@ -9,6 +9,8 @@ import DkMath.Lib.Cosmic.GTailCyclotomic
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Galois
 import Mathlib.NumberTheory.NumberField.Norm
 
+#print "file: DkMath.Lib.NumberTheory.CosmicCyclotomicNorm"
+
 /-!
 # GN から円分ノルムへ
 
@@ -22,10 +24,10 @@ import Mathlib.NumberTheory.NumberField.Norm
 一般の切断 `GTail p r` (`r > 1`) のノルム表示は主張しない。
 -/
 
+namespace DkMath.Lib.NumberTheory
+
 open scoped BigOperators NumberField
 open DkMath.CosmicFormula DkMath.NumberTheory.GapFocusing
-
-namespace DkMath.Lib.NumberTheory
 
 /-- 素数法の単元を `1, …, p-1` で数え直す。
 この有限積の補題が、Galois 群によるノルムと GN の添字を接続する。 -/

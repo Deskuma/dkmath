@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenCurrentUnitSeventh
 
+#print "file: DkMathTest.FLT.Kummer.SevenCurrentUnitSeventhAxioms"
+
 /-! 回転固定性と current 単元七乗性について、新規公開18定理の公理を検査する。 -/
 
 open DkMath.FLT.Seven.SevenRealCubicInt DkMath.FLT.Kummer.SevenRealGN

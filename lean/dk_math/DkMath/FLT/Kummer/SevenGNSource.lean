@@ -9,6 +9,8 @@ import DkMath.Lib.Cosmic.GTailCyclotomic
 import DkMath.FLT.Kummer.SevenUnitPowerClassBridge
 import DkMath.FLT.Seven.SevenRamifiedFusionGlobalOrientedPrimeFactorization
 
+#print "file: DkMath.FLT.Kummer.SevenGNSource"
+
 /-!
 # GN source 保存原理：位相変換と係数環の境界
 
@@ -17,10 +19,10 @@ import DkMath.FLT.Seven.SevenRamifiedFusionGlobalOrientedPrimeFactorization
 同じ位相で整数 source へ降りる条件を、二次代数の係数の一意性で検査する。
 -/
 
+namespace DkMath.FLT.Kummer.SevenPrimaryNorm
+
 open scoped BigOperators NumberField
 open DkMath.FLT.Seven DkMath.Lib.Cosmic DkMath.CosmicFormula
-
-namespace DkMath.FLT.Kummer.SevenPrimaryNorm
 
 noncomputable section
 

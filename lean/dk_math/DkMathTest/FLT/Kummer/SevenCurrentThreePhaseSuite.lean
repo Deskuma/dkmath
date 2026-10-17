@@ -7,3 +7,5 @@ Authors: D. and Wise Wolf.
 import DkMathTest.FLT.Kummer.SevenCurrentThreePhase
 import DkMathTest.FLT.Kummer.SevenCurrentThreePhaseAxioms
 import DkMathTest.FLT.Kummer.SevenCurrentThreePhaseDependencyAudit
+
+#print "file: DkMathTest.FLT.Kummer.SevenCurrentThreePhaseSuite"

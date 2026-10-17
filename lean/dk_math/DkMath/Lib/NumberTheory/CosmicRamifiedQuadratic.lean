@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Lib.NumberTheory.CosmicRamifiedUnitNormalization
 
+#print "file: DkMath.Lib.NumberTheory.CosmicRamifiedQuadratic"
+
 /-!
 # 剥離商と正規化単元の mod λ² 展開
 
@@ -18,9 +20,9 @@ import DkMath.Lib.NumberTheory.CosmicRamifiedUnitNormalization
 従って β=εγ^p の二次合同はそのまま ε に残る。単元の p 乗性や降下は主張しない。
 -/
 
-open scoped BigOperators NumberField
-
 namespace DkMath.Lib.NumberTheory
+
+open scoped BigOperators NumberField
 
 /-- ζ^i を ζ=1 の周りで一次まで展開し、残りを (ζ−1)² で括る。
 幾何和を使うので、二項係数の除算や体の仮定は不要。 -/

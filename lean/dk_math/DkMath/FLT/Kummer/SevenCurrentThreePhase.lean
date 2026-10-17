@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.SevenCurrentPhaseFamily
 import DkMath.Lib.Cosmic.GNPhaseThreeTerm
 
+#print "file: DkMath.FLT.Kummer.SevenCurrentThreePhase"
+
 /-! # 同じ二端点の三因子から、重み付き七乗方程式へ
 
 六因子を同時に七乗表示した族を使い、位相1,2,3の加法関係を得る。
@@ -15,14 +17,14 @@ alpha の単元七乗剰余類は非自明なので、この式を単元倍だ�
 置き換えることはできない。次の反例への再入と厳密減少はまだ結論しない。
 -/
 
+namespace DkMath.FLT.Kummer.SevenRealGN
+
 open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm DkMath.Lib.Cosmic
 open DkMath.FLT.Seven.SevenRealCubic
 open DkMath.FLT.Seven.SevenRealCubic.CurrentCarrierRamification
-
-namespace DkMath.FLT.Kummer.SevenRealGN
+open SevenCyclotomicDegreeSixInt
 
 noncomputable section
-open SevenCyclotomicDegreeSixInt
 
 variable {a b d : ℕ} {source : CounterexamplePack a b d}
 variable {r : PrimitiveCounterexampleRamifiedProvenance source}

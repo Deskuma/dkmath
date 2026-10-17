@@ -1,5 +1,7 @@
 import DkMath.FLT.Kummer.SevenCurrentCorrectionPower
 
+#print "file: docs.dev.FLT-regular-to-GN-GTail-261015-v0.scratch.RouteProbe"
+
 open DkMath.FLT.Seven DkMath.FLT.Kummer.SevenPrimaryNorm
 open DkMath.FLT.Kummer.SevenRealGN SevenCyclotomicDegreeSixInt
 

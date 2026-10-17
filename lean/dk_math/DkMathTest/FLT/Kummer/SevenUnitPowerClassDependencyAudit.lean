@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.SevenUnitPowerClassBridge
 import Lean.Util.FoldConsts
 
+#print "file: DkMathTest.FLT.Kummer.SevenUnitPowerClassDependencyAudit"
+
 /-!
 # 同じ source に対する剰余類比較の依存監査
 
@@ -14,9 +16,9 @@ import Lean.Util.FoldConsts
 source の同一性は定理の入力であり、監査もその存在を結論しない。
 -/
 
-open Lean Elab Command
-
 namespace SevenUnitPowerClassDependencyAudit
+
+open Lean Elab Command
 
 private def forbidden (n : Name) : Bool :=
   let s := n.toString

@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.SevenRealGNConservation
 
+#print "file: DkMathTest.FLT.Kummer.SevenRealGNAxioms"
+
 /-! 全新規公開宣言の公理 whitelist。四保存定理と七乗判定を個別にも表示する。 -/
 
 open DkMath.FLT.Kummer.SevenRealGN

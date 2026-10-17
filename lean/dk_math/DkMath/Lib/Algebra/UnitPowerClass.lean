@@ -8,6 +8,8 @@ import DkMath.Lib.Algebra.PowerSubgroup
 import Mathlib.RingTheory.Polynomial.RationalRoot
 import Mathlib.RingTheory.IntegralClosure.IntegrallyClosed
 
+#print "file: DkMath.Lib.Algebra.UnitPowerClass"
+
 /-!
 # 固定した非零因子の、単元冪剰余類
 

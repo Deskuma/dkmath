@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Lib.Cosmic.GNPhaseFactorization
 
+#print "file: DkMath.NumberTheory.GapFocusing.Phase"
+
 /-!
 Compatibility entry point for the phase factorization API, now owned by
 `DkMath.Lib.Cosmic.GNPhaseFactorization`. The original namespace is retained.

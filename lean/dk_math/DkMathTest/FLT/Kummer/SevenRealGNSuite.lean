@@ -8,4 +8,6 @@ import DkMathTest.FLT.Kummer.SevenRealGNConservation
 import DkMathTest.FLT.Kummer.SevenRealGNAxioms
 import DkMathTest.FLT.Kummer.SevenRealGNDependencyAudit
 
+#print "file: DkMathTest.FLT.Kummer.SevenRealGNSuite"
+
 /-! 実三次 GN の回帰例・全公開宣言の公理検査・再帰的依存監査の入口。 -/

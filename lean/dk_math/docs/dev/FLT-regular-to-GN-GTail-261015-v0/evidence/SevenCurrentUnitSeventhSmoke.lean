@@ -1,5 +1,7 @@
 import DkMath.FLT.Kummer
 
+#print "file: docs.dev.FLT-regular-to-GN-GTail-261015-v0.evidence.SevenCurrentUnitSeventhSmoke"
+
 open DkMath.FLT.Seven DkMath.FLT.Seven.SevenRealCubicInt
 open DkMath.FLT.Kummer.SevenRealGN
 

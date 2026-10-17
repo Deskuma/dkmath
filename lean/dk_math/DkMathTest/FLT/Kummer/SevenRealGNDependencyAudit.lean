@@ -7,11 +7,14 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.SevenRealGNConservation
 import Lean.Util.FoldConsts
 
+#print "file: DkMathTest.FLT.Kummer.SevenRealGNDependencyAudit"
+
 /-! 障害判定・実三次一次合同・反復保存の証明全体を監査する。
 七次の整数合同 criterion や既存 FLT 終点から結論を借りない。 -/
 
-open Lean Elab Command
 namespace SevenRealGNDependencyAudit
+
+open Lean Elab Command
 
 private def forbidden (n : Name) : Bool :=
   let s := n.toString
