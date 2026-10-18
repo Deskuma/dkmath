@@ -6,7 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.ElevenThirteenFLT
 
-#print "file: DkMathTest.FLT.Kummer.PhaseRigidityFLTDependencyAudit"
+#print "file: DkMathTest.FLT.Kummer.PhaseRigidityFLT"
 
 /-! 任意宇宙の係数 API、必要な例外、および標準 FLT 終点の回帰検査。 -/
 
