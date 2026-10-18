@@ -1,0 +1,43 @@
+IRR-001 to IRR-005 and sample exponent 37, 2026-10-18
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+Scope: actual ideal-root classes, multiplicative phase transport, local unit quotient, conditional weighted successor and normalization.
+No unconditional FLT37, class-group 37-torsion witness, Bernoulli-to-class-group criterion, or Selmer exact sequence is claimed.
+
+PASS: source scan of 8 new production modules; no sorry/admit/native_decide, new axiom declarations or external FltRegular/P2MW imports.
+PASS: RegularStateTransport, RegularDescentState, RegularPrimeFLT and ElevenThirteenFLT are byte-identical to HEAD.
+PASS: no new production/test warnings. Historical warnings in unrelated modules remain outside audited graphs.
+
+$ lake build DkMath DkMath.FLT.Kummer DkMathTest
+exit 0
+Build completed successfully (11482 jobs).
+info: DkMathTest/FLT/Kummer/IrregularObstructionDependencyAudit.lean:60:0: PASS: 72 public IRR/sample declarations; standard logical axioms only.
+info: DkMathTest/FLT/Kummer/IrregularObstructionDependencyAudit.lean:60:0: PASS: DkMath.Lib.NumberTheory.IdealPowerObstruction.trivial_iff_unit_power; 16924 reachable constants; expected providers present.
+info: DkMathTest/FLT/Kummer/IrregularObstructionDependencyAudit.lean:60:0: PASS: DkMath.FLT.Kummer.IrregularDescent.ofState; 18865 reachable constants; expected providers present.
+info: DkMathTest/FLT/Kummer/IrregularObstructionDependencyAudit.lean:60:0: PASS: DkMath.FLT.Kummer.IrregularDescent.ObstructedState.exists_weighted; 18880 reachable constants; expected providers present.
+info: DkMathTest/FLT/Kummer/IrregularObstructionDependencyAudit.lean:60:0: PASS: DkMath.FLT.Kummer.IrregularDescent.WeightedObstructedState.normalize; 6188 reachable constants; expected providers present.
+info: DkMathTest/FLT/Kummer/IrregularObstructionDependencyAudit.lean:60:0: PASS: DkMath.Lib.NumberTheory.BernoulliPrime37.irregular_pair_thirtySeven_iff; 14648 reachable constants; expected providers present.
+info: DkMathTest/FLT/Kummer/IrregularObstructionDependencyAudit.lean:60:0: PASS: DkMath.Lib.Cosmic.prime_choose_exact_layer; 3401 reachable constants; expected providers present.
+
+$ lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeIRR.lean
+exit 0
+'DkMath.Lib.NumberTheory.IdealPowerObstruction.trivial_iff_unit_power' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.IrregularDescent.ofState' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Kummer.IrregularDescent.ObstructedState.exists_weighted' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.IrregularDescent.WeightedObstructedState.normalize' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.BernoulliPrime37.irregular_pair_thirtySeven_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+$ lake env lean DkMathTest.lean
+exit 0
+file: DkMathTest
+
+$ git diff --check
+exit 0

@@ -44,6 +44,12 @@ import DkMath.Lib.NumberTheory.RamifiedGNPhaseBridge
 import DkMath.Lib.NumberTheory.CyclotomicPhaseCoefficientRigidity
 import DkMath.Lib.NumberTheory.SparsePhaseObstruction
 import DkMath.Lib.NumberTheory.RegularKummer.Cyclotomic.UnitConjugation
+import DkMath.Lib.NumberTheory.IdealPowerObstruction
+import DkMath.Lib.NumberTheory.PhaseClassPacket
+import DkMath.Lib.NumberTheory.PhaseObstructionTransport
+import DkMath.Lib.NumberTheory.UnitObstructionPacket
+import DkMath.Lib.NumberTheory.BernoulliPrime37
+import DkMath.Lib.Cosmic.GNPrime37
 import DkMath.Lib.NumberTheory.CyclotomicRamifiedPhase
 import DkMath.Lib.NumberTheory.RegularKummer.KummersLemma.KummersLemma
 import DkMath.Lib.NumberTheory.CyclotomicElevenPID

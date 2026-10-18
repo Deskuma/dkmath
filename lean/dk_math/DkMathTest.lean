@@ -141,4 +141,7 @@ import DkMathTest.FLT.Kummer.PhaseContractBoundary
 import DkMathTest.FLT.Kummer.PhasePacketModuleCompatibility
 import DkMathTest.FLT.Kummer.PhaseRigidityFLTDependencyAudit
 
+import DkMathTest.FLT.Kummer.IrregularObstruction
+import DkMathTest.FLT.Kummer.IrregularObstructionDependencyAudit
+
 #print "file: DkMathTest"

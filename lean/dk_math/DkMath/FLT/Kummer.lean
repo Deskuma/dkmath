@@ -41,4 +41,7 @@ import DkMath.FLT.Kummer.GNCaseIObstruction
 import DkMath.FLT.Kummer.RegularPrimeFLT
 import DkMath.FLT.Kummer.ElevenThirteenFLT
 
+import DkMath.FLT.Kummer.ObstructedState
+import DkMath.FLT.Kummer.IrregularPrime37
+
 #print "file: DkMath.FLT.Kummer"
