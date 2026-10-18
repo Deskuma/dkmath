@@ -54,6 +54,9 @@ import DkMath.Lib.NumberTheory.PhaseObstructionTransport
 import DkMath.Lib.NumberTheory.IdealGaloisTransport
 import DkMath.Lib.NumberTheory.GaloisPhaseObstructionTransport
 import DkMath.Lib.NumberTheory.GaloisPhaseOrbitNorm
+import DkMath.Lib.NumberTheory.GaloisIdealNorm
+import DkMath.Lib.NumberTheory.CyclotomicClassNorm
+import DkMath.Lib.NumberTheory.FreyTwoArithmetic
 import DkMath.Lib.NumberTheory.UnitObstructionPacket
 import DkMath.Lib.NumberTheory.BernoulliPrime37
 import DkMath.Lib.Cosmic.GNPrime37

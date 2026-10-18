@@ -1,0 +1,98 @@
+NOTE-007 section 5: ideal norm / Frey at two / central-seat j / character entrance
+Date: 2026-10-19
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+Scope: actual conjugate ideal product=(absolute ideal norm) in finite Galois number fields;
+genuine cyclotomic orbitNorm=1, integer-coordinate State37 zero obstruction/root/unit generator;
+fixed p-primary classes vanish, exponent-p character subgroups and trivial component;
+same rational Frey model minimal and good-or-multiplicative at every prime;
+p>=5 gives multiplicative reduction at 2, v2(Delta_min)=2*p*v2(abc)-8;
+actual central-seat j formula and nonsingular residue j=0 with old q<=n support.
+Artin conductor, nontrivial character assignment/dimensions/direct-sum decomposition,
+prime existence, CM inference, mod-p representations and FLT37 remain outside this result.
+
+PASS: import-following marker DkMath.Lib.NumberTheory.GaloisIdealNorm
+PASS: import-following marker DkMath.Lib.NumberTheory.CyclotomicClassNorm
+PASS: import-following marker DkMath.Lib.NumberTheory.FreyTwoArithmetic
+PASS: import-following marker DkMath.FLT.FreyTwo
+PASS: import-following marker DkMath.FLT.Kummer.IrregularNorm37
+PASS: import-following marker DkMath.NumberTheory.Legendre.FreyJCentralSeat
+PASS: import-following marker DkMathTest.FLT.Kummer.IrregularNorm37
+PASS: import-following marker DkMathTest.FLT.FreyTwo
+PASS: import-following marker DkMathTest.NumberTheory.LegendreFreyJCentralSeat
+PASS: import-following marker DkMathTest.FLT.Note007DependencyAudit
+PASS: all 6 new production files pass forbidden-construct scan
+PASS: 273 tracked Kummer, Legendre and Lib.NumberTheory Lean files byte-identical to HEAD
+PASS: no warnings from the 10 new production/test modules;
+historical warnings elsewhere in the root build are outside these audited proof graphs.
+
+$ lake build DkMathTest.FLT.Note007DependencyAudit
+exit 0 (9013 jobs)
+info: DkMathTest/FLT/Note007DependencyAudit.lean:72:0: PASS: 34 public NOTE-007 declarations; standard logical axioms only.
+info: DkMathTest/FLT/Note007DependencyAudit.lean:72:0: PASS: DkMath.Lib.NumberTheory.GaloisIdealNorm.prod_map_eq_span_absNorm; 39107 reachable constants; expected providers present.
+info: DkMathTest/FLT/Note007DependencyAudit.lean:72:0: PASS: DkMath.Lib.NumberTheory.CyclotomicPhaseGalois.orbitNorm_eq_one; 45628 reachable constants; expected providers present.
+info: DkMathTest/FLT/Note007DependencyAudit.lean:72:0: PASS: DkMath.FLT.Kummer.IrregularPrime37.observe_zero_unit_generator; 46854 reachable constants; expected providers present.
+info: DkMathTest/FLT/Note007DependencyAudit.lean:72:0: PASS: DkMath.Lib.NumberTheory.CyclotomicPhaseGalois.fixed_p_primary_eq_one; 45674 reachable constants; expected providers present.
+info: DkMathTest/FLT/Note007DependencyAudit.lean:72:0: PASS: DkMath.Lib.NumberTheory.CyclotomicPhaseGalois.trivial_characterComponent; 45667 reachable constants; expected providers present.
+info: DkMathTest/FLT/Note007DependencyAudit.lean:72:0: PASS: DkMath.FLT.Frey.Source.isMinimal_at_two; 27016 reachable constants; expected providers present.
+info: DkMathTest/FLT/Note007DependencyAudit.lean:72:0: PASS: DkMath.FLT.Frey.Source.hasMultiplicativeReduction_at_two; 27388 reachable constants; expected providers present.
+info: DkMathTest/FLT/Note007DependencyAudit.lean:72:0: PASS: DkMath.FLT.Frey.Source.good_or_multiplicative_every_prime; 27399 reachable constants; expected providers present.
+info: DkMathTest/FLT/Note007DependencyAudit.lean:72:0: PASS: DkMath.NumberTheory.Legendre.FreyC4CentralSeat.rationalJ_eq; 11880 reachable constants; expected providers present.
+info: DkMathTest/FLT/Note007DependencyAudit.lean:72:0: PASS: DkMath.NumberTheory.Legendre.FreyC4CentralSeat.j_bridge_of_mem_support; 8990 reachable constants; expected providers present.
+
+$ lake build DkMath DkMath.FLT.Kummer DkMath.FLT DkMath.NumberTheory.Legendre DkMathTest
+exit 0
+Build completed successfully (11511 jobs).
+
+$ lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE007.lean
+exit 0
+file: RootSmokeNOTE007
+DkMath.Lib.NumberTheory.GaloisIdealNorm.prod_map_eq_span_absNorm.{u_1} {K : Type u_1} [Field K] [NumberField K]
+  [IsGalois ℚ K] (I : Ideal (NumberField.RingOfIntegers K)) (hI : I ≠ ⊥) :
+  ∏ σ, Ideal.map (DkMath.Lib.NumberTheory.GaloisIdealNorm.integerAut σ) I = Ideal.span {↑(Ideal.absNorm I)}
+DkMath.Lib.NumberTheory.CyclotomicPhaseGalois.fixed_p_primary_eq_one.{u_1} {K : Type u_1} [Field K] [NumberField K]
+  {p : ℕ} [Fact (Nat.Prime p)] [IsCyclotomicExtension {p} ℚ K] (w : ClassGroup (NumberField.RingOfIntegers K)) (r : ℕ)
+  (ht : w ^ p ^ r = 1)
+  (hf : ∀ (a : (ZMod p)ˣ), (ClassGroup.mulEquiv (DkMath.Lib.NumberTheory.CyclotomicPhaseGalois.sigma a)) w = w) : w = 1
+DkMath.FLT.Frey.Source.multiplicative_support_iff {p : ℕ} (S : DkMath.FLT.Frey.Source p) (hp : 5 ≤ p) {ℓ : ℕ}
+  [Fact (Nat.Prime ℓ)] :
+  WeierstrassCurve.HasMultiplicativeReduction (DkMath.Lib.NumberTheory.FreyLocalReduction.LocalRing ℓ) S.rationalCurve ↔
+    ↑ℓ ∣ S.a * S.b * S.c
+'DkMath.Lib.NumberTheory.CyclotomicPhaseGalois.orbitNorm_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.IrregularPrime37.observe_zero_obstruction_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.IrregularPrime37.observe_zero_unit_generator' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.good_or_multiplicative_every_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.hasMultiplicativeReduction_at_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.FreyC4CentralSeat.rationalJ_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.FreyC4CentralSeat.j_bridge_of_mem_support' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.CyclotomicPhaseGalois.trivial_characterComponent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+$ lake env lean DkMathTest.lean
+exit 0
+file: DkMathTest
+
+$ python3 check_tracker_mismatch.py /tmp/note007-full.log
+exit 0
+OK: no mismatches found
+PASS: 2307 Built/Replayed-marker pairs agree; all 10 new modules represented.
+
+$ git diff --check
+exit 0
+
+SHA256 of checked production sources:
+fcd1a0c1d1cd5cd121ae746487c032037e35de619ce24c5b11580c68984a49f6  DkMath/Lib/NumberTheory/GaloisIdealNorm.lean
+f421f14d1ec97c364c8a2afa8a2f46fb87dde998d29d4e40ef07df8f491cd5ec  DkMath/Lib/NumberTheory/CyclotomicClassNorm.lean
+62a4df09a325f343a3fca1fdfd96969148e1e1bd177ee355665c0cdf14ff5f05  DkMath/Lib/NumberTheory/FreyTwoArithmetic.lean
+14f88f0e8a099ca236d478c475b3a8884da53704da4f3f045e15b9d33fc24fd1  DkMath/FLT/FreyTwo.lean
+2b5b93b8a231ca7d34b6dd1ae2552f3e79ffe9362dd40939aaa0b818aeb49ac4  DkMath/FLT/Kummer/IrregularNorm37.lean
+dcde448f1f345b830ab8a4951dab268f78c0bde70c71a35e840999f4a6a73f9b  DkMath/NumberTheory/Legendre/FreyJCentralSeat.lean

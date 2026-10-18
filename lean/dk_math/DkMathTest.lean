@@ -152,5 +152,9 @@ import DkMathTest.NumberTheory.LegendreFreyC4CentralSeatAxiomAudit
 import DkMathTest.FLT.Kummer.GaloisPhaseOrbitNorm
 import DkMathTest.FLT.FreyLocalReduction
 import DkMathTest.FLT.SectionFourDependencyAudit
+import DkMathTest.FLT.Kummer.IrregularNorm37
+import DkMathTest.FLT.FreyTwo
+import DkMathTest.NumberTheory.LegendreFreyJCentralSeat
+import DkMathTest.FLT.Note007DependencyAudit
 
 #print "file: DkMathTest"
