@@ -4,17 +4,18 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.Lib.NumberTheory.FreyPrimeValuation
+import DkMath.Lib.NumberTheory.FreyLocalReduction
 
 #print "file: DkMath.FLT.Frey"
 
 /-!
 # NOTE-005: 原始冪和から Frey の局所算術へ
 
-この公開入口は三つの段階を混ぜない。
+この公開入口は四つの段階を混ぜない。
 (1) 冪和・非零性・原始性・整数モデルの分母条件を持つ `Source`、
 (2) そこから構成した実際の Weierstrass モデルと判別式、
-(3) 奇素数ごとの判別式付値と c₄ の可除性、である。
+(3) 奇素数ごとの判別式付値と c₄ の可除性、
+(4) ℤ_(ℓ) に関する正式な最小性・良還元・乗法的還元、である。
 
 source の整数・共通因子・符号を取り直さず、そのまま保持する。
 向き付け済みの整数からの構成は `ofOriented` が分母条件を証明する。
@@ -95,6 +96,72 @@ theorem reduction_isElliptic (hp : 0 < p) {ℓ : ℕ} [Fact ℓ.Prime] (hℓ2 : 
   intro hz
   exact hd ((prime_dvd_integral_discriminant_iff hp hℓ2 S.normalization S.equation).mp
     ((ZMod.intCast_zmod_eq_zero_iff_dvd _ _).mp hz))
+
+/-- NOTE-006 §4: abc を割る奇素数では元の有理モデルが乗法的還元を持つ。
+Mathlib の定義は全ての整な座標変換に対する最小性を含む。ℓ=p も許すが、
+mod-p 表現の有限平坦性・不分岐性まではこの局所定理から推論しない。 -/
+theorem hasMultiplicativeReduction (hp : 0 < p) {ℓ : ℕ} [Fact ℓ.Prime] (hℓ2 : ℓ ≠ 2)
+    (hd : (ℓ : ℤ) ∣ S.a * S.b * S.c) :
+    WeierstrassCurve.HasMultiplicativeReduction (FreyLocalReduction.LocalRing ℓ) S.rationalCurve := by
+  rw [← S.curve_map]
+  have h := S.local_arithmetic hp hℓ2 hd
+  exact FreyLocalReduction.hasMultiplicativeReduction_at_prime ℓ S.curve h.1 h.2.1
+
+/-- abc を割らない奇素数では、最小性を含む正式な良還元が成立する。 -/
+theorem hasGoodReduction (hp : 0 < p) {ℓ : ℕ} [Fact ℓ.Prime] (hℓ2 : ℓ ≠ 2)
+    (hd : ¬ (ℓ : ℤ) ∣ S.a * S.b * S.c) :
+    WeierstrassCurve.HasGoodReduction (FreyLocalReduction.LocalRing ℓ) S.rationalCurve := by
+  rw [← S.curve_map]
+  exact FreyLocalReduction.hasGoodReduction_at_prime ℓ S.curve
+    (fun h => hd ((prime_dvd_integral_discriminant_iff hp hℓ2
+      S.normalization S.equation).mp h))
+
+/-- 全ての奇素数で同じ有理モデルが最小。素数ごとに座標を選び直さない。 -/
+theorem isMinimal_at_odd_prime (hp : 0 < p) {ℓ : ℕ} [Fact ℓ.Prime] (hℓ2 : ℓ ≠ 2) :
+    WeierstrassCurve.IsMinimal (FreyLocalReduction.LocalRing ℓ) S.rationalCurve := by
+  by_cases hd : (ℓ : ℤ) ∣ S.a * S.b * S.c
+  · exact (S.hasMultiplicativeReduction hp hℓ2 hd).toIsMinimal
+  · exact (S.hasGoodReduction hp hℓ2 hd).toIsMinimal
+
+/-- 奇素数での半安定性を、既存の二つの還元型の選言として明記する。 -/
+theorem good_or_multiplicative (hp : 0 < p) {ℓ : ℕ} [Fact ℓ.Prime] (hℓ2 : ℓ ≠ 2) :
+    WeierstrassCurve.HasGoodReduction (FreyLocalReduction.LocalRing ℓ) S.rationalCurve ∨
+      WeierstrassCurve.HasMultiplicativeReduction (FreyLocalReduction.LocalRing ℓ) S.rationalCurve := by
+  by_cases hd : (ℓ : ℤ) ∣ S.a * S.b * S.c
+  · exact Or.inr (S.hasMultiplicativeReduction hp hℓ2 hd)
+  · exact Or.inl (S.hasGoodReduction hp hℓ2 hd)
+
+/-- 奇素数の乗法的還元の支持は正確に abc の素因子支持である。 -/
+theorem hasMultiplicativeReduction_iff (hp : 0 < p) {ℓ : ℕ} [Fact ℓ.Prime] (hℓ2 : ℓ ≠ 2) :
+    WeierstrassCurve.HasMultiplicativeReduction (FreyLocalReduction.LocalRing ℓ) S.rationalCurve ↔
+      (ℓ : ℤ) ∣ S.a * S.b * S.c := by
+  constructor
+  · intro hm
+    by_contra hd
+    exact WeierstrassCurve.HasMultiplicativeReduction.not_hasGoodReduction
+      (FreyLocalReduction.LocalRing ℓ) hm (S.hasGoodReduction hp hℓ2 hd)
+  · exact S.hasMultiplicativeReduction hp hℓ2
+
+/-- 既存の付値式を最小モデル上の等式として確定する。
+2での分母補正を無視していないので、ℓ≠2 の前提を残す。 -/
+theorem minimal_discriminant_valuation (hp : 0 < p) {ℓ : ℕ} [Fact ℓ.Prime] (hℓ2 : ℓ ≠ 2) :
+    WeierstrassCurve.IsMinimal (FreyLocalReduction.LocalRing ℓ) S.rationalCurve ∧
+      padicValRat ℓ S.rationalCurve.Δ =
+        (2 * p : ℕ) * (padicValInt ℓ (S.a * S.b * S.c) : ℤ) :=
+  ⟨S.isMinimal_at_odd_prime hp hℓ2,
+    valuation_of_solution_odd hℓ2 S.equation S.product_ne_zero⟩
+
+/-- レベル降下への算術的入力: 最小性と p∣vℓ(Δ) を同じモデル上で束ねる。
+この結論は表現の構成やレベル降下定理そのものを含まない。 -/
+theorem minimal_discriminant_exponent_dvd (hp : 0 < p) {ℓ : ℕ} [Fact ℓ.Prime]
+    (hℓ2 : ℓ ≠ 2) :
+    WeierstrassCurve.IsMinimal (FreyLocalReduction.LocalRing ℓ) S.rationalCurve ∧
+      (p : ℤ) ∣ padicValRat ℓ S.rationalCurve.Δ := by
+  refine ⟨S.isMinimal_at_odd_prime hp hℓ2, ?_⟩
+  rw [(S.minimal_discriminant_valuation hp hℓ2).2]
+  refine ⟨2 * (padicValInt ℓ (S.a * S.b * S.c) : ℤ), ?_⟩
+  push_cast
+  ring
 
 end Source
 

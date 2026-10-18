@@ -1,0 +1,83 @@
+NOTE-006 section 4 / IRR-007: orbit norm and odd-prime local reduction, 2026-10-19
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+Scope: genuine cyclotomic class-group orbit product, conditional integer-coordinate State37;
+DVR minimality against every integral variable change; actual Z_(ell) inside Q;
+Mathlib IsMinimal / HasGoodReduction / HasMultiplicativeReduction;
+Source p, p>0, ell prime and ell!=2: good or multiplicative, exact bad support,
+minimal discriminant valuation 2*p*v_ell(abc), and p-divisibility.
+No FLT37, class37 torsion witness/component classification, prime-2 reduction,
+Galois representation or level lowering is inferred.
+
+PASS: import-following marker DkMath.Lib.NumberTheory.GaloisPhaseOrbitNorm
+PASS: import-following marker DkMath.Lib.NumberTheory.FreyLocalReduction
+PASS: import-following marker DkMathTest.FLT.Kummer.GaloisPhaseOrbitNorm
+PASS: import-following marker DkMathTest.FLT.FreyLocalReduction
+PASS: import-following marker DkMathTest.FLT.SectionFourDependencyAudit
+PASS: production forbidden-construct scan; no sorry/admit/native_decide or new axioms
+PASS: 207 existing Kummer (excluding extended IrregularGalois37), Legendre and arithmetic provider files byte-identical to HEAD
+PASS: no warnings from the new modules or the two extended production modules;
+historical warnings elsewhere in the root build are outside these audited proof graphs.
+
+$ lake build DkMathTest.FLT.SectionFourDependencyAudit
+exit 0 (8998 jobs)
+info: DkMathTest/FLT/SectionFourDependencyAudit.lean:72:0: PASS: 35 public section-4 declarations; standard logical axioms only.
+info: DkMathTest/FLT/SectionFourDependencyAudit.lean:72:0: PASS: DkMath.Lib.NumberTheory.RamifiedPhasePacket.zero_mul_orbit_norm; 5019 reachable constants; expected providers present.
+info: DkMathTest/FLT/SectionFourDependencyAudit.lean:72:0: PASS: DkMath.Lib.NumberTheory.CyclotomicPhaseGalois.zero_mul_orbitNorm; 39386 reachable constants; expected providers present.
+info: DkMathTest/FLT/SectionFourDependencyAudit.lean:72:0: PASS: DkMath.FLT.Kummer.IrregularPrime37.observe_orbit_norm; 39616 reachable constants; expected providers present.
+info: DkMathTest/FLT/SectionFourDependencyAudit.lean:72:0: PASS: DkMath.Lib.NumberTheory.FreyLocalReduction.isMinimal_of_isUnit_c4; 17012 reachable constants; expected providers present.
+info: DkMathTest/FLT/SectionFourDependencyAudit.lean:72:0: PASS: DkMath.FLT.Frey.Source.hasMultiplicativeReduction; 27144 reachable constants; expected providers present.
+info: DkMathTest/FLT/SectionFourDependencyAudit.lean:72:0: PASS: DkMath.FLT.Frey.Source.hasGoodReduction; 26775 reachable constants; expected providers present.
+info: DkMathTest/FLT/SectionFourDependencyAudit.lean:72:0: PASS: DkMath.FLT.Frey.Source.minimal_discriminant_valuation; 27162 reachable constants; expected providers present.
+
+$ lake build DkMath DkMath.FLT.Kummer DkMath.FLT.Frey DkMathTest
+exit 0
+Build completed successfully (11501 jobs).
+
+$ lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE006Section4.lean
+exit 0
+file: RootSmokeNOTE006Section4
+DkMath.Lib.NumberTheory.RamifiedPhasePacket.exists_phaseMul_one {p : ℕ} [Fact (Nat.Prime p)] (i : Fin p) (hi : i ≠ 0) :
+  ∃! a, DkMath.Lib.NumberTheory.RamifiedPhasePacket.phaseMul a 1 = i
+DkMath.Lib.NumberTheory.CyclotomicPhaseGalois.orbitNorm_fixed.{u_1} {K : Type u_1} [Field K] [NumberField K] {p : ℕ}
+  [Fact (Nat.Prime p)] [IsCyclotomicExtension {p} ℚ K] (a : (ZMod p)ˣ) (w : ClassGroup (NumberField.RingOfIntegers K)) :
+  (ClassGroup.mulEquiv (DkMath.Lib.NumberTheory.CyclotomicPhaseGalois.sigma a))
+      (DkMath.Lib.NumberTheory.CyclotomicPhaseGalois.orbitNorm w) =
+    DkMath.Lib.NumberTheory.CyclotomicPhaseGalois.orbitNorm w
+DkMath.Lib.NumberTheory.CyclotomicPhaseGalois.zero_mul_orbitNorm.{u_1} {K : Type u_1} [Field K] [NumberField K] {p : ℕ}
+  [Fact (Nat.Prime p)] [IsCyclotomicExtension {p} ℚ K] (hζ : IsPrimitiveRoot (IsCyclotomicExtension.zeta p ℚ K) p)
+  (hodd : Odd p) (C : DkMath.Lib.NumberTheory.PhaseClassPacket (NumberField.RingOfIntegers K) p (Fin p))
+  (q : NumberField.RingOfIntegers K) (A B : ℤ)
+  (hq : ↑A + ↑B = (DkMath.Lib.NumberTheory.cyclotomicRamifiedPhase hζ hodd).lambda * q)
+  (hf : ∀ (i : Fin p), C.factor i = (DkMath.Lib.NumberTheory.cyclotomicRamifiedPhase hζ hodd).quotient q (↑B) i)
+  (hprod : ∏ i, C.obstruction i = 1) :
+  C.obstruction 0 * DkMath.Lib.NumberTheory.CyclotomicPhaseGalois.orbitNorm (C.obstruction 1) = 1
+DkMath.FLT.Frey.Source.good_or_multiplicative {p : ℕ} (S : DkMath.FLT.Frey.Source p) (hp : 0 < p) {ℓ : ℕ}
+  [Fact (Nat.Prime ℓ)] (hℓ2 : ℓ ≠ 2) :
+  WeierstrassCurve.HasGoodReduction (DkMath.Lib.NumberTheory.FreyLocalReduction.LocalRing ℓ) S.rationalCurve ∨
+    WeierstrassCurve.HasMultiplicativeReduction (DkMath.Lib.NumberTheory.FreyLocalReduction.LocalRing ℓ) S.rationalCurve
+'DkMath.FLT.Kummer.IrregularPrime37.observe_orbit_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.FreyLocalReduction.isMinimal_of_isUnit_c4' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.hasMultiplicativeReduction' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.hasGoodReduction' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.minimal_discriminant_exponent_dvd' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+$ lake env lean DkMathTest.lean
+exit 0
+file: DkMathTest
+
+$ python3 check_tracker_mismatch.py /tmp/note006-s4-full.log
+exit 0
+OK: no mismatches found
+PASS: 2297 Built/Replayed-marker pairs agree; all 5 new production/test modules are represented.
+
+$ git diff --check
+exit 0
+
+SHA256 of checked production sources:
+1328364fe16a78f83a8bbf6534727baf315efbf62bf90ff20d64ebe78eec6baf  DkMath/Lib/NumberTheory/GaloisPhaseOrbitNorm.lean
+ee04da0b54993947f1e6ebedee5907fbc71ce41fd1ae4efe42987fa302f26d48  DkMath/Lib/NumberTheory/FreyLocalReduction.lean
+750c3c075c5749a30becff19ed6fe41fb2c4d8128a6d8efd4b0dc53ca3453716  DkMath/FLT/Frey.lean
+32c8b651d4e35f60a444c6713f12dc7f7946e88ba40a427b8f8fb2a24784e164  DkMath/FLT/Kummer/IrregularGalois37.lean

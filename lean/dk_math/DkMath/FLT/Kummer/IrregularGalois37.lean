@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.Kummer.IrregularPrime37
-import DkMath.Lib.NumberTheory.GaloisPhaseObstructionTransport
+import DkMath.Lib.NumberTheory.GaloisPhaseOrbitNorm
 
 #print "file: DkMath.FLT.Kummer.IrregularGalois37"
 
@@ -73,6 +73,26 @@ theorem observe_galois {m : ℕ} (E : RegularDescent.State phase37 (m + 1))
   · change sigma37 a E.y = E.y
     rw [hy]
     exact CyclotomicPhaseGalois.sigma_int a B
+
+/-- IRR-007: 整数座標を保つ37次 State の位相0は全ガロア作用で固定される。
+一般の円分整数座標へ、この固定性を無条件に延長してはならない。 -/
+theorem observe_zero_fixed {m : ℕ} (E : RegularDescent.State phase37 (m + 1))
+    (A B : ℤ) (hx : E.x = (A : 𝓞 Cyclotomic37)) (hy : E.y = (B : 𝓞 Cyclotomic37))
+    (a : (ZMod 37)ˣ) :
+    ClassGroup.mulEquiv (sigma37 a) ((observe E).phases.obstruction 0) =
+      (observe E).phases.obstruction 0 := by
+  simpa [RamifiedPhasePacket.phaseMul] using (observe_galois E A B hx hy a 0).2
+
+/-- IRR-007 の主式 ω₀ N(ω₁)=1 を、実際の37次円分体の類群で固定する。
+既存の全位相積とガロア輸送だけを消費するため、指数固有の新しい算術証明は不要。
+この保存則は非零軌道の全障害の消滅や、FLT37 の排除を主張しない。 -/
+theorem observe_orbit_norm {m : ℕ} (E : RegularDescent.State phase37 (m + 1))
+    (A B : ℤ) (hx : E.x = (A : 𝓞 Cyclotomic37)) (hy : E.y = (B : 𝓞 Cyclotomic37)) :
+    (observe E).phases.obstruction 0 *
+      CyclotomicPhaseGalois.orbitNorm (p := 37) ((observe E).phases.obstruction 1) = 1 :=
+  RamifiedPhasePacket.zero_mul_orbit_norm (observe E).phases.obstruction
+    (fun a => ClassGroup.mulEquiv (sigma37 a))
+    (fun a i => (observe_galois E A B hx hy a i).2) (product_obstruction_one E)
 
 end IrregularPrime37
 end DkMath.FLT.Kummer

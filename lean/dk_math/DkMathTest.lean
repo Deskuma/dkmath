@@ -149,5 +149,8 @@ import DkMathTest.FLT.FreyArithmetic
 import DkMathTest.FLT.FreyArithmeticDependencyAudit
 import DkMathTest.NumberTheory.LegendreFreyC4CentralSeat
 import DkMathTest.NumberTheory.LegendreFreyC4CentralSeatAxiomAudit
+import DkMathTest.FLT.Kummer.GaloisPhaseOrbitNorm
+import DkMathTest.FLT.FreyLocalReduction
+import DkMathTest.FLT.SectionFourDependencyAudit
 
 #print "file: DkMathTest"

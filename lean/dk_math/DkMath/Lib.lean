@@ -14,6 +14,7 @@ import DkMath.Lib.NumberTheory.PadicValNat
 import DkMath.Lib.NumberTheory.FreyGapCubic
 import DkMath.Lib.NumberTheory.GNFreyDiscriminant
 import DkMath.Lib.NumberTheory.FreyPrimeValuation
+import DkMath.Lib.NumberTheory.FreyLocalReduction
 import DkMath.Lib.NumberTheory.HomogeneousPowerQuotient
 import DkMath.Lib.NumberTheory.ClassGroupTorsionBridge
 import DkMath.Lib.NumberTheory.TraceOneLatticeLanding
@@ -52,6 +53,7 @@ import DkMath.Lib.NumberTheory.PhaseClassPacket
 import DkMath.Lib.NumberTheory.PhaseObstructionTransport
 import DkMath.Lib.NumberTheory.IdealGaloisTransport
 import DkMath.Lib.NumberTheory.GaloisPhaseObstructionTransport
+import DkMath.Lib.NumberTheory.GaloisPhaseOrbitNorm
 import DkMath.Lib.NumberTheory.UnitObstructionPacket
 import DkMath.Lib.NumberTheory.BernoulliPrime37
 import DkMath.Lib.Cosmic.GNPrime37
