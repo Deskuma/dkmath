@@ -1,5 +1,7 @@
 # FLT11・FLT13：共通 State 排除への算術 provider（2026-10-18）
 
+> 後続実装：一般 Case I・整数入口と FLT11/13 の標準終点は [NOTE-001 実装報告](IMPLEMENTATION-NOTE001-261018.md) で完成。本書は State 排除を実装した時点の記録。
+
 ## 結果
 
 `RegularDescent.no_eleven_state` と `RegularDescent.no_thirteen_state` を実装した。

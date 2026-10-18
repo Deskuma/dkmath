@@ -136,4 +136,7 @@ import DkMathTest.FLT.Kummer.RegularTransportDependencyAudit
 import DkMathTest.FLT.Kummer.ElevenThirteenRegularTransport
 import DkMathTest.FLT.Kummer.ElevenThirteenDependencyAudit
 
+import DkMathTest.FLT.Kummer.PhaseRigidityFLT
+import DkMathTest.FLT.Kummer.PhaseRigidityFLTDependencyAudit
+
 #print "file: DkMathTest"

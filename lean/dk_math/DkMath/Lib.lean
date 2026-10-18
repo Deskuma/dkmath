@@ -41,6 +41,9 @@ import DkMath.Lib.Cosmic.GTailTransport
 import DkMath.Lib.Cosmic.CoreNested
 import DkMath.Lib.Cosmic.CoreNestedTransport
 import DkMath.Lib.NumberTheory.RamifiedGNPhaseBridge
+import DkMath.Lib.NumberTheory.CyclotomicPhaseCoefficientRigidity
+import DkMath.Lib.NumberTheory.SparsePhaseObstruction
+import DkMath.Lib.NumberTheory.RegularKummer.Cyclotomic.UnitConjugation
 import DkMath.Lib.NumberTheory.CyclotomicRamifiedPhase
 import DkMath.Lib.NumberTheory.RegularKummer.KummersLemma.KummersLemma
 import DkMath.Lib.NumberTheory.CyclotomicElevenPID

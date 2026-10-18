@@ -1,0 +1,32 @@
+NOTE-001 validation, 2026-10-18
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+PASS: source scan of 8 new production modules.
+No sorry/admit/native_decide, added axiom declarations, or external FltRegular/P2MW imports.
+Origin paths in Apache attribution comments are retained.
+
+$ lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE001.lean
+exit 0
+import DkMath exposes all new library/Case I/orientation/regular-prime/11/13 endpoints.
+'DkMath.Lib.NumberTheory.phase_sum_dvd_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Kummer.not_int_solution_caseI' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Kummer.fermatLastTheoremFor_of_regular_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Kummer.fermatLastTheoremFor_eleven' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Kummer.fermatLastTheoremFor_thirteen' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+$ lake build DkMath DkMath.FLT.Kummer DkMathTest
+exit 0
+Build completed successfully (11467 jobs).
+No warnings in new production or test modules. Historical warnings in unrelated modules are outside the new audited proof graphs.
+info: DkMathTest/FLT/Kummer/PhaseRigidityFLTDependencyAudit.lean:69:0: PASS: 36 new explicit declarations; standard logical axioms only.
+info: DkMathTest/FLT/Kummer/PhaseRigidityFLTDependencyAudit.lean:69:0: PASS: DkMath.Lib.NumberTheory.phase_sum_dvd_iff; 72098 reachable constants; expected providers present.
+info: DkMathTest/FLT/Kummer/PhaseRigidityFLTDependencyAudit.lean:69:0: PASS: DkMath.FLT.Kummer.not_int_solution_caseI; 73409 reachable constants; expected providers present.
+info: DkMathTest/FLT/Kummer/PhaseRigidityFLTDependencyAudit.lean:69:0: PASS: DkMath.FLT.Kummer.fermatLastTheoremWith_int_eleven; 85386 reachable constants; expected providers present.
+info: DkMathTest/FLT/Kummer/PhaseRigidityFLTDependencyAudit.lean:69:0: PASS: DkMath.FLT.Kummer.fermatLastTheoremWith_int_thirteen; 85305 reachable constants; expected providers present.
+
+$ git diff --check
+exit 0
+
+$ lake env lean DkMathTest.lean
+exit 0
+file: DkMathTest
