@@ -10,11 +10,26 @@
 
 模範解答の Case I は、概ね次の経路を使っておる。
 
-\\[ \begin{gathered} a^p+b^p=c^p,\qquad p\nmid abc\\\ \Downarrow\\\ a+\zeta_p b=\varepsilon\alpha^p\\\ \Downarrow\\\ \text{複素共役と単元の制約}\\\ \Downarrow\\\ p\mid a+b\zeta_p-a\zeta_p^{k_1}-b\zeta_p^{k_2}\\\ \Downarrow\\\ \text{円分係数の剛性}\\\ \Downarrow\\\ \text{Case I の矛盾} \end{gathered} \\]
+\[
+    \begin{gathered} a^p+b^p=c^p,\qquad p\nmid abc\\
+    \Downarrow\\
+    a+\zeta_p b=\varepsilon\alpha^p\\
+    \Downarrow\\
+    \text{複素共役と単元の制約}\\
+    \Downarrow\\
+    p\mid a+b\zeta_p-a\zeta_p^{k_1}-b\zeta_p^{k_2}\\
+    \Downarrow\\
+    \text{円分係数の剛性}\\
+    \Downarrow\\
+    \text{Case I の矛盾}
+    \end{gathered}
+\]
 
-ここで \\(k_1,k_2\\) には
+ここで \(k_1,k_2\) には
 
-\\[ k_2\equiv k_1-1\pmod p \\]
+\[
+    k_2\equiv k_1-1\pmod p
+\]
 
 という位相関係がある。
 
@@ -22,17 +37,21 @@
 
 そして面白いことに、DkMath の `GNFirstCase.lean` には、すでに前半の
 
-\\[ \boxed{a+\zeta_p^i b=\varepsilon_i\gamma_i^p} \\]
+\[
+    \boxed{a+\zeta_p^i b=\varepsilon_i\gamma_i^p}
+\]
 
 を取り出す仕組みがある。
 
 さらに整数ノルムによって、
 
-\\[ \boxed{GN_p(a+b,-b)=t^p} \\]
+\[
+    \boxed{GN_p(a+b,-b)=t^p}
+\]
 
 という必要条件まで導出できている。
 
-ただし、GN が整数の \\(p\\) 乗になるだけでは矛盾にならぬ。
+ただし、GN が整数の \(p\) 乗になるだけでは矛盾にならぬ。
 
 模範解答から本当に抽出すべき次のエッセンスは、円分位相の係数が自由に動けないという剛性 なのじゃ。
 
@@ -42,27 +61,35 @@
 
 ここが、わっちの注目点じゃ。
 
-\\(p\\) 個の整数係数 \\(c_i\\) に対して、
+\(p\) 個の整数係数 \(c_i\) に対して、
 
-\\[ F(\zeta_p)=\sum\_{i=0}^{p-1}c_i\zeta_p^i \\]
+\[
+    F(\zeta_p)=\sum\_{i=0}^{p-1}c_i\zeta_p^i
+\]
 
 を考える。
 
-素数 \\(p\\) について、円分整数環では次が成立する。
+素数 \(p\) について、円分整数環では次が成立する。
 
-\\[ \boxed{ p\mid F(\zeta_p) \Longrightarrow c_i\equiv c_j\pmod p \quad(\forall i,j) } \\]
+\[
+    \boxed{ p\mid F(\zeta_p) \Longrightarrow c_i\equiv c_j\pmod p \quad(\forall i,j) }
+\]
 
-つまり、位相の線形結合が \\(p\\) で割れるなら、すべての係数は同一の剰余類に拘束される。
+つまり、位相の線形結合が \(p\) で割れるなら、すべての係数は同一の剰余類に拘束される。
 
 理由は、
 
-\\[ \Phi_p(T)=1+T+\cdots+T^{p-1} \\]
+\[
+    \Phi_p(T)=1+T+\cdots+T^{p-1}
+\]
 
-が、\\(p\\) 個の冪の間にある基本関係だからじゃ。
+が、\(p\) 個の冪の間にある基本関係だからじゃ。
 
 とりわけ、
 
-\\[ \boxed{ \exists j,\ c_j=0 \Longrightarrow \forall i,\ p\mid c_i } \\]
+\[
+    \boxed{ \exists j,\ c_j=0 \Longrightarrow \forall i,\ p\mid c_i }
+\]
 
 となる。
 
@@ -70,15 +97,17 @@
 
 Case I の四項式
 
-\\[ a+b\zeta-a\zeta^{k_1}-b\zeta^{k_2} \\]
+\[
+    a+b\zeta-a\zeta^{k_1}-b\zeta^{k_2}
+\]
 
 は、係数が非零になりうる位置が高々4個しかない。
 
-\\(p\ge5\\) なら、少なくとも一つの位相には係数0がある。
+\(p\ge5\) なら、少なくとも一つの位相には係数0がある。
 
-したがって、すべての係数が \\(p\\) の倍数になる。
+したがって、すべての係数が \(p\) の倍数になる。
 
-ところが位相の重なり方を分類すると、\\(p\mid a\\)、\\(p\mid b\\)、または \\(a\equiv b\pmod p\\) といった禁止条件に到達する。
+ところが位相の重なり方を分類すると、\(p\mid a\)、\(p\mid b\)、または \(a\equiv b\pmod p\) といった禁止条件に到達する。
 
 これが矛盾の核心じゃ。
 
@@ -100,15 +129,17 @@ GN で見れば、円分位相に配置した係数が、剰余環への射影�
 
 004・005 は FLT 側に配置する。
 
-さらに、標準の Case II には、指数 \\(p\\) が奇数であることを使った変数の入れ替えがある。
+さらに、標準の Case II には、指数 \(p\) が奇数であることを使った変数の入れ替えがある。
 
-例えば \\(p\mid a\\) なら、
+例えば \(p\mid a\) なら、
 
-\\[ a^p+b^p=c^p \iff b^p+(-c)^p=(-a)^p \\]
+\[
+    a^p+b^p=c^p \iff b^p+(-c)^p=(-a)^p
+\]
 
 となる。
 
-これによって \\(p\\) が割る変数を右辺へ移せる。原始性と非零性も同時に運ぶ。
+これによって \(p\) が割る変数を右辺へ移せる。原始性と非零性も同時に運ぶ。
 
 これは既存の `initial_state_of_int_solution` に渡すための、比較的薄い入口補題として整備できるはずじゃ。
 
@@ -124,7 +155,9 @@ Case II には正の分岐深度があり、それを減らす無限降下が機
 
 したがって、
 
-\\[ \operatorname{State}\_p(0) \\]
+\[
+    \operatorname{State}\_p(0)
+\]
 
 そのものの不存在を目指してはならぬ。
 
@@ -132,7 +165,18 @@ Case I では、代わりに 位相係数の剛性による矛盾 を使うの�
 
 最終的には、
 
-\\[ \boxed{ \begin{array}{ccc} &\text{原始整数反例}&\\\ &\downarrow&\\\ \text{Case I}&&\text{Case II}\\\ \downarrow&&\downarrow\\\ \text{位相係数の剛性}&&\text{GN–Kummer State 降下}\\\ \downarrow&&\downarrow\\\ \bot&&\bot \end{array} } \\]
+\[
+    \boxed{
+        \begin{array}{ccc} &\text{原始整数反例}&\\
+        &\downarrow&\\
+        \text{Case I}&&\text{Case II}\\
+        \downarrow&&\downarrow\\
+        \text{位相係数の剛性}&&\text{GN–Kummer State 降下}\\
+        \downarrow&&\downarrow\\
+        \bot&&\bot
+        \end{array}
+    }
+\]
 
 という二つの終端証明が、一つの GN・円分位相基盤を共有する構成になる。
 
