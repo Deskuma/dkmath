@@ -10,6 +10,7 @@ import DkMath.NumberTheory.Legendre.GnomonSuccessor
 import DkMath.NumberTheory.Legendre.GnomonSupportTurnover
 import DkMath.NumberTheory.Legendre.GnomonPetalTurnover
 import DkMath.NumberTheory.Legendre.CyclotomicPersistence
+import DkMath.NumberTheory.Legendre.FreyC4CentralSeat
 import DkMath.NumberTheory.Legendre.CenteredPair
 import DkMath.NumberTheory.Legendre.CenteredPacketTriangle
 import DkMath.NumberTheory.Legendre.CenteredPacketDiamond

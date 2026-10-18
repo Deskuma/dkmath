@@ -1,0 +1,60 @@
+NOTE-006 section 3 only: Legendre central seat / Frey c4 bridge, 2026-10-19
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+Scope: Q_n=n^2+n+1 in the existing square shell; real integral/normalized Frey curves;
+c4 and discriminant formulas, actual coordinate change and integral normalization iff 16|n;
+conditional prime divisor support, nonsingular residue curve with c4=0;
+order-three finite-field proof of q=3 or q mod 3=1;
+existing bounded prime support retains q<=n.
+No Legendre conjecture, full-cover exclusion, prime-existence or FLT endpoint is inferred.
+
+PASS: import-following marker DkMath.NumberTheory.Legendre.FreyC4CentralSeat
+PASS: import-following marker DkMathTest.NumberTheory.LegendreFreyC4CentralSeat
+PASS: import-following marker DkMathTest.NumberTheory.LegendreFreyC4CentralSeatAxiomAudit
+PASS: production module; no sorry/admit/native_decide, new axioms or external FLT imports
+PASS: 29 documented public source declarations
+PASS: existing Frey, Kummer/IRR state, FLT11/13 and Legendre.Basic files byte-identical to HEAD
+PASS: import-following smoke marker RootSmokeNOTE006Legendre
+PASS: final build has no new production/test warnings; unrelated historical warnings are outside these proof graphs.
+
+$ lake build DkMathTest.NumberTheory.LegendreFreyC4CentralSeatAxiomAudit
+exit 0 (3119 jobs)
+
+$ lake build DkMath DkMath.NumberTheory.Legendre DkMathTest
+exit 0
+Build completed successfully (11496 jobs).
+info: DkMathTest/NumberTheory/LegendreFreyC4CentralSeatAxiomAudit.lean:60:0: PASS: 29 public NOTE-006 central-seat declarations; standard logical axioms only.
+info: DkMathTest/NumberTheory/LegendreFreyC4CentralSeatAxiomAudit.lean:60:0: PASS: DkMath.NumberTheory.Legendre.FreyC4CentralSeat.rationalCurve_c4; 3461 reachable constants; expected providers present.
+info: DkMathTest/NumberTheory/LegendreFreyC4CentralSeatAxiomAudit.lean:60:0: PASS: DkMath.NumberTheory.Legendre.FreyC4CentralSeat.prime_not_dvd_discriminant; 4028 reachable constants; expected providers present.
+info: DkMathTest/NumberTheory/LegendreFreyC4CentralSeatAxiomAudit.lean:60:0: PASS: DkMath.NumberTheory.Legendre.FreyC4CentralSeat.reduction_isElliptic; 4743 reachable constants; expected providers present.
+info: DkMathTest/NumberTheory/LegendreFreyC4CentralSeatAxiomAudit.lean:60:0: PASS: DkMath.NumberTheory.Legendre.FreyC4CentralSeat.prime_mod_three; 8675 reachable constants; expected providers present.
+info: DkMathTest/NumberTheory/LegendreFreyC4CentralSeatAxiomAudit.lean:60:0: PASS: DkMath.NumberTheory.Legendre.FreyC4CentralSeat.prime_bridge; 8897 reachable constants; expected providers present.
+info: DkMathTest/NumberTheory/LegendreFreyC4CentralSeatAxiomAudit.lean:60:0: PASS: DkMath.NumberTheory.Legendre.FreyC4CentralSeat.prime_bridge_of_mem_support; 8911 reachable constants; expected providers present.
+
+$ lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE006Legendre.lean
+exit 0
+file: RootSmokeNOTE006Legendre
+'DkMath.NumberTheory.Legendre.FreyC4CentralSeat.rationalCurve_c4' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.FreyC4CentralSeat.reduction_isElliptic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.FreyC4CentralSeat.prime_mod_three' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.FreyC4CentralSeat.prime_bridge_of_mem_support' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+$ lake env lean DkMathTest.lean
+exit 0
+file: DkMathTest
+
+$ python3 check_tracker_mismatch.py /tmp/note006-legendre-full.log
+exit 0
+OK: no mismatches found
+PASS: 2292 Built/Replayed-marker pairs agree; all 3 new production/test modules are represented.
+
+$ git diff --check
+exit 0

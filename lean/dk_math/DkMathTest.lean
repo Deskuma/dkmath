@@ -147,5 +147,7 @@ import DkMathTest.FLT.Kummer.GaloisPhaseObstruction
 import DkMathTest.FLT.Kummer.GaloisPhaseObstructionDependencyAudit
 import DkMathTest.FLT.FreyArithmetic
 import DkMathTest.FLT.FreyArithmeticDependencyAudit
+import DkMathTest.NumberTheory.LegendreFreyC4CentralSeat
+import DkMathTest.NumberTheory.LegendreFreyC4CentralSeatAxiomAudit
 
 #print "file: DkMathTest"
