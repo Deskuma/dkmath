@@ -157,4 +157,8 @@ import DkMathTest.FLT.FreyTwo
 import DkMathTest.NumberTheory.LegendreFreyJCentralSeat
 import DkMathTest.FLT.Note007DependencyAudit
 
+import DkMathTest.FLT.PrimeDepthTransport
+import DkMathTest.Lib.FiniteSpectrumProjectors
+import DkMathTest.FLT.Note008DependencyAudit
+
 #print "file: DkMathTest"
