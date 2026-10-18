@@ -20,6 +20,11 @@ import DkMath.Lib.NumberTheory.RegularKummer.Cyclotomic.MoreLemmas
 
 This file records how complex conjugation acts on cyclotomic units and proves that the quotient
 of a unit by its conjugate is a square of a root of unity.
+
+ここは古典的な CM 単元の供給証明である。FLT 側では固定した
+`CaseIConjugation.FactorPacketProvider` の既定実装からのみ接続する。
+将来の GN 代替証明は別モジュールで同じ契約を満たす形とし、
+この移植証明本体や整数ノルムの結論を新しい GN 証明と同一視しない。
 -/
 
 @[expose] public section

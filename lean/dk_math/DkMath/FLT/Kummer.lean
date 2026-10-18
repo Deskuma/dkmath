@@ -32,6 +32,9 @@ import DkMath.FLT.Kummer.RegularKummerUnit
 import DkMath.FLT.Kummer.ElevenRegularTransport
 import DkMath.FLT.Kummer.ThirteenRegularTransport
 
+import DkMath.FLT.Kummer.CaseIConjugationContract
+import DkMath.FLT.Kummer.GNCaseIContract
+import DkMath.FLT.Kummer.RegularPrimeContract
 import DkMath.FLT.Kummer.CaseIConjugationPacket
 import DkMath.FLT.Kummer.IntegerCounterexampleOrientation
 import DkMath.FLT.Kummer.GNCaseIObstruction

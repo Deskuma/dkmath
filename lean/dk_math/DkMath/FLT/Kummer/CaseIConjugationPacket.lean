@@ -10,6 +10,7 @@ module
 
 public import Mathlib.NumberTheory.NumberField.CMField
 public import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
+public import DkMath.FLT.Kummer.CaseIConjugationContract
 
 import DkMath.Lib.NumberTheory.RegularKummer.Cyclotomic.MoreLemmas
 import DkMath.Lib.NumberTheory.RegularKummer.Cyclotomic.UnitConjugation
@@ -24,7 +25,8 @@ CM 体の単元比は ζ の平方冪であり、p 乗とその共役は mod p �
 最後に指数を `Fin p` に戻し、二つの負側位相が隣接する証拠を保持する。
 
 この provider は整数反例や類数条件を仮定せず、因子表示だけを入力する。
-GN の因子抽出との合成は `GNCaseIObstruction`、係数の排除原理は
+固定型は `CaseIConjugationContract` に置き、ここは古典的供給のみを担当する。
+GN の因子抽出との合成は `GNCaseIContract`、係数の排除原理は
 `DkMath.Lib.NumberTheory.SparsePhaseObstruction` が担当する。
 -/
 
@@ -122,14 +124,6 @@ namespace DkMath.FLT.Kummer.CaseIConjugation
 open scoped NumberField
 open Int Ideal
 
-/-- 共役から得られる4項関係。位相の隣接条件と整数 p による可除性を
-同じ packet に保持し、係数剛性への入口を明示する。 -/
-structure Packet {p : ℕ} {K : Type*} [Field K] (ζ : 𝓞 K) (a b : ℤ) where
-  k₁ : Fin p
-  k₂ : Fin p
-  adjacent : Int.ModEq p (k₂ : ℤ) ((k₁ : ℤ) - 1)
-  divisible : (p : 𝓞 K) ∣ (a : 𝓞 K) + b * ζ - a * ζ ^ (k₁ : ℕ) - b * ζ ^ (k₂ : ℕ)
-
 /-- 任意の素数次円分体で、単元倍 p 乗の因子から隣接する二位相を得る。
 指数を p の剰余へ戻すので、負の共役指数も `Fin p` に収まる。
 この段階では FLT 方程式も類群条件も仮定しない。 -/
@@ -189,5 +183,14 @@ theorem packet_of_factor
     Nonempty (Packet (p := p) ζ a b) := by
   obtain ⟨k₁, k₂, hcong, hdiv⟩ := exists_adjacent_phases hp5 hζ hfactor
   exact ⟨⟨k₁, k₂, hcong, hdiv⟩⟩
+
+/-- 古典的な CM 共役証明を、固定した因子供給契約へ適合させる。
+将来の別証明はこの定理を書き換えず、同じ契約の別の値として実装する。 -/
+theorem classical_factor_packet_provider
+    {p : ℕ} [Fact p.Prime] {K : Type*} [Field K] [NumberField K]
+    [IsCyclotomicExtension {p} ℚ K] (hp5 : 5 ≤ p)
+    {ζ : 𝓞 K} (hζ : IsPrimitiveRoot ζ p) : FactorPacketProvider (p := p) ζ := by
+  intro a b u α hfactor
+  exact packet_of_factor hp5 hζ hfactor
 
 end DkMath.FLT.Kummer.CaseIConjugation

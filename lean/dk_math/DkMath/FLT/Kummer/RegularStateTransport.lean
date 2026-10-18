@@ -19,8 +19,8 @@ ramification `(p) ∣ λ^(p-1)`, class-group p-torsion-freeness, and the Kummer
 unit criterion. Three roots from the same phase family supply the new state.
 
 The endpoint excludes positive-depth states. An oriented primitive Case II
-integer entrance is provided below. General Case I and orientation of arbitrary
-integer counterexamples remain separate FLT entrance obligations.
+integer entrance is provided below. General Case I and arbitrary integer orientation
+are supplied separately by GNCaseIContract and IntegerCounterexampleOrientation.
 -/
 
 namespace DkMath.FLT.Kummer.RegularDescent
@@ -34,7 +34,9 @@ variable {R : Type*} [CommRing R] [IsDomain R]
 variable {p : ℕ} [hp : Fact p.Prime] {P : RamifiedPhasePacket R p}
 
 /-- Arithmetic inputs beyond the neutral phase packet. These hypotheses are
-proved by concrete providers; none is inferred from GN identities alone. -/
+proved by concrete providers; none is inferred from GN identities alone.
+NOTE-002 の固定契約：5フィールドの型を維持し、別証明は同じ Conditions の
+値として渡す。反例排除・底・降下ステップを仮定するフィールドは追加しない。 -/
 structure Conditions (P : RamifiedPhasePacket R p) : Prop where
   odd : Odd p
   three_le : 3 ≤ p

@@ -4,68 +4,64 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.FLT.Kummer.GNFirstCase
+import DkMath.FLT.Kummer.GNCaseIContract
 import DkMath.FLT.Kummer.CaseIConjugationPacket
-import DkMath.FLT.Kummer.IntegerCounterexampleOrientation
-import DkMath.Lib.NumberTheory.SparsePhaseObstruction
 
 #print "file: DkMath.FLT.Kummer.GNCaseIObstruction"
 
 /-!
-# GN の因子抽出から Case I の終端へ
+# GN 因子抽出と古典的 Kummer 供給の既定アダプタ
 
-既存の GN 構造定理から、同じ線形因子 `a+ζb` の単元倍 p 乗表示を得る。
-その表示を共役 packet へ、packet を疎な係数剛性へ渡す。
-GN の整数ノルムが p 乗になるだけで矛盾とする推論は用いない。
+GN 側は `GN_kummer_structure_of_first_case` によって同じ因子の単元倍 p 乗表示を
+作る。古典的な CM 共役・単元比の証明は `classical_factor_packet_provider` が担う。
+終端の非合同化と位相係数剛性は `GNCaseIContract` の供給非依存な定理である。
 
-`a≡b` の例外は整数の向き付けで除去する。正則性は類数との互いに素性
-として明示される。Case I の終端は State の深度0を排除するものではない。
+以前の整数ノルムの結論 `GN_p=t^p` だけから矛盾を導くものではない。
+GN による代替証明を開発するときは、古典的供給を直接改変せず、固定した
+`FactorPacketProvider` または `SolutionPacketProvider` の別の証明を渡す。
+既存の公開定理の名前・引数・結論は維持する。
 -/
 
 namespace DkMath.FLT.Kummer
 
-open DkMath.Lib.NumberTheory
 open scoped NumberField
 
 variable {p : ℕ} [hp : Fact p.Prime] {K : Type*} [Field K] [NumberField K]
   [IsCyclotomicExtension {p} ℚ K] {ζ : K}
 
-/-- GN で抽出した i=1 の同じ因子を共役 packet に変換する。
-イデアル生成元と単元は抽出定理から実際に得る。 -/
+/-- 既存 GN 因子抽出と古典的共役を合成した既定の方程式単位の供給。
+正則性は供給側で消費され、Packet の固定型に新たな仮定を加えない。 -/
+theorem classical_solution_packet_provider (hζ : IsPrimitiveRoot ζ p) (hp5 : 5 ≤ p)
+    (hreg : Nat.Coprime p (Fintype.card (ClassGroup (𝓞 K)))) :
+    CaseIConjugation.SolutionPacketProvider (p := p) hζ.toInteger :=
+  solution_packet_provider_using hζ hp5 hreg
+    (CaseIConjugation.classical_factor_packet_provider hp5 hζ.toInteger_isPrimitiveRoot)
+
+/-- GN の i=1 因子を古典的共役 packet に変換する互換入口。
+同じ因子・単元・根を運ぶ実処理は `first_case_conjugation_packet_using` に置く。 -/
 theorem first_case_conjugation_packet (hζ : IsPrimitiveRoot ζ p) (hp5 : 5 ≤ p)
     {a b c : ℤ} (heq : a ^ p + b ^ p = c ^ p) (hcop : IsCoprime a b)
     (hfirst : ¬ (p : ℤ) ∣ a * b * c)
     (hreg : Nat.Coprime p (Fintype.card (ClassGroup (𝓞 K)))) :
-    Nonempty (CaseIConjugation.Packet (p := p) hζ.toInteger a b) := by
-  have hodd := hp.out.odd_of_ne_two (by omega)
-  obtain ⟨_, ε, γ, _, _, hε, _, hfactor⟩ :=
-    GN_kummer_structure_of_first_case hζ hodd heq hcop hfirst hreg hp.out.one_lt
-  obtain ⟨u, rfl⟩ := hε
-  exact CaseIConjugation.packet_of_factor hp5 hζ.toInteger_isPrimitiveRoot
-    (by simpa only [pow_one] using hfactor.symm)
+    Nonempty (CaseIConjugation.Packet (p := p) hζ.toInteger a b) :=
+  classical_solution_packet_provider hζ hp5 hreg heq hcop hfirst
 
-/-- 非合同に向き付けた Case I の反例は、4項の位相剛性に反する。 -/
+/-- 非合同な原始的 Case I の既定入口。古典的供給を中立な4項障害へ渡す。 -/
 theorem not_int_solution_caseI_of_not_modEq (hζ : IsPrimitiveRoot ζ p) (hp5 : 5 ≤ p)
     (hreg : Nat.Coprime p (Fintype.card (ClassGroup (𝓞 K))))
     {a b c : ℤ} (hcop : IsCoprime a b) (hab : ¬ Int.ModEq p a b)
-    (hfirst : ¬ (p : ℤ) ∣ a * b * c) : a ^ p + b ^ p ≠ c ^ p := by
-  intro heq
-  obtain ⟨packet⟩ := first_case_conjugation_packet hζ hp5 heq hcop hfirst hreg
-  have ha : ¬ (p : ℤ) ∣ a := fun h => hfirst (dvd_mul_of_dvd_left (dvd_mul_of_dvd_left h b) c)
-  have hb : ¬ (p : ℤ) ∣ b := fun h => hfirst (dvd_mul_of_dvd_left (dvd_mul_of_dvd_right h a) c)
-  exact four_phase_obstruction hp.out hp5 hζ.toInteger_isPrimitiveRoot ha hb hab
-    packet.k₁ packet.k₂ packet.adjacent packet.divisible
+    (hfirst : ¬ (p : ℤ) ∣ a * b * c) : a ^ p + b ^ p ≠ c ^ p :=
+  not_int_solution_caseI_of_not_modEq_using hζ hp5
+    (classical_solution_packet_provider hζ hp5 hreg) hcop hab hfirst
 
-/-- p≥5 の一般 Case I を排除する。必要なのは整数の原始性と類数条件。
-単元の p 乗 criterion は Case II 用であり、この終端には不要である。 -/
+/-- p≥5 の一般 Case I の既定入口。整数の原始性と類数条件を仮定する。
+Case II 用の単元 p 乗 criterion や State 0 の不存在は仮定しない。 -/
 theorem not_int_solution_caseI
     (hζ : IsPrimitiveRoot ζ p)
     (hp5 : 5 ≤ p)
     (hreg : Nat.Coprime p (Fintype.card (ClassGroup (𝓞 K))))
     {a b c : ℤ} (hcop : IsCoprime a b) (hfirst : ¬ (p : ℤ) ∣ a * b * c) :
-    a ^ p + b ^ p ≠ c ^ p := by
-  intro heq
-  obtain ⟨x, y, z, h, hxy, hne, hfirst'⟩ := orient_first_case hp5 heq hcop hfirst
-  exact not_int_solution_caseI_of_not_modEq hζ hp5 hreg hxy hne hfirst' h
+    a ^ p + b ^ p ≠ c ^ p :=
+  not_int_solution_caseI_using hζ hp5 (classical_solution_packet_provider hζ hp5 hreg) hcop hfirst
 
 end DkMath.FLT.Kummer

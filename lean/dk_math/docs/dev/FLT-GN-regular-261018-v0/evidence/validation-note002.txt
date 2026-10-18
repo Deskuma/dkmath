@@ -1,0 +1,55 @@
+NOTE-002 sections 4 and 5 validation, 2026-10-18
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+Fixed interfaces: phase_sum_dvd_iff; CaseIConjugation.Packet; RegularDescent.Conditions.
+PASS: no listed concrete/classical providers in the abstract consumer environment.
+PASS: ordinary imports and existing Lean module imports.
+PASS: ElevenThirteenFLT code is identical to HEAD after removing comments.
+PASS: scanned 11 changed/new production Lean files; no proof placeholders, native_decide, added axiom declarations or external FltRegular/P2MW imports.
+
+$ lake build DkMath DkMath.FLT.Kummer DkMathTest
+exit 0
+Build completed successfully (11472 jobs).
+No warnings in changed/new production modules or new/updated tests. Historical warnings in unrelated modules are outside the audited proof graphs.
+info: DkMathTest/FLT/Kummer/PhaseContractBoundary.lean:21:0: PASS: abstract contract consumer imports no listed classical/concrete providers.
+info: DkMathTest/FLT/Kummer/PhaseRigidityFLTDependencyAudit.lean:75:0: PASS: 49 new explicit declarations; standard logical axioms only.
+info: DkMathTest/FLT/Kummer/PhaseRigidityFLTDependencyAudit.lean:75:0: PASS: DkMath.Lib.NumberTheory.phase_sum_dvd_iff; 72098 reachable constants; expected providers present.
+info: DkMathTest/FLT/Kummer/PhaseRigidityFLTDependencyAudit.lean:75:0: PASS: DkMath.FLT.Kummer.not_int_solution_caseI; 73416 reachable constants; expected providers present.
+info: DkMathTest/FLT/Kummer/PhaseRigidityFLTDependencyAudit.lean:75:0: PASS: DkMath.FLT.Kummer.fermatLastTheoremWith_int_eleven; 85394 reachable constants; expected providers present.
+info: DkMathTest/FLT/Kummer/PhaseRigidityFLTDependencyAudit.lean:75:0: PASS: DkMath.FLT.Kummer.fermatLastTheoremWith_int_thirteen; 85313 reachable constants; expected providers present.
+
+$ lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE002.lean
+exit 0
+DkMath.Lib.NumberTheory.phase_sum_dvd_iff.{u_1} {p : ℕ} {L : Type u_1} [Field L] [CharZero L]
+  [IsCyclotomicExtension {p} ℚ L] (hp : Nat.Prime p) {ζ : NumberField.RingOfIntegers L} (hζ : IsPrimitiveRoot ζ p)
+  (f : Fin p → ℤ) (m : ℤ) : ↑m ∣ ∑ i, f i • ζ ^ ↑i ↔ ∀ (i j : Fin p), m ∣ f i - f j
+DkMath.FLT.Kummer.CaseIConjugation.Packet.{u_1} {p : ℕ} {K : Type u_1} [Field K] (ζ : NumberField.RingOfIntegers K)
+  (a b : ℤ) : Type
+DkMath.FLT.Kummer.CaseIConjugation.FactorPacketProvider.{u_1} {p : ℕ} {K : Type u_1} [Field K]
+  (ζ : NumberField.RingOfIntegers K) : Prop
+DkMath.FLT.Kummer.CaseIConjugation.SolutionPacketProvider.{u_1} {p : ℕ} {K : Type u_1} [Field K]
+  (ζ : NumberField.RingOfIntegers K) : Prop
+DkMath.FLT.Kummer.RegularDescent.Conditions.{u_1} {R : Type u_1} [CommRing R] [IsDomain R] {p : ℕ}
+  [hp : Fact (Nat.Prime p)] (P : DkMath.Lib.NumberTheory.RamifiedPhasePacket R p) : Prop
+DkMath.FLT.Kummer.fermatLastTheoremWith_int_of_phase_contracts.{u_1} {p : ℕ} [hp : Fact (Nat.Prime p)] {K : Type u_1}
+  [Field K] [NumberField K] [IsCyclotomicExtension {p} ℚ K] {ζ : K} (hζ : IsPrimitiveRoot ζ p) (hp5 : 5 ≤ p)
+  (hodd : Odd p) (provider : CaseIConjugation.SolutionPacketProvider hζ.toInteger)
+  (C : RegularDescent.Conditions (DkMath.Lib.NumberTheory.cyclotomicRamifiedPhase hζ hodd)) : FermatLastTheoremWith ℤ p
+DkMath.FLT.Kummer.fermatLastTheoremFor_of_phase_contracts.{u_1} {p : ℕ} [hp : Fact (Nat.Prime p)] {K : Type u_1}
+  [Field K] [NumberField K] [IsCyclotomicExtension {p} ℚ K] {ζ : K} (hζ : IsPrimitiveRoot ζ p) (hp5 : 5 ≤ p)
+  (hodd : Odd p) (provider : CaseIConjugation.SolutionPacketProvider hζ.toInteger)
+  (C : RegularDescent.Conditions (DkMath.Lib.NumberTheory.cyclotomicRamifiedPhase hζ hodd)) : FermatLastTheoremFor p
+'DkMath.FLT.Kummer.fermatLastTheoremWith_int_of_phase_contracts' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.classical_solution_packet_provider' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Kummer.regular_prime_conditions' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Kummer.fermatLastTheoremFor_eleven' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Kummer.fermatLastTheoremFor_thirteen' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+$ lake env lean DkMathTest.lean
+exit 0
+file: DkMathTest
+
+$ git diff --check
+exit 0

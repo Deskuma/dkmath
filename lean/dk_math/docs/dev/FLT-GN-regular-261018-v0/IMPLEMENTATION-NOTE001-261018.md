@@ -1,5 +1,7 @@
 # NOTE-001 実装報告 — 位相係数剛性から FLT11・FLT13 へ
 
+> NOTE-002 の後続改善：固定契約と具体的供給の分離は [実施報告](CONTRACTS-NOTE002-261018.md) を参照。本書の実装経路・証跡は NOTE-001 時点の記録。
+
 2026-10-18。対象は `NOTE-001.md` (cid: `6ad3b3b2-9e6c-83e8-9c41-0a5f32082ac2`) の数学的提案。
 原文は検討時点の記録として保持する。
 
@@ -9,9 +11,9 @@ NOTE の段階001–005を実装し、さらに既存の一般 Kummer 単元補�
 
 - `fermatLastTheoremFor_of_regular_prime`：任意の素数 `p ≥ 5` と p 次円分体 K について、
   `Nat.Coprime p (Fintype.card (ClassGroup (𝓞 K)))` から標準の `FermatLastTheoremFor p` を証明する。
-- `fermatLastTheoremWith_int_of_regular_prime`：同じ条件で全整数の入口。
+- `fermatLastTheoremWith_int_of_regular_prime`：同じ条件で非零整数 `a,b,c≠0` の入口。
 - `fermatLastTheoremFor_eleven` / `fermatLastTheoremFor_thirteen`：既存の類数1証明で正則性を供給した無条件の FLT11 / FLT13。
-- `fermatLastTheoremWith_int_eleven` / `fermatLastTheoremWith_int_thirteen`：整数の符号・共通因子を制限しない入口。
+- `fermatLastTheoremWith_int_eleven` / `fermatLastTheoremWith_int_thirteen`：非零整数 `a,b,c≠0` の符号・共通因子を制限しない入口。
 
 これらの宣言の namespace は `DkMath.FLT.Kummer`。
 `DkMath.FLT.Kummer` facade と `DkMath` から利用できる。

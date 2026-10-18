@@ -16,6 +16,7 @@ import DkMath.FLT.Kummer.ThirteenRegularTransport
 指数固有のコードは類数1の供給に限る。Case I の共役・係数剛性、Case II の
 原始性を保つ整数入口、正深度 State 降下、gcd 原始化はすべて一般核を使う。
 したがって、ここでの結論は正深度 State の排除だけでなく標準 FLT 述語である。
+整数版の a,b,c≠0 は必要であり、符号・共通因子の制限を除去してもこの条件は残る。
 -/
 
 namespace DkMath.FLT.Kummer
@@ -38,11 +39,11 @@ theorem fermatLastTheoremFor_thirteen : FermatLastTheoremFor 13 := by
   exact fermatLastTheoremFor_of_regular_prime hζ (by decide)
     (by rw [RegularDescent.thirteen_classGroup_card_eq_one]; decide)
 
-/-- 整数の符号や共通因子を制限しない FLT11 の入口。 -/
+/-- a,b,c≠0 を満たす整数の FLT11。符号や共通因子は制限しない。 -/
 theorem fermatLastTheoremWith_int_eleven : FermatLastTheoremWith ℤ 11 :=
   fermatLastTheoremFor_iff_int.mp fermatLastTheoremFor_eleven
 
-/-- 整数の符号や共通因子を制限しない FLT13 の入口。 -/
+/-- a,b,c≠0 を満たす整数の FLT13。符号や共通因子は制限しない。 -/
 theorem fermatLastTheoremWith_int_thirteen : FermatLastTheoremWith ℤ 13 :=
   fermatLastTheoremFor_iff_int.mp fermatLastTheoremFor_thirteen
 

@@ -99,7 +99,9 @@ theorem dvd_phase_coefficient_sub (hp : p.Prime) {ζ : 𝓞 L}
     sub_zero] using hdiv
 
 /-- 円分評価値の可除性と、全係数の合同は同値。
-後向きは任意の基準位相 j を引き、各項の m 可除性を足し合わせる。 -/
+後向きは任意の基準位相 j を引き、各項の m 可除性を足し合わせる。
+NOTE-002 の固定契約：名前・引数・任意整数 m・双方向同値を維持する。
+GN への一般化は別の定理として追加し、この円分特化を弱めない。 -/
 theorem phase_sum_dvd_iff (hp : p.Prime) {ζ : 𝓞 L}
     (hζ : IsPrimitiveRoot ζ p) (f : Fin p → ℤ) (m : ℤ) :
     (m : 𝓞 L) ∣ ∑ i, f i • ζ ^ (i : ℕ) ↔ ∀ i j, m ∣ f i - f j := by

@@ -23,6 +23,8 @@ private def allowedFLT : Array Name := #[
   ``fermatLastTheoremWith_of_fermatLastTheoremWith_coprime,
   ``fermatLastTheoremFor_iff_int,
   ``fermatLastTheoremWith_nat_int_rat_tfae,
+  ``DkMath.FLT.Kummer.fermatLastTheoremWith_int_of_phase_contracts,
+  ``DkMath.FLT.Kummer.fermatLastTheoremFor_of_phase_contracts,
   ``DkMath.FLT.Kummer.fermatLastTheoremWith_int_of_regular_prime,
   ``DkMath.FLT.Kummer.fermatLastTheoremFor_of_regular_prime,
   ``DkMath.FLT.Kummer.fermatLastTheoremFor_eleven,
@@ -69,9 +71,22 @@ private def checkRoot (root : Name) (required : Array Name) (neutral : Bool := f
   logInfo m!"PASS: {root}; {visited.size} reachable constants; expected providers present."
 
 set_option maxHeartbeats 0 in
--- The finite audit traverses 36 declarations and four large transitive proof graphs.
+-- The finite audit traverses 49 declarations and four large transitive proof graphs.
 run_cmd do
   let roots : Array Name := #[
+    ``DkMath.FLT.Kummer.CaseIConjugation.FactorPacketProvider,
+    ``DkMath.FLT.Kummer.CaseIConjugation.SolutionPacketProvider,
+    ``DkMath.FLT.Kummer.CaseIConjugation.Packet.false_of_not_modEq,
+    ``DkMath.FLT.Kummer.CaseIConjugation.classical_factor_packet_provider,
+    ``DkMath.FLT.Kummer.first_case_conjugation_packet_using,
+    ``DkMath.FLT.Kummer.solution_packet_provider_using,
+    ``DkMath.FLT.Kummer.not_int_solution_caseI_of_not_modEq_using,
+    ``DkMath.FLT.Kummer.not_int_solution_caseI_using,
+    ``DkMath.FLT.Kummer.not_int_solution_of_phase_contracts,
+    ``DkMath.FLT.Kummer.fermatLastTheoremWith_int_of_phase_contracts,
+    ``DkMath.FLT.Kummer.fermatLastTheoremFor_of_phase_contracts,
+    ``DkMath.FLT.Kummer.classical_solution_packet_provider,
+    ``DkMath.FLT.Kummer.regular_prime_conditions,
     ``DkMath.Lib.NumberTheory.dvd_phase_coefficients_of_zero,
     ``DkMath.Lib.NumberTheory.dvd_phase_coefficient_sub,
     ``DkMath.Lib.NumberTheory.phase_sum_dvd_iff,
@@ -123,7 +138,10 @@ run_cmd do
     ``DkMath.Lib.NumberTheory.dvd_phase_coefficients_of_zero]
   checkRoot ``DkMath.FLT.Kummer.fermatLastTheoremWith_int_eleven #[
     ``DkMath.FLT.Kummer.fermatLastTheoremFor_of_regular_prime,
-    ``DkMath.FLT.Kummer.not_int_solution_caseI,
+    ``DkMath.FLT.Kummer.not_int_solution_caseI_using,
+    ``DkMath.FLT.Kummer.classical_solution_packet_provider,
+    ``DkMath.FLT.Kummer.regular_prime_conditions,
+    ``DkMath.FLT.Kummer.fermatLastTheoremWith_int_of_phase_contracts,
     ``DkMath.FLT.Kummer.positive_state_of_second_case,
     ``DkMath.FLT.Kummer.orient_second_case,
     ``DkMath.FLT.Kummer.RegularDescent.initial_state_of_int_solution,
@@ -133,7 +151,10 @@ run_cmd do
     ``DkMath.Lib.NumberTheory.CyclotomicElevenPID.eleven_pid]
   checkRoot ``DkMath.FLT.Kummer.fermatLastTheoremWith_int_thirteen #[
     ``DkMath.FLT.Kummer.fermatLastTheoremFor_of_regular_prime,
-    ``DkMath.FLT.Kummer.not_int_solution_caseI,
+    ``DkMath.FLT.Kummer.not_int_solution_caseI_using,
+    ``DkMath.FLT.Kummer.classical_solution_packet_provider,
+    ``DkMath.FLT.Kummer.regular_prime_conditions,
+    ``DkMath.FLT.Kummer.fermatLastTheoremWith_int_of_phase_contracts,
     ``DkMath.FLT.Kummer.positive_state_of_second_case,
     ``DkMath.FLT.Kummer.orient_second_case,
     ``DkMath.FLT.Kummer.RegularDescent.initial_state_of_int_solution,

@@ -137,6 +137,8 @@ import DkMathTest.FLT.Kummer.ElevenThirteenRegularTransport
 import DkMathTest.FLT.Kummer.ElevenThirteenDependencyAudit
 
 import DkMathTest.FLT.Kummer.PhaseRigidityFLT
+import DkMathTest.FLT.Kummer.PhaseContractBoundary
+import DkMathTest.FLT.Kummer.PhasePacketModuleCompatibility
 import DkMathTest.FLT.Kummer.PhaseRigidityFLTDependencyAudit
 
 #print "file: DkMathTest"
