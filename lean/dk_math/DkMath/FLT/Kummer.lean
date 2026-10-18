@@ -43,5 +43,6 @@ import DkMath.FLT.Kummer.ElevenThirteenFLT
 
 import DkMath.FLT.Kummer.ObstructedState
 import DkMath.FLT.Kummer.IrregularPrime37
+import DkMath.FLT.Kummer.IrregularGalois37
 
 #print "file: DkMath.FLT.Kummer"

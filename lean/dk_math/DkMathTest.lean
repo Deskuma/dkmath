@@ -143,5 +143,7 @@ import DkMathTest.FLT.Kummer.PhaseRigidityFLTDependencyAudit
 
 import DkMathTest.FLT.Kummer.IrregularObstruction
 import DkMathTest.FLT.Kummer.IrregularObstructionDependencyAudit
+import DkMathTest.FLT.Kummer.GaloisPhaseObstruction
+import DkMathTest.FLT.Kummer.GaloisPhaseObstructionDependencyAudit
 
 #print "file: DkMathTest"

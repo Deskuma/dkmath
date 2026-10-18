@@ -155,7 +155,9 @@ structure WeightedObstructedState (P : RamifiedPhasePacket R p) (m : ℕ) where
 def WeightedObstructedState.unitObstruction {m : ℕ} (E : WeightedObstructedState P m) :
     Rˣ ⧸ unitPowerSubgroup R p := unitPowerObstruction p (E.u / E.v)
 
-/-- 選んだ単元比の障害が消えた場合だけ正規化し、同じ y,z と原始性を保持する。 -/
+/-- 選んだ単元比の障害が消えた場合だけ正規化し、同じ y,z と原始性を保持する。
+ここで保存するのは重み付き後続状態 `E` の y,z であり、前段の
+`ObstructedState.source` の座標と同一であるとは主張しない。 -/
 theorem WeightedObstructedState.normalize {m : ℕ} (E : WeightedObstructedState P m)
     (h : E.unitObstruction = 1) :
     ∃ F : State P m, F.y = E.y ∧ F.z = E.z := by
