@@ -1,0 +1,72 @@
+NOTE-005 Frey discriminant and local arithmetic translation, 2026-10-19
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+Scope: actual cubic/Weierstrass invariants and admissible coordinate change;
+integral normalization conditions and their oriented-input provider;
+GN discriminant identities, odd-prime valuations and p-divisibility;
+primitive c4 nondivisibility and nonsingular reduction away from abc.
+Galois representations, modularity, level lowering, minimality at 2 and FLT37 closure remain outside this arithmetic implementation.
+
+PASS: import-following marker DkMath.Lib.NumberTheory.FreyGapCubic
+PASS: import-following marker DkMath.Lib.NumberTheory.GNFreyDiscriminant
+PASS: import-following marker DkMath.Lib.NumberTheory.FreyPrimeValuation
+PASS: import-following marker DkMath.FLT.Frey
+PASS: import-following marker DkMathTest.FLT.FreyArithmetic
+PASS: import-following marker DkMathTest.FLT.FreyArithmeticDependencyAudit
+PASS: 4 production modules; no sorry/admit/native_decide, extra axioms or external FLT imports
+PASS: regular contracts/endpoints and existing obstruction/Galois state files byte-identical to HEAD
+PASS: import-following smoke marker RootSmokeNOTE005
+PASS: no new production/test warnings; historical unrelated warnings remain outside these proof graphs.
+
+$ lake build DkMath.Lib.NumberTheory.FreyGapCubic
+exit 0 (3095 jobs)
+$ lake build DkMath.Lib.NumberTheory.FreyPrimeValuation
+exit 0 (3108 jobs)
+$ lake build DkMathTest.FLT.FreyArithmeticDependencyAudit
+exit 0 (3111 jobs)
+
+$ lake build DkMath DkMath.FLT.Frey DkMathTest
+exit 0
+Build completed successfully (11493 jobs).
+info: DkMathTest/FLT/FreyArithmeticDependencyAudit.lean:59:0: PASS: 48 public NOTE-005 declarations; standard logical axioms only.
+info: DkMathTest/FLT/FreyArithmeticDependencyAudit.lean:59:0: PASS: DkMath.Lib.NumberTheory.FreyGapCubic.normalized_discriminant; 3476 reachable constants; expected providers present.
+info: DkMathTest/FLT/FreyArithmeticDependencyAudit.lean:59:0: PASS: DkMath.Lib.NumberTheory.GNFreyDiscriminant.integral_discriminant_gn; 6325 reachable constants; expected providers present.
+info: DkMathTest/FLT/FreyArithmeticDependencyAudit.lean:59:0: PASS: DkMath.Lib.NumberTheory.FreyPrimeValuation.integral_valuation_of_solution; 12585 reachable constants; expected providers present.
+info: DkMathTest/FLT/FreyArithmeticDependencyAudit.lean:59:0: PASS: DkMath.FLT.Frey.Source.local_arithmetic; 12851 reachable constants; expected providers present.
+info: DkMathTest/FLT/FreyArithmeticDependencyAudit.lean:59:0: PASS: DkMath.FLT.Frey.Source.reduction_isElliptic; 5156 reachable constants; expected providers present.
+
+$ lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE005.lean
+exit 0
+file: RootSmokeNOTE005
+DkMath.FLT.Kummer.IrregularPrime37.observe_galois {m : ℕ}
+  (E : DkMath.FLT.Kummer.RegularDescent.State DkMath.FLT.Kummer.IrregularPrime37.phase37 (m + 1)) (A B : ℤ)
+  (hx : E.x = ↑A) (hy : E.y = ↑B) (a : (ZMod 37)ˣ) (i : Fin 37) :
+  mapNonzeroIdeal (DkMath.FLT.Kummer.IrregularPrime37.sigma37 a)
+        ((DkMath.FLT.Kummer.IrregularPrime37.observe E).phases.power i).root =
+      ((DkMath.FLT.Kummer.IrregularPrime37.observe E).phases.power (RamifiedPhasePacket.phaseMul a i)).root ∧
+    (ClassGroup.mulEquiv (DkMath.FLT.Kummer.IrregularPrime37.sigma37 a))
+        ((DkMath.FLT.Kummer.IrregularPrime37.observe E).phases.obstruction i) =
+      (DkMath.FLT.Kummer.IrregularPrime37.observe E).phases.obstruction (RamifiedPhasePacket.phaseMul a i)
+'DkMath.Lib.NumberTheory.FreyGapCubic.normalized_discriminant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.GNFreyDiscriminant.integral_discriminant_gn' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.FreyPrimeValuation.integral_valuation_of_solution' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.local_arithmetic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.reduction_isElliptic' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+$ lake env lean DkMathTest.lean
+exit 0
+file: DkMathTest
+
+$ python3 check_tracker_mismatch.py /tmp/note005-full.log
+exit 0
+OK: no mismatches found
+PASS: 2289 Built/Replayed-marker pairs agree; all 6 new production/test modules are represented.
+
+$ git diff --check
+exit 0

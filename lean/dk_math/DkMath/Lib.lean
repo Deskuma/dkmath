@@ -11,6 +11,9 @@ import DkMath.Lib.Algebra.UnitPowerClass
 import DkMath.Lib.Algebra.OddPowerRecovery
 import DkMath.Lib.TwoChannel
 import DkMath.Lib.NumberTheory.PadicValNat
+import DkMath.Lib.NumberTheory.FreyGapCubic
+import DkMath.Lib.NumberTheory.GNFreyDiscriminant
+import DkMath.Lib.NumberTheory.FreyPrimeValuation
 import DkMath.Lib.NumberTheory.HomogeneousPowerQuotient
 import DkMath.Lib.NumberTheory.ClassGroupTorsionBridge
 import DkMath.Lib.NumberTheory.TraceOneLatticeLanding

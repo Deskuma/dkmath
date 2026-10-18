@@ -12,6 +12,7 @@ import DkMath.FLT.Samples
 import DkMath.FLT.Five
 import DkMath.FLT.Seven
 import DkMath.FLT.QuadraticEssence
+import DkMath.FLT.Frey
 
 #print "file: DkMath.FLT"
 
