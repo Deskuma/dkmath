@@ -1,0 +1,60 @@
+NOTE-011 verification evidence — 2026-10-20
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Focused regression and dependency audit:
+  lake build DkMathTest.FLT.Note011DependencyAudit
+  exit 0; Build completed successfully (3150 jobs).
+  Regression module rebuilt after warning fixes: 9 named lemmas, 4 examples.
+  42 public production declarations and 9 named regression declarations audited.
+  12 selected dependency routes inspect types and opaque proof bodies.
+  Allowed axioms: propext, Classical.choice, Quot.sound only.
+  Forbidden: sorryAx, FLT endpoints, FltRegular/P2MW/P2M/FreyPackage,
+    Herbrand/Ribet and the listed global regularity providers.
+
+Integrated public entrances:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  Build completed successfully (11539 jobs).
+  All 8 new source/test modules appear with matching file markers.
+  No warnings in the 8 new source/test modules; historical warnings elsewhere remain.
+
+Root smoke:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE011.lean
+  exit 0; import DkMath exposes equivariance, stability transport,
+    conditional rank two, normal finite level and the Frey facade.
+  All 4 printed axiom sets contain only the 3 allowed logical axioms.
+
+Direct suite entrance after integrated build:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest
+
+Marker checker:
+  python3 check_tracker_mismatch.py /tmp/note011-full-build.log
+  exit 0; OK: no mismatches found
+  Static check: all 8 source/test markers match paths and follow imports.
+
+Hygiene:
+  No sorry/admit/axiom/native_decide in the 6 new production modules.
+  No trailing whitespace in the 8 new source/test modules.
+  git diff --check: exit 0.
+
+Scope:
+  6 production modules, 458 lines including textbook comments.
+  Rank two requires an explicit actual E[p] cardinality p^2 proof.
+  Open kernel and finite level require Finite of actual E[n].
+  The geometric cardinality theorem and Frey irreducibility are not proved here.
+
+PASS: 42 public NOTE-011 declarations and 9 named regression declarations; standard logical axioms only.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsionByLinearEquiv; 23612 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.standardRepresentation; 23673 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.standard_isStable_iff; 23729 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.standard_isIrreducible_iff; 23733 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finrank_eq_two_of_card_sq; 24013 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.representationKernel_eq_iInter; 23702 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.factorsThroughFiniteLevel; 26732 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.residual_standard_isIrreducible_iff; 24219 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.residual_profile_of_card_sq; 27536 reachable constants; expected providers present.
+PASS: FreyResidualFiniteLevelTest.standardTwoPoint_fixed; 24379 reachable constants; expected providers present.
+PASS: FreyResidualFiniteLevelTest.torsionOne_finite_level; 27211 reachable constants; expected providers present.
+PASS: FreyResidualFiniteLevelTest.source37_profile; 27550 reachable constants; expected providers present.
