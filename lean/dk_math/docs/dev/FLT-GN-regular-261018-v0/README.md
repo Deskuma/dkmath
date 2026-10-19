@@ -34,6 +34,10 @@ NOTE-008 の IRR-009（実際の37-torsion類群の指標射影・直和分解�
 Hensel住所からj深度への輸送と二曲線の素数での比較は
 [指標射影・深度輸送の教科書実装](IMPLEMENTATION-NOTE008-261019.md) に記録した。
 非零類の存在・Herbrand–Ribet・Artin導手・FLT37は引き続き別の境界である。
+NOTE-009 の IRR-010（指標別位相輸送）、Bernoulli32の5乗指標ラベル同定、
+任意の非零整数反例からの `Source.ofCounterexample` と半安定なFrey曲線への入口は
+[指標輸送・反例入口の教科書実装](IMPLEMENTATION-NOTE009-261019.md) に記録した。
+対象指標成分の非零性・Artin導手・一般FLTの終点は別の境界として残る。
 元の設計書と議事録は設計・検討時点の記録として保持する。
 
 ## 1. 基本目的

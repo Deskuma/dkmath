@@ -161,4 +161,7 @@ import DkMathTest.FLT.PrimeDepthTransport
 import DkMathTest.Lib.FiniteSpectrumProjectors
 import DkMathTest.FLT.Note008DependencyAudit
 
+import DkMathTest.FLT.Note009Transport
+import DkMathTest.FLT.Note009DependencyAudit
+
 #print "file: DkMathTest"

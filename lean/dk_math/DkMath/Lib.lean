@@ -58,6 +58,7 @@ import DkMath.Lib.NumberTheory.GaloisIdealNorm
 import DkMath.Lib.NumberTheory.CyclotomicClassNorm
 import DkMath.Lib.LinearAlgebra.FiniteSpectrumProjectors
 import DkMath.Lib.NumberTheory.Cyclotomic37CharacterDecomposition
+import DkMath.Lib.NumberTheory.Cyclotomic37CharacterTransport
 import DkMath.Lib.NumberTheory.FreyTwoArithmetic
 import DkMath.Lib.NumberTheory.UnitObstructionPacket
 import DkMath.Lib.NumberTheory.BernoulliPrime37

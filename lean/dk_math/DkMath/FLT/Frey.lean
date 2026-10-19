@@ -19,8 +19,8 @@ import DkMath.Lib.NumberTheory.FreyLocalReduction
 
 source の整数・共通因子・符号を取り直さず、そのまま保持する。
 向き付け済みの整数からの構成は `ofOriented` が分母条件を証明する。
-任意の反例の向き付け、素数2での最小性、mod-p 表現、モジュラー性、
-レベル降下の供給は、ここで得た局所算術とは別の未実装境界である。
+任意の反例の向き付けは `FreyCounterexample`、素数2での最小性は `FreyTwo` で接続する。
+mod-p 表現・モジュラー性・レベル降下の供給は、この局所算術とは別の理論である。
 -/
 
 namespace DkMath.FLT.Frey
