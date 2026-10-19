@@ -38,6 +38,9 @@ NOTE-009 の IRR-010（指標別位相輸送）、Bernoulli32の5乗指標ラベ
 任意の非零整数反例からの `Source.ofCounterexample` と半安定なFrey曲線への入口は
 [指標輸送・反例入口の教科書実装](IMPLEMENTATION-NOTE009-261019.md) に記録した。
 対象指標成分の非零性・Artin導手・一般FLTの終点は別の境界として残る。
+NOTE-010 §4以降の、同じFrey曲線の実際のE[p]・Krull連続ガロア作用、標準torsion表示へのアダプタ、
+Pascal差分恒等式は [残余ガロア表現の入口](IMPLEMENTATION-NOTE010-261020.md) に記録した。
+次元2・行列式・局所慣性作用・Artin導手は次の接続境界である。
 元の設計書と議事録は設計・検討時点の記録として保持する。
 
 ## 1. 基本目的

@@ -16,6 +16,7 @@ import DkMath.FLT.Frey
 import DkMath.FLT.FreyTwo
 import DkMath.FLT.FreyPrimeProfile
 import DkMath.FLT.FreyCounterexample
+import DkMath.FLT.FreyResidualRepresentation
 import DkMath.FLT.PrimeDepthBridge
 
 #print "file: DkMath.FLT"

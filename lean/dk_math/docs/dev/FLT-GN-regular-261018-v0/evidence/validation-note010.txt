@@ -1,0 +1,80 @@
+NOTE-010 verification evidence — 2026-10-20
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+
+Focused regression:
+  lake build DkMathTest.FLT.FreyResidualRepresentation
+  exit 0; Build completed successfully (3142 jobs).
+  10 anonymous examples and 7 named verification lemmas, plus actual point constructions.
+
+Focused audit:
+  lake build DkMathTest.FLT.Note010DependencyAudit
+  exit 0; Build completed successfully (3143 jobs).
+  The final integrated build recompiles the audit with additional external namespace prohibitions.
+
+Final integrated build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11531 jobs).
+  All 6 new source/test modules appear as Built/Replayed with matching file markers.
+  No warnings in the 6 new modules; historical warnings elsewhere are outside this change.
+
+Root smoke:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE010.lean
+  exit 0; import DkMath reaches actual torsion, Krull continuity, Frey entrance and Pascal difference.
+
+Direct test entrance after final build:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest
+
+Marker checker:
+  python3 check_tracker_mismatch.py /tmp/note010-full-build.log
+  exit 0; OK: no mismatches found
+  Static check: all 6 module markers follow imports and match source paths.
+
+Hygiene:
+  4 new production modules contain no sorry/admit/axiom/native_decide.
+  All new Lean modules have no trailing whitespace.
+  git diff --check: exit 0.
+
+Production source: 4 modules, 396 lines including textbook comments.
+Axiom audit: 43 public production declarations and 12 named regression declarations.
+Allowed axioms: propext, Classical.choice, Quot.sound only.
+Dependency audit: 11 selected routes include types and opaque bodies and require actual providers.
+Forbidden: FLT endpoints, FltRegular/P2MW/P2M/FreyPackage, Herbrand/Ribet, global regularity providers.
+
+PASS: 43 public NOTE-010 declarations and 12 named regression declarations; standard logical axioms only.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.representation; 23678 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsionByAddEquiv; 23522 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointAction_stabilizer_isOpen; 25821 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsionContinuousSMul; 26103 reachable constants; expected providers present.
+PASS: DkMath.Lib.RepresentationTheory.PascalDifference.end_difference_pow; 9281 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.residualRepresentation; 24162 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.residualAutomorphisms; 24169 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.residual_difference_nilpotent; 24682 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.ofCounterexample_residual_entrance; 32766 reachable constants; expected providers present.
+PASS: FreyResidualRepresentationTest.twoPoint; 24168 reachable constants; expected providers present.
+PASS: FreyResidualRepresentationTest.shear_pow; 9582 reachable constants; expected providers present.
+
+Scope:
+  E[n] is the kernel of n-smultiplication on actual nonsingular algebraic-closure points.
+  Its standard torsionBy adapter is an additive equivalence preserving the same point values.
+  The Galois action comes from Affine.Point.map and becomes a ZMod n-linear representation.
+  Stabilizers of individual points are open by algebraicity of their two coordinates.
+  The full action is jointly continuous for the Krull/discrete topologies, without a finiteness premise.
+  The Frey counterexample entrance retains the same selected Source and its local arithmetic.
+  Pascal gives (rho(sigma)-1)^p=rho(sigma^p)-1, including the zero module case.
+  Nilpotence requires rho(sigma^p)=1. A nonidentity shear with T^37=1 is explicitly checked.
+  The real p=2 Source has a nonzero fixed 2-torsion point; E[1] is zero.
+  No cardinality p^2, dimension 2, GL2 basis, determinant, Weil pairing,
+  inertia identification, unramifiedness, finite flatness, Artin conductor,
+  irreducibility, modularity, level lowering, or general FLT endpoint is supplied.
+
+Reference files inspected (2026-10-20, public main):
+  https://github.com/anthropics/fermats-last-theorem/blob/main/Definitions/Def_FLTPrelim_GaloisRep.lean
+  https://github.com/anthropics/fermats-last-theorem/blob/main/Definitions/Def_FLTPrelim_FreyPackage.lean
+  No external repository imports were added.
+
+Transient raw logs:
+  /tmp/note010-full-build.log
+  /tmp/note010-root-smoke.log
+  /tmp/note010-test-entrance.log
