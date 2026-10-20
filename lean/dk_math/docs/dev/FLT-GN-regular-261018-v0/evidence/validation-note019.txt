@@ -1,0 +1,103 @@
+NOTE-019 verification evidence — 2026-10-21
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Focused implementation:
+  lake build DkMath.Lib.Algebra.TorsionMultiplication
+  exit 0; Build completed successfully (1244 jobs).
+  General commutative-group inclusion, restricted multiplication, kernel equivalence,
+    exact pair, surjectivity, quotient equivalence and Nat.card multiplicativity.
+  No coprimality or finite-type input needed for the generic identities.
+  Short exactness requires actual n-multiplication surjectivity on the ambient group.
+
+  lake build DkMath.Lib.NumberTheory.EllipticTorsionAllCard
+  exit 0; Build completed successfully (2249 jobs).
+  Same actual points and torsion kernels, both maps Galois equivariant.
+  Actual multiplication_surjective supplies generic right surjectivity.
+  Nonzero m,n provide geometric finiteness; card_torsion_mul only needs nonzero right factor
+    as a general Nat.card equality (not finite-group cardinality at m=0).
+  card_torsion_sq: every nonzero n, actual characteristic-zero elliptic E[n] has n^2 elements.
+  Uses card_torsion_prime_sq, card_torsion_one, card_torsion_mul and Nat.recOnMul.
+  Power formula n^(2*k), including k=0; standard torsionBy cardinality also transported.
+
+  lake build DkMath.FLT.FreyTorsionAllCard
+  exit 0; Build completed successfully (3173 jobs).
+  Same Source's curve at arbitrary nonzero torsion index n, distinguished from Source index p.
+  No prime or Weil pairing input for the new all-index cardinality API.
+  Source-index residual_card_sq needs p != 0; arbitrary n cardinality retained with finite level.
+
+Focused regression:
+  lake build DkMathTest.FLT.FreyTorsionAllCard
+  exit 0; Build completed successfully (3175 jobs).
+  17 named regression declarations.
+  Actual Source 2 curve: E[1]=1, E[4]=16, E[36]=1296, E[37^2]=1874161, E[37^0]=1.
+  Standard E[4] cardinality, noncoprime 6 and 6 finite short exact sequence,
+    kernel and quotient cardinalities 36, both maps Galois equivariant.
+  Unit factor and zero-right-factor exact-pair boundary tested separately.
+  ZMod 2 counterexample: restricted multiplication by 2 is not surjective; ambient divisibility cannot be omitted.
+  Arbitrary Source 37 all-index API tested without assuming existence globally.
+
+Dependency audit:
+  lake build DkMathTest.FLT.Note019DependencyAudit
+  exit 0; Build completed successfully (3176 jobs).
+  29 public production and 17 regression declarations; 14 selected routes inspect types and opaque bodies.
+  Allowed axioms: propext, Classical.choice, Quot.sound only.
+  Required: actual multiplication surjectivity, generic kernel and quotient equivalences,
+    prime cardinality provider, multiplicative induction, geometric finiteness, same Source curve.
+  All selected paths forbid pairing data; general-group selected paths also forbid DkMath number-theory layer.
+  Forbidden: sorryAx, external FltRegular/P2MW/P2M/FreyPackage, FLT endpoints,
+    Herbrand/Ribet, listed global regularity providers and old conditional cardinality/rank providers.
+  Library-only selected routes also forbid all DkMath.FLT dependencies.
+
+Integrated entrances:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11588 jobs).
+  All 5 new source/test modules reached with matching file markers.
+  No warnings/errors in these 5 modules; historical warnings elsewhere remain.
+
+Root smoke:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE019.lean
+  exit 0; import DkMath exposes general exact sequence, all-index formula and same-Source finite level.
+  Includes arbitrary rational elliptic E, composite 36, prime square 37^2, noncoprime 6 and 6.
+  Printed axiom sets for generic multiplicativity, actual all-index formula and Source wrapper:
+    propext, Classical.choice, Quot.sound only.
+
+Direct suite entrance:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest
+
+Markers and hygiene:
+  python3 check_tracker_mismatch.py /tmp/note019-full.log
+  exit 0; OK: no mismatches found.
+  Static check: 5 source/test markers and root smoke marker follow imports and match paths.
+  No sorry/admit/native_decide/unsafe/implemented_by or custom axiom declarations in those 6 files.
+  No trailing whitespace in those 6 files.
+  git diff --check: exit 0.
+
+Scope:
+  3 production modules, 285 lines including Japanese textbook comments; 29 named declarations.
+  Actual characteristic-zero elliptic curve over any field, all nonzero natural torsion indices.
+  Both maps preserve original points and original Galois actions.
+  No coprimality, external cardinality, or Weil pairing assumptions.
+  Nat.card at an infinite type is 0; finite-group interpretation requires nonzero indices.
+  Cardinality alone does not prove ZMod(p^k) freeness or Tate-module rank/free structure.
+  Weil geometry, unconditional cyclotomic determinant, Frey irreducibility and FLT remain separate.
+  No new external source copied/imported; existing DkMath geometry and Mathlib group/induction APIs reused.
+
+Audit output:
+PASS: 29 production and 17 regression declarations; standard logical axioms only.
+PASS: DkMath.Lib.Algebra.TorsionMultiplication.short_exact; 1053 reachable constants; expected providers present.
+PASS: DkMath.Lib.Algebra.TorsionMultiplication.card_mul; 6941 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsion_short_exact; 27447 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsion_finite_short_exact; 27480 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.card_torsion_mul; 27480 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.card_torsion_sq; 28584 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.card_standardTorsion_sq; 28612 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsionMultiply_equivariant; 23688 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.curve_torsion_card_sq; 31779 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.curve_torsion_card_finite_level; 33273 reachable constants; expected providers present.
+PASS: FreyTorsionAllCardTest.actual37square_card; 31794 reachable constants; expected providers present.
+PASS: FreyTorsionAllCardTest.actual6_6_short_exact; 30773 reachable constants; expected providers present.
+PASS: FreyTorsionAllCardTest.actual6_6_quotient_card; 31794 reachable constants; expected providers present.
+PASS: FreyTorsionAllCardTest.nondivisible_multiply_not_surjective; 4020 reachable constants; expected providers present.

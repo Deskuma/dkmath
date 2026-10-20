@@ -26,6 +26,7 @@ import DkMath.FLT.FreyResidualDimensionCriteria
 import DkMath.FLT.FreyResidualRankTwo
 import DkMath.FLT.FreyResidualGL2
 import DkMath.FLT.FreyResidualCyclotomic
+import DkMath.FLT.FreyTorsionAllCard
 import DkMath.FLT.PrimeDepthBridge
 
 #print "file: DkMath.FLT"

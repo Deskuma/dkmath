@@ -88,6 +88,8 @@ import DkMath.Lib.NumberTheory.CyclotomicRootModule
 import DkMath.Lib.NumberTheory.RootPairingDeterminant
 import DkMath.Lib.NumberTheory.EllipticTorsionWeilDeterminant
 import DkMath.Lib.NumberTheory.EllipticMultiplicationSurjective
+import DkMath.Lib.Algebra.TorsionMultiplication
+import DkMath.Lib.NumberTheory.EllipticTorsionAllCard
 import DkMath.Lib.RepresentationTheory.PascalDifference
 import DkMath.Lib.NumberTheory.FreyTwoArithmetic
 import DkMath.Lib.NumberTheory.UnitObstructionPacket
