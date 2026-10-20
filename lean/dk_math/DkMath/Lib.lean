@@ -82,6 +82,12 @@ import DkMath.Lib.NumberTheory.EllipticTorsionRegularFiber
 import DkMath.Lib.RepresentationTheory.InvariantLine
 import DkMath.Lib.RepresentationTheory.MatrixRealization
 import DkMath.Lib.NumberTheory.EllipticTorsionGL2
+import DkMath.Lib.RepresentationTheory.AlternatingDeterminant
+import DkMath.Lib.RepresentationTheory.StableLineMatrix
+import DkMath.Lib.NumberTheory.CyclotomicRootModule
+import DkMath.Lib.NumberTheory.RootPairingDeterminant
+import DkMath.Lib.NumberTheory.EllipticTorsionWeilDeterminant
+import DkMath.Lib.NumberTheory.EllipticMultiplicationSurjective
 import DkMath.Lib.RepresentationTheory.PascalDifference
 import DkMath.Lib.NumberTheory.FreyTwoArithmetic
 import DkMath.Lib.NumberTheory.UnitObstructionPacket

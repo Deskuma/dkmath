@@ -180,5 +180,7 @@ import DkMathTest.FLT.FreyResidualRankTwo
 import DkMathTest.FLT.Note016DependencyAudit
 import DkMathTest.FLT.FreyResidualGL2
 import DkMathTest.FLT.Note017DependencyAudit
+import DkMathTest.FLT.FreyResidualCyclotomic
+import DkMathTest.FLT.Note018DependencyAudit
 
 #print "file: DkMathTest"
