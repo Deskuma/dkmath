@@ -1,0 +1,94 @@
+NOTE-015 verification evidence — 2026-10-20
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Focused final core:
+  lake build DkMath.Lib.NumberTheory.EllipticTwoTorsionRank
+  exit 0; Build completed successfully (2244 jobs).
+  Includes RootCount and DimensionCriteria; no warnings in these final modules.
+  Actual E[2] cardinality 4 comes from cubic discriminant and exact coordinate-fibre counting.
+  Its F2 dimension 2 uses the finite-vector-space cardinality formula.
+  No prior conditional cardinality/rank provider is used.
+
+Focused regression:
+  lake build DkMathTest.FLT.FreyResidualDimensionCriteria
+  exit 0; Build completed successfully (3172 jobs).
+  8 named lemmas and 3 examples.
+  Actual Source 2 curve: 3 distinct roots at n=2, actual E[2] cardinality 4 and dimension 2.
+  The span of the existing nonzero twoPoint has a second actual torsion point outside it.
+  The same curve's E[37] satisfies the exact odd count and the criterion dimension 2 iff r > 18.
+  r > 18 itself is not assumed as a proved fact or concluded by the regression.
+  Boundary n=1 has no roots; the odd formula is explicitly tested to fail at n=2.
+  Standard torsionBy dimension 2 is also checked at n=2.
+
+Focused dependency audit:
+  lake build DkMathTest.FLT.Note015DependencyAudit
+  exit 0; Build completed successfully (3173 jobs).
+  31 public named production declarations and 8 named regression lemmas.
+  15 selected routes inspect types and opaque proof bodies and require actual providers.
+  Allowed axioms: propext, Classical.choice, Quot.sound only.
+  Forbidden: sorryAx, FLT endpoints, FltRegular/P2MW/P2M/FreyPackage,
+    Herbrand/Ribet, listed global regularity providers,
+    finite_of_card_sq, finrank_eq_two_of_card_sq,
+    finrank_eq_two_of_standard_card_sq, residual_profile_of_card_sq.
+  Geometry-only routes also forbid all DkMath.FLT dependencies.
+
+Integrated public entrances:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11562 jobs).
+  All 6 new source/test modules appear with matching file markers.
+  No warnings/errors in these 6 modules; historical warnings elsewhere remain.
+
+Root smoke:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE015.lean
+  exit 0; exact counts, criteria and actual two-torsion rank exposed by import DkMath.
+  Both printed axiom sets contain only the 3 allowed logical axioms.
+  Includes arbitrary rational elliptic curves, an outside-span witness for p=2,
+    and a Source 37 cardinality conclusion conditional on cardinality > 37.
+
+Direct suite entrance after integrated build:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest
+
+Marker checker:
+  python3 check_tracker_mismatch.py /tmp/note015-full.log
+  exit 0; OK: no mismatches found
+  Static check: all 6 source/test markers and root smoke marker follow imports and match paths.
+
+Hygiene:
+  Static scan: no sorry/admit/native_decide/unsafe/implemented_by or axiom declarations
+    in the 6 new source/test modules and root smoke.
+  All 31 named production declarations included in the axiom audit.
+  No trailing whitespace in the 6 new source/test modules and root smoke.
+  git diff --check: exit 0.
+
+Scope:
+  4 production modules, 430 lines including textbook comments.
+  For n nonzero, exact actual torsion cardinality equals 1 plus the sum of finite affine fibres.
+  For odd n on a characteristic-zero elliptic curve, cardinality is exactly 1 + 2*r,
+    where r counts DISTINCT roots of PsiSq_n, not roots with multiplicity or degree.
+  For prime p, dimension 2 is equivalent to cardinality > p and, for a specified nonzero P,
+    existence of Q outside the span of P. In the odd case it is equivalent to r > (p-1)/2.
+  These criteria do not supply the lower bound for general odd primes.
+  For p=2, discriminant 16*Delta != 0 supplies r=3, cardinality 4 and dimension 2.
+  For p=37, the lower bound r > 18 remains unproved.
+  GL2 realization, Weil pairing, irreducibility, inertia and general FLT remain separate.
+  No new external code was ported; existing DkMath bridges and Mathlib APIs are reused.
+
+PASS: 31 public named NOTE-015 declarations and 8 named regression declarations; standard logical axioms only.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.card_torsion_eq_one_add_sum_fibers; 26258 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.affineXFiber_ncard_eq_two_of_odd; 27219 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.card_torsion_eq_one_add_twice_roots; 27408 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finrank_torsion_eq_two_of_prime_lt; 27905 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finrank_torsion_eq_two_iff_exists_outside_span; 27056 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finrank_torsion_eq_two_iff_root_count; 27933 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.divisionRootCount_two; 18948 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.card_torsion_two; 27451 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finrank_torsion_two; 27892 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finrank_standardTorsion_two; 27923 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.exists_torsion_two_outside_span; 28194 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.residual_finrank_eq_two_iff_root_count; 31198 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.residual_two_exists_outside_span; 31458 reachable constants; expected providers present.
+PASS: FreyResidualDimensionCriteriaTest.actualTwoPoint_outside_span; 31492 reachable constants; expected providers present.
+PASS: FreyResidualDimensionCriteriaTest.actualCurve37_frontier; 31225 reachable constants; expected providers present.

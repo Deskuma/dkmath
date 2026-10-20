@@ -22,6 +22,7 @@ import DkMath.FLT.FreyResidualFiniteLevel
 import DkMath.FLT.FreyResidualGeometry
 import DkMath.FLT.FreyResidualDimensionBound
 import DkMath.FLT.FreyResidualNontrivial
+import DkMath.FLT.FreyResidualDimensionCriteria
 import DkMath.FLT.PrimeDepthBridge
 
 #print "file: DkMath.FLT"
