@@ -176,5 +176,7 @@ import DkMathTest.FLT.FreyResidualNontrivial
 import DkMathTest.FLT.Note014DependencyAudit
 import DkMathTest.FLT.FreyResidualDimensionCriteria
 import DkMathTest.FLT.Note015DependencyAudit
+import DkMathTest.FLT.FreyResidualRankTwo
+import DkMathTest.FLT.Note016DependencyAudit
 
 #print "file: DkMathTest"

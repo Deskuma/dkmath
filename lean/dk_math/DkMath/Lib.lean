@@ -76,6 +76,9 @@ import DkMath.Lib.NumberTheory.EllipticTorsionNontrivial
 import DkMath.Lib.NumberTheory.EllipticTorsionRootCount
 import DkMath.Lib.NumberTheory.EllipticTorsionDimensionCriteria
 import DkMath.Lib.NumberTheory.EllipticTwoTorsionRank
+import DkMath.Lib.Algebra.RationalPolynomialFiber
+import DkMath.Lib.NumberTheory.EllipticMultiplicationCoordinates
+import DkMath.Lib.NumberTheory.EllipticTorsionRegularFiber
 import DkMath.Lib.RepresentationTheory.PascalDifference
 import DkMath.Lib.NumberTheory.FreyTwoArithmetic
 import DkMath.Lib.NumberTheory.UnitObstructionPacket
