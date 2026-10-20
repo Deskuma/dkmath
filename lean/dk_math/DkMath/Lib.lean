@@ -72,6 +72,7 @@ import DkMath.Lib.NumberTheory.EllipticDivisionMultiplication
 import DkMath.Lib.NumberTheory.EllipticTorsionFinite
 import DkMath.Lib.NumberTheory.EllipticTorsionCardBound
 import DkMath.Lib.NumberTheory.EllipticTorsionDimensionBound
+import DkMath.Lib.NumberTheory.EllipticTorsionNontrivial
 import DkMath.Lib.RepresentationTheory.PascalDifference
 import DkMath.Lib.NumberTheory.FreyTwoArithmetic
 import DkMath.Lib.NumberTheory.UnitObstructionPacket

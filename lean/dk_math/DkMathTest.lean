@@ -172,5 +172,7 @@ import DkMathTest.FLT.FreyResidualGeometry
 import DkMathTest.FLT.Note012DependencyAudit
 import DkMathTest.FLT.FreyResidualDimensionBound
 import DkMathTest.FLT.Note013DependencyAudit
+import DkMathTest.FLT.FreyResidualNontrivial
+import DkMathTest.FLT.Note014DependencyAudit
 
 #print "file: DkMathTest"
