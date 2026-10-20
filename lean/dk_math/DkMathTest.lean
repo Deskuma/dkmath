@@ -168,5 +168,7 @@ import DkMathTest.FLT.FreyResidualRepresentation
 import DkMathTest.FLT.Note010DependencyAudit
 import DkMathTest.FLT.FreyResidualFiniteLevel
 import DkMathTest.FLT.Note011DependencyAudit
+import DkMathTest.FLT.FreyResidualGeometry
+import DkMathTest.FLT.Note012DependencyAudit
 
 #print "file: DkMathTest"

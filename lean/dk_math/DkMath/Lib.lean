@@ -65,6 +65,11 @@ import DkMath.Lib.NumberTheory.EllipticTorsionGaloisStable
 import DkMath.Lib.NumberTheory.EllipticTorsionStandardEquiv
 import DkMath.Lib.NumberTheory.EllipticTorsionRankTwo
 import DkMath.Lib.NumberTheory.EllipticTorsionFiniteLevel
+import DkMath.Lib.NumberTheory.EllipticDivisionSequence
+import DkMath.Lib.NumberTheory.EllipticDivisionUniversal
+import DkMath.Lib.NumberTheory.EllipticDivisionCoordinates
+import DkMath.Lib.NumberTheory.EllipticDivisionMultiplication
+import DkMath.Lib.NumberTheory.EllipticTorsionFinite
 import DkMath.Lib.RepresentationTheory.PascalDifference
 import DkMath.Lib.NumberTheory.FreyTwoArithmetic
 import DkMath.Lib.NumberTheory.UnitObstructionPacket

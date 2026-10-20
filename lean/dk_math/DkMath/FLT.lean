@@ -19,6 +19,7 @@ import DkMath.FLT.FreyCounterexample
 import DkMath.FLT.FreyResidualRepresentation
 import DkMath.FLT.FreyResidualIrreducibility
 import DkMath.FLT.FreyResidualFiniteLevel
+import DkMath.FLT.FreyResidualGeometry
 import DkMath.FLT.PrimeDepthBridge
 
 #print "file: DkMath.FLT"

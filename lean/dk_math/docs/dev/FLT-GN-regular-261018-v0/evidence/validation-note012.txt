@@ -1,0 +1,71 @@
+NOTE-012 verification evidence — 2026-10-20
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Focused regression:
+  lake build DkMathTest.FLT.FreyResidualGeometry
+  exit 0; Build completed successfully (3163 jobs).
+  5 named regression lemmas and 4 examples.
+  Includes actual Source 2 curve with its 37-torsion; no hypothetical Source 37 is needed there.
+
+Focused dependency audit:
+  lake build DkMathTest.FLT.Note012DependencyAudit
+  exit 0; Build completed successfully (3164 jobs).
+  237 public named production declarations and 5 named regression lemmas.
+  12 selected routes inspect types and opaque proof bodies and require actual providers.
+  Allowed axioms: propext, Classical.choice, Quot.sound only.
+  Forbidden: sorryAx, FLT endpoints, FltRegular/P2MW/P2M/FreyPackage,
+    Herbrand/Ribet, listed global regularity providers,
+    finite_of_card_sq, finrank_eq_two_of_card_sq, residual_profile_of_card_sq.
+
+Integrated public entrances:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11547 jobs).
+  All 8 new source/test modules appear with matching file markers.
+  No warnings in these 8 modules; historical warnings elsewhere remain.
+
+Root smoke:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE012.lean
+  exit 0; actual finite torsion and Frey finite level are exposed by import DkMath.
+  Both printed axiom sets contain only the 3 allowed logical axioms.
+  Finite (Torsion E 37) is synthesized for arbitrary rational curves.
+
+Direct suite entrance after integrated build:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest
+
+Marker checker:
+  python3 check_tracker_mismatch.py /tmp/note012-full-build.log
+  exit 0; OK: no mismatches found
+  Static check: all 8 source/test markers match paths and follow imports.
+
+Hygiene:
+  No sorry/admit/axiom/native_decide in the 6 new production modules.
+  No trailing whitespace in the 8 new source/test modules.
+  git diff --check: exit 0.
+
+Scope:
+  6 production modules, 1703 lines including textbook comments.
+  The geometric field has characteristic zero and n is nonzero.
+  No external finite/cardinality/rank provider is an input to actual torsion finiteness.
+  Prime Frey finite level requires neither Finite nor cardinality p^2 as an input.
+  Exact cardinality p^2, rank two, GL2, irreducibility and inertia remain separate.
+
+Reference blobs (read, not imported):
+  Definitions/Def_WeierstrassCurve_EDSEngine.lean: 1baedebf5d82fbcf4a1d543f7a7582ac96edcfc5
+  P2M/Sol/S_WeierstrassCurve_card_torsion_of_isAlgClosed.lean: 865709609f50e0e2ef445df7c01d01768ca731c5
+
+PASS: 237 public named NOTE-012 declarations and 5 named regression declarations; standard logical axioms only.
+PASS: DkMath.Lib.NumberTheory.EllipticDivision.net_normEDS; 10137 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticDivision.WeierstrassCurve.ωe; 6943 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticDivision.WeierstrassCurve.zsmul_eq_smulEval; 24951 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticDivision.WeierstrassCurve.smul_eq_zero_iff_evalEval_ψ; 24953 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsion_some_coordinate_root; 26035 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finite_torsion_of_ne_zero; 26235 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.factorsThroughFiniteLevel_of_ne_zero; 29421 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.residual_normal_finite_level; 29451 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.residual_factorsThroughFiniteLevel_of_prime; 29456 reachable constants; expected providers present.
+PASS: FreyResidualGeometryTest.actualCurve37_finite_level; 29443 reachable constants; expected providers present.
+PASS: FreyResidualGeometryTest.twoPoint_coordinate_root; 26098 reachable constants; expected providers present.
+PASS: FreyResidualGeometryTest.source37_finite_level; 29479 reachable constants; expected providers present.
