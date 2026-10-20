@@ -1,0 +1,113 @@
+NOTE-020 verification evidence — 2026-10-21
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Focused implementation:
+  lake build DkMath.Lib.Algebra.TorsionPowerLifting
+  exit 0; Build completed successfully (1246 jobs).
+  General additive commutative-group induction: lifts of two generators generate the power kernel.
+  No primality, finiteness, local-ring or Nakayama assumptions in this generation lemma.
+
+  lake build DkMath.Lib.NumberTheory.EllipticTorsionPrimePower
+  exit 0; Build completed successfully (2257 jobs).
+  Actual E[p] basis, actual multiplication surjectivity, natural-coefficient generation,
+    ZMod(p^(k+1))^2 presentation, surjectivity and equal cardinalities imply bijectivity.
+  Linear equivalence and basis for every k >= 0; Module.Free at every stage.
+  Positive-exponent finrank 2 only: requires nontrivial coefficient ring.
+  k=0 explicitly treated as E[1] over zero ring ZMod 1, not a rank-uniqueness assertion.
+  Canonical multiplication transitions surjective and Galois equivariant.
+  Coordinate action transported from same original point action; not assumed trivial.
+
+  lake build DkMath.Lib.NumberTheory.EllipticTorsionPrimePower DkMath.Lib.NumberTheory.EllipticTorsionNonSplit
+  exit 0; Build completed successfully (2258 jobs).
+  Non-split module is independent of new prime-power free-module construction.
+  Actual E[p*p] contains P not killed by p, with additive order p^2.
+  Restricted p multiplication admits no additive right inverse.
+  No additive equivalence E[p*p] ~= E[p] x E[p].
+
+  lake build DkMath.FLT.FreyTorsionPrimePower
+  exit 0; Build completed successfully (3182 jobs).
+  Same Source curve with independent torsion prime q and Source exponent p.
+  No new cardinality, independent-point or pairing hypotheses.
+
+Focused regression:
+  lake build DkMathTest.FLT.FreyTorsionPrimePower
+  exit 0; Build completed successfully (3184 jobs).
+  16 named regression declarations, actual Source 2 curve (4,3,5).
+  E[37^2] equivalence, E[37^3] freeness and rank 2; E[4] freeness.
+  Zero-stage group zero and equivalence; no zero-stage rank 2 asserted.
+  Actual selected lifts and first coordinate inverse image, arbitrary-lift bijectivity.
+  Surjective transition, original Galois equivariance and transported coordinate equivariance.
+  Point of order 1369; equal cardinalities yet nonisomorphic E[37*37] and E[37]^2.
+  No additive section at 37; non-product at prime 2.
+  No hypothetical Source 37 needed for these actual examples.
+
+Dependency audit:
+  lake build DkMathTest.FLT.Note020DependencyAudit
+  exit 0; Build completed successfully (3185 jobs).
+  32 public production and 16 regression declarations; 17 selected type-and-opaque-body traversals.
+  Allowed axioms: propext, Classical.choice, Quot.sound only.
+  Freeness requires actual lifts, actual prime basis, generation induction,
+    presentation surjectivity, all-index cardinality and LinearEquiv.ofBijective.
+  Non-splitting requires actual nonzero basis point, lift and killed-by-p structure.
+  All selected routes forbid pairing data; general-group route forbids DkMath number-theory layer.
+  Forbidden: sorryAx, external FltRegular/P2MW/P2M/FreyPackage, FLT endpoints,
+    Herbrand/Ribet, listed global regularity providers and old conditional cardinality/rank providers.
+  Library-only selected routes also forbid all DkMath.FLT dependencies.
+
+Integrated entrances:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11594 jobs).
+  All 6 new source/test modules reached with matching file markers.
+  No warnings/errors in those 6 modules; historical warnings elsewhere remain.
+
+Root smoke:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE020.lean
+  exit 0; import DkMath exposes structure, rank, transitions and non-splitting.
+  Includes all k, positive-rank example E[37^3], non-product and no-section statements,
+    Source 2 curve E[37^2] Module.Free interface.
+  Printed axioms for coordinate equivalence and non-product:
+    propext, Classical.choice, Quot.sound only.
+
+Direct suite entrance:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest
+
+Markers and hygiene:
+  python3 check_tracker_mismatch.py /tmp/note020-full.log
+  exit 0; OK: no mismatches found.
+  Static check: 6 source/test markers and root smoke marker follow imports and match paths.
+  No sorry/admit/native_decide/unsafe/implemented_by or custom axiom declarations in those 7 files.
+  No trailing whitespace in those 7 files.
+  git diff --check: exit 0.
+
+Scope:
+  4 production modules, 359 lines including Japanese textbook comments; 32 named declarations.
+  Characteristic-zero elliptic curve, prime p, any natural exponent k.
+  Actual structure isomorphism via generators and cardinality, not cardinality alone.
+  Basis choices noncomputable and noncanonical; no compatible family of bases across levels.
+  Original action retained through point-level transitions and transported coordinate actions.
+  Finite-level freeness does not constitute construction/freeness of the Tate module.
+  Weil geometry, unconditional cyclotomic determinant, Frey irreducibility and FLT remain separate.
+  No new external source copied/imported; existing DkMath and Mathlib APIs reused.
+
+Audit output:
+PASS: 32 production and 16 regression declarations; standard logical axioms only.
+PASS: DkMath.Lib.Algebra.TorsionPowerLifting.lifted_pair_generates; 836 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.prime_basis_generates_points; 28492 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.exists_prime_power_lifts; 28489 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.primePowerPresentation_surjective; 28506 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.primePowerPresentation_bijective; 28770 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.primePowerSuccEquiv; 28776 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.primePower_free; 28788 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.primePower_finrank; 28811 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.primePowerTransition_surjective; 27421 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.primePowerCoordinate_equivariant; 28872 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.exists_prime_square_order; 28547 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.prime_square_no_additive_section; 28503 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.prime_square_not_product; 28530 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.curve_primePowerEquiv; 31979 reachable constants; expected providers present.
+PASS: FreyTorsionPrimePowerTest.actual37square_equiv; 31994 reachable constants; expected providers present.
+PASS: FreyTorsionPrimePowerTest.actual37square_no_section; 31739 reachable constants; expected providers present.
+PASS: FreyTorsionPrimePowerTest.same_card_not_product; 31963 reachable constants; expected providers present.

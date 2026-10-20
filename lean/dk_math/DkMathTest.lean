@@ -184,5 +184,7 @@ import DkMathTest.FLT.FreyResidualCyclotomic
 import DkMathTest.FLT.Note018DependencyAudit
 import DkMathTest.FLT.FreyTorsionAllCard
 import DkMathTest.FLT.Note019DependencyAudit
+import DkMathTest.FLT.FreyTorsionPrimePower
+import DkMathTest.FLT.Note020DependencyAudit
 
 #print "file: DkMathTest"
