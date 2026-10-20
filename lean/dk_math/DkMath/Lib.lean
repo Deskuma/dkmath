@@ -79,6 +79,9 @@ import DkMath.Lib.NumberTheory.EllipticTwoTorsionRank
 import DkMath.Lib.Algebra.RationalPolynomialFiber
 import DkMath.Lib.NumberTheory.EllipticMultiplicationCoordinates
 import DkMath.Lib.NumberTheory.EllipticTorsionRegularFiber
+import DkMath.Lib.RepresentationTheory.InvariantLine
+import DkMath.Lib.RepresentationTheory.MatrixRealization
+import DkMath.Lib.NumberTheory.EllipticTorsionGL2
 import DkMath.Lib.RepresentationTheory.PascalDifference
 import DkMath.Lib.NumberTheory.FreyTwoArithmetic
 import DkMath.Lib.NumberTheory.UnitObstructionPacket

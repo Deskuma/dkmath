@@ -178,5 +178,7 @@ import DkMathTest.FLT.FreyResidualDimensionCriteria
 import DkMathTest.FLT.Note015DependencyAudit
 import DkMathTest.FLT.FreyResidualRankTwo
 import DkMathTest.FLT.Note016DependencyAudit
+import DkMathTest.FLT.FreyResidualGL2
+import DkMathTest.FLT.Note017DependencyAudit
 
 #print "file: DkMathTest"
