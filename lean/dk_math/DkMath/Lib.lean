@@ -134,6 +134,16 @@ import DkMath.Lib.NumberTheory.EllipticFunctionFieldGalois
 import DkMath.Lib.Algebra.DedekindValuationEquiv
 import DkMath.Lib.NumberTheory.EllipticGaloisValuation
 import DkMath.Lib.NumberTheory.EllipticWeilGalois
+import DkMath.Lib.NumberTheory.EllipticFunctionFieldNegation
+import DkMath.Lib.NumberTheory.EllipticFunctionFieldGenerators
+import DkMath.Lib.Algebra.QuadraticInvolutionDegree
+import DkMath.Lib.NumberTheory.EllipticMultiplicationPullback
+import DkMath.Lib.NumberTheory.EllipticMultiplicationFunctionDegree
+import DkMath.Lib.NumberTheory.EllipticMultiplicationFixedField
+import DkMath.Lib.Algebra.PullbackPrincipalPrime
+import DkMath.Lib.NumberTheory.EllipticMultiplicationValuation
+import DkMath.Lib.NumberTheory.EllipticWeilNondegenerate
+import DkMath.Lib.NumberTheory.EllipticGeometricWeilPairing
 
 #print "file: DkMath.Lib"
 

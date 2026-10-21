@@ -1,0 +1,98 @@
+NOTE-028 verification evidence — 2026-10-21
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Mathematical scope:
+  Characteristic zero, elliptic E/K, geometric points and function field over AlgebraicClosure K.
+  A: n != 0 required by the actual multiplicationPull definition; no identity fallback.
+     Nonconstant n-fold generic point proved using translations, multiplication surjectivity and a nonzero point.
+     Coordinate x,y generation and quadratic involution eliminate the extra factor 2 in the field degree.
+     Non-fixed pulled-back y follows from nonzero (2*n)-fold generic point, without a new integrality API.
+     Finite-dimensional fieldRange extension and degree <= n^2 proved.
+  B: Actual faithful torsion translation subgroup has order n^2.
+     Fixed field degree n^2 and multiplication range containment proved.
+     Degree comparison proves equality of intermediate fields; multiplication degree exactly n^2.
+  C: Actual Jacobian x and y formulas, nonzero finite denominators and coordinate congruences.
+     Local finite-place inequalities for all k >= 0 proved, not assumed.
+     Simple-zero function in the actual pullback range forces the target prime ideal to be principal.
+     Existing point-to-class injection gives target zero; both sides of the same bicharacter nondegenerate.
+  Same NOTE-025 unit values packaged as geometricRootPairing and geometricWeilPairingData.
+  Actual torsion and Source determinant equals cyclotomic character without pairing-data inputs.
+  Regression: Source 2 degree 4, finite point U with 2U=(0,0), nonzero targets detected by actual values.
+  Regression: n=1 boundary, n=37 exact field degree 1369, nondegeneracy, arbitrary Source 37 determinant/roots.
+  No numeric value for the chosen off-diagonal two-point pairing computed.
+  No Frey irreducibility, conductor, modularity, level lowering or new general FLT closure asserted.
+  A/B/C completed; no unresolved mathematical stop gate remains in the requested stages.
+
+Static checks:
+  14 new Lean files: exact markers, whitespace, forbidden constructs/imports and license paths PASS.
+  No sorry/admit, custom axiom/opaque, unsafe, native_decide or external P2M/P2MW/FltRegular imports.
+  Nine adapted production files retain Apache-2.0 attribution, upstream blobs and LICENSE/NOTICE paths.
+  git diff --check: exit 0.
+
+Focused build and audit:
+  lake build DkMathTest.FLT.Note028DependencyAudit
+  exit 0; Build completed successfully (3260 jobs).
+  66 production and 20 regression declarations: standard logical axioms only.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  21 selected type-and-opaque-body paths PASS.
+  Geometry core forbids RootPairing/WeilPairingData/torsion-basis dependencies.
+  Data adapters must reach the proved geometric construction and nondegeneracy.
+  Determinant adapters alone allow existing basis/card-to-dimension APIs; actual card provider required.
+  All selected paths forbid unported providers, old FLT endpoints and global Kummer input.
+  New production, regression, audit and final smoke: no warnings.
+
+Selected audit output:
+  66 production and 20 regression declarations; standard logical axioms only.
+  DkMath.Lib.NumberTheory.EllipticFunctionField.negEquiv; 26013 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticFunctionField.functionField_adjoin_X_Y; 13922 reachable constants; expected providers present.
+  DkMath.Lib.Algebra.QuadraticInvolutionDegree.finrank_fieldRange_le; 17210 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.generic_nsmul_ne_zero; 29285 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.multiplicationPull; 29291 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.negEquiv_multiplicationPull_genericY_ne; 29326 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finiteDimensional_finrank_multiplicationPull; 29742 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finrank_torsionFixedField; 30654 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.multiplicationRange_eq_torsionFixedField; 31129 reachable constants; expected providers present.
+  DkMath.Lib.Algebra.PullbackPrincipalPrime.exists_eq_span_of_eq_pullback; 16825 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.valuation_multiplicationPull_le; 31403 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.eq_zero_of_invariant_fiber_valuation; 33104 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilAlternatingBicharacter_nondegenerate_right; 34652 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilAlternatingBicharacter_nondegenerate_left; 34688 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.geometricRootPairing; 34692 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.geometricWeilPairingData; 34810 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsion_determinant_eq_cyclotomic; 41413 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.residual_determinant_eq_cyclotomic; 41483 reachable constants; expected providers present.
+  FreyGeometricWeilPairingTest.actual_target_detected; 37702 reachable constants; expected providers present.
+  FreyGeometricWeilPairingTest.degree_thirtySeven; 34259 reachable constants; expected providers present.
+  FreyGeometricWeilPairingTest.determinant_thirtySeven; 41485 reachable constants; expected providers present.
+
+Facade/root build:
+  lake build DkMath DkMath.FLT DkMath.Lib
+  exit 0; Build completed successfully (10702 jobs).
+
+Integrated build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11658 jobs).
+  Five historical sorry warnings outside new code:
+  warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+  warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+  warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+  warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+  warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+
+Root smoke:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE028.lean
+  exit 0; generic nondegeneracy and Source 37 determinant examples elaborate.
+  #print axioms: A degree, B fixed field, C nondegeneracy and Source determinant:
+    [propext, Classical.choice, Quot.sound] only.
+
+Test entrance:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest.
+
+Tracker:
+  python3 check_tracker_mismatch.py /tmp/note028-audit2.log
+  python3 check_tracker_mismatch.py /tmp/note028-full.log
+  Both exit 0: OK: no mismatches found.
+  Compact results preserved here; raw /tmp/note028-*.log files are disposable.

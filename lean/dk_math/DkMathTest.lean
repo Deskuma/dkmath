@@ -200,5 +200,7 @@ import DkMathTest.FLT.FreyWeilBicharacter
 import DkMathTest.FLT.Note026DependencyAudit
 import DkMathTest.FLT.FreyWeilGalois
 import DkMathTest.FLT.Note027DependencyAudit
+import DkMathTest.FLT.FreyGeometricWeilPairing
+import DkMathTest.FLT.Note028DependencyAudit
 
 #print "file: DkMathTest"
