@@ -37,6 +37,7 @@ import DkMath.FLT.FreyWeilBicharacter
 import DkMath.FLT.PrimeDepthBridge
 import DkMath.FLT.FreyWeilGalois
 import DkMath.FLT.FreyGeometricWeilPairing
+import DkMath.FLT.FreyStableLine
 
 #print "file: DkMath.FLT"
 

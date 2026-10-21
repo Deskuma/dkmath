@@ -144,6 +144,10 @@ import DkMath.Lib.Algebra.PullbackPrincipalPrime
 import DkMath.Lib.NumberTheory.EllipticMultiplicationValuation
 import DkMath.Lib.NumberTheory.EllipticWeilNondegenerate
 import DkMath.Lib.NumberTheory.EllipticGeometricWeilPairing
+import DkMath.Lib.RepresentationTheory.FixedCofixed
+import DkMath.Lib.NumberTheory.EllipticFixedTorsion
+import DkMath.Lib.NumberTheory.EllipticStableLine
+import DkMath.Lib.NumberTheory.FoldedValuationOrbit
 
 #print "file: DkMath.Lib"
 

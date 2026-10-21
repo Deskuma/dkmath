@@ -1,0 +1,73 @@
+NOTE-029 verification evidence — 2026-10-21
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Mathematical scope:
+  029-A completed: actual stable line and prime-order cyclic subgroup in geometric points.
+  Fixed / cofixed definitions, quotient-class equivalence and conditional extraction proved.
+  Fixed geometric points descend to base-field points in characteristic zero.
+  Rational n-torsion vanishing iff nonzero fixed n-torsion vanishing proved.
+  Pure integer folded-valuation-orbit contradiction and odd-prime cancellation proved.
+  Shifted modulus gamma = p*v - 4 supplies cancellation without an extra provider.
+  Actual Source stable-line diagonal product equals cyclotomic character with no pairing-data input.
+  029-B NOT completed: local inertia and global fixed/cofixed dichotomy are explicit inputs.
+  029-C NOT completed: rational-point 2-adic bounds/min rules/recurrences still need proofs.
+  Cofixed-line exclusion and rational isogeny construction NOT implemented.
+  No unconditional Frey irreducibility or general FLT closure asserted.
+
+Regression:
+  Actual Source 2: reducibility yields a stable cyclic order-2 subgroup in the same point group.
+  Actual nonzero fixed 2-torsion descends to a nonzero rational 2-torsion point.
+  Same existing curve at exponent 37: line-image cardinality and fixed/rational equivalence.
+  Cancellation at 37; explicit failure of cancellation at 2.
+  Finite abstract representation of (ZMod 5)^units on (ZMod 5)^2: diag(g^2,g^3).
+  Determinant equals g, but the actual rank-one first axis is neither fixed nor cofixed.
+  This finite example is not asserted to be an elliptic or Frey Galois representation.
+
+Static checks:
+  8 new Lean files (5 production, 2 tests/audits, 1 root smoke).
+  Exact file markers after imports, whitespace and final newlines: PASS.
+  No sorry/admit/native_decide, custom axiom/opaque/unsafe declarations or external provider imports.
+  FoldedValuationOrbit retains upstream blob, Apache-2.0 attribution and valid LICENSE/NOTICE paths.
+  git diff --check: exit 0.
+
+Focused build:
+  lake build DkMathTest.FLT.Note029DependencyAudit
+  PASS: Build completed successfully (3259 jobs).
+  34 public production definitions/theorems and 17 regression definitions/theorems checked.
+  Standard logical axioms only: propext, Classical.choice, Quot.sound.
+  Full type and opaque-body graph checks, including required providers:
+  34 production and 17 regression declarations; standard logical axioms only.
+  DkMath.Lib.RepresentationTheory.exists_cofixed_line_of_not_isIrreducible; 15323 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.exists_stable_pointSubgroup_of_reducible; 28762 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.noNonzeroFixed_iff_rational_torsion; 29424 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.FoldedValuationOrbit.no_prime_shifted_valuation_orbit; 4139 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.residual_exists_stable_pointSubgroup; 31976 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.residual_exists_cofixed_line; 35578 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.residual_stable_line_diagonal_product; 41492 reachable constants; expected providers present.
+  FreyStableLineTest.DeterminantBoundary.stable_without_dichotomy; 6327 reachable constants; expected providers present.
+  FreyStableLineTest.DeterminantBoundary.determinant; 14644 reachable constants; expected providers present.
+
+Facade/root/suite build after final production/import changes:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  PASS: Build completed successfully (11665 jobs).
+  New NOTE-029 code: no warnings or errors.
+  Five pre-existing sorry warnings elsewhere in the broad root:
+  warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+  warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+  warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+  warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+  warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+
+Additional entrance checks:
+  lake env lean DkMathTest.lean
+  PASS: file: DkMathTest; no warnings or errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE029.lean
+  PASS: new endpoints reachable through import DkMath; concrete cancellation at 37;
+        selected endpoint axiom prints contain only the standard three axioms.
+  python3 check_tracker_mismatch.py /tmp/note029-full-build.log
+  PASS: OK: no mismatches found.
+
+Raw build logs are disposable /tmp/note029-*.log files.
+This file preserves compact results for the checked scope, not whole-repository axiom freedom.
