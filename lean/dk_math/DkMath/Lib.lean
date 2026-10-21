@@ -96,6 +96,10 @@ import DkMath.Lib.NumberTheory.EllipticCoordinateRing
 import DkMath.Lib.NumberTheory.EllipticFunctionField
 import DkMath.Lib.NumberTheory.EllipticFunctionFieldPlaces
 import DkMath.Lib.NumberTheory.EllipticFunctionFieldTranslation
+import DkMath.Lib.Algebra.FiniteTorsionSum
+import DkMath.Lib.NumberTheory.EllipticMultiplicationFiber
+import DkMath.Lib.NumberTheory.EllipticPrincipalPointIdeal
+import DkMath.Lib.NumberTheory.EllipticWeilFunction
 import DkMath.Lib.NumberTheory.EllipticTorsionNonSplit
 import DkMath.Lib.RepresentationTheory.PascalDifference
 import DkMath.Lib.NumberTheory.FreyTwoArithmetic

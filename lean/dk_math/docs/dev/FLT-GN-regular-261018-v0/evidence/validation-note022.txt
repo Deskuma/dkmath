@@ -1,0 +1,86 @@
+NOTE-022 verification evidence — 2026-10-21
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Mathematical scope:
+  Generic additive-group cancellation reduces finite kernel sums to two-torsion.
+  Four-element two-torsion implies zero sum; two-element cyclic group is a regression counterexample.
+  Actual characteristic-zero elliptic-curve points over the algebraic closure.
+  Nonzero n: multiplication fiber nonempty, finite and of cardinality n^2.
+  Actual translation equivalence kernel -> fiber; sum of all fiber points = n*T.
+  Point.toClass connects integral-ideal product principality with the sum of actual points.
+  Integer-weighted fractional-ideal version includes negative exponents.
+  Infinity contributes unit ideal only; it is not treated as an affine prime or valuation.
+  Fiber ideal principal iff n*T=0; nonzero product and nonzero chosen generator.
+  Actual function-field quotient f(n,T)/f(n,0) nonzero; zero target gives 1.
+  No fallback-to-1 branches for unknown finiteness/principality.
+  Actual Source 2 curve: two-torsion target, 37 zero fiber and n=1 boundaries.
+  Actual four-torsion target: 2R != 0, 4R=0; n=2 fiber sum nonzero and ideal not principal.
+  No valuation formula, translation proportionality, WeilPairingData existence,
+    unconditional det=cyclotomic or new FLT closure asserted.
+
+Static checks performed:
+  git diff --check: exit 0.
+  All 8 new Lean files: exact file markers, whitespace, no proof placeholders/bypass constructs.
+  Four adapted library modules: Apache-2.0 source/blob attribution and existing LICENSE/NOTICE paths.
+
+Focused implementation, regression and audit:
+  lake build DkMathTest.FLT.Note022DependencyAudit
+  exit 0; Build completed successfully (3183 jobs).
+  All 5 production modules and actual Source 2 regression compiled.
+  No warnings in the final focused build.
+  42 production and 19 regression declarations; standard logical axioms only.
+  13 selected type-and-opaque-body dependency traversals.
+  Allowed axioms: propext, Classical.choice, Quot.sound only.
+  Required actual providers: multiplication surjectivity, kernel finiteness, card_torsion_sq,
+    generic inverse cancellation, Point.toClass, principal generator, nonzero ideal product.
+  Forbidden: WeilPairingData, RootPairing, torsionBasis, primePowerEquiv, primePowerBasis,
+    external FltRegular/P2MW/P2M, FLT endpoints and listed global Kummer providers.
+  General-group route also forbids DkMath number-theory and FLT layers.
+
+Audit output:
+  PASS: 42 production and 19 regression declarations; standard logical axioms only.
+  PASS: DkMath.Lib.Algebra.FiniteTorsionSum.sum_kernel_eq_zero; 7671 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.fiber_finite; 27454 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.fiber_card; 28595 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.sum_torsionFinset; 28622 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.sum_fiber; 28629 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticPrincipalPointIdeal.isPrincipal_prod_pointIdeal_iff; 22569 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.fiberIdeal_isPrincipal_iff; 28782 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilNumerator; 28784 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilNumerator_ne_zero; 28800 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilFunction_ne_zero; 28806 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.curve_weilFunction; 31983 reachable constants; expected providers present.
+  PASS: FreyWeilFunctionTest.actual_two_generator; 32032 reachable constants; expected providers present.
+  PASS: FreyWeilFunctionTest.non_torsion_target_not_principal; 32019 reachable constants; expected providers present.
+
+Facade, root and complete test-library build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11608 jobs).
+  All new modules reachable through DkMath.Lib/DkMath.FLT and root DkMath.
+  New regression and audit imported by DkMathTest.
+  New NOTE-022 module warnings: none.
+  Five existing sorry warnings replayed from unrelated modules.
+
+Tracker checks:
+  python3 check_tracker_mismatch.py /tmp/note022-focused.log
+  python3 check_tracker_mismatch.py /tmp/note022-full.log
+  Both exit 0; OK: no mismatches found.
+
+Root smoke and explicit axiom reports:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE022.lean
+  exit 0.
+  import DkMath reaches generic group cancellation, actual finite fibers and sum nT,
+    integer-weighted fractional ideal criterion, integral fiber-ideal principality,
+    nonzero generators and same-Source function-field quotient.
+  #print axioms: sum_fiber, fiberIdeal_isPrincipal_iff, weilFunction_ne_zero:
+    propext, Classical.choice, Quot.sound only.
+
+Direct suite entrance:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest.
+
+Final hygiene:
+  git diff --check: exit 0.
+  Raw build logs remain disposable in /tmp/note022-*.log.
