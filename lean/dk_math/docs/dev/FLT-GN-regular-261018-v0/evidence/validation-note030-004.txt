@@ -1,0 +1,77 @@
+NOTE-030-004 verification evidence — 2026-10-22 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Completed mathematical scope:
+  General normalized model with a1=1, a3=a6=0, Lower 0 a2 and Lower 1 a4.
+  Even-a2 branch: equation excludes unit x for integral y.
+  Unit-a2 branch: nonzero tangent denominator, integral slope, unit doubled x.
+  Distinct unit x coordinates give negative secant slope and triple x valuation <= -2.
+  Actual group law and order p>=5 exclude equal-x exceptions 2Q=Q and 2Q=-Q.
+  Previous actual finite-orbit nonnegative valuation at 3Q contradicts the negative triple.
+  Positive x valuation at every nontrivial multiple, explicit p not dividing k.
+  Source coefficient facts supplied from previous chapters, even b explicit.
+  Same Source, same rational point, same curve; coprimality and normalization retained.
+  Source.orbit_x_lower_bound supplies 1 <= e(k) for 1 <= k <= p-1.
+
+Remaining scope:
+  030-005 through 030-008 unimplemented.
+  No two-torsion reflection, upper bound gamma-1 or valuation recurrence supplied.
+  No rational p-torsion vanishing, hrat supply, hcases, hno, irreducibility or FLT closure.
+
+Actual regression points:
+  Previous order-3 unit point: double x equals original x; strict p>=5 boundary preserved.
+  Curve (1,1,0,-2,0): U=(1,0), 2U=(9,-33), x(3U)=121/64;
+                      actual triple negative valuation proved using the local theorem.
+  Curve (1,-24,0,160,0): Q=(4,-20), R=(16,16), 2Q=R and 2R=-Q;
+                         nonzero Q has order 5; positive theorem applies for all 5 not dividing k.
+  Zero multiple has valuation 0, so removing the nontrivial-multiple guard is invalid.
+  Source 37 lower-bound API checked conditionally, without claiming such Source or point exists.
+  General rational order-5 example is not a Frey Source 5 or a Fermat counterexample.
+  Candidate search used exact rational arithmetic only for discovery; Lean proves all final claims.
+
+Static checks:
+  5 new Lean files: 2 production, 2 tests/audits, 1 root smoke.
+  Exact markers after imports, whitespace, final newlines: PASS.
+  No sorry/admit/native_decide/custom axiom/opaque/unsafe or external provider imports.
+  General translated module retains Apache-2.0 attribution, upstream blob and valid LICENSE/NOTICE paths.
+  All 31 public production and regression declarations are listed in the axiom audit.
+  git diff --check: exit 0.
+
+Focused build:
+  lake build DkMathTest.FLT.Note030PositiveDependencyAudit
+  exit 0; Build completed successfully (3155 jobs).
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Full type and opaque-body dependency audit on 7 main paths:
+  9 production and 22 regression declarations; standard logical axioms only.
+  DkMath.Lib.NumberTheory.WeierstrassPositiveValuation.not_unit_x_of_even_a₂; 9492 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.WeierstrassPositiveValuation.double_x_unit; 6689 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.WeierstrassPositiveValuation.triple_x_valuation_negative; 6715 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.WeierstrassPositiveValuation.x_positive_of_prime_order; 23846 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.orbit_x_lower_bound; 23989 reachable constants; expected providers present.
+  FreyRationalTorsionPositiveTest.actual_triple_negative; 23798 reachable constants; expected providers present.
+  FreyRationalTorsionPositiveTest.actual_five_orbit_positive; 23987 reachable constants; expected providers present.
+
+Facade/root/test build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11677 jobs).
+  New code: no warnings or errors.
+  Five existing unrelated broad-root sorry warnings:
+  warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+  warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+  warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+  warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+  warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+
+Additional entrance checks:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest; no warnings or errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE030Positive.lean
+  exit 0; 5 selected endpoints reachable through import DkMath;
+          Source 37 lower-bound API checks; standard-only axiom prints.
+  python3 check_tracker_mismatch.py /tmp/note030-004-full.log
+  exit 0; OK: no mismatches found.
+
+Raw logs are disposable /tmp/note030-004-*.log files.
+This records the stated scope, not whole-repository axiom freedom.

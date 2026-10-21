@@ -206,5 +206,7 @@ import DkMathTest.FLT.FreyStableLine
 import DkMathTest.FLT.Note029DependencyAudit
 import DkMathTest.FLT.FreyRationalTorsionIntegral
 import DkMathTest.FLT.Note030DependencyAudit
+import DkMathTest.FLT.FreyRationalTorsionPositive
+import DkMathTest.FLT.Note030PositiveDependencyAudit
 
 #print "file: DkMathTest"

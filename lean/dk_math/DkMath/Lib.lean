@@ -152,6 +152,7 @@ import DkMath.Lib.NumberTheory.RationalTwoAdicBounds
 import DkMath.Lib.Algebra.FiniteOrbitMinimum
 import DkMath.Lib.NumberTheory.WeierstrassNegativeValuation
 import DkMath.Lib.NumberTheory.WeierstrassTorsionValuation
+import DkMath.Lib.NumberTheory.WeierstrassPositiveValuation
 
 #print "file: DkMath.Lib"
 

@@ -40,6 +40,7 @@ import DkMath.FLT.FreyGeometricWeilPairing
 import DkMath.FLT.FreyStableLine
 import DkMath.FLT.FreyRationalTorsionValuation
 import DkMath.FLT.FreyRationalTorsionIntegral
+import DkMath.FLT.FreyRationalTorsionPositive
 
 #print "file: DkMath.FLT"
 
