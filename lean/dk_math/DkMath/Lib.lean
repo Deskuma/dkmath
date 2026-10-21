@@ -153,6 +153,8 @@ import DkMath.Lib.Algebra.FiniteOrbitMinimum
 import DkMath.Lib.NumberTheory.WeierstrassNegativeValuation
 import DkMath.Lib.NumberTheory.WeierstrassTorsionValuation
 import DkMath.Lib.NumberTheory.WeierstrassPositiveValuation
+import DkMath.Lib.NumberTheory.WeierstrassXReflection
+import DkMath.Lib.NumberTheory.WeierstrassTorsionBounds
 
 #print "file: DkMath.Lib"
 

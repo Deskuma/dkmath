@@ -1,0 +1,83 @@
+NOTE-030-005 verification evidence — 2026-10-22 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Completed mathematical scope:
+  Arbitrary field, a3=a6=0 and a4 nonzero: actual finite nonzero T=(0,0), 2T=0.
+  No a1 restriction for reflection: x(P+T)=a4/x(P), explicit x(P) nonzero.
+  Translation is an involution; 2(P+T)=2P for all P.
+  Odd n with nP=0: n(P+T)=T, so translated point is not n-torsion.
+  Rational Exact gamma a4 and Exact e x(P) reflect to Exact (gamma-e) x(P+T).
+  Normalized rational model, Lower 0 a2, Exact gamma a4, gamma>=1, prime order p>=5:
+    negative reflected valuation contradicts nonnegative valuation at original 2Q;
+    zero reflected valuation contradicts the equation or positive valuation at original 2Q.
+  Upper bound v2(x(Q)) <= gamma-1, and 1 <= v2(x(kQ)) <= gamma-1 for p not dividing k.
+  Source coefficient facts supply gamma=p*v2(b)-4, even b explicit.
+  Same Source, coordinates, gcd/coprimality data and normalization retained.
+  Source.orbit_x_bounds supplies the interval for every 1 <= k <= p-1.
+
+Remaining scope:
+  030-006 through 030-008 unimplemented.
+  No exact tangent-denominator valuation, doubling or plus/minus valuation recurrence supplied.
+  No complete input to FoldedValuationOrbit, no rational p-torsion vanishing or hrat supply.
+  No fixed/cofixed dichotomy, cofixed exclusion, irreducibility or general FLT closure.
+
+Actual regression points:
+  Previous curve (1,-24,0,160,0), Q=(4,-20), 2Q=(16,16), addOrderOf Q=5.
+  Exact v2(a4)=5; T nonzero and 2T=0; translation involution and doubled-point equality.
+  x(Q+T)=40, Exact v2(x(Q+T))=3=5-2.
+  5(Q+T)=T nonzero; translating Q does not preserve 5-torsion.
+  All 5 not dividing k: 1 <= v2(x(kQ)) <= 4, using the new general theorem.
+  v2(x(2Q))=4 attains gamma-1; the stronger bound <=3 is false.
+  x(T)=0, T+T=O and O+T=T distinguish the reflection denominator boundary.
+  Source 37 interval API checks conditionally for 1 <= k <= 36.
+  No Frey Source 5, Fermat counterexample, Source 37 or nonzero rational 37-torsion existence claimed.
+
+Static checks:
+  6 new Lean files: 3 production, 2 tests/audits, 1 root smoke.
+  Exact markers after imports, whitespace, final newlines: PASS.
+  All public production/regression declarations have textbook docstrings: PASS.
+  No sorry/admit/native_decide/custom axiom/opaque/unsafe or external provider imports.
+  Both translated general modules retain Apache-2.0, upstream blob fe61fd5d4f94d55b5a9da38d1541903c84397df0,
+    and existing module-relative LICENSE/NOTICE paths.
+  Complete audit lists: all 21 production and 12 regression declarations.
+  git diff --check: exit 0.
+
+Focused build:
+  lake build DkMathTest.FLT.Note030BoundsDependencyAudit
+  exit 0; Build completed successfully (3159 jobs).
+  New code: no warnings or errors.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Full type and opaque-body dependency audit on 7 main paths:
+  21 production and 12 regression declarations; standard logical axioms only.
+  DkMath.Lib.NumberTheory.WeierstrassXReflection.add_twoTorsionPoint_x; 7655 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.WeierstrassXReflection.double_add_twoTorsionPoint; 22418 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.WeierstrassXReflection.exact_add_twoTorsionPoint; 9308 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.WeierstrassTorsionBounds.x_below_gamma_of_prime_order; 23893 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.orbit_x_bounds; 24017 reachable constants; expected providers present.
+  FreyRationalTorsionBoundsTest.actual_five_orbit_bounds; 24020 reachable constants; expected providers present.
+  FreyRationalTorsionBoundsTest.translated_not_five_torsion; 23549 reachable constants; expected providers present.
+
+Facade/root/test build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11682 jobs).
+  New code: no warnings or errors.
+  Five existing unrelated broad-root sorry warnings:
+  warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+  warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+  warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+  warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+  warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+
+Additional entrance checks:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest; no warnings or errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE030Bounds.lean
+  exit 0; 5 selected endpoints reachable through import DkMath;
+          Source 37 interval API checks; standard-only axiom prints; no warnings or errors.
+  python3 check_tracker_mismatch.py /tmp/note030-005-full.log
+  exit 0; OK: no mismatches found.
+
+Raw logs are disposable /tmp/note030-005-*.log files.
+This records the stated scope, not whole-repository axiom freedom.

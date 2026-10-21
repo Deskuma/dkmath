@@ -41,6 +41,7 @@ import DkMath.FLT.FreyStableLine
 import DkMath.FLT.FreyRationalTorsionValuation
 import DkMath.FLT.FreyRationalTorsionIntegral
 import DkMath.FLT.FreyRationalTorsionPositive
+import DkMath.FLT.FreyRationalTorsionBounds
 
 #print "file: DkMath.FLT"
 
