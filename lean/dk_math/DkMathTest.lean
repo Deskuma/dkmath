@@ -198,5 +198,7 @@ import DkMathTest.FLT.FreyWeilCharacter
 import DkMathTest.FLT.Note025DependencyAudit
 import DkMathTest.FLT.FreyWeilBicharacter
 import DkMathTest.FLT.Note026DependencyAudit
+import DkMathTest.FLT.FreyWeilGalois
+import DkMathTest.FLT.Note027DependencyAudit
 
 #print "file: DkMathTest"

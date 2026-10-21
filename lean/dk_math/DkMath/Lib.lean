@@ -130,6 +130,10 @@ import DkMath.Lib.NumberTheory.CyclotomicElevenPID
 import DkMath.Lib.NumberTheory.CyclotomicThirteenPID
 import DkMath.Lib.Cosmic.GTailSeven
 import DkMath.Lib.Cosmic.GTailSevenArithmetic
+import DkMath.Lib.NumberTheory.EllipticFunctionFieldGalois
+import DkMath.Lib.Algebra.DedekindValuationEquiv
+import DkMath.Lib.NumberTheory.EllipticGaloisValuation
+import DkMath.Lib.NumberTheory.EllipticWeilGalois
 
 #print "file: DkMath.Lib"
 
