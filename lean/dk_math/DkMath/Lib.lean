@@ -100,6 +100,8 @@ import DkMath.Lib.Algebra.FiniteTorsionSum
 import DkMath.Lib.NumberTheory.EllipticMultiplicationFiber
 import DkMath.Lib.NumberTheory.EllipticPrincipalPointIdeal
 import DkMath.Lib.NumberTheory.EllipticWeilFunction
+import DkMath.Lib.NumberTheory.EllipticPointIdealValuation
+import DkMath.Lib.NumberTheory.EllipticWeilValuation
 import DkMath.Lib.NumberTheory.EllipticTorsionNonSplit
 import DkMath.Lib.RepresentationTheory.PascalDifference
 import DkMath.Lib.NumberTheory.FreyTwoArithmetic

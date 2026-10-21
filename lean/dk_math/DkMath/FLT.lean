@@ -30,6 +30,7 @@ import DkMath.FLT.FreyTorsionAllCard
 import DkMath.FLT.FreyTorsionPrimePower
 import DkMath.FLT.FreyWeilGeometry
 import DkMath.FLT.FreyWeilFunction
+import DkMath.FLT.FreyWeilValuation
 import DkMath.FLT.PrimeDepthBridge
 
 #print "file: DkMath.FLT"
