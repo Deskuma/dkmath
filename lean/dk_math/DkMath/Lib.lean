@@ -111,6 +111,9 @@ import DkMath.Lib.NumberTheory.EllipticTranslationValuation
 import DkMath.Lib.NumberTheory.EllipticTranslationInfinity
 import DkMath.Lib.NumberTheory.EllipticWeilInfinity
 import DkMath.Lib.NumberTheory.EllipticWeilTransport
+import DkMath.Lib.NumberTheory.EllipticFunctionFieldConstants
+import DkMath.Lib.NumberTheory.EllipticFunctionEigenvalue
+import DkMath.Lib.NumberTheory.EllipticWeilCharacter
 import DkMath.Lib.NumberTheory.EllipticTorsionNonSplit
 import DkMath.Lib.RepresentationTheory.PascalDifference
 import DkMath.Lib.NumberTheory.FreyTwoArithmetic

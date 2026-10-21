@@ -1,0 +1,92 @@
+NOTE-025 verification evidence — 2026-10-21
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Mathematical scope:
+  Unit of the actual affine coordinate ring -> norm unit -> norm degree zero.
+  NOTE-024 norm degree forces zero Y component; remaining polynomial is a nonzero constant.
+  For a nonzero rational function, valuation 1 at every finite place puts f and f^-1 in A.
+  Their product is 1 by injectivity into the actual fraction field; unit classification applies.
+  The recovered coefficient-field unit is unique by injectivity of its field embedding.
+  Equal actual point orders -> equal nonzero valuations -> ratio has all finite valuations 1.
+  Existing weilFunction and NOTE-024 torsion translation order preservation reused unchanged.
+  Unique c(S,T) satisfies actual transEquiv(S)(w) = algebraMap(c(S,T)) * w.
+  Translation composition and uniqueness give c(S+R,T)=c(S,T)c(R,T).
+  nS=0 gives c(S,T)^n=1; AddChar E[n] (rootsOfUnity n Kbar) is constructed.
+  Independent nonzero constant rescalings of numerator and denominator give (a/b)*w.
+  Their translated quotient has eigenvalue c iff c is the original unique value.
+  Source 2 regressions retain the same actual curve and a nonzero 2-torsion target.
+  Actual constant 2 recovery, eigen-equation/uniqueness, square=1, zero/combined translations,
+    root membership, Source character addition, scalar 2 rescaling, n=1/37 zero targets.
+  General constant/ratio criteria require no characteristic-zero assumption.
+  Weil function application retains CharZero, n != 0, actual n-torsion points, nonzero functions.
+  No right-variable additivity, alternation, nondegeneracy, Galois equivariance,
+    WeilPairingData existence, unconditional det=cyclotomic or new FLT closure asserted.
+
+Static checks:
+  Exact file markers, whitespace, forbidden-construct scan in 7 new Lean files: PASS.
+  Whitespace in all 9 new files: PASS.
+  No sorry/admit, custom axiom/opaque, unsafe or native_decide in new Lean files.
+  Adapted constant criterion retains Apache-2.0 notice, source blob and LICENSE/NOTICE paths.
+  git diff --check: exit 0.
+
+Focused build and audit:
+  lake build DkMathTest.FLT.Note025DependencyAudit
+  exit 0; Build completed successfully (3206 jobs).
+  New production and regression/audit modules: no warnings.
+  28 production and 16 regression declarations: standard logical axioms only.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  13 selected type-and-opaque-body dependency paths: PASS.
+  Required norm-degree, Dedekind integrality, actual finite places and order preservation,
+    nonzero functions, translation composition, rescaled numerators and root-valued character.
+  Selected paths forbid external unported providers, Weil pairing data, torsion bases,
+    old FLT endpoints and global Kummer input; constant criteria also forbid torsion providers.
+
+Selected audit output:
+  28 production and 16 regression declarations; standard logical axioms only.
+  DkMath.Lib.NumberTheory.EllipticFunctionFieldConstants.isUnit_iff_eq_algebraMap; 16411 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticFunctionFieldConstants.existsUnique_unit_of_valuation_eq_one; 21953 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.existsUnique_scalar_of_pointOrder_eq; 28790 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.existsUnique_weilTranslationUnit; 33825 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilTranslationUnit_spec; 33829 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilTranslationUnit_add; 33831 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilTranslationUnit_pow; 33838 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilTranslationCharacter; 33853 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilTranslationUnit_rescaled_numerators; 33835 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.curve_weilTranslationCharacter; 36883 reachable constants; expected providers present.
+  FreyWeilCharacterTest.recover_constant_two; 31276 reachable constants; expected providers present.
+  FreyWeilCharacterTest.actual_translation_eigenvalue; 36897 reachable constants; expected providers present.
+  FreyWeilCharacterTest.exponent_thirtySeven; 36874 reachable constants; expected providers present.
+
+Facade/root build:
+  lake build DkMath DkMath.FLT DkMath.Lib
+  exit 0; Build completed successfully (10681 jobs).
+
+Integrated build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11631 jobs).
+  New modules: no warnings.
+  Five pre-existing unrelated sorry warnings were replayed:
+    DkMath/CosmicFormula/TriominoFLT.lean:1919
+    DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147
+    DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187
+    DkMath/NumberTheory/GcdNextResearch.lean:850
+    DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389
+  These declarations are not in the selected audited dependency paths.
+
+Root smoke:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE025.lean
+  exit 0; no warnings; root checks, actual AddChar construction and n-th power example elaborated.
+  #print axioms for existsUnique_weilTranslationUnit and weilTranslationCharacter:
+    [propext, Classical.choice, Quot.sound].
+
+Test entrance:
+  lake env lean DkMathTest.lean
+  exit 0; output: file: DkMathTest
+
+Tracker checks:
+  python3 check_tracker_mismatch.py /tmp/note025-audit2.log
+  python3 check_tracker_mismatch.py /tmp/note025-roots.log
+  python3 check_tracker_mismatch.py /tmp/note025-full.log
+  all exit 0; OK: no mismatches found.
