@@ -38,6 +38,8 @@ import DkMath.FLT.PrimeDepthBridge
 import DkMath.FLT.FreyWeilGalois
 import DkMath.FLT.FreyGeometricWeilPairing
 import DkMath.FLT.FreyStableLine
+import DkMath.FLT.FreyRationalTorsionValuation
+import DkMath.FLT.FreyRationalTorsionIntegral
 
 #print "file: DkMath.FLT"
 

@@ -148,6 +148,10 @@ import DkMath.Lib.RepresentationTheory.FixedCofixed
 import DkMath.Lib.NumberTheory.EllipticFixedTorsion
 import DkMath.Lib.NumberTheory.EllipticStableLine
 import DkMath.Lib.NumberTheory.FoldedValuationOrbit
+import DkMath.Lib.NumberTheory.RationalTwoAdicBounds
+import DkMath.Lib.Algebra.FiniteOrbitMinimum
+import DkMath.Lib.NumberTheory.WeierstrassNegativeValuation
+import DkMath.Lib.NumberTheory.WeierstrassTorsionValuation
 
 #print "file: DkMath.Lib"
 

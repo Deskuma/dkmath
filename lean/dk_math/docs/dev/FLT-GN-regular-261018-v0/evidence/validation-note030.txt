@@ -1,0 +1,84 @@
+NOTE-030 part 1 verification evidence — 2026-10-22 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Completed mathematical scope:
+  030-001: zero-tolerant Lower and nonzero Exact rational two-adic bounds;
+           sum/difference/product/quotient/powers/min laws and units modulo 2.
+  030-002: actual Source a2 integral via curve_map, without parity assumptions;
+           explicit even b + coprimality give odd a;
+           exact a4 value gamma = p*v2(b)-4, and p>=5 implies gamma>=1.
+  030-003: independent finite-orbit minimum principle;
+           normalized Weierstrass negative x valuation drops by at least 2 under doubling;
+           actual prime-order p>2 point orbit has nonnegative x valuation;
+           nontrivial multiples have nonzero x coordinates;
+           same Source p>=5 and even b supply all coefficient inputs.
+  No Source coordinates, coprimality, normalization or rational point were replaced.
+  Actual Point.xc and point-group doubling are used.
+
+Explicit remaining scope:
+  030-004 through 030-008 unimplemented.
+  Valuation zero is not excluded; no upper bound by gamma-1 is supplied.
+  No actual e/A/B/A1 recurrence assembled; existing folded integer core not invoked.
+  No rational p-torsion vanishing, hrat supply, hcases, hno, Frey irreducibility or FLT closure.
+
+Regression:
+  Raw v2(0)=0 does not imply Exact 0 0; cancellation and zero power-zero boundary checked.
+  Distinct depths vs equal-depth cancellation; fractions and exponent 37 checked.
+  Finite orbit hypothesis contrasted with infinite strict descent on integers.
+  Existing actual Source 2: a2=-2, no even-b assumption.
+  Actual Source 1 (-1,16,15): even b, gamma=0, exact a4 valuation 0.
+  Curve (a1,a2,a3,a4,a6)=(1,8,0,2,0): actual nonzero 2-torsion P=(-1/4,1/8), v2(x)=-2.
+  Curve (1,3,0,-2,0): actual Q=(1,1), 2Q=-Q, order 3, v2(x)=0;
+                       generic orbit and nonzero-coordinate theorems applied to all its multiples.
+  Conditional Source 37 coefficients and same-point entrance checked, no existence claimed.
+
+Static checks:
+  9 new Lean files: 6 production, 2 test/audit, 1 root smoke.
+  Exact markers after imports, whitespace, final newlines: PASS.
+  No sorry/admit/native_decide/custom axiom/opaque/unsafe or external provider imports.
+  Three adapted modules retain Apache-2.0 attribution, verified upstream blob and valid LICENSE/NOTICE paths.
+  Upstream GitHub fetch returned blob fe61fd5d4f94d55b5a9da38d1541903c84397df0.
+  git diff --check: exit 0.
+
+Focused build:
+  lake build DkMathTest.FLT.Note030DependencyAudit
+  exit 0; Build completed successfully (3152 jobs).
+  71 public production and 28 regression definitions/lemmas/theorems checked.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Full type and opaque-body graph audit on 9 main paths:
+  71 production and 28 regression declarations; standard logical axioms only.
+  DkMath.Lib.NumberTheory.RationalTwoAdicBounds.lower_one_sub_one_of_unit; 6318 reachable constants; expected providers present.
+  DkMath.Lib.Algebra.FiniteOrbitMinimum.nsmul_nonnegative_of_double_drop; 4149 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.a₂_twoAdic_integral; 3930 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.a₄_twoAdic_exact; 5840 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.WeierstrassNegativeValuation.double_x_valuation_drop; 9181 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.WeierstrassTorsionValuation.x_nonnegative_of_prime_order; 23567 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.x_nonnegative_of_prime_torsion; 23713 reachable constants; expected providers present.
+  FreyRationalTorsionIntegralTest.negative_two_torsion; 23431 reachable constants; expected providers present.
+  FreyRationalTorsionIntegralTest.actual_three_orbit; 23654 reachable constants; expected providers present.
+
+Final facade/root/test build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11673 jobs).
+  New code: no warnings or errors.
+  Five existing unrelated sorry warnings remain in broad-root modules:
+  warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+  warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+  warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+  warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+  warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+
+Additional entrance checks:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest; no warnings or errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE030.lean
+  exit 0; all 7 selected endpoints reachable through import DkMath;
+          actual Source 37 coefficient and point APIs typecheck;
+          selected axiom prints contain only standard logical axioms.
+  python3 check_tracker_mismatch.py /tmp/note030-full-final.log
+  exit 0; OK: no mismatches found.
+
+Raw logs: disposable /tmp/note030-*.log files.
+This evidence is for the stated implementation scope, not whole-repository axiom freedom.

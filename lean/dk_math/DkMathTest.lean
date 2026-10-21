@@ -204,5 +204,7 @@ import DkMathTest.FLT.FreyGeometricWeilPairing
 import DkMathTest.FLT.Note028DependencyAudit
 import DkMathTest.FLT.FreyStableLine
 import DkMathTest.FLT.Note029DependencyAudit
+import DkMathTest.FLT.FreyRationalTorsionIntegral
+import DkMathTest.FLT.Note030DependencyAudit
 
 #print "file: DkMathTest"
