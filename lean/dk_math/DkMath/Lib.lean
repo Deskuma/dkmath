@@ -92,6 +92,10 @@ import DkMath.Lib.Algebra.TorsionMultiplication
 import DkMath.Lib.NumberTheory.EllipticTorsionAllCard
 import DkMath.Lib.Algebra.TorsionPowerLifting
 import DkMath.Lib.NumberTheory.EllipticTorsionPrimePower
+import DkMath.Lib.NumberTheory.EllipticCoordinateRing
+import DkMath.Lib.NumberTheory.EllipticFunctionField
+import DkMath.Lib.NumberTheory.EllipticFunctionFieldPlaces
+import DkMath.Lib.NumberTheory.EllipticFunctionFieldTranslation
 import DkMath.Lib.NumberTheory.EllipticTorsionNonSplit
 import DkMath.Lib.RepresentationTheory.PascalDifference
 import DkMath.Lib.NumberTheory.FreyTwoArithmetic

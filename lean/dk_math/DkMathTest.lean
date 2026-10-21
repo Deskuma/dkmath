@@ -186,5 +186,7 @@ import DkMathTest.FLT.FreyTorsionAllCard
 import DkMathTest.FLT.Note019DependencyAudit
 import DkMathTest.FLT.FreyTorsionPrimePower
 import DkMathTest.FLT.Note020DependencyAudit
+import DkMathTest.FLT.FreyWeilGeometry
+import DkMathTest.FLT.Note021DependencyAudit
 
 #print "file: DkMathTest"

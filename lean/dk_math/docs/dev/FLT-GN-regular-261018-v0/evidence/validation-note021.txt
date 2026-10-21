@@ -1,0 +1,80 @@
+NOTE-021 verification evidence — 2026-10-21
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Focused implementation, regression and audit:
+  lake build DkMathTest.FLT.Note021DependencyAudit
+  exit 0; Build completed successfully (3149 jobs).
+  All 5 new production modules and actual Source 2 regression compiled.
+  No warnings in the new production, regression or audit modules.
+  73 named production declarations and 12 regression declarations audited.
+  12 selected dependency traversals include types and opaque bodies.
+  Allowed axioms: propext, Classical.choice, Quot.sound only.
+  Geometry routes additionally forbid EllipticTorsionRepresentation providers.
+  All selected routes forbid WeilPairingData, RootPairing, external FltRegular/P2MW/P2M,
+    FLT endpoints and the explicitly listed global Kummer providers.
+
+Audit output:
+  PASS: 73 production and 12 regression declarations; standard logical axioms only.
+  PASS: DkMath.Lib.NumberTheory.EllipticCoordinateRing.isDedekindDomain; 24811 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticFunctionField.pointHom_injective_of_ne_baseChange; 21396 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticFunctionField.pointPull; 13795 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticFunctionField.transEquiv; 26021 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticFunctionField.transEquiv_injective; 26026 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticFunctionField.placeOf_surjective; 21115 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticFunctionField.placeOf_injective; 10373 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.functionFieldTranslation; 30657 reachable constants; expected providers present.
+  PASS: FreyWeilGeometryTest.actual_local_dvr; 24073 reachable constants; expected providers present.
+  PASS: FreyWeilGeometryTest.actual_translation_nonidentity; 30717 reachable constants; expected providers present.
+  PASS: FreyWeilGeometryTest.actual_translation_square; 30715 reachable constants; expected providers present.
+  PASS: FreyWeilGeometryTest.constant_evaluation_not_injective; 15493 reachable constants; expected providers present.
+
+Mathematical scope:
+  Actual affine coordinate-ring maximal ideal classification over an algebraically closed field.
+  Local principal maximal ideal at a nonsingular point; localized ring is a DVR.
+  Actual coordinate ring of an elliptic curve is Dedekind over algebraically closed fields.
+  Actual function-field generic point; nonconstant-point substitution is injective.
+  Fraction-ring lift gives translation pullback; inverse, composition, identity and faithful action.
+  Finite points correspond to HeightOneSpectrum; no place at infinity or valuation transport yet.
+  Actual Source 2 curve: nonidentity translation by real nonzero 2-torsion, square identity.
+  Constant evaluation kills nonzero X class, so is not injective.
+  No geometric Weil pairing, exists_weilPairingData, unconditional det=cyclotomic,
+    compatible bases, Tate module or new FLT closure asserted.
+
+Static checks performed:
+  python3 check_tracker_mismatch.py /tmp/note021-focused.log
+  exit 0; OK: no mismatches found.
+  git diff --check
+  exit 0.
+  New 7 production/test Lean files: exact file markers, whitespace, proof-placeholder scan.
+  Four adapted files: Apache-2.0 headers, source blob attribution and existing LICENSE/NOTICE paths.
+
+Facade, root and complete test-library build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11601 jobs).
+  New modules and both facades reachable from DkMath; regression and audit reachable from DkMathTest.
+  Five pre-existing sorry warnings in unrelated modules were replayed.
+  New NOTE-021 module and regression/audit warnings: none.
+  python3 check_tracker_mismatch.py /tmp/note021-full.log
+  exit 0; OK: no mismatches found.
+
+Direct suite entrance:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest.
+  New regression and audit modules are imported by the normal suite entrance.
+
+Root smoke and explicit axiom reports:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE021.lean
+  exit 0.
+  import DkMath reaches coordinate-ring Dedekindity, generic point, nonconstant substitution,
+    translation equivalence and faithfulness, finite-place coverage and injectivity.
+  Generic algebraically closed field, translation composition, and same-Source interfaces checked.
+  #print axioms: isDedekindDomain, transEquiv, placeOf_surjective:
+    propext, Classical.choice, Quot.sound only.
+
+Final hygiene:
+  git diff --check: exit 0.
+  All 8 new Lean files: exact file markers and no trailing whitespace;
+    no sorry/admit/custom axiom/native_decide/implemented_by proof bypasses.
+  Raw build logs remain disposable in /tmp/note021-*.log.

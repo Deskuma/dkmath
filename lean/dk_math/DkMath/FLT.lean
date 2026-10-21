@@ -28,6 +28,7 @@ import DkMath.FLT.FreyResidualGL2
 import DkMath.FLT.FreyResidualCyclotomic
 import DkMath.FLT.FreyTorsionAllCard
 import DkMath.FLT.FreyTorsionPrimePower
+import DkMath.FLT.FreyWeilGeometry
 import DkMath.FLT.PrimeDepthBridge
 
 #print "file: DkMath.FLT"
