@@ -33,6 +33,7 @@ import DkMath.FLT.FreyWeilFunction
 import DkMath.FLT.FreyWeilValuation
 import DkMath.FLT.FreyWeilTransport
 import DkMath.FLT.FreyWeilCharacter
+import DkMath.FLT.FreyWeilBicharacter
 import DkMath.FLT.PrimeDepthBridge
 
 #print "file: DkMath.FLT"
