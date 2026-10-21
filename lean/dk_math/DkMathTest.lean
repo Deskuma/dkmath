@@ -192,5 +192,7 @@ import DkMathTest.FLT.FreyWeilFunction
 import DkMathTest.FLT.Note022DependencyAudit
 import DkMathTest.FLT.FreyWeilValuation
 import DkMathTest.FLT.Note023DependencyAudit
+import DkMathTest.FLT.FreyWeilTransport
+import DkMathTest.FLT.Note024DependencyAudit
 
 #print "file: DkMathTest"

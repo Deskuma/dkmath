@@ -1,0 +1,95 @@
+NOTE-024 verification evidence — 2026-10-21
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Mathematical scope:
+  Existing weilNumerator, span_weilNumerator, fiber_card and weilFunction reused.
+  Distinct point ideal product -> CRT -> residue fields of dimension 1 -> norm degree.
+  Norm degree = n^2 - 1_[T=O], with natural-number balance before integer subtraction.
+  Actual infinity Valuation constructed on the coordinate ring and localized to its function field.
+  Infinity order = negative norm degree; nonzero target Weil function has order -1 at O.
+  All-point order formula = 1_[nP=T] - 1_[nP=O].
+  Normal transport proved by secant/tangent local congruences and valuation-ring rigidity.
+  Exceptional P=-S transport: translated x has a pole; infinity valuation ring classified.
+  Surjectivity via norm degrees 2 and 3 fixes the actual discrete valuation normalization.
+  Arbitrary rational functions handled through numerator/denominator representation.
+  Translation at P=O handled by inverse translation and its proved composition law.
+  Actual all-point valuations and nonzero-function orders transported along P -> P+S.
+  n-torsion translation preserves all orders of the same existing Weil function.
+  Source 2 regressions: degrees 4, 3, 0, 1368; infinity orders -4, -1, 0;
+    exceptional T+T=O, translation from O, ordinary simple zero, Source invariance.
+  No proportionality constant, constant-ratio criterion, WeilPairingData existence,
+    nondegeneracy, unconditional det=cyclotomic, or new FLT closure asserted.
+
+Static checks:
+  git diff --check: exit 0.
+  Whitespace in all 15 new files: PASS.
+  13 new Lean files (10 production, 2 regression/audit, 1 root smoke):
+    exact file markers, whitespace, forbidden constructs, LICENSE/NOTICE paths: PASS.
+  Six adapted modules have Apache-2.0 notices, source paths/blobs and modification notes.
+  No sorry/admit, custom axiom/opaque, unsafe or native_decide in new Lean files.
+
+Focused build:
+  lake build DkMathTest.FLT.Note024DependencyAudit
+  exit 0; Build completed successfully (3201 jobs).
+  New modules: no warnings.
+  90 named production and 12 regression declarations: standard logical axioms only.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  11 selected type-and-opaque-body dependency traversals: PASS.
+  Selected traversals forbid unported external providers, Weil pairing data,
+    old FLT endpoints and global Kummer inputs.
+  General ring/valuation transport traversals also exclude DkMath torsion representation providers.
+
+Selected audit output:
+  90 production and 12 regression declarations; standard logical axioms only.
+  DkMath.Lib.NumberTheory.EllipticPointIdealNorm.natDegree_norm_of_span_eq_prod; 22599 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.normDegree_weilNumerator_balance; 31765 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticInfinityValuation.valuationInfty; 20180 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.infinityOrder_weilFunction; 32229 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticFunctionField.valuation_transEquiv_eq; 28728 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticFunctionField.valuation_placeOf_neg_transEquiv_algebraMap_aux; 27357 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointValuation_transEquiv; 30191 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointOrder_transEquiv_weilFunction_of_torsion; 33795 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.curve_weilFunction_pointOrder_transEquiv; 36828 reachable constants; expected providers present.
+  FreyWeilTransportTest.exceptional_translation_pole; 36863 reachable constants; expected providers present.
+  FreyWeilTransportTest.normDegree_thirtySeven; 34895 reachable constants; expected providers present.
+
+Facade/root build:
+  lake build DkMath DkMath.FLT DkMath.Lib
+  exit 0; Build completed successfully (10677 jobs).
+
+Integrated build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11625 jobs).
+  New modules: no warnings.
+  Five pre-existing unrelated sorry warnings were replayed:
+    DkMath/CosmicFormula/TriominoFLT.lean:1919
+    DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147
+    DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187
+    DkMath/NumberTheory/GcdNextResearch.lean:850
+    DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389
+  These declarations are not in the selected audited dependency paths.
+
+Root smoke:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE024.lean
+  exit 0; no warnings; all checks and the full-point translation example elaborated.
+  #print axioms for normDegree_weilNumerator and
+    pointOrder_transEquiv_weilFunction_of_torsion:
+    [propext, Classical.choice, Quot.sound].
+
+Test entrance:
+  lake env lean DkMathTest.lean
+  exit 0; output: file: DkMathTest
+
+Tracker checks:
+  python3 check_tracker_mismatch.py /tmp/note024-audit3.log
+  python3 check_tracker_mismatch.py /tmp/note024-roots.log
+  python3 check_tracker_mismatch.py /tmp/note024-full.log
+  python3 check_tracker_mismatch.py /tmp/note024-final-full.log
+  all exit 0; OK: no mismatches found.
+
+Final verification after the textbook comment clarified q=0 versus q!=0:
+  Integrated build repeated: exit 0; 11625 jobs.
+  Same 90 production / 12 regression axiom audit and all 11 dependency paths: PASS.
+  Root smoke repeated: exit 0; same standard logical axioms only.

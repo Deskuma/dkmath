@@ -102,6 +102,15 @@ import DkMath.Lib.NumberTheory.EllipticPrincipalPointIdeal
 import DkMath.Lib.NumberTheory.EllipticWeilFunction
 import DkMath.Lib.NumberTheory.EllipticPointIdealValuation
 import DkMath.Lib.NumberTheory.EllipticWeilValuation
+import DkMath.Lib.Algebra.DiscreteValuationRigidity
+import DkMath.Lib.NumberTheory.EllipticPointIdealNorm
+import DkMath.Lib.NumberTheory.EllipticInfinityValuation
+import DkMath.Lib.NumberTheory.EllipticInfinityClassification
+import DkMath.Lib.NumberTheory.EllipticValuationTransport
+import DkMath.Lib.NumberTheory.EllipticTranslationValuation
+import DkMath.Lib.NumberTheory.EllipticTranslationInfinity
+import DkMath.Lib.NumberTheory.EllipticWeilInfinity
+import DkMath.Lib.NumberTheory.EllipticWeilTransport
 import DkMath.Lib.NumberTheory.EllipticTorsionNonSplit
 import DkMath.Lib.RepresentationTheory.PascalDifference
 import DkMath.Lib.NumberTheory.FreyTwoArithmetic
