@@ -234,5 +234,7 @@ import DkMathTest.FLT.FreyShallowSlope
 import DkMathTest.FLT.Note031ShallowSlopeDependencyAudit
 import DkMathTest.FLT.FreyBranchComparison
 import DkMathTest.FLT.Note031BranchComparisonDependencyAudit
+import DkMathTest.FLT.FreyDoublingDepth
+import DkMathTest.FLT.Note031DoublingDepthDependencyAudit
 
 #print "file: DkMathTest"

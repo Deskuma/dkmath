@@ -1,0 +1,110 @@
+NOTE-031-002C6a verification evidence — 2026-10-23 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Completed scope:
+  Same CriticalCentre and actual finite Point on arbitrary field/valuation subring.
+  Two-torsion: tangent denominator zero, X^2(4X+B)=4F0.
+  Near centre and v(2)=1 imply v(X)^2=v(F0).
+  Distinct two-torsion X coordinates near same centre have v(x'-x)=v(X).
+  Near+shallow implies v(tangent denominator)=v(X), supplied from C4 opposite-slope separation.
+  Shallow actual point has nonzero 2P; actual finite doubling witness constructed via Point addition.
+  (x(2P)-centre.x)*Psi^2=X^4+8F0*X+B*F0.
+  Doubling numerator bound; exact max valuation only away from equal-valued main terms.
+  Actual doubling depth rule: N*L^2<=max(L^4,F); F<L^4 => N=L^2; L^4<F => N*L^2=F.
+  Same Frey Source/curve/centre/point retained in two transport APIs.
+
+Remaining scope:
+  Same-branch general addition depth and branch transport, unequal-depth opposite branches.
+  Antipodal transitions and smooth-reduction addition/return.
+  Full all-multiple orbit induction, odd torsion shallowness and L^p=F^j relation.
+  Discriminant p-divisibility to all singular-reduction torsion fixedness.
+  Full multiplicative unramifiedness, additive zero-component submodule.
+  031-002 overall, 031-003 through 005, hcases/hno and general FLT remain incomplete.
+  No claim of a new mathematical proof; DkMath reconstruction of referenced coordinate/valuation argument.
+
+Regressions:
+  Previous curve y^2=x^3+x^2+1053, P=(3,33).
+    Actual doubling coordinates 2P=(-27/4,-225/8) checked by Point addition.
+    F=L^4 at every valuation subring of Q over 3; N=v(3)^3<L^2 shows strict cancellation.
+    Master doubling theorem still applies at the threshold and returns actual finite point/bound.
+  Curve family y^2=x^3+x^2+c:
+    Same explicit centre (0,0), both derivatives zero, node unit and defect valuation=discriminant valuation.
+    c=7533=3^5*31, actual point (3,87): F<L^4, actual doubling witness with N=L^2.
+    c=189=3^3*7, actual point (3,15): L^4<F<L^2, actual doubling witness with N*L^2=F.
+    No additional explicit rational evaluation of these two doubling coordinates claimed.
+  Previous actual two-torsion points (-4,2) and (-1/4,1/8), over algebraic closure of Q:
+    First point has exact critical-depth equality for every same centre over 3.
+    Both near same centre; actual two-torsion and distinct-X separation checked.
+
+Focused validation:
+  lake build DkMath.Lib.NumberTheory.EllipticCriticalDepth DkMath.Lib.NumberTheory.EllipticDoublingDepth DkMath.FLT.FreyDoublingDepth DkMathTest.FLT.FreyDoublingDepth DkMathTest.FLT.Note031DoublingDepthDependencyAudit
+  exit 0; Build completed successfully (3205 jobs); no warnings/errors.
+  13 public production and 13 public regression declarations: standard logical axioms only.
+  13 type/opaque-body graph audits; 7 explicit-input audits.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Forbidden graph: sorryAx, old FLT endpoints, external P2M/P2MW/FltRegular/FreyPackage,
+    DkMath.FLT.Kummer, RegularKummer and FoldedValuationOrbit.
+  Neutral library/concrete paths additionally exclude DkMath.FLT dependencies.
+  Required providers: actual Point.add_self_of_Y_ne, slope_of_Y_ne, critical cubic,
+    nodal-depth formula, existing shallow opposite-slope separation and actual regression points.
+  h2/htor/near/distinct-X retained for two-torsion comparisons.
+  Doubling identity requires nonzero denominator; master doubling derives it from near+shallow.
+  No all-orbit/fixedness/hcases/hno inputs supplied to master theorem.
+
+Normal facade/root/test build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11747 jobs).
+  New code: no warnings/errors.
+  Five existing unrelated broad-root sorry warnings:
+    DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6
+    DkMath/CosmicFormula/TriominoFLT.lean:1919:6
+    DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8
+    DkMath/NumberTheory/GcdNextResearch.lean:850:6
+    DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8
+
+Entrances:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest; no warnings/errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE031DoublingDepth.lean
+  exit 0; 7 endpoints reachable through import DkMath; same Source transport at p=37;
+    both Source endpoints print standard-only axioms; no warnings/errors.
+  Source 37 reachability is conditional API type checking, not a constructed Source/counterexample.
+  python3 check_tracker_mismatch.py /tmp/note031-002C6a-full.log
+  exit 0; OK: no mismatches found.
+
+Static checks:
+  python3 /tmp/check_note031C6a.py
+  exit 0; 9 changed/new Lean files: 3 facades, 3 production, regression, audit and root smoke.
+  Exact markers, public textbook docstrings, final newlines, whitespace and Lib layering: PASS.
+  All 13 production and 13 regression public declarations listed in axiom audit: PASS.
+  No sorry/admit/native_decide/custom axiom/opaque/unsafe in checked new/changed Lean files.
+  Upstream LICENSE/NOTICE present; provenance manifest records read-only source fetches and cached polynomial.
+  git diff --check: exit 0.
+
+These checks cover the new paths; they do not establish whole-repository axiom freedom.
+Disposable raw logs: /tmp/note031-002C6a-{focused,full,entrance,smoke}.log.
+
+Compact audit output:
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS: 13 production and 13 regression declarations; standard logical axioms only.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.EllipticCriticalDepth.two_torsion_depth; 22706 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.EllipticCriticalDepth.two_torsion_separation; 22720 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.EllipticCriticalDepth.shallow_denominator_valuation; 8336 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.EllipticCriticalDepth.shallow_not_two_torsion; 22753 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.EllipticDoublingDepth.doubling_identity; 8050 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.EllipticDoublingDepth.doubling_depth; 22761 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.two_torsion_critical_depth; 24340 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.shallow_doubling_depth; 24391 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS: FreyDoublingDepthTest.threshold_rule; 23555 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS: FreyDoublingDepthTest.deeper_rule; 23553 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS: FreyDoublingDepthTest.shallower_rule; 23552 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS: FreyDoublingDepthTest.bad_point_critical_depth; 25900 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS: FreyDoublingDepthTest.bad_pair_separated; 26031 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS inputs: DkMath.Lib.NumberTheory.EllipticCriticalDepth.two_torsion_depth; explicit arithmetic guards and remaining inputs retained.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS inputs: DkMath.Lib.NumberTheory.EllipticCriticalDepth.two_torsion_separation; explicit arithmetic guards and remaining inputs retained.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS inputs: DkMath.Lib.NumberTheory.EllipticCriticalDepth.shallow_denominator_valuation; explicit arithmetic guards and remaining inputs retained.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS inputs: DkMath.Lib.NumberTheory.EllipticDoublingDepth.doubling_identity; explicit arithmetic guards and remaining inputs retained.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS inputs: DkMath.Lib.NumberTheory.EllipticDoublingDepth.doubling_depth; explicit arithmetic guards and remaining inputs retained.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS inputs: DkMath.FLT.Frey.Source.two_torsion_critical_depth; explicit arithmetic guards and remaining inputs retained.
+  DkMathTest/FLT/Note031DoublingDepthDependencyAudit.lean:80:0: PASS inputs: DkMath.FLT.Frey.Source.shallow_doubling_depth; explicit arithmetic guards and remaining inputs retained.

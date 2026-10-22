@@ -1,0 +1,36 @@
+{
+  "implementation_date": "2026-10-23",
+  "repository": "anthropics/fermats-last-theorem",
+  "sources": [
+    {
+      "path": "P2M/Sol/S_WeierstrassCurve_valuation_sq_eq_of_two_torsion_of_not_inZeroComponentAt.lean",
+      "blob_sha": "4de142e4da82c3fd8d7f9c59dd9f3d986475304f",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_valuation_sq_eq_of_two_torsion_of_not_inZeroComponentAt.lean",
+      "transport": "Read-only GitHub connector fetch, 2026-10-23",
+      "usage": "Adapt critical cubic, exact two-torsion depth and separation; generalize to same DkMath centre over arbitrary field"
+    },
+    {
+      "path": "P2M/Sol/S_WeierstrassCurve_valuation_pow_eq_of_torsion_of_not_inZeroComponentAt.lean",
+      "blob_sha": "94e0bb0c302237deddfc439eca64e6321c1f553c",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_valuation_pow_eq_of_torsion_of_not_inZeroComponentAt.lean",
+      "transport": "Read-only GitHub connector fetch, 2026-10-23",
+      "usage": "Read the odd-torsion orbit proof to identify outstanding geometric transitions; not ported"
+    },
+    {
+      "path": "P2M/Sol/S_WeierstrassCurve_slope_mem_of_shallow.lean",
+      "blob_sha": "0b9d8a2eb9bfd9e038a8a875189907fdafd76f58",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_slope_mem_of_shallow.lean",
+      "transport": "Read-only local cache from NOTE-031-002C3",
+      "usage": "S04_dbl_core and S04_dbl_ident; reconstruct same-centre valuation bound, unequal-value rules and actual doubling witness"
+    }
+  ],
+  "reconstructed": "Same CriticalCentre, raw tangent denominator, polynomial doubling identity and actual Point doubling; keep cancellation threshold and finite-coordinate witnesses. Transport unchanged Frey Source.",
+  "remaining": [
+    "Same-branch addition depth and branch transport beyond doubling",
+    "Opposite-branch unequal-depth and antipodal transitions",
+    "Addition of a point with smooth reduction and return to singular neighbourhood",
+    "All-multiple orbit induction and odd-prime torsion level power relation",
+    "Multiplicative unramifiedness, zero-component submodule and full FLT"
+  ],
+  "novelty": "Independent DkMath formalization and API decomposition of the referenced coordinate/valuation argument; no claim of a new mathematical proof of FLT or unramifiedness."
+}

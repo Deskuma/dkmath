@@ -54,6 +54,7 @@ import DkMath.FLT.FreyCriticalCentre
 import DkMath.FLT.FreyNodalReduction
 import DkMath.FLT.FreyShallowSlope
 import DkMath.FLT.FreyBranchComparison
+import DkMath.FLT.FreyDoublingDepth
 
 #print "file: DkMath.FLT"
 

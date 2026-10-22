@@ -180,6 +180,8 @@ import DkMath.Lib.NumberTheory.EllipticNodalReduction
 import DkMath.Lib.Algebra.ValuationSeparatedRoots
 import DkMath.Lib.NumberTheory.EllipticShallowSlope
 import DkMath.Lib.NumberTheory.EllipticBranchComparison
+import DkMath.Lib.NumberTheory.EllipticCriticalDepth
+import DkMath.Lib.NumberTheory.EllipticDoublingDepth
 
 #print "file: DkMath.Lib"
 
