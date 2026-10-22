@@ -13,7 +13,8 @@ import Lean.Util.FoldConsts
 # NOTE-031-004部分実装: 良還元ケース、整点存在、共役輸送と節点捩れの依存監査
 
 型とopaque本体を走査し、実際の供給経路と標準論理公理のみであることを検査する。
-p∤abcの仮定を良還元終点の明示入力に保持する。乗法的還元の場合の終点は未供給である。
+p∤abcの仮定を本章の良還元終点の明示入力に保持する。
+両還元ケースの終点は続編Note031PrimeFiltrationDependencyAuditで別に監査する。
 -/
 namespace Note031PrimeGoodFiltrationDependencyAudit
 open Lean Elab Command

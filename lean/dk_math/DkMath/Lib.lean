@@ -202,6 +202,12 @@ import DkMath.Lib.NumberTheory.EllipticGoodReductionKernel
 import DkMath.Lib.NumberTheory.ValuationPlaceConjugacy
 import DkMath.Lib.NumberTheory.AbsoluteInertiaConjugacy
 import DkMath.Lib.NumberTheory.EllipticNodalTorsion
+import DkMath.Lib.NumberTheory.ValuationResidue
+import DkMath.Lib.NumberTheory.EllipticReductionSlope
+import DkMath.Lib.NumberTheory.EllipticReductionCoordinates
+import DkMath.Lib.NumberTheory.EllipticSmoothReduction
+import DkMath.Lib.NumberTheory.EllipticNodalReductionKernel
+import DkMath.Lib.NumberTheory.EllipticNodalInertia
 
 #print "file: DkMath.Lib"
 

@@ -1,7 +1,13 @@
 /-
-Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
-Released under MIT license as described in the file LICENSE.
-Authors: D. and Wise Wolf.
+Copyright (c) 2026 Anthropic, PBC.
+Copyright (c) 2026 D. and Wise Wolf.
+SPDX-License-Identifier: Apache-2.0
+License: RegularKummer/LICENSE
+Upstream notices: RegularKummer/ANTHROPIC-NOTICE
+Proof structure informed by S_WeierstrassCurve_inZeroComponentAt_torsionBy_residueChar.lean,
+blob 01d7a6df7cd7c56355d71af165e9f1ba34303e1c.
+Modified: Reconstruct the residue-characteristic torsion bridge using DkMath zeroComponentReduction;
+use the same CriticalCentre to supply the residue node instead of a fresh node-existence theorem.
 -/
 
 import DkMath.Lib.NumberTheory.EllipticSmoothReduction

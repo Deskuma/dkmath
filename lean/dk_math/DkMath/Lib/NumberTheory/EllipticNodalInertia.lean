@@ -1,7 +1,13 @@
 /-
-Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
-Released under MIT license as described in the file LICENSE.
-Authors: D. and Wise Wolf.
+Copyright (c) 2026 Anthropic, PBC.
+Copyright (c) 2026 D. and Wise Wolf.
+SPDX-License-Identifier: Apache-2.0
+License: RegularKummer/LICENSE
+Upstream notices: RegularKummer/ANTHROPIC-NOTICE
+Proof structure informed by S_WeierstrassCurve_inZeroComponentAt_smul_sub_of_mem_inertiaSubgroupIn.lean,
+blob 4671d1857e26c4967080e5f48c4ce2fbe56484ee.
+Modified: Reconstruct smooth inertia differences with the same DkMath centre and directions;
+use pointwise smooth-reduction predicates, existing branch comparison and actual subgroup closure.
 -/
 
 import DkMath.Lib.NumberTheory.EllipticNodalReductionKernel
