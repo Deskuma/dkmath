@@ -15,12 +15,13 @@ import DkMath.Lib.NumberTheory.FoldedValuationOrbit
 
 029-Aは幾何学的な次元2だけで閉じる。可約性から得られる部分群は、元の曲線の
 実際の点でできており、位数p・巡回性・ガロア安定性を持つ。
-029-Bの局所慣性による二択と、029-Cの有理p-torsion排除はまだ算術入力である。
-両方を供給すれば、一般の降下と線形代数だけでcofixed直線へ進める。
+029-Bの局所慣性による二択はまだ算術入力である。029-Cの有理p-torsion排除は
+NOTE-030で証明し、`FreyRationalTorsionBridge`が向き付き条件の下でhratを供給する。
+この一般形では二入力を明示し、降下と線形代数だけでcofixed直線へ進める。
 
 `Source p`自体はp≥5やa≡3 mod4・bの偶数性をフィールドとして保持しない。
-これらを暗黙に補うことはしない。将来の2進付値論では`FreyCounterexample`の
-向き付け付き存在定理から条件を取り出す必要がある。このファイルは指数に関する
+これらを暗黙に補うことはしない。bridgeは`FreyCounterexample`の向き付け付き存在定理から
+同じ選択済みSourceの条件と正規化証拠を取り出す。このファイルは指数に関する
 例外分岐を使わず、既約性や一般FLTの完成を主張しない。
 -/
 
@@ -48,8 +49,8 @@ theorem residual_noNonzeroFixed_iff_rational_torsion :
       ∀ Q : S.rationalCurve.toAffine.Point, p • Q = 0 → Q = 0 :=
   noNonzeroFixed_iff_rational_torsion S.rationalCurve p
 
-/-- 二択と有理torsion排除を別に証明した場合のcofixed直線。
-二入力は未解決の算術を表し、この条件付き結論を無条件の既約性とは呼ばない。 -/
+/-- 二択と有理torsion排除を入力に取るcofixed直線の一般形。
+向き付きSourceのhratはbridgeで供給する。hcasesは依然別の算術であり、既約性は結論しない。 -/
 theorem residual_exists_cofixed_line (hred : ¬ S.ResidualIsIrreducible)
     (hcases : ∀ L : Submodule (ZMod p) S.ResidualSpace, Module.finrank (ZMod p) L = 1 →
       S.IsGaloisStable L → IsFixedOn S.residualRepresentation L ∨ IsCofixedOn S.residualRepresentation L)
@@ -59,8 +60,8 @@ theorem residual_exists_cofixed_line (hred : ¬ S.ResidualIsIrreducible)
   have := S.rationalCurve_isElliptic
   exact exists_cofixed_line_of_reducible S.rationalCurve p hred hcases hrat
 
-/-- 将来の既約性証明の三つの算術入力を、同じSourceで固定する。
-cofixed直線の不存在は、固定点の不存在だけでは代用できない。 -/
+/-- 既約性証明の三つの算術入力を、同じSourceで固定する一般形。
+hratを供給するbridgeでもhcasesとhnoは残す。cofixed不存在は固定点不存在だけでは代用できない。 -/
 theorem residual_isIrreducible_of_no_cofixed_line
     (hcases : ∀ L : Submodule (ZMod p) S.ResidualSpace, Module.finrank (ZMod p) L = 1 →
       S.IsGaloisStable L → IsFixedOn S.residualRepresentation L ∨ IsCofixedOn S.residualRepresentation L)
@@ -81,7 +82,8 @@ theorem residual_stable_line_diagonal_product
         (cyclotomicCharacter p σ : ZMod p) :=
   S.residual_stable_line_diagonal_product_of_pairing S.residual_geometricWeilPairingData b hstable σ
 
-/-- 有理torsion排除の付値軌道に現れる法の約分。上下界・加法公式はまだ供給しない。 -/
+/-- 有理torsion排除の付値軌道に現れる法の約分だけを扱う補題。
+実際の点からの全入力と排除は`FreyRationalTorsion`が供給する。 -/
 theorem residual_valuation_modulus_cancel (hp2 : p ≠ 2) (m : ℤ)
     (hm : 2 * ((p : ℤ) * (padicValInt 2 S.b : ℤ) - 4) ∣ (p : ℤ) * m) :
     2 * ((p : ℤ) * (padicValInt 2 S.b : ℤ) - 4) ∣ m :=

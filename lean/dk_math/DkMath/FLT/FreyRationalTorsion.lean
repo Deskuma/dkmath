@@ -18,7 +18,8 @@ import DkMath.Lib.NumberTheory.WeierstrassValuationOrbit
 
 公開仮定はpの素数性、p≥5、Even S.bである。任意のp倍零点Qは零となり、
 非零有理p-torsionや位数・整数列のproviderは必要ない。
-ガロア固定点の有理点への降下との接続は030-008、fixed/cofixedとcofixed排除は別の課題である。
+ガロア固定点の有理点への降下との接続は030-008の`FreyRationalTorsionBridge`に置く。
+fixed/cofixed二択とcofixed排除は別の課題である。
 この章は残余表現の無条件既約性や一般FLTを証明したものではない。
 -/
 namespace DkMath.FLT.Frey.Source

@@ -1,0 +1,104 @@
+NOTE-030-008 verification evidence — 2026-10-22 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Completed mathematical scope:
+  NOTE-030 stages 001 through 008 complete within the explicit oriented-Source scope.
+  Same Source, same rational curve, same residual representation and same actual point.
+  Prime p>=5 and even b explicit: NoNonzeroFixed S.residualRepresentation.
+  Existing absolute-Galois fixed-field descent supplies rational p-torsion on the same curve.
+  Base change is injective and preserves the killed-by-p condition.
+  Chapter 007 rational_p_torsion_eq_zero supplies hrat; no external hrat/hzero provider remains.
+  Every globally fixed residual point is zero; every pointwise fixed residual submodule is bottom.
+  With a nonzero submodule and an explicit fixed/cofixed alternative, select cofixed.
+  With reducibility and hcases, extract a cofixed stable line without an hrat input.
+  With hcases and hno, retain the conditional irreducibility entrance without an hrat input.
+  Counterexample entrance uses the same selected Source.ofCounterexample and returns:
+    4 divides a+1, even b, PrimitiveReduction and OrientationTrace, and NoNonzeroFixed.
+  PrimitiveReduction retains the original common factor; normalized and original coordinates are not identified.
+
+Remaining scope:
+  Local-inertia supply of fixed/cofixed dichotomy hcases.
+  Cofixed stable-line exclusion hno.
+  No unconditional irreducibility, modularity, level lowering or general FLT closure claimed.
+  NoNonzeroFixed does not assert that geometric E[p] itself is zero.
+
+Regression cases:
+  Same Source 37: fixed point vanishing, NoNonzeroFixed, pointwise fixed submodule vanishing.
+  Same Source 37: cofixed extraction retains hcases; conditional irreducibility retains hcases and hno.
+  Counterexample 37 entrance preserves the same selected Source, primitive reduction and orientation trace.
+  No Source or Fermat counterexample existence claimed.
+  Actual Source 2 (a,b,c)=(4,3,5) has a nonzero fixed 2-torsion point.
+    It fails both p>=5 and even b; it is a boundary against an unguarded statement for all Sources,
+    not a counterexample proving necessity of the p>=5 hypothesis alone.
+  Finite boundary representation F5^* on F5^2, rho(g)=diag(g^2,g^3):
+    NoNonzeroFixed proved from g=2 eigenvalues 4 and 3.
+    A genuine stable one-dimensional first axis remains, so the representation is reducible.
+    The axis is neither fixed nor cofixed; fixed-point vanishing does not supply hcases.
+    This finite representation is not substituted for the Frey or absolute-Galois representation.
+
+Static checks:
+  4 new Lean files: 1 production, 2 tests/audits, 1 root smoke.
+  All 7 production and 10 regression declarations listed in the axiom audit.
+  Exact markers after imports, textbook docstrings, whitespace, final newlines: PASS.
+  No new sorry/admit/native_decide/custom axiom/opaque/unsafe or external provider imports.
+  Existing FreyStableLine and FreyRationalTorsion changed only in comments;
+    checked against HEAD after comment removal: imports, theorem types and proofs unchanged.
+  New bridge reuses DkMath APIs; no additional external code port.
+  git diff --check: exit 0.
+
+Focused build:
+  lake build DkMathTest.FLT.Note030BridgeDependencyAudit
+  exit 0; Build completed successfully (3277 jobs).
+  New code: no warnings or errors.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Full type and opaque-body dependency audit on 10 paths and 3 public-input checks:
+  7 production and 10 regression declarations; standard logical axioms only.
+  DkMath.FLT.Frey.Source.residual_noNonzeroFixed_of_oriented; 30809 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.residual_fixed_eq_zero_of_oriented; 30810 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.residual_fixed_submodule_eq_bot_of_oriented; 30812 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.residual_isCofixedOn_of_oriented; 30814 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.residual_exists_cofixed_line_of_oriented; 36208 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.residual_isIrreducible_of_oriented_no_cofixed_line; 36207 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.ofCounterexample_residual_noNonzeroFixed; 34219 reachable constants; expected providers present.
+  FreyRationalTorsionBridgeTest.actual_two_fixed_boundary; 24347 reachable constants; expected providers present.
+  FreyRationalTorsionBridgeTest.LinearBoundary.no_fixed_without_dichotomy; 6679 reachable constants; expected providers present.
+  FreyRationalTorsionBridgeTest.LinearBoundary.no_fixed_but_reducible; 16215 reachable constants; expected providers present.
+  INPUTS: DkMath.FLT.Frey.Source.residual_noNonzeroFixed_of_oriented; explicit arithmetic guards and remaining inputs retained.
+  INPUTS: DkMath.FLT.Frey.Source.residual_exists_cofixed_line_of_oriented; explicit arithmetic guards and remaining inputs retained.
+  INPUTS: DkMath.FLT.Frey.Source.residual_isIrreducible_of_oriented_no_cofixed_line; explicit arithmetic guards and remaining inputs retained.
+
+  Required: absolute-Galois fixed-field theorem, base-change injectivity,
+    rational torsion descent, Source.rational_p_torsion_eq_zero, folded integer kernel.
+  Required counterexample provenance: same Source.ofCounterexample, its specification,
+    PrimitiveReduction and OrientationTrace.
+  Forbidden: sorryAx, old FLT endpoints, external FltRegular/P2M/P2MW/FreyPackage, Kummer endpoints.
+  Finite linear boundary paths: no DkMath.FLT, elliptic geometry or folded integer kernel dependencies.
+  Input guards: hp/hp5/hbe for NoNonzeroFixed; no hrat/hzero/hcases/hno inputs there.
+  Cofixed extraction: hp5/hbe/hred/hcases retained; hrat/hzero absent.
+  Conditional irreducibility: hp5/hbe/hcases/hno retained; hrat/hzero absent.
+
+Facade/root/test build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11694 jobs).
+  New code: no warnings or errors.
+  Five existing unrelated broad-root sorry warnings:
+  warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+  warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+  warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+  warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+  warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+
+Additional entrance checks:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest; no warnings or errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE030Bridge.lean
+  exit 0; 5 selected endpoints reachable through import DkMath;
+          conditional same-Source 37 NoNonzeroFixed/fixed-point APIs; standard-only axiom prints;
+          no warnings or errors.
+  python3 check_tracker_mismatch.py /tmp/note030-008-full.log
+  exit 0; OK: no mismatches found.
+
+Raw logs are disposable /tmp/note030-008-*.log files.
+This records the stated scope, not whole-repository axiom freedom.
