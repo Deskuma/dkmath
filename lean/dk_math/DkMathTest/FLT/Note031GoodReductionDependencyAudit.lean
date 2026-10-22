@@ -107,8 +107,8 @@ run_cmd do
   logInfo m!"PASS: {production.size} production and {regression.size} regression declarations; standard logical axioms only."
   checkRoot ``DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation.slope_notMem_of_sub_mem_nonunits #[``DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation.nonsingular_residue,
     ``DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation.sub_mul_sub_negY] true
-  checkRoot ``DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation.addX_notMem_of_sub_mem_nonunits #[``DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation.slope_notMem_of_sub_mem_nonunits] true
-  checkRoot ``DkMath.Lib.NumberTheory.EllipticGoodReductionInertia.torsion_eq_of_coordinate_congruence #[``DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation.addX_notMem_of_sub_mem_nonunits,
+  checkRoot ``DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation.addX_notMem_of_sub_mem_nonunits #[``DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation.slope_notMem_of_sub_mem_nonunits_of_smooth] true
+  checkRoot ``DkMath.Lib.NumberTheory.EllipticGoodReductionInertia.torsion_eq_of_coordinate_congruence #[``DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation.addX_notMem_of_sub_mem_nonunits_of_smooth,
     ``DkMath.Lib.NumberTheory.EllipticTorsionValuationIntegrality.torsion_x_mem] true
   checkRoot ``DkMath.Lib.NumberTheory.EllipticGoodReductionInertia.fixed_of_inertia_of_good_model #[``DkMath.Lib.NumberTheory.EllipticGoodReductionInertia.torsion_eq_of_coordinate_congruence,
     ``DkMath.Lib.NumberTheory.ValuationPrimeSupport.inertia_apply_sub_mem_nonunits] true

@@ -172,6 +172,7 @@ import DkMath.Lib.NumberTheory.ValuationPrimeSupport
 import DkMath.Lib.NumberTheory.EllipticTorsionValuationIntegrality
 import DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation
 import DkMath.Lib.NumberTheory.EllipticGoodReductionInertia
+import DkMath.Lib.NumberTheory.EllipticSmoothReductionInertia
 
 #print "file: DkMath.Lib"
 

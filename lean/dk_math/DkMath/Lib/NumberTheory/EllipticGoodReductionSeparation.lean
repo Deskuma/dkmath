@@ -6,7 +6,7 @@ License: RegularKummer/LICENSE
 Upstream notices: RegularKummer/ANTHROPIC-NOTICE
 Chord estimates adapted from S_WeierstrassCurve_exists_torsion_zeroComponent_submodule_of_multiplicativeReduction.lean,
 blob 38bdee599f8b536cb30402a8d1dbef001a3d89da.
-Modified: extract good-reduction separation only; reuse DkMath coordinate integrality;
+Modified: extract pointwise smooth-reduction separation; reuse DkMath coordinate integrality;
 avoid the full formal-group and zero-component construction.
 -/
 
@@ -24,6 +24,9 @@ import DkMath.Lib.NumberTheory.EllipticTorsionValuationIntegrality
 次の章ではP−Qへ適用する。P,Qと差点が全てprime-to-q torsionなら、
 前章の座標整性に反するので、同じ剰余座標のtorsion点は等しくなる。
 この章自体は還元写像の加法性を仮定せず、実際の点の加法公式を使う。
+
+031-002C1では一点の滑らかな還元へ一般化する。剰余判別式が零でも、
+当該点が非特異なら同じ証明が通る。従来の良還元APIはその特殊化として保つ。
 -/
 namespace DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation
 open WeierstrassCurve IsLocalRing
@@ -84,9 +87,46 @@ theorem sub_mul_sub_negY {R : Type*} [CommRing R] {V : Affine R} {x₁ x₂ y₁
 
 variable {A : ValuationSubring L} (W : WeierstrassCurve A)
 
-/-- Y方向の偏微分が剰余体で消えるなら、良還元の非特異性からX方向の偏微分は単元となる。 -/
-theorem notMem_nonunits_of_sub_negY_mem_nonunits (hΔ : (W.map (residue A)).Δ ≠ 0)
-    {x y : L} (h : (W.map A.subtype).toAffine.Equation x y) (hx : x ∈ A)
+/-- 指定された有限座標の還元だけが非特異である条件。
+曲線全体の判別式の単元性は要求しない。整性の証明項による違いは生じない。 -/
+def SmoothCoordinates (x y : L) : Prop :=
+  ∀ (hx : x ∈ A) (hy : y ∈ A),
+    (W.map (residue A)).toAffine.Nonsingular (residue A ⟨x, hx⟩) (residue A ⟨y, hy⟩)
+
+/-- 点の滑らかな還元の座標的条件。有限座標が整なら、その剰余点の非特異性を要求する。
+無限遠点および非整なx座標の点はこの条件を満たす。後者を除外して零成分を縮めない。
+V上の点をWのモデルで調べるため、幾何学への適用定理ではW.map A.subtype = Vも要求する。
+本定義だけで加法閉性や零成分部分加群を構成したとはしない。 -/
+def HasSmoothReduction {V : WeierstrassCurve L} (P : V.toAffine.Point) : Prop :=
+  ∀ x y (h : V.toAffine.Nonsingular x y), P = .some x y h → SmoothCoordinates W x y
+
+/-- 無限遠点は滑らかな還元条件を満たす。便宜的な有限座標は割り当てない。 -/
+theorem hasSmoothReduction_zero (V : WeierstrassCurve L) : HasSmoothReduction W (0 : V.toAffine.Point) :=
+  fun _ _ h heq => absurd heq (Ne.symm (Affine.Point.some_ne_zero h))
+
+/-- 有限点の滑らかな還元条件は、その座標での条件と同値である。 -/
+theorem hasSmoothReduction_some_iff {V : WeierstrassCurve L} {x y : L}
+    (h : V.toAffine.Nonsingular x y) :
+    HasSmoothReduction W (.some x y h) ↔ SmoothCoordinates W x y := by
+  refine ⟨fun hP => hP x y h rfl, fun hs x' y' h' heq => ?_⟩
+  obtain ⟨rfl, rfl⟩ := Affine.Point.some.inj heq
+  exact hs
+
+/-- 非整なx座標の点も滑らかな還元条件に含める。
+prime-to-q torsionでは別途証明した座標整性により、この枝は起きない。 -/
+theorem hasSmoothReduction_of_notMem {V : WeierstrassCurve L} {x y : L}
+    (h : V.toAffine.Nonsingular x y) (hx : x ∉ A) : HasSmoothReduction W (.some x y h) :=
+  (hasSmoothReduction_some_iff W h).mpr fun hx' _ => absurd hx' hx
+
+/-- 良い剰余曲線では全点が滑らかな還元条件を満たす。 -/
+theorem hasSmoothReduction_of_good (hΔ : (W.map (residue A)).Δ ≠ 0)
+    (P : (W.map A.subtype).toAffine.Point) : HasSmoothReduction W P :=
+  fun _ _ h _ _ _ => nonsingular_residue W hΔ h.1
+
+/-- Y方向の偏微分が消える滑らかな剰余点では、X方向の偏微分は単元となる。
+必要なのは当該一点の非特異性であり、他の剰余点の特異性は妨げない。 -/
+theorem notMem_nonunits_of_sub_negY_mem_nonunits_of_smooth
+    {x y : L} (hs : SmoothCoordinates W x y) (h : (W.map A.subtype).toAffine.Equation x y) (hx : x ∈ A)
     (hY : y - (W.map A.subtype).toAffine.negY x y ∈ A.nonunits) :
     3 * x ^ 2 + 2 * (W.map A.subtype).toAffine.a₂ * x + (W.map A.subtype).toAffine.a₄ -
       (W.map A.subtype).toAffine.a₁ * y ∉ A.nonunits := by
@@ -103,7 +143,7 @@ theorem notMem_nonunits_of_sub_negY_mem_nonunits (hΔ : (W.map (residue A)).Δ �
     rw [heY]
     push_cast
     rw [h1]
-  have hns := nonsingular_residue W hΔ (x := ⟨x, hx⟩) (y := ⟨y, hy⟩) h
+  have hns := hs hx hy
   rw [Affine.nonsingular_iff] at hns
   have hY0 : residue A eY = 0 := by
     rw [← coe_mem_nonunits_iff_residue_eq_zero A, hcoeY]
@@ -126,14 +166,23 @@ theorem notMem_nonunits_of_sub_negY_mem_nonunits (hΔ : (W.map (residue A)).Δ �
   rw [← hcoeX, coe_mem_nonunits_iff_residue_eq_zero A]
   exact hX0
 
+/-- 良還元は、偏微分の単元性に必要な一点の滑らかさを供給する。 -/
+theorem notMem_nonunits_of_sub_negY_mem_nonunits (hΔ : (W.map (residue A)).Δ ≠ 0)
+    {x y : L} (h : (W.map A.subtype).toAffine.Equation x y) (hx : x ∈ A)
+    (hY : y - (W.map A.subtype).toAffine.negY x y ∈ A.nonunits) :
+    3 * x ^ 2 + 2 * (W.map A.subtype).toAffine.a₂ * x + (W.map A.subtype).toAffine.a₄ -
+      (W.map A.subtype).toAffine.a₁ * y ∉ A.nonunits :=
+  notMem_nonunits_of_sub_negY_mem_nonunits_of_smooth W
+    (fun _ _ => nonsingular_residue W hΔ h) h hx hY
+
 section Slope
 
 variable [DecidableEq L]
 
 
 /-- 逆の剰余座標を持つ二点の和が非零なら、その接線または割線の傾きは付値環を外れる。 -/
-theorem slope_notMem_of_sub_mem_nonunits (hΔ : (W.map (residue A)).Δ ≠ 0)
-    {x₁ x₂ y₁ y₂ : L} (h₁ : (W.map A.subtype).toAffine.Equation x₁ y₁)
+theorem slope_notMem_of_sub_mem_nonunits_of_smooth
+    {x₁ x₂ y₁ y₂ : L} (hs : SmoothCoordinates W x₁ y₁) (h₁ : (W.map A.subtype).toAffine.Equation x₁ y₁)
     (h₂ : (W.map A.subtype).toAffine.Equation x₂ y₂) (hx₁ : x₁ ∈ A) (hx₂ : x₂ ∈ A)
     (hPQ : ¬(x₁ = x₂ ∧ y₁ = (W.map A.subtype).toAffine.negY x₂ y₂))
     (hxx : x₁ - x₂ ∈ A.nonunits)
@@ -159,7 +208,7 @@ theorem slope_notMem_of_sub_mem_nonunits (hΔ : (W.map (residue A)).Δ ≠ 0)
       rw [sub_ne_zero]
       intro hcon
       exact hy (by rw [← hx, ← hy12]; exact hcon)
-    have hnum := notMem_nonunits_of_sub_negY_mem_nonunits W hΔ h₁ hx₁ hden
+    have hnum := notMem_nonunits_of_sub_negY_mem_nonunits_of_smooth W hs h₁ hx₁ hden
     exact div_notMem A hnum hden hden0
   · by_cases hyy' : y₁ - y₂ ∈ A.nonunits
     · rw [Affine.slope_of_X_ne hx]
@@ -171,7 +220,7 @@ theorem slope_notMem_of_sub_mem_nonunits (hΔ : (W.map (residue A)).Δ ≠ 0)
           ring
         rw [key]
         exact add_mem (add_mem hyy hyy') (mul_mem_nonunits A ha₁ hxx)
-      have hnum := notMem_nonunits_of_sub_negY_mem_nonunits W hΔ h₁ hx₁ hden
+      have hnum := notMem_nonunits_of_sub_negY_mem_nonunits_of_smooth W hs h₁ hx₁ hden
       set N : L := x₁ ^ 2 + x₁ * x₂ + x₂ ^ 2 + (W.map A.subtype).toAffine.a₂ * (x₁ + x₂) +
         (W.map A.subtype).toAffine.a₄ - (W.map A.subtype).toAffine.a₁ * y₁ with hN
       have hNunit : N ∉ A.nonunits := by
@@ -204,14 +253,14 @@ theorem slope_notMem_of_sub_mem_nonunits (hΔ : (W.map (residue A)).Δ ≠ 0)
 
 
 /-- 逆の剰余座標を持つ二点の非零な和はx座標に極を持つ。傾きの二次項が支配する。 -/
-theorem addX_notMem_of_sub_mem_nonunits (hΔ : (W.map (residue A)).Δ ≠ 0)
-    {x₁ x₂ y₁ y₂ : L} (h₁ : (W.map A.subtype).toAffine.Equation x₁ y₁)
+theorem addX_notMem_of_sub_mem_nonunits_of_smooth
+    {x₁ x₂ y₁ y₂ : L} (hs : SmoothCoordinates W x₁ y₁) (h₁ : (W.map A.subtype).toAffine.Equation x₁ y₁)
     (h₂ : (W.map A.subtype).toAffine.Equation x₂ y₂) (hx₁ : x₁ ∈ A) (hx₂ : x₂ ∈ A)
     (hPQ : ¬(x₁ = x₂ ∧ y₁ = (W.map A.subtype).toAffine.negY x₂ y₂))
     (hxx : x₁ - x₂ ∈ A.nonunits)
     (hyy : y₁ - (W.map A.subtype).toAffine.negY x₂ y₂ ∈ A.nonunits) :
     (W.map A.subtype).toAffine.addX x₁ x₂ ((W.map A.subtype).toAffine.slope x₁ x₂ y₁ y₂) ∉ A := by
-  have hℓ := slope_notMem_of_sub_mem_nonunits W hΔ h₁ h₂ hx₁ hx₂ hPQ hxx hyy
+  have hℓ := slope_notMem_of_sub_mem_nonunits_of_smooth W hs h₁ h₂ hx₁ hx₂ hPQ hxx hyy
   set ℓ : L := (W.map A.subtype).toAffine.slope x₁ x₂ y₁ y₂
   have ha₁ : (W.map A.subtype).toAffine.a₁ ∈ A := SetLike.coe_mem W.a₁
   have ha₂ : (W.map A.subtype).toAffine.a₂ ∈ A := SetLike.coe_mem W.a₂
@@ -220,6 +269,30 @@ theorem addX_notMem_of_sub_mem_nonunits (hΔ : (W.map (residue A)).Δ ≠ 0)
       (-(W.map A.subtype).toAffine.a₂ - x₁ - x₂) from by rw [Affine.addX]; ring]
   exact add_notMem A (mul_notMem A hℓ (by simpa [add_comm] using add_notMem A hℓ ha₁))
     (A.toSubring.sub_mem (A.toSubring.sub_mem (A.toSubring.neg_mem ha₂) hx₁) hx₂)
+
+/-- 良還元から一点の滑らかさを供給する、従来の傾きの入口。 -/
+theorem slope_notMem_of_sub_mem_nonunits
+    (hΔ : (W.map (residue A)).Δ ≠ 0)
+    {x₁ x₂ y₁ y₂ : L} (h₁ : (W.map A.subtype).toAffine.Equation x₁ y₁)
+    (h₂ : (W.map A.subtype).toAffine.Equation x₂ y₂) (hx₁ : x₁ ∈ A) (hx₂ : x₂ ∈ A)
+    (hPQ : ¬(x₁ = x₂ ∧ y₁ = (W.map A.subtype).toAffine.negY x₂ y₂))
+    (hxx : x₁ - x₂ ∈ A.nonunits)
+    (hyy : y₁ - (W.map A.subtype).toAffine.negY x₂ y₂ ∈ A.nonunits) :
+    (W.map A.subtype).toAffine.slope x₁ x₂ y₁ y₂ ∉ A :=
+  slope_notMem_of_sub_mem_nonunits_of_smooth W (fun _ _ => nonsingular_residue W hΔ h₁)
+    h₁ h₂ hx₁ hx₂ hPQ hxx hyy
+
+/-- 良還元から一点の滑らかさを供給する、従来の和の極の入口。 -/
+theorem addX_notMem_of_sub_mem_nonunits
+    (hΔ : (W.map (residue A)).Δ ≠ 0)
+    {x₁ x₂ y₁ y₂ : L} (h₁ : (W.map A.subtype).toAffine.Equation x₁ y₁)
+    (h₂ : (W.map A.subtype).toAffine.Equation x₂ y₂) (hx₁ : x₁ ∈ A) (hx₂ : x₂ ∈ A)
+    (hPQ : ¬(x₁ = x₂ ∧ y₁ = (W.map A.subtype).toAffine.negY x₂ y₂))
+    (hxx : x₁ - x₂ ∈ A.nonunits)
+    (hyy : y₁ - (W.map A.subtype).toAffine.negY x₂ y₂ ∈ A.nonunits) :
+    (W.map A.subtype).toAffine.addX x₁ x₂ ((W.map A.subtype).toAffine.slope x₁ x₂ y₁ y₂) ∉ A :=
+  addX_notMem_of_sub_mem_nonunits_of_smooth W (fun _ _ => nonsingular_residue W hΔ h₁)
+    h₁ h₂ hx₁ hx₂ hPQ hxx hyy
 
 end Slope
 end DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation

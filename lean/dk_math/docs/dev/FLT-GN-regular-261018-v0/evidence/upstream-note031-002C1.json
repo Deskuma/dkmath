@@ -1,0 +1,22 @@
+{
+  "implementation_date": "2026-10-22",
+  "source_transport": "Read-only GitHub source cache acquired during NOTE-031-002A; no new remote fetch in this step",
+  "repository": "anthropics/fermats-last-theorem",
+  "adapted": {
+    "path": "P2M/Sol/S_WeierstrassCurve_exists_torsion_zeroComponent_submodule_of_multiplicativeReduction.lean",
+    "blob_sha": "38bdee599f8b536cb30402a8d1dbef001a3d89da",
+    "sections": "HasNonsingularReduction and zero/some/nonintegral/good lemmas, around lines 2103-2138; generalize previously extracted chord estimates to pointwise smoothness",
+    "implementation": "SmoothCoordinates and HasSmoothReduction in existing Apache-2.0 separation module; same-model inertia proof reconstructed using actual DkMath torsion integrality"
+  },
+  "inspected_not_ported": {
+    "path": "P2M/Sol/S_WeierstrassCurve_smul_eq_self_of_torsion_of_not_inZeroComponentAt_of_dvd.lean",
+    "blob_sha": "5d43284b2120bb6712ad3d27e6f2c41e7b821953",
+    "remaining": "critical centre; discriminant-depth relation; branches and levels outside the zero component; inertia fixedness for singular reductions"
+  },
+  "nonclaims": [
+    "zero-component subgroup or submodule closure",
+    "inertia fixedness for singular reductions",
+    "full multiplicative-reduction unramifiedness",
+    "hcases or general FLT closure"
+  ]
+}

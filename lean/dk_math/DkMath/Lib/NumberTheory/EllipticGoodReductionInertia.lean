@@ -21,12 +21,13 @@ P,Qが同じ剰余座標を持つなら、異なると仮定した差点P−Qの
 namespace DkMath.Lib.NumberTheory.EllipticGoodReductionInertia
 open WeierstrassCurve IsLocalRing EllipticGoodReductionSeparation
 
-/-- 同じ整モデルの、同じ剰余座標を持つn-torsion点は等しい。
+/-- 同じ整モデルのn-torsion点が同じ剰余座標を持ち、第一点が滑らかに還元するなら等しい。
+剰余判別式の非零性を必要とせず、悪い還元でも当該点が滑らかなら適用できる。
 差点の極と実際の差点のtorsion整性を衝突させる。 -/
-theorem torsion_eq_of_coordinate_congruence {L : Type*} [Field L] [CharZero L] [DecidableEq L]
+theorem torsion_eq_of_coordinate_congruence_of_smooth {L : Type*} [Field L] [CharZero L] [DecidableEq L]
     {A : ValuationSubring L} (W : WeierstrassCurve A)
-    (hgood : (W.map (residue A)).Δ ≠ 0) {n : ℕ} (hn : A.valuation (n : L) = 1)
-    {x₁ y₁ x₂ y₂ : L} (h₁ : (W.map A.subtype).toAffine.Nonsingular x₁ y₁)
+    {n : ℕ} (hn : A.valuation (n : L) = 1)
+    {x₁ y₁ x₂ y₂ : L} (hs : SmoothCoordinates W x₁ y₁) (h₁ : (W.map A.subtype).toAffine.Nonsingular x₁ y₁)
     (h₂ : (W.map A.subtype).toAffine.Nonsingular x₂ y₂)
     (ht₁ : n • Affine.Point.some x₁ y₁ h₁ = 0) (ht₂ : n • Affine.Point.some x₂ y₂ h₂ = 0)
     (hxx : x₁ - x₂ ∈ A.nonunits) (hyy : y₁ - y₂ ∈ A.nonunits) :
@@ -46,8 +47,20 @@ theorem torsion_eq_of_coordinate_congruence {L : Type*} [Field L] [CharZero L] [
     rw [nsmul_sub, ht₁, ht₂, sub_zero]
   have hint := EllipticTorsionValuationIntegrality.torsion_x_mem A W _ rfl hn
     (Affine.nonsingular_add h₁ hneg hPQ) (hd ▸ hdt)
-  exact addX_notMem_of_sub_mem_nonunits W hgood h₁.1 hneg.1 hx₁ hx₂ hPQ hxx
+  exact addX_notMem_of_sub_mem_nonunits_of_smooth W hs h₁.1 hneg.1 hx₁ hx₂ hPQ hxx
     (by rwa [Affine.negY_negY]) hint
+
+/-- 良還元の座標単射性は、一点での滑らかな還元による単射性の特殊化である。 -/
+theorem torsion_eq_of_coordinate_congruence {L : Type*} [Field L] [CharZero L] [DecidableEq L]
+    {A : ValuationSubring L} (W : WeierstrassCurve A)
+    (hgood : (W.map (residue A)).Δ ≠ 0) {n : ℕ} (hn : A.valuation (n : L) = 1)
+    {x₁ y₁ x₂ y₂ : L} (h₁ : (W.map A.subtype).toAffine.Nonsingular x₁ y₁)
+    (h₂ : (W.map A.subtype).toAffine.Nonsingular x₂ y₂)
+    (ht₁ : n • Affine.Point.some x₁ y₁ h₁ = 0) (ht₂ : n • Affine.Point.some x₂ y₂ h₂ = 0)
+    (hxx : x₁ - x₂ ∈ A.nonunits) (hyy : y₁ - y₂ ∈ A.nonunits) :
+    Affine.Point.some x₁ y₁ h₁ = Affine.Point.some x₂ y₂ h₂ :=
+  torsion_eq_of_coordinate_congruence_of_smooth W hn (fun _ _ => nonsingular_residue W hgood h₁.1)
+    h₁ h₂ ht₁ ht₂ hxx hyy
 
 private theorem eq_of_model_congruence {L : Type*} [Field L] [CharZero L] [DecidableEq L]
     {A : ValuationSubring L} (W : WeierstrassCurve A) (V : WeierstrassCurve L)
