@@ -189,6 +189,11 @@ import DkMath.Lib.NumberTheory.EllipticCriticalPair
 import DkMath.Lib.NumberTheory.EllipticIntegralReturn
 import DkMath.Lib.NumberTheory.EllipticTorsionDepth
 import DkMath.Lib.NumberTheory.EllipticDepthInertia
+import DkMath.Lib.RepresentationTheory.ConjugateSquare
+import DkMath.Lib.NumberTheory.ValuationFrobenius
+import DkMath.Lib.NumberTheory.ValuationTameCharacter
+import DkMath.Lib.NumberTheory.EllipticDyadicSeparation
+import DkMath.Lib.NumberTheory.EllipticDyadicWildInertia
 
 #print "file: DkMath.Lib"
 
