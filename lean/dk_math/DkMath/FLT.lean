@@ -46,6 +46,8 @@ import DkMath.FLT.FreyRationalTorsionIdentities
 import DkMath.FLT.FreyRationalTorsion
 import DkMath.FLT.FreyRationalTorsionBridge
 
+import DkMath.FLT.FreyInertiaTransport
+
 #print "file: DkMath.FLT"
 
 set_option linter.style.longLine false

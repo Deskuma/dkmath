@@ -161,6 +161,12 @@ import DkMath.Lib.NumberTheory.WeierstrassValuationOrbit
 import DkMath.Lib.RepresentationTheory.LocalFixedCofixed
 import DkMath.Lib.NumberTheory.NumberFieldInertiaGeneration
 import DkMath.Lib.NumberTheory.NumberFieldInertiaRepresentation
+import DkMath.Lib.NumberTheory.ValuationInertia
+import DkMath.Lib.NumberTheory.IntegralClosureInertiaLift
+import DkMath.Lib.NumberTheory.ValuationInertiaLift
+import DkMath.Lib.NumberTheory.AbsoluteInertiaGeneration
+import DkMath.Lib.NumberTheory.AbsoluteInertiaRepresentation
+import DkMath.Lib.NumberTheory.EllipticInertiaTransport
 
 #print "file: DkMath.Lib"
 
