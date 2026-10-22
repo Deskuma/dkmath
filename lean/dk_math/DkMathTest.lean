@@ -226,5 +226,7 @@ import DkMathTest.FLT.FreyGoodReductionInertia
 import DkMathTest.FLT.Note031GoodReductionDependencyAudit
 import DkMathTest.FLT.FreySmoothReductionInertia
 import DkMathTest.FLT.Note031SmoothReductionDependencyAudit
+import DkMathTest.FLT.FreyCriticalCentre
+import DkMathTest.FLT.Note031CriticalCentreDependencyAudit
 
 #print "file: DkMathTest"

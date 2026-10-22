@@ -50,6 +50,7 @@ import DkMath.FLT.FreyInertiaTransport
 import DkMath.FLT.FreyValuationArithmetic
 import DkMath.FLT.FreyGoodReductionInertia
 import DkMath.FLT.FreySmoothReductionInertia
+import DkMath.FLT.FreyCriticalCentre
 
 #print "file: DkMath.FLT"
 

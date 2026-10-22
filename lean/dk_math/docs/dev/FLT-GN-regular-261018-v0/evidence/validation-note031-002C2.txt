@@ -1,0 +1,113 @@
+NOTE-031-002C2 verification evidence — 2026-10-22 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Completed scope:
+  Polynomial identities, two critical-centre candidates and defect product/difference.
+  Actual critical-centre existence from integral coefficients, nonzero discriminant,
+    valuation(discriminant)<1 and valuation(c4)=1, over an algebraically closed characteristic-zero field.
+  Integral centre coordinates; both exact partial derivatives zero; nondegenerate quadratic part.
+  Nonzero defect with valuation equal to the same discriminant valuation.
+  Actual residue equation and singularity; explicit same-model transport.
+  Finite Taylor formula and factorization conditional on supplied tangent directions.
+  Unit square-root inertia fixedness when 2 is unit, from actual residue congruence.
+  Same rational curve's centre coordinates fixed by inertia when 2 is unit.
+  Same Frey Source supplies all arithmetic inputs at every odd q dividing abc.
+  Same centre has inertia-fixed coordinates and defect valuation a p-th power.
+  q!=p is not required for this centre/arithmetic statement.
+  No Source/common-factor/orientation/curve/point replacement.
+
+Remaining scope:
+  Tangent-direction existence/integrality/fixedness, outside-zero-component coordinate characterization.
+  Shallow slopes, equal-depth branch comparisons, actual singular-reduction torsion levels.
+  Discriminant p-divisibility to full multiplicative-reduction inertia fixedness.
+  Zero-component subgroup/submodule, full point-reduction homomorphism.
+  031-002C and 031-002 overall incomplete; 031-003 through 005, hcases/hno and general FLT remain separate.
+  Centre coordinates fixed does not assert that all actual torsion points are fixed.
+
+Regressions:
+  Existing actual curve y^2+xy=x^3+4x^2+x: discriminant 225, c4=241.
+  At every valuation subring of Qbar over 3: construct an actual centre,
+    defect valuation = valuation(3)^2 and centre coordinates fixed under every inertia element.
+  Same centre reduces to an actual singular point of the same residue model.
+  Separate rational curve y^2+xy=x^3+x^2+3: c4=25, discriminant=-4263.
+    Candidate s=5 has x=y=0, defect=-3; candidate s=-5 has x=-5/6.
+    At every valuation subring of Q over 3: first x integral, second x nonintegral.
+    Thus dividing a unit square-root expression by 12 is not a valid integrality proof.
+  At valuations over 2: valuation(2)!=1; odd-prime sign separation guard retained.
+  Same Source 37 at bad prime 3: centre coordinates fixed and defect depth a 37th power.
+  No Source/counterexample existence asserted.
+
+Source provenance:
+  Read-only GitHub fetch_file of upstream critical-centre solution.
+  Blob: e3a454fddddd39651f2791c4a538ec90c9e926d4.
+  Exact path/sections/reconstruction/nonported boundaries in upstream-note031-002C2.json.
+  Adapted algebra and valuation modules retain Apache-2.0, copyright, modifications, LICENSE/NOTICE.
+  Odd-prime inertia route reconstructs fixedness from actual DkMath residue congruence;
+    no general valuation-preservation/minpoly finite-orbit machinery ported.
+
+Focused build:
+  lake build DkMathTest.FLT.Note031CriticalCentreDependencyAudit
+  exit 0; Build completed successfully (3168 jobs).
+  32 new production and 8 regression declarations: standard logical axioms only.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Eleven type/opaque-body graph checks and three public-input checks passed.
+  Required applicable providers: defect product/difference, c4*x integrality identity,
+    c_relation, finite Taylor identity, critical derivative relation and node square,
+    residue kernel and actual inertia congruence, same-Source discriminant/c4/depth.
+  Two polynomial-only graph paths additionally exclude valuation/local Galois infrastructure.
+  Neutral library/concrete-boundary paths exclude DkMath.FLT dependencies.
+  Forbidden graph: sorryAx, old FLT endpoints, FltRegular/P2M/P2MW/FreyPackage,
+    Kummer, RegularKummer and FoldedValuationOrbit.
+  No centre/fixedness/valuation-preservation/hcases/hno providers in public construction inputs.
+  Nonzero discriminant, both valuation guards, coefficient integrality and unit 2 guard retained.
+
+Facade/root/test build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11728 jobs).
+  New code: no warnings or errors.
+  Five existing unrelated broad-root sorry warnings:
+    DkMath/CosmicFormula/TriominoFLT.lean:1919:6
+    DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6
+    DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8
+    DkMath/NumberTheory/GcdNextResearch.lean:850:6
+    DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8
+
+Entrance checks:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest; no warnings/errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE031CriticalCentre.lean
+  exit 0; five public endpoints reachable through import DkMath;
+    standard-only Frey axiom print and same Source 37 centre/depth connection;
+    no warnings/errors.
+  python3 check_tracker_mismatch.py /tmp/note031-002C2-full.log
+  exit 0; OK: no mismatches found.
+
+Static checks:
+  10 changed/new Lean files: four modified, six new (three production, regression, audit, root smoke).
+  Exact file markers, public textbook docstrings, final newlines, tabs/trailing spaces: PASS.
+  All 32 new production and 8 regression declarations listed in axiom audit: PASS.
+  No sorry/admit/native_decide/custom axiom/opaque/unsafe in checked Lean files.
+  No Lib-to-FLT imports; upstream LICENSE/NOTICE exists.
+  git diff --check: exit 0.
+
+This records the checked new paths and scope, not whole-repository axiom freedom.
+Disposable raw logs: /tmp/note031-002C2-{focused,full,entrance,smoke}.log.
+
+Compact new audit output:
+  PASS: 32 production and 8 regression declarations; standard logical axioms only.
+  PASS: DkMath.Lib.NumberTheory.EllipticCriticalCentreAlgebra.defect_mul_opposite; 2915 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticCriticalCentreAlgebra.translated_defect_factor; 1495 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticCriticalCentre.exists_criticalCentre; 9715 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticCriticalCentre.CriticalCentre.node_square; 4862 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticCriticalCentre.CriticalCentre.residue_singular; 9229 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticCriticalCentre.CriticalCentre.inertia_fixed; 16646 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.exists_criticalCentre_at_bad_prime; 24621 reachable constants; expected providers present.
+  PASS: FreyCriticalCentreTest.exists_centre_at_three; 20689 reachable constants; expected providers present.
+  PASS: FreyCriticalCentreTest.centre_residue_singular; 15957 reachable constants; expected providers present.
+  PASS: FreyCriticalCentreTest.candidate_boundary_at_three; 8106 reachable constants; expected providers present.
+  PASS: FreyCriticalCentreTest.source37_centre; 24623 reachable constants; expected providers present.
+  PASS inputs: DkMath.Lib.NumberTheory.EllipticCriticalCentre.exists_criticalCentre; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.Lib.NumberTheory.EllipticCriticalCentre.CriticalCentre.inertia_fixed; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.FLT.Frey.Source.exists_criticalCentre_at_bad_prime; explicit arithmetic guards and remaining inputs retained.

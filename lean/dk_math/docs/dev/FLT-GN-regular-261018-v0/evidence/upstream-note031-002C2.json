@@ -1,0 +1,15 @@
+{
+  "implementation_date": "2026-10-22",
+  "repository": "anthropics/fermats-last-theorem",
+  "path": "P2M/Sol/S_WeierstrassCurve_exists_criticalCentre_of_multiplicativeReduction.lean",
+  "blob_sha": "e3a454fddddd39651f2791c4a538ec90c9e926d4",
+  "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_criticalCentre_of_multiplicativeReduction.lean",
+  "source_transport": "Read-only GitHub fetch_file; entire UTF-8 source inspected in this step",
+  "adapted": "Ring identities and centre candidates around lines 20-122; monic-quadratic and valuation-selection estimates around lines 124-276; sign choice around lines 309-319",
+  "reconstructed": "CriticalCentre structure; actual residue singularity and same-model transport; finite Taylor identities; odd-prime inertia fixedness via DkMath residue congruence and unit square-root sign separation; same-Source Frey depth connection",
+  "not_ported": [
+    "general automorphism valuation-preservation/minpoly finite-root orbit argument in NormWrap",
+    "upstream critical_center tangent-direction existence and inertia fixedness"
+  ],
+  "scope": "Critical-centre geometry and odd-prime coordinate fixedness only; singular-reduction torsion depths/branches, full multiplicative unramifiedness, zero-component submodule and hcases remain incomplete"
+}

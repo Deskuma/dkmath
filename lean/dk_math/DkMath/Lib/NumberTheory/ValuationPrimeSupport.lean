@@ -56,6 +56,15 @@ theorem charP_residueField (A : ValuationSubring K) {q : ℕ} (hq : q.Prime)
   rw [← ValuationSubring.coe_mem_nonunits_iff]
   exact hA
 
+/-- qで割れる整数の付値は、q上の付値環では厳密に1より小さい。
+零も含む。判別式の非零性は幾何学の側で別に保持する。 -/
+theorem valuation_intCast_lt_one_of_dvd (A : ValuationSubring K) {q : ℕ}
+    (hA : A.valuation (q : K) < 1) {z : ℤ} (hz : (q : ℤ) ∣ z) :
+    A.valuation (z : K) < 1 := by
+  obtain ⟨k, rfl⟩ := hz
+  rw [Int.cast_mul, Int.cast_natCast, map_mul]
+  exact (mul_le_of_le_one_right' ((A.valuation_le_one_iff _).mpr (intCast_mem A k))).trans_lt hA
+
 /-- 非零整数zの付値を、qの付値と通常の整数q進付値から厳密に復元する。
 z=0でのpadicValIntの零デフォルトを使わないため、非零条件を保持する。 -/
 theorem valuation_intCast_eq_pow_padicValInt (A : ValuationSubring K) {q : ℕ}
@@ -105,5 +114,20 @@ theorem inertia_apply_sub_mem_nonunits (A : ValuationSubring K) (F : Type*) [Fie
   apply ValuationSubring.coe_mem_nonunits_iff.mpr
   apply (IsLocalRing.residue_eq_zero_iff _).mp
   rw [map_sub, hfix, sub_self]
+
+/-- 2が単元で、単元zの平方を固定する慣性元はzも固定する。
+平方の二つの根±zを剰余合同で区別する。2が非単元の場合はこの符号の議論を適用しない。 -/
+theorem inertia_fixed_of_unit_square (A : ValuationSubring K) (F : Type*) [Field F] [Algebra F K]
+    (h2 : A.valuation (2 : K) = 1) (σ : K ≃ₐ[F] K) (hσ : σ ∈ inertiaSubgroupIn A F)
+    {z : K} (hz : A.valuation z = 1) (hsq : σ (z * z) = z * z) : σ z = z := by
+  have hmul : σ z * σ z = z * z := by rwa [map_mul] at hsq
+  rcases mul_self_eq_mul_self_iff.mp hmul with h | h
+  · exact h
+  · have hint : z ∈ A := (A.valuation_le_one_iff _).mp hz.le
+    have hsmall := (ValuationSubring.mem_nonunits_iff A).mp
+      (inertia_apply_sub_mem_nonunits A F σ hσ hint)
+    have hd : σ z - z = -(2 * z) := by rw [h]; ring
+    rw [hd, Valuation.map_neg, map_mul, h2, hz, one_mul] at hsmall
+    exact (lt_irrefl _ hsmall).elim
 
 end DkMath.Lib.NumberTheory.ValuationPrimeSupport
