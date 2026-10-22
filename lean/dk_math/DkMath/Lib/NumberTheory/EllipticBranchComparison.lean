@@ -33,7 +33,10 @@ variable {L : Type*} [Field L] [DecidableEq L] {A : ValuationSubring L} (W : Wei
 local notation "V" => W.map A.subtype
 local notation "v" => A.valuation
 
-private theorem node_chord_core (C : CriticalCentre A V) (D : TangentDirections C)
+/-- 弦の二方向の偏差が同じ付値で非零なら、実際の和は無限遠点、非整Xの点、
+または中心から単元距離の有限点になる。最後の場合は元のX差の鋭い評価も保持する。
+同じ点の接線は偏差非零の条件から除かれ、接線の評価は別途行う。 -/
+theorem chord_of_equal_deviation (C : CriticalCentre A V) (D : TangentDirections C)
     {x₁ y₁ x₂ y₂ : L}
     (h₁ : (V).toAffine.Nonsingular x₁ y₁) (h₂ : (V).toAffine.Nonsingular x₂ y₂)
     (hX₁ : v (x₁ - C.x) < 1) (hX₂ : v (x₂ - C.x) < 1)
@@ -198,7 +201,7 @@ private theorem sub_on_first_branch (C : CriticalCentre A (V)) (D : TangentDirec
   have hsub : (Point.some x₁ y₁ h₁ - Point.some x₂ y₂ h₂ : (V).toAffine.Point) =
       .some x₁ y₁ h₁ + Point.some x₂ ((V).toAffine.negY x₂ y₂) h₂' := by
     rw [sub_eq_add_neg, neg_some]
-  rcases node_chord_core W C D h₁ h₂' hX₁ hX₂ hΔ hne with h0 | ⟨x₃, y₃, h₃, h3eq, hpole | ⟨hunit, hsharp⟩⟩
+  rcases chord_of_equal_deviation W C D h₁ h₂' hX₁ hX₂ hΔ hne with h0 | ⟨x₃, y₃, h₃, h3eq, hpole | ⟨hunit, hsharp⟩⟩
   · refine ⟨?_, ?_⟩
     · rw [hsub, h0]
       exact hasSmoothReduction_zero W _

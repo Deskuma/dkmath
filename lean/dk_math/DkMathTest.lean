@@ -236,5 +236,7 @@ import DkMathTest.FLT.FreyBranchComparison
 import DkMathTest.FLT.Note031BranchComparisonDependencyAudit
 import DkMathTest.FLT.FreyDoublingDepth
 import DkMathTest.FLT.Note031DoublingDepthDependencyAudit
+import DkMathTest.FLT.FreyUnramifiedAway
+import DkMathTest.FLT.Note031UnramifiedAwayDependencyAudit
 
 #print "file: DkMathTest"
