@@ -1,0 +1,118 @@
+NOTE-031-004 PARTIAL implementation verification — 2026-10-23 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Branch: feat/FLT-GNR-031-04-261023-codex
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Status: PARTIAL. The good-reduction case and common-side transport are proved.
+The multiplicative-reduction absorbing filtration is NOT supplied; NOTE-031-004 is NOT complete.
+
+Completed scope:
+  Arbitrary-field rank-two absorbing-space lemma: one common side for the whole subgroup.
+  FixedOn/CofixedOn transported along conjugate subgroups, preserving the same globally stable N.
+  Actual reduction kernel as an additive subgroup of infinity and nonintegral finite points.
+  New closure argument: integral+pole has integral X; invert actual group addition to close pole+pole.
+  No full formal-parameter expansion, unit-order hypothesis, or ellipticity hypothesis for this subgroup.
+  Single-slope root lemma for arbitrary valuations and split polynomials whose roots are all poles.
+  Same Source: stable proper nonzero line implies an actual finite p-torsion point with integral X.
+  Good reduction at p: actual residualReductionKernel is proper and absorbs all inertia differences.
+  Local good-case endpoint: Source.residual_fixed_or_cofixed_at_p_of_good.
+  Actual transitivity of valuation subrings above q and exact inertia conjugacy.
+  Good-case common-side endpoint: Source.residual_common_side_at_p_of_good.
+  Final good-case inputs: same Source, Fact p.Prime, 5<=p, p does not divide abc,
+    same N, global stability, N!=bottom, N!=top.
+  No supplied M/properness/integral-point/absorbing/side-selection provider in good-case endpoint inputs.
+  Standalone arbitrary-field CharP p nodal smooth-point theorem: p*P=0 implies P=0.
+
+Outstanding arithmetic bridge:
+  For p dividing abc, inertia differences must be connected to smooth reduction and residue p-torsion.
+  No zero-component reduction homomorphism or arbitrary-characteristic division multiplication bridge supplied.
+  Existing EllipticDivision.WeierstrassCurve.smul_eq_zero_iff_evalEval_psi explicitly requires CharZero F.
+  Existing universal curve is Affine (MvPolynomial Coeff Q), not an integral universal model.
+  The standalone nodal CharP p theorem is therefore not claimed to close the bad case.
+  Source roots, normalization, coprimality, equation, actual curve and actual residual representation retained.
+  No NOTE-031-004 full endpoint, NOTE-031-005, hcases/hno closure or general FLT claim.
+
+Concrete regressions:
+  Cusp y^2=x^3 (not elliptic), actual smooth P=(1/4,1/8), R=(1,1).
+  For every A above 2, P and P+P belong to the same actual reduction kernel.
+  Actual group addition proves R+P=(1/9,1/27); the secant X formula also checked directly.
+  Nodal curve y^2=x^3+x^2 over ZMod 5: no nonzero smooth five-torsion point.
+  Source 37: good-case common side over all valuation subrings above 37.
+  Source 37 is an API specialization, not a constructed Source or integer counterexample.
+
+Focused verification:
+  lake build DkMath.Lib.RepresentationTheory.AbsorbingSubspace: exit 0, 2220 jobs.
+  lake build DkMath.Lib.RepresentationTheory.ConjugateLocalConditions: exit 0, 2220 jobs.
+  lake build DkMathTest.FLT.FreyPrimeFiltration: exit 0, 3235 jobs, no warnings/errors.
+  lake build DkMathTest.FLT.Note031PrimeGoodFiltrationDependencyAudit: exit 0, 3236 jobs, no warnings/errors.
+  Standard-only axiom audit covers all 46 public production and 14 public regression declarations.
+  15 type/opaque-body dependency graphs and 4 input guards passed, including the explicit hgood guard.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Forbidden: sorryAx, external P2M/P2MW/FltRegular/FreyPackage, old FLT endpoints,
+    DkMath.FLT.Kummer, RegularKummer, FoldedValuationOrbit.
+  Neutral Lib graphs additionally exclude DkMath.FLT; pure algebra graphs exclude number theory.
+
+Normal root/facade/suite build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11777 jobs).
+  An initial normal-entry import collision from auto-generated local DecidableEq instance names was repaired
+    with module-specific names in FreyIntegralTorsionWitness and FreyPrimeGoodFiltration.
+  The final full build reran the affected regression and dependency audit successfully.
+  No new/changed code warnings/errors.
+  Five historical unrelated sorry warnings:
+  warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+  warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+  warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+  warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+  warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+
+Direct entrances:
+  lake env lean DkMathTest.lean: exit 0; file: DkMathTest; no warnings/errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE031PrimeGoodFiltration.lean
+  exit 0; all eight requested declarations resolve via import DkMath; no warnings/errors.
+  Good-case endpoint uses standard axioms only.
+  Printed types confirm both CharP k p on the nodal theorem and CharZero F on the existing division bridge.
+
+Static checks:
+  python3 check_tracker_mismatch.py /tmp/004-full2.log: OK: no mismatches found.
+  16 Lean files: exact markers, public docstrings, forbidden constructs, whitespace, final newlines, Lib layering passed.
+  All 46 production and 14 regression declaration names covered in axiom audit.
+  Existing Apache-2.0 LICENSE/NOTICE files retained and adapted-source references recorded.
+  git diff --check: exit 0.
+
+Compact final audit evidence:
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS: 46 production and 14 regression declarations; standard logical axioms only.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS: DkMath.Lib.RepresentationTheory.AbsorbingSubspace.fixed_or_cofixed; 15504 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS: DkMath.Lib.RepresentationTheory.ConjugateLocalConditions.common_side_on_conjugates; 1426 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS: DkMath.Lib.Algebra.SingleSlopeRoot.root_pow_natDegree_mul_leadingCoeff_eq_one; 10360 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.EllipticReductionKernel.reductionKernel; 24036 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.EllipticGoodReductionKernel.inertia_difference_mem; 25959 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.exists_integral_torsion_of_stable_line; 36011 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.residualReductionKernel_ne_top; 36142 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.residual_fixed_or_cofixed_at_p_of_good; 36547 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.ValuationPlaceConjugacy.exists_smul_eq; 34963 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.AbsoluteInertiaConjugacy.common_side_on_places; 35057 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.residual_common_side_at_p_of_good; 41462 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.EllipticNodalTorsion.eq_zero_of_residue_characteristic_torsion; 25281 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS: FreyPrimeFiltrationTest.double_pole_mem; 25649 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS: FreyPrimeFiltrationTest.integral_plus_pole; 15809 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS: FreyPrimeFiltrationTest.source37_good_common_side; 41482 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS inputs: DkMath.FLT.Frey.Source.exists_integral_torsion_of_stable_line; explicit arithmetic guards and remaining inputs retained.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS inputs: DkMath.FLT.Frey.Source.residual_fixed_or_cofixed_at_p_of_good; explicit arithmetic guards and remaining inputs retained.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS inputs: DkMath.FLT.Frey.Source.residual_common_side_at_p_of_good; explicit arithmetic guards and remaining inputs retained.
+  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean:80:0: PASS inputs: DkMath.Lib.NumberTheory.EllipticNodalTorsion.eq_zero_of_residue_characteristic_torsion; explicit arithmetic guards and remaining inputs retained.
+
+Source SHA-256 (checked implementation and regression/audit):
+6da5e326c2f83f5a499d0ed78459c6337d7420f348f6cf7aba7149f941b78e04  DkMath/Lib/RepresentationTheory/AbsorbingSubspace.lean
+569ebb958e232c2ecc303c91a961dab1d58d4fab6c423ee1008504646d30cc1e  DkMath/Lib/RepresentationTheory/ConjugateLocalConditions.lean
+3dcd16c0f04946863c7605cb74e075821fd65a2545e7a2135303141ea40fa272  DkMath/Lib/Algebra/SingleSlopeRoot.lean
+272103ee653090bacaa392de24dc03f7df37d27bb9ace31cccffe49498e90334  DkMath/Lib/NumberTheory/EllipticReductionKernel.lean
+19a993c6f781f1aebb2a3292532e77d4c9616a95712b66183aa159156617cb75  DkMath/Lib/NumberTheory/EllipticGoodReductionKernel.lean
+dabcbd13e671dec7ca1035460fbd233dff8c031eaf21e7dcf939bb528c0f4e31  DkMath/Lib/NumberTheory/ValuationPlaceConjugacy.lean
+3d36a3799299a14934c2bd1a1f60f060127992de0660c111dff3b48e9cadbb35  DkMath/Lib/NumberTheory/AbsoluteInertiaConjugacy.lean
+fa10a3e4769c9709f547641ea707c3b922dd11353d64195ab7dda8443895f302  DkMath/Lib/NumberTheory/EllipticNodalTorsion.lean
+c4691fbe320445350320fdabc3b41d354fe98ce7d2360bec6f98f1c326897f0a  DkMath/FLT/FreyIntegralTorsionWitness.lean
+a711ec3fa87f5934ee3071b604cba219cc4954c91f7d5a3033a0c362f211c25d  DkMath/FLT/FreyPrimeGoodFiltration.lean
+eae1bfbc80dda38bf83d5eed55a4b46acac41dbb4979455571854b94b1943278  DkMathTest/FLT/FreyPrimeFiltration.lean
+d18572ccb0651781bf5abcf60551e41378e548c04fd90763fd540cf8ec6a4c58  DkMathTest/FLT/Note031PrimeGoodFiltrationDependencyAudit.lean

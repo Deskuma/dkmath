@@ -240,5 +240,9 @@ import DkMathTest.FLT.FreyUnramifiedAway
 import DkMathTest.FLT.Note031UnramifiedAwayDependencyAudit
 import DkMathTest.FLT.FreyDyadicInertia
 import DkMathTest.FLT.Note031DyadicInertiaDependencyAudit
+import DkMathTest.FLT.FreyPrimeFiltration
+import DkMathTest.FLT.Note031PrimeGoodFiltrationDependencyAudit
+import DkMathTest.FLT.FreyPrimeFiltrationComplete
+import DkMathTest.FLT.Note031PrimeFiltrationDependencyAudit
 
 #print "file: DkMathTest"
