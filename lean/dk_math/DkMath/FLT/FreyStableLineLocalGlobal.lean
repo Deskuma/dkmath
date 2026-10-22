@@ -106,4 +106,35 @@ theorem residual_isIrreducible_of_oriented_cofixed_obstruction (hp5 : 5 ≤ p) (
   S.residual_isIrreducible_of_oriented_no_cofixed_line hp5 hbe
     (fun L hline hstable => S.residual_stable_line_fixed_or_cofixed hp5 L hline hstable) hno
 
+/-- b偶数の同じSourceでは、可約性はCofixed安定直線の存在と同値である。
+逆向きは直線の安定性だけから従い、Cofixed性から直線の不存在を導いたとはしない。 -/
+theorem residual_not_irreducible_iff_exists_cofixed_line_of_oriented
+    (hp5 : 5 ≤ p) (hbe : Even S.b) :
+    ¬ S.ResidualIsIrreducible ↔
+      ∃ L : Submodule (ZMod p) S.ResidualSpace, finrank (ZMod p) L = 1 ∧
+        S.IsGaloisStable L ∧ IsCofixedOn S.residualRepresentation L := by
+  constructor
+  · exact S.residual_exists_cofixed_line_of_not_irreducible hp5 hbe
+  · rintro ⟨L, hline, hstable, _⟩ hirr
+    have := S.rationalCurve_isElliptic
+    exact (isIrreducible_iff_no_stable_line S.residualRepresentation S.residual_finrank_eq_two).mp
+      hirr ⟨L, hline, hstable⟩
+
+/-- 元の非零整数反例から選んだ同じSourceで、可約ならCofixed直線が存在する。
+共通因子を保つPrimitiveReductionと符号付き置換OrientationTraceを結論へ残す。
+反例や可約性を構成したとはせず、それぞれを明示した条件付き入口である。 -/
+theorem ofCounterexample_residual_exists_cofixed_line (hp5 : 5 ≤ p)
+    (a b c : ℤ) (ha : a ≠ 0) (hb : b ≠ 0) (hc : c ≠ 0) (he : a ^ p + b ^ p = c ^ p) :
+    let S := Source.ofCounterexample p Fact.out hp5 a b c ha hb hc he
+    ¬ S.ResidualIsIrreducible →
+      4 ∣ S.a + 1 ∧ Even S.b ∧
+        (∃ R : PrimitiveReduction p a b c, OrientationTrace R.A R.B R.C S.a S.b S.c) ∧
+        ∃ L : Submodule (ZMod p) S.ResidualSpace, finrank (ZMod p) L = 1 ∧
+          S.IsGaloisStable L ∧ IsCofixedOn S.residualRepresentation L := by
+  let S := Source.ofCounterexample p Fact.out hp5 a b c ha hb hc he
+  change ¬ S.ResidualIsIrreducible → _
+  intro hred
+  obtain ⟨ha4, hbe, htrace⟩ := Source.ofCounterexample_spec p Fact.out hp5 a b c ha hb hc he
+  exact ⟨ha4, hbe, htrace, S.residual_exists_cofixed_line_of_not_irreducible hp5 hbe hred⟩
+
 end DkMath.FLT.Frey.Source
