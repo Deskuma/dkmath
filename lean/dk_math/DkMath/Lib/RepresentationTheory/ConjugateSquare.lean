@@ -38,19 +38,16 @@ theorem eq_id_on_line_of_conj_eq_sq {F V : Type*} [Field F] [AddCommGroup V]
     (hTN : ∀ x ∈ N, T x ∈ N) (hMN : ∀ x ∈ N, M x ∈ N) (hM'N : ∀ x ∈ N, M' x ∈ N)
     (hrel : ∀ x, M (T (M' x)) = T (T x)) :
     (∀ x ∈ N, T x = x) ∧ (∀ x, T x - x ∈ N) := by
-
   have hN1 : Module.finrank F N = 1 := by
     have hlt : Module.finrank F N < 2 := h2 ▸ Submodule.finrank_lt htop
     have hpos : 1 ≤ Module.finrank F N := Submodule.one_le_finrank_iff.mpr hbot
     omega
-
   have key : ∀ c : F, c = c * c → c = 0 ∨ c = 1 := by
     intro c hc
     have : c * (1 - c) = 0 := by rw [mul_sub, mul_one, ← hc, sub_self]
     rcases mul_eq_zero.mp this with h | h
     · exact Or.inl h
     · exact Or.inr (sub_eq_zero.mp h).symm
-
   have line_arg : ∀ {W : Type _} [AddCommGroup W] [Module F W], Module.finrank F W = 1 →
       ∀ (t m m' : W →ₗ[F] W), Function.Injective t → (∀ w, m (m' w) = w) →
         (∀ w, m (t (m' w)) = t (t w)) → ∀ w, t w = w := by
@@ -58,7 +55,7 @@ theorem eq_id_on_line_of_conj_eq_sq {F V : Type*} [Field F] [AddCommGroup V]
     obtain ⟨w₀, hw₀⟩ : ∃ w₀ : W, w₀ ≠ 0 := by
       by_contra h
       push Not at h
-      haveI : Subsingleton W := ⟨fun a b => by rw [h a, h b]⟩
+      have : Subsingleton W := ⟨fun a b => by rw [h a, h b]⟩
       have : Module.finrank F W = 0 := Module.finrank_zero_of_subsingleton
       omega
     have hgen : ∀ w : W, ∃ c : F, c • w₀ = w := fun w =>
@@ -66,7 +63,6 @@ theorem eq_id_on_line_of_conj_eq_sq {F V : Type*} [Field F] [AddCommGroup V]
     obtain ⟨c, hc⟩ := hgen (t w₀)
     obtain ⟨a, ha⟩ := hgen (m w₀)
     obtain ⟨a', ha'⟩ := hgen (m' w₀)
-
     have haa' : a' * a = 1 := by
       have h1 : (a' * a) • w₀ = w₀ := by
         rw [mul_smul, ha, ← map_smul, ha', hmm']
@@ -76,7 +72,6 @@ theorem eq_id_on_line_of_conj_eq_sq {F V : Type*} [Field F] [AddCommGroup V]
       rcases smul_eq_zero.mp this with h | h
       · exact absurd (sub_eq_zero.mp h) hne
       · exact h
-
     have hcc : c • w₀ = (c * c) • w₀ := by
       have lhs : m (t (m' w₀)) = (a' * c * a) • w₀ := by
         rw [← ha', map_smul, ← hc, map_smul, map_smul, ← ha, smul_smul, smul_smul]
@@ -101,8 +96,7 @@ theorem eq_id_on_line_of_conj_eq_sq {F V : Type*} [Field F] [AddCommGroup V]
     obtain ⟨d, rfl⟩ := hgen w
     rw [map_smul, ← hc, hc1, one_smul]
   constructor
-  ·
-    let t : N →ₗ[F] N := T.restrict (p := N) (q := N) hTN
+  · let t : N →ₗ[F] N := T.restrict (p := N) (q := N) hTN
     let m : N →ₗ[F] N := M.restrict (p := N) (q := N) hMN
     let m' : N →ₗ[F] N := M'.restrict (p := N) (q := N) hM'N
     have ht : Function.Injective t := fun a b hab => by
@@ -114,8 +108,7 @@ theorem eq_id_on_line_of_conj_eq_sq {F V : Type*} [Field F] [AddCommGroup V]
     intro x hx
     have := line_arg hN1 t m m' ht hmm' hrel' ⟨x, hx⟩
     simpa [t] using congrArg Subtype.val this
-  ·
-    have hQ1 : Module.finrank F (V ⧸ N) = 1 := by
+  · have hQ1 : Module.finrank F (V ⧸ N) = 1 := by
       have := Submodule.finrank_quotient_add_finrank N
       omega
     have hTN' : N ≤ N.comap T := fun x hx => hTN x hx
@@ -124,7 +117,6 @@ theorem eq_id_on_line_of_conj_eq_sq {F V : Type*} [Field F] [AddCommGroup V]
     let t : V ⧸ N →ₗ[F] V ⧸ N := N.mapQ N T hTN'
     let m : V ⧸ N →ₗ[F] V ⧸ N := N.mapQ N M hMN'
     let m' : V ⧸ N →ₗ[F] V ⧸ N := N.mapQ N M' hM'N'
-
     have hTonto : ∀ y ∈ N, ∃ x ∈ N, T x = y := by
       let t₀ : N →ₗ[F] N := T.restrict (p := N) (q := N) hTN
       have ht₀ : Function.Injective t₀ := fun a b hab => by
