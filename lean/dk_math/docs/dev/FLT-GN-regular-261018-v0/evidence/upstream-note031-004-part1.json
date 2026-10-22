@@ -1,0 +1,101 @@
+{
+  "checkpoint": "NOTE-031-004",
+  "status": "PARTIAL: good reduction and common-side transport complete; multiplicative reduction absorption incomplete",
+  "date": "2026-10-23",
+  "repository": "anthropics/fermats-last-theorem",
+  "sources": [
+    {
+      "name": "S_FreyPackage_frey_inertia_at_p_trivial_on_submodule_or_quotient_at.lean",
+      "blob": "f3662ff0776be01e007dae4e422ad750cacccb5d",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_inertia_at_p_trivial_on_submodule_or_quotient_at.lean",
+      "role": "NOTE-031-004 target inspected; full target remains unimplemented"
+    },
+    {
+      "name": "Submodule_stableLine_fixed_or_cofixed_of_absorbing",
+      "blob": "d3f70a12ac4f51a1f847e1f38c1e51c8f7cc1c82",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_Submodule_stableLine_fixed_or_cofixed_of_absorbing.lean",
+      "lines": 47,
+      "role": "adapted into DkMath"
+    },
+    {
+      "name": "FreyPackage_frey_inertia_at_p_filtration_of_dvd_abc_of_stable_line",
+      "blob": "fecc66ce3165cacfb02c83af7ce3f2e733444059",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_inertia_at_p_filtration_of_dvd_abc_of_stable_line.lean",
+      "lines": 110,
+      "role": "consulted for dependency and remaining-boundary analysis"
+    },
+    {
+      "name": "FreyPackage_frey_inertia_at_p_filtration_of_not_dvd_abc",
+      "blob": "3f7a355aa0bca51cc2a416a2196c3b30f6789009",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_inertia_at_p_filtration_of_not_dvd_abc.lean",
+      "lines": 140,
+      "role": "consulted for dependency and remaining-boundary analysis"
+    },
+    {
+      "name": "WeierstrassCurve_exists_reductionKernel_absorbing_inertia",
+      "blob": "3dcb86c75f3502b8a6039ec128b5e51b31b854d0",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_reductionKernel_absorbing_inertia.lean",
+      "lines": 1519,
+      "role": "consulted for dependency and remaining-boundary analysis"
+    },
+    {
+      "name": "FreyPackage_frey_exists_p_torsion_integral_abscissa_of_stable_line",
+      "blob": "aa678c2894fcf3bab25d6a4bd9e4a7878dd58eb5",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_exists_p_torsion_integral_abscissa_of_stable_line.lean",
+      "lines": 757,
+      "role": "adapted into DkMath"
+    },
+    {
+      "name": "FreyPackage_frey_exists_p_torsion_integral_abscissa",
+      "blob": "c7ed94c49da5d298877b15a9a3174fb7f7ffea02",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_exists_p_torsion_integral_abscissa.lean",
+      "lines": 758,
+      "role": "consulted for dependency and remaining-boundary analysis"
+    },
+    {
+      "name": "WeierstrassCurve_inZeroComponentAt_torsionBy_residueChar",
+      "blob": "01d7a6df7cd7c56355d71af165e9f1ba34303e1c",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_inZeroComponentAt_torsionBy_residueChar.lean",
+      "lines": 173,
+      "role": "consulted for dependency and remaining-boundary analysis"
+    },
+    {
+      "name": "WeierstrassCurve_Affine_Point_nsmul_some_eq_zero_iff_eval_prePsi",
+      "blob": "a1ba940f76c2ba59748475b839e1bb20d1fbc116",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_Point_nsmul_some_eq_zero_iff_eval_prePsi.lean",
+      "lines": 24,
+      "role": "consulted for dependency and remaining-boundary analysis"
+    },
+    {
+      "name": "WeierstrassCurve_inZeroComponentAt_smul_sub_of_mem_inertiaSubgroupIn",
+      "blob": "4671d1857e26c4967080e5f48c4ce2fbe56484ee",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_inZeroComponentAt_smul_sub_of_mem_inertiaSubgroupIn.lean",
+      "lines": 67,
+      "role": "consulted for dependency and remaining-boundary analysis"
+    },
+    {
+      "name": "WeierstrassCurve_exists_torsion_zeroComponent_submodule_of_multiplicativeReduction",
+      "blob": "38bdee599f8b536cb30402a8d1dbef001a3d89da",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_torsion_zeroComponent_submodule_of_multiplicativeReduction.lean",
+      "lines": 3250,
+      "role": "consulted for dependency and remaining-boundary analysis"
+    },
+    {
+      "name": "WeierstrassCurve_Affine_Point_eq_zero_of_prime_smul_eq_zero_of_isNode",
+      "blob": "d8351e928b52bd3cc653b0eced3014b6a97c606a",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_Point_eq_zero_of_prime_smul_eq_zero_of_isNode.lean",
+      "lines": 340,
+      "role": "adapted into DkMath"
+    },
+    {
+      "name": "S_ValuationSubring_exists_isFrobeniusAt_of_liesOverPrime.lean",
+      "blob": "bd12adb9f848a63454efd82d8e4797dd594826c3",
+      "role": "previously retrieved source reused for actual valuation-place transitivity"
+    }
+  ],
+  "original_reconstruction": [
+    "Reduction-kernel addition closure reconstructed from integral-plus-pole secant estimate, avoiding the reference full formal-parameter development.",
+    "Reuse actual Source integer model, actual nsmul-kernel torsion, existing residual rank two and integer valuation support."
+  ],
+  "remaining_boundary": "Existing DkMath EllipticDivision.smul_eq_zero_iff_evalEval_psi requires CharZero. The residue-characteristic nodal torsion theorem has been implemented, but no reduction homomorphism or arbitrary-characteristic division multiplication bridge has been supplied for the bad case."
+}

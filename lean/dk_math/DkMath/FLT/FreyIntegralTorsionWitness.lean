@@ -33,7 +33,7 @@ open WeierstrassCurve WeierstrassCurve.Affine WeierstrassCurve.Affine.Point Poly
 open DkMath.Lib.NumberTheory EllipticTorsionRepresentation ValuationInertia ValuationPrimeSupport
 open DkMath.Lib.RepresentationTheory
 local notation "Kb" => AlgebraicClosure ℚ
-noncomputable local instance : DecidableEq Kb := Classical.decEq _
+noncomputable local instance instDecidableEqFreyIntegralTorsionWitness : DecidableEq Kb := Classical.decEq _
 
 private theorem integer_gap {K : Type*} [Field K] (A : ValuationSubring K) {q : ℕ}
     (hq : q.Prime) (hA : LiesOverPrime A q) (m : ℤ) :

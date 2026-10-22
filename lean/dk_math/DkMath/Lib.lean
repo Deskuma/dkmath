@@ -194,6 +194,14 @@ import DkMath.Lib.NumberTheory.ValuationFrobenius
 import DkMath.Lib.NumberTheory.ValuationTameCharacter
 import DkMath.Lib.NumberTheory.EllipticDyadicSeparation
 import DkMath.Lib.NumberTheory.EllipticDyadicWildInertia
+import DkMath.Lib.RepresentationTheory.AbsorbingSubspace
+import DkMath.Lib.RepresentationTheory.ConjugateLocalConditions
+import DkMath.Lib.Algebra.SingleSlopeRoot
+import DkMath.Lib.NumberTheory.EllipticReductionKernel
+import DkMath.Lib.NumberTheory.EllipticGoodReductionKernel
+import DkMath.Lib.NumberTheory.ValuationPlaceConjugacy
+import DkMath.Lib.NumberTheory.AbsoluteInertiaConjugacy
+import DkMath.Lib.NumberTheory.EllipticNodalTorsion
 
 #print "file: DkMath.Lib"
 

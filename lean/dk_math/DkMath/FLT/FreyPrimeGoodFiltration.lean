@@ -24,7 +24,7 @@ namespace DkMath.FLT.Frey.Source
 open DkMath.Lib.NumberTheory EllipticDyadicSeparation EllipticReductionKernel
 open EllipticTorsionRepresentation ValuationInertia
 open DkMath.Lib.RepresentationTheory LocalFixedCofixed
-noncomputable local instance : DecidableEq (AlgebraicClosure ℚ) := Classical.decEq _
+noncomputable local instance instDecidableEqFreyPrimeGoodFiltration : DecidableEq (AlgebraicClosure ℚ) := Classical.decEq _
 variable {p : ℕ} [Fact p.Prime] (S : Source p)
 
 omit [Fact p.Prime] in
