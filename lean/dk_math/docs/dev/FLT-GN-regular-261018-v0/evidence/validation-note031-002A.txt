@@ -1,0 +1,122 @@
+NOTE-031-002A verification evidence — 2026-10-22 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Completed scope: valuation-ring arithmetic and actual torsion-coordinate integrality, named 031-002A.
+  Arbitrary q-adic valuation extensions; no normalization of their value groups assumed.
+  Bezout shows q-coprime integers have multiplicative valuation one.
+  Residue characteristic q is proved from q.Prime and LiesOverPrime.
+  For nonzero integer z, v(z)=v(q)^padicValInt(q,z).
+  Generic leading-term dominance proves integral coefficients and unit leading coefficient
+    force every polynomial root to have valuation at most one.
+  For a characteristic-zero curve with an explicit integral model and v(n)=1,
+    actual n-torsion finite coordinates x,y belong to the valuation ring.
+  x uses the actual division-polynomial root and leading coefficient n^2;
+    y uses a monic quadratic and integral closedness, without division by two.
+  Same Frey Source/model gives discriminant valuation and p-th-power form for q!=2,
+    unit c4 at bad odd primes and an elliptic residue curve at good odd primes.
+  For p,q distinct primes, actual p-torsion coordinates are integral.
+  Actual inertia implies coordinate differences belong to the maximal ideal/nonunits.
+  No Source/common-factor/orientation/curve/point data replaced.
+
+Remaining scope:
+  031-002B: good-reduction point reduction, additivity and prime-to-q torsion injectivity;
+    use these to obtain actual inertia fixed points.
+  031-002C: multiplicative-reduction zero component and outside-component valuation geometry.
+  031-002 overall remains incomplete. Congruence is not point equality.
+  031-003 through 005, hcases, hno, unconditional irreducibility and general FLT not supplied.
+
+Regressions:
+  Actual elliptic curve y^2+xy=x^3+4x^2+x, discriminant 225.
+  Actual point (-1/4,1/8) is nonzero and killed by 2.
+  At every valuation ring of Q over 3, both coordinates are integral by the generic torsion theorem.
+  At every valuation ring of Q over 2, x=-1/4 is not integral.
+  Ellipticity/nonzero/two-torsion/pole assembled into one unit-hypothesis boundary.
+  4 and 1 are congruent over 3 but unequal; not claimed to be an explicit inertia permutation.
+  Integer zero distinguishes v(0)=0 from v(q)^padicValInt(q,0)=1.
+  Same Source 37: q=3 discriminant, good residue curve, bad c4, coordinates and inertia congruence.
+  q=p=37 discriminant p-th-power arithmetic remains valid, without claiming prime-to-q integrality.
+  No Source 37 or Fermat counterexample existence asserted.
+
+Source provenance:
+  Ten files inspected via read-only GitHub fetch_file; paths, SHA, line counts,
+    direct imports and use classification saved in upstream-note031-002A.json.
+  Only two proof fragments adapted: integer factorization and polynomial leading-term estimate.
+  Both adapted modules preserve copyright, Apache-2.0, modifications, LICENSE and NOTICE paths.
+  Other upstream local geometry is dependency inventory, not counted as implemented.
+  DkMath division-polynomial bridge, original integer Frey arithmetic and actual inertia definitions reused.
+
+Static checks:
+  Seven new Lean files: four production, one regression, one audit, one root smoke.
+  Exact post-import markers, textbook public docstrings, final newlines and whitespace: PASS.
+  All 19 production and 17 regression declarations included in the axiom audit: PASS.
+  No new sorry/admit/native_decide/custom axiom/opaque/unsafe or external provider imports.
+  No Lib-to-FLT or RegularKummer Lean imports.
+  Source local DecidableEq instance has a module-specific name; normal entrance checked.
+  LICENSE/NOTICE paths and all ten source blob SHAs checked.
+  git diff --check: exit 0.
+
+Focused build:
+  lake build DkMathTest.FLT.Note031ValuationArithmeticDependencyAudit
+  exit 0; Build completed successfully (3164 jobs).
+  New code: no warnings or errors.
+  All 19 production and 17 regression declarations use standard logical axioms only.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Fourteen full type/opaque-body graph checks and five public-input checks passed.
+  Expected providers present: leading-term sum estimate, integer valuation factorization,
+    residue characteristic, actual inertia kernel, actual division-polynomial root,
+    leading coefficient formula, integral closedness, discriminant nonzero and integer valuation,
+    same-model base change, actual nonzero 2-torsion boundary.
+  Input guards: nonzero z; explicit integral model, v(n)=1 and actual n-torsion;
+    p!=q for coordinates and congruence; q!=2 for discriminant arithmetic.
+  Discriminant arithmetic does not acquire a p!=q restriction.
+  Forbidden graph dependencies: sorryAx, old FLT endpoints, external FltRegular/P2M/P2MW/FreyPackage,
+    Kummer, RegularKummer and FoldedValuationOrbit.
+  Neutral library and concrete-boundary roots additionally exclude DkMath.FLT dependencies.
+
+Facade/root/test build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11714 jobs).
+  New code: no warnings or errors.
+  Five existing unrelated broad-root sorry warnings:
+    DkMath/CosmicFormula/TriominoFLT.lean:1919:6
+    DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6
+    DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8
+    DkMath/NumberTheory/GcdNextResearch.lean:850:6
+    DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8
+
+Additional entrance checks:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest; no warnings or errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE031ValuationArithmetic.lean
+  exit 0; seven selected endpoints reachable through import DkMath;
+    two standard-only axiom prints; same Source 37/point coordinate integrality;
+    no warnings or errors.
+  python3 check_tracker_mismatch.py /tmp/note031-002A-full.log
+  exit 0; OK: no mismatches found.
+
+Raw logs are disposable /tmp/note031-002A-*.log files.
+This records the checked new paths and stated scope, not whole-repository axiom freedom.
+
+Compact audit output (types, opaque bodies and public inputs):
+  PASS: 19 production and 17 regression declarations; standard logical axioms only.
+  PASS: DkMath.Lib.Algebra.ValuationPolynomial.valuation_root_le_one; 6363 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.ValuationPrimeSupport.valuation_intCast_eq_pow_padicValInt; 8247 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.ValuationPrimeSupport.charP_residueField; 6267 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.ValuationPrimeSupport.inertia_apply_sub_mem_nonunits; 6821 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionValuationIntegrality.torsion_x_mem; 25391 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionValuationIntegrality.y_mem_of_x_mem; 15586 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.valuation_discriminant_eq; 20951 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.valuation_reduction_isElliptic; 16518 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.residual_coordinates_mem; 27784 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.residual_inertia_coordinate_congruence; 28032 reachable constants; expected providers present.
+  PASS: FreyValuationArithmeticTest.point_integral_at_three; 26875 reachable constants; expected providers present.
+  PASS: FreyValuationArithmeticTest.unit_hypothesis_boundary; 23354 reachable constants; expected providers present.
+  PASS: FreyValuationArithmeticTest.congruence_does_not_imply_equality; 5620 reachable constants; expected providers present.
+  PASS: FreyValuationArithmeticTest.zero_default_boundary; 5792 reachable constants; expected providers present.
+  PASS inputs: DkMath.Lib.NumberTheory.ValuationPrimeSupport.valuation_intCast_eq_pow_padicValInt; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.Lib.NumberTheory.EllipticTorsionValuationIntegrality.torsion_coordinates_mem; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.FLT.Frey.Source.residual_coordinates_mem; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.FLT.Frey.Source.residual_inertia_coordinate_congruence; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.FLT.Frey.Source.valuation_discriminant_eq; explicit arithmetic guards and remaining inputs retained.

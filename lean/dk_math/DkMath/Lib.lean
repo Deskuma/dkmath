@@ -167,6 +167,9 @@ import DkMath.Lib.NumberTheory.ValuationInertiaLift
 import DkMath.Lib.NumberTheory.AbsoluteInertiaGeneration
 import DkMath.Lib.NumberTheory.AbsoluteInertiaRepresentation
 import DkMath.Lib.NumberTheory.EllipticInertiaTransport
+import DkMath.Lib.Algebra.ValuationPolynomial
+import DkMath.Lib.NumberTheory.ValuationPrimeSupport
+import DkMath.Lib.NumberTheory.EllipticTorsionValuationIntegrality
 
 #print "file: DkMath.Lib"
 

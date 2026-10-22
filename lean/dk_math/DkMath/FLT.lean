@@ -47,6 +47,7 @@ import DkMath.FLT.FreyRationalTorsion
 import DkMath.FLT.FreyRationalTorsionBridge
 
 import DkMath.FLT.FreyInertiaTransport
+import DkMath.FLT.FreyValuationArithmetic
 
 #print "file: DkMath.FLT"
 

@@ -220,5 +220,7 @@ import DkMathTest.FLT.InertiaLocalGlobal
 import DkMathTest.FLT.Note031FiniteInertiaDependencyAudit
 import DkMathTest.FLT.AbsoluteInertiaLocalGlobal
 import DkMathTest.FLT.Note031AbsoluteInertiaDependencyAudit
+import DkMathTest.FLT.FreyValuationArithmetic
+import DkMathTest.FLT.Note031ValuationArithmeticDependencyAudit
 
 #print "file: DkMathTest"

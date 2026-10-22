@@ -1,0 +1,177 @@
+{
+  "retrieved_date": "2026-10-22",
+  "transport": "Read-only GitHub fetch_file",
+  "files": [
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "P2M/Sol/S_FreyPackage_freyGaloisRep_isUnramifiedAt.lean",
+      "blob_sha": "4db5218f902ba98cfb2863276bc39e0160503090",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_freyGaloisRep_isUnramifiedAt.lean",
+      "line_count": 181,
+      "purpose": "dependency inventory only; not ported",
+      "imports": [
+        "import Theorems.Thm_WeierstrassCurve_galoisRepUnramifiedAt_of_goodReduction",
+        "import Theorems.Thm_WeierstrassCurve_galoisRepUnramifiedAt_of_multiplicativeReduction",
+        "import P2M.Util"
+      ]
+    },
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "P2M/Sol/S_WeierstrassCurve_galoisRepUnramifiedAt_of_goodReduction.lean",
+      "blob_sha": "89dd3c20010eb29893cf1fd7d87f5d83860a2dfc",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_galoisRepUnramifiedAt_of_goodReduction.lean",
+      "line_count": 120,
+      "purpose": "dependency inventory only; not ported",
+      "imports": [
+        "import Theorems.Thm_WeierstrassCurve_galoisRepUnramifiedAt_of_hasGoodReduction",
+        "import Definitions.Def_FLTPrelim_Modularity",
+        "import Definitions.Def_FLTPrelim_Ramification",
+        "import P2M.Util"
+      ]
+    },
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "P2M/Sol/S_WeierstrassCurve_galoisRepUnramifiedAt_of_multiplicativeReduction.lean",
+      "blob_sha": "6ef2368f7825a0535403a85e64255b81c56c90a9",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_galoisRepUnramifiedAt_of_multiplicativeReduction.lean",
+      "line_count": 40,
+      "purpose": "dependency inventory only; not ported",
+      "imports": [
+        "import Theorems.Thm_WeierstrassCurve_exists_torsion_zeroComponent_submodule_of_multiplicativeReduction",
+        "import Theorems.Thm_WeierstrassCurve_smul_eq_self_of_torsion_of_not_inZeroComponentAt_of_dvd",
+        "import Mathlib.Algebra.Algebra.Rat",
+        "import Mathlib.Algebra.Lie.OfAssociative",
+        "import P2M.Util"
+      ]
+    },
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "P2M/Sol/S_WeierstrassCurve_galoisRepUnramifiedAt_of_hasGoodReduction.lean",
+      "blob_sha": "946e07213d898d43b0e33aeaf09161ce9bc07c15",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_galoisRepUnramifiedAt_of_hasGoodReduction.lean",
+      "line_count": 308,
+      "purpose": "dependency inventory only; not ported",
+      "imports": [
+        "import Theorems.Thm_ValuationSubring_isDiscreteValuationRing_comap_of_liesOverPrime",
+        "import Theorems.Thm_ValuationSubring_exists_inertiaSubgroup_restrictNormal_eq",
+        "import Theorems.Thm_WeierstrassCurve_hasGoodReduction_baseChange_of_valuation_lt_one",
+        "import Theorems.Thm_WeierstrassCurve_reducePoint_some",
+        "import Theorems.Thm_WeierstrassCurve_reducePoint_some_eq_zero_iff",
+        "import Theorems.Thm_WeierstrassCurve_reducePoint_add",
+        "import Theorems.Thm_WeierstrassCurve_eq_zero_of_smul_eq_zero_of_reducePoint_eq_zero",
+        "import Definitions.Def_FLTPrelim_Ramification",
+        "import Definitions.Def_EllipticCurve_PointReduction",
+        "import P2M.Util"
+      ]
+    },
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "P2M/Sol/S_WeierstrassCurve_exists_torsion_zeroComponent_submodule_of_multiplicativeReduction.lean",
+      "blob_sha": "38bdee599f8b536cb30402a8d1dbef001a3d89da",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_torsion_zeroComponent_submodule_of_multiplicativeReduction.lean",
+      "line_count": 3250,
+      "purpose": "dependency inventory only; not ported",
+      "imports": [
+        "import Mathlib.Algebra.Algebra.Rat",
+        "import Mathlib.RingTheory.Valuation.RamificationGroup",
+        "import Mathlib.RingTheory.Valuation.LocalSubring",
+        "import Mathlib.AlgebraicGeometry.EllipticCurve.Affine.Point",
+        "import Mathlib.RingTheory.LocalRing.ResidueField.Basic",
+        "import Mathlib.FieldTheory.IsAlgClosed.AlgebraicClosure",
+        "import Mathlib.Algebra.Module.ZMod",
+        "import Mathlib.Algebra.CharP.Basic",
+        "import Definitions.Def_FLTPrelim_GaloisRep",
+        "import Definitions.Def_FLTPrelim_Ramification",
+        "import Definitions.Def_EllipticCurve_ZeroComponentAt",
+        "import P2M.Util"
+      ]
+    },
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "P2M/Sol/S_WeierstrassCurve_smul_eq_self_of_torsion_of_not_inZeroComponentAt_of_dvd.lean",
+      "blob_sha": "5d43284b2120bb6712ad3d27e6f2c41e7b821953",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_smul_eq_self_of_torsion_of_not_inZeroComponentAt_of_dvd.lean",
+      "line_count": 148,
+      "purpose": "dependency inventory only; not ported",
+      "imports": [
+        "import Mathlib.RingTheory.Valuation.ValuationSubring",
+        "import Mathlib.Algebra.Lie.OfAssociative",
+        "import Mathlib.Algebra.Algebra.Rat",
+        "import Theorems.Thm_WeierstrassCurve_exists_criticalCentre_of_multiplicativeReduction",
+        "import Theorems.Thm_WeierstrassCurve_not_inZeroComponentAt_some_iff_of_criticalCentre",
+        "import Theorems.Thm_WeierstrassCurve_valuation_discriminant_eq_of_criticalCentre",
+        "import Theorems.Thm_WeierstrassCurve_slope_mem_of_shallow",
+        "import Theorems.Thm_WeierstrassCurve_valuation_slope_sub_slope_neg_of_shallow",
+        "import Theorems.Thm_WeierstrassCurve_inZeroComponentAt_sub_of_level_eq_of_branch_eq",
+        "import Theorems.Thm_WeierstrassCurve_inZeroComponentAt_add_of_level_eq_of_branch_ne",
+        "import Theorems.Thm_WeierstrassCurve_valuation_pow_eq_of_torsion_of_not_inZeroComponentAt",
+        "import Theorems.Thm_WeierstrassCurve_valuation_sq_eq_of_two_torsion_of_not_inZeroComponentAt",
+        "import Theorems.Thm_WeierstrassCurve_Affine_Point_smul_eq_self_of_two_torsion_of_mem_inertiaSubgroupIn_of_level",
+        "import Theorems.Thm_WeierstrassCurve_Affine_Point_smul_eq_self_of_mem_inertiaSubgroupIn_of_level",
+        "import Theorems.Thm_WeierstrassCurve_torsion_integral_of_not_dvd",
+        "import Theorems.Thm_ValuationSubring_valuation_intCast_eq_pow_pow_of_dvd",
+        "import Definitions.Def_FLTPrelim_FreyPackage",
+        "import Definitions.Def_FLTPrelim_GaloisRep",
+        "import Definitions.Def_FLTPrelim_Ramification",
+        "import Definitions.Def_EllipticCurve_ZeroComponentAt",
+        "import P2M.Util"
+      ]
+    },
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "P2M/Sol/S_ValuationSubring_valuation_intCast_eq_pow_pow_of_dvd.lean",
+      "blob_sha": "6726dc2d64593cf988d4bdbe06624749b445502e",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_ValuationSubring_valuation_intCast_eq_pow_pow_of_dvd.lean",
+      "line_count": 15,
+      "purpose": "dependency inventory only; not ported",
+      "imports": [
+        "import Mathlib.RingTheory.Valuation.ValuationSubring",
+        "import Mathlib.NumberTheory.Padics.PadicVal.Basic",
+        "import Theorems.Thm_ValuationSubring_valuation_intCast_eq_pow_padicValInt",
+        "import P2M.Util"
+      ]
+    },
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "P2M/Sol/S_WeierstrassCurve_eq_zero_of_smul_eq_zero_of_reducePoint_eq_zero.lean",
+      "blob_sha": "6d9088ee96d5303a6b9112c87260486777330a27",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_eq_zero_of_smul_eq_zero_of_reducePoint_eq_zero.lean",
+      "line_count": 132,
+      "purpose": "ported leading-term estimate only; generalized beyond DVR and elliptic curves",
+      "imports": [
+        "import Theorems.Thm_WeierstrassCurve_Affine_Point_smul_some_eq_zero_iff",
+        "import Theorems.Thm_WeierstrassCurve_reducePoint_some_eq_zero_iff",
+        "import Definitions.Def_EllipticCurve_PointReduction",
+        "import P2M.Util"
+      ]
+    },
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "P2M/Sol/S_ValuationSubring_valuation_intCast_eq_pow_padicValInt.lean",
+      "blob_sha": "ebcc3734f530bf46253e247834ad3209035932d5",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_ValuationSubring_valuation_intCast_eq_pow_padicValInt.lean",
+      "line_count": 34,
+      "purpose": "ported integer factorization argument; other module interfaces reconstructed in DkMath",
+      "imports": [
+        "import Mathlib.RingTheory.Valuation.ValuationSubring",
+        "import Mathlib.NumberTheory.Padics.PadicVal.Basic",
+        "import Theorems.Thm_ValuationSubring_valuation_intCast_eq_one_of_not_dvd",
+        "import P2M.Util"
+      ]
+    },
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "P2M/Sol/S_ValuationSubring_valuation_intCast_eq_one_of_not_dvd.lean",
+      "blob_sha": "ca69fbe03f07941706ce876023e63ea7b4d0e7fb",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_ValuationSubring_valuation_intCast_eq_one_of_not_dvd.lean",
+      "line_count": 17,
+      "purpose": "dependency inventory only; not ported",
+      "imports": [
+        "import Mathlib.RingTheory.Valuation.ValuationSubring",
+        "import Mathlib.Data.Nat.Prime.Basic",
+        "import Theorems.Thm_ValuationSubring_valuation_natCast_eq_one_of_not_dvd",
+        "import P2M.Util"
+      ]
+    }
+  ]
+}
