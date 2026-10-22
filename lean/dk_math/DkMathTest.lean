@@ -230,5 +230,7 @@ import DkMathTest.FLT.FreyCriticalCentre
 import DkMathTest.FLT.Note031CriticalCentreDependencyAudit
 import DkMathTest.FLT.FreyNodalReduction
 import DkMathTest.FLT.Note031NodalReductionDependencyAudit
+import DkMathTest.FLT.FreyShallowSlope
+import DkMathTest.FLT.Note031ShallowSlopeDependencyAudit
 
 #print "file: DkMathTest"

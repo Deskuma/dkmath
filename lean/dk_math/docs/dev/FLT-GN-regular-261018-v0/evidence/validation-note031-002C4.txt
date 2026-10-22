@@ -1,0 +1,118 @@
+NOTE-031-002C4 verification evidence — 2026-10-22 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Completed scope:
+  Geometry-independent separated-root small-product core over arbitrary ordered valuation groups.
+  Exclusive branch: one distance <1, the other exactly 1; both-near impossible under unit separation.
+  Integral separated roots plus small product imply integrality of the candidate.
+  Same-centre finite-coordinate slope t=Y/X and quadratic identity retaining nonzero defect F0.
+  Strict shallowness implies nonzero denominator; near+shallow implies residual quadratic <1.
+  Existing same-centre directions supply slope integrality, small Y and exclusive branch.
+  Actual curve negation sends t to -t-a1 and exchanges direction distances.
+  Shallow point/opposite-point slopes have unit difference, independent of direction choice.
+  Same Frey Source/curve/centre/directions/finite coordinates retained on transport paths.
+  No primality/q!=p/torsion assumption needed for this geometric transport.
+
+Remaining scope:
+  Actual point sum/difference estimates at equal depth and branch comparison.
+  Torsion-depth recurrence and supplying near/shallow conditions for relevant torsion points.
+  Discriminant p-divisibility to all singular-reduction torsion fixedness.
+  Additive zero-component submodule and full multiplicative unramifiedness.
+  031-002 overall, 031-003 through 005, hcases/hno and general FLT remain incomplete.
+  No inference from fixed directions to fixed nearby torsion points in this step.
+
+Regressions:
+  New actual curve y^2=x^3+x^2+1053, discriminant=(-1053)*454960, c4=16.
+  At every valuation subring of Q over 3, explicit actual centre (0,0) and directions (1,-1).
+  Actual nonsingular group point (3,33) is nonzero and not 2-torsion.
+  Defect valuation=valuation(3)^4 < valuation(3)^2=X valuation squared; X valuation<1.
+  New branch theorem selects slope 11 near beta=-1, with unit alpha-distance.
+  Negation selects opposite branch near alpha=1; slopes 11,-11 have unit difference 22.
+  Previous actual two-torsion coordinates (-4,2), at every centre over 3:
+    centre-near but not strictly shallow, from equality to their own curve negation.
+    No equality-level depth classification is asserted.
+  Colliding roots 0,3 with t=0: small product and both-near; separation hypothesis necessary.
+  Unit-separated roots 0,1 with t=2: product valuation=1 and neither-near; strict smallness necessary.
+  Same Source 37 finite-coordinate shallow transport type-checked; no Source/counterexample existence asserted.
+
+Source provenance:
+  Existing read-only C3 source cache; no new remote fetch in this step.
+  Upstream blob: 0b9d8a2eb9bfd9e038a8a875189907fdafd76f58.
+  Exact path/selected S04_n_slope and S04_n_neg sections in upstream-note031-002C4.json.
+  Shallow identity/negative comparison informed by upstream.
+  Integrality/exclusive branches reconstructed from DkMath's existing separated tangent roots.
+  Adapted elliptic module retains Apache-2.0, copyright, modifications and LICENSE/NOTICE locations.
+  No external FreyPackage/GaloisRep providers imported.
+
+Focused build:
+  lake build DkMathTest.FLT.Note031ShallowSlopeDependencyAudit
+  exit 0; Build completed successfully (3199 jobs).
+  18 new production and 15 regression declarations: standard logical axioms only.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Thirteen type/opaque-body graph checks and five public-input checks passed.
+  Required applicable providers: separated-root branch/integrality core,
+    same-centre finite Taylor identity, shallow denominator nonzero, quadratic factorization,
+    strict residual smallness, actual negative-coordinate formula, node unit,
+    explicit actual shallow point and previous near-two-torsion boundary.
+  Two pure-core paths exclude WeierstrassCurve, DkMath.Lib.NumberTheory, NumberField and inertia dependencies.
+  Neutral library/concrete paths additionally exclude DkMath.FLT dependencies.
+  Forbidden graph: sorryAx, old FLT endpoints, FltRegular/P2M/P2MW/FreyPackage,
+    Kummer, RegularKummer and FoldedValuationOrbit.
+  Inputs retained: hsep/hp, same D/h/hnear/hsh, nonzero denominator hx for negation.
+  No pre-supplied slope integrality/branch/fixedness/hcases/hno inputs.
+  No direction D required for opposite-slope separation; node condition supplies it.
+
+Facade/root/test build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11738 jobs).
+  New code: no warnings or errors.
+  Five existing unrelated broad-root sorry warnings:
+    DkMath/CosmicFormula/TriominoFLT.lean:1919:6
+    DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6
+    DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8
+    DkMath/NumberTheory/GcdNextResearch.lean:850:6
+    DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8
+
+Entrance checks:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest; no warnings/errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE031ShallowSlope.lean
+  exit 0; six public endpoints reachable through import DkMath;
+    standard-only Frey axiom print, same Source 37 centre/directions/finite coordinates kept;
+    no warnings/errors.
+  python3 check_tracker_mismatch.py /tmp/note031-002C4-full.log
+  exit 0; OK: no mismatches found.
+
+Static checks:
+  9 changed/new Lean files: three modified facades, six new (three production, regression, audit, smoke).
+  Exact file markers, public textbook docstrings, final newlines, tabs/trailing spaces: PASS.
+  All 18 new production and 15 regression declarations listed in axiom audit: PASS.
+  No sorry/admit/native_decide/custom axiom/opaque/unsafe in checked Lean files.
+  No Lib-to-FLT imports; upstream LICENSE/NOTICE exists.
+  git diff --check: exit 0.
+
+This records the checked new paths and scope, not whole-repository axiom freedom.
+Disposable raw logs: /tmp/note031-002C4-{focused,full,entrance,smoke}.log.
+
+Compact new audit output:
+  PASS: 18 production and 15 regression declarations; standard logical axioms only.
+  PASS: DkMath.Lib.Algebra.ValuationSeparatedRoots.branches_of_small_product; 1873 reachable constants; expected providers present.
+  PASS: DkMath.Lib.Algebra.ValuationSeparatedRoots.mem_of_small_product; 4969 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticShallowSlope.centreSlope_quadratic; 8091 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticShallowSlope.quadratic_small_of_shallow; 8276 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticShallowSlope.slope_mem_and_branches_of_shallow; 8350 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticShallowSlope.negY_branch_distances; 4952 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticShallowSlope.opposite_slope_separated_of_shallow; 8333 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.shallow_slope_mem_and_branches; 15944 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.shallow_opposite_slope_separated; 15930 reachable constants; expected providers present.
+  PASS: FreyShallowSlopeTest.point_on_second_branch; 10134 reachable constants; expected providers present.
+  PASS: FreyShallowSlopeTest.negative_point_on_first_branch; 10143 reachable constants; expected providers present.
+  PASS: FreyShallowSlopeTest.old_two_torsion_not_shallow; 19996 reachable constants; expected providers present.
+  PASS: FreyShallowSlopeTest.source37_shallow; 15945 reachable constants; expected providers present.
+  PASS inputs: DkMath.Lib.Algebra.ValuationSeparatedRoots.branches_of_small_product; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.Lib.NumberTheory.EllipticShallowSlope.slope_mem_and_branches_of_shallow; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.Lib.NumberTheory.EllipticShallowSlope.centreSlope_negY; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.FLT.Frey.Source.shallow_slope_mem_and_branches; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.FLT.Frey.Source.shallow_opposite_slope_separated; explicit arithmetic guards and remaining inputs retained.

@@ -177,6 +177,8 @@ import DkMath.Lib.NumberTheory.EllipticCriticalCentreAlgebra
 import DkMath.Lib.NumberTheory.EllipticCriticalCentre
 import DkMath.Lib.NumberTheory.EllipticTangentDirections
 import DkMath.Lib.NumberTheory.EllipticNodalReduction
+import DkMath.Lib.Algebra.ValuationSeparatedRoots
+import DkMath.Lib.NumberTheory.EllipticShallowSlope
 
 #print "file: DkMath.Lib"
 
