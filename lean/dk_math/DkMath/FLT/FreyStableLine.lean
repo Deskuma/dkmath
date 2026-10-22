@@ -18,6 +18,7 @@ import DkMath.Lib.NumberTheory.FoldedValuationOrbit
 029-Bの局所慣性による二択はまだ算術入力である。029-Cの有理p-torsion排除は
 NOTE-030で証明し、`FreyRationalTorsionBridge`が向き付き条件の下でhratを供給する。
 この一般形では二入力を明示し、降下と線形代数だけでcofixed直線へ進める。
+031-005のFreyStableLineLocalGlobalは同じ表現の局所算術から二択を供給する。
 
 `Source p`自体はp≥5やa≡3 mod4・bの偶数性をフィールドとして保持しない。
 これらを暗黙に補うことはしない。bridgeは`FreyCounterexample`の向き付け付き存在定理から

@@ -17,7 +17,8 @@ Sourceの残余空間・残余表現を変えず、同じ部分加群の全慣�
 一次元性・p≥5・bの偶数性はこの一般的輸送には不要であり、今後の局所算術で扱う。
 
 全素点共通の側を要求する。各素点の独立した二択では足りない。
-031-002〜004の局所作用と031-005のhcasesは、この章の入力を供給する次の課題である。
+031-002〜004の局所作用を合流するFreyStableLineLocalGlobalが、本章の入力を算術から供給する。
+本章は局所条件を明示する一般形として保持する。
 -/
 namespace DkMath.FLT.Frey.Source
 open DkMath.Lib.NumberTheory ValuationInertia

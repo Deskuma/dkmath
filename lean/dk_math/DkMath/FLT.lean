@@ -60,6 +60,7 @@ import DkMath.FLT.FreyDyadicInertia
 import DkMath.FLT.FreyIntegralTorsionWitness
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeFiltration
+import DkMath.FLT.FreyStableLineLocalGlobal
 
 #print "file: DkMath.FLT"
 
