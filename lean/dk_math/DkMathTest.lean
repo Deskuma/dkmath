@@ -238,5 +238,7 @@ import DkMathTest.FLT.FreyDoublingDepth
 import DkMathTest.FLT.Note031DoublingDepthDependencyAudit
 import DkMathTest.FLT.FreyUnramifiedAway
 import DkMathTest.FLT.Note031UnramifiedAwayDependencyAudit
+import DkMathTest.FLT.FreyDyadicInertia
+import DkMathTest.FLT.Note031DyadicInertiaDependencyAudit
 
 #print "file: DkMathTest"

@@ -56,6 +56,7 @@ import DkMath.FLT.FreyShallowSlope
 import DkMath.FLT.FreyBranchComparison
 import DkMath.FLT.FreyDoublingDepth
 import DkMath.FLT.FreyUnramifiedAway
+import DkMath.FLT.FreyDyadicInertia
 
 #print "file: DkMath.FLT"
 
