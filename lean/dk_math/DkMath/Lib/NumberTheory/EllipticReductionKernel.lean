@@ -125,4 +125,22 @@ theorem some_mem_iff {x y : K} (h : (E).toAffine.Nonsingular x y) :
   rw [poleOrZero_some_iff, ← A.valuation_le_one_iff]
   exact not_le.symm
 
+/-- 整性が係数ごとに与えられた元の曲線上の還元核。一般ファイバーを選び直さない。 -/
+noncomputable def ofIntegral (V : WeierstrassCurve K) (hV : Integral A V) : AddSubgroup V.toAffine.Point := by
+  rw [← hV.model_map]
+  exact reductionKernel A hV.model
+
+/-- 元の曲線へ戻しても、還元核は無限遠または極という同じ条件である。 -/
+theorem mem_ofIntegral_iff (V : WeierstrassCurve K) (hV : Integral A V) (P : V.toAffine.Point) :
+    P ∈ ofIntegral A V hV ↔ PoleOrZero A V P := by
+  cases V
+  rfl
+
+/-- 整な有限点は還元核に入らない。真の吸収空間を作るための反証点になる。 -/
+theorem not_mem_ofIntegral_some (V : WeierstrassCurve K) (hV : Integral A V)
+    {x y : K} (h : V.toAffine.Nonsingular x y) (hx : x ∈ A) :
+    Point.some x y h ∉ ofIntegral A V hV := by
+  rw [mem_ofIntegral_iff, poleOrZero_some_iff]
+  exact not_lt_of_ge ((A.valuation_le_one_iff _).mpr hx)
+
 end DkMath.Lib.NumberTheory.EllipticReductionKernel
