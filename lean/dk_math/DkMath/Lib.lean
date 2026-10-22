@@ -175,6 +175,8 @@ import DkMath.Lib.NumberTheory.EllipticGoodReductionInertia
 import DkMath.Lib.NumberTheory.EllipticSmoothReductionInertia
 import DkMath.Lib.NumberTheory.EllipticCriticalCentreAlgebra
 import DkMath.Lib.NumberTheory.EllipticCriticalCentre
+import DkMath.Lib.NumberTheory.EllipticTangentDirections
+import DkMath.Lib.NumberTheory.EllipticNodalReduction
 
 #print "file: DkMath.Lib"
 

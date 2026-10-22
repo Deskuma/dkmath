@@ -228,5 +228,7 @@ import DkMathTest.FLT.FreySmoothReductionInertia
 import DkMathTest.FLT.Note031SmoothReductionDependencyAudit
 import DkMathTest.FLT.FreyCriticalCentre
 import DkMathTest.FLT.Note031CriticalCentreDependencyAudit
+import DkMathTest.FLT.FreyNodalReduction
+import DkMathTest.FLT.Note031NodalReductionDependencyAudit
 
 #print "file: DkMathTest"
