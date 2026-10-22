@@ -216,5 +216,7 @@ import DkMathTest.FLT.FreyRationalTorsion
 import DkMathTest.FLT.Note030TorsionDependencyAudit
 import DkMathTest.FLT.FreyRationalTorsionBridge
 import DkMathTest.FLT.Note030BridgeDependencyAudit
+import DkMathTest.FLT.InertiaLocalGlobal
+import DkMathTest.FLT.Note031FiniteInertiaDependencyAudit
 
 #print "file: DkMathTest"

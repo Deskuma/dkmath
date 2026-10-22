@@ -158,6 +158,9 @@ import DkMath.Lib.NumberTheory.WeierstrassTorsionBounds
 import DkMath.Lib.NumberTheory.WeierstrassXIdentities
 import DkMath.Lib.NumberTheory.WeierstrassTorsionIdentities
 import DkMath.Lib.NumberTheory.WeierstrassValuationOrbit
+import DkMath.Lib.RepresentationTheory.LocalFixedCofixed
+import DkMath.Lib.NumberTheory.NumberFieldInertiaGeneration
+import DkMath.Lib.NumberTheory.NumberFieldInertiaRepresentation
 
 #print "file: DkMath.Lib"
 
