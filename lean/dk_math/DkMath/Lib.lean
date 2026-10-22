@@ -182,6 +182,13 @@ import DkMath.Lib.NumberTheory.EllipticShallowSlope
 import DkMath.Lib.NumberTheory.EllipticBranchComparison
 import DkMath.Lib.NumberTheory.EllipticCriticalDepth
 import DkMath.Lib.NumberTheory.EllipticDoublingDepth
+import DkMath.Lib.NumberTheory.EllipticAdditionDepth
+import DkMath.Lib.NumberTheory.EllipticOppositeDepth
+import DkMath.Lib.NumberTheory.EllipticCriticalAddition
+import DkMath.Lib.NumberTheory.EllipticCriticalPair
+import DkMath.Lib.NumberTheory.EllipticIntegralReturn
+import DkMath.Lib.NumberTheory.EllipticTorsionDepth
+import DkMath.Lib.NumberTheory.EllipticDepthInertia
 
 #print "file: DkMath.Lib"
 
