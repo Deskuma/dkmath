@@ -170,6 +170,8 @@ import DkMath.Lib.NumberTheory.EllipticInertiaTransport
 import DkMath.Lib.Algebra.ValuationPolynomial
 import DkMath.Lib.NumberTheory.ValuationPrimeSupport
 import DkMath.Lib.NumberTheory.EllipticTorsionValuationIntegrality
+import DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation
+import DkMath.Lib.NumberTheory.EllipticGoodReductionInertia
 
 #print "file: DkMath.Lib"
 

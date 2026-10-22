@@ -1,0 +1,105 @@
+NOTE-031-002B verification evidence — 2026-10-22 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Completed scope: good-reduction inertia fixed points, named 031-002B.
+  Finite integral coordinates satisfy the actual residue curve equation and nonsingularity.
+  Tangent/secant estimates handle equal x and unequal x without division by two.
+  Inverse residue coordinates of two points force a nonzero sum to have an x-coordinate pole.
+  For n unit, same residue coordinates imply equality of actual n-torsion points:
+    the nonzero difference would have both a pole and an integral x-coordinate.
+  Same rational curve, same actual E[n], same coordinate Galois action.
+  Actual inertia fixes every E[n] point for an explicit good integral residue model and unit n.
+  Same Frey Source supplies the good model and unit exponent for q!=2,p and q not dividing abc.
+  Every residual point fixed; every same submodule is locally both Fixed and Cofixed.
+  No hfix/hinj/hcases/hno oracle inputs. Model and unit data supplied on the Frey path.
+  No full point-reduction additive homomorphism, DVR restriction or formal-group induction ported.
+  No Source/common-factor/orientation/curve/point data replaced.
+
+Remaining scope:
+  031-002C: multiplicative reduction at q dividing abc and p-divisible discriminant depth.
+  031-002 overall remains incomplete.
+  031-003 through 005, hcases, hno, unconditional irreducibility and general FLT remain separate.
+
+Regressions:
+  Actual curve y^2=x^3-x has discriminant 64 and |E[3]|=9.
+  At every valuation subring over 5, every inertia element fixes all nine actual points.
+  Actual bad-reduction boundary curve y^2+xy=x^3+4x^2+x, discriminant 225:
+    P=(-1/4,1/8), Q=(-4,2) are distinct actual 2-torsion points.
+    At every valuation subring of Q over 3, differences 15/4 and -15/8 are nonunits.
+    Thus unit exponent alone does not give residue-coordinate injectivity at bad reduction.
+    No inertia permutation of this pair is asserted.
+  Same Source 37: actual residual point fixed at good prime 3.
+  No Source 37 or Fermat counterexample existence asserted.
+
+Source provenance:
+  Reused read-only GitHub source cache from NOTE-031-002A.
+  Blob/path/selected sections in upstream-note031-002B.json.
+  Extracted residue and chord estimates from the zero-component solution only.
+  Adapted module preserves copyright, Apache-2.0, modifications and LICENSE/NOTICE paths.
+  Actual torsion integrality reuses DkMath 031-002A; no 3000-line formal-group/zero-component port.
+  No external FreyPackage/GaloisRep/FLT provider imports.
+
+Static checks:
+  Six new Lean files: three production, one regression, one audit, one root smoke.
+  Exact post-import markers, public textbook docstrings, final newlines and whitespace: PASS.
+  All 10 production and 10 regression declarations listed in axiom audit: PASS.
+  No new sorry/admit/native_decide/custom axiom/opaque/unsafe or external provider imports.
+  No Lib-to-FLT or RegularKummer Lean imports; adapted LICENSE/NOTICE paths checked.
+  git diff --check: exit 0.
+
+Focused build:
+  lake build DkMathTest.FLT.Note031GoodReductionDependencyAudit
+  exit 0; Build completed successfully (3184 jobs).
+  New code: no warnings or errors.
+  All 10 production and 10 regression declarations use standard logical axioms only.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Eight type/opaque-body graph checks and three public-input checks passed.
+  Required providers present: residue nonsingularity, curve-equation factorization,
+    slope pole and addX pole, actual difference-point torsion integrality,
+    actual inertia residue kernel, same-Source model and good residue curve,
+    actual |E[3]|=9 and distinct actual two-torsion boundary.
+  Forbidden: sorryAx, old FLT endpoints, external FltRegular/P2M/P2MW/FreyPackage,
+    Kummer, RegularKummer and FoldedValuationOrbit.
+  Neutral library/concrete boundary paths additionally forbid DkMath.FLT dependencies.
+  Inputs retained: hgood/hn, both torsion and congruence conditions; actual hmodel/hσ;
+    S/hq/hq2/hqp/hd/hA/hσ/P on the Frey path. No hfix/hinj/hcases/hno inputs.
+
+Facade/root/test build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11719 jobs).
+  New code: no warnings or errors.
+  Five existing unrelated broad-root sorry warnings:
+    DkMath/CosmicFormula/TriominoFLT.lean:1919:6
+    DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6
+    DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8
+    DkMath/NumberTheory/GcdNextResearch.lean:850:6
+    DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8
+
+Additional entrance checks:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest; no warnings or errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE031GoodReduction.lean
+  exit 0; five endpoints reachable through import DkMath;
+    standard-only axiom print; same Source 37 actual point fixed at good prime 3;
+    no warnings or errors.
+  python3 check_tracker_mismatch.py /tmp/note031-002B-full.log
+  exit 0; OK: no mismatches found.
+
+Raw logs are disposable /tmp/note031-002B-*.log files.
+This records the checked new paths and stated scope, not whole-repository axiom freedom.
+
+Compact audit output:
+  PASS: 10 production and 10 regression declarations; standard logical axioms only.
+  PASS: DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation.slope_notMem_of_sub_mem_nonunits; 16336 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation.addX_notMem_of_sub_mem_nonunits; 16343 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticGoodReductionInertia.torsion_eq_of_coordinate_congruence; 26744 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticGoodReductionInertia.fixed_of_inertia_of_good_model; 28027 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.residual_fixed_at_good_prime; 28269 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.residual_fixed_and_cofixed_at_good_prime; 28338 reachable constants; expected providers present.
+  PASS: FreyGoodReductionInertiaTest.nine_points_fixed_at_five; 29141 reachable constants; expected providers present.
+  PASS: FreyGoodReductionInertiaTest.bad_reduction_not_injective; 26889 reachable constants; expected providers present.
+  PASS inputs: DkMath.Lib.NumberTheory.EllipticGoodReductionInertia.torsion_eq_of_coordinate_congruence; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.Lib.NumberTheory.EllipticGoodReductionInertia.fixed_of_inertia_of_good_model; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.FLT.Frey.Source.residual_fixed_at_good_prime; explicit arithmetic guards and remaining inputs retained.
