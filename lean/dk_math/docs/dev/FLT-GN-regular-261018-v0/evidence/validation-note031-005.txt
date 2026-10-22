@@ -1,0 +1,82 @@
+NOTE-031-005 — 2026-10-23 JST
+branch: feat/FLT-GNR-031-05-261023-codex
+base commit: 4c7735e601f11f00bbe4e461996f63ed2dd86482
+status: IMPLEMENTED: common-side local synthesis, global stable-line dichotomy,
+hcases supplied, and cofixed-line extraction preserving the same Source.
+Remaining obstruction: nonexistence of cofixed stable lines (hno).
+Unconditional residual irreducibility and general FLT are outside the result.
+
+Environment
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Focused validation
+lake build DkMath.FLT.FreyStableLineLocalGlobal
+  PASS (exit 0): 4029 jobs; core synthesis and counterexample adapter.
+lake build DkMathTest.FLT.FreyStableLineLocalGlobal
+  PASS (exit 0): 4042 jobs; Source37 API and two mathematical boundary examples.
+lake build DkMathTest.FLT.Note031StableLineLocalGlobalDependencyAudit
+  PASS (exit 0): 4043 jobs; standard axioms and actual providers.
+No warnings in the new production, regression or audit modules.
+
+Facade/root validation
+lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  PASS (exit 0): 11789 jobs; includes updated explanatory comments in earlier bridge modules.
+lake env lean DkMathTest.lean
+  PASS (exit 0): file: DkMathTest
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE031StableLineLocalGlobal.lean
+  PASS (exit 0): all-prime common side, global dichotomy, cofixed extraction,
+  conditional irreducibility with hno, and same-Source counterexample adapter accessible via import DkMath.
+
+Dependency audit from full build
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS: 8 production and 7 regression declarations; standard logical axioms only.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.residual_inertia_common_side_of_stable; 42421 reachable constants; expected providers present.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.residual_stable_submodule_fixed_or_cofixed; 75673 reachable constants; expected providers present.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.residual_stable_line_fixed_or_cofixed; 75692 reachable constants; expected providers present.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.residual_stable_line_cofixed_of_oriented; 76143 reachable constants; expected providers present.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.residual_exists_cofixed_line_of_not_irreducible; 76151 reachable constants; expected providers present.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.residual_isIrreducible_of_oriented_cofixed_obstruction; 76149 reachable constants; expected providers present.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.residual_not_irreducible_iff_exists_cofixed_line_of_oriented; 76152 reachable constants; expected providers present.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.ofCounterexample_residual_exists_cofixed_line; 76263 reachable constants; expected providers present.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS: FreyStableLineLocalGlobalTest.source37_dichotomy; 75694 reachable constants; expected providers present.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS: FreyStableLineLocalGlobalTest.source37_cofixed_of_reducible; 76153 reachable constants; expected providers present.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS: FreyStableLineLocalGlobalTest.source37_irreducible_with_obstruction; 76151 reachable constants; expected providers present.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS: FreyStableLineLocalGlobalTest.incompatible_local_sides_boundary; 13002 reachable constants; expected providers present.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS inputs: DkMath.FLT.Frey.Source.residual_inertia_common_side_of_stable; explicit arithmetic guards and remaining inputs retained.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS inputs: DkMath.FLT.Frey.Source.residual_stable_line_fixed_or_cofixed; explicit arithmetic guards and remaining inputs retained.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS inputs: DkMath.FLT.Frey.Source.residual_stable_line_cofixed_of_oriented; explicit arithmetic guards and remaining inputs retained.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS inputs: DkMath.FLT.Frey.Source.residual_exists_cofixed_line_of_not_irreducible; explicit arithmetic guards and remaining inputs retained.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS inputs: DkMath.FLT.Frey.Source.residual_isIrreducible_of_oriented_cofixed_obstruction; explicit arithmetic guards and remaining inputs retained.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS inputs: DkMath.FLT.Frey.Source.residual_not_irreducible_iff_exists_cofixed_line_of_oriented; explicit arithmetic guards and remaining inputs retained.
+DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean:80:0: PASS inputs: DkMath.FLT.Frey.Source.ofCounterexample_residual_exists_cofixed_line; explicit arithmetic guards and remaining inputs retained.
+
+#print axioms:
+  DkMath.FLT.Frey.Source.residual_stable_line_fixed_or_cofixed
+  DkMath.FLT.Frey.Source.residual_exists_cofixed_line_of_not_irreducible
+  DkMath.FLT.Frey.Source.residual_isIrreducible_of_oriented_cofixed_obstruction
+All three depend only on [propext, Classical.choice, Quot.sound].
+All 8 production and 7 regression declarations were audited.
+12 type/opaque-body dependency roots and 7 input contracts passed.
+Local/global dichotomy excludes FoldedValuationOrbit.
+Cofixed selection requires the checked NOTE-030 rational-torsion exclusion and its actual integer valuation-orbit proof.
+All roots exclude sorryAx, FltRegular, P2M/P2MW, FreyPackage, RegularKummer, Kummer and external FLT endpoints.
+
+Markers and static source checks
+python3 check_tracker_mismatch.py /tmp/005-full.log
+  OK: no mismatches found
+Static scan: PASS, 9 Lean files; exact markers, public docstrings, whitespace;
+no sorry/admit/axiom/opaque/native_decide/unsafe in checked code;
+all new production and regression declarations listed in the axiom audit.
+git diff --check: PASS.
+
+Provenance
+Existing DkMath providers were composed; same Source, submodule and quotient retained.
+Seven provider file hashes and source roles are recorded in dependencies-note031-005.json.
+
+Historical full-build warnings outside the new audited proof paths
+warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`

@@ -17,8 +17,9 @@ import DkMath.FLT.FreyRationalTorsion
 表現・曲線・点・Sourceを取り替えず、p≥5とb偶数を明示する。
 
 これでNoNonzeroFixedと固定部分加群の消滅が得られる。
-cofixed直線の抽出には依然として局所慣性などからのfixed/cofixed二択が必要であり、
-既約性にはさらにcofixed直線の不存在が必要である。この二入力を引数に残す。
+本章の一般形は局所慣性などからのfixed/cofixed二択hcasesを入力に残す。
+FreyStableLineLocalGlobalが031-005の算術からhcasesを供給する。
+既約性にはさらにcofixed直線の不存在hnoが必要であり、その境界は残る。
 整数反例からの入口では既存の同じ選択済みSourceを使い、共通因子・符号付き置換の証拠も保持する。
 NOTE-030の八段階はここで完了するが、一般FLTや無条件既約性の完成は含まない。
 -/
@@ -57,7 +58,8 @@ section PrimeField
 variable [Fact p.Prime]
 
 /-- 可約性と安定直線の二択を入力とするcofixed直線の抽出。
-hratは同じSourceから供給済みなので引数に取らない。hcasesは未供給の算術として明示する。 -/
+hratは同じSourceから供給済みなので引数に取らない。
+hcasesを明示する本一般形へ、031-005のFreyStableLineLocalGlobalが二択の証明を渡す。 -/
 theorem residual_exists_cofixed_line_of_oriented (hp5 : 5 ≤ p) (hbe : Even S.b)
     (hred : ¬ S.ResidualIsIrreducible)
     (hcases : ∀ L : Submodule (ZMod p) S.ResidualSpace, finrank (ZMod p) L = 1 →

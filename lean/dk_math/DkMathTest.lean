@@ -244,5 +244,7 @@ import DkMathTest.FLT.FreyPrimeFiltration
 import DkMathTest.FLT.Note031PrimeGoodFiltrationDependencyAudit
 import DkMathTest.FLT.FreyPrimeFiltrationComplete
 import DkMathTest.FLT.Note031PrimeFiltrationDependencyAudit
+import DkMathTest.FLT.FreyStableLineLocalGlobal
+import DkMathTest.FLT.Note031StableLineLocalGlobalDependencyAudit
 
 #print "file: DkMathTest"
