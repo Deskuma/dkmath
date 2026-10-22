@@ -316,4 +316,15 @@ lemma Exact.sub_exact_of_ne {n m : ℤ} {q r : ℚ} (hq : Exact n q) (hr : Exact
   rw [sub_eq_add_neg]
   exact hq.add_exact_of_ne hr.neg hne
 
+/-- 非零な差を整数軌道のmin条件へ翻訳する。
+異なる深さではminが正確に残り、同じ深さでは打ち消しを許す下界だけを返す。
+一致時にLowerから数値的な不等式を得るには、差自体の非零性が必要である。 -/
+lemma Exact.sub_valuation_spec {n m : ℤ} {q r : ℚ} (hq : Exact n q) (hr : Exact m r)
+    (hqr : q - r ≠ 0) :
+    (n ≠ m → v (q - r) = min n m) ∧ (n = m → m ≤ v (q - r)) := by
+  refine ⟨fun hne => (hq.sub_exact_of_ne hr hne).2, ?_⟩
+  intro heq
+  have hq' : Lower m q := by rw [← heq]; exact hq.lower
+  exact (hq'.sub hr.lower).le_valuation hqr
+
 end DkMath.Lib.NumberTheory.RationalTwoAdicBounds

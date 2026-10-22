@@ -8,7 +8,7 @@ Adapted from anthropics/fermats-last-theorem,
 P2M/Sol/S_FreyPackage_freyCurve_rational_p_torsion_eq_zero.lean, section S04.Arith.
 Upstream blob: fe61fd5d4f94d55b5a9da38d1541903c84397df0
 Modified for DkMath: isolate the integer recurrence, simplify prime cancellation,
-and document the unimplemented connection to actual point valuations.
+and retain a geometry-independent interface for the actual point-valuation bridge.
 -/
 
 import Mathlib.Data.Nat.Prime.Int
@@ -91,8 +91,9 @@ private lemma wrap_zero {γ t : ℤ} (hγ : 0 < γ) (hdvd : 2 * γ ∣ t) (h1 : 
 
 ε=e(1)とおく。帰納法でθ≡kε mod 2γ、−γ<θ≤γ、e(k)=±θを示す。
 両端のe(p−1)=e(1)から、e(p−2)=0または2γ∣pεが従う。前者は正の深さに反し、
-後者は`hdiv`によるpの約分と0<ε<γに反する。`hbd`などを実際のFrey曲線から
-供給する2進付値論は未実装であり、この定理だけで有理torsionを排除したとはしない。 -/
+後者は`hdiv`によるpの約分と0<ε<γに反する。`hbd`などを実際の曲線から供給する
+証明は`WeierstrassValuationOrbit`、Frey Sourceの係数供給は`FreyRationalTorsion`に置く。
+この純整数定理自体は点の存在や幾何学的な入力を供給しない。 -/
 theorem no_folded_valuation_orbit (p : ℕ) (hp5 : 5 ≤ p) (γ : ℤ) (e A B : ℕ → ℤ) (A₁ : ℤ)
     (hbd : ∀ k, 1 ≤ k → k ≤ p - 1 → 1 ≤ e k ∧ e k ≤ γ - 1)
     (hA₁ : (2 * e 1 ≠ γ → A₁ = min (2 * e 1) γ) ∧ (2 * e 1 = γ → γ ≤ A₁))
@@ -232,8 +233,8 @@ theorem no_folded_valuation_orbit (p : ℕ) (hp5 : 5 ≤ p) (γ : ℤ) (e A B : 
 
 
 /-- Frey型の法γ=pv−4では、約分可能性を素数性から供給できる。
-残る入力は付値列の上下界・min法則・漸化式・末尾条件だけであり、これらを実際の
-点から供給する段階を明示的に残す。p≥5は整数軌道の議論に必要な範囲である。 -/
+入力は付値列の上下界・min法則・漸化式・末尾条件であり、実際の点からの供給は
+`WeierstrassValuationOrbit`が担当する。p≥5は整数軌道の議論に必要な範囲である。 -/
 theorem no_prime_shifted_valuation_orbit (p : ℕ) (hp : p.Prime) (hp5 : 5 ≤ p)
     (v γ : ℤ) (hγ : γ = (p : ℤ) * v - 4) (e A B : ℕ → ℤ) (A₁ : ℤ)
     (hbd : ∀ k, 1 ≤ k → k ≤ p - 1 → 1 ≤ e k ∧ e k ≤ γ - 1)

@@ -43,6 +43,7 @@ import DkMath.FLT.FreyRationalTorsionIntegral
 import DkMath.FLT.FreyRationalTorsionPositive
 import DkMath.FLT.FreyRationalTorsionBounds
 import DkMath.FLT.FreyRationalTorsionIdentities
+import DkMath.FLT.FreyRationalTorsion
 
 #print "file: DkMath.FLT"
 

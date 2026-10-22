@@ -1,0 +1,98 @@
+NOTE-030-007 verification evidence — 2026-10-22 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Completed mathematical scope:
+  Nonzero difference: unequal-depth min equality and equal-depth numerical lower bound.
+  Actual same-point definitions e(k)=v2(x(kQ)), A(k)=v2(x(kQ)*x(Q)-a4),
+    B(k)=v2(x(kQ)-x(Q)), A1=v2(x(Q)^2-a4).
+  OrbitConditions is a proposition about these actual definitions, not freely chosen sequences.
+  Seven kernel inputs proved from the same prime-order point and normalized coefficient hypotheses:
+    bounds, square-gap min, doubling, product-gap min, difference min, recurrence, endpoint.
+  Nonzero factors supplied from chapter 006 before the equal-depth lower bounds.
+  Endpoint: pQ=0 implies (p-1)Q=-Q and x-coordinate equality; no coefficient input needed.
+  Gamma=p*v-4 allows the existing pure integer core to cancel p modulo 2*gamma.
+  General normalized rational model with exact coefficient depth gamma and gamma>=1:
+    with prime p>=5 and gamma=p*v-4, every p-killed point Q equals zero.
+  Source coefficients supply a1=1, a3=a6=0, integral a2, Exact gamma a4,
+    gamma=p*v2(b)-4 and gamma>=1, with even b explicit.
+  Source.rational_p_torsion_eq_zero: p*Q=0 -> Q=0.
+  Source.rational_p_torsion_iff: p*Q=0 iff Q=0.
+  Same Source, a,b,c, nonzero coordinates, coprimality and normalization retained.
+  No order, sequence, nonzero-factor or vanishing provider assumed in the endpoint.
+
+Remaining scope:
+  030-008 unimplemented: public hrat bridge from Galois fixed points via rational descent.
+  No fixed/cofixed dichotomy, cofixed exclusion, unconditional irreducibility or general FLT closure.
+
+Actual regression cases:
+  Equal depths: 3-5=-2 has Exact depth 1; the equal-depth lower-bound API applies.
+  Zero difference: 4-4 has Lower 2 but not the raw numerical lower bound 2<=v2(0).
+  Existing order-5 Q=(4,-20) on curve (1,-24,0,160,0) satisfies all seven OrbitConditions for gamma=5.
+  Same definitions: e(1)=2, e(2)=4, A1=4, A(2)=5, B(2)=2; actual endpoint equality.
+  No integer v has 5=5*v-4; 10 divides 5*2 but not 2.
+  Thus the seven conditions alone do not exclude the existing rational order-5 point.
+  Curve (1,0,0,2,0) has gamma=1=5*1-4: its 5-killed rational points are zero.
+  The same curve has an actual nonzero 2-torsion T=(0,0); zero point also passes the endpoint API.
+  Conditional Source 37 vanishing and iff APIs checked without nonzero-Q provider.
+  No Source, Fermat counterexample, or nonzero rational 37-torsion existence claimed.
+
+Static checks:
+  5 new Lean files: 2 production, 2 tests/audits, 1 root smoke.
+  Existing RationalTwoAdicBounds: one new public lemma with textbook docstring.
+  Existing FoldedValuationOrbit: comments only, verified against HEAD after comment removal;
+    imports, theorem types and proofs unchanged.
+  Exact markers after imports, whitespace, final newlines, textbook docstrings: PASS.
+  No new sorry/admit/native_decide/custom axiom/opaque/unsafe or external provider imports.
+  General translated module retains Apache-2.0 attribution, upstream blob
+    fe61fd5d4f94d55b5a9da38d1541903c84397df0 and existing module-relative LICENSE/NOTICE paths.
+  All 13 new production and 13 regression declarations listed in the axiom audit.
+  git diff --check: exit 0.
+
+Focused build:
+  lake build DkMathTest.FLT.Note030TorsionDependencyAudit
+  exit 0; Build completed successfully (3167 jobs).
+  New code: no warnings or errors.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Full type and opaque-body dependency audit on 8 main paths:
+  13 production and 13 regression declarations; standard logical axioms only.
+  DkMath.Lib.NumberTheory.RationalTwoAdicBounds.Exact.sub_valuation_spec; 5734 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.WeierstrassValuationOrbit.xValuation_endpoint; 22917 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.WeierstrassValuationOrbit.orbit_conditions; 23952 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.WeierstrassValuationOrbit.no_prime_shifted_torsion; 24068 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.rational_p_torsion_eq_zero; 24194 reachable constants; expected providers present.
+  FreyRationalTorsionTest.actual_five_orbit_conditions; 24077 reachable constants; expected providers present.
+  FreyRationalTorsionTest.shifted_curve_five_torsion; 24090 reachable constants; expected providers present.
+  FreyRationalTorsionTest.source_thirtySeven_torsion; 24195 reachable constants; expected providers present.
+
+  Newly required: FoldedValuationOrbit.no_prime_shifted_valuation_orbit,
+    no_folded_valuation_orbit and cancel_prime_modulus, with actual point data supplied.
+  Forbidden: sorryAx, old FLT endpoints, external FltRegular/P2M/P2MW/FreyPackage, Kummer endpoints.
+  General Lib graph roots: no DkMath.FLT dependencies.
+  Generic actual order-5 orbit certificate: no FoldedValuationOrbit dependency.
+  Source endpoint graph requires curve_map, coprimality-to-parity, exact a4 depth and gamma positivity.
+
+Facade/root/test build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11691 jobs).
+  New code: no warnings or errors.
+  Five existing unrelated broad-root sorry warnings:
+  warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+  warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+  warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+  warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+  warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+
+Additional entrance checks:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest; no warnings or errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE030Torsion.lean
+  exit 0; 5 selected endpoints reachable through import DkMath;
+          conditional Source 37 vanishing/iff APIs; standard-only axiom prints;
+          no warnings or errors.
+  python3 check_tracker_mismatch.py /tmp/note030-007-full.log
+  exit 0; OK: no mismatches found.
+
+Raw logs are disposable /tmp/note030-007-*.log files.
+This records the stated scope, not whole-repository axiom freedom.

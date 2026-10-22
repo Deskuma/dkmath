@@ -157,6 +157,7 @@ import DkMath.Lib.NumberTheory.WeierstrassXReflection
 import DkMath.Lib.NumberTheory.WeierstrassTorsionBounds
 import DkMath.Lib.NumberTheory.WeierstrassXIdentities
 import DkMath.Lib.NumberTheory.WeierstrassTorsionIdentities
+import DkMath.Lib.NumberTheory.WeierstrassValuationOrbit
 
 #print "file: DkMath.Lib"
 
