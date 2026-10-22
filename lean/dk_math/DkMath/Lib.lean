@@ -179,6 +179,7 @@ import DkMath.Lib.NumberTheory.EllipticTangentDirections
 import DkMath.Lib.NumberTheory.EllipticNodalReduction
 import DkMath.Lib.Algebra.ValuationSeparatedRoots
 import DkMath.Lib.NumberTheory.EllipticShallowSlope
+import DkMath.Lib.NumberTheory.EllipticBranchComparison
 
 #print "file: DkMath.Lib"
 

@@ -1,0 +1,37 @@
+{
+  "implementation_date": "2026-10-22",
+  "repository": "anthropics/fermats-last-theorem",
+  "sources": [
+    {
+      "path": "P2M/Sol/S_WeierstrassCurve_inZeroComponentAt_sub_of_level_eq_of_branch_eq.lean",
+      "blob_sha": "829600493f3eabf22160657058a3a83fba5ec103",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_inZeroComponentAt_sub_of_level_eq_of_branch_eq.lean",
+      "selected_sections": [
+        "NodeChord.node_chord_core",
+        "NodeChord.ch_core",
+        "NodeChord.ch_eq"
+      ],
+      "source_transport": "Read-only GitHub connector fetch during NOTE-031-002C5"
+    },
+    {
+      "path": "P2M/Sol/S_WeierstrassCurve_inZeroComponentAt_add_of_level_eq_of_branch_ne.lean",
+      "blob_sha": "3d072d79d3734a624a6571e2af048f28b902b5d6",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_inZeroComponentAt_add_of_level_eq_of_branch_ne.lean",
+      "selected_sections": [
+        "NodeChord.ch_pm"
+      ],
+      "source_transport": "Read-only GitHub connector fetch during NOTE-031-002C5"
+    }
+  ],
+  "reconstructed": "Arbitrary field and actual valuation-ring model; reuse the same DkMath CriticalCentre, TangentDirections, slope classification, negation and smooth-reduction criterion. No re-selection of roots. Keep finite-integral-result guard on sharp depth. Actual Point addition, infinity and nonintegral branches retained.",
+  "not_ported": [
+    "Upstream InZeroComponentAt definition or additive subgroup",
+    "Repeated integral coefficient cast wrappers and tangent-root existence",
+    "Torsion depth recurrence, fixedness or FLT closure"
+  ],
+  "nonclaims": [
+    "All torsion points are shallow",
+    "Full multiplicative unramifiedness",
+    "031-002 complete, zero-component submodule, hcases/hno or general FLT"
+  ]
+}

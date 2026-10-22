@@ -53,6 +53,7 @@ import DkMath.FLT.FreySmoothReductionInertia
 import DkMath.FLT.FreyCriticalCentre
 import DkMath.FLT.FreyNodalReduction
 import DkMath.FLT.FreyShallowSlope
+import DkMath.FLT.FreyBranchComparison
 
 #print "file: DkMath.FLT"
 
