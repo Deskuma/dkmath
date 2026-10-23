@@ -1,12 +1,13 @@
 # 現行Leanの定理棚卸し
 
 2026-10-23。添付監査の36宣言（A01–A36）と追加調査22宣言（B01–B22）。
-合計58宣言・42所有モジュール。添付36宣言のソース行は現行と一致し、うち16宣言は既にLib配下にある。
-今回の58宣言は所有モジュールのビルド後に`#check`と`Lean.collectAxioms`で確認し、依存公理は標準の3つ以内だった。
+初回棚卸しは合計58宣言・42所有モジュール。添付36宣言のソース行は当時のcheckoutと一致し、うち16宣言は既にLib配下にあった。
+この初回58宣言は所有モジュールのビルド後に`#check`と`Lean.collectAxioms`で確認し、依存公理は標準の3つ以内だった。
 この検査は既存宣言に対するもの。新しい一般化、ZIP facadeの配置、全面的な依存層監査は別工程である。
 
 初回棚卸しの全修飾名・ソース宣言・暗黙引数・SHA256は[source-inventory.json](evidence/source-inventory.json)に保存した。
 B01–B05はGN-LIB-001で移管済みであり、下表は新しい所有先を示す。
+A17もGN-LIB-003aで移管済みであり、その表の所有先・行を更新した。
 計17宣言の移管対応と型・証明本体の保存は [gn-lib-001.json](evidence/gn-lib-001.json) に記録した。
 Lib配下でもnamespaceが歴史的名称のままの場合がある。namespaceだけで所有層を判定しない。
 
@@ -30,7 +31,7 @@ Lib配下でもnamespaceが歴史的名称のままの場合がある。namespac
 | A14 | [`GTail_one_eq_cyclotomicHomEval_of_prime`](../../../../DkMath/Lib/Cosmic/GTailCyclotomic.lean#L233)<br>`DkMath/Lib/Cosmic/GTailCyclotomic.lean`                                                  | 既存署名はField、g≠0。B22の一般橋も参照。                  | Lib既存・再作成不要          |
 | A15 | [`add_pow_seven_sub_endpoints`](../../../../DkMath/Lib/Cosmic/GTailSeven.lean#L107)<br>`DkMath/Lib/Cosmic/GTailSeven.lean`                                                                        | CommRing、次数7。                                          | Lib既存・7次の回帰として保持 |
 | A16 | [`coprime_sum_seven_quadratic`](../../../../DkMath/Lib/Cosmic/GTailSevenArithmetic.lean#L39)<br>`DkMath/Lib/Cosmic/GTailSevenArithmetic.lean`                                                     | Nat.Coprime a b、7次の二次形式。                           | Lib既存・7次の回帰として保持 |
-| A17 | [`add_pow_gt_sum_pows_nat_of_two_le`](../../../../DkMath/Algebra/BinomTail.lean#L188)<br>`DkMath/Algebra/BinomTail.lean`                                                                          | Nat、2≤n、a,b>0。                                          | 昇格候補                     |
+| A17 | [`add_pow_gt_sum_pows_nat_of_two_le`](../../../../DkMath/Lib/Algebra/BinomTail.lean#L227)<br>`DkMath/Lib/Algebra/BinomTail.lean`                                                                          | Nat、2≤n、a,b>0。                                          | GN-LIB-003aでLib所有化済み・旧名互換 |
 | A18 | [`add_pow_gap_factor`](../../../../DkMath/CosmicFormula/CosmicFormulaBinom.lean#L383)<br>`DkMath/CosmicFormula/CosmicFormulaBinom.lean`                                                           | CommSemiring。A01のlegacy語彙への転送。                    | 薄いadapter                  |
 | A19 | [`body_not_perfect_pow_of_squarefree_GN`](../../../../DkMath/CosmicFormula/CosmicFormulaBinom.lean#L497)<br>`DkMath/CosmicFormula/CosmicFormulaBinom.lean`                                        | 1<d、1<GN、Coprime x GN、Squarefree GN。                   | 昇格候補                     |
 | A20 | [`square_add_squareGnomonBand`](../../../../DkMath/Gnomon/Algebra.lean#L102)<br>`DkMath/Gnomon/Algebra.lean`                                                                                      | Nat、平方帯の定義を保持。                                  | 昇格候補                     |
@@ -112,3 +113,10 @@ Lib配下でもnamespaceが歴史的名称のままの場合がある。namespac
 三者gcdを中心に、原始対の三者coprime、正次数の素数支持、Bigの付値倍化を公開する。
 既存58宣言の名前・型は変更していない。
 [公開APIと保持条件](IMPLEMENTATION-GN-LIB-002.md)、[型と検証証跡](evidence/gn-lib-002.json) を参照。
+
+## 6. GN-LIB-003aで所有化したBinomTail
+
+A17の依存先を含む既存5補題を `Lib.Algebra.BinomTail` へ移管した。
+A17の表は新所有者へ更新し、初回JSONは移管前snapshotとして保持する。
+全修飾名・型・証明は変えていない。[実装報告](IMPLEMENTATION-GN-LIB-003a.md) と
+[移管対応・型・ハッシュ](evidence/gn-lib-003a.json) を参照。

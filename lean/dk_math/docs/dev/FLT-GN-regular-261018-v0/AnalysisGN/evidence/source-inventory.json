@@ -1066,6 +1066,7 @@
   "source_header_note": "statement is a source declaration header; implicit section variables are shown in elaborated_check",
   "followup_audits": [
     "gn-lib-001.json",
-    "gn-lib-002.json"
+    "gn-lib-002.json",
+    "gn-lib-003a.json"
   ]
 }

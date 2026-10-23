@@ -1,6 +1,6 @@
 # ROADMAP — AnalysisGNから一般核の固定へ
 
-2026-10-23。状態は**資料整理・現行棚卸し、GN-LIB-001・002完了**。
+2026-10-23。状態は**資料整理・現行棚卸し、GN-LIB-001・002・003a完了**。
 工程名は今後の管理IDであり、新しいLean定理が存在することを示すものではない。
 
 ## 工程と受入条件
@@ -10,7 +10,7 @@
 | GN-PLAN-000    | 完了                  | 提供資料と現行ソースの棚卸し         | 提供24ファイル                  | 36+22宣言、仮定・所有層・型、ZIP、実験の範囲を記録      |
 | GN-LIB-001     | 完了                  | Successor/Supportの中立核をLib所有化 | 既存B01–B05                     | 旧名・旧importと新importが通り、d=0と一般環の条件を維持 |
 | GN-LIB-002     | 完了                  | Completionの三者gcdと素数支持        | 既存A01、標準gcd算術            | 非原始対も含むgcd=h^d、原始版、次数0、正次数の支持の橋  |
-| GN-LIB-003a    | 未着手・並行可能      | BinomTailの正性・一般尾項            | A17の証明閉包                   | 下位のみでビルド、既存名を維持                          |
+| GN-LIB-003a    | 完了                  | BinomTailの正性・一般尾項            | A17の証明閉包                   | 下位のみでビルド、既存名を維持                          |
 | GN-LIB-003b    | 未着手                | 平方完成・有限帯の中立部分           | A20,A21,A23                     | 旧Gnomon/Primitive定義を逆importしない一般式とwrapper   |
 | GN-LIB-003c    | 未着手                | prime-power binomial付値             | A34、既存Lib.PadicValNat        | ABC依存を除いた一般核、旧署名、境界k=p^rも保持          |
 | GN-LIB-004     | 未着手                | R_n・D_n・再帰・正性                 | 001、既存B22                    | 除算不要の定義、Nat差の上界、再帰、完全冪の反例回帰     |
@@ -34,7 +34,10 @@ GN-LIB-001で既存の `GapFocusing.Successor/Support` の17定理をLib所有�
 [実装報告](IMPLEMENTATION-GN-LIB-001.md) に検証範囲を記録する。
 GN-LIB-002で三者gcd、原始完成のcoprime、素数支持・付値の13宣言を固定した。
 [実装報告](IMPLEMENTATION-GN-LIB-002.md) に型と保持条件を記録する。
-次はGN-LIB-003aのBinomTailを独立した小さな確定単位として進める。
+GN-LIB-003aでBinomTailの一般尾項・正性の5補題を移管した。
+[実装報告](IMPLEMENTATION-GN-LIB-003a.md) に互換性と数学的境界を記録する。
+003aはキャッシュを利用した全体ビルドと通常入口の最終確認を完了した。
+次はGN-LIB-003bの平方完成・有限帯の中立部分へ進む。
 
 この順序なら「既存定理の所有化」と「新しい一般的な橋の実装」を別々に検証できる。
 添付ZIPを一括適用することを先に完了条件にはしない。
@@ -74,5 +77,6 @@ Libからの逆依存の有無、必要な仮定、実際に通したビルド�
 
 - [GN-LIB-001の移管・検証記録](IMPLEMENTATION-GN-LIB-001.md)
 - [GN-LIB-002の一般完成API・検証記録](IMPLEMENTATION-GN-LIB-002.md)
+- [GN-LIB-003aの尾項・正性の移管記録](IMPLEMENTATION-GN-LIB-003a.md)
 
 この計画の完了はGNの一般数学を再利用可能にすることであり、一般FLTやLegendre予想の完了ではない。

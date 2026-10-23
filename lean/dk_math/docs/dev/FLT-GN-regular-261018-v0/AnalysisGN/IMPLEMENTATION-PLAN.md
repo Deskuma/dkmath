@@ -1,9 +1,9 @@
 # 実装計画 — 一般核の所有化とCompletionの教科書
 
 2026-10-23。対象ブランチ：`lib/FLT-GN-Completion-261023-v0`。
-本書は工程ごとの実装契約である。GN-LIB-001・002以外の未着手工程にある新規モジュール名と宣言名は設計名である。
+本書は工程ごとの実装契約である。未着手工程にある新規モジュール名と宣言名は設計名である。
 初回は[棚卸し](THEOREM-INVENTORY.md)と既存宣言の確認を行った。
-GN-LIB-001・002は実装済みであり、[001報告](IMPLEMENTATION-GN-LIB-001.md) と [002報告](IMPLEMENTATION-GN-LIB-002.md) に結果を記録する。
+GN-LIB-001・002・003aは実装済みであり、[001報告](IMPLEMENTATION-GN-LIB-001.md)・[002報告](IMPLEMENTATION-GN-LIB-002.md)・[003a報告](IMPLEMENTATION-GN-LIB-003a.md) に結果を記録する。
 
 ## 1. 所有層と数学の範囲
 
@@ -60,8 +60,8 @@ d>0、gcdの原始性、付値の非零条件を公開型に残す。
 
 三つを別の確定単位に分ける。
 
-1. **BinomTail**：A17の正性と必要な一般尾項の証明閉包。候補所有先は `Lib.Algebra.BinomTail`。
-   元の全修飾名を保持する方式なら旧ファイルは互換importにする。
+1. **BinomTail（003a完了）**：A17の正性を含む5補題を `Lib.Algebra.BinomTail` へ移管済み。
+   元の全修飾名を保持し、旧ファイルは互換importにした。
 2. **平方完成**：A20,A21,A23から、旧`Gnomon`・`Primitive`定義を参照しない式を抽出する。
    例：x²+u(2x+u)=(x+u)²。A23の特例はこの一般式へのwrapperとして残す。
 3. **二項係数付値**：A34と加法版をMathlibのfactorization定理から中立的な`Lib.NumberTheory`へ抽出する。

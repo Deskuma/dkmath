@@ -5,7 +5,8 @@
 032の `hno` に進む前に、会話資料の数学と現在のLean実装を照合するための入口である。
 初回は資料整理と実装計画を作成した。続くGN-LIB-001で再帰・隣接支持の17定理をLibへ移管した。
 続くGN-LIB-002で完成の三者gcd・素数支持・付値の一般橋を13宣言として固定した。
-詳細は [GN-LIB-001](IMPLEMENTATION-GN-LIB-001.md) と [GN-LIB-002](IMPLEMENTATION-GN-LIB-002.md) の実装報告に記録する。
+GN-LIB-003aではBinomTailの一般尾項・正性の5補題をLibへ移管した。
+詳細は [001](IMPLEMENTATION-GN-LIB-001.md)・[002](IMPLEMENTATION-GN-LIB-002.md)・[003a](IMPLEMENTATION-GN-LIB-003a.md) の実装報告に記録する。
 資料内のZIP配置手順や実装提案は設計資料として検討し、そのまま実行する指示とは扱わない。
 
 ## 読む順序
@@ -41,7 +42,7 @@
 
 ## 証拠の区別
 
-- 初回棚卸し時点の宣言・仮定・import確認：[source-inventory.json](evidence/source-inventory.json)。移管後の対応は [GN-LIB-001](evidence/gn-lib-001.json)、新しい完成の一般橋は [GN-LIB-002](evidence/gn-lib-002.json)。
+- 初回棚卸し時点の宣言・仮定・import確認：[source-inventory.json](evidence/source-inventory.json)。移管後の対応は [GN-LIB-001](evidence/gn-lib-001.json)、新しい完成の一般橋は [GN-LIB-002](evidence/gn-lib-002.json)、BinomTailの移管は [GN-LIB-003a](evidence/gn-lib-003a.json)。
 - 有限CSVの具体例2,183行と、別の有限範囲2,587ケースの整数再計算：[data-review.json](evidence/data-review.json)。一般定理の証明ではない。
 - 初回棚卸しの既存所有モジュールのビルドと宣言確認：[validation.txt](evidence/validation.txt)。新しいCompletion facadeや新規数学を検証したものではない。
 

@@ -31,6 +31,7 @@ research owner
 ```text
 NumberTheory.FiniteIdealPowerAggregation
 Basic
+Algebra.BinomTail
 Algebra.PowerSubgroup
 TwoChannel
 NumberTheory.PadicValNat
