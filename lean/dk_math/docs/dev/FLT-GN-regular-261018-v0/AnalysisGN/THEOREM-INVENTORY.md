@@ -48,7 +48,7 @@ Lib配下でもnamespaceが歴史的名称のままの場合がある。namespac
 | A31 | [`legendreConjecture_iff_open_oddGnomon_prime`](../../../../DkMath/NumberTheory/Legendre/GnomonBridge.lean#L89)<br>`DkMath/NumberTheory/Legendre/GnomonBridge.lean`                               | LegendreConjectureとの同値。予想そのものの証明ではない。   | Legendre保持                 |
 | A32 | [`gnomonPascalCell_factorization_carries`](../../../../DkMath/NumberTheory/Legendre/GnomonPascalCell.lean#L71)<br>`DkMath/NumberTheory/Legendre/GnomonPascalCell.lean`                            | p素数とNat.logによる有限上限b。                            | 抽出候補                     |
 | A33 | [`coprime_squarePacketPoints_of_coprime_offset`](../../../../DkMath/NumberTheory/Legendre/PacketCoprimality.lean#L37)<br>`DkMath/NumberTheory/Legendre/PacketCoprimality.lean`                    | Coprime n r、平方殻の対向二点。                            | Bridge保持                   |
-| A34 | [`padicValNat_choose_prime_pow`](../../../../DkMath/NumberTheory/BinomialPrimePower.lean#L210)<br>`DkMath/NumberTheory/BinomialPrimePower.lean`                                                   | p素数、0<k≤p^n。n=0も現行署名に含む。                      | 昇格候補                     |
+| A34 | [`padicValNat_choose_prime_pow`](../../../../DkMath/NumberTheory/BinomialPrimePower.lean#L214)<br>`DkMath/NumberTheory/BinomialPrimePower.lean`                                                   | p素数、0<k≤p^n。n=0も現行署名に含む。                      | 003cのLib一般核へのwrapper                     |
 | A35 | [`unitCoordinate_refine`](../../../../DkMath/NumberTheory/PrimorialUniverse/UnitCoordinateRefinement.lean#L77)<br>`DkMath/NumberTheory/PrimorialUniverse/UnitCoordinateRefinement.lean`           | PositiveUnit、UnitRefinesBy。座標の存在は入力。            | 昇格候補                     |
 | A36 | [`finitePrimeBasis_subset_primeScalesUpTo_product`](../../../../DkMath/NumberTheory/PrimorialUniverse/SquareBodyBridge.lean#L63)<br>`DkMath/NumberTheory/PrimorialUniverse/SquareBodyBridge.lean` | IsFinitePrimeBasis S。有限基底から積アンカーへ。           | Primitive保持                |
 
@@ -127,3 +127,12 @@ A20,A21,A23などから一般可換半環の7定理を抽出し、旧7定理をN
 旧全修飾名は旧所有者に残るため、表のリンクはそのwrapperを指す。
 一般核の対応先は [003b報告](IMPLEMENTATION-GN-LIB-003b.md) と [型の対応表](evidence/gn-lib-003b.json) を参照。
 フルビルド・テストライブラリを省略した対象モジュール単位の検証である。
+
+## 8. GN-LIB-003cの素数冪二項係数付値
+
+A34と加法版、添字付値に基づく整除性、単位添字の全層整除性の4定理を
+`DkMath.Lib.NumberTheory.BinomialPrimePower` に固定した。
+旧 `DkMath.NumberTheory` の4名は同一の公開型で一般核へ転送する。
+`UniformBeamHeight` 等の旧carrierは移していない。
+素数性、非零添字、上界 `k ≤ p^n`、端点、次数0を保持した。
+[003c報告](IMPLEMENTATION-GN-LIB-003c.md) と [新旧対応・型](evidence/gn-lib-003c.json) を参照。

@@ -36,6 +36,7 @@ Algebra.SquareCompletion
 Algebra.PowerSubgroup
 TwoChannel
 NumberTheory.PadicValNat
+NumberTheory.BinomialPrimePower
 NumberTheory.HomogeneousPowerQuotient
 NumberTheory.ClassGroupTorsionBridge
 NumberTheory.TraceOneLatticeLanding
@@ -235,6 +236,14 @@ GTail_split_at
 Reusable natural-number valuation utilities, independent of ABC/FLT/RH owners.
 
 Includes zero criteria, bounds, powers, carrier-shape lemmas, and prime-power divisibility tools.
+
+### `BinomialPrimePower`
+
+Exact coefficient valuations for prime-power Pascal rows, for every prime:
+`v_p(choose (p^n) k) + v_p(k) = n` when `0 < k ≤ p^n`.
+Includes the subtractive formula and two prime-power divisibility consequences.
+The original NumberTheory names remain wrappers; filtered-beam carriers stay
+with that owner. Prime regularity is not an assumption or a conclusion.
 
 ### `PowerFactor`
 

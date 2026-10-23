@@ -1,0 +1,34 @@
+GN-LIB-003c — 2026-10-24
+
+lake build DkMath.Lib.NumberTheory.BinomialPrimePower DkMath.NumberTheory.BinomialPrimePower DkMath.NumberTheory.PascalPrimeDial DkMath.NumberTheory.WeightedBinomial
+Build completed successfully (8931 jobs).
+Warnings/errors in final build log: 0/0
+
+lake env lean /tmp/GNLib003cAudit.lean
+file: GNLib003cAudit
+DkMath.Lib.NumberTheory.padicValNat_choose_prime_pow {p n k : ℕ} (hp : Nat.Prime p) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0) :
+  padicValNat p ((p ^ n).choose k) = n - padicValNat p k
+DkMath.Lib.NumberTheory.padicValNat_choose_prime_pow_add_index {p n k : ℕ} (hp : Nat.Prime p) (hkn : k ≤ p ^ n)
+  (hk0 : k ≠ 0) : padicValNat p ((p ^ n).choose k) + padicValNat p k = n
+DkMath.Lib.NumberTheory.prime_power_pow_dvd_choose_of_padicValNat_index {p n k r : ℕ} (hp : Nat.Prime p)
+  (hkn : k ≤ p ^ n) (hk0 : k ≠ 0) (hr : r + padicValNat p k ≤ n) : p ^ r ∣ (p ^ n).choose k
+DkMath.Lib.NumberTheory.prime_power_dvd_choose_of_not_dvd_index {p n k : ℕ} (hp : Nat.Prime p) (hkn : k ≤ p ^ n)
+  (hk0 : k ≠ 0) (hpk : ¬p ∣ k) : p ^ n ∣ (p ^ n).choose k
+DkMath.NumberTheory.padicValNat_choose_prime_pow {p n k : ℕ} (hp : Nat.Prime p) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0) :
+  padicValNat p ((p ^ n).choose k) = n - padicValNat p k
+DkMath.NumberTheory.padicValNat_choose_prime_pow_add_index {p n k : ℕ} (hp : Nat.Prime p) (hkn : k ≤ p ^ n)
+  (hk0 : k ≠ 0) : padicValNat p ((p ^ n).choose k) + padicValNat p k = n
+DkMath.NumberTheory.prime_power_pow_dvd_choose_of_padicValNat_index {p n k r : ℕ} (hp : Nat.Prime p) (hkn : k ≤ p ^ n)
+  (hk0 : k ≠ 0) (hr : r + padicValNat p k ≤ n) : p ^ r ∣ (p ^ n).choose k
+DkMath.NumberTheory.prime_power_dvd_choose_of_not_dvd_index {p n k : ℕ} (hp : Nat.Prime p) (hkn : k ≤ p ^ n)
+  (hk0 : k ≠ 0) (hpk : ¬p ∣ k) : p ^ n ∣ (p ^ n).choose k
+GN-LIB-003c: 8 declarations checked; standard logical axioms only.
+
+Static checks: four legacy source signatures preserved; 8 definitions/structures unchanged; eight inline examples; forbidden constructs absent in three checked Lean files.
+Original materials verified: 24 SHA256 hashes.
+ABC references in nine descendant modules retain an ABC.PadicValNat import closure; PascalPrimeDial now uses the Lib name.
+Full/root/test builds excluded by user request. No aggregator build claimed.
+File tracker: OK, no mismatches found.
+Markdown: 116 local links checked for target existence and line-anchor bounds.
+Evidence JSON: both files parse successfully.
+Git diff --check: passed.

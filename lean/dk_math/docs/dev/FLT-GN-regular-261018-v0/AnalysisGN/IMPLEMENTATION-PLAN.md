@@ -3,7 +3,7 @@
 2026-10-23。対象ブランチ：`lib/FLT-GN-Completion-261023-v0`。
 本書は工程ごとの実装契約である。未着手工程にある新規モジュール名と宣言名は設計名である。
 初回は[棚卸し](THEOREM-INVENTORY.md)と既存宣言の確認を行った。
-GN-LIB-001・002・003a・003bは実装済みであり、[001報告](IMPLEMENTATION-GN-LIB-001.md)・[002報告](IMPLEMENTATION-GN-LIB-002.md)・[003a報告](IMPLEMENTATION-GN-LIB-003a.md)・[003b報告](IMPLEMENTATION-GN-LIB-003b.md) に結果を記録する。
+GN-LIB-001・002・003a・003b・003cは実装済みであり、[001報告](IMPLEMENTATION-GN-LIB-001.md)・[002報告](IMPLEMENTATION-GN-LIB-002.md)・[003a報告](IMPLEMENTATION-GN-LIB-003a.md)・[003b報告](IMPLEMENTATION-GN-LIB-003b.md)・[003c報告](IMPLEMENTATION-GN-LIB-003c.md) に結果を記録する。
 
 ## 1. 所有層と数学の範囲
 
@@ -64,7 +64,8 @@ d>0、gcdの原始性、付値の非零条件を公開型に残す。
    元の全修飾名を保持し、旧ファイルは互換importにした。
 2. **平方完成（003b完了）**：A20,A21,A23などの一般核7定理を `Lib.Algebra.SquareCompletion` へ固定。
    旧carrierを保持した7定理を一般式へのwrapperにした。有限和の層数はNatのまま保持する。
-3. **二項係数付値**：A34と加法版をMathlibのfactorization定理から中立的な`Lib.NumberTheory`へ抽出する。
+3. **二項係数付値（003c完了）**：A34と加法版、および整除性の2帰結を `Lib.NumberTheory.BinomialPrimePower` へ抽出済み。
+   Mathlibのfactorization定理とLibの付値APIを再利用し、旧4名を同じ型のwrapperとして保持した。
    `ABC.PadicValNat`は既にLibの互換入口なので、一般所有先ではLib名を使う。
    `UniformBeamHeight`などの旧carrier全体の移動を、この数式の昇格へ混ぜない。
 
