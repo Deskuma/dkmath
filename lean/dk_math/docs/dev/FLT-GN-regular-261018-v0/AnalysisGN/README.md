@@ -3,7 +3,8 @@
 2026-10-23。作業ブランチ：`lib/FLT-GN-Completion-261023-v0`。
 
 032の `hno` に進む前に、会話資料の数学と現在のLean実装を照合するための入口である。
-今回は資料整理と実装計画を作成する段階であり、本体Leanの昇格・移動・置換は行っていない。
+初回は資料整理と実装計画を作成した。続くGN-LIB-001で再帰・隣接支持の17定理をLibへ移管した。
+詳細は [GN-LIB-001実装報告](IMPLEMENTATION-GN-LIB-001.md) に記録する。
 資料内のZIP配置手順や実装提案は設計資料として検討し、そのまま実行する指示とは扱わない。
 
 ## 読む順序
@@ -13,7 +14,7 @@
 3. [実装計画・昇格規約](IMPLEMENTATION-PLAN.md)：配置、旧API、`[DkMath.Lib]` マーカー、検証契約。
 4. [ROADMAP](ROADMAP.md)：工程別の依存、完了条件、次に実装する単位。
 
-## 今回の整理で変わった点
+## 初回の整理で変わった点
 
 - 添付監査の36宣言は現行ソースに存在し、うち16宣言は既にLib配下にある。追加調査を含め58宣言・42所有モジュールを棚卸しした。
 - `GapFocusing.Successor/Support` の隣接次数再帰・互いに素性、円分住所、範囲付きLTEは既存である。これらを新規研究結果として重複実装しない。
@@ -39,9 +40,9 @@
 
 ## 証拠の区別
 
-- 現行ソースの宣言・仮定・import確認：[source-inventory.json](evidence/source-inventory.json)。
+- 初回棚卸し時点の宣言・仮定・import確認：[source-inventory.json](evidence/source-inventory.json)。移管後の対応は [GN-LIB-001](evidence/gn-lib-001.json)。
 - 有限CSVの具体例2,183行と、別の有限範囲2,587ケースの整数再計算：[data-review.json](evidence/data-review.json)。一般定理の証明ではない。
-- 既存所有モジュールのビルドと宣言確認の実行結果：[validation.txt](evidence/validation.txt)。新しいCompletion facadeや新規数学を検証したものではない。
+- 初回棚卸しの既存所有モジュールのビルドと宣言確認：[validation.txt](evidence/validation.txt)。新しいCompletion facadeや新規数学を検証したものではない。
 
 ## FLTとの境界
 

@@ -5,7 +5,9 @@
 今回の58宣言は所有モジュールのビルド後に`#check`と`Lean.collectAxioms`で確認し、依存公理は標準の3つ以内だった。
 この検査は既存宣言に対するもの。新しい一般化、ZIP facadeの配置、全面的な依存層監査は別工程である。
 
-全修飾名・ソース宣言・Leanが補った暗黙引数・SHA256は[source-inventory.json](evidence/source-inventory.json)に保存した。
+初回棚卸しの全修飾名・ソース宣言・暗黙引数・SHA256は[source-inventory.json](evidence/source-inventory.json)に保存した。
+B01–B05はGN-LIB-001で移管済みであり、下表は新しい所有先を示す。
+計17宣言の移管対応と型・証明本体の保存は [gn-lib-001.json](evidence/gn-lib-001.json) に記録した。
 Lib配下でもnamespaceが歴史的名称のままの場合がある。namespaceだけで所有層を判定しない。
 
 ## 1. 添付36宣言の現行確認
@@ -53,11 +55,11 @@ Lib配下でもnamespaceが歴史的名称のままの場合がある。namespac
 
 | ID  | 宣言と所有ファイル                                                                                                                                                                            | 必須条件・限界                                 | 配置判断                                       |
 | --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
-| B01 | [`GN_succ_right`](../../../../DkMath/NumberTheory/GapFocusing/Successor.lean#L25)<br>`DkMath/NumberTheory/GapFocusing/Successor.lean`                                                         | CommSemiring、d=0・零座標を含む。              | 中立核のLib抽出候補                            |
-| B02 | [`GN_succ_left`](../../../../DkMath/NumberTheory/GapFocusing/Successor.lean#L31)<br>`DkMath/NumberTheory/GapFocusing/Successor.lean`                                                          | CommSemiring、同じ二つの底の再帰。             | 中立核のLib抽出候補                            |
-| B03 | [`nat_coprime_adjacent_GN`](../../../../DkMath/NumberTheory/GapFocusing/Support.lean#L67)<br>`DkMath/NumberTheory/GapFocusing/Support.lean`                                                   | Nat.Coprime x u、d=0含む。                     | 証明再利用・Lib抽出候補                        |
-| B04 | [`isCoprime_adjacent_GN`](../../../../DkMath/NumberTheory/GapFocusing/Support.lean#L132)<br>`DkMath/NumberTheory/GapFocusing/Support.lean`                                                    | CommRing、IsCoprime x u。                      | CommRing版も再利用                             |
-| B05 | [`nat_exists_prime_dvd_GN_succ_not_dvd_GN`](../../../../DkMath/NumberTheory/GapFocusing/Support.lean#L87)<br>`DkMath/NumberTheory/GapFocusing/Support.lean`                                   | d>0、x,u>0、原始性。直前との非共有のみ。       | 直前の次数との分離に限定                       |
+| B01 | [`GN_succ_right`](../../../../DkMath/Lib/Cosmic/GNSuccessor.lean#L46)<br>`DkMath/Lib/Cosmic/GNSuccessor.lean`                                                         | CommSemiring、d=0・零座標を含む。              | GN-LIB-001でLib所有化済み・旧名互換 |
+| B02 | [`GN_succ_left`](../../../../DkMath/Lib/Cosmic/GNSuccessor.lean#L60)<br>`DkMath/Lib/Cosmic/GNSuccessor.lean`                                                          | CommSemiring、同じ二つの底の再帰。             | GN-LIB-001でLib所有化済み・旧名互換 |
+| B03 | [`nat_coprime_adjacent_GN`](../../../../DkMath/Lib/Cosmic/GNSupport.lean#L122)<br>`DkMath/Lib/Cosmic/GNSupport.lean`                                                   | Nat.Coprime x u、d=0含む。                     | GN-LIB-001でLib所有化済み・旧名互換 |
+| B04 | [`isCoprime_adjacent_GN`](../../../../DkMath/Lib/Cosmic/GNSupport.lean#L235)<br>`DkMath/Lib/Cosmic/GNSupport.lean`                                                    | CommRing、IsCoprime x u。                      | GN-LIB-001でLib所有化済み・旧名互換 |
+| B05 | [`nat_exists_prime_dvd_GN_succ_not_dvd_GN`](../../../../DkMath/Lib/Cosmic/GNSupport.lean#L158)<br>`DkMath/Lib/Cosmic/GNSupport.lean`                                   | d>0、x,u>0、原始性。直前との非共有のみ。       | GN-LIB-001でLib所有化済み・旧名互換 |
 | B06 | [`kernelPolynomial_eq_prod_cyclotomic`](../../../../DkMath/NumberTheory/GapFocusing/Degree.lean#L53)<br>`DkMath/NumberTheory/GapFocusing/Degree.lean`                                         | d>0、ℤ[X]、非自明な約数の層。                  | 一般核抽出候補・整数評価と区別                 |
 | B07 | [`kernelPolynomial_irreducible_iff_prime`](../../../../DkMath/NumberTheory/GapFocusing/Degree.lean#L149)<br>`DkMath/NumberTheory/GapFocusing/Degree.lean`                                     | d≥2、ℤ[X]。整数評価の素数性とは別。            | 同じnamespaceを保持して抽出候補                |
 | B08 | [`isRoot_cyclotomic_iff_prime_pow_mul_orderOf`](../../../../DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean#L27)<br>`DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean`           | 整域、CharP R q、q素数、n>0。                  | 中立核抽出候補                                 |

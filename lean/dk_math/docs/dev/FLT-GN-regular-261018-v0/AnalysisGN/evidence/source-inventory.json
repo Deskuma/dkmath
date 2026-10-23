@@ -1,6 +1,6 @@
 {
   "branch": "lib/FLT-GN-Completion-261023-v0",
-  "scope": "planning and read-only verification; no production Lean promotion performed",
+  "scope": "GN-PLAN-000 pre-migration snapshot; existing declaration verification at planning time; current ownership changes are recorded in gn-lib-001.json",
   "attached_entries": 36,
   "additional_entries": 22,
   "source_file_count": 42,
@@ -1063,5 +1063,8 @@
     ],
     "scope": "existing declaration closure only; not full import-graph audit, not new theorem implementation, not a Completion-facade build"
   },
-  "source_header_note": "statement is a source declaration header; implicit section variables are shown in elaborated_check"
+  "source_header_note": "statement is a source declaration header; implicit section variables are shown in elaborated_check",
+  "followup_audits": [
+    "gn-lib-001.json"
+  ]
 }

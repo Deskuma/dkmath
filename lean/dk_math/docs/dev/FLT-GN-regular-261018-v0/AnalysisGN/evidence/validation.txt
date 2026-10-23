@@ -1,4 +1,5 @@
 AnalysisGN planning verification — 2026-10-23
+GN-PLAN-000 pre-migration snapshot. GN-LIB-001 follow-up: validation-gn-lib-001.txt.
 
 Branch: lib/FLT-GN-Completion-261023-v0
 Base HEAD: df357a0b8319e314178991f5e895b1f7312c5e4a

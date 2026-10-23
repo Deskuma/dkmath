@@ -1,8 +1,9 @@
 # 実装計画 — 一般核の所有化とCompletionの教科書
 
 2026-10-23。対象ブランチ：`lib/FLT-GN-Completion-261023-v0`。
-本書は次工程の契約案である。以下の新規モジュール名と宣言名は設計名であり、実装済み宣言ではない。
-今回行ったのは[棚卸し](THEOREM-INVENTORY.md)と既存宣言の確認までである。
+本書は工程ごとの実装契約である。GN-LIB-001以外の未着手工程にある新規モジュール名と宣言名は設計名である。
+初回は[棚卸し](THEOREM-INVENTORY.md)と既存宣言の確認を行った。
+GN-LIB-001はその後実装済みであり、[実装報告](IMPLEMENTATION-GN-LIB-001.md) に結果を記録する。
 
 ## 1. 所有層と数学の範囲
 
@@ -22,7 +23,8 @@
 ### GN-LIB-001：既存の再帰と隣接素数支持をLib所有にする
 
 対象：棚卸しB01–B05、`GapFocusing.Successor` と `Support` の必要な証明閉包。
-配置候補：`DkMath/Lib/Cosmic/GNSuccessor.lean`、`GNSupport.lean`。
+配置済み：`DkMath/Lib/Cosmic/GNSuccessor.lean`、`GNSupport.lean`。
+以下はこの移管で維持した契約である。
 
 - 再帰の二表示、Natの隣接coprime、CommRingのIsCoprime版を元の仮定で移す。
 - 次の次数の素因数が直前にないというB05の意味を保持する。全過去次数に対する原始素数存在へ強めない。
