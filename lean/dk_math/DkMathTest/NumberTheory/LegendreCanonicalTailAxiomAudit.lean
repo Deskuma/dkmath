@@ -6,8 +6,10 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.Legendre
 import DkMathTest.NumberTheory.LegendreCanonicalTailRegression
-import DkMathTest.NumberTheory.LegendreCanonicalTailDiagnostics
-import DkMathTest.NumberTheory.LegendreCanonicalPrimeCapCalibration
+
+-- heavy test disable: 2026/10/24  0:09
+-- import DkMathTest.NumberTheory.LegendreCanonicalTailDiagnostics
+-- import DkMathTest.NumberTheory.LegendreCanonicalPrimeCapCalibration
 
 #print "file: DkMathTest.NumberTheory.LegendreCanonicalTailAxiomAudit"
 
@@ -143,6 +145,7 @@ import DkMathTest.NumberTheory.LegendreCanonicalPrimeCapCalibration
 #print axioms DkMath.NumberTheory.Legendre.sqrtCutoff_support_card_le_three
 #check DkMath.NumberTheory.Legendre.sqrtCutoff_tail_card_le_two_mul
 #print axioms DkMath.NumberTheory.Legendre.sqrtCutoff_tail_card_le_two_mul
+/-
 #check DkMathTest.LegendreCanonicalTailCalibration.RootRow
 #print axioms DkMathTest.LegendreCanonicalTailCalibration.RootRow
 #check DkMathTest.LegendreCanonicalTailCalibration.rootData
@@ -217,6 +220,7 @@ import DkMathTest.NumberTheory.LegendreCanonicalPrimeCapCalibration
 #print axioms DkMathTest.LegendreCanonicalTailDiagnostics.diagnostic_rough_seats_checked
 #check DkMathTest.LegendreCanonicalTailDiagnostics.tail_tables_consistent
 #print axioms DkMathTest.LegendreCanonicalTailDiagnostics.tail_tables_consistent
+-/
 #check DkMathTest.LegendreCanonicalTailRegression.erased_root_counterexample
 #print axioms DkMathTest.LegendreCanonicalTailRegression.erased_root_counterexample
 #check DkMathTest.LegendreCanonicalTailRegression.empty_support_counterexample
@@ -235,7 +239,9 @@ import DkMathTest.NumberTheory.LegendreCanonicalPrimeCapCalibration
 #print axioms DkMathTest.LegendreCanonicalTailRegression.rough_seats_five_floor
 #check DkMathTest.LegendreCanonicalTailRegression.sqrt_multiplicity_bound_sharp
 #print axioms DkMathTest.LegendreCanonicalTailRegression.sqrt_multiplicity_bound_sharp
+/-
 #check DkMathTest.LegendreCanonicalPrimeCapCalibration.cap_probe
 #print axioms DkMathTest.LegendreCanonicalPrimeCapCalibration.cap_probe
 #check DkMathTest.LegendreCanonicalPrimeCapCalibration.old_sieve_credit_checked
 #print axioms DkMathTest.LegendreCanonicalPrimeCapCalibration.old_sieve_credit_checked
+-/

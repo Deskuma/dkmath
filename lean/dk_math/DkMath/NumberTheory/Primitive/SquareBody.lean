@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.Lib.Algebra.SquareCompletion
 import Mathlib.Data.Nat.Prime.Basic
 import DkMath.CosmicFormula.CosmicFormulaBinom
 import DkMath.NumberTheory.Primitive.FinitePrimeWorld
@@ -18,9 +19,9 @@ route.  It does not define a Legendre provider: it only says that a point
 before the next square is prime when all prime directions up to the anchor
 are absent.
 
-The identity at the algebraic source layer is reused through
-`CosmicFormulaBinom.cosmic_id_csr'`.  The order and primality arguments begin
-only in the natural-number theorems below.
+The square endpoint identity is specialized from
+`DkMath.Lib.Algebra.square_body_add_one`; the legacy BodyN bridge remains here.
+The order and primality arguments begin only in the natural-number theorems below.
 -/
 
 namespace DkMath.NumberTheory.Primitive
@@ -38,11 +39,16 @@ theorem unitSquare_body_eq (P : ℕ) :
   norm_num [Finset.sum_range_succ, squareBody]
   ring
 
-/-- The square Body ends immediately before the next consecutive square. -/
+/--
+The square Body ends immediately before the next consecutive square.
+
+[DkMath.Lib] 昇格済み: `DkMath.Lib.Algebra.square_body_add_one`。
+この旧APIは従来のNat carrier・全修飾名・型を保持し、Libの一般半環の式を特殊化する。
+新しい一般consumerは `DkMath.Lib.Algebra.SquareCompletion` を直接importできる。
+-/
 theorem squareBody_add_one_eq (P : ℕ) :
     squareBody P + 1 = (P + 1) ^ 2 := by
-  simp [squareBody]
-  ring
+  simpa only [squareBody] using DkMath.Lib.Algebra.square_body_add_one P
 
 /-- The natural square Body is monotone in its anchor. -/
 theorem squareBody_mono {q P : ℕ} (h : q ≤ P) :

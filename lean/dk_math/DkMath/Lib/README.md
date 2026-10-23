@@ -32,6 +32,7 @@ research owner
 NumberTheory.FiniteIdealPowerAggregation
 Basic
 Algebra.BinomTail
+Algebra.SquareCompletion
 Algebra.PowerSubgroup
 TwoChannel
 NumberTheory.PadicValNat

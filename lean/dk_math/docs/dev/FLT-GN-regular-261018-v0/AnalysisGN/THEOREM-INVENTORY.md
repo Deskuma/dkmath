@@ -34,10 +34,10 @@ Lib配下でもnamespaceが歴史的名称のままの場合がある。namespac
 | A17 | [`add_pow_gt_sum_pows_nat_of_two_le`](../../../../DkMath/Lib/Algebra/BinomTail.lean#L227)<br>`DkMath/Lib/Algebra/BinomTail.lean`                                                                          | Nat、2≤n、a,b>0。                                          | GN-LIB-003aでLib所有化済み・旧名互換 |
 | A18 | [`add_pow_gap_factor`](../../../../DkMath/CosmicFormula/CosmicFormulaBinom.lean#L383)<br>`DkMath/CosmicFormula/CosmicFormulaBinom.lean`                                                           | CommSemiring。A01のlegacy語彙への転送。                    | 薄いadapter                  |
 | A19 | [`body_not_perfect_pow_of_squarefree_GN`](../../../../DkMath/CosmicFormula/CosmicFormulaBinom.lean#L497)<br>`DkMath/CosmicFormula/CosmicFormulaBinom.lean`                                        | 1<d、1<GN、Coprime x GN、Squarefree GN。                   | 昇格候補                     |
-| A20 | [`square_add_squareGnomonBand`](../../../../DkMath/Gnomon/Algebra.lean#L102)<br>`DkMath/Gnomon/Algebra.lean`                                                                                      | Nat、平方帯の定義を保持。                                  | 昇格候補                     |
-| A21 | [`squareGnomonBand_eq_sum_shifted_oddGnomon`](../../../../DkMath/Gnomon/Algebra.lean#L125)<br>`DkMath/Gnomon/Algebra.lean`                                                                        | Nat、平方帯の有限和分割。                                  | 昇格候補                     |
+| A20 | [`square_add_squareGnomonBand`](../../../../DkMath/Gnomon/Algebra.lean#L114)<br>`DkMath/Gnomon/Algebra.lean`                                                                                      | Nat、平方帯の定義を保持。                                  | 003bのLib一般核へのNat wrapper |
+| A21 | [`squareGnomonBand_eq_sum_shifted_oddGnomon`](../../../../DkMath/Gnomon/Algebra.lean#L145)<br>`DkMath/Gnomon/Algebra.lean`                                                                        | Nat、平方帯の有限和分割。                                  | 003bのLib一般核へのNat wrapper |
 | A22 | [`squareGnomonBand_eq_mul_GTail_two_one`](../../../../DkMath/Gnomon/CosmicBridge.lean#L43)<br>`DkMath/Gnomon/CosmicBridge.lean`                                                                   | Nat、平方帯とGTailのbridge。                               | Bridge保持                   |
-| A23 | [`squareBody_add_one_eq`](../../../../DkMath/NumberTheory/Primitive/SquareBody.lean#L42)<br>`DkMath/NumberTheory/Primitive/SquareBody.lean`                                                       | Nat、P=0含む。squareBodyは上位定義。                       | 昇格候補                     |
+| A23 | [`squareBody_add_one_eq`](../../../../DkMath/NumberTheory/Primitive/SquareBody.lean#L49)<br>`DkMath/NumberTheory/Primitive/SquareBody.lean`                                                       | Nat、P=0含む。squareBodyは上位定義。                       | 003bのLib一般核へのNat wrapper |
 | A24 | [`prime_of_supportDisjointFrom_primeScalesUpTo_le_squareBody`](../../../../DkMath/NumberTheory/Primitive/SquareBody.lean#L98)<br>`DkMath/NumberTheory/Primitive/SquareBody.lean`                  | 1<m≤squareBody P、全旧素数支持との非交差。候補の存在は別。 | Primitive保持                |
 | A25 | [`squarePrimeExpansion_eq_primeScalesUpTo_squareBody`](../../../../DkMath/NumberTheory/Primitive/SquarePrimeExpansion.lean#L86)<br>`DkMath/NumberTheory/Primitive/SquarePrimeExpansion.lean`      | 有限prime worldの定義を持つ等式。                          | Primitive保持                |
 | A26 | [`squareBody_thirty_add_one_eq_thirtyOne_sq`](../../../../DkMath/NumberTheory/PrimorialUniverse/ThirtySquareWorld.lean#L67)<br>`DkMath/NumberTheory/PrimorialUniverse/ThirtySquareWorld.lean`     | P=30の数値特例。                                           | 特例保持                     |
@@ -120,3 +120,10 @@ A17の依存先を含む既存5補題を `Lib.Algebra.BinomTail` へ移管した
 A17の表は新所有者へ更新し、初回JSONは移管前snapshotとして保持する。
 全修飾名・型・証明は変えていない。[実装報告](IMPLEMENTATION-GN-LIB-003a.md) と
 [移管対応・型・ハッシュ](evidence/gn-lib-003a.json) を参照。
+
+## 7. GN-LIB-003bの平方完成・有限帯
+
+A20,A21,A23などから一般可換半環の7定理を抽出し、旧7定理をNat carrierのwrapperにした。
+旧全修飾名は旧所有者に残るため、表のリンクはそのwrapperを指す。
+一般核の対応先は [003b報告](IMPLEMENTATION-GN-LIB-003b.md) と [型の対応表](evidence/gn-lib-003b.json) を参照。
+フルビルド・テストライブラリを省略した対象モジュール単位の検証である。

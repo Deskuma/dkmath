@@ -1,0 +1,200 @@
+{
+  "checkpoint": "GN-LIB-003b",
+  "base_head": "4d74d7d2de03889ab5f3dc619dd552e98882bee7",
+  "scope": "general square completion and finite bands; legacy carriers preserved",
+  "legacy_adapters": [
+    {
+      "name": "DkMath.Gnomon.square_add_oddGnomon",
+      "path": "DkMath/Gnomon/Algebra.lean",
+      "lib_target": "DkMath.Lib.Algebra.square_add_unit_layer",
+      "statement": "theorem square_add_oddGnomon (x : ℕ) :\n    x ^ 2 + oddGnomon x = (x + 1) ^ 2",
+      "old_statement_and_proof_sha256": "2cd93026151b83af3aca097a4d2810ff89393c5edb1d6d87f8573db9cff6b143",
+      "signature_preserved": true,
+      "line": 105,
+      "new_statement_and_proof_sha256": "034339c43af6c484284419a21a370ea995e3c41d4720fb95f084ab8b7df368e0",
+      "source_sha256": "a1d80323d08e7f42d1491c542a09ff4bd8dbae84fb5c1089ac49ce95def8de88",
+      "elaborated_check": "DkMath.Gnomon.square_add_oddGnomon (x : ℕ) : x ^ 2 + DkMath.Gnomon.oddGnomon x = (x + 1) ^ 2"
+    },
+    {
+      "name": "DkMath.Gnomon.square_add_squareGnomonBand",
+      "path": "DkMath/Gnomon/Algebra.lean",
+      "lib_target": "DkMath.Lib.Algebra.square_add_band",
+      "statement": "theorem square_add_squareGnomonBand (x u : ℕ) :\n    x ^ 2 + squareGnomonBand x u = (x + u) ^ 2",
+      "old_statement_and_proof_sha256": "642bdb32640b4e8ad95be11a078e0e9bc867047596a95b28b92b379eac701b20",
+      "signature_preserved": true,
+      "line": 114,
+      "new_statement_and_proof_sha256": "664f4d69ed5520ba89258ccaf1991f48a3572b7a513c46e5e7c9d6c131639019",
+      "source_sha256": "a1d80323d08e7f42d1491c542a09ff4bd8dbae84fb5c1089ac49ce95def8de88",
+      "elaborated_check": "DkMath.Gnomon.square_add_squareGnomonBand (x u : ℕ) : x ^ 2 + DkMath.Gnomon.squareGnomonBand x u = (x + u) ^ 2"
+    },
+    {
+      "name": "DkMath.Gnomon.squareGnomonBand_add",
+      "path": "DkMath/Gnomon/Algebra.lean",
+      "lib_target": "DkMath.Lib.Algebra.band_add_thickness",
+      "statement": "theorem squareGnomonBand_add (x u v : ℕ) :\n    squareGnomonBand x (u + v) =\n      squareGnomonBand x u + squareGnomonBand (x + u) v",
+      "old_statement_and_proof_sha256": "610101b47a7783cd58c29773efd573d21eac0f995600b9bd7079a812bec3a1ab",
+      "signature_preserved": true,
+      "line": 135,
+      "new_statement_and_proof_sha256": "cff4c8c3a893c7cfc4953e58cd7a013db89afd140ff1698c48da5760452b7ebe",
+      "source_sha256": "a1d80323d08e7f42d1491c542a09ff4bd8dbae84fb5c1089ac49ce95def8de88",
+      "elaborated_check": "DkMath.Gnomon.squareGnomonBand_add (x u v : ℕ) :\n  DkMath.Gnomon.squareGnomonBand x (u + v) =\n    DkMath.Gnomon.squareGnomonBand x u + DkMath.Gnomon.squareGnomonBand (x + u) v"
+    },
+    {
+      "name": "DkMath.Gnomon.squareGnomonBand_eq_sum_shifted_oddGnomon",
+      "path": "DkMath/Gnomon/Algebra.lean",
+      "lib_target": "DkMath.Lib.Algebra.band_eq_sum_unit_layers",
+      "statement": "theorem squareGnomonBand_eq_sum_shifted_oddGnomon\n    (x u : ℕ) :\n    squareGnomonBand x u =\n      (Finset.range u).sum (fun i => oddGnomon (x + i))",
+      "old_statement_and_proof_sha256": "e34adce19c70304f01b023b16a757745d8ad04c02950bda0f4ce9514fcb07be5",
+      "signature_preserved": true,
+      "line": 145,
+      "new_statement_and_proof_sha256": "c0b00ff11f043b9f56e273295aaf70fddec392829cdf27825916e8d3fb055435",
+      "source_sha256": "a1d80323d08e7f42d1491c542a09ff4bd8dbae84fb5c1089ac49ce95def8de88",
+      "elaborated_check": "DkMath.Gnomon.squareGnomonBand_eq_sum_shifted_oddGnomon (x u : ℕ) :\n  DkMath.Gnomon.squareGnomonBand x u = ∑ i ∈ Finset.range u, DkMath.Gnomon.oddGnomon (x + i)"
+    },
+    {
+      "name": "DkMath.Gnomon.sum_oddGnomon_eq_square",
+      "path": "DkMath/Gnomon/Algebra.lean",
+      "lib_target": "DkMath.Lib.Algebra.sum_unit_layers_eq_square",
+      "statement": "theorem sum_oddGnomon_eq_square (n : ℕ) :\n    (Finset.range n).sum oddGnomon = n ^ 2",
+      "old_statement_and_proof_sha256": "007481f18570f5307587e491a0624e2f6cbd43fcfa584964354464fa6e119fab",
+      "signature_preserved": true,
+      "line": 157,
+      "new_statement_and_proof_sha256": "dbc728002b2eadf641575fc4cf954ef97a8889f0e9d8ef56319a299ce7a6d188",
+      "source_sha256": "a1d80323d08e7f42d1491c542a09ff4bd8dbae84fb5c1089ac49ce95def8de88",
+      "elaborated_check": "DkMath.Gnomon.sum_oddGnomon_eq_square (n : ℕ) : (Finset.range n).sum DkMath.Gnomon.oddGnomon = n ^ 2"
+    },
+    {
+      "name": "DkMath.Gnomon.sum_odd_eq_square",
+      "path": "DkMath/Gnomon/Algebra.lean",
+      "lib_target": "DkMath.Lib.Algebra.sum_unit_layers_eq_square",
+      "statement": "theorem sum_odd_eq_square (n : ℕ) :\n    (Finset.range n).sum (fun i => 2 * i + 1) = n ^ 2",
+      "old_statement_and_proof_sha256": "94f1f7b0f981cb2f5313400e7f71431488e55c086ce469d7bcf5e35af16a0418",
+      "signature_preserved": true,
+      "line": 168,
+      "new_statement_and_proof_sha256": "858e7677119f0ef00a9228be4daeeb13cc8e7a4e5ff1ddeb532a13871cd1802c",
+      "source_sha256": "a1d80323d08e7f42d1491c542a09ff4bd8dbae84fb5c1089ac49ce95def8de88",
+      "elaborated_check": "DkMath.Gnomon.sum_odd_eq_square (n : ℕ) : ∑ i ∈ Finset.range n, (2 * i + 1) = n ^ 2"
+    },
+    {
+      "name": "DkMath.NumberTheory.Primitive.squareBody_add_one_eq",
+      "path": "DkMath/NumberTheory/Primitive/SquareBody.lean",
+      "lib_target": "DkMath.Lib.Algebra.square_body_add_one",
+      "statement": "theorem squareBody_add_one_eq (P : ℕ) :\n    squareBody P + 1 = (P + 1) ^ 2",
+      "old_statement_and_proof_sha256": "df8bb521a8607d3948967192ca170461425f7d9da6e41f4f67077a8f87ccad05",
+      "signature_preserved": true,
+      "line": 49,
+      "new_statement_and_proof_sha256": "1a34b87959760bcec680d79d1c7ca34a1ed39293c3dea499c751147bb17ab418",
+      "source_sha256": "6bb5a1d699aa177260b0bbd95d469bb7a93245ea22fab95178197af883b928e6",
+      "elaborated_check": "DkMath.NumberTheory.Primitive.squareBody_add_one_eq (P : ℕ) :\n  DkMath.NumberTheory.Primitive.squareBody P + 1 = (P + 1) ^ 2"
+    }
+  ],
+  "validation_scope": "affected production modules only; no full build and no DkMathTest/lake test build, per user instruction",
+  "new_declarations": [
+    {
+      "name": "DkMath.Lib.Algebra.square_add_band",
+      "path": "DkMath/Lib/Algebra/SquareCompletion.lean",
+      "line": 38,
+      "statement": "theorem square_add_band {R : Type*} [CommSemiring R] (x u : R) :\n    x ^ 2 + u * (2 * x + u) = (x + u) ^ 2",
+      "statement_and_proof_sha256": "b6d887511f0159439c2b7edc0df216c3744e3da126c360f4b562740ee710428e",
+      "elaborated_check": "DkMath.Lib.Algebra.square_add_band.{u_1} {R : Type u_1} [CommSemiring R] (x u : R) :\n  x ^ 2 + u * (2 * x + u) = (x + u) ^ 2"
+    },
+    {
+      "name": "DkMath.Lib.Algebra.square_add_unit_layer",
+      "path": "DkMath/Lib/Algebra/SquareCompletion.lean",
+      "line": 47,
+      "statement": "theorem square_add_unit_layer {R : Type*} [CommSemiring R] (x : R) :\n    x ^ 2 + (2 * x + 1) = (x + 1) ^ 2",
+      "statement_and_proof_sha256": "ba3a251fe7b85d22d84ce0a448de89292005fb6e4daf141de3c38c78096f4600",
+      "elaborated_check": "DkMath.Lib.Algebra.square_add_unit_layer.{u_1} {R : Type u_1} [CommSemiring R] (x : R) :\n  x ^ 2 + (2 * x + 1) = (x + 1) ^ 2"
+    },
+    {
+      "name": "DkMath.Lib.Algebra.band_add_thickness",
+      "path": "DkMath/Lib/Algebra/SquareCompletion.lean",
+      "line": 55,
+      "statement": "theorem band_add_thickness {R : Type*} [CommSemiring R] (x u v : R) :\n    (u + v) * (2 * x + (u + v)) =\n      u * (2 * x + u) + v * (2 * (x + u) + v)",
+      "statement_and_proof_sha256": "981c8e569913d2cb18f68696ba74038964ff6bee21c0db8954b81b199b72ba95",
+      "elaborated_check": "DkMath.Lib.Algebra.band_add_thickness.{u_1} {R : Type u_1} [CommSemiring R] (x u v : R) :\n  (u + v) * (2 * x + (u + v)) = u * (2 * x + u) + v * (2 * (x + u) + v)"
+    },
+    {
+      "name": "DkMath.Lib.Algebra.band_eq_sum_unit_layers",
+      "path": "DkMath/Lib/Algebra/SquareCompletion.lean",
+      "line": 65,
+      "statement": "theorem band_eq_sum_unit_layers {R : Type*} [CommSemiring R] (x : R) (n : ℕ) :\n    (n : R) * (2 * x + (n : R)) =\n      ∑ i ∈ Finset.range n, (2 * (x + (i : R)) + 1)",
+      "statement_and_proof_sha256": "58cdb6eb43cea03f7bcc5f99e850b03239006fc9b47961f24706debb21a9074f",
+      "elaborated_check": "DkMath.Lib.Algebra.band_eq_sum_unit_layers.{u_1} {R : Type u_1} [CommSemiring R] (x : R) (n : ℕ) :\n  ↑n * (2 * x + ↑n) = ∑ i ∈ Finset.range n, (2 * (x + ↑i) + 1)"
+    },
+    {
+      "name": "DkMath.Lib.Algebra.square_add_sum_unit_layers",
+      "path": "DkMath/Lib/Algebra/SquareCompletion.lean",
+      "line": 78,
+      "statement": "theorem square_add_sum_unit_layers {R : Type*} [CommSemiring R] (x : R) (n : ℕ) :\n    x ^ 2 + (∑ i ∈ Finset.range n, (2 * (x + (i : R)) + 1)) =\n      (x + (n : R)) ^ 2",
+      "statement_and_proof_sha256": "e6d5121415c35b50243867dfe45367c35222b8f6cdd2bf5a985ec1c886cf32b1",
+      "elaborated_check": "DkMath.Lib.Algebra.square_add_sum_unit_layers.{u_1} {R : Type u_1} [CommSemiring R] (x : R) (n : ℕ) :\n  x ^ 2 + ∑ i ∈ Finset.range n, (2 * (x + ↑i) + 1) = (x + ↑n) ^ 2"
+    },
+    {
+      "name": "DkMath.Lib.Algebra.sum_unit_layers_eq_square",
+      "path": "DkMath/Lib/Algebra/SquareCompletion.lean",
+      "line": 88,
+      "statement": "theorem sum_unit_layers_eq_square {R : Type*} [CommSemiring R] (n : ℕ) :\n    (∑ i ∈ Finset.range n, (2 * (i : R) + 1)) = (n : R) ^ 2",
+      "statement_and_proof_sha256": "94bf5561b90ceddb123aad90387508aee343ed1b1bfbad79a2515a5497fc83d0",
+      "elaborated_check": "DkMath.Lib.Algebra.sum_unit_layers_eq_square.{u_1} {R : Type u_1} [CommSemiring R] (n : ℕ) :\n  ∑ i ∈ Finset.range n, (2 * ↑i + 1) = ↑n ^ 2"
+    },
+    {
+      "name": "DkMath.Lib.Algebra.square_body_add_one",
+      "path": "DkMath/Lib/Algebra/SquareCompletion.lean",
+      "line": 97,
+      "statement": "theorem square_body_add_one {R : Type*} [CommSemiring R] (x : R) :\n    (x ^ 2 + 2 * x) + 1 = (x + 1) ^ 2",
+      "statement_and_proof_sha256": "8683b939fe894ad2bb073054d2d4310cc4b0b7304d3f729a7a7a2b975f89d72b",
+      "elaborated_check": "DkMath.Lib.Algebra.square_body_add_one.{u_1} {R : Type u_1} [CommSemiring R] (x : R) : x ^ 2 + 2 * x + 1 = (x + 1) ^ 2"
+    }
+  ],
+  "owner_imports": [
+    "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+    "Mathlib.Algebra.Ring.Basic",
+    "Mathlib.Tactic.Ring"
+  ],
+  "neutral_to_application_edges": 0,
+  "neutral_import_cycles": 0,
+  "owner_source_sha256": "4c749628b6985781daa7cb0de0fd1c4e2f89fc1542d5a2f15b656057cdcac24a",
+  "textbook_examples": 8,
+  "status": "COMPLETE under user-requested affected-production-module validation scope",
+  "preserved_carrier_definition_sha256": {
+    "oddGnomon": "34b4aa660018ddc45a0c2260cdd04e6d5d624836e414d157563ffd9bede79aab",
+    "squareGnomonBand": "35f08c2c5d3a9dfabd5cf2dbb9e1209cb69a51bc662e68a9e970393fc0b34e7d",
+    "petalMul": "0f564038c430538e9e8276fee6aae66a1eef3daa023901324bde2d12382d1ad4",
+    "squareBody": "7283508ca94017a731e188123f67b60994b63fca5737176b62eb984425b8e866"
+  },
+  "primitive_order_and_prime_theorem_suffix_unchanged": true,
+  "cosmic_bridge_source_unchanged": true,
+  "validation": {
+    "modules": {
+      "command": "lake build DkMath.Lib.Algebra.SquareCompletion DkMath.Gnomon.Algebra DkMath.Gnomon.CosmicBridge DkMath.NumberTheory.Primitive.SquareBody",
+      "exit_code": 0,
+      "jobs": 3115,
+      "warnings": 0
+    },
+    "metadata_audit": {
+      "command": "lake env lean /tmp/GNLib003bAudit.lean",
+      "exit_code": 0,
+      "public_types": 14,
+      "axiom_checks": 14,
+      "allowed_axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    "tracker": {
+      "command": "python3 check_tracker_mismatch.py /tmp/gn-lib-003b-modules.log",
+      "exit_code": 0,
+      "result": "no mismatches"
+    },
+    "source_checks": {
+      "legacy_signatures": "7 of 7 unchanged",
+      "carrier_definitions": "4 of 4 unchanged",
+      "module_markers": "4 of 4 match paths",
+      "original_material_sha256": "24 of 24 preserved",
+      "forbidden_construct_scan": "PASS"
+    },
+    "integration_scope": "Lib import registered statically; full build belongs to user; no DkMathTest/lake test build or test source changes"
+  }
+}

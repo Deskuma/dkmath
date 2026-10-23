@@ -6,7 +6,8 @@
 初回は資料整理と実装計画を作成した。続くGN-LIB-001で再帰・隣接支持の17定理をLibへ移管した。
 続くGN-LIB-002で完成の三者gcd・素数支持・付値の一般橋を13宣言として固定した。
 GN-LIB-003aではBinomTailの一般尾項・正性の5補題をLibへ移管した。
-詳細は [001](IMPLEMENTATION-GN-LIB-001.md)・[002](IMPLEMENTATION-GN-LIB-002.md)・[003a](IMPLEMENTATION-GN-LIB-003a.md) の実装報告に記録する。
+GN-LIB-003bでは平方完成・有限帯の一般核7定理と、旧carrierの7wrapperを固定した。
+詳細は [001](IMPLEMENTATION-GN-LIB-001.md)・[002](IMPLEMENTATION-GN-LIB-002.md)・[003a](IMPLEMENTATION-GN-LIB-003a.md)・[003b](IMPLEMENTATION-GN-LIB-003b.md) の実装報告に記録する。
 資料内のZIP配置手順や実装提案は設計資料として検討し、そのまま実行する指示とは扱わない。
 
 ## 読む順序
@@ -45,6 +46,12 @@ GN-LIB-003aではBinomTailの一般尾項・正性の5補題をLibへ移管し�
 - 初回棚卸し時点の宣言・仮定・import確認：[source-inventory.json](evidence/source-inventory.json)。移管後の対応は [GN-LIB-001](evidence/gn-lib-001.json)、新しい完成の一般橋は [GN-LIB-002](evidence/gn-lib-002.json)、BinomTailの移管は [GN-LIB-003a](evidence/gn-lib-003a.json)。
 - 有限CSVの具体例2,183行と、別の有限範囲2,587ケースの整数再計算：[data-review.json](evidence/data-review.json)。一般定理の証明ではない。
 - 初回棚卸しの既存所有モジュールのビルドと宣言確認：[validation.txt](evidence/validation.txt)。新しいCompletion facadeや新規数学を検証したものではない。
+
+## 検証分担の更新
+
+003b以降はユーザー指定により、本体の対象モジュールだけを当方でビルドする。
+フルビルドはユーザーが担当し、`DkMathTest`・`lake test` 側のビルドは省略する。
+各報告書に対象範囲を明記する。
 
 ## FLTとの境界
 

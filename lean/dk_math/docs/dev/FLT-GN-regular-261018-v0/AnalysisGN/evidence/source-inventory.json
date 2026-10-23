@@ -1067,6 +1067,7 @@
   "followup_audits": [
     "gn-lib-001.json",
     "gn-lib-002.json",
-    "gn-lib-003a.json"
+    "gn-lib-003a.json",
+    "gn-lib-003b.json"
   ]
 }
