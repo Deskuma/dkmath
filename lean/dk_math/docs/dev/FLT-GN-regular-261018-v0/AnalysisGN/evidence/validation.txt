@@ -1,0 +1,98 @@
+AnalysisGN planning verification — 2026-10-23
+
+Branch: lib/FLT-GN-Completion-261023-v0
+Base HEAD: df357a0b8319e314178991f5e895b1f7312c5e4a
+Lake cwd: lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+1. Existing owner modules
+   Command: lake build <the 42 distinct owner modules below>
+   Exit: 0
+   Result: Build completed successfully (9029 jobs).
+   Scope: existing owners and their build dependencies; no new Completion facade.
+
+   DkMath.Algebra.BinomTail
+   DkMath.CosmicFormula.CosmicFormulaBinom
+   DkMath.Gnomon.Algebra
+   DkMath.Gnomon.CosmicBridge
+   DkMath.Lib.Cosmic.CoreNested
+   DkMath.Lib.Cosmic.CoreNestedTransport
+   DkMath.Lib.Cosmic.GNPhaseFactorization
+   DkMath.Lib.Cosmic.GNPrime37
+   DkMath.Lib.Cosmic.GNProductDegree
+   DkMath.Lib.Cosmic.GTail
+   DkMath.Lib.Cosmic.GTailBoundary
+   DkMath.Lib.Cosmic.GTailCongruence
+   DkMath.Lib.Cosmic.GTailCyclotomic
+   DkMath.Lib.Cosmic.GTailFactor
+   DkMath.Lib.Cosmic.GTailPadic
+   DkMath.Lib.Cosmic.GTailSelection
+   DkMath.Lib.Cosmic.GTailSeven
+   DkMath.Lib.Cosmic.GTailSevenArithmetic
+   DkMath.Lib.Cosmic.GTailTransport
+   DkMath.Lib.NumberTheory.PadicValNat
+   DkMath.NumberTheory.BinomialPrimePower
+   DkMath.NumberTheory.GNDegreeFactorization
+   DkMath.NumberTheory.GapFocusing.CyclotomicAddress
+   DkMath.NumberTheory.GapFocusing.Degree
+   DkMath.NumberTheory.GapFocusing.Focus
+   DkMath.NumberTheory.GapFocusing.HomogeneousAddress
+   DkMath.NumberTheory.GapFocusing.LayerValuation
+   DkMath.NumberTheory.GapFocusing.PrimeOrder
+   DkMath.NumberTheory.GapFocusing.Successor
+   DkMath.NumberTheory.GapFocusing.Support
+   DkMath.NumberTheory.Legendre.GnomonBridge
+   DkMath.NumberTheory.Legendre.GnomonPascalCell
+   DkMath.NumberTheory.Legendre.PacketCoprimality
+   DkMath.NumberTheory.Legendre.PrimeWorldPacketBridge
+   DkMath.NumberTheory.Legendre.PrimorialWheelBridge
+   DkMath.NumberTheory.Primitive.PeriodicPrimeWorld
+   DkMath.NumberTheory.Primitive.PrimeWorldRefinement
+   DkMath.NumberTheory.Primitive.SquareBody
+   DkMath.NumberTheory.Primitive.SquarePrimeExpansion
+   DkMath.NumberTheory.PrimorialUniverse.SquareBodyBridge
+   DkMath.NumberTheory.PrimorialUniverse.ThirtySquareWorld
+   DkMath.NumberTheory.PrimorialUniverse.UnitCoordinateRefinement
+
+2. Existing declarations and axioms
+   Command: lake env lean /tmp/analysisgn-existing-inventory.lean
+   Exit: 0
+   Audit input: imports the 42 owners; #check for each of the 58 declarations
+   in source-inventory.json; Lean.collectAxioms on each declaration.
+   The audit fails for any axiom outside propext, Classical.choice, Quot.sound.
+   Result: PASS: 58 existing declarations resolve; standard logical axioms only.
+   Elaborated types are retained in source-inventory.json.
+   Scope: these declaration closures; not a complete import-graph audit.
+
+3. Independent finite integer recomputation
+   Command: python3 /tmp/analysisgn_numeric.py
+   Exit: 0
+   Result: 2183 concrete rows recomputed from 10 supplied example CSVs.
+   Four aggregate-summary CSVs were inspected but not regenerated.
+   Independent range: 1 <= y < x <= 25, 2 <= n <= 14;
+   199 primitive pairs, 2587 cases; recurrence/gcd/ABC contracts passed.
+   All 72 supplied v4 escape examples satisfy the checked interval/valuation guards.
+   Counterexample to dropping the size guard: p=3, B=3, y=1001,
+   M=2, g=72, x=1073; y^p < x^p-(x-1)^p is false.
+   Result details and five referenced but absent CSVs: data-review.json.
+   Scope: exact finite computation, not a Lean proof or a full experimental rerun.
+   The supplied Python programs were read but not executed.
+
+4. Archive, provenance, and documentation
+   ZIP inspected read-only; six entries, including four Lean files.
+   All four Lean files lack the required #print "file: ..." marker.
+   None of their four target files exists in this checkout.
+   ZIP AUDIT.md is byte-identical to the supplied standalone audit.
+   Original 24 input files: byte counts and SHA256 preserved.
+   All 58 recorded source hashes: unchanged.
+   Five new Markdown documents: relative links and source line anchors checked.
+   New document whitespace and git diff --check: clean.
+
+5. Boundary
+   Deliverable: reanalysis, theorem inventory, implementation plan and ROADMAP.
+   No production Lean theorem promotion, ownership migration, facade installation,
+   or source-level [DkMath.Lib] annotations were performed in this planning phase.
+   New candidate formulas and module names are implementation targets, not
+   newly kernel-checked results. No full-root/facade/suite success is asserted.
+   hno and general FLT closure are outside this verification.
