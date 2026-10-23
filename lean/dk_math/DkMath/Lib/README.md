@@ -45,6 +45,7 @@ NumberTheory.EisensteinCoordinates
 NumberTheory.EisensteinLatticeLanding
 NumberTheory.SquarefreePowerFactor
 Cosmic.GTail
+Cosmic.CompletionCoprime
 Cosmic.GNProductDegree
 Cosmic.CyclicDeterminant
 Cosmic.GTailCyclotomic

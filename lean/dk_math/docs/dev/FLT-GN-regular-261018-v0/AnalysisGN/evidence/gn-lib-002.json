@@ -1,0 +1,197 @@
+{
+  "checkpoint": "GN-LIB-002",
+  "base_head": "46395439edf5f31729a3f648f9378bc75b2e8eef",
+  "scope": "new general completion bridges, Nat arithmetic and existing Lib valuation specialization; no application carriers",
+  "declarations": [
+    {
+      "name": "DkMath.Lib.Cosmic.completion_body_add_gap",
+      "path": "DkMath/Lib/Cosmic/CompletionCoprime.lean",
+      "line": 41,
+      "statement": "theorem completion_body_add_gap (d g u : ℕ) :\n    g * GTail d 1 g u + u ^ d = (g + u) ^ d",
+      "declaration_sha256": "cdf13782a36ca3925d690128ba61d80ee7113a1c9e7448232aa1f6dafa2a3084",
+      "elaborated_check": "DkMath.Lib.Cosmic.completion_body_add_gap (d g u : ℕ) : g * DkMath.CosmicFormula.GTail d 1 g u + u ^ d = (g + u) ^ d"
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completion_gcd_big_gap",
+      "path": "DkMath/Lib/Cosmic/CompletionCoprime.lean",
+      "line": 50,
+      "statement": "theorem completion_gcd_big_gap (d g u : ℕ) :\n    Nat.gcd ((g + u) ^ d) (u ^ d) = Nat.gcd g u ^ d",
+      "declaration_sha256": "52d45748ec22a4e56743cd9e1ebec08f1a27f373efe21b7931e2acc8cdfef67d",
+      "elaborated_check": "DkMath.Lib.Cosmic.completion_gcd_big_gap (d g u : ℕ) : ((g + u) ^ d).gcd (u ^ d) = g.gcd u ^ d"
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completion_gcd_body_gap",
+      "path": "DkMath/Lib/Cosmic/CompletionCoprime.lean",
+      "line": 59,
+      "statement": "theorem completion_gcd_body_gap (d g u : ℕ) :\n    Nat.gcd (g * GTail d 1 g u) (u ^ d) = Nat.gcd g u ^ d",
+      "declaration_sha256": "63d8b9b87c7bdedf7e5bc69c9ebb65d3e1387bae891723b52d7dae0a32d05b04",
+      "elaborated_check": "DkMath.Lib.Cosmic.completion_gcd_body_gap (d g u : ℕ) :\n  (g * DkMath.CosmicFormula.GTail d 1 g u).gcd (u ^ d) = g.gcd u ^ d"
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completion_gcd_body_big",
+      "path": "DkMath/Lib/Cosmic/CompletionCoprime.lean",
+      "line": 73,
+      "statement": "theorem completion_gcd_body_big (d g u : ℕ) :\n    Nat.gcd (g * GTail d 1 g u) ((g + u) ^ d) = Nat.gcd g u ^ d",
+      "declaration_sha256": "276f46890ee264f947887e3d576b87a670976281ee138b5d96b8625aefd76822",
+      "elaborated_check": "DkMath.Lib.Cosmic.completion_gcd_body_big (d g u : ℕ) :\n  (g * DkMath.CosmicFormula.GTail d 1 g u).gcd ((g + u) ^ d) = g.gcd u ^ d"
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completion_coprime_big_gap",
+      "path": "DkMath/Lib/Cosmic/CompletionCoprime.lean",
+      "line": 86,
+      "statement": "theorem completion_coprime_big_gap (d g u : ℕ) (h : g.Coprime u) :\n    ((g + u) ^ d).Coprime (u ^ d)",
+      "declaration_sha256": "294d983cc81b3f0906ee05624334dc03385a6530ca5caf1b9bb1471b7451f0c1",
+      "elaborated_check": "DkMath.Lib.Cosmic.completion_coprime_big_gap (d g u : ℕ) (h : g.Coprime u) : ((g + u) ^ d).Coprime (u ^ d)"
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completion_coprime_body_gap",
+      "path": "DkMath/Lib/Cosmic/CompletionCoprime.lean",
+      "line": 95,
+      "statement": "theorem completion_coprime_body_gap (d g u : ℕ) (h : g.Coprime u) :\n    (g * GTail d 1 g u).Coprime (u ^ d)",
+      "declaration_sha256": "cb1ee0d68dd911a215cc1406f4c843682e14c85db8a2ae5ad7c462a343a15f20",
+      "elaborated_check": "DkMath.Lib.Cosmic.completion_coprime_body_gap (d g u : ℕ) (h : g.Coprime u) :\n  (g * DkMath.CosmicFormula.GTail d 1 g u).Coprime (u ^ d)"
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completion_coprime_body_big",
+      "path": "DkMath/Lib/Cosmic/CompletionCoprime.lean",
+      "line": 104,
+      "statement": "theorem completion_coprime_body_big (d g u : ℕ) (h : g.Coprime u) :\n    (g * GTail d 1 g u).Coprime ((g + u) ^ d)",
+      "declaration_sha256": "81e6f41826f8f77981c1607d6279f3aa3f134ccdf845cd9fc1061c947ded5877",
+      "elaborated_check": "DkMath.Lib.Cosmic.completion_coprime_body_big (d g u : ℕ) (h : g.Coprime u) :\n  (g * DkMath.CosmicFormula.GTail d 1 g u).Coprime ((g + u) ^ d)"
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completion_pairwise_coprime",
+      "path": "DkMath/Lib/Cosmic/CompletionCoprime.lean",
+      "line": 113,
+      "statement": "theorem completion_pairwise_coprime (d g u : ℕ) (h : g.Coprime u) :\n    (g * GTail d 1 g u).Coprime (u ^ d) ∧\n      (g * GTail d 1 g u).Coprime ((g + u) ^ d) ∧\n      ((g + u) ^ d).Coprime (u ^ d)",
+      "declaration_sha256": "6b772343fca7e5dad0f5eb3686e443221cb70a4bcd1359c0e8034e1ccba03ac9",
+      "elaborated_check": "DkMath.Lib.Cosmic.completion_pairwise_coprime (d g u : ℕ) (h : g.Coprime u) :\n  (g * DkMath.CosmicFormula.GTail d 1 g u).Coprime (u ^ d) ∧\n    (g * DkMath.CosmicFormula.GTail d 1 g u).Coprime ((g + u) ^ d) ∧ ((g + u) ^ d).Coprime (u ^ d)"
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completion_prime_not_dvd_body_gap_of_dvd_big",
+      "path": "DkMath/Lib/Cosmic/CompletionCoprime.lean",
+      "line": 124,
+      "statement": "theorem completion_prime_not_dvd_body_gap_of_dvd_big\n    (d g u : ℕ) (h : g.Coprime u) {q : ℕ} (hq : q.Prime)\n    (hbig : q ∣ (g + u) ^ d) :\n    ¬q ∣ g * GTail d 1 g u ∧ ¬q ∣ u ^ d",
+      "declaration_sha256": "df7fdf2f9e605137f2b1a463c237e0013424a4e728bbd08f9e74cde3a6dbb5bf",
+      "elaborated_check": "DkMath.Lib.Cosmic.completion_prime_not_dvd_body_gap_of_dvd_big (d g u : ℕ) (h : g.Coprime u) {q : ℕ} (hq : Nat.Prime q)\n  (hbig : q ∣ (g + u) ^ d) : ¬q ∣ g * DkMath.CosmicFormula.GTail d 1 g u ∧ ¬q ∣ u ^ d"
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completion_prime_dvd_big_iff_dvd_sum",
+      "path": "DkMath/Lib/Cosmic/CompletionCoprime.lean",
+      "line": 139,
+      "statement": "theorem completion_prime_dvd_big_iff_dvd_sum\n    (d g u : ℕ) (hd : 0 < d) {q : ℕ} (hq : q.Prime) :\n    q ∣ (g + u) ^ d ↔ q ∣ g + u",
+      "declaration_sha256": "e67d4ecb2587c814d90442bcf2f5fb01376cd565d3b88c58e42105af2f1ba7c3",
+      "elaborated_check": "DkMath.Lib.Cosmic.completion_prime_dvd_big_iff_dvd_sum (d g u : ℕ) (hd : 0 < d) {q : ℕ} (hq : Nat.Prime q) :\n  q ∣ (g + u) ^ d ↔ q ∣ g + u"
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completion_prime_not_dvd_body_gap_of_dvd_sum",
+      "path": "DkMath/Lib/Cosmic/CompletionCoprime.lean",
+      "line": 151,
+      "statement": "theorem completion_prime_not_dvd_body_gap_of_dvd_sum\n    (d g u : ℕ) (hd : 0 < d) (h : g.Coprime u) {q : ℕ} (hq : q.Prime)\n    (hsum : q ∣ g + u) :\n    ¬q ∣ g * GTail d 1 g u ∧ ¬q ∣ u ^ d",
+      "declaration_sha256": "e752be6a56f07ca54463332ea47912511720f4492798e47dd6129b7dc35c927b",
+      "elaborated_check": "DkMath.Lib.Cosmic.completion_prime_not_dvd_body_gap_of_dvd_sum (d g u : ℕ) (hd : 0 < d) (h : g.Coprime u) {q : ℕ}\n  (hq : Nat.Prime q) (hsum : q ∣ g + u) : ¬q ∣ g * DkMath.CosmicFormula.GTail d 1 g u ∧ ¬q ∣ u ^ d"
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completion_padicValNat_big",
+      "path": "DkMath/Lib/Cosmic/CompletionCoprime.lean",
+      "line": 163,
+      "statement": "theorem completion_padicValNat_big\n    (d g u : ℕ) {q : ℕ} (hq : q.Prime) (hsum : g + u ≠ 0) :\n    padicValNat q ((g + u) ^ d) = d * padicValNat q (g + u)",
+      "declaration_sha256": "71d590e69cda8da2a469a2442eabb3b6c579f4a8da7ed3bd43a158a38011998d",
+      "elaborated_check": "DkMath.Lib.Cosmic.completion_padicValNat_big (d g u : ℕ) {q : ℕ} (hq : Nat.Prime q) (hsum : g + u ≠ 0) :\n  padicValNat q ((g + u) ^ d) = d * padicValNat q (g + u)"
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completion_degree_dvd_padicValNat_big",
+      "path": "DkMath/Lib/Cosmic/CompletionCoprime.lean",
+      "line": 172,
+      "statement": "theorem completion_degree_dvd_padicValNat_big\n    (d g u : ℕ) {q : ℕ} (hq : q.Prime) (hsum : g + u ≠ 0) :\n    d ∣ padicValNat q ((g + u) ^ d)",
+      "declaration_sha256": "108b14eef6dda0e45a2f0909d83c236d5d0ec516b21849f4c66e1537b09827a0",
+      "elaborated_check": "DkMath.Lib.Cosmic.completion_degree_dvd_padicValNat_big (d g u : ℕ) {q : ℕ} (hq : Nat.Prime q) (hsum : g + u ≠ 0) :\n  d ∣ padicValNat q ((g + u) ^ d)"
+    }
+  ],
+  "neutral_import_graph": {
+    "DkMath.Lib.Cosmic.CompletionCoprime": [
+      "DkMath.Lib.Cosmic.GTail",
+      "DkMath.Lib.NumberTheory.PadicValNat",
+      "Mathlib.Data.Nat.GCD.Basic",
+      "Mathlib.Data.Nat.Prime.Basic"
+    ],
+    "DkMath.Lib.Cosmic.GTail": [
+      "Mathlib.Data.Nat.Choose.Sum",
+      "Lean.Elab.Tactic.Omega"
+    ],
+    "DkMath.Lib.NumberTheory.PadicValNat": [
+      "Mathlib.Data.Nat.PadicValNat",
+      "Mathlib.NumberTheory.Padics.PadicVal.Basic",
+      "Mathlib.Tactic.NormNum",
+      "Lean.Elab.Tactic.Omega"
+    ]
+  },
+  "neutral_to_application_edges": 0,
+  "neutral_import_cycles": 0,
+  "new_module_source_sha256": "579b9fe6563b699eb3436cd0bcb491a83bba16af76e40cfe0f3d12eeb5f2517e",
+  "boundary_examples": 19,
+  "validation": {
+    "owners": {
+      "command": "lake build DkMath.Lib.Cosmic.CompletionCoprime",
+      "jobs": 1148,
+      "exit_code": 0
+    },
+    "regression": {
+      "command": "lake build DkMathTest.Lib.Cosmic.CompletionCoprime",
+      "jobs": 1149,
+      "exit_code": 0,
+      "warnings": 0,
+      "axiom_checks": 13
+    },
+    "allowed_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "libraries": {
+      "command": "lake build DkMath.Lib DkMath DkMathTest",
+      "jobs": 11794,
+      "exit_code": 0,
+      "new_code_warnings": 0,
+      "existing_sorry_warnings": [
+        "warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`",
+        "warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`",
+        "warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`",
+        "warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`",
+        "warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`"
+      ]
+    },
+    "test_root": {
+      "command": "lake env lean DkMathTest.lean",
+      "exit_code": 0
+    },
+    "lib_smoke": {
+      "command": "lake env lean /tmp/GNLib002LibSmoke.lean",
+      "imports": [
+        "DkMath.Lib"
+      ],
+      "checks": 13,
+      "exit_code": 0
+    },
+    "root_smoke": {
+      "command": "lake env lean /tmp/GNLib002RootSmoke.lean",
+      "imports": [
+        "DkMath"
+      ],
+      "checks": 13,
+      "exit_code": 0
+    },
+    "source_checks": {
+      "module_markers": "2 of 2 match paths",
+      "marked_public_theorems": 13,
+      "forbidden_construct_scan": "PASS",
+      "original_input_sha256": "24 of 24 unchanged"
+    },
+    "tracker_checks": {
+      "owner_log": "PASS",
+      "regression_log": "PASS"
+    }
+  },
+  "lean_version": "4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)",
+  "mathlib_commit": "d13f23b723b8a846827a245b89c10fc7d3f11612"
+}

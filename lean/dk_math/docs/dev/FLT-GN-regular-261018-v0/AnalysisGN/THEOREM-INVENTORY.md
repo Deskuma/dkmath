@@ -82,7 +82,7 @@ Lib配下でもnamespaceが歴史的名称のままの場合がある。namespac
 
 | 課題                        | 判定                                          | 実装前の行動                     |
 | --------------------------- | --------------------------------------------- | -------------------------------- |
-| Big/Body/Gapの三つのgcd=h^d | 一体化したLib APIは今回特定できなかった       | A01と既存gcd算術から薄い橋を作る |
+| Big/Body/Gapの三つのgcd=h^d | GN-LIB-002で実装済み | `Lib.Cosmic.CompletionCoprime`。原始性不要、次数0を含む |
 | R_nの有限和とGTail          | B22の殻が同じ幾何和を持つ                     | 除算定義を避け、座標変換を固定   |
 | R_nの二階再帰               | B01/B02を合成して再利用可能                   | 同じ底の再帰へ翻訳               |
 | D_nの正性・漸化式           | 同型の独立APIは今回特定できなかった           | 自然数差の前に上界を証明         |
@@ -105,3 +105,10 @@ Lib配下でもnamespaceが歴史的名称のままの場合がある。namespac
 新しいLibからABC・FLT・Legendre・CFBRCを逆importしない。
 `[DkMath.Lib]` は実際の昇格と検証を終えた定理の完了マーカーとする。
 既存配置を確認しただけで一括追記することはしない。詳細は[実装計画](IMPLEMENTATION-PLAN.md)へ。
+
+## 5. GN-LIB-002で固定した新規一般橋
+
+初回58宣言の棚卸しとは別に、`Lib.Cosmic.CompletionCoprime` へ13宣言を追加した。
+三者gcdを中心に、原始対の三者coprime、正次数の素数支持、Bigの付値倍化を公開する。
+既存58宣言の名前・型は変更していない。
+[公開APIと保持条件](IMPLEMENTATION-GN-LIB-002.md)、[型と検証証跡](evidence/gn-lib-002.json) を参照。

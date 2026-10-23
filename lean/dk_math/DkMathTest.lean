@@ -25,6 +25,7 @@ import DkMathTest.CosmicFormula.GTailTransport
 import DkMathTest.CosmicFormula.GTailSeven
 import DkMathTest.CosmicFormula.GTailLibFacade
 import DkMathTest.Lib.Cosmic.GNSuccessorSupport
+import DkMathTest.Lib.Cosmic.CompletionCoprime
 import DkMathTest.FLT.Seven.GTailBridge
 import DkMathTest.FLT.Seven.GTailConstraintAudit
 import DkMathTest.FLT.Seven.GTailFacade

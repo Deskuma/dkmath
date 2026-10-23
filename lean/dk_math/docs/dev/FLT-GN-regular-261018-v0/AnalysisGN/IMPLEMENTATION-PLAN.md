@@ -1,9 +1,9 @@
 # 実装計画 — 一般核の所有化とCompletionの教科書
 
 2026-10-23。対象ブランチ：`lib/FLT-GN-Completion-261023-v0`。
-本書は工程ごとの実装契約である。GN-LIB-001以外の未着手工程にある新規モジュール名と宣言名は設計名である。
+本書は工程ごとの実装契約である。GN-LIB-001・002以外の未着手工程にある新規モジュール名と宣言名は設計名である。
 初回は[棚卸し](THEOREM-INVENTORY.md)と既存宣言の確認を行った。
-GN-LIB-001はその後実装済みであり、[実装報告](IMPLEMENTATION-GN-LIB-001.md) に結果を記録する。
+GN-LIB-001・002は実装済みであり、[001報告](IMPLEMENTATION-GN-LIB-001.md) と [002報告](IMPLEMENTATION-GN-LIB-002.md) に結果を記録する。
 
 ## 1. 所有層と数学の範囲
 
@@ -37,7 +37,7 @@ GN-LIB-001はその後実装済みであり、[実装報告](IMPLEMENTATION-GN-L
 
 ### GN-LIB-002：Big・Body・Gapの三つのgcdを一つの契約にする
 
-配置候補：`DkMath/Lib/Cosmic/CompletionCoprime.lean`。
+配置済み：`DkMath/Lib/Cosmic/CompletionCoprime.lean`。以下は実装で保持した契約である。
 既存の`GTail`を使い、上位`CosmicFormula.Defs`のBigN/BodyNをimportしない。
 
 自然数g,u,dについて
@@ -51,7 +51,7 @@ GN-LIB-001はその後実装済みであり、[実装報告](IMPLEMENTATION-GN-L
 
 gcdの加法・冪に関する既存算術を先に確認して使う。一般GCDMonoidへの拡張はNat版の完成条件に含めない。
 名前案は `completion_gcd_big_gap`、`completion_gcd_body_gap`、`completion_gcd_body_big`。
-これらは未実装の設計名である。
+これらの名前で実装済み。公開API全体は [002報告](IMPLEMENTATION-GN-LIB-002.md) を参照。
 
 回帰：(30,1,2)の960+1=961、非原始対(6,4,3)でgcdが8、d=0、零座標、完成根91の合成数例。
 d>0、gcdの原始性、付値の非零条件を公開型に残す。
