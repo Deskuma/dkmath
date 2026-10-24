@@ -3,7 +3,7 @@
 2026-10-23。対象ブランチ：`lib/FLT-GN-Completion-261023-v0`。
 本書は工程ごとの実装契約である。未着手工程にある新規モジュール名と宣言名は設計名である。
 初回は[棚卸し](THEOREM-INVENTORY.md)と既存宣言の確認を行った。
-GN-LIB-001・002・003a・003b・003cは実装済みであり、[001報告](IMPLEMENTATION-GN-LIB-001.md)・[002報告](IMPLEMENTATION-GN-LIB-002.md)・[003a報告](IMPLEMENTATION-GN-LIB-003a.md)・[003b報告](IMPLEMENTATION-GN-LIB-003b.md)・[003c報告](IMPLEMENTATION-GN-LIB-003c.md) に結果を記録する。
+GN-LIB-001・002・003a・003b・003c・004は実装済みであり、[001報告](IMPLEMENTATION-GN-LIB-001.md)・[002報告](IMPLEMENTATION-GN-LIB-002.md)・[003a報告](IMPLEMENTATION-GN-LIB-003a.md)・[003b報告](IMPLEMENTATION-GN-LIB-003b.md)・[003c報告](IMPLEMENTATION-GN-LIB-003c.md)・[004報告](IMPLEMENTATION-GN-LIB-004.md) に結果を記録する。
 
 ## 1. 所有層と数学の範囲
 
@@ -74,9 +74,11 @@ B16の一般な素数行の正確な可除性も再利用対象である。
 
 ## 3. 新規一般化を行う順序
 
-### GN-LIB-004：R_nとD_nの教科書
+### GN-LIB-004：R_nとD_nの教科書（対象moduleで完了）
 
-配置候補：`Lib.Cosmic.PowerDifferenceCofactor`、`CompletionDefect`。
+配置済み：`Lib.Cosmic.PowerDifferenceCofactor`、`CompletionDefect`。
+3定義・24定理、11例を実装し、対象2モジュールのビルドと全公開宣言の公理監査を完了した。
+以下は実装で満たした契約である。正性には両座標の正性を明示する。
 
 - 標準R_nは有限和。R_0=0、R_1=1、R_2=x+yを含める。
 - B22を用い、環上でR_n(x,y)=GTail n 1 (x−y) yを証明する。

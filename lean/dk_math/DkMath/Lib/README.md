@@ -49,6 +49,8 @@ NumberTheory.EisensteinLatticeLanding
 NumberTheory.SquarefreePowerFactor
 Cosmic.GTail
 Cosmic.CompletionCoprime
+Cosmic.PowerDifferenceCofactor
+Cosmic.CompletionDefect
 Cosmic.GNProductDegree
 Cosmic.CyclicDeterminant
 Cosmic.GTailCyclotomic
@@ -112,6 +114,18 @@ GN_tail_decomposition
 GTail_eval_zero
 GN_zero_eval
 ```
+
+### `PowerDifferenceCofactor`, `CompletionDefect`
+
+The division-free geometric cofactor `powerDifferenceCofactor n x y` (R_n)
+includes the diagonal x=y and degree zero. It connects to GTail at gap x-y
+in rings; the natural subtraction bridge explicitly requires y≤x.
+The cancellation-free recurrence is `R_(k+2)+xy R_k=(x+y)R_(k+1)`.
+
+Over naturals, `R_n≤(x+y)^(n-1)` makes `completionDefect` an exact deficit.
+It satisfies `D_(k+3)=(x+y)D_(k+2)+xy R_(k+1)` and is positive for n≥3
+when both coordinates are positive. `signedCompletionDefect` is the separate
+ring version. A cofactor can still be a square or cube with another base.
 
 ### `GTailSelection`, `GTailFactor`, `GTailTransport`
 

@@ -32,6 +32,8 @@ import DkMath.Lib.NumberTheory.EisensteinLatticeLanding
 import DkMath.Lib.NumberTheory.SquarefreePowerFactor
 import DkMath.Lib.Cosmic.GTail
 import DkMath.Lib.Cosmic.CompletionCoprime
+import DkMath.Lib.Cosmic.PowerDifferenceCofactor
+import DkMath.Lib.Cosmic.CompletionDefect
 import DkMath.Lib.Cosmic.GNProductDegree
 import DkMath.Lib.Cosmic.GNSourceTransport
 import DkMath.Lib.Cosmic.GNPhaseThreeTerm

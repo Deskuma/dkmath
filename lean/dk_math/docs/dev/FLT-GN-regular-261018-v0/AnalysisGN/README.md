@@ -8,7 +8,8 @@
 GN-LIB-003aではBinomTailの一般尾項・正性の5補題をLibへ移管した。
 GN-LIB-003bでは平方完成・有限帯の一般核7定理と、旧carrierの7wrapperを固定した。
 GN-LIB-003cでは素数冪二項係数の正確な付値と整除性の4定理を中立化し、旧4名をwrapperにした。
-詳細は [001](IMPLEMENTATION-GN-LIB-001.md)・[002](IMPLEMENTATION-GN-LIB-002.md)・[003a](IMPLEMENTATION-GN-LIB-003a.md)・[003b](IMPLEMENTATION-GN-LIB-003b.md)・[003c](IMPLEMENTATION-GN-LIB-003c.md) の実装報告に記録する。
+GN-LIB-004では有限和R_nと完成不足D_nの3定義・24定理を固定し、再帰・上界・正性を証明した。
+詳細は [001](IMPLEMENTATION-GN-LIB-001.md)・[002](IMPLEMENTATION-GN-LIB-002.md)・[003a](IMPLEMENTATION-GN-LIB-003a.md)・[003b](IMPLEMENTATION-GN-LIB-003b.md)・[003c](IMPLEMENTATION-GN-LIB-003c.md)・[004](IMPLEMENTATION-GN-LIB-004.md) の実装報告に記録する。
 資料内のZIP配置手順や実装提案は設計資料として検討し、そのまま実行する指示とは扱わない。
 
 ## 読む順序
