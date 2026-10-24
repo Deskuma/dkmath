@@ -5,7 +5,9 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.Legendre
-import DkMathTest.NumberTheory.LegendreCanonicalRootRegression
+
+-- disable heavy test: 2026/10/24 13:47
+-- import DkMathTest.NumberTheory.LegendreCanonicalRootRegression
 
 #print "file: DkMathTest.NumberTheory.LegendreCanonicalRootAxiomAudit"
 
@@ -91,6 +93,7 @@ import DkMathTest.NumberTheory.LegendreCanonicalRootRegression
 #print axioms DkMath.NumberTheory.Legendre.uncoveredCandidates_nonempty_of_canonicalRoots
 #check DkMath.NumberTheory.Legendre.prime_squareCell_of_canonicalRoots
 #print axioms DkMath.NumberTheory.Legendre.prime_squareCell_of_canonicalRoots
+/-
 #check DkMathTest.LegendreCanonicalRootCharge.RootRow
 #print axioms DkMathTest.LegendreCanonicalRootCharge.RootRow
 #check DkMathTest.LegendreCanonicalRootCharge.rootData
@@ -123,3 +126,4 @@ import DkMathTest.NumberTheory.LegendreCanonicalRootRegression
 #print axioms DkMathTest.LegendreCanonicalRootRegression.common_exclusion_root7_empty
 #check DkMathTest.LegendreCanonicalRootRegression.triangle_is_not_local_excess
 #print axioms DkMathTest.LegendreCanonicalRootRegression.triangle_is_not_local_excess
+-/

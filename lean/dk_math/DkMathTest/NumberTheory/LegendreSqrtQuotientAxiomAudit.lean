@@ -5,8 +5,10 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.Legendre
-import DkMathTest.NumberTheory.LegendreSqrtQuotientCalibration
-import DkMathTest.NumberTheory.LegendreSqrtQuotientRegression
+
+-- disable heavy test: 2026/10/24 14:27
+-- import DkMathTest.NumberTheory.LegendreSqrtQuotientCalibration
+-- import DkMathTest.NumberTheory.LegendreSqrtQuotientRegression
 
 #print "file: DkMathTest.NumberTheory.LegendreSqrtQuotientAxiomAudit"
 
@@ -104,6 +106,7 @@ import DkMathTest.NumberTheory.LegendreSqrtQuotientRegression
 #print axioms DkMath.NumberTheory.Legendre.primeAnchor_quotient_range_eq_floor
 #check DkMath.NumberTheory.Legendre.sqrt_cross_fiber_card_le_odd_span
 #print axioms DkMath.NumberTheory.Legendre.sqrt_cross_fiber_card_le_odd_span
+/-
 #check DkMathTest.LegendreSqrtQuotientCalibration.quotientNumbers
 #print axioms DkMathTest.LegendreSqrtQuotientCalibration.quotientNumbers
 #check DkMathTest.LegendreSqrtQuotientCalibration.rejectedThreeCalc
@@ -164,3 +167,4 @@ import DkMathTest.NumberTheory.LegendreSqrtQuotientRegression
 #print axioms DkMathTest.LegendreSqrtQuotientRegression.no_multiple_owners_before_eight
 #check DkMathTest.LegendreSqrtQuotientRegression.no_prime_multiple_owners_before_thirteen
 #print axioms DkMathTest.LegendreSqrtQuotientRegression.no_prime_multiple_owners_before_thirteen
+-/

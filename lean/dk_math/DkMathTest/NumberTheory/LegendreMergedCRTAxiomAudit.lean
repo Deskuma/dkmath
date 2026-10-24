@@ -5,8 +5,10 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.Legendre
-import DkMathTest.NumberTheory.LegendreMergedCRT
-import DkMathTest.NumberTheory.LegendreMergedCRTRegression
+
+-- disable heavy test: 2026/10/24 12:59
+-- import DkMathTest.NumberTheory.LegendreMergedCRT
+-- import DkMathTest.NumberTheory.LegendreMergedCRTRegression
 
 #print "file: DkMathTest.NumberTheory.LegendreMergedCRTAxiomAudit"
 
@@ -52,6 +54,7 @@ import DkMathTest.NumberTheory.LegendreMergedCRTRegression
 #print axioms DkMath.NumberTheory.Legendre.prime_star_pair_charge_le_supportExcess
 #check DkMath.NumberTheory.Legendre.prime_star_pair_linear_charge
 #print axioms DkMath.NumberTheory.Legendre.prime_star_pair_linear_charge
+/-
 #check DkMathTest.LegendreMergedCRT.controlledBasis
 #print axioms DkMathTest.LegendreMergedCRT.controlledBasis
 #check DkMathTest.LegendreMergedCRT.checkpointData
@@ -128,3 +131,4 @@ import DkMathTest.NumberTheory.LegendreMergedCRTRegression
 #print axioms DkMathTest.LegendreMergedCRTRegression.mixed320_explicit_lifts
 #check DkMathTest.LegendreMergedCRTRegression.checkpoint_floor_charge_le_excess
 #print axioms DkMathTest.LegendreMergedCRTRegression.checkpoint_floor_charge_le_excess
+-/

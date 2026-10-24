@@ -7,11 +7,11 @@ Authors: D. and Wise Wolf.
 import DkMath.NumberTheory.Legendre
 import DkMathTest.NumberTheory.LegendreCanonicalTailRegression
 
--- heavy test disable: 2026/10/24  0:09
--- import DkMathTest.NumberTheory.LegendreCanonicalTailDiagnostics
--- import DkMathTest.NumberTheory.LegendreCanonicalPrimeCapCalibration
+-- disable heavy test: 2026/10/24  0:09
+-- import DkMathHeavyTest.NumberTheory.LegendreCanonicalTailDiagnostics
+-- import DkMathHeavyTest.NumberTheory.LegendreCanonicalPrimeCapCalibration
 
-#print "file: DkMathTest.NumberTheory.LegendreCanonicalTailAxiomAudit"
+#print "file: DkMathHeavyTest.NumberTheory.LegendreCanonicalTailAxiomAudit"
 
 #check DkMath.NumberTheory.Legendre.canonicalRootHead
 #print axioms DkMath.NumberTheory.Legendre.canonicalRootHead

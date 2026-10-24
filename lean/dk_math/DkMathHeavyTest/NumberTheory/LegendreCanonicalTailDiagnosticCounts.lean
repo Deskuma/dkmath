@@ -4,12 +4,13 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMathTest.NumberTheory.LegendreCanonicalTailCalibration
+import DkMathHeavyTest.NumberTheory.LegendreCanonicalTailCalibration
 
-#print "file: DkMathTest.NumberTheory.LegendreCanonicalTailDiagnosticCounts"
+#print "file: DkMathHeavyTest.NumberTheory.LegendreCanonicalTailDiagnosticCounts"
 
 namespace DkMathTest.LegendreCanonicalTailDiagnostics
-open DkMath.NumberTheory.Legendre DkMathTest.LegendreCanonicalTailCalibration
+open DkMath.NumberTheory.Legendre
+open DkMathTest.LegendreCanonicalTailCalibration
 open DkMathTest.LegendreBlockLocalization
 open scoped BigOperators
 

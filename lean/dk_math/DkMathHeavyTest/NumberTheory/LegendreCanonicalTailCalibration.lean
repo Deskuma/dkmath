@@ -7,11 +7,12 @@ Authors: D. and Wise Wolf.
 import DkMath.NumberTheory.Legendre.ParitySafeCanonicalRoughCount
 import DkMathTest.NumberTheory.LegendreHybridProvider
 
-#print "file: DkMathTest.NumberTheory.LegendreCanonicalTailCalibration"
+#print "file: DkMathHeavyTest.NumberTheory.LegendreCanonicalTailCalibration"
 
 namespace DkMathTest.LegendreCanonicalTailCalibration
 open DkMath.NumberTheory.Legendre
-open DkMathTest.LegendreHybridProvider DkMathTest.LegendreBlockLocalization
+open DkMathTest.LegendreHybridProvider
+open DkMathTest.LegendreBlockLocalization
 open scoped BigOperators
 
 set_option maxRecDepth 100000

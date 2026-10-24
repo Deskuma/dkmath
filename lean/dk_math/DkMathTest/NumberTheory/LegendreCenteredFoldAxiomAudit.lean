@@ -6,7 +6,9 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.Legendre
 import DkMath.CosmicFormula.QuadraticCenteredBridge
-import DkMathTest.NumberTheory.LegendreCenteredFoldRegression
+
+-- disable heavy test: 2026/10/24 14:38
+-- import DkMathTest.NumberTheory.LegendreCenteredFoldRegression
 
 #print "file: DkMathTest.NumberTheory.LegendreCenteredFoldAxiomAudit"
 
@@ -142,6 +144,7 @@ import DkMathTest.NumberTheory.LegendreCenteredFoldRegression
 #print axioms DkMath.NumberTheory.Legendre.centeredFoldNorm_succ_coprime
 #check DkMath.NumberTheory.Legendre.common_centered_support_no_successor
 #print axioms DkMath.NumberTheory.Legendre.common_centered_support_no_successor
+/-
 #check DkMathTest.LegendreCenteredFoldRegression.unit_and_second_difference
 #print axioms DkMathTest.LegendreCenteredFoldRegression.unit_and_second_difference
 #check DkMathTest.LegendreCenteredFoldRegression.rational_steps
@@ -178,3 +181,4 @@ import DkMathTest.NumberTheory.LegendreCenteredFoldRegression
 #print axioms DkMathTest.LegendreCenteredFoldRegression.preserved1031
 #check DkMathTest.LegendreCenteredFoldRegression.compatible_covered_trajectory
 #print axioms DkMathTest.LegendreCenteredFoldRegression.compatible_covered_trajectory
+-/
