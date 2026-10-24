@@ -61,6 +61,7 @@ import DkMath.FLT.FreyIntegralTorsionWitness
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeFiltration
 import DkMath.FLT.FreyStableLineLocalGlobal
+import DkMath.FLT.FreyCofixedBranchSwap
 
 #print "file: DkMath.FLT"
 

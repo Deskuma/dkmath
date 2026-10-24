@@ -16,3 +16,10 @@ $$
 `DkMathTest.lean` へ登録済み。GN-PUB-002ではテストのビルドを行わず、
 同じ検証本体を独立smokeとしてLeanで確認した。
 [実装報告](../docs/dev/FLT-GN-regular-261018-v0/AnalysisGN/IMPLEMENTATION-GN-PUB-002.md) を参照。
+
+## NOTE-032の枝交換の境界
+
+`Lib/RepresentationTheory/CofixedBranchSwap.lean` を通常入口へ登録した。
+標数2、奇標数のせん断、真でない吸収空間、mod8の残る枝を実際の有限表現・整数で確認する。
+本作業ではテストをビルドせず、同一の検証本体を独立Lean資料として確認した。
+[実装報告](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-001-261025.md) を参照。

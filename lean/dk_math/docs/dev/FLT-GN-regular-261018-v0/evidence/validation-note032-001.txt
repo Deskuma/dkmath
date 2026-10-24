@@ -1,0 +1,86 @@
+NOTE-032-001 — 2026-10-25
+Branch verified: dev/FLT-GN-regular-261018-v0; initial worktree clean.
+lib/FLT-GN-Completion-261023-v0 verified as ancestor of baseline HEAD.
+
+lake build DkMath.Lib.RepresentationTheory.CofixedBranchSwap DkMath.FLT.FreyCofixedBranchSwap
+Build completed successfully (4031 jobs). Warnings: 0.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032Smoke.lean
+Exit 0. 4 same-Source conditional theorems at exponent 37. No Source existence constructed.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032BranchSwapBoundary.lean
+Exit 0. 14 public declarations; exact registered test body elaborated independently.
+Boundaries: characteristic two, odd shear without branch swap, top absorber, mod8 seven branch.
+
+lake env lean /tmp/Note032Axioms.lean
+Exit 0. 33 public declaration axiom lists, standard logical axioms only.
+'DkMath.Lib.RepresentationTheory.CofixedBranchSwap.line_le_of_common_nonzero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.RepresentationTheory.CofixedBranchSwap.line_le_of_cofixed_and_nontrivial' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.RepresentationTheory.CofixedBranchSwap.not_cofixed_of_swap_at' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.RepresentationTheory.CofixedBranchSwap.not_cofixed_of_branch_swap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.RepresentationTheory.CofixedBranchSwap.no_cofixed_line' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.RepresentationTheory.CofixedBranchSwap.no_stable_cofixed_line' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.RepresentationTheory.CofixedBranchSwap.inertia_fixed_of_cofixed_and_branch_swap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.a_mod_eight_cases_of_oriented' depends on axioms: [propext, Quot.sound]
+'DkMath.FLT.Frey.Source.residualZeroComponent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.mem_residualZeroComponent_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.residualZeroComponent_ne_top_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.residualZeroComponent_absorbs_of_fixed_centre' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_no_cofixed_line_of_inertia_and_branch_swap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_no_cofixed_line_of_zeroComponent_branch_swap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_isIrreducible_of_inertia_and_branch_swap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'CofixedBranchSwapTest.axis' depends on axioms: [propext, Quot.sound]
+'CofixedBranchSwapTest.mem_axis' depends on axioms: [propext, Quot.sound]
+'CofixedBranchSwapTest.axis_ne_top' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedBranchSwapTest.axis_ne_bot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedBranchSwapTest.axis_finrank' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedBranchSwapTest.rho' depends on axioms: [propext, Quot.sound]
+'CofixedBranchSwapTest.rho_cofixed' depends on axioms: [propext, Quot.sound]
+'CofixedBranchSwapTest.rho_nontrivial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedBranchSwapTest.rho_absorbs' depends on axioms: [propext, Quot.sound]
+'CofixedBranchSwapTest.characteristic_two_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedBranchSwapTest.odd_shear_has_no_branch_swap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedBranchSwapTest.odd_cofixed_line_exists' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedBranchSwapTest.top_absorber_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedBranchSwapTest.orientation_leaves_seven_branch' depends on axioms: [propext]
+'Note032Smoke.source37_no_cofixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032Smoke.source37_irreducible' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032Smoke.source37_zeroComponent_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032Smoke.source37_zeroComponent_absorbs' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Production: 14 public theorems, 1 actual zero-component submodule definition.
+Two private model-transport lemmas used by that definition.
+9 existing central owners unchanged from baseline HEAD.
+Original NOTE-032.md unchanged.
+Four pinned upstream source digests verified.
+Neutral kernel closure: 6 Lib-only modules.
+Frey adapter closure: 196 local modules, acyclic.
+Required file markers and absence of sorry/admit/axiom/unsafe/native_decide in new code verified.
+Marker tracker: OK: no mismatches found
+Relative document targets checked: 70.
+Evidence JSON parses. Git diff --check passed.
+Lib/FLT/test registrations statically checked; test glob already covers module.
+Full/root/DkMathTest/lake test builds excluded per user validation split.
+Unconditional hno remains open: dyadic centre/outer torsion, nontrivial inertia, branch-swap arithmetic.

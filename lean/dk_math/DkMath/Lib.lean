@@ -216,6 +216,7 @@ import DkMath.Lib.NumberTheory.ValuationTameCharacter
 import DkMath.Lib.NumberTheory.EllipticDyadicSeparation
 import DkMath.Lib.NumberTheory.EllipticDyadicWildInertia
 import DkMath.Lib.RepresentationTheory.AbsorbingSubspace
+import DkMath.Lib.RepresentationTheory.CofixedBranchSwap
 import DkMath.Lib.RepresentationTheory.ConjugateLocalConditions
 import DkMath.Lib.Algebra.SingleSlopeRoot
 import DkMath.Lib.NumberTheory.EllipticReductionKernel

@@ -512,3 +512,12 @@ The current architecture treats the fixed-degree GN5 project as an important his
 ## 7. Current status
 
 As of the 2026-10-09 integration snapshot, `DkMath.Lib` is an established promoted layer but is still evolving. Some reusable mathematics remains in older owner namespaces and may be migrated in later refactors.
+
+## Cofixed branch-swap obstruction (NOTE-032)
+
+`DkMath.Lib.RepresentationTheory.CofixedBranchSwap` proves a conditional obstruction
+for one-dimensional cofixed subspaces. It retains a proper absorbing subspace,
+a nontrivial local action, a quotient sign-reversing element, and 2≠0 in the field.
+It uses containment of the line in the absorber; ambient rank two is not required.
+Frey arithmetic supplies these inputs separately through `DkMath.FLT.FreyCofixedBranchSwap`.
+[Implementation report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-001-261025.md).

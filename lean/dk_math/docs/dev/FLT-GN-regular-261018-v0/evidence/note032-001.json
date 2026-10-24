@@ -1,0 +1,1070 @@
+{
+  "checkpoint": "NOTE-032-001",
+  "date": "2026-10-25",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "4db514ce85bfafee898156a51d43ef2db21d9fb9",
+  "scope": "linear branch-swap obstruction, actual smooth zero-component submodule, conditional hno and irreducibility adapters for the same Frey Source",
+  "status": "conditional kernel implemented; arithmetic suppliers at two remain open",
+  "new_declarations": [
+    {
+      "name": "DkMath.Lib.RepresentationTheory.CofixedBranchSwap.line_le_of_common_nonzero",
+      "kind": "theorem",
+      "path": "DkMath/Lib/RepresentationTheory/CofixedBranchSwap.lean",
+      "line": 36,
+      "source_signature": "theorem line_le_of_common_nonzero {L M : Submodule k V}\n    (hline : Module.finrank k L = 1) {x : V} (hx : x ≠ 0) (hxL : x ∈ L) (hxM : x ∈ M) :\n    L ≤ M"
+    },
+    {
+      "name": "DkMath.Lib.RepresentationTheory.CofixedBranchSwap.line_le_of_cofixed_and_nontrivial",
+      "kind": "theorem",
+      "path": "DkMath/Lib/RepresentationTheory/CofixedBranchSwap.lean",
+      "line": 50,
+      "source_signature": "theorem line_le_of_cofixed_and_nontrivial (ρ : Representation k G V) (I : Subgroup G)\n    {L M : Submodule k V} (hline : Module.finrank k L = 1) (hL : IsCofixedOn ρ L)\n    (habs : CofixedOn ρ M I) (hram : ∃ τ ∈ I, ∃ x, ρ τ x ≠ x) : L ≤ M"
+    },
+    {
+      "name": "DkMath.Lib.RepresentationTheory.CofixedBranchSwap.not_cofixed_of_swap_at",
+      "kind": "theorem",
+      "path": "DkMath/Lib/RepresentationTheory/CofixedBranchSwap.lean",
+      "line": 59,
+      "source_signature": "theorem not_cofixed_of_swap_at (ρ : Representation k G V) {L M : Submodule k V}\n    (hle : L ≤ M) (h2 : (2 : k) ≠ 0) (σ : G) (x : V) (hx : x ∉ M)\n    (hswap : ρ σ x + x ∈ M) : ¬ IsCofixedOn ρ L"
+    },
+    {
+      "name": "DkMath.Lib.RepresentationTheory.CofixedBranchSwap.not_cofixed_of_branch_swap",
+      "kind": "theorem",
+      "path": "DkMath/Lib/RepresentationTheory/CofixedBranchSwap.lean",
+      "line": 70,
+      "source_signature": "theorem not_cofixed_of_branch_swap (ρ : Representation k G V) {L M : Submodule k V}\n    (hle : L ≤ M) (hM : M ≠ ⊤) (h2 : (2 : k) ≠ 0)\n    (hswap : ∃ σ, ∀ x, x ∉ M → ρ σ x + x ∈ M) : ¬ IsCofixedOn ρ L"
+    },
+    {
+      "name": "DkMath.Lib.RepresentationTheory.CofixedBranchSwap.no_cofixed_line",
+      "kind": "theorem",
+      "path": "DkMath/Lib/RepresentationTheory/CofixedBranchSwap.lean",
+      "line": 81,
+      "source_signature": "theorem no_cofixed_line (ρ : Representation k G V) (I : Subgroup G)\n    (M : Submodule k V) (hM : M ≠ ⊤) (h2 : (2 : k) ≠ 0)\n    (habs : CofixedOn ρ M I) (hram : ∃ τ ∈ I, ∃ x, ρ τ x ≠ x)\n    (hswap : ∃ σ, ∀ x, x ∉ M → ρ σ x + x ∈ M) :\n    ¬ ∃ L : Submodule k V, Module.finrank k L = 1 ∧ IsCofixedOn ρ L"
+    },
+    {
+      "name": "DkMath.Lib.RepresentationTheory.CofixedBranchSwap.no_stable_cofixed_line",
+      "kind": "theorem",
+      "path": "DkMath/Lib/RepresentationTheory/CofixedBranchSwap.lean",
+      "line": 91,
+      "source_signature": "theorem no_stable_cofixed_line (ρ : Representation k G V) (I : Subgroup G)\n    (M : Submodule k V) (hM : M ≠ ⊤) (h2 : (2 : k) ≠ 0)\n    (habs : CofixedOn ρ M I) (hram : ∃ τ ∈ I, ∃ x, ρ τ x ≠ x)\n    (hswap : ∃ σ, ∀ x, x ∉ M → ρ σ x + x ∈ M) :\n    ¬ ∃ L : Submodule k V, Module.finrank k L = 1 ∧ IsStable ρ L ∧ IsCofixedOn ρ L"
+    },
+    {
+      "name": "DkMath.Lib.RepresentationTheory.CofixedBranchSwap.inertia_fixed_of_cofixed_and_branch_swap",
+      "kind": "theorem",
+      "path": "DkMath/Lib/RepresentationTheory/CofixedBranchSwap.lean",
+      "line": 101,
+      "source_signature": "theorem inertia_fixed_of_cofixed_and_branch_swap (ρ : Representation k G V) (I : Subgroup G)\n    (M : Submodule k V) (hM : M ≠ ⊤) (h2 : (2 : k) ≠ 0)\n    (habs : CofixedOn ρ M I) (hswap : ∃ σ, ∀ x, x ∉ M → ρ σ x + x ∈ M)\n    {L : Submodule k V} (hline : Module.finrank k L = 1) (hL : IsCofixedOn ρ L) :\n    ∀ τ ∈ I, ∀ x, ρ τ x = x"
+    },
+    {
+      "name": "DkMath.FLT.Frey.Source.a_mod_eight_cases_of_oriented",
+      "kind": "theorem",
+      "path": "DkMath/FLT/FreyCofixedBranchSwap.lean",
+      "line": 51,
+      "source_signature": "theorem a_mod_eight_cases_of_oriented (ha4 : (4 : ℤ) ∣ S.a + 1) :\n    S.a % 8 = 3 ∨ S.a % 8 = 7"
+    },
+    {
+      "name": "DkMath.FLT.Frey.Source.residualZeroComponent",
+      "kind": "def",
+      "path": "DkMath/FLT/FreyCofixedBranchSwap.lean",
+      "line": 58,
+      "source_signature": "noncomputable def residualZeroComponent (A : ValuationSubring (AlgebraicClosure ℚ)) :\n    Submodule (ZMod p) S.ResidualSpace"
+    },
+    {
+      "name": "DkMath.FLT.Frey.Source.mem_residualZeroComponent_iff",
+      "kind": "theorem",
+      "path": "DkMath/FLT/FreyCofixedBranchSwap.lean",
+      "line": 79,
+      "source_signature": "theorem mem_residualZeroComponent_iff (A : ValuationSubring (AlgebraicClosure ℚ))\n    (P : S.ResidualSpace) : P ∈ S.residualZeroComponent A ↔\n      HasSmoothReduction (S.valuationModel A) P.val"
+    },
+    {
+      "name": "DkMath.FLT.Frey.Source.residualZeroComponent_ne_top_iff",
+      "kind": "theorem",
+      "path": "DkMath/FLT/FreyCofixedBranchSwap.lean",
+      "line": 85,
+      "source_signature": "theorem residualZeroComponent_ne_top_iff (A : ValuationSubring (AlgebraicClosure ℚ)) :\n    S.residualZeroComponent A ≠ ⊤ ↔\n      ∃ P : S.ResidualSpace, ¬ HasSmoothReduction (S.valuationModel A) P.val"
+    },
+    {
+      "name": "DkMath.FLT.Frey.Source.residualZeroComponent_absorbs_of_fixed_centre",
+      "kind": "theorem",
+      "path": "DkMath/FLT/FreyCofixedBranchSwap.lean",
+      "line": 98,
+      "source_signature": "theorem residualZeroComponent_absorbs_of_fixed_centre\n    (A : ValuationSubring (AlgebraicClosure ℚ))\n    (C : CriticalCentre A (S.rationalCurve.baseChange (AlgebraicClosure ℚ)))\n    (D : TangentDirections C)\n    (hfix : ∀ τ ∈ inertiaSubgroupIn A ℚ, τ C.x = C.x ∧ τ C.y = C.y) :\n    CofixedOn S.residualRepresentation (S.residualZeroComponent A) (inertiaSubgroupIn A ℚ)"
+    },
+    {
+      "name": "DkMath.FLT.Frey.Source.residual_no_cofixed_line_of_inertia_and_branch_swap",
+      "kind": "theorem",
+      "path": "DkMath/FLT/FreyCofixedBranchSwap.lean",
+      "line": 112,
+      "source_signature": "theorem residual_no_cofixed_line_of_inertia_and_branch_swap (hp2 : p ≠ 2)\n    (A : ValuationSubring (AlgebraicClosure ℚ))\n    (M : Submodule (ZMod p) S.ResidualSpace) (hM : M ≠ ⊤)\n    (habs : CofixedOn S.residualRepresentation M (inertiaSubgroupIn A ℚ))\n    (hram : ∃ τ ∈ inertiaSubgroupIn A ℚ, ∃ P, S.residualRepresentation τ P ≠ P)\n    (hswap : ∃ σ, ∀ P, P ∉ M → S.residualRepresentation σ P + P ∈ M) :\n    ¬ ∃ L : Submodule (ZMod p) S.ResidualSpace, Module.finrank (ZMod p) L = 1 ∧\n      S.IsGaloisStable L ∧ IsCofixedOn S.residualRepresentation L"
+    },
+    {
+      "name": "DkMath.FLT.Frey.Source.residual_no_cofixed_line_of_zeroComponent_branch_swap",
+      "kind": "theorem",
+      "path": "DkMath/FLT/FreyCofixedBranchSwap.lean",
+      "line": 131,
+      "source_signature": "theorem residual_no_cofixed_line_of_zeroComponent_branch_swap (hp2 : p ≠ 2)\n    (A : ValuationSubring (AlgebraicClosure ℚ))\n    (C : CriticalCentre A (S.rationalCurve.baseChange (AlgebraicClosure ℚ)))\n    (D : TangentDirections C)\n    (hfix : ∀ τ ∈ inertiaSubgroupIn A ℚ, τ C.x = C.x ∧ τ C.y = C.y)\n    (hout : ∃ P : S.ResidualSpace, ¬ HasSmoothReduction (S.valuationModel A) P.val)\n    (hram : ∃ τ ∈ inertiaSubgroupIn A ℚ, ∃ P, S.residualRepresentation τ P ≠ P)\n    (hswap : ∃ σ, ∀ P : S.ResidualSpace, ¬ HasSmoothReduction (S.valuationModel A) P.val →\n      HasSmoothReduction (S.valuationModel A) (S.residualRepresentation σ P + P).val) :\n    ¬ ∃ L : Submodule (ZMod p) S.ResidualSpace, Module.finrank (ZMod p) L = 1 ∧\n      S.IsGaloisStable L ∧ IsCofixedOn S.residualRepresentation L"
+    },
+    {
+      "name": "DkMath.FLT.Frey.Source.residual_isIrreducible_of_inertia_and_branch_swap",
+      "kind": "theorem",
+      "path": "DkMath/FLT/FreyCofixedBranchSwap.lean",
+      "line": 151,
+      "source_signature": "theorem residual_isIrreducible_of_inertia_and_branch_swap (hp5 : 5 ≤ p) (hbe : Even S.b)\n    (A : ValuationSubring (AlgebraicClosure ℚ))\n    (M : Submodule (ZMod p) S.ResidualSpace) (hM : M ≠ ⊤)\n    (habs : CofixedOn S.residualRepresentation M (inertiaSubgroupIn A ℚ))\n    (hram : ∃ τ ∈ inertiaSubgroupIn A ℚ, ∃ P, S.residualRepresentation τ P ≠ P)\n    (hswap : ∃ σ, ∀ P, P ∉ M → S.residualRepresentation σ P + P ∈ M) :\n    S.ResidualIsIrreducible"
+    }
+  ],
+  "boundary_declarations": [
+    "CofixedBranchSwapTest.axis",
+    "CofixedBranchSwapTest.mem_axis",
+    "CofixedBranchSwapTest.axis_ne_top",
+    "CofixedBranchSwapTest.axis_ne_bot",
+    "CofixedBranchSwapTest.axis_finrank",
+    "CofixedBranchSwapTest.rho",
+    "CofixedBranchSwapTest.rho_cofixed",
+    "CofixedBranchSwapTest.rho_nontrivial",
+    "CofixedBranchSwapTest.rho_absorbs",
+    "CofixedBranchSwapTest.characteristic_two_boundary",
+    "CofixedBranchSwapTest.odd_shear_has_no_branch_swap",
+    "CofixedBranchSwapTest.odd_cofixed_line_exists",
+    "CofixedBranchSwapTest.top_absorber_boundary",
+    "CofixedBranchSwapTest.orientation_leaves_seven_branch"
+  ],
+  "smoke_declarations": [
+    "Note032Smoke.source37_no_cofixed",
+    "Note032Smoke.source37_irreducible",
+    "Note032Smoke.source37_zeroComponent_mem",
+    "Note032Smoke.source37_zeroComponent_absorbs"
+  ],
+  "reference_sources": [
+    {
+      "path": "P2M/Sol/S_FreyPackage_frey_no_cofixed_of_a_mod_eight.lean",
+      "commit": "6e837e75355538c7f80bab5b956861e86c4eacc2",
+      "bytes": 5887,
+      "lines": 90,
+      "sha256": "5098ddbdc71ce7a7ad34ef7ceed70e489fae314f74509207386865ea0746cc5f",
+      "git_blob": "ae957068bc982922786cc449eead6514b2de00e2"
+    },
+    {
+      "path": "P2M/Sol/S_FreyPackage_frey_exists_inertia_not_fixed_at_two.lean",
+      "commit": "6e837e75355538c7f80bab5b956861e86c4eacc2",
+      "bytes": 27912,
+      "lines": 558,
+      "sha256": "ab7b1bead99be5cf2060e4e841fee2ed6ebfb7619ea03f44c0801206118d4ad9",
+      "git_blob": "0bf3da9c6ecf37f2fc6f2fc97bd8c6b888d856f2"
+    },
+    {
+      "path": "P2M/Sol/S_Submodule_not_exists_cofixed_line_of_inertia_and_branch_swap.lean",
+      "commit": "6e837e75355538c7f80bab5b956861e86c4eacc2",
+      "bytes": 4276,
+      "lines": 96,
+      "sha256": "a603655c890a798c5bf80a9e28463a5132d9e4dcaddecdca6d98ce5ee97c6243",
+      "git_blob": "ddbf26fccbe3616cd3d0adeb665850984d47a921"
+    },
+    {
+      "path": "P2M/Sol/S_FreyPackage_frey_exists_decomposition_branch_swap_of_a_mod_eight.lean",
+      "commit": "6e837e75355538c7f80bab5b956861e86c4eacc2",
+      "bytes": 17630,
+      "lines": 329,
+      "sha256": "5610ba471b7a22fb47ed41de278eab6f9def67ee23aaadb0b3aef906352d54c9",
+      "git_blob": "adf56ea854af039815cd489721136765c4bed9df"
+    }
+  ],
+  "existing_owner_sha256": {
+    "DkMath/FLT/FreyStableLineLocalGlobal.lean": "3f645fea057a7f6318d7ec1f6d113c9ba42e008b7b163505dc35a022b8f797cd",
+    "DkMath/FLT/FreyPrimeProfile.lean": "3ae765d943f18ea62199cb97cc7532c1bc71c9430261e112f385386a82370c75",
+    "DkMath/FLT/FreyPrimeGoodFiltration.lean": "a711ec3fa87f5934ee3071b604cba219cc4954c91f7d5a3033a0c362f211c25d",
+    "DkMath/FLT/FreyPrimeFiltration.lean": "b2c14535f55c0bc30c2fef3250cc3a0536439f93fe7e8bdf8fd4305deb979842",
+    "DkMath/FLT/FreyDyadicInertia.lean": "bf2e82d1893464566832786079de649ddf25383b8cca393b0a8c2421a83a1152",
+    "DkMath/Lib/NumberTheory/EllipticNodalInertia.lean": "a7cbef9a5cbe0729d93c6745398ea6cce6ebd507b3aae7fad65533d13a6dee27",
+    "DkMath/Lib/NumberTheory/EllipticSmoothReduction.lean": "3b148dd07922137b85c3e26f35b38c1633db77c2d997905eb5d9d9797a704622",
+    "DkMath/Lib/RepresentationTheory/FixedCofixed.lean": "582a450bc23c41dfb5666421a5ab9765265b55dd63002a407b11befe103c78f6",
+    "DkMath/Lib/RepresentationTheory/AbsorbingSubspace.lean": "6da5e326c2f83f5a499d0ed78459c6337d7420f348f6cf7aba7149f941b78e04"
+  },
+  "note032_sha256": "2acc118dd81f200ef3f63d3032f09b061061f51629584d2f51d46bd4ed96324b",
+  "lib_completion_merged": true,
+  "open_inputs": [
+    "dyadic critical centre and tangent directions with inertia fixed centre",
+    "p-torsion point outside smooth zero component E0",
+    "nontrivial inertia action at two from discriminant depth obstruction",
+    "branch swapping Galois element from a congruent to 3 mod 8",
+    "a congruent to 7 mod 8 and general no-cofixed route remain separate"
+  ],
+  "local_import_graph": {
+    "DkMath.Lib.RepresentationTheory.CofixedBranchSwap": [
+      "DkMath.Lib.RepresentationTheory.LocalFixedCofixed"
+    ],
+    "DkMath.Lib.RepresentationTheory.LocalFixedCofixed": [
+      "DkMath.Lib.RepresentationTheory.FixedCofixed"
+    ],
+    "DkMath.Lib.RepresentationTheory.FixedCofixed": [
+      "DkMath.Lib.RepresentationTheory.InvariantLine"
+    ],
+    "DkMath.Lib.RepresentationTheory.InvariantLine": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionGaloisStable"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionGaloisStable": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation": [],
+    "DkMath.FLT.FreyCofixedBranchSwap": [
+      "DkMath.FLT.FreyStableLineLocalGlobal",
+      "DkMath.Lib.RepresentationTheory.CofixedBranchSwap",
+      "DkMath.Lib.NumberTheory.EllipticNodalInertia"
+    ],
+    "DkMath.FLT.FreyStableLineLocalGlobal": [
+      "DkMath.FLT.FreyInertiaTransport",
+      "DkMath.FLT.FreyPrimeFiltration",
+      "DkMath.FLT.FreyDyadicInertia",
+      "DkMath.FLT.FreyUnramifiedAway",
+      "DkMath.FLT.FreyRationalTorsionBridge"
+    ],
+    "DkMath.FLT.FreyInertiaTransport": [
+      "DkMath.FLT.FreyResidualGeometry",
+      "DkMath.Lib.NumberTheory.EllipticInertiaTransport"
+    ],
+    "DkMath.FLT.FreyResidualGeometry": [
+      "DkMath.FLT.FreyResidualFiniteLevel",
+      "DkMath.Lib.NumberTheory.EllipticTorsionFinite"
+    ],
+    "DkMath.FLT.FreyResidualFiniteLevel": [
+      "DkMath.FLT.FreyResidualIrreducibility",
+      "DkMath.Lib.NumberTheory.EllipticTorsionRankTwo",
+      "DkMath.Lib.NumberTheory.EllipticTorsionFiniteLevel"
+    ],
+    "DkMath.FLT.FreyResidualIrreducibility": [
+      "DkMath.FLT.FreyResidualRepresentation",
+      "DkMath.Lib.NumberTheory.EllipticTorsionStandardEquiv"
+    ],
+    "DkMath.FLT.FreyResidualRepresentation": [
+      "DkMath.FLT.FreyCounterexample",
+      "DkMath.Lib.NumberTheory.EllipticTorsionContinuity",
+      "DkMath.Lib.RepresentationTheory.PascalDifference"
+    ],
+    "DkMath.FLT.FreyCounterexample": [
+      "DkMath.FLT.FreyPrimeProfile"
+    ],
+    "DkMath.FLT.FreyPrimeProfile": [
+      "DkMath.FLT.FreyTwo"
+    ],
+    "DkMath.FLT.FreyTwo": [
+      "DkMath.FLT.Frey",
+      "DkMath.Lib.NumberTheory.FreyTwoArithmetic"
+    ],
+    "DkMath.FLT.Frey": [
+      "DkMath.Lib.NumberTheory.FreyLocalReduction"
+    ],
+    "DkMath.Lib.NumberTheory.FreyLocalReduction": [
+      "DkMath.Lib.NumberTheory.FreyPrimeValuation"
+    ],
+    "DkMath.Lib.NumberTheory.FreyPrimeValuation": [
+      "DkMath.Lib.NumberTheory.GNFreyDiscriminant",
+      "DkMath.Lib.NumberTheory.PadicValNat"
+    ],
+    "DkMath.Lib.NumberTheory.GNFreyDiscriminant": [
+      "DkMath.Lib.NumberTheory.FreyGapCubic",
+      "DkMath.Lib.Cosmic.CoreNested",
+      "DkMath.CosmicFormula.Defs"
+    ],
+    "DkMath.Lib.NumberTheory.FreyGapCubic": [],
+    "DkMath.Lib.Cosmic.CoreNested": [
+      "DkMath.Lib.Cosmic.GTail"
+    ],
+    "DkMath.Lib.Cosmic.GTail": [],
+    "DkMath.CosmicFormula.Defs": [
+      "DkMath.CosmicFormula.GTail"
+    ],
+    "DkMath.CosmicFormula.GTail": [
+      "DkMath.Lib.Cosmic.GTailCongruence",
+      "DkMath.Lib.Cosmic.GTailPadic"
+    ],
+    "DkMath.Lib.Cosmic.GTailCongruence": [
+      "DkMath.Lib.Cosmic.GTailNat"
+    ],
+    "DkMath.Lib.Cosmic.GTailNat": [
+      "DkMath.Lib.Cosmic.GTail"
+    ],
+    "DkMath.Lib.Cosmic.GTailPadic": [
+      "DkMath.Lib.Cosmic.GTailNat",
+      "DkMath.Lib.Cosmic.GTailBoundary",
+      "DkMath.Lib.Cosmic.GTailCongruence",
+      "DkMath.Lib.NumberTheory.PadicValNat"
+    ],
+    "DkMath.Lib.Cosmic.GTailBoundary": [
+      "DkMath.Lib.Cosmic.GTail"
+    ],
+    "DkMath.Lib.NumberTheory.PadicValNat": [],
+    "DkMath.Lib.NumberTheory.FreyTwoArithmetic": [
+      "DkMath.Lib.NumberTheory.FreyLocalReduction"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionContinuity": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation"
+    ],
+    "DkMath.Lib.RepresentationTheory.PascalDifference": [],
+    "DkMath.Lib.NumberTheory.EllipticTorsionStandardEquiv": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionGaloisStable"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionRankTwo": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionStandardEquiv"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionFiniteLevel": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionContinuity"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionFinite": [
+      "DkMath.Lib.NumberTheory.EllipticDivisionMultiplication",
+      "DkMath.Lib.NumberTheory.EllipticTorsionFiniteLevel"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticDivisionMultiplication": [
+      "DkMath.Lib.NumberTheory.EllipticDivisionCoordinates"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticDivisionCoordinates": [
+      "DkMath.Lib.NumberTheory.EllipticDivisionUniversal"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticDivisionUniversal": [
+      "DkMath.Lib.NumberTheory.EllipticDivisionSequence"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticDivisionSequence": [],
+    "DkMath.Lib.NumberTheory.EllipticInertiaTransport": [
+      "DkMath.Lib.NumberTheory.AbsoluteInertiaRepresentation",
+      "DkMath.Lib.NumberTheory.EllipticTorsionFinite"
+    ],
+    "DkMath.Lib.NumberTheory.AbsoluteInertiaRepresentation": [
+      "DkMath.Lib.NumberTheory.AbsoluteInertiaGeneration",
+      "DkMath.Lib.RepresentationTheory.LocalFixedCofixed"
+    ],
+    "DkMath.Lib.NumberTheory.AbsoluteInertiaGeneration": [
+      "DkMath.Lib.NumberTheory.NumberFieldInertiaGeneration",
+      "DkMath.Lib.NumberTheory.IntegralClosureInertiaLift",
+      "DkMath.Lib.NumberTheory.ValuationInertiaLift"
+    ],
+    "DkMath.Lib.NumberTheory.NumberFieldInertiaGeneration": [],
+    "DkMath.Lib.NumberTheory.IntegralClosureInertiaLift": [],
+    "DkMath.Lib.NumberTheory.ValuationInertiaLift": [
+      "DkMath.Lib.NumberTheory.ValuationInertia"
+    ],
+    "DkMath.Lib.NumberTheory.ValuationInertia": [],
+    "DkMath.FLT.FreyPrimeFiltration": [
+      "DkMath.FLT.FreyPrimeGoodFiltration",
+      "DkMath.FLT.FreyNodalReduction",
+      "DkMath.Lib.NumberTheory.EllipticNodalInertia"
+    ],
+    "DkMath.FLT.FreyPrimeGoodFiltration": [
+      "DkMath.FLT.FreyIntegralTorsionWitness",
+      "DkMath.Lib.NumberTheory.EllipticGoodReductionKernel",
+      "DkMath.Lib.RepresentationTheory.AbsorbingSubspace",
+      "DkMath.Lib.NumberTheory.AbsoluteInertiaConjugacy"
+    ],
+    "DkMath.FLT.FreyIntegralTorsionWitness": [
+      "DkMath.FLT.FreyValuationArithmetic",
+      "DkMath.FLT.FreyResidualRankTwo",
+      "DkMath.Lib.Algebra.SingleSlopeRoot"
+    ],
+    "DkMath.FLT.FreyValuationArithmetic": [
+      "DkMath.FLT.FreyResidualRepresentation",
+      "DkMath.Lib.NumberTheory.ValuationPrimeSupport",
+      "DkMath.Lib.NumberTheory.EllipticTorsionValuationIntegrality"
+    ],
+    "DkMath.Lib.NumberTheory.ValuationPrimeSupport": [
+      "DkMath.Lib.NumberTheory.ValuationInertia"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionValuationIntegrality": [
+      "DkMath.Lib.Algebra.ValuationPolynomial",
+      "DkMath.Lib.NumberTheory.EllipticDivisionMultiplication"
+    ],
+    "DkMath.Lib.Algebra.ValuationPolynomial": [],
+    "DkMath.FLT.FreyResidualRankTwo": [
+      "DkMath.FLT.FreyResidualDimensionCriteria",
+      "DkMath.Lib.NumberTheory.EllipticTorsionRegularFiber"
+    ],
+    "DkMath.FLT.FreyResidualDimensionCriteria": [
+      "DkMath.FLT.FreyResidualNontrivial",
+      "DkMath.Lib.NumberTheory.EllipticTwoTorsionRank"
+    ],
+    "DkMath.FLT.FreyResidualNontrivial": [
+      "DkMath.FLT.FreyResidualDimensionBound",
+      "DkMath.Lib.NumberTheory.EllipticTorsionNontrivial"
+    ],
+    "DkMath.FLT.FreyResidualDimensionBound": [
+      "DkMath.FLT.FreyResidualGeometry",
+      "DkMath.Lib.NumberTheory.EllipticTorsionDimensionBound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionDimensionBound": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionCardBound",
+      "DkMath.Lib.NumberTheory.EllipticTorsionRankTwo"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionCardBound": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionFinite"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionNontrivial": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionDimensionBound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTwoTorsionRank": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionDimensionCriteria"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionDimensionCriteria": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionRootCount"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionRootCount": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionNontrivial"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionRegularFiber": [
+      "DkMath.Lib.NumberTheory.EllipticMultiplicationCoordinates",
+      "DkMath.Lib.NumberTheory.EllipticTorsionDimensionCriteria"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticMultiplicationCoordinates": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionNontrivial",
+      "DkMath.Lib.Algebra.RationalPolynomialFiber"
+    ],
+    "DkMath.Lib.Algebra.RationalPolynomialFiber": [],
+    "DkMath.Lib.Algebra.SingleSlopeRoot": [
+      "DkMath.Lib.Algebra.ValuationPolynomial"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticGoodReductionKernel": [
+      "DkMath.Lib.NumberTheory.EllipticReductionKernel",
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation",
+      "DkMath.Lib.NumberTheory.ValuationTameCharacter"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticReductionKernel": [
+      "DkMath.Lib.NumberTheory.EllipticDyadicSeparation",
+      "DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation",
+      "DkMath.Lib.NumberTheory.ValuationPrimeSupport"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticDyadicSeparation": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionValuationIntegrality"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionValuationIntegrality"
+    ],
+    "DkMath.Lib.NumberTheory.ValuationTameCharacter": [
+      "DkMath.Lib.NumberTheory.ValuationFrobenius"
+    ],
+    "DkMath.Lib.NumberTheory.ValuationFrobenius": [
+      "DkMath.Lib.NumberTheory.ValuationInertiaLift",
+      "DkMath.Lib.NumberTheory.IntegralClosureInertiaLift"
+    ],
+    "DkMath.Lib.RepresentationTheory.AbsorbingSubspace": [
+      "DkMath.Lib.RepresentationTheory.LocalFixedCofixed"
+    ],
+    "DkMath.Lib.NumberTheory.AbsoluteInertiaConjugacy": [
+      "DkMath.Lib.NumberTheory.ValuationPlaceConjugacy",
+      "DkMath.Lib.RepresentationTheory.ConjugateLocalConditions"
+    ],
+    "DkMath.Lib.NumberTheory.ValuationPlaceConjugacy": [
+      "DkMath.Lib.NumberTheory.ValuationTameCharacter"
+    ],
+    "DkMath.Lib.RepresentationTheory.ConjugateLocalConditions": [
+      "DkMath.Lib.RepresentationTheory.LocalFixedCofixed"
+    ],
+    "DkMath.FLT.FreyNodalReduction": [
+      "DkMath.FLT.FreyCriticalCentre",
+      "DkMath.FLT.FreySmoothReductionInertia",
+      "DkMath.Lib.NumberTheory.EllipticTangentDirections",
+      "DkMath.Lib.NumberTheory.EllipticNodalReduction"
+    ],
+    "DkMath.FLT.FreyCriticalCentre": [
+      "DkMath.FLT.FreyValuationArithmetic",
+      "DkMath.Lib.NumberTheory.EllipticCriticalCentre"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticCriticalCentre": [
+      "DkMath.Lib.NumberTheory.EllipticCriticalCentreAlgebra",
+      "DkMath.Lib.NumberTheory.ValuationPrimeSupport"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticCriticalCentreAlgebra": [],
+    "DkMath.FLT.FreySmoothReductionInertia": [
+      "DkMath.FLT.FreyValuationArithmetic",
+      "DkMath.Lib.NumberTheory.EllipticSmoothReductionInertia"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticSmoothReductionInertia": [
+      "DkMath.Lib.NumberTheory.EllipticGoodReductionInertia"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticGoodReductionInertia": [
+      "DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation",
+      "DkMath.Lib.NumberTheory.ValuationPrimeSupport",
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTangentDirections": [
+      "DkMath.Lib.NumberTheory.EllipticCriticalCentre"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticNodalReduction": [
+      "DkMath.Lib.NumberTheory.EllipticCriticalCentre",
+      "DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticNodalInertia": [
+      "DkMath.Lib.NumberTheory.EllipticNodalReductionKernel",
+      "DkMath.Lib.NumberTheory.EllipticDepthInertia",
+      "DkMath.Lib.NumberTheory.ValuationTameCharacter"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticNodalReductionKernel": [
+      "DkMath.Lib.NumberTheory.EllipticSmoothReduction",
+      "DkMath.Lib.NumberTheory.EllipticNodalTorsion",
+      "DkMath.Lib.NumberTheory.EllipticCriticalCentre"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticSmoothReduction": [
+      "DkMath.Lib.NumberTheory.EllipticReductionCoordinates",
+      "DkMath.Lib.NumberTheory.EllipticReductionKernel"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticReductionCoordinates": [
+      "DkMath.Lib.NumberTheory.EllipticReductionSlope"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticReductionSlope": [
+      "DkMath.Lib.NumberTheory.ValuationResidue",
+      "DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation"
+    ],
+    "DkMath.Lib.NumberTheory.ValuationResidue": [
+      "DkMath.Lib.NumberTheory.ValuationInertia"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticNodalTorsion": [],
+    "DkMath.Lib.NumberTheory.EllipticDepthInertia": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionDepth",
+      "DkMath.Lib.NumberTheory.EllipticSmoothReductionInertia"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionDepth": [
+      "DkMath.Lib.NumberTheory.EllipticIntegralReturn"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticIntegralReturn": [
+      "DkMath.Lib.NumberTheory.EllipticCriticalPair"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticCriticalPair": [
+      "DkMath.Lib.NumberTheory.EllipticCriticalAddition"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticCriticalAddition": [
+      "DkMath.Lib.NumberTheory.EllipticOppositeDepth"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticOppositeDepth": [
+      "DkMath.Lib.NumberTheory.EllipticAdditionDepth"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticAdditionDepth": [
+      "DkMath.Lib.NumberTheory.EllipticBranchComparison",
+      "DkMath.Lib.NumberTheory.EllipticDoublingDepth"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticBranchComparison": [
+      "DkMath.Lib.NumberTheory.EllipticShallowSlope",
+      "DkMath.Lib.NumberTheory.EllipticNodalReduction"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticShallowSlope": [
+      "DkMath.Lib.Algebra.ValuationSeparatedRoots",
+      "DkMath.Lib.NumberTheory.EllipticTangentDirections"
+    ],
+    "DkMath.Lib.Algebra.ValuationSeparatedRoots": [],
+    "DkMath.Lib.NumberTheory.EllipticDoublingDepth": [
+      "DkMath.Lib.NumberTheory.EllipticCriticalDepth"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticCriticalDepth": [
+      "DkMath.Lib.NumberTheory.EllipticShallowSlope"
+    ],
+    "DkMath.FLT.FreyDyadicInertia": [
+      "DkMath.FLT.FreyValuationArithmetic",
+      "DkMath.FLT.FreyRationalTorsionValuation",
+      "DkMath.FLT.FreyResidualRankTwo",
+      "DkMath.Lib.NumberTheory.EllipticDyadicWildInertia",
+      "DkMath.Lib.NumberTheory.ValuationTameCharacter",
+      "DkMath.Lib.RepresentationTheory.ConjugateSquare"
+    ],
+    "DkMath.FLT.FreyRationalTorsionValuation": [
+      "DkMath.FLT.Frey",
+      "DkMath.Lib.NumberTheory.RationalTwoAdicBounds"
+    ],
+    "DkMath.Lib.NumberTheory.RationalTwoAdicBounds": [],
+    "DkMath.Lib.NumberTheory.EllipticDyadicWildInertia": [
+      "DkMath.Lib.NumberTheory.EllipticDyadicSeparation",
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation"
+    ],
+    "DkMath.Lib.RepresentationTheory.ConjugateSquare": [
+      "DkMath.Lib.RepresentationTheory.InvariantLine",
+      "DkMath.Lib.RepresentationTheory.LocalFixedCofixed"
+    ],
+    "DkMath.FLT.FreyUnramifiedAway": [
+      "DkMath.FLT.FreyDoublingDepth",
+      "DkMath.FLT.FreyGoodReductionInertia",
+      "DkMath.Lib.NumberTheory.EllipticDepthInertia"
+    ],
+    "DkMath.FLT.FreyDoublingDepth": [
+      "DkMath.FLT.FreyBranchComparison",
+      "DkMath.Lib.NumberTheory.EllipticDoublingDepth"
+    ],
+    "DkMath.FLT.FreyBranchComparison": [
+      "DkMath.FLT.FreyShallowSlope",
+      "DkMath.Lib.NumberTheory.EllipticBranchComparison"
+    ],
+    "DkMath.FLT.FreyShallowSlope": [
+      "DkMath.FLT.FreyNodalReduction",
+      "DkMath.Lib.NumberTheory.EllipticShallowSlope"
+    ],
+    "DkMath.FLT.FreyGoodReductionInertia": [
+      "DkMath.FLT.FreyValuationArithmetic",
+      "DkMath.Lib.NumberTheory.EllipticGoodReductionInertia",
+      "DkMath.Lib.RepresentationTheory.LocalFixedCofixed"
+    ],
+    "DkMath.FLT.FreyRationalTorsionBridge": [
+      "DkMath.FLT.FreyStableLine",
+      "DkMath.FLT.FreyRationalTorsion"
+    ],
+    "DkMath.FLT.FreyStableLine": [
+      "DkMath.FLT.FreyGeometricWeilPairing",
+      "DkMath.Lib.NumberTheory.EllipticStableLine",
+      "DkMath.Lib.NumberTheory.FoldedValuationOrbit"
+    ],
+    "DkMath.FLT.FreyGeometricWeilPairing": [
+      "DkMath.FLT.FreyWeilGalois",
+      "DkMath.FLT.FreyResidualCyclotomic",
+      "DkMath.Lib.NumberTheory.EllipticGeometricWeilPairing"
+    ],
+    "DkMath.FLT.FreyWeilGalois": [
+      "DkMath.FLT.FreyWeilBicharacter",
+      "DkMath.FLT.FreyResidualRepresentation",
+      "DkMath.Lib.NumberTheory.EllipticWeilGalois"
+    ],
+    "DkMath.FLT.FreyWeilBicharacter": [
+      "DkMath.FLT.FreyWeilCharacter",
+      "DkMath.Lib.NumberTheory.EllipticWeilBicharacter"
+    ],
+    "DkMath.FLT.FreyWeilCharacter": [
+      "DkMath.FLT.FreyWeilTransport",
+      "DkMath.Lib.NumberTheory.EllipticWeilCharacter"
+    ],
+    "DkMath.FLT.FreyWeilTransport": [
+      "DkMath.FLT.FreyWeilValuation",
+      "DkMath.Lib.NumberTheory.EllipticWeilTransport"
+    ],
+    "DkMath.FLT.FreyWeilValuation": [
+      "DkMath.FLT.FreyWeilFunction",
+      "DkMath.Lib.NumberTheory.EllipticWeilValuation"
+    ],
+    "DkMath.FLT.FreyWeilFunction": [
+      "DkMath.FLT.FreyWeilGeometry",
+      "DkMath.Lib.NumberTheory.EllipticWeilFunction"
+    ],
+    "DkMath.FLT.FreyWeilGeometry": [
+      "DkMath.FLT.Frey",
+      "DkMath.Lib.NumberTheory.EllipticFunctionFieldTranslation"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFunctionFieldTranslation": [
+      "DkMath.Lib.NumberTheory.EllipticFunctionField"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFunctionField": [
+      "DkMath.Lib.NumberTheory.EllipticCoordinateRing"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticCoordinateRing": [],
+    "DkMath.Lib.NumberTheory.EllipticWeilFunction": [
+      "DkMath.Lib.NumberTheory.EllipticMultiplicationFiber",
+      "DkMath.Lib.NumberTheory.EllipticPrincipalPointIdeal"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticMultiplicationFiber": [
+      "DkMath.Lib.Algebra.FiniteTorsionSum",
+      "DkMath.Lib.NumberTheory.EllipticTorsionAllCard"
+    ],
+    "DkMath.Lib.Algebra.FiniteTorsionSum": [],
+    "DkMath.Lib.NumberTheory.EllipticTorsionAllCard": [
+      "DkMath.Lib.Algebra.TorsionMultiplication",
+      "DkMath.Lib.NumberTheory.EllipticMultiplicationSurjective"
+    ],
+    "DkMath.Lib.Algebra.TorsionMultiplication": [],
+    "DkMath.Lib.NumberTheory.EllipticMultiplicationSurjective": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionRegularFiber"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPrincipalPointIdeal": [
+      "DkMath.Lib.NumberTheory.EllipticFunctionFieldPlaces"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFunctionFieldPlaces": [
+      "DkMath.Lib.NumberTheory.EllipticFunctionField"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticWeilValuation": [
+      "DkMath.Lib.NumberTheory.EllipticWeilFunction",
+      "DkMath.Lib.NumberTheory.EllipticPointIdealValuation"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointIdealValuation": [
+      "DkMath.Lib.NumberTheory.EllipticPrincipalPointIdeal"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticWeilTransport": [
+      "DkMath.Lib.NumberTheory.EllipticWeilInfinity",
+      "DkMath.Lib.NumberTheory.EllipticTranslationInfinity"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticWeilInfinity": [
+      "DkMath.Lib.NumberTheory.EllipticWeilValuation",
+      "DkMath.Lib.NumberTheory.EllipticPointIdealNorm",
+      "DkMath.Lib.NumberTheory.EllipticInfinityValuation"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointIdealNorm": [
+      "DkMath.Lib.NumberTheory.EllipticPointIdealValuation"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticInfinityValuation": [
+      "DkMath.Lib.NumberTheory.EllipticFunctionField"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTranslationInfinity": [
+      "DkMath.Lib.NumberTheory.EllipticTranslationValuation",
+      "DkMath.Lib.NumberTheory.EllipticInfinityClassification"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTranslationValuation": [
+      "DkMath.Lib.NumberTheory.EllipticValuationTransport",
+      "DkMath.Lib.Algebra.DiscreteValuationRigidity"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticValuationTransport": [
+      "DkMath.Lib.NumberTheory.EllipticFunctionFieldTranslation",
+      "DkMath.Lib.NumberTheory.EllipticPointIdealValuation"
+    ],
+    "DkMath.Lib.Algebra.DiscreteValuationRigidity": [],
+    "DkMath.Lib.NumberTheory.EllipticInfinityClassification": [
+      "DkMath.Lib.NumberTheory.EllipticInfinityValuation"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticWeilCharacter": [
+      "DkMath.Lib.NumberTheory.EllipticFunctionEigenvalue"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFunctionEigenvalue": [
+      "DkMath.Lib.NumberTheory.EllipticFunctionFieldConstants",
+      "DkMath.Lib.NumberTheory.EllipticWeilTransport"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFunctionFieldConstants": [
+      "DkMath.Lib.NumberTheory.EllipticInfinityClassification",
+      "DkMath.Lib.NumberTheory.EllipticFunctionFieldPlaces"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticWeilBicharacter": [
+      "DkMath.Lib.NumberTheory.EllipticWeilAlternating"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticWeilAlternating": [
+      "DkMath.Lib.NumberTheory.EllipticWeilRightAdd"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticWeilRightAdd": [
+      "DkMath.Lib.NumberTheory.EllipticWeilCharacter",
+      "DkMath.Lib.NumberTheory.EllipticPointOrderAlgebra"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointOrderAlgebra": [
+      "DkMath.Lib.NumberTheory.EllipticFunctionEigenvalue"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticWeilGalois": [
+      "DkMath.Lib.NumberTheory.EllipticGaloisValuation",
+      "DkMath.Lib.NumberTheory.EllipticWeilBicharacter"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticGaloisValuation": [
+      "DkMath.Lib.NumberTheory.EllipticFunctionFieldGalois",
+      "DkMath.Lib.NumberTheory.EllipticWeilValuation",
+      "DkMath.Lib.Algebra.DedekindValuationEquiv"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFunctionFieldGalois": [
+      "DkMath.Lib.NumberTheory.EllipticFunctionFieldTranslation"
+    ],
+    "DkMath.Lib.Algebra.DedekindValuationEquiv": [],
+    "DkMath.FLT.FreyResidualCyclotomic": [
+      "DkMath.FLT.FreyResidualGL2",
+      "DkMath.Lib.NumberTheory.EllipticTorsionWeilDeterminant",
+      "DkMath.Lib.NumberTheory.EllipticMultiplicationSurjective",
+      "DkMath.Lib.RepresentationTheory.StableLineMatrix"
+    ],
+    "DkMath.FLT.FreyResidualGL2": [
+      "DkMath.FLT.FreyResidualRankTwo",
+      "DkMath.Lib.NumberTheory.EllipticTorsionGL2"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionGL2": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionRegularFiber",
+      "DkMath.Lib.RepresentationTheory.MatrixRealization"
+    ],
+    "DkMath.Lib.RepresentationTheory.MatrixRealization": [
+      "DkMath.Lib.RepresentationTheory.InvariantLine"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionWeilDeterminant": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionGL2",
+      "DkMath.Lib.NumberTheory.RootPairingDeterminant"
+    ],
+    "DkMath.Lib.NumberTheory.RootPairingDeterminant": [
+      "DkMath.Lib.NumberTheory.CyclotomicRootModule",
+      "DkMath.Lib.RepresentationTheory.AlternatingDeterminant"
+    ],
+    "DkMath.Lib.NumberTheory.CyclotomicRootModule": [],
+    "DkMath.Lib.RepresentationTheory.AlternatingDeterminant": [
+      "DkMath.Lib.RepresentationTheory.MatrixRealization"
+    ],
+    "DkMath.Lib.RepresentationTheory.StableLineMatrix": [
+      "DkMath.Lib.RepresentationTheory.MatrixRealization"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticGeometricWeilPairing": [
+      "DkMath.Lib.NumberTheory.EllipticWeilNondegenerate",
+      "DkMath.Lib.NumberTheory.EllipticTorsionWeilDeterminant"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticWeilNondegenerate": [
+      "DkMath.Lib.NumberTheory.EllipticMultiplicationFixedField",
+      "DkMath.Lib.NumberTheory.EllipticMultiplicationValuation",
+      "DkMath.Lib.Algebra.PullbackPrincipalPrime",
+      "DkMath.Lib.NumberTheory.EllipticWeilGalois"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticMultiplicationFixedField": [
+      "DkMath.Lib.NumberTheory.EllipticMultiplicationFunctionDegree",
+      "DkMath.Lib.NumberTheory.EllipticTorsionAllCard"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticMultiplicationFunctionDegree": [
+      "DkMath.Lib.NumberTheory.EllipticMultiplicationPullback",
+      "DkMath.Lib.NumberTheory.EllipticFunctionFieldGenerators",
+      "DkMath.Lib.Algebra.QuadraticInvolutionDegree"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticMultiplicationPullback": [
+      "DkMath.Lib.NumberTheory.EllipticFunctionFieldNegation",
+      "DkMath.Lib.NumberTheory.EllipticMultiplicationSurjective"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFunctionFieldNegation": [
+      "DkMath.Lib.NumberTheory.EllipticFunctionFieldTranslation"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFunctionFieldGenerators": [
+      "DkMath.Lib.NumberTheory.EllipticFunctionField"
+    ],
+    "DkMath.Lib.Algebra.QuadraticInvolutionDegree": [],
+    "DkMath.Lib.NumberTheory.EllipticMultiplicationValuation": [
+      "DkMath.Lib.NumberTheory.EllipticMultiplicationFunctionDegree",
+      "DkMath.Lib.NumberTheory.EllipticWeilTransport"
+    ],
+    "DkMath.Lib.Algebra.PullbackPrincipalPrime": [],
+    "DkMath.Lib.NumberTheory.EllipticStableLine": [
+      "DkMath.Lib.NumberTheory.EllipticFixedTorsion",
+      "DkMath.Lib.NumberTheory.EllipticTorsionGL2"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFixedTorsion": [
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation",
+      "DkMath.Lib.RepresentationTheory.FixedCofixed"
+    ],
+    "DkMath.Lib.NumberTheory.FoldedValuationOrbit": [],
+    "DkMath.FLT.FreyRationalTorsion": [
+      "DkMath.FLT.FreyRationalTorsionIdentities",
+      "DkMath.Lib.NumberTheory.WeierstrassValuationOrbit"
+    ],
+    "DkMath.FLT.FreyRationalTorsionIdentities": [
+      "DkMath.FLT.FreyRationalTorsionBounds",
+      "DkMath.Lib.NumberTheory.WeierstrassTorsionIdentities"
+    ],
+    "DkMath.FLT.FreyRationalTorsionBounds": [
+      "DkMath.FLT.FreyRationalTorsionPositive",
+      "DkMath.Lib.NumberTheory.WeierstrassTorsionBounds"
+    ],
+    "DkMath.FLT.FreyRationalTorsionPositive": [
+      "DkMath.FLT.FreyRationalTorsionIntegral",
+      "DkMath.Lib.NumberTheory.WeierstrassPositiveValuation"
+    ],
+    "DkMath.FLT.FreyRationalTorsionIntegral": [
+      "DkMath.FLT.FreyRationalTorsionValuation",
+      "DkMath.Lib.NumberTheory.WeierstrassTorsionValuation"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassTorsionValuation": [
+      "DkMath.Lib.NumberTheory.WeierstrassNegativeValuation",
+      "DkMath.Lib.NumberTheory.EllipticFunctionField",
+      "DkMath.Lib.Algebra.FiniteOrbitMinimum"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassNegativeValuation": [
+      "DkMath.Lib.NumberTheory.RationalTwoAdicBounds"
+    ],
+    "DkMath.Lib.Algebra.FiniteOrbitMinimum": [],
+    "DkMath.Lib.NumberTheory.WeierstrassPositiveValuation": [
+      "DkMath.Lib.NumberTheory.WeierstrassTorsionValuation"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassTorsionBounds": [
+      "DkMath.Lib.NumberTheory.WeierstrassXReflection",
+      "DkMath.Lib.NumberTheory.WeierstrassPositiveValuation"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassXReflection": [
+      "DkMath.Lib.NumberTheory.EllipticFunctionField",
+      "DkMath.Lib.NumberTheory.RationalTwoAdicBounds"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassTorsionIdentities": [
+      "DkMath.Lib.NumberTheory.WeierstrassXIdentities"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassXIdentities": [
+      "DkMath.Lib.NumberTheory.WeierstrassTorsionBounds"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassValuationOrbit": [
+      "DkMath.Lib.NumberTheory.WeierstrassTorsionIdentities",
+      "DkMath.Lib.NumberTheory.FoldedValuationOrbit"
+    ]
+  },
+  "validation": {
+    "focused_build": {
+      "command": "lake build DkMath.Lib.RepresentationTheory.CofixedBranchSwap DkMath.FLT.FreyCofixedBranchSwap",
+      "exit_code": 0,
+      "jobs": 4031,
+      "warnings": 0
+    },
+    "smoke": {
+      "path": "evidence/Note032Smoke.lean",
+      "exit_code": 0,
+      "theorems": 4,
+      "same_source_exponent": 37,
+      "source_existence_not_constructed": true
+    },
+    "boundary": {
+      "path": "evidence/Note032BranchSwapBoundary.lean",
+      "exit_code": 0,
+      "public_declarations": 14,
+      "identical_registered_test_body": true
+    },
+    "axiom_audit": {
+      "declarations": 33,
+      "allowed_axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "results": {
+        "DkMath.Lib.RepresentationTheory.CofixedBranchSwap.line_le_of_common_nonzero": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.RepresentationTheory.CofixedBranchSwap.line_le_of_cofixed_and_nontrivial": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.RepresentationTheory.CofixedBranchSwap.not_cofixed_of_swap_at": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.RepresentationTheory.CofixedBranchSwap.not_cofixed_of_branch_swap": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.RepresentationTheory.CofixedBranchSwap.no_cofixed_line": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.RepresentationTheory.CofixedBranchSwap.no_stable_cofixed_line": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.RepresentationTheory.CofixedBranchSwap.inertia_fixed_of_cofixed_and_branch_swap": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.FLT.Frey.Source.a_mod_eight_cases_of_oriented": [
+          "propext",
+          "Quot.sound"
+        ],
+        "DkMath.FLT.Frey.Source.residualZeroComponent": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.FLT.Frey.Source.mem_residualZeroComponent_iff": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.FLT.Frey.Source.residualZeroComponent_ne_top_iff": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.FLT.Frey.Source.residualZeroComponent_absorbs_of_fixed_centre": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.FLT.Frey.Source.residual_no_cofixed_line_of_inertia_and_branch_swap": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.FLT.Frey.Source.residual_no_cofixed_line_of_zeroComponent_branch_swap": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.FLT.Frey.Source.residual_isIrreducible_of_inertia_and_branch_swap": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "CofixedBranchSwapTest.axis": [
+          "propext",
+          "Quot.sound"
+        ],
+        "CofixedBranchSwapTest.mem_axis": [
+          "propext",
+          "Quot.sound"
+        ],
+        "CofixedBranchSwapTest.axis_ne_top": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "CofixedBranchSwapTest.axis_ne_bot": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "CofixedBranchSwapTest.axis_finrank": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "CofixedBranchSwapTest.rho": [
+          "propext",
+          "Quot.sound"
+        ],
+        "CofixedBranchSwapTest.rho_cofixed": [
+          "propext",
+          "Quot.sound"
+        ],
+        "CofixedBranchSwapTest.rho_nontrivial": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "CofixedBranchSwapTest.rho_absorbs": [
+          "propext",
+          "Quot.sound"
+        ],
+        "CofixedBranchSwapTest.characteristic_two_boundary": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "CofixedBranchSwapTest.odd_shear_has_no_branch_swap": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "CofixedBranchSwapTest.odd_cofixed_line_exists": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "CofixedBranchSwapTest.top_absorber_boundary": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "CofixedBranchSwapTest.orientation_leaves_seven_branch": [
+          "propext"
+        ],
+        "Note032Smoke.source37_no_cofixed": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "Note032Smoke.source37_irreducible": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "Note032Smoke.source37_zeroComponent_mem": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "Note032Smoke.source37_zeroComponent_absorbs": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      }
+    },
+    "prior_owners_unchanged": 9,
+    "original_note032_unchanged": true,
+    "neutral_kernel_lib_only_dependency_nodes": 6,
+    "source_local_dependency_nodes": 196,
+    "production_public_theorems": 14,
+    "production_public_definitions": 1,
+    "marker_tracker": "OK: no mismatches found",
+    "relative_document_links_checked": 70,
+    "normal_entrance_and_test_registration": "static check only; existing test glob includes new module",
+    "git_diff_check": "passed",
+    "full_root_and_test_builds": "not run per user validation split"
+  }
+}

@@ -366,3 +366,10 @@ x^p+y^p=\varepsilon(\lambda^m z)^p
 各段階で focused build、回帰検証、`#print axioms` 監査を実施する。
 
 最初は代数的入れ子を独立に完成させ、その後に算術条件付きの状態降下へ進む。
+
+## NOTE-032：hnoの着手
+
+枝交換によるCofixed直線排除の一般核と、同じFrey Sourceの実際の滑らかな零成分E₀[p]を実装した。
+[実装報告](IMPLEMENTATION-NOTE032-001-261025.md)・[研究ROADMAP](ROADMAP-NOTE032.md)・
+[検証記録](evidence/validation-note032-001.txt) を参照。
+既約性へは幾何入力を保持した条件付き接続であり、無条件のhnoは未証明である。
