@@ -107,7 +107,10 @@ Natのgcd還元には004の正確な再構成を使い、原始性・奇数条�
 4. **005b完了**：奇数nで1、偶数nでx+yという、gcd(R_n,xyR_(n−2))の式。
 5. **005b完了**：h_nの分子可除性・掛け戻しを証明し、n≥3・両座標正・原始性で正のpairwise-coprimeなA+B=Cを構成。
 6. **005b完了**：R_(2m)=(x+y)R_m(x²,y²)、奇数次数の平方因子を持つ補填恒等式をCommSemiringで証明。
-7. 偶数D_nの精密gcdは、LTEの依存が整ってから追加する。
+7. **005c完了**：`Lib.NumberTheory.PowerDifferenceCofactorValuation` と `CompletionDefectGcd` に14定理を追加。
+   奇素数LTEと差が4で割れる2進LTEを分け、`gcd(R_(2m),D_(2m))=(x+y)*gcd(m,(x+y)^(2m-2))` を証明。
+   最終型はm≠0と原始性のみで、逆順・対角・零座標を含む。正次数の奇偶統合と次数0の別定理も固定。
+   [005c報告](IMPLEMENTATION-GN-LIB-005c.md) に検証範囲を記録する。
 
 2を3や7に依存させる必要はない。証明コストの低い奇数版を先に確定する。
 追加する三項構造をABC予想の証明やFLT状態と同一視しない。

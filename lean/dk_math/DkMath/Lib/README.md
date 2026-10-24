@@ -38,6 +38,8 @@ TwoChannel
 NumberTheory.PadicValNat
 NumberTheory.BinomialPrimePower
 NumberTheory.PowerDifferenceCofactorGcd
+NumberTheory.PowerDifferenceCofactorValuation
+NumberTheory.CompletionDefectGcd
 NumberTheory.PrimeRatioOrder
 NumberTheory.CyclotomicAddress
 NumberTheory.CyclotomicLayerValuation
@@ -332,6 +334,21 @@ by `n=r*q^k`, treats vanishing coordinates separately, and exposes mapping,
 unit-anchor and zero-anchor formulas. At degree zero the value is 1.
 The first positive and first nontrivial layers differ when r=1. Valuation at
 the basic address may exceed one. These are polynomial/divisibility results.
+
+### `PowerDifferenceCofactorValuation`, `CompletionDefectGcd`
+
+At a prime q dividing x+y, squared primitive bases satisfy
+`v_q(R_m(x²,y²))=v_q(m)`. Odd-prime LTE and the four-divisible two-adic
+LTE branch are proved separately. Natural LTE uses strict ordering and a
+nonzero exponent; the final gcd formula removes the ordering by symmetry
+and handles the primitive diagonal directly.
+
+For every primitive natural pair and m>0:
+`gcd(R_(2m),D_(2m))=(x+y)*gcd(m,(x+y)^(2m-2))`.
+The positive-degree parity API combines this with the odd gcd-one result.
+Degree zero has a separate gcd-one theorem. Primitive zero coordinates,
+reversed pairs and n=2 are included; primitiveness and positive degree remain
+explicit. The borrowed correction has a different even gcd from D_n.
 
 ### `PowerFactor`
 

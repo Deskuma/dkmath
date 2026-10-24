@@ -15,6 +15,8 @@ import DkMath.Lib.TwoChannel
 import DkMath.Lib.NumberTheory.PadicValNat
 import DkMath.Lib.NumberTheory.BinomialPrimePower
 import DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd
+import DkMath.Lib.NumberTheory.PowerDifferenceCofactorValuation
+import DkMath.Lib.NumberTheory.CompletionDefectGcd
 import DkMath.Lib.NumberTheory.PrimeRatioOrder
 import DkMath.Lib.NumberTheory.CyclotomicAddress
 import DkMath.Lib.NumberTheory.CyclotomicLayerValuation

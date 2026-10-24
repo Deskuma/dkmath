@@ -182,3 +182,11 @@ CFBRC由来の一般評価器2定義と脱斉次化1定理、GapFocusingの住�
 新LibのDkMath依存閉包はLibのみであり、残すCFBRC namespaceは旧名互換のためのもの。
 006aと合わせ006の一般核を完了し、次は005cの偶数不足の精密gcdを扱う。
 [006b報告](IMPLEMENTATION-GN-LIB-006b.md) と [対応・型・依存](evidence/gn-lib-006b.json) を参照。
+
+## 14. GN-LIB-005cの偶数完成不足の精密gcd
+
+`Lib.NumberTheory.PowerDifferenceCofactorValuation` の6定理と `CompletionDefectGcd` の8定理を追加した。
+平方座標での付値比較を奇素数・2進に分け、素数支持上の付値一致から正確なgcdを復元した。
+m≠0と原始性のもとで偶数式を証明し、公開型から座標順序・正性を除いた。
+奇数gcd=1と統合する正次数API、零次数gcd=1の別定理も固定した。
+[005c報告](IMPLEMENTATION-GN-LIB-005c.md) と [全新定理・型・依存](evidence/gn-lib-005c.json) を参照。
