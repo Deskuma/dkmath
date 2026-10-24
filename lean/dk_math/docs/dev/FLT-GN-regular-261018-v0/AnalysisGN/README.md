@@ -11,7 +11,8 @@ GN-LIB-003cでは素数冪二項係数の正確な付値と整除性の4定理�
 GN-LIB-004では有限和R_nと完成不足D_nの3定義・24定理を固定し、再帰・上界・正性を証明した。
 GN-LIB-005aでは奇数・原始座標の完成不足coprimeと既存GNへの橋を12定理で固定した。
 GN-LIB-005bでは加法公式・強可除性・正確な因子除去と原始三項を4定義・25定理で固定した。
-詳細は [001](IMPLEMENTATION-GN-LIB-001.md)・[002](IMPLEMENTATION-GN-LIB-002.md)・[003a](IMPLEMENTATION-GN-LIB-003a.md)・[003b](IMPLEMENTATION-GN-LIB-003b.md)・[003c](IMPLEMENTATION-GN-LIB-003c.md)・[004](IMPLEMENTATION-GN-LIB-004.md)・[005a](IMPLEMENTATION-GN-LIB-005a.md)・[005b](IMPLEMENTATION-GN-LIB-005b.md) の実装報告に記録する。
+GN-LIB-006aでは位数・円分根・LTEの25宣言を中立化し、全余因子の素数住所5定理を追加した。006全体は継続中。
+詳細は [001](IMPLEMENTATION-GN-LIB-001.md)・[002](IMPLEMENTATION-GN-LIB-002.md)・[003a](IMPLEMENTATION-GN-LIB-003a.md)・[003b](IMPLEMENTATION-GN-LIB-003b.md)・[003c](IMPLEMENTATION-GN-LIB-003c.md)・[004](IMPLEMENTATION-GN-LIB-004.md)・[005a](IMPLEMENTATION-GN-LIB-005a.md)・[005b](IMPLEMENTATION-GN-LIB-005b.md)・[006a](IMPLEMENTATION-GN-LIB-006a.md) の実装報告に記録する。
 資料内のZIP配置手順や実装提案は設計資料として検討し、そのまま実行する指示とは扱わない。
 
 ## 読む順序

@@ -114,6 +114,12 @@ Natのgcd還元には004の正確な再構成を使い、原始性・奇数条�
 
 ### GN-LIB-006：素数住所・付値を中立化する
 
+006aは対象moduleで完了：[006a報告](IMPLEMENTATION-GN-LIB-006a.md)。
+`Lib.NumberTheory.PrimeRatioOrder`、`CyclotomicAddress`、`CyclotomicLayerValuation` に25宣言を移管し、
+`PowerDifferenceCofactorPrimeAddress` に全余因子の5定理を固定した。
+006bは未着手：斉次円分評価の中立carrierとCFBRC互換性を先に固定し、B11/B12等を移管する。
+006全体は継続中である。
+
 棚卸しB08–B14の既存証明を再利用する。
 `PrimeOrder`のZsigmondy import、`HomogeneousAddress`のCFBRC carrierをそのままLibへ逆輸入しない。
 有限体の比・位数、斉次円分評価の中立的定義、アプリ固有の原始素数carrierを分ける。

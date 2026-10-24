@@ -15,6 +15,10 @@ import DkMath.Lib.TwoChannel
 import DkMath.Lib.NumberTheory.PadicValNat
 import DkMath.Lib.NumberTheory.BinomialPrimePower
 import DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd
+import DkMath.Lib.NumberTheory.PrimeRatioOrder
+import DkMath.Lib.NumberTheory.CyclotomicAddress
+import DkMath.Lib.NumberTheory.CyclotomicLayerValuation
+import DkMath.Lib.NumberTheory.PowerDifferenceCofactorPrimeAddress
 import DkMath.Lib.NumberTheory.FreyGapCubic
 import DkMath.Lib.NumberTheory.GNFreyDiscriminant
 import DkMath.Lib.NumberTheory.FreyPrimeValuation

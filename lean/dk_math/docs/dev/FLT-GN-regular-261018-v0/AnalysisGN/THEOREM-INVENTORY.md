@@ -63,13 +63,13 @@ Lib配下でもnamespaceが歴史的名称のままの場合がある。namespac
 | B05 | [`nat_exists_prime_dvd_GN_succ_not_dvd_GN`](../../../../DkMath/Lib/Cosmic/GNSupport.lean#L158)<br>`DkMath/Lib/Cosmic/GNSupport.lean`                                   | d>0、x,u>0、原始性。直前との非共有のみ。       | GN-LIB-001でLib所有化済み・旧名互換 |
 | B06 | [`kernelPolynomial_eq_prod_cyclotomic`](../../../../DkMath/NumberTheory/GapFocusing/Degree.lean#L53)<br>`DkMath/NumberTheory/GapFocusing/Degree.lean`                                         | d>0、ℤ[X]、非自明な約数の層。                  | 一般核抽出候補・整数評価と区別                 |
 | B07 | [`kernelPolynomial_irreducible_iff_prime`](../../../../DkMath/NumberTheory/GapFocusing/Degree.lean#L149)<br>`DkMath/NumberTheory/GapFocusing/Degree.lean`                                     | d≥2、ℤ[X]。整数評価の素数性とは別。            | 同じnamespaceを保持して抽出候補                |
-| B08 | [`isRoot_cyclotomic_iff_prime_pow_mul_orderOf`](../../../../DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean#L27)<br>`DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean`           | 整域、CharP R q、q素数、n>0。                  | 中立核抽出候補                                 |
-| B09 | [`int_dvd_pow_sub_pow_iff_primeOrder_dvd`](../../../../DkMath/NumberTheory/GapFocusing/PrimeOrder.lean#L40)<br>`DkMath/NumberTheory/GapFocusing/PrimeOrder.lean`                              | q素数、q∤b。冪差全体の可除性。                 | Zsigmondy依存を分離して再利用                  |
-| B10 | [`primeOrder_dvd_prime_sub_one`](../../../../DkMath/NumberTheory/GapFocusing/PrimeOrder.lean#L61)<br>`DkMath/NumberTheory/GapFocusing/PrimeOrder.lean`                                        | q素数、q∤a,b。                                 | qと座標の非可除条件を保持                      |
+| B08 | [`isRoot_cyclotomic_iff_prime_pow_mul_orderOf`](../../../../DkMath/Lib/NumberTheory/CyclotomicAddress.lean#L31)<br>`DkMath/Lib/NumberTheory/CyclotomicAddress.lean`           | 整域、CharP R q、q素数、n>0。                  | 006aでLib所有化・旧名互換 |
+| B09 | [`int_dvd_pow_sub_pow_iff_primeOrder_dvd`](../../../../DkMath/Lib/NumberTheory/PrimeRatioOrder.lean#L70)<br>`DkMath/Lib/NumberTheory/PrimeRatioOrder.lean`                              | q素数、q∤b。冪差全体の可除性。                 | 006aでLib所有化・旧名互換 |
+| B10 | [`primeOrder_dvd_prime_sub_one`](../../../../DkMath/Lib/NumberTheory/PrimeRatioOrder.lean#L99)<br>`DkMath/Lib/NumberTheory/PrimeRatioOrder.lean`                                        | q素数、q∤a,b。                                 | 006aでLib所有化・旧名互換 |
 | B11 | [`dvd_cyclotomicShiftedEval_iff_prime_pow_mul_orderOf`](../../../../DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean#L91)<br>`DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean` | q素数、n>0、q∤b。単一円分層の添字。            | CFBRCのcarrierを監査して再利用                 |
 | B12 | [`primeLayerAddresses_isLeast_of_one_lt_primeOrder`](../../../../DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean#L194)<br>`DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean`   | q素数、q∤b、1<primeOrder。                     | 層の最初と全GNの次の次数を区別                 |
-| B13 | [`padicValNat_pow_sub_pow_mul_prime_pow`](../../../../DkMath/NumberTheory/GapFocusing/LayerValuation.lean#L71)<br>`DkMath/NumberTheory/GapFocusing/LayerValuation.lean`                       | q奇素数、b<a、r≠0、q∤a、q∣a^r−b^r。            | 既存の範囲付きLTEを再利用                      |
-| B14 | [`padicValNat_pow_sub_pow_mul_two_pow_succ`](../../../../DkMath/NumberTheory/GapFocusing/LayerValuation.lean#L85)<br>`DkMath/NumberTheory/GapFocusing/LayerValuation.lean`                    | b<a、r≠0、a奇数、2∣a^r−b^r。和の補正項を保持。 | 補正項を消さない                               |
+| B13 | [`padicValNat_pow_sub_pow_mul_prime_pow`](../../../../DkMath/Lib/NumberTheory/CyclotomicLayerValuation.lean#L79)<br>`DkMath/Lib/NumberTheory/CyclotomicLayerValuation.lean`                       | q奇素数、b<a、r≠0、q∤a、q∣a^r−b^r。            | 006aでLib所有化・旧名互換 |
+| B14 | [`padicValNat_pow_sub_pow_mul_two_pow_succ`](../../../../DkMath/Lib/NumberTheory/CyclotomicLayerValuation.lean#L97)<br>`DkMath/Lib/NumberTheory/CyclotomicLayerValuation.lean`                    | b<a、r≠0、a奇数、2∣a^r−b^r。和の補正項を保持。 | 006aでLib所有化・旧名互換 |
 | B15 | [`GN_eq_nontrivial_phase_prod_range`](../../../../DkMath/Lib/Cosmic/GNPhaseFactorization.lean#L115)<br>`DkMath/Lib/Cosmic/GNPhaseFactorization.lean`                                          | 原始根を持つ整域、d>0、全非自明位相の積。      | Lib既存・再作成不要                            |
 | B16 | [`prime_choose_exact_layer`](../../../../DkMath/Lib/Cosmic/GNPrime37.lean#L50)<br>`DkMath/Lib/Cosmic/GNPrime37.lean`                                                                          | p素数、0<k<p。正則性不要。                     | Lib既存。GNPrime37の上位Defs依存を分離する候補 |
 | B17 | [`prime_GN_zmod`](../../../../DkMath/Lib/Cosmic/GNPrime37.lean#L89)<br>`DkMath/Lib/Cosmic/GNPrime37.lean`                                                                                     | ZMod p、p素数。正則性不要。                    | Lib既存・再作成不要                            |
@@ -165,3 +165,11 @@ Natの `Odd n` 入口では原始性を明示する。零座標や次数1に不�
 倍次数と平方借入はCommSemiringの恒等式であり、底がx²,y²に変わることを明示する。
 原始性を落とすと強可除性・正規化後のcoprimeが壊れる例も確認した。
 [005b報告](IMPLEMENTATION-GN-LIB-005b.md) と [全新宣言・型・ハッシュ](evidence/gn-lib-005b.json) を参照。
+
+## 12. GN-LIB-006aの位数・通常円分住所・LTE
+
+比／位数2定義・一般7定理、通常円分住所8定理、層付値8定理をLib所有へ移管した。
+全25宣言の歴史的namespace、型、証明／定義本体を保持し、旧モジュールを互換入口にした。
+全余因子R_nの素数出現は新5定理として分離し、r>1とr=1の枝、次数0、2進補正を保持した。
+B11/B12の斉次carrierは変更せず、006bでCFBRCとの互換を先に設計する。006全体は継続中。
+[006a報告](IMPLEMENTATION-GN-LIB-006a.md) と [対応・型・依存](evidence/gn-lib-006a.json) を参照。

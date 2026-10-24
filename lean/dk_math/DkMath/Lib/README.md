@@ -38,6 +38,10 @@ TwoChannel
 NumberTheory.PadicValNat
 NumberTheory.BinomialPrimePower
 NumberTheory.PowerDifferenceCofactorGcd
+NumberTheory.PrimeRatioOrder
+NumberTheory.CyclotomicAddress
+NumberTheory.CyclotomicLayerValuation
+NumberTheory.PowerDifferenceCofactorPrimeAddress
 NumberTheory.HomogeneousPowerQuotient
 NumberTheory.ClassGroupTorsionBridge
 NumberTheory.TraceOneLatticeLanding
@@ -293,6 +297,21 @@ The proof uses the cofactor addition formula and Euclid's algorithm.
 Divisibility of indices alone implies divisibility of cofactors without
 requiring primitive coordinates. The exact gcd with `xy R_(n-2)` remains
 distinct from the even-degree completion-deficit gcd.
+
+### `PrimeRatioOrder`, `CyclotomicAddress`, `CyclotomicLayerValuation`
+
+Neutral owners for the existing GapFocusing residue-ratio/order, cyclotomic
+root-address and valuation APIs. Historical namespaces and old imports remain
+compatible. The general order kernel has no Zsigmondy dependency.
+Odd-prime LTE and the two-adic sum correction are retained separately.
+
+### `PowerDifferenceCofactorPrimeAddress`
+
+The whole cofactor R_n detects `r ∣ n` when the residue-ratio order r is greater
+than one. At order one it instead detects `q ∣ n`. A single cyclotomic layer
+has the distinct address `n=r*q^k`; the CFBRC homogeneous-carrier migration
+is a later GN-LIB-006b unit. No valuation-one assumption is imposed on the
+fundamental address: `R_3(18,1)=7³` is a checked boundary example.
 
 ### `PowerFactor`
 
