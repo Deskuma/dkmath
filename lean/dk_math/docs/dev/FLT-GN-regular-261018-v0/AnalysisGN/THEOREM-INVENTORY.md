@@ -221,3 +221,20 @@ Legendreの同値変形を予想の無条件証明とは数えない。
 [公開入口smoke](evidence/GNFinitePrimeCompensationSmoke.lean)、
 [証明経路と保持条件](IMPLEMENTATION-GN-LIB-007a.md) を固定した。
 全体007は進行中であり、一般yのサイズ条件付き構成と追加因子の選択はb/cで扱う。
+
+## GN-LIB-007b：正の下側座標への移動
+
+`Lib.NumberTheory.PrimePowerCompensationShift` に3定義・31定理を追加した。
+名前空間は `DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift`。
+
+- `base`・`residual`・`primeProduct`：上側座標、残余、yを割る素数を除いた有限積。
+- 原始性・LTE・再構成・正性・gapとyの支持除去：サイズ条件は不要。
+- `small_prime_valuation_exact`：q≤Bでq∣yなら0、そうでなければp。
+- `difference_between`・`residual_not_pow`：明示的な隣接冪のサイズ条件が必要。
+- `exists_prime_escape_with_address`・`finite_set_compensation_and_escape`：
+  サイズ条件の下で未完成付値を持つ集合外の素数と、位数pの住所を返す。
+- `base_one`・`residual_one`・`primeProduct_one`：007aの定義との互換。
+
+[34宣言の型・所有者・昇格マーカー](evidence/gn-lib-007b.json) と
+[公開入口smoke](evidence/GNShiftedPrimeCompensationSmoke.lean) を固定した。
+サイズ条件の達成は007cへ残し、無条件の一般yでの脱出とは数えない。

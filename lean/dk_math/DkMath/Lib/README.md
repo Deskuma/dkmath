@@ -28,8 +28,12 @@ and hypotheses remain unchanged.
 The Completion entry also exposes `NumberTheory.PerfectPowerValuation` and
 `NumberTheory.PrimePowerCompensation`: a nonzero perfect-power valuation criterion,
 and a construction at y=1 that completes all primes in a finite set locally while
-producing an outside prime with an exponent obstruction. General y requires a
-separate size hypothesis; this is a special construction, not an FLT descent.
+producing an outside prime with an exponent obstruction. `NumberTheory.PrimePowerCompensationShift` extends this to a positive lower coordinate y.
+Primitive coordinates suffice for the exact local valuations (zero at primes of y,
+p at the remaining controlled primes). An explicit power-gap size hypothesis is
+required for the outside prime with an exponent obstruction. Selecting an extra
+factor that attains this hypothesis remains GN-LIB-007c. This is a special
+construction, not an FLT descent.
 
 The intended flow is:
 

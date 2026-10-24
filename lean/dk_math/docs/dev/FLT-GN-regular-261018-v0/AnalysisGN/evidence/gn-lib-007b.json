@@ -1,0 +1,1079 @@
+{
+  "checkpoint": "GN-LIB-007b",
+  "date": "2026-10-25",
+  "base_head": "ecbeae332c19be4964f67c20982c9dfb64881daf",
+  "scope": "general positive lower coordinate; primitive gap; exact local valuations without size; prime escape conditional on explicit power-gap size inequality",
+  "new_declarations": [
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.base",
+      "kind": "def",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 31,
+      "source_signature": "def base (p M y : ℕ) : ℕ",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.residual",
+      "kind": "def",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 34,
+      "source_signature": "def residual (p M y : ℕ) : ℕ",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.lt_base",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 37,
+      "source_signature": "theorem lt_base {p M : ℕ} (hp : p.Prime) (hM : 0 < M) (y : ℕ) : y < base p M y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.base_coprime",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 43,
+      "source_signature": "theorem base_coprime {p M y : ℕ} (hc : (gap p M).Coprime y) :\n    (base p M y).Coprime y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.not_dvd_base_of_dvd_gap",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 48,
+      "source_signature": "theorem not_dvd_base_of_dvd_gap {p M y q : ℕ} (hc : (gap p M).Coprime y)\n    (hq : q.Prime) (hg : q ∣ gap p M) : ¬ q ∣ base p M y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.cofactor_valuation",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 56,
+      "source_signature": "theorem cofactor_valuation {p M y : ℕ} (hp : p.Prime) (ho : Odd p) (hM : 0 < M)\n    (hc : (gap p M).Coprime y) :\n    padicValNat p (powerDifferenceCofactor p (base p M y) y) = 1",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.prime_mul_residual",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 65,
+      "source_signature": "theorem prime_mul_residual {p M y : ℕ} (hp : p.Prime) (ho : Odd p) (hM : 0 < M)\n    (hc : (gap p M).Coprime y) :\n    p * residual p M y = powerDifferenceCofactor p (base p M y) y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.residual_valuation",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 72,
+      "source_signature": "theorem residual_valuation {p M y : ℕ} (hp : p.Prime) (ho : Odd p) (hM : 0 < M)\n    (hc : (gap p M).Coprime y) : padicValNat p (residual p M y) = 0",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.reconstruction",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 81,
+      "source_signature": "theorem reconstruction {p M y : ℕ} (hp : p.Prime) (ho : Odd p) (hM : 0 < M)\n    (hc : (gap p M).Coprime y) :\n    base p M y ^ p - y ^ p = (p * M) ^ p * residual p M y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.residual_pos",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 100,
+      "source_signature": "theorem residual_pos {p M y : ℕ} (hp : p.Prime) (ho : Odd p) (hM : 0 < M)\n    (hc : (gap p M).Coprime y) : 0 < residual p M y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.not_dvd_residual_of_dvd_gap",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 110,
+      "source_signature": "theorem not_dvd_residual_of_dvd_gap {p M y q : ℕ}\n    (hp : p.Prime) (ho : Odd p) (hM : 0 < M) (hc : (gap p M).Coprime y)\n    (hq : q.Prime) (hg : q ∣ gap p M) : ¬ q ∣ residual p M y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.local_valuation",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 128,
+      "source_signature": "theorem local_valuation {p M y q : ℕ} (hp : p.Prime) (ho : Odd p) (hM : 0 < M)\n    (hc : (gap p M).Coprime y) (hq : q.Prime) (hg : q ∣ gap p M) :\n    padicValNat q (base p M y ^ p - y ^ p) = p * padicValNat q (p * M)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.not_dvd_difference_of_dvd_lower",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 138,
+      "source_signature": "theorem not_dvd_difference_of_dvd_lower {p M y q : ℕ} (hp : p.Prime) (hM : 0 < M)\n    (hc : (gap p M).Coprime y) (hq : q.Prime) (hqy : q ∣ y) :\n    ¬ q ∣ base p M y ^ p - y ^ p",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.difference_between",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 153,
+      "source_signature": "theorem difference_between {p M y : ℕ} (hp : p.Prime) (hM : 0 < M) (hy : 0 < y)\n    (hsize : y ^ p < base p M y ^ p - (base p M y - 1) ^ p) :\n    (base p M y - 1) ^ p < base p M y ^ p - y ^ p ∧\n      base p M y ^ p - y ^ p < base p M y ^ p",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.difference_not_pow",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 163,
+      "source_signature": "theorem difference_not_pow {p M y : ℕ} (hp : p.Prime) (hM : 0 < M) (hy : 0 < y)\n    (hsize : y ^ p < base p M y ^ p - (base p M y - 1) ^ p) :\n    ¬ ∃ a : ℕ, a ^ p = base p M y ^ p - y ^ p",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.residual_not_pow",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 172,
+      "source_signature": "theorem residual_not_pow {p M y : ℕ} (hp : p.Prime) (ho : Odd p) (hM : 0 < M)\n    (hy : 0 < y) (hc : (gap p M).Coprime y)\n    (hsize : y ^ p < base p M y ^ p - (base p M y - 1) ^ p) :\n    ¬ ∃ a : ℕ, a ^ p = residual p M y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.residual_prime_address",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 183,
+      "source_signature": "theorem residual_prime_address {p M y q : ℕ} (hp : p.Prime) (ho : Odd p) (hM : 0 < M)\n    (hc : (gap p M).Coprime y) (hq : q.Prime) (hqr : q ∣ residual p M y) :\n    primeOrder q (base p M y) y = p ∧ p ∣ q - 1",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.not_dvd_residual_of_dvd_lower",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 213,
+      "source_signature": "theorem not_dvd_residual_of_dvd_lower {p M y q : ℕ} (hp : p.Prime) (ho : Odd p)\n    (hM : 0 < M) (hc : (gap p M).Coprime y) (hq : q.Prime) (hqy : q ∣ y) :\n    ¬ q ∣ residual p M y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.gap_coprime_of_mul_coprime",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 223,
+      "source_signature": "theorem gap_coprime_of_mul_coprime {p M y : ℕ} (hc : (p * M).Coprime y) :\n    (gap p M).Coprime y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.primeProduct",
+      "kind": "def",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 229,
+      "source_signature": "def primeProduct (p B y : ℕ) : ℕ",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.primeProduct_pos",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 233,
+      "source_signature": "theorem primeProduct_pos (p B y : ℕ) : 0 < primeProduct p B y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.primeProduct_coprime",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 239,
+      "source_signature": "theorem primeProduct_coprime (p B y : ℕ) : (primeProduct p B y).Coprime y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.standard_gap_coprime",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 246,
+      "source_signature": "theorem standard_gap_coprime {p B y : ℕ} (hp : p.Prime) (hpy : ¬ p ∣ y) :\n    (gap p (primeProduct p B y)).Coprime y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.prime_not_dvd_primeProduct",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 253,
+      "source_signature": "theorem prime_not_dvd_primeProduct {p B y : ℕ} (hp : p.Prime) :\n    ¬ p ∣ primeProduct p B y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.small_prime_product_valuation",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 262,
+      "source_signature": "theorem small_prime_product_valuation {p B y q : ℕ} (hp : p.Prime)\n    (hq : q.Prime) (hB : q ≤ B) (hqy : ¬ q ∣ y) :\n    padicValNat q (p * primeProduct p B y) = 1",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.small_prime_dvd_gap",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 291,
+      "source_signature": "theorem small_prime_dvd_gap {p B y q : ℕ} (hp : p.Prime) (hq : q.Prime)\n    (hB : q ≤ B) (hqy : ¬ q ∣ y) : q ∣ gap p (primeProduct p B y)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.small_prime_valuation_exact",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 301,
+      "source_signature": "theorem small_prime_valuation_exact {p B y q : ℕ} (hp : p.Prime) (ho : Odd p)\n    (hpy : ¬ p ∣ y) (hq : q.Prime) (hB : q ≤ B) :\n    padicValNat q (base p (primeProduct p B y) y ^ p - y ^ p) = if q ∣ y then 0 else p",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.small_prime_local_completion",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 312,
+      "source_signature": "theorem small_prime_local_completion {p B y q : ℕ} (hp : p.Prime) (ho : Odd p)\n    (hpy : ¬ p ∣ y) (hq : q.Prime) (hB : q ≤ B) :\n    p ∣ padicValNat q (base p (primeProduct p B y) y ^ p - y ^ p)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.not_dvd_residual_of_small_prime",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 319,
+      "source_signature": "theorem not_dvd_residual_of_small_prime {p B y q : ℕ} (hp : p.Prime) (ho : Odd p)\n    (hpy : ¬ p ∣ y) (hq : q.Prime) (hB : q ≤ B) :\n    ¬ q ∣ residual p (primeProduct p B y) y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.exists_prime_escape_with_address",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 330,
+      "source_signature": "theorem exists_prime_escape_with_address {p B y : ℕ} (hp : p.Prime) (ho : Odd p)\n    (hy : 0 < y) (hpy : ¬ p ∣ y)\n    (hsize : y ^ p < base p (primeProduct p B y) y ^ p -\n      (base p (primeProduct p B y) y - 1) ^ p) :\n    ∃ q, q.Prime ∧ B < q ∧ q ∣ residual p (primeProduct p B y) y ∧\n      ¬ p ∣ padicValNat q (residual p (primeProduct p B y) y) ∧\n      primeOrder q (base p (primeProduct p B y) y) y = p ∧ p ∣ q - 1",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.finite_set_compensation_and_escape",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 349,
+      "source_signature": "theorem finite_set_compensation_and_escape {p y : ℕ} (hp : p.Prime) (ho : Odd p)\n    (hy : 0 < y) (hpy : ¬ p ∣ y) (S : Finset ℕ)\n    (hsize : let M",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.base_one",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 366,
+      "source_signature": "theorem base_one (p M : ℕ) : base p M 1 = PrimePowerCompensation.base p M",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.residual_one",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 369,
+      "source_signature": "theorem residual_one (p M : ℕ) : residual p M 1 = PrimePowerCompensation.residual p M",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.primeProduct_one",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PrimePowerCompensationShift.lean",
+      "line": 372,
+      "source_signature": "theorem primeProduct_one (p B : ℕ) : primeProduct p B 1 = PrimePowerCompensation.primeProduct p B",
+      "docstring_has_promotion_marker": true
+    }
+  ],
+  "new_definitions": 3,
+  "new_theorems": 31,
+  "kernel_checked_examples": 11,
+  "prior_public_endpoints": [
+    "DkMath.Lib.NumberTheory.exists_pow_eq_of_dvd_padicValNat",
+    "DkMath.Lib.NumberTheory.exists_pow_eq_iff_dvd_padicValNat",
+    "DkMath.Lib.NumberTheory.exists_prime_padicValNat_not_dvd",
+    "DkMath.Lib.NumberTheory.exists_prime_outside_of_local_power",
+    "DkMath.Lib.NumberTheory.not_pow_of_between_consecutive_powers",
+    "DkMath.Lib.NumberTheory.pow_sub_one_between",
+    "DkMath.Lib.NumberTheory.not_pow_pow_sub_one",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.gap",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.base",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.residual",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.gap_pos",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.prime_dvd_gap",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.not_dvd_base_of_dvd_gap",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.cofactor_valuation",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.prime_mul_residual",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.residual_valuation",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.reconstruction",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.residual_pos",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.not_dvd_residual_of_dvd_gap",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.local_valuation",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.residual_not_pow",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.residual_prime_address",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.primeProduct",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.primeProduct_pos",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.prime_not_dvd_primeProduct",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.small_prime_product_valuation",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.small_prime_dvd_gap",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.small_prime_local_completion",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.small_prime_valuation_exact",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.exists_prime_escape",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.exists_prime_escape_with_address",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation.finite_set_compensation_and_escape",
+    "DkMath.CosmicFormula.add_pow_eq_prefix_add_xpow_mul_GTail",
+    "DkMath.NumberTheory.GapFocusing.GN_succ_right",
+    "DkMath.NumberTheory.GapFocusing.dvd_anchor_pow_of_dvd_adjacent_GN",
+    "DkMath.Lib.NumberTheory.prod_cyclotomicEval_eq_geomSum",
+    "DkMath.CosmicFormula.gcd_GTail_eq_gcd_boundary",
+    "DkMath.CosmicFormula.GTail_congr_of_modEq",
+    "DkMath.CosmicFormula.pow_dvd_higher_tail",
+    "DkMath.CosmicFormula.padicValNat_GTail_eq_zero_of_head_unit_of_prime_dvd_x",
+    "DkMath.CosmicFormula.GTail_split_at",
+    "DkMath.Algebra.BinomTail.add_pow_tail_exists",
+    "DkMath.Lib.Algebra.square_add_band",
+    "DkMath.Lib.Cosmic.completion_body_add_gap",
+    "DkMath.Lib.Cosmic.powerDifferenceCofactor_add_eq_GTail",
+    "DkMath.Lib.Cosmic.powerDifferenceCofactor_symm",
+    "DkMath.Lib.Cosmic.signedCompletionDefect_add_cofactor",
+    "DkMath.Lib.NumberTheory.gcd_gap_powerDifferenceCofactor_eq_gcd_degree",
+    "DkMath.Lib.NumberTheory.coprime_powerDifferenceCofactor_right",
+    "DkMath.Lib.NumberTheory.gcd_eq_of_padicValNat_eq_on_support",
+    "DkMath.Lib.Cosmic.completionLoan_numerators_add",
+    "DkMath.Lib.NumberTheory.padicValNat_split",
+    "DkMath.Lib.NumberTheory.padicValNat_choose_prime_pow",
+    "DkMath.NumberTheory.GapFocusing.primeRatio_ne_zero",
+    "DkMath.NumberTheory.GapFocusing.isRoot_cyclotomic_iff_prime_pow_mul_orderOf",
+    "DkMath.NumberTheory.GapFocusing.padicValInt_cyclotomicEval_eq_pow_sub_one_of_orderOf_eq",
+    "DkMath.Lib.NumberTheory.padicValNat_pow_sub_pow_of_four_dvd",
+    "DkMath.Lib.NumberTheory.primeOrder_eq_one_iff_dvd_gap",
+    "DkMath.CFBRC.cyclotomicShiftedEval_eq_cyclotomicEval_div_mul_pow",
+    "DkMath.NumberTheory.GapFocusing.map_cyclotomicShiftedEval",
+    "DkMath.NumberTheory.GapFocusing.eval_homogenize_zero_second",
+    "DkMath.Lib.NumberTheory.map_homogeneousCyclotomicEval",
+    "DkMath.Lib.Cosmic.powerDifferenceCofactor_recurrence",
+    "DkMath.Lib.Cosmic.completionDefect_pos",
+    "DkMath.Lib.Cosmic.completion_pairwise_coprime",
+    "DkMath.Lib.NumberTheory.isStrongDvdSequence_powerDifferenceCofactor",
+    "DkMath.Lib.NumberTheory.gcd_cofactor_completionDefect",
+    "DkMath.Lib.Cosmic.completionLoan_primitive_triple",
+    "DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_order_ray",
+    "DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_dvd_first_of_dvd_second"
+  ],
+  "previous_owner_sha256": {
+    "DkMath.Lib.Cosmic.GTail": "d1d4317332effa93864454de2e367e020cd7d103ff163f438ea80ef7472108ef",
+    "DkMath.Lib.Cosmic.GNSuccessor": "2475129c8c6963eddde9b19d48f7e82cb700b6085db063c2bfaec7b61de7125f",
+    "DkMath.Lib.Cosmic.GTailCyclotomic": "9b303ba64bfabaa9edc40215eb2e6275d66d3fc516430fb7c33841aab944cf62",
+    "DkMath.Lib.Cosmic.GNSupport": "dd2e2be212cbcd574972524929ed50aab5d1d8b7ab97d6650ced08d3bb399d08",
+    "DkMath.Lib.Cosmic.GTailBoundary": "d329436625c9d454560a3ccbb766801c7068e48d2e17ca73db8e4e48bcfb6ff6",
+    "DkMath.Lib.Cosmic.GTailCongruence": "8cb13b609fd5a51b66780360504cf0c36307214118b948edff54d06bb3a60398",
+    "DkMath.Lib.Cosmic.GTailNat": "9271078c373f3e62fa94103c568dd0c7113e3373473de2e3e5cbb7c2271a5f4a",
+    "DkMath.Lib.Cosmic.GTailPadic": "97cad4e34331fb0309567297ba55c3e8f3fc4d6f203d5f48083c8e5fb9904503",
+    "DkMath.Lib.NumberTheory.PadicValNat": "30f22ea62f19845d8542a7d1ac5b5350b5c31975b92e0bb32afb205da36212ff",
+    "DkMath.Lib.Cosmic.GTailPascal": "0652ee2d1112c4ab0d91c376862463ab94b2c04b4fc0cd872494173478fd2004",
+    "DkMath.Lib.Algebra.BinomTail": "b083a834e1d62482fe768acdfba21e98b82076595e0f0b94a05c3eb9ffc8fc0c",
+    "DkMath.Lib.Algebra.SquareCompletion": "4c749628b6985781daa7cb0de0fd1c4e2f89fc1542d5a2f15b656057cdcac24a",
+    "DkMath.Lib.Cosmic.CompletionCoprime": "579b9fe6563b699eb3436cd0bcb491a83bba16af76e40cfe0f3d12eeb5f2517e",
+    "DkMath.Lib.Cosmic.PowerDifferenceCofactor": "709f197f88d347762f628f0db9fbbb57be626e404e1de1270be4e230b47e78b1",
+    "DkMath.Lib.Cosmic.PowerDifferenceCofactorArithmetic": "3b5e21b2ebbb76c68c63c613861119b4567c95c732b7f2a1cd63dea9c8cd0303",
+    "DkMath.Lib.Cosmic.CompletionDefect": "84f0af4389cdae47d99eb611dfdc7ae938bbb16d2c35eb3c68530340452f80f8",
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd": "0eec961820c5ae2be81183ad167e0ae8c7ff6d5d9ac866ffbb6e307d950a35b5",
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorStrongDivisibility": "a86bb8cdc609e2f0fedfbfcbc9bdaad6b0fbda38beff19657de42c6d00c275cb",
+    "DkMath.Lib.NumberTheory.CompletionDefectGcd": "c60a562e5e615079dd147fe9585b5d4a49132fc77a407ed97a874a269e521ae7",
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorValuation": "d0f4888f46613462d7024699fb323ca628065f9de8eddf112a401a43168199d1",
+    "DkMath.Lib.Cosmic.CompletionLoan": "b13d217d94a2b5cdbcd6f978f711c0bf5e1b91b2e270fe67e7f1a3011f9d3aa8",
+    "DkMath.Lib.NumberTheory.PerfectPowerValuation": "1ee05c0a2ab8f3465e0966ab082413960284c1e2f4ddbf700bbd9380c15c8f6b",
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation": "dc86200f9dcea440b263f20770d1189e13c7477053bf1d4efc02a78bfbbc9f88",
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorPrimeAddress": "d8301095b840767a159643d9740706644e94bcada3a8c091e0523a6d074708e5",
+    "DkMath.Lib.NumberTheory.PrimeRatioOrder": "2dac6a5143da7d64be4c9b5e44d0b25e3b39bba0af83870ebc8bb1d2eba6e119",
+    "DkMath.Lib.NumberTheory.CyclotomicLayerValuation": "7b50bf344a8b652563edcff7b22517ef7c04bda68a8810ab492c91e6e2b3d9a6",
+    "DkMath.Lib.NumberTheory.CyclotomicAddress": "4dca003ceab028b0235813a5eb8313ae72d8d1e5cab93d7680f44b517d961f36",
+    "DkMath.Lib.NumberTheory.BinomialPrimePower": "97bbd1670bc42794a3051330fea934d026615b6dcb864c4c81e3ef901099ab11",
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomic": "e475845997badbdd916d1404b0ad0391fef311280b57d62f7c4b48c057e3e136",
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomicAddress": "332768125f000f2789e05efb20163b1f7e7bc23eb54a0ac85f42b2c64a69a04c",
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomicBoundary": "af58eeb41438e553126ad03da01ffbd98d5c9ba875314387741a9f1714bf26b1",
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomicPrimeAddress": "47dff3c02b95bb63e98b7f67748cb40d222c5bd247bd53610f79847326ac929a"
+  },
+  "open_boundaries": [
+    "007c: select extra p-th power factor coprime to lower coordinate and all controlled primes, attaining the size inequality",
+    "general FLT descent and hno handoff remain separate contracts"
+  ],
+  "source_references": [
+    "data-4/DkMath_gauge_v4_research_note.md section D",
+    "REANALYSIS.md section 7",
+    "IMPLEMENTATION-PLAN.md section GN-LIB-007"
+  ],
+  "local_import_graph": {
+    "DkMath.Lib.Cosmic.Completion": [
+      "DkMath.Lib.Cosmic.GTail",
+      "DkMath.Lib.Cosmic.GNSuccessor",
+      "DkMath.Lib.Cosmic.GNSupport",
+      "DkMath.Lib.Cosmic.GTailCyclotomic",
+      "DkMath.Lib.Cosmic.GTailBoundary",
+      "DkMath.Lib.Cosmic.GTailCongruence",
+      "DkMath.Lib.Cosmic.GTailNat",
+      "DkMath.Lib.Cosmic.GTailPadic",
+      "DkMath.Lib.Cosmic.GTailPascal",
+      "DkMath.Lib.Algebra.BinomTail",
+      "DkMath.Lib.Algebra.SquareCompletion",
+      "DkMath.Lib.Cosmic.CompletionCoprime",
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactor",
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactorArithmetic",
+      "DkMath.Lib.Cosmic.CompletionDefect",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorStrongDivisibility",
+      "DkMath.Lib.NumberTheory.CompletionDefectGcd",
+      "DkMath.Lib.Cosmic.CompletionLoan",
+      "DkMath.Lib.NumberTheory.PerfectPowerValuation",
+      "DkMath.Lib.NumberTheory.PrimePowerCompensation",
+      "DkMath.Lib.NumberTheory.PrimePowerCompensationShift",
+      "DkMath.Lib.NumberTheory.PadicValNat",
+      "DkMath.Lib.NumberTheory.BinomialPrimePower",
+      "DkMath.Lib.NumberTheory.PrimeRatioOrder",
+      "DkMath.Lib.NumberTheory.CyclotomicAddress",
+      "DkMath.Lib.NumberTheory.CyclotomicLayerValuation",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorValuation",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorPrimeAddress",
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomic",
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomicAddress",
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomicBoundary",
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomicPrimeAddress"
+    ],
+    "DkMath.Lib.Cosmic.GTail": [],
+    "DkMath.Lib.Cosmic.GNSuccessor": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic"
+    ],
+    "DkMath.Lib.Cosmic.GTailCyclotomic": [
+      "DkMath.Lib.Cosmic.GTail"
+    ],
+    "DkMath.Lib.Cosmic.GNSupport": [
+      "DkMath.Lib.Cosmic.GNSuccessor"
+    ],
+    "DkMath.Lib.Cosmic.GTailBoundary": [
+      "DkMath.Lib.Cosmic.GTail"
+    ],
+    "DkMath.Lib.Cosmic.GTailCongruence": [
+      "DkMath.Lib.Cosmic.GTailNat"
+    ],
+    "DkMath.Lib.Cosmic.GTailNat": [
+      "DkMath.Lib.Cosmic.GTail"
+    ],
+    "DkMath.Lib.Cosmic.GTailPadic": [
+      "DkMath.Lib.Cosmic.GTailNat",
+      "DkMath.Lib.Cosmic.GTailBoundary",
+      "DkMath.Lib.Cosmic.GTailCongruence",
+      "DkMath.Lib.NumberTheory.PadicValNat"
+    ],
+    "DkMath.Lib.NumberTheory.PadicValNat": [],
+    "DkMath.Lib.Cosmic.GTailPascal": [
+      "DkMath.Lib.Cosmic.GTail"
+    ],
+    "DkMath.Lib.Algebra.BinomTail": [],
+    "DkMath.Lib.Algebra.SquareCompletion": [],
+    "DkMath.Lib.Cosmic.CompletionCoprime": [
+      "DkMath.Lib.Cosmic.GTail",
+      "DkMath.Lib.NumberTheory.PadicValNat"
+    ],
+    "DkMath.Lib.Cosmic.PowerDifferenceCofactor": [
+      "DkMath.Lib.Cosmic.GNSuccessor"
+    ],
+    "DkMath.Lib.Cosmic.PowerDifferenceCofactorArithmetic": [
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactor"
+    ],
+    "DkMath.Lib.Cosmic.CompletionDefect": [
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactor"
+    ],
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd": [
+      "DkMath.Lib.Cosmic.CompletionDefect",
+      "DkMath.Lib.Cosmic.GNSupport",
+      "DkMath.Lib.Cosmic.GTailBoundary"
+    ],
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorStrongDivisibility": [
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactorArithmetic",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd"
+    ],
+    "DkMath.Lib.NumberTheory.CompletionDefectGcd": [
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorValuation",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd",
+      "DkMath.Lib.NumberTheory.PadicValNat"
+    ],
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorValuation": [
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactorArithmetic"
+    ],
+    "DkMath.Lib.Cosmic.CompletionLoan": [
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorStrongDivisibility"
+    ],
+    "DkMath.Lib.NumberTheory.PerfectPowerValuation": [
+      "DkMath.Lib.NumberTheory.PadicValNat",
+      "DkMath.Lib.Algebra.BinomTail"
+    ],
+    "DkMath.Lib.NumberTheory.PrimePowerCompensation": [
+      "DkMath.Lib.NumberTheory.PerfectPowerValuation",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorValuation",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorPrimeAddress"
+    ],
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorPrimeAddress": [
+      "DkMath.Lib.NumberTheory.PrimeRatioOrder",
+      "DkMath.Lib.NumberTheory.CyclotomicLayerValuation",
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactor"
+    ],
+    "DkMath.Lib.NumberTheory.PrimeRatioOrder": [],
+    "DkMath.Lib.NumberTheory.CyclotomicLayerValuation": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic",
+      "DkMath.Lib.NumberTheory.CyclotomicAddress"
+    ],
+    "DkMath.Lib.NumberTheory.CyclotomicAddress": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic"
+    ],
+    "DkMath.Lib.NumberTheory.PrimePowerCompensationShift": [
+      "DkMath.Lib.NumberTheory.PrimePowerCompensation"
+    ],
+    "DkMath.Lib.NumberTheory.BinomialPrimePower": [
+      "DkMath.Lib.NumberTheory.PadicValNat"
+    ],
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomic": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic"
+    ],
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomicAddress": [
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomic",
+      "DkMath.Lib.NumberTheory.CyclotomicAddress",
+      "DkMath.Lib.NumberTheory.PrimeRatioOrder"
+    ],
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomicBoundary": [
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomicAddress"
+    ],
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomicPrimeAddress": [
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomicBoundary",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorPrimeAddress"
+    ]
+  },
+  "validation": {
+    "focused_build": {
+      "command": "lake build DkMath.Lib.NumberTheory.PrimePowerCompensationShift DkMath.Lib.Cosmic.Completion",
+      "exit_code": 0,
+      "jobs": 2847,
+      "warnings": 0
+    },
+    "smoke": {
+      "command": "lake env lean docs/dev/FLT-GN-regular-261018-v0/AnalysisGN/evidence/GNShiftedPrimeCompensationSmoke.lean",
+      "exit_code": 0,
+      "sole_import": "DkMath.Lib.Cosmic.Completion",
+      "new_declarations": 34,
+      "prior_endpoints": 70
+    },
+    "axiom_audit": {
+      "declarations": 104,
+      "allowed_axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "results": {
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.base": [
+          "propext"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.residual": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.lt_base": [
+          "propext",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.base_coprime": [
+          "propext",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.not_dvd_base_of_dvd_gap": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.cofactor_valuation": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.prime_mul_residual": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.residual_valuation": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.reconstruction": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.residual_pos": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.not_dvd_residual_of_dvd_gap": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.local_valuation": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.not_dvd_difference_of_dvd_lower": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.difference_between": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.difference_not_pow": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.residual_not_pow": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.residual_prime_address": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.not_dvd_residual_of_dvd_lower": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.gap_coprime_of_mul_coprime": [
+          "propext",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.primeProduct": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.primeProduct_pos": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.primeProduct_coprime": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.standard_gap_coprime": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.prime_not_dvd_primeProduct": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.small_prime_product_valuation": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.small_prime_dvd_gap": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.small_prime_valuation_exact": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.small_prime_local_completion": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.not_dvd_residual_of_small_prime": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.exists_prime_escape_with_address": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.finite_set_compensation_and_escape": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.base_one": [
+          "propext"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.residual_one": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.Shift.primeProduct_one": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.exists_pow_eq_of_dvd_padicValNat": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.exists_pow_eq_iff_dvd_padicValNat": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.exists_prime_padicValNat_not_dvd": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.exists_prime_outside_of_local_power": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.not_pow_of_between_consecutive_powers": [
+          "propext",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.pow_sub_one_between": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.not_pow_pow_sub_one": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.gap": [
+          "propext"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.base": [
+          "propext"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.residual": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.gap_pos": [
+          "propext"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.prime_dvd_gap": [
+          "propext",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.not_dvd_base_of_dvd_gap": [
+          "propext"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.cofactor_valuation": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.prime_mul_residual": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.residual_valuation": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.reconstruction": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.residual_pos": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.not_dvd_residual_of_dvd_gap": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.local_valuation": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.residual_not_pow": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.residual_prime_address": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.primeProduct": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.primeProduct_pos": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.prime_not_dvd_primeProduct": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.small_prime_product_valuation": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.small_prime_dvd_gap": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.small_prime_local_completion": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.small_prime_valuation_exact": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.exists_prime_escape": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.exists_prime_escape_with_address": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.PrimePowerCompensation.finite_set_compensation_and_escape": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.CosmicFormula.add_pow_eq_prefix_add_xpow_mul_GTail": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.NumberTheory.GapFocusing.GN_succ_right": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.NumberTheory.GapFocusing.dvd_anchor_pow_of_dvd_adjacent_GN": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.prod_cyclotomicEval_eq_geomSum": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.CosmicFormula.gcd_GTail_eq_gcd_boundary": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.CosmicFormula.GTail_congr_of_modEq": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.CosmicFormula.pow_dvd_higher_tail": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.CosmicFormula.padicValNat_GTail_eq_zero_of_head_unit_of_prime_dvd_x": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.CosmicFormula.GTail_split_at": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Algebra.BinomTail.add_pow_tail_exists": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.Algebra.square_add_band": [
+          "propext"
+        ],
+        "DkMath.Lib.Cosmic.completion_body_add_gap": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.Cosmic.powerDifferenceCofactor_add_eq_GTail": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.Cosmic.powerDifferenceCofactor_symm": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.Cosmic.signedCompletionDefect_add_cofactor": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.gcd_gap_powerDifferenceCofactor_eq_gcd_degree": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.coprime_powerDifferenceCofactor_right": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.gcd_eq_of_padicValNat_eq_on_support": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.Cosmic.completionLoan_numerators_add": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.padicValNat_split": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.padicValNat_choose_prime_pow": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.NumberTheory.GapFocusing.primeRatio_ne_zero": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.NumberTheory.GapFocusing.isRoot_cyclotomic_iff_prime_pow_mul_orderOf": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.NumberTheory.GapFocusing.padicValInt_cyclotomicEval_eq_pow_sub_one_of_orderOf_eq": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.padicValNat_pow_sub_pow_of_four_dvd": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.primeOrder_eq_one_iff_dvd_gap": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.CFBRC.cyclotomicShiftedEval_eq_cyclotomicEval_div_mul_pow": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.NumberTheory.GapFocusing.map_cyclotomicShiftedEval": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.NumberTheory.GapFocusing.eval_homogenize_zero_second": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.map_homogeneousCyclotomicEval": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.Cosmic.powerDifferenceCofactor_recurrence": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.Cosmic.completionDefect_pos": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.Cosmic.completion_pairwise_coprime": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.isStrongDvdSequence_powerDifferenceCofactor": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.gcd_cofactor_completionDefect": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.Cosmic.completionLoan_primitive_triple": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_order_ray": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_dvd_first_of_dvd_second": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      }
+    },
+    "kernel_checked_examples": 11,
+    "prior_owners_unchanged_from_baseline_head": 32,
+    "direct_facade_owners": 33,
+    "lib_only_dependency_nodes": 34,
+    "original_material_sha256_verified": 24,
+    "promotion_markers": 34,
+    "file_tracker": "OK: no mismatches found",
+    "relative_markdown_link_targets_checked": 170,
+    "git_diff_check": "passed",
+    "full_root_and_test_builds": "not run per user validation split"
+  }
+}

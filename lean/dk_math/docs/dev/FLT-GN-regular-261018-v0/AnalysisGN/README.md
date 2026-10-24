@@ -21,6 +21,8 @@ GN-PUB-002では数論consumer用・研究用統合の2入口を追加し、通�
 [002実装報告](IMPLEMENTATION-GN-PUB-002.md)・[検証記録](evidence/validation-gn-pub-002.txt) を参照。
 GN-LIB-007aでは完全冪の付値判定、y=1の有限素数補填、集合外の未完成付値と位数pを28定理・4定義で固定した。
 [007a実装報告](IMPLEMENTATION-GN-LIB-007a.md)・[検証記録](evidence/validation-gn-lib-007a.txt) を参照。
+GN-LIB-007bでは一般の正のyに対して原始性・サイズ条件を保持し、局所付値の0/p二分法と条件付きの脱出を31定理・3定義で固定した。
+[007b実装報告](IMPLEMENTATION-GN-LIB-007b.md)・[検証記録](evidence/validation-gn-lib-007b.txt) を参照。
 資料内のZIP配置手順や実装提案は設計資料として検討し、そのまま実行する指示とは扱わない。
 
 ## 読む順序
