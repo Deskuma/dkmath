@@ -52,6 +52,9 @@ Cosmic.GTail
 Cosmic.CompletionCoprime
 Cosmic.PowerDifferenceCofactor
 Cosmic.CompletionDefect
+Cosmic.PowerDifferenceCofactorArithmetic
+NumberTheory.PowerDifferenceCofactorStrongDivisibility
+Cosmic.CompletionLoan
 Cosmic.GNProductDegree
 Cosmic.CyclicDeterminant
 Cosmic.GTailCyclotomic
@@ -127,6 +130,19 @@ Over naturals, `R_n≤(x+y)^(n-1)` makes `completionDefect` an exact deficit.
 It satisfies `D_(k+3)=(x+y)D_(k+2)+xy R_(k+1)` and is positive for n≥3
 when both coordinates are positive. `signedCompletionDefect` is the separate
 ring version. A cofactor can still be a square or cube with another base.
+
+### `PowerDifferenceCofactorArithmetic`, `CompletionLoan`
+
+The cofactor addition and degree-product identities hold in every commutative
+semiring. In particular `R_(2m)=(x+y)R_m(x²,y²)` and the odd borrowed sum has
+an `(x+y)²` factor. Changing the bases is explicit and does not prove height descent.
+
+For primitive natural coordinates the exact common factor of `R_n` and
+`xy R_(n-2)` is 1 in odd degrees and x+y in even degrees (n≥2).
+`CompletionLoan` divides all three numerators in
+`R_n+xy R_(n-2)=(x+y)R_(n-1)` by that factor, proves exact reconstruction,
+and for n≥3 and positive primitive coordinates constructs positive pairwise
+coprime entries A+B=C. This is an additive triple, without an ABC radical bound.
 
 ### `GTailSelection`, `GTailFactor`, `GTailTransport`
 
@@ -268,6 +284,15 @@ uses `R_(2k+1) ≡ (-xy)^k (mod x+y)`; natural gcd results follow by casting.
 Ring Bezout coprimality also applies to the signed deficit. The module
 translates the existing GN gap-gcd and adjacent-coprime APIs. Even degrees
 and nonprimitive coordinates can have a nontrivial cofactor/deficit gcd.
+
+### `PowerDifferenceCofactorStrongDivisibility`
+
+At primitive natural coordinates, `gcd(R_m,R_n)=R_gcd(m,n)`, including zero
+indices. The sequence is registered with `Nat.IsStrongDvdSequence`.
+The proof uses the cofactor addition formula and Euclid's algorithm.
+Divisibility of indices alone implies divisibility of cofactors without
+requiring primitive coordinates. The exact gcd with `xy R_(n-2)` remains
+distinct from the even-degree completion-deficit gcd.
 
 ### `PowerFactor`
 

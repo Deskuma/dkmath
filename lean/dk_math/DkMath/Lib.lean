@@ -35,6 +35,9 @@ import DkMath.Lib.Cosmic.GTail
 import DkMath.Lib.Cosmic.CompletionCoprime
 import DkMath.Lib.Cosmic.PowerDifferenceCofactor
 import DkMath.Lib.Cosmic.CompletionDefect
+import DkMath.Lib.Cosmic.PowerDifferenceCofactorArithmetic
+import DkMath.Lib.NumberTheory.PowerDifferenceCofactorStrongDivisibility
+import DkMath.Lib.Cosmic.CompletionLoan
 import DkMath.Lib.Cosmic.GNProductDegree
 import DkMath.Lib.Cosmic.GNSourceTransport
 import DkMath.Lib.Cosmic.GNPhaseThreeTerm
