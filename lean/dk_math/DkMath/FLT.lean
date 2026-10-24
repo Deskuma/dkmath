@@ -64,6 +64,7 @@ import DkMath.FLT.FreyStableLineLocalGlobal
 import DkMath.FLT.FreyCofixedBranchSwap
 import DkMath.FLT.FreyDyadicNontrivial
 import DkMath.FLT.FreyDyadicGeometry
+import DkMath.FLT.FreyDyadicZeroComponent
 
 #print "file: DkMath.FLT"
 

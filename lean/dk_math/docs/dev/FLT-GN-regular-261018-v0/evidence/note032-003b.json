@@ -1,0 +1,88 @@
+{
+  "checkpoint": "NOTE-032-003B",
+  "date": "2026-10-25",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "b117568eae88ec1ca6057313adfbf87cf5a96429",
+  "status": "outside E0[p] and nontrivial dyadic inertia supplied; hno conditional only on branch swap",
+  "mathematical_changes": {
+    "reduction": "injective on smooth unit-order torsion, via zero-component homomorphism and finite-coordinate integrality",
+    "nodal_bound": "same residue centre/direction Frame yields finite torsion bound <=n; finite-image injection transfers it to E0[n]",
+    "same_Source": "|E0[p]|<=p<p^2=|E[p]| gives actual outside point; then nontrivial inertia supplied",
+    "sharp_structure": "inertia difference absorption plus nontriviality gives dim E0[p]=1 and |E0[p]|=p",
+    "boundary": "unit order required even for good reduction: y^2+xy=x^3+4x^2+x, discriminant=225, nonzero 2-torsion (-1/4,1/8) reduces to zero",
+    "positive_example": "y^2+xy=x^3+x^2+2x, discriminant=-412, c4=-71; actual 3-torsion has outside point without Frey Source"
+  },
+  "production": [
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticSmoothTorsionReduction.lean",
+      "public_theorems": [
+        "eq_zero_of_reduce_eq_zero",
+        "reduce_injOn_torsion",
+        "finite_and_ncard_le_of_residue_bound"
+      ],
+      "sha256": "bf81e49803736ebb7d57106178c0e35d9b9637f79d290ba96247ca521c8df075"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticNodalTorsionBound.lean",
+      "public_theorems": [
+        "residue_frame",
+        "finite_and_ncard_smooth_torsion_le",
+        "card_le_of_injective_smooth_torsion"
+      ],
+      "sha256": "05a586eb3c7ea765cc1eaaa0746e1902b86de6b59350aa8e8ef6c44204f22742"
+    },
+    {
+      "path": "DkMath/FLT/FreyDyadicZeroComponent.lean",
+      "public_theorems": [
+        "residualZeroComponent_card_le_at_two",
+        "residualZeroComponent_ne_top_at_two",
+        "residual_exists_not_smooth_at_two",
+        "residualZeroComponent_absorbs_at_two",
+        "residual_exists_dyadic_inertia_ne",
+        "residualZeroComponent_ne_bot_at_two",
+        "residualZeroComponent_finrank_eq_one_at_two",
+        "residualZeroComponent_card_eq_at_two",
+        "residual_no_cofixed_line_of_branch_swap_at_two",
+        "residual_isIrreducible_of_branch_swap_at_two"
+      ],
+      "sha256": "04d36ed6d0311a74025c47c892b3757b8155ef12ea84d17e2d6de28acccec40e"
+    }
+  ],
+  "checks": {
+    "target_build": {
+      "targets": [
+        "DkMath.Lib.NumberTheory.EllipticSmoothTorsionReduction",
+        "DkMath.Lib.NumberTheory.EllipticNodalTorsionBound",
+        "DkMath.FLT.FreyDyadicZeroComponent"
+      ],
+      "jobs": 4040,
+      "exit_code": 0,
+      "warnings": 0
+    },
+    "standalone_boundary_theorems": 4,
+    "standalone_example_definitions": 2,
+    "same_Source37_smoke_theorems": 5,
+    "audited_declarations": 27,
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "forbidden_construct_scan": "passed",
+    "lib_only_dependency_nodes": 21,
+    "prior_owners_unchanged": 13,
+    "original_note032_unchanged": true,
+    "tracker": "OK: no mismatches found",
+    "normal_test_body_matches_independent_boundary": true,
+    "entrance_and_test_registration": "static only",
+    "git_diff_check": "passed",
+    "full_root_and_test_builds": "user validation split; not run",
+    "local_document_links": 16,
+    "new_file_whitespace_checks": 9
+  },
+  "remaining": [
+    "branch swap from a=3 mod8 for same Source (003C)",
+    "direct hno at a=3 mod8 after 003C (032-004)",
+    "a=7 mod8 and general hno"
+  ]
+}
