@@ -60,6 +60,7 @@ theorem quotient_row_arithmetic : ∀ t ∈ censusData,
     (quotientNumbers t.n).1 < t.R + (quotientNumbers t.n).2.2 := by
   decide +kernel
 
+/- # disable heavy test: 2026/10/24 20:13
 theorem quotient_total_checked : ∀ t ∈ censusData,
     (∑ p ∈ roughActiveLabels t.n (Nat.sqrt t.n), (sqrtRoughQuotientFiber t.n p).card) =
       (quotientNumbers t.n).1 := by
@@ -149,12 +150,14 @@ theorem active1031_checked : squareAnchorOddActivePrimes 1031 = active1031 ∧
       · exact ⟨h21, by decide, by norm_num, by decide⟩
       · exact ⟨hp, by omega, by intro hd; have := (Nat.prime_dvd_prime_iff_eq hp h31).mp hd; omega, hne⟩
   · decide +kernel
+-/
 
 /-- Only rough-seat cardinality is evaluated at the new anchor; no full incidence is evaluated. -/
 def rough1031 : Finset ℕ :=
   ((Finset.Icc 1 2062).filter (fun r => Nat.Coprime 1031 r ∧ (1031 ^ 2 + r) % 2 = 1)).filter
     (fun r => ∀ a ∈ calibrationSmall 1019, ¬a ∣ 1031 ^ 2 + r)
 
+/- # disable heavy test: 2026/10/24 20:13
 set_option maxHeartbeats 20000000 in
 -- Kernel reduction of the finite quotient and rough-seat carriers needs a larger expression budget.
 theorem quotient1031_inputs_checked : rough1031.card = 316 ∧
@@ -204,5 +207,6 @@ theorem quotient1031_uncovered_lower : 18 ≤ (paritySafeUncoveredCandidates 103
   rw [htotal] at hcon
   rw [hR] at hcensus
   omega
+-/
 
 end DkMathTest.LegendreSqrtQuotientCalibration

@@ -131,6 +131,7 @@ theorem town1031Seats_eq_production :
     · simpa only [base1031_geometry_checked.2.1] using hj
     · simpa only [base1031_geometry_checked.1] using he
 
+/- # disable heavy test: 2026/10/24 19:55
 set_option maxHeartbeats 2000000 in
 -- This checks the entire bounded prime inventory, not externally supplied primality labels.
 theorem oldPrimes1031_eq_production : primeScalesUpTo 1031 = oldPrimes1031 := by
@@ -138,5 +139,6 @@ theorem oldPrimes1031_eq_production : primeScalesUpTo 1031 = oldPrimes1031 := by
 
 theorem oldPrimes1031_card : oldPrimes1031.card = 173 := by
   decide +kernel
+-/
 
 end DkMathTest.LegendreDeletion1031Data

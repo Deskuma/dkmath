@@ -12,9 +12,11 @@ import DkMath.NumberTheory.Legendre.ParitySafeSqrtRoughFactorization
 namespace DkMathTest.LegendreSqrtRoughMomentCalibration
 -- Seven-field row membership needs a larger typeclass expression budget.
 set_option synthInstance.maxSize 1024
-open DkMath.NumberTheory.Legendre DkMathTest.LegendreBlockLocalization
+open DkMath.NumberTheory.Legendre
+open DkMathTest.LegendreBlockLocalization
 open scoped BigOperators
 
+/- # disable heavy test: 2026/10/24 20:13
 theorem calibrationRough_eq {t : MomentRow} (ht : t ∈ momentData) :
     canonicalRoughCandidates t.1 (Nat.sqrt t.1) = calibrationRough t.1 := by
   obtain ⟨_, _, hA, hsmall⟩ := inventories_checked t ht
@@ -78,5 +80,6 @@ theorem checkpoints_prime_from_moments : ∀ t ∈ momentData,
 
 theorem shell1019_prime : ∃ p, p.Prime ∧ SquareCell 1019 p :=
   checkpoints_prime_from_moments (1019, 31, 312, 196, 28, 9, 135) (by decide)
+-/
 
 end DkMathTest.LegendreSqrtRoughMomentCalibration

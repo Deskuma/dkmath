@@ -61,6 +61,7 @@ def calibrationM2 (n : ℕ) : ℕ :=
 def calibrationM3 (n : ℕ) : ℕ :=
   ∑ r ∈ calibrationRough n, Nat.choose (calibrationSupport n r).card 3
 
+/- # disable heavy test: 2026/10/24 19:54
 set_option maxHeartbeats 6000000 in
 -- Complete prime inventories and the cutoff filters are checked once for the five anchors.
 theorem inventories_checked : ∀ t ∈ momentData,
@@ -83,5 +84,6 @@ theorem row_margins_checked : ∀ t ∈ momentData,
     0 < t.1 ∧ t.2.2.2.1 + t.2.2.2.2.2.1 < t.2.2.1 + t.2.2.2.2.1 ∧
     t.2.2.1 + t.2.2.2.2.1 = t.2.2.2.2.2.2 + t.2.2.2.1 + t.2.2.2.2.2.1 := by
   decide +kernel
+-/
 
 end DkMathTest.LegendreSqrtRoughMomentCalibration

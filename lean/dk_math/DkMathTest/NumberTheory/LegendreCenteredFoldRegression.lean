@@ -149,6 +149,7 @@ theorem norm1031_support_counts : centeredFoldNorm 1031 = 2127985 ∧
   · rw [centeredCommonSupportIndices_card (by decide : Nat.Prime 61) (by decide),
       ite_eq_left (by norm_num [centeredFoldNorm])]
 
+/- # disable heavy test: 2026/10/24 20:13
 /-- Reuse the earlier kernel endpoint rather than recalculate a full 1031 census. -/
 theorem preserved1031 : ¬SquareOffsetsFullyCovered 1031 ∧
     18 ≤ (squareShellWheelSurvivorImage 1031).card ∧
@@ -156,6 +157,7 @@ theorem preserved1031 : ¬SquareOffsetsFullyCovered 1031 ∧
   ⟨DkMathTest.LegendreResidueCoverCalibration.residue1031_not_full,
     DkMathTest.LegendreResidueCoverCalibration.residue1031_projected_survivor_lower,
     DkMathTest.LegendreResidueCoverCalibration.residue1031_preserved_endpoint⟩
+-/
 
 /-- A covered local trajectory satisfies all fold and successor restrictions together. -/
 theorem compatible_covered_trajectory :

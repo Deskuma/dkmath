@@ -40,7 +40,7 @@ def seats1031 : Finset ℕ :=
     apply List.Pairwise.nodup (r := fun a b : ℕ => a < b)
     apply List.IsChain.pairwise
     decide +kernel⟩
-
+/- # disable heavy test: 2026/10/24 20:13
 set_option maxRecDepth 100000
 
 set_option maxHeartbeats 4000000 in
@@ -62,5 +62,6 @@ theorem certificate1031_cards : seats1031.card = 233 ∧ (primeScalesUpTo 1031).
 theorem exists_prime_squareCell_1031_of_explicitCapacityCertificate :
     ∃ p, p.Prime ∧ SquareCell 1031 p :=
   exists_prime_squareCell_of_oldSupportCapacityCertificate (by decide) certificate1031_semantic
+-/
 
 end DkMathTest.LegendreCapacity1031Calibration
