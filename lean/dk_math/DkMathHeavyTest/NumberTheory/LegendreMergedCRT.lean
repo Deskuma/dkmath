@@ -4,14 +4,16 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMathTest.NumberTheory.LegendreMergedCRTData
+import DkMathHeavyTest.NumberTheory.LegendreMergedCRTData
 
-#print "file: DkMathTest.NumberTheory.LegendreMergedCRT"
+#print "file: DkMathHeavyTest.NumberTheory.LegendreMergedCRT"
 
 namespace DkMathTest.LegendreMergedCRT
 
-open DkMath.NumberTheory.Legendre DkMathTest.LegendreHybridClassification
-open DkMathTest.LegendreHybridProvider DkMathTest.LegendreBlockLocalization
+open DkMath.NumberTheory.Legendre
+open DkMathTest.LegendreHybridClassification
+open DkMathTest.LegendreHybridProvider
+open DkMathTest.LegendreBlockLocalization
 open scoped BigOperators
 
 set_option maxRecDepth 100000

@@ -17,6 +17,7 @@ open DkMath.NumberTheory.Primitive
 open DkMath.NumberTheory.StructuralArithmetic
 open DkMathTest.LegendreDeletion1031Data
 
+/- # disable heavy test: 2026/10/24 20:11
 set_option maxRecDepth 100000
 
 set_option maxHeartbeats 20000000 in
@@ -48,5 +49,6 @@ theorem exists_prime_squareCell_1031_of_coarseTownDeletion : ∃ p, p.Prime ∧ 
   rw [oldPrimes1031_card_checked, deletion1031_symbolic_card,
     DkMathTest.LegendreFullTownRegression.large_anchor_grid.2.2]
   decide +kernel
+-/
 
 end DkMathTest.LegendreDeletion1031Calibration

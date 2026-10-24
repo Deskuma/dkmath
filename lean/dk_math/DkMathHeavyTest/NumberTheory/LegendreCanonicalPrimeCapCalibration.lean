@@ -5,10 +5,10 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.Legendre.ParitySafePrimeAnchorCap
-import DkMathTest.NumberTheory.LegendreCanonicalTailCalibration
+import DkMathHeavyTest.NumberTheory.LegendreCanonicalTailCalibration
 import DkMathTest.NumberTheory.LegendreCanonicalTailRegression
 
-#print "file: DkMathTest.NumberTheory.LegendreCanonicalPrimeCapCalibration"
+#print "file: DkMathHeavyTest.NumberTheory.LegendreCanonicalPrimeCapCalibration"
 
 namespace DkMathTest.LegendreCanonicalPrimeCapCalibration
 open DkMath.NumberTheory.Legendre

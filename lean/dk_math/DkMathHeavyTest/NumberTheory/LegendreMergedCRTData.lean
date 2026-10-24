@@ -7,7 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.NumberTheory.Legendre.ParitySafeMixedCRT
 import DkMathTest.NumberTheory.LegendreAdaptiveClassification
 
-#print "file: DkMathTest.NumberTheory.LegendreMergedCRTData"
+#print "file: DkMathHeavyTest.NumberTheory.LegendreMergedCRTData"
 
 namespace DkMathTest.LegendreMergedCRT
 

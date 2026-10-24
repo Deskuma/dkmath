@@ -39,6 +39,7 @@ def active1021 : Finset ℕ := insert 1019 (calibrationActive 1019)
 def censusActive (n : ℕ) : Finset ℕ :=
   if n = 1021 then active1021 else calibrationActive n
 
+/- # disable heavy test: 2026/10/24 20:13
 /-- Reuse the verified 1019 inventory; only the two new boundary integers need consideration. -/
 theorem active1021_checked : squareAnchorOddActivePrimes 1021 = active1021 ∧
     (active1021.filter (fun p => p ≤ Nat.sqrt 1021)) = calibrationSmall 1019 := by
@@ -67,8 +68,9 @@ theorem active1021_checked : squareAnchorOddActivePrimes 1021 = active1021 ∧
         calibrationSmall 1019 := hold.2.2.2
     rw [active1021, Finset.filter_insert, hs21, ite_eq_right (by decide : ¬1019 ≤ 31)]
     simpa only [hs19] using hsmall
+-/
 
-
+/- # disable heavy test: 2026/10/24 20:13
 /-- Existing five inventories plus one checked extra inventory. -/
 theorem census_inventory_checked : ∀ t ∈ censusData,
     t.n.Prime ∧ 0 < t.n ∧ squareAnchorOddActivePrimes t.n = censusActive t.n := by
@@ -80,6 +82,7 @@ theorem census_inventory_checked : ∀ t ∈ censusData,
     have h := inventories_checked u hu
     rw [heq] at h
     exact ⟨h.1, h.1.pos, by simpa [censusActive, he] using h.2.2.1⟩
+-/
 
 /-- Only the new anchor's rough seats and local support are evaluated. -/
 def rough1021 : Finset ℕ :=

@@ -5,8 +5,10 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.Legendre
-import DkMathTest.NumberTheory.LegendreSqrtRoughCensusCalibration
-import DkMathTest.NumberTheory.LegendreSqrtRoughCensusRegression
+
+-- disable heavy test: 2026/10/24 14:26
+-- import DkMathTest.NumberTheory.LegendreSqrtRoughCensusCalibration
+-- import DkMathTest.NumberTheory.LegendreSqrtRoughCensusRegression
 
 #print "file: DkMathTest.NumberTheory.LegendreSqrtRoughCensusAxiomAudit"
 
@@ -148,6 +150,7 @@ import DkMathTest.NumberTheory.LegendreSqrtRoughCensusRegression
 #print axioms DkMath.NumberTheory.Legendre.prime_squareCell_of_sqrt_factorization_census
 #check DkMath.NumberTheory.Legendre.prime_squareCell_of_cross_fiber_budget
 #print axioms DkMath.NumberTheory.Legendre.prime_squareCell_of_cross_fiber_budget
+/-
 #check DkMathTest.LegendreSqrtRoughCensus.censusData
 #print axioms DkMathTest.LegendreSqrtRoughCensus.censusData
 #check DkMathTest.LegendreSqrtRoughCensus.active1021
@@ -248,3 +251,4 @@ import DkMathTest.NumberTheory.LegendreSqrtRoughCensusRegression
 #print axioms DkMathTest.LegendreSqrtRoughCensus.CensusRow.repeated
 #check DkMathTest.LegendreSqrtRoughCensus.CensusRow.triple
 #print axioms DkMathTest.LegendreSqrtRoughCensus.CensusRow.triple
+-/

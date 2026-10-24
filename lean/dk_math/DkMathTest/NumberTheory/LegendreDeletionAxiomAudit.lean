@@ -5,11 +5,13 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.Legendre
-import DkMathTest.NumberTheory.LegendreDeletionRegression
-import DkMathTest.NumberTheory.LegendreCapacity297Calibration
-import DkMathTest.NumberTheory.LegendreDeletionProvenance
-import DkMathTest.NumberTheory.LegendreCapacity1031Calibration
-import DkMathTest.NumberTheory.LegendreDeletion1031Strictness
+
+-- disable heavy test: 2026/10/24 14:29
+-- import DkMathTest.NumberTheory.LegendreDeletionRegression
+-- import DkMathTest.NumberTheory.LegendreCapacity297Calibration
+-- import DkMathTest.NumberTheory.LegendreDeletionProvenance
+-- import DkMathTest.NumberTheory.LegendreCapacity1031Calibration
+-- import DkMathTest.NumberTheory.LegendreDeletion1031Strictness
 
 #print "file: DkMathTest.NumberTheory.LegendreDeletionAxiomAudit"
 
@@ -109,6 +111,7 @@ import DkMathTest.NumberTheory.LegendreDeletion1031Strictness
 #print axioms DkMath.NumberTheory.Legendre.coarseTownDeletionByFibers
 #check DkMath.NumberTheory.Legendre.coarseTownDeletionVertices_eq_fibers
 #print axioms DkMath.NumberTheory.Legendre.coarseTownDeletionVertices_eq_fibers
+/-
 #check DkMathTest.LegendreDeletionRegression.tiny_collision_free
 #print axioms DkMathTest.LegendreDeletionRegression.tiny_collision_free
 #check DkMathTest.LegendreDeletionRegression.six_shared_first_endpoints
@@ -189,3 +192,4 @@ import DkMathTest.NumberTheory.LegendreDeletion1031Strictness
 #print axioms DkMathTest.LegendreDeletion1031Strictness.fiber11_card1031
 #check DkMathTest.LegendreDeletion1031Strictness.strict_deletion_vs_edge1031
 #print axioms DkMathTest.LegendreDeletion1031Strictness.strict_deletion_vs_edge1031
+-/

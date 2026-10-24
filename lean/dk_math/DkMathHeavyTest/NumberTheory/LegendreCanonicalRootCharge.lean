@@ -7,11 +7,12 @@ Authors: D. and Wise Wolf.
 import DkMath.NumberTheory.Legendre.ParitySafeCanonicalRootCharge
 import DkMathTest.NumberTheory.LegendreHybridProvider
 
-#print "file: DkMathTest.NumberTheory.LegendreCanonicalRootCharge"
+#print "file: DkMathHeavyTest.NumberTheory.LegendreCanonicalRootCharge"
 
 namespace DkMathTest.LegendreCanonicalRootCharge
 open DkMath.NumberTheory.Legendre
-open DkMathTest.LegendreIncidenceUpper DkMathTest.LegendreHybridProvider
+open DkMathTest.LegendreIncidenceUpper
+open DkMathTest.LegendreHybridProvider
 open DkMathTest.LegendreBlockLocalization
 open scoped BigOperators
 
