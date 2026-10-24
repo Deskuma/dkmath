@@ -34,6 +34,8 @@ import DkMath.Lib.NumberTheory.CompletionDefectGcd
 import DkMath.Lib.Cosmic.CompletionLoan
 
 -- 素数住所
+import DkMath.Lib.NumberTheory.PerfectPowerValuation
+import DkMath.Lib.NumberTheory.PrimePowerCompensation
 import DkMath.Lib.NumberTheory.PadicValNat
 import DkMath.Lib.NumberTheory.BinomialPrimePower
 import DkMath.Lib.NumberTheory.PrimeRatioOrder
@@ -51,7 +53,7 @@ import DkMath.Lib.NumberTheory.HomogeneousCyclotomicPrimeAddress
 /-!
 # GN と完成算術の公開入口
 
-[DkMath.Lib] GN-LIB-001〜006で整備した一般核を、所有モジュールへの直接importで公開する。
+[DkMath.Lib] GN-LIB-001〜007aで整備した一般核を、所有モジュールへの直接importで公開する。
 このファイルは宣言を複製せず、既存の名前空間・仮定・証明をそのまま利用する薄い入口である。
 
 ```lean
@@ -66,6 +68,7 @@ import DkMath.Lib.Cosmic.Completion
 * **可除性**：原始座標での強可除性、奇数次数のcoprime、偶数次数の精密gcd。
 * **原始三項**：CompletionLoanの因子除去から、正の原始三項 A+B=C を構成する。
 * **素数住所**：乗法位数、円分層、斉次評価、LTE、素数冪の深さを表す付値。
+  GN-LIB-007aでは全素数付値による完全冪判定と、y=1の有限素数補填・集合外脱出を追加した。
 
 R_nとD_nは `DkMath.Lib.Cosmic`、可除性の新しい一般核は
 `DkMath.Lib.NumberTheory` にある。GNは `DkMath.CosmicFormula`、既存の位数・円分住所は
@@ -74,7 +77,8 @@ R_nとD_nは `DkMath.Lib.Cosmic`、可除性の新しい一般核は
 
 原始性、正次数、座標の大小、素数が分母を割らない条件などは各定理の型に残る。
 とくに自然数差と有限付値の非零条件、2進LTEの補正を省略しない。
-素数住所は可除性の分類であり、新しい原始素数の存在やFLTの矛盾を主張しない。
+素数住所の分類だけから、新しい原始素数の存在やFLTの矛盾は導かない。
+有限集合外の未完成付値の存在は、007aのy=1の特殊構成と独立な非完全冪性の証明に限定する。
 
 `DkMath.Lib` 全体やFLT・Legendre等のconsumerはimportしない。
 consumer側からこの入口をimportすることで、応用層への逆依存を防ぐ。

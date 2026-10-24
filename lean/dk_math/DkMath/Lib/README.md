@@ -25,6 +25,12 @@ divisibility, primitive additive triples, and prime addresses. It does not impor
 the `DkMath.Lib` aggregator or application consumers. Existing theorem namespaces
 and hypotheses remain unchanged.
 
+The Completion entry also exposes `NumberTheory.PerfectPowerValuation` and
+`NumberTheory.PrimePowerCompensation`: a nonzero perfect-power valuation criterion,
+and a construction at y=1 that completes all primes in a finite set locally while
+producing an outside prime with an exponent obstruction. General y requires a
+separate size hypothesis; this is a special construction, not an FLT descent.
+
 The intended flow is:
 
 ```text

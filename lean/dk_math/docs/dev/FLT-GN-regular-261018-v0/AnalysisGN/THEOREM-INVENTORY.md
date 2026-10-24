@@ -209,3 +209,15 @@ m≠0と原始性のもとで偶数式を証明し、公開型から座標順序
 [数論smoke](evidence/GNCompletionNumberTheorySmoke.lean)、
 [研究入口smoke](evidence/GNCompletionResearchSmoke.lean) を固定した。
 Legendreの同値変形を予想の無条件証明とは数えない。
+
+## GN-LIB-007a：局所補填から集合外の付値障害へ
+
+| 所有者 | 定義 | 定理 | 内容 |
+| --- | ---: | ---: | --- |
+| `Lib.NumberTheory.PerfectPowerValuation` | 0 | 7 | 非零自然数の全素数付値による完全冪判定、非完全冪の付値障害、有限集合外への抽出、隣接冪の間隔 |
+| `Lib.NumberTheory.PrimePowerCompensation` | 4 | 21 | gap・base・residual・有限素数積、LTE、正確な再構成、局所完済、K非完全冪、集合外脱出、位数p |
+
+[32宣言の型・所有者・昇格マーカー](evidence/gn-lib-007a.json)、
+[公開入口smoke](evidence/GNFinitePrimeCompensationSmoke.lean)、
+[証明経路と保持条件](IMPLEMENTATION-GN-LIB-007a.md) を固定した。
+全体007は進行中であり、一般yのサイズ条件付き構成と追加因子の選択はb/cで扱う。
