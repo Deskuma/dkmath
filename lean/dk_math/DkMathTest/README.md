@@ -33,3 +33,8 @@ $$
 ℚ(X)の37上の住所、ℚの代数閉包上のFrobeniusと、1・異なる素数・正標数の境界を扱う。
 通常テストの同一本体を独立Lean資料で確認した。
 [004報告](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-004-261025.md) を参照。
+
+`Lib/NumberTheory/EllipticSplitDyadic.lean` は005Aの分裂接錐を確認する。
+実際の非Frey曲線と同じ3捩れ点で、Frobenius差は滑らか、和は滑らかでないことを証明した。
+通常テストの同一本体を独立Lean資料で確認した。
+[005A報告](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005A-261025.md) を参照。

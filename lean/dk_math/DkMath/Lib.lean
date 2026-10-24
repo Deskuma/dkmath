@@ -144,6 +144,7 @@ import DkMath.Lib.NumberTheory.EllipticShallowSlope
 import DkMath.Lib.NumberTheory.EllipticSmoothReduction
 import DkMath.Lib.NumberTheory.EllipticSmoothTorsionReduction
 import DkMath.Lib.NumberTheory.EllipticStableLine
+import DkMath.Lib.NumberTheory.EllipticSplitDyadic
 import DkMath.Lib.NumberTheory.EllipticTangentDirections
 import DkMath.Lib.NumberTheory.EllipticTorsionAllCard
 import DkMath.Lib.NumberTheory.EllipticTorsionCardBound
@@ -187,6 +188,7 @@ import DkMath.Lib.NumberTheory.FoldedValuationOrbit
 
 import DkMath.Lib.NumberTheory.FreyGapCubic
 import DkMath.Lib.NumberTheory.FreyModEight
+import DkMath.Lib.NumberTheory.FreySplitModEight
 import DkMath.Lib.NumberTheory.FreyLocalReduction
 import DkMath.Lib.NumberTheory.FreyPrimeValuation
 import DkMath.Lib.NumberTheory.FreyTwoArithmetic
@@ -255,6 +257,7 @@ import DkMath.Lib.NumberTheory.ValuationPrimeExistence
 import DkMath.Lib.NumberTheory.ValuationPrimeSupport
 import DkMath.Lib.NumberTheory.ValuationQuadraticFrobenius
 import DkMath.Lib.NumberTheory.ValuationResidue
+import DkMath.Lib.NumberTheory.ValuationSplitQuadratic
 import DkMath.Lib.NumberTheory.ValuationTameCharacter
 
 import DkMath.Lib.NumberTheory.WeierstrassNegativeValuation

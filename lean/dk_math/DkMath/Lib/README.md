@@ -534,3 +534,10 @@ any prime in any characteristic-zero field, using lying-over in the integral clo
 The Frey consumer uses it to supply the dyadic address internally in the a≡3 mod8
 hno and irreducibility endpoints.
 [004 report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-004-261025.md).
+
+`FreySplitModEight`, `ValuationSplitQuadratic`, and `EllipticSplitDyadic`
+handle the a≡7 mod8 split tangent cone. The decomposition group fixes each
+direction and sends actual point differences into the smooth zero component.
+The Frey consumer identifies a possible global cofixed line with the same E₀[p];
+the global escape needed for hno remains unproved.
+[005A report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005A-261025.md).
