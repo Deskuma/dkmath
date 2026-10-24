@@ -161,7 +161,11 @@ LibからCFBRC応用モジュールへのimportは加えていない。
 GN-PUB-001で `DkMath.Lib.Cosmic.Completion` を実装した。6層・30所有モジュールを直接importし、
 `DkMath.Lib` 集約入口や応用層はimportしない。マーカーと教科書docstringを持つimport-onlyの入口である。
 Lib集約入口からも公開する。独立smokeで確認し、重い通常テストへの登録は今回の範囲に含めない。
-他の2研究facadeは未実装。ZIPは適用せず設計素材として保持する。
+GN-PUB-002で数論consumer用と研究用統合の2入口を実装した。
+数論入口はLibの完成入口と14 consumer所有者、研究入口は7モジュールを直接importする。
+既にLibが公開するBinomTailとBinomialPrimePowerの旧wrapper importは重複列挙しない。
+`DkMath` と `DkMathTest` へ登録し、対象moduleと独立smokeのみを検証した。
+ZIPはそのまま適用せず設計素材として保持する。
 ZIP中のREADMEとAUDITをプロジェクトルートへ上書きしない。
 既存の `DkMath.NumberTheory.GNPrime`、`GapFocusing` facadeとの重複を整理してから公開する。
 ルート`DkMath`への重い研究facadeの自動追加は、依存とビルド負荷を確認して判断する。

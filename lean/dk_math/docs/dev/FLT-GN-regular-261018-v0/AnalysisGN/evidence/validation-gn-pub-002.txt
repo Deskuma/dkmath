@@ -1,0 +1,76 @@
+GN-PUB-002 — 2026-10-24
+lake build DkMath.NumberTheory.Completion DkMath.Completion
+Build completed successfully (9038 jobs).
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/AnalysisGN/evidence/GNCompletionNumberTheorySmoke.lean
+Exit 0. Sole import: DkMath.NumberTheory.Completion. 14 theorem checks.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/AnalysisGN/evidence/GNCompletionResearchSmoke.lean
+Exit 0. Sole import: DkMath.Completion. 27 theorem checks, 2 generic examples.
+Verification body identical to the registered DkMathTest.CompletionFacadeAudit source.
+
+lake env lean /tmp/GNCompletionResearchAxioms.lean
+Exit 0. 27 theorem axiom lists, standard logical axioms only.
+'DkMath.NumberTheory.prime_allInnerChooseDivisible_self' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Primitive.unitSquare_body_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Primitive.mem_squarePrimeExpansion_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Primitive.dvd_primeWorldModulus_of_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Primitive.mem_primeWorldResidues_iff_supportDisjointFrom' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Primitive.supportDisjointFrom_insert_prime_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.PrimorialUniverse.finitePrimeBasis_subset_primeScalesUpTo_product' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.PrimorialUniverse.primeBasis235_subset_primeScalesUpTo_thirty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.PrimorialUniverse.unitCoordinate_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.primeWorldResidues_eq_packetBase' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.primeScalesUpTo_isFinitePrimeBasis' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.gnomonPascalCell_mul_factorial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.Legendre.coprime_squarePacketPoints_of_coprime_offset' depends on axioms: [propext, Quot.sound]
+'DkMath.NumberTheory.Legendre.squareOffset_iff_open_oddGnomon' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.CosmicFormulaBinom.mul_G_eq_GZ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Gnomon.oddGnomon_succ' depends on axioms: [propext]
+'DkMath.Gnomon.GTail_two_one_eq_square_shell' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.CosmicFormula.GTail_seven_six' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.CosmicFormula.coprime_left_seven_quadratic' depends on axioms: [propext, Quot.sound]
+'DkMath.Lib.Cosmic.completionLoan_primitive_triple' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.gcd_cofactor_completionDefect' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_order_ray' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.legendreConjecture_iff_projectedWheelEscape_from_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.legendreConjecture_iff_pascalOldBudget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.Legendre.legendreConjecture_iff_open_oddGnomon_prime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Gnomon.squareGnomonBand_eq_mul_GTail_two_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.PrimorialUniverse.squareBody_thirty_add_one_eq_thirtyOne_sq' depends on axioms: [propext]
+
+Build warnings: 0.
+Two import-only production facades with required file markers.
+113 existing owners unchanged from baseline HEAD.
+Root import graph acyclic: 1888 nodes; baseline: 1885 nodes.
+New root dependencies: two facades and existing ThirtySquareWorld owner.
+Lib Completion dependency closure: 31 Lib-only nodes including the facade.
+DkMath and DkMathTest registrations, existing Lake test glob: statically checked.
+24 original material SHA256 hashes verified.
+Marker tracker: OK: no mismatches found
+Relative Markdown link targets checked: 178.
+Evidence JSON parse checks: passed.
+Git diff --check: passed.
+Full/root/DkMathTest/lake test builds excluded by user request.

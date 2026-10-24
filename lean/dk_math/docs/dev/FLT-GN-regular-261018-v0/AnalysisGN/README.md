@@ -17,6 +17,8 @@ GN-LIB-005cでは偶数完成不足の精密gcdと奇偶統合入口を14定理�
 詳細は [001](IMPLEMENTATION-GN-LIB-001.md)・[002](IMPLEMENTATION-GN-LIB-002.md)・[003a](IMPLEMENTATION-GN-LIB-003a.md)・[003b](IMPLEMENTATION-GN-LIB-003b.md)・[003c](IMPLEMENTATION-GN-LIB-003c.md)・[004](IMPLEMENTATION-GN-LIB-004.md)・[005a](IMPLEMENTATION-GN-LIB-005a.md)・[005b](IMPLEMENTATION-GN-LIB-005b.md)・[006a](IMPLEMENTATION-GN-LIB-006a.md)・[006b](IMPLEMENTATION-GN-LIB-006b.md)・[005c](IMPLEMENTATION-GN-LIB-005c.md) の実装報告に記録する。
 GN-PUB-001では6層・30所有モジュールを直接importする [Lib公開入口](../../../../DkMath/Lib/Cosmic/Completion.lean) を追加した。
 [実装報告](IMPLEMENTATION-GN-PUB-001.md)・[検証記録](evidence/validation-gn-pub-001.txt) を参照。
+GN-PUB-002では数論consumer用・研究用統合の2入口を追加し、通常入口・テストへ登録した。
+[002実装報告](IMPLEMENTATION-GN-PUB-002.md)・[検証記録](evidence/validation-gn-pub-002.txt) を参照。
 資料内のZIP配置手順や実装提案は設計資料として検討し、そのまま実行する指示とは扱わない。
 
 ## 読む順序

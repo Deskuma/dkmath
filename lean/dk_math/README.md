@@ -15,6 +15,18 @@ presented by D. and Wise Wolf
 
 プロジェクト全体の公開概要は [root README](../../README.md)、日付つきの技術的な正本は [docs/PROJECT_STATUS.md](../../docs/PROJECT_STATUS.md) を参照。
 
+## GN・完成算術の入口
+
+```lean
+import DkMath.Lib.Cosmic.Completion  -- GN・完成不足・gcd・原始三項・素数住所の一般核
+-- consumerが必要な場合は以下のいずれかを使う
+import DkMath.NumberTheory.Completion  -- 素数世界・primorial・Legendreとの橋
+import DkMath.Completion               -- CosmicFormula・Gnomon・七次教材を含む研究入口
+```
+
+[公開入口の実装報告](docs/dev/FLT-GN-regular-261018-v0/AnalysisGN/IMPLEMENTATION-GN-PUB-002.md)。
+研究入口は既存の条件付き結果・同値変形も公開する。FLTやLegendre予想の新しい証明を主張しない。
+
 ## 2. Current stable result surfaces
 
 ### FLT3

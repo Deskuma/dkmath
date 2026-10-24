@@ -198,3 +198,14 @@ m≠0と原始性のもとで偶数式を証明し、公開型から座標順序
 [六層とimport依存の対応](evidence/gn-pub-001.json) と
 [単独importのLean例](evidence/GNCompletionPublicSmoke.lean) を固定した。
 入口の追加はFLT・Legendre consumerの証明完成を意味しない。
+
+## GN-PUB-002：consumerの公開入口
+
+- `DkMath.NumberTheory.Completion`：Libの完成入口と14 consumer所有者を公開する。
+- `DkMath.Completion`：上記とCosmicFormula・Gnomon・七次教材を7直接importで公開する。
+
+新しい数学宣言や旧APIの変更はない。consumer名は所有者の名前空間を保持する。
+[依存・代表宣言の対応](evidence/gn-pub-002.json)、
+[数論smoke](evidence/GNCompletionNumberTheorySmoke.lean)、
+[研究入口smoke](evidence/GNCompletionResearchSmoke.lean) を固定した。
+Legendreの同値変形を予想の無条件証明とは数えない。
