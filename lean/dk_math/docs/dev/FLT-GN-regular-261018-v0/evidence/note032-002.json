@@ -1,0 +1,84 @@
+{
+  "checkpoint": "NOTE-032-002",
+  "date": "2026-10-25",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "a81c260ec01e6a25747f18cfd613d9f5d12e9559",
+  "status": "Kummer arithmetic proved; same-Source nontrivial action and hno conditional on dyadic geometry",
+  "reference": {
+    "commit": "6e837e75355538c7f80bab5b956861e86c4eacc2",
+    "path": "P2M/Sol/S_FreyPackage_frey_exists_inertia_not_fixed_at_two.lean",
+    "sha256": "ab7b1bead99be5cf2060e4e841fee2ed6ebfb7619ea03f44c0801206118d4ad9",
+    "git_blob": "0bf3da9c6ecf37f2fc6f2fc97bd8c6b888d856f2"
+  },
+  "production": [
+    {
+      "path": "DkMath/Lib/NumberTheory/ValuationInertiaPower.lean",
+      "public_theorems": [
+        "natCast_eq_one_sub_mul_sum",
+        "valuation_sub_one_eq_one",
+        "inertia_fixed_of_unit_pow",
+        "inertia_fixed_of_pow_eq_one"
+      ],
+      "sha256": "6eb16bbbbba04ec93f814cc5926cc5c986eb7ea29dd1e6dc113dd74e20a08664"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/KummerInertia.lean",
+      "public_theorems": [
+        "exists_inertia_ne_of_pow_eq",
+        "exists_inertia_ne_of_valuation_pow_eq",
+        "dvd_depth_of_inertia_fixed"
+      ],
+      "sha256": "56945c60a037334f5383a9a2a7e0b257fde444b80b4173f31d181f107d88cadd"
+    },
+    {
+      "path": "DkMath/FLT/FreyDyadicNontrivial.lean",
+      "public_theorems": [
+        "curve_two_valuation_natCast_eq",
+        "not_exponent_dvd_curve_two_valuation",
+        "exists_inertia_ne_of_two_depth",
+        "residual_exists_inertia_ne_of_not_smooth",
+        "residual_exists_dyadic_inertia_ne_of_geometry",
+        "residual_no_cofixed_line_of_dyadic_geometry"
+      ],
+      "sha256": "b83ca4b9a967766c03df8bc1fe3a9dbfcb6453f7dc2c6ff77dd17176562084fb"
+    }
+  ],
+  "checks": {
+    "target_build": {
+      "targets": [
+        "DkMath.Lib.NumberTheory.ValuationInertiaPower",
+        "DkMath.Lib.NumberTheory.KummerInertia",
+        "DkMath.FLT.FreyDyadicNontrivial"
+      ],
+      "jobs": 4034,
+      "exit_code": 0,
+      "warnings": 0
+    },
+    "standalone_boundary_theorems": 4,
+    "same_Source37_smoke_theorems": 4,
+    "audited_declarations": 21,
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "forbidden_construct_scan": "passed",
+    "lib_only_dependency_nodes": 9,
+    "prior_owners_unchanged": 10,
+    "original_note032_unchanged": true,
+    "tracker": "OK: no mismatches found",
+    "normal_test_body_matches_independent_boundary": true,
+    "entrance_and_test_registration": "static only",
+    "git_diff_check": "passed",
+    "full_root_and_test_builds": "user validation split; not run",
+    "local_document_links": 12,
+    "new_file_whitespace_checks": 9,
+    "cached_reference_matches_note032_001": true
+  },
+  "remaining": [
+    "dyadic critical centre and directions with inertia-fixed centre",
+    "existence of actual p-torsion outside E0",
+    "branch swap from a=3 mod8",
+    "a=7 mod8 and general hno"
+  ]
+}
