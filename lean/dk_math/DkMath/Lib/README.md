@@ -42,6 +42,10 @@ NumberTheory.PrimeRatioOrder
 NumberTheory.CyclotomicAddress
 NumberTheory.CyclotomicLayerValuation
 NumberTheory.PowerDifferenceCofactorPrimeAddress
+NumberTheory.HomogeneousCyclotomic
+NumberTheory.HomogeneousCyclotomicAddress
+NumberTheory.HomogeneousCyclotomicBoundary
+NumberTheory.HomogeneousCyclotomicPrimeAddress
 NumberTheory.HomogeneousPowerQuotient
 NumberTheory.ClassGroupTorsionBridge
 NumberTheory.TraceOneLatticeLanding
@@ -309,9 +313,25 @@ Odd-prime LTE and the two-adic sum correction are retained separately.
 
 The whole cofactor R_n detects `r ∣ n` when the residue-ratio order r is greater
 than one. At order one it instead detects `q ∣ n`. A single cyclotomic layer
-has the distinct address `n=r*q^k`; the CFBRC homogeneous-carrier migration
-is a later GN-LIB-006b unit. No valuation-one assumption is imposed on the
+has the distinct address `n=r*q^k`; the homogeneous evaluator and its CFBRC compatibility spellings are now
+owned by the neutral GN-LIB-006b modules. No valuation-one assumption is imposed on the
 fundamental address: `R_3(18,1)=7³` is a checked boundary example.
+
+### `HomogeneousCyclotomic`, `HomogeneousCyclotomicAddress`, `HomogeneousCyclotomicBoundary`
+
+The polynomial evaluator at coordinates (a,b), its historical CFBRC shifted
+spelling at (a-b,b), the support/first-appearance definitions and all neutral
+layer-address proofs live in Lib. Original names and bodies are retained.
+Compatibility is given by definitional and explicit coordinate equalities;
+these owners import no CFBRC application or Zsigmondy carrier.
+
+### `HomogeneousCyclotomicPrimeAddress`
+
+The direct-coordinate interface classifies positive single-layer addresses
+by `n=r*q^k`, treats vanishing coordinates separately, and exposes mapping,
+unit-anchor and zero-anchor formulas. At degree zero the value is 1.
+The first positive and first nontrivial layers differ when r=1. Valuation at
+the basic address may exceed one. These are polynomial/divisibility results.
 
 ### `PowerFactor`
 

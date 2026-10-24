@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.CFBRC.Basic
+import DkMath.Lib.NumberTheory.HomogeneousCyclotomic
 import Mathlib.RingTheory.Polynomial.Cyclotomic.Basic
 
 #print "file: DkMath.CFBRC.CyclotomicProduct"
@@ -18,6 +19,13 @@ Phase D (D-GO) の着手として、
 を `CFBRC` 側で再利用しやすい形に定義する。
 -/
 
+/-!
+[DkMath.Lib] GN-LIB-006b: `cyclotomicEval`, `cyclotomicShiftedEval` and
+`cyclotomicShiftedEval_eq_cyclotomicEval_div_mul_pow` are now owned by
+`DkMath.Lib.NumberTheory.HomogeneousCyclotomic`. The original names and
+bodies are retained; this application owner keeps the product/GN bridges.
+-/
+
 namespace DkMath.CFBRC
 
 open scoped BigOperators
@@ -25,10 +33,6 @@ open DkMath.CosmicFormulaBinom
 
 noncomputable section
 
-/-- 円分多項式 `Φ_m` の単変数評価器（係数は `ℤ` から射影）。 -/
-@[simp] def cyclotomicEval {R : Type _} [CommRing R]
-    (m : ℕ) (X : R) : R :=
-  Polynomial.eval₂ (Int.castRingHom R) X (Polynomial.cyclotomic m ℤ)
 
 /--
 `∏_{m|d,m>1} Φ_m(X) = ∑_{i=0}^{d-1} X^i`
@@ -45,15 +49,6 @@ theorem prod_cyclotomicEval_eq_geomSum {R : Type _} [CommRing R]
   have hEval := congrArg (Polynomial.eval₂ (Int.castRingHom R) X) hpoly
   simpa [cyclotomicEval, Polynomial.eval₂_finsetProd, Polynomial.eval₂_finsetSum] using hEval
 
-/--
-shifted 版の局所評価器（`u=1` で plain eval に戻る形）。
-
-`m-1-k` での指数は `k ≥ m` で 0 になるため、`range m` 上で定義する。
--/
-@[simp] def cyclotomicShiftedEval {R : Type _} [CommRing R]
-    (m : ℕ) (x u : R) : R :=
-  let pR : Polynomial R := (Polynomial.cyclotomic m ℤ).map (Int.castRingHom R)
-  MvPolynomial.eval ![x + u, u] (pR.homogenize (Polynomial.cyclotomic m ℤ).natDegree)
 
 /-- divisors product の shifted 版（Phase D の product bridge 本体）。 -/
 @[simp] def cyclotomicDivisorsProductShifted {R : Type _} [CommRing R]
@@ -125,21 +120,6 @@ theorem cyclotomicDivisorsProductShifted_one_eq_GN
     exact mul_left_cancel₀ hx hmul
   exact hcore.trans hcoreGN
 
-/-- `u ≠ 0` のとき、局所 shifted evaluator は scaled plain evaluator に一致する。 -/
-theorem cyclotomicShiftedEval_eq_cyclotomicEval_div_mul_pow
-    {R : Type _} [Field R] (m : ℕ) (x u : R) (hu : u ≠ 0) :
-    cyclotomicShiftedEval m x u =
-      cyclotomicEval m ((x + u) / u) * u ^ (Polynomial.cyclotomic m ℤ).natDegree := by
-  have hmain := Polynomial.eval_homogenize
-    (p := (Polynomial.cyclotomic m ℤ).map (Int.castRingHom R))
-    (n := (Polynomial.cyclotomic m ℤ).natDegree)
-    (hn := by
-      simpa using
-        (Polynomial.natDegree_map_le (p := Polynomial.cyclotomic m ℤ) (f := Int.castRingHom R)))
-    (x := ![x + u, u]) hu
-  unfold cyclotomicShiftedEval
-  simp [cyclotomicEval, Polynomial.eval₂_eq_eval_map] at hmain ⊢
-  simpa using hmain
 
 /--
 `d` の真性因子側（`m>1`）での円分次数和

@@ -66,8 +66,8 @@ Lib配下でもnamespaceが歴史的名称のままの場合がある。namespac
 | B08 | [`isRoot_cyclotomic_iff_prime_pow_mul_orderOf`](../../../../DkMath/Lib/NumberTheory/CyclotomicAddress.lean#L31)<br>`DkMath/Lib/NumberTheory/CyclotomicAddress.lean`           | 整域、CharP R q、q素数、n>0。                  | 006aでLib所有化・旧名互換 |
 | B09 | [`int_dvd_pow_sub_pow_iff_primeOrder_dvd`](../../../../DkMath/Lib/NumberTheory/PrimeRatioOrder.lean#L70)<br>`DkMath/Lib/NumberTheory/PrimeRatioOrder.lean`                              | q素数、q∤b。冪差全体の可除性。                 | 006aでLib所有化・旧名互換 |
 | B10 | [`primeOrder_dvd_prime_sub_one`](../../../../DkMath/Lib/NumberTheory/PrimeRatioOrder.lean#L99)<br>`DkMath/Lib/NumberTheory/PrimeRatioOrder.lean`                                        | q素数、q∤a,b。                                 | 006aでLib所有化・旧名互換 |
-| B11 | [`dvd_cyclotomicShiftedEval_iff_prime_pow_mul_orderOf`](../../../../DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean#L91)<br>`DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean` | q素数、n>0、q∤b。単一円分層の添字。            | CFBRCのcarrierを監査して再利用                 |
-| B12 | [`primeLayerAddresses_isLeast_of_one_lt_primeOrder`](../../../../DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean#L194)<br>`DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean`   | q素数、q∤b、1<primeOrder。                     | 層の最初と全GNの次の次数を区別                 |
+| B11 | [`dvd_cyclotomicShiftedEval_iff_prime_pow_mul_orderOf`](../../../../DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean#L119)<br>`DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean` | q素数、n>0、q∤b。単一円分層の添字。            | 006bでLib所有化・CFBRC互換保持 |
+| B12 | [`primeLayerAddresses_isLeast_of_one_lt_primeOrder`](../../../../DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean#L228)<br>`DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean`   | q素数、q∤b、1<primeOrder。                     | 006bでLib所有化・CFBRC互換保持 |
 | B13 | [`padicValNat_pow_sub_pow_mul_prime_pow`](../../../../DkMath/Lib/NumberTheory/CyclotomicLayerValuation.lean#L79)<br>`DkMath/Lib/NumberTheory/CyclotomicLayerValuation.lean`                       | q奇素数、b<a、r≠0、q∤a、q∣a^r−b^r。            | 006aでLib所有化・旧名互換 |
 | B14 | [`padicValNat_pow_sub_pow_mul_two_pow_succ`](../../../../DkMath/Lib/NumberTheory/CyclotomicLayerValuation.lean#L97)<br>`DkMath/Lib/NumberTheory/CyclotomicLayerValuation.lean`                    | b<a、r≠0、a奇数、2∣a^r−b^r。和の補正項を保持。 | 006aでLib所有化・旧名互換 |
 | B15 | [`GN_eq_nontrivial_phase_prod_range`](../../../../DkMath/Lib/Cosmic/GNPhaseFactorization.lean#L115)<br>`DkMath/Lib/Cosmic/GNPhaseFactorization.lean`                                          | 原始根を持つ整域、d>0、全非自明位相の積。      | Lib既存・再作成不要                            |
@@ -171,5 +171,14 @@ Natの `Odd n` 入口では原始性を明示する。零座標や次数1に不�
 比／位数2定義・一般7定理、通常円分住所8定理、層付値8定理をLib所有へ移管した。
 全25宣言の歴史的namespace、型、証明／定義本体を保持し、旧モジュールを互換入口にした。
 全余因子R_nの素数出現は新5定理として分離し、r>1とr=1の枝、次数0、2進補正を保持した。
-B11/B12の斉次carrierは変更せず、006bでCFBRCとの互換を先に設計する。006全体は継続中。
+006aではB11/B12の斉次carrierを対象外とした。続く006bでCFBRC互換移管を完了した（§13）。
 [006a報告](IMPLEMENTATION-GN-LIB-006a.md) と [対応・型・依存](evidence/gn-lib-006a.json) を参照。
+
+## 13. GN-LIB-006bの斉次評価・carrier互換・単一層住所
+
+CFBRC由来の一般評価器2定義と脱斉次化1定理、GapFocusingの住所3定義・12定理、
+境界7定理の計25宣言をLib所有へ移管した。全て旧名・型・定義／証明本体を保持。
+実座標Lib入口と互換の橋、および単一層住所・境界のAPIとして1定義・13定理を追加した。
+新LibのDkMath依存閉包はLibのみであり、残すCFBRC namespaceは旧名互換のためのもの。
+006aと合わせ006の一般核を完了し、次は005cの偶数不足の精密gcdを扱う。
+[006b報告](IMPLEMENTATION-GN-LIB-006b.md) と [対応・型・依存](evidence/gn-lib-006b.json) を参照。

@@ -117,12 +117,16 @@ Natのgcd還元には004の正確な再構成を使い、原始性・奇数条�
 006aは対象moduleで完了：[006a報告](IMPLEMENTATION-GN-LIB-006a.md)。
 `Lib.NumberTheory.PrimeRatioOrder`、`CyclotomicAddress`、`CyclotomicLayerValuation` に25宣言を移管し、
 `PowerDifferenceCofactorPrimeAddress` に全余因子の5定理を固定した。
-006bは未着手：斉次円分評価の中立carrierとCFBRC互換性を先に固定し、B11/B12等を移管する。
-006全体は継続中である。
+006bも対象moduleで完了：[006b報告](IMPLEMENTATION-GN-LIB-006b.md)。
+`HomogeneousCyclotomic`、`HomogeneousCyclotomicAddress`、`HomogeneousCyclotomicBoundary` に25宣言を移管。
+実座標のLib定義と旧CFBRC評価の互換を固定し、`HomogeneousCyclotomicPrimeAddress` などで1定義・13定理を追加した。
+006全体の中立化契約を対象module単位で完了した。
 
 棚卸しB08–B14の既存証明を再利用する。
 `PrimeOrder`のZsigmondy import、`HomogeneousAddress`のCFBRC carrierをそのままLibへ逆輸入しない。
 有限体の比・位数、斉次円分評価の中立的定義、アプリ固有の原始素数carrierを分ける。
+006bではMathlibだけで閉じる旧評価器を下位所有へ移し、CFBRC namespaceは互換名として保持した。
+LibからCFBRC応用モジュールへのimportは加えていない。
 
 - q素数、分母のq非可除性、必要な分子非可除性、n>0を保持する。
 - r>1での全余因子の出現条件r∣nと、単一円分層の添字r q^kを別APIにする。

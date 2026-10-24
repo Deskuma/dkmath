@@ -1,0 +1,666 @@
+{
+  "checkpoint": "GN-LIB-006b",
+  "date": "2026-10-24",
+  "base_head": "64147858a683ce22c8401a3e56ff370c033cac46",
+  "scope": "neutral homogeneous evaluator, exact CFBRC compatibility, layer order rays and coordinate boundaries; completes bounded GN-LIB-006 with 006a",
+  "migrated_declarations": [
+    {
+      "name": "DkMath.CFBRC.cyclotomicEval",
+      "old_path": "DkMath/CFBRC/CyclotomicProduct.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "source_signature": "@[simp] def cyclotomicEval {R : Type _} [CommRing R]\n    (m : ℕ) (X : R) : R",
+      "new_line": 35,
+      "declaration_sha256": "4ac4120a40da1dde97eac24a3c560796901a3d418335483419bbdf9cb018655a"
+    },
+    {
+      "name": "DkMath.CFBRC.cyclotomicShiftedEval",
+      "old_path": "DkMath/CFBRC/CyclotomicProduct.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "source_signature": "@[simp] def cyclotomicShiftedEval {R : Type _} [CommRing R]\n    (m : ℕ) (x u : R) : R",
+      "new_line": 49,
+      "declaration_sha256": "c5b0d85b1f04c347023f1d36b4be288a778c3ab9ba2caddd51e7679aa57a5d33"
+    },
+    {
+      "name": "DkMath.CFBRC.cyclotomicShiftedEval_eq_cyclotomicEval_div_mul_pow",
+      "old_path": "DkMath/CFBRC/CyclotomicProduct.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "source_signature": "theorem cyclotomicShiftedEval_eq_cyclotomicEval_div_mul_pow\n    {R : Type _} [Field R] (m : ℕ) (x u : R) (hu : u ≠ 0) :\n    cyclotomicShiftedEval m x u =\n      cyclotomicEval m ((x + u) / u) * u ^ (Polynomial.cyclotomic m ℤ).natDegree",
+      "new_line": 59,
+      "declaration_sha256": "e65264c0144ea6d3ac14aa6aec3f82398aa89cd1876d347cf1290ac0b10c9df0"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.map_cyclotomicShiftedEval",
+      "old_path": "DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "source_signature": "theorem map_cyclotomicShiftedEval\n    {R S : Type*} [CommRing R] [CommRing S] (f : R →+* S)\n    (n : ℕ) (x u : R) :\n    f (cyclotomicShiftedEval n x u) = cyclotomicShiftedEval n (f x) (f u)",
+      "new_line": 31,
+      "declaration_sha256": "9f7938fd0e33ed5628013f42e7e7a3429a8030439994b20bda70762cf6c0daee"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.cyclotomicShiftedEval_one_eq_cyclotomicEval",
+      "old_path": "DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "source_signature": "theorem cyclotomicShiftedEval_one_eq_cyclotomicEval\n    {R : Type*} [CommRing R] (n : ℕ) (x : R) :\n    cyclotomicShiftedEval n x 1 = cyclotomicEval n (x + 1)",
+      "new_line": 52,
+      "declaration_sha256": "c0a997bfb73dccc225bfd95f5524dd1271fdeda1dbafa9aafaac9bcfd165466b"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeLayerAddresses",
+      "old_path": "DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "source_signature": "def primeLayerAddresses (q : ℕ) (a b : ℤ) : Set ℕ",
+      "new_line": 69,
+      "declaration_sha256": "217c1d7f0c78c6d41460e0ee46b7403a47670d1dffa5e149fc25d6ed0b069b52"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.layerPrimeSupport",
+      "old_path": "DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "source_signature": "def layerPrimeSupport (a b : ℤ) (n : ℕ) : Set ℕ",
+      "new_line": 78,
+      "declaration_sha256": "e7ade47c13e31add80109f059f333d684f32f8e908a2080f847c84a594052499"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeLayerAddresses_eq_support_fiber",
+      "old_path": "DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "source_signature": "theorem primeLayerAddresses_eq_support_fiber\n    {q : ℕ} (hq : q.Prime) (a b : ℤ) :\n    primeLayerAddresses q a b = {n | 1 < n ∧ q ∈ layerPrimeSupport a b n}",
+      "new_line": 86,
+      "declaration_sha256": "12ba230517209071568d4dd8473b747a275ca36f9f88a328feb7f25e9c1fd3da"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_isRoot",
+      "old_path": "DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "source_signature": "theorem dvd_cyclotomicShiftedEval_iff_isRoot\n    (q : ℕ) [Fact q.Prime] (n : ℕ) (a b : ℤ) (hb : ¬(q : ℤ) ∣ b) :\n    (q : ℤ) ∣ cyclotomicShiftedEval n (a - b) b ↔\n      (cyclotomic n (ZMod q)).IsRoot ((a : ZMod q) * (b : ZMod q)⁻¹)",
+      "new_line": 98,
+      "declaration_sha256": "6c908482dc3e0fcc02c264e108f577cc1b150c3b96107d935f02ff462ccdcade"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_prime_pow_mul_orderOf",
+      "old_path": "DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "source_signature": "theorem dvd_cyclotomicShiftedEval_iff_prime_pow_mul_orderOf\n    (q : ℕ) [Fact q.Prime] {n : ℕ} (hn : 0 < n) (a b : ℤ)\n    (hb : ¬(q : ℤ) ∣ b) :\n    (q : ℤ) ∣ cyclotomicShiftedEval n (a - b) b ↔\n      ∃ k : ℕ, n = orderOf ((a : ZMod q) * (b : ZMod q)⁻¹) * q ^ k",
+      "new_line": 119,
+      "declaration_sha256": "38560a3dcd9a81acee78ab04a0b9dec7d957217e34861dc253db8851679590e8"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_primeOrder_eq_of_not_dvd",
+      "old_path": "DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "source_signature": "theorem dvd_cyclotomicShiftedEval_iff_primeOrder_eq_of_not_dvd\n    (q : ℕ) [Fact q.Prime] (n : ℕ) (a b : ℤ)\n    (hb : ¬(q : ℤ) ∣ b) (hqn : ¬q ∣ n) :\n    (q : ℤ) ∣ cyclotomicShiftedEval n (a - b) b ↔ primeOrder q a b = n",
+      "new_line": 133,
+      "declaration_sha256": "b61a132bac8895f6c22cc1a3bbbd59b0895e83952dcd76f8993b8863c164626b"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.mem_primeLayerAddresses_iff",
+      "old_path": "DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "source_signature": "theorem mem_primeLayerAddresses_iff\n    (q : ℕ) [Fact q.Prime] (a b : ℤ) (hb : ¬(q : ℤ) ∣ b) (n : ℕ) :\n    n ∈ primeLayerAddresses q a b ↔\n      1 < n ∧ ∃ k : ℕ, n = orderOf ((a : ZMod q) * (b : ZMod q)⁻¹) * q ^ k",
+      "new_line": 147,
+      "declaration_sha256": "d9e065be0f6032431b5b383b80fb1619acaec67d73f6abac97f771b9f984c9da"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_mul_prime_iff",
+      "old_path": "DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "source_signature": "theorem dvd_cyclotomicShiftedEval_mul_prime_iff\n    (q : ℕ) [Fact q.Prime] (n : ℕ) (a b : ℤ) (hb : ¬(q : ℤ) ∣ b) :\n    (q : ℤ) ∣ cyclotomicShiftedEval (n * q) (a - b) b ↔\n      (q : ℤ) ∣ cyclotomicShiftedEval n (a - b) b",
+      "new_line": 165,
+      "declaration_sha256": "a5b59d46040c59853f42e6f827f0554c797c98bf528ae852a9043a250a4b0030"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.FirstLayerAppearance",
+      "old_path": "DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "source_signature": "def FirstLayerAppearance (q : ℕ) (a b : ℤ) (n : ℕ) : Prop",
+      "new_line": 179,
+      "declaration_sha256": "1cad1f13094a3871258d791443b66c04b9610e6a148d25f33d904d694a97e736"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.firstLayerAppearance_iff_primeOrder_eq",
+      "old_path": "DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "source_signature": "theorem firstLayerAppearance_iff_primeOrder_eq\n    (q : ℕ) [Fact q.Prime] (a b : ℤ) {n : ℕ}\n    (hn : 0 < n) (hb : ¬(q : ℤ) ∣ b) :\n    FirstLayerAppearance q a b n ↔ primeOrder q a b = n",
+      "new_line": 188,
+      "declaration_sha256": "9f1079be8a88e9bba2e01056da35440c08163da26184ceac81a00ade687409d0"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeLayerAddresses_isLeast_of_one_lt_primeOrder",
+      "old_path": "DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "source_signature": "theorem primeLayerAddresses_isLeast_of_one_lt_primeOrder\n    (q : ℕ) [Fact q.Prime] (a b : ℤ) (hb : ¬(q : ℤ) ∣ b)\n    (hr : 1 < primeOrder q a b) :\n    IsLeast (primeLayerAddresses q a b) (primeOrder q a b)",
+      "new_line": 228,
+      "declaration_sha256": "69cd1af3b248f74c19e358279df3925f0d72f32fc546b13dd7cfc4fe6b0b15bd"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeLayerAddresses_isLeast_of_primeOrder_eq_one",
+      "old_path": "DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "source_signature": "theorem primeLayerAddresses_isLeast_of_primeOrder_eq_one\n    (q : ℕ) [Fact q.Prime] (a b : ℤ) (hb : ¬(q : ℤ) ∣ b)\n    (hr : primeOrder q a b = 1) : IsLeast (primeLayerAddresses q a b) q",
+      "new_line": 246,
+      "declaration_sha256": "1dc1f6bfdb737214d5a58127fa003be19bd45b659270860eb31282d18663320f"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.exists_gt_mem_primeLayerAddresses_of_mem",
+      "old_path": "DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "source_signature": "theorem exists_gt_mem_primeLayerAddresses_of_mem\n    (q : ℕ) [Fact q.Prime] (a b : ℤ) (hb : ¬(q : ℤ) ∣ b)\n    {n : ℕ} (hn : n ∈ primeLayerAddresses q a b) :\n    ∃ m : ℕ, n < m ∧ m ∈ primeLayerAddresses q a b",
+      "new_line": 272,
+      "declaration_sha256": "d4a89e7364017747587dfd5ff1aff900ce4930f068b25c1379bb0ec942fd5a77"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.eval_homogenize_zero_second",
+      "old_path": "DkMath/NumberTheory/GapFocusing/CyclotomicBoundary.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicBoundary.lean",
+      "source_signature": "theorem eval_homogenize_zero_second {R : Type*} [CommSemiring R]\n    (p : R[X]) (n : ℕ) (a : R) :\n    MvPolynomial.eval ![a, 0] (p.homogenize n) = p.coeff n * a ^ n",
+      "new_line": 21,
+      "declaration_sha256": "e0616f996c6298ef78a03d1d243169449aa43885a3f6cf60d04dedb674b0780c"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.cyclotomicShiftedEval_zero_anchor",
+      "old_path": "DkMath/NumberTheory/GapFocusing/CyclotomicBoundary.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicBoundary.lean",
+      "source_signature": "theorem cyclotomicShiftedEval_zero_anchor {R : Type*} [CommRing R]\n    (n : ℕ) (a : R) :\n    cyclotomicShiftedEval n a 0 = a ^ n.totient",
+      "new_line": 47,
+      "declaration_sha256": "159a82c34d95d63fd9c1e9210371284f5e8d3c5f97bb14cc685fa8b284c3a947"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_dvd_first_of_dvd_second",
+      "old_path": "DkMath/NumberTheory/GapFocusing/CyclotomicBoundary.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicBoundary.lean",
+      "source_signature": "theorem dvd_cyclotomicShiftedEval_iff_dvd_first_of_dvd_second\n    (q : ℕ) [Fact q.Prime] {n : ℕ} (hn : 0 < n) (a b : ℤ)\n    (hb : (q : ℤ) ∣ b) :\n    (q : ℤ) ∣ cyclotomicShiftedEval n (a - b) b ↔ (q : ℤ) ∣ a",
+      "new_line": 62,
+      "declaration_sha256": "2aaaa3272fbe6c30cee7472ae7d4498eb643a0577bf87bc9d90a993b8c7ddc06"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeLayerAddresses_of_dvd_second",
+      "old_path": "DkMath/NumberTheory/GapFocusing/CyclotomicBoundary.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicBoundary.lean",
+      "source_signature": "theorem primeLayerAddresses_of_dvd_second\n    (q : ℕ) [Fact q.Prime] (a b : ℤ) (hb : (q : ℤ) ∣ b) :\n    primeLayerAddresses q a b = {n | 1 < n ∧ (q : ℤ) ∣ a}",
+      "new_line": 81,
+      "declaration_sha256": "6bf00d256968c8d2fe8e1adb59a02b3edfec1f51126dfdba5ef5286c0afe0cd5"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeLayerAddresses_eq_empty_of_dvd_second",
+      "old_path": "DkMath/NumberTheory/GapFocusing/CyclotomicBoundary.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicBoundary.lean",
+      "source_signature": "theorem primeLayerAddresses_eq_empty_of_dvd_second\n    (q : ℕ) [Fact q.Prime] (a b : ℤ)\n    (ha : ¬(q : ℤ) ∣ a) (hb : (q : ℤ) ∣ b) :\n    primeLayerAddresses q a b = ∅",
+      "new_line": 96,
+      "declaration_sha256": "6719a39a527d8553ab49c2b5001032f78e4cca6ad38ab572cc52293144a3d245"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeLayerAddresses_eq_nontrivial_of_dvd_coordinates",
+      "old_path": "DkMath/NumberTheory/GapFocusing/CyclotomicBoundary.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicBoundary.lean",
+      "source_signature": "theorem primeLayerAddresses_eq_nontrivial_of_dvd_coordinates\n    (q : ℕ) [Fact q.Prime] (a b : ℤ)\n    (ha : (q : ℤ) ∣ a) (hb : (q : ℤ) ∣ b) :\n    primeLayerAddresses q a b = {n | 1 < n}",
+      "new_line": 110,
+      "declaration_sha256": "81fb400c5a5da5d3d53ab25e3f12a4eb54a850827edf075756fdc3dae3bf60ba"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeLayerAddresses_eq_empty_of_dvd_first",
+      "old_path": "DkMath/NumberTheory/GapFocusing/CyclotomicBoundary.lean",
+      "new_path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicBoundary.lean",
+      "source_signature": "theorem primeLayerAddresses_eq_empty_of_dvd_first\n    (q : ℕ) [Fact q.Prime] (a b : ℤ)\n    (ha : (q : ℤ) ∣ a) (hb : ¬(q : ℤ) ∣ b) :\n    primeLayerAddresses q a b = ∅",
+      "new_line": 123,
+      "declaration_sha256": "cae561138c556b9967f7aaf41831ed579fd1c1ec4c98a9c8d6775ee05f0999e6"
+    }
+  ],
+  "promoted_definitions": 5,
+  "promoted_theorems": 20,
+  "new_declarations": [
+    {
+      "name": "DkMath.Lib.NumberTheory.homogeneousCyclotomicEval",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "line": 82,
+      "source_signature": "def homogeneousCyclotomicEval {R : Type*} [CommRing R] (n : ℕ) (a b : R) : R",
+      "kind": "def"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_eq_shifted_sub",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "line": 87,
+      "source_signature": "theorem homogeneousCyclotomicEval_eq_shifted_sub\n    {R : Type*} [CommRing R] (n : ℕ) (a b : R) :\n    homogeneousCyclotomicEval n a b = DkMath.CFBRC.cyclotomicShiftedEval n (a - b) b",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.cyclotomicShiftedEval_eq_homogeneousCyclotomicEval",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "line": 93,
+      "source_signature": "theorem cyclotomicShiftedEval_eq_homogeneousCyclotomicEval\n    {R : Type*} [CommRing R] (n : ℕ) (x u : R) :\n    DkMath.CFBRC.cyclotomicShiftedEval n x u = homogeneousCyclotomicEval n (x + u) u",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.cfbRC_cyclotomicEval_eq_lib",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "line": 100,
+      "source_signature": "theorem cfbRC_cyclotomicEval_eq_lib\n    {R : Type*} [CommRing R] (n : ℕ) (a : R) :\n    DkMath.CFBRC.cyclotomicEval n a = cyclotomicEval n a",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_eq_eval_homogenize",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "line": 107,
+      "source_signature": "theorem homogeneousCyclotomicEval_eq_eval_homogenize\n    {R : Type*} [CommRing R] (n : ℕ) (a b : R) :\n    homogeneousCyclotomicEval n a b = MvPolynomial.eval ![a, b]\n      (((Polynomial.cyclotomic n ℤ).map (Int.castRingHom R)).homogenize\n        (Polynomial.cyclotomic n ℤ).natDegree)",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_eq_eval_div_mul_pow",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "line": 116,
+      "source_signature": "theorem homogeneousCyclotomicEval_eq_eval_div_mul_pow\n    {R : Type*} [Field R] (n : ℕ) (a b : R) (hb : b ≠ 0) :\n    homogeneousCyclotomicEval n a b =\n      cyclotomicEval n (a / b) * b ^ (Polynomial.cyclotomic n ℤ).natDegree",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.map_homogeneousCyclotomicEval",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicPrimeAddress.lean",
+      "line": 28,
+      "source_signature": "theorem map_homogeneousCyclotomicEval\n    {R S : Type*} [CommRing R] [CommRing S] (f : R →+* S) (n : ℕ) (a b : R) :\n    f (homogeneousCyclotomicEval n a b) = homogeneousCyclotomicEval n (f a) (f b)",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_one_right",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicPrimeAddress.lean",
+      "line": 36,
+      "source_signature": "theorem homogeneousCyclotomicEval_one_right\n    {R : Type*} [CommRing R] (n : ℕ) (a : R) :\n    homogeneousCyclotomicEval n a 1 = cyclotomicEval n a",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_zero_right",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicPrimeAddress.lean",
+      "line": 45,
+      "source_signature": "theorem homogeneousCyclotomicEval_zero_right\n    {R : Type*} [CommRing R] (n : ℕ) (a : R) :\n    homogeneousCyclotomicEval n a 0 = a ^ n.totient",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_zero_degree",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicPrimeAddress.lean",
+      "line": 52,
+      "source_signature": "@[simp] theorem homogeneousCyclotomicEval_zero_degree\n    {R : Type*} [CommRing R] (a b : R) : homogeneousCyclotomicEval 0 a b = 1",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_order_ray",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicPrimeAddress.lean",
+      "line": 60,
+      "source_signature": "theorem prime_dvd_homogeneousCyclotomicEval_iff_order_ray\n    {q n : ℕ} [Fact q.Prime] (hn : 0 < n) (a b : ℤ) (hb : ¬ (q : ℤ) ∣ b) :\n    (q : ℤ) ∣ homogeneousCyclotomicEval n a b ↔\n      ∃ k : ℕ, n = primeOrder q a b * q ^ k",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_order_eq_of_not_dvd",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicPrimeAddress.lean",
+      "line": 68,
+      "source_signature": "theorem prime_dvd_homogeneousCyclotomicEval_iff_order_eq_of_not_dvd\n    {q : ℕ} [Fact q.Prime] (n : ℕ) (a b : ℤ) (hb : ¬ (q : ℤ) ∣ b) (hqn : ¬ q ∣ n) :\n    (q : ℤ) ∣ homogeneousCyclotomicEval n a b ↔ primeOrder q a b = n",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_dvd_first_of_dvd_second",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicPrimeAddress.lean",
+      "line": 76,
+      "source_signature": "theorem prime_dvd_homogeneousCyclotomicEval_iff_dvd_first_of_dvd_second\n    {q n : ℕ} [Fact q.Prime] (hn : 0 < n) (a b : ℤ) (hb : (q : ℤ) ∣ b) :\n    (q : ℤ) ∣ homogeneousCyclotomicEval n a b ↔ (q : ℤ) ∣ a",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.not_prime_dvd_homogeneousCyclotomicEval_of_dvd_first",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicPrimeAddress.lean",
+      "line": 84,
+      "source_signature": "theorem not_prime_dvd_homogeneousCyclotomicEval_of_dvd_first\n    {q n : ℕ} [Fact q.Prime] (hn : 0 < n) (a b : ℤ)\n    (ha : (q : ℤ) ∣ a) (hb : ¬ (q : ℤ) ∣ b) :\n    ¬ (q : ℤ) ∣ homogeneousCyclotomicEval n a b",
+      "kind": "theorem"
+    }
+  ],
+  "new_definitions": 1,
+  "new_theorems": 13,
+  "all_neutral_owner_declarations": [
+    {
+      "name": "DkMath.CFBRC.cyclotomicEval",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "line": 35,
+      "source_signature": "@[simp] def cyclotomicEval {R : Type _} [CommRing R]\n    (m : ℕ) (X : R) : R",
+      "kind": "def"
+    },
+    {
+      "name": "DkMath.CFBRC.cyclotomicShiftedEval",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "line": 49,
+      "source_signature": "@[simp] def cyclotomicShiftedEval {R : Type _} [CommRing R]\n    (m : ℕ) (x u : R) : R",
+      "kind": "def"
+    },
+    {
+      "name": "DkMath.CFBRC.cyclotomicShiftedEval_eq_cyclotomicEval_div_mul_pow",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "line": 59,
+      "source_signature": "theorem cyclotomicShiftedEval_eq_cyclotomicEval_div_mul_pow\n    {R : Type _} [Field R] (m : ℕ) (x u : R) (hu : u ≠ 0) :\n    cyclotomicShiftedEval m x u =\n      cyclotomicEval m ((x + u) / u) * u ^ (Polynomial.cyclotomic m ℤ).natDegree",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.homogeneousCyclotomicEval",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "line": 82,
+      "source_signature": "def homogeneousCyclotomicEval {R : Type*} [CommRing R] (n : ℕ) (a b : R) : R",
+      "kind": "def"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_eq_shifted_sub",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "line": 87,
+      "source_signature": "theorem homogeneousCyclotomicEval_eq_shifted_sub\n    {R : Type*} [CommRing R] (n : ℕ) (a b : R) :\n    homogeneousCyclotomicEval n a b = DkMath.CFBRC.cyclotomicShiftedEval n (a - b) b",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.cyclotomicShiftedEval_eq_homogeneousCyclotomicEval",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "line": 93,
+      "source_signature": "theorem cyclotomicShiftedEval_eq_homogeneousCyclotomicEval\n    {R : Type*} [CommRing R] (n : ℕ) (x u : R) :\n    DkMath.CFBRC.cyclotomicShiftedEval n x u = homogeneousCyclotomicEval n (x + u) u",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.cfbRC_cyclotomicEval_eq_lib",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "line": 100,
+      "source_signature": "theorem cfbRC_cyclotomicEval_eq_lib\n    {R : Type*} [CommRing R] (n : ℕ) (a : R) :\n    DkMath.CFBRC.cyclotomicEval n a = cyclotomicEval n a",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_eq_eval_homogenize",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "line": 107,
+      "source_signature": "theorem homogeneousCyclotomicEval_eq_eval_homogenize\n    {R : Type*} [CommRing R] (n : ℕ) (a b : R) :\n    homogeneousCyclotomicEval n a b = MvPolynomial.eval ![a, b]\n      (((Polynomial.cyclotomic n ℤ).map (Int.castRingHom R)).homogenize\n        (Polynomial.cyclotomic n ℤ).natDegree)",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_eq_eval_div_mul_pow",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean",
+      "line": 116,
+      "source_signature": "theorem homogeneousCyclotomicEval_eq_eval_div_mul_pow\n    {R : Type*} [Field R] (n : ℕ) (a b : R) (hb : b ≠ 0) :\n    homogeneousCyclotomicEval n a b =\n      cyclotomicEval n (a / b) * b ^ (Polynomial.cyclotomic n ℤ).natDegree",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.map_cyclotomicShiftedEval",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "line": 31,
+      "source_signature": "theorem map_cyclotomicShiftedEval\n    {R S : Type*} [CommRing R] [CommRing S] (f : R →+* S)\n    (n : ℕ) (x u : R) :\n    f (cyclotomicShiftedEval n x u) = cyclotomicShiftedEval n (f x) (f u)",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.cyclotomicShiftedEval_one_eq_cyclotomicEval",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "line": 52,
+      "source_signature": "theorem cyclotomicShiftedEval_one_eq_cyclotomicEval\n    {R : Type*} [CommRing R] (n : ℕ) (x : R) :\n    cyclotomicShiftedEval n x 1 = cyclotomicEval n (x + 1)",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeLayerAddresses",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "line": 69,
+      "source_signature": "def primeLayerAddresses (q : ℕ) (a b : ℤ) : Set ℕ",
+      "kind": "def"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.layerPrimeSupport",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "line": 78,
+      "source_signature": "def layerPrimeSupport (a b : ℤ) (n : ℕ) : Set ℕ",
+      "kind": "def"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeLayerAddresses_eq_support_fiber",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "line": 86,
+      "source_signature": "theorem primeLayerAddresses_eq_support_fiber\n    {q : ℕ} (hq : q.Prime) (a b : ℤ) :\n    primeLayerAddresses q a b = {n | 1 < n ∧ q ∈ layerPrimeSupport a b n}",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_isRoot",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "line": 98,
+      "source_signature": "theorem dvd_cyclotomicShiftedEval_iff_isRoot\n    (q : ℕ) [Fact q.Prime] (n : ℕ) (a b : ℤ) (hb : ¬(q : ℤ) ∣ b) :\n    (q : ℤ) ∣ cyclotomicShiftedEval n (a - b) b ↔\n      (cyclotomic n (ZMod q)).IsRoot ((a : ZMod q) * (b : ZMod q)⁻¹)",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_prime_pow_mul_orderOf",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "line": 119,
+      "source_signature": "theorem dvd_cyclotomicShiftedEval_iff_prime_pow_mul_orderOf\n    (q : ℕ) [Fact q.Prime] {n : ℕ} (hn : 0 < n) (a b : ℤ)\n    (hb : ¬(q : ℤ) ∣ b) :\n    (q : ℤ) ∣ cyclotomicShiftedEval n (a - b) b ↔\n      ∃ k : ℕ, n = orderOf ((a : ZMod q) * (b : ZMod q)⁻¹) * q ^ k",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_primeOrder_eq_of_not_dvd",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "line": 133,
+      "source_signature": "theorem dvd_cyclotomicShiftedEval_iff_primeOrder_eq_of_not_dvd\n    (q : ℕ) [Fact q.Prime] (n : ℕ) (a b : ℤ)\n    (hb : ¬(q : ℤ) ∣ b) (hqn : ¬q ∣ n) :\n    (q : ℤ) ∣ cyclotomicShiftedEval n (a - b) b ↔ primeOrder q a b = n",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.mem_primeLayerAddresses_iff",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "line": 147,
+      "source_signature": "theorem mem_primeLayerAddresses_iff\n    (q : ℕ) [Fact q.Prime] (a b : ℤ) (hb : ¬(q : ℤ) ∣ b) (n : ℕ) :\n    n ∈ primeLayerAddresses q a b ↔\n      1 < n ∧ ∃ k : ℕ, n = orderOf ((a : ZMod q) * (b : ZMod q)⁻¹) * q ^ k",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_mul_prime_iff",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "line": 165,
+      "source_signature": "theorem dvd_cyclotomicShiftedEval_mul_prime_iff\n    (q : ℕ) [Fact q.Prime] (n : ℕ) (a b : ℤ) (hb : ¬(q : ℤ) ∣ b) :\n    (q : ℤ) ∣ cyclotomicShiftedEval (n * q) (a - b) b ↔\n      (q : ℤ) ∣ cyclotomicShiftedEval n (a - b) b",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.FirstLayerAppearance",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "line": 179,
+      "source_signature": "def FirstLayerAppearance (q : ℕ) (a b : ℤ) (n : ℕ) : Prop",
+      "kind": "def"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.firstLayerAppearance_iff_primeOrder_eq",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "line": 188,
+      "source_signature": "theorem firstLayerAppearance_iff_primeOrder_eq\n    (q : ℕ) [Fact q.Prime] (a b : ℤ) {n : ℕ}\n    (hn : 0 < n) (hb : ¬(q : ℤ) ∣ b) :\n    FirstLayerAppearance q a b n ↔ primeOrder q a b = n",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeLayerAddresses_isLeast_of_one_lt_primeOrder",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "line": 228,
+      "source_signature": "theorem primeLayerAddresses_isLeast_of_one_lt_primeOrder\n    (q : ℕ) [Fact q.Prime] (a b : ℤ) (hb : ¬(q : ℤ) ∣ b)\n    (hr : 1 < primeOrder q a b) :\n    IsLeast (primeLayerAddresses q a b) (primeOrder q a b)",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeLayerAddresses_isLeast_of_primeOrder_eq_one",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "line": 246,
+      "source_signature": "theorem primeLayerAddresses_isLeast_of_primeOrder_eq_one\n    (q : ℕ) [Fact q.Prime] (a b : ℤ) (hb : ¬(q : ℤ) ∣ b)\n    (hr : primeOrder q a b = 1) : IsLeast (primeLayerAddresses q a b) q",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.exists_gt_mem_primeLayerAddresses_of_mem",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean",
+      "line": 272,
+      "source_signature": "theorem exists_gt_mem_primeLayerAddresses_of_mem\n    (q : ℕ) [Fact q.Prime] (a b : ℤ) (hb : ¬(q : ℤ) ∣ b)\n    {n : ℕ} (hn : n ∈ primeLayerAddresses q a b) :\n    ∃ m : ℕ, n < m ∧ m ∈ primeLayerAddresses q a b",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.eval_homogenize_zero_second",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicBoundary.lean",
+      "line": 21,
+      "source_signature": "theorem eval_homogenize_zero_second {R : Type*} [CommSemiring R]\n    (p : R[X]) (n : ℕ) (a : R) :\n    MvPolynomial.eval ![a, 0] (p.homogenize n) = p.coeff n * a ^ n",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.cyclotomicShiftedEval_zero_anchor",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicBoundary.lean",
+      "line": 47,
+      "source_signature": "theorem cyclotomicShiftedEval_zero_anchor {R : Type*} [CommRing R]\n    (n : ℕ) (a : R) :\n    cyclotomicShiftedEval n a 0 = a ^ n.totient",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_dvd_first_of_dvd_second",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicBoundary.lean",
+      "line": 62,
+      "source_signature": "theorem dvd_cyclotomicShiftedEval_iff_dvd_first_of_dvd_second\n    (q : ℕ) [Fact q.Prime] {n : ℕ} (hn : 0 < n) (a b : ℤ)\n    (hb : (q : ℤ) ∣ b) :\n    (q : ℤ) ∣ cyclotomicShiftedEval n (a - b) b ↔ (q : ℤ) ∣ a",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeLayerAddresses_of_dvd_second",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicBoundary.lean",
+      "line": 81,
+      "source_signature": "theorem primeLayerAddresses_of_dvd_second\n    (q : ℕ) [Fact q.Prime] (a b : ℤ) (hb : (q : ℤ) ∣ b) :\n    primeLayerAddresses q a b = {n | 1 < n ∧ (q : ℤ) ∣ a}",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeLayerAddresses_eq_empty_of_dvd_second",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicBoundary.lean",
+      "line": 96,
+      "source_signature": "theorem primeLayerAddresses_eq_empty_of_dvd_second\n    (q : ℕ) [Fact q.Prime] (a b : ℤ)\n    (ha : ¬(q : ℤ) ∣ a) (hb : (q : ℤ) ∣ b) :\n    primeLayerAddresses q a b = ∅",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeLayerAddresses_eq_nontrivial_of_dvd_coordinates",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicBoundary.lean",
+      "line": 110,
+      "source_signature": "theorem primeLayerAddresses_eq_nontrivial_of_dvd_coordinates\n    (q : ℕ) [Fact q.Prime] (a b : ℤ)\n    (ha : (q : ℤ) ∣ a) (hb : (q : ℤ) ∣ b) :\n    primeLayerAddresses q a b = {n | 1 < n}",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeLayerAddresses_eq_empty_of_dvd_first",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicBoundary.lean",
+      "line": 123,
+      "source_signature": "theorem primeLayerAddresses_eq_empty_of_dvd_first\n    (q : ℕ) [Fact q.Prime] (a b : ℤ)\n    (ha : (q : ℤ) ∣ a) (hb : ¬(q : ℤ) ∣ b) :\n    primeLayerAddresses q a b = ∅",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.map_homogeneousCyclotomicEval",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicPrimeAddress.lean",
+      "line": 28,
+      "source_signature": "theorem map_homogeneousCyclotomicEval\n    {R S : Type*} [CommRing R] [CommRing S] (f : R →+* S) (n : ℕ) (a b : R) :\n    f (homogeneousCyclotomicEval n a b) = homogeneousCyclotomicEval n (f a) (f b)",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_one_right",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicPrimeAddress.lean",
+      "line": 36,
+      "source_signature": "theorem homogeneousCyclotomicEval_one_right\n    {R : Type*} [CommRing R] (n : ℕ) (a : R) :\n    homogeneousCyclotomicEval n a 1 = cyclotomicEval n a",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_zero_right",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicPrimeAddress.lean",
+      "line": 45,
+      "source_signature": "theorem homogeneousCyclotomicEval_zero_right\n    {R : Type*} [CommRing R] (n : ℕ) (a : R) :\n    homogeneousCyclotomicEval n a 0 = a ^ n.totient",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_zero_degree",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicPrimeAddress.lean",
+      "line": 52,
+      "source_signature": "@[simp] theorem homogeneousCyclotomicEval_zero_degree\n    {R : Type*} [CommRing R] (a b : R) : homogeneousCyclotomicEval 0 a b = 1",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_order_ray",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicPrimeAddress.lean",
+      "line": 60,
+      "source_signature": "theorem prime_dvd_homogeneousCyclotomicEval_iff_order_ray\n    {q n : ℕ} [Fact q.Prime] (hn : 0 < n) (a b : ℤ) (hb : ¬ (q : ℤ) ∣ b) :\n    (q : ℤ) ∣ homogeneousCyclotomicEval n a b ↔\n      ∃ k : ℕ, n = primeOrder q a b * q ^ k",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_order_eq_of_not_dvd",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicPrimeAddress.lean",
+      "line": 68,
+      "source_signature": "theorem prime_dvd_homogeneousCyclotomicEval_iff_order_eq_of_not_dvd\n    {q : ℕ} [Fact q.Prime] (n : ℕ) (a b : ℤ) (hb : ¬ (q : ℤ) ∣ b) (hqn : ¬ q ∣ n) :\n    (q : ℤ) ∣ homogeneousCyclotomicEval n a b ↔ primeOrder q a b = n",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_dvd_first_of_dvd_second",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicPrimeAddress.lean",
+      "line": 76,
+      "source_signature": "theorem prime_dvd_homogeneousCyclotomicEval_iff_dvd_first_of_dvd_second\n    {q n : ℕ} [Fact q.Prime] (hn : 0 < n) (a b : ℤ) (hb : (q : ℤ) ∣ b) :\n    (q : ℤ) ∣ homogeneousCyclotomicEval n a b ↔ (q : ℤ) ∣ a",
+      "kind": "theorem"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.not_prime_dvd_homogeneousCyclotomicEval_of_dvd_first",
+      "path": "DkMath/Lib/NumberTheory/HomogeneousCyclotomicPrimeAddress.lean",
+      "line": 84,
+      "source_signature": "theorem not_prime_dvd_homogeneousCyclotomicEval_of_dvd_first\n    {q n : ℕ} [Fact q.Prime] (hn : 0 < n) (a b : ℤ)\n    (ha : (q : ℤ) ∣ a) (hb : ¬ (q : ℤ) ∣ b) :\n    ¬ (q : ℤ) ∣ homogeneousCyclotomicEval n a b",
+      "kind": "theorem"
+    }
+  ],
+  "textbook_examples": 11,
+  "compatibility": "historical CFBRC definitions retained byte-for-byte; direct-coordinate alias is definitionally the shifted evaluator at (a-b,b), with proved homogenization and (x+u,u) bridges",
+  "local_import_closure": {
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomic": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic",
+      "Mathlib.Algebra.Polynomial.Homogenize"
+    ],
+    "DkMath.Lib.Cosmic.GTailCyclotomic": [
+      "DkMath.Lib.Cosmic.GTail",
+      "Mathlib.RingTheory.Polynomial.Cyclotomic.Basic"
+    ],
+    "DkMath.Lib.Cosmic.GTail": [
+      "Mathlib.Data.Nat.Choose.Sum",
+      "Lean.Elab.Tactic.Omega"
+    ],
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomicAddress": [
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomic",
+      "DkMath.Lib.NumberTheory.CyclotomicAddress",
+      "DkMath.Lib.NumberTheory.PrimeRatioOrder"
+    ],
+    "DkMath.Lib.NumberTheory.CyclotomicAddress": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic",
+      "Mathlib.RingTheory.Polynomial.Cyclotomic.Expand",
+      "Mathlib.Data.Nat.Factorization.Basic"
+    ],
+    "DkMath.Lib.NumberTheory.PrimeRatioOrder": [
+      "Mathlib.FieldTheory.Finite.Basic"
+    ],
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomicBoundary": [
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomicAddress"
+    ],
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomicPrimeAddress": [
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomicBoundary",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorPrimeAddress"
+    ],
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorPrimeAddress": [
+      "DkMath.Lib.NumberTheory.PrimeRatioOrder",
+      "DkMath.Lib.NumberTheory.CyclotomicLayerValuation",
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactor"
+    ],
+    "DkMath.Lib.NumberTheory.CyclotomicLayerValuation": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic",
+      "DkMath.Lib.NumberTheory.CyclotomicAddress",
+      "Mathlib.Algebra.BigOperators.Associated",
+      "Mathlib.NumberTheory.Multiplicity"
+    ],
+    "DkMath.Lib.Cosmic.PowerDifferenceCofactor": [
+      "DkMath.Lib.Cosmic.GNSuccessor"
+    ],
+    "DkMath.Lib.Cosmic.GNSuccessor": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic",
+      "Mathlib.RingTheory.Coprime.Basic"
+    ]
+  },
+  "all_DkMath_dependencies_are_Lib": true,
+  "source_sha256": {
+    "DkMath/Lib/NumberTheory/HomogeneousCyclotomic.lean": "e475845997badbdd916d1404b0ad0391fef311280b57d62f7c4b48c057e3e136",
+    "DkMath/Lib/NumberTheory/HomogeneousCyclotomicAddress.lean": "332768125f000f2789e05efb20163b1f7e7bc23eb54a0ac85f42b2c64a69a04c",
+    "DkMath/Lib/NumberTheory/HomogeneousCyclotomicBoundary.lean": "af58eeb41438e553126ad03da01ffbd98d5c9ba875314387741a9f1714bf26b1",
+    "DkMath/Lib/NumberTheory/HomogeneousCyclotomicPrimeAddress.lean": "47dff3c02b95bb63e98b7f67748cb40d222c5bd247bd53610f79847326ac929a",
+    "DkMath/CFBRC/CyclotomicProduct.lean": "b7600301e9af119e1b4756918a7ada153fae8a17c96f4aa4aeba15b327ca2f0e",
+    "DkMath/NumberTheory/GapFocusing/HomogeneousAddress.lean": "42f90c6513909909d53bfafcbcc1ca7cc82bdd6151a91073fa48cbb29c0bffc5",
+    "DkMath/NumberTheory/GapFocusing/CyclotomicBoundary.lean": "3c0aca036102f07b7a4cb1002a43cbacd465c332400eb1518b7130a309e40dc9"
+  },
+  "original_material_hashes_verified": 24,
+  "validation": {
+    "command": "lake build DkMath.Lib.NumberTheory.HomogeneousCyclotomic DkMath.Lib.NumberTheory.HomogeneousCyclotomicAddress DkMath.Lib.NumberTheory.HomogeneousCyclotomicBoundary DkMath.Lib.NumberTheory.HomogeneousCyclotomicPrimeAddress DkMath.CFBRC.CyclotomicProduct DkMath.NumberTheory.GapFocusing.HomogeneousAddress DkMath.NumberTheory.GapFocusing.CyclotomicBoundary DkMath.CFBRC.CyclotomicNorm",
+    "result": "Build completed successfully (8964 jobs).",
+    "warnings": 0,
+    "audit_command": "lake env lean /tmp/GNLib006bAudit.lean",
+    "audited_declarations": 54,
+    "audit_composition": "39 neutral-owner declarations (25 migrated plus 14 new), 13 retained product declarations, 2 retained Zsigmondy bridges",
+    "allowed_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "scope": "eight production targets, including existing CyclotomicNorm consumer; aggregator registration checked statically; no full/root/test build"
+  }
+}

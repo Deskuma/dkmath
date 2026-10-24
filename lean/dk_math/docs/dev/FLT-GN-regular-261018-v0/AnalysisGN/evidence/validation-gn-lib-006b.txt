@@ -1,0 +1,149 @@
+GN-LIB-006b — 2026-10-24
+
+lake build DkMath.Lib.NumberTheory.HomogeneousCyclotomic DkMath.Lib.NumberTheory.HomogeneousCyclotomicAddress DkMath.Lib.NumberTheory.HomogeneousCyclotomicBoundary DkMath.Lib.NumberTheory.HomogeneousCyclotomicPrimeAddress DkMath.CFBRC.CyclotomicProduct DkMath.NumberTheory.GapFocusing.HomogeneousAddress DkMath.NumberTheory.GapFocusing.CyclotomicBoundary DkMath.CFBRC.CyclotomicNorm
+Build completed successfully (8964 jobs).
+Final warnings/errors: 0/0
+
+lake env lean /tmp/GNLib006bAudit.lean
+file: GNLib006bAudit
+DkMath.CFBRC.cyclotomicEval.{u_1} {R : Type u_1} [CommRing R] (m : ℕ) (X : R) : R
+DkMath.CFBRC.cyclotomicShiftedEval.{u_1} {R : Type u_1} [CommRing R] (m : ℕ) (x u : R) : R
+DkMath.CFBRC.cyclotomicShiftedEval_eq_cyclotomicEval_div_mul_pow.{u_1} {R : Type u_1} [Field R] (m : ℕ) (x u : R)
+  (hu : u ≠ 0) :
+  DkMath.CFBRC.cyclotomicShiftedEval m x u =
+    DkMath.CFBRC.cyclotomicEval m ((x + u) / u) * u ^ (Polynomial.cyclotomic m ℤ).natDegree
+DkMath.Lib.NumberTheory.homogeneousCyclotomicEval.{u_1} {R : Type u_1} [CommRing R] (n : ℕ) (a b : R) : R
+DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_eq_shifted_sub.{u_1} {R : Type u_1} [CommRing R] (n : ℕ) (a b : R) :
+  DkMath.Lib.NumberTheory.homogeneousCyclotomicEval n a b = DkMath.CFBRC.cyclotomicShiftedEval n (a - b) b
+DkMath.Lib.NumberTheory.cyclotomicShiftedEval_eq_homogeneousCyclotomicEval.{u_1} {R : Type u_1} [CommRing R] (n : ℕ)
+  (x u : R) : DkMath.CFBRC.cyclotomicShiftedEval n x u = DkMath.Lib.NumberTheory.homogeneousCyclotomicEval n (x + u) u
+DkMath.Lib.NumberTheory.cfbRC_cyclotomicEval_eq_lib.{u_1} {R : Type u_1} [CommRing R] (n : ℕ) (a : R) :
+  DkMath.CFBRC.cyclotomicEval n a = DkMath.Lib.NumberTheory.cyclotomicEval n a
+DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_eq_eval_homogenize.{u_1} {R : Type u_1} [CommRing R] (n : ℕ)
+  (a b : R) :
+  DkMath.Lib.NumberTheory.homogeneousCyclotomicEval n a b =
+    (MvPolynomial.eval ![a, b])
+      ((Polynomial.map (Int.castRingHom R) (Polynomial.cyclotomic n ℤ)).homogenize
+        (Polynomial.cyclotomic n ℤ).natDegree)
+DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_eq_eval_div_mul_pow.{u_1} {R : Type u_1} [Field R] (n : ℕ) (a b : R)
+  (hb : b ≠ 0) :
+  DkMath.Lib.NumberTheory.homogeneousCyclotomicEval n a b =
+    DkMath.Lib.NumberTheory.cyclotomicEval n (a / b) * b ^ (Polynomial.cyclotomic n ℤ).natDegree
+DkMath.NumberTheory.GapFocusing.map_cyclotomicShiftedEval.{u_1, u_2} {R : Type u_1} {S : Type u_2} [CommRing R]
+  [CommRing S] (f : R →+* S) (n : ℕ) (x u : R) :
+  f (DkMath.CFBRC.cyclotomicShiftedEval n x u) = DkMath.CFBRC.cyclotomicShiftedEval n (f x) (f u)
+DkMath.NumberTheory.GapFocusing.cyclotomicShiftedEval_one_eq_cyclotomicEval.{u_1} {R : Type u_1} [CommRing R] (n : ℕ)
+  (x : R) : DkMath.CFBRC.cyclotomicShiftedEval n x 1 = DkMath.CFBRC.cyclotomicEval n (x + 1)
+DkMath.NumberTheory.GapFocusing.primeLayerAddresses (q : ℕ) (a b : ℤ) : Set ℕ
+DkMath.NumberTheory.GapFocusing.layerPrimeSupport (a b : ℤ) (n : ℕ) : Set ℕ
+DkMath.NumberTheory.GapFocusing.primeLayerAddresses_eq_support_fiber {q : ℕ} (hq : Nat.Prime q) (a b : ℤ) :
+  DkMath.NumberTheory.GapFocusing.primeLayerAddresses q a b =
+    {n | 1 < n ∧ q ∈ DkMath.NumberTheory.GapFocusing.layerPrimeSupport a b n}
+DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_isRoot (q : ℕ) [Fact (Nat.Prime q)] (n : ℕ) (a b : ℤ)
+  (hb : ¬↑q ∣ b) :
+  ↑q ∣ DkMath.CFBRC.cyclotomicShiftedEval n (a - b) b ↔ (Polynomial.cyclotomic n (ZMod q)).IsRoot (↑a * (↑b)⁻¹)
+DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_prime_pow_mul_orderOf (q : ℕ) [Fact (Nat.Prime q)] {n : ℕ}
+  (hn : 0 < n) (a b : ℤ) (hb : ¬↑q ∣ b) :
+  ↑q ∣ DkMath.CFBRC.cyclotomicShiftedEval n (a - b) b ↔ ∃ k, n = orderOf (↑a * (↑b)⁻¹) * q ^ k
+DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_primeOrder_eq_of_not_dvd (q : ℕ) [Fact (Nat.Prime q)]
+  (n : ℕ) (a b : ℤ) (hb : ¬↑q ∣ b) (hqn : ¬q ∣ n) :
+  ↑q ∣ DkMath.CFBRC.cyclotomicShiftedEval n (a - b) b ↔ DkMath.NumberTheory.GapFocusing.primeOrder q a b = n
+DkMath.NumberTheory.GapFocusing.mem_primeLayerAddresses_iff (q : ℕ) [Fact (Nat.Prime q)] (a b : ℤ) (hb : ¬↑q ∣ b)
+  (n : ℕ) :
+  n ∈ DkMath.NumberTheory.GapFocusing.primeLayerAddresses q a b ↔ 1 < n ∧ ∃ k, n = orderOf (↑a * (↑b)⁻¹) * q ^ k
+DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_mul_prime_iff (q : ℕ) [Fact (Nat.Prime q)] (n : ℕ) (a b : ℤ)
+  (hb : ¬↑q ∣ b) :
+  ↑q ∣ DkMath.CFBRC.cyclotomicShiftedEval (n * q) (a - b) b ↔ ↑q ∣ DkMath.CFBRC.cyclotomicShiftedEval n (a - b) b
+DkMath.NumberTheory.GapFocusing.FirstLayerAppearance (q : ℕ) (a b : ℤ) (n : ℕ) : Prop
+DkMath.NumberTheory.GapFocusing.firstLayerAppearance_iff_primeOrder_eq (q : ℕ) [Fact (Nat.Prime q)] (a b : ℤ) {n : ℕ}
+  (hn : 0 < n) (hb : ¬↑q ∣ b) :
+  DkMath.NumberTheory.GapFocusing.FirstLayerAppearance q a b n ↔ DkMath.NumberTheory.GapFocusing.primeOrder q a b = n
+DkMath.NumberTheory.GapFocusing.primeLayerAddresses_isLeast_of_one_lt_primeOrder (q : ℕ) [Fact (Nat.Prime q)] (a b : ℤ)
+  (hb : ¬↑q ∣ b) (hr : 1 < DkMath.NumberTheory.GapFocusing.primeOrder q a b) :
+  IsLeast (DkMath.NumberTheory.GapFocusing.primeLayerAddresses q a b) (DkMath.NumberTheory.GapFocusing.primeOrder q a b)
+DkMath.NumberTheory.GapFocusing.primeLayerAddresses_isLeast_of_primeOrder_eq_one (q : ℕ) [Fact (Nat.Prime q)] (a b : ℤ)
+  (hb : ¬↑q ∣ b) (hr : DkMath.NumberTheory.GapFocusing.primeOrder q a b = 1) :
+  IsLeast (DkMath.NumberTheory.GapFocusing.primeLayerAddresses q a b) q
+DkMath.NumberTheory.GapFocusing.exists_gt_mem_primeLayerAddresses_of_mem (q : ℕ) [Fact (Nat.Prime q)] (a b : ℤ)
+  (hb : ¬↑q ∣ b) {n : ℕ} (hn : n ∈ DkMath.NumberTheory.GapFocusing.primeLayerAddresses q a b) :
+  ∃ m, n < m ∧ m ∈ DkMath.NumberTheory.GapFocusing.primeLayerAddresses q a b
+DkMath.NumberTheory.GapFocusing.eval_homogenize_zero_second.{u_1} {R : Type u_1} [CommSemiring R] (p : Polynomial R)
+  (n : ℕ) (a : R) : (MvPolynomial.eval ![a, 0]) (p.homogenize n) = p.coeff n * a ^ n
+DkMath.NumberTheory.GapFocusing.cyclotomicShiftedEval_zero_anchor.{u_1} {R : Type u_1} [CommRing R] (n : ℕ) (a : R) :
+  DkMath.CFBRC.cyclotomicShiftedEval n a 0 = a ^ n.totient
+DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_dvd_first_of_dvd_second (q : ℕ) [Fact (Nat.Prime q)]
+  {n : ℕ} (hn : 0 < n) (a b : ℤ) (hb : ↑q ∣ b) : ↑q ∣ DkMath.CFBRC.cyclotomicShiftedEval n (a - b) b ↔ ↑q ∣ a
+DkMath.NumberTheory.GapFocusing.primeLayerAddresses_of_dvd_second (q : ℕ) [Fact (Nat.Prime q)] (a b : ℤ) (hb : ↑q ∣ b) :
+  DkMath.NumberTheory.GapFocusing.primeLayerAddresses q a b = {n | 1 < n ∧ ↑q ∣ a}
+DkMath.NumberTheory.GapFocusing.primeLayerAddresses_eq_empty_of_dvd_second (q : ℕ) [Fact (Nat.Prime q)] (a b : ℤ)
+  (ha : ¬↑q ∣ a) (hb : ↑q ∣ b) : DkMath.NumberTheory.GapFocusing.primeLayerAddresses q a b = ∅
+DkMath.NumberTheory.GapFocusing.primeLayerAddresses_eq_nontrivial_of_dvd_coordinates (q : ℕ) [Fact (Nat.Prime q)]
+  (a b : ℤ) (ha : ↑q ∣ a) (hb : ↑q ∣ b) : DkMath.NumberTheory.GapFocusing.primeLayerAddresses q a b = {n | 1 < n}
+DkMath.NumberTheory.GapFocusing.primeLayerAddresses_eq_empty_of_dvd_first (q : ℕ) [Fact (Nat.Prime q)] (a b : ℤ)
+  (ha : ↑q ∣ a) (hb : ¬↑q ∣ b) : DkMath.NumberTheory.GapFocusing.primeLayerAddresses q a b = ∅
+DkMath.Lib.NumberTheory.map_homogeneousCyclotomicEval.{u_1, u_2} {R : Type u_1} {S : Type u_2} [CommRing R] [CommRing S]
+  (f : R →+* S) (n : ℕ) (a b : R) :
+  f (DkMath.Lib.NumberTheory.homogeneousCyclotomicEval n a b) =
+    DkMath.Lib.NumberTheory.homogeneousCyclotomicEval n (f a) (f b)
+DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_one_right.{u_1} {R : Type u_1} [CommRing R] (n : ℕ) (a : R) :
+  DkMath.Lib.NumberTheory.homogeneousCyclotomicEval n a 1 = DkMath.Lib.NumberTheory.cyclotomicEval n a
+DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_zero_right.{u_1} {R : Type u_1} [CommRing R] (n : ℕ) (a : R) :
+  DkMath.Lib.NumberTheory.homogeneousCyclotomicEval n a 0 = a ^ n.totient
+DkMath.Lib.NumberTheory.homogeneousCyclotomicEval_zero_degree.{u_1} {R : Type u_1} [CommRing R] (a b : R) :
+  DkMath.Lib.NumberTheory.homogeneousCyclotomicEval 0 a b = 1
+DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_order_ray {q n : ℕ} [Fact (Nat.Prime q)] (hn : 0 < n)
+  (a b : ℤ) (hb : ¬↑q ∣ b) :
+  ↑q ∣ DkMath.Lib.NumberTheory.homogeneousCyclotomicEval n a b ↔
+    ∃ k, n = DkMath.NumberTheory.GapFocusing.primeOrder q a b * q ^ k
+DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_order_eq_of_not_dvd {q : ℕ} [Fact (Nat.Prime q)] (n : ℕ)
+  (a b : ℤ) (hb : ¬↑q ∣ b) (hqn : ¬q ∣ n) :
+  ↑q ∣ DkMath.Lib.NumberTheory.homogeneousCyclotomicEval n a b ↔ DkMath.NumberTheory.GapFocusing.primeOrder q a b = n
+DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_dvd_first_of_dvd_second {q n : ℕ} [Fact (Nat.Prime q)]
+  (hn : 0 < n) (a b : ℤ) (hb : ↑q ∣ b) : ↑q ∣ DkMath.Lib.NumberTheory.homogeneousCyclotomicEval n a b ↔ ↑q ∣ a
+DkMath.Lib.NumberTheory.not_prime_dvd_homogeneousCyclotomicEval_of_dvd_first {q n : ℕ} [Fact (Nat.Prime q)] (hn : 0 < n)
+  (a b : ℤ) (ha : ↑q ∣ a) (hb : ¬↑q ∣ b) : ¬↑q ∣ DkMath.Lib.NumberTheory.homogeneousCyclotomicEval n a b
+DkMath.CFBRC.prod_cyclotomicEval_eq_geomSum.{u_1} {R : Type u_1} [CommRing R] {d : ℕ} (hd : 0 < d) (X : R) :
+  ∏ m ∈ d.divisors.erase 1, DkMath.CFBRC.cyclotomicEval m X = ∑ i ∈ Finset.range d, X ^ i
+DkMath.CFBRC.cyclotomicDivisorsProductShifted.{u_1} {R : Type u_1} [CommRing R] (d : ℕ) (x u : R) : R
+DkMath.CFBRC.cyclotomicShiftedEval_one_eq_cyclotomicEval_add_one.{u_1} {R : Type u_1} [Field R] (m : ℕ) (x : R) :
+  DkMath.CFBRC.cyclotomicShiftedEval m x 1 = DkMath.CFBRC.cyclotomicEval m (x + 1)
+DkMath.CFBRC.cyclotomicDivisorsProductShifted_one_eq_geomSum.{u_1} {R : Type u_1} [Field R] {d : ℕ} (hd : 0 < d)
+  (x : R) : DkMath.CFBRC.cyclotomicDivisorsProductShifted d x 1 = ∑ i ∈ Finset.range d, (x + 1) ^ i
+DkMath.CFBRC.cyclotomicPrimeCore_one_eq_geomSum.{u_1} {R : Type u_1} [CommSemiring R] (d : ℕ) (x : R) :
+  DkMath.CFBRC.cyclotomicPrimeCore d x 1 = ∑ i ∈ Finset.range d, (x + 1) ^ i
+DkMath.CFBRC.cyclotomicDivisorsProductShifted_one_eq_cyclotomicPrimeCore.{u_1} {R : Type u_1} [Field R] {d : ℕ}
+  (hd : 0 < d) (x : R) : DkMath.CFBRC.cyclotomicDivisorsProductShifted d x 1 = DkMath.CFBRC.cyclotomicPrimeCore d x 1
+DkMath.CFBRC.cyclotomicDivisorsProductShifted_one_eq_GN.{u_1} {R : Type u_1} [Field R] {d : ℕ} (hd : 0 < d) {x : R}
+  (hx : x ≠ 0) : DkMath.CFBRC.cyclotomicDivisorsProductShifted d x 1 = DkMath.CosmicFormulaBinom.GN d x 1
+DkMath.CFBRC.cyclotomicDegreeSum (d : ℕ) : ℕ
+DkMath.CFBRC.cyclotomicDegreeSum_eq_pred {d : ℕ} (hd : 0 < d) : DkMath.CFBRC.cyclotomicDegreeSum d = d - 1
+DkMath.CFBRC.geomSum_div_mul_pow_eq_cyclotomicPrimeCore.{u_1} {R : Type u_1} [Field R] {d : ℕ} (x u : R) (hu : u ≠ 0) :
+  (∑ i ∈ Finset.range d, ((x + u) / u) ^ i) * u ^ (d - 1) = DkMath.CFBRC.cyclotomicPrimeCore d x u
+DkMath.CFBRC.cyclotomicDivisorsProductShifted_eq_geomSum_div_mul_powDegreeSum.{u_1} {R : Type u_1} [Field R] {d : ℕ}
+  (hd : 0 < d) (x u : R) (hu : u ≠ 0) :
+  DkMath.CFBRC.cyclotomicDivisorsProductShifted d x u =
+    (∑ i ∈ Finset.range d, ((x + u) / u) ^ i) * u ^ DkMath.CFBRC.cyclotomicDegreeSum d
+DkMath.CFBRC.cyclotomicDivisorsProductShifted_eq_cyclotomicPrimeCore.{u_1} {R : Type u_1} [Field R] {d : ℕ} (hd : 0 < d)
+  (x u : R) (hu : u ≠ 0) : DkMath.CFBRC.cyclotomicDivisorsProductShifted d x u = DkMath.CFBRC.cyclotomicPrimeCore d x u
+DkMath.CFBRC.cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero.{u_1} {R : Type u_1} [Field R] {d : ℕ} (hd : 0 < d)
+  {x u : R} (hx : x ≠ 0) (hu : u ≠ 0) :
+  DkMath.CFBRC.cyclotomicDivisorsProductShifted d x u = DkMath.CosmicFormulaBinom.GN d x u
+DkMath.NumberTheory.GapFocusing.primitivePrimeDivisor_iff_firstLayerAppearance {q a b n : ℕ} [Fact (Nat.Prime q)]
+  (hab : b ≤ a) (hn : 0 < n) (hb : ¬q ∣ b) :
+  DkMath.Zsigmondy.PrimitivePrimeDivisor a b n q ↔ DkMath.NumberTheory.GapFocusing.FirstLayerAppearance q (↑a) (↑b) n
+DkMath.NumberTheory.GapFocusing.primitivePrimeDivisor_firstLayerAppearance {q a b n : ℕ} (hab : b ≤ a) (hn : 1 < n)
+  (hprim : DkMath.Zsigmondy.PrimitivePrimeDivisor a b n q) :
+  DkMath.NumberTheory.GapFocusing.FirstLayerAppearance q (↑a) (↑b) n
+GN-LIB-006b: 54 declarations checked; standard logical axioms only.
+
+25 migrated declarations: signatures and definition/proof bodies preserved.
+39 neutral-owner declarations include 14 new APIs; 11 inline textbook examples.
+Retained CFBRC product declarations and Zsigmondy bridges preserve their bodies.
+File/promotion markers and forbidden-construct absence checked in four neutral owners.
+Neutral DkMath dependency closure contains Lib modules only.
+24 original material SHA256 hashes verified.
+Full/root/DkMathTest/lake test builds excluded by user request.
+File tracker: OK, no mismatches found.
+Markdown: 142 local links checked for target existence and line-anchor bounds.
+Evidence JSON: both files parse successfully.
+Git diff --check: passed.
