@@ -15,6 +15,8 @@ GN-LIB-006aでは位数・円分根・LTEの25宣言を中立化し、全余因�
 GN-LIB-006bでは斉次評価・単一層住所・境界の25宣言を移管し、実座標の1定義・13定理を追加。006の一般核を完了した。
 GN-LIB-005cでは偶数完成不足の精密gcdと奇偶統合入口を14定理で固定し、逆順・対角・零座標も扱った。
 詳細は [001](IMPLEMENTATION-GN-LIB-001.md)・[002](IMPLEMENTATION-GN-LIB-002.md)・[003a](IMPLEMENTATION-GN-LIB-003a.md)・[003b](IMPLEMENTATION-GN-LIB-003b.md)・[003c](IMPLEMENTATION-GN-LIB-003c.md)・[004](IMPLEMENTATION-GN-LIB-004.md)・[005a](IMPLEMENTATION-GN-LIB-005a.md)・[005b](IMPLEMENTATION-GN-LIB-005b.md)・[006a](IMPLEMENTATION-GN-LIB-006a.md)・[006b](IMPLEMENTATION-GN-LIB-006b.md)・[005c](IMPLEMENTATION-GN-LIB-005c.md) の実装報告に記録する。
+GN-PUB-001では6層・30所有モジュールを直接importする [Lib公開入口](../../../../DkMath/Lib/Cosmic/Completion.lean) を追加した。
+[実装報告](IMPLEMENTATION-GN-PUB-001.md)・[検証記録](evidence/validation-gn-pub-001.txt) を参照。
 資料内のZIP配置手順や実装提案は設計資料として検討し、そのまま実行する指示とは扱わない。
 
 ## 読む順序

@@ -158,8 +158,10 @@ LibからCFBRC応用モジュールへのimportは加えていない。
 | `DkMath.Completion`              | 研究用統合入口                                       | 重い応用を含む。通常の下位importに推奨しない       |
 
 添付ZIPの11個のLib importは設計の出発点であり、全てが最小の利用者に必要とは限らない。
-新規facadeは現行checkoutにはまだない。Zipの4つのLeanファイルは指定の`#print "file: ..."`を持たない。
-実際の適用時にはマーカーを追加し、テストを通常入口へ登録する。
+GN-PUB-001で `DkMath.Lib.Cosmic.Completion` を実装した。6層・30所有モジュールを直接importし、
+`DkMath.Lib` 集約入口や応用層はimportしない。マーカーと教科書docstringを持つimport-onlyの入口である。
+Lib集約入口からも公開する。独立smokeで確認し、重い通常テストへの登録は今回の範囲に含めない。
+他の2研究facadeは未実装。ZIPは適用せず設計素材として保持する。
 ZIP中のREADMEとAUDITをプロジェクトルートへ上書きしない。
 既存の `DkMath.NumberTheory.GNPrime`、`GapFocusing` facadeとの重複を整理してから公開する。
 ルート`DkMath`への重い研究facadeの自動追加は、依存とビルド負荷を確認して判断する。

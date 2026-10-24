@@ -41,6 +41,7 @@ import DkMath.Lib.NumberTheory.EisensteinCyclotomic
 import DkMath.Lib.NumberTheory.QuinticGoldenNorm
 import DkMath.Lib.NumberTheory.EisensteinLatticeLanding
 import DkMath.Lib.NumberTheory.SquarefreePowerFactor
+import DkMath.Lib.Cosmic.Completion
 import DkMath.Lib.Cosmic.GTail
 import DkMath.Lib.Cosmic.CompletionCoprime
 import DkMath.Lib.Cosmic.PowerDifferenceCofactor

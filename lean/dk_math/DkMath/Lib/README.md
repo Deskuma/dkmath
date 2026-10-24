@@ -14,6 +14,17 @@ import DkMath.Lib
 
 `DkMath.Lib.lean` intentionally exposes a promoted subset without importing the whole experimental DkMath workspace. Some neutral modules in this directory are currently direct-import APIs and are not yet listed by the aggregator.
 
+For GN and completion arithmetic, use the narrower public entry:
+
+```lean
+import DkMath.Lib.Cosmic.Completion
+```
+
+It directly imports the owners of GN basics, completion arithmetic and deficits,
+divisibility, primitive additive triples, and prime addresses. It does not import
+the `DkMath.Lib` aggregator or application consumers. Existing theorem namespaces
+and hypotheses remain unchanged.
+
 The intended flow is:
 
 ```text
@@ -58,6 +69,7 @@ NumberTheory.TraceOnePowerLanding
 NumberTheory.EisensteinCoordinates
 NumberTheory.EisensteinLatticeLanding
 NumberTheory.SquarefreePowerFactor
+Cosmic.Completion
 Cosmic.GTail
 Cosmic.CompletionCoprime
 Cosmic.PowerDifferenceCofactor
