@@ -6,13 +6,14 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.Legendre.ParitySafeMixedCRT
 import DkMathTest.NumberTheory.LegendreHybridProvider
-import DkMathTest.NumberTheory.LegendreMergedCRT
+import DkMathHeavyTest.NumberTheory.LegendreMergedCRT
 
-#print "file: DkMathTest.NumberTheory.LegendreMergedCRTRegression"
+#print "file: DkMathHeavyTest.NumberTheory.LegendreMergedCRTRegression"
 
 namespace DkMathTest.LegendreMergedCRTRegression
 
-open DkMath.NumberTheory.Legendre DkMathTest.LegendreHybridProvider
+open DkMath.NumberTheory.Legendre
+open DkMathTest.LegendreHybridProvider
 open DkMathTest.LegendreBlockLocalization
 open scoped BigOperators
 

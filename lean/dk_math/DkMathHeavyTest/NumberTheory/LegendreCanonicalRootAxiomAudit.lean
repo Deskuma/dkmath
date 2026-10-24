@@ -7,9 +7,9 @@ Authors: D. and Wise Wolf.
 import DkMath.NumberTheory.Legendre
 
 -- disable heavy test: 2026/10/24 13:47
--- import DkMathTest.NumberTheory.LegendreCanonicalRootRegression
+-- import DkMathHeavyTest.NumberTheory.LegendreCanonicalRootRegression
 
-#print "file: DkMathTest.NumberTheory.LegendreCanonicalRootAxiomAudit"
+#print "file: DkMathHeavyTest.NumberTheory.LegendreCanonicalRootAxiomAudit"
 
 #check DkMath.NumberTheory.Legendre.mem_canonicalIncidence_iff
 #print axioms DkMath.NumberTheory.Legendre.mem_canonicalIncidence_iff

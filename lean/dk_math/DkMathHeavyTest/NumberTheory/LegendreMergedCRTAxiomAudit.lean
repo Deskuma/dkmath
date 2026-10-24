@@ -7,10 +7,10 @@ Authors: D. and Wise Wolf.
 import DkMath.NumberTheory.Legendre
 
 -- disable heavy test: 2026/10/24 12:59
--- import DkMathTest.NumberTheory.LegendreMergedCRT
--- import DkMathTest.NumberTheory.LegendreMergedCRTRegression
+-- import DkMathHeavyTest.NumberTheory.LegendreMergedCRT
+-- import DkMathHeavyTest.NumberTheory.LegendreMergedCRTRegression
 
-#print "file: DkMathTest.NumberTheory.LegendreMergedCRTAxiomAudit"
+#print "file: DkMathHeavyTest.NumberTheory.LegendreMergedCRTAxiomAudit"
 
 #check DkMath.NumberTheory.union_excess_add_inter_card
 #print axioms DkMath.NumberTheory.union_excess_add_inter_card

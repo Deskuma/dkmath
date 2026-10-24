@@ -4,9 +4,9 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMathTest.NumberTheory.LegendreCanonicalRootCharge
+import DkMathHeavyTest.NumberTheory.LegendreCanonicalRootCharge
 
-#print "file: DkMathTest.NumberTheory.LegendreCanonicalRootRegression"
+#print "file: DkMathHeavyTest.NumberTheory.LegendreCanonicalRootRegression"
 
 namespace DkMathTest.LegendreCanonicalRootRegression
 open DkMath.NumberTheory.Legendre
