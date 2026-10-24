@@ -1,0 +1,92 @@
+{
+  "checkpoint": "NOTE-032-003A",
+  "date": "2026-10-25",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "c81a7a3a34802e6ccb8e18cdcd704b4f574527ce",
+  "status": "dyadic centre and directions supplied; hno still conditional on proper E0 and branch swap",
+  "mathematical_changes": {
+    "centre": "unique integral X root of 6X^2+b2X+b4 and derivative Y condition; fixed by whole decomposition group",
+    "directions": "integral by monic quadratic; fixed individually by inertia after centre fixed",
+    "example_curve": "y^2+xy=x^3+x^2+2x; discriminant=-412; c4=-71",
+    "same_Source_frontier": "outside actual E0[p] implies inertia moves that same point, without centre/direction/fixedness inputs"
+  },
+  "production": [
+    {
+      "path": "DkMath/Lib/Algebra/ValuationQuadraticRoot.lean",
+      "public_theorems": [
+        "mem_of_monic_quadratic",
+        "valuation_linear_eq_one",
+        "eq_of_integral_quadratic_roots"
+      ],
+      "sha256": "0aa4f8de5f91a61ff8877bb5d94efcf312e6d8da9e6fc6dc6df820e2575ae0cf"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticDyadicGeometry.lean",
+      "public_theorems": [
+        "criticalQuadratic_eq_zero",
+        "valuation_b2_eq_one",
+        "coordinates_eq_of_derivatives",
+        "coordinates_eq",
+        "decomposition_fixed",
+        "inertia_fixed",
+        "exists_tangentDirections",
+        "tangentDirections_inertia_fixed"
+      ],
+      "sha256": "b245296dc6398735bd12052324eddf972458abde245dcd2b9614b6523944342b"
+    },
+    {
+      "path": "DkMath/FLT/FreyDyadicGeometry.lean",
+      "public_theorems": [
+        "valuation_c4_eq_one_at_two",
+        "two_dvd_curve_discriminant",
+        "exists_criticalCentre_at_two",
+        "criticalCentre_decomposition_fixed_at_two",
+        "criticalCentre_inertia_fixed_at_two",
+        "tangentDirections_inertia_fixed_at_two",
+        "exists_dyadic_geometry",
+        "residual_exists_inertia_ne_of_not_smooth_at_two",
+        "residual_exists_dyadic_inertia_ne_of_zeroComponent_ne_top",
+        "residual_no_cofixed_line_of_dyadic_branch_swap",
+        "residual_isIrreducible_of_dyadic_branch_swap"
+      ],
+      "sha256": "10f19d08e788ebe799254572bc85a51eb08d1733a768fa346add7f7321f23bf8"
+    }
+  ],
+  "checks": {
+    "target_build": {
+      "targets": [
+        "DkMath.Lib.Algebra.ValuationQuadraticRoot",
+        "DkMath.Lib.NumberTheory.EllipticDyadicGeometry",
+        "DkMath.FLT.FreyDyadicGeometry"
+      ],
+      "jobs": 4037,
+      "exit_code": 0,
+      "warnings": 0
+    },
+    "standalone_boundary_theorems": 4,
+    "standalone_example_definitions": 1,
+    "same_Source37_smoke_theorems": 5,
+    "audited_declarations": 32,
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "forbidden_construct_scan": "passed",
+    "lib_only_dependency_nodes": 11,
+    "prior_owners_unchanged": 15,
+    "original_note032_unchanged": true,
+    "tracker": "OK: no mismatches found",
+    "normal_test_body_matches_independent_boundary": true,
+    "entrance_and_test_registration": "static only",
+    "git_diff_check": "passed",
+    "full_root_and_test_builds": "user validation split; not run",
+    "local_document_links": 14,
+    "new_file_whitespace_checks": 9
+  },
+  "remaining": [
+    "actual p-torsion outside E0[p] via injective reduction and cardinality comparison (003B)",
+    "branch swap from a=3 mod8 (003C)",
+    "a=7 mod8 and general hno"
+  ]
+}

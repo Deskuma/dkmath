@@ -63,6 +63,7 @@ import DkMath.FLT.FreyPrimeFiltration
 import DkMath.FLT.FreyStableLineLocalGlobal
 import DkMath.FLT.FreyCofixedBranchSwap
 import DkMath.FLT.FreyDyadicNontrivial
+import DkMath.FLT.FreyDyadicGeometry
 
 #print "file: DkMath.FLT"
 

@@ -199,8 +199,10 @@ import DkMath.Lib.NumberTheory.EllipticSmoothReductionInertia
 import DkMath.Lib.NumberTheory.EllipticCriticalCentreAlgebra
 import DkMath.Lib.NumberTheory.EllipticCriticalCentre
 import DkMath.Lib.NumberTheory.EllipticTangentDirections
+import DkMath.Lib.NumberTheory.EllipticDyadicGeometry
 import DkMath.Lib.NumberTheory.EllipticNodalReduction
 import DkMath.Lib.Algebra.ValuationSeparatedRoots
+import DkMath.Lib.Algebra.ValuationQuadraticRoot
 import DkMath.Lib.NumberTheory.EllipticShallowSlope
 import DkMath.Lib.NumberTheory.EllipticBranchComparison
 import DkMath.Lib.NumberTheory.EllipticCriticalDepth
