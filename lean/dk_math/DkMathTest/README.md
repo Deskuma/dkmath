@@ -28,3 +28,8 @@ $$
 非Frey曲線の実際のFrobeniusで方向交換と3捩れ点の和まで検証した。
 通常テストと同じ本体を独立Lean資料で確認した。
 [003C報告](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-003C-261025.md) を参照。
+
+`Lib/NumberTheory/ValuationPrimeExistence.lean` は004の住所の存在を確認する。
+ℚ(X)の37上の住所、ℚの代数閉包上のFrobeniusと、1・異なる素数・正標数の境界を扱う。
+通常テストの同一本体を独立Lean資料で確認した。
+[004報告](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-004-261025.md) を参照。

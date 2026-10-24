@@ -1,0 +1,85 @@
+NOTE-032-004 — 2026-10-25
+Branch: dev/FLT-GN-regular-261018-v0
+Base HEAD: d21c835157c6df441b552145285e652b387fca87; initially clean.
+
+lake build DkMath.Lib.NumberTheory.ValuationPrimeExistence DkMath.FLT.FreyModEightIrreducibility
+Exit 0. Build completed successfully (4046 jobs). Warnings: 0.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032PrimeExistenceBoundary.lean
+Exit 0. 5 theorems. Exact normal test body elaborated independently.
+Positive examples: Q(X) has a prime-37 address with residue characteristic 37;
+Qbar has a dyadic address and actual Frobenius without Frey Source assumptions.
+Boundaries: 1 not an address, 2 and 3 cannot share a single address,
+ZMod 2 has no prime-3 address (characteristic-zero hypothesis matters).
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032ModEightIrreducibilitySmoke.lean
+Exit 0. 4 theorems at exponent 37; same Source and actual residual representation.
+Address/Frobenius witness, direct hno/irreducibility/no stable line without address
+inputs, reducibility implies seven branch, integer counterexample trace retained.
+No Source or counterexample existence asserted.
+
+lake env lean /tmp/Note032ModEightIrreducibilityAxioms.lean
+Exit 0. Imports production module, elaborates both evidence proof bodies,
+then prints axioms for 7 production + 5 boundary + 4 smoke declarations.
+file: Note032PrimeExistenceBoundary
+file: Note032ModEightIrreducibilitySmoke
+'DkMath.Lib.NumberTheory.ValuationPrimeExistence.exists_liesOverPrime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_exists_dyadic_frobenius_branch_swap_of_a_mod_eight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_no_cofixed_line_of_a_mod_eight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_isIrreducible_of_a_mod_eight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_no_stable_line_of_a_mod_eight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_a_mod_eight_eq_seven_of_not_irreducible' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.ofCounterexample_residual_irreducible_or_seven' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ValuationPrimeExistenceTest.transcendental_address' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ValuationPrimeExistenceTest.rational_closure_frobenius' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ValuationPrimeExistenceTest.one_address_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ValuationPrimeExistenceTest.two_three_address_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ValuationPrimeExistenceTest.positive_characteristic_boundary' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Note032ModEightIrreducibilitySmoke.source37_local_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032ModEightIrreducibilitySmoke.source37_closed_profile' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032ModEightIrreducibilitySmoke.source37_remaining_branch' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Note032ModEightIrreducibilitySmoke.counterexample37_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Static checks:
+- Forbidden constructs: no sorry, sorryAx, admit, axiom, unsafe, native_decide, FltRegular, P2MW in new Lean code after stripping comments.
+- No new imports from P2M, Definitions, Theorems.
+- All new Lean files have correct file markers and theorem docstrings.
+- Public Lib theorem docstring has [DkMath.Lib].
+- Lib dependency closure: 2 DkMath nodes, all under DkMath.Lib.
+- 18 prior proof owners, NOTE-032 and 003C report/JSON/validation match baseline HEAD byte for byte.
+- Production and normal test entrance registration: checked statically.
+- Independent boundary body matches normal test after removing copyright header and normalizing file marker.
+- python3 check_tracker_mismatch.py /tmp/note032-004-modules.log: OK: no mismatches found
+- git diff --check: passed.
+- Full build / root / DkMathTest / lake test builds: user validation split, not run.
+
+Mathematical boundary:
+Generic existence requires characteristic zero and a prime q, not algebraicity.
+Frobenius used only over Qbar with the existing proved existence theorem.
+Public hno/irreducibility endpoints require same Source, prime p>=5, a=3 mod8.
+No dyadic address or local geometry provider remains an argument.
+Reducibility-to-seven is a conditional implication; no converse/existence claim.
+PrimitiveReduction and OrientationTrace preserve gcd/common-factor provenance.
+E0[p] and E1[p] remain distinct. Seven branch, general hno and general FLT remain open.
+
+Local document links checked: 86.
+New-file whitespace checks: 8 files passed.
+JSON round-trip checked.

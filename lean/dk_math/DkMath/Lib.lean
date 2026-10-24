@@ -251,6 +251,7 @@ import DkMath.Lib.NumberTheory.ValuationInertia
 import DkMath.Lib.NumberTheory.ValuationInertiaLift
 import DkMath.Lib.NumberTheory.ValuationInertiaPower
 import DkMath.Lib.NumberTheory.ValuationPlaceConjugacy
+import DkMath.Lib.NumberTheory.ValuationPrimeExistence
 import DkMath.Lib.NumberTheory.ValuationPrimeSupport
 import DkMath.Lib.NumberTheory.ValuationQuadraticFrobenius
 import DkMath.Lib.NumberTheory.ValuationResidue

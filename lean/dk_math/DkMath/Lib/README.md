@@ -528,3 +528,9 @@ and actual tangent/point branch exchange. Their public theorems retain the model
 centre, Frobenius and shallow-point hypotheses. The Frey consumer supplies these
 for a≡3 mod8; the a≡7 mod8 case remains separate.
 [003C report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-003C-261025.md).
+
+`ValuationPrimeExistence.exists_liesOverPrime` supplies a valuation subring above
+any prime in any characteristic-zero field, using lying-over in the integral closure.
+The Frey consumer uses it to supply the dyadic address internally in the a≡3 mod8
+hno and irreducibility endpoints.
+[004 report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-004-261025.md).

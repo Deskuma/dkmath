@@ -254,6 +254,7 @@ import DkMathTest.Lib.NumberTheory.KummerInertia
 import DkMathTest.Lib.NumberTheory.EllipticDyadicGeometry
 import DkMathTest.Lib.NumberTheory.EllipticNodalTorsionBound
 import DkMathTest.Lib.NumberTheory.EllipticFrobeniusBranchSwap
+import DkMathTest.Lib.NumberTheory.ValuationPrimeExistence
 import DkMathTest.FLT.Note031StableLineLocalGlobalDependencyAudit
 
 #print "file: DkMathTest"

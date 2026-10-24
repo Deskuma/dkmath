@@ -66,6 +66,7 @@ import DkMath.FLT.FreyDyadicNontrivial
 import DkMath.FLT.FreyDyadicGeometry
 import DkMath.FLT.FreyDyadicZeroComponent
 import DkMath.FLT.FreyDyadicBranchSwap
+import DkMath.FLT.FreyModEightIrreducibility
 
 #print "file: DkMath.FLT"
 
