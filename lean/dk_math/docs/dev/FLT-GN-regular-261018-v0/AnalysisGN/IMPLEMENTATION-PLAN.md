@@ -3,7 +3,7 @@
 2026-10-23。対象ブランチ：`lib/FLT-GN-Completion-261023-v0`。
 本書は工程ごとの実装契約である。未着手工程にある新規モジュール名と宣言名は設計名である。
 初回は[棚卸し](THEOREM-INVENTORY.md)と既存宣言の確認を行った。
-GN-LIB-001・002・003a・003b・003c・004は実装済みであり、[001報告](IMPLEMENTATION-GN-LIB-001.md)・[002報告](IMPLEMENTATION-GN-LIB-002.md)・[003a報告](IMPLEMENTATION-GN-LIB-003a.md)・[003b報告](IMPLEMENTATION-GN-LIB-003b.md)・[003c報告](IMPLEMENTATION-GN-LIB-003c.md)・[004報告](IMPLEMENTATION-GN-LIB-004.md) に結果を記録する。
+GN-LIB-001・002・003a・003b・003c・004・005aは実装済みであり、[001報告](IMPLEMENTATION-GN-LIB-001.md)・[002報告](IMPLEMENTATION-GN-LIB-002.md)・[003a報告](IMPLEMENTATION-GN-LIB-003a.md)・[003b報告](IMPLEMENTATION-GN-LIB-003b.md)・[003c報告](IMPLEMENTATION-GN-LIB-003c.md)・[004報告](IMPLEMENTATION-GN-LIB-004.md)・[005a報告](IMPLEMENTATION-GN-LIB-005a.md) に結果を記録する。
 
 ## 1. 所有層と数学の範囲
 
@@ -93,11 +93,14 @@ B16の一般な素数行の正確な可除性も再利用対象である。
 
 ### GN-LIB-005：gcdの偶奇と原始ABC三項
 
-配置候補：`Lib.NumberTheory.PowerDifferenceCofactorGcd`、`Lib.Cosmic.CompletionLoan`。
+005a配置済み：`Lib.NumberTheory.PowerDifferenceCofactorGcd`。
+12定理・12例を実装。A10のgap橋、隣接coprime、奇数合同式、sum/deficitのcoprimeを確認した。
+Natのgcd還元には004の正確な再構成を使い、原始性・奇数条件を公開型に残した。
+005b以降の配置候補は `Lib.Cosmic.CompletionLoan` など。
 依存順は次とする。
 
-1. A10とB03/B04のR語彙への橋。
-2. modulo x+yによる奇数次数のcoprimeと、gcd(R_n,D_n)=1。
+1. **005a完了**：A10とB03/B04のR語彙への橋。Nat隣接版はB04の整数特殊化とcastから導出。
+2. **005a完了**：modulo x+yによる奇数次数のcoprimeと、gcd(R_n,D_n)=1。
 3. R_(a+b)の加法公式と互除法から強可除性を再確認・構成する。
 4. 奇数nで1、偶数nでx+yという、gcd(R_n,xyR_(n−2))の式。
 5. h_nの分子可除性を証明し、n≥3で正のpairwise-coprimeなA+B=Cを作る。

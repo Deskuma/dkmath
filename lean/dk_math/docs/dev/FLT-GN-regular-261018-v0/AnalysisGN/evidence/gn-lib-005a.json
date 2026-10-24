@@ -1,0 +1,151 @@
+{
+  "checkpoint": "GN-LIB-005a",
+  "date": "2026-10-24",
+  "base_head": "ebfd7817e2175fa14bb87043b23a0cf90259f5b7",
+  "scope": "odd primitive cofactor/deficit coprimality and GN gcd bridges; strong divisibility and even precise gcd deferred",
+  "new_theorems": 12,
+  "declarations": [
+    {
+      "name": "DkMath.Lib.Cosmic.cast_powerDifferenceCofactor",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean",
+      "line": 140,
+      "source_signature": "theorem cast_powerDifferenceCofactor {R : Type*} [CommSemiring R] (n x y : ℕ) :\n    ((powerDifferenceCofactor n x y : ℕ) : R) = powerDifferenceCofactor n (x : R) (y : R)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.gcd_gap_powerDifferenceCofactor_eq_gcd_degree",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorGcd.lean",
+      "line": 35,
+      "source_signature": "theorem gcd_gap_powerDifferenceCofactor_eq_gcd_degree\n    {n x y : ℕ} (hn : 1 ≤ n) (hyx : y ≤ x) (hxy : x.Coprime y) :\n    Nat.gcd (x - y) (powerDifferenceCofactor n x y) = Nat.gcd (x - y) n",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.isCoprime_adjacent_powerDifferenceCofactor",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorGcd.lean",
+      "line": 45,
+      "source_signature": "theorem isCoprime_adjacent_powerDifferenceCofactor\n    {R : Type*} [CommRing R] (n : ℕ) (x y : R) (hxy : IsCoprime x y) :\n    IsCoprime (powerDifferenceCofactor n x y) (powerDifferenceCofactor (n + 1) x y)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.coprime_adjacent_powerDifferenceCofactor",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorGcd.lean",
+      "line": 57,
+      "source_signature": "theorem coprime_adjacent_powerDifferenceCofactor\n    (n x y : ℕ) (hxy : x.Coprime y) :\n    (powerDifferenceCofactor n x y).Coprime (powerDifferenceCofactor (n + 1) x y)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.sum_dvd_powerDifferenceCofactor_odd_sub",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorGcd.lean",
+      "line": 68,
+      "source_signature": "theorem sum_dvd_powerDifferenceCofactor_odd_sub\n    {R : Type*} [CommRing R] (k : ℕ) (x y : R) :\n    x + y ∣ powerDifferenceCofactor (2 * k + 1) x y - (-(x * y)) ^ k",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.isCoprime_sum_powerDifferenceCofactor_odd",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorGcd.lean",
+      "line": 87,
+      "source_signature": "theorem isCoprime_sum_powerDifferenceCofactor_odd\n    {R : Type*} [CommRing R] (k : ℕ) (x y : R) (hxy : IsCoprime x y) :\n    IsCoprime (x + y) (powerDifferenceCofactor (2 * k + 1) x y)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.coprime_sum_powerDifferenceCofactor_odd",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorGcd.lean",
+      "line": 105,
+      "source_signature": "theorem coprime_sum_powerDifferenceCofactor_odd\n    (k x y : ℕ) (hxy : x.Coprime y) :\n    (x + y).Coprime (powerDifferenceCofactor (2 * k + 1) x y)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.coprime_sum_powerDifferenceCofactor_of_odd",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorGcd.lean",
+      "line": 114,
+      "source_signature": "theorem coprime_sum_powerDifferenceCofactor_of_odd\n    {n x y : ℕ} (hn : Odd n) (hxy : x.Coprime y) :\n    (x + y).Coprime (powerDifferenceCofactor n x y)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.gcd_powerDifferenceCofactor_completionDefect_eq_gcd_budget",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorGcd.lean",
+      "line": 125,
+      "source_signature": "theorem gcd_powerDifferenceCofactor_completionDefect_eq_gcd_budget (n x y : ℕ) :\n    Nat.gcd (powerDifferenceCofactor n x y) (completionDefect n x y) =\n      Nat.gcd (powerDifferenceCofactor n x y) ((x + y) ^ (n - 1))",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.isCoprime_powerDifferenceCofactor_signedCompletionDefect_odd",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorGcd.lean",
+      "line": 134,
+      "source_signature": "theorem isCoprime_powerDifferenceCofactor_signedCompletionDefect_odd\n    {R : Type*} [CommRing R] (k : ℕ) (x y : R) (hxy : IsCoprime x y) :\n    IsCoprime (powerDifferenceCofactor (2 * k + 1) x y)\n      (signedCompletionDefect (2 * k + 1) x y)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.coprime_powerDifferenceCofactor_completionDefect_odd",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorGcd.lean",
+      "line": 148,
+      "source_signature": "theorem coprime_powerDifferenceCofactor_completionDefect_odd\n    (k x y : ℕ) (hxy : x.Coprime y) :\n    (powerDifferenceCofactor (2 * k + 1) x y).Coprime (completionDefect (2 * k + 1) x y)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.coprime_powerDifferenceCofactor_completionDefect_of_odd",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorGcd.lean",
+      "line": 156,
+      "source_signature": "theorem coprime_powerDifferenceCofactor_completionDefect_of_odd\n    {n x y : ℕ} (hn : Odd n) (hxy : x.Coprime y) :\n    (powerDifferenceCofactor n x y).Coprime (completionDefect n x y)",
+      "docstring_has_promotion_marker": true
+    }
+  ],
+  "new_owner_inline_examples": 12,
+  "previous_core_source_preserved_except_insertion": true,
+  "CompletionDefect_source_unchanged": true,
+  "source_sha256": {
+    "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean": "709f197f88d347762f628f0db9fbbb57be626e404e1de1270be4e230b47e78b1",
+    "DkMath/Lib/NumberTheory/PowerDifferenceCofactorGcd.lean": "0eec961820c5ae2be81183ad167e0ae8c7ff6d5d9ac866ffbb6e307d950a35b5"
+  },
+  "local_import_closure": {
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd": [
+      "DkMath.Lib.Cosmic.CompletionDefect",
+      "DkMath.Lib.Cosmic.GNSupport",
+      "DkMath.Lib.Cosmic.GTailBoundary"
+    ],
+    "DkMath.Lib.Cosmic.CompletionDefect": [
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactor"
+    ],
+    "DkMath.Lib.Cosmic.PowerDifferenceCofactor": [
+      "DkMath.Lib.Cosmic.GNSuccessor"
+    ],
+    "DkMath.Lib.Cosmic.GNSuccessor": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic",
+      "Mathlib.RingTheory.Coprime.Basic"
+    ],
+    "DkMath.Lib.Cosmic.GTailCyclotomic": [
+      "DkMath.Lib.Cosmic.GTail",
+      "Mathlib.RingTheory.Polynomial.Cyclotomic.Basic"
+    ],
+    "DkMath.Lib.Cosmic.GTail": [
+      "Mathlib.Data.Nat.Choose.Sum",
+      "Lean.Elab.Tactic.Omega"
+    ],
+    "DkMath.Lib.Cosmic.GNSupport": [
+      "DkMath.Lib.Cosmic.GNSuccessor",
+      "Mathlib.Data.Nat.Prime.Basic",
+      "Mathlib.RingTheory.Coprime.Lemmas"
+    ],
+    "DkMath.Lib.Cosmic.GTailBoundary": [
+      "DkMath.Lib.Cosmic.GTail",
+      "Mathlib.Data.Nat.Prime.Basic"
+    ]
+  },
+  "all_DkMath_dependencies_are_Lib": true,
+  "original_material_hashes_verified": 24,
+  "validation": {
+    "command": "lake build DkMath.Lib.Cosmic.PowerDifferenceCofactor DkMath.Lib.Cosmic.CompletionDefect DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd",
+    "result": "Build completed successfully (2792 jobs).",
+    "warnings": 0,
+    "audit_command": "lake env lean /tmp/GNLib005aAudit.lean",
+    "new_public_declarations_checked": 12,
+    "prior_public_declarations_checked": 27,
+    "allowed_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "aggregator": "direct import registration checked statically; no aggregator build",
+    "scope": "three production targets and lightweight declaration audit; full build and DkMathTest/lake test excluded per user request"
+  }
+}

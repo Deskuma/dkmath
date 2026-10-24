@@ -134,6 +134,13 @@ theorem powerDifferenceCofactor_diagonal
       omega
     _ = _ := by simp
 
+/-- [DkMath.Lib] Natural cofactor values commute with casting into a semiring.
+GN-LIB-005a uses this finite-sum bridge to transport ring Bezout statements to
+natural gcd statements. Casting neither orders nor subtracts the coordinates. -/
+theorem cast_powerDifferenceCofactor {R : Type*} [CommSemiring R] (n x y : ℕ) :
+    ((powerDifferenceCofactor n x y : ℕ) : R) = powerDifferenceCofactor n (x : R) (y : R) := by
+  simp only [powerDifferenceCofactor, Nat.cast_sum, Nat.cast_mul, Nat.cast_pow]
+
 /-- [DkMath.Lib] Natural cofactors lie below the full (x+y)^(n-1) budget.
 For n=0 the assertion is 0≤1. For positive degrees the nonnegative correction
 xy R_k in the second-order recurrence proves the induction step. -/

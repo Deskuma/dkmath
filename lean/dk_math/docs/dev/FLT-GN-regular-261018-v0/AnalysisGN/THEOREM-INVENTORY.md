@@ -87,7 +87,7 @@ Lib配下でもnamespaceが歴史的名称のままの場合がある。namespac
 | R_nの有限和とGTail          | GN-LIB-004で実装済み | B22から座標変換。Nat減算にはy≤xを保持 |
 | R_nの二階再帰               | GN-LIB-004で実装済み | GN後続の翻訳と有限和再帰、CommSemiring版 |
 | D_nの正性・漸化式           | GN-LIB-004で実装済み | 上界→Nat差→再帰。n≥3、両座標正の条件を保持 |
-| 隣接次数の互いに素性        | B03/B04に既存                                 | 所有層の抽出と旧名互換           |
+| 隣接次数の互いに素性        | B03/B04は001でLib所有化、005aでRへ接続 | 環版とNat版を原始性のもとで固定 |
 | 円分層のq住所=r q^k         | B08/B11に既存                                 | carrierと上位importを分離        |
 | qでの次数膨張のLTE          | B13/B14に既存                                 | 奇素数と2の条件を維持            |
 | gcd(R_m,R_n)=R_gcd(m,n)     | 今回の限定検索では直接のAPIを特定できなかった | 加法公式・互除法の再利用を再確認 |
@@ -145,3 +145,13 @@ A34と加法版、添字付値に基づく整除性、単位添字の全層整�
 環の符号付き不足と自然数の不足を区別し、再構成・再帰・正性・castの橋を固定した。
 既存A/Bの宣言の移動や型変更は行っていない。
 [004報告](IMPLEMENTATION-GN-LIB-004.md) と [全宣言・型・ハッシュ](evidence/gn-lib-004.json) を参照。
+
+## 10. GN-LIB-005aの奇数完成不足coprime
+
+`Lib.NumberTheory.PowerDifferenceCofactorGcd` の11定理と、
+`Lib.Cosmic.PowerDifferenceCofactor` のcast定理1個を追加した。
+A10のgap gcdを保持した橋、B04からの隣接Bézout関係とNat特殊化、
+奇数合同式 `R_(2k+1) ≡ (-xy)^k (mod x+y)`、原始座標でのsum/deficit coprimeを固定した。
+Natの `Odd n` 入口では原始性を明示する。零座標や次数1に不要な正性は課さない。
+既存定理の型・本文を変更せず、強可除性・偶数精密gcd・ABC三項は後続に残した。
+[005a報告](IMPLEMENTATION-GN-LIB-005a.md) と [全新定理・型・ハッシュ](evidence/gn-lib-005a.json) を参照。

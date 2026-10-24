@@ -37,6 +37,7 @@ Algebra.PowerSubgroup
 TwoChannel
 NumberTheory.PadicValNat
 NumberTheory.BinomialPrimePower
+NumberTheory.PowerDifferenceCofactorGcd
 NumberTheory.HomogeneousPowerQuotient
 NumberTheory.ClassGroupTorsionBridge
 NumberTheory.TraceOneLatticeLanding
@@ -258,6 +259,15 @@ Exact coefficient valuations for prime-power Pascal rows, for every prime:
 Includes the subtractive formula and two prime-power divisibility consequences.
 The original NumberTheory names remain wrappers; filtered-beam carriers stay
 with that owner. Prime regularity is not an assumption or a conclusion.
+
+### `PowerDifferenceCofactorGcd`
+
+For primitive coordinates x,y and odd n, the geometric cofactor R_n is
+coprime to x+y and to its natural completion deficit D_n. The ring argument
+uses `R_(2k+1) ≡ (-xy)^k (mod x+y)`; natural gcd results follow by casting.
+Ring Bezout coprimality also applies to the signed deficit. The module
+translates the existing GN gap-gcd and adjacent-coprime APIs. Even degrees
+and nonprimitive coordinates can have a nontrivial cofactor/deficit gcd.
 
 ### `PowerFactor`
 
