@@ -23,3 +23,8 @@ $$
 標数2、奇標数のせん断、真でない吸収空間、mod8の残る枝を実際の有限表現・整数で確認する。
 本作業ではテストをビルドせず、同一の検証本体を独立Lean資料として確認した。
 [実装報告](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-001-261025.md) を参照。
+
+`Lib/NumberTheory/EllipticFrobeniusBranchSwap.lean` は003Cの算術境界と具体曲線を確認する。
+非Frey曲線の実際のFrobeniusで方向交換と3捩れ点の和まで検証した。
+通常テストと同じ本体を独立Lean資料で確認した。
+[003C報告](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-003C-261025.md) を参照。

@@ -99,6 +99,7 @@ import DkMath.Lib.NumberTheory.EllipticDivisionSequence
 import DkMath.Lib.NumberTheory.EllipticDivisionUniversal
 import DkMath.Lib.NumberTheory.EllipticDoublingDepth
 import DkMath.Lib.NumberTheory.EllipticDyadicGeometry
+import DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap
 import DkMath.Lib.NumberTheory.EllipticDyadicSeparation
 import DkMath.Lib.NumberTheory.EllipticDyadicWildInertia
 import DkMath.Lib.NumberTheory.EllipticFixedTorsion
@@ -185,6 +186,7 @@ import DkMath.Lib.NumberTheory.FiniteIdealPowerAggregation
 import DkMath.Lib.NumberTheory.FoldedValuationOrbit
 
 import DkMath.Lib.NumberTheory.FreyGapCubic
+import DkMath.Lib.NumberTheory.FreyModEight
 import DkMath.Lib.NumberTheory.FreyLocalReduction
 import DkMath.Lib.NumberTheory.FreyPrimeValuation
 import DkMath.Lib.NumberTheory.FreyTwoArithmetic
@@ -250,6 +252,7 @@ import DkMath.Lib.NumberTheory.ValuationInertiaLift
 import DkMath.Lib.NumberTheory.ValuationInertiaPower
 import DkMath.Lib.NumberTheory.ValuationPlaceConjugacy
 import DkMath.Lib.NumberTheory.ValuationPrimeSupport
+import DkMath.Lib.NumberTheory.ValuationQuadraticFrobenius
 import DkMath.Lib.NumberTheory.ValuationResidue
 import DkMath.Lib.NumberTheory.ValuationTameCharacter
 

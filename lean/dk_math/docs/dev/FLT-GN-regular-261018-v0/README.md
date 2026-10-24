@@ -373,3 +373,8 @@ x^p+y^p=\varepsilon(\lambda^m z)^p
 [実装報告](IMPLEMENTATION-NOTE032-001-261025.md)・[研究ROADMAP](ROADMAP-NOTE032.md)・
 [検証記録](evidence/validation-note032-001.txt) を参照。
 既約性へは幾何入力を保持した条件付き接続であり、無条件のhnoは未証明である。
+
+032-003Cまでの進展は [003C報告](IMPLEMENTATION-NOTE032-003C-261025.md) を参照。
+同じSource・素数p≥5・a≡3 mod8・2上の住所の下では、幾何providerを全て内部供給し、
+枝交換・直接hno・残余表現の既約性まで接続した。
+次は住所の存在を内部供給する公開入口の整理。a≡7 mod8と一般hnoは引き続き別の研究課題である。

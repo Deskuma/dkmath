@@ -1,0 +1,107 @@
+NOTE-032-003C — 2026-10-25
+Branch: dev/FLT-GN-regular-261018-v0
+Base HEAD: 5f8435e34037694399ee3358d455548b25c050ea; initially clean.
+
+lake build DkMath.FLT.FreyDyadicBranchSwap
+Exit 0. Build completed successfully (4044 jobs). Warnings: 0.
+Includes all four new production modules (three Lib owners and Frey consumer).
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FrobeniusBranchSwapBoundary.lean
+Exit 0. 6 theorems and 1 definition. Exact normal test body elaborated independently.
+Boundaries: mod4 versus mod8, odd exponent one, split quadratic fixed root.
+Exponent 37 with negative integer input exercises generic mod8 arithmetic.
+Non-Frey positive example: y^2+xy=x^3+x^2+2x, discriminant=-412,c4=-71.
+Actual Frobenius swaps directions; an actual outside 3-torsion point exists
+and sigmaP+P is smooth at same place. No Frey Source existence assumption.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FrobeniusBranchSwapSmoke.lean
+Exit 0. 4 theorems at exponent 37; same Source and actual residual representation.
+Direction swap, point branch swap, direct hno and irreducibility, without
+centre/direction/outside-point/inertia/swap providers. No Source existence asserted.
+
+lake env lean /tmp/Note032FrobeniusBranchSwapAxioms.lean
+Exit 0. Imports production module, elaborates both evidence proof bodies,
+then prints axioms for 18 production + 7 boundary/example + 4 smoke declarations.
+file: Note032FrobeniusBranchSwapBoundary
+file: Note032FrobeniusBranchSwapSmoke
+'DkMath.Lib.NumberTheory.ValuationQuadraticFrobenius.square_sub_eq_one' depends on axioms: [propext, Quot.sound]
+'DkMath.Lib.NumberTheory.ValuationQuadraticFrobenius.square_ne_self' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.ValuationQuadraticFrobenius.valuation_apply_sub_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.FreyModEight.power_difference_mod_eight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.FreyModEight.integral_a2_odd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap.centre_x_small_of_normalized' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap.quadratic_residue_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap.directions_swap_of_frobenius' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap.slope_difference_of_frobenius' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap.add_smooth_of_frobenius' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.b_even_of_a_mod_eight' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.curve_a2_odd_of_a_mod_eight' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.dyadic_tangent_residue_profile_of_a_mod_eight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.exists_dyadic_direction_swap_of_a_mod_eight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_frobenius_branch_swap_of_a_mod_eight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_exists_decomposition_branch_swap_of_a_mod_eight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_no_cofixed_line_of_a_mod_eight_at_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_isIrreducible_of_a_mod_eight_at_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'EllipticFrobeniusBranchSwapTest.exponent37_negative_input' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFrobeniusBranchSwapTest.seven_side_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFrobeniusBranchSwapTest.exponent_one_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFrobeniusBranchSwapTest.split_quadratic_boundary' depends on axioms: [propext, Quot.sound]
+'EllipticFrobeniusBranchSwapTest.nodalCurve' does not depend on any axioms
+'EllipticFrobeniusBranchSwapTest.nodalCurve_invariants' depends on axioms: [propext, Quot.sound]
+'EllipticFrobeniusBranchSwapTest.nodalCurve_frobenius_three' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FrobeniusBranchSwapSmoke.source37_directions' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FrobeniusBranchSwapSmoke.source37_branch_swap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FrobeniusBranchSwapSmoke.source37_no_cofixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FrobeniusBranchSwapSmoke.source37_irreducible' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Static checks:
+- Forbidden constructs: no sorry, sorryAx, admit, axiom, unsafe, native_decide, FltRegular, P2MW in new Lean code after stripping comments.
+- No new imports from P2M, Definitions, Theorems.
+- All new Lean files have correct file markers and declaration docstrings.
+- All 10 public Lib theorem docstrings have [DkMath.Lib].
+- Lib dependency closure: 27 DkMath nodes, all under DkMath.Lib.
+- 16 prior proof owners and NOTE-032 match baseline HEAD byte for byte.
+- Production and normal test entrance registration: checked statically.
+- Independent boundary body matches normal test after removing copyright header and normalizing file marker.
+- Pinned reference cache SHA256 and Git blob match NOTE-032-001 evidence.
+- python3 check_tracker_mismatch.py /tmp/note032-003c-frey.log: OK: no mismatches found
+- git diff --check: passed.
+- Full build / root / DkMathTest / lake test builds: user validation split, not run.
+
+Mathematical boundary:
+Source, prime p>=5, a=3 mod8 and actual place over two remain assumptions.
+The direct hno/irreducibility endpoints have no local geometry provider inputs.
+E0[p] and E1[p] remain distinct. A,hA are not internally supplied yet.
+The a=7 mod8 case, general hno and general FLT remain separate open tasks.
+
+Local document links checked: 83.
+New-file whitespace checks: 10 files passed.
+JSON round-trip checked.

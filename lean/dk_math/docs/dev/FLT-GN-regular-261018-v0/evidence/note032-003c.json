@@ -1,0 +1,244 @@
+{
+  "checkpoint": "NOTE-032-003C",
+  "date": "2026-10-25",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "5f8435e34037694399ee3358d455548b25c050ea",
+  "status": "a=3 mod8 branch swap supplied; direct hno and irreducibility at same dyadic address; address-free wrapper pending",
+  "mathematical_changes": {
+    "mod_eight": "odd n>=3, a=3 mod8, b even implies numerator=4 mod8 and integer a2 odd; no FLT equation needed",
+    "residue": "characteristic two z^2+z=1 implies square-z=1 and nonfixedness; actual Frobenius change has valuation one",
+    "centre": "a1=1,a3=0 gives x0=-2*y0, so residue x0=0 directly",
+    "directions": "actual two-power Frobenius swaps same tangent roots via centre fixedness and factorization",
+    "points": "odd torsion gives strict shallowness; same centre-slope residue polynomial, equal depth and unit slope difference imply sigmaP+P smooth",
+    "same_Source": "actual residual representation, centre/directions/outside point/inertia/swap supplied internally; direct hno and irreducibility at specified place over two",
+    "boundary": "mod4 alone insufficient; a=7 has even a2; exponent one fails numerator congruence; split polynomial root fixed by squaring",
+    "positive_example": "non-Frey y^2+xy=x^3+x^2+2x, discriminant=-412,c4=-71; same actual Frobenius swaps directions and adds an outside 3-torsion point into E0"
+  },
+  "production": [
+    {
+      "path": "DkMath/Lib/NumberTheory/ValuationQuadraticFrobenius.lean",
+      "public_theorems": [
+        "square_sub_eq_one",
+        "square_ne_self",
+        "valuation_apply_sub_eq_one"
+      ],
+      "sha256": "5a2ec6ca27fb1b3a0789433a3c9a7446d5681229c2a42f6547ae3899016a3d9b"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/FreyModEight.lean",
+      "public_theorems": [
+        "power_difference_mod_eight",
+        "integral_a2_odd"
+      ],
+      "sha256": "9a50a2a340ef9f3088f67ef036af76929c43da008ec0f59d503acd400eb955d5"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFrobeniusBranchSwap.lean",
+      "public_theorems": [
+        "centre_x_small_of_normalized",
+        "quadratic_residue_eq_one",
+        "directions_swap_of_frobenius",
+        "slope_difference_of_frobenius",
+        "add_smooth_of_frobenius"
+      ],
+      "sha256": "dfc215fde13df4343509657105dbf2a0e8ef4552db5dd58b47342353ab854414"
+    },
+    {
+      "path": "DkMath/FLT/FreyDyadicBranchSwap.lean",
+      "public_theorems": [
+        "b_even_of_a_mod_eight",
+        "curve_a2_odd_of_a_mod_eight",
+        "dyadic_tangent_residue_profile_of_a_mod_eight",
+        "exists_dyadic_direction_swap_of_a_mod_eight",
+        "residual_frobenius_branch_swap_of_a_mod_eight",
+        "residual_exists_decomposition_branch_swap_of_a_mod_eight",
+        "residual_no_cofixed_line_of_a_mod_eight_at_two",
+        "residual_isIrreducible_of_a_mod_eight_at_two"
+      ],
+      "sha256": "c8794915c8fe359011876ed0c3a5d90ccc4f9041ace03369488b2594df181f7e"
+    }
+  ],
+  "reference_source": {
+    "path": "P2M/Sol/S_FreyPackage_frey_exists_decomposition_branch_swap_of_a_mod_eight.lean",
+    "commit": "6e837e75355538c7f80bab5b956861e86c4eacc2",
+    "bytes": 17630,
+    "lines": 329,
+    "sha256": "5610ba471b7a22fb47ed41de278eab6f9def67ee23aaadb0b3aef906352d54c9",
+    "git_blob": "adf56ea854af039815cd489721136765c4bed9df"
+  },
+  "checks": {
+    "target_build": {
+      "command": "lake build DkMath.FLT.FreyDyadicBranchSwap",
+      "includes_all_four_new_production_modules": true,
+      "jobs": 4044,
+      "exit_code": 0,
+      "warnings": 0
+    },
+    "standalone_boundary_theorems": 6,
+    "standalone_example_definitions": 1,
+    "same_Source37_smoke_theorems": 4,
+    "audited_declarations": 29,
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "axiom_results": {
+      "DkMath.Lib.NumberTheory.ValuationQuadraticFrobenius.square_sub_eq_one": [
+        "propext",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.ValuationQuadraticFrobenius.square_ne_self": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.ValuationQuadraticFrobenius.valuation_apply_sub_eq_one": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.FreyModEight.power_difference_mod_eight": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.FreyModEight.integral_a2_odd": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap.centre_x_small_of_normalized": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap.quadratic_residue_eq_one": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap.directions_swap_of_frobenius": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap.slope_difference_of_frobenius": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap.add_smooth_of_frobenius": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.b_even_of_a_mod_eight": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.curve_a2_odd_of_a_mod_eight": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.dyadic_tangent_residue_profile_of_a_mod_eight": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.exists_dyadic_direction_swap_of_a_mod_eight": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_frobenius_branch_swap_of_a_mod_eight": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_exists_decomposition_branch_swap_of_a_mod_eight": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_no_cofixed_line_of_a_mod_eight_at_two": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_isIrreducible_of_a_mod_eight_at_two": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFrobeniusBranchSwapTest.exponent37_negative_input": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFrobeniusBranchSwapTest.seven_side_boundary": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFrobeniusBranchSwapTest.exponent_one_boundary": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFrobeniusBranchSwapTest.split_quadratic_boundary": [
+        "propext",
+        "Quot.sound"
+      ],
+      "EllipticFrobeniusBranchSwapTest.nodalCurve_invariants": [
+        "propext",
+        "Quot.sound"
+      ],
+      "EllipticFrobeniusBranchSwapTest.nodalCurve_frobenius_three": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FrobeniusBranchSwapSmoke.source37_directions": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FrobeniusBranchSwapSmoke.source37_branch_swap": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FrobeniusBranchSwapSmoke.source37_no_cofixed": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FrobeniusBranchSwapSmoke.source37_irreducible": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFrobeniusBranchSwapTest.nodalCurve": []
+    },
+    "forbidden_construct_scan": "passed",
+    "lib_only_dependency_nodes": 27,
+    "prior_owners_unchanged": 16,
+    "original_note032_unchanged": true,
+    "reference_sha256_and_git_blob": "matched NOTE-032-001 pinned cache",
+    "tracker": "OK: no mismatches found",
+    "normal_test_body_matches_independent_boundary": true,
+    "entrance_and_test_registration": "static only",
+    "git_diff_check": "passed",
+    "full_root_and_test_builds": "user validation split; not run",
+    "local_document_links": 83,
+    "new_file_whitespace_checks": 10
+  },
+  "remaining": [
+    "supply existence of place over two internally for address-free a=3 mod8 hno/irreducibility endpoint (032-004)",
+    "a=7 mod8 and general hno (032-005)",
+    "general FLT"
+  ]
+}

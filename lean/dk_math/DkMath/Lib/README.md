@@ -521,3 +521,10 @@ a nontrivial local action, a quotient sign-reversing element, and 2≠0 in the f
 It uses containment of the line in the absorber; ambient rank two is not required.
 Frey arithmetic supplies these inputs separately through `DkMath.FLT.FreyCofixedBranchSwap`.
 [Implementation report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-001-261025.md).
+
+`FreyModEight`, `ValuationQuadraticFrobenius`, and `EllipticFrobeniusBranchSwap`
+separate odd-exponent mod-eight arithmetic, characteristic-two residue action,
+and actual tangent/point branch exchange. Their public theorems retain the model,
+centre, Frobenius and shallow-point hypotheses. The Frey consumer supplies these
+for a≡3 mod8; the a≡7 mod8 case remains separate.
+[003C report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-003C-261025.md).
