@@ -31,8 +31,11 @@ and a construction at y=1 that completes all primes in a finite set locally whil
 producing an outside prime with an exponent obstruction. `NumberTheory.PrimePowerCompensationShift` extends this to a positive lower coordinate y.
 Primitive coordinates suffice for the exact local valuations (zero at primes of y,
 p at the remaining controlled primes). An explicit power-gap size hypothesis is
-required for the outside prime with an exponent obstruction. Selecting an extra
-factor that attains this hypothesis remains GN-LIB-007c. This is a special
+required for the outside prime with an exponent obstruction. `NumberTheory.PrimePowerCompensationLift` explicitly selects the extra factor
+T=(p M₀ y)y^p+1, preserves the controlled valuations, and attains this hypothesis.
+For every finite control set it constructs a primitive nonpower with the stated
+local valuations, retaining the odd-prime and p∤y hypotheses. The constructed
+upper coordinate and residual depend on the control set. This is a special
 construction, not an FLT descent.
 
 The intended flow is:

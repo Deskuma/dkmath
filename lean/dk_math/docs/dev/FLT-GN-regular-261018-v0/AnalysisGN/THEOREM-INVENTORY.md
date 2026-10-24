@@ -238,3 +238,21 @@ Legendreの同値変形を予想の無条件証明とは数えない。
 [34宣言の型・所有者・昇格マーカー](evidence/gn-lib-007b.json) と
 [公開入口smoke](evidence/GNShiftedPrimeCompensationSmoke.lean) を固定した。
 サイズ条件の達成は007cへ残し、無条件の一般yでの脱出とは数えない。
+
+## GN-LIB-007c：追加因子の構成とサイズ条件の達成
+
+`Lib.NumberTheory.PrimePowerCompensationLift` に3定義・27定理を追加した。
+名前空間は `DkMath.Lib.NumberTheory.PrimePowerCompensation.Lift`。
+
+- `padding`・`factor`・`product`：C L+1、T=(pM₀y)y^p+1、拡大パラメータM=M₀T。
+- `padding_coprime`・`small_prime_not_dvd_factor`：原始性と制御素数の付値を保持する。
+- `self_le_consecutive_power_gap`・`size_condition`：有限和R_pの最終項を使ってサイズ条件を達成する。
+- `small_prime_valuation_exact`：拡大後も全q≤Bで0/p付値を維持する。
+- `finite_set_compensation_and_escape`：サイズ条件を外部仮定にしない有限集合の局所完済と集合外脱出。
+- `difference_valuation_of_residual_prime`・`exists_prime_escape_in_difference`：付値障害を元の冪差へ正確に戻す。
+- `exists_primitive_nonpower_with_local_completion`：原始座標xの存在、有限集合上の正確な付値、全体の非完全冪性を返す。
+
+[30宣言の型・所有者・昇格マーカー](evidence/gn-lib-007c.json) と
+[公開入口smoke](evidence/GNPrimeCompensationLiftSmoke.lean) を固定した。
+奇素数p・y>0・p∤yは保持する。上限や集合を変えると構成するx・Kも変わる。
+007全体は86定理・10定義・35例（a/b/c合計）となった。

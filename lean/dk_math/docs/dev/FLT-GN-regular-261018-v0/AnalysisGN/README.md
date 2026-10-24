@@ -23,6 +23,9 @@ GN-LIB-007aでは完全冪の付値判定、y=1の有限素数補填、集合外
 [007a実装報告](IMPLEMENTATION-GN-LIB-007a.md)・[検証記録](evidence/validation-gn-lib-007a.txt) を参照。
 GN-LIB-007bでは一般の正のyに対して原始性・サイズ条件を保持し、局所付値の0/p二分法と条件付きの脱出を31定理・3定義で固定した。
 [007b実装報告](IMPLEMENTATION-GN-LIB-007b.md)・[検証記録](evidence/validation-gn-lib-007b.txt) を参照。
+GN-LIB-007cでは明示的な追加因子で原始性・局所付値を保ち、サイズ条件を達成した。
+[007c実装報告](IMPLEMENTATION-GN-LIB-007c.md)・[検証記録](evidence/validation-gn-lib-007c.txt) を参照。
+007のa/b/cは対象moduleで完了。一般FLT降下やhnoの接続は別の課題である。
 資料内のZIP配置手順や実装提案は設計資料として検討し、そのまま実行する指示とは扱わない。
 
 ## 読む順序
