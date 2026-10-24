@@ -1,0 +1,18 @@
+import DkMath.NumberTheory.Completion
+
+#print "file: GNCompletionNumberTheorySmoke"
+
+#check DkMath.NumberTheory.prime_allInnerChooseDivisible_self
+#check DkMath.NumberTheory.Primitive.unitSquare_body_eq
+#check DkMath.NumberTheory.Primitive.mem_squarePrimeExpansion_iff
+#check DkMath.NumberTheory.Primitive.dvd_primeWorldModulus_of_mem
+#check DkMath.NumberTheory.Primitive.mem_primeWorldResidues_iff_supportDisjointFrom
+#check DkMath.NumberTheory.Primitive.supportDisjointFrom_insert_prime_iff
+#check DkMath.NumberTheory.PrimorialUniverse.finitePrimeBasis_subset_primeScalesUpTo_product
+#check DkMath.NumberTheory.PrimorialUniverse.primeBasis235_subset_primeScalesUpTo_thirty
+#check DkMath.NumberTheory.PrimorialUniverse.unitCoordinate_unique
+#check DkMath.NumberTheory.Legendre.primeWorldResidues_eq_packetBase
+#check DkMath.NumberTheory.Legendre.primeScalesUpTo_isFinitePrimeBasis
+#check DkMath.NumberTheory.Legendre.gnomonPascalCell_mul_factorial
+#check DkMath.NumberTheory.Legendre.coprime_squarePacketPoints_of_coprime_offset
+#check DkMath.NumberTheory.Legendre.squareOffset_iff_open_oddGnomon

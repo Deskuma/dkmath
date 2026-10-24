@@ -1,0 +1,192 @@
+{
+  "checkpoint": "GN-LIB-005c",
+  "date": "2026-10-24",
+  "base_head": "5bfa1c99d9b1d222d035a3f745bb1739569621f7",
+  "scope": "exact even completion-deficit gcd, including two-adic correction; all primitive natural coordinate pairs",
+  "new_theorems": [
+    {
+      "name": "DkMath.Lib.NumberTheory.padicValNat_pow_sub_pow_of_four_dvd",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorValuation.lean",
+      "line": 31,
+      "source_signature": "theorem padicValNat_pow_sub_pow_of_four_dvd\n    {a b n : ℕ} (hab : b < a) (hn : n ≠ 0) (h4 : 4 ∣ a - b) (ha : ¬ 2 ∣ a) :\n    padicValNat 2 (a ^ n - b ^ n) = padicValNat 2 (a - b) + padicValNat 2 n",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.padicValNat_powerDifferenceCofactor_add_gap",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorValuation.lean",
+      "line": 55,
+      "source_signature": "theorem padicValNat_powerDifferenceCofactor_add_gap\n    {q a b n : ℕ} [Fact q.Prime] (hab : b < a) (hn : n ≠ 0) :\n    padicValNat q (powerDifferenceCofactor n a b) + padicValNat q (a - b) =\n      padicValNat q (a ^ n - b ^ n)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.padicValNat_powerDifferenceCofactor_of_odd_prime",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorValuation.lean",
+      "line": 72,
+      "source_signature": "theorem padicValNat_powerDifferenceCofactor_of_odd_prime\n    {q a b n : ℕ} (hq : q.Prime) (hodd : Odd q) (hab : b < a) (hn : n ≠ 0)\n    (hgap : q ∣ a - b) (ha : ¬ q ∣ a) :\n    padicValNat q (powerDifferenceCofactor n a b) = padicValNat q n",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.padicValNat_powerDifferenceCofactor_of_four_dvd",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorValuation.lean",
+      "line": 84,
+      "source_signature": "theorem padicValNat_powerDifferenceCofactor_of_four_dvd\n    {a b n : ℕ} (hab : b < a) (hn : n ≠ 0) (h4 : 4 ∣ a - b) (ha : ¬ 2 ∣ a) :\n    padicValNat 2 (powerDifferenceCofactor n a b) = padicValNat 2 n",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.padicValNat_squared_cofactor_of_dvd_sum",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorValuation.lean",
+      "line": 95,
+      "source_signature": "theorem padicValNat_squared_cofactor_of_dvd_sum\n    {q m x y : ℕ} (hq : q.Prime) (hm : m ≠ 0) (hyx : y < x)\n    (hxy : x.Coprime y) (hqs : q ∣ x + y) :\n    padicValNat q (powerDifferenceCofactor m (x ^ 2) (y ^ 2)) = padicValNat q m",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.padicValNat_even_cofactor_of_dvd_sum",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorValuation.lean",
+      "line": 129,
+      "source_signature": "theorem padicValNat_even_cofactor_of_dvd_sum\n    {q m x y : ℕ} (hq : q.Prime) (hm : m ≠ 0) (hyx : y < x)\n    (hxy : x.Coprime y) (hqs : q ∣ x + y) :\n    padicValNat q (powerDifferenceCofactor (2 * m) x y) =\n      padicValNat q (x + y) + padicValNat q m",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.gcd_eq_of_padicValNat_eq_on_support",
+      "path": "DkMath/Lib/NumberTheory/CompletionDefectGcd.lean",
+      "line": 31,
+      "source_signature": "theorem gcd_eq_of_padicValNat_eq_on_support\n    {a b c : ℕ} (ha : a ≠ 0) (hb : b ≠ 0) (hc : c ≠ 0)\n    (hv : ∀ q : ℕ, q.Prime → q ∣ c → padicValNat q a = padicValNat q b) :\n    Nat.gcd a c = Nat.gcd b c",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.gcd_squared_cofactor_sum_pow",
+      "path": "DkMath/Lib/NumberTheory/CompletionDefectGcd.lean",
+      "line": 47,
+      "source_signature": "theorem gcd_squared_cofactor_sum_pow\n    {m x y : ℕ} (hm : m ≠ 0) (hyx : y < x) (hxy : x.Coprime y) (N : ℕ) :\n    Nat.gcd (powerDifferenceCofactor m (x ^ 2) (y ^ 2)) ((x + y) ^ N) =\n      Nat.gcd m ((x + y) ^ N)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.gcd_even_cofactor_defect_eq_mul_gcd_squared",
+      "path": "DkMath/Lib/NumberTheory/CompletionDefectGcd.lean",
+      "line": 63,
+      "source_signature": "theorem gcd_even_cofactor_defect_eq_mul_gcd_squared\n    {m : ℕ} (hm : m ≠ 0) (x y : ℕ) :\n    Nat.gcd (powerDifferenceCofactor (2 * m) x y) (completionDefect (2 * m) x y) =\n      (x + y) * Nat.gcd (powerDifferenceCofactor m (x ^ 2) (y ^ 2))\n        ((x + y) ^ (2 * m - 2))",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.gcd_even_cofactor_completionDefect_of_lt",
+      "path": "DkMath/Lib/NumberTheory/CompletionDefectGcd.lean",
+      "line": 75,
+      "source_signature": "theorem gcd_even_cofactor_completionDefect_of_lt\n    {m x y : ℕ} (hm : m ≠ 0) (hyx : y < x) (hxy : x.Coprime y) :\n    Nat.gcd (powerDifferenceCofactor (2 * m) x y) (completionDefect (2 * m) x y) =\n      (x + y) * Nat.gcd m ((x + y) ^ (2 * m - 2))",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.gcd_even_cofactor_completionDefect",
+      "path": "DkMath/Lib/NumberTheory/CompletionDefectGcd.lean",
+      "line": 86,
+      "source_signature": "theorem gcd_even_cofactor_completionDefect\n    {m x y : ℕ} (hm : m ≠ 0) (hxy : x.Coprime y) :\n    Nat.gcd (powerDifferenceCofactor (2 * m) x y) (completionDefect (2 * m) x y) =\n      (x + y) * Nat.gcd m ((x + y) ^ (2 * m - 2))",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.gcd_cofactor_completionDefect_of_even",
+      "path": "DkMath/Lib/NumberTheory/CompletionDefectGcd.lean",
+      "line": 108,
+      "source_signature": "theorem gcd_cofactor_completionDefect_of_even\n    {n x y : ℕ} (hn : Even n) (hn0 : 0 < n) (hxy : x.Coprime y) :\n    Nat.gcd (powerDifferenceCofactor n x y) (completionDefect n x y) =\n      (x + y) * Nat.gcd (n / 2) ((x + y) ^ (n - 2))",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.gcd_cofactor_completionDefect",
+      "path": "DkMath/Lib/NumberTheory/CompletionDefectGcd.lean",
+      "line": 121,
+      "source_signature": "theorem gcd_cofactor_completionDefect\n    {n x y : ℕ} (hn0 : 0 < n) (hxy : x.Coprime y) :\n    Nat.gcd (powerDifferenceCofactor n x y) (completionDefect n x y) =\n      if Odd n then 1 else (x + y) * Nat.gcd (n / 2) ((x + y) ^ (n - 2))",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.gcd_zero_cofactor_completionDefect",
+      "path": "DkMath/Lib/NumberTheory/CompletionDefectGcd.lean",
+      "line": 131,
+      "source_signature": "@[simp] theorem gcd_zero_cofactor_completionDefect (x y : ℕ) :\n    Nat.gcd (powerDifferenceCofactor 0 x y) (completionDefect 0 x y) = 1",
+      "docstring_has_promotion_marker": true
+    }
+  ],
+  "new_theorem_count": 14,
+  "textbook_examples": 13,
+  "prior_39_declaration_owner_sources_unchanged": [
+    "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean",
+    "DkMath/Lib/Cosmic/CompletionDefect.lean",
+    "DkMath/Lib/NumberTheory/PowerDifferenceCofactorGcd.lean"
+  ],
+  "local_import_closure": {
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorValuation": [
+      "Mathlib.NumberTheory.Multiplicity",
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactorArithmetic",
+      "Mathlib.Algebra.Ring.GeomSum"
+    ],
+    "DkMath.Lib.Cosmic.PowerDifferenceCofactorArithmetic": [
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactor"
+    ],
+    "DkMath.Lib.Cosmic.PowerDifferenceCofactor": [
+      "DkMath.Lib.Cosmic.GNSuccessor"
+    ],
+    "DkMath.Lib.Cosmic.GNSuccessor": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic",
+      "Mathlib.RingTheory.Coprime.Basic"
+    ],
+    "DkMath.Lib.Cosmic.GTailCyclotomic": [
+      "DkMath.Lib.Cosmic.GTail",
+      "Mathlib.RingTheory.Polynomial.Cyclotomic.Basic"
+    ],
+    "DkMath.Lib.Cosmic.GTail": [
+      "Mathlib.Data.Nat.Choose.Sum",
+      "Lean.Elab.Tactic.Omega"
+    ],
+    "DkMath.Lib.NumberTheory.CompletionDefectGcd": [
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorValuation",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd",
+      "DkMath.Lib.NumberTheory.PadicValNat"
+    ],
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd": [
+      "DkMath.Lib.Cosmic.CompletionDefect",
+      "DkMath.Lib.Cosmic.GNSupport",
+      "DkMath.Lib.Cosmic.GTailBoundary"
+    ],
+    "DkMath.Lib.Cosmic.CompletionDefect": [
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactor"
+    ],
+    "DkMath.Lib.Cosmic.GNSupport": [
+      "DkMath.Lib.Cosmic.GNSuccessor",
+      "Mathlib.Data.Nat.Prime.Basic",
+      "Mathlib.RingTheory.Coprime.Lemmas"
+    ],
+    "DkMath.Lib.Cosmic.GTailBoundary": [
+      "DkMath.Lib.Cosmic.GTail",
+      "Mathlib.Data.Nat.Prime.Basic"
+    ],
+    "DkMath.Lib.NumberTheory.PadicValNat": [
+      "Mathlib.Data.Nat.PadicValNat",
+      "Mathlib.NumberTheory.Padics.PadicVal.Basic",
+      "Mathlib.Tactic.NormNum",
+      "Lean.Elab.Tactic.Omega"
+    ]
+  },
+  "all_DkMath_dependencies_are_Lib": true,
+  "source_sha256": {
+    "DkMath/Lib/NumberTheory/PowerDifferenceCofactorValuation.lean": "d0f4888f46613462d7024699fb323ca628065f9de8eddf112a401a43168199d1",
+    "DkMath/Lib/NumberTheory/CompletionDefectGcd.lean": "c60a562e5e615079dd147fe9585b5d4a49132fc77a407ed97a874a269e521ae7"
+  },
+  "original_material_hashes_verified": 24,
+  "validation": {
+    "command": "lake build DkMath.Lib.NumberTheory.PowerDifferenceCofactorValuation DkMath.Lib.NumberTheory.CompletionDefectGcd",
+    "result": "Build completed successfully (2798 jobs).",
+    "warnings": 0,
+    "audit_command": "lake env lean /tmp/GNLib005cAudit.lean",
+    "audited_declarations": 53,
+    "audit_composition": "14 new theorems and 39 existing cofactor/deficit/odd-gcd declarations",
+    "allowed_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "scope": "two production targets and metadata audit; aggregator registration checked statically; no full/root/DkMathTest/lake test builds"
+  },
+  "mathematical_guards": {
+    "valuation_lemmas": "strict natural ordering and positive exponent; odd-prime LTE or four-divisible two-adic difference",
+    "final_even_gcd": "m nonzero and Coprime x y; no coordinate ordering or positivity required",
+    "parity_gcd": "positive degree and Coprime x y; degree zero separately equals one"
+  },
+  "next": "GN-PUB-001: thin neutral Completion entrance"
+}

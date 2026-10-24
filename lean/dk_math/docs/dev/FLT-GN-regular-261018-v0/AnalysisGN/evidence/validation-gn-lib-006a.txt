@@ -1,0 +1,111 @@
+GN-LIB-006a — 2026-10-24
+
+lake build DkMath.Lib.NumberTheory.PrimeRatioOrder DkMath.Lib.NumberTheory.CyclotomicAddress DkMath.Lib.NumberTheory.CyclotomicLayerValuation DkMath.Lib.NumberTheory.PowerDifferenceCofactorPrimeAddress DkMath.NumberTheory.GapFocusing.PrimeOrder DkMath.NumberTheory.GapFocusing.CyclotomicAddress DkMath.NumberTheory.GapFocusing.LayerValuation DkMath.NumberTheory.GapFocusing.HomogeneousAddress
+Build completed successfully (8958 jobs).
+Final warnings/errors: 0/0
+
+lake env lean /tmp/GNLib006aAudit.lean
+file: GNLib006aAudit
+DkMath.NumberTheory.GapFocusing.primeRatio (q : ℕ) (a b : ℤ) : ZMod q
+DkMath.NumberTheory.GapFocusing.primeOrder (q : ℕ) (a b : ℤ) : ℕ
+DkMath.NumberTheory.GapFocusing.primeRatio_ne_zero {q : ℕ} [Fact (Nat.Prime q)] {a b : ℤ} (ha : ¬↑q ∣ a)
+  (hb : ¬↑q ∣ b) : DkMath.NumberTheory.GapFocusing.primeRatio q a b ≠ 0
+DkMath.NumberTheory.GapFocusing.primeOrder_eq_unit_order {q : ℕ} [Fact (Nat.Prime q)] {a b : ℤ} (ha : ¬↑q ∣ a)
+  (hb : ¬↑q ∣ b) :
+  DkMath.NumberTheory.GapFocusing.primeOrder q a b =
+    orderOf (Units.mk0 (DkMath.NumberTheory.GapFocusing.primeRatio q a b) ⋯)
+DkMath.NumberTheory.GapFocusing.int_dvd_pow_sub_pow_iff_primeOrder_dvd {q : ℕ} [Fact (Nat.Prime q)] (a b : ℤ) (n : ℕ)
+  (hb : ¬↑q ∣ b) : ↑q ∣ a ^ n - b ^ n ↔ DkMath.NumberTheory.GapFocusing.primeOrder q a b ∣ n
+DkMath.NumberTheory.GapFocusing.nat_dvd_pow_sub_pow_iff_primeOrder_dvd {q : ℕ} [Fact (Nat.Prime q)] (a b n : ℕ)
+  (hab : b ≤ a) (hb : ¬q ∣ b) : q ∣ a ^ n - b ^ n ↔ DkMath.NumberTheory.GapFocusing.primeOrder q ↑a ↑b ∣ n
+DkMath.NumberTheory.GapFocusing.primeOrder_dvd_prime_sub_one {q : ℕ} [Fact (Nat.Prime q)] {a b : ℤ} (ha : ¬↑q ∣ a)
+  (hb : ¬↑q ∣ b) : DkMath.NumberTheory.GapFocusing.primeOrder q a b ∣ q - 1
+DkMath.NumberTheory.GapFocusing.primeOrder_pos {q : ℕ} [Fact (Nat.Prime q)] {a b : ℤ} (ha : ¬↑q ∣ a) (hb : ¬↑q ∣ b) :
+  0 < DkMath.NumberTheory.GapFocusing.primeOrder q a b
+DkMath.NumberTheory.GapFocusing.primeOrder_coprime_prime {q : ℕ} [Fact (Nat.Prime q)] {a b : ℤ} (ha : ¬↑q ∣ a)
+  (hb : ¬↑q ∣ b) : (DkMath.NumberTheory.GapFocusing.primeOrder q a b).Coprime q
+DkMath.NumberTheory.GapFocusing.isRoot_cyclotomic_iff_prime_pow_mul_orderOf.{u_1} {R : Type u_1} [CommRing R]
+  [IsDomain R] {q : ℕ} [hq : Fact (Nat.Prime q)] [CharP R q] {n : ℕ} (hn : 0 < n) (z : R) :
+  (Polynomial.cyclotomic n R).IsRoot z ↔ ∃ k, n = orderOf z * q ^ k
+DkMath.NumberTheory.GapFocusing.isRoot_cyclotomic_iff_orderOf_of_not_dvd.{u_1} {R : Type u_1} [CommRing R] [IsDomain R]
+  {q : ℕ} [Fact (Nat.Prime q)] [CharP R q] {n : ℕ} (hqn : ¬q ∣ n) (z : R) :
+  (Polynomial.cyclotomic n R).IsRoot z ↔ orderOf z = n
+DkMath.NumberTheory.GapFocusing.isRoot_cyclotomic_mul_prime_iff.{u_1} {R : Type u_1} [CommRing R] [IsDomain R] {q : ℕ}
+  [hq : Fact (Nat.Prime q)] [CharP R q] (n : ℕ) (z : R) :
+  (Polynomial.cyclotomic (n * q) R).IsRoot z ↔ (Polynomial.cyclotomic n R).IsRoot z
+DkMath.NumberTheory.GapFocusing.isRoot_cyclotomic_mul_prime_pow_iff.{u_1} {R : Type u_1} [CommRing R] [IsDomain R]
+  {q : ℕ} [Fact (Nat.Prime q)] [CharP R q] (n k : ℕ) (z : R) :
+  (Polynomial.cyclotomic (n * q ^ k) R).IsRoot z ↔ (Polynomial.cyclotomic n R).IsRoot z
+DkMath.NumberTheory.GapFocusing.prime_dvd_cyclotomicEval_iff_isRoot {q : ℕ} [Fact (Nat.Prime q)] (n : ℕ) (a : ℤ) :
+  ↑q ∣ DkMath.Lib.NumberTheory.cyclotomicEval n a ↔ (Polynomial.cyclotomic n (ZMod q)).IsRoot ↑a
+DkMath.NumberTheory.GapFocusing.prime_dvd_cyclotomicEval_iff_prime_pow_mul_orderOf {q : ℕ} [Fact (Nat.Prime q)] {n : ℕ}
+  (hn : 0 < n) (a : ℤ) : ↑q ∣ DkMath.Lib.NumberTheory.cyclotomicEval n a ↔ ∃ k, n = orderOf ↑a * q ^ k
+DkMath.NumberTheory.GapFocusing.prime_dvd_cyclotomicEval_iff_orderOf_of_not_dvd {q : ℕ} [Fact (Nat.Prime q)] {n : ℕ}
+  (hqn : ¬q ∣ n) (a : ℤ) : ↑q ∣ DkMath.Lib.NumberTheory.cyclotomicEval n a ↔ orderOf ↑a = n
+DkMath.NumberTheory.GapFocusing.prime_dvd_cyclotomicEval_mul_prime_pow_iff {q : ℕ} [Fact (Nat.Prime q)] (n k : ℕ)
+  (a : ℤ) : ↑q ∣ DkMath.Lib.NumberTheory.cyclotomicEval (n * q ^ k) a ↔ ↑q ∣ DkMath.Lib.NumberTheory.cyclotomicEval n a
+DkMath.NumberTheory.GapFocusing.padicValInt_cyclotomicEval_eq_pow_sub_one_of_orderOf_eq {q n : ℕ} [Fact (Nat.Prime q)]
+  (a : ℤ) (hn : 0 < n) (horder : orderOf ↑a = n) (hdiff : a ^ n - 1 ≠ 0) :
+  padicValInt q (DkMath.Lib.NumberTheory.cyclotomicEval n a) = padicValInt q (a ^ n - 1)
+DkMath.NumberTheory.GapFocusing.padicValNat_pow_sub_pow_mul_prime_pow {q a b r : ℕ} (hq : Nat.Prime q) (hqodd : Odd q)
+  (hab : b < a) (hr : r ≠ 0) (hqar : ¬q ∣ a) (hqdiff : q ∣ a ^ r - b ^ r) (k : ℕ) :
+  padicValNat q (a ^ (r * q ^ k) - b ^ (r * q ^ k)) = padicValNat q (a ^ r - b ^ r) + k
+DkMath.NumberTheory.GapFocusing.padicValNat_pow_sub_pow_mul_two_pow_succ {a b r : ℕ} (hab : b < a) (hr : r ≠ 0)
+  (haodd : ¬2 ∣ a) (hdiff : 2 ∣ a ^ r - b ^ r) (k : ℕ) :
+  padicValNat 2 (a ^ (r * 2 ^ (k + 1)) - b ^ (r * 2 ^ (k + 1))) =
+    padicValNat 2 (a ^ r + b ^ r) + padicValNat 2 (a ^ r - b ^ r) + k
+DkMath.NumberTheory.GapFocusing.natAbs_cyclotomicEval_prime_pow (q a k : ℕ) (hq : Nat.Prime q) :
+  (DkMath.Lib.NumberTheory.cyclotomicEval (q ^ (k + 1)) ↑a).natAbs = ∑ i ∈ Finset.range q, (a ^ q ^ k) ^ i
+DkMath.NumberTheory.GapFocusing.natAbs_cyclotomicEval_prime_pow_mul_sub_one (q a k : ℕ) (hq : Nat.Prime q)
+  (ha : 1 < a) :
+  (DkMath.Lib.NumberTheory.cyclotomicEval (q ^ (k + 1)) ↑a).natAbs * (a ^ q ^ k - 1) = a ^ q ^ (k + 1) - 1
+DkMath.NumberTheory.GapFocusing.padicValNat_cyclotomicEval_prime_pow_eq_one {q a : ℕ} (hq : Nat.Prime q) (hqodd : Odd q)
+  (ha : 1 < a) (hqa : ¬q ∣ a) (hqdiff : q ∣ a - 1) (k : ℕ) :
+  padicValNat q (DkMath.Lib.NumberTheory.cyclotomicEval (q ^ (k + 1)) ↑a).natAbs = 1
+DkMath.NumberTheory.GapFocusing.padicValNat_cyclotomicEval_two (a : ℕ) :
+  padicValNat 2 (DkMath.Lib.NumberTheory.cyclotomicEval 2 ↑a).natAbs = padicValNat 2 (a + 1)
+DkMath.NumberTheory.GapFocusing.padicValNat_cyclotomicEval_two_pow_succ_eq_one {a : ℕ} (ha : 1 < a) (haodd : ¬2 ∣ a)
+  (hdiff : 2 ∣ a - 1) (k : ℕ) : padicValNat 2 (DkMath.Lib.NumberTheory.cyclotomicEval (2 ^ (k + 2)) ↑a).natAbs = 1
+DkMath.Lib.NumberTheory.primeOrder_eq_one_iff_dvd_gap {q : ℕ} [Fact (Nat.Prime q)] (a b : ℤ) (hb : ¬↑q ∣ b) :
+  DkMath.NumberTheory.GapFocusing.primeOrder q a b = 1 ↔ ↑q ∣ a - b
+DkMath.Lib.NumberTheory.int_dvd_powerDifferenceCofactor_iff_primeOrder_dvd_of_gap {q : ℕ} [Fact (Nat.Prime q)] (a b : ℤ)
+  (n : ℕ) (hb : ¬↑q ∣ b) (hgap : ¬↑q ∣ a - b) :
+  ↑q ∣ DkMath.Lib.Cosmic.powerDifferenceCofactor n a b ↔ DkMath.NumberTheory.GapFocusing.primeOrder q a b ∣ n
+DkMath.Lib.NumberTheory.int_dvd_powerDifferenceCofactor_iff_primeOrder_dvd {q : ℕ} [Fact (Nat.Prime q)] (a b : ℤ)
+  (n : ℕ) (hb : ¬↑q ∣ b) (hr : 1 < DkMath.NumberTheory.GapFocusing.primeOrder q a b) :
+  ↑q ∣ DkMath.Lib.Cosmic.powerDifferenceCofactor n a b ↔ DkMath.NumberTheory.GapFocusing.primeOrder q a b ∣ n
+DkMath.Lib.NumberTheory.nat_dvd_powerDifferenceCofactor_iff_primeOrder_dvd {q : ℕ} [Fact (Nat.Prime q)] (a b n : ℕ)
+  (hb : ¬q ∣ b) (hr : 1 < DkMath.NumberTheory.GapFocusing.primeOrder q ↑a ↑b) :
+  q ∣ DkMath.Lib.Cosmic.powerDifferenceCofactor n a b ↔ DkMath.NumberTheory.GapFocusing.primeOrder q ↑a ↑b ∣ n
+DkMath.Lib.NumberTheory.nat_dvd_powerDifferenceCofactor_iff_dvd_index_of_order_one {q : ℕ} [Fact (Nat.Prime q)]
+  (a b n : ℕ) (hb : ¬q ∣ b) (hr : DkMath.NumberTheory.GapFocusing.primeOrder q ↑a ↑b = 1) :
+  q ∣ DkMath.Lib.Cosmic.powerDifferenceCofactor n a b ↔ q ∣ n
+DkMath.NumberTheory.GapFocusing.primitivePrimeDivisor_not_dvd_coordinates {a b n q : ℕ} (hab : b ≤ a) (hn : 1 < n)
+  (hprim : DkMath.Zsigmondy.PrimitivePrimeDivisor a b n q) : ¬q ∣ a ∧ ¬q ∣ b
+DkMath.NumberTheory.GapFocusing.primitivePrimeDivisor_iff_primeOrder_eq {q a b n : ℕ} [Fact (Nat.Prime q)] (hab : b ≤ a)
+  (hn : 0 < n) (hb : ¬q ∣ b) :
+  DkMath.Zsigmondy.PrimitivePrimeDivisor a b n q ↔ DkMath.NumberTheory.GapFocusing.primeOrder q ↑a ↑b = n
+DkMath.NumberTheory.GapFocusing.primitivePrimeDivisor_iff_primeOrder_eq_and_not_dvd {q a b n : ℕ} [Fact (Nat.Prime q)]
+  (hab : b ≤ a) (hn : 1 < n) :
+  DkMath.Zsigmondy.PrimitivePrimeDivisor a b n q ↔ DkMath.NumberTheory.GapFocusing.primeOrder q ↑a ↑b = n ∧ ¬q ∣ b
+DkMath.NumberTheory.GapFocusing.primitivePrimeDivisor_degree_dvd_prime_sub_one {q a b n : ℕ} (hab : b ≤ a) (hn : 1 < n)
+  (hprim : DkMath.Zsigmondy.PrimitivePrimeDivisor a b n q) : n ∣ q - 1
+DkMath.NumberTheory.GapFocusing.dvd_cyclotomicShiftedEval_iff_prime_pow_mul_orderOf (q : ℕ) [Fact (Nat.Prime q)] {n : ℕ}
+  (hn : 0 < n) (a b : ℤ) (hb : ¬↑q ∣ b) :
+  ↑q ∣ DkMath.CFBRC.cyclotomicShiftedEval n (a - b) b ↔ ∃ k, n = orderOf (↑a * (↑b)⁻¹) * q ^ k
+DkMath.NumberTheory.GapFocusing.primeLayerAddresses_isLeast_of_one_lt_primeOrder (q : ℕ) [Fact (Nat.Prime q)] (a b : ℤ)
+  (hb : ¬↑q ∣ b) (hr : 1 < DkMath.NumberTheory.GapFocusing.primeOrder q a b) :
+  IsLeast (DkMath.NumberTheory.GapFocusing.primeLayerAddresses q a b) (DkMath.NumberTheory.GapFocusing.primeOrder q a b)
+GN-LIB-006a: 36 declarations checked; standard logical axioms only.
+
+25 migrated public declarations: signatures and proof/definition bodies preserved.
+4 primitive-carrier bridges and HomogeneousAddress source unchanged.
+5 new general theorems, 13 textbook examples, file and promotion markers checked.
+Forbidden constructs absent in four neutral owners.
+DkMath dependency closure of neutral owners contains Lib modules only.
+24 original material SHA256 hashes verified.
+Full/root/DkMathTest/lake test builds excluded by user request.
+File tracker: OK, no mismatches found.
+Markdown: 137 local links checked for target existence and line-anchor bounds.
+Evidence JSON: both files parse successfully.
+Git diff --check: passed.

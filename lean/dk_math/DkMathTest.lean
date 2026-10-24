@@ -16,6 +16,7 @@ import DkMathlib.Basic
 import DkMathTest.NumberTheory.QuadraticResidueType
 import DkMathTest.NumberTheory.CyclotomicQRProvenanceLift
 import DkMathTest.Algebra.MetallicRatioCore
+import DkMathTest.Lib.Algebra.BinomTail
 import DkMathTest.CosmicFormula.ThreeElement.Basic
 import DkMathTest.CosmicFormula.ThreeElement.MagicCore
 import DkMathTest.CosmicFormula.ThreeElement.Assimilation
@@ -24,6 +25,9 @@ import DkMathTest.CosmicFormula.GTailFactor
 import DkMathTest.CosmicFormula.GTailTransport
 import DkMathTest.CosmicFormula.GTailSeven
 import DkMathTest.CosmicFormula.GTailLibFacade
+import DkMathTest.Lib.Cosmic.GNSuccessorSupport
+import DkMathTest.Lib.Cosmic.CompletionCoprime
+import DkMathTest.CompletionFacadeAudit
 import DkMathTest.FLT.Seven.GTailBridge
 import DkMathTest.FLT.Seven.GTailConstraintAudit
 import DkMathTest.FLT.Seven.GTailFacade

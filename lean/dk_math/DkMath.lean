@@ -33,6 +33,7 @@ import DkMath.NumberTheory.PascalPrimeCoordinateDecoder
 import DkMath.NumberTheory.PascalPrebirthBoundary
 import DkMath.NumberTheory.PascalPrebirthBirth
 import DkMath.NumberTheory.Primitive
+import DkMath.Completion
 import DkMath.NumberTheory.PrimorialUniverse
 import DkMath.NumberTheory.Legendre
 import DkMath.NumberTheory.AKSBridge  -- NumberTheory.AKSBridge: AKS-facing binomial/Frobenius bridge

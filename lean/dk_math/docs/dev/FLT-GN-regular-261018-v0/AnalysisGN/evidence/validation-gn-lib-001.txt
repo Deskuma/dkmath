@@ -1,0 +1,71 @@
+GN-LIB-001 verification — 2026-10-23
+
+Branch: lib/FLT-GN-Completion-261023-v0
+Base HEAD: 9ddb79b97e37e03bcc8609d5f7fc9a5715b2cd91
+Lake cwd: lean/dk_math
+
+Existing signature/proof migration: 17 declarations (5 successor + 12 support).
+Full names and namespaces retained; compatibility files contain imports only.
+All 17 declaration-block SHA256 values match the Git baseline and the new owners.
+Neutral local dependency closure: 4 Lib modules; application edges 0; cycles 0.
+Five touched/new owner, compatibility and regression files have correct file markers.
+24 original input material hashes preserved.
+
+Executed validation:
+
+owners:
+  lake build DkMath.Lib.Cosmic.GNSuccessor DkMath.Lib.Cosmic.GNSupport DkMath.NumberTheory.GapFocusing.Successor DkMath.NumberTheory.GapFocusing.Support
+  exit 0; 2790 jobs
+
+regression:
+  lake build DkMathTest.Lib.Cosmic.GNSuccessorSupport DkMathTest.GapFocusingSupport DkMathTest.NumberTheory.GapFocusingSuccessorCalibration DkMathTest.NumberTheory.GapFocusingSuccessorAxiomAudit DkMathTest.NumberTheory.GapFocusingHomogeneousAddress DkMath.NumberTheory.GapFocusing
+  exit 0; 8974 jobs
+
+final_new_test:
+  lake build DkMathTest.Lib.Cosmic.GNSuccessorSupport
+  exit 0; 2789 jobs
+
+libraries:
+  lake build DkMath DkMathTest
+  exit 0; 11792 jobs
+
+test_root:
+  lake env lean DkMathTest.lean
+  exit 0
+
+root_smoke:
+  lake env lean /tmp/GNLib001RootSmoke.lean
+  exit 0
+
+legacy_successor_smoke:
+  lake env lean /tmp/GNLib001LegacySuccessorSmoke.lean
+  exit 0
+
+The Lib-only test has 10 boundary examples and collects axioms for all 17
+promoted declarations. It fails for axioms other than propext, Classical.choice,
+Quot.sound. Final build uses the standard heartbeat limit and has no warnings.
+
+The root smoke imports only DkMath and checks all 17 full names.
+The legacy successor smoke imports only the old Successor module and checks 5.
+The existing GapFocusingSupport regression uses the old Support import, checks
+Nat/Int and degree boundaries, and retains the degree-six primitive-prime counterexample.
+
+Library build warning scope: five pre-existing sorry declarations; no new-code warnings.
+  warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+  warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+  warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+  warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+  warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+
+Build tracker commands (both exit 0, no mismatches):
+  python3 check_tracker_mismatch.py /tmp/gn-lib-001-owners.log
+  python3 check_tracker_mismatch.py /tmp/gn-lib-001-test-final.log
+
+Lake configuration boundary: +DkMathTest is not a registered module target
+because DkMathTest.+ excludes its root. The initial combined +module probe
+returned unknown module DkMathTest. The registered test library was built,
+then DkMathTest.lean was checked directly; no Lake configuration changes.
+
+Scope: GN-LIB-001 ownership and compatibility only. No new Completion facade,
+GN-LIB-002 mathematics, hno provider, or general FLT closure.
+Detailed declarations, source hashes, import graph and results: gn-lib-001.json.

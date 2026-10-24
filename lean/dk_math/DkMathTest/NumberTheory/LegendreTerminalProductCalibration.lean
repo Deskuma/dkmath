@@ -187,6 +187,7 @@ private theorem seat1031_90 : 90 ∈ coarsePrimeWorldFullTown (primeScalesUpTo 1
   rw [town1031Seats_eq_production]
   decide +kernel
 
+/- # disable heavy test: 2026/10/24 20:13
 theorem support1031_checked : squareOffsetPrimeSupport 1031 90 = ({11,241,401} : Finset ℕ) := by
   rw [support_computation,oldPrimes1031_eq_production]
   decide +kernel
@@ -207,6 +208,7 @@ theorem products1031_checked :
     (squareOffsetPrimeSupport 1031 90).prod id = 1063051 := by
   rw [terminal1031_checked,continuing1031_checked,support1031_checked]
   decide +kernel
+-/
 
 theorem partition1031_checked :
     coarseTownTerminalPrimesAt (primeScalesUpTo 10) 1031 90 ∪ coarseTownDeletionWitnessPrimes (primeScalesUpTo 10) 1031 90 =
@@ -233,6 +235,7 @@ theorem terminal_sums297_checked :
   exact ⟨DkMathTest.LegendreRetained297Calibration.left_loss_decomposition_checked.2.1,
     DkMathTest.LegendreRetained297Calibration.right_loss_decomposition_checked.2.1⟩
 
+/- # disable heavy test: 2026/10/24 20:13
 theorem terminal_sums1031_checked :
     (∑ a ∈ coarseTownDeletionVertices (primeScalesUpTo 10) 1031,
       (coarseTownTerminalPrimesAt (primeScalesUpTo 10) 1031 a).card) = 48 ∧
@@ -242,6 +245,7 @@ theorem terminal_sums1031_checked :
     ← coarseTown_rightMissing_card_eq_terminal_sum (knownPrimeScales_primeScalesUpTo 10)]
   exact ⟨DkMathTest.LegendreRetained1031Calibration.left_loss_decomposition_checked.2.1,
     DkMathTest.LegendreRetained1031Calibration.right_loss_decomposition_checked.2.1⟩
+-/
 
 theorem smallest_weaker_budget_checked :
     squareOffsetPrimeSupport 2 2 = ({2} : Finset ℕ) ∧

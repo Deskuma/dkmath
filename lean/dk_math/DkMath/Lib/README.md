@@ -14,6 +14,30 @@ import DkMath.Lib
 
 `DkMath.Lib.lean` intentionally exposes a promoted subset without importing the whole experimental DkMath workspace. Some neutral modules in this directory are currently direct-import APIs and are not yet listed by the aggregator.
 
+For GN and completion arithmetic, use the narrower public entry:
+
+```lean
+import DkMath.Lib.Cosmic.Completion
+```
+
+It directly imports the owners of GN basics, completion arithmetic and deficits,
+divisibility, primitive additive triples, and prime addresses. It does not import
+the `DkMath.Lib` aggregator or application consumers. Existing theorem namespaces
+and hypotheses remain unchanged.
+
+The Completion entry also exposes `NumberTheory.PerfectPowerValuation` and
+`NumberTheory.PrimePowerCompensation`: a nonzero perfect-power valuation criterion,
+and a construction at y=1 that completes all primes in a finite set locally while
+producing an outside prime with an exponent obstruction. `NumberTheory.PrimePowerCompensationShift` extends this to a positive lower coordinate y.
+Primitive coordinates suffice for the exact local valuations (zero at primes of y,
+p at the remaining controlled primes). An explicit power-gap size hypothesis is
+required for the outside prime with an exponent obstruction. `NumberTheory.PrimePowerCompensationLift` explicitly selects the extra factor
+T=(p M₀ y)y^p+1, preserves the controlled valuations, and attains this hypothesis.
+For every finite control set it constructs a primitive nonpower with the stated
+local valuations, retaining the odd-prime and p∤y hypotheses. The constructed
+upper coordinate and residual depend on the control set. This is a special
+construction, not an FLT descent.
+
 The intended flow is:
 
 ```text
@@ -31,9 +55,23 @@ research owner
 ```text
 NumberTheory.FiniteIdealPowerAggregation
 Basic
+Algebra.BinomTail
+Algebra.SquareCompletion
 Algebra.PowerSubgroup
 TwoChannel
 NumberTheory.PadicValNat
+NumberTheory.BinomialPrimePower
+NumberTheory.PowerDifferenceCofactorGcd
+NumberTheory.PowerDifferenceCofactorValuation
+NumberTheory.CompletionDefectGcd
+NumberTheory.PrimeRatioOrder
+NumberTheory.CyclotomicAddress
+NumberTheory.CyclotomicLayerValuation
+NumberTheory.PowerDifferenceCofactorPrimeAddress
+NumberTheory.HomogeneousCyclotomic
+NumberTheory.HomogeneousCyclotomicAddress
+NumberTheory.HomogeneousCyclotomicBoundary
+NumberTheory.HomogeneousCyclotomicPrimeAddress
 NumberTheory.HomogeneousPowerQuotient
 NumberTheory.ClassGroupTorsionBridge
 NumberTheory.TraceOneLatticeLanding
@@ -44,7 +82,14 @@ NumberTheory.TraceOnePowerLanding
 NumberTheory.EisensteinCoordinates
 NumberTheory.EisensteinLatticeLanding
 NumberTheory.SquarefreePowerFactor
+Cosmic.Completion
 Cosmic.GTail
+Cosmic.CompletionCoprime
+Cosmic.PowerDifferenceCofactor
+Cosmic.CompletionDefect
+Cosmic.PowerDifferenceCofactorArithmetic
+NumberTheory.PowerDifferenceCofactorStrongDivisibility
+Cosmic.CompletionLoan
 Cosmic.GNProductDegree
 Cosmic.CyclicDeterminant
 Cosmic.GTailCyclotomic
@@ -108,6 +153,31 @@ GN_tail_decomposition
 GTail_eval_zero
 GN_zero_eval
 ```
+
+### `PowerDifferenceCofactor`, `CompletionDefect`
+
+The division-free geometric cofactor `powerDifferenceCofactor n x y` (R_n)
+includes the diagonal x=y and degree zero. It connects to GTail at gap x-y
+in rings; the natural subtraction bridge explicitly requires y≤x.
+The cancellation-free recurrence is `R_(k+2)+xy R_k=(x+y)R_(k+1)`.
+
+Over naturals, `R_n≤(x+y)^(n-1)` makes `completionDefect` an exact deficit.
+It satisfies `D_(k+3)=(x+y)D_(k+2)+xy R_(k+1)` and is positive for n≥3
+when both coordinates are positive. `signedCompletionDefect` is the separate
+ring version. A cofactor can still be a square or cube with another base.
+
+### `PowerDifferenceCofactorArithmetic`, `CompletionLoan`
+
+The cofactor addition and degree-product identities hold in every commutative
+semiring. In particular `R_(2m)=(x+y)R_m(x²,y²)` and the odd borrowed sum has
+an `(x+y)²` factor. Changing the bases is explicit and does not prove height descent.
+
+For primitive natural coordinates the exact common factor of `R_n` and
+`xy R_(n-2)` is 1 in odd degrees and x+y in even degrees (n≥2).
+`CompletionLoan` divides all three numerators in
+`R_n+xy R_(n-2)=(x+y)R_(n-1)` by that factor, proves exact reconstruction,
+and for n≥3 and positive primitive coordinates constructs positive pairwise
+coprime entries A+B=C. This is an additive triple, without an ABC radical bound.
 
 ### `GTailSelection`, `GTailFactor`, `GTailTransport`
 
@@ -232,6 +302,78 @@ GTail_split_at
 Reusable natural-number valuation utilities, independent of ABC/FLT/RH owners.
 
 Includes zero criteria, bounds, powers, carrier-shape lemmas, and prime-power divisibility tools.
+
+### `BinomialPrimePower`
+
+Exact coefficient valuations for prime-power Pascal rows, for every prime:
+`v_p(choose (p^n) k) + v_p(k) = n` when `0 < k ≤ p^n`.
+Includes the subtractive formula and two prime-power divisibility consequences.
+The original NumberTheory names remain wrappers; filtered-beam carriers stay
+with that owner. Prime regularity is not an assumption or a conclusion.
+
+### `PowerDifferenceCofactorGcd`
+
+For primitive coordinates x,y and odd n, the geometric cofactor R_n is
+coprime to x+y and to its natural completion deficit D_n. The ring argument
+uses `R_(2k+1) ≡ (-xy)^k (mod x+y)`; natural gcd results follow by casting.
+Ring Bezout coprimality also applies to the signed deficit. The module
+translates the existing GN gap-gcd and adjacent-coprime APIs. Even degrees
+and nonprimitive coordinates can have a nontrivial cofactor/deficit gcd.
+
+### `PowerDifferenceCofactorStrongDivisibility`
+
+At primitive natural coordinates, `gcd(R_m,R_n)=R_gcd(m,n)`, including zero
+indices. The sequence is registered with `Nat.IsStrongDvdSequence`.
+The proof uses the cofactor addition formula and Euclid's algorithm.
+Divisibility of indices alone implies divisibility of cofactors without
+requiring primitive coordinates. The exact gcd with `xy R_(n-2)` remains
+distinct from the even-degree completion-deficit gcd.
+
+### `PrimeRatioOrder`, `CyclotomicAddress`, `CyclotomicLayerValuation`
+
+Neutral owners for the existing GapFocusing residue-ratio/order, cyclotomic
+root-address and valuation APIs. Historical namespaces and old imports remain
+compatible. The general order kernel has no Zsigmondy dependency.
+Odd-prime LTE and the two-adic sum correction are retained separately.
+
+### `PowerDifferenceCofactorPrimeAddress`
+
+The whole cofactor R_n detects `r ∣ n` when the residue-ratio order r is greater
+than one. At order one it instead detects `q ∣ n`. A single cyclotomic layer
+has the distinct address `n=r*q^k`; the homogeneous evaluator and its CFBRC compatibility spellings are now
+owned by the neutral GN-LIB-006b modules. No valuation-one assumption is imposed on the
+fundamental address: `R_3(18,1)=7³` is a checked boundary example.
+
+### `HomogeneousCyclotomic`, `HomogeneousCyclotomicAddress`, `HomogeneousCyclotomicBoundary`
+
+The polynomial evaluator at coordinates (a,b), its historical CFBRC shifted
+spelling at (a-b,b), the support/first-appearance definitions and all neutral
+layer-address proofs live in Lib. Original names and bodies are retained.
+Compatibility is given by definitional and explicit coordinate equalities;
+these owners import no CFBRC application or Zsigmondy carrier.
+
+### `HomogeneousCyclotomicPrimeAddress`
+
+The direct-coordinate interface classifies positive single-layer addresses
+by `n=r*q^k`, treats vanishing coordinates separately, and exposes mapping,
+unit-anchor and zero-anchor formulas. At degree zero the value is 1.
+The first positive and first nontrivial layers differ when r=1. Valuation at
+the basic address may exceed one. These are polynomial/divisibility results.
+
+### `PowerDifferenceCofactorValuation`, `CompletionDefectGcd`
+
+At a prime q dividing x+y, squared primitive bases satisfy
+`v_q(R_m(x²,y²))=v_q(m)`. Odd-prime LTE and the four-divisible two-adic
+LTE branch are proved separately. Natural LTE uses strict ordering and a
+nonzero exponent; the final gcd formula removes the ordering by symmetry
+and handles the primitive diagonal directly.
+
+For every primitive natural pair and m>0:
+`gcd(R_(2m),D_(2m))=(x+y)*gcd(m,(x+y)^(2m-2))`.
+The positive-degree parity API combines this with the odd gcd-one result.
+Degree zero has a separate gcd-one theorem. Primitive zero coordinates,
+reversed pairs and n=2 are included; primitiveness and positive degree remain
+explicit. The borrowed correction has a different even gcd from D_n.
 
 ### `PowerFactor`
 

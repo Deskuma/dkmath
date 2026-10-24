@@ -1,0 +1,342 @@
+{
+  "checkpoint": "GN-LIB-006a",
+  "date": "2026-10-24",
+  "base_head": "2e871ab7563a14730c04c6fa3a6dad40ed47572b",
+  "scope": "neutral ratio/order, cyclotomic root addresses and valuation owners; whole-cofactor prime appearance; homogeneous CFBRC carrier deferred to 006b",
+  "promoted_declarations": [
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeRatio",
+      "old_path": "DkMath/NumberTheory/GapFocusing/PrimeOrder.lean",
+      "new_path": "DkMath/Lib/NumberTheory/PrimeRatioOrder.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "def primeRatio (q : ℕ) (a b : ℤ) : ZMod q",
+      "declaration_sha256": "4522e945bf18e0581337e07104632285db959fd3d4f19e66d7a75dc5119c2662",
+      "new_line": 30
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeOrder",
+      "old_path": "DkMath/NumberTheory/GapFocusing/PrimeOrder.lean",
+      "new_path": "DkMath/Lib/NumberTheory/PrimeRatioOrder.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "noncomputable def primeOrder (q : ℕ) (a b : ℤ) : ℕ",
+      "declaration_sha256": "bcf916e3704aa9beaebe09777a0a3bf49763c50117ac70239676fed5f44790a3",
+      "new_line": 38
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeRatio_ne_zero",
+      "old_path": "DkMath/NumberTheory/GapFocusing/PrimeOrder.lean",
+      "new_path": "DkMath/Lib/NumberTheory/PrimeRatioOrder.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem primeRatio_ne_zero {q : ℕ} [Fact q.Prime] {a b : ℤ}\n    (ha : ¬ (q : ℤ) ∣ a) (hb : ¬ (q : ℤ) ∣ b) : primeRatio q a b ≠ 0",
+      "declaration_sha256": "d74b70e1e327f9b56ce4896a81703b24e4c6f580ee55a1bb5e16254b005b1ade",
+      "new_line": 45
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeOrder_eq_unit_order",
+      "old_path": "DkMath/NumberTheory/GapFocusing/PrimeOrder.lean",
+      "new_path": "DkMath/Lib/NumberTheory/PrimeRatioOrder.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem primeOrder_eq_unit_order {q : ℕ} [Fact q.Prime] {a b : ℤ}\n    (ha : ¬ (q : ℤ) ∣ a) (hb : ¬ (q : ℤ) ∣ b) :\n    primeOrder q a b = orderOf (Units.mk0 (primeRatio q a b) (primeRatio_ne_zero ha hb))",
+      "declaration_sha256": "fea6aea660397a7698100080e24dff6973848dcfd6e20305a971cbead8d17348",
+      "new_line": 58
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.int_dvd_pow_sub_pow_iff_primeOrder_dvd",
+      "old_path": "DkMath/NumberTheory/GapFocusing/PrimeOrder.lean",
+      "new_path": "DkMath/Lib/NumberTheory/PrimeRatioOrder.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem int_dvd_pow_sub_pow_iff_primeOrder_dvd {q : ℕ} [Fact q.Prime]\n    (a b : ℤ) (n : ℕ) (hb : ¬ (q : ℤ) ∣ b) :\n    (q : ℤ) ∣ a ^ n - b ^ n ↔ primeOrder q a b ∣ n",
+      "declaration_sha256": "372ae123f7ecde80a8e5474a5f7023a98e52bd123be8ea21f7709ef858be6679",
+      "new_line": 70
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.nat_dvd_pow_sub_pow_iff_primeOrder_dvd",
+      "old_path": "DkMath/NumberTheory/GapFocusing/PrimeOrder.lean",
+      "new_path": "DkMath/Lib/NumberTheory/PrimeRatioOrder.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem nat_dvd_pow_sub_pow_iff_primeOrder_dvd {q : ℕ} [Fact q.Prime]\n    (a b n : ℕ) (hab : b ≤ a) (hb : ¬ q ∣ b) :\n    q ∣ a ^ n - b ^ n ↔ primeOrder q a b ∣ n",
+      "declaration_sha256": "c9d76719fdb355ba1cb86207d7651d9e1598bd22b11c495970c13ff9df0e1d77",
+      "new_line": 85
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeOrder_dvd_prime_sub_one",
+      "old_path": "DkMath/NumberTheory/GapFocusing/PrimeOrder.lean",
+      "new_path": "DkMath/Lib/NumberTheory/PrimeRatioOrder.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem primeOrder_dvd_prime_sub_one {q : ℕ} [Fact q.Prime] {a b : ℤ}\n    (ha : ¬ (q : ℤ) ∣ a) (hb : ¬ (q : ℤ) ∣ b) : primeOrder q a b ∣ q - 1",
+      "declaration_sha256": "3a79466469a790f08288727fef4e66516d84a843f6d1b4eca96579e892097ecf",
+      "new_line": 99
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeOrder_pos",
+      "old_path": "DkMath/NumberTheory/GapFocusing/PrimeOrder.lean",
+      "new_path": "DkMath/Lib/NumberTheory/PrimeRatioOrder.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem primeOrder_pos {q : ℕ} [Fact q.Prime] {a b : ℤ}\n    (ha : ¬ (q : ℤ) ∣ a) (hb : ¬ (q : ℤ) ∣ b) : 0 < primeOrder q a b",
+      "declaration_sha256": "77ce216db1e1b95c2c345402320aad8edb2fb97f572b73c1eee940efa9993b03",
+      "new_line": 108
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.primeOrder_coprime_prime",
+      "old_path": "DkMath/NumberTheory/GapFocusing/PrimeOrder.lean",
+      "new_path": "DkMath/Lib/NumberTheory/PrimeRatioOrder.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem primeOrder_coprime_prime {q : ℕ} [Fact q.Prime] {a b : ℤ}\n    (ha : ¬ (q : ℤ) ∣ a) (hb : ¬ (q : ℤ) ∣ b) : (primeOrder q a b).Coprime q",
+      "declaration_sha256": "4d2506ee0289ebf5259e4bbc037d308bb64875762751af9dd655d6182750544b",
+      "new_line": 119
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.isRoot_cyclotomic_iff_prime_pow_mul_orderOf",
+      "old_path": "DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/CyclotomicAddress.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem isRoot_cyclotomic_iff_prime_pow_mul_orderOf\n    {R : Type*} [CommRing R] [IsDomain R] {q : ℕ} [hq : Fact q.Prime]\n    [CharP R q] {n : ℕ} (hn : 0 < n) (z : R) :\n    (cyclotomic n R).IsRoot z ↔ ∃ k : ℕ, n = orderOf z * q ^ k",
+      "declaration_sha256": "eb8d40d86a95c775aa1abba305097bd2ac6bebd8b4c1c2cf61f7bd65149b3947",
+      "new_line": 31
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.isRoot_cyclotomic_iff_orderOf_of_not_dvd",
+      "old_path": "DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/CyclotomicAddress.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem isRoot_cyclotomic_iff_orderOf_of_not_dvd\n    {R : Type*} [CommRing R] [IsDomain R] {q : ℕ} [Fact q.Prime]\n    [CharP R q] {n : ℕ} (hqn : ¬q ∣ n) (z : R) :\n    (cyclotomic n R).IsRoot z ↔ orderOf z = n",
+      "declaration_sha256": "9095c65ca5ee43e5ebc101a8d3feb26174c7193394c5220cdcf7c6c8f80a2d37",
+      "new_line": 62
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.isRoot_cyclotomic_mul_prime_iff",
+      "old_path": "DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/CyclotomicAddress.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem isRoot_cyclotomic_mul_prime_iff\n    {R : Type*} [CommRing R] [IsDomain R] {q : ℕ} [hq : Fact q.Prime]\n    [CharP R q] (n : ℕ) (z : R) :\n    (cyclotomic (n * q) R).IsRoot z ↔ (cyclotomic n R).IsRoot z",
+      "declaration_sha256": "495df65ca3c72a63ccb482cbc8d0f79ddb00922d50275672200b926cb445953c",
+      "new_line": 74
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.isRoot_cyclotomic_mul_prime_pow_iff",
+      "old_path": "DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/CyclotomicAddress.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem isRoot_cyclotomic_mul_prime_pow_iff\n    {R : Type*} [CommRing R] [IsDomain R] {q : ℕ} [Fact q.Prime]\n    [CharP R q] (n k : ℕ) (z : R) :\n    (cyclotomic (n * q ^ k) R).IsRoot z ↔ (cyclotomic n R).IsRoot z",
+      "declaration_sha256": "bb46343d518ff1de454891e8cdade7c4ad956a101ac1837dbf611df5f5420dae",
+      "new_line": 90
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.prime_dvd_cyclotomicEval_iff_isRoot",
+      "old_path": "DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/CyclotomicAddress.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem prime_dvd_cyclotomicEval_iff_isRoot\n    {q : ℕ} [Fact q.Prime] (n : ℕ) (a : ℤ) :\n    (q : ℤ) ∣ DkMath.Lib.NumberTheory.cyclotomicEval n a ↔\n      (cyclotomic n (ZMod q)).IsRoot (a : ZMod q)",
+      "declaration_sha256": "cb745bcfd5d9a66df0ed75f766c1488057b7c9b3bd43ea9042c09af6f1808256",
+      "new_line": 105
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.prime_dvd_cyclotomicEval_iff_prime_pow_mul_orderOf",
+      "old_path": "DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/CyclotomicAddress.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem prime_dvd_cyclotomicEval_iff_prime_pow_mul_orderOf\n    {q : ℕ} [Fact q.Prime] {n : ℕ} (hn : 0 < n) (a : ℤ) :\n    (q : ℤ) ∣ DkMath.Lib.NumberTheory.cyclotomicEval n a ↔\n      ∃ k : ℕ, n = orderOf (a : ZMod q) * q ^ k",
+      "declaration_sha256": "cd38d7489ca013fe8a541833ee7624c9c9c920ab4aed8bcdf91ba97e4d839137",
+      "new_line": 123
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.prime_dvd_cyclotomicEval_iff_orderOf_of_not_dvd",
+      "old_path": "DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/CyclotomicAddress.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem prime_dvd_cyclotomicEval_iff_orderOf_of_not_dvd\n    {q : ℕ} [Fact q.Prime] {n : ℕ} (hqn : ¬q ∣ n) (a : ℤ) :\n    (q : ℤ) ∣ DkMath.Lib.NumberTheory.cyclotomicEval n a ↔\n      orderOf (a : ZMod q) = n",
+      "declaration_sha256": "c832338f7b43247aa49f1e075e1d6b322d8f0482ed580fd094a6637a158c14b6",
+      "new_line": 136
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.prime_dvd_cyclotomicEval_mul_prime_pow_iff",
+      "old_path": "DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean",
+      "new_path": "DkMath/Lib/NumberTheory/CyclotomicAddress.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem prime_dvd_cyclotomicEval_mul_prime_pow_iff\n    {q : ℕ} [Fact q.Prime] (n k : ℕ) (a : ℤ) :\n    (q : ℤ) ∣ DkMath.Lib.NumberTheory.cyclotomicEval (n * q ^ k) a ↔\n      (q : ℤ) ∣ DkMath.Lib.NumberTheory.cyclotomicEval n a",
+      "declaration_sha256": "d86fc61097c93075bff16ad502b7e45896e91e7837774d321cbe096030ad9589",
+      "new_line": 149
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.padicValInt_cyclotomicEval_eq_pow_sub_one_of_orderOf_eq",
+      "old_path": "DkMath/NumberTheory/GapFocusing/LayerValuation.lean",
+      "new_path": "DkMath/Lib/NumberTheory/CyclotomicLayerValuation.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem padicValInt_cyclotomicEval_eq_pow_sub_one_of_orderOf_eq\n    {q n : ℕ} [Fact q.Prime] (a : ℤ) (hn : 0 < n)\n    (horder : orderOf (a : ZMod q) = n) (hdiff : a ^ n - 1 ≠ 0) :\n    padicValInt q (cyclotomicEval n a) = padicValInt q (a ^ n - 1)",
+      "declaration_sha256": "3e1dc3fca4baca481d1a828fe38806ac256185b057b93d3a04ab5e8fdce5a92c",
+      "new_line": 35
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.padicValNat_pow_sub_pow_mul_prime_pow",
+      "old_path": "DkMath/NumberTheory/GapFocusing/LayerValuation.lean",
+      "new_path": "DkMath/Lib/NumberTheory/CyclotomicLayerValuation.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem padicValNat_pow_sub_pow_mul_prime_pow\n    {q a b r : ℕ} (hq : q.Prime) (hqodd : Odd q) (hab : b < a)\n    (hr : r ≠ 0) (hqar : ¬ q ∣ a) (hqdiff : q ∣ a ^ r - b ^ r) (k : ℕ) :\n    padicValNat q (a ^ (r * q ^ k) - b ^ (r * q ^ k)) =\n      padicValNat q (a ^ r - b ^ r) + k",
+      "declaration_sha256": "3c2db205a345aa8419441a5bf12d7d7531cccd6e71abf8913a280b0fccb99268",
+      "new_line": 79
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.padicValNat_pow_sub_pow_mul_two_pow_succ",
+      "old_path": "DkMath/NumberTheory/GapFocusing/LayerValuation.lean",
+      "new_path": "DkMath/Lib/NumberTheory/CyclotomicLayerValuation.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem padicValNat_pow_sub_pow_mul_two_pow_succ\n    {a b r : ℕ} (hab : b < a) (hr : r ≠ 0) (haodd : ¬ 2 ∣ a)\n    (hdiff : 2 ∣ a ^ r - b ^ r) (k : ℕ) :\n    padicValNat 2 (a ^ (r * 2 ^ (k + 1)) - b ^ (r * 2 ^ (k + 1))) =\n      padicValNat 2 (a ^ r + b ^ r) + padicValNat 2 (a ^ r - b ^ r) + k",
+      "declaration_sha256": "322abf50a90f1372b4e4dae5fefc9281bc507fb61713d19c780a3755218ae33e",
+      "new_line": 97
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.natAbs_cyclotomicEval_prime_pow",
+      "old_path": "DkMath/NumberTheory/GapFocusing/LayerValuation.lean",
+      "new_path": "DkMath/Lib/NumberTheory/CyclotomicLayerValuation.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem natAbs_cyclotomicEval_prime_pow (q a k : ℕ) (hq : q.Prime) :\n    (cyclotomicEval (q ^ (k + 1)) (a : ℤ)).natAbs =\n      ∑ i ∈ Finset.range q, (a ^ (q ^ k)) ^ i",
+      "declaration_sha256": "f23710638f4bebf1958fedc1c1a25c2f52f213cb01368a48bfd863f9165a834e",
+      "new_line": 114
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.natAbs_cyclotomicEval_prime_pow_mul_sub_one",
+      "old_path": "DkMath/NumberTheory/GapFocusing/LayerValuation.lean",
+      "new_path": "DkMath/Lib/NumberTheory/CyclotomicLayerValuation.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem natAbs_cyclotomicEval_prime_pow_mul_sub_one\n    (q a k : ℕ) (hq : q.Prime) (ha : 1 < a) :\n    (cyclotomicEval (q ^ (k + 1)) (a : ℤ)).natAbs * (a ^ (q ^ k) - 1) =\n      a ^ (q ^ (k + 1)) - 1",
+      "declaration_sha256": "0ad0f9cde563ebea42ed9f9156c5711d5f0fa705b09c5aa0d6663fc33d00468e",
+      "new_line": 128
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.padicValNat_cyclotomicEval_prime_pow_eq_one",
+      "old_path": "DkMath/NumberTheory/GapFocusing/LayerValuation.lean",
+      "new_path": "DkMath/Lib/NumberTheory/CyclotomicLayerValuation.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem padicValNat_cyclotomicEval_prime_pow_eq_one\n    {q a : ℕ} (hq : q.Prime) (hqodd : Odd q) (ha : 1 < a)\n    (hqa : ¬ q ∣ a) (hqdiff : q ∣ a - 1) (k : ℕ) :\n    padicValNat q (cyclotomicEval (q ^ (k + 1)) (a : ℤ)).natAbs = 1",
+      "declaration_sha256": "fc833ae57b381dcfc34a84cf905c882bb6b01119d5c06df5379e9604451a23bb",
+      "new_line": 150
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.padicValNat_cyclotomicEval_two",
+      "old_path": "DkMath/NumberTheory/GapFocusing/LayerValuation.lean",
+      "new_path": "DkMath/Lib/NumberTheory/CyclotomicLayerValuation.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem padicValNat_cyclotomicEval_two (a : ℕ) :\n    padicValNat 2 (cyclotomicEval 2 (a : ℤ)).natAbs = padicValNat 2 (a + 1)",
+      "declaration_sha256": "f3e5b86324a5fad7ce87099b59175484375dae4b90ae31b5a54ad2881964ded3",
+      "new_line": 179
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.padicValNat_cyclotomicEval_two_pow_succ_eq_one",
+      "old_path": "DkMath/NumberTheory/GapFocusing/LayerValuation.lean",
+      "new_path": "DkMath/Lib/NumberTheory/CyclotomicLayerValuation.lean",
+      "signature_and_proof_preserved": true,
+      "source_signature": "theorem padicValNat_cyclotomicEval_two_pow_succ_eq_one\n    {a : ℕ} (ha : 1 < a) (haodd : ¬ 2 ∣ a) (hdiff : 2 ∣ a - 1) (k : ℕ) :\n    padicValNat 2 (cyclotomicEval (2 ^ (k + 2)) (a : ℤ)).natAbs = 1",
+      "declaration_sha256": "e5abfaf999cb02c915e5a26fee86ffd88f405cd30d52b28679cec127dcf91845",
+      "new_line": 191
+    }
+  ],
+  "promoted_definitions": 2,
+  "promoted_theorems": 23,
+  "new_theorems": [
+    {
+      "name": "DkMath.Lib.NumberTheory.primeOrder_eq_one_iff_dvd_gap",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorPrimeAddress.lean",
+      "line": 32,
+      "source_signature": "theorem primeOrder_eq_one_iff_dvd_gap {q : ℕ} [Fact q.Prime]\n    (a b : ℤ) (hb : ¬ (q : ℤ) ∣ b) :\n    primeOrder q a b = 1 ↔ (q : ℤ) ∣ a - b",
+      "declaration_sha256": "5c3e6c77958c964a4c87982ed66af6891004fa39a90306fe8cafba50ee6efe3b"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.int_dvd_powerDifferenceCofactor_iff_primeOrder_dvd_of_gap",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorPrimeAddress.lean",
+      "line": 42,
+      "source_signature": "theorem int_dvd_powerDifferenceCofactor_iff_primeOrder_dvd_of_gap\n    {q : ℕ} [Fact q.Prime] (a b : ℤ) (n : ℕ)\n    (hb : ¬ (q : ℤ) ∣ b) (hgap : ¬ (q : ℤ) ∣ a - b) :\n    (q : ℤ) ∣ powerDifferenceCofactor n a b ↔ primeOrder q a b ∣ n",
+      "declaration_sha256": "58e5c4d6d2bcd01dacf807e65b070443ff657fd17c72d6196c70d922bd861217"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.int_dvd_powerDifferenceCofactor_iff_primeOrder_dvd",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorPrimeAddress.lean",
+      "line": 53,
+      "source_signature": "theorem int_dvd_powerDifferenceCofactor_iff_primeOrder_dvd\n    {q : ℕ} [Fact q.Prime] (a b : ℤ) (n : ℕ)\n    (hb : ¬ (q : ℤ) ∣ b) (hr : 1 < primeOrder q a b) :\n    (q : ℤ) ∣ powerDifferenceCofactor n a b ↔ primeOrder q a b ∣ n",
+      "declaration_sha256": "f74161fdf6f395852199fae3f12f81ced7f273fa41b2c301423bbffe33280909"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.nat_dvd_powerDifferenceCofactor_iff_primeOrder_dvd",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorPrimeAddress.lean",
+      "line": 64,
+      "source_signature": "theorem nat_dvd_powerDifferenceCofactor_iff_primeOrder_dvd\n    {q : ℕ} [Fact q.Prime] (a b n : ℕ) (hb : ¬ q ∣ b)\n    (hr : 1 < primeOrder q a b) :\n    q ∣ powerDifferenceCofactor n a b ↔ primeOrder q a b ∣ n",
+      "declaration_sha256": "5c726ef3bc633493d0d965ea0c7fca6a9d696ff4d904dce406a3d39e8ddbc746"
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.nat_dvd_powerDifferenceCofactor_iff_dvd_index_of_order_one",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorPrimeAddress.lean",
+      "line": 77,
+      "source_signature": "theorem nat_dvd_powerDifferenceCofactor_iff_dvd_index_of_order_one\n    {q : ℕ} [Fact q.Prime] (a b n : ℕ) (hb : ¬ q ∣ b)\n    (hr : primeOrder q a b = 1) :\n    q ∣ powerDifferenceCofactor n a b ↔ q ∣ n",
+      "declaration_sha256": "997c3ee8217dccfb7c58acb0431d36a4ad1ccd33bba5598e164e96b89c492d5e"
+    }
+  ],
+  "textbook_examples": 13,
+  "legacy_primitive_carrier_bridges_preserved": [
+    "primitivePrimeDivisor_not_dvd_coordinates",
+    "primitivePrimeDivisor_iff_primeOrder_eq",
+    "primitivePrimeDivisor_iff_primeOrder_eq_and_not_dvd",
+    "primitivePrimeDivisor_degree_dvd_prime_sub_one"
+  ],
+  "HomogeneousAddress_source_unchanged": true,
+  "source_sha256": {
+    "DkMath/Lib/NumberTheory/PrimeRatioOrder.lean": "2dac6a5143da7d64be4c9b5e44d0b25e3b39bba0af83870ebc8bb1d2eba6e119",
+    "DkMath/Lib/NumberTheory/CyclotomicAddress.lean": "4dca003ceab028b0235813a5eb8313ae72d8d1e5cab93d7680f44b517d961f36",
+    "DkMath/Lib/NumberTheory/CyclotomicLayerValuation.lean": "7b50bf344a8b652563edcff7b22517ef7c04bda68a8810ab492c91e6e2b3d9a6",
+    "DkMath/Lib/NumberTheory/PowerDifferenceCofactorPrimeAddress.lean": "d8301095b840767a159643d9740706644e94bcada3a8c091e0523a6d074708e5",
+    "DkMath/NumberTheory/GapFocusing/PrimeOrder.lean": "8b84d89ee878a223e9d848ed5f55a2912b5fb26e532d10f361001b2a2557de78",
+    "DkMath/NumberTheory/GapFocusing/CyclotomicAddress.lean": "89cc486c9c3f8fef79600739d0d3f195d747812e4fa168be5cffd292cc71f085",
+    "DkMath/NumberTheory/GapFocusing/LayerValuation.lean": "4d4218361ef6c9a476a289c3dc711ce3ac0db78d6286a9ed5cdf784c527ac5b1"
+  },
+  "local_import_closure": {
+    "DkMath.Lib.NumberTheory.PrimeRatioOrder": [
+      "Mathlib.FieldTheory.Finite.Basic"
+    ],
+    "DkMath.Lib.NumberTheory.CyclotomicAddress": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic",
+      "Mathlib.RingTheory.Polynomial.Cyclotomic.Expand",
+      "Mathlib.Data.Nat.Factorization.Basic"
+    ],
+    "DkMath.Lib.Cosmic.GTailCyclotomic": [
+      "DkMath.Lib.Cosmic.GTail",
+      "Mathlib.RingTheory.Polynomial.Cyclotomic.Basic"
+    ],
+    "DkMath.Lib.Cosmic.GTail": [
+      "Mathlib.Data.Nat.Choose.Sum",
+      "Lean.Elab.Tactic.Omega"
+    ],
+    "DkMath.Lib.NumberTheory.CyclotomicLayerValuation": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic",
+      "DkMath.Lib.NumberTheory.CyclotomicAddress",
+      "Mathlib.Algebra.BigOperators.Associated",
+      "Mathlib.NumberTheory.Multiplicity"
+    ],
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorPrimeAddress": [
+      "DkMath.Lib.NumberTheory.PrimeRatioOrder",
+      "DkMath.Lib.NumberTheory.CyclotomicLayerValuation",
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactor"
+    ],
+    "DkMath.Lib.Cosmic.PowerDifferenceCofactor": [
+      "DkMath.Lib.Cosmic.GNSuccessor"
+    ],
+    "DkMath.Lib.Cosmic.GNSuccessor": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic",
+      "Mathlib.RingTheory.Coprime.Basic"
+    ]
+  },
+  "all_DkMath_dependencies_are_Lib": true,
+  "original_material_hashes_verified": 24,
+  "validation": {
+    "command": "lake build DkMath.Lib.NumberTheory.PrimeRatioOrder DkMath.Lib.NumberTheory.CyclotomicAddress DkMath.Lib.NumberTheory.CyclotomicLayerValuation DkMath.Lib.NumberTheory.PowerDifferenceCofactorPrimeAddress DkMath.NumberTheory.GapFocusing.PrimeOrder DkMath.NumberTheory.GapFocusing.CyclotomicAddress DkMath.NumberTheory.GapFocusing.LayerValuation DkMath.NumberTheory.GapFocusing.HomogeneousAddress",
+    "result": "Build completed successfully (8958 jobs).",
+    "warnings": 0,
+    "audit_command": "lake env lean /tmp/GNLib006aAudit.lean",
+    "audited_declarations": 36,
+    "audit_composition": "25 promoted, 5 new, 4 retained primitive bridges, 2 homogeneous consumers",
+    "allowed_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "scope": "eight production targets only; Lib aggregator registration checked statically; no full/root/test build per user request"
+  },
+  "remaining_006b": "neutral homogeneous cyclotomic carrier with definitional or proved compatibility to CFBRC.cyclotomicShiftedEval; B11/B12 layer address transport"
+}

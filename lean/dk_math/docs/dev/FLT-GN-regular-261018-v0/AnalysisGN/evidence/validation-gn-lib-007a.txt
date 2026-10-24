@@ -1,0 +1,148 @@
+GN-LIB-007a — 2026-10-24
+lake build DkMath.Lib.NumberTheory.PerfectPowerValuation DkMath.Lib.NumberTheory.PrimePowerCompensation DkMath.Lib.Cosmic.Completion
+Build completed successfully (2846 jobs). Warnings: 0.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/AnalysisGN/evidence/GNFinitePrimeCompensationSmoke.lean
+Exit 0. Sole import: DkMath.Lib.Cosmic.Completion.
+32 new declarations and 38 prior endpoints checked.
+
+lake env lean /tmp/GNFinitePrimeCompensationAxioms.lean
+Exit 0. 70 axiom lists, standard logical axioms only.
+'DkMath.Lib.NumberTheory.exists_pow_eq_of_dvd_padicValNat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.exists_pow_eq_iff_dvd_padicValNat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.exists_prime_padicValNat_not_dvd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.exists_prime_outside_of_local_power' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.not_pow_of_between_consecutive_powers' depends on axioms: [propext, Quot.sound]
+'DkMath.Lib.NumberTheory.pow_sub_one_between' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.not_pow_pow_sub_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.gap' depends on axioms: [propext]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.base' depends on axioms: [propext]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.residual' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.gap_pos' depends on axioms: [propext]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.prime_dvd_gap' depends on axioms: [propext, Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.not_dvd_base_of_dvd_gap' depends on axioms: [propext]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.cofactor_valuation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.prime_mul_residual' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.residual_valuation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.reconstruction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.residual_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.not_dvd_residual_of_dvd_gap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.local_valuation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.residual_not_pow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.residual_prime_address' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.primeProduct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.primeProduct_pos' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.prime_not_dvd_primeProduct' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.small_prime_product_valuation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.small_prime_dvd_gap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.small_prime_local_completion' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.small_prime_valuation_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.exists_prime_escape' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.exists_prime_escape_with_address' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.PrimePowerCompensation.finite_set_compensation_and_escape' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.CosmicFormula.add_pow_eq_prefix_add_xpow_mul_GTail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GapFocusing.GN_succ_right' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GapFocusing.dvd_anchor_pow_of_dvd_adjacent_GN' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.prod_cyclotomicEval_eq_geomSum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.CosmicFormula.gcd_GTail_eq_gcd_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.CosmicFormula.GTail_congr_of_modEq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.CosmicFormula.pow_dvd_higher_tail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.CosmicFormula.padicValNat_GTail_eq_zero_of_head_unit_of_prime_dvd_x' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.CosmicFormula.GTail_split_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Algebra.BinomTail.add_pow_tail_exists' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Algebra.square_add_band' depends on axioms: [propext]
+'DkMath.Lib.Cosmic.completion_body_add_gap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Cosmic.powerDifferenceCofactor_add_eq_GTail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Cosmic.powerDifferenceCofactor_symm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Cosmic.signedCompletionDefect_add_cofactor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.gcd_gap_powerDifferenceCofactor_eq_gcd_degree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.coprime_powerDifferenceCofactor_right' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.gcd_eq_of_padicValNat_eq_on_support' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Cosmic.completionLoan_numerators_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.padicValNat_split' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.padicValNat_choose_prime_pow' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GapFocusing.primeRatio_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GapFocusing.isRoot_cyclotomic_iff_prime_pow_mul_orderOf' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GapFocusing.padicValInt_cyclotomicEval_eq_pow_sub_one_of_orderOf_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.padicValNat_pow_sub_pow_of_four_dvd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.primeOrder_eq_one_iff_dvd_gap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.CFBRC.cyclotomicShiftedEval_eq_cyclotomicEval_div_mul_pow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.NumberTheory.GapFocusing.map_cyclotomicShiftedEval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.NumberTheory.GapFocusing.eval_homogenize_zero_second' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.map_homogeneousCyclotomicEval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Cosmic.powerDifferenceCofactor_recurrence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Cosmic.completionDefect_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Cosmic.completion_pairwise_coprime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.isStrongDvdSequence_powerDifferenceCofactor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.gcd_cofactor_completionDefect' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Cosmic.completionLoan_primitive_triple' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_order_ray' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_dvd_first_of_dvd_second' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+28 new theorems, 4 definitions, 12 kernel-checked examples.
+All 32 new public declarations have [DkMath.Lib] textbook documentation.
+Both new modules have the required #print file marker.
+No sorry/axiom/admit/unsafe/native_decide in new source code.
+30 prior owner files unchanged from baseline HEAD.
+32 direct facade owners; 33 acyclic Lib-only local dependency nodes.
+24 original material SHA256 hashes verified.
+Marker tracker: OK: no mismatches found
+Relative Markdown targets checked: 165.
+Evidence JSON parse checks: passed.
+Git diff --check: passed.
+Full/root/DkMathTest/lake test builds excluded by user request.
+GN-LIB-007a is y=1 only. General y size conditions and factor selection remain 007b/c.

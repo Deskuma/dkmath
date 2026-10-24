@@ -1,0 +1,268 @@
+{
+  "checkpoint": "GN-LIB-004",
+  "date": "2026-10-24",
+  "base_head": "292a2027c7549320f0a65480b58ff0ef084a96ee",
+  "branch": "lib/FLT-GN-Completion-261023-v0",
+  "scope": "division-free cofactor and completion deficit; no gcd/strong-divisibility/FLT closure",
+  "declarations": [
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor",
+      "kind": "def",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean",
+      "line": 27,
+      "source_signature": "def powerDifferenceCofactor {R : Type*} [CommSemiring R] (n : ℕ) (x y : R) : R",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_zero",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean",
+      "line": 31,
+      "source_signature": "@[simp] theorem powerDifferenceCofactor_zero {R : Type*} [CommSemiring R] (x y : R) :\n    powerDifferenceCofactor 0 x y = 0",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_one",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean",
+      "line": 35,
+      "source_signature": "@[simp] theorem powerDifferenceCofactor_one {R : Type*} [CommSemiring R] (x y : R) :\n    powerDifferenceCofactor 1 x y = 1",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_add_eq_GTail",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean",
+      "line": 40,
+      "source_signature": "theorem powerDifferenceCofactor_add_eq_GTail\n    {R : Type*} [CommSemiring R] (n : ℕ) (g y : R) :\n    powerDifferenceCofactor n (g + y) y = GTail n 1 g y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_eq_GTail_sub",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean",
+      "line": 48,
+      "source_signature": "theorem powerDifferenceCofactor_eq_GTail_sub\n    {R : Type*} [CommRing R] (n : ℕ) (x y : R) :\n    powerDifferenceCofactor n x y = GTail n 1 (x - y) y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_eq_GTail_nat_sub",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean",
+      "line": 55,
+      "source_signature": "theorem powerDifferenceCofactor_eq_GTail_nat_sub\n    (n x y : ℕ) (hyx : y ≤ x) :\n    powerDifferenceCofactor n x y = GTail n 1 (x - y) y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_add_succ",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean",
+      "line": 65,
+      "source_signature": "theorem powerDifferenceCofactor_add_succ\n    {R : Type*} [CommSemiring R] (n : ℕ) (g y : R) :\n    powerDifferenceCofactor (n + 1) (g + y) y =\n      y * powerDifferenceCofactor n (g + y) y + (g + y) ^ n",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_succ",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean",
+      "line": 74,
+      "source_signature": "theorem powerDifferenceCofactor_succ\n    {R : Type*} [CommSemiring R] (n : ℕ) (x y : R) :\n    powerDifferenceCofactor (n + 1) x y = y * powerDifferenceCofactor n x y + x ^ n",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_two",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean",
+      "line": 90,
+      "source_signature": "@[simp] theorem powerDifferenceCofactor_two {R : Type*} [CommSemiring R] (x y : R) :\n    powerDifferenceCofactor 2 x y = x + y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_recurrence",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean",
+      "line": 98,
+      "source_signature": "theorem powerDifferenceCofactor_recurrence\n    {R : Type*} [CommSemiring R] (k : ℕ) (x y : R) :\n    powerDifferenceCofactor (k + 2) x y + x * y * powerDifferenceCofactor k x y =\n      (x + y) * powerDifferenceCofactor (k + 1) x y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.sub_mul_powerDifferenceCofactor",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean",
+      "line": 114,
+      "source_signature": "theorem sub_mul_powerDifferenceCofactor\n    {R : Type*} [CommRing R] (n : ℕ) (x y : R) :\n    (x - y) * powerDifferenceCofactor n x y = x ^ n - y ^ n",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_diagonal",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean",
+      "line": 123,
+      "source_signature": "theorem powerDifferenceCofactor_diagonal\n    {R : Type*} [CommSemiring R] (n : ℕ) (x : R) :\n    powerDifferenceCofactor n x x = n * x ^ (n - 1)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_le",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean",
+      "line": 140,
+      "source_signature": "theorem powerDifferenceCofactor_le (n x y : ℕ) :\n    powerDifferenceCofactor n x y ≤ (x + y) ^ (n - 1)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_pos",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean",
+      "line": 158,
+      "source_signature": "theorem powerDifferenceCofactor_pos (k x y : ℕ) (hx : 0 < x) :\n    0 < powerDifferenceCofactor (k + 1) x y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.signedCompletionDefect",
+      "kind": "def",
+      "path": "DkMath/Lib/Cosmic/CompletionDefect.lean",
+      "line": 28,
+      "source_signature": "def signedCompletionDefect {R : Type*} [CommRing R] (n : ℕ) (x y : R) : R",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.signedCompletionDefect_add_cofactor",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionDefect.lean",
+      "line": 32,
+      "source_signature": "theorem signedCompletionDefect_add_cofactor\n    {R : Type*} [CommRing R] (n : ℕ) (x y : R) :\n    signedCompletionDefect n x y + powerDifferenceCofactor n x y =\n      (x + y) ^ (n - 1)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.signedCompletionDefect_recurrence",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionDefect.lean",
+      "line": 40,
+      "source_signature": "theorem signedCompletionDefect_recurrence\n    {R : Type*} [CommRing R] (k : ℕ) (x y : R) :\n    signedCompletionDefect (k + 3) x y =\n      (x + y) * signedCompletionDefect (k + 2) x y +\n        x * y * powerDifferenceCofactor (k + 1) x y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionDefect",
+      "kind": "def",
+      "path": "DkMath/Lib/Cosmic/CompletionDefect.lean",
+      "line": 54,
+      "source_signature": "def completionDefect (n x y : ℕ) : ℕ",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionDefect_add_cofactor",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionDefect.lean",
+      "line": 58,
+      "source_signature": "theorem completionDefect_add_cofactor (n x y : ℕ) :\n    completionDefect n x y + powerDifferenceCofactor n x y =\n      (x + y) ^ (n - 1)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionDefect_zero",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionDefect.lean",
+      "line": 64,
+      "source_signature": "@[simp] theorem completionDefect_zero (x y : ℕ) : completionDefect 0 x y = 1",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionDefect_one",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionDefect.lean",
+      "line": 68,
+      "source_signature": "@[simp] theorem completionDefect_one (x y : ℕ) : completionDefect 1 x y = 0",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionDefect_two",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionDefect.lean",
+      "line": 72,
+      "source_signature": "@[simp] theorem completionDefect_two (x y : ℕ) : completionDefect 2 x y = 0",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionDefect_recurrence",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionDefect.lean",
+      "line": 78,
+      "source_signature": "theorem completionDefect_recurrence (k x y : ℕ) :\n    completionDefect (k + 3) x y =\n      (x + y) * completionDefect (k + 2) x y +\n        x * y * powerDifferenceCofactor (k + 1) x y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionDefect_three",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionDefect.lean",
+      "line": 91,
+      "source_signature": "@[simp] theorem completionDefect_three (x y : ℕ) : completionDefect 3 x y = x * y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionDefect_pos",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionDefect.lean",
+      "line": 97,
+      "source_signature": "theorem completionDefect_pos {n x y : ℕ} (hn : 3 ≤ n) (hx : 0 < x) (hy : 0 < y) :\n    0 < completionDefect n x y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_lt",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionDefect.lean",
+      "line": 106,
+      "source_signature": "theorem powerDifferenceCofactor_lt {n x y : ℕ}\n    (hn : 3 ≤ n) (hx : 0 < x) (hy : 0 < y) :\n    powerDifferenceCofactor n x y < (x + y) ^ (n - 1)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.cast_completionDefect",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionDefect.lean",
+      "line": 116,
+      "source_signature": "theorem cast_completionDefect {R : Type*} [CommRing R] (n x y : ℕ) :\n    (completionDefect n x y : R) = signedCompletionDefect n (x : R) (y : R)",
+      "docstring_has_promotion_marker": true
+    }
+  ],
+  "definitions": 3,
+  "theorems": 24,
+  "inline_examples": 11,
+  "source_sha256": {
+    "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean": "dcd5079b0a9971a3d8699cae7357aa5efe6ff83c41b6523cd6a521127ea88de5",
+    "DkMath/Lib/Cosmic/CompletionDefect.lean": "84f0af4389cdae47d99eb611dfdc7ae938bbb16d2c35eb3c68530340452f80f8"
+  },
+  "local_import_closure": {
+    "DkMath.Lib.Cosmic.PowerDifferenceCofactor": [
+      "DkMath.Lib.Cosmic.GNSuccessor"
+    ],
+    "DkMath.Lib.Cosmic.GNSuccessor": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic",
+      "Mathlib.RingTheory.Coprime.Basic"
+    ],
+    "DkMath.Lib.Cosmic.GTailCyclotomic": [
+      "DkMath.Lib.Cosmic.GTail",
+      "Mathlib.RingTheory.Polynomial.Cyclotomic.Basic"
+    ],
+    "DkMath.Lib.Cosmic.GTail": [
+      "Mathlib.Data.Nat.Choose.Sum",
+      "Lean.Elab.Tactic.Omega"
+    ],
+    "DkMath.Lib.Cosmic.CompletionDefect": [
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactor"
+    ]
+  },
+  "all_DkMath_dependencies_are_Lib": true,
+  "original_material_hashes_verified": 24,
+  "validation": {
+    "command": "lake build DkMath.Lib.Cosmic.PowerDifferenceCofactor DkMath.Lib.Cosmic.CompletionDefect",
+    "result": "Build completed successfully (2789 jobs).",
+    "warnings": 0,
+    "audit_command": "lake env lean /tmp/GNLib004Audit.lean",
+    "public_declarations_checked": 27,
+    "allowed_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "aggregator": "two direct imports registered; static verification only",
+    "scope": "two production targets, inline examples and metadata audit; full build and DkMathTest/lake test omitted per user request"
+  }
+}

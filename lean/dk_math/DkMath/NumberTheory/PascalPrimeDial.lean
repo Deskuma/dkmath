@@ -119,7 +119,7 @@ theorem prime_not_dvd_pascalCoeffMass_of_row_lt
     simpa [pascalCoeffMass] using Nat.choose_ne_zero hkn
   have hv : pascalPrimeDialHeight p n k = 0 :=
     pascalPrimeDialHeight_eq_zero_of_row_lt hp hnp
-  exact (DkMath.ABC.padicValNat_eq_zero_iff hp hcoeff_ne).mp hv
+  exact (DkMath.Lib.NumberTheory.padicValNat_eq_zero_iff hp hcoeff_ne).mp hv
 
 /--
 Kummer's prime-power row formula in prime-dial language.

@@ -1,0 +1,5 @@
+degree,x,y,R,R_root,x_minus_y,full_difference,full_difference_exact_nth_power
+3,18,1,343,7,17,5831,False
+3,36,17,2197,13,19,41743,False
+3,73,17,6859,19,56,384104,False
+3,109,90,29791,31,19,566029,False
