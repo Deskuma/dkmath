@@ -18,6 +18,7 @@ import DkMath.Lib.Algebra.OddPowerRecovery
 import DkMath.Lib.Algebra.PoleSpaceDegree
 import DkMath.Lib.Algebra.PowerSubgroup
 import DkMath.Lib.Algebra.PullbackPrincipalPrime
+import DkMath.Lib.Algebra.QuadraticFixedField
 import DkMath.Lib.Algebra.QuadraticInvolutionDegree
 import DkMath.Lib.Algebra.RationalPolynomialFiber
 import DkMath.Lib.Algebra.RootUnitGauge
@@ -27,10 +28,12 @@ import DkMath.Lib.Algebra.TorsionMultiplication
 import DkMath.Lib.Algebra.TorsionPowerLifting
 import DkMath.Lib.Algebra.TranscendentalFiniteDegree
 import DkMath.Lib.Algebra.UnitPowerClass
+import DkMath.Lib.Algebra.ValuationCubicModel
 import DkMath.Lib.Algebra.ValuationDegreeLower
 import DkMath.Lib.Algebra.ValuationPoleSpace
 import DkMath.Lib.Algebra.ValuationPolynomial
 import DkMath.Lib.Algebra.ValuationQuadraticRoot
+import DkMath.Lib.Algebra.ValuationRationalPolynomial
 import DkMath.Lib.Algebra.ValuationSeparatedRoots
 
 -- Cosmic
@@ -114,6 +117,11 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelGalois
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPoles
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDegree
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelGeneration
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelModel
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelModelDescent
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelModelMap
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelPolynomial
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelReflection
 import DkMath.Lib.NumberTheory.EllipticFixedTorsion
 import DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap
 import DkMath.Lib.NumberTheory.EllipticFunctionEigenvalue
@@ -273,6 +281,7 @@ import DkMath.Lib.NumberTheory.ValuationQuadraticFrobenius
 import DkMath.Lib.NumberTheory.ValuationResidue
 import DkMath.Lib.NumberTheory.ValuationSplitQuadratic
 import DkMath.Lib.NumberTheory.ValuationTameCharacter
+import DkMath.Lib.NumberTheory.WeierstrassCoordinateEvaluation
 
 import DkMath.Lib.NumberTheory.WeierstrassNegativeValuation
 import DkMath.Lib.NumberTheory.WeierstrassPositiveValuation

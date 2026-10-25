@@ -70,3 +70,11 @@ degrees 4,6 for the same actual curve/kernel, unconditional fixed-field generati
 minimal-polynomial degree 2 and an actual monic quadratic relation. The trivial kernel
 also has degrees 2,3 and generates its fixed field.
 [005C2C report](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C2C-261025.md).
+
+`Lib.NumberTheory.EllipticFiniteKernelModel` checks the same actual two-point kernel:
+model equation, injectivity, generic nonsingularity, fixed-field image, degree two and
+rational coefficient descent. The trivial kernel recovers the original model with Δ=64.
+The contrasting cusp y²=x³ has a nonsingular generic point (t²,t³), degrees two and three
+and full field generation, but Δ=0 and a singular origin. This is a boundary for inference
+from generic data, not a counterexample to elliptic finite-kernel quotients.
+[Quotient-model report](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-QUOTIENT-MODEL-261025.md).

@@ -1,0 +1,659 @@
+{
+  "unit": "NOTE-032-QUOTIENT-MODEL",
+  "date": "2026-10-25",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "04f54ce47a7d79d2e930211b271df27b2ffb01b8",
+  "status": "same Weierstrass model, uniqueness, actual coordinate/function-field injections, image F_H, degree |H|, stable-kernel coefficient descent completed; target ellipticity and point isogeny remain open",
+  "numbering": "single quotient-model unit; no additional internal checkpoint suffix",
+  "production": [
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelModel.lean",
+      "public_theorems": [
+        "residual_kernel_model_equation",
+        "residual_kernel_model_generic_nonsingular",
+        "residual_kernel_model_fieldRange",
+        "finrank_residual_kernel_model_pull",
+        "exists_rational_residual_kernel_model"
+      ],
+      "public_definitions": [
+        "residualKernelModel",
+        "residualKernelModelPull"
+      ],
+      "sha256": "a0d51bcfed5dd086476486fb190b024499df5a0854714ced7c6ec6b4ff243c0c"
+    },
+    {
+      "path": "DkMath/Lib/Algebra/QuadraticFixedField.lean",
+      "public_theorems": [
+        "mem_of_fixed"
+      ],
+      "public_definitions": [],
+      "sha256": "d696b493028331e82765aeec3e493c1bd4c654a260ad2058cfe3745d722b2124"
+    },
+    {
+      "path": "DkMath/Lib/Algebra/ValuationCubicModel.lean",
+      "public_theorems": [
+        "residual_le"
+      ],
+      "public_definitions": [],
+      "sha256": "387701f74a613d2b880736048859dc7a5b64680121cdafbbffff5c7f6858bb0e"
+    },
+    {
+      "path": "DkMath/Lib/Algebra/ValuationRationalPolynomial.lean",
+      "public_theorems": [
+        "aeval_le_one",
+        "exists_coprime_fraction",
+        "exists_polynomial_of_regular"
+      ],
+      "public_definitions": [],
+      "sha256": "ed2a2ad423a6733e44d2dd7f4aecac69b4af548029ab6fdc0f9dcc415d6e722f"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelModel.lean",
+      "public_theorems": [
+        "normalized_trace_correction_regular",
+        "velu_corrections_regular",
+        "pointValuation_base_const_le_one",
+        "veluCubicResidual_mem_fixedField",
+        "veluCubicResidual_regular_outside",
+        "veluCubicResidual_pole_bound",
+        "negEquiv_base_const",
+        "negEquiv_veluCubicResidual",
+        "veluY_not_mem_simpleX",
+        "negEquiv_veluY_ne",
+        "veluCubicResidual_mem_simpleX",
+        "exists_velu_residual_polynomial",
+        "exists_velu_weierstrass_equation",
+        "exists_kernelModel",
+        "kernelModel_a₁",
+        "kernelModel_a₃",
+        "kernelModel_equation",
+        "kernelModel_generic_nonsingular",
+        "kernelModelGenericPoint_ne_zero"
+      ],
+      "public_definitions": [
+        "veluCubicResidual",
+        "kernelModel",
+        "kernelModelGenericPoint"
+      ],
+      "sha256": "be075dcbd1437840c7ff92ae4cb7ef977e4b47e3cac481053480c39a13aea835"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelModelDescent.lean",
+      "public_theorems": [
+        "kernelModel_galois",
+        "exists_descended_kernelModel",
+        "descendedKernelModel_map"
+      ],
+      "public_definitions": [
+        "descendedKernelModel"
+      ],
+      "sha256": "1ce24c2aa144748c79769b499abfae4c91a7cac82d22c3563549d52b50cfda31"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelModelMap.lean",
+      "public_theorems": [
+        "kernelModel_unique",
+        "kernelModelCoordinateHom_injective",
+        "kernelModelPull_injective",
+        "kernelModelPull_fieldRange",
+        "finrank_kernelModelPull"
+      ],
+      "public_definitions": [
+        "kernelModelCoordinateHom",
+        "kernelModelPull"
+      ],
+      "sha256": "ce270c099156ac6bc65c5b4a681d3843ee40a1bff8355c6d0eae85c5d5818111"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelPolynomial.lean",
+      "public_theorems": [
+        "exists_point_zero_of_transcendental",
+        "exists_veluX_finite_value",
+        "exists_polynomial_of_kernel_regular",
+        "polynomial_natDegree_le_of_pole_bound"
+      ],
+      "public_definitions": [],
+      "sha256": "91e7e64dedc81bb60f06cb082e78ec91d1bdc30c8eba0ecb443781d9c46e5f89"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelReflection.lean",
+      "public_theorems": [
+        "map_neg_translated_generic",
+        "neg_translated_genericX_point",
+        "neg_translated_genericY_point",
+        "neg_translated_genericX",
+        "neg_translated_genericY",
+        "sum_kernel_neg",
+        "kernel_coordinate_correction",
+        "negEquiv_veluX",
+        "negEquiv_veluY"
+      ],
+      "public_definitions": [],
+      "sha256": "31b37b538943ce02b34eb09d177398ec537a731f6b230af3c568e8ad5b6f6806"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassCoordinateEvaluation.lean",
+      "public_theorems": [
+        "equation_eval₂",
+        "coordinateEval_mk",
+        "coordinateEval_mk_C",
+        "coordinateEval_mk_Y",
+        "coordinateEval_basis",
+        "coordinateEval_injective",
+        "functionPull_algebraMap",
+        "functionPull_fieldRange",
+        "eq_of_same_equation"
+      ],
+      "public_definitions": [
+        "coordinateEval",
+        "functionPull"
+      ],
+      "sha256": "4db6b4bc666b6c5638be9f6846366d98a1851ae2cbc2f985f195c314168fce5e"
+    }
+  ],
+  "counts": {
+    "production_modules": 10,
+    "production_theorems": 59,
+    "production_definitions": 10,
+    "production_lines": 1149,
+    "boundary_theorems": 12,
+    "boundary_definitions": 1,
+    "source37_theorems": 5,
+    "audited_declarations": 87
+  },
+  "mathematics": {
+    "reflection": "same normalized X_H fixed; Y_H sent to -Y_H-a1X_H-a3; identity-point correction treated separately",
+    "quadratic": "same residual R lies in same F_H and is reflection-fixed; [F_H:k(X_H)]=2 and moved Y_H give R in k(X_H)",
+    "denominator": "each finite value of same X_H has a detecting zero outside H; reduced p/q and Bezout exclude a nonconstant denominator of a kernel-outside regular rational expression",
+    "pole_bound": "regular corrections X_H-x,Y_H-y and source equation bound R pole by4; X_H pole2 gives residual polynomial degree<=2",
+    "model": "actual W over algebraic closure, same a1,a3, monic cubic equation; generic point is nonsingular; no same-a2 claim",
+    "coordinate_injection": "arbitrary W and target field; x transcendental and y not in k(x) imply injectivity by p(x)+q(x)y basis",
+    "function_pull": "actual fraction-field algebra hom with image k(X_H,Y_H)=F_H; field extension degree |H|",
+    "uniqueness": "same coordinates and same a1,a3 give actual equality of Weierstrass models",
+    "descent": "stable H gives semilinear invariance of equation; uniqueness gives fixed coefficients; actual K-model basechange equals chosen same model",
+    "Source": "same Source, same line, same actual pointSubgroup; degree p internally supplied; stable line yields rational coefficient model"
+  },
+  "generality": [
+    "reflection formulas, denominator elimination and pole estimates work in arbitrary characteristic",
+    "model construction, nontrivial reflection and descent implemented for characteristic zero",
+    "finite H may have arbitrary order, including trivial and even",
+    "stability only required for coefficient descent; no individual rational-kernel-point hypothesis",
+    "Source wrappers retain dimension1; rational coefficient descent retains same-line stability; no Source or stable-line existence asserted"
+  ],
+  "boundary": {
+    "actual_curve": "y^2=x^3-x with actual Q=(1,0), same H={O,Q}; equation, generic nonsingularity, coordinate/field injection, same image, degree2 and rational descent",
+    "trivial_kernel": "same model equals original basechange and discriminant=64",
+    "cusp": "y^2=x^3 has nonsingular generic point (t^2,t^3), degrees2/3 and full generation, but discriminant=0 and singular origin",
+    "interpretation": "cusp refutes inference from listed generic data to global nonsingularity; not a counterexample to actual elliptic finite-kernel quotients"
+  },
+  "provenance": {
+    "new_upstream_fetch": false,
+    "adaptation": "coordinate evaluation generalized from existing EllipticFunctionField.pointHom",
+    "upstream_blob": "ce8783a9e9613db1c4c0323ce93fb0d89917ee65",
+    "license": "Apache-2.0 and existing RegularKummer LICENSE/NOTICE retained",
+    "external_proof_imports_added": false
+  },
+  "validation": {
+    "focused_build": "lake build DkMath.FLT.FreyFiniteKernelModel",
+    "focused_build_jobs": 4084,
+    "boundary": "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032QuotientModelBoundary.lean",
+    "smoke": "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032QuotientModelSmoke.lean",
+    "axioms": "lake env lean tmp/note032-model/Axioms.lean (boundary and smoke bodies re-elaborated)",
+    "warnings": 0,
+    "tracker": "OK: no mismatches found",
+    "forbidden_constructs": false,
+    "lib_import_closure_count": 69,
+    "prior_owners_unchanged": true,
+    "prior_contract_unchanged": true,
+    "test_boundary_bodies_equal": true,
+    "facades": "imports registered and statically checked; root builds not run",
+    "full_build_run": false,
+    "lake_test_run": false,
+    "root_test_build_run": false,
+    "git_diff_check": "pass"
+  },
+  "axioms": {
+    "DkMath.FLT.Frey.Source.residualKernelModel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_model_equation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_model_generic_nonsingular": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualKernelModelPull": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_model_fieldRange": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.finrank_residual_kernel_model_pull": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.exists_rational_residual_kernel_model": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.Algebra.QuadraticFixedField.mem_of_fixed": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.Algebra.ValuationCubicModel.residual_le": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.Algebra.ValuationRationalPolynomial.aeval_le_one": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.Algebra.ValuationRationalPolynomial.exists_coprime_fraction": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.Algebra.ValuationRationalPolynomial.exists_polynomial_of_regular": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.normalized_trace_correction_regular": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_corrections_regular": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.pointValuation_base_const_le_one": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCubicResidual": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCubicResidual_mem_fixedField": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCubicResidual_regular_outside": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCubicResidual_pole_bound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.negEquiv_base_const": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.negEquiv_veluCubicResidual": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_not_mem_simpleX": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.negEquiv_veluY_ne": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCubicResidual_mem_simpleX": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_velu_residual_polynomial": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_velu_weierstrass_equation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_kernelModel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_a₁": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_a₃": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_equation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_generic_nonsingular": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelGenericPoint": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelGenericPoint_ne_zero": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_galois": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_descended_kernelModel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelModel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelModel_map": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_unique": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelCoordinateHom": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelCoordinateHom_injective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelPull": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelPull_injective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelPull_fieldRange": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.finrank_kernelModelPull": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_point_zero_of_transcendental": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_veluX_finite_value": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_polynomial_of_kernel_regular": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.polynomial_natDegree_le_of_pole_bound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.map_neg_translated_generic": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.neg_translated_genericX_point": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.neg_translated_genericY_point": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.neg_translated_genericX": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.neg_translated_genericY": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.sum_kernel_neg": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernel_coordinate_correction": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.negEquiv_veluX": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.negEquiv_veluY": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassCoordinateEvaluation.equation_eval₂": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassCoordinateEvaluation.coordinateEval": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassCoordinateEvaluation.coordinateEval_mk": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassCoordinateEvaluation.coordinateEval_mk_C": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassCoordinateEvaluation.coordinateEval_mk_Y": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassCoordinateEvaluation.coordinateEval_basis": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassCoordinateEvaluation.coordinateEval_injective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassCoordinateEvaluation.functionPull": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassCoordinateEvaluation.functionPull_algebraMap": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassCoordinateEvaluation.functionPull_fieldRange": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassCoordinateEvaluation.eq_of_same_equation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelModelTest.actual_equation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelModelTest.actual_generic_data": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelModelTest.actual_pull_data": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelModelTest.actual_rational_descent": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelModelTest.trivial_model": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelModelTest.trivial_model_discriminant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelModelTest.cusp": [
+      "propext",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelModelTest.cusp_discriminant": [
+      "propext",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelModelTest.cusp_origin_singular": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelModelTest.cusp_equation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelModelTest.cusp_generic_nonsingular": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelModelTest.cusp_degrees_and_generation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelModelTest.cusp_boundary": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032QuotientModelSmoke.source37_equation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032QuotientModelSmoke.source37_generic_nonsingular": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032QuotientModelSmoke.source37_pull": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032QuotientModelSmoke.source37_degree": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032QuotientModelSmoke.source37_rational_model": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  "remaining": [
+    "target kernelModel discriminant nonzero / IsElliptic",
+    "all-point regular extension, additivity, exact point kernel and equivariance",
+    "point isogeny and its degree",
+    "target zero-component/reduction transport",
+    "same quotient rational torsion arithmetic",
+    "hno and general Frey irreducibility",
+    "general FLT closure"
+  ]
+}

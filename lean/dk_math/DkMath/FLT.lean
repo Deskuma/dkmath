@@ -28,6 +28,7 @@ import DkMath.FLT.FreyDyadicNontrivial
 import DkMath.FLT.FreyDyadicZeroComponent
 
 import DkMath.FLT.FreyFiniteKernel
+import DkMath.FLT.FreyFiniteKernelModel
 import DkMath.FLT.FreyFiniteKernelPoles
 import DkMath.FLT.FreyFiniteKernelDegree
 import DkMath.FLT.FreyFiniteKernelGeneration
@@ -107,9 +108,9 @@ current standalone FLT3 proof.
 
 For completed exponent-specific public results, prefer explicit imports:
 
-```lean
-import DkMath.FLT.Three
-import DkMath.FLT.Five
+```text
+> import DkMath.FLT.Three
+> import DkMath.FLT.Five
 ```
 
 with endpoints:

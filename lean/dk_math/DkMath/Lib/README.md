@@ -587,3 +587,14 @@ now supplies exact relative degrees 2,3, ambient degrees 2|H|,3|H|, same fixed-f
 total-pole-order/degree equalities and an actual degree-2 minimal polynomial, without the earlier
 degree hypotheses. The target Weierstrass equation, nonsingularity and point isogeny remain open.
 [005C2C report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C2C-261025.md).
+
+`EllipticFiniteKernelReflection`, `EllipticFiniteKernelPolynomial` and
+`EllipticFiniteKernelModel` now construct a Weierstrass model for the SAME normalized
+coordinates, using quadratic reflection, denominator removal and the residual pole bound four.
+`WeierstrassCoordinateEvaluation` and `EllipticFiniteKernelModelMap` construct actual
+coordinate-ring/function-field injections, image equal to the same fixed field and degree |H|.
+`EllipticFiniteKernelModelDescent` proves uniqueness and descent to K for a stable kernel.
+The model construction uses characteristic zero. These results supersede the earlier
+open equation boundary; model nonsingularity, point isogeny and zero-component transport remain open.
+A cuspidal cubic tests why generic nonsingularity and degrees 2,3 do not suffice for Δ≠0.
+[Quotient-model report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-QUOTIENT-MODEL-261025.md).

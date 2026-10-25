@@ -427,3 +427,10 @@ x^p+y^p=\varepsilon(\lambda^m z)^p
 同じSource37では次数74,111を内部供給し、前回の次数仮定を除去した。
 標的のWeierstrass方程式・非特異性・点isogeny・零成分輸送は未構成。
 [実装報告](IMPLEMENTATION-NOTE032-005C2C-261025.md)。
+
+NOTE-032 の標的三次モデルは、細かな枝番を追加せず一括して実装した。
+同じ二関数のWeierstrass方程式、モデルの一意性、実際の座標環・関数体単射、像F_H・次数|H|、
+安定核のK係数降下まで確定した。Source37では同じ引き戻しの次数37を内部供給する。
+[標的三次モデルの明と暗](IMPLEMENTATION-NOTE032-QUOTIENT-MODEL-261025.md) に証明経路を記録した。
+尖点曲線y²=x³で、非特異な一般点・次数2,3・生成とΔ=0が両立する境界も形式化した。
+今回のkernelModelのΔ≠0、点isogeny、標的零成分輸送、一般hnoは引き続き未証明である。
