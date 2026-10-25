@@ -1,0 +1,19 @@
+NOTE-032-LOCAL-VALUATION validation (2026-10-26)
+Base HEAD: 80f38a06aea1123419381ef6c5bf8bc29a62c7c9
+Branch: dev/FLT-GN-regular-261018-v0
+PASS focused production build: DkMath.FLT.FreyFiniteKernelValuation
+PASS focused test build: DkMathTest.Lib.NumberTheory.EllipticFiniteKernelValuation
+PASS Source37 direct Lean: 3 theorems
+PASS axiom audit: 52 declarations; only propext, Classical.choice, Quot.sound
+PASS forbidden-construct and external-proof-import scan
+PASS Lib dependency direction, textbook docstrings, promotion markers
+PASS file markers after imports and tracker mismatch check
+PASS facade import registration (static)
+PASS previous owners and checkpoint documents unchanged
+PASS cached upstream place-restriction solution blob hash
+PASS git diff --check and new-file whitespace
+Counts: 8 production owners, 31 theorems, 8 definitions, 823 lines
+Actual tests: 9 theorems, 1 definition; same E[3] of order 9, finite R and infinity, doubled valuation guard
+Completed: exact normalized pullback valuation at every image, with local multiplier one proved internally
+Completed: target orbit-product order formula at every image, including infinity
+Boundary: global principal-divisor pushforward, arbitrary-fiber description, surjectivity and additivity remain open

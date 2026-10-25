@@ -34,6 +34,7 @@ import DkMath.FLT.FreyFiniteKernelDegree
 import DkMath.FLT.FreyFiniteKernelGeneration
 import DkMath.FLT.FreyFiniteKernelNonsingular
 import DkMath.FLT.FreyFiniteKernelPointDescent
+import DkMath.FLT.FreyFiniteKernelValuation
 import DkMath.FLT.FreyFiniteKernelSpecialization
 import DkMath.FLT.FreyGeometricWeilPairing
 import DkMath.FLT.FreyGoodReductionInertia

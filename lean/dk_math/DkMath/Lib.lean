@@ -124,6 +124,13 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelModelMap
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNonsingular
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPointDescent
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNorm
+import DkMath.Lib.NumberTheory.DiscreteValuationPullback
+import DkMath.Lib.NumberTheory.DedekindLocalParameter
+import DkMath.Lib.NumberTheory.WeierstrassFinitePlace
+import DkMath.Lib.NumberTheory.WeierstrassPolePullback
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelLocalTransport
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelUnramified
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelValuation
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPolynomial
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelRationalFiber
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelReflection
