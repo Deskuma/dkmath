@@ -38,3 +38,8 @@ $$
 実際の非Frey曲線と同じ3捩れ点で、Frobenius差は滑らか、和は滑らかでないことを証明した。
 通常テストの同一本体を独立Lean資料で確認した。
 [005A報告](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005A-261025.md) を参照。
+
+`Lib/RepresentationTheory/CofixedDeterminant.lean` は005Bの一般核を検証する。
+安定性とCofixed性の違い、一次元条件、指標と逆指標、非零の右上成分、三次元非可逆写像を扱う。
+通常テストの同一本体を独立Lean資料で確認した。
+[005B報告](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005B-261025.md) を参照。

@@ -250,6 +250,7 @@ import DkMathTest.FLT.FreyPrimeFiltrationComplete
 import DkMathTest.FLT.Note031PrimeFiltrationDependencyAudit
 import DkMathTest.FLT.FreyStableLineLocalGlobal
 import DkMathTest.Lib.RepresentationTheory.CofixedBranchSwap
+import DkMathTest.Lib.RepresentationTheory.CofixedDeterminant
 import DkMathTest.Lib.NumberTheory.KummerInertia
 import DkMathTest.Lib.NumberTheory.EllipticDyadicGeometry
 import DkMathTest.Lib.NumberTheory.EllipticNodalTorsionBound

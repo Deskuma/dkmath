@@ -1,0 +1,104 @@
+NOTE-032-005B — 2026-10-25
+Branch: dev/FLT-GN-regular-261018-v0
+Base HEAD: bfa6ece0d55c48ee65db86fba30dcef91402d635; initially clean.
+
+lake build DkMath.Lib.RepresentationTheory.CofixedDeterminant DkMath.Lib.NumberTheory.EllipticCofixedCyclotomic DkMath.FLT.FreyCofixedCyclotomic
+Exit 0. Build completed successfully (4053 jobs). Warnings: 0.
+All three new production owners built. 14 production theorems (5 linear + 3 elliptic + 6 Source).
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CofixedDeterminantBoundary.lean
+Exit 0. 8 theorems, 4 definitions. Exact normal test body elaborated independently.
+Stable versus cofixed boundary; line dimension boundary; character versus inverse orientation;
+same-basis nonzero upper-right retained; noninvertible three-dimensional projection.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CofixedCyclotomicSmoke.lean
+Exit 0. 4 theorems at exponent 37; same Source, representation, point, subgroup and E0[37].
+Global cofixed line remains a hypothesis. No Source or line existence asserted.
+
+lake env lean /tmp/Note032CofixedCyclotomicAxioms.lean
+Exit 0. Imports production owner, elaborates both independent evidence bodies,
+then prints axioms for 14 production + 12 boundary/example + 4 smoke declarations.
+file: Note032CofixedDeterminantBoundary
+file: Note032CofixedCyclotomicSmoke
+'DkMath.Lib.RepresentationTheory.CofixedDeterminant.apply_eq_det_smul_of_sub_mem' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.RepresentationTheory.CofixedDeterminant.apply_eq_det_smul_of_cofixed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.RepresentationTheory.CofixedDeterminant.apply_eq_character_smul_of_cofixed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.RepresentationTheory.CofixedDeterminant.basis_line_lower_right_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.RepresentationTheory.CofixedDeterminant.basis_line_matrix' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.cofixed_torsion_apply_eq_cyclotomic_smul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.cofixed_pointAction_eq_cyclotomic_nsmul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.cofixed_pointSubgroup_action_eq_cyclotomic_nsmul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_cofixed_line_apply_eq_det_smul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_cofixed_line_apply_eq_cyclotomic_smul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_cofixed_line_pointAction_eq_cyclotomic_nsmul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_cofixed_pointSubgroup_action_eq_cyclotomic_nsmul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_cofixed_basis_matrix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.residualZeroComponent_apply_eq_cyclotomic_smul_of_cofixed_line' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'CofixedDeterminantTest.axis' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedDeterminantTest.axis_finrank' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedDeterminantTest.diagonal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedDeterminantTest.diagonal_det' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedDeterminantTest.stable_guard_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedDeterminantTest.dimension_guard_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedDeterminantTest.unitShear' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedDeterminantTest.unitShear_cofixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedDeterminantTest.unitShear_det' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedDeterminantTest.character_orientation_and_matrix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedDeterminantTest.projectionThree' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedDeterminantTest.noninvertible_higher_dimension' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032CofixedCyclotomicSmoke.source37_same_line_action' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032CofixedCyclotomicSmoke.source37_point_subgroup_action' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Note032CofixedCyclotomicSmoke.source37_adapted_matrix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032CofixedCyclotomicSmoke.source37_zeroComponent_action' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Static checks:
+- New Lean forbidden constructs/imports: passed after stripping nested comments.
+- All six new Lean files have file markers and public declaration docstrings.
+- All eight public Lib theorem docstrings have [DkMath.Lib].
+- Lib dependency closure: 75 DkMath nodes, all under DkMath.Lib.
+- 18 prior proof owners, NOTE-032 and 005A report/JSON/validation match baseline HEAD byte for byte.
+- Production and normal test entrance registration: static check passed.
+- Independent boundary body matches normal test after copyright removal and marker normalization.
+- python3 check_tracker_mismatch.py /tmp/note032-005b-modules.log: OK: no mismatches found
+- git diff --check: passed.
+- Full build / root / DkMathTest / lake test builds: user validation split, not run.
+
+Mathematical boundary:
+Given global cofixed line, same line action equals determinant equals cyclotomic scalar.
+Actual point and pointSubgroup formulas use the same curve and natural representative.
+Same adapted matrix retains upper-right entry; splitting not asserted.
+005A supplies conditional identification with E0[p]; local cofixedness is not globalized.
+Quotient elliptic curve, isogeny and rational torsion transport remain 005C.
+No escape existence, general hno or general FLT closure asserted.
+
+Local document links checked: 96.
+New-file whitespace checks: 9 files passed.
+JSON round-trip checked.

@@ -4,70 +4,88 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.FLT.GEisensteinBridge
-import DkMath.FLT.Kummer
-import DkMath.FLT.Main
-import DkMath.FLT.PrimeProvider
-import DkMath.FLT.Samples
-import DkMath.FLT.Five
-import DkMath.FLT.Seven
-import DkMath.FLT.QuadraticEssence
+import DkMath.FLT.Main    -- 旧 Facade
+
+import DkMath.FLT.Three   -- FLT3
+import DkMath.FLT.Five    -- FLT5
+import DkMath.FLT.Seven   -- FLT7
+
 import DkMath.FLT.Frey
 import DkMath.FLT.FreyTwo
-import DkMath.FLT.FreyPrimeProfile
+
+import DkMath.FLT.FreyBranchComparison
+import DkMath.FLT.FreyCofixedBranchSwap
+import DkMath.FLT.FreyCofixedCyclotomic
 import DkMath.FLT.FreyCounterexample
-import DkMath.FLT.FreyResidualRepresentation
-import DkMath.FLT.FreyResidualIrreducibility
-import DkMath.FLT.FreyResidualFiniteLevel
-import DkMath.FLT.FreyResidualGeometry
-import DkMath.FLT.FreyResidualDimensionBound
-import DkMath.FLT.FreyResidualNontrivial
-import DkMath.FLT.FreyResidualDimensionCriteria
-import DkMath.FLT.FreyResidualRankTwo
-import DkMath.FLT.FreyResidualGL2
-import DkMath.FLT.FreyResidualCyclotomic
-import DkMath.FLT.FreyTorsionAllCard
-import DkMath.FLT.FreyTorsionPrimePower
-import DkMath.FLT.FreyWeilGeometry
-import DkMath.FLT.FreyWeilFunction
-import DkMath.FLT.FreyWeilValuation
-import DkMath.FLT.FreyWeilTransport
-import DkMath.FLT.FreyWeilCharacter
-import DkMath.FLT.FreyWeilBicharacter
-import DkMath.FLT.PrimeDepthBridge
-import DkMath.FLT.FreyWeilGalois
+import DkMath.FLT.FreyCriticalCentre
+import DkMath.FLT.FreyDoublingDepth
+
+import DkMath.FLT.FreyDyadicBranchSwap
+import DkMath.FLT.FreyDyadicGeometry
+import DkMath.FLT.FreyDyadicInertia
+import DkMath.FLT.FreyDyadicNontrivial
+import DkMath.FLT.FreyDyadicZeroComponent
+
 import DkMath.FLT.FreyGeometricWeilPairing
-import DkMath.FLT.FreyStableLine
-import DkMath.FLT.FreyRationalTorsionValuation
+import DkMath.FLT.FreyGoodReductionInertia
+import DkMath.FLT.FreyInertiaTransport
+import DkMath.FLT.FreyIntegralTorsionWitness
+import DkMath.FLT.FreyModEightIrreducibility
+import DkMath.FLT.FreyNodalReduction
+
+import DkMath.FLT.FreyPrimeFiltration
+import DkMath.FLT.FreyPrimeGoodFiltration
+import DkMath.FLT.FreyPrimeProfile
+
+import DkMath.FLT.FreyRationalTorsion
+import DkMath.FLT.FreyRationalTorsionBounds
+import DkMath.FLT.FreyRationalTorsionBridge
+import DkMath.FLT.FreyRationalTorsionIdentities
 import DkMath.FLT.FreyRationalTorsionIntegral
 import DkMath.FLT.FreyRationalTorsionPositive
-import DkMath.FLT.FreyRationalTorsionBounds
-import DkMath.FLT.FreyRationalTorsionIdentities
-import DkMath.FLT.FreyRationalTorsion
-import DkMath.FLT.FreyRationalTorsionBridge
+import DkMath.FLT.FreyRationalTorsionValuation
+import DkMath.FLT.FreyResidualCyclotomic
+import DkMath.FLT.FreyResidualDimensionBound
+import DkMath.FLT.FreyResidualDimensionCriteria
+import DkMath.FLT.FreyResidualFiniteLevel
+import DkMath.FLT.FreyResidualGL2
+import DkMath.FLT.FreyResidualGeometry
+import DkMath.FLT.FreyResidualIrreducibility
+import DkMath.FLT.FreyResidualNontrivial
+import DkMath.FLT.FreyResidualRankTwo
+import DkMath.FLT.FreyResidualRepresentation
 
-import DkMath.FLT.FreyInertiaTransport
-import DkMath.FLT.FreyValuationArithmetic
-import DkMath.FLT.FreyGoodReductionInertia
-import DkMath.FLT.FreySmoothReductionInertia
-import DkMath.FLT.FreyCriticalCentre
-import DkMath.FLT.FreyNodalReduction
 import DkMath.FLT.FreyShallowSlope
-import DkMath.FLT.FreyBranchComparison
-import DkMath.FLT.FreyDoublingDepth
-import DkMath.FLT.FreyUnramifiedAway
-import DkMath.FLT.FreyDyadicInertia
-import DkMath.FLT.FreyIntegralTorsionWitness
-import DkMath.FLT.FreyPrimeGoodFiltration
-import DkMath.FLT.FreyPrimeFiltration
-import DkMath.FLT.FreyStableLineLocalGlobal
-import DkMath.FLT.FreyCofixedBranchSwap
-import DkMath.FLT.FreyDyadicNontrivial
-import DkMath.FLT.FreyDyadicGeometry
-import DkMath.FLT.FreyDyadicZeroComponent
-import DkMath.FLT.FreyDyadicBranchSwap
-import DkMath.FLT.FreyModEightIrreducibility
+import DkMath.FLT.FreySmoothReductionInertia
 import DkMath.FLT.FreySplitDyadic
+
+import DkMath.FLT.FreyStableLine
+import DkMath.FLT.FreyStableLineLocalGlobal
+
+import DkMath.FLT.FreyTorsionAllCard
+import DkMath.FLT.FreyTorsionPrimePower
+
+import DkMath.FLT.FreyUnramifiedAway
+import DkMath.FLT.FreyValuationArithmetic
+
+import DkMath.FLT.FreyWeilBicharacter
+import DkMath.FLT.FreyWeilCharacter
+import DkMath.FLT.FreyWeilFunction
+import DkMath.FLT.FreyWeilGalois
+import DkMath.FLT.FreyWeilGeometry
+import DkMath.FLT.FreyWeilTransport
+import DkMath.FLT.FreyWeilValuation
+
+import DkMath.FLT.GEisensteinBridge
+
+import DkMath.FLT.Kummer
+
+import DkMath.FLT.PrimeDepthBridge
+import DkMath.FLT.PrimeProvider
+
+import DkMath.FLT.QuadraticEssence
+
+import DkMath.FLT.Samples
 
 #print "file: DkMath.FLT"
 

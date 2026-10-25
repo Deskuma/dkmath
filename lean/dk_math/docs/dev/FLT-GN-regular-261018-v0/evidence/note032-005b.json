@@ -1,0 +1,248 @@
+{
+  "checkpoint": "NOTE-032-005B",
+  "date": "2026-10-25",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "bfa6ece0d55c48ee65db86fba30dcef91402d635",
+  "status": "cofixed-line determinant and cyclotomic action completed conditional on given line; general hno remains open",
+  "mathematical_changes": {
+    "linear_algebra": "all differences in a one-dimensional L imply restriction equals determinant scalar; finite ambient dimension, no invertibility or ambient rank-two restriction",
+    "elliptic": "same actual E[p] line action equals cyclotomic scalar through existing constructed geometric Weil pairing",
+    "points": "same actual point and pointSubgroup obey natural-representative multiplication formula",
+    "matrix": "same adapted-basis matrix [cyclotomic, original upper-right; 0, 1]; no splitting claim",
+    "zero_component": "given global cofixed line identifies with same E0[p] via 005A and transports scalar action; local cofixedness is not globalized"
+  },
+  "production": [
+    {
+      "path": "DkMath/Lib/RepresentationTheory/CofixedDeterminant.lean",
+      "public_theorems": [
+        "apply_eq_det_smul_of_sub_mem",
+        "apply_eq_det_smul_of_cofixed",
+        "apply_eq_character_smul_of_cofixed",
+        "basis_line_lower_right_one",
+        "basis_line_matrix"
+      ],
+      "sha256": "55fe0cc16fb2dfff9765edbfdb4518ac9222c258107c472f356de5f89145e082"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticCofixedCyclotomic.lean",
+      "public_theorems": [
+        "cofixed_torsion_apply_eq_cyclotomic_smul",
+        "cofixed_pointAction_eq_cyclotomic_nsmul",
+        "cofixed_pointSubgroup_action_eq_cyclotomic_nsmul"
+      ],
+      "sha256": "e6ff316afb92b1f517ae4e6b53372257bd843161245c85f26873883c08887e30"
+    },
+    {
+      "path": "DkMath/FLT/FreyCofixedCyclotomic.lean",
+      "public_theorems": [
+        "residual_cofixed_line_apply_eq_det_smul",
+        "residual_cofixed_line_apply_eq_cyclotomic_smul",
+        "residual_cofixed_line_pointAction_eq_cyclotomic_nsmul",
+        "residual_cofixed_pointSubgroup_action_eq_cyclotomic_nsmul",
+        "residual_cofixed_basis_matrix",
+        "residualZeroComponent_apply_eq_cyclotomic_smul_of_cofixed_line"
+      ],
+      "sha256": "ce5b32619dd774b2fb3110fc043e22bbde0afd66c9402f1d0d74c5d159dbb4fe"
+    }
+  ],
+  "reference_use": {
+    "current_local_mathlib": [
+      "LinearMap.existsUnique_eq_smul_id_of_finrank_eq_one",
+      "LinearMap.det_eq_det_mul_det"
+    ],
+    "new_external_imports": false,
+    "upstream_code_copied": false
+  },
+  "checks": {
+    "target_build": {
+      "command": "lake build DkMath.Lib.RepresentationTheory.CofixedDeterminant DkMath.Lib.NumberTheory.EllipticCofixedCyclotomic DkMath.FLT.FreyCofixedCyclotomic",
+      "jobs": 4053,
+      "exit_code": 0,
+      "warnings": 0
+    },
+    "standalone_boundary_theorems": 8,
+    "standalone_example_definitions": 4,
+    "same_Source37_smoke_theorems": 4,
+    "audited_declarations": 30,
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "axiom_results": {
+      "DkMath.Lib.RepresentationTheory.CofixedDeterminant.apply_eq_det_smul_of_sub_mem": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.RepresentationTheory.CofixedDeterminant.apply_eq_det_smul_of_cofixed": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.RepresentationTheory.CofixedDeterminant.apply_eq_character_smul_of_cofixed": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.RepresentationTheory.CofixedDeterminant.basis_line_lower_right_one": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.RepresentationTheory.CofixedDeterminant.basis_line_matrix": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.cofixed_torsion_apply_eq_cyclotomic_smul": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.cofixed_pointAction_eq_cyclotomic_nsmul": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.cofixed_pointSubgroup_action_eq_cyclotomic_nsmul": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_cofixed_line_apply_eq_det_smul": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_cofixed_line_apply_eq_cyclotomic_smul": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_cofixed_line_pointAction_eq_cyclotomic_nsmul": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_cofixed_pointSubgroup_action_eq_cyclotomic_nsmul": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_cofixed_basis_matrix": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residualZeroComponent_apply_eq_cyclotomic_smul_of_cofixed_line": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedDeterminantTest.axis": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedDeterminantTest.axis_finrank": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedDeterminantTest.diagonal": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedDeterminantTest.diagonal_det": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedDeterminantTest.stable_guard_boundary": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedDeterminantTest.dimension_guard_boundary": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedDeterminantTest.unitShear": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedDeterminantTest.unitShear_cofixed": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedDeterminantTest.unitShear_det": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedDeterminantTest.character_orientation_and_matrix": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedDeterminantTest.projectionThree": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedDeterminantTest.noninvertible_higher_dimension": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032CofixedCyclotomicSmoke.source37_same_line_action": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032CofixedCyclotomicSmoke.source37_point_subgroup_action": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032CofixedCyclotomicSmoke.source37_adapted_matrix": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032CofixedCyclotomicSmoke.source37_zeroComponent_action": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    "forbidden_construct_scan": "passed",
+    "lib_only_dependency_nodes": 75,
+    "prior_owners_unchanged": 18,
+    "original_note032_and_005a_report_and_evidence_unchanged": true,
+    "tracker": "OK: no mismatches found",
+    "normal_test_body_matches_independent_boundary": true,
+    "entrance_and_test_registration": "static only",
+    "git_diff_check": "passed",
+    "full_root_and_test_builds": "user validation split; not run",
+    "local_document_links": 96,
+    "new_file_whitespace_checks": 9
+  },
+  "boundary_examples": [
+    "stable diag(2,3) has line action 2 distinct from determinant 6; cofixedness necessary",
+    "full rank-two L makes difference condition trivial but scalar formula fails; line dimension necessary",
+    "rational unit representation (u*x+(u-1)*y,y): at u=2 distinguish character 2 from inverse 1/2; same-basis upper-right 1 retained",
+    "noninvertible projection in dimension three with one-dimensional difference image and determinant zero"
+  ],
+  "remaining": [
+    "005C same-kernel quotient elliptic curve, isogeny, rational torsion and zero-component transport",
+    "005D global arithmetic exclusion or proved alternative",
+    "005E stable cyclic higher torsion tower if following reference route",
+    "seven-case Galois escape existence, general hno and general FLT"
+  ]
+}

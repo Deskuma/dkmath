@@ -541,3 +541,10 @@ direction and sends actual point differences into the smooth zero component.
 The Frey consumer identifies a possible global cofixed line with the same E₀[p];
 the global escape needed for hno remains unproved.
 [005A report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005A-261025.md).
+
+`RepresentationTheory.CofixedDeterminant` identifies the action on a cofixed line
+with the determinant, for any finite ambient dimension. The endomorphism need not
+be invertible. `NumberTheory.EllipticCofixedCyclotomic` uses the constructed Weil
+pairing to identify that action with the cyclotomic character on the same actual
+torsion points and point subgroup. The adapted matrix retains its upper-right entry.
+[005B report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005B-261025.md).
