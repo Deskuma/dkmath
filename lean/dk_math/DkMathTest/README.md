@@ -53,3 +53,8 @@ elliptic [p] multiplication map whose full torsion kernel cannot be a line.
 rational point (1,0): same two-point kernel, fixed-field degree two, normalization
 constant one, translation/Galois invariance, trace versus average, and trivial kernel.
 [005C2A report](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C2A-261025.md).
+
+`Lib.NumberTheory.EllipticFiniteKernelPoles` checks actual poles at O and (1,0)
+on y²=x³−x, regularity at (-1,0), total pole orders 4/6, individual transcendence,
+cancellation with equal valuations, constant functions, and the trivial kernel.
+[005C2B report](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C2B-261025.md).

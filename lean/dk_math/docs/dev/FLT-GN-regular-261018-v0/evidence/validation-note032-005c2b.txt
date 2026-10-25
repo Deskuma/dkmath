@@ -1,0 +1,152 @@
+NOTE-032-005C2B — 2026-10-25
+Branch: dev/FLT-GN-regular-261018-v0
+Base HEAD: 3f6cd7f1d42dad1ebf5cac6824fbe95457f28062; initially clean.
+
+lake build DkMath.FLT.FreyFiniteKernelPoles
+Exit 0. Build completed successfully (4062 jobs). Warnings: 0.
+Includes all three new production owners: 29 theorems.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FiniteKernelPolesBoundary.lean
+Exit 0. Warnings: 0. 9 theorems, 2 definitions.
+Normal test body independently elaborated; previous actual curve/kernel owner imported.
+Actual same curve y^2=x^3-x and H={O,Q}, Q=(1,0): local orders -2/-3,
+actual pole sets cardinal2 and total pole orders4/6; R=(-1,0) outside kernel regular.
+Nonconstancy and individual transcendence with injective polynomial evaluations;
+equal-valued cancellation, constant function and trivial-kernel boundaries.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FiniteKernelPolesSmoke.lean
+Exit 0. Warnings: 0. 4 theorems, same Source37 and actual kernel/function/point.
+Nonconstancy; same residual point returned to actual point kernel; exact pole support;
+conditional same E0[37] pointSubgroup identification retains global cofixed input.
+No Source37, cofixed line, target curve or isogeny existence asserted.
+
+lake env lean /tmp/Note032FiniteKernelPolesAxioms.lean
+Exit 0. 29 production + 11 boundary/example + 4 smoke declarations audited.
+Both independent proof bodies re-elaborated in audit file.
+file: Note032FiniteKernelPolesBoundary
+file: Note032FiniteKernelPolesSmoke
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointValuation_zero_genericX' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointValuation_zero_genericY' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointValuation_genericX_le_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointValuation_genericY_le_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointValuation_zero_const_le_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointValuation_const_le_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointValuation_const_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.transcendental_of_point_pole' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.normalized_trace_valuation_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_valuation_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_valuation_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_ne_const' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_ne_const' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.normalized_trace_regular_outside' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_regular_outside' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_regular_outside' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_valuation_of_mem' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_valuation_of_mem' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_pole_support' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_orders_of_mem' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.card_velu_pole_support' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_total_pole_orders' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_transcendental' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_transcendental' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_kernel_coordinates_nonconstant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_kernel_coordinate_valuations_of_mem' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_kernel_coordinate_pole_support' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'EllipticFiniteKernelPolesTest.actual_kernel_orders' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelPolesTest.actual_total_poles' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelPolesTest.rationalR' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelPolesTest.R' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelPolesTest.R_outside' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelPolesTest.actual_outside_regular' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelPolesTest.actual_nonconstant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelPolesTest.actual_transcendental' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelPolesTest.cancellation_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelPolesTest.constant_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelPolesTest.trivial_support' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FiniteKernelPolesSmoke.source37_nonconstant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FiniteKernelPolesSmoke.source37_line_point_poles' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FiniteKernelPolesSmoke.source37_pole_support' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FiniteKernelPolesSmoke.source37_zeroComponent_pole_support' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+Static checks:
+- All six new Lean files: forbidden constructs/imports scan passed after nested-comment removal.
+- All new Lean files have file markers; public theorems/definitions have docstrings.
+- All 26 public Lib theorem docstrings have [DkMath.Lib].
+- Lib dependency closure: 44 DkMath nodes, all under DkMath.Lib.
+- 30 prior owners unchanged against baseline HEAD.
+- Original NOTE-032 and 005C2A report/JSON/validation unchanged against baseline HEAD.
+- Production and test entrances checked statically; normal test glob retained.
+- Normal test body matches independent boundary after header removal and marker normalization.
+- Explicit new local-instance names avoid collision with other existing owners; combined Source import passed.
+- Tracker: OK: no mismatches found
+- git diff --check: passed.
+- Full/root/DkMathTest/lake test builds: user validation split, not run.
+
+Mathematical boundary:
+Same functions have poles exactly on same H, local orders -2/-3 and total pole orders 2|H|/3|H|.
+Nonconstancy and individual transcendence proved; no algebraic independence of pair asserted.
+Total pole orders have not yet been identified with function-field extension degrees.
+Fixed-field generation, relative degrees2/3, target equation and ellipticity remain open.
+No actual point morphism, additivity, exact point kernel or isogeny constructed.
+005C1 actual point homomorphism remains an input.
+Function-field point valuation is distinct from coefficient-field dyadic valuation.
+No target zero-component transport, global escape, general hno or general FLT proved.
+005C2B pole/nonconstancy unit complete; 005C as a whole remains incomplete.
+
+Local document links checked: 110.
+New-file whitespace checks: 9 files passed.
+JSON round-trip checked.

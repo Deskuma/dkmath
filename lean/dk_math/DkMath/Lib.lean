@@ -88,6 +88,7 @@ import DkMath.Lib.NumberTheory.EllipticAdditionDepth
 import DkMath.Lib.NumberTheory.EllipticBranchComparison
 import DkMath.Lib.NumberTheory.EllipticCofixedCyclotomic
 import DkMath.Lib.NumberTheory.EllipticCofixedImage
+import DkMath.Lib.NumberTheory.EllipticCoordinatePoles
 import DkMath.Lib.NumberTheory.EllipticCoordinateRing
 import DkMath.Lib.NumberTheory.EllipticCriticalAddition
 import DkMath.Lib.NumberTheory.EllipticCriticalCentre
@@ -105,6 +106,7 @@ import DkMath.Lib.NumberTheory.EllipticDyadicSeparation
 import DkMath.Lib.NumberTheory.EllipticDyadicWildInertia
 import DkMath.Lib.NumberTheory.EllipticFiniteKernel
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelGalois
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelPoles
 import DkMath.Lib.NumberTheory.EllipticFixedTorsion
 import DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap
 import DkMath.Lib.NumberTheory.EllipticFunctionEigenvalue

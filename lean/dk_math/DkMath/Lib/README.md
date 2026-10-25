@@ -562,3 +562,10 @@ and constructs normalized coordinate sums. `EllipticFiniteKernelGalois` proves
 coefficient-Galois invariance for a stable kernel using permutation of its points.
 Quotient-curve equations, nonsingularity and point morphisms remain open.
 [005C2A report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C2A-261025.md).
+
+`NumberTheory.EllipticCoordinatePoles` reuses existing all-point valuations for
+coordinate poles, regular constants, and transcendence from a pole.
+`EllipticFiniteKernelPoles` proves exact pole support H for the same normalized
+coordinates, local orders -2/-3, total pole orders 2|H|/3|H|, nonconstancy and
+individual transcendence. Fixed-field generation and quotient-curve equations remain open.
+[005C2B report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C2B-261025.md).
