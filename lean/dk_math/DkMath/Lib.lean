@@ -122,6 +122,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelModelDescent
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelModelMap
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPolynomial
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelReflection
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelSpecialization
 import DkMath.Lib.NumberTheory.EllipticFixedTorsion
 import DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap
 import DkMath.Lib.NumberTheory.EllipticFunctionEigenvalue
@@ -154,6 +155,7 @@ import DkMath.Lib.NumberTheory.EllipticNodalReductionKernel
 import DkMath.Lib.NumberTheory.EllipticNodalTorsion
 import DkMath.Lib.NumberTheory.EllipticNodalTorsionBound
 import DkMath.Lib.NumberTheory.EllipticOppositeDepth
+import DkMath.Lib.NumberTheory.EllipticPointEvaluation
 import DkMath.Lib.NumberTheory.EllipticPointIdealNorm
 import DkMath.Lib.NumberTheory.EllipticPointIdealValuation
 import DkMath.Lib.NumberTheory.EllipticPoleDegree
@@ -288,6 +290,7 @@ import DkMath.Lib.NumberTheory.WeierstrassPositiveValuation
 import DkMath.Lib.NumberTheory.WeierstrassTorsionBounds
 import DkMath.Lib.NumberTheory.WeierstrassTorsionIdentities
 import DkMath.Lib.NumberTheory.WeierstrassTorsionValuation
+import DkMath.Lib.NumberTheory.WeierstrassTwoTorsionSeparation
 import DkMath.Lib.NumberTheory.WeierstrassValuationOrbit
 import DkMath.Lib.NumberTheory.WeierstrassXIdentities
 import DkMath.Lib.NumberTheory.WeierstrassXReflection

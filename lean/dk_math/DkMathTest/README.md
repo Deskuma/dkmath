@@ -78,3 +78,11 @@ The contrasting cusp y²=x³ has a nonsingular generic point (t²,t³), degrees 
 and full field generation, but Δ=0 and a singular origin. This is a boundary for inference
 from generic data, not a counterexample to elliptic finite-kernel quotients.
 [Quotient-model report](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-QUOTIENT-MODEL-261025.md).
+
+`Lib.NumberTheory.EllipticFiniteKernelSpecialization` checks actual finite evaluation
+on y²=x³−x with H={O,(1,0)} and R=(−1,0), producing target coordinates (−2,0).
+It verifies the same equation and two-torsion root, orbit invariance, the pole guard,
+a three-root discriminant example, the cusp separation guard, and the trivial-kernel
+all-point zero fiber with target ellipticity actually supplied. The even kernel has
+distinct points R,R+Q with the same x-image, guarding against universal separation claims.
+[Point-specialization report](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-POINT-SPECIALIZATION-261026.md).

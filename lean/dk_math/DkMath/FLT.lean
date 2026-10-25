@@ -32,6 +32,7 @@ import DkMath.FLT.FreyFiniteKernelModel
 import DkMath.FLT.FreyFiniteKernelPoles
 import DkMath.FLT.FreyFiniteKernelDegree
 import DkMath.FLT.FreyFiniteKernelGeneration
+import DkMath.FLT.FreyFiniteKernelSpecialization
 import DkMath.FLT.FreyGeometricWeilPairing
 import DkMath.FLT.FreyGoodReductionInertia
 import DkMath.FLT.FreyInertiaTransport

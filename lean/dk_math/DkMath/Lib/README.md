@@ -598,3 +598,13 @@ The model construction uses characteristic zero. These results supersede the ear
 open equation boundary; model nonsingularity, point isogeny and zero-component transport remain open.
 A cuspidal cubic tests why generic nonsingularity and degrees 2,3 do not suffice for Δ≠0.
 [Quotient-model report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-QUOTIENT-MODEL-261025.md).
+
+`EllipticPointEvaluation` constructs unique finite values and a surjective evaluation
+algebra hom on the actual algebra of functions regular at a point, in arbitrary characteristic.
+`EllipticFiniteKernelSpecialization` specializes the SAME normalized coordinates outside H,
+identifies them with actual point-coordinate sums, and proves the equation, translation and
+negation formulas. Fixed points of negation yield roots of the target two-torsion cubic.
+`WeierstrassTwoTorsionSeparation` proves Δ≠0 from three separated roots. Separation for
+the actual odd kernel remains open. With target IsElliptic supplied explicitly, an all-point
+FUNCTION with zero fiber exactly H is constructed; additivity and isogeny remain open.
+[Point-specialization report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-POINT-SPECIALIZATION-261026.md).
