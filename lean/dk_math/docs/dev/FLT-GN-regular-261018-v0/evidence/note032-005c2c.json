@@ -1,0 +1,368 @@
+{
+  "checkpoint": "NOTE-032-005C2C",
+  "date": "2026-10-25",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "4769788b39e7fbafc8c8fa0c47a3c2801bff280f",
+  "status": "exact degrees and same fixed-field generation completed unconditionally; exact degree-2 minimal polynomial supplied; target Weierstrass model and point isogeny remain open",
+  "numbering": "parent 005C2C only; no additional internal checkpoint suffix",
+  "production": [
+    {
+      "path": "DkMath/Lib/Algebra/ValuationPoleSpace.lean",
+      "public_theorems": [
+        "exists_const_sub_lt",
+        "exists_sub_smul_lt",
+        "value_adjoin_simple",
+        "le_one_of_isIntegral_adjoin",
+        "le_exp_of_lt_exp_succ",
+        "poleSpace_mono",
+        "finiteDimensional_finrank_poleSpace"
+      ],
+      "public_definitions": [
+        "poleSpace"
+      ],
+      "sha256": "d546c8f9776a3ec2915f5eeb8836909813ee7892a9a5e3ec02d6c8316e1ac5a9"
+    },
+    {
+      "path": "DkMath/Lib/Algebra/PoleSpaceDegree.lean",
+      "public_theorems": [
+        "isFractionRing_adjoin_of_eq_top",
+        "adjoin_gen_eq_top",
+        "linearIndependent_pow_mul",
+        "finrank_le"
+      ],
+      "public_definitions": [],
+      "sha256": "fe597da75e944465433874c47bbe19125782a02bc8bb369acc5f29b6278ea87d"
+    },
+    {
+      "path": "DkMath/Lib/Algebra/ValuationDegreeLower.lean",
+      "public_theorems": [
+        "linearIndependent_of_value_classes"
+      ],
+      "public_definitions": [],
+      "sha256": "cb52ec9609c0fdb8168741aeb717fc910b3b67223b57804b3d867c60c86fe2f5"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticPoleDegree.lean",
+      "public_theorems": [
+        "eq_const_of_pointValuation_le_one",
+        "pointValuation_kernel_eq_zero",
+        "relfinrank_le_poleOrder",
+        "le_relfinrank_of_pole_classes"
+      ],
+      "public_definitions": [
+        "kernelRegularAlgebra"
+      ],
+      "sha256": "48c6681ffe178e68875d604d80337ae41da4c42add6cff3340597a0e52e4dc2c"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelGeneration.lean",
+      "public_theorems": [
+        "velu_relative_degrees",
+        "velu_ambient_degrees",
+        "veluCoordinateField_eq_fixedField",
+        "velu_total_poles_eq_degrees",
+        "natDegree_minpoly_veluY",
+        "exists_velu_quadratic_relation"
+      ],
+      "public_definitions": [],
+      "sha256": "9b11e3b3845714a73380ffc44c4b0fb0eb3e2a9cffc410fc37ff69d739fb8e8a"
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelGeneration.lean",
+      "public_theorems": [
+        "residual_kernel_relative_degrees",
+        "residual_kernel_function_degrees",
+        "residual_kernel_coordinateField_eq_fixedField",
+        "natDegree_residual_kernel_minpoly",
+        "exists_residual_kernel_quadratic_relation"
+      ],
+      "public_definitions": [],
+      "sha256": "0d7592b229f181b0a853121889ec2eea58affb63f0fd3d797341c08532a81e86"
+    }
+  ],
+  "mathematical_changes": {
+    "residue": "in algebraically closed one-variable function fields, same nonzero valuation highest terms cancel by a base scalar; prove via polynomial splitting and transcendence exchange, no residue-field identification assumption",
+    "pole_space": "actual subalgebra R and discrete valuation; regular elements constant and highest-term cancellation yield finite pole space of dimension at most n+1",
+    "upper_degree": "integral k[f]-basis of N/k(f) lies in R; mr independent powers times basis vectors lie in pole space c+dm, forcing r<=d",
+    "lower_degree": "nonzero k(f) values have exponents divisible by d; distinct exponent classes give independent families without separability assumptions",
+    "elliptic": "same fixed field N and actual subgroup H; kernel-outside regular algebra; all H valuations equal O valuation; globally regular functions constant by coordinate norm-degree",
+    "relative_degrees": "exact [N:k(X_H)]=2 and [N:k(Y_H)]=3 proved by upper bounds and independent families 1,Y and 1,X,X^2",
+    "ambient_degrees": "exact [F:k(X_H)]=2|H| and [F:k(Y_H)]=3|H| internally supplied via existing [F:N]=|H|",
+    "generation": "same actual k(X_H,Y_H)=F_H unconditionally; previous exact-degree assumptions removed at new public entrance",
+    "pole_degree_bridge": "same functions total pole orders equal actual ambient function-field degrees; no general arbitrary-curve divisor theorem asserted",
+    "quadratic": "same Y_H minimal polynomial over k(X_H) has EXACT degree2, actual monic quadratic relation constructed",
+    "Source": "same Source, same line and actual pointSubgroup; degrees2p,3p and fixed-field generation no longer require degree providers; minpoly degree2 and quadratic relation"
+  },
+  "generality": [
+    "arbitrary field K, elliptic E, arbitrary same actual finite subgroup H",
+    "no characteristic-zero, prime-order, odd-order, stability or cofixedness required in Lib results",
+    "same Source wrappers retain same dimension1 line; no line existence asserted",
+    "Source37 same E0[37] identification retains global cofixed input",
+    "function-specific pole-degree bridge; no generic Riemann-Roch or target-model theorem"
+  ],
+  "provenance": {
+    "upstream": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_AlgebraicCurve_Divisor_finrank_adjoin_le_degree_of_eq_max_neg_ord.lean",
+    "blob": "3c0bfbe2ef83931a739635809490b5a7f4db654e",
+    "use": "integral-basis growth argument reconstructed using one proved valuation filtration; Apache/NOTICE retained",
+    "other_viewed": [
+      "S_AlgebraicCurve_degree_poleDivisor_eq_finrank_adjoin_of_isAlgClosed_of_transcendental.lean",
+      "S_WeierstrassCurve_exists_veluX_eq_div_and_veluY_eq_div_of_addOrderOf_eq.lean"
+    ],
+    "external_proof_imports_added": false
+  },
+  "checks": {
+    "target_build": {
+      "command": "lake build DkMath.FLT.FreyFiniteKernelGeneration",
+      "includes_six_new_production_modules": true,
+      "jobs": 4074,
+      "exit_code": 0,
+      "warnings": 0
+    },
+    "production_theorems": 27,
+    "production_definitions": 2,
+    "production_lines": 781,
+    "standalone_boundary_theorems": 7,
+    "same_Source37_smoke_theorems": 5,
+    "audited_declarations": 41,
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "axiom_results": {
+      "DkMath.Lib.Algebra.ValuationPoleSpace.exists_const_sub_lt": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.Algebra.ValuationPoleSpace.exists_sub_smul_lt": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.Algebra.ValuationPoleSpace.value_adjoin_simple": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.Algebra.ValuationPoleSpace.le_one_of_isIntegral_adjoin": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.Algebra.ValuationPoleSpace.le_exp_of_lt_exp_succ": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.Algebra.ValuationPoleSpace.poleSpace": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.Algebra.ValuationPoleSpace.poleSpace_mono": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.Algebra.ValuationPoleSpace.finiteDimensional_finrank_poleSpace": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.Algebra.PoleSpaceDegree.isFractionRing_adjoin_of_eq_top": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.Algebra.PoleSpaceDegree.adjoin_gen_eq_top": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.Algebra.PoleSpaceDegree.linearIndependent_pow_mul": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.Algebra.PoleSpaceDegree.finrank_le": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.Algebra.ValuationDegreeLower.linearIndependent_of_value_classes": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.eq_const_of_pointValuation_le_one": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.pointValuation_kernel_eq_zero": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelRegularAlgebra": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.relfinrank_le_poleOrder": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.le_relfinrank_of_pole_classes": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_relative_degrees": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_ambient_degrees": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCoordinateField_eq_fixedField": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_total_poles_eq_degrees": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.natDegree_minpoly_veluY": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_velu_quadratic_relation": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_kernel_relative_degrees": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_kernel_function_degrees": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_kernel_coordinateField_eq_fixedField": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.natDegree_residual_kernel_minpoly": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.exists_residual_kernel_quadratic_relation": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelGenerationTest.actual_relative_degrees": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelGenerationTest.actual_ambient_degrees": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelGenerationTest.actual_generation": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelGenerationTest.actual_minpoly_degree": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelGenerationTest.actual_quadratic": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelGenerationTest.trivial_kernel_degrees": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelGenerationTest.trivial_kernel_generation": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FiniteKernelGenerationSmoke.source37_degrees": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FiniteKernelGenerationSmoke.source37_generation": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FiniteKernelGenerationSmoke.source37_quadratic": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FiniteKernelGenerationSmoke.source37_minpoly": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FiniteKernelGenerationSmoke.source37_same_zeroComponent_generation": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    "forbidden_construct_scan": "passed",
+    "lib_only_dependency_nodes": 54,
+    "prior_owners_unchanged": 39,
+    "all_tracked_Lean_owners_unchanged_except_three_import_facades": true,
+    "original_note032_and_005c2c1_report_and_evidence_unchanged": true,
+    "tracker": "OK: no mismatches found",
+    "normal_test_body_matches_independent_boundary": true,
+    "entrance_and_test_registration": "static only",
+    "git_diff_check": "passed",
+    "license_notice_paths_and_upstream_blob": "passed",
+    "full_root_and_test_builds": "user validation split; not run",
+    "local_document_links": 124,
+    "new_file_whitespace_checks": 12
+  },
+  "boundary_examples": [
+    "same actual y^2=x^3-x and H={O,(1,0)}: relative degrees2,3; ambient degrees4,6",
+    "same actual generated field equals same kernel fixed field without degree hypotheses",
+    "same actual minpoly has degree2; same monic quadratic relation",
+    "trivial kernel: ambient degrees2,3 and same fixed-field generation",
+    "same Source37: degrees74,111 internally computed; generation without degree hypotheses; exact quadratic and minpoly degree2",
+    "same Source37 zero-component identification still retains global cofixedness"
+  ],
+  "remaining": [
+    "k(X_H)-coefficient quadratic relation not yet converted to a k-coefficient Weierstrass equation",
+    "target coefficients and nonsingularity",
+    "actual point map, regular extension, additivity, exact kernel and equivariance for 005C1",
+    "zero-component transport at same coefficient-field dyadic place",
+    "global escape, general hno, Mazur Step Three, stable cyclic tower and general FLT"
+  ]
+}

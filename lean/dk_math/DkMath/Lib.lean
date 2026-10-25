@@ -15,6 +15,7 @@ import DkMath.Lib.Algebra.DiscreteValuationRigidity
 import DkMath.Lib.Algebra.FiniteOrbitMinimum
 import DkMath.Lib.Algebra.FiniteTorsionSum
 import DkMath.Lib.Algebra.OddPowerRecovery
+import DkMath.Lib.Algebra.PoleSpaceDegree
 import DkMath.Lib.Algebra.PowerSubgroup
 import DkMath.Lib.Algebra.PullbackPrincipalPrime
 import DkMath.Lib.Algebra.QuadraticInvolutionDegree
@@ -26,6 +27,8 @@ import DkMath.Lib.Algebra.TorsionMultiplication
 import DkMath.Lib.Algebra.TorsionPowerLifting
 import DkMath.Lib.Algebra.TranscendentalFiniteDegree
 import DkMath.Lib.Algebra.UnitPowerClass
+import DkMath.Lib.Algebra.ValuationDegreeLower
+import DkMath.Lib.Algebra.ValuationPoleSpace
 import DkMath.Lib.Algebra.ValuationPolynomial
 import DkMath.Lib.Algebra.ValuationQuadraticRoot
 import DkMath.Lib.Algebra.ValuationSeparatedRoots
@@ -110,6 +113,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernel
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelGalois
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPoles
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDegree
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelGeneration
 import DkMath.Lib.NumberTheory.EllipticFixedTorsion
 import DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap
 import DkMath.Lib.NumberTheory.EllipticFunctionEigenvalue
@@ -144,6 +148,7 @@ import DkMath.Lib.NumberTheory.EllipticNodalTorsionBound
 import DkMath.Lib.NumberTheory.EllipticOppositeDepth
 import DkMath.Lib.NumberTheory.EllipticPointIdealNorm
 import DkMath.Lib.NumberTheory.EllipticPointIdealValuation
+import DkMath.Lib.NumberTheory.EllipticPoleDegree
 import DkMath.Lib.NumberTheory.EllipticPointOrderAlgebra
 import DkMath.Lib.NumberTheory.EllipticPrincipalPointIdeal
 import DkMath.Lib.NumberTheory.EllipticReductionCoordinates

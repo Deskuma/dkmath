@@ -64,3 +64,9 @@ coprime degrees 2,3 generate ℚ(t), while degrees 4,6 generate ℚ(t²).
 Repeated degree 2 and a zero common factor check the guards. The previous actual
 curve/kernel example now has finite positive degrees and a genuine monic relation.
 [005C2C1 report](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C2C1-261025.md).
+
+`Lib.NumberTheory.EllipticFiniteKernelGeneration` checks relative degrees 2,3 and ambient
+degrees 4,6 for the same actual curve/kernel, unconditional fixed-field generation,
+minimal-polynomial degree 2 and an actual monic quadratic relation. The trivial kernel
+also has degrees 2,3 and generates its fixed field.
+[005C2C report](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C2C-261025.md).

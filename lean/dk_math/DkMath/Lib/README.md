@@ -578,3 +578,12 @@ normalized coordinates, degree towers and an actual monic relation over k(X_H).
 Generation of the same fixed field remains conditional on ambient degrees 2|H|,3|H|;
 the total-pole-order/field-degree equality is not supplied here.
 [005C2C1 report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C2C1-261025.md).
+
+`Algebra.ValuationPoleSpace`, `Algebra.PoleSpaceDegree` and `Algebra.ValuationDegreeLower`
+prove highest-term cancellation, the n+1 bound for a single pole filtration, and function-field
+degree bounds from integral bases and valuation classes. `NumberTheory.EllipticPoleDegree`
+applies them to the same translation fixed field. `NumberTheory.EllipticFiniteKernelGeneration`
+now supplies exact relative degrees 2,3, ambient degrees 2|H|,3|H|, same fixed-field generation,
+total-pole-order/degree equalities and an actual degree-2 minimal polynomial, without the earlier
+degree hypotheses. The target Weierstrass equation, nonsingularity and point isogeny remain open.
+[005C2C report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C2C-261025.md).

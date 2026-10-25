@@ -153,6 +153,7 @@ import DkMathTest.Lib.NumberTheory.EllipticDyadicGeometry
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernel
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelPoles
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelDegree
+import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelGeneration
 import DkMathTest.Lib.NumberTheory.EllipticFrobeniusBranchSwap
 import DkMathTest.Lib.NumberTheory.EllipticNodalTorsionBound
 import DkMathTest.Lib.NumberTheory.EllipticSplitDyadic

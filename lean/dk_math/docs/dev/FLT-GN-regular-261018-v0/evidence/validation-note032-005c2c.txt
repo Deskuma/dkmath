@@ -1,0 +1,140 @@
+NOTE-032-005C2C — 2026-10-25
+Branch: dev/FLT-GN-regular-261018-v0
+Base HEAD: 4769788b39e7fbafc8c8fa0c47a3c2801bff280f; initially clean.
+No additional checkpoint suffix; degree/generation work completed as one unit.
+
+lake build DkMath.FLT.FreyFiniteKernelGeneration
+Exit 0. Build completed successfully (4074 jobs). Warnings: 0.
+Includes all six new production owners: 27 theorems, 2 definitions, 781 lines.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FiniteKernelGenerationBoundary.lean
+Exit 0. Warnings: 0. Seven actual curve/kernel theorems.
+Same curve y^2=x^3-x, same H={O,(1,0)}:
+relative degrees2,3; ambient degrees4,6; unconditional same fixed-field generation;
+actual minimal polynomial degree2; actual monic quadratic.
+Trivial kernel: ambient degrees2,3 and same fixed-field generation.
+Normal test proof body independently elaborated, not imported as a cached new test owner.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FiniteKernelGenerationSmoke.lean
+Exit 0. Warnings: 0. Five same-Source37 checks.
+Degrees74,111 computed internally; same fixed-field generation has no degree inputs.
+Actual monic quadratic and exact minpoly degree2.
+Same E0[37] pointSubgroup identification RETAINS global cofixedness.
+No Source37 or line existence, target curve or point isogeny existence asserted.
+
+lake env lean tmp/note032-005c/Note032FiniteKernelGenerationAxioms.lean
+Exit 0. Warnings: 0. 29 production + 7 boundary + 5 smoke declarations audited.
+Both independent proof bodies re-elaborated in the audit file.
+file: Note032FiniteKernelGenerationAxioms
+'DkMath.Lib.Algebra.ValuationPoleSpace.exists_const_sub_lt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Algebra.ValuationPoleSpace.exists_sub_smul_lt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Algebra.ValuationPoleSpace.value_adjoin_simple' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Algebra.ValuationPoleSpace.le_one_of_isIntegral_adjoin' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.Algebra.ValuationPoleSpace.le_exp_of_lt_exp_succ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Algebra.ValuationPoleSpace.poleSpace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Algebra.ValuationPoleSpace.poleSpace_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Algebra.ValuationPoleSpace.finiteDimensional_finrank_poleSpace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.Algebra.PoleSpaceDegree.isFractionRing_adjoin_of_eq_top' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.Algebra.PoleSpaceDegree.adjoin_gen_eq_top' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Algebra.PoleSpaceDegree.linearIndependent_pow_mul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.Algebra.PoleSpaceDegree.finrank_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Algebra.ValuationDegreeLower.linearIndependent_of_value_classes' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.eq_const_of_pointValuation_le_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.pointValuation_kernel_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelRegularAlgebra' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.relfinrank_le_poleOrder' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.le_relfinrank_of_pole_classes' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_relative_degrees' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_ambient_degrees' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCoordinateField_eq_fixedField' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_total_poles_eq_degrees' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.natDegree_minpoly_veluY' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_velu_quadratic_relation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_kernel_relative_degrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.residual_kernel_function_degrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.residual_kernel_coordinateField_eq_fixedField' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.natDegree_residual_kernel_minpoly' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.exists_residual_kernel_quadratic_relation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'EllipticFiniteKernelGenerationTest.actual_relative_degrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelGenerationTest.actual_ambient_degrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelGenerationTest.actual_generation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelGenerationTest.actual_minpoly_degree' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelGenerationTest.actual_quadratic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelGenerationTest.trivial_kernel_degrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelGenerationTest.trivial_kernel_generation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Note032FiniteKernelGenerationSmoke.source37_degrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FiniteKernelGenerationSmoke.source37_generation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FiniteKernelGenerationSmoke.source37_quadratic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FiniteKernelGenerationSmoke.source37_minpoly' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FiniteKernelGenerationSmoke.source37_same_zeroComponent_generation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+Static checks:
+- All nine new Lean files: forbidden constructs/imports scan passed after nested-comment removal.
+- All new Lean files have file markers; public theorems/definitions have docstrings.
+- All 24 public Lib theorem/definition docstrings have [DkMath.Lib].
+- Lib dependency closure: 54 DkMath nodes, all under DkMath.Lib.
+- 39 selected prior owners unchanged against baseline HEAD.
+- All tracked Lean files unchanged except three import facades.
+- Original NOTE-032 and prior 005C2C1 report/JSON/validation unchanged against baseline HEAD.
+- Production and test entrances checked statically; normal test glob retained.
+- Normal test body matches independent boundary after header removal and marker normalization.
+- Apache license/notice paths and upstream integral-basis source blob checked.
+- Tracker: OK: no mismatches found
+- git diff --check: passed.
+- Full/root/DkMathTest/lake test builds: user validation split, not run.
+
+Mathematical boundary:
+Exact same relative degrees2,3 and ambient degrees2|H|,3|H| proved without numerical degree inputs.
+Same fixed-field generation and function-specific total-pole-order/degree equalities proved.
+Same Y_H minimal polynomial over k(X_H) has EXACT degree2; actual monic quadratic constructed.
+Arbitrary characteristic and arbitrary finite actual H; no stability or cofixed hypothesis in degree proofs.
+No general arbitrary-curve Riemann-Roch or pole-divisor degree theorem asserted.
+Quadratic coefficients remain in k(X_H); k-coefficient Weierstrass equation and target nonsingularity open.
+No actual point morphism, additivity, exact point kernel or isogeny constructed.
+005C1 point homomorphism remains an input. Target zero-component transport and global escape remain open.
+Function-field point valuation is distinct from coefficient-field dyadic valuation.
+Degree and fixed-field generation obligations closed; 005C as a whole and general hno/FLT incomplete.
+
+Local document links checked: 124.
+New-file whitespace checks: 12 files passed.
+JSON round-trip checked.
