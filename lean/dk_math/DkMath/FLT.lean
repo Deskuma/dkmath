@@ -27,6 +27,7 @@ import DkMath.FLT.FreyDyadicInertia
 import DkMath.FLT.FreyDyadicNontrivial
 import DkMath.FLT.FreyDyadicZeroComponent
 
+import DkMath.FLT.FreyFiniteKernel
 import DkMath.FLT.FreyGeometricWeilPairing
 import DkMath.FLT.FreyGoodReductionInertia
 import DkMath.FLT.FreyInertiaTransport

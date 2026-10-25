@@ -1,0 +1,355 @@
+{
+  "checkpoint": "NOTE-032-005C2A",
+  "date": "2026-10-25",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "c7d4d9be496759857df33276c271041b181e9f63",
+  "status": "same finite-kernel fixed field and normalized invariant functions constructed; quotient-curve equation and actual point map remain open",
+  "production": [
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernel.lean",
+      "public_theorems": [
+        "kernelTranslation_injective",
+        "card_kernelTranslationGroup",
+        "finite_kernelTranslationGroup",
+        "finrank_kernelFixedField",
+        "mem_kernelFixedField_iff",
+        "kernelTrace_translation",
+        "veluX_translation",
+        "veluY_translation",
+        "velu_coordinates_mem"
+      ],
+      "definitions": [
+        "kernelTranslation",
+        "kernelTranslationGroup",
+        "kernelFixedField",
+        "kernelTrace",
+        "veluX",
+        "veluY"
+      ],
+      "sha256": "a56df90d30432c605330b54c7924536ffd87ff13a9661bd2397d223507e74203"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelGalois.lean",
+      "public_theorems": [
+        "kernelTrace_galois",
+        "kernel_sum_xc_galois",
+        "kernel_sum_yc_galois",
+        "veluX_galois",
+        "veluY_galois"
+      ],
+      "definitions": [
+        "kernelGaloisEquiv"
+      ],
+      "sha256": "424be548c2beadbcbfa6531a8b7ebecf0cdcd310467a0ca36b71b86d345cacf1"
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernel.lean",
+      "public_theorems": [
+        "finite_residualPointSubgroup",
+        "residual_kernelFixedField_finrank",
+        "residual_kernel_coordinates_invariant",
+        "residual_cofixed_kernel_coordinates_galois"
+      ],
+      "definitions": [
+        "residualKernelX",
+        "residualKernelY"
+      ],
+      "sha256": "bf700b87607c1935ab6be0016df0bf0abdbea55b36401e5a91e5582e4f53fd5c"
+    }
+  ],
+  "mathematical_changes": {
+    "field": "same actual subgroup H acts faithfully by translations; constructed intermediate fixed field has extension degree Nat.card H when H finite",
+    "functions": "actual kernelTrace and normalized x/y sums; same H translations preserve them; membership in same fixed field",
+    "Galois": "same actual stable H is permuted, not necessarily fixed pointwise; semilinear coefficient action commutes with trace; normalized coordinates fixed",
+    "Source": "finite subgroup from same residual line via existing order p; extension degree p; actual normalized functions constructed; stability or cofixedness gives coefficient-Galois invariance",
+    "zero_component": "Source37 smoke identifies same kernel with pointSubgroup of E0[37] conditional on global cofixed line; no target-component transport"
+  },
+  "generality": [
+    "general field K and elliptic E for library owners",
+    "no prime or characteristic-zero restriction for finite-kernel fixed field and invariance",
+    "finite subgroup required for finite sums and degree formula",
+    "Galois stability required only for coefficient invariance, not translation invariance"
+  ],
+  "reference_use": {
+    "existing_owner": "DkMath.Lib.NumberTheory.EllipticMultiplicationFixedField",
+    "scope": "translation-group and fixed-field proofs generalized from full n-torsion to arbitrary same actual H",
+    "license": "Apache-2.0 and upstream notices retained in generalized owner",
+    "upstream_blob": "e82e468ec9dc155bbe1c531016cbd83735a3b037",
+    "primary_reference": "https://math.mit.edu/classes/18.783/2023/LectureSlides5.pdf",
+    "primary_scope": "short-model Velu finite-kernel formulas used as direction; no equation theorem imported or claimed",
+    "separate_quotientDatum_owner_fetch": "web cache miss; implementation not reviewed or copied"
+  },
+  "checks": {
+    "target_build": {
+      "command": "lake build DkMath.FLT.FreyFiniteKernel",
+      "includes_three_new_production_modules": true,
+      "jobs": 4059,
+      "exit_code": 0,
+      "warnings": 0
+    },
+    "production_theorems": 18,
+    "production_definitions": 9,
+    "standalone_boundary_theorems": 10,
+    "standalone_example_definitions": 4,
+    "same_Source37_smoke_theorems": 4,
+    "audited_declarations": 45,
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "axiom_results": {
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelTranslation": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelTranslation_injective": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelTranslationGroup": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.card_kernelTranslationGroup": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.finite_kernelTranslationGroup": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelFixedField": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.finrank_kernelFixedField": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.mem_kernelFixedField_iff": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelTrace": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelTrace_translation": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_translation": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_translation": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_coordinates_mem": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelGaloisEquiv": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelTrace_galois": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernel_sum_xc_galois": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernel_sum_yc_galois": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_galois": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_galois": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.finite_residualPointSubgroup": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_kernelFixedField_finrank": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residualKernelX": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residualKernelY": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_kernel_coordinates_invariant": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_cofixed_kernel_coordinates_galois": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelTest.curve": [
+        "propext",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelTest.curve_discriminant": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelTest.rationalQ": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelTest.Q": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelTest.point_data": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelTest.kernel": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelTest.kernel_univ": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelTest.sum_kernel": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelTest.degree_two": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelTest.normalized_coordinates": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelTest.kernel_stable": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelTest.same_kernel_invariance": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelTest.trace_not_average": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelTest.trivial_kernel": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FiniteKernelSmoke.source37_degree": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FiniteKernelSmoke.source37_stable_functions": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FiniteKernelSmoke.source37_cofixed_functions": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FiniteKernelSmoke.source37_zeroComponent_degree": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    "forbidden_construct_scan": "passed",
+    "lib_only_dependency_nodes": 7,
+    "prior_owners_unchanged": 27,
+    "original_note032_and_005c1_report_and_evidence_unchanged": true,
+    "tracker": "OK: no mismatches found",
+    "normal_test_body_matches_independent_boundary": true,
+    "entrance_and_test_registration": "static only",
+    "Apache_license_and_notice_targets": "exist",
+    "git_diff_check": "passed",
+    "full_root_and_test_builds": "user validation split; not run",
+    "local_document_links": 105,
+    "new_file_whitespace_checks": 9
+  },
+  "boundary_examples": [
+    "actual nonsingular curve y^2=x^3-x, Delta64, rational Q=(1,0), nonzero two-torsion",
+    "actual kernel {O,Q}, exact enumeration and fixed-field degree2",
+    "normalized X=x+translation_Q(x)-1 and Y=y+translation_Q(y)",
+    "same actual translation and Galois invariance",
+    "trace(1)=2 distinct from average1",
+    "trivial kernel restores generic coordinates"
+  ],
+  "remaining": [
+    "005C2B pole orders and nonconstancy of same normalized functions",
+    "target coefficients and curve equation; nonsingularity and generation of same fixed field",
+    "actual point map, curve-morphism extension, additivity, exact kernel and equivariance for 005C1",
+    "zero-component transport at same place",
+    "general hno, global escape, Mazur Step Three, stable cyclic tower and general FLT"
+  ]
+}

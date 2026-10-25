@@ -101,10 +101,12 @@ import DkMath.Lib.NumberTheory.EllipticDivisionSequence
 import DkMath.Lib.NumberTheory.EllipticDivisionUniversal
 import DkMath.Lib.NumberTheory.EllipticDoublingDepth
 import DkMath.Lib.NumberTheory.EllipticDyadicGeometry
-import DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap
 import DkMath.Lib.NumberTheory.EllipticDyadicSeparation
 import DkMath.Lib.NumberTheory.EllipticDyadicWildInertia
+import DkMath.Lib.NumberTheory.EllipticFiniteKernel
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelGalois
 import DkMath.Lib.NumberTheory.EllipticFixedTorsion
+import DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap
 import DkMath.Lib.NumberTheory.EllipticFunctionEigenvalue
 import DkMath.Lib.NumberTheory.EllipticFunctionField
 import DkMath.Lib.NumberTheory.EllipticFunctionFieldConstants

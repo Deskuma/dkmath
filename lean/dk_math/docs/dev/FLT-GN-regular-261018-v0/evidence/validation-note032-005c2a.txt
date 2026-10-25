@@ -1,0 +1,135 @@
+NOTE-032-005C2A — 2026-10-25
+Branch: dev/FLT-GN-regular-261018-v0
+Base HEAD: c7d4d9be496759857df33276c271041b181e9f63; initially clean.
+
+lake build DkMath.FLT.FreyFiniteKernel
+Exit 0. Build completed successfully (4059 jobs). Warnings: 0.
+Includes all three new production owners: 18 theorems and 9 definitions.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FiniteKernelBoundary.lean
+Exit 0. Warnings: 0. 10 theorems, 4 definitions.
+Normal test body independently elaborated.
+Actual curve y^2=x^3-x, Delta64, Q=(1,0), Q+Q=O and Galois fixed;
+actual two-point kernel, extension degree2; correction constant1 retained;
+same translation/Galois invariance; trace not average; trivial kernel boundary.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FiniteKernelSmoke.lean
+Exit 0. Warnings: 0. 4 theorems, same Source37 and kernel.
+Fixed-field extension degree37; actual normalized coordinates stable/cofixed invariance;
+same kernel identified with same E0[37] conditional on given global cofixed line.
+No Source37, cofixed line, target quotient curve or isogeny existence asserted.
+
+lake env lean /tmp/Note032FiniteKernelAxioms.lean
+Exit 0. 27 production + 14 boundary/example + 4 smoke declarations audited.
+Both independent proof bodies re-elaborated in audit file.
+file: Note032FiniteKernelBoundary
+file: Note032FiniteKernelSmoke
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelTranslation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelTranslation_injective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelTranslationGroup' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.card_kernelTranslationGroup' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.finite_kernelTranslationGroup' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelFixedField' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.finrank_kernelFixedField' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.mem_kernelFixedField_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelTrace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelTrace_translation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_translation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_translation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_coordinates_mem' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelGaloisEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelTrace_galois' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernel_sum_xc_galois' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernel_sum_yc_galois' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_galois' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_galois' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.finite_residualPointSubgroup' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.residual_kernelFixedField_finrank' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.residualKernelX' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.residualKernelY' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.residual_kernel_coordinates_invariant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_cofixed_kernel_coordinates_galois' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'EllipticFiniteKernelTest.curve' depends on axioms: [propext, Quot.sound]
+'EllipticFiniteKernelTest.curve_discriminant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelTest.rationalQ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelTest.Q' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelTest.point_data' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelTest.kernel' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelTest.kernel_univ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelTest.sum_kernel' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelTest.degree_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelTest.normalized_coordinates' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelTest.kernel_stable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelTest.same_kernel_invariance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelTest.trace_not_average' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelTest.trivial_kernel' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FiniteKernelSmoke.source37_degree' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FiniteKernelSmoke.source37_stable_functions' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FiniteKernelSmoke.source37_cofixed_functions' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FiniteKernelSmoke.source37_zeroComponent_degree' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Static checks:
+- All six new Lean files: forbidden constructs/imports scan passed after nested-comment removal.
+- All new Lean files have file markers; public theorems/definitions have docstrings.
+- All 21 public Lib theorem/definition docstrings have [DkMath.Lib].
+- Lib dependency closure: 7 DkMath nodes, all under DkMath.Lib.
+- 27 prior owners unchanged against baseline HEAD.
+- Original NOTE-032 and 005C1 report/JSON/validation unchanged against baseline HEAD.
+- Production and test entrances checked statically; normal test glob retained.
+- Normal test body matches independent boundary after header removal and marker normalization.
+- Generalized existing Apache owner retains SPDX, upstream provenance, license/notice paths.
+- Tracker: OK: no mismatches found
+- git diff --check: passed.
+- Full/root/DkMathTest/lake test builds: user validation split, not run.
+
+Mathematical boundary:
+Same intermediate fixed field and degree |H| constructed, not an elliptic quotient model.
+Same normalized functions constructed and invariant under kernel translations.
+Stable kernel suffices for coefficient-Galois invariance; individual points need not be rational.
+Nonconstancy, pole degrees, generation of fixed field and target curve equation remain open.
+Target ellipticity, point morphism, exact point kernel and additivity not supplied.
+005C1 actual point homomorphism remains an input.
+No target zero-component transport, global escape, general hno or general FLT proved.
+005C2A complete as function-field construction; 005C2 and 005C remain incomplete.
+
+Local document links checked: 105.
+New-file whitespace checks: 9 files passed.
+JSON round-trip checked.

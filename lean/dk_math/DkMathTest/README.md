@@ -48,3 +48,8 @@ $$
 zero-map kernel guard, equivariance and cofixedness boundaries, and the actual
 elliptic [p] multiplication map whose full torsion kernel cannot be a line.
 [005C1 report](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C1-261025.md).
+
+`Lib.NumberTheory.EllipticFiniteKernel` uses the actual curve y²=x³−x and its
+rational point (1,0): same two-point kernel, fixed-field degree two, normalization
+constant one, translation/Galois invariance, trace versus average, and trivial kernel.
+[005C2A report](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C2A-261025.md).

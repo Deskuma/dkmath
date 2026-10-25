@@ -150,6 +150,7 @@ import DkMathTest.Lib.Cosmic.CompletionCoprime
 import DkMathTest.Lib.Cosmic.GNSuccessorSupport
 import DkMathTest.Lib.FiniteSpectrumProjectors
 import DkMathTest.Lib.NumberTheory.EllipticDyadicGeometry
+import DkMathTest.Lib.NumberTheory.EllipticFiniteKernel
 import DkMathTest.Lib.NumberTheory.EllipticFrobeniusBranchSwap
 import DkMathTest.Lib.NumberTheory.EllipticNodalTorsionBound
 import DkMathTest.Lib.NumberTheory.EllipticSplitDyadic

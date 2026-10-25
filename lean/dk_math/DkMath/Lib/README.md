@@ -555,3 +555,10 @@ linear map with the specified kernel and identifies the quotient with the same i
 given its kernel and Galois equivariance, the image has order p and supplies a nonzero
 rational p-torsion point on the target curve. Quotient-curve and isogeny existence remain open.
 [005C1 report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C1-261025.md).
+
+`NumberTheory.EllipticFiniteKernel` constructs the translation fixed field of the
+same finite subgroup of actual points, proves extension degree equal to its order,
+and constructs normalized coordinate sums. `EllipticFiniteKernelGalois` proves
+coefficient-Galois invariance for a stable kernel using permutation of its points.
+Quotient-curve equations, nonsingularity and point morphisms remain open.
+[005C2A report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C2A-261025.md).
