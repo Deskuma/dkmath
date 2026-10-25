@@ -86,3 +86,11 @@ a three-root discriminant example, the cusp separation guard, and the trivial-ke
 all-point zero fiber with target ellipticity actually supplied. The even kernel has
 distinct points R,R+Q with the same x-image, guarding against universal separation claims.
 [Point-specialization report](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-POINT-SPECIALIZATION-261026.md).
+
+`Lib.NumberTheory.EllipticFiniteKernelNonsingular` uses the full three-torsion kernel
+on the actual curve y²=x³−x, proves its order nine and oddness, and checks the same
+target discriminant, rational-function degree nine, finite-fiber bound and separated
+two-torsion images. It also checks rational target ellipticity, all-point zero fiber
+and orbit invariance without an external ellipticity instance. The old two-point
+kernel cannot satisfy the new odd-cardinality guard.
+[Target-nonsingularity report](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-TARGET-NONSINGULAR-261026.md).

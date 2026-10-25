@@ -24,6 +24,7 @@ import DkMath.Lib.Algebra.RationalPolynomialFiber
 import DkMath.Lib.Algebra.RootUnitGauge
 import DkMath.Lib.Algebra.SingleSlopeRoot
 import DkMath.Lib.Algebra.SquareCompletion
+import DkMath.Lib.Algebra.StrictFiberCardinality
 import DkMath.Lib.Algebra.TorsionMultiplication
 import DkMath.Lib.Algebra.TorsionPowerLifting
 import DkMath.Lib.Algebra.TranscendentalFiniteDegree
@@ -120,9 +121,12 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelGeneration
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelModel
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelModelDescent
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelModelMap
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelNonsingular
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPolynomial
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelRationalFiber
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelReflection
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelSpecialization
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelTwoTorsion
 import DkMath.Lib.NumberTheory.EllipticFixedTorsion
 import DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap
 import DkMath.Lib.NumberTheory.EllipticFunctionEigenvalue

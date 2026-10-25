@@ -608,3 +608,13 @@ negation formulas. Fixed points of negation yield roots of the target two-torsio
 the actual odd kernel remains open. With target IsElliptic supplied explicitly, an all-point
 FUNCTION with zero fiber exactly H is constructed; additivity and isogeny remain open.
 [Point-specialization report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-POINT-SPECIALIZATION-261026.md).
+
+`EllipticFiniteKernelRationalFiber` realizes the SAME X_H in the original k(x),
+computes reduced numerator/denominator maximum degree |H| from existing field degrees,
+and bounds finite fibers by a nonzero cleared polynomial. `StrictFiberCardinality`
+and `EllipticFiniteKernelTwoTorsion` separate two-torsion images using entire orbits
+and one strict x-fiber. `EllipticFiniteKernelNonsingular` now proves Delta!=0 and
+IsElliptic for the SAME target model in characteristic zero with odd finite H.
+Stable-kernel K-models are elliptic as well. The same all-point function and zero fiber
+H no longer need target IsElliptic as an external input. Additivity/isogeny remain open.
+[Target-nonsingularity report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-TARGET-NONSINGULAR-261026.md).
