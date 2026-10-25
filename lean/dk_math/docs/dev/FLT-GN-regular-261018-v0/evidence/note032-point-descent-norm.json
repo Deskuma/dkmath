@@ -1,0 +1,453 @@
+{
+  "unit": "NOTE-032-POINT-DESCENT-NORM",
+  "date": "2026-10-26",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "e22e0d63ab580adf2e4717466e469e66c7d06094",
+  "status": "same all-point function descended to the existing K-model; Galois equivariance and inversion proved; fixed cosets and Cofixed residual points have rational images; orbit product descended uniquely to the same target function field with source valuation/order formula; additivity and target local-order comparison remain open",
+  "production": [
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelPointDescent.lean",
+      "sha256": "6c7df816a4015f37767f098dce6012e2c0cf2f653e021d2e14f0a0e7472592ff",
+      "theorems": [
+        "pointModelEquiv_some",
+        "pointAction_mem_kernel_iff",
+        "kernelXAt_galois",
+        "kernelYAt_galois",
+        "oddKernelPointMap_neg",
+        "descendedKernelPointMap_transport",
+        "descendedKernelPointMap_of_not_mem",
+        "descendedKernelPointMap_eq_zero_iff",
+        "descendedKernelPointMap_translation",
+        "descendedKernelPointMap_neg",
+        "descendedKernelPointMap_equivariant",
+        "exists_rational_image_of_fixed_coset",
+        "torsion_mem_pointSubgroup_iff",
+        "exists_rational_image_of_cofixed"
+      ],
+      "definitions": [
+        "pointModelEquiv",
+        "descendedKernelPointMap"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelNorm.lean",
+      "sha256": "639dfae8edb8475675e65094cbcdaa1843c607eb314eb191f44d242af4d80cf0",
+      "theorems": [
+        "kernelNorm_translation",
+        "kernelNorm_mem",
+        "kernelNorm_mul",
+        "kernelNorm_ne_zero",
+        "kernelNorm_of_mem",
+        "pointValuation_kernelNorm",
+        "pointOrder_kernelNorm",
+        "existsUnique_kernelModelNorm",
+        "kernelModelPull_norm",
+        "kernelModelNorm_mul",
+        "kernelModelNorm_ne_zero",
+        "kernelModelNorm_pull"
+      ],
+      "definitions": [
+        "kernelNorm",
+        "kernelModelNorm"
+      ]
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelPointDescent.lean",
+      "sha256": "374b9186b7fe198cb4cc260e54634e1a12b9b244a73a37c62920a88a168e965b",
+      "theorems": [
+        "residual_descended_kernel_model_map",
+        "residual_descended_kernel_model_isElliptic",
+        "residual_descended_kernel_pointMap_transport",
+        "residual_descended_kernel_pointMap_eq_zero_iff",
+        "residual_descended_kernel_pointMap_equivariant",
+        "exists_rational_residual_kernel_image",
+        "exists_nonzero_rational_residual_kernel_image"
+      ],
+      "definitions": [
+        "residualDescendedKernelModel",
+        "residualDescendedKernelPointMap"
+      ]
+    }
+  ],
+  "tests": [
+    {
+      "path": "DkMathTest/Lib/NumberTheory/EllipticFiniteKernelPointDescent.lean",
+      "sha256": "fc1b78e7eb3ff3b5da03a98f2ab5924f2acb0416ed355bf4018cf3c8d60a8fc3",
+      "theorems": [
+        "actual_equivariance",
+        "actual_zero_fiber",
+        "actual_same_map",
+        "actual_inversion",
+        "actual_R_fixed",
+        "actual_R_outside",
+        "actual_fixed_coset",
+        "actual_coset_nonzero_rational_image",
+        "actual_coset_image",
+        "actual_norm_of_x",
+        "actual_norm_of_x_ne_zero",
+        "actual_norm_fixed_coordinate",
+        "actual_norm_pole_order"
+      ],
+      "definitions": [
+        "target",
+        "image"
+      ]
+    },
+    {
+      "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032PointDescentSmoke.lean",
+      "sha256": "8b68541736ea5f11cffb29e342b4ab5ee159dda855c73af3c115aa6e944288ec",
+      "theorems": [
+        "source37_target",
+        "source37_same_map",
+        "source37_zero_fiber",
+        "source37_equivariant",
+        "source37_nonzero_rational_image"
+      ],
+      "definitions": []
+    }
+  ],
+  "counts": {
+    "production_owners": 3,
+    "production_theorems": 33,
+    "production_definitions": 6,
+    "production_lines": 536,
+    "test_theorems": 13,
+    "test_definitions_and_abbreviations": 2,
+    "source37_theorems": 5,
+    "audited_declarations": 59
+  },
+  "validation": {
+    "focused_builds": [
+      "./lean-build.sh DkMath.FLT.FreyFiniteKernelPointDescent",
+      "./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelPointDescent"
+    ],
+    "direct_lean": [
+      "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032PointDescentSmoke.lean",
+      "lake env lean tmp/note032-point-descent/Axioms.lean"
+    ],
+    "results": "passed without warnings",
+    "forbidden_construct_scan": "passed",
+    "lib_dependency_direction": "passed",
+    "file_markers_and_docstrings": "passed",
+    "facade_registration": "static check passed",
+    "previous_owners_and_checkpoint": "unchanged",
+    "diff_check": "passed",
+    "axiom_allowlist": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "full_build_and_suite": "delegated to user"
+  },
+  "upstream": {
+    "path": "P2M/Sol/S_WeierstrassCurve_exists_veluPointHom_oddOrderSummingSet_of_isAlgClosed.lean",
+    "blob": "fa5eda1fdc857b6445c21720c78805e7ecded543",
+    "cached_blob_hash": "verified",
+    "role": "read for principal-divisor pushforward and Pic0 additivity route; no external proof-library import"
+  },
+  "boundaries": [
+    "all-point additivity and AddMonoidHom packaging not proved",
+    "rational images not yet proved p-torsion",
+    "orbit product not identified with Algebra.norm in this API",
+    "source order formula not yet a target-point order formula",
+    "principal-divisor pushforward not constructed",
+    "isogeny, integral models, reduction/component transport and general hno remain open"
+  ],
+  "axioms": {
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.pointModelEquiv": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.pointModelEquiv_some": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.pointAction_mem_kernel_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt_galois": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelYAt_galois": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_neg": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelPointMap": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelPointMap_transport": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelPointMap_of_not_mem": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelPointMap_eq_zero_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelPointMap_translation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelPointMap_neg": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelPointMap_equivariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_rational_image_of_fixed_coset": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.torsion_mem_pointSubgroup_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_rational_image_of_cofixed": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelNorm": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelNorm_translation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelNorm_mem": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelNorm_mul": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelNorm_ne_zero": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelNorm_of_mem": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.pointValuation_kernelNorm": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.pointOrder_kernelNorm": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.existsUnique_kernelModelNorm": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelNorm": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelPull_norm": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelNorm_mul": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelNorm_ne_zero": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelNorm_pull": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualDescendedKernelModel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_descended_kernel_model_map": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_descended_kernel_model_isElliptic": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualDescendedKernelPointMap": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_descended_kernel_pointMap_transport": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_descended_kernel_pointMap_eq_zero_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_descended_kernel_pointMap_equivariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.exists_rational_residual_kernel_image": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.exists_nonzero_rational_residual_kernel_image": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelPointDescentTest.target": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelPointDescentTest.image": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelPointDescentTest.actual_equivariance": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelPointDescentTest.actual_zero_fiber": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelPointDescentTest.actual_same_map": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelPointDescentTest.actual_inversion": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelPointDescentTest.actual_R_fixed": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelPointDescentTest.actual_R_outside": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelPointDescentTest.actual_fixed_coset": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelPointDescentTest.actual_coset_nonzero_rational_image": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelPointDescentTest.actual_coset_image": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelPointDescentTest.actual_norm_of_x": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelPointDescentTest.actual_norm_of_x_ne_zero": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelPointDescentTest.actual_norm_fixed_coordinate": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelPointDescentTest.actual_norm_pole_order": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032PointDescentSmoke.source37_target": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032PointDescentSmoke.source37_same_map": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032PointDescentSmoke.source37_zero_fiber": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032PointDescentSmoke.source37_equivariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032PointDescentSmoke.source37_nonzero_rational_image": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  }
+}

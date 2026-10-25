@@ -122,6 +122,8 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelModel
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelModelDescent
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelModelMap
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNonsingular
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelPointDescent
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelNorm
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPolynomial
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelRationalFiber
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelReflection
