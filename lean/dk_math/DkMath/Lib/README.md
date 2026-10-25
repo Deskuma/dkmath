@@ -548,3 +548,10 @@ be invertible. `NumberTheory.EllipticCofixedCyclotomic` uses the constructed Wei
 pairing to identify that action with the cyclotomic character on the same actual
 torsion points and point subgroup. The adapted matrix retains its upper-right entry.
 [005B report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005B-261025.md).
+
+`RepresentationTheory.CofixedImage` transports cofixedness through an equivariant
+linear map with the specified kernel and identifies the quotient with the same image.
+`NumberTheory.EllipticCofixedImage` restricts an actual point homomorphism to torsion;
+given its kernel and Galois equivariance, the image has order p and supplies a nonzero
+rational p-torsion point on the target curve. Quotient-curve and isogeny existence remain open.
+[005C1 report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C1-261025.md).

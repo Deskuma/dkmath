@@ -1,0 +1,104 @@
+NOTE-032-005C1 — 2026-10-25
+Branch: dev/FLT-GN-regular-261018-v0
+Base HEAD: bf899495cd500e2990590754e2dbf624e9252498; initially clean.
+
+lake build DkMath.FLT.FreyCofixedImage
+Exit 0. Build completed successfully (4056 jobs). Warnings: 0.
+Includes all three new production owners: 15 theorems and 2 definitions.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CofixedImageBoundary.lean
+Exit 0. Warnings: 0. 5 theorems, 1 definition.
+Normal test body independently elaborated, with existing 005B concrete test owner imported.
+Checks same projection and quotient-to-range representative; zero-map exact-kernel guard;
+equivariance guard; cofixedness versus stability; actual elliptic [p] multiplication kernel.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CofixedImageSmoke.lean
+Exit 0. Warnings: 0. 4 theorems, same Source37, kernel, actual map and target.
+Image order and fixedness; nonzero rational target point; same quotient representative;
+original point outside same E0[37] using 005A. No target component claim.
+Source37, map, target quotient curve and cofixed line existence not asserted.
+
+lake env lean /tmp/Note032CofixedImageAxioms.lean
+Exit 0. 17 production + 6 boundary/example + 4 smoke declarations audited.
+Both independent proof bodies re-elaborated in audit file.
+file: Note032CofixedImageBoundary
+file: Note032CofixedImageSmoke
+'DkMath.Lib.RepresentationTheory.CofixedImage.image_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.RepresentationTheory.CofixedImage.image_ne_zero_iff' depends on axioms: [propext, Quot.sound]
+'DkMath.Lib.RepresentationTheory.CofixedImage.quotientEquivRange' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.RepresentationTheory.CofixedImage.quotientEquivRange_apply_val' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.RepresentationTheory.CofixedImage.cofixed_iff_image_fixed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.RepresentationTheory.CofixedImage.finrank_range' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.RepresentationTheory.CofixedImage.exists_nonzero_fixed_image' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsionPointMap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsionPointMap_val' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsionPointMap_equivariant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsionPointMap_ker' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.cofixed_pointMap_image_fixed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finrank_torsionPointMap_range' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.card_torsionPointMap_range' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.exists_rational_torsion_of_cofixed_pointMap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.card_residual_pointMap_image' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.exists_rational_torsion_of_cofixed_residual_pointMap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'CofixedImageTest.unitScalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedImageTest.projection_positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedImageTest.zero_map_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedImageTest.equivariance_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedImageTest.cofixed_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CofixedImageTest.multiplication_kernel_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032CofixedImageSmoke.source37_image' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032CofixedImageSmoke.source37_rational_image' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032CofixedImageSmoke.source37_quotient_image' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032CofixedImageSmoke.source37_zeroComponent_outside_image' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+Static checks:
+- All six new Lean files: forbidden constructs/imports scan passed after nested-comment removal.
+- All new Lean files have file markers; public theorems/definitions have docstrings.
+- All 15 public Lib theorem/definition docstrings have [DkMath.Lib].
+- Lib dependency closure: 27 DkMath nodes, all under DkMath.Lib.
+- 21 prior owners unchanged against baseline HEAD.
+- Original NOTE-032 and 005B report/JSON/validation unchanged against baseline HEAD.
+- Production and test entrances checked statically; normal test glob retained.
+- Normal test body matches independent boundary after header removal and marker normalization.
+- Tracker: OK: no mismatches found
+- git diff --check: passed.
+- Full/root/DkMathTest/lake test builds: user validation split, not run.
+
+Mathematical boundary:
+Exact-kernel, equivariant actual point map is an input, not a constructed isogeny.
+Target curve and map existence, curve-morphism status, degree and surjectivity not supplied.
+Nonzero rational torsion lies on target curve; source hrat cannot be applied to it.
+No target zero-component transport, global escape, general hno or general FLT proved.
+005C1 complete as conditional bridge; 005C remains incomplete.
+
+Local document links checked: 100.
+New-file whitespace checks: 9 files passed.
+JSON round-trip checked.

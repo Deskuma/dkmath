@@ -43,3 +43,8 @@ $$
 安定性とCofixed性の違い、一次元条件、指標と逆指標、非零の右上成分、三次元非可逆写像を扱う。
 通常テストの同一本体を独立Lean資料で確認した。
 [005B報告](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005B-261025.md) を参照。
+
+`Lib.RepresentationTheory.CofixedImage` tests the same quotient/projection image,
+zero-map kernel guard, equivariance and cofixedness boundaries, and the actual
+elliptic [p] multiplication map whose full torsion kernel cannot be a line.
+[005C1 report](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C1-261025.md).

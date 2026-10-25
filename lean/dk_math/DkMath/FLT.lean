@@ -16,6 +16,7 @@ import DkMath.FLT.FreyTwo
 import DkMath.FLT.FreyBranchComparison
 import DkMath.FLT.FreyCofixedBranchSwap
 import DkMath.FLT.FreyCofixedCyclotomic
+import DkMath.FLT.FreyCofixedImage
 import DkMath.FLT.FreyCounterexample
 import DkMath.FLT.FreyCriticalCentre
 import DkMath.FLT.FreyDoublingDepth

@@ -87,6 +87,7 @@ import DkMath.Lib.NumberTheory.EisensteinLatticeLanding
 import DkMath.Lib.NumberTheory.EllipticAdditionDepth
 import DkMath.Lib.NumberTheory.EllipticBranchComparison
 import DkMath.Lib.NumberTheory.EllipticCofixedCyclotomic
+import DkMath.Lib.NumberTheory.EllipticCofixedImage
 import DkMath.Lib.NumberTheory.EllipticCoordinateRing
 import DkMath.Lib.NumberTheory.EllipticCriticalAddition
 import DkMath.Lib.NumberTheory.EllipticCriticalCentre
@@ -275,6 +276,7 @@ import DkMath.Lib.RepresentationTheory.AbsorbingSubspace
 import DkMath.Lib.RepresentationTheory.AlternatingDeterminant
 import DkMath.Lib.RepresentationTheory.CofixedBranchSwap
 import DkMath.Lib.RepresentationTheory.CofixedDeterminant
+import DkMath.Lib.RepresentationTheory.CofixedImage
 import DkMath.Lib.RepresentationTheory.ConjugateLocalConditions
 import DkMath.Lib.RepresentationTheory.ConjugateSquare
 import DkMath.Lib.RepresentationTheory.FixedCofixed
