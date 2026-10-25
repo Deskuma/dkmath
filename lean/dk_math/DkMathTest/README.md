@@ -58,3 +58,9 @@ constant one, translation/Galois invariance, trace versus average, and trivial k
 on y²=x³−x, regularity at (-1,0), total pole orders 4/6, individual transcendence,
 cancellation with equal valuations, constant functions, and the trivial kernel.
 [005C2B report](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C2B-261025.md).
+
+`Lib.NumberTheory.EllipticFiniteKernelDegree` checks the actual subfields ℚ(tⁿ):
+coprime degrees 2,3 generate ℚ(t), while degrees 4,6 generate ℚ(t²).
+Repeated degree 2 and a zero common factor check the guards. The previous actual
+curve/kernel example now has finite positive degrees and a genuine monic relation.
+[005C2C1 report](../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C2C1-261025.md).

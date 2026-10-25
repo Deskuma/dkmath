@@ -1,0 +1,284 @@
+{
+  "checkpoint": "NOTE-032-005C2C1",
+  "date": "2026-10-25",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "69770a06657f9423169e273c674c6c7d2bdabcb9",
+  "status": "finite positive degrees, actual monic relation and degree towers complete; fixed-field generation conditional on exact ambient degrees 2|H| and 3|H|",
+  "production": [
+    {
+      "path": "DkMath/Lib/Algebra/TranscendentalFiniteDegree.lean",
+      "public_theorems": [
+        "finiteDimensional_of_pair",
+        "finiteDimensional_of_transcendental"
+      ],
+      "public_definitions": [],
+      "sha256": "c873bb2b20268d3596d91dc3315256520c4823bb380440e1eeed6b2ceae1e3c4"
+    },
+    {
+      "path": "DkMath/Lib/Algebra/CoprimeFieldGeneration.lean",
+      "public_theorems": [
+        "sup_eq_of_coprime",
+        "relfinrank_eq_of_ambient_degrees",
+        "sup_eq_of_ambient_degrees"
+      ],
+      "public_definitions": [],
+      "sha256": "117f3c5b335c0f92fa48bcf78e2f4d3ae3e4d2ba5ab1b52fac2477a95ac04990"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelDegree.lean",
+      "public_theorems": [
+        "finiteDimensional_over_genericX",
+        "finiteDimensional_over_transcendental",
+        "finiteDimensional_over_velu",
+        "veluCoordinateField_le_fixedField",
+        "velu_simple_degrees_pos",
+        "exists_velu_monic_relation",
+        "velu_degree_towers",
+        "veluCoordinateField_eq_fixedField_of_degrees"
+      ],
+      "public_definitions": [
+        "veluCoordinateField"
+      ],
+      "sha256": "7d11c85345581af66fb5e362e5ad794ad5ad185f6b726bcb00247daba22a11e7"
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelDegree.lean",
+      "public_theorems": [
+        "residual_kernel_function_degrees_finite",
+        "residual_kernel_coordinateField_le_fixedField",
+        "exists_residual_kernel_monic_relation",
+        "residual_kernel_coordinateField_eq_fixedField_of_degrees"
+      ],
+      "public_definitions": [],
+      "sha256": "5de1c91829f1c4ca1be2866ed9e969a5f9abe0a568888bd560221fba472d14c3"
+    }
+  ],
+  "mathematical_changes": {
+    "exchange": "same F=k(x,y), y integral over k(x) gives finite F/k(x); arbitrary transcendental z exchanges with x and gives finite F/k(z)",
+    "finite_degrees": "same actual normalized X_H,Y_H give finite extensions F/k(X_H), F/k(Y_H) with positive finranks; no extra finiteness provider",
+    "monic_relation": "actual minpoly of same Y_H over k(X_H), monic of positive degree; degree2 and Weierstrass shape not proved",
+    "subfield": "actual adjoin of same X_H,Y_H included in same kernel fixed field F_H",
+    "towers": "same relative degrees [F_H:k(X_H)] and [F_H:k(Y_H)] multiplied by |H| equal ambient finranks",
+    "generation": "coprime relative degrees imply same intermediate-field generation; ambient degrees cancel common NONZERO factor d; apply to 2|H| and 3|H| as EXPLICIT hypotheses",
+    "Source": "same residualKernelX/residualKernelY and actual pointSubgroup; finite, containment, monic relation unconditional; generation conditional on degrees2p,3p"
+  },
+  "generality": [
+    "arbitrary field K, same elliptic E and same actual finite subgroup H",
+    "no characteristic-zero, prime-order, odd-order, stable or cofixed hypothesis in Lib owner",
+    "quadratic finite-over-genericX theorem does not require E.IsElliptic",
+    "individual transcendence does not mean algebraic independence of pair"
+  ],
+  "provenance": [
+    "local Mathlib NumberTheory/FunctionField.lean: exchange-and-tower adapted with Anne Baanen and Ashvni Narayanan Apache notice",
+    "existing EllipticMultiplicationFunctionDegree generic quadratic proof; Anthropic blob 346a32fb08ba430a7125a16d9c7b96c9608ea417 notices retained",
+    "Mathlib FieldTheory/Relrank and RatFunc/IntermediateField reused"
+  ],
+  "checks": {
+    "target_build": {
+      "command": "lake build DkMath.FLT.FreyFiniteKernelDegree",
+      "includes_four_new_production_modules": true,
+      "jobs": 4068,
+      "exit_code": 0,
+      "warnings": 0
+    },
+    "production_theorems": 17,
+    "production_definitions": 1,
+    "standalone_boundary_theorems": 8,
+    "standalone_example_definitions": 1,
+    "same_Source37_smoke_theorems": 4,
+    "audited_declarations": 31,
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "axiom_results": {
+      "DkMath.Lib.Algebra.TranscendentalFiniteDegree.finiteDimensional_of_pair": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.Algebra.TranscendentalFiniteDegree.finiteDimensional_of_transcendental": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.Algebra.CoprimeFieldGeneration.sup_eq_of_coprime": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.Algebra.CoprimeFieldGeneration.relfinrank_eq_of_ambient_degrees": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.Algebra.CoprimeFieldGeneration.sup_eq_of_ambient_degrees": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.finiteDimensional_over_genericX": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.finiteDimensional_over_transcendental": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.finiteDimensional_over_velu": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCoordinateField": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCoordinateField_le_fixedField": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_simple_degrees_pos": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_velu_monic_relation": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_degree_towers": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCoordinateField_eq_fixedField_of_degrees": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_kernel_function_degrees_finite": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_kernel_coordinateField_le_fixedField": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.exists_residual_kernel_monic_relation": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_kernel_coordinateField_eq_fixedField_of_degrees": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelDegreeTest.powerField": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelDegreeTest.powerField_degree": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelDegreeTest.exchange_finite": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelDegreeTest.coprime_two_three": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelDegreeTest.common_factor_four_six": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelDegreeTest.noncoprime_boundary": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelDegreeTest.zero_finrank_boundary": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelDegreeTest.actual_finite_degrees": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelDegreeTest.actual_monic_relation": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FiniteKernelDegreeSmoke.source37_finite": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FiniteKernelDegreeSmoke.source37_monic_relation": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FiniteKernelDegreeSmoke.source37_generation_of_degrees": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FiniteKernelDegreeSmoke.source37_zeroComponent_generation_of_degrees": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    "forbidden_construct_scan": "passed",
+    "lib_only_dependency_nodes": 48,
+    "prior_owners_unchanged": 35,
+    "original_note032_and_005c2b_report_and_evidence_unchanged": true,
+    "tracker": "OK: no mismatches found",
+    "normal_test_body_matches_independent_boundary": true,
+    "entrance_and_test_registration": "static only",
+    "git_diff_check": "passed",
+    "license_and_notice_paths": "passed",
+    "full_root_and_test_builds": "user validation split; not run",
+    "local_document_links": 117,
+    "new_file_whitespace_checks": 10
+  },
+  "boundary_examples": [
+    "actual k(t) and k(t^n), arbitrary field k; exact degree n including degree0 convention",
+    "exchange of t,t^n for n>0",
+    "degrees2,3 generate k(t)",
+    "ambient degrees4,6 generate k(t^2), common factor2 retained",
+    "same degree2 field twice does not generate top",
+    "constant t^0: ambient finrank0 and relative self-degree1; zero common factor cannot cancel",
+    "same actual y^2=x^3-x and H={O,(1,0)}: finite positive degrees and actual monic relation",
+    "same Source37: finite and monic relation unconditional; generation retains degrees74,111; same E0[37] identification retains global cofixed"
+  ],
+  "remaining": [
+    "005C2C2 supply exact ambient degrees by total-pole-order/field-degree bridge or independent explicit function-degree computation",
+    "unconditional same fixed-field generation and relative degrees2/3 not proved",
+    "monic relation has coefficients in k(X_H), not yet k[X_H] with degree2 or Weierstrass shape",
+    "target equation, coefficients and nonsingularity",
+    "actual point map, additivity, exact kernel and equivariance for 005C1",
+    "zero-component transport at same place",
+    "global escape, general hno, Mazur Step Three, stable cyclic tower and general FLT"
+  ]
+}

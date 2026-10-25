@@ -569,3 +569,12 @@ coordinate poles, regular constants, and transcendence from a pole.
 coordinates, local orders -2/-3, total pole orders 2|H|/3|H|, nonconstancy and
 individual transcendence. Fixed-field generation and quotient-curve equations remain open.
 [005C2B report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C2B-261025.md).
+
+`Algebra.TranscendentalFiniteDegree` exchanges transcendental generators in the same
+finite one-variable extension. `Algebra.CoprimeFieldGeneration` generates an intermediate
+field from coprime relative degrees, retaining the nonzero common factor when using ambient degrees.
+`NumberTheory.EllipticFiniteKernelDegree` proves finite positive degrees of the same
+normalized coordinates, degree towers and an actual monic relation over k(X_H).
+Generation of the same fixed field remains conditional on ambient degrees 2|H|,3|H|;
+the total-pole-order/field-degree equality is not supplied here.
+[005C2C1 report](../../docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE032-005C2C1-261025.md).

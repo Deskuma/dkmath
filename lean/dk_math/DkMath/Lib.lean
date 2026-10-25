@@ -9,6 +9,7 @@ import DkMath.Lib.Basic
 
 -- Algebra
 import DkMath.Lib.Algebra.BinomTail
+import DkMath.Lib.Algebra.CoprimeFieldGeneration
 import DkMath.Lib.Algebra.DedekindValuationEquiv
 import DkMath.Lib.Algebra.DiscreteValuationRigidity
 import DkMath.Lib.Algebra.FiniteOrbitMinimum
@@ -23,6 +24,7 @@ import DkMath.Lib.Algebra.SingleSlopeRoot
 import DkMath.Lib.Algebra.SquareCompletion
 import DkMath.Lib.Algebra.TorsionMultiplication
 import DkMath.Lib.Algebra.TorsionPowerLifting
+import DkMath.Lib.Algebra.TranscendentalFiniteDegree
 import DkMath.Lib.Algebra.UnitPowerClass
 import DkMath.Lib.Algebra.ValuationPolynomial
 import DkMath.Lib.Algebra.ValuationQuadraticRoot
@@ -107,6 +109,7 @@ import DkMath.Lib.NumberTheory.EllipticDyadicWildInertia
 import DkMath.Lib.NumberTheory.EllipticFiniteKernel
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelGalois
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPoles
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelDegree
 import DkMath.Lib.NumberTheory.EllipticFixedTorsion
 import DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap
 import DkMath.Lib.NumberTheory.EllipticFunctionEigenvalue
