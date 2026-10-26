@@ -21,11 +21,11 @@ open WeierstrassCurve WeierstrassCurve.Affine WithZero
 open EllipticFunctionField EllipticTorsionRepresentation WeierstrassVeluPair WeierstrassVeluPolynomial
 open DkMath.Lib.Algebra.ValuationVeluExpansion
 open scoped BigOperators
-variable {K : Type*} [Field K] [CharZero K] (E : WeierstrassCurve K) [E.IsElliptic]
+variable {K : Type*} [Field K] [NeZero (2 : K)] (E : WeierstrassCurve K) [E.IsElliptic]
 noncomputable local instance instDecidableEqEllipticFiniteKernelVeluEquation {α : Type*} :
     DecidableEq α := Classical.decEq _
 
-omit [CharZero K] in
+omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] 同じ核で不変かつ核外正則な関数は、Oで厳密に消えれば零。
 既存の全点正則関数の定数判定を、同じ核の対称性と接続する。 -/
 theorem eq_zero_of_kernel_regular_lt_one (H : AddSubgroup (Points E))
@@ -44,7 +44,7 @@ theorem eq_zero_of_kernel_regular_lt_one (H : AddSubgroup (Points E))
     exact lt_irrefl _ h0
   rw [he, hc, map_zero]
 
-omit [CharZero K] in
+omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] 同じ半核の二モーメントと整な剰余による、同じ座標の正確な有限展開。 -/
 theorem velu_half_expansion (H : AddSubgroup (Points E)) [Fintype H] (ho : Odd (Nat.card H)) :
     let F := (E.toAffine⁄(AlgebraicClosure K)).FunctionField
@@ -164,7 +164,8 @@ theorem halfKernelPolynomialDefect_lt_one (H : AddSubgroup (Points E)) [Fintype 
     rw [map_inv₀, pointValuation_zero_genericX]
     change exp (-2 : ℤ) < exp (0 : ℤ)
     exact exp_lt_exp.mpr (by decide)
-  let : CharZero F := charZero_of_injective_algebraMap (algebraMap (AlgebraicClosure K) F).injective
+  let : NeZero (2 : F) := ⟨by
+    simpa only [map_ofNat, map_zero] using (algebraMap K F).injective.ne (NeZero.ne (2 : K))⟩
   have hz := (equation_iff_completedSquare W x y).mp (generic_equation E _)
   obtain ⟨A, B, hA, hB, hX, hZ⟩ := velu_half_expansion E H ho
   have he := defect_lt_one v x (2 * y + W.a₁ * x + W.a₃) (veluX E H)
@@ -179,7 +180,7 @@ theorem halfKernelPolynomialDefect_lt_one (H : AddSubgroup (Points E)) [Fintype 
   rw [hb.1, hb.2.1, hb.2.2]
   exact he
 
-omit [CharZero K] in
+omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] 同じ候補残差はH不変かつ核外で正則。係数は同じ定数体にある。 -/
 theorem halfKernelPolynomialDefect_regular (H : AddSubgroup (Points E)) [Fintype H] :
     halfKernelPolynomialDefect E H ∈ kernelFixedField E H ∧
@@ -213,7 +214,8 @@ theorem halfKernelPolynomialModel_equation (H : AddSubgroup (Points E)) [Fintype
   have hr := halfKernelPolynomialDefect_regular E H
   have hz := eq_zero_of_kernel_regular_lt_one E H _ hr.1 hr.2 (halfKernelPolynomialDefect_lt_one E H ho)
   let F := (E.toAffine⁄(AlgebraicClosure K)).FunctionField
-  let : CharZero F := charZero_of_injective_algebraMap (algebraMap (AlgebraicClosure K) F).injective
+  let : NeZero (2 : F) := ⟨by
+    simpa only [map_ofNat, map_zero] using (algebraMap K F).injective.ne (NeZero.ne (2 : K))⟩
   apply (equation_iff_completedSquare _ _ _).mpr
   exact sub_eq_zero.mp hz
 
@@ -234,7 +236,7 @@ theorem kernelModel_coefficients (H : AddSubgroup (Points E)) [Fintype H] (ho : 
 
 /-- [DkMath.Lib] 同じ奇数核と同じ整モデルから、既存kernelModel自体の係数整性を得る。
 候補との一致は内部証明済みであり、方程式providerは不要である。 -/
-theorem kernelModel_coefficientsIn (H : AddSubgroup (Points E)) [Fintype H] (ho : Odd (Nat.card H))
+theorem kernelModel_coefficientsIn [CharZero K] (H : AddSubgroup (Points E)) [Fintype H] (ho : Odd (Nat.card H))
     (n : ℕ) (hkill : ∀ P : H, n • P.val = 0) (A : ValuationSubring (AlgebraicClosure K))
     (M : WeierstrassCurve A) (hM : M.map A.subtype = E.map (algebraMap K (AlgebraicClosure K)))
     (hn : A.valuation (n : AlgebraicClosure K) = 1) : CoefficientsIn A.toSubring (kernelModel E H) := by

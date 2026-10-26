@@ -28,10 +28,10 @@ namespace DkMath.Lib.NumberTheory.EllipticFiniteKernel
 open Polynomial IntermediateField WeierstrassCurve WeierstrassCurve.Affine
 open EllipticFunctionField EllipticTorsionRepresentation EllipticPointEvaluation
 open DkMath.Lib.Algebra
-variable {K : Type*} [Field K] [CharZero K] (E : WeierstrassCurve K) [E.IsElliptic]
+variable {K : Type*} [Field K] [NeZero (2 : K)] (E : WeierstrassCurve K) [E.IsElliptic]
 noncomputable local instance : DecidableEq (AlgebraicClosure K) := Classical.decEq _
 
-omit [CharZero K] [E.IsElliptic] in
+omit [NeZero (2 : K)] [E.IsElliptic] in
 /-- [DkMath.Lib] 奇数位数の核内の反転固定点はOだけである。 -/
 theorem eq_zero_of_mem_odd_kernel_fixed (H : AddSubgroup (Points E))
     (hodd : Odd (Nat.card H)) (P : Points E) (hP : P ∈ H) (hn : -P = P) : P = 0 := by
@@ -45,7 +45,7 @@ theorem eq_zero_of_mem_odd_kernel_fixed (H : AddSubgroup (Points E))
     have ho := Nat.odd_iff.mp hodd
     omega
 
-omit [CharZero K] [E.IsElliptic] in
+omit [NeZero (2 : K)] [E.IsElliptic] in
 /-- [DkMath.Lib] 有限点の同じx座標を持つ二点は、同じ点か互いの負である。 -/
 theorem point_eq_or_eq_neg_of_xc_eq (P R : Points E) (hP : P ≠ 0) (hR : R ≠ 0)
     (hx : P.xc = R.xc) : P = R ∨ P = -R := by
@@ -56,7 +56,7 @@ theorem point_eq_or_eq_neg_of_xc_eq (P R : Points E) (hP : P ≠ 0) (hR : R ≠ 
     | zero => exact (hR rfl).elim
     | some x' y' h' => exact Point.X_eq_iff.mp hx
 
-omit [CharZero K] [E.IsElliptic] in
+omit [NeZero (2 : K)] [E.IsElliptic] in
 /-- [DkMath.Lib] 無限遠点を含まない有限集合の、x座標ファイバーは高々2点。 -/
 theorem card_xc_fiber_le_two (s : Finset (Points E))
     (hs : ∀ P ∈ s, P ≠ 0) (a : AlgebraicClosure K) :
@@ -73,7 +73,7 @@ theorem card_xc_fiber_le_two (s : Finset (Points E))
     exact (Finset.card_le_card hsub).trans Finset.card_le_two
   · simp only [Finset.not_nonempty_iff_eq_empty.mp he, Finset.card_empty, zero_le]
 
-omit [CharZero K] [E.IsElliptic] in
+omit [NeZero (2 : K)] [E.IsElliptic] in
 /-- [DkMath.Lib] 反転固定点のx座標ファイバーは高々1点。厳密計数の余裕をここで得る。 -/
 theorem card_xc_fiber_le_one_of_fixed (s : Finset (Points E))
     (hs : ∀ P ∈ s, P ≠ 0) (P : Points E) (hP : P ≠ 0) (hn : -P = P) :

@@ -22,7 +22,7 @@ namespace DkMath.Lib.NumberTheory.EllipticFiniteKernel
 open WeierstrassCurve WeierstrassCurve.Affine
 open EllipticFunctionField EllipticTorsionRepresentation EllipticPointEvaluation
 open scoped BigOperators
-variable {K : Type*} [Field K] [CharZero K] (E : WeierstrassCurve K) [E.IsElliptic]
+variable {K : Type*} [Field K] [NeZero (2 : K)] (E : WeierstrassCurve K) [E.IsElliptic]
 noncomputable local instance : DecidableEq (AlgebraicClosure K) := Classical.decEq _
 
 /-- [DkMath.Lib] Hの外の実点における、同じX_Hの一意な有限値。 -/
@@ -35,7 +35,7 @@ noncomputable def kernelYAt (H : AddSubgroup (Points E)) [Fintype H]
     (P : Points E) (hP : P ∉ H) : AlgebraicClosure K :=
   value E P (veluY E H) (veluY_regular_outside E H P hP)
 
-omit [CharZero K] in
+omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] 二つの特殊化座標は、元の関数に同じ点で合同である。 -/
 theorem kernelAt_congr (H : AddSubgroup (Points E)) [Fintype H]
     (P : Points E) (hP : P ∉ H) :
@@ -50,14 +50,14 @@ theorem kernelAt_equation (H : AddSubgroup (Points E)) [Fintype H]
   equation_value E P (kernelModel E H) _ _
     (veluX_regular_outside E H P hP) (veluY_regular_outside E H P hP) (kernelModel_equation E H)
 
-omit [CharZero K] [E.IsElliptic] in
+omit [NeZero (2 : K)] [E.IsElliptic] in
 /-- [DkMath.Lib] Hの元による移動は、Hの外という条件を保つ。 -/
 theorem add_not_mem_kernel (H : AddSubgroup (Points E))
     (P : Points E) (hP : P ∉ H) (Q : H) : P + Q.val ∉ H := by
   intro hm
   exact hP (by simpa only [add_sub_cancel_right] using H.sub_mem hm Q.property)
 
-omit [CharZero K] in
+omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] 同じ核の移動で、特殊化したx値も不変である。 -/
 theorem kernelXAt_translation (H : AddSubgroup (Points E)) [Fintype H]
     (P : Points E) (hP : P ∉ H) (Q : H) :
@@ -66,7 +66,7 @@ theorem kernelXAt_translation (H : AddSubgroup (Points E)) [Fintype H]
     (veluX_regular_outside E H _ (add_not_mem_kernel E H P hP Q))
   simpa only [veluX_translation, kernelXAt] using h.symm
 
-omit [CharZero K] in
+omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] 同じ核の移動で、特殊化したy値も不変である。 -/
 theorem kernelYAt_translation (H : AddSubgroup (Points E)) [Fintype H]
     (P : Points E) (hP : P ∉ H) (Q : H) :
@@ -75,7 +75,7 @@ theorem kernelYAt_translation (H : AddSubgroup (Points E)) [Fintype H]
     (veluY_regular_outside E H _ (add_not_mem_kernel E H P hP Q))
   simpa only [veluY_translation, kernelYAt] using h.symm
 
-omit [CharZero K] in
+omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] 点の座標へ合同な関数の正規化和を、同じ有限点の座標和へ特殊化する。
 移動先P+Qは全て有限点なので、Oの便宜的座標を有限評価へ流用しない。 -/
 theorem normalized_trace_congr (H : AddSubgroup (Points E)) [Fintype H]
@@ -107,7 +107,7 @@ theorem normalized_trace_congr (H : AddSubgroup (Points E)) [Fintype H]
     (v := pointValuation E P) (a := algebraMap _ _ (∑ Q : H, c Q.val)))
   simpa only [kernelTrace, map_sub, map_sum] using h
 
-omit [CharZero K] in
+omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] 特殊化x値は、実点の正規化座標和そのものである。 -/
 theorem kernelXAt_eq_sum (H : AddSubgroup (Points E)) [Fintype H]
     (P : Points E) (hP : P ∉ H) :
@@ -118,7 +118,7 @@ theorem kernelXAt_eq_sum (H : AddSubgroup (Points E)) [Fintype H]
   have h := value_spec E R (genericX E (AlgebraicClosure K)) (pointValuation_genericX_le_one E R hR)
   rwa [value_genericX E R hR] at h
 
-omit [CharZero K] in
+omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] 特殊化y値も、同じ実点の正規化座標和で計算できる。 -/
 theorem kernelYAt_eq_sum (H : AddSubgroup (Points E)) [Fintype H]
     (P : Points E) (hP : P ∉ H) :
@@ -129,7 +129,7 @@ theorem kernelYAt_eq_sum (H : AddSubgroup (Points E)) [Fintype H]
   have h := value_spec E R (genericY E (AlgebraicClosure K)) (pointValuation_genericY_le_one E R hR)
   rwa [value_genericY E R hR] at h
 
-omit [CharZero K] in
+omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] Hの外の点を反転しても、同じ特殊化x値となる。 -/
 theorem kernelXAt_neg (H : AddSubgroup (Points E)) [Fintype H]
     (P : Points E) (hP : P ∉ H) :
@@ -145,7 +145,7 @@ theorem kernelXAt_neg (H : AddSubgroup (Points E)) [Fintype H]
       rw [he]
       cases (P + Q.val : Points E) <;> rfl
 
-omit [CharZero K] in
+omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] 特殊化y値の反転公式。Oの補正を含む同じa₃が残る。 -/
 theorem kernelYAt_neg (H : AddSubgroup (Points E)) [Fintype H]
     (P : Points E) (hP : P ∉ H) :
@@ -188,7 +188,8 @@ theorem kernelModel_discriminant_of_twoTorsion_separation
     (hx : Function.Injective (fun i => kernelXAt E H (P i) (hP i))) :
     (kernelModel E H).Δ ≠ 0 :=
   WeierstrassTwoTorsionSeparation.discriminant_ne_zero_of_three_roots (kernelModel E H)
-    (by norm_num) _ _ _ (kernelAt_twoTorsion_root E H _ (hP 0) (hneg 0))
+    (by simpa only [map_ofNat, map_zero] using
+      (algebraMap K (AlgebraicClosure K)).injective.ne (NeZero.ne (2 : K))) _ _ _ (kernelAt_twoTorsion_root E H _ (hP 0) (hneg 0))
     (kernelAt_twoTorsion_root E H _ (hP 1) (hneg 1))
     (kernelAt_twoTorsion_root E H _ (hP 2) (hneg 2))
     (fun h => (by decide : (0 : Fin 3) ≠ 1) (hx h))

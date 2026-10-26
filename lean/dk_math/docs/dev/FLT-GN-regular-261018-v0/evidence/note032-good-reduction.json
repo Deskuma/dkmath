@@ -1,0 +1,347 @@
+{
+  "unit": "NOTE-032-GOOD-REDUCTION",
+  "date": "2026-10-27",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "42ddc3902f08e250f1cff28f6acde3b338a48179",
+  "status": "same actual integer target has good reduction at good odd primes distinct from p; good or multiplicative reduction at every prime distinct from p for p at least five",
+  "new_production_theorems": 13,
+  "generalized_owners": 11,
+  "regression_theorems": 6,
+  "regression_definitions": 5,
+  "source37_smoke_theorems": 3,
+  "axiom_audit": {
+    "public_declarations": 122,
+    "batches": [
+      40,
+      40,
+      39,
+      3
+    ],
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "sorryAx": false
+  },
+  "files": [
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelModel.lean",
+      "role": "generalized existing owner",
+      "sha256": "654773b1f5602aabe1426d363536df24d1532b293905ad5e1459b44ee2b62b6f",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.normalized_trace_correction_regular",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_corrections_regular",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.pointValuation_base_const_le_one",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCubicResidual",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCubicResidual_mem_fixedField",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCubicResidual_regular_outside",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCubicResidual_pole_bound",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.negEquiv_base_const",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.negEquiv_veluCubicResidual",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_not_mem_simpleX",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.negEquiv_veluY_ne",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCubicResidual_mem_simpleX",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_velu_residual_polynomial",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_velu_weierstrass_equation",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_kernelModel",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_a₁",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_a₃",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_equation",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_generic_nonsingular",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelGenericPoint",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelGenericPoint_ne_zero"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelModelMap.lean",
+      "role": "generalized existing owner",
+      "sha256": "b3a788c61a94986731d4c8d86fdc1f5f133c04682c3c0edef8c2cb96577a0b7e",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_unique",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelCoordinateHom",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelCoordinateHom_injective",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelPull",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelPull_injective",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelPull_fieldRange",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.finrank_kernelModelPull"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelModelDescent.lean",
+      "role": "generalized existing owner",
+      "sha256": "0973a7dd8352df953134a5d5d83e2a858f3959f1b6d9651ecf7b636c6cfb6303",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_galois",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_descended_kernelModel",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelModel",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelModel_map"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelSpecialization.lean",
+      "role": "generalized existing owner",
+      "sha256": "fb09c717ac2b835d37ee00483a7623653009d89da085e8261ce0b70ac81cd5a2",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelYAt",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelAt_congr",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelAt_equation",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.add_not_mem_kernel",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt_translation",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelYAt_translation",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.normalized_trace_congr",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt_eq_sum",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelYAt_eq_sum",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt_neg",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelYAt_neg",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelAt_twoTorsion_root",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_discriminant_of_twoTorsion_separation",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelAt_nonsingular",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelPointMap",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelPointMap_of_mem",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelPointMap_of_not_mem",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelPointMap_eq_zero_iff",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelPointMap_translation"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelRationalFiber.lean",
+      "role": "generalized existing owner",
+      "sha256": "e73270dd12ddd978b44f8197cae27b244993a2f2232004156dc2d295c4966035",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_bot_coordinates",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.finrank_over_genericX",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_mem_genericX",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.genericX_relative_degree",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_veluX_rational",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_veluX_fiber_polynomial",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.card_veluX_fiber_le"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelTwoTorsion.lean",
+      "role": "generalized existing owner",
+      "sha256": "2c48e92a9dd7ab154e0ae34952e9c2c93933fe0dbedcf216b0559539c30944f6",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.eq_zero_of_mem_odd_kernel_fixed",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.point_eq_or_eq_neg_of_xc_eq",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.card_xc_fiber_le_two",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.card_xc_fiber_le_one_of_fixed",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt_injective_on_twoTorsion"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelNonsingular.lean",
+      "role": "generalized existing owner",
+      "sha256": "7b7593df52be54ad75c7a0befca6105af258decbcf98722b8da792be644658f1",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_three_nonzero_fixed_points",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_discriminant_ne_zero_of_odd_card",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_isElliptic_of_odd_card",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelModel_isElliptic_of_odd_card",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_eq_zero_iff",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_translation"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelPair.lean",
+      "role": "generalized existing owner",
+      "sha256": "ae26d2ce0f175bc89479b584c309094fd23be18fc8a747d8d3be850353fbc452",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.sum_kernel_half",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.genericX_ne_const",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.translated_pair",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_half",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluZ_half"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelVeluEquation.lean",
+      "role": "generalized existing owner",
+      "sha256": "c7499ef68700d083130f32433ca48370fb1c47af972237e72c96a67f72fbf70f",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.eq_zero_of_kernel_regular_lt_one",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_half_expansion",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernelPolynomialDefect",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernelPolynomialDefect_lt_one",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernelPolynomialDefect_regular",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernelPolynomialModel_equation",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernelPolynomialModel_eq_kernelModel",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_coefficients",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_coefficientsIn"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassVeluPair.lean",
+      "role": "generalized existing owner",
+      "sha256": "49d4c468a66ffdd8347030a5db077bd492decf03563f1f84bf747491d213a1c2",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.WeierstrassVeluPair.xCorrection",
+        "DkMath.Lib.NumberTheory.WeierstrassVeluPair.zCorrection",
+        "DkMath.Lib.NumberTheory.WeierstrassVeluPair.secant_pair_x",
+        "DkMath.Lib.NumberTheory.WeierstrassVeluPair.secant_pair_z",
+        "DkMath.Lib.NumberTheory.WeierstrassVeluPair.equation_iff_completedSquare"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelLocalIntegrality.lean",
+      "role": "generalized existing owner",
+      "sha256": "6da58544ef93d25e094be77cff42c380020839ff8ece91eba637af3b88ef1989",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernel_coordinates_mem",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernelPolynomialModel",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernelPolynomialModel_coefficientsIn",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernelPolynomialModel_eq_kernelModel_of_equation"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/Algebra/FiniteInversionHalfTransport.lean",
+      "role": "production",
+      "sha256": "a6bb51383e1c8612d3bbb75ffddaa1a254c43d8a5488a399a490772815ea7594",
+      "public_declarations": [
+        "DkMath.Lib.Algebra.FiniteInversionHalf.IsHalf.image",
+        "DkMath.Lib.Algebra.FiniteInversionHalf.sum_eq_equiv"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassFiniteKernelModel.lean",
+      "role": "production",
+      "sha256": "06bcbc7fb1c3504d47e6cf3cca48b2ff41ac82e5261f49ba6bc4a330ee250777",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.WeierstrassFiniteKernelModel.point_map_coordinates",
+        "DkMath.Lib.NumberTheory.WeierstrassFiniteKernelModel.polynomialModel_discriminant_ne_zero",
+        "DkMath.Lib.NumberTheory.WeierstrassFiniteKernelModel.polynomialModel_isElliptic"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelGoodReduction.lean",
+      "role": "production",
+      "sha256": "9b95186dbb3550dd43945c673cf27279141dccef2f9d789fec9ee238fc19fd87",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.hasSmoothReduction_of_good_of_model",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.valuationKernelModel_good_discriminant",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.valuationKernelModel_good_value_one",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_good_value_one",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_smooth_of_good"
+      ]
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelGoodReduction.lean",
+      "role": "production",
+      "sha256": "e8f8009ebb3d1112f3d638d82cea5a9734f0511433bce84130313f9b82d47716",
+      "public_declarations": [
+        "DkMath.FLT.Frey.Source.residual_integer_target_good_value_one",
+        "DkMath.FLT.Frey.Source.residual_integer_target_good_at_prime",
+        "DkMath.FLT.Frey.Source.residual_integer_target_semistable_away"
+      ]
+    },
+    {
+      "path": "DkMathTest/Lib/NumberTheory/EllipticFiniteKernelGoodReduction.lean",
+      "role": "regression",
+      "sha256": "0885328daebc1d41a55e58078c72b0ed7342281fc2558b32f526b2038b7a1d68",
+      "public_declarations": [
+        "EllipticFiniteKernelGoodReductionTest.toy",
+        "EllipticFiniteKernelGoodReductionTest.q0",
+        "EllipticFiniteKernelGoodReductionTest.Q",
+        "EllipticFiniteKernelGoodReductionTest.toy_double",
+        "EllipticFiniteKernelGoodReductionTest.toy_neg_ne",
+        "EllipticFiniteKernelGoodReductionTest.toyKernel",
+        "EllipticFiniteKernelGoodReductionTest.toyKernel_card",
+        "EllipticFiniteKernelGoodReductionTest.half",
+        "EllipticFiniteKernelGoodReductionTest.half_partition",
+        "EllipticFiniteKernelGoodReductionTest.actual_positive_characteristic_target",
+        "EllipticFiniteKernelGoodReductionTest.actual_model_coefficients"
+      ]
+    },
+    {
+      "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032GoodReductionSmoke.lean",
+      "role": "Source37 smoke",
+      "sha256": "ae10a9065e905e6f028861164c0e82cdcbe373eae9c63669aa84afaabafa4850",
+      "public_declarations": [
+        "Note032GoodReductionSmoke.source37_good_at_three",
+        "Note032GoodReductionSmoke.source37_good_at_prime",
+        "Note032GoodReductionSmoke.source37_semistable_away"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "command": "./lean-build.sh DkMath.FLT.FreyFiniteKernelGoodReduction",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelGoodReduction",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelVeluEquation",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMathTest.Lib.NumberTheory.WeierstrassNodalVelu",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032GoodReductionSmoke.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "6b038d82bdf7de6f997cccd8cee76c8d775dfb4a9da80a37c506f5a144462c8c"
+    },
+    {
+      "command": "lake env lean tmp/note032-good-reduction/Axioms1.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "b6d069a0a6d2e16ce8af51b2df384816fe833e8db8557c22e5fab75c896319fe"
+    },
+    {
+      "command": "lake env lean tmp/note032-good-reduction/Axioms2.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "b4b254a8d83d5785e13e49240efbd6dffac6f1d3e1d712bedc560c80e8c0817e"
+    },
+    {
+      "command": "lake env lean tmp/note032-good-reduction/Axioms3.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "f96917919e739000921790dfd8a2f42c4102c3100e1d48b9d044e1ab2dd0596f"
+    }
+  ],
+  "static_checks": [
+    "same module file markers on all 16 production/test files",
+    "new Lib theorem docstrings and promotion markers",
+    "no forbidden proof constructs on audited files",
+    "Lib imports do not depend on FLT or external solution modules",
+    "new facade imports registered; no facade build",
+    "tracked diff confined to intended 11 owners, 3 facades and documentation",
+    "index unchanged",
+    "git diff HEAD --check passed"
+  ],
+  "remaining": [
+    "q = p",
+    "exact discriminant depth",
+    "all-point zero-component transport at bad places",
+    "commuting reduction square",
+    "scheme isogeny",
+    "arithmetic exclusion of target rational torsion",
+    "general hno"
+  ],
+  "full_build": {
+    "performed": false,
+    "reason": "user handles full build; no root build or lake test"
+  },
+  "upstream_cache_blobs": {
+    "veluQuotient_oddOrderSummingSet_discriminant_ne_zero": "f66586eb1bb501437c601e7af2bd9a79c0f77a48",
+    "veluQuotient_oddOrderSummingSet_discriminant_prod_veluU_pow": "0c42a9282f1033d6d64cc213bb1f7c7c52b17d1e"
+  }
+}

@@ -21,7 +21,7 @@ namespace DkMath.Lib.NumberTheory.EllipticFiniteKernel
 open Polynomial IntermediateField WeierstrassCurve WeierstrassCurve.Affine
 open EllipticTorsionRepresentation EllipticFunctionField
 open WeierstrassCoordinateEvaluation
-variable {K : Type*} [Field K] [CharZero K] (E : WeierstrassCurve K) [E.IsElliptic]
+variable {K : Type*} [Field K] [NeZero (2 : K)] (E : WeierstrassCurve K) [E.IsElliptic]
 noncomputable local instance instDecidableEqEllipticFiniteKernelModelMap :
     DecidableEq (AlgebraicClosure K) := Classical.decEq _
 

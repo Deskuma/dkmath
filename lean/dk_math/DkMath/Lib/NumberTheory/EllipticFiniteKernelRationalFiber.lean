@@ -21,10 +21,10 @@ namespace DkMath.Lib.NumberTheory.EllipticFiniteKernel
 open Polynomial IntermediateField WeierstrassCurve WeierstrassCurve.Affine WithZero
 open EllipticFunctionField EllipticTorsionRepresentation EllipticPointEvaluation
 open DkMath.Lib.Algebra
-variable {K : Type*} [Field K] [CharZero K] (E : WeierstrassCurve K) [E.IsElliptic]
+variable {K : Type*} [Field K] [NeZero (2 : K)] (E : WeierstrassCurve K) [E.IsElliptic]
 noncomputable local instance : DecidableEq (AlgebraicClosure K) := Classical.decEq _
 
-omit [CharZero K] in
+omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] 自明核の同じ二関数は、元の一般座標へ戻る。 -/
 theorem velu_bot_coordinates :
     letI : Fintype (⊥ : AddSubgroup (Points E)) := Fintype.ofFinite _
@@ -38,7 +38,7 @@ theorem velu_bot_coordinates :
   have hy0 : (0 : Points E).yc = 0 := rfl
   constructor <;> simp [veluX, veluY, kernelTrace, hd, h0, hx0, hy0]
 
-omit [CharZero K] in
+omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] 元の一般x座標の単純体上で、同じ楕円関数体の次数は2。 -/
 theorem finrank_over_genericX :
     Module.finrank (AlgebraicClosure K)⟮genericX E (AlgebraicClosure K)⟯

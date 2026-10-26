@@ -19,8 +19,11 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelTwoTorsion
 namespace DkMath.Lib.NumberTheory.EllipticFiniteKernel
 open Polynomial WeierstrassCurve WeierstrassCurve.Affine
 open EllipticFunctionField EllipticTorsionRepresentation
-variable {K : Type*} [Field K] [CharZero K] (E : WeierstrassCurve K) [E.IsElliptic]
+variable {K : Type*} [Field K] [NeZero (2 : K)] (E : WeierstrassCurve K) [E.IsElliptic]
 noncomputable local instance : DecidableEq (AlgebraicClosure K) := Classical.decEq _
+local instance : NeZero (2 : AlgebraicClosure K) := ⟨by
+  simpa only [map_ofNat, map_zero] using
+    (algebraMap K (AlgebraicClosure K)).injective.ne (NeZero.ne (2 : K))⟩
 
 /-- [DkMath.Lib] 同じ曲線に三つの実際の相異なる非零反転固定点を構成する。
 抽象的な三根や仮想的な別群で置換せず、同じPoints Eへ入れる。 -/
@@ -31,10 +34,13 @@ theorem exists_three_nonzero_fixed_points :
   let : W.IsElliptic := by
     change (E.map (algebraMap K k)).IsElliptic
     infer_instance
-  have ha : W.twoTorsionPolynomial.a ≠ 0 := by change (4 : k) ≠ 0; norm_num
+  have ha : W.twoTorsionPolynomial.a ≠ 0 := by
+    change (4 : k) ≠ 0
+    simpa only [show (4 : k) = 2 ^ 2 by ring] using pow_ne_zero 2 (NeZero.ne (2 : k))
   have hd : W.twoTorsionPolynomial.discr ≠ 0 := by
     rw [twoTorsionPolynomial_discr]
-    exact mul_ne_zero (by norm_num) W.Δ'.ne_zero
+    exact mul_ne_zero (by
+      simpa only [show (16 : k) = 2 ^ 4 by ring] using pow_ne_zero 4 (NeZero.ne (2 : k))) W.Δ'.ne_zero
   have hs : (W.twoTorsionPolynomial.toPoly.map (RingHom.id k)).Splits := IsAlgClosed.splits _
   obtain ⟨r₁, r₂, r₃, hr⟩ := (Cubic.splits_iff_roots_eq_three ha).mp hs
   obtain ⟨h₁₂, h₁₃, h₂₃⟩ := (Cubic.discr_ne_zero_iff_roots_ne ha hr).mp hd
@@ -51,7 +57,7 @@ theorem exists_three_nonzero_fixed_points :
     fin_cases i <;> simp [r]
   have hex (i : Fin 3) : ∃ y, ∃ h : W.toAffine.Nonsingular (r i) y,
       (Point.some (r i) y h : W.toAffine.Point) + Point.some (r i) y h = 0 :=
-    (Point.isRoot_twoTorsionPolynomial_iff (W := W.toAffine) ⟨by norm_num⟩ W.Δ'.ne_zero (r i)).mp (hv i)
+    (Point.isRoot_twoTorsionPolynomial_iff (W := W.toAffine) ⟨NeZero.ne (2 : k)⟩ W.Δ'.ne_zero (r i)).mp (hv i)
   choose y hy hsum using hex
   let P : Fin 3 → Points E := fun i => Point.some (r i) (y i) (hy i)
   refine ⟨P, fun i => Point.some_ne_zero _, ?_, ?_⟩
@@ -84,7 +90,7 @@ theorem kernelModel_isElliptic_of_odd_card
 
 /-- [DkMath.Lib] 同じ安定奇数核のK係数モデルも楕円曲線である。
 前回の係数降下の等式と判別式の基底変換を実際に使う。 -/
-theorem descendedKernelModel_isElliptic_of_odd_card
+theorem descendedKernelModel_isElliptic_of_odd_card [CharZero K]
     (H : AddSubgroup (Points E)) [Fintype H] (hodd : Odd (Nat.card H))
     (hH : ∀ σ P, P ∈ H → pointAction E σ P ∈ H) :
     (descendedKernelModel E H hH).IsElliptic := by

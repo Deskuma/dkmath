@@ -1,0 +1,30 @@
+NOTE-032-GOOD-REDUCTION validation / 2026-10-27
+base: 42ddc3902f08e250f1cff28f6acde3b338a48179
+
+PASS ./lean-build.sh DkMath.FLT.FreyFiniteKernelGoodReduction (0 warnings)
+PASS ./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelGoodReduction (0 warnings)
+PASS ./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelVeluEquation (0 warnings)
+PASS ./lean-build.sh DkMathTest.Lib.NumberTheory.WeierstrassNodalVelu (0 warnings)
+PASS lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032GoodReductionSmoke.lean (0 warnings)
+PASS lake env lean tmp/note032-good-reduction/Axioms1.lean (0 warnings)
+PASS lake env lean tmp/note032-good-reduction/Axioms2.lean (0 warnings)
+PASS lake env lean tmp/note032-good-reduction/Axioms3.lean (0 warnings)
+
+New production: 4 owners, 13 theorems.
+Generalized existing: 11 owners, 95 public declarations audited.
+Positive-characteristic regression: 6 theorems, 5 definitions; actual order-three subgroup on y^2+y=x^3 over ZMod 5.
+Source37 smoke: 3 theorems on the same existing integer target.
+Axiom audit: 122 public declarations in batches 40 + 40 + 39 + 3.
+Allowed/observed: propext, Classical.choice, Quot.sound; no sorryAx.
+
+Static checks:
+PASS same module file markers on all 16 production/test files
+PASS new Lib theorem docstrings and promotion markers
+PASS no forbidden proof constructs on audited files
+PASS Lib imports do not depend on FLT or external solution modules
+PASS new facade imports registered; no facade build
+PASS tracked diff confined to intended 11 owners, 3 facades and documentation
+PASS index unchanged
+PASS git diff HEAD --check passed
+
+Boundary: q=p, exact depth, bad-place all-point zero-component transport, commuting reduction square, scheme isogeny, target rational torsion exclusion, general hno remain open.

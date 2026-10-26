@@ -148,14 +148,15 @@ theorem veluY_not_mem_simpleX (H : AddSubgroup (Points E)) [Fintype H] :
   rw [veluY_valuation_zero, exp_inj] at hm
   omega
 
-variable [CharZero K]
+variable [NeZero (2 : K)]
 
-/-- [DkMath.Lib] 標数0では、反転は同じY_Hを実際に動かす。
+/-- [DkMath.Lib] 2が非零の体では、反転は同じY_Hを実際に動かす。
 固定ならY_Hを2で割った一次式で表せてしまい、上の非所属に矛盾する。 -/
 theorem negEquiv_veluY_ne (H : AddSubgroup (Points E)) [Fintype H] :
     negEquiv E (AlgebraicClosure K) (veluY E H) ≠ veluY E H := by
   let F := (E.toAffine⁄(AlgebraicClosure K)).FunctionField
-  let : CharZero F := charZero_of_injective_algebraMap (algebraMap (AlgebraicClosure K) F).injective
+  let : NeZero (2 : F) := ⟨by
+    simpa only [map_ofNat, map_zero] using (algebraMap K F).injective.ne (NeZero.ne (2 : K))⟩
   let A := (AlgebraicClosure K)⟮veluX E H⟯
   have hc (c : K) : algebraMap K F c ∈ A := by
     rw [IsScalarTower.algebraMap_apply K (AlgebraicClosure K)]

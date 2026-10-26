@@ -55,9 +55,9 @@ theorem secant_pair_z {x y a b : F} (hx : x ≠ a)
   linear_combination -2 * (2 * y + W.a₁ * x + W.a₃) * hxy +
     2 * (2 * y + W.a₁ * x + W.a₃) * hab
 
-/-- [DkMath.Lib] 標数0では、Weierstrass方程式は平方完成した三次式と同値。
+/-- [DkMath.Lib] 2が非零の体では、Weierstrass方程式は平方完成した三次式と同値。
 2y+a₁x+a₃を用い、係数b₂,b₄,b₆を保って比較する。 -/
-theorem equation_iff_completedSquare [CharZero F] (x y : F) :
+theorem equation_iff_completedSquare [NeZero (2 : F)] (x y : F) :
     W.toAffine.Equation x y ↔
       (2 * y + W.a₁ * x + W.a₃) ^ 2 =
         4 * x ^ 3 + W.b₂ * x ^ 2 + 2 * W.b₄ * x + W.b₆ := by
@@ -67,7 +67,7 @@ theorem equation_iff_completedSquare [CharZero F] (x y : F) :
   · intro he
     linear_combination 4 * he
   · intro he
-    apply mul_left_cancel₀ (show (4 : F) ≠ 0 by norm_num)
+    apply mul_left_cancel₀ (show (4 : F) ≠ 0 by simpa only [show (4 : F) = 2 ^ 2 by ring] using pow_ne_zero 2 (NeZero.ne (2 : F)))
     linear_combination he
 
 end DkMath.Lib.NumberTheory.WeierstrassVeluPair

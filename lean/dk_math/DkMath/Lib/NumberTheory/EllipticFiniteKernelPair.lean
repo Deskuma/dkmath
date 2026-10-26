@@ -19,10 +19,10 @@ namespace DkMath.Lib.NumberTheory.EllipticFiniteKernel
 open WeierstrassCurve WeierstrassCurve.Affine WithZero
 open EllipticFunctionField EllipticTorsionRepresentation WeierstrassVeluPair
 open scoped BigOperators
-variable {K : Type*} [Field K] [CharZero K] (E : WeierstrassCurve K) [E.IsElliptic]
+variable {K : Type*} [Field K] [NeZero (2 : K)] (E : WeierstrassCurve K) [E.IsElliptic]
 noncomputable local instance instDecidableEqEllipticFiniteKernelPair {α : Type*} : DecidableEq α := Classical.decEq _
 
-omit [CharZero K] [E.IsElliptic] in
+omit [NeZero (2 : K)] [E.IsElliptic] in
 /-- [DkMath.Lib] 同じ奇数核上の任意の有限和をOと半核の反転対へ分割する。 -/
 theorem sum_kernel_half {M : Type*} [AddCommMonoid M]
     (H : AddSubgroup (Points E)) [Fintype H] (ho : Odd (Nat.card H)) (f : H → M) :
@@ -33,7 +33,7 @@ theorem sum_kernel_half {M : Type*} [AddCommMonoid M]
   rw [Finset.sum_add_distrib]
   exact he.symm.trans (by ac_rfl)
 
-omit [CharZero K] in
+omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] 一般xは任意の定数座標と異なる。Oの極から直接証明する。 -/
 theorem genericX_ne_const (a : AlgebraicClosure K) :
     genericX E (AlgebraicClosure K) ≠ algebraMap _ _ a := by
@@ -42,7 +42,7 @@ theorem genericX_ne_const (a : AlgebraicClosure K) :
   rw [← he, pointValuation_zero_genericX, ← exp_zero, exp_le_exp] at hc
   norm_num at hc
 
-omit [CharZero K] in
+omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] 同じ実点Qと−Qの平行移動を、割線の二つの有理式へ接続する。 -/
 theorem translated_pair (Q : (E⁄(AlgebraicClosure K)).Point) (hQ : Q ≠ 0) :
     let F := (E.toAffine⁄(AlgebraicClosure K)).FunctionField
@@ -76,7 +76,7 @@ theorem translated_pair (Q : (E⁄(AlgebraicClosure K)).Point) (hQ : Q ≠ 0) :
     exact ⟨secant_pair_x _ hx (generic_equation E _) hqe,
       secant_pair_z _ hx (generic_equation E _) hqe⟩
 
-omit [CharZero K] in
+omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] 同じX_Hの半核表示。既存関数のまま明示的有理式へ展開する。 -/
 theorem veluX_half (H : AddSubgroup (Points E)) [Fintype H] (ho : Odd (Nat.card H)) :
     let F := (E.toAffine⁄(AlgebraicClosure K)).FunctionField
@@ -109,7 +109,7 @@ theorem veluX_half (H : AddSubgroup (Points E)) [Fintype H] (ho : Odd (Nat.card 
       2 * algebraMap _ _ Q.val.xc = xCorrection _ _ _ _ := (translated_pair E Q.val hQ0).1
   linear_combination hp
 
-omit [CharZero K] in
+omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] 同じ平方完成座標2Y_H+a₁X_H+a₃の半核表示。
 補正和のO項を含めて数えることで、余分な|H|a₃を残さない。 -/
 theorem veluZ_half (H : AddSubgroup (Points E)) [Fintype H] (ho : Odd (Nat.card H)) :

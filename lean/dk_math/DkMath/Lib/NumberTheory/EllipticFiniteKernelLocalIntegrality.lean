@@ -59,10 +59,11 @@ theorem halfKernelPolynomialModel_coefficientsIn (H : AddSubgroup (Points E)) [F
   · intro Q _
     exact kernel_coordinates_mem E H n hkill A M hM hn Q
 
+omit [CharZero K] in
 /-- [DkMath.Lib] 同じX_H,Y_Hが多項式候補の方程式を満たすなら、候補は既存の同じkernelModelに等しい。
 本定理では具体的な関数体恒等式を入力に取る。奇数核の場合は後続の
 halfKernelPolynomialModel_equationがこの入力を内部供給する。 -/
-theorem halfKernelPolynomialModel_eq_kernelModel_of_equation [E.IsElliptic]
+theorem halfKernelPolynomialModel_eq_kernelModel_of_equation [NeZero (2 : K)] [E.IsElliptic]
     (H : AddSubgroup (Points E)) [Fintype H]
     (he : ((halfKernelPolynomialModel E H).toAffine⁄(E.toAffine⁄(AlgebraicClosure K)).FunctionField).Equation (veluX E H) (veluY E H)) :
     halfKernelPolynomialModel E H = kernelModel E H :=

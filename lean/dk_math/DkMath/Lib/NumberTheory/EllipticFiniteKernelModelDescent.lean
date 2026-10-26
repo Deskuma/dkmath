@@ -20,7 +20,7 @@ import DkMath.Lib.NumberTheory.EllipticFixedTorsion
 namespace DkMath.Lib.NumberTheory.EllipticFiniteKernel
 open Polynomial WeierstrassCurve WeierstrassCurve.Affine
 open EllipticFunctionField EllipticTorsionRepresentation
-variable {K : Type*} [Field K] [CharZero K] (E : WeierstrassCurve K) [E.IsElliptic]
+variable {K : Type*} [Field K] [NeZero (2 : K)] (E : WeierstrassCurve K) [E.IsElliptic]
 noncomputable local instance instDecidableEqEllipticFiniteKernelModelDescent :
     DecidableEq (AlgebraicClosure K) := Classical.decEq _
 
@@ -51,6 +51,8 @@ theorem kernelModel_galois (H : AddSubgroup (Points E)) [Fintype H]
       veluX E H + algebraMap (AlgebraicClosure K) _ (σ.toAlgHom (kernelModel E H).a₆)
     simpa only [map_add, map_mul, map_pow, hconst,
       veluX_galois E H hH, veluY_galois E H hH] using hg
+
+variable [CharZero K]
 
 /-- [DkMath.Lib] 同じ安定核から得たモデルの三つの新係数を元の体Kへ降下する。
 存在するのは同じモデルのK係数表示であり、楕円性や点写像の存在ではない。 -/
