@@ -163,6 +163,7 @@ import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelHom
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelLocalIntegrality
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelVeluEquation
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelReduction
+import DkMathTest.Lib.NumberTheory.WeierstrassNodalVelu
 import DkMathTest.Lib.NumberTheory.WeierstrassIntegralModel
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelSpecialization
 import DkMathTest.Lib.NumberTheory.EllipticFrobeniusBranchSwap

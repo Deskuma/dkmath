@@ -1,0 +1,414 @@
+{
+  "unit": "NOTE-032-NODAL-QUOTIENT",
+  "date": "2026-10-26",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "e9653adda33a53912e3ebcbbd81326b5cd7bef7e",
+  "status": "same smooth cyclic kernel nodal quotient invariants in arbitrary characteristic; both local kernel branches closed for same actual Source integer target at bad primes distinct from p, including two for p at least five; good reduction and depth laws remain open",
+  "production": [
+    {
+      "path": "DkMath/Lib/Algebra/FiniteInversionHalf.lean",
+      "sha256": "b3996ab0bdb285f1ac5cbc7d0f41355533245fdd85cc95140d5482d12cfc67bc",
+      "theorems": [
+        "sum_eq",
+        "cyclicHalf_isHalf",
+        "sum_eq_cyclic"
+      ],
+      "definitions": [
+        "IsHalf",
+        "cyclicHalf"
+      ],
+      "lines": 138
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/OddRootPairMoments.lean",
+      "sha256": "e0d9c92a52d396f464a8d3722f448d43a915d4e1cf6ad0b7450a02b77144f05c",
+      "theorems": [
+        "power_sums",
+        "weighted_moments"
+      ],
+      "definitions": [
+        "firstCoefficient",
+        "secondCoefficient",
+        "thirdCoefficient"
+      ],
+      "lines": 1144
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassNodalFrame.lean",
+      "sha256": "03e5671538bc2b381d0b1584001a70085d7ccbdfeda40278dc8905290e0dd79c",
+      "theorems": [
+        "b_invariants",
+        "c_invariants",
+        "nodal_invariants",
+        "x_tc_identity",
+        "tc_ne_one",
+        "xc_eq",
+        "residue_frame_of_model",
+        "primitiveRoot_tc",
+        "nsmul_xc"
+      ],
+      "definitions": [],
+      "lines": 136
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassNodalVelu.lean",
+      "sha256": "43906c1a99b8ba41bd2874e6c834fc395e633a06aa72349e2d59720c96cdd5c7",
+      "theorems": [
+        "polynomialModel_b8",
+        "momentW_eq_cubic",
+        "point_moments_neg",
+        "polynomialModel_invariants"
+      ],
+      "definitions": [],
+      "lines": 141
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelNodalReduction.lean",
+      "sha256": "da1a9ef6c7a78266b704216d7abf4b8374534d86e58ebedd8d1dc9720783723b",
+      "theorems": [
+        "valuationKernelModel_nodal_invariants_of_smooth",
+        "valuationKernelModel_nodal_invariants",
+        "kernelModel_nodal_conditions"
+      ],
+      "definitions": [],
+      "lines": 94
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelNodalReduction.lean",
+      "sha256": "66dee96871b7fd49fb1cb4a87052e39733527ef9f430acbb7d4059fa486c701c",
+      "theorems": [
+        "residual_integer_target_nodal_conditions",
+        "residual_integer_target_multiplicative_of_geometry",
+        "residual_integer_target_multiplicative_at_bad_prime",
+        "residual_integer_target_multiplicative_at_two",
+        "residual_integer_target_multiplicative_at_bad_place"
+      ],
+      "definitions": [],
+      "lines": 115
+    }
+  ],
+  "tests": [
+    {
+      "path": "DkMathTest/Lib/NumberTheory/WeierstrassNodalVelu.lean",
+      "sha256": "cdbd23e84c927782cf08bfea196a8c7900a3b3badbbb1e9285badf7bce0c5187",
+      "theorems": [
+        "parameter_tc",
+        "parameter_order",
+        "sampleKernel_card",
+        "quotient_invariants",
+        "characteristic_two_example",
+        "characteristic_three_example",
+        "characteristic_two_thirtySeven_example",
+        "characteristic_three_thirtySeven_example",
+        "even_half_boundary"
+      ],
+      "definitions": [
+        "splitCurve",
+        "parameterPoint",
+        "sampleKernel",
+        "quotient"
+      ],
+      "lines": 174
+    },
+    {
+      "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032NodalQuotientSmoke.lean",
+      "sha256": "833b95fe24577549f4be26674aeacbb02278bc0d19e0ad4b5561eafda5eee408",
+      "theorems": [
+        "source37_multiplicative_at_two",
+        "source37_multiplicative_at_bad_three",
+        "source37_multiplicative_at_bad_prime",
+        "source37_multiplicative_at_bad_place"
+      ],
+      "definitions": [],
+      "lines": 46
+    }
+  ],
+  "counts": {
+    "new_production_owners": 6,
+    "public_production_theorems": 26,
+    "production_definitions": 5,
+    "test_theorems": 9,
+    "test_definitions": 4,
+    "source37_theorems": 4,
+    "audited_public_declarations": 48
+  },
+  "completed": [
+    "inversion-invariant sums independent of finite inversion-half choice without division by two",
+    "cyclic positive half is genuine inversion half for odd n; canonical half compatible with existing halfKernel",
+    "finite root-pair polynomial product, Pascal coefficient windows one three five seven, Newton power sums and integer certificates",
+    "three Pascal integer coefficients and denominator-cleared root-pair power sums public in Lib",
+    "weighted moment identities determining c4 c6 and discriminant directly, without division by 1728",
+    "same existing Frame gives same point x via tc and primitive root of actual additive order; b and c invariants in arbitrary characteristic",
+    "same injective cyclic kernel and arbitrary indexed inversion half have target c4=n^4 source c4, c6=n^6 source c6 and discriminant zero",
+    "same actual prime-cardinality kernel internally supplies cyclic representation and applies to same existing valuation target residue",
+    "both smooth and singular kernel branches give same existing target discriminant nonunit and c4 unit",
+    "same actual Source integer target formally multiplicative at bad odd primes distinct from p with no Disjoint or geometry provider input",
+    "same actual Source integer target formally multiplicative at two for p at least five with geometry supplied internally",
+    "actual split nodal points constructed from primitive roots, exact additive order and generated kernel cardinality proved",
+    "actual characteristic-two kernels of orders three and thirty-seven and characteristic-three kernels of orders five and thirty-seven; same polynomial target discriminant zero and c4 one",
+    "even order-two canonical half fails inversion-half condition; oddness guard tested",
+    "same Source37 formal multiplicative reduction at two, bad three, arbitrary bad odd prime and unified bad place"
+  ],
+  "boundaries": [
+    "normal Source, one-dimensional L and Galois stability hypotheses retained",
+    "local Source endpoints require q distinct from p; dyadic endpoint requires p at least five",
+    "good reduction preservation at good primes and local control at p remain unproved",
+    "discriminant nonunit and residue zero do not assert exact valuation depth",
+    "full source zero-component transport, scheme isogeny, target rational torsion exclusion and general hno remain open"
+  ],
+  "validation": {
+    "focused_builds": [
+      "./lean-build.sh DkMath.FLT.FreyFiniteKernelNodalReduction",
+      "./lean-build.sh DkMathTest.Lib.NumberTheory.WeierstrassNodalVelu"
+    ],
+    "direct_lean": [
+      "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032NodalQuotientSmoke.lean",
+      "lake env lean tmp/note032-nodal-quotient/Axioms.lean"
+    ],
+    "results": "passed without warnings",
+    "source_scan": "passed",
+    "lib_dependency_direction": "passed",
+    "docstrings_markers_tracker": "passed",
+    "facades": "static registration checked",
+    "protected_predecessors_and_contracts": "unchanged",
+    "diff_and_whitespace": "passed",
+    "full_build_and_full_test_suite": "not run; user handles full build"
+  },
+  "upstream": {
+    "inspected_file": {
+      "path": "P2M/Sol/S_WeierstrassCurve_veluQuotient_oddOrderSummingSet_c4_c6_discriminant_of_nodal.lean",
+      "blob_sha": "fbe8b46b385ec6f97df009c8cb22a7e62c104cc8",
+      "bytes": 88186,
+      "lines": 1907
+    },
+    "hash": "verified",
+    "role": "finite symmetric sums and integer weighted-moment certificates adapted; nodal frame, same kernel and residue connections rebuilt from existing DkMath; no external solution imports",
+    "licenses": "OddRootPairMoments and WeierstrassNodalVelu Apache-2.0 with blob and existing notices; four other new owners MIT"
+  },
+  "axioms": {
+    "DkMath.Lib.Algebra.FiniteInversionHalf.IsHalf": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.Algebra.FiniteInversionHalf.sum_eq": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.Algebra.FiniteInversionHalf.cyclicHalf": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.Algebra.FiniteInversionHalf.cyclicHalf_isHalf": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.Algebra.FiniteInversionHalf.sum_eq_cyclic": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.OddRootPairMoments.power_sums": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.OddRootPairMoments.weighted_moments": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassNodalFrame.b_invariants": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassNodalFrame.c_invariants": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassNodalFrame.nodal_invariants": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassNodalFrame.x_tc_identity": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassNodalFrame.tc_ne_one": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassNodalFrame.xc_eq": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassNodalFrame.residue_frame_of_model": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassNodalFrame.primitiveRoot_tc": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassNodalFrame.nsmul_xc": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassNodalVelu.polynomialModel_b8": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassNodalVelu.momentW_eq_cubic": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassNodalVelu.point_moments_neg": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassNodalVelu.polynomialModel_invariants": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.valuationKernelModel_nodal_invariants_of_smooth": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.valuationKernelModel_nodal_invariants": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_nodal_conditions": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_target_nodal_conditions": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_target_multiplicative_of_geometry": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_target_multiplicative_at_bad_prime": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_target_multiplicative_at_two": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_target_multiplicative_at_bad_place": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassNodalVeluTest.splitCurve": [
+      "propext",
+      "Quot.sound"
+    ],
+    "WeierstrassNodalVeluTest.parameterPoint": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassNodalVeluTest.parameter_tc": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassNodalVeluTest.parameter_order": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassNodalVeluTest.sampleKernel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassNodalVeluTest.sampleKernel_card": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassNodalVeluTest.quotient": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassNodalVeluTest.quotient_invariants": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassNodalVeluTest.characteristic_two_example": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassNodalVeluTest.characteristic_three_example": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassNodalVeluTest.characteristic_two_thirtySeven_example": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassNodalVeluTest.characteristic_three_thirtySeven_example": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassNodalVeluTest.even_half_boundary": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032NodalQuotientSmoke.source37_multiplicative_at_two": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032NodalQuotientSmoke.source37_multiplicative_at_bad_three": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032NodalQuotientSmoke.source37_multiplicative_at_bad_prime": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032NodalQuotientSmoke.source37_multiplicative_at_bad_place": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.OddRootPairMoments.firstCoefficient": [],
+    "DkMath.Lib.NumberTheory.OddRootPairMoments.secondCoefficient": [],
+    "DkMath.Lib.NumberTheory.OddRootPairMoments.thirdCoefficient": []
+  }
+}
