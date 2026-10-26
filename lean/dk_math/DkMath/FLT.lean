@@ -36,6 +36,7 @@ import DkMath.FLT.FreyFiniteKernelNonsingular
 import DkMath.FLT.FreyFiniteKernelPointDescent
 import DkMath.FLT.FreyFiniteKernelValuation
 import DkMath.FLT.FreyFiniteKernelGlobal
+import DkMath.FLT.FreyFiniteKernelHom
 import DkMath.FLT.FreyFiniteKernelSpecialization
 import DkMath.FLT.FreyGeometricWeilPairing
 import DkMath.FLT.FreyGoodReductionInertia

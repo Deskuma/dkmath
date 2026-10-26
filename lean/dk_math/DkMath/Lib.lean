@@ -138,6 +138,10 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelSurjective
 import DkMath.Lib.NumberTheory.ValuationDivisor
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDivisor
 import DkMath.Lib.NumberTheory.EllipticWeilDivisor
+import DkMath.Lib.NumberTheory.DedekindFractionalValuation
+import DkMath.Lib.NumberTheory.WeierstrassDivisorAbel
+import DkMath.Lib.NumberTheory.WeierstrassPrincipalPushHom
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelHom
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPolynomial
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelRationalFiber
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelReflection
