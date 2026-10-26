@@ -1,0 +1,20 @@
+NOTE-032-LOCAL-INTEGRAL-SUPPORT validation (2026-10-26)
+Base HEAD: cc1104f4325a652b9c6ac859b32bd1851e8f11e2
+Branch: dev/FLT-GN-regular-261018-v0
+PASS focused production build: DkMath.FLT.FreyFiniteKernelLocalIntegrality
+PASS focused test build: DkMathTest.Lib.NumberTheory.EllipticFiniteKernelLocalIntegrality
+PASS Source37 direct Lean: 6 theorems
+PASS axiom audit: 57 public declarations; only propext, Classical.choice, Quot.sound
+PASS forbidden-construct and external-proof-import scan
+PASS Lib dependency direction, textbook docstrings and promotion markers
+PASS file markers after imports and tracker mismatch check
+PASS facade import registration (static)
+PASS protected prior mathematical owners and checkpoint unchanged
+PASS two upstream blob hashes and adaptation license provenance
+PASS git diff --check and new-file whitespace
+Counts: 7 production owners, 35 public theorems, 8 definitions
+Actual tests: noncyclic order-9 kernel half has four points, denominator 16 and 74 boundary examples, polynomial candidate reduction in characteristic two
+Source37: kernel killed by 37, half has 18 points, actual coordinates and candidate coefficients integral at two, exact actual target denominator criterion, conditional actual denominator theorem
+Completed: same-kernel local integrality, half-kernel polynomial candidate integrality, exact denominator support criteria
+Conditional only: actual target p-power denominator under same actual X_H,Y_H candidate equation
+Unresolved: that equation, unconditional actual target p-power denominator, source-to-quotient reduction and general hno

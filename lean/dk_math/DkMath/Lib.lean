@@ -142,10 +142,14 @@ import DkMath.Lib.NumberTheory.DedekindFractionalValuation
 import DkMath.Lib.NumberTheory.WeierstrassDivisorAbel
 import DkMath.Lib.NumberTheory.WeierstrassPrincipalPushHom
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelHom
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelHalf
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelLocalIntegrality
 import DkMath.Lib.NumberTheory.WeierstrassVariableChange
 import DkMath.Lib.NumberTheory.WeierstrassVariableChangeHom
 import DkMath.Lib.NumberTheory.WeierstrassVariableChangeGalois
 import DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel
+import DkMath.Lib.NumberTheory.WeierstrassDenominatorSupport
+import DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial
 import DkMath.Lib.NumberTheory.WeierstrassIntegralModelTransport
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPolynomial
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelRationalFiber
@@ -308,6 +312,8 @@ import DkMath.Lib.NumberTheory.ValuationInertiaPower
 import DkMath.Lib.NumberTheory.ValuationPlaceConjugacy
 import DkMath.Lib.NumberTheory.ValuationPrimeExistence
 import DkMath.Lib.NumberTheory.ValuationPrimeSupport
+import DkMath.Lib.NumberTheory.RationalPrimeDenominator
+import DkMath.Lib.NumberTheory.ValuationRationalPrimeSupport
 import DkMath.Lib.NumberTheory.ValuationQuadraticFrobenius
 import DkMath.Lib.NumberTheory.ValuationResidue
 import DkMath.Lib.NumberTheory.ValuationSplitQuadratic
