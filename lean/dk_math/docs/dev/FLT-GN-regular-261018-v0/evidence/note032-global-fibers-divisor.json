@@ -1,0 +1,458 @@
+{
+  "unit": "NOTE-032-GLOBAL-FIBERS-DIVISOR",
+  "date": "2026-10-26",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "4cfb0c40f783b4dff1bd3d5105b41ba77ab2e88f",
+  "status": "exact H-coset fibers, surjectivity, cardinality of every target fiber, finite-supported principal-divisor pushforward and induced divisor-class homomorphism proved for the same all-point function; Abel correspondence and point additivity remain open",
+  "production": [
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFinitePointApproximation.lean",
+      "sha256": "92baea2dc9161746b17eb5105abbf199c39512fb5a8b398889b7c4b2a23b1ed9",
+      "theorems": [
+        "exists_parameter_on_finset"
+      ],
+      "definitions": [],
+      "lines": 60
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/RationalFunctionFiniteFiber.lean",
+      "sha256": "3983e65db57ea5997d0b2836cc915450ab692d530675ba40184bb239b3f3473e",
+      "theorems": [
+        "exists_finite_fiber"
+      ],
+      "definitions": [],
+      "lines": 43
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelFibers.lean",
+      "sha256": "d26f0e9b230aa0cb3cb93fcc819c58408abac6bcfbc417a934ec8dd01f281e2d",
+      "theorems": [
+        "exists_pull_separating_orbits",
+        "oddKernelPointMap_eq_iff_sub_mem",
+        "oddKernelPointMap_eq_iff_exists_translate",
+        "card_kernel_image_fiber"
+      ],
+      "definitions": [
+        "kernelFiberEquiv"
+      ],
+      "lines": 122
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelSurjective.lean",
+      "sha256": "b159a5925c9f3c3499db63cb06dee50783223880cca8d1a19e655431f71da9cd",
+      "theorems": [
+        "exists_finite_point_with_x",
+        "exists_veluX_rational_at_infinity",
+        "exists_kernelXAt_eq",
+        "oddKernelPointMap_surjective",
+        "card_kernel_fiber",
+        "descendedKernelPointMap_surjective",
+        "descendedKernelPointMap_eq_iff_sub_mem"
+      ],
+      "definitions": [],
+      "lines": 162
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/ValuationDivisor.lean",
+      "sha256": "b0f706d760e3a5018c6e5d2b2be5327e24dfcb5dd20a21038f465c7a07a78ff8",
+      "theorems": [
+        "isPrincipal_zero",
+        "IsPrincipal.add",
+        "IsPrincipal.neg"
+      ],
+      "definitions": [
+        "IsPrincipal",
+        "principalSubgroup"
+      ],
+      "lines": 58
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelDivisor.lean",
+      "sha256": "8d678ef36db7a65e34a7021d47f218ba556264911597d7800f81ff09c349d6f7",
+      "theorems": [
+        "kernelDivisorPush_apply_image",
+        "kernelDivisorPush_degree",
+        "kernelDivisorPush_pointDivisor",
+        "kernelDivisorPush_isPrincipal",
+        "kernelDivisorClassPush_mk",
+        "kernelDivisorClassPush_pointClass"
+      ],
+      "definitions": [
+        "kernelDivisorPush",
+        "kernelDivisorClassPush"
+      ],
+      "lines": 131
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticWeilDivisor.lean",
+      "sha256": "a5e59d9294c274ea885318c9b577f903c7f11c3793393c2fae102a4eb603fd24",
+      "theorems": [
+        "fiberDivisor_apply",
+        "weilDivisor_isPrincipal"
+      ],
+      "definitions": [
+        "fiberDivisor",
+        "weilDivisor"
+      ],
+      "lines": 53
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelGlobal.lean",
+      "sha256": "68b6251e0822d476112ef00c52174211f65b18da9805089f5f66a15e07433c1d",
+      "theorems": [
+        "residual_pointSubgroup_odd",
+        "residual_odd_kernel_pointMap_eq_iff_sub_mem",
+        "residual_odd_kernel_pointMap_surjective",
+        "card_residual_odd_kernel_fiber",
+        "residual_kernel_divisor_push_isPrincipal"
+      ],
+      "definitions": [
+        "residualKernelDivisorPush"
+      ],
+      "lines": 78
+    }
+  ],
+  "tests": [
+    {
+      "path": "DkMathTest/Lib/NumberTheory/EllipticFiniteKernelGlobal.lean",
+      "sha256": "6fff8a0d8f3f14337589b34f5db887a3f65c972509f26c3bf93a4854afd4881d",
+      "theorems": [
+        "actual_rational_degrees",
+        "actual_surjective",
+        "actual_fiber_relation",
+        "actual_all_fiber_cards",
+        "actual_descended_surjective",
+        "actual_R_two_torsion",
+        "actual_weil_fiber_cards",
+        "actual_source_principal",
+        "actual_nonzero_principal_push"
+      ],
+      "definitions": [
+        "sourceDivisor"
+      ],
+      "lines": 120
+    },
+    {
+      "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032GlobalFibersSmoke.lean",
+      "sha256": "5a037e211c2ef1e55d7e4e311b4fc8e6b21b8a795065335764688c9258af2ef8",
+      "theorems": [
+        "source37_surjective",
+        "source37_fiber_relation",
+        "source37_fiber_card",
+        "source37_principal_transport"
+      ],
+      "definitions": [],
+      "lines": 39
+    }
+  ],
+  "counts": {
+    "production_owners": 8,
+    "production_theorems": 29,
+    "production_definitions": 8,
+    "production_lines": 707,
+    "test_theorems": 9,
+    "test_definitions": 1,
+    "source37_theorems": 4,
+    "audited_declarations": 51
+  },
+  "completed": [
+    "CRT separation of two distinct H orbits using same descended orbit product",
+    "exact arbitrary fibers as H cosets and actual fiber equivalence",
+    "numerator degree |H| and denominator degree |H|-1 for same X_H rational expression",
+    "surjectivity and cardinal |H| for every target fiber",
+    "surjectivity and fiber relation on same descended K model",
+    "finite-supported principal subgroup and divisor pushforward with degree preservation",
+    "same kernelModelNorm witnesses principal-divisor preservation",
+    "induced homomorphism on all divisors modulo principal divisors, including same point-difference class formula",
+    "actual nonzero Weil principal divisor transport over E[3] of cardinal 9",
+    "same Source37 global fiber and principal-preservation wrappers"
+  ],
+  "boundaries": [
+    "point-class Abel correspondence not proved",
+    "divisor-class map is not yet identified with a point-group homomorphism",
+    "no general theorem asserting finite divisor support for every rational function is introduced",
+    "point additivity, isogeny and rational-image p-torsion remain open",
+    "integral models, reduction/components and general hno remain open"
+  ],
+  "validation": {
+    "focused_builds": [
+      "./lean-build.sh DkMath.FLT.FreyFiniteKernelGlobal",
+      "./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelGlobal"
+    ],
+    "direct_lean": [
+      "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032GlobalFibersSmoke.lean",
+      "lake env lean tmp/note032-global/Axioms.lean"
+    ],
+    "results": "passed without warnings",
+    "source_scan": "passed",
+    "lib_dependency_direction": "passed",
+    "docstrings_markers_tracker": "passed",
+    "facades": "static registration checked",
+    "previous_owners_and_contract": "unchanged",
+    "diff_and_new_file_whitespace": "passed",
+    "full_build_and_full_test_suite": "not run; user handles full build"
+  },
+  "upstream": {
+    "blob": "fa5eda1fdc857b6445c21720c78805e7ecded543",
+    "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/validation-note032-global-fibers-divisor.txt",
+    "hash": "verified",
+    "role": "inspected divisor and Pic0 pushforward and same-point-map seam; no upstream proof-library imports"
+  },
+  "axioms": {
+    "DkMath.Lib.NumberTheory.EllipticFinitePointApproximation.exists_parameter_on_finset": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.RationalFunctionFiniteFiber.exists_finite_fiber": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_pull_separating_orbits": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_eq_iff_sub_mem": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_eq_iff_exists_translate": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelFiberEquiv": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.card_kernel_image_fiber": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_finite_point_with_x": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_veluX_rational_at_infinity": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_kernelXAt_eq": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_surjective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.card_kernel_fiber": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelPointMap_surjective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelPointMap_eq_iff_sub_mem": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.ValuationDivisor.IsPrincipal": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.ValuationDivisor.isPrincipal_zero": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.ValuationDivisor.IsPrincipal.add": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.ValuationDivisor.IsPrincipal.neg": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.ValuationDivisor.principalSubgroup": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelDivisorPush": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelDivisorPush_apply_image": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelDivisorPush_degree": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelDivisorPush_pointDivisor": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelDivisorPush_isPrincipal": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelDivisorClassPush": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelDivisorClassPush_mk": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelDivisorClassPush_pointClass": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.fiberDivisor": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.fiberDivisor_apply": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilDivisor": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilDivisor_isPrincipal": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_pointSubgroup_odd": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_odd_kernel_pointMap_eq_iff_sub_mem": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_odd_kernel_pointMap_surjective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.card_residual_odd_kernel_fiber": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualKernelDivisorPush": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_divisor_push_isPrincipal": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelGlobalTest.actual_rational_degrees": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelGlobalTest.actual_surjective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelGlobalTest.actual_fiber_relation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelGlobalTest.actual_all_fiber_cards": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelGlobalTest.actual_descended_surjective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelGlobalTest.actual_R_two_torsion": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelGlobalTest.actual_weil_fiber_cards": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelGlobalTest.sourceDivisor": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelGlobalTest.actual_source_principal": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelGlobalTest.actual_nonzero_principal_push": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032GlobalFibersSmoke.source37_surjective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032GlobalFibersSmoke.source37_fiber_relation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032GlobalFibersSmoke.source37_fiber_card": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032GlobalFibersSmoke.source37_principal_transport": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  }
+}

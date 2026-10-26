@@ -131,6 +131,13 @@ import DkMath.Lib.NumberTheory.WeierstrassPolePullback
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelLocalTransport
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelUnramified
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelValuation
+import DkMath.Lib.NumberTheory.EllipticFinitePointApproximation
+import DkMath.Lib.NumberTheory.RationalFunctionFiniteFiber
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelFibers
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelSurjective
+import DkMath.Lib.NumberTheory.ValuationDivisor
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelDivisor
+import DkMath.Lib.NumberTheory.EllipticWeilDivisor
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPolynomial
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelRationalFiber
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelReflection
