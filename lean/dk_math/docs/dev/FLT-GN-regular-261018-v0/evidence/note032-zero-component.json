@@ -1,0 +1,152 @@
+{
+  "unit": "NOTE-032-ZERO-COMPONENT",
+  "date": "2026-10-27",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "813bc1696c131e08d78ac78b8a7f79707126db77",
+  "status": "same actual point map preserves the formal neighbourhood and exact x valuation; singular-kernel branch transports every zero-component point to the same valuation-ring target and gives an injective restriction homomorphism; Source connection retains Disjoint",
+  "production": {
+    "owners": 4,
+    "theorems": 18,
+    "definitions": 1
+  },
+  "regression_theorems": 6,
+  "smoke_theorems": 3,
+  "axiom_audit": {
+    "declarations": 28,
+    "batches": [
+      15,
+      10,
+      3
+    ],
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "sorryAx": false
+  },
+  "checks": [
+    {
+      "command": "./lean-build.sh DkMath.FLT.FreyFiniteKernelZeroComponent",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelZeroComponent",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032ZeroComponentSmoke.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "96b8fcd581d76b173b2926747e69df41e0129da1655830c233fd2a18753621f3"
+    },
+    {
+      "command": "lake env lean tmp/note032-zero-component/Axioms1.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "50d7a4dcb550ef33b3617a7d8d4fb3684ed410c90a412c3453ff23079c708cb2"
+    },
+    {
+      "command": "lake env lean tmp/note032-zero-component/Axioms2.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "40eea7255a2b10d20e9d9503217eeaf0646aa90c13be618bf188ecc7700d3abd"
+    }
+  ],
+  "files": [
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassVeluFormal.lean",
+      "sha256": "9c90814bdb67e186bab4385731476294e58e34e29db49a91000c93babf5092e0",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.WeierstrassVeluFormal.correction_sum_small",
+        "DkMath.Lib.NumberTheory.WeierstrassVeluFormal.x_value_eq"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelFormal.lean",
+      "sha256": "49d41b1763eafac9d4c63f1d202f30e4f35b76749843e4e13da58665a1fccebf",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt_half",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.not_mem_kernel_of_x_not_mem",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt_value_of_x_not_mem",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_x_not_mem",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_smooth_of_x_not_mem",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_reduce_zero_of_x_not_mem"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelZeroComponent.lean",
+      "sha256": "dfd48bd3eda952fb127c19007263896fcece7644245fe7c5101256061e9f0e26",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.smooth_sub_of_model",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.nonsmooth_coordinates_congr",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelAt_congr_of_not_smooth_kernel",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_smooth_of_not_smooth_kernel",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.singularKernelZeroComponentHom",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.singularKernelZeroComponentHom_geometric",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.singularKernelZeroComponentHom_injective"
+      ]
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelZeroComponent.lean",
+      "sha256": "03a7eb7d8c28d2b36ea6c0f34d60ac56913186d7358d1afb353ced9bd410e666",
+      "public_declarations": [
+        "DkMath.FLT.Frey.Source.residual_pointHom_x_not_mem",
+        "DkMath.FLT.Frey.Source.residual_pointHom_smooth_of_disjoint_geometry",
+        "DkMath.FLT.Frey.Source.residual_pointHom_smooth_at_bad_prime_of_disjoint",
+        "DkMath.FLT.Frey.Source.residual_pointHom_smooth_at_two_of_disjoint"
+      ]
+    },
+    {
+      "path": "DkMathTest/Lib/NumberTheory/EllipticFiniteKernelZeroComponent.lean",
+      "sha256": "40e8b6157b2e3ea45c90c615a5268b9004a9f14c59d56d109dfa068fcb81edc2",
+      "public_declarations": [
+        "EllipticFiniteKernelZeroComponentTest.actual_all_smooth_points",
+        "EllipticFiniteKernelZeroComponentTest.exists_nonzero_point_x_one",
+        "EllipticFiniteKernelZeroComponentTest.smooth_at_seven_of_x_one",
+        "EllipticFiniteKernelZeroComponentTest.exists_actual_smooth_image",
+        "EllipticFiniteKernelZeroComponentTest.actual_formal_value",
+        "EllipticFiniteKernelZeroComponentTest.exists_actual_formal_image"
+      ]
+    },
+    {
+      "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032ZeroComponentSmoke.lean",
+      "sha256": "0542a0af05ae3f6d77f6e30888b9f46f43b9e97220194e2889601bc14f70f7f5"
+    }
+  ],
+  "static_checks": [
+    "five production/test file markers match module paths",
+    "public Lib textbook docstrings and promotion markers",
+    "no forbidden proof constructs",
+    "Lib imports do not depend on FLT or external solution modules",
+    "five facade imports statically registered, no facade build",
+    "all existing mathematical owners and prior NOTE/evidence unchanged",
+    "index unchanged",
+    "upstream cache blob and Apache license/notice verified",
+    "git diff HEAD --check passed"
+  ],
+  "upstream": {
+    "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_inZeroComponentAt_veluCoord_iff_of_multiplicative.lean",
+    "git_blob": "ab1aee61bdcfbe439dcf9693d5f1417cacc05b6b",
+    "bytes": 194234
+  },
+  "remaining": [
+    "zero-component transport for smooth kernel branch",
+    "general commuting reduction square",
+    "transport to points on the existing integer target",
+    "inverse-image zero-component criterion",
+    "exact discriminant depth",
+    "q=p",
+    "scheme isogeny",
+    "arithmetic exclusion of target rational torsion",
+    "general hno"
+  ],
+  "full_build": {
+    "performed": false,
+    "reason": "user handles full build; no root build or lake test"
+  }
+}
