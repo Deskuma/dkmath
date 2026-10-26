@@ -44,6 +44,7 @@ import DkMath.FLT.FreyFiniteKernelReduction
 import DkMath.FLT.FreyFiniteKernelNodalReduction
 import DkMath.FLT.FreyFiniteKernelGoodReduction
 import DkMath.FLT.FreyFiniteKernelZeroComponent
+import DkMath.FLT.FreyFiniteKernelReductionSquare
 import DkMath.FLT.FreyFiniteKernelSpecialization
 import DkMath.FLT.FreyGeometricWeilPairing
 import DkMath.FLT.FreyGoodReductionInertia

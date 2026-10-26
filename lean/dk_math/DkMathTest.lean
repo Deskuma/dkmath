@@ -164,6 +164,7 @@ import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelLocalIntegrality
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelVeluEquation
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelGoodReduction
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelZeroComponent
+import DkMathTest.Lib.NumberTheory.FreyReductionTransport
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelReduction
 import DkMathTest.Lib.NumberTheory.WeierstrassNodalVelu
 import DkMathTest.Lib.NumberTheory.WeierstrassIntegralModel

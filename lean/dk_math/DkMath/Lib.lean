@@ -153,6 +153,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalReduction
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelGoodReduction
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelFormal
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelZeroComponent
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelReductionSquare
 import DkMath.Lib.NumberTheory.WeierstrassVariableChange
 import DkMath.Lib.NumberTheory.WeierstrassVariableChangeHom
 import DkMath.Lib.NumberTheory.WeierstrassVariableChangeGalois
@@ -170,6 +171,9 @@ import DkMath.Lib.Algebra.FiniteInversionHalfTransport
 import DkMath.Lib.NumberTheory.WeierstrassVeluPair
 import DkMath.Lib.NumberTheory.WeierstrassVeluFormal
 import DkMath.Lib.NumberTheory.WeierstrassIntegralModelTransport
+import DkMath.Lib.NumberTheory.WeierstrassModelReduction
+import DkMath.Lib.NumberTheory.WeierstrassIntegralChangeReduction
+import DkMath.Lib.NumberTheory.WeierstrassIntegerReductionTransport
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPolynomial
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelRationalFiber
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelReflection
