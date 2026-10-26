@@ -1,0 +1,733 @@
+{
+  "unit": "NOTE-032-INTEGRAL-MODEL",
+  "date": "2026-10-26",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "f5cc6eb87abdb3457a5b2e94b85d5b70352f25da",
+  "status": "explicit integer target constructed from same rational target; variable-change additive equivalences preserve same point homomorphism, kernel, surjectivity, Galois equivariance and nonzero cofixed rational p-torsion image; local invariant valuations preserved when clearing denominator is a valuation unit",
+  "production": [
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassVariableChange.lean",
+      "sha256": "28704407109099a642ce4730b3e65e016b3c07de5a2feaa6abc198575f4a07c4",
+      "theorems": [
+        "vcX_vcXInv",
+        "vcY_vcYInv",
+        "vcXInv_vcX",
+        "vcYInv_vcY",
+        "partialX_aux",
+        "partialY_aux",
+        "equation_variableChange_iff",
+        "nonsingular_variableChange_iff",
+        "vcFun_zero",
+        "vcInvFun_zero",
+        "vcFun_leftInverse",
+        "vcFun_rightInverse"
+      ],
+      "definitions": [
+        "vcX",
+        "vcY",
+        "vcXInv",
+        "vcYInv",
+        "vcFun",
+        "vcInvFun",
+        "variableChangeEquiv",
+        "equivOfVariableChangeEq"
+      ],
+      "private_theorems": [
+        "u_ne_zero",
+        "u_pow_ne_zero",
+        "equation_aux",
+        "partials_zero_iff",
+        "some_eq_some"
+      ],
+      "lines": 203
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassVariableChangeHom.lean",
+      "sha256": "b0b88142eeb8e9dfbe8da500f7ce97579cfa264633536c0956db649dd8488199",
+      "theorems": [
+        "vcAdd_u_ne_zero",
+        "vcX_injective",
+        "vcY_injective",
+        "negY_variableChange",
+        "Yeq_variableChange_iff",
+        "slope_variableChange",
+        "addX_variableChange",
+        "addY_variableChange",
+        "some_of_eq_of_eq",
+        "vcFun_add",
+        "vcInvFun_add",
+        "variableChangeAddEquiv_apply"
+      ],
+      "definitions": [
+        "variableChangeAddEquiv"
+      ],
+      "private_theorems": [],
+      "lines": 197
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassVariableChangeGalois.lean",
+      "sha256": "b5a477288922136e846ca09a1d45cc072a2fa82a3fd748959e341ff3b0f982e6",
+      "theorems": [
+        "pointEquivOfModelEq_some",
+        "pointEquivOfModelEq_equivariant",
+        "pointEquivOfModelEq_baseChange",
+        "geometricChangeEquiv_some",
+        "geometricChangeEquiv_equivariant",
+        "geometricChangeEquiv_symm_equivariant",
+        "geometricChangeEquiv_baseChange"
+      ],
+      "definitions": [
+        "pointEquivOfModelEq",
+        "geometricChangeEquiv"
+      ],
+      "private_theorems": [],
+      "lines": 132
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassRationalIntegralModel.lean",
+      "sha256": "d2da8c79cb36fdf1b4b360fb486ecea6d12d4400d6e5e40d369be2b7e0ee5685",
+      "theorems": [
+        "commonDenominator_ne_zero",
+        "denominators_dvd",
+        "weightedCoefficient_cast",
+        "integerModel_map",
+        "integerModel_discriminant",
+        "integerModel_c4",
+        "integerModel_c6",
+        "integerModel_discriminant_value",
+        "integerModel_c4_value",
+        "integerModel_discriminant_ne_zero",
+        "integerModel_map_isElliptic"
+      ],
+      "definitions": [
+        "commonDenominator",
+        "weightedCoefficient",
+        "clearingChange",
+        "integerModel"
+      ],
+      "private_theorems": [],
+      "lines": 135
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassIntegralModelTransport.lean",
+      "sha256": "f750f46841eff85da519fcbc3d4a993fa40b3d15e51af7b2bccf9c7e23376626",
+      "theorems": [
+        "rationalPointEquiv_some",
+        "geometricPointEquiv_equivariant",
+        "geometricPointEquiv_symm_equivariant",
+        "geometricPointEquiv_baseChange",
+        "geometricPointEquiv_symm_baseChange",
+        "exists_nonzero_torsion_on_integerModel"
+      ],
+      "definitions": [
+        "rationalModel",
+        "rationalPointEquiv",
+        "geometricPointEquiv"
+      ],
+      "private_theorems": [],
+      "lines": 98
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelIntegralModel.lean",
+      "sha256": "764005a4bde911aa99a2e131560478e4603aa748c1a32597d6464ba736211e20",
+      "theorems": [
+        "residual_integer_kernel_model_discriminant",
+        "residual_integer_kernel_model_discriminant_ne_zero",
+        "residual_integer_kernel_model_isElliptic",
+        "residual_integer_kernel_pointHom_transport",
+        "residual_integer_kernel_pointHom_ker",
+        "residual_integer_kernel_pointHom_surjective",
+        "card_residual_integer_kernel_torsion_image",
+        "residual_integer_kernel_pointHom_equivariant",
+        "exists_rational_torsion_on_integer_kernel"
+      ],
+      "definitions": [
+        "residualIntegerKernelModel",
+        "residualIntegerKernelPointHom"
+      ],
+      "private_theorems": [],
+      "lines": 146
+    }
+  ],
+  "tests": [
+    {
+      "path": "DkMathTest/Lib/NumberTheory/WeierstrassIntegralModel.lean",
+      "sha256": "185959593a75532ef69c19fa59c4dedf61b726f948f9546b516e825d136a9fee",
+      "theorems": [
+        "sample_discriminant",
+        "sample_denominator",
+        "sample_integer_model",
+        "sample_integer_discriminant",
+        "sample_point_transport",
+        "integralPoint_nonzero_two_torsion",
+        "sample_baseChange_transport",
+        "sample_unit_place",
+        "sample_dyadic_orders",
+        "actual_kernel_target_integer_torsion"
+      ],
+      "definitions": [
+        "sample",
+        "samplePoint",
+        "integralPoint"
+      ],
+      "private_theorems": [],
+      "lines": 111
+    },
+    {
+      "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032IntegralModelSmoke.lean",
+      "sha256": "785e327bc26c9b263f412ad4043ca21523242234b1c37b8fff0375e2fc14d6b7",
+      "theorems": [
+        "source37_integer_discriminant",
+        "source37_integer_kernel",
+        "source37_integer_surjective",
+        "source37_integer_equivariant",
+        "source37_integer_rational_torsion"
+      ],
+      "definitions": [],
+      "private_theorems": [],
+      "lines": 49
+    }
+  ],
+  "counts": {
+    "production_owners": 6,
+    "public_production_theorems_including_lemmas": 57,
+    "production_definitions": 20,
+    "private_production_lemmas": 5,
+    "production_lines": 911,
+    "test_theorems": 10,
+    "test_definitions": 3,
+    "source37_theorems": 5,
+    "audited_public_declarations": 95
+  },
+  "completed": [
+    "explicit nonzero common denominator and weighted integer coefficients 1,2,3,4,6",
+    "same rational variable change identifies integer model base change with original rational target",
+    "exact discriminant/c4/c6 scaling and nonzero integer discriminant; rational ellipticity",
+    "general-field variable-change nonsingular point equivalence and additive equivalence",
+    "same geometric variable change is Galois equivariant and commutes with rational base change",
+    "same Source integer target homomorphism, old-map transport equality, exact kernel H and surjectivity",
+    "same integer-target torsion image has cardinal p",
+    "cofixed line forces actual nonzero rational p-torsion on same integer target with actual point equality",
+    "discriminant and c4 valuation preservation under v(d)=1",
+    "actual denominator-16, point (1/4,0) to (64,0), nonzero 2-torsion, dyadic discriminant orders -6 and 42",
+    "same noncyclic order-9 kernel target rational torsion transported to integer model"
+  ],
+  "boundaries": [
+    "no control of prime divisors of common denominator and no p-power-only scaling theorem",
+    "no preservation claim at places where v(d) is not one",
+    "unit-scaling invariant comparison is for integerization, not for source-to-quotient reduction",
+    "integer model discriminant nonzero does not mean a unit over Z",
+    "rational torsion point on integer equation does not assert integral coordinates",
+    "minimal model, source-to-quotient local reduction and component transport remain open",
+    "scheme isogeny and arithmetic exclusion of target torsion remain open",
+    "general hno and general FLT not proved"
+  ],
+  "validation": {
+    "focused_builds": [
+      "./lean-build.sh DkMath.FLT.FreyFiniteKernelIntegralModel",
+      "./lean-build.sh DkMathTest.Lib.NumberTheory.WeierstrassIntegralModel"
+    ],
+    "direct_lean": [
+      "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032IntegralModelSmoke.lean",
+      "lake env lean tmp/note032-integral/Axioms.lean"
+    ],
+    "results": "passed without warnings",
+    "source_scan": "passed",
+    "lib_dependency_direction": "passed",
+    "docstrings_markers_tracker": "passed",
+    "facades": "static registration checked",
+    "previous_owners_and_contract": "unchanged",
+    "diff_and_new_file_whitespace": "passed",
+    "full_build_and_full_test_suite": "not run; user handles full build"
+  },
+  "upstream": {
+    "files": [
+      {
+        "upstream": "Definitions/Def_WeierstrassCurve_VariableChangePointEquiv.lean",
+        "sha": "93376fed97aefdb39c2ff3173013fbb5c1288d12",
+        "local": "tmp/note032-integral/VariableChangePointEquiv.lean"
+      },
+      {
+        "upstream": "P2M/Sol/S_WeierstrassCurve_Affine_Point_vcInvFun_add.lean",
+        "sha": "1f15a16634107da49dcfd4ffe712cd5beeb61138",
+        "local": "tmp/note032-integral/S_WeierstrassCurve_Affine_Point_vcInvFun_add.lean"
+      },
+      {
+        "upstream": "P2M/Sol/S_WeierstrassCurve_VariableChange_exists_addEquiv_affine_point_baseChange_gal_equiv.lean",
+        "sha": "4542e0df895bf2fecf64a96a630035070ddc12b6",
+        "local": "tmp/note032-integral/S_WeierstrassCurve_VariableChange_exists_addEquiv_affine_point_baseChange_gal_equiv.lean"
+      },
+      {
+        "upstream": "P2M/Sol/S_WeierstrassCurve_exists_integral_veluQuotient_rescale_of_galois_stable.lean",
+        "sha": "361e2b2a3f20b849206fe0142b58063452ace691",
+        "local": "tmp/note032-integral/S_WeierstrassCurve_exists_integral_veluQuotient_rescale_of_galois_stable.lean"
+      }
+    ],
+    "hashes": "verified",
+    "licenses": "Apache-2.0 provenance in three adaptation owners; existing license and notice retained",
+    "role": "adapted variable-change coordinates and addition; reconstructed explicit equivariance; inspected stronger p-power integral rescaling and retained its unproved boundary"
+  },
+  "axioms": {
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcX": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcY": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcXInv": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcYInv": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcX_vcXInv": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcY_vcYInv": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcXInv_vcX": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcYInv_vcY": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.partialX_aux": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.partialY_aux": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.equation_variableChange_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.nonsingular_variableChange_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcFun": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcInvFun": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcFun_zero": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcInvFun_zero": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcFun_leftInverse": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcFun_rightInverse": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.variableChangeEquiv": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.equivOfVariableChangeEq": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcAdd_u_ne_zero": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcX_injective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcY_injective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.negY_variableChange": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.Yeq_variableChange_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.slope_variableChange": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.addX_variableChange": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.addY_variableChange": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.some_of_eq_of_eq": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcFun_add": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.vcInvFun_add": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.variableChangeAddEquiv": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.variableChangeAddEquiv_apply": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.pointEquivOfModelEq": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.pointEquivOfModelEq_some": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.pointEquivOfModelEq_equivariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.pointEquivOfModelEq_baseChange": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.geometricChangeEquiv": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.geometricChangeEquiv_some": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.geometricChangeEquiv_equivariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.geometricChangeEquiv_symm_equivariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVariableChange.geometricChangeEquiv_baseChange": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.commonDenominator_ne_zero": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.denominators_dvd": [
+      "propext"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.weightedCoefficient": [
+      "propext"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.weightedCoefficient_cast": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.clearingChange": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.integerModel": [
+      "propext"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.integerModel_map": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.integerModel_discriminant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.integerModel_c4": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.integerModel_c6": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.integerModel_discriminant_value": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.integerModel_c4_value": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.integerModel_discriminant_ne_zero": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.integerModel_map_isElliptic": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.rationalModel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.rationalPointEquiv": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.rationalPointEquiv_some": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.geometricPointEquiv": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.geometricPointEquiv_equivariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.geometricPointEquiv_symm_equivariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.geometricPointEquiv_baseChange": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.geometricPointEquiv_symm_baseChange": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.exists_nonzero_torsion_on_integerModel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualIntegerKernelModel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_kernel_model_discriminant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_kernel_model_discriminant_ne_zero": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_kernel_model_isElliptic": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualIntegerKernelPointHom": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_kernel_pointHom_transport": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_kernel_pointHom_ker": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_kernel_pointHom_surjective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.card_residual_integer_kernel_torsion_image": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_kernel_pointHom_equivariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.exists_rational_torsion_on_integer_kernel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassIntegralModelTest.sample": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassIntegralModelTest.sample_discriminant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassIntegralModelTest.sample_denominator": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassIntegralModelTest.sample_integer_model": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassIntegralModelTest.sample_integer_discriminant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassIntegralModelTest.samplePoint": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassIntegralModelTest.integralPoint": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassIntegralModelTest.sample_point_transport": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassIntegralModelTest.integralPoint_nonzero_two_torsion": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassIntegralModelTest.sample_baseChange_transport": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassIntegralModelTest.sample_unit_place": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassIntegralModelTest.sample_dyadic_orders": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "WeierstrassIntegralModelTest.actual_kernel_target_integer_torsion": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032IntegralModelSmoke.source37_integer_discriminant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032IntegralModelSmoke.source37_integer_kernel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032IntegralModelSmoke.source37_integer_surjective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032IntegralModelSmoke.source37_integer_equivariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032IntegralModelSmoke.source37_integer_rational_torsion": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.commonDenominator": []
+  }
+}

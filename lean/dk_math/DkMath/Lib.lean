@@ -142,6 +142,11 @@ import DkMath.Lib.NumberTheory.DedekindFractionalValuation
 import DkMath.Lib.NumberTheory.WeierstrassDivisorAbel
 import DkMath.Lib.NumberTheory.WeierstrassPrincipalPushHom
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelHom
+import DkMath.Lib.NumberTheory.WeierstrassVariableChange
+import DkMath.Lib.NumberTheory.WeierstrassVariableChangeHom
+import DkMath.Lib.NumberTheory.WeierstrassVariableChangeGalois
+import DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel
+import DkMath.Lib.NumberTheory.WeierstrassIntegralModelTransport
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPolynomial
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelRationalFiber
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelReflection

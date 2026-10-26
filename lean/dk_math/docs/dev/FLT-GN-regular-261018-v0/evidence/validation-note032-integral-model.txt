@@ -1,0 +1,20 @@
+NOTE-032-INTEGRAL-MODEL validation (2026-10-26)
+Base HEAD: f5cc6eb87abdb3457a5b2e94b85d5b70352f25da
+Branch: dev/FLT-GN-regular-261018-v0
+PASS focused production build: DkMath.FLT.FreyFiniteKernelIntegralModel
+PASS focused test build: DkMathTest.Lib.NumberTheory.WeierstrassIntegralModel
+PASS Source37 direct Lean: 5 theorems
+PASS axiom audit: 95 public declarations; only propext, Classical.choice, Quot.sound
+PASS forbidden-construct and external-proof-import scan
+PASS Lib dependency direction, textbook docstrings, promotion markers
+PASS file markers after imports and tracker mismatch check
+PASS facade import registration (static)
+PASS previous owners and checkpoint documents unchanged
+PASS four cached upstream solution blob hashes and adaptation license provenance
+PASS git diff --check and new-file whitespace
+Counts: 6 production owners, 57 public theorems/lemmas, 20 definitions, 5 private lemmas, 911 lines
+Actual tests: 10 theorems, 3 definitions; denominator 16, integer model -4096, (1/4,0) to (64,0), nonzero 2-torsion, dyadic discriminant valuations -6 to 42
+Completed: explicit same-target integer model and additive/Galois/base-change transport
+Completed: same Source integer-target hom, exact kernel H, surjectivity, equivariance and cofixed nonzero rational p-torsion image
+Completed: exact invariant scaling; invariant valuation preservation under v(d)=1
+Boundary: denominator prime support, source-to-quotient local reduction, minimality, zero components, scheme isogeny and hno remain open
