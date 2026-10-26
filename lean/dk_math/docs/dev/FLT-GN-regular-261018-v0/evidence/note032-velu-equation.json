@@ -1,0 +1,483 @@
+{
+  "unit": "NOTE-032-VELU-EQUATION",
+  "date": "2026-10-26",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "2e739fb8c7119b29eecaf49cc6de4fcc91a1c476",
+  "status": "same actual X_H,Y_H satisfy explicit half-kernel polynomial candidate equation for arbitrary odd finite kernel in characteristic zero; candidate equals original kernelModel; same actual Source target has p-power common denominator with no equation provider",
+  "production": [
+    {
+      "path": "DkMath/Lib/Algebra/ValuationVeluExpansion.lean",
+      "sha256": "0d5c439c64e99a204da7235771a29cf9efb1ae38e8cfaf28b28bd9906983fe8f",
+      "theorems": [
+        "pair_expansion",
+        "remainders_mem",
+        "squareDefect_mem",
+        "defect_lt_one"
+      ],
+      "definitions": [
+        "remainderX",
+        "remainderZ",
+        "cubic"
+      ],
+      "lines": 124
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassVeluPair.lean",
+      "sha256": "f6332f7a2e69ca31865932fd36c81ed37f74d22611493637954cbd3700c7c75a",
+      "theorems": [
+        "secant_pair_x",
+        "secant_pair_z",
+        "equation_iff_completedSquare"
+      ],
+      "definitions": [
+        "xCorrection",
+        "zCorrection"
+      ],
+      "lines": 73
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelPair.lean",
+      "sha256": "a0421bf8465eac1de335246d045ab3be190254a1539c187708bc9e0c0f0dfa40",
+      "theorems": [
+        "sum_kernel_half",
+        "genericX_ne_const",
+        "translated_pair",
+        "veluX_half",
+        "veluZ_half"
+      ],
+      "definitions": [],
+      "lines": 159
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelVeluEquation.lean",
+      "sha256": "462158966c981327ef5ab4d72b43ecc3d9bd1433ec37c8ee7a196d0194710797",
+      "theorems": [
+        "eq_zero_of_kernel_regular_lt_one",
+        "velu_half_expansion",
+        "halfKernelPolynomialDefect_lt_one",
+        "halfKernelPolynomialDefect_regular",
+        "halfKernelPolynomialModel_equation",
+        "halfKernelPolynomialModel_eq_kernelModel",
+        "kernelModel_coefficients",
+        "kernelModel_coefficientsIn"
+      ],
+      "definitions": [
+        "halfKernelPolynomialDefect"
+      ],
+      "lines": 244
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelDenominatorSupport.lean",
+      "sha256": "569ae8194b91f3848656104c2e22b82a50d73e39df3863f192de4d2ead07e18d",
+      "theorems": [
+        "residual_halfKernelPolynomialModel_equation",
+        "residual_halfKernelPolynomialModel_eq",
+        "residual_target_coeffIntegralAt",
+        "residual_target_denominator_power",
+        "residual_target_denominator_value_one",
+        "residual_integer_target_invariant_values"
+      ],
+      "definitions": [],
+      "lines": 83
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassVeluPolynomial.lean",
+      "sha256": "19dee8c6a210356baf6efc37c4084fa911f92252dd47448212b59678b4513c82",
+      "theorems": [
+        "momentW_negY",
+        "polynomialModel_map",
+        "polynomialModel_coefficientsIn",
+        "moments_map",
+        "polynomialModel_b_invariants"
+      ],
+      "definitions": [
+        "momentT",
+        "momentW",
+        "polynomialModel",
+        "CoefficientsIn"
+      ],
+      "lines": 100
+    }
+  ],
+  "comment_only_predecessors": [
+    "DkMath/Lib/NumberTheory/EllipticFiniteKernelLocalIntegrality.lean",
+    "DkMath/FLT/FreyFiniteKernelLocalIntegrality.lean"
+  ],
+  "tests": [
+    {
+      "path": "DkMathTest/Lib/NumberTheory/EllipticFiniteKernelVeluEquation.lean",
+      "sha256": "2fce097287fcf8be402e4a4ed0772f7ca05bee4429f8ab19a3d1071a483336fb",
+      "theorems": [
+        "actual_nine_point_model",
+        "actual_nine_point_defect",
+        "toy_double",
+        "toy_neg_ne",
+        "toyKernel_card",
+        "toy_actual_model",
+        "toy_actual_discriminant",
+        "even_kernel_candidate_fails"
+      ],
+      "definitions": [
+        "toy",
+        "q0",
+        "Q",
+        "toyKernel"
+      ],
+      "lines": 184
+    },
+    {
+      "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032VeluEquationSmoke.lean",
+      "sha256": "aaa646a7f14fd61b0a3e6cb68cba70c116de7f871192b9050d57e49461c7cddd",
+      "theorems": [
+        "source37_same_model",
+        "source37_actual_denominator",
+        "source37_dyadic_integral",
+        "source37_denominator_unit",
+        "source37_dyadic_invariants"
+      ],
+      "definitions": [],
+      "lines": 50
+    }
+  ],
+  "counts": {
+    "new_production_owners": 5,
+    "extended_production_owners": 1,
+    "new_public_production_theorems": 28,
+    "new_production_definitions": 6,
+    "test_theorems": 8,
+    "test_definitions": 4,
+    "source37_theorems": 5,
+    "audited_public_declarations_including_existing_polynomial_owner": 58
+  },
+  "completed": [
+    "two secant pair identities proved directly from source and kernel point equations",
+    "same actual translation sums rewritten as half-kernel rational x and completed-square z formulas without cyclicity",
+    "exact finite expansion in h=1/x with explicit integral remainders; no formal series",
+    "candidate defect equals h times integral polynomial and strictly vanishes at infinity",
+    "kernel-invariant, kernel-outside-regular function strictly vanishing at infinity is zero",
+    "same actual candidate equation, uniqueness equality with original kernelModel, and explicit a2 a4 a6 coefficients",
+    "original actual kernelModel coefficients integral when same integral source has kernel annihilator a valuation unit",
+    "same Source target locally integral away from p and original common denominator equal to p power, no equation hypothesis",
+    "same integer target invariant valuations agree with same rational target at all places away from p",
+    "noncyclic order-9 kernel same-model and defect-zero tests",
+    "actual order-3 kernel on y2+y=x3 gives original kernelModel y2+y=x3-7 and discriminant -19683",
+    "even order-2 kernel polynomial candidate differs from original target: oddness guard tested"
+  ],
+  "boundaries": [
+    "characteristic zero and odd finite kernel are retained",
+    "arithmetic target coefficient integrality uses same integral source and valuation-unit annihilator",
+    "source and quotient local reduction comparison is unproved; invariant comparison is target integerization only",
+    "minimality, zero components, scheme isogeny, target torsion exclusion and general hno remain open"
+  ],
+  "validation": {
+    "focused_builds": [
+      "./lean-build.sh DkMath.FLT.FreyFiniteKernelDenominatorSupport",
+      "./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelVeluEquation"
+    ],
+    "direct_lean": [
+      "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032VeluEquationSmoke.lean",
+      "lake env lean tmp/note032-velu-equation/Axioms.lean"
+    ],
+    "results": "passed without warnings",
+    "source_scan": "passed",
+    "lib_dependency_direction": "passed",
+    "docstrings_markers_tracker": "passed",
+    "facades": "static registration checked",
+    "predecessor_code": "unchanged except append-only polynomial identities; two predecessor docstrings refreshed without code change",
+    "protected_contracts_and_evidence": "unchanged",
+    "diff_and_new_file_whitespace": "passed",
+    "full_build_and_full_test_suite": "not run; user handles full build"
+  },
+  "upstream": {
+    "inspected_files": [
+      {
+        "file": "S_WeierstrassCurve_velu_map_equation_of_oddOrderSummingSet_of_isAlgClosed.lean",
+        "sha": "07152486990f62434183e3bfb4968cb9fcf40c98",
+        "bytes": 1310411
+      },
+      {
+        "file": "S_WeierstrassCurve_velu_map_equation_of_oddOrderSummingSet.lean",
+        "sha": "637be8a31d2ae3faeddc538b9c648ff3f64b2fcf",
+        "bytes": 1201107
+      }
+    ],
+    "hashes": "verified",
+    "role": "inspected secant coordinate and deficit constancy route; reconstructed finite-expansion strict-vanishing proof using existing DkMath constants theorem; no solution import",
+    "licenses": "new proof owners MIT; existing polynomial adaptation retains Apache-2.0 provenance and notice"
+  },
+  "axioms": {
+    "DkMath.Lib.Algebra.ValuationVeluExpansion.remainderX": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.Algebra.ValuationVeluExpansion.remainderZ": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.Algebra.ValuationVeluExpansion.pair_expansion": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.Algebra.ValuationVeluExpansion.remainders_mem": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.Algebra.ValuationVeluExpansion.cubic": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.Algebra.ValuationVeluExpansion.squareDefect_mem": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.Algebra.ValuationVeluExpansion.defect_lt_one": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPair.xCorrection": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPair.zCorrection": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPair.secant_pair_x": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPair.secant_pair_z": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPair.equation_iff_completedSquare": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.sum_kernel_half": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.genericX_ne_const": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.translated_pair": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_half": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluZ_half": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.eq_zero_of_kernel_regular_lt_one": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_half_expansion": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernelPolynomialDefect": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernelPolynomialDefect_lt_one": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernelPolynomialDefect_regular": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernelPolynomialModel_equation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernelPolynomialModel_eq_kernelModel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_coefficients": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_coefficientsIn": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_halfKernelPolynomialModel_equation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_halfKernelPolynomialModel_eq": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_target_coeffIntegralAt": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_target_denominator_power": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_target_denominator_value_one": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_target_invariant_values": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.momentT": [
+      "propext"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.momentW": [
+      "propext"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.momentW_negY": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.polynomialModel": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.polynomialModel_map": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.CoefficientsIn": [
+      "propext"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.polynomialModel_coefficientsIn": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.moments_map": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.polynomialModel_b_invariants": [
+      "propext",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelVeluEquationTest.actual_nine_point_model": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelVeluEquationTest.actual_nine_point_defect": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelVeluEquationTest.toy": [
+      "propext",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelVeluEquationTest.q0": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelVeluEquationTest.Q": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelVeluEquationTest.toy_double": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelVeluEquationTest.toy_neg_ne": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelVeluEquationTest.toyKernel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelVeluEquationTest.toyKernel_card": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelVeluEquationTest.toy_actual_model": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelVeluEquationTest.toy_actual_discriminant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelVeluEquationTest.even_kernel_candidate_fails": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032VeluEquationSmoke.source37_same_model": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032VeluEquationSmoke.source37_actual_denominator": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032VeluEquationSmoke.source37_dyadic_integral": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032VeluEquationSmoke.source37_denominator_unit": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032VeluEquationSmoke.source37_dyadic_invariants": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  }
+}

@@ -78,4 +78,23 @@ theorem polynomialModel_coefficientsIn {ι : Type*} (A : Subring R) (W : Weierst
     A.sub_mem (A.sub_mem h₆ (A.mul_mem hb₂ (A.sum_mem ht)))
       (A.mul_mem (natCast_mem A 7) (A.sum_mem hw))⟩
 
+/-- [DkMath.Lib] 二つのモーメントは任意の環写像と可換。 -/
+theorem moments_map {S : Type*} [CommRing S] (f : R →+* S)
+    (W : WeierstrassCurve R) (x y : R) :
+    momentT (W.map f) (f x) = f (momentT W x) ∧
+      momentW (W.map f) (f x) (f y) = f (momentW W x y) := by
+  constructor <;> simp [momentT, momentW, b₂, b₄, map_ofNat]
+
+/-- [DkMath.Lib] 候補の平方完成三次式の係数。二つのモーメント和を明示して保つ。 -/
+theorem polynomialModel_b_invariants {ι : Type*} (W : WeierstrassCurve R)
+    (s : Finset ι) (x y : ι → R) :
+    (polynomialModel W s x y).b₂ = W.b₂ ∧
+      (polynomialModel W s x y).b₄ = W.b₄ - 10 * ∑ i ∈ s, momentT W (x i) ∧
+      (polynomialModel W s x y).b₆ = W.b₆ - 4 * W.b₂ * (∑ i ∈ s, momentT W (x i)) -
+        28 * ∑ i ∈ s, momentW W (x i) (y i) := by
+  simp only [polynomialModel, b₂, b₄, b₆]
+  constructor
+  · trivial
+  constructor <;> ring
+
 end DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial

@@ -16,7 +16,8 @@ import DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial
 [DkMath.Lib] 同じ実点核Hをn倍で消すとき、nが付値単元なら全ての有限核座標は整である。
 Oの便宜座標0も含めた定理を公開し、奇数核の半核を添字とするVélu型多項式候補へ運ぶ。
 局所係数候補の整性と、既存kernelModelの係数の整性を区別する。
-両モデルの一致には、同じX_H,Y_Hが多項式候補の方程式を満たす証明がまだ必要である。
+本所有者は方程式から同一性へ進む条件付きAPIを公開する。後続の
+EllipticFiniteKernelVeluEquationでは、標数0・奇数核についてその方程式と一致を証明済み。
 -/
 namespace DkMath.Lib.NumberTheory.EllipticFiniteKernel
 open WeierstrassCurve WeierstrassCurve.Affine EllipticTorsionRepresentation
@@ -59,7 +60,8 @@ theorem halfKernelPolynomialModel_coefficientsIn (H : AddSubgroup (Points E)) [F
     exact kernel_coordinates_mem E H n hkill A M hM hn Q
 
 /-- [DkMath.Lib] 同じX_H,Y_Hが多項式候補の方程式を満たすなら、候補は既存の同じkernelModelに等しい。
-仮定は残っている具体的な関数体恒等式そのものであり、その証明をここでは供給しない。 -/
+本定理では具体的な関数体恒等式を入力に取る。奇数核の場合は後続の
+halfKernelPolynomialModel_equationがこの入力を内部供給する。 -/
 theorem halfKernelPolynomialModel_eq_kernelModel_of_equation [E.IsElliptic]
     (H : AddSubgroup (Points E)) [Fintype H]
     (he : ((halfKernelPolynomialModel E H).toAffine⁄(E.toAffine⁄(AlgebraicClosure K)).FunctionField).Equation (veluX E H) (veluY E H)) :

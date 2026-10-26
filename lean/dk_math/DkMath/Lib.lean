@@ -30,6 +30,7 @@ import DkMath.Lib.Algebra.TorsionPowerLifting
 import DkMath.Lib.Algebra.TranscendentalFiniteDegree
 import DkMath.Lib.Algebra.UnitPowerClass
 import DkMath.Lib.Algebra.ValuationCubicModel
+import DkMath.Lib.Algebra.ValuationVeluExpansion
 import DkMath.Lib.Algebra.ValuationDegreeLower
 import DkMath.Lib.Algebra.ValuationPoleSpace
 import DkMath.Lib.Algebra.ValuationPolynomial
@@ -144,12 +145,15 @@ import DkMath.Lib.NumberTheory.WeierstrassPrincipalPushHom
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelHom
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelHalf
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelLocalIntegrality
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelPair
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelVeluEquation
 import DkMath.Lib.NumberTheory.WeierstrassVariableChange
 import DkMath.Lib.NumberTheory.WeierstrassVariableChangeHom
 import DkMath.Lib.NumberTheory.WeierstrassVariableChangeGalois
 import DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel
 import DkMath.Lib.NumberTheory.WeierstrassDenominatorSupport
 import DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial
+import DkMath.Lib.NumberTheory.WeierstrassVeluPair
 import DkMath.Lib.NumberTheory.WeierstrassIntegralModelTransport
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPolynomial
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelRationalFiber

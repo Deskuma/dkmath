@@ -19,7 +19,8 @@ import DkMath.Lib.NumberTheory.WeierstrassDenominatorSupport
 既存の同じℚ標的については、共通分母p冪と五係数の局所整性の同値を公開する。
 
 候補の整性を、既存標的の整性と読み替えない。同じX_H,Y_Hが候補の方程式を満たすこと、
-従ってkernelModel_uniqueで同じモデルに戻せることは、残る接続である。
+従ってkernelModel_uniqueで同じモデルに戻せることを、この所有者では入力に残す。
+後続のFreyFiniteKernelDenominatorSupportでは、p≠2の場合にこの入力を内部証明済み。
 -/
 namespace DkMath.FLT.Frey.Source
 open WeierstrassCurve WeierstrassCurve.Affine
@@ -84,7 +85,8 @@ theorem residual_halfKernelPolynomialModel_coefficientsIn
     A (S.valuationModel A) (S.valuationModel_map A) hn
 
 /-- 既存の同じℚ標的の共通分母がp冪であることは、その五係数がp以外で整であることと同値。
-右辺の一般証明は未供給であり、上の多項式候補の整性だけでは右辺を結論しない。 -/
+この同値だけでは右辺を結論しない。p≠2の場合の右辺の証明は、
+後続のresidual_target_coeffIntegralAtが同じ二関数の方程式を介して供給する。 -/
 theorem residual_target_denominator_power_iff
     (L : Submodule (ZMod p) S.ResidualSpace) (hline : Module.finrank (ZMod p) L = 1)
     (hstable : IsStable S.residualRepresentation L) :
@@ -92,7 +94,7 @@ theorem residual_target_denominator_power_iff
       ∀ q : ℕ, q.Prime → q ≠ p → CoeffIntegralAt (S.residualDescendedKernelModel L hline hstable) q :=
   exists_commonDenominator_pow_iff _ Fact.out
 
-/-- 同じ二関数の方程式という一つの未証明入力から、既存標的の局所整性まで接続する。
+/-- 同じ二関数の方程式という具体的な入力から、既存標的の局所整性まで接続する。
 候補係数の整性・標的の一意性・元のℚモデルへの降下・素数住所の存在を全て内部供給する。 -/
 theorem residual_target_coeffIntegralAt_of_polynomial_equation
     (L : Submodule (ZMod p) S.ResidualSpace) (hline : Module.finrank (ZMod p) L = 1)
@@ -112,7 +114,8 @@ theorem residual_target_coeffIntegralAt_of_polynomial_equation
   exact hc
 
 /-- 同じ具体的方程式が証明されれば、既存の同じ共通分母がp冪であることまで一括して閉じる。
-方程式仮定は未解消であり、無条件の分母支持定理とは区別する。 -/
+このAPIは方程式を入力に保つ。後続のresidual_target_denominator_powerでは
+p≠2からこの方程式を内部供給し、同じ分母のp冪性を結論する。 -/
 theorem residual_target_denominator_power_of_polynomial_equation
     (L : Submodule (ZMod p) S.ResidualSpace) (hline : Module.finrank (ZMod p) L = 1)
     (hstable : IsStable S.residualRepresentation L)
