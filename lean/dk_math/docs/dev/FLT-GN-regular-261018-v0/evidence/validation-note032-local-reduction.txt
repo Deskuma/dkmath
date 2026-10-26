@@ -1,0 +1,25 @@
+NOTE-032-LOCAL-REDUCTION validation (2026-10-26)
+Base HEAD: 4bceb51a56ea8a149577e47ba3dff9e878f4f5a5
+Branch: dev/FLT-GN-regular-261018-v0
+PASS focused production build: DkMath.FLT.FreyFiniteKernelReduction
+PASS focused test build: DkMathTest.Lib.NumberTheory.EllipticFiniteKernelReduction
+PASS Source37 direct Lean: 8 theorems
+PASS axiom audit: 71 public declarations; only propext, Classical.choice, Quot.sound
+PASS forbidden-construct and external-proof-import scan
+PASS Lib dependency direction, textbook docstrings and promotion markers
+PASS file markers after imports and tracker mismatch check
+PASS facade import registration (static)
+PASS protected previous owners, checkpoint and previous evidence unchanged
+PASS five upstream solution blob hashes and Apache-2.0 identity adaptation provenance
+PASS git diff --check and new-file whitespace
+Counts: 5 new production owners, 39 public theorems, 5 definitions
+Tests: 14 theorems, 5 definitions; actual order-3 kernel on y2+xy+7y=x3
+Actual original target: y2+xy+7y=x3-35x-350, discriminant -46512704
+Source integer discriminant: -2^2*7^3*47; target: -2^6*7*47^3
+At 7: same kernel nonzero points singular, source and same quotient residue models equal
+At 47: all kernel points smooth, exact reduced range card 3, residue models differ
+Completed: same valuation-ring target, generic-fiber identity, indexed residue compatibility
+Completed: singular-kernel branch same integer target formal multiplicative reduction at bad odd primes distinct from p
+Completed: same integer target formal minimality at 2 without branch premise; bad 3/5 minimality away from p
+Completed: smooth same-kernel reduction hom, injectivity, card, half-kernel and residue-model compatibility
+Unresolved: smooth nodal quotient invariants, general good reduction, discriminant depth, full zero-component transport, scheme isogeny, target torsion exclusion and general hno

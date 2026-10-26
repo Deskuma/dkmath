@@ -147,12 +147,16 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelHalf
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelLocalIntegrality
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPair
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelVeluEquation
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelReduction
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelSmoothReduction
 import DkMath.Lib.NumberTheory.WeierstrassVariableChange
 import DkMath.Lib.NumberTheory.WeierstrassVariableChangeHom
 import DkMath.Lib.NumberTheory.WeierstrassVariableChangeGalois
 import DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel
 import DkMath.Lib.NumberTheory.WeierstrassDenominatorSupport
 import DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial
+import DkMath.Lib.NumberTheory.WeierstrassVeluReduction
+import DkMath.Lib.NumberTheory.WeierstrassResidueModel
 import DkMath.Lib.NumberTheory.WeierstrassVeluPair
 import DkMath.Lib.NumberTheory.WeierstrassIntegralModelTransport
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPolynomial

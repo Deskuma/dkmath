@@ -40,6 +40,7 @@ import DkMath.FLT.FreyFiniteKernelHom
 import DkMath.FLT.FreyFiniteKernelIntegralModel
 import DkMath.FLT.FreyFiniteKernelLocalIntegrality
 import DkMath.FLT.FreyFiniteKernelDenominatorSupport
+import DkMath.FLT.FreyFiniteKernelReduction
 import DkMath.FLT.FreyFiniteKernelSpecialization
 import DkMath.FLT.FreyGeometricWeilPairing
 import DkMath.FLT.FreyGoodReductionInertia
