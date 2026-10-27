@@ -118,6 +118,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernel
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelCollision
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelCriticalCentre
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDegree
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelDepthProduct
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDivisor
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelFibers
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelFormal
@@ -135,7 +136,6 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalCenterAll
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalDistance
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalInverse
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalLevels
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelSingularInverse
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalReduction
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalTransport
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNoncollision
@@ -150,6 +150,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelReducedHom
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelReduction
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelReductionSquare
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelReflection
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelSingularInverse
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelSmoothReduction
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelSpecialization
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelSurjective

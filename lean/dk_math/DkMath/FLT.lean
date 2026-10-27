@@ -30,6 +30,7 @@ import DkMath.FLT.FreyDyadicZeroComponent
 import DkMath.FLT.FreyFiniteKernel
 import DkMath.FLT.FreyFiniteKernelCollision
 import DkMath.FLT.FreyFiniteKernelDegree
+import DkMath.FLT.FreyFiniteKernelDepthProduct
 import DkMath.FLT.FreyFiniteKernelDenominatorSupport
 import DkMath.FLT.FreyFiniteKernelGeneration
 import DkMath.FLT.FreyFiniteKernelGlobal
