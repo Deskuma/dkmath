@@ -22,6 +22,26 @@ import DkMath.Lib.NumberTheory.WeierstrassDiscriminantRoots
 namespace DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
 variable {k : Type*} [Field k]
 
+/-- [DkMath.Lib] 点ごとの根差関係を有限積へ持ち上げる。
+右辺の符号を `eₖ-eⱼ` に直してから積を取り、半核の濃度を指数へ変換する。
+この補題が、平行移動された2捩れ点から判別式消去へ進む橋である。 -/
+theorem product_root_difference_relation {ι : Type*} (s : Finset ι)
+    (x ξ : ι → k) (eⱼ eₖ eₗ : k)
+    (hL : ∀ q ∈ s, (eₖ - ξ q) * (x q - eⱼ) =
+      -((eⱼ - eₖ) * (x q - eₗ))) :
+    (∏ q ∈ s, (eₖ - ξ q)) * (∏ q ∈ s, (x q - eⱼ)) =
+      (eₖ - eⱼ) ^ s.card * ∏ q ∈ s, (x q - eₗ) := by
+  rw [← Finset.prod_mul_distrib]
+  calc
+    (∏ q ∈ s, (eₖ - ξ q) * (x q - eⱼ)) =
+        ∏ q ∈ s, ((eₖ - eⱼ) * (x q - eₗ)) := by
+      apply Finset.prod_congr rfl
+      intro q hq
+      rw [hL q hq]
+      ring
+    _ = (eₖ - eⱼ) ^ s.card * ∏ q ∈ s, (x q - eₗ) := by
+      rw [Finset.prod_mul_distrib, Finset.prod_const, Finset.card]
+
 /-- [DkMath.Lib] 有理式による座標評価と移動された点の積の関係から、
 三組の差に共通する一つの関係式を作る。分母で割る代わりに両辺へ因子を掛ける。 -/
 theorem pair_relation (n : ℕ) (G Hj Hk Hl Xj Xk ej ek A : k)

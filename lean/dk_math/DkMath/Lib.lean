@@ -362,6 +362,7 @@ import DkMath.Lib.TwoChannel
 -- 新規追加分（後でソート挿入する）
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelRootProduct
 import DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
+import DkMath.Lib.NumberTheory.WeierstrassTwoTorsionTranslate
 
 #print "file: DkMath.Lib"
 

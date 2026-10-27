@@ -36,6 +36,18 @@ example : curve.Δ = 64 := by
 example : (64 : ℚ) * 1 ^ 4 = 64 ^ (2 * 0 + 1) := by
   apply discriminant_product_of_pair_relations 0 (-1) 0 1 (-1) 0 1 64 64 1 1 1 1 <;> norm_num
 
+example :
+    (∏ q ∈ ({0} : Finset ℕ), ((1 : ℚ) - (fun _ => (2 : ℚ) / 3) q)) *
+      (∏ q ∈ ({0} : Finset ℕ), ((fun _ => (3 : ℚ)) q - 0)) =
+      (1 - 0) ^ ({0} : Finset ℕ).card *
+        ∏ q ∈ ({0} : Finset ℕ), ((fun _ => (3 : ℚ)) q - 2) := by
+  apply product_root_difference_relation ({0} : Finset ℕ)
+    (fun _ => (3 : ℚ)) (fun _ => (2 : ℚ) / 3) 0 1 2
+  intro q hq
+  simp at hq
+  subst q
+  norm_num
+
 #print axioms discriminant_eq_root_differences
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.half_tangent_product_eq_root_products
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.half_x_sub_root_ne_zero
