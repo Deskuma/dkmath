@@ -170,6 +170,7 @@ import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNoncollision
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelReduction
 import DkMathTest.Lib.NumberTheory.WeierstrassNodalVelu
 import DkMathTest.Lib.NumberTheory.WeierstrassNodalOrbit
+import DkMathTest.Lib.NumberTheory.WeierstrassNodalDistance
 import DkMathTest.Lib.NumberTheory.WeierstrassIntegralModel
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelSpecialization
 import DkMathTest.Lib.NumberTheory.EllipticFrobeniusBranchSwap

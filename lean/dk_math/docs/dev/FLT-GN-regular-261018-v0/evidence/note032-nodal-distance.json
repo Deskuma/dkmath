@@ -1,0 +1,50 @@
+{
+  "unit": "NOTE-032-NODAL-DISTANCE",
+  "date": "2026-10-27",
+  "base_head": "7a015b821d0ab485704532a1e82a3f9e700d68e1",
+  "checks": [
+    {
+      "command": "./lean-build.sh DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalDistance",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMathTest.Lib.NumberTheory.WeierstrassNodalDistance",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "lake env lean tmp/note032-node-distance/Axioms.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "7053763a415de5c10f6fc9719afb8a516ba64a51d13caf83290c54d7a4ce2dbc"
+    }
+  ],
+  "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "axiom_declarations": 10,
+  "production_theorems": 5,
+  "test_theorems": 3,
+  "test_definitions": 2,
+  "files": [
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassNodalDistance.lean",
+      "sha256": "816201874d721d945cc29a9b91dc42f2d3b3401b410ef06685395281602d9bc9"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelNodalDistance.lean",
+      "sha256": "67c72226ac21cf00caff5d16b9c09bf90dcabc1fb85dca50ad6039087f96243d"
+    },
+    {
+      "path": "DkMathTest/Lib/NumberTheory/WeierstrassNodalDistance.lean",
+      "sha256": "ca33943a08251edfd80e23624e7d8f6493a62c45dd077817f0dd3c4d31b05d89"
+    }
+  ],
+  "scope": "For the same quotient X, prime smooth kernel, separated source node and noncollision, the residue X avoids the candidate center. Identification of that candidate with the general quotient node remains unproved.",
+  "full_build": "user handles full build and tests"
+}
