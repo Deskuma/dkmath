@@ -47,6 +47,89 @@ theorem fiberFactor_monic {ι : Type*} [DecidableEq ι] (s : Finset ι) (e : k)
   intro q hq
   exact (monic_X_sub_C (ξ q)).pow 2
 
+/-- [DkMath.Lib] ファイバー因子は零多項式ではない。
+モニック性から直ちに得られるが、`natDegree_mul` や根の API に渡す
+非零条件を毎回書き直さないための教科書用補題である。 -/
+theorem fiberFactor_ne_zero {ι : Type*} [DecidableEq ι] (s : Finset ι) (e : k)
+    (ξ : ι → k) : fiberFactor s e ξ ≠ 0 :=
+  (fiberFactor_monic s e ξ).ne_zero
+
+/-- [DkMath.Lib] ファイバー因子の次数は、一本の単純根と
+各移動根の二重根から `2 |s| + 1` になる。 -/
+theorem fiberFactor_natDegree {ι : Type*} [DecidableEq ι] (s : Finset ι) (e : k)
+    (ξ : ι → k) : (fiberFactor s e ξ).natDegree = 2 * s.card + 1 := by
+  unfold fiberFactor
+  have hp : (∏ q ∈ s, (X - C (ξ q)) ^ 2).Monic := by
+    apply monic_prod_of_monic
+    intro q hq
+    exact (monic_X_sub_C (ξ q)).pow 2
+  rw [natDegree_mul (monic_X_sub_C e).ne_zero hp.ne_zero]
+  rw [natDegree_X_sub_C, natDegree_prod_of_monic]
+  · simp
+    omega
+  · exact fun q hq => (monic_X_sub_C (ξ q)).pow 2
+
+/-- [DkMath.Lib] `fiberFactor` がある点で消えることの評価形。
+根の集合を使う代わりに、一本の単純根 `e` または移動根 `ξ q` の
+いずれかであることを直接取り出せる。 -/
+theorem fiberFactor_eval_eq_zero_iff {ι : Type*} [DecidableEq ι] (s : Finset ι)
+    (e z : k) (ξ : ι → k) :
+    (fiberFactor s e ξ).eval z = 0 ↔ z = e ∨ ∃ q ∈ s, z = ξ q := by
+  rw [fiberFactor_eval]
+  constructor
+  · intro h
+    rcases mul_eq_zero.mp h with h | h
+    · exact Or.inl (sub_eq_zero.mp h)
+    · right
+      have hprod : (∏ q ∈ s, (z - ξ q)) = 0 := sq_eq_zero_iff.mp h
+      obtain ⟨q, hq, hqz⟩ := Finset.prod_eq_zero_iff.mp hprod
+      exact ⟨q, hq, sub_eq_zero.mp hqz⟩
+  · rintro (rfl | ⟨q, hq, rfl⟩)
+    · simp
+    · have hzero : (∏ a ∈ s, (ξ q - ξ a)) = 0 :=
+        Finset.prod_eq_zero_iff.mpr ⟨q, hq, by simp⟩
+      simp [hzero]
+
+/-- [DkMath.Lib] ファイバー因子の根の多重集合は、一本の根 `e` と
+各移動根 `ξ q` を二重に並べたものになる。重複を消去せず保持する。 -/
+theorem fiberFactor_roots {ι : Type*} [DecidableEq ι] (s : Finset ι) (e : k)
+    (ξ : ι → k) :
+    (fiberFactor s e ξ).roots = {e} + s.1.bind (fun q => 2 • ({ξ q} : Multiset k)) := by
+  classical
+  unfold fiberFactor
+  have hp : (∏ q ∈ s, (X - C (ξ q)) ^ 2) ≠ 0 :=
+    Finset.prod_ne_zero_iff.mpr fun q hq =>
+      (monic_X_sub_C (ξ q)).pow 2 |>.ne_zero
+  have hroots := roots_prod (fun q => (X - C (ξ q)) ^ 2) s hp
+  rw [roots_mul (mul_ne_zero (monic_X_sub_C e).ne_zero hp)]
+  rw [hroots]
+  simp only [roots_X_sub_C, roots_pow]
+
+/-- [DkMath.Lib] 根が次数を尽くすモニック多項式は、`fiberFactor` の根が
+一致すればその因子そのものに一致する。
+
+これは「有理式のファイバーがこの因子を持つ」から「有理式の分子が
+この因子である」へ進むための標準的な一意性層である。`hcard` は
+標数や代数閉性を隠れて仮定せず、根の多重集合が次数を尽くすことを
+明示的に要求する。 -/
+theorem eq_fiberFactor_of_monic_of_roots
+    {ι : Type*} [DecidableEq ι] (s : Finset ι) (e : k) (ξ : ι → k)
+    (p : k[X]) (hp : p.Monic)
+    (hroots : p.roots = (fiberFactor s e ξ).roots)
+    (hcard : p.roots.card = p.natDegree) :
+    p = fiberFactor s e ξ := by
+  have hcard_f : (fiberFactor s e ξ).roots.card =
+      (fiberFactor s e ξ).natDegree := by
+    rw [fiberFactor_roots, fiberFactor_natDegree]
+    simp [Nat.mul_comm]
+  have hp_repr := prod_multiset_X_sub_C_of_monic_of_roots_card_eq hp hcard
+  have hf_repr := prod_multiset_X_sub_C_of_monic_of_roots_card_eq
+    (fiberFactor_monic s e ξ) hcard_f
+  calc
+    p = (p.roots.map fun a => X - C a).prod := hp_repr.symm
+    _ = ((fiberFactor s e ξ).roots.map fun a => X - C a).prod := by rw [hroots]
+    _ = fiberFactor s e ξ := hf_repr
+
 /-- [DkMath.Lib] 点ごとの根差関係を有限積へ持ち上げる。
 右辺の符号を `eₖ-eⱼ` に直してから積を取り、半核の濃度を指数へ変換する。
 この補題が、平行移動された2捩れ点から判別式消去へ進む橋である。 -/

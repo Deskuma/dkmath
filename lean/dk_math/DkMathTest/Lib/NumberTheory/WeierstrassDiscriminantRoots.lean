@@ -56,6 +56,31 @@ example :
 example : (fiberFactor ({0} : Finset ℕ) (1 : ℚ) (fun _ => (2 : ℚ) / 3)).Monic := by
   exact fiberFactor_monic _ _ _
 
+example :
+    (fiberFactor ({0} : Finset ℕ) (1 : ℚ) (fun _ => (2 : ℚ) / 3)).natDegree = 3 := by
+  simpa using fiberFactor_natDegree ({0} : Finset ℕ) (1 : ℚ) (fun _ => (2 : ℚ) / 3)
+
+example :
+    (fiberFactor ({0} : Finset ℕ) (1 : ℚ) (fun _ => (2 : ℚ) / 3)).eval (2 / 3) = 0 := by
+  rw [fiberFactor_eval_eq_zero_iff]
+  right
+  exact ⟨0, by simp⟩
+
+example :
+    (fiberFactor ({0} : Finset ℕ) (1 : ℚ) (fun _ => (2 : ℚ) / 3)).roots =
+      ({1} : Multiset ℚ) + ({0} : Multiset ℕ).bind
+        (fun _ => 2 • ({(2 : ℚ) / 3} : Multiset ℚ)) := by
+  exact fiberFactor_roots _ _ _
+
+example :
+    (fiberFactor ({0} : Finset ℕ) (1 : ℚ) (fun _ => (2 : ℚ) / 3)) =
+      fiberFactor ({0} : Finset ℕ) (1 : ℚ) (fun _ => (2 : ℚ) / 3) := by
+  apply (eq_fiberFactor_of_monic_of_roots ({0} : Finset ℕ) (1 : ℚ)
+    (fun _ => (2 : ℚ) / 3) _ (fiberFactor_monic _ _ _))
+  · rfl
+  · rw [fiberFactor_roots, fiberFactor_natDegree]
+    simp
+
 #print axioms discriminant_eq_root_differences
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.half_tangent_product_eq_root_products
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.half_x_sub_root_ne_zero
