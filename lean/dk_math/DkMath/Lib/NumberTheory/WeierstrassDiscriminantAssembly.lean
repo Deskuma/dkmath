@@ -20,7 +20,32 @@ import DkMath.Lib.NumberTheory.WeierstrassDiscriminantRoots
 実際の Vélu 写像から供給する幾何学的な証明は別途必要である。
 -/
 namespace DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
+open Polynomial
 variable {k : Type*} [Field k]
+
+/-- [DkMath.Lib] 一本の2捩れ根 `e` と半核の移動根 `ξ q` から作る
+モニックなファイバー因子。`ξ` の重複度は反転対に対応して2である。 -/
+noncomputable def fiberFactor {ι : Type*} [DecidableEq ι] (s : Finset ι) (e : k)
+    (ξ : ι → k) : k[X] :=
+  (X - C e) * ∏ q ∈ s, (X - C (ξ q)) ^ 2
+
+/-- [DkMath.Lib] ファイバー因子を任意の点で評価すると、根との差と
+移動根への距離積の平方になる。判別式積公式の `hF` の右辺に対応する。 -/
+theorem fiberFactor_eval {ι : Type*} [DecidableEq ι] (s : Finset ι) (e e' : k)
+    (ξ : ι → k) :
+    (fiberFactor s e ξ).eval e' = (e' - e) * (∏ q ∈ s, (e' - ξ q)) ^ 2 := by
+  simp only [fiberFactor, eval_mul, eval_sub, eval_X, eval_C, eval_prod, eval_pow]
+  rw [← Finset.prod_pow]
+
+/-- [DkMath.Lib] ファイバー因子はモニックである。
+この性質は根の個数を次数へ移す際に使う。 -/
+theorem fiberFactor_monic {ι : Type*} [DecidableEq ι] (s : Finset ι) (e : k)
+    (ξ : ι → k) : (fiberFactor s e ξ).Monic := by
+  unfold fiberFactor
+  apply Monic.mul (monic_X_sub_C e)
+  apply monic_prod_of_monic
+  intro q hq
+  exact (monic_X_sub_C (ξ q)).pow 2
 
 /-- [DkMath.Lib] 点ごとの根差関係を有限積へ持ち上げる。
 右辺の符号を `eₖ-eⱼ` に直してから積を取り、半核の濃度を指数へ変換する。

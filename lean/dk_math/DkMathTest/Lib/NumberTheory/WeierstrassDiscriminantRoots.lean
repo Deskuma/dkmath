@@ -48,6 +48,14 @@ example :
   subst q
   norm_num
 
+example :
+    (fiberFactor ({0} : Finset ℕ) (1 : ℚ) (fun _ => (2 : ℚ) / 3)).eval 3 = 98 / 9 := by
+  rw [fiberFactor_eval]
+  norm_num
+
+example : (fiberFactor ({0} : Finset ℕ) (1 : ℚ) (fun _ => (2 : ℚ) / 3)).Monic := by
+  exact fiberFactor_monic _ _ _
+
 #print axioms discriminant_eq_root_differences
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.half_tangent_product_eq_root_products
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.half_x_sub_root_ne_zero
