@@ -592,3 +592,5 @@ Sourceへ接続し、実3点核の47上でx=1の実点について両座標の�
 [還元像への降下の報告](IMPLEMENTATION-NOTE032-REDUCED-HOM-261027.md)。
 
 - [NOTE-032 還元核の一致と商の単射](IMPLEMENTATION-NOTE032-REDUCED-KERNEL-261027.md): 同じ零成分の実際の還元像上で、商準同型の核を同じ有限核の還元像と同定する。
+
+- [NOTE-032 零成分の逆像と局所核の分岐](IMPLEMENTATION-NOTE032-NODAL-INVERSE-261027.md): 滑らかな核側の逆像同値と、特異核側の実際の反例。

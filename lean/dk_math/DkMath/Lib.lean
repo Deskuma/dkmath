@@ -161,6 +161,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalTransport
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelCriticalCentre
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalCenterAll
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelReducedHom
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalInverse
 import DkMath.Lib.NumberTheory.WeierstrassVariableChange
 import DkMath.Lib.NumberTheory.WeierstrassVariableChangeHom
 import DkMath.Lib.NumberTheory.WeierstrassVariableChangeGalois

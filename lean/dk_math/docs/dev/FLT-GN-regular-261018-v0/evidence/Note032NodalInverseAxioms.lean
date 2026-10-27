@@ -1,0 +1,17 @@
+import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNodalInverse
+
+#print "file: Note032NodalInverseAxioms"
+
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.nonsmooth_translate_smooth_kernel
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.not_mem_of_nonsmooth
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt_nonsmooth_congr_candidate
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_nonsmooth_of_nonsmooth
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_smooth_iff
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.nonsmooth_kernel_point_counterexample
+#print axioms DkMath.FLT.Frey.Source.residual_pointHom_smooth_iff_at_bad_place_of_le
+#print axioms DkMath.FLT.Frey.Source.residual_integer_pointHom_smooth_iff_at_bad_place_of_le
+#print axioms DkMath.FLT.Frey.Source.residual_disjoint_kernel_counterexample
+#print axioms DkMath.FLT.Frey.Source.exists_residual_disjoint_counterexample
+#print axioms EllipticFiniteKernelNodalInverseTest.source37_two_smooth_kernel
+#print axioms EllipticFiniteKernelNodalInverseTest.source37_two_singular_kernel
+#print axioms EllipticFiniteKernelNodalInverseSample.sample_seven_counterexample
