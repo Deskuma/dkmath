@@ -171,6 +171,7 @@ import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNodalTransport
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNodalCenter
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelReducedHom
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNodalInverse
+import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelZeroComponentExact
 import DkMathTest.Lib.NumberTheory.WeierstrassNodalCenterSmallChar
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelReduction
 import DkMathTest.Lib.NumberTheory.WeierstrassNodalVelu

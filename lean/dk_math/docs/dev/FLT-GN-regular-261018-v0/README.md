@@ -594,3 +594,5 @@ Sourceへ接続し、実3点核の47上でx=1の実点について両座標の�
 - [NOTE-032 還元核の一致と商の単射](IMPLEMENTATION-NOTE032-REDUCED-KERNEL-261027.md): 同じ零成分の実際の還元像上で、商準同型の核を同じ有限核の還元像と同定する。
 
 - [NOTE-032 零成分の逆像と局所核の分岐](IMPLEMENTATION-NOTE032-NODAL-INVERSE-261027.md): 滑らかな核側の逆像同値と、特異核側の実際の反例。
+
+- [NOTE-032 零成分の商同型と特異核側の逆像](IMPLEMENTATION-NOTE032-ZERO-COMPONENT-EXACT-261027.md): 滑らかな核側の全射・商同型と、特異核側の全射性の還元像・還元核への分解。
