@@ -56,6 +56,27 @@
 `fiberFactor` への一致を直接得られる。残る幾何学課題は、各軌道根の二重性を
 `kernelXAt` の分子多項式へ供給することに限定された。
 
+今回、`fullKernel_factor_eq_root_and_half_square` を追加した。反転不変な有限族
+`ξ : H → AlgebraicClosure K` に対して、全核積を無限遠点の単純根と半核積の
+平方へ分解する。したがって、半核の各根が `kernelXAt` の分子に二重に現れる
+ことを別途示せば、全核側の因子分解へ直ちに戻せる。これは `ξ(-Q)=ξ(Q)` と
+奇数核の半核分割だけを使う純粋な有限積の教科書定理であり、標的判別式の
+無条件公式そのものではない。
+
+また `eq_halfKernel_fiberFactor_of_monic_of_dvd_of_degree` を追加し、半核因子の
+可除性から根の多重度包含を `Polynomial.roots.le_of_dvd` で回収した。したがって
+実際の分子側では、(i) `fiberFactor ∣ p`、(ii) モニック性、(iii) 次数上界、の
+三つを示せば因子同定が完了する。根を直接列挙する証明と可除性を先に示す証明の
+二つの教科書ルートを、同じ `fiberFactor` API に揃えた。
+
+さらに `kernelXAt_neg_translation_eq` と
+`kernelXAt_fullKernel_factor_eq_root_and_half_square` を追加した。反転固定点
+`P=-P` の軌道では、`P+(-Q)` と `P+Q` の特殊化 x 値が一致することを
+`kernelXAt_neg` から導き、その有限族を全核積分解へ直接代入できる。これにより
+「抽象的な反転不変族」から実際の `kernelXAt` 軌道積への幾何学的な橋ができた。
+ただし各半核根が分子で二重になること、及びその分子がこの積を割ること自体は
+まだ別証明であり、判別式積公式は引き続き条件付きである。
+
 さらに `translated_root_product_relation` を追加し、各 affine 平行移動の
 根差恒等式を有限積へ一括輸送した。これにより、半核点の曲線方程式と
 `x ≠ e₁` という分母条件が揃えば、`product_root_difference_relation` の
@@ -82,7 +103,7 @@
 ## 検証
 
 対象モジュールおよび具体例 `y²=x³-x` のテストをビルドし、三根と判別式64、
-消去定理の退化しない計算例、付値輸送の自明付値例を検査した。主要な4定理の
+消去定理の退化しない計算例、付値輸送の自明付値例を検査した。主要定理の
 `#print axioms` は `propext`, `Classical.choice`, `Quot.sound` のみ。
 本サイクルでは対象モジュールの focused build と `git diff --check` を実行した。
 フルビルドは依頼側で確認済み、`lake test` はここでは実行していない。

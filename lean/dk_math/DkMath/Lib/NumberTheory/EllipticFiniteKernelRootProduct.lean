@@ -112,6 +112,92 @@ theorem kernelAt_twoTorsion_root_halfKernel
         (add_not_mem_kernel E H P hP Q.val)) = 0 := by
   exact kernelAt_twoTorsion_root_translation E H P hP hneg Q.val
 
+omit [CharZero K] in
+/-- [DkMath.Lib] 反転固定点の核軌道は、半核添字の反転にも不変である。
+
+`P=-P` と既存の `kernelXAt_neg` を組み合わせると、`P+(-Q)` と `P+Q`
+の特殊化 x 値が一致する。これは幾何学的な反転対を、有限積定理が要求する
+`ξ(-Q)=ξ(Q)` の形へ直接変換する橋である。 -/
+theorem kernelXAt_neg_translation_eq
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P) (Q : H) :
+    kernelXAt E H (P + (-Q).val)
+        (add_not_mem_kernel E H P hP (-Q)) =
+      kernelXAt E H (P + Q.val) (add_not_mem_kernel E H P hP Q) := by
+  have hR : -(P + (-Q).val) = P + Q.val := by
+    calc
+      -(P + (-Q).val) = -P + -(-Q).val := by abel
+      _ = P + Q.val := by rw [hneg]; simp
+  have h := kernelXAt_neg E H (P + (-Q).val)
+    (add_not_mem_kernel E H P hP (-Q))
+  simpa only [hR] using h.symm
+
+omit [CharZero K] [E.IsElliptic] in
+/-- [DkMath.Lib] 反転不変な有限ファイバーの全核因子は、無限遠点の根と
+半核因子の平方へ分解する。
+
+`hneg` は `ξ(-Q)=ξ(Q)` という幾何学的な反転不変性だけを入力に取る。
+半核分割を有限積へ写すことで、各半核根が全核側では二重に現れることを
+多項式恒等式として記録する。`kernelXAt` の分子へ適用する際には、
+`ξ Q = kernelXAt (P + Q)` と置き、先に根の多重度をこの形へ供給する。 -/
+theorem fullKernel_factor_eq_root_and_half_square
+    (ho : Odd (Nat.card H)) (ξ : H → AlgebraicClosure K)
+    (hneg : ∀ Q : H, ξ (-Q) = ξ Q) :
+    (∏ Q : H, (Polynomial.X - Polynomial.C (ξ Q))) =
+      (Polynomial.X - Polynomial.C (ξ 0)) *
+        (∏ Q ∈ halfKernel E H, (Polynomial.X - Polynomial.C (ξ Q))) ^ 2 := by
+  classical
+  obtain ⟨hu, hd⟩ := halfKernel_partition E H ho
+  let f : H → Polynomial (AlgebraicClosure K) :=
+    fun Q => Polynomial.X - Polynomial.C (ξ Q)
+  have hprod : (∏ Q : H, f Q) = f 0 * ∏ Q ∈ (Finset.univ : Finset H).erase 0, f Q := by
+    rw [← Finset.prod_erase_mul (Finset.univ : Finset H) f (Finset.mem_univ 0)]
+    ac_rfl
+  calc
+    (∏ Q : H, (Polynomial.X - Polynomial.C (ξ Q))) =
+        f 0 * ∏ Q ∈ (Finset.univ : Finset H).erase 0, f Q := hprod
+    _ = f 0 * ((∏ Q ∈ halfKernel E H, f Q) *
+        (∏ Q ∈ (halfKernel E H).image Neg.neg, f Q)) := by
+      rw [← hu, Finset.prod_union hd]
+    _ = f 0 * (∏ Q ∈ halfKernel E H, f Q) ^ 2 := by
+      have himage :
+          (∏ Q ∈ (halfKernel E H).image Neg.neg, f Q) =
+            ∏ Q ∈ halfKernel E H, f Q := by
+        rw [Finset.prod_image]
+        · apply Finset.prod_congr rfl
+          intro Q hQ
+          simp only [f, hneg]
+        · exact neg_injective.injOn
+      rw [himage]
+      ring
+    _ = (Polynomial.X - Polynomial.C (ξ 0)) *
+        (∏ Q ∈ halfKernel E H, (Polynomial.X - Polynomial.C (ξ Q))) ^ 2 := by
+      rfl
+
+omit [CharZero K] in
+/-- [DkMath.Lib] 反転固定点 `P` の `kernelXAt` 軌道積を半核因子へ分解する。
+
+`kernelXAt_neg_translation_eq` が供給する軌道の反転不変性を
+`fullKernel_factor_eq_root_and_half_square` へ渡した特殊化版である。右辺の
+単純根は `Q=0` の軌道点であり、`kernelXAt_translation` により `P` 自身へ
+簡約できる。以後の根差計算では、この因子を標的2捩れ根ごとに評価する。 -/
+theorem kernelXAt_fullKernel_factor_eq_root_and_half_square
+    (ho : Odd (Nat.card H)) (P : Points E) (hP : P ∉ H) (hneg : -P = P) :
+    (∏ Q : H, (Polynomial.X - Polynomial.C
+      (kernelXAt E H (P + Q.val) (add_not_mem_kernel E H P hP Q)))) =
+      (Polynomial.X - Polynomial.C (kernelXAt E H P hP)) *
+        (∏ Q ∈ halfKernel E H, (Polynomial.X - Polynomial.C
+          (kernelXAt E H (P + Q.val) (add_not_mem_kernel E H P hP Q)))) ^ 2 := by
+  let ξ : H → AlgebraicClosure K := fun Q =>
+    kernelXAt E H (P + Q.val) (add_not_mem_kernel E H P hP Q)
+  have hξ : ∀ Q : H, ξ (-Q) = ξ Q := by
+    intro Q
+    exact kernelXAt_neg_translation_eq E H P hP hneg Q
+  have hfactor := fullKernel_factor_eq_root_and_half_square E H ho ξ hξ
+  have hzero : ξ 0 = kernelXAt E H P hP := by
+    dsimp [ξ]
+    exact kernelXAt_translation E H P hP (0 : H)
+  simpa only [ξ, hzero] using hfactor
+
 omit [CharZero K] [E.IsElliptic] in
 /-- [DkMath.Lib] 半核ファイバー因子の根包含と次数上界から、実際のモニック分子を
 `fiberFactor` へ同定する。
@@ -129,6 +215,24 @@ theorem eq_halfKernel_fiberFactor_of_monic_of_roots_le
   apply eq_fiberFactor_of_monic_of_roots_le (Finset.univ : Finset (halfKernel E H))
     e ξ p hp hroots
   rw [halfKernel_fiberFactor_natDegree E H ho e ξ]
+  exact hdeg
+
+omit [CharZero K] [E.IsElliptic] in
+/-- [DkMath.Lib] 半核ファイバー因子が分子を割り、次数が尽きていれば同一である。
+
+根の多重集合を直接構成する代わりに、幾何学側で得た可除性
+`fiberFactor ∣ p` を入力に取る。`Polynomial.roots.le_of_dvd` が根の多重度を
+自動的に持ち上げるため、平行移動根の二重性を分子の根 API へ接続する際の
+教科書的な短い入口になる。 -/
+theorem eq_halfKernel_fiberFactor_of_monic_of_dvd_of_degree
+    (ho : Odd (Nat.card H))
+    (e : AlgebraicClosure K) (ξ : halfKernel E H → AlgebraicClosure K)
+    (p : Polynomial (AlgebraicClosure K)) (hp : p.Monic)
+    (hdiv : fiberFactor (Finset.univ : Finset (halfKernel E H)) e ξ ∣ p)
+    (hdeg : p.natDegree ≤ Nat.card H) :
+    p = fiberFactor (Finset.univ : Finset (halfKernel E H)) e ξ := by
+  apply eq_halfKernel_fiberFactor_of_monic_of_roots_le E H ho e ξ p hp
+    (Polynomial.roots.le_of_dvd hp.ne_zero hdiv)
   exact hdeg
 
 end DkMath.Lib.NumberTheory.EllipticFiniteKernel
