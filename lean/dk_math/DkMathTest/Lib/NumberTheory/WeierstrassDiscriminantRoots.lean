@@ -81,6 +81,19 @@ example :
   · rw [fiberFactor_roots, fiberFactor_natDegree]
     simp
 
+example :
+    fiberFactor ({0} : Finset ℕ) (1 : ℚ) (fun _ => (2 : ℚ) / 3) ∣
+      fiberFactor ({0} : Finset ℕ) (1 : ℚ) (fun _ => (2 : ℚ) / 3) := by
+  apply fiberFactor_dvd_of_roots_le _ _ _ _ (fiberFactor_ne_zero _ _ _)
+  exact le_rfl
+
+example :
+    (fiberFactor ({0} : Finset ℕ) (1 : ℚ) (fun _ => (2 : ℚ) / 3)) =
+      fiberFactor ({0} : Finset ℕ) (1 : ℚ) (fun _ => (2 : ℚ) / 3) := by
+  apply eq_fiberFactor_of_monic_of_roots_le _ _ _ _ (fiberFactor_monic _ _ _)
+  · exact le_rfl
+  · exact le_rfl
+
 #print axioms discriminant_eq_root_differences
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.half_tangent_product_eq_root_products
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.half_x_sub_root_ne_zero

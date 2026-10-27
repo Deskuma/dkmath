@@ -130,6 +130,51 @@ theorem eq_fiberFactor_of_monic_of_roots
     _ = ((fiberFactor s e ξ).roots.map fun a => X - C a).prod := by rw [hroots]
     _ = fiberFactor s e ξ := hf_repr
 
+/-- [DkMath.Lib] `fiberFactor` の根が別の非零多項式の根に多重度込みで
+含まれるなら、`fiberFactor` はその多項式を割る。
+
+実際の有限ファイバーでは、まず各平行移動点から根の包含を作り、
+この補題で分子多項式への可除性へ移す。等号には別途、モニック性と
+次数比較を要求するため、ここでは過剰な幾何学仮定を導入しない。 -/
+theorem fiberFactor_dvd_of_roots_le
+    {ι : Type*} [DecidableEq ι] (s : Finset ι) (e : k) (ξ : ι → k)
+    (p : k[X]) (hp : p ≠ 0)
+    (hroots : (fiberFactor s e ξ).roots ≤ p.roots) :
+    fiberFactor s e ξ ∣ p := by
+  have hcard_f : (fiberFactor s e ξ).roots.card =
+      (fiberFactor s e ξ).natDegree := by
+    rw [fiberFactor_roots, fiberFactor_natDegree]
+    simp [Nat.mul_comm]
+  have hf_repr := prod_multiset_X_sub_C_of_monic_of_roots_card_eq
+    (fiberFactor_monic s e ξ) hcard_f
+  rw [← hf_repr]
+  exact (Multiset.prod_X_sub_C_dvd_iff_le_roots hp _).mpr hroots
+
+/-- [DkMath.Lib] `fiberFactor` の根を多重度込みで含み、かつ次数が
+`fiberFactor` 以下であるモニック多項式は、`fiberFactor` と等しい。
+
+根の包含、一般の多項式に対する根数上界、そして `fiberFactor` の既知の
+次数を一列の不等式に並べ、根の多重集合の等号を回収する。実際の
+Vélu 分子を因子同定する際の最短の入口である。 -/
+theorem eq_fiberFactor_of_monic_of_roots_le
+    {ι : Type*} [DecidableEq ι] (s : Finset ι) (e : k) (ξ : ι → k)
+    (p : k[X]) (hp : p.Monic)
+    (hroots : (fiberFactor s e ξ).roots ≤ p.roots)
+    (hdeg : p.natDegree ≤ (fiberFactor s e ξ).natDegree) :
+    p = fiberFactor s e ξ := by
+  have hcard_f : (fiberFactor s e ξ).roots.card =
+      (fiberFactor s e ξ).natDegree := by
+    rw [fiberFactor_roots, fiberFactor_natDegree]
+    simp [Nat.mul_comm]
+  have hcard_le : (fiberFactor s e ξ).roots.card ≤ p.roots.card :=
+    Multiset.card_le_card hroots
+  have hcard_roots : p.roots.card ≤ p.natDegree := Polynomial.card_roots' p
+  have hcard_eq : p.roots.card = p.natDegree := by
+    omega
+  have hroots_eq : p.roots = (fiberFactor s e ξ).roots :=
+    (Multiset.eq_of_le_of_card_le hroots (by omega)).symm
+  exact eq_fiberFactor_of_monic_of_roots s e ξ p hp hroots_eq hcard_eq
+
 /-- [DkMath.Lib] 点ごとの根差関係を有限積へ持ち上げる。
 右辺の符号を `eₖ-eⱼ` に直してから積を取り、半核の濃度を指数へ変換する。
 この補題が、平行移動された2捩れ点から判別式消去へ進む橋である。 -/
