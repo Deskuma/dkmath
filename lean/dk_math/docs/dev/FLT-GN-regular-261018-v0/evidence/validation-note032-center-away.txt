@@ -1,0 +1,29 @@
+NOTE-032-CENTER-AWAY validation / 2026-10-27
+base: 3b8f5bbceb0249a7bf4e268d01528186f324707b
+
+PASS ./lean-build.sh DkMath.Lib.NumberTheory.OddRootPairMoments (0 warnings)
+PASS ./lean-build.sh DkMath.Lib.NumberTheory.WeierstrassNodalCenter (0 warnings)
+PASS ./lean-build.sh DkMath.Lib.NumberTheory.WeierstrassNodalCenterSmallChar (0 warnings)
+PASS ./lean-build.sh DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalCenterAll (0 warnings)
+PASS ./lean-build.sh DkMath.FLT.FreyFiniteKernelZeroComponentAway (0 warnings)
+PASS ./lean-build.sh DkMathTest.Lib.NumberTheory.WeierstrassNodalCenterSmallChar (0 warnings)
+PASS ./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNodalCenter (0 warnings)
+PASS lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CenterAwaySmoke.lean (0 warnings)
+PASS lake env lean tmp/note032-center/Axioms1.lean (0 warnings)
+PASS lake env lean tmp/note032-center/Axioms2.lean (0 warnings)
+
+Production: 6 new owners, 1 existing owner extended, 18 theorems and 1 definition.
+Regression: 5 theorems; actual characteristic-2 order-3 and characteristic-3 order-5 kernels with singular-point center comparison, and actual order-3 kernel at 47 with x=1 point.
+Source37 smoke: 4 theorems, including two and three.
+Axiom audit: 28 public declarations in batches 12 + 12 + 4.
+Observed axioms: propext, Classical.choice, Quot.sound; no sorryAx.
+
+PASS file markers match paths
+PASS Lib public declarations have textbook docstrings and promotion markers
+PASS new owners contain no forbidden proof constructs or raised heartbeat limits
+PASS Lib imports do not depend on FLT or external solution modules
+PASS eight facade imports registered exactly once; no facade build
+PASS git diff HEAD --check passed
+PASS index unchanged
+
+Boundary: forward E0 transport away from p only; reduction square, inverse-image criterion, discriminant depth, q=p and general hno remain open.

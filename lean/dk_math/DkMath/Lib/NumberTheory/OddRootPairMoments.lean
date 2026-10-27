@@ -1006,6 +1006,15 @@ private lemma E3_q (m : ℕ) :
     · rw [show thirdCoefficient 3 = 0 from by decide]
       norm_num
 
+/-- [DkMath.Lib] Pascalの最初の対称係数は奇数nについて整数恒等式
+`24 a₁ = n (n²−1)` を満たす。整数で確定するため剰余標数2,3でも使える。 -/
+theorem firstCoefficient_certificate {n : ℕ} (hn : Odd n) :
+    24 * firstCoefficient n = (n : ℤ) * ((n : ℤ) ^ 2 - 1) := by
+  obtain ⟨m, rfl⟩ := hn
+  qify
+  rw [E1_q]
+  ring
+
 private lemma cert_T {n : ℕ} (hn : Odd n) :
     240 * (-(n : ℤ) * firstCoefficient n + 6 * firstCoefficient n ^ 2 - 12 * n * secondCoefficient n)
       = (n : ℤ) ^ 2 * ((n : ℤ) ^ 4 - 1) := by

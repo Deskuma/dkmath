@@ -158,6 +158,8 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelCollision
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNoncollision
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalDistance
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalTransport
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelCriticalCentre
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalCenterAll
 import DkMath.Lib.NumberTheory.WeierstrassVariableChange
 import DkMath.Lib.NumberTheory.WeierstrassVariableChangeHom
 import DkMath.Lib.NumberTheory.WeierstrassVariableChangeGalois
@@ -170,6 +172,8 @@ import DkMath.Lib.NumberTheory.WeierstrassNodalFrame
 import DkMath.Lib.NumberTheory.WeierstrassNodalVelu
 import DkMath.Lib.NumberTheory.WeierstrassNodalOrbit
 import DkMath.Lib.NumberTheory.WeierstrassNodalDistance
+import DkMath.Lib.NumberTheory.WeierstrassNodalCenter
+import DkMath.Lib.NumberTheory.WeierstrassNodalCenterSmallChar
 import DkMath.Lib.NumberTheory.WeierstrassFiniteKernelModel
 import DkMath.Lib.NumberTheory.OddRootPairMoments
 import DkMath.Lib.Algebra.FiniteInversionHalf
