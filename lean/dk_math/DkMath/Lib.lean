@@ -135,6 +135,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalCenterAll
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalDistance
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalInverse
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalLevels
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelSingularInverse
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalReduction
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalTransport
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNoncollision

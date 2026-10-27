@@ -1,0 +1,24 @@
+import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelSingularInverse
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalLevels
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelZeroComponentExact
+
+#print "file: Note032SingularInverseAxioms"
+
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.singular_kernel_shallow
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.singular_kernel_half_deep
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.same_level_sub_or_add_smooth
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.singular_kernel_smooth_iff_translate_with_target_centre
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_singular_kernel_criticalCentre
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.singular_kernel_smooth_iff_translate
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.singularKernelZeroComponentHom_surjective
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.singularZeroComponentEquiv
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.singular_zeroComponent_comap_eq_sup_kernel
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.singular_zeroComponent_reduction_and_kernel_lift
+#print axioms DkMath.FLT.Frey.Source.residual_pointHom_smooth_iff_translate_of_disjoint
+#print axioms DkMath.FLT.Frey.Source.residual_pointHom_smooth_iff_translate_at_bad_place
+#print axioms DkMath.FLT.Frey.Source.residual_integer_pointHom_smooth_iff_translate_at_bad_place
+#print axioms DkMath.FLT.Frey.Source.residual_pointHom_smooth_iff_translate_away
+#print axioms DkMath.FLT.Frey.Source.residual_integer_pointHom_smooth_iff_translate_away
+#print axioms EllipticFiniteKernelSingularInverseTest.sample_seven_inverse
+#print axioms EllipticFiniteKernelSingularInverseTest.sample_seven_inverse_internal_geometry
+#print axioms EllipticFiniteKernelSingularInverseTest.source37_integer_inverse_away

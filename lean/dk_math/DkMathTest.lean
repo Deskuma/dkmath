@@ -162,6 +162,7 @@ import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelModel
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNodalCenter
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNodalInverse
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNodalLevels
+import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelSingularInverse
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNodalTransport
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNoncollision
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNonsingular
