@@ -165,8 +165,10 @@ import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelVeluEquation
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelGoodReduction
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelZeroComponent
 import DkMathTest.Lib.NumberTheory.FreyReductionTransport
+import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelCollision
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelReduction
 import DkMathTest.Lib.NumberTheory.WeierstrassNodalVelu
+import DkMathTest.Lib.NumberTheory.WeierstrassNodalOrbit
 import DkMathTest.Lib.NumberTheory.WeierstrassIntegralModel
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelSpecialization
 import DkMathTest.Lib.NumberTheory.EllipticFrobeniusBranchSwap

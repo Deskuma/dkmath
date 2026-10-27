@@ -1,0 +1,28 @@
+NOTE-032-NODAL-ORBIT-COLLISION validation / 2026-10-27
+base: bb59b81de5daebe9e206959efb7728844080349c
+
+PASS ./lean-build.sh DkMath.Lib.NumberTheory.WeierstrassNodalOrbit (0 warnings)
+PASS ./lean-build.sh DkMath.FLT.FreyFiniteKernelCollision (0 warnings)
+PASS ./lean-build.sh DkMathTest.Lib.NumberTheory.WeierstrassNodalOrbit (0 warnings)
+PASS ./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelCollision (0 warnings)
+PASS lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032NodalOrbitCollisionSmoke.lean (0 warnings)
+PASS lake env lean tmp/note032-nodal-orbit/Axioms1.lean (0 warnings)
+PASS lake env lean tmp/note032-nodal-orbit/Axioms2.lean (0 warnings)
+
+Production: 3 owners, 16 theorems.
+Regression: 7 theorems and 1 definition; actual 37-point nodal orbits in characteristics two and three; actual kernel-exterior collision at forty-seven and its same quotient image.
+Source37 smoke: 2 theorems.
+Axiom audit: 26 public declarations in batches 14 + 10 + 2.
+Observed axioms: propext, Classical.choice, Quot.sound; no sorryAx.
+
+PASS five production/test file markers match paths
+PASS Lib public textbook docstrings include promotion markers
+PASS no forbidden proof constructs or raised heartbeat limits
+PASS Lib has no FLT or external-solution imports
+PASS five facade imports registered exactly once; no facade build
+PASS only three facade files and three documentation files changed among tracked files; prior mathematical owners, NOTE and evidence unchanged
+PASS index unchanged
+PASS git diff HEAD --check passed; new Lean files have no trailing whitespace
+PASS upstream Git blob 3070fac325fbd76952d37b988b13682b20dcadb4
+
+Boundary: noncollision integral specialization to same quotient residue model, whole smooth-kernel zero-component transport and reduction, inverse-image criterion, discriminant depth, q=p, scheme isogeny, target rational torsion exclusion and general hno remain open.
