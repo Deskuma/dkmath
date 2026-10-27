@@ -155,6 +155,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelFormal
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelZeroComponent
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelReductionSquare
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelCollision
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelNoncollision
 import DkMath.Lib.NumberTheory.WeierstrassVariableChange
 import DkMath.Lib.NumberTheory.WeierstrassVariableChangeHom
 import DkMath.Lib.NumberTheory.WeierstrassVariableChangeGalois
