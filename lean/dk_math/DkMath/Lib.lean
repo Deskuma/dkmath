@@ -157,6 +157,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelReductionSquare
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelCollision
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNoncollision
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalDistance
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalTransport
 import DkMath.Lib.NumberTheory.WeierstrassVariableChange
 import DkMath.Lib.NumberTheory.WeierstrassVariableChangeHom
 import DkMath.Lib.NumberTheory.WeierstrassVariableChangeGalois

@@ -1,0 +1,13 @@
+NOTE-032-NODAL-TRANSPORT validation / 2026-10-27
+base: 2dd5296f78dd6491d030bbdfc41806af4245ef4a
+
+PASS ./lean-build.sh DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalTransport (0 warnings)
+PASS ./lean-build.sh DkMath.FLT.FreyFiniteKernelNodalTransport (0 warnings)
+PASS ./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNodalTransport (0 warnings)
+PASS lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032NodalTransportSmoke.lean (0 warnings)
+PASS lake env lean tmp/note032-transport/Axioms.lean (0 warnings)
+
+10 declarations: Classical.choice, Quot.sound, propext; no sorryAx.
+Actual three-point kernel at 47: conditional E0 transport and nonzero kernel point.
+Source37 smoke keeps target center equality and source frame as assumptions.
+General center equality, reduction square and hno remain open.
