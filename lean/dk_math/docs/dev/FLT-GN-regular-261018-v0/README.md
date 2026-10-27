@@ -596,3 +596,5 @@ Sourceへ接続し、実3点核の47上でx=1の実点について両座標の�
 - [NOTE-032 零成分の逆像と局所核の分岐](IMPLEMENTATION-NOTE032-NODAL-INVERSE-261027.md): 滑らかな核側の逆像同値と、特異核側の実際の反例。
 
 - [NOTE-032 零成分の商同型と特異核側の逆像](IMPLEMENTATION-NOTE032-ZERO-COMPONENT-EXACT-261027.md): 滑らかな核側の全射・商同型と、特異核側の全射性の還元像・還元核への分解。
+
+- [NOTE-032 特異核の節点水準と商座標](IMPLEMENTATION-NOTE032-SINGULAR-LEVELS-261027.md): 模範解答の付値評価を同じ実点・半核へ接続し、水準条件の範囲を明示。

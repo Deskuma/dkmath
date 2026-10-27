@@ -12,6 +12,8 @@ import DkMath.Lib.Algebra.BinomTail
 import DkMath.Lib.Algebra.CoprimeFieldGeneration
 import DkMath.Lib.Algebra.DedekindValuationEquiv
 import DkMath.Lib.Algebra.DiscreteValuationRigidity
+import DkMath.Lib.Algebra.FiniteInversionHalf
+import DkMath.Lib.Algebra.FiniteInversionHalfTransport
 import DkMath.Lib.Algebra.FiniteOrbitMinimum
 import DkMath.Lib.Algebra.FiniteTorsionSum
 import DkMath.Lib.Algebra.OddPowerRecovery
@@ -72,13 +74,10 @@ import DkMath.Lib.LinearAlgebra.FiniteSpectrumProjectors
 import DkMath.Lib.NumberTheory.AbsoluteInertiaConjugacy
 import DkMath.Lib.NumberTheory.AbsoluteInertiaGeneration
 import DkMath.Lib.NumberTheory.AbsoluteInertiaRepresentation
-
 import DkMath.Lib.NumberTheory.BernoulliPrime37
 import DkMath.Lib.NumberTheory.BinomialPrimePower
-
 import DkMath.Lib.NumberTheory.ClassGroupTorsionBridge
 import DkMath.Lib.NumberTheory.CompletionDefectGcd
-
 import DkMath.Lib.NumberTheory.Cyclotomic37CharacterDecomposition
 import DkMath.Lib.NumberTheory.Cyclotomic37CharacterTransport
 import DkMath.Lib.NumberTheory.CyclotomicAddress
@@ -89,11 +88,12 @@ import DkMath.Lib.NumberTheory.CyclotomicPhaseCoefficientRigidity
 import DkMath.Lib.NumberTheory.CyclotomicRamifiedPhase
 import DkMath.Lib.NumberTheory.CyclotomicRootModule
 import DkMath.Lib.NumberTheory.CyclotomicThirteenPID
-
+import DkMath.Lib.NumberTheory.DedekindFractionalValuation
+import DkMath.Lib.NumberTheory.DedekindLocalParameter
+import DkMath.Lib.NumberTheory.DiscreteValuationPullback
 import DkMath.Lib.NumberTheory.EisensteinCoordinates
 import DkMath.Lib.NumberTheory.EisensteinCyclotomic
 import DkMath.Lib.NumberTheory.EisensteinLatticeLanding
-
 import DkMath.Lib.NumberTheory.EllipticAdditionDepth
 import DkMath.Lib.NumberTheory.EllipticBranchComparison
 import DkMath.Lib.NumberTheory.EllipticCofixedCyclotomic
@@ -115,83 +115,50 @@ import DkMath.Lib.NumberTheory.EllipticDyadicGeometry
 import DkMath.Lib.NumberTheory.EllipticDyadicSeparation
 import DkMath.Lib.NumberTheory.EllipticDyadicWildInertia
 import DkMath.Lib.NumberTheory.EllipticFiniteKernel
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelGalois
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelPoles
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelCollision
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelCriticalCentre
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDegree
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelDivisor
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelFibers
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelFormal
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelGalois
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelGeneration
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelGoodReduction
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelHalf
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelHom
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelLocalIntegrality
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelLocalTransport
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelModel
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelModelDescent
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelModelMap
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelNonsingular
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelPointDescent
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelNorm
-import DkMath.Lib.NumberTheory.DiscreteValuationPullback
-import DkMath.Lib.NumberTheory.DedekindLocalParameter
-import DkMath.Lib.NumberTheory.WeierstrassFinitePlace
-import DkMath.Lib.NumberTheory.WeierstrassPolePullback
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelLocalTransport
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelUnramified
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelValuation
-import DkMath.Lib.NumberTheory.EllipticFinitePointApproximation
-import DkMath.Lib.NumberTheory.RationalFunctionFiniteFiber
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelFibers
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelSurjective
-import DkMath.Lib.NumberTheory.ValuationDivisor
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelDivisor
-import DkMath.Lib.NumberTheory.EllipticWeilDivisor
-import DkMath.Lib.NumberTheory.DedekindFractionalValuation
-import DkMath.Lib.NumberTheory.WeierstrassDivisorAbel
-import DkMath.Lib.NumberTheory.WeierstrassPrincipalPushHom
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelHom
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelHalf
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelLocalIntegrality
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelPair
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelVeluEquation
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelReduction
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelSmoothReduction
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalReduction
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelGoodReduction
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelFormal
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelZeroComponent
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelReductionSquare
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelCollision
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelNoncollision
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalDistance
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalTransport
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelCriticalCentre
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalCenterAll
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelReducedHom
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalDistance
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalInverse
-import DkMath.Lib.NumberTheory.EllipticFiniteKernelZeroComponentExact
-import DkMath.Lib.NumberTheory.WeierstrassVariableChange
-import DkMath.Lib.NumberTheory.WeierstrassVariableChangeHom
-import DkMath.Lib.NumberTheory.WeierstrassVariableChangeGalois
-import DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel
-import DkMath.Lib.NumberTheory.WeierstrassDenominatorSupport
-import DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial
-import DkMath.Lib.NumberTheory.WeierstrassVeluReduction
-import DkMath.Lib.NumberTheory.WeierstrassResidueModel
-import DkMath.Lib.NumberTheory.WeierstrassNodalFrame
-import DkMath.Lib.NumberTheory.WeierstrassNodalVelu
-import DkMath.Lib.NumberTheory.WeierstrassNodalOrbit
-import DkMath.Lib.NumberTheory.WeierstrassNodalDistance
-import DkMath.Lib.NumberTheory.WeierstrassNodalCenter
-import DkMath.Lib.NumberTheory.WeierstrassNodalCenterSmallChar
-import DkMath.Lib.NumberTheory.WeierstrassFiniteKernelModel
-import DkMath.Lib.NumberTheory.OddRootPairMoments
-import DkMath.Lib.Algebra.FiniteInversionHalf
-import DkMath.Lib.Algebra.FiniteInversionHalfTransport
-import DkMath.Lib.NumberTheory.WeierstrassVeluPair
-import DkMath.Lib.NumberTheory.WeierstrassVeluFormal
-import DkMath.Lib.NumberTheory.WeierstrassIntegralModelTransport
-import DkMath.Lib.NumberTheory.WeierstrassModelReduction
-import DkMath.Lib.NumberTheory.WeierstrassIntegralChangeReduction
-import DkMath.Lib.NumberTheory.WeierstrassIntegerReductionTransport
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalLevels
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalReduction
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalTransport
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelNoncollision
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelNonsingular
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelNorm
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelPair
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelPointDescent
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelPoles
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPolynomial
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelRationalFiber
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelReducedHom
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelReduction
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelReductionSquare
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelReflection
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelSmoothReduction
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelSpecialization
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelSurjective
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelTwoTorsion
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelUnramified
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelValuation
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelVeluEquation
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelZeroComponent
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelZeroComponentExact
+import DkMath.Lib.NumberTheory.EllipticFinitePointApproximation
 import DkMath.Lib.NumberTheory.EllipticFixedTorsion
 import DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap
 import DkMath.Lib.NumberTheory.EllipticFunctionEigenvalue
@@ -227,8 +194,8 @@ import DkMath.Lib.NumberTheory.EllipticOppositeDepth
 import DkMath.Lib.NumberTheory.EllipticPointEvaluation
 import DkMath.Lib.NumberTheory.EllipticPointIdealNorm
 import DkMath.Lib.NumberTheory.EllipticPointIdealValuation
-import DkMath.Lib.NumberTheory.EllipticPoleDegree
 import DkMath.Lib.NumberTheory.EllipticPointOrderAlgebra
+import DkMath.Lib.NumberTheory.EllipticPoleDegree
 import DkMath.Lib.NumberTheory.EllipticPrincipalPointIdeal
 import DkMath.Lib.NumberTheory.EllipticReductionCoordinates
 import DkMath.Lib.NumberTheory.EllipticReductionKernel
@@ -236,8 +203,8 @@ import DkMath.Lib.NumberTheory.EllipticReductionSlope
 import DkMath.Lib.NumberTheory.EllipticShallowSlope
 import DkMath.Lib.NumberTheory.EllipticSmoothReduction
 import DkMath.Lib.NumberTheory.EllipticSmoothTorsionReduction
-import DkMath.Lib.NumberTheory.EllipticStableLine
 import DkMath.Lib.NumberTheory.EllipticSplitDyadic
+import DkMath.Lib.NumberTheory.EllipticStableLine
 import DkMath.Lib.NumberTheory.EllipticTangentDirections
 import DkMath.Lib.NumberTheory.EllipticTorsionAllCard
 import DkMath.Lib.NumberTheory.EllipticTorsionCardBound
@@ -266,6 +233,7 @@ import DkMath.Lib.NumberTheory.EllipticValuationTransport
 import DkMath.Lib.NumberTheory.EllipticWeilAlternating
 import DkMath.Lib.NumberTheory.EllipticWeilBicharacter
 import DkMath.Lib.NumberTheory.EllipticWeilCharacter
+import DkMath.Lib.NumberTheory.EllipticWeilDivisor
 import DkMath.Lib.NumberTheory.EllipticWeilFunction
 import DkMath.Lib.NumberTheory.EllipticWeilGalois
 import DkMath.Lib.NumberTheory.EllipticWeilInfinity
@@ -273,74 +241,55 @@ import DkMath.Lib.NumberTheory.EllipticWeilNondegenerate
 import DkMath.Lib.NumberTheory.EllipticWeilRightAdd
 import DkMath.Lib.NumberTheory.EllipticWeilTransport
 import DkMath.Lib.NumberTheory.EllipticWeilValuation
-
 import DkMath.Lib.NumberTheory.FiniteFreeLatticeLanding
 import DkMath.Lib.NumberTheory.FiniteIdealPowerAggregation
-
 import DkMath.Lib.NumberTheory.FoldedValuationOrbit
-
 import DkMath.Lib.NumberTheory.FreyGapCubic
-import DkMath.Lib.NumberTheory.FreyModEight
-import DkMath.Lib.NumberTheory.FreySplitModEight
 import DkMath.Lib.NumberTheory.FreyLocalReduction
+import DkMath.Lib.NumberTheory.FreyModEight
 import DkMath.Lib.NumberTheory.FreyPrimeValuation
+import DkMath.Lib.NumberTheory.FreySplitModEight
 import DkMath.Lib.NumberTheory.FreyTwoArithmetic
-
 import DkMath.Lib.NumberTheory.GNFreyDiscriminant
-
 import DkMath.Lib.NumberTheory.GaloisIdealNorm
 import DkMath.Lib.NumberTheory.GaloisPhaseObstructionTransport
 import DkMath.Lib.NumberTheory.GaloisPhaseOrbitNorm
-
 import DkMath.Lib.NumberTheory.HomogeneousCyclotomic
 import DkMath.Lib.NumberTheory.HomogeneousCyclotomicAddress
 import DkMath.Lib.NumberTheory.HomogeneousCyclotomicBoundary
 import DkMath.Lib.NumberTheory.HomogeneousCyclotomicPrimeAddress
 import DkMath.Lib.NumberTheory.HomogeneousPowerQuotient
-
 import DkMath.Lib.NumberTheory.IdealGaloisTransport
 import DkMath.Lib.NumberTheory.IdealPowerObstruction
-
 import DkMath.Lib.NumberTheory.IntegralClosureInertiaLift
-
 import DkMath.Lib.NumberTheory.KummerInertia
-
 import DkMath.Lib.NumberTheory.NumberFieldInertiaGeneration
 import DkMath.Lib.NumberTheory.NumberFieldInertiaRepresentation
-
+import DkMath.Lib.NumberTheory.OddRootPairMoments
 import DkMath.Lib.NumberTheory.PadicValNat
-
 import DkMath.Lib.NumberTheory.PhaseClassPacket
 import DkMath.Lib.NumberTheory.PhaseObstructionTransport
-
 import DkMath.Lib.NumberTheory.PolynomialHenselDigit
-
 import DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd
 import DkMath.Lib.NumberTheory.PowerDifferenceCofactorPrimeAddress
 import DkMath.Lib.NumberTheory.PowerDifferenceCofactorStrongDivisibility
 import DkMath.Lib.NumberTheory.PowerDifferenceCofactorValuation
-
 import DkMath.Lib.NumberTheory.PrimeRatioOrder
-
 import DkMath.Lib.NumberTheory.QuadraticResidueType
 import DkMath.Lib.NumberTheory.QuinticGoldenNorm
-
 import DkMath.Lib.NumberTheory.RamifiedGNPhaseBridge
+import DkMath.Lib.NumberTheory.RationalFunctionFiniteFiber
+import DkMath.Lib.NumberTheory.RationalPrimeDenominator
 import DkMath.Lib.NumberTheory.RationalTwoAdicBounds
-
 import DkMath.Lib.NumberTheory.RegularKummer.Cyclotomic.UnitConjugation
 import DkMath.Lib.NumberTheory.RegularKummer.KummersLemma.KummersLemma
-
 import DkMath.Lib.NumberTheory.RootPairingDeterminant
-
 import DkMath.Lib.NumberTheory.SparsePhaseObstruction
 import DkMath.Lib.NumberTheory.SquarefreePowerFactor
-
 import DkMath.Lib.NumberTheory.TraceOneLatticeLanding
 import DkMath.Lib.NumberTheory.TraceOnePowerLanding
-
 import DkMath.Lib.NumberTheory.UnitObstructionPacket
-
+import DkMath.Lib.NumberTheory.ValuationDivisor
 import DkMath.Lib.NumberTheory.ValuationFrobenius
 import DkMath.Lib.NumberTheory.ValuationInertia
 import DkMath.Lib.NumberTheory.ValuationInertiaLift
@@ -348,21 +297,45 @@ import DkMath.Lib.NumberTheory.ValuationInertiaPower
 import DkMath.Lib.NumberTheory.ValuationPlaceConjugacy
 import DkMath.Lib.NumberTheory.ValuationPrimeExistence
 import DkMath.Lib.NumberTheory.ValuationPrimeSupport
-import DkMath.Lib.NumberTheory.RationalPrimeDenominator
-import DkMath.Lib.NumberTheory.ValuationRationalPrimeSupport
 import DkMath.Lib.NumberTheory.ValuationQuadraticFrobenius
+import DkMath.Lib.NumberTheory.ValuationRationalPrimeSupport
 import DkMath.Lib.NumberTheory.ValuationResidue
 import DkMath.Lib.NumberTheory.ValuationSplitQuadratic
 import DkMath.Lib.NumberTheory.ValuationTameCharacter
 import DkMath.Lib.NumberTheory.WeierstrassCoordinateEvaluation
-
+import DkMath.Lib.NumberTheory.WeierstrassDenominatorSupport
+import DkMath.Lib.NumberTheory.WeierstrassDivisorAbel
+import DkMath.Lib.NumberTheory.WeierstrassFiniteKernelModel
+import DkMath.Lib.NumberTheory.WeierstrassFinitePlace
+import DkMath.Lib.NumberTheory.WeierstrassIntegerReductionTransport
+import DkMath.Lib.NumberTheory.WeierstrassIntegralChangeReduction
+import DkMath.Lib.NumberTheory.WeierstrassIntegralModelTransport
+import DkMath.Lib.NumberTheory.WeierstrassModelReduction
 import DkMath.Lib.NumberTheory.WeierstrassNegativeValuation
+import DkMath.Lib.NumberTheory.WeierstrassNodalCenter
+import DkMath.Lib.NumberTheory.WeierstrassNodalCenterSmallChar
+import DkMath.Lib.NumberTheory.WeierstrassNodalDistance
+import DkMath.Lib.NumberTheory.WeierstrassNodalFrame
+import DkMath.Lib.NumberTheory.WeierstrassNodalOrbit
+import DkMath.Lib.NumberTheory.WeierstrassNodalVelu
+import DkMath.Lib.NumberTheory.WeierstrassPolePullback
 import DkMath.Lib.NumberTheory.WeierstrassPositiveValuation
+import DkMath.Lib.NumberTheory.WeierstrassPrincipalPushHom
+import DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel
+import DkMath.Lib.NumberTheory.WeierstrassResidueModel
 import DkMath.Lib.NumberTheory.WeierstrassTorsionBounds
 import DkMath.Lib.NumberTheory.WeierstrassTorsionIdentities
 import DkMath.Lib.NumberTheory.WeierstrassTorsionValuation
 import DkMath.Lib.NumberTheory.WeierstrassTwoTorsionSeparation
 import DkMath.Lib.NumberTheory.WeierstrassValuationOrbit
+import DkMath.Lib.NumberTheory.WeierstrassVariableChange
+import DkMath.Lib.NumberTheory.WeierstrassVariableChangeGalois
+import DkMath.Lib.NumberTheory.WeierstrassVariableChangeHom
+import DkMath.Lib.NumberTheory.WeierstrassVeluFormal
+import DkMath.Lib.NumberTheory.WeierstrassVeluNodalValuation
+import DkMath.Lib.NumberTheory.WeierstrassVeluPair
+import DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial
+import DkMath.Lib.NumberTheory.WeierstrassVeluReduction
 import DkMath.Lib.NumberTheory.WeierstrassXIdentities
 import DkMath.Lib.NumberTheory.WeierstrassXReflection
 
