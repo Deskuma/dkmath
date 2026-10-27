@@ -86,5 +86,29 @@ theorem actual_quotient_map (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : 
   nodalReducedQuotientHom_mk sample sampleKernel 3 sampleKernel_card (by decide) sample_killed A (localSource A)
     (localSource_map A) (three_unit A hA) (sample_kernel_smooth_at_fortySeven A hA) F hsep R
 
+/-- 47 上では商の還元が O となる点は、実 3 点核の還元との衝突に限られる。 -/
+theorem actual_reduced_zero_fiber (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A 47)
+    {x₀ y₀ α : ResidueField A} (F : Frame ((localSource A).map (residue A)) x₀ y₀ α)
+    (hsep : α ≠ -((localSource A).map (residue A)).a₁ - α)
+    (P : zeroComponentSubgroup (localSource A)) :
+    nodalReducedHom sample sampleKernel 3 sampleKernel_card (by decide) sample_killed A (localSource A)
+      (localSource_map A) (three_unit A hA) (sample_kernel_smooth_at_fortySeven A hA) F hsep
+      ⟨zeroComponentReduction (localSource A) P, ⟨P, rfl⟩⟩ = 0 ↔
+    ∃ R : sampleKernel, zeroComponentReduction (localSource A) P =
+      smoothKernelReduction sample sampleKernel A (localSource A) (localSource_map A)
+        (sample_kernel_smooth_at_fortySeven A hA) R :=
+  nodalReducedHom_eq_zero_iff sample sampleKernel 3 sampleKernel_card (by decide) sample_killed A (localSource A)
+    (localSource_map A) (three_unit A hA) (sample_kernel_smooth_at_fortySeven A hA) F hsep P
+
+/-- 実際の還元像を 3 点核で割ると、標的への準同型は単射になる。 -/
+theorem actual_quotient_injective (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A 47)
+    {x₀ y₀ α : ResidueField A} (F : Frame ((localSource A).map (residue A)) x₀ y₀ α)
+    (hsep : α ≠ -((localSource A).map (residue A)).a₁ - α) :
+    Function.Injective (nodalReducedQuotientHom sample sampleKernel 3 sampleKernel_card (by decide)
+      sample_killed A (localSource A) (localSource_map A) (three_unit A hA)
+      (sample_kernel_smooth_at_fortySeven A hA) F hsep) :=
+  nodalReducedQuotientHom_injective sample sampleKernel 3 sampleKernel_card (by decide) sample_killed A
+    (localSource A) (localSource_map A) (three_unit A hA) (sample_kernel_smooth_at_fortySeven A hA) F hsep
+
 end
 end EllipticFiniteKernelReducedHomTest

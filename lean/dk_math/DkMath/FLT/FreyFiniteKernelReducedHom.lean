@@ -102,6 +102,32 @@ theorem residualNodalReducedHom_commutes_model (hp2 : p ≠ 2)
     (card_pointSubgroup S.rationalCurve p L hl) hp2 (S.residual_kernel_killed L) A
     (S.valuationModel A) (S.valuationModel_map A) hn (S.residual_kernel_smooth_of_le L A hle) F hsep P
 
+/-- 同じ Source の滑らかな核側で、商像が無限遠へ還元する条件を正確に判定する。
+源の還元点が元の L の核点の一つと一致することが必要十分である。
+これは源の点自体が L に属するという主張ではない。 -/
+theorem residualNodalReducedHom_eq_zero_iff (hp2 : p ≠ 2)
+    (L : Submodule (ZMod p) S.ResidualSpace) (hl : Module.finrank (ZMod p) L = 1)
+    {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    (hle : L ≤ S.residualZeroComponent A) {x₀ y₀ α : ResidueField A}
+    (F : Frame ((S.valuationModel A).map (residue A)) x₀ y₀ α)
+    (hsep : α ≠ -((S.valuationModel A).map (residue A)).a₁ - α)
+    (P : zeroComponentSubgroup (S.valuationModel A)) :
+    S.residualNodalReducedHom hp2 L hl hq hqp A hA hle F hsep
+      ⟨zeroComponentReduction (S.valuationModel A) P, ⟨P, rfl⟩⟩ = 0 ↔
+    ∃ Q : pointSubgroup S.rationalCurve p L,
+      zeroComponentReduction (S.valuationModel A) P =
+        smoothKernelReduction S.rationalCurve (pointSubgroup S.rationalCurve p L) A
+          (S.valuationModel A) (S.valuationModel_map A) (S.residual_kernel_smooth_of_le L A hle) Q := by
+  let := S.finite_residualPointSubgroup L hl
+  let := Fintype.ofFinite (pointSubgroup S.rationalCurve p L)
+  have hn : A.valuation (p : AlgebraicClosure ℚ) = 1 := by
+    simpa only [pow_one] using prime_power_value_one A (Fact.out : p.Prime) hq
+      ((ValuationSubring.mem_nonunits_iff _).mp hA) hqp 1
+  exact nodalReducedHom_eq_zero_iff S.rationalCurve (pointSubgroup S.rationalCurve p L) p
+    (card_pointSubgroup S.rationalCurve p L hl) hp2 (S.residual_kernel_killed L) A
+    (S.valuationModel A) (S.valuationModel_map A) hn (S.residual_kernel_smooth_of_le L A hle) F hsep P
+
 /-- 悪い住所q≠pの滑らかな核側で、同じSourceの実際の還元像上の準同型を内部構成する。
 2進・奇素数の源Frameと方向分離を内部供給し、全零成分点に対する同じ実点商写像との可換図式を得る。
 定義域は源の実際の還元像であり、全剰余点の持上げは結論しない。 -/
@@ -133,5 +159,34 @@ theorem exists_residualNodalReducedHom_at_bad_place (hp5 : 5 ≤ p)
     refine ⟨S.residualNodalReducedHom (by omega) L hl Fact.out hqp A hA hle F hsep, ?_⟩
     intro P
     exact S.residualNodalReducedHom_commutes_model (by omega) L hl Fact.out hqp A hA hle F hsep P
+
+/-- 悪い素点の滑らかな核側で、同じ実商の還元が O になる点を同じ核の還元で判定する。
+2進・奇素点の Frame は内部供給し、L が源の零成分に含まれる条件は明示的に保持する。 -/
+theorem residual_modelReduce_eq_zero_iff_at_bad_place (hp5 : 5 ≤ p)
+    (L : Submodule (ZMod p) S.ResidualSpace) (hl : Module.finrank (ZMod p) L = 1)
+    {q : ℕ} [Fact q.Prime] (hqp : q ≠ p) (hbad : q = 2 ∨ (q : ℤ) ∣ S.a * S.b * S.c)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    (hle : L ≤ S.residualZeroComponent A) (P : zeroComponentSubgroup (S.valuationModel A)) :
+    WeierstrassModelReduction.modelReduce A (S.residualValuationKernelModel L hl Fact.out hqp A hA)
+      (S.residualKernelModel L hl) (S.residual_valuation_kernel_model_map (by omega) L hl Fact.out hqp A hA)
+      (S.residualOddKernelPointHom (by omega) L hl (WeierstrassVariableChange.pointEquivOfModelEq
+        (S.valuationModel_map A) P.val)) = 0 ↔
+    ∃ Q : pointSubgroup S.rationalCurve p L,
+      zeroComponentReduction (S.valuationModel A) P =
+        smoothKernelReduction S.rationalCurve (pointSubgroup S.rationalCurve p L) A
+          (S.valuationModel A) (S.valuationModel_map A) (S.residual_kernel_smooth_of_le L A hle) Q := by
+  by_cases hq2 : q = 2
+  · subst q
+    obtain ⟨C, D, -, -⟩ := S.exists_dyadic_geometry hp5 A hA
+    obtain ⟨F, hsep⟩ := WeierstrassNodalFrame.residue_frame_of_model A (S.valuationModel A) _
+      (S.valuationModel_map A) C D
+    rw [← S.residualNodalReducedHom_commutes_model (by omega) L hl Fact.out hqp A hA hle F hsep P]
+    exact S.residualNodalReducedHom_eq_zero_iff (by omega) L hl Fact.out hqp A hA hle F hsep P
+  · obtain ⟨C, D, -, -⟩ := S.exists_criticalCentre_directions_at_bad_prime
+      (Fact.out : p.Prime).pos hq2 (hbad.resolve_left hq2) A hA
+    obtain ⟨F, hsep⟩ := WeierstrassNodalFrame.residue_frame_of_model A (S.valuationModel A) _
+      (S.valuationModel_map A) C D
+    rw [← S.residualNodalReducedHom_commutes_model (by omega) L hl Fact.out hqp A hA hle F hsep P]
+    exact S.residualNodalReducedHom_eq_zero_iff (by omega) L hl Fact.out hqp A hA hle F hsep P
 
 end DkMath.FLT.Frey.Source

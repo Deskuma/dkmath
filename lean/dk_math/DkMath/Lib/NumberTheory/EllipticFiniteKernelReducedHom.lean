@@ -205,5 +205,88 @@ theorem nodalReducedQuotientHom_mk (R : (zeroComponentReduction M).range) :
       (QuotientAddGroup.mk R) = nodalReducedHom E H p hcard hp2 hkill A M hM hp hs F hsep R :=
   QuotientAddGroup.lift_mk _ _ R
 
+/-- [DkMath.Lib] 核の還元像と衝突しない零成分点は、商の後に無限遠へ還元しない。
+非衝突なら商の実際の有限座標は整である。一方、商像は既に滑らかなので、
+無限遠への還元は点が無限遠または x 非整であることと同値であり、両方を除く。 -/
+theorem nodalReducedHom_ne_zero_of_noncollision (P : zeroComponentSubgroup M)
+    (hout : ∀ Q : H, zeroComponentReduction M P ≠ smoothKernelReduction E H A M hM hs Q) :
+    nodalReducedHom E H p hcard hp2 hkill A M hM hp hs F hsep
+      ⟨zeroComponentReduction M P, ⟨P, rfl⟩⟩ ≠ 0 := by
+  let ho : Odd (Nat.card H) := hcard ▸ (Fact.out : p.Prime).odd_of_ne_two hp2
+  let := kernelModel_isElliptic_of_odd_card E H ho
+  let T := pointEquivOfModelEq hM P.val
+  have hsm : HasSmoothReduction M T := by
+    apply (smooth_pointEquiv_of_model A M _ hM T).mp
+    rw [pointEquiv_symm_of_eq hM, AddEquiv.symm_apply_apply]
+    exact P.property
+  have hnon : ∀ Q : H, modelReduce A M _ hM T ≠ modelReduce A M _ hM Q.val := by
+    intro Q
+    have hh := hout Q
+    change reducePointSmooth M P.val ≠ reducePointSmooth M (pointEquivOfModelEq hM.symm Q.val) at hh
+    change reducePointSmooth M (pointEquivOfModelEq hM.symm (pointEquivOfModelEq hM P.val)) ≠ _
+    rw [pointEquiv_symm_of_eq hM, AddEquiv.symm_apply_apply]
+    exact hh
+  have hmem := (kernelAt_coordinates_mem E H p hkill A M hM hp hs T hsm hnon).1
+  let hT := not_mem_of_reduction_noncollision E H A M hM T hnon
+  have he : oddKernelPointMap E H ho T = Point.some _ _ (kernelAt_nonsingular E H T hT) :=
+    kernelPointMap_of_not_mem E H T hT
+  have hsmooth := oddKernelPointMap_smooth_of_nodal_frame E H p hcard hp2 hkill A M hM hp hs F hsep T hsm
+  intro hz
+  have hz' : modelReduce A (valuationKernelModel E H p hkill A M hM hp) (kernelModel E H)
+      (valuationKernelModel_map E H p hkill A M hM hp ho) (oddKernelPointMap E H ho T) = 0 := by
+    exact (nodalReducedHom_commutes_model E H p hcard hp2 hkill A M hM hp hs F hsep P).symm.trans hz
+  rcases (modelReduce_eq_zero_iff A _ _ _ hsmooth).mp hz' with hz0 | hx
+  · rw [he] at hz0
+    exact Point.some_ne_zero _ hz0
+  · rw [he, Point.xc_some] at hx
+    exact hx hmem
+
+/-- [DkMath.Lib] 還元像上の商準同型の核は、同じ有限核 H の還元像に正確に一致する。
+衝突する点は前章で零に写り、衝突しない点は整な有限商座標を持つので零に写らない。 -/
+theorem nodalReducedHom_ker_eq :
+    (nodalReducedHom E H p hcard hp2 hkill A M hM hp hs F hsep).ker =
+      (reducedKernelIntoRange E H A M hM hs).range := by
+  apply le_antisymm
+  · intro R hR
+    obtain ⟨P, hP⟩ := R.property
+    have he : R = ⟨zeroComponentReduction M P, ⟨P, rfl⟩⟩ := Subtype.ext hP.symm
+    subst R
+    change nodalReducedHom E H p hcard hp2 hkill A M hM hp hs F hsep _ = 0 at hR
+    by_contra hn
+    have hout : ∀ Q : H, zeroComponentReduction M P ≠ smoothKernelReduction E H A M hM hs Q := by
+      intro Q heq
+      apply hn
+      exact ⟨Q, Subtype.ext heq.symm⟩
+    exact nodalReducedHom_ne_zero_of_noncollision E H p hcard hp2 hkill A M hM hp hs F hsep P hout hR
+  · exact reducedKernelIntoRange_le_ker E H p hcard hp2 hkill A M hM hp hs F hsep
+
+/-- [DkMath.Lib] 源の零成分点の商像が O へ還元することは、源の還元点が同じ核 H の
+還元像にあることと同値である。実点そのものが核に属すると主張するものではない。 -/
+theorem nodalReducedHom_eq_zero_iff (P : zeroComponentSubgroup M) :
+    nodalReducedHom E H p hcard hp2 hkill A M hM hp hs F hsep
+      ⟨zeroComponentReduction M P, ⟨P, rfl⟩⟩ = 0 ↔
+      ∃ Q : H, zeroComponentReduction M P = smoothKernelReduction E H A M hM hs Q := by
+  have hk := nodalReducedHom_ker_eq E H p hcard hp2 hkill A M hM hp hs F hsep
+  constructor
+  · intro hz
+    have hm : (⟨zeroComponentReduction M P, ⟨P, rfl⟩⟩ : (zeroComponentReduction M).range) ∈
+        (reducedKernelIntoRange E H A M hM hs).range := hk ▸ hz
+    obtain ⟨Q, hQ⟩ := hm
+    exact ⟨Q, (congrArg Subtype.val hQ).symm⟩
+  · rintro ⟨Q, hQ⟩
+    have hm : (⟨zeroComponentReduction M P, ⟨P, rfl⟩⟩ : (zeroComponentReduction M).range) ∈
+        (reducedKernelIntoRange E H A M hM hs).range := ⟨Q, Subtype.ext hQ.symm⟩
+    have hz : (⟨zeroComponentReduction M P, ⟨P, rfl⟩⟩ : (zeroComponentReduction M).range) ∈
+        (nodalReducedHom E H p hcard hp2 hkill A M hM hp hs F hsep).ker := hk.symm ▸ hm
+    exact hz
+
+/-- [DkMath.Lib] 同じ還元核で割った準同型は単射である。
+これは還元像上での正確な核の一致から従う第一同型定理の単射部分であり、
+標的剰余点群への全射性を主張しない。 -/
+theorem nodalReducedQuotientHom_injective :
+    Function.Injective (nodalReducedQuotientHom E H p hcard hp2 hkill A M hM hp hs F hsep) := by
+  apply (QuotientAddGroup.injective_lift_iff _ _ _).2
+  exact (nodalReducedHom_ker_eq E H p hcard hp2 hkill A M hM hp hs F hsep).symm
+
 end EllipticFiniteKernel
 end DkMath.Lib.NumberTheory
