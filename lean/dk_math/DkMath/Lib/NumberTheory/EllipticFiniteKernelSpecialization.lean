@@ -180,6 +180,20 @@ theorem kernelAt_twoTorsion_root (H : AddSubgroup (Points E)) [Fintype H]
   have hy := kernelYAt_neg E H P hP
   simpa only [hneg, kernelModel_a₁, kernelModel_a₃] using hy
 
+/-- [DkMath.Lib] 反転固定点のH軌道では、特殊化x値が不変であるため、
+軌道上の全ての点が同じ標的2捩れ根へ着地する。
+
+これは根の「存在」を軌道全体へ輸送する補題であり、根の多重度や
+ファイバー全体の列挙までは主張しない。後者は別途、次数比較と
+`fiberFactor` の可除性層から供給する。 -/
+theorem kernelAt_twoTorsion_root_translation
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P) (Q : H) :
+    (kernelModel E H).twoTorsionPolynomial.toPoly.eval
+      (kernelXAt E H (P + Q.val) (add_not_mem_kernel E H P hP Q)) = 0 := by
+  rw [kernelXAt_translation E H P hP Q]
+  exact kernelAt_twoTorsion_root E H P hP hneg
+
 /-- [DkMath.Lib] 元の三つの反転固定点の特殊化x値が分離すれば、同じ標的のΔは非零。
 根への着地は内部供給済みで、残る入力は実際の三値の分離である。 -/
 theorem kernelModel_discriminant_of_twoTorsion_separation

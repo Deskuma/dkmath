@@ -128,6 +128,20 @@ theorem actual_orbit_values :
     kernelYAt_translation curve kernel R R_outside ⟨Q, Or.inr rfl⟩]
   exact actual_kernel_values
 
+/-- RのH軌道全体が、標的2捩れ三次式の同じ根へ着地する。 -/
+theorem actual_orbit_twoTorsion_root :
+    (kernelModel curve kernel).twoTorsionPolynomial.toPoly.eval
+      (kernelXAt curve kernel (R + Q)
+        (add_not_mem_kernel curve kernel R R_outside ⟨Q, Or.inr rfl⟩)) = 0 := by
+  have h := kernelAt_twoTorsion_root_translation curve kernel R R_outside
+    (by
+      change -Point.some _ _ _ = Point.some _ _ _
+      simp only [Point.neg_some]
+      congr 1
+      norm_num [negY, curve, WeierstrassCurve.baseChange, WeierstrassCurve.map])
+    ⟨Q, Or.inr rfl⟩
+  exact h
+
 /-- 偶数核では異なる実点R,R+Qのx像が一致する。
 三つの2捩れ像の分離を任意の有限核へ無条件に拡張してはならない。 -/
 theorem even_kernel_collision :
