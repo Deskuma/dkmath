@@ -178,11 +178,14 @@ import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelZeroComponentExact
 import DkMathTest.Lib.NumberTheory.EllipticFrobeniusBranchSwap
 import DkMathTest.Lib.NumberTheory.EllipticNodalTorsionBound
 import DkMathTest.Lib.NumberTheory.EllipticSplitDyadic
+import DkMathTest.Lib.NumberTheory.EllipticThreeKernelDiscriminant
+
 import DkMathTest.Lib.NumberTheory.FreyReductionTransport
 
 import DkMathTest.Lib.NumberTheory.KummerInertia
 
 import DkMathTest.Lib.NumberTheory.ValuationPrimeExistence
+
 import DkMathTest.Lib.NumberTheory.WeierstrassIntegralModel
 import DkMathTest.Lib.NumberTheory.WeierstrassNodalCenterSmallChar
 import DkMathTest.Lib.NumberTheory.WeierstrassNodalDistance

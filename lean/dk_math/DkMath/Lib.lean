@@ -207,6 +207,7 @@ import DkMath.Lib.NumberTheory.EllipticSmoothTorsionReduction
 import DkMath.Lib.NumberTheory.EllipticSplitDyadic
 import DkMath.Lib.NumberTheory.EllipticStableLine
 import DkMath.Lib.NumberTheory.EllipticTangentDirections
+import DkMath.Lib.NumberTheory.EllipticThreeKernelDiscriminant
 import DkMath.Lib.NumberTheory.EllipticTorsionAllCard
 import DkMath.Lib.NumberTheory.EllipticTorsionCardBound
 import DkMath.Lib.NumberTheory.EllipticTorsionContinuity

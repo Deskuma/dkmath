@@ -600,3 +600,5 @@ Sourceへ接続し、実3点核の47上でx=1の実点について両座標の�
 - [NOTE-032 特異核の節点水準と商座標](IMPLEMENTATION-NOTE032-SINGULAR-LEVELS-261027.md): 模範解答の付値評価を同じ実点・半核へ接続し、水準条件の範囲を明示。
 
 - [NOTE-032 特異核側の零成分逆像](IMPLEMENTATION-NOTE032-SINGULAR-INVERSE-261028.md): 同じ奇素数核の浅さ・節点水準・枝比較から逆像を証明し、Frey の q≠p 全住所へ接続。
+
+- [NOTE-032 Tate 型3点核の判別式](IMPLEMENTATION-NOTE032-THREE-DISCRIMINANT-261028.md): 同じ実商の積公式と、核の還元位置に応じた付値の3乗関係。
