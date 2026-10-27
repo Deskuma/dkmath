@@ -1,0 +1,132 @@
+{
+  "unit": "NOTE-032-REDUCED-HOM",
+  "date": "2026-10-27",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "e0f2f7832dcec78df0771141fb18c63ad1163a76",
+  "checks": [
+    {
+      "command": "./lean-build.sh DkMath.Lib.NumberTheory.EllipticFiniteKernelReducedHom",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMath.FLT.FreyFiniteKernelReducedHom",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelReducedHom",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032ReducedHomSmoke.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "0c49c76e017faa6b87255f285357875dc7a816ed3bd85c063a83376e388a4032"
+    },
+    {
+      "command": "lake env lean tmp/note032-reduced-hom/Axioms1.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "62dbe5e820f5b0611df29f9864ce9525ca178da142e56d812cb79af852ef8e8b"
+    },
+    {
+      "command": "lake env lean tmp/note032-reduced-hom/Axioms2.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "047d3d3c459219415493c80bbe256849e61a6599bd7db4eec75e512b5f8a7f83"
+    }
+  ],
+  "axiom_audit": {
+    "declarations": 23,
+    "batches": [
+      11,
+      10,
+      2
+    ],
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "sorryAx": false
+  },
+  "production": {
+    "owners": 2,
+    "theorems": 12,
+    "definitions": 5
+  },
+  "regression": {
+    "theorems": 4
+  },
+  "smoke_theorems": 2,
+  "files": [
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelReducedHom.lean",
+      "sha256": "5f45d833a5e805e80a6ffdc9b2752c7ffceab5916a9f7392045bc5cc73f040b5",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.AdditiveRangeDescent.eq_of_same_image",
+        "DkMath.Lib.NumberTheory.AdditiveRangeDescent.onRange",
+        "DkMath.Lib.NumberTheory.AdditiveRangeDescent.onRange_apply",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.zeroComponent_reduction_ker_le",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.nodalReducedHom",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.nodalReducedHom_commutes",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.nodalReducedHom_commutes_model",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.nodalReducedHom_kills_kernel",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.reducedKernelIntoRange",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.reducedKernelIntoRange_injective",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.reducedKernelIntoRange_le_ker",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.nodalReducedQuotientHom",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.nodalReducedQuotientHom_mk"
+      ]
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelReducedHom.lean",
+      "sha256": "ed2f94d9fc4b7494dd7b9d7384618f432d56d25a4f785a813ef3f6df8ac54bf7",
+      "public_declarations": [
+        "DkMath.FLT.Frey.Source.residualNodalReducedHom",
+        "DkMath.FLT.Frey.Source.residualNodalReducedHom_commutes",
+        "DkMath.FLT.Frey.Source.residualNodalReducedHom_commutes_model",
+        "DkMath.FLT.Frey.Source.exists_residualNodalReducedHom_at_bad_place"
+      ]
+    },
+    {
+      "path": "DkMathTest/Lib/NumberTheory/EllipticFiniteKernelReducedHom.lean",
+      "sha256": "75ede2369b37f428dcfe34cbc29fc90eb7590447d65d1a6a2c1c24b32a4d6bfe",
+      "public_declarations": [
+        "EllipticFiniteKernelReducedHomTest.actual_reduction_commutes",
+        "EllipticFiniteKernelReducedHomTest.actual_kernel_reduces_to_zero",
+        "EllipticFiniteKernelReducedHomTest.actual_reduced_kernel_nonzero",
+        "EllipticFiniteKernelReducedHomTest.actual_quotient_map"
+      ]
+    },
+    {
+      "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032ReducedHomSmoke.lean",
+      "sha256": "df2ba1cfe709368d31c041a5e095fd212588a6e56ce79d27abe4599aeaab5f31"
+    }
+  ],
+  "static_checks": [
+    "file markers match paths",
+    "Lib public declarations have textbook docstrings and promotion markers",
+    "new owners contain no forbidden proof constructs or raised heartbeat limits",
+    "Lib imports do not depend on FLT or external solution modules",
+    "three facade imports registered exactly once; no facade build",
+    "git diff HEAD --check passed",
+    "index unchanged"
+  ],
+  "scope_notes": [
+    "reduced homomorphism is constructed from the actual original point homomorphism on the actual source reduction image",
+    "same reduced H embeds injectively and lies in the kernel; reverse inclusion is unproved",
+    "quotient domain is the actual reduction image modulo the embedded reduced kernel, not the full residue-point group",
+    "bad-place Source endpoint keeps the smooth-kernel condition L within E0 and p at least five",
+    "explicit residual Velu or toric p-power law, full residue lifting, inverse image E0, discriminant depth, q=p and general hno remain open"
+  ],
+  "full_build": {
+    "performed": false,
+    "reason": "user handles full build and full tests"
+  }
+}

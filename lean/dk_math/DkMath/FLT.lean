@@ -50,6 +50,7 @@ import DkMath.FLT.FreyFiniteKernelNoncollision
 import DkMath.FLT.FreyFiniteKernelNodalTransport
 import DkMath.FLT.FreyFiniteKernelNodalAll
 import DkMath.FLT.FreyFiniteKernelZeroComponentAway
+import DkMath.FLT.FreyFiniteKernelReducedHom
 import DkMath.FLT.FreyFiniteKernelSpecialization
 import DkMath.FLT.FreyGeometricWeilPairing
 import DkMath.FLT.FreyGoodReductionInertia
