@@ -359,6 +359,10 @@ import DkMath.Lib.RepresentationTheory.StableLineMatrix
 
 import DkMath.Lib.TwoChannel
 
+-- 新規追加分（後でソート挿入する）
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelRootProduct
+import DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
+
 #print "file: DkMath.Lib"
 
 /-!

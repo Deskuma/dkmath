@@ -300,4 +300,7 @@ import DkMathTest.RH.CFBRCEtaMirrorUnitSplit
 import DkMathTest.RH.WeaveEtaPairIntegral
 import DkMathTest.RH.WeaveEtaPairPhaseSpan
 
+-- 新規追加分（後でソート挿入する）
+import DkMathTest.Lib.NumberTheory.WeierstrassDiscriminantRoots
+
 #print "file: DkMathTest"
