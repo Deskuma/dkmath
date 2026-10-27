@@ -98,4 +98,37 @@ theorem halfKernel_fiberFactor_natDegree (ho : Odd (Nat.card H))
   rw [Finset.card_univ, Fintype.card_coe]
   omega
 
+/-- [DkMath.Lib] 半核の各添字を明示した二捩れ根輸送。
+
+`halfKernel` は反転対から一方だけを選ぶ有限集合である。ここではその選択を
+隠さず、各 `Q : halfKernel E H` について `P + Q` の特殊化座標が標的
+二捩れ多項式の根になることを直接記録する。これは `fiberFactor` の根包含を
+作る幾何学側の入力であり、二重根（多重度）の主張は別の層に残す。 -/
+theorem kernelAt_twoTorsion_root_halfKernel
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P)
+    (Q : halfKernel E H) :
+    (kernelModel E H).twoTorsionPolynomial.toPoly.eval
+      (kernelXAt E H (P + Q.val.val)
+        (add_not_mem_kernel E H P hP Q.val)) = 0 := by
+  exact kernelAt_twoTorsion_root_translation E H P hP hneg Q.val
+
+omit [CharZero K] [E.IsElliptic] in
+/-- [DkMath.Lib] 半核ファイバー因子の根包含と次数上界から、実際のモニック分子を
+`fiberFactor` へ同定する。
+
+幾何学側は `kernelAt_twoTorsion_root_halfKernel` で各根の存在を供給するが、
+各根が二重に現れることは自動ではない。そのため `hroots` は多重集合として
+明示的に要求し、ここでは半核の次数公式だけを加えて、同定の代数部分を閉じる。 -/
+theorem eq_halfKernel_fiberFactor_of_monic_of_roots_le
+    (ho : Odd (Nat.card H))
+    (e : AlgebraicClosure K) (ξ : halfKernel E H → AlgebraicClosure K)
+    (p : Polynomial (AlgebraicClosure K)) (hp : p.Monic)
+    (hroots : (fiberFactor (Finset.univ : Finset (halfKernel E H)) e ξ).roots ≤ p.roots)
+    (hdeg : p.natDegree ≤ Nat.card H) :
+    p = fiberFactor (Finset.univ : Finset (halfKernel E H)) e ξ := by
+  apply eq_fiberFactor_of_monic_of_roots_le (Finset.univ : Finset (halfKernel E H))
+    e ξ p hp hroots
+  rw [halfKernel_fiberFactor_natDegree E H ho e ξ]
+  exact hdeg
+
 end DkMath.Lib.NumberTheory.EllipticFiniteKernel

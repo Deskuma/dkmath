@@ -50,6 +50,12 @@
 これは軌道上の根の存在を供給するが、根の多重度・ファイバー全体の列挙は
 まだ仮定していない。
 
+この輸送を半核添字へ明示化した `kernelAt_twoTorsion_root_halfKernel` も追加した。
+さらに `eq_halfKernel_fiberFactor_of_monic_of_roots_le` により、半核ファイバーの
+根を多重集合として含むモニック分子が `|H|` 以下の次数を持つなら、
+`fiberFactor` への一致を直接得られる。残る幾何学課題は、各軌道根の二重性を
+`kernelXAt` の分子多項式へ供給することに限定された。
+
 さらに `translated_root_product_relation` を追加し、各 affine 平行移動の
 根差恒等式を有限積へ一括輸送した。これにより、半核点の曲線方程式と
 `x ≠ e₁` という分母条件が揃えば、`product_root_difference_relation` の
