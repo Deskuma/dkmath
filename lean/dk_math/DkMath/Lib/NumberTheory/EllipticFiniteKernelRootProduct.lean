@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDepthProduct
 import DkMath.Lib.NumberTheory.WeierstrassDiscriminantRoots
+import DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
 
 #print "file: DkMath.Lib.NumberTheory.EllipticFiniteKernelRootProduct"
 
@@ -18,6 +19,7 @@ import DkMath.Lib.NumberTheory.WeierstrassDiscriminantRoots
 namespace DkMath.Lib.NumberTheory.EllipticFiniteKernel
 open WeierstrassCurve WeierstrassCurve.Affine
 open EllipticTorsionRepresentation WeierstrassDiscriminantRoots
+open DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
 open scoped BigOperators
 noncomputable local instance instDecidableEqEllipticFiniteKernelRootProduct {α : Type*} : DecidableEq α := Classical.decEq _
 
@@ -81,5 +83,19 @@ theorem half_x_sub_root_ne_zero (ho : Odd (Nat.card H)) (r₁ r₂ r₃ : Algebr
       (Q.val.val.xc - r₃) ≠ 0 := by rw [← hf]; exact pow_ne_zero _ ht
   exact ⟨(mul_ne_zero_iff.mp (mul_ne_zero_iff.mp (mul_ne_zero_iff.mp hn).1).1).2,
     (mul_ne_zero_iff.mp (mul_ne_zero_iff.mp hn).1).2, (mul_ne_zero_iff.mp hn).2⟩
+
+omit [CharZero K] [E.IsElliptic] in
+/-- [DkMath.Lib] 半核を添字にしたファイバー因子の次数は、元の核の位数に一致する。
+
+`fiberFactor` は一本の単純根と半核各点の二重根から作るため、次数は
+`2 * |halfKernel| + 1` である。半核分割公式をここで接続すると、
+実際の奇数核の有限ファイバーに期待される次数 `|H|` を得る。 -/
+theorem halfKernel_fiberFactor_natDegree (ho : Odd (Nat.card H))
+    (e : AlgebraicClosure K) (ξ : halfKernel E H → AlgebraicClosure K) :
+    (fiberFactor (Finset.univ : Finset (halfKernel E H)) e ξ).natDegree = Nat.card H := by
+  rw [fiberFactor_natDegree]
+  have hc := card_halfKernel E H ho
+  rw [Finset.card_univ, Fintype.card_coe]
+  omega
 
 end DkMath.Lib.NumberTheory.EllipticFiniteKernel

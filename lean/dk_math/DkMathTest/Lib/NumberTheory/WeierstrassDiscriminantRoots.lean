@@ -94,6 +94,28 @@ example :
   · exact le_rfl
   · exact le_rfl
 
+example :
+    (∏ _q ∈ ({0} : Finset ℕ),
+      (0 - curve.toAffine.addX (-1) 0 (curve.toAffine.slope (-1) 0 0 0))) *
+        (∏ _q ∈ ({0} : Finset ℕ), ((0 : ℚ) - (-1))) =
+      ((0 : ℚ) - (-1)) ^ ({0} : Finset ℕ).card *
+        ∏ _q ∈ ({0} : Finset ℕ), ((0 : ℚ) - 1) := by
+  have h := translated_root_product_relation curve ({0} : Finset ℕ)
+    (fun _ => (0 : ℚ)) (fun _ => (0 : ℚ)) (-1) 0 1 rfl rfl
+    (by norm_num [curve]) (by norm_num [curve]) (by norm_num [curve])
+    (by
+      intro _ _
+      norm_num [curve, WeierstrassCurve.Affine.equation_iff])
+    (by
+      intro _ _
+      norm_num)
+  simpa using h
+
+example (n : ℕ) (Δ Δ' : ℚ) (h : Δ' * (1 : ℚ) ^ 4 = Δ ^ (2 * n + 1)) :
+    (1 : Valuation ℚ ℚ≥0) Δ' = ((1 : Valuation ℚ ℚ≥0) Δ) ^ (2 * n + 1) := by
+  apply discriminant_value_of_unit_factor (1 : Valuation ℚ ℚ≥0) n Δ Δ' 1 h
+  simp
+
 #print axioms discriminant_eq_root_differences
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.half_tangent_product_eq_root_products
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.half_x_sub_root_ne_zero

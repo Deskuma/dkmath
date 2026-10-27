@@ -9,6 +9,8 @@ S_WeierstrassCurve_veluQuotient_oddOrderSummingSet_discriminant_prod_veluU_pow.l
 blob 0c42a9282f1033d6d64cc213bb1f7c7c52b17d1e.
 -/
 import DkMath.Lib.NumberTheory.WeierstrassDiscriminantRoots
+import DkMath.Lib.NumberTheory.WeierstrassTwoTorsionTranslate
+import Mathlib.RingTheory.Valuation.ValuationSubring
 
 #print "file: DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly"
 
@@ -20,7 +22,7 @@ import DkMath.Lib.NumberTheory.WeierstrassDiscriminantRoots
 実際の Vélu 写像から供給する幾何学的な証明は別途必要である。
 -/
 namespace DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
-open Polynomial
+open Polynomial WeierstrassCurve WeierstrassCurve.Affine WeierstrassTwoTorsionTranslate
 variable {k : Type*} [Field k]
 
 /-- [DkMath.Lib] 一本の2捩れ根 `e` と半核の移動根 `ξ q` から作る
@@ -195,6 +197,34 @@ theorem product_root_difference_relation {ι : Type*} (s : Finset ι)
     _ = (eₖ - eⱼ) ^ s.card * ∏ q ∈ s, (x q - eₗ) := by
       rw [Finset.prod_mul_distrib, Finset.prod_const, Finset.card]
 
+/-- [DkMath.Lib] 2捩れ点による affine 平行移動公式を、半核添字の有限積へ
+直接持ち上げる。
+
+各 `q` で `translated_root_difference` を呼び出すだけで、判別式積公式の
+入力形式 `(e₂-ξ q)(x q-e₁)=-(e₁-e₂)(x q-e₃)` を供給する。ここでの
+`hEq` と `hxe` は、加法公式の分母と曲線方程式を明示するための幾何学的
+境界であり、商写像の全射性や標的の楕円性は仮定していない。 -/
+theorem translated_root_product_relation {ι : Type*} [DecidableEq k]
+    (W : WeierstrassCurve k)
+    (s : Finset ι) (x y : ι → k)
+    (e₁ e₂ e₃ : k)
+    (ha₁ : W.a₁ = 0) (ha₃ : W.a₃ = 0)
+    (hσ₁ : e₁ + e₂ + e₃ = -W.a₂)
+    (hσ₂ : e₁ * e₂ + e₁ * e₃ + e₂ * e₃ = W.a₄)
+    (hσ₃ : e₁ * e₂ * e₃ = -W.a₆)
+    (hEq : ∀ q ∈ s, W.toAffine.Equation (x q) (y q))
+    (hxe : ∀ q ∈ s, x q ≠ e₁) :
+    (∏ q ∈ s, (e₂ - W.toAffine.addX e₁ (x q)
+      (W.toAffine.slope e₁ (x q) 0 (y q)))) *
+        (∏ q ∈ s, (x q - e₁)) =
+      (e₂ - e₁) ^ s.card * ∏ q ∈ s, (x q - e₃) := by
+  apply product_root_difference_relation s x
+    (fun q => W.toAffine.addX e₁ (x q) (W.toAffine.slope e₁ (x q) 0 (y q)))
+    e₁ e₂ e₃
+  intro q hq
+  exact translated_root_difference W ha₁ ha₃ hσ₁ hσ₂ hσ₃
+    (hEq q hq) (hxe q hq)
+
 /-- [DkMath.Lib] 有理式による座標評価と移動された点の積の関係から、
 三組の差に共通する一つの関係式を作る。分母で割る代わりに両辺へ因子を掛ける。 -/
 theorem pair_relation (n : ℕ) (G Hj Hk Hl Xj Xk ej ek A : k)
@@ -257,5 +287,40 @@ theorem discriminant_product_of_pair_relations
     _ = 16 * (4 ^ n) ^ 4 * (a ^ (2 * (2 * n + 1)) *
         b ^ (2 * (2 * n + 1)) * c ^ (2 * (2 * n + 1))) := by rw [key2]
     _ = Δ ^ (2 * n + 1) := by rw [hΔ, mul_pow, h16]; ring
+
+/-! ### 付値への輸送
+
+判別式積恒等式を得た後の局所計算は、ここで一度だけ `Valuation` に写す。
+この層は積公式の幾何学的供給元を仮定せず、既に得られた体の等式を
+`map_mul` と `map_pow` で輸送するだけである。 -/
+
+/-- [DkMath.Lib] 判別式積恒等式を任意の付値へ写した形。
+
+付値の値域には離散性を要求しない。従って、良還元・特異還元のどちらでも、
+上流で積公式が供給されれば同じ教科書補題を再利用できる。 -/
+theorem discriminant_product_value
+    {Γ₀ : Type*} [LinearOrderedCommGroupWithZero Γ₀]
+    (v : Valuation k Γ₀)
+    (n : ℕ) (Δ Δ' U : k)
+    (hprod : Δ' * U ^ 4 = Δ ^ (2 * n + 1)) :
+    v Δ' * (v U) ^ 4 = (v Δ) ^ (2 * n + 1) := by
+  have h := congrArg v hprod
+  simpa only [map_mul, map_pow] using h
+
+/-- [DkMath.Lib] 接線因子が付値1なら、商判別式の値は源判別式の
+`2*n+1` 乗になる。
+
+`v U = 1` の単元条件を明示的に残し、判別式の非零性や付値の離散性を
+隠れて仮定しない。 -/
+theorem discriminant_value_of_unit_factor
+    {Γ₀ : Type*} [LinearOrderedCommGroupWithZero Γ₀]
+    (v : Valuation k Γ₀)
+    (n : ℕ) (Δ Δ' U : k)
+    (hprod : Δ' * U ^ 4 = Δ ^ (2 * n + 1))
+    (hU : v U = 1) :
+    v Δ' = (v Δ) ^ (2 * n + 1) := by
+  have hv := discriminant_product_value v n Δ Δ' U hprod
+  rw [hU, one_pow, mul_one] at hv
+  exact hv
 
 end DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly

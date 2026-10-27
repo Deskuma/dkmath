@@ -50,6 +50,18 @@
 これは軌道上の根の存在を供給するが、根の多重度・ファイバー全体の列挙は
 まだ仮定していない。
 
+さらに `translated_root_product_relation` を追加し、各 affine 平行移動の
+根差恒等式を有限積へ一括輸送した。これにより、半核点の曲線方程式と
+`x ≠ e₁` という分母条件が揃えば、`product_root_difference_relation` の
+入力を直接構成できる。
+
+判別式積恒等式を局所計算へ渡す `discriminant_product_value` と
+`discriminant_value_of_unit_factor` も追加した。前者は任意の線型順序付き
+付値値群へ写し、後者は接線因子の付値1から商判別式の
+`(2*n+1)` 乗則を得る。さらに `halfKernel_fiberFactor_natDegree` により、
+奇数核では `fiberFactor` の次数 `2 |halfKernel| + 1` が `|H|` へ一致することを
+半核分割定理から内部供給した。
+
 ## 次に必要なこと
 
 上の消去定理は一般判別式積公式の無条件の証明ではない。残る中心課題は、
@@ -64,6 +76,7 @@
 ## 検証
 
 対象モジュールおよび具体例 `y²=x³-x` のテストをビルドし、三根と判別式64、
-消去定理の退化しない計算例を検査した。主要な4定理の `#print axioms` は
-`propext`, `Classical.choice`, `Quot.sound` のみ。フルビルドと `lake test` は
-実行していない。
+消去定理の退化しない計算例、付値輸送の自明付値例を検査した。主要な4定理の
+`#print axioms` は `propext`, `Classical.choice`, `Quot.sound` のみ。
+本サイクルでは対象モジュールの focused build と `git diff --check` を実行した。
+フルビルドは依頼側で確認済み、`lake test` はここでは実行していない。
