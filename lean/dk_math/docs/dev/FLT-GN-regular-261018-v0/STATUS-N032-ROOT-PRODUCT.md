@@ -442,3 +442,68 @@ Wronskian 零点へ進める。
 今回の検証では、対象の有限積モジュール、Vélu 補正族モジュール、回帰テスト、
 `DkMath.Lib` を focused build した。新規公開定理の `#print axioms` は
 いずれも `propext`, `Classical.choice`, `Quot.sound` のみである。
+
+## 実半核への共通分母特殊化
+
+レビューの次工程として、一般有限積を実際の `halfKernel E H` に代入した。
+新規モジュール `DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianHalf` では、
+関数体上の多項式族
+
+* `veluHalfNumerator E H := commonNumerator (halfKernel E H) N D`、
+* `veluHalfDenominator E H := commonDenominator (halfKernel E H) D`
+
+を定義した。ここで `N Q` と `D Q` は既存の `xCorrectionNumerator` と
+`xCorrectionDenominator` を半核点の座標へ特殊化したものである。
+
+一般評価補題 `commonNumerator_eval_div_commonDenominator` を用い、
+`genericX` が半核点の定数 x 座標と異なることを
+`genericX_ne_const` から供給した。その結果、分母因子の非零性
+`veluHalf_denominator_factor_ne_zero` と、既存の `veluX_half` を組み合わせた
+
+`veluX_eq_veluHalfNumerator_div_denominator`
+
+を無条件に証明した。すなわち、Vélu x 座標は実半核で構成した共通分母表示
+`A_H / D_H` の関数体評価と一致する。新規部分は分母評価の非零性と有限分数和の
+通分であり、`veluX_half` 自体や局所補正の式は既存定理を組み合わせている。
+
+この段階で未解決なのは、`veluZ_half` を同じ `A_H,D_H` の Wronskian へ接続する
+無分母恒等式、二捩れ軌道での `D_H ≠ 0` と `z_H = 0` の同時評価、標準
+`RatFunc` 係数対への輸送である。従って、実半核特殊化は完了したが、
+`W(A_H,D_H)(x(T+Q)) = 0` および標準 `W(F,G)` の零点まではまだ到達していない。
+
+次に攻める具体的な補題は、`veluZ_half` の補正和を各局所
+`zCorrectionNumerator` へ通分し、`D_H^2 z_H = z W(A_H,D_H)` を関数体上で
+証明することである。その後、二捩れ点の局所評価と `RatFunc` 交差乗算法へ進む。
+
+対象モジュール `EllipticFiniteKernelWronskianHalf`、回帰テスト
+`DkMathTest.Lib.NumberTheory.EllipticFiniteKernelWronskian`、および
+`DkMath.Lib` の focused build は成功した。回帰テストの `#print axioms` で
+`veluHalf_denominator_factor_ne_zero` と
+`veluX_eq_veluHalfNumerator_div_denominator` はいずれも
+`propext`, `Classical.choice`, `Quot.sound` のみを報告した。
+
+## 平方完成座標と Wronskian の接続
+
+さらに、上の有限評価公式を既存の `veluZ_half` に直接代入し、
+`veluHalf_denominator_sq_mul_z_eq_z_mul_wronskian` を追加した。この定理は、
+`F := (E.toAffine⁄(AlgebraicClosure K)).FunctionField`、
+`x := genericX E (AlgebraicClosure K)`、
+`z := 2 * genericY + a₁ * x + a₃` と置いたとき、
+
+`D_H(x)^2 * z_H = z * (A_H'(x) D_H(x) - A_H(x) D_H'(x))`
+
+を関数体上で証明する。証明は、
+`finite_xCorrection_wronskian_eval_eq_denominator_sq_mul_one_add_z` と
+`veluZ_half` の二つの既存表示を同じ補正和へ正規化し、最後に可換体上の
+`ring` で因子を並べ替える構造である。したがって、ここで新しく閉じたのは
+有限補正族の Wronskian と平方完成座標を結ぶ無分母恒等式であり、まだ特定点の
+評価や二捩れ性を仮定していない。
+
+残る境界は、`z = 0` となる二捩れ軌道点への正則評価、共通分母の非零性をその
+点で供給する幾何学的非衝突、および標準 `RatFunc` の係数対 `F,G` へ
+Wronskian を輸送することである。次の具体的な補題は、点評価 API を使って
+この恒等式を `T + Q` へ特殊化し、`D_H(x(T+Q)) ≠ 0` と
+`z_H(T+Q) = 0` から `W(A_H,D_H)(x(T+Q)) = 0` を得ることである。
+
+この新定理も回帰テストで再利用し、`#print axioms` は
+`propext`, `Classical.choice`, `Quot.sound` のみを報告した。

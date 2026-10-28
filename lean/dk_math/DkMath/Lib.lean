@@ -363,6 +363,7 @@ import DkMath.Lib.TwoChannel
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelRootProduct
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskian
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianAssembly
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianHalf
 import DkMath.Lib.Algebra.FiniteProductWronskian
 import DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
 import DkMath.Lib.NumberTheory.WeierstrassTwoTorsionTranslate

@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 -/
 
 import Mathlib.Algebra.Polynomial.Derivative
+import Mathlib.Tactic.FieldSimp
 
 #print "file: DkMath.Lib.Algebra.FiniteProductWronskian"
 
@@ -115,5 +116,52 @@ theorem commonNumerator_wronskian_eq_of_local
   apply Finset.sum_congr rfl
   intro i hi
   rw [hZ i hi]
+
+end DkMath.Lib.Algebra.FiniteProductWronskian
+
+namespace DkMath.Lib.Algebra.FiniteProductWronskian
+
+open Polynomial
+open scoped BigOperators
+
+/-! ## 共通分母表示の有限分数和 -/
+
+variable {K ι : Type*} [Field K] [DecidableEq ι]
+
+/-- 共通分母で作った分子は、各分数の有限和を表す。
+
+各 `D i` の評価が非零なら、`A/D` は
+`x + Σᵢ Nᵢ/Dᵢ` に戻る。これは Vélu の有限補正和を
+`commonNumerator`/`commonDenominator` へ接続する一般評価補題である。 -/
+theorem commonNumerator_eval_div_commonDenominator
+    (s : Finset ι) (N D : ι → K[X]) (x : K)
+    (hD : ∀ i ∈ s, (D i).eval x ≠ 0) :
+    (commonNumerator s N D).eval x /
+        (commonDenominator s D).eval x =
+      x + ∑ i ∈ s, (N i).eval x / (D i).eval x := by
+  classical
+  have hprod : (commonDenominator s D).eval x ≠ 0 := by
+    simp only [commonDenominator, eval_prod]
+    exact Finset.prod_ne_zero_iff.mpr (fun i hi => hD i hi)
+  have hfactor (i : ι) (hi : i ∈ s) :
+      (commonDenominator s D).eval x =
+        (D i).eval x * (erasedProduct s D i).eval x := by
+    have h := congrArg (fun p : K[X] => p.eval x)
+      (commonDenominator_eq_factor_mul_erasedProduct s D hi)
+    simpa only [eval_mul] using h
+  have hfactor_ne (i : ι) (hi : i ∈ s) :
+      (erasedProduct s D i).eval x ≠ 0 := by
+    intro hE
+    apply hprod
+    rw [hfactor i hi, hE, mul_zero]
+  simp only [commonNumerator, eval_add, eval_mul, eval_X, eval_finsetSum]
+  field_simp [hprod, hD]
+  rw [mul_add, Finset.mul_sum]
+  ring_nf
+  congr 1
+  apply Finset.sum_congr rfl
+  intro i hi
+  rw [hfactor i hi]
+  field_simp [hD i hi, hfactor_ne i hi]
 
 end DkMath.Lib.Algebra.FiniteProductWronskian
