@@ -124,6 +124,37 @@ coprime 性を得て、局所多重度 `1` と `2` を `Finset.prod_dvd_of_copri
 `1/2` を評価から供給すること」と明確化された。多重度供給をまだ自動化して
 いないため、判別式積公式そのものは引き続き条件付きである。
 
+続いて、評価零点から根多重度への最初の輸送を実装した。
+`exists_veluX_fiber_polynomial_with_rootMultiplicity` は、既存の非零ファイバー
+多項式 `p` と次数上界を保ったまま、`kernelXAt = c` の各点で
+`1 ≤ p.rootMultiplicity P.xc` を供給する。さらに
+`exists_veluX_fiber_polynomial_with_orbit_rootMultiplicity` は
+`kernelXAt_translation` を使って、この一重根情報を `P+Q` の全核軌道へ運ぶ。
+したがって、現時点で実分子から無条件に得られるのは「軌道全体が一重以上の根」
+までであり、`fiberFactor` の二重因子へ進むには、なお別の分岐・接線評価が必要
+であることを Lean の定理境界として固定した。
+
+また `Polynomial.normalize` を用いた
+`exists_veluX_monic_fiber_polynomial_with_rootMultiplicity` を追加した。非零性を
+保ったままモニック性を供給し、`roots_normalize` と `natDegree_normalize` で根の
+多重集合と次数上界を保存する。さらに
+`exists_veluX_monic_fiber_polynomial_with_orbit_rootMultiplicity` により、モニック
+分子と全軌道の一重根情報を同時に得られる。これで最終因子同定に必要な
+「モニック性・次数・一重根」は自動供給され、未解決部分は半核根の二重性だけに
+縮約された。
+
+二重性の入口も `two_le_rootMultiplicity_of_isRoot_of_derivative_isRoot` として
+一般化した。値零点と一階微分零点から `2 ≤ rootMultiplicity` を得るだけの
+代数補題であり、`orbit_x_fiberFactor_dvd_of_derivative_roots` はこれを半核
+軌道へ適用して `fiberFactor ∣ p` まで運ぶ。従って、今後の幾何学的分岐証明は
+各 `P+Q` で `p` と `p.derivative` の同時零点を示す形へ整理できる。
+
+さらに `eq_orbit_x_fiberFactor_of_monic_of_derivative_roots` を終端として追加
+した。モニック性・次数上界・単純根の値零点に加え、半核軌道での値零点と微分
+零点を入力すれば、実軌道 `fiberFactor` との多項式等号まで得られる。したがって
+現在の完全な証明経路は、分子の構成 → モニック化 → 軌道値零点 → 軌道微分零点
+→ 因子同定、という五段階に分離されている。
+
 ## 次に必要なこと
 
 上の消去定理は一般判別式積公式の無条件の証明ではない。残る中心課題は、

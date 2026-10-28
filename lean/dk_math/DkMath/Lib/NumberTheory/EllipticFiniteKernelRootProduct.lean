@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDepthProduct
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelRationalFiber
 import DkMath.Lib.NumberTheory.WeierstrassDiscriminantRoots
 import DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
 
@@ -308,6 +309,72 @@ theorem orbit_x_fiberFactor_dvd_of_rootMultiplicity
   · exact hdouble
 
 omit [CharZero K] [E.IsElliptic] in
+/-- [DkMath.Lib] 軌道根の値零点と微分零点からファイバー因子の可除性を得る。
+
+各半核軌道根で `p` と `p.derivative` が同時に消えるなら、一般補題
+`two_le_rootMultiplicity_of_isRoot_of_derivative_isRoot` が二重性を供給する。
+単純根 `P.xc` の値零点は非零多項式の根多重度正性へ変換し、前定理へ渡す。
+この定理は、未実装の幾何学的分岐計算を「微分零点を示す」という一つの
+明確な入力へ縮約する教科書入口である。
+-/
+theorem orbit_x_fiberFactor_dvd_of_derivative_roots
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P)
+    (p : Polynomial (AlgebraicClosure K)) (hp : p ≠ 0)
+    (hroot : p.IsRoot P.xc)
+    (hderiv : ∀ Q : halfKernel E H,
+      p.IsRoot ((P + Q.val.val).xc) ∧
+        p.derivative.IsRoot ((P + Q.val.val).xc)) :
+    fiberFactor (Finset.univ : Finset (halfKernel E H)) P.xc
+      (fun Q : halfKernel E H => (P + Q.val.val).xc) ∣ p := by
+  apply orbit_x_fiberFactor_dvd_of_rootMultiplicity E H P hP hneg p hp
+  · have hpos : 0 < p.rootMultiplicity P.xc :=
+      (Polynomial.rootMultiplicity_pos hp).mpr hroot
+    omega
+  · intro Q
+    exact two_le_rootMultiplicity_of_isRoot_of_derivative_isRoot p hp _
+      (hderiv Q).1 (hderiv Q).2
+
+/-- [DkMath.Lib] 有限ファイバー分子の一重根を、同じ核の全軌道へ輸送する。
+
+`exists_veluX_fiber_polynomial_with_rootMultiplicity` が評価零点から一重根を
+供給し、`kernelXAt_translation` が `P+Q` でも同じ値 `c` を保つ。従って、
+核外の一点 `P` を選ぶだけで、全核軌道の x 座標が分子の根になることを
+一つの存在定理にまとめられる。ここでは各根が一重以上であることだけを
+確定し、半核根の二重性は次の幾何学層へ残す。
+-/
+theorem exists_veluX_fiber_polynomial_with_orbit_rootMultiplicity
+    (P : Points E) (hP : P ∉ H) (c : AlgebraicClosure K)
+    (hPc : kernelXAt E H P hP = c) :
+    ∃ p : Polynomial (AlgebraicClosure K), p ≠ 0 ∧
+      p.natDegree ≤ Nat.card H ∧ 1 ≤ p.rootMultiplicity P.xc ∧
+      ∀ Q : H, 1 ≤ p.rootMultiplicity ((P + Q.val).xc) := by
+  obtain ⟨p, hp, hd, hroot⟩ :=
+    exists_veluX_fiber_polynomial_with_rootMultiplicity E H c
+  refine ⟨p, hp, hd, hroot P hP hPc, ?_⟩
+  intro Q
+  apply hroot (P + Q.val) (add_not_mem_kernel E H P hP Q)
+  rw [kernelXAt_translation E H P hP Q, hPc]
+
+/-- [DkMath.Lib] モニック化した有限ファイバー分子の一重根を全核軌道へ輸送する。
+
+前定理のモニック化版であり、`eq_orbit_x_fiberFactor_of_monic_of_rootMultiplicity`
+へ直接渡せる形を用意する。ここでも供給されるのは各軌道根の一重性だけで、
+半核の二重性は依然として別の幾何学的入力である。
+-/
+theorem exists_veluX_monic_fiber_polynomial_with_orbit_rootMultiplicity
+    (P : Points E) (hP : P ∉ H) (c : AlgebraicClosure K)
+    (hPc : kernelXAt E H P hP = c) :
+    ∃ p : Polynomial (AlgebraicClosure K), p.Monic ∧
+      p.natDegree ≤ Nat.card H ∧ 1 ≤ p.rootMultiplicity P.xc ∧
+      ∀ Q : H, 1 ≤ p.rootMultiplicity ((P + Q.val).xc) := by
+  obtain ⟨p, hp, hd, hroot⟩ :=
+    exists_veluX_monic_fiber_polynomial_with_rootMultiplicity E H c
+  refine ⟨p, hp, hd, hroot P hP hPc, ?_⟩
+  intro Q
+  apply hroot (P + Q.val) (add_not_mem_kernel E H P hP Q)
+  rw [kernelXAt_translation E H P hP Q, hPc]
+
+omit [CharZero K] [E.IsElliptic] in
 /-- [DkMath.Lib] x 軌道積を標準の `fiberFactor` 表記へ正規化する。
 
 前定理の積分解を、判別式組立で使う `fiberFactor` にそのまま同定する。
@@ -408,6 +475,32 @@ theorem eq_orbit_x_fiberFactor_of_monic_of_rootMultiplicity
     (fun Q : halfKernel E H => (P + Q.val.val).xc) p hp
   · exact orbit_x_fiberFactor_dvd_of_rootMultiplicity E H P hP hneg p hp.ne_zero
       hsimple hdouble
+  · exact hdeg
+
+omit [CharZero K] [E.IsElliptic] in
+/-- [DkMath.Lib] 値・微分の軌道零点と次数上界からファイバー因子を同定する。
+
+`orbit_x_fiberFactor_dvd_of_derivative_roots` が値零点・微分零点を根多重度へ
+変換し、`eq_halfKernel_fiberFactor_of_monic_of_dvd_of_degree` がモニック性と
+次数上界から等号を回収する。従って、Vélu 分子の幾何学的仕事を「全軌道で
+値と微分が消える」の一命題へ集約できる。ここでも、その微分零点自体を
+自動生成したとは主張せず、明示的な入力として保持する。
+-/
+theorem eq_orbit_x_fiberFactor_of_monic_of_derivative_roots
+    (ho : Odd (Nat.card H))
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P)
+    (p : Polynomial (AlgebraicClosure K)) (hp : p.Monic)
+    (hroot : p.IsRoot P.xc)
+    (hderiv : ∀ Q : halfKernel E H,
+      p.IsRoot ((P + Q.val.val).xc) ∧
+        p.derivative.IsRoot ((P + Q.val.val).xc))
+    (hdeg : p.natDegree ≤ Nat.card H) :
+    p = fiberFactor (Finset.univ : Finset (halfKernel E H)) P.xc
+      (fun Q : halfKernel E H => (P + Q.val.val).xc) := by
+  apply eq_halfKernel_fiberFactor_of_monic_of_dvd_of_degree E H ho P.xc
+    (fun Q : halfKernel E H => (P + Q.val.val).xc) p hp
+  · exact orbit_x_fiberFactor_dvd_of_derivative_roots E H P hP hneg p hp.ne_zero
+      hroot hderiv
   · exact hdeg
 
 end DkMath.Lib.NumberTheory.EllipticFiniteKernel

@@ -230,6 +230,21 @@ theorem fiberFactor_dvd_of_rootMultiplicity
   change (X - C e) * ∏ q : ι, (X - C (ξ q)) ^ 2 ∣ p
   simpa [f, fiberFactor, Fintype.prod_option] using hprod
 
+/-- [DkMath.Lib] 値と一階微分が同時に消える点は二重根である。
+
+`Polynomial.one_lt_rootMultiplicity_iff_isRoot` を、有限ファイバーの局所
+分岐判定に使いやすい `2 ≤ rootMultiplicity` の形へ言い換える。実際の
+`kernelXAt` 分子では、平行移動点での値零点に加えて微分零点を供給できれば、
+この補題から `fiberFactor_dvd_of_rootMultiplicity` の二重根仮定へ直結する。
+-/
+theorem two_le_rootMultiplicity_of_isRoot_of_derivative_isRoot
+    (p : k[X]) (hp : p ≠ 0) (a : k)
+    (hroot : p.IsRoot a) (hderiv : p.derivative.IsRoot a) :
+    2 ≤ p.rootMultiplicity a := by
+  have hlt : 1 < p.rootMultiplicity a :=
+    (Polynomial.one_lt_rootMultiplicity_iff_isRoot hp).mpr ⟨hroot, hderiv⟩
+  omega
+
 /-- [DkMath.Lib] `fiberFactor` の根を多重度込みで含み、かつ次数が
 `fiberFactor` 以下であるモニック多項式は、`fiberFactor` と等しい。
 

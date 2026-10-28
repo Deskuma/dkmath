@@ -158,6 +158,51 @@ theorem exists_veluX_fiber_polynomial (H : AddSubgroup (Points E)) [Fintype H]
     rw [pointValuation_const_eq_one E P hn] at hcval
     exact lt_irrefl _ hcval
 
+/-- [DkMath.Lib] 有限ファイバー多項式の評価零点を根多重度へ変換する。
+
+`exists_veluX_fiber_polynomial` は、`kernelXAt = c` となる点の x 座標で
+`p.eval = 0` を供給する。非零多項式ではこれは `rootMultiplicity ≥ 1` と
+同値なので、評価 API と多項式の重複度 API の間の教科書的な変換をここで
+固定する。二重根までは主張せず、単純根の確実な層だけを公開する。
+-/
+theorem exists_veluX_fiber_polynomial_with_rootMultiplicity
+    (H : AddSubgroup (Points E)) [Fintype H] (c : AlgebraicClosure K) :
+    ∃ p : (AlgebraicClosure K)[X], p ≠ 0 ∧ p.natDegree ≤ Nat.card H ∧
+      ∀ (P : Points E) (hP : P ∉ H),
+        kernelXAt E H P hP = c → 1 ≤ p.rootMultiplicity P.xc := by
+  obtain ⟨p, hp, hd, hroot⟩ := exists_veluX_fiber_polynomial E H c
+  refine ⟨p, hp, hd, ?_⟩
+  intro P hP hval
+  apply (Polynomial.rootMultiplicity_pos hp).mpr
+  exact hroot P hP hval
+
+/-- [DkMath.Lib] 有限ファイバー分子をモニック化しても、根・次数・一重根情報は
+そのまま保たれる。
+
+`Polynomial.normalize` は非零多項式を最高係数で割るだけなので、根の多重集合を
+変えずに `Monic` を供給する。以後の `fiberFactor` 同定定理へ渡す分子は、この
+標準モニック化を使えばよく、係数の正規化を幾何学側へ持ち込む必要がない。
+-/
+theorem exists_veluX_monic_fiber_polynomial_with_rootMultiplicity
+    (H : AddSubgroup (Points E)) [Fintype H] (c : AlgebraicClosure K) :
+    ∃ p : (AlgebraicClosure K)[X], p.Monic ∧ p.natDegree ≤ Nat.card H ∧
+      ∀ (P : Points E) (hP : P ∉ H),
+        kernelXAt E H P hP = c → 1 ≤ p.rootMultiplicity P.xc := by
+  obtain ⟨p, hp, hd, hroot⟩ :=
+    exists_veluX_fiber_polynomial_with_rootMultiplicity E H c
+  let q := normalize p
+  have hroots : q.roots = p.roots := by
+    exact Polynomial.roots_normalize
+  have hdeg : q.natDegree ≤ Nat.card H := by
+    rw [Polynomial.natDegree_normalize]
+    exact hd
+  refine ⟨q, Polynomial.monic_normalize hp, hdeg, ?_⟩
+  intro P hP hval
+  have hmult : q.rootMultiplicity P.xc = p.rootMultiplicity P.xc := by
+    rw [← Polynomial.count_roots q, ← Polynomial.count_roots p, hroots]
+  rw [hmult]
+  exact hroot P hP hval
+
 /-- [DkMath.Lib] 同じ有限値cへ移る相異なるx座標は、同じ核の位数以下である。 -/
 theorem card_veluX_fiber_le (H : AddSubgroup (Points E)) [Fintype H]
     (c : AlgebraicClosure K) (T : Finset (AlgebraicClosure K))
