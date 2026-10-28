@@ -173,6 +173,56 @@ theorem fullKernel_factor_eq_root_and_half_square
         (∏ Q ∈ halfKernel E H, (Polynomial.X - Polynomial.C (ξ Q))) ^ 2 := by
       rfl
 
+omit [CharZero K] [E.IsElliptic] in
+/-- [DkMath.Lib] 反転固定点の x 軌道積を、単純根と半核積の平方へ分解する。
+
+`ξ Q = (P + Q).xc` と置いた全核積分解の幾何学的特殊化である。`P=-P` なら
+`P+(-Q)=-(P+Q)` なので x 座標は反転で変わらず、半核の各 x 根が全核側で
+二重に現れる。これは `kernelXAt=c` の有限ファイバー分子を組み立てる際に、
+根の重複度を明示的に供給するための直接の入口である。 -/
+theorem orbit_x_factor_eq_root_and_half_square
+    (ho : Odd (Nat.card H)) (P : Points E) (hneg : -P = P) :
+    (∏ Q : H, (Polynomial.X - Polynomial.C ((P + Q.val : Points E).xc))) =
+      (Polynomial.X - Polynomial.C P.xc) *
+        (∏ Q ∈ halfKernel E H,
+          (Polynomial.X - Polynomial.C ((P + Q.val : Points E).xc))) ^ 2 := by
+  let ξ : H → AlgebraicClosure K := fun Q => (P + Q.val : Points E).xc
+  have hξ : ∀ Q : H, ξ (-Q) = ξ Q := by
+    intro Q
+    have hsum : -(P + Q.val) = P + (-Q).val := by
+      calc
+        -(P + Q.val) = -P + -Q.val := by abel
+        _ = P + (-Q).val := by rw [hneg, AddSubgroup.coe_neg]
+    dsimp [ξ]
+    have hcoord :
+        (P + (-Q).val : Points E).xc = (P + Q.val).xc := by
+      calc
+        (P + (-Q).val : Points E).xc = (-(P + Q.val)).xc := by rw [hsum]
+        _ = (P + Q.val).xc := by
+          cases hR : (P + Q.val : Points E) <;> rfl
+    simpa only [AddSubgroup.coe_neg] using hcoord
+  have hfactor := fullKernel_factor_eq_root_and_half_square E H ho ξ hξ
+  have hzero : ξ 0 = P.xc := by
+    dsimp [ξ]
+    simp only [add_zero]
+  simpa only [ξ, hzero] using hfactor
+
+omit [CharZero K] [E.IsElliptic] in
+/-- [DkMath.Lib] x 軌道積を標準の `fiberFactor` 表記へ正規化する。
+
+前定理の積分解を、判別式組立で使う `fiberFactor` にそのまま同定する。
+単純根は `P.xc`、半核の添字 `Q` に対応する移動根は `(P+Q).xc` である。
+この同定により、以後は一般の根多重度 API と x 軌道の幾何学 API を混在させずに
+接続できる。 -/
+theorem orbit_x_factor_eq_fiberFactor
+    (ho : Odd (Nat.card H)) (P : Points E) (hneg : -P = P) :
+    (∏ Q : H, (Polynomial.X - Polynomial.C ((P + Q.val : Points E).xc))) =
+      fiberFactor (halfKernel E H) P.xc
+        (fun Q : H => (P + Q.val : Points E).xc) := by
+  rw [orbit_x_factor_eq_root_and_half_square E H ho P hneg]
+  unfold fiberFactor
+  rw [← Finset.prod_pow]
+
 omit [CharZero K] in
 /-- [DkMath.Lib] 反転固定点 `P` の `kernelXAt` 軌道積を半核因子へ分解する。
 
