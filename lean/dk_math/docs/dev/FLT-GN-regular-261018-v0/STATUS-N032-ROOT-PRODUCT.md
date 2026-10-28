@@ -287,6 +287,37 @@ Vélu 係数対 `F,G` を内部選択し、`kernelXAt P = c` と `2P ∉ H` か�
 したがって、一般核の判別式積公式・付値公式も従来どおり条件付きであり、
 素数3の個別公式が一般核に拡張されたと主張しない。
 
+## 今回の無条件分岐閉包
+
+残っていた `2 • P ∈ H` 枝を、有限奇数群の倍写像で正規化した。
+`exists_two_torsion_translate_of_two_smul_mem` は
+`Nat.Coprime.nsmul_right_bijective` と `Odd (Nat.card H)` から、ある `Q : H` に
+対して `2 • (P - Q) = 0` を構成する。従って `T = P-Q` は反転固定点となる。
+
+`exists_two_torsion_kernelXAt_representative_of_two_smul_mem` はさらに、元の
+`P ∉ H` を保ち、`kernelXAt T = kernelXAt P` を平行移動不変性から証明する。
+この結果、例外枝の任意の有限ファイバー値は、核外の二捩れ代表で評価できる。
+
+`exists_two_torsion_kernelXAt_root_of_two_smul_mem` はその代表に
+`kernelAt_twoTorsion_root` を適用し、標的二捩れ多項式の根と全 `T+Q` 軌道への
+根輸送を供給する。これは根の存在までを無条件化するが、根の二重性はまだ
+主張しない。
+
+さらに `exists_two_torsion_kernelXAt_halfKernel_factorization_of_two_smul_mem` は、
+同じ代表に全核軌道積の反転分解を適用し、単純根 `X-c` と半核積の平方を
+無条件に得る。ここで確定した平方は点群軌道積の構造であり、正規化された
+Vélu 分子がその積を持つことまでは含めない。
+
+最後に `exists_veluX_normalized_fullKernel_factor_or_twoTorsion_root` を追加し、
+任意の核外ファイバーを、
+
+* `2 • P ∉ H`：正規化ファイバーの全核一次因子積（完全な因子等号）、または
+* `2 • P ∈ H`：二捩れ代表、二捩れ根、全核軌道への根包含
+
+の二枝へ分岐した。これでファイバーの入口は無条件に閉じた。一方、二捩れ枝を
+`fiberFactor` 等号や判別式積へ進めるには、引き続き二重根（同値な微分零点／
+Wronskian 軌道零点）の幾何学計算が必要であり、そこを仮定なしにしたとはしていない。
+
 ## 検証
 
 対象モジュールおよび具体例 `y²=x³-x` のテストをビルドし、三根と判別式64、

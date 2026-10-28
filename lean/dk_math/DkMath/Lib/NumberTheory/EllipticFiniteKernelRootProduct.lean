@@ -324,6 +324,127 @@ theorem orbit_x_injective_of_two_smul_not_mem
         _ = 0 := by rw [hneg]; abel
     exact (htwo (hsum ▸ H.neg_mem (H.add_mem Q.property R.property))).elim
 
+omit [CharZero K] [E.IsElliptic] [Fintype ↥H] in
+/-- [DkMath.Lib] 奇数核の倍写像で、二捩れ分岐を核外の代表へ移す。
+
+`Nat.Coprime.nsmul_right_bijective` は、有限加法群の位数と互いに素な
+`n` による `n • ·` が全単射であることを述べる。`|H|` が奇数なら
+`n = 2` を選べるため、`2P ∈ H` のときも `2Q = 2P` となる `Q : H`
+を選べる。従って `T = P-Q` は二捩れ点になる。この有限群論だけの
+正規化により、例外枝を「二捩れ代表の局所計算」へ無条件に縮約する。
+-/
+theorem exists_two_torsion_translate_of_two_smul_mem
+    (ho : Odd (Nat.card H)) (P : Points E) (hP2 : 2 • P ∈ H) :
+    ∃ Q : H, 2 • (P - Q.val) = 0 := by
+  have hcop : (Nat.card H).Coprime 2 := Nat.coprime_two_right.mpr ho
+  obtain ⟨Q, hQ⟩ := (Nat.Coprime.nsmul_right_bijective (G := H) hcop).2
+    (⟨2 • P, hP2⟩ : H)
+  refine ⟨Q, ?_⟩
+  have hQval := congrArg Subtype.val hQ
+  have hQeq : 2 • Q.val = 2 • P := by simpa using hQval
+  calc
+    2 • (P - Q.val) = 2 • P - 2 • Q.val := by rw [smul_sub]
+    _ = 0 := by rw [hQeq]; abel
+
+omit [CharZero K] in
+/-- [DkMath.Lib] `2P ∈ H` のファイバーを二捩れ代表へ正規化する。
+
+`P ∉ H` を保ったまま `T = P-Q` を選ぶので、`T` は依然として核外であり、
+`kernelXAt` を評価できる。`T+Q=P` と平行移動不変性を組み合わせると、
+`T` は元のファイバー値を保つ反転固定点となる。したがって、一般値で
+既に閉じた `2P ∉ H` 枝を補完する残りの枝は、二捩れ根・Wronskian の
+局所計算をこの `T` に対して一度だけ行えばよい。
+-/
+theorem exists_two_torsion_kernelXAt_representative_of_two_smul_mem
+    (ho : Odd (Nat.card H)) (P : Points E) (hP : P ∉ H)
+    (hP2 : 2 • P ∈ H) (c : AlgebraicClosure K)
+    (hPc : kernelXAt E H P hP = c) :
+    ∃ T : Points E, T ∉ H ∧ -T = T ∧
+      ∃ hT : T ∉ H, kernelXAt E H T hT = c := by
+  obtain ⟨Q, hT2⟩ := exists_two_torsion_translate_of_two_smul_mem E H ho P hP2
+  let T : Points E := P - Q.val
+  have hT : T ∉ H := by
+    intro hTm
+    apply hP
+    have hPT : P = T + Q.val := by
+      dsimp [T]
+      abel
+    rw [hPT]
+    exact H.add_mem hTm Q.property
+  have hTneg : -T = T := by
+    apply neg_eq_iff_add_eq_zero.mpr
+    simpa only [two_nsmul] using hT2
+  have htrans := kernelXAt_translation E H T hT Q
+  have hPT : T + Q.val = P := by
+    dsimp [T]
+    abel
+  have htrans' : kernelXAt E H P hP = kernelXAt E H T hT := by
+    simpa only [hPT] using htrans
+  refine ⟨T, hT, hTneg, hT, ?_⟩
+  exact htrans'.symm.trans hPc
+
+/-- [DkMath.Lib] 例外枝でも、二捩れ根とその核軌道を無条件に供給する。
+
+前定理の代表 `T` に `kernelAt_twoTorsion_root` を適用し、さらに
+`kernelAt_twoTorsion_root_translation` で `T+Q` 全体へ輸送する。ここで得られる
+のは根の存在（および軌道全体での根包含）までであり、各根の二重性はまだ
+主張しない。この切り分けにより、残る Wronskian 計算の入力が明確になる。
+-/
+theorem exists_two_torsion_kernelXAt_root_of_two_smul_mem
+    (ho : Odd (Nat.card H)) (P : Points E) (hP : P ∉ H)
+    (hP2 : 2 • P ∈ H) (c : AlgebraicClosure K)
+    (hPc : kernelXAt E H P hP = c) :
+    ∃ T : Points E, T ∉ H ∧ -T = T ∧
+      ∃ hT : T ∉ H, kernelXAt E H T hT = c ∧
+        (kernelModel E H).twoTorsionPolynomial.toPoly.eval
+            (kernelXAt E H T hT) = 0 ∧
+        ∀ Q : H,
+          (kernelModel E H).twoTorsionPolynomial.toPoly.eval
+            (kernelXAt E H (T + Q.val)
+              (add_not_mem_kernel E H T hT Q)) = 0 := by
+  obtain ⟨T, hT, hTneg, hTc⟩ :=
+    exists_two_torsion_kernelXAt_representative_of_two_smul_mem E H ho P hP hP2 c hPc
+  obtain ⟨hT', hTc'⟩ := hTc
+  refine ⟨T, hT, hTneg, hT', hTc', ?_, ?_⟩
+  · exact kernelAt_twoTorsion_root E H T hT hTneg
+  · intro Q
+    exact kernelAt_twoTorsion_root_translation E H T hT hTneg Q
+
+omit [CharZero K] in
+/-- [DkMath.Lib] 二捩れ代表の全核軌道積を、単純根と半核平方へ分解する。
+
+`kernelXAt_fullKernel_factor_eq_root_and_half_square` は反転固定点の軌道で
+有限積を既に分解している。ここでは前定理の `T` をその入力へ渡し、単純根を
+ファイバー値 `c` へ書き換える。従って、例外枝の多重度構造は多項式側へ
+押し付けず、まず点群軌道の有限積として無条件に確定する。
+-/
+theorem exists_two_torsion_kernelXAt_halfKernel_factorization_of_two_smul_mem
+    (ho : Odd (Nat.card H)) (P : Points E) (hP : P ∉ H)
+    (hP2 : 2 • P ∈ H) (c : AlgebraicClosure K)
+    (hPc : kernelXAt E H P hP = c) :
+    ∃ T : Points E, T ∉ H ∧ -T = T ∧
+      ∃ hT : T ∉ H, kernelXAt E H T hT = c ∧
+      (∏ Q : H, (Polynomial.X - Polynomial.C
+        (kernelXAt E H (T + Q.val) (add_not_mem_kernel E H T hT Q)))) =
+      (Polynomial.X - Polynomial.C c) *
+        (∏ Q ∈ halfKernel E H, (Polynomial.X - Polynomial.C
+          (kernelXAt E H (T + Q.val)
+            (add_not_mem_kernel E H T hT Q)))) ^ 2 := by
+  obtain ⟨T, hT, hTneg, hTc⟩ :=
+    exists_two_torsion_kernelXAt_representative_of_two_smul_mem E H ho P hP hP2 c hPc
+  obtain ⟨hT', hTc'⟩ := hTc
+  refine ⟨T, hT, hTneg, hT', hTc', ?_⟩
+  let ξ : H → AlgebraicClosure K := fun Q =>
+    kernelXAt E H (T + Q.val) (add_not_mem_kernel E H T hT Q)
+  have hξ : ∀ Q : H, ξ (-Q) = ξ Q := by
+    intro Q
+    exact kernelXAt_neg_translation_eq E H T hT hTneg Q
+  have hf := fullKernel_factor_eq_root_and_half_square E H ho ξ hξ
+  have hzero : ξ 0 = kernelXAt E H T hT := by
+    dsimp [ξ]
+    exact kernelXAt_translation E H T hT (0 : H)
+  simpa only [ξ, hzero, hTc'] using hf
+
 omit [CharZero K] [E.IsElliptic] in
 /-- [DkMath.Lib] 単射な全軌道の一次因子積は、各軌道根を含む多項式を割る。
 
@@ -410,6 +531,50 @@ theorem exists_veluX_normalized_fullKernel_factor_of_two_smul_not_mem
   have hfactor := eq_fullKernel_factor_of_monic_of_injective_roots E H P htwo
     (normalize (fiberPolynomial F G c)) hmonic hroot (by rw [hnormdeg])
   exact ⟨F, G, hcop, hG, hF, hGlt, hrel, hp0, hmonic, hnormdeg, hfactor⟩
+
+/-- [DkMath.Lib] 奇数核の有限ファイバーを、一般枝と二捩れ枝へ無条件に分岐する。
+
+`2P ∉ H` なら、軌道 x 座標の単射性と次数比較から、正規化ファイバーは
+全核の一次因子積として完全に閉じる。一方 `2P ∈ H` なら、有限核の
+倍写像逆元で二捩れ代表へ移し、標的二捩れ多項式の根と全核軌道への根輸送を
+得る。この二分法は、未証明の多重度計算を隠さずに、すべての核外ファイバー
+について到達可能な無条件の終端を一つにまとめる。
+
+第二枝の根包含から `fiberFactor` 等号へ進むには、二重根、同値な微分零点、
+または Wronskian 軌道零点のいずれかを別途供給する必要がある。従って本定理は
+「分岐を閉じた」ことと「二捩れ枝の局所多重度を閉じた」ことを区別する。
+-/
+theorem exists_veluX_normalized_fullKernel_factor_or_twoTorsion_root
+    (ho : Odd (Nat.card H)) (c : AlgebraicClosure K) (P : Points E)
+    (hPc : ∃ hP : P ∉ H, kernelXAt E H P hP = c) :
+    (2 • P ∉ H ∧
+      ∃ F G : (AlgebraicClosure K)[X],
+        IsCoprime F G ∧ G ≠ 0 ∧ F.natDegree = Nat.card H ∧
+          G.natDegree < F.natDegree ∧
+          veluX E H =
+            aeval (genericX E (AlgebraicClosure K)) F /
+              aeval (genericX E (AlgebraicClosure K)) G ∧
+          fiberPolynomial F G c ≠ 0 ∧
+          (normalize (fiberPolynomial F G c)).Monic ∧
+          (normalize (fiberPolynomial F G c)).natDegree = Nat.card H ∧
+          normalize (fiberPolynomial F G c) =
+            ∏ Q : H, (Polynomial.X - Polynomial.C ((P + Q.val).xc))) ∨
+    (2 • P ∈ H ∧
+      ∃ T : Points E, T ∉ H ∧ -T = T ∧
+        ∃ hT : T ∉ H, kernelXAt E H T hT = c ∧
+          (kernelModel E H).twoTorsionPolynomial.toPoly.eval
+              (kernelXAt E H T hT) = 0 ∧
+          ∀ Q : H,
+            (kernelModel E H).twoTorsionPolynomial.toPoly.eval
+                (kernelXAt E H (T + Q.val)
+                  (add_not_mem_kernel E H T hT Q)) = 0) := by
+  obtain ⟨hP, hPc⟩ := hPc
+  by_cases hbad : 2 • P ∈ H
+  · exact Or.inr ⟨hbad,
+      exists_two_torsion_kernelXAt_root_of_two_smul_mem E H ho P hP hbad c hPc⟩
+  · exact Or.inl ⟨hbad,
+      exists_veluX_normalized_fullKernel_factor_of_two_smul_not_mem E H c P hbad
+        ⟨hP, hPc⟩⟩
 
 omit [CharZero K] [E.IsElliptic] in
 /-- [DkMath.Lib] 実軌道の局所多重度から半核ファイバー因子の可除性を得る。
