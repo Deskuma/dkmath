@@ -175,6 +175,32 @@ Wronskian の軌道零点自体は引き続き幾何学側の未解決入力で�
 した。これで次段では、Wronskian の有限例外値論を `X_H` の実際の有理式へ
 適用する際に、互いに素性を別途再構成する必要がない。
 
+さらに、一般補題 `fiberPolynomial_natDegree_eq_of_natDegree_lt` と、Vélu の
+無限遠点次数データを組み合わせた `exists_veluX_fiber_polynomial_exact_degree`
+を追加した。これにより `F-cG` の次数上界は、任意の有限値で核位数に等しい
+exact degree として扱える。非零性も同時に供給されるため、今後の
+`rootMultiplicity`・モニック化・因子同定の入力が一つの定理から得られる。
+
+さらに `exists_veluX_coprime_fiber_polynomial_exact_degree` を追加した。これは
+同じ無限遠点次数データを、標準 RatFunc 表示の互いに素な分子・分母 `F,G` と
+`veluX = F/G` の等式へ束ね、`deg G < deg F = |H|`、および有限ファイバー
+`F-cG` の非零性と exact degree `|H|` を一つの証明オブジェクトとして公開する。
+したがって、後段の Wronskian 零点判定は抽象的な分子の存在ではなく、実際の
+Vélu 有理式の係数対へ直接適用できる。今回の補題は根の二重性をまだ供給せず、
+その幾何学的入力を残すという境界も保持している。
+
+加えて `exists_veluX_separable_coprime_fiber_avoiding` を固定した。exact degree
+から分子の非定数性を得て `wronskian_ne_zero` を適用し、任意に指定した有限集合
+`s` を避ける分離ファイバー値 `c` を構成する。出力には同じ `F,G`、`X_H = F/G`、
+`deg G < deg F = |H|`、`c ∉ s`、`Separable (F-cG)`、および exact degree が
+同時に含まれる。従って、有限例外値の除去と Vélu 有理式の次数管理を、後段の
+分岐・根多重度証明へ渡す前処理として再利用できる。
+
+一般有理関数層には `not_wronskian_isRoot_of_separable_fiberPolynomial` も追加
+した。分離ファイバーでは各根の多重度が高々1なので、根上の Wronskian 零点は
+存在しない。これにより、分離ファイバーの「一般値」経路と、軌道因子同定に必要な
+Wronskian 零点を仮定する「分岐値」経路が、定理の型で相互排他的になる。
+
 ## 次に必要なこと
 
 上の消去定理は一般判別式積公式の無条件の証明ではない。残る中心課題は、

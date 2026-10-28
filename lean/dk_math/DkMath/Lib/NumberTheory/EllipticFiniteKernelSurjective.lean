@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelFibers
 import DkMath.Lib.NumberTheory.RationalFunctionFiniteFiber
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPointDescent
+import DkMath.Lib.Algebra.RationalPolynomialFiber
 
 #print "file: DkMath.Lib.NumberTheory.EllipticFiniteKernelSurjective"
 
@@ -21,6 +22,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelPointDescent
 namespace DkMath.Lib.NumberTheory.EllipticFiniteKernel
 open Polynomial WeierstrassCurve WeierstrassCurve.Affine WithZero
 open EllipticFunctionField EllipticTorsionRepresentation EllipticPointEvaluation
+open DkMath.Lib.Algebra.RationalPolynomialFiber
 open scoped Polynomial.Bivariate
 variable {K : Type*} [Field K] [CharZero K] (E : WeierstrassCurve K) [E.IsElliptic]
 noncomputable local instance instDecidableEqEllipticFiniteKernelSurjective :
@@ -73,6 +75,95 @@ theorem exists_veluX_rational_at_infinity (H : AddSubgroup (Points E)) [Fintype 
   refine ⟨r, hd, ?_, hr⟩
   rw [max_eq_left (by omega)] at hmax
   exact hmax
+
+set_option linter.unusedFintypeInType false in
+/-- [DkMath.Lib] Vélu 有理式の有限ファイバー分子は、核位数を正確な次数に持つ。
+
+`exists_veluX_rational_at_infinity` は分子次数が分母次数より1大きく、かつ
+分子次数が `|H|` であることを供給する。一般補題
+`fiberPolynomial_natDegree_eq_of_natDegree_lt` を適用すると、任意の有限値 `c`
+に対する `F-cG` の次数落ちがないことが分かる。ここでは次段の根多重度証明へ
+渡すため、ファイバー多項式の非零性も同時に記録する。 -/
+theorem exists_veluX_fiber_polynomial_exact_degree
+    (H : AddSubgroup (Points E)) [Fintype H] (c : AlgebraicClosure K) :
+    ∃ r : RatFunc (AlgebraicClosure K),
+      r.num.natDegree = Nat.card H ∧
+        (fiberPolynomial r.num r.denom c).natDegree = Nat.card H ∧
+          fiberPolynomial r.num r.denom c ≠ 0 := by
+  obtain ⟨r, hgap, hnum, _⟩ := exists_veluX_rational_at_infinity E H
+  have hdeg : (fiberPolynomial r.num r.denom c).natDegree = r.num.natDegree :=
+    fiberPolynomial_natDegree_eq_of_natDegree_lt (c := c) (by omega)
+  have hcard : 0 < Nat.card H := by omega
+  refine ⟨r, hnum, hdeg.trans hnum, ?_⟩
+  intro hz
+  have hzdeg : (fiberPolynomial r.num r.denom c).natDegree = 0 := by simp [hz]
+  exact (Nat.ne_of_gt hcard) (by rw [hdeg, hnum] at hzdeg; exact hzdeg)
+
+/-- [DkMath.Lib] Vélu 分子・分母を保った有限ファイバーの exact degree 形。
+
+`exists_veluX_coprime_rational` は、標準 RatFunc 表示から互いに素な
+`F,G` と `X_H = F/G` を供給する。一方、無限遠点での極位数2の比較は
+`deg G < deg F = |H|` を与えるので、一般補題
+`fiberPolynomial_natDegree_eq_of_natDegree_lt` により、有限値 `c` に対する
+`F-cG` の次数は常に `|H|` である。ここで非零性も同時に記録することで、
+後段の Wronskian と根多重度の議論が、同じ係数対 `F,G` をそのまま再利用できる。
+-/
+theorem exists_veluX_coprime_fiber_polynomial_exact_degree
+    (H : AddSubgroup (Points E)) [Fintype H] (c : AlgebraicClosure K) :
+    ∃ F G : (AlgebraicClosure K)[X],
+      IsCoprime F G ∧ F.natDegree = Nat.card H ∧ G.natDegree < F.natDegree ∧
+        veluX E H = aeval (genericX E (AlgebraicClosure K)) F /
+          aeval (genericX E (AlgebraicClosure K)) G ∧
+        fiberPolynomial F G c ≠ 0 ∧
+          (fiberPolynomial F G c).natDegree = Nat.card H := by
+  obtain ⟨r, hgap, hnum, hr⟩ := exists_veluX_rational_at_infinity E H
+  have hdeg : (fiberPolynomial r.num r.denom c).natDegree = r.num.natDegree :=
+    fiberPolynomial_natDegree_eq_of_natDegree_lt (c := c) (by omega)
+  have hcard : 0 < Nat.card H := by omega
+  have hpoly : fiberPolynomial r.num r.denom c ≠ 0 := by
+    intro hz
+    have hzdeg : (fiberPolynomial r.num r.denom c).natDegree = 0 := by simp [hz]
+    exact (Nat.ne_of_gt hcard) (by rw [hdeg, hnum] at hzdeg; exact hzdeg)
+  refine ⟨r.num, r.denom, r.isCoprime_num_denom, hnum, ?_, hr, hpoly, ?_⟩
+  · omega
+  · exact hdeg.trans hnum
+
+/-- [DkMath.Lib] Vélu 有理式には、任意の有限例外集合を避ける分離ファイバーがある。
+
+分子・分母の互いに素性と `deg G < deg F` から Wronskian の非零性を得て、
+一般補題 `exists_separable_fiber_avoiding` を適用する。従って、重根を持つ
+有限値は有限集合に閉じ込められ、例外を避けた値では `F-cG` は分離的である。
+同時に無限遠点次数を再利用して、そのファイバーの次数が `|H|` であることを
+保持する。これは幾何学的な軌道根を因子分解へ渡す前の、分岐値を除外する
+教科書的な前処理である。
+-/
+theorem exists_veluX_separable_coprime_fiber_avoiding
+    (H : AddSubgroup (Points E)) [Fintype H]
+    {s : Set (AlgebraicClosure K)} (hs : s.Finite) :
+    ∃ F G : (AlgebraicClosure K)[X], ∃ c : AlgebraicClosure K,
+      IsCoprime F G ∧ F.natDegree = Nat.card H ∧ G.natDegree < F.natDegree ∧
+        veluX E H = aeval (genericX E (AlgebraicClosure K)) F /
+          aeval (genericX E (AlgebraicClosure K)) G ∧
+        (fiberPolynomial F G c).Separable ∧ c ∉ s ∧
+          (fiberPolynomial F G c).natDegree = Nat.card H := by
+  obtain ⟨r, hgap, hnum, hr⟩ := exists_veluX_rational_at_infinity E H
+  let F : (AlgebraicClosure K)[X] := r.num
+  let G : (AlgebraicClosure K)[X] := r.denom
+  have hcop : IsCoprime F G := by
+    simpa [F, G] using r.isCoprime_num_denom
+  have hF : F.natDegree = Nat.card H := by simpa [F] using hnum
+  have hGlt : G.natDegree < F.natDegree := by
+    dsimp [F, G]
+    omega
+  have hw : wronskian F G ≠ 0 :=
+    wronskian_ne_zero hcop (by rw [hF]; omega)
+  obtain ⟨c, hcsep, hcs⟩ := exists_separable_fiber_avoiding hcop hw hs
+  have hdeg : (fiberPolynomial F G c).natDegree = Nat.card H := by
+    rw [fiberPolynomial_natDegree_eq_of_natDegree_lt (c := c) hGlt, hF]
+  have hrel : veluX E H = aeval (genericX E (AlgebraicClosure K)) F /
+      aeval (genericX E (AlgebraicClosure K)) G := by
+    simpa [F, G] using hr
+  exact ⟨F, G, c, hcop, hF, hGlt, hrel, hcsep, hcs, hdeg⟩
 
 /-- [DkMath.Lib] 同じX_Hは各有限値を、同じ核の外の実際の点で取る。
 分母非零・源の有限性・核外性・有限評価との一致を全て内部供給する。 -/

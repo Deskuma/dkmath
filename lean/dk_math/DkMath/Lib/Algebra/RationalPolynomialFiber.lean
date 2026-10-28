@@ -39,6 +39,19 @@ noncomputable def wronskian (F G : K[X]) : K[X] := F.derivative * G - F * G.deri
 /-- ファイバーのx座標を与える一変数多項式。 -/
 noncomputable def fiberPolynomial (F G : K[X]) (c : K) : K[X] := F - C c * G
 
+/-- [DkMath.Lib] 分母次数が小さいファイバーは分子次数を保つ。
+
+`H_c = F-cG` で `deg G < deg F` なら、`cG` の次数は `F` より小さいため、
+最高次係数の打消しは起こらない。従って有限値 `c` に依らず
+`natDegree (H_c) = natDegree F` となる。Vélu の `X_H` では、無限遠点の極位数
+からこの次数条件を供給できるので、ファイバーの次数上界を exact degree へ
+強化するための基本補題になる。 -/
+theorem fiberPolynomial_natDegree_eq_of_natDegree_lt
+    {F G : K[X]} {c : K} (hdeg : G.natDegree < F.natDegree) :
+    (fiberPolynomial F G c).natDegree = F.natDegree := by
+  rw [fiberPolynomial, natDegree_sub_eq_left_of_natDegree_lt]
+  exact (natDegree_C_mul_le c G).trans_lt hdeg
+
 /-- 互いに素な多項式は共通根を持たない。 -/
 theorem eval_denominator_ne_zero {F G : K[X]} (h : IsCoprime F G) {x c : K}
     (hx : (fiberPolynomial F G c).IsRoot x) : G.eval x ≠ 0 := by
@@ -117,6 +130,29 @@ theorem rootMultiplicity_ge_two_of_fiberPolynomial_root_of_wronskian_root
     (fiberPolynomial_derivative_isRoot_iff_wronskian_isRoot h hx).mpr hw
   have hlt : 1 < (fiberPolynomial F G c).rootMultiplicity x :=
     (Polynomial.one_lt_rootMultiplicity_iff_isRoot hp).mpr ⟨hx, hdx⟩
+  omega
+
+/-- [DkMath.Lib] 分離ファイバーの根では Wronskian は消えない。
+
+前定理は、ファイバー根と Wronskian 零点の同時成立が二重根を生むことを
+示した。分離性は全ての根の多重度を高々1に抑えるので、その対偶として
+`Separable (F-cG)` の根では Wronskian が非零となる。この補題は、有限個の
+分岐値を避ける一般論と、軌道全体で Wronskian 零点を要求する因子同定経路を
+明確に分離するための教科書的な境界である。
+-/
+theorem not_wronskian_isRoot_of_separable_fiberPolynomial
+    {F G : K[X]} (h : IsCoprime F G) {x c : K}
+    (hp : (fiberPolynomial F G c).Separable)
+    (hx : (fiberPolynomial F G c).IsRoot x) :
+    ¬ (wronskian F G).IsRoot x := by
+  intro hw
+  have hmult : 2 ≤ (fiberPolynomial F G c).rootMultiplicity x :=
+    rootMultiplicity_ge_two_of_fiberPolynomial_root_of_wronskian_root h
+      (by
+        exact hp.ne_zero)
+      hx hw
+  have hle : (fiberPolynomial F G c).rootMultiplicity x ≤ 1 :=
+    Polynomial.rootMultiplicity_le_one_of_separable hp x
   omega
 
 /-- 標数0の非定数の分子では、互いに素性と微分の次数減少からWronskianが非零となる。 -/
