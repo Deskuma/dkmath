@@ -285,6 +285,132 @@ theorem orbit_x_root_ne_halfKernel
         _ = 0 := by rw [hneg]; abel
     exact ((mem_halfKernel E H Q.val).mp Q.property).1 (Subtype.ext hz)
 
+omit [CharZero K] [E.IsElliptic] [Fintype ↥H] in
+/-- [DkMath.Lib] 二捩れ分岐を避ける軌道では、全核の x 座標が単射になる。
+
+`x(A)=x(B)` は `A=B` または `A=-B` の二択である。後者が半核内で
+起きると `2P ∈ H` が従うので、`2P ∉ H` を分岐回避条件として置けば、
+全ての一次因子 `X-(P+Q).x` は互いに異なる。これは Wronskian を使わずに
+一般ファイバーを一次因子の積へ降ろすための、最小の幾何学条件である。
+
+二捩れ点ではこの条件が失敗し、反転対が同じ x 値を共有する。その枝だけが
+二重根・Wronskian の局所計算を必要とする。 -/
+theorem orbit_x_injective_of_two_smul_not_mem
+    (P : Points E) (htwo : 2 • P ∉ H) :
+    Function.Injective (fun Q : H => (P + Q.val).xc) := by
+  intro Q R hQR
+  have hP : P ∉ H := by
+    intro hP
+    apply htwo
+    simpa only [two_nsmul] using H.add_mem hP hP
+  have hQ0 : P + Q.val ≠ 0 := by
+    intro hz
+    apply hP
+    rw [eq_neg_of_add_eq_zero_left hz]
+    exact H.neg_mem Q.property
+  have hR0 : P + R.val ≠ 0 := by
+    intro hz
+    apply hP
+    rw [eq_neg_of_add_eq_zero_left hz]
+    exact H.neg_mem R.property
+  rcases point_eq_or_eq_neg_of_xc_eq E (P + Q.val) (P + R.val)
+      hQ0 hR0 hQR with hsame | hneg
+  · apply Subtype.ext
+    exact add_left_cancel hsame
+  · have hsum : 2 • P = -(Q.val + R.val) := by
+      apply eq_neg_of_add_eq_zero_left
+      calc
+        2 • P + (Q.val + R.val) = (P + Q.val) + (P + R.val) := by abel
+        _ = 0 := by rw [hneg]; abel
+    exact (htwo (hsum ▸ H.neg_mem (H.add_mem Q.property R.property))).elim
+
+omit [CharZero K] [E.IsElliptic] in
+/-- [DkMath.Lib] 単射な全軌道の一次因子積は、各軌道根を含む多項式を割る。
+
+各根から `X-C(ξ Q) ∣ p` を得て、単射性から一次因子同士の互いに素性を
+`Fintype.prod_dvd_of_coprime` へ渡す。二重根を要求しないため、これは一般値
+ファイバーの代数的な終端として独立に再利用できる。 -/
+theorem fullKernel_factor_dvd_of_injective_roots
+    (ξ : H → AlgebraicClosure K) (hinj : Function.Injective ξ)
+    (p : Polynomial (AlgebraicClosure K)) (_hp : p ≠ 0)
+    (hroot : ∀ Q : H, p.IsRoot (ξ Q)) :
+    (∏ Q : H, (Polynomial.X - Polynomial.C (ξ Q))) ∣ p := by
+  let f : H → Polynomial (AlgebraicClosure K) :=
+    fun Q => Polynomial.X - Polynomial.C (ξ Q)
+  have hf_pair : Pairwise (fun Q R => IsCoprime (f Q) (f R)) := by
+    intro Q R hQR
+    simpa only [f] using Polynomial.pairwise_coprime_X_sub_C hinj hQR
+  have hf_dvd : ∀ Q : H, f Q ∣ p := by
+    intro Q
+    simpa only [f] using (dvd_iff_isRoot.mpr (hroot Q))
+  change (∏ Q : H, f Q) ∣ p
+  exact Fintype.prod_dvd_of_coprime hf_pair hf_dvd
+
+omit [CharZero K] [E.IsElliptic] in
+/-- [DkMath.Lib] 一般値ファイバーのモニック分子を全軌道因子へ同定する。
+
+`2P ∉ H` により軌道根は単射であり、全軌道因子の次数は `|H|` になる。
+したがって、モニックなファイバー多項式が全軌道を根に持ち、次数が
+`|H|` 以下なら、可除性と次数比較だけで等号が得られる。これは二捩れ分岐の
+Wronskian 条件を一切使わない、一般ファイバー側の完全な教材定理である。 -/
+theorem eq_fullKernel_factor_of_monic_of_injective_roots
+    (P : Points E) (htwo : 2 • P ∉ H)
+    (p : Polynomial (AlgebraicClosure K)) (hp : p.Monic)
+    (hroot : ∀ Q : H, p.IsRoot ((P + Q.val).xc))
+    (hdeg : p.natDegree ≤ Nat.card H) :
+    p = ∏ Q : H, (Polynomial.X - Polynomial.C ((P + Q.val).xc)) := by
+  let ξ : H → AlgebraicClosure K := fun Q => (P + Q.val).xc
+  have hinj : Function.Injective ξ := by
+    exact orbit_x_injective_of_two_smul_not_mem E H P htwo
+  have hdiv : (∏ Q : H, (Polynomial.X - Polynomial.C (ξ Q))) ∣ p :=
+    fullKernel_factor_dvd_of_injective_roots E H ξ hinj p hp.ne_zero hroot
+  have hfactor : (∏ Q : H, (Polynomial.X - Polynomial.C (ξ Q))).Monic := by
+    exact Polynomial.monic_prod_X_sub_C ξ (Finset.univ : Finset H)
+  have hfactor_deg :
+      (∏ Q : H, (Polynomial.X - Polynomial.C (ξ Q))).natDegree = Nat.card H := by
+    rw [Polynomial.natDegree_finsetProd_X_sub_C_eq_card]
+    simp only [Finset.card_univ, Nat.card_eq_fintype_card]
+  have heq := Polynomial.eq_of_monic_of_dvd_of_natDegree_le hfactor hp hdiv
+    (hdeg.trans_eq hfactor_deg.symm)
+  simpa only [ξ] using heq
+
+/-- [DkMath.Lib] 実際の Vélu ファイバーを、一般値では仮定なしで全軌道因子へ送る。
+
+係数対 `F,G` は既存の exact-degree パッケージから内部選択する。点 `P` が
+`X_H=c` を満たし、かつ `2P ∉ H` なら、平行移動不変性で全軌道の x 座標が
+正規化ファイバーの根になり、前定理がそのまま適用できる。従って残る
+Wronskian の仕事は、`2P ∈ H` という特異な分岐枝だけに限定される。 -/
+theorem exists_veluX_normalized_fullKernel_factor_of_two_smul_not_mem
+    (c : AlgebraicClosure K) (P : Points E) (htwo : 2 • P ∉ H)
+    (hPc : ∃ hP : P ∉ H, kernelXAt E H P hP = c) :
+    ∃ F G : (AlgebraicClosure K)[X],
+      IsCoprime F G ∧ G ≠ 0 ∧ F.natDegree = Nat.card H ∧
+        G.natDegree < F.natDegree ∧
+        veluX E H =
+          aeval (genericX E (AlgebraicClosure K)) F /
+            aeval (genericX E (AlgebraicClosure K)) G ∧
+        fiberPolynomial F G c ≠ 0 ∧
+        (normalize (fiberPolynomial F G c)).Monic ∧
+        (normalize (fiberPolynomial F G c)).natDegree = Nat.card H ∧
+        normalize (fiberPolynomial F G c) =
+          ∏ Q : H, (Polynomial.X - Polynomial.C ((P + Q.val).xc)) := by
+  obtain ⟨hP, hPc⟩ := hPc
+  obtain ⟨F, G, hcop, hG, hF, hGlt, hrel, hp0, hmonic, hnormdeg, _⟩ :=
+    exists_veluX_normalized_coprime_fiber_data E H c
+  have hroot : ∀ Q : H,
+      (normalize (fiberPolynomial F G c)).IsRoot ((P + Q.val).xc) := by
+    intro Q
+    have hQ : P + Q.val ∉ H := add_not_mem_kernel E H P hP Q
+    have hroot' := fiberPolynomial_isRoot_of_veluX_eq_quotient E H F G hG hrel c
+      (P + Q.val) hQ (by rw [kernelXAt_translation E H P hP Q, hPc])
+    rw [← mem_roots hp0] at hroot'
+    apply (mem_roots hmonic.ne_zero).mp
+    rw [Polynomial.roots_normalize]
+    exact hroot'
+  have hfactor := eq_fullKernel_factor_of_monic_of_injective_roots E H P htwo
+    (normalize (fiberPolynomial F G c)) hmonic hroot (by rw [hnormdeg])
+  exact ⟨F, G, hcop, hG, hF, hGlt, hrel, hp0, hmonic, hnormdeg, hfactor⟩
+
 omit [CharZero K] [E.IsElliptic] in
 /-- [DkMath.Lib] 実軌道の局所多重度から半核ファイバー因子の可除性を得る。
 

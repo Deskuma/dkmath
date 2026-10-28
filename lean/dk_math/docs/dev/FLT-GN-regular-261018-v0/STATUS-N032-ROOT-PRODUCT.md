@@ -253,6 +253,28 @@ exact degree を未正規化次数へ戻し、既存の軌道因子同定定理�
 供給する部分は明示的に未完了のまま残る。RootProduct はこの接続の所有モジュール
 を直接 import し、`DkMath.Lib` 全体への依存を増やしていない。
 
+## 今回の一般値ファイバー閉包
+
+Wronskian の全半核軌道零点を要求するのは、反転固定点へ写る二捩れ分岐に
+限られる。そこで `orbit_x_injective_of_two_smul_not_mem` を追加し、`2 • P ∉ H`
+なら `Q ↦ (P + Q).xc` が全核上で単射になることを証明した。衝突の反転枝から
+`2P ∈ H` を直接導くため、追加の次数仮定や非分岐 provider は不要である。
+
+次に `fullKernel_factor_dvd_of_injective_roots` で、各軌道値が多項式の根なら
+一次因子積がその多項式を割ることを、一次因子の互いに素性と
+`Fintype.prod_dvd_of_coprime` だけで閉じた。`eq_fullKernel_factor_of_monic_of_injective_roots`
+は、モニック性と次数 `≤ |H|` を加えて全軌道因子との等号を回収する。
+
+さらに `exists_veluX_normalized_fullKernel_factor_of_two_smul_not_mem` は、実際の
+Vélu 係数対 `F,G` を内部選択し、`kernelXAt P = c` と `2P ∉ H` から、正規化
+ファイバー `normalize (F-cG)` を全核軌道の一次因子積へ同定する。したがって、
+一般値ファイバーの因子分解は Wronskian 仮定なしで完了した。残る Wronskian
+条件は、必然的に `2P ∈ H` の二捩れ分岐枝へ局在している。
+
+この追加定理は、分岐枝の二重根を一般値の一次根計算へ混ぜないための重要な
+境界線を提供する。一般核の判別式積公式を無条件にしたわけではなく、二捩れ枝の
+局所接線・一様化計算は引き続き未実装である。
+
 ## 次に必要なこと
 
 上の消去定理は一般判別式積公式の無条件の証明ではない。残る中心課題は、
