@@ -18,8 +18,8 @@ import DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
 この恒等式は局所付値や商判別式の積公式を仮定しない。
 -/
 namespace DkMath.Lib.NumberTheory.EllipticFiniteKernel
-open WeierstrassCurve WeierstrassCurve.Affine
-open EllipticTorsionRepresentation WeierstrassDiscriminantRoots
+open Polynomial WeierstrassCurve WeierstrassCurve.Affine
+open EllipticFunctionField EllipticTorsionRepresentation WeierstrassDiscriminantRoots
 open DkMath.Lib.Algebra.RationalPolynomialFiber
 open DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
 open scoped BigOperators
@@ -536,5 +536,45 @@ theorem eq_orbit_x_fiberFactor_of_monic_of_wronskian_roots
   refine ⟨horbit Q, ?_⟩
   exact (fiberPolynomial_derivative_isRoot_iff_wronskian_isRoot hcoprime (horbit Q)).mpr
     (hwronskian Q)
+
+omit [CharZero K] in
+/-- [DkMath.Lib] Vélu 有理式の点評価から実軌道因子同定へ進む終端。
+
+`fiberPolynomial_isRoot_of_veluX_eq_quotient` は、同じ係数対 `F,G` を使った
+`X_H = F/G` の表示から、`kernelXAt P = c` を `F-cG` の根へ変換する。
+`kernelXAt_translation` によってこの根を `P+Q` の全半核軌道へ輸送し、最後に
+Wronskian の軌道零点を微分零点へ変換する。従って、モニック性・次数上界・
+Wronskian 軌道零点が別途与えられれば、有限ファイバー多項式は標準の
+`fiberFactor` と一致する。
+
+この定理は幾何学的な Wronskian 零点を自動生成したとは主張しない。その入力を
+明示的に残すことで、Vélu 有理式の評価、核平行移動、代数的因子同定の三段を
+独立に再利用できる教科書構成を保つ。
+-/
+theorem eq_orbit_x_fiberFactor_of_monic_of_veluX_quotient_of_wronskian_roots
+    (ho : Odd (Nat.card H))
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P)
+    (F G : Polynomial (AlgebraicClosure K)) (hcoprime : IsCoprime F G) (hG : G ≠ 0)
+    (hrel : veluX E H =
+      aeval (genericX E (AlgebraicClosure K)) F /
+        aeval (genericX E (AlgebraicClosure K)) G)
+    (c : AlgebraicClosure K)
+    (hp : (fiberPolynomial F G c).Monic)
+    (hPc : kernelXAt E H P hP = c)
+    (hwronskian : ∀ Q : halfKernel E H,
+      (wronskian F G).IsRoot ((P + Q.val.val).xc))
+    (hdeg : (fiberPolynomial F G c).natDegree ≤ Nat.card H) :
+    fiberPolynomial F G c = fiberFactor (Finset.univ : Finset (halfKernel E H)) P.xc
+      (fun Q : halfKernel E H => (P + Q.val.val).xc) := by
+  have hroot : (fiberPolynomial F G c).IsRoot P.xc :=
+    fiberPolynomial_isRoot_of_veluX_eq_quotient E H F G hG hrel c P hP hPc
+  have horbit : ∀ Q : halfKernel E H,
+      (fiberPolynomial F G c).IsRoot ((P + Q.val.val).xc) := by
+    intro Q
+    apply fiberPolynomial_isRoot_of_veluX_eq_quotient E H F G hG hrel c
+      (P + Q.val.val) (add_not_mem_kernel E H P hP Q.val)
+    rw [kernelXAt_translation E H P hP Q.val, hPc]
+  exact eq_orbit_x_fiberFactor_of_monic_of_wronskian_roots E H ho P hP hneg F G
+    hcoprime c hp hroot horbit hwronskian hdeg
 
 end DkMath.Lib.NumberTheory.EllipticFiniteKernel

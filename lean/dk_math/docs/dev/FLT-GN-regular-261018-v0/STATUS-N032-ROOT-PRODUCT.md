@@ -201,6 +201,19 @@ Vélu 有理式の係数対へ直接適用できる。今回の補題は根の�
 存在しない。これにより、分離ファイバーの「一般値」経路と、軌道因子同定に必要な
 Wronskian 零点を仮定する「分岐値」経路が、定理の型で相互排他的になる。
 
+さらに、`fiberPolynomial_isRoot_of_veluX_eq_quotient` を追加した。これは任意の
+非零分母 `G` と関数体恒等式 `X_H = F/G` を入力に、`kernelXAt P = c` から
+`(F-cG).IsRoot P.x` を直接導く。RatFunc 表示を内部で選ぶ従来の存在定理と違い、
+後段の Wronskian 計算で使う同じ係数対を保持したまま、点評価・付値合同・多項式
+評価を接続する。
+
+この橋を `eq_orbit_x_fiberFactor_of_monic_of_veluX_quotient_of_wronskian_roots`
+へ接続した。核外の反転固定点 `P`、モニック性、次数上界、同じ `F/G` の
+Wronskian 軌道零点を仮定すると、`kernelXAt P = c` と平行移動不変性から単純根と
+全半核軌道根を自動生成し、有限ファイバー多項式を `fiberFactor` と同定する。
+残る未実装入力は、半核軌道上の Wronskian 零点を幾何学から供給する部分に限定
+された。
+
 ## 次に必要なこと
 
 上の消去定理は一般判別式積公式の無条件の証明ではない。残る中心課題は、

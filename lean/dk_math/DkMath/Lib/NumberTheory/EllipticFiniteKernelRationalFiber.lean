@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelSpecialization
+import DkMath.Lib.Algebra.RationalPolynomialFiber
 import Mathlib.FieldTheory.RatFunc.IntermediateField
 
 #print "file: DkMath.Lib.NumberTheory.EllipticFiniteKernelRationalFiber"
@@ -21,6 +22,7 @@ namespace DkMath.Lib.NumberTheory.EllipticFiniteKernel
 open Polynomial IntermediateField WeierstrassCurve WeierstrassCurve.Affine WithZero
 open EllipticFunctionField EllipticTorsionRepresentation EllipticPointEvaluation
 open DkMath.Lib.Algebra
+open DkMath.Lib.Algebra.RationalPolynomialFiber
 variable {K : Type*} [Field K] [NeZero (2 : K)] (E : WeierstrassCurve K) [E.IsElliptic]
 noncomputable local instance : DecidableEq (AlgebraicClosure K) := Classical.decEq _
 
@@ -173,6 +175,59 @@ theorem exists_veluX_fiber_polynomial (H : AddSubgroup (Points E)) [Fintype H]
     by_contra hn
     rw [pointValuation_const_eq_one E P hn] at hcval
     exact lt_irrefl _ hcval
+
+omit [NeZero (2 : K)] in
+/-- [DkMath.Lib] 同じ Vélu 分子・分母の有限ファイバーは実点の x 座標を根に持つ。
+
+`exists_veluX_fiber_polynomial` は、関数体から取り出した RatFunc 表示を内部で
+選ぶため、後段の Wronskian 計算にその分子・分母を直接渡しにくい。ここでは
+任意の係数対 `F,G`（分母 `G` は非零）と恒等式 `X_H = F/G` を入力に固定する。
+点 `P` での評価は、分母の非零性を超越性から得てから、付値の合同を
+`fiberPolynomial F G c` へ移す。従って `kernelXAt P = c` なら、まさに同じ
+`F-cG` の根であることが形式化される。
+-/
+theorem fiberPolynomial_isRoot_of_veluX_eq_quotient
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (F G : (AlgebraicClosure K)[X]) (hG : G ≠ 0)
+    (hrel : veluX E H =
+      aeval (genericX E (AlgebraicClosure K)) F /
+        aeval (genericX E (AlgebraicClosure K)) G)
+    (c : AlgebraicClosure K) (P : Points E) (hP : P ∉ H)
+    (hval : kernelXAt E H P hP = c) :
+    (fiberPolynomial F G c).IsRoot P.xc := by
+  let k := AlgebraicClosure K
+  let Func := (E.toAffine⁄k).FunctionField
+  let x := genericX E k
+  have hx : Transcendental k x := transcendental_of_point_pole E 0 x (by
+    change 1 < pointValuation E (0 : (E⁄k).Point) (genericX E k)
+    rw [pointValuation_zero_genericX, ← exp_zero, exp_lt_exp]
+    decide)
+  have hq : aeval x G ≠ 0 := fun h => hG ((transcendental_iff.mp hx) _ h)
+  let p : k[X] := fiberPolynomial F G c
+  change veluX E H = aeval x F / aeval x G at hrel
+  have hid : aeval x p = (veluX E H - algebraMap k Func c) * aeval x G := by
+    dsimp only [p, fiberPolynomial]
+    rw [map_sub, map_mul, aeval_C, hrel]
+    field_simp [hq]
+    ring
+  have hP0 : P ≠ 0 := fun hz => hP (hz ▸ H.zero_mem)
+  have hc (a : k) := pointValuation_const_le_one E P a
+  have hX := (kernelAt_congr E H P hP).1
+  rw [hval] at hX
+  have hqreg := ValuationRationalPolynomial.aeval_le_one (pointValuation E P) hc x
+    (pointValuation_genericX_le_one E P hP0) G
+  have hv : pointValuation E P (aeval x p) < 1 := by
+    rw [hid, map_mul]
+    exact lt_of_le_of_lt ((mul_le_mul' le_rfl hqreg).trans_eq (mul_one _)) hX
+  have hxc := value_spec E P x (pointValuation_genericX_le_one E P hP0)
+  rw [value_genericX E P hP0] at hxc
+  have hcong := (Valuation.Cong.eval₂ (algebraMap k Func) hc hxc (hc P.xc) p).1
+  rw [eval₂_at_apply] at hcong
+  have hcval : pointValuation E P (algebraMap k Func (p.eval P.xc)) < 1 :=
+    hcong.lt_one_iff.mp hv
+  by_contra hn
+  rw [pointValuation_const_eq_one E P hn] at hcval
+  exact lt_irrefl _ hcval
 
 /-- [DkMath.Lib] 有限ファイバー多項式の評価零点を根多重度へ変換する。
 
