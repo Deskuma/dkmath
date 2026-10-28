@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDepthProduct
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelRationalFiber
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelSurjective
 import DkMath.Lib.NumberTheory.WeierstrassDiscriminantRoots
 import DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
 import Mathlib.Algebra.Polynomial.FieldDivision
@@ -629,5 +630,53 @@ theorem normalize_fiberPolynomial_eq_orbit_x_fiberFactor_of_veluX_quotient_of_wr
   change q = _
   exact eq_orbit_x_fiberFactor_of_monic_of_rootMultiplicity E H ho P hP hneg q hq
     hsimple hdouble hdegq
+
+/-- [DkMath.Lib] 実際の Vélu 係数対から、条件付き軌道因子同定までを一括する。
+
+`exists_veluX_normalized_coprime_fiber_data` は、有限値 `c` に対して分子・分母を
+一度だけ選び、分母非零、exact degree、正規化モニック性、点評価根を供給する。
+この定理はその選択を、既存の
+`normalize_fiberPolynomial_eq_orbit_x_fiberFactor_of_veluX_quotient_of_wronskian_roots`
+へ渡す。必要な Wronskian 軌道零点は `hwronskian` として明示入力に残るので、
+この接続は代数的な通し道を完成させつつ、幾何学的分岐証明を過大主張しない。
+
+`hPc` は軌道の基点 `P` がファイバー値 `c` を取ること、`hneg` はその基点が
+反転固定の二捩れ点であることを表す。従って、出力等号は、平行移動不変性から
+得られる全半核軌道を標準 `fiberFactor` へ送る終端になる。
+-/
+theorem exists_veluX_normalized_fiberFactor_of_wronskian_transport
+    (ho : Odd (Nat.card H))
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P)
+    (c : AlgebraicClosure K)
+    (hPc : kernelXAt E H P hP = c)
+    (hwronskian : ∀ F G : (AlgebraicClosure K)[X],
+      IsCoprime F G → G ≠ 0 →
+        veluX E H = aeval (genericX E (AlgebraicClosure K)) F /
+          aeval (genericX E (AlgebraicClosure K)) G →
+        ∀ Q : halfKernel E H,
+          (wronskian F G).IsRoot ((P + Q.val.val).xc)) :
+    ∃ F G : (AlgebraicClosure K)[X],
+      IsCoprime F G ∧ G ≠ 0 ∧ F.natDegree = Nat.card H ∧
+        G.natDegree < F.natDegree ∧
+        veluX E H = aeval (genericX E (AlgebraicClosure K)) F /
+          aeval (genericX E (AlgebraicClosure K)) G ∧
+        fiberPolynomial F G c ≠ 0 ∧
+        (normalize (fiberPolynomial F G c)).Monic ∧
+        (normalize (fiberPolynomial F G c)).natDegree = Nat.card H ∧
+        (∀ (P : Points E) (hP : P ∉ H),
+          kernelXAt E H P hP = c →
+            (normalize (fiberPolynomial F G c)).IsRoot P.xc) ∧
+        normalize (fiberPolynomial F G c) =
+          fiberFactor (Finset.univ : Finset (halfKernel E H)) P.xc
+            (fun Q : halfKernel E H => (P + Q.val.val).xc) := by
+  obtain ⟨F, G, hcop, hG, hF, hGlt, hrel, hp0, hmonic, hnormdeg, hroot⟩ :=
+    exists_veluX_normalized_coprime_fiber_data E H c
+  have hdeg : (fiberPolynomial F G c).natDegree = Nat.card H := by
+    simpa only [Polynomial.natDegree_normalize] using hnormdeg
+  have hfactor :=
+    normalize_fiberPolynomial_eq_orbit_x_fiberFactor_of_veluX_quotient_of_wronskian_roots
+      E H ho P hP hneg F G hcop hG hrel c hp0 hPc (hwronskian F G hcop hG hrel)
+        hdeg.le
+  exact ⟨F, G, hcop, hG, hF, hGlt, hrel, hp0, hmonic, hnormdeg, hroot, hfactor⟩
 
 end DkMath.Lib.NumberTheory.EllipticFiniteKernel

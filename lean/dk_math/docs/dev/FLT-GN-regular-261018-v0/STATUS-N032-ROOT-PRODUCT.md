@@ -225,6 +225,34 @@ Wronskian 軌道零点を仮定すると、`kernelXAt P = c` と平行移動不�
 `F.eval x / G.eval x = c` を同時に取り出す。これにより、例外値を有限集合へ
 押し込めるだけでなく、各例外値の具体的な臨界根データを後段の軌道比較へ渡せる。
 
+今回、Vélu 有理式の標準 RatFunc 表示をさらに一つの教材用パッケージへ束ねた。
+`exists_veluX_normalized_coprime_fiber_data` は、同じ `F,G` に対して
+`IsCoprime F G`、`G ≠ 0`、`deg G < deg F = |H|`、`X_H = F/G`、非零ファイバー、
+`normalize (F-cG)` のモニック性と exact degree、さらに核外点の評価根を同時に
+返す。これにより、点評価から多項式の根、そこから軌道因子へ進む際に、表示を
+途中で選び直す必要がなくなった。
+
+その上で `exists_veluX_separable_or_wronskian_critical` を追加した。同じ実際の
+Vélu 係数対と正規化データを保ったまま、有限ファイバーを、分離多項式を持つ
+一般値か、具体的な `x` における `F-cG` と Wronskian の同時根および
+`F.eval x / G.eval x = c` を持つ臨界値かに分類する。これは商曲線の非特異性や
+判別式非零性を自動的に結論するものではないが、分離経路と分岐経路を同じ係数対
+で比較するための境界を明示する。
+
+さらに `exists_veluX_normalized_separable_fiber_avoiding` を追加した。任意の有限
+例外集合 `s` を避ける分離値 `c` について、分母非零・非零ファイバー・正規化
+モニック多項式・exact degree・核外点の根性まで一括して供給する。したがって、
+一般値を使う局所計算ではこの補題だけを入口にでき、臨界値側では上記の二分岐の
+Wronskian 根データへ切り替えられる。
+
+最後に RootProduct 層から `exists_veluX_normalized_fiberFactor_of_wronskian_transport`
+を追加した。これは Surjective 層の実際の係数対を選び、正規化ファイバーの
+exact degree を未正規化次数へ戻し、既存の軌道因子同定定理を適用して、
+`normalize (F-cG) = fiberFactor` を得る。仮定は基点 `P` のファイバー値と、
+選ばれた `F,G` に沿った半核軌道上の Wronskian 零点だけであり、後者を幾何学から
+供給する部分は明示的に未完了のまま残る。RootProduct はこの接続の所有モジュール
+を直接 import し、`DkMath.Lib` 全体への依存を増やしていない。
+
 ## 次に必要なこと
 
 上の消去定理は一般判別式積公式の無条件の証明ではない。残る中心課題は、
@@ -243,6 +271,8 @@ Wronskian 軌道零点を仮定すると、`kernelXAt P = c` と平行移動不�
 消去定理の退化しない計算例、付値輸送の自明付値例を検査した。主要定理の
 `#print axioms` は `propext`, `Classical.choice`, `Quot.sound` のみ。
 本サイクルでは `RationalPolynomialFiber`、`EllipticFiniteKernelRationalFiber`、
-`EllipticFiniteKernelRootProduct` と既存テストモジュールの focused build、ならびに
-`git diff --check` を実行した。
+`EllipticFiniteKernelSurjective`、`EllipticFiniteKernelRootProduct` と既存テスト
+モジュールの focused build、ならびに `DkMath.Lib` の再ビルドと `git diff --check`
+を実行した。RootProduct の新しい直接 import と係数対からの条件付き因子同定も
+ルートビルドで確認済みである。
 フルビルドは依頼側で確認済み、`lake test` はここでは実行していない。

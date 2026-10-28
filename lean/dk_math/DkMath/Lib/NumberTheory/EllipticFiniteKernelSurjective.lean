@@ -128,6 +128,110 @@ theorem exists_veluX_coprime_fiber_polynomial_exact_degree
   · omega
   · exact hdeg.trans hnum
 
+/-- [DkMath.Lib] Vélu 有理式の有限ファイバーを、後段の因子同定へそのまま渡す。
+
+この定理は、標準 RatFunc 表示から得られる係数対 `F,G` を一度だけ選び、
+後段で必要になるデータを一つの教材用レコードとして束ねる。
+
+* `IsCoprime F G` は、ファイバー根での Wronskian 判定に使う。
+* `G ≠ 0` は、`X_H = F/G` の点評価を正則化する。
+* `deg G < deg F = |H|` は、有限ファイバーの次数落ちを防ぐ。
+* `fiberPolynomial F G c ≠ 0` と `Monic (normalize ...)` は、根の多重集合を
+  `fiberFactor` と比較するための正規化された入力である。
+
+最後の根命題は、`kernelXAt P = c` から同じ `F-cG` の根を返すだけであり、
+Wronskian の零点や二重根は仮定していない。従って、この補題は幾何学的な
+分岐入力を隠さず、Vélu 有理式から一変数多項式へ降ろす確実な部分だけを固定する。
+-/
+theorem exists_veluX_normalized_coprime_fiber_data
+    (H : AddSubgroup (Points E)) [Fintype H] (c : AlgebraicClosure K) :
+    ∃ F G : (AlgebraicClosure K)[X],
+      IsCoprime F G ∧ G ≠ 0 ∧ F.natDegree = Nat.card H ∧
+        G.natDegree < F.natDegree ∧
+        veluX E H = aeval (genericX E (AlgebraicClosure K)) F /
+          aeval (genericX E (AlgebraicClosure K)) G ∧
+        fiberPolynomial F G c ≠ 0 ∧
+        (normalize (fiberPolynomial F G c)).Monic ∧
+        (normalize (fiberPolynomial F G c)).natDegree = Nat.card H ∧
+        ∀ (P : Points E) (hP : P ∉ H),
+          kernelXAt E H P hP = c →
+            (normalize (fiberPolynomial F G c)).IsRoot P.xc := by
+  obtain ⟨r, hgap, hnum, hrel⟩ := exists_veluX_rational_at_infinity E H
+  let F : (AlgebraicClosure K)[X] := r.num
+  let G : (AlgebraicClosure K)[X] := r.denom
+  have hcop : IsCoprime F G := by
+    simpa [F, G] using r.isCoprime_num_denom
+  have hG : G ≠ 0 := by
+    simpa [G] using r.denom_ne_zero
+  have hF : F.natDegree = Nat.card H := by
+    simpa [F] using hnum
+  have hGlt : G.natDegree < F.natDegree := by
+    dsimp [F, G]
+    omega
+  have hrel' : veluX E H =
+      aeval (genericX E (AlgebraicClosure K)) F /
+        aeval (genericX E (AlgebraicClosure K)) G := by
+    simpa [F, G] using hrel
+  have hdeg : (fiberPolynomial F G c).natDegree = Nat.card H := by
+    rw [fiberPolynomial_natDegree_eq_of_natDegree_lt (c := c) hGlt, hF]
+  have hcard : 0 < Nat.card H := by omega
+  have hp0 : fiberPolynomial F G c ≠ 0 := by
+    intro hz
+    have hzdeg : (fiberPolynomial F G c).natDegree = 0 := by simp [hz]
+    exact (Nat.ne_of_gt hcard) (by rw [hdeg] at hzdeg; exact hzdeg)
+  have hmonic : (normalize (fiberPolynomial F G c)).Monic :=
+    Polynomial.monic_normalize hp0
+  have hnormdeg : (normalize (fiberPolynomial F G c)).natDegree = Nat.card H := by
+    rw [Polynomial.natDegree_normalize, hdeg]
+  refine ⟨F, G, hcop, hG, hF, hGlt, hrel', hp0, hmonic, hnormdeg, ?_⟩
+  intro P hP hPc
+  have hroot : (fiberPolynomial F G c).IsRoot P.xc :=
+    fiberPolynomial_isRoot_of_veluX_eq_quotient E H F G hG hrel' c P hP hPc
+  rw [← mem_roots hp0] at hroot
+  apply (mem_roots hmonic.ne_zero).mp
+  rw [Polynomial.roots_normalize]
+  exact hroot
+
+/-- [DkMath.Lib] 実際の Vélu ファイバーを「一般値」か「臨界値」へ分類する。
+
+前定理で固定した同じ `F,G` について、有限ファイバー `F-cG` が分離的なら
+`c` は Wronskian の零点を持たない一般値である。分離的でないなら、一般の
+RationalPolynomialFiber 補題から、ファイバー根 `x` と Wronskian 根 `x`、さらに
+`F.eval x / G.eval x = c` を同時に取り出せる。従って、幾何学的な軌道根の
+二重性を構成する前段階で、実際の `X_H = F/G` の有限値をこの二分岐として
+整理できる。
+
+この分類は、分離性だけから商曲線の非特異性を結論しない。分岐側の根は
+Wronskian 零点として記録されるだけであり、軌道全体の Wronskian 消滅や
+判別式非零性は、後続の幾何学的仮定に残る。
+-/
+theorem exists_veluX_separable_or_wronskian_critical
+    (H : AddSubgroup (Points E)) [Fintype H] (c : AlgebraicClosure K) :
+    ∃ F G : (AlgebraicClosure K)[X],
+      IsCoprime F G ∧ G ≠ 0 ∧ F.natDegree = Nat.card H ∧
+        G.natDegree < F.natDegree ∧
+        veluX E H = aeval (genericX E (AlgebraicClosure K)) F /
+          aeval (genericX E (AlgebraicClosure K)) G ∧
+        fiberPolynomial F G c ≠ 0 ∧
+        (normalize (fiberPolynomial F G c)).Monic ∧
+        (normalize (fiberPolynomial F G c)).natDegree = Nat.card H ∧
+        (∀ (P : Points E) (hP : P ∉ H),
+          kernelXAt E H P hP = c →
+            (normalize (fiberPolynomial F G c)).IsRoot P.xc) ∧
+        ((fiberPolynomial F G c).Separable ∨
+          ∃ x : AlgebraicClosure K,
+            (fiberPolynomial F G c).IsRoot x ∧
+              (wronskian F G).IsRoot x ∧ F.eval x / G.eval x = c) := by
+  obtain ⟨F, G, hcop, hG, hF, hGlt, hrel, hp0, hmonic, hnormdeg, hroot⟩ :=
+    exists_veluX_normalized_coprime_fiber_data E H c
+  by_cases hsep : (fiberPolynomial F G c).Separable
+  · exact ⟨F, G, hcop, hG, hF, hGlt, hrel, hp0, hmonic, hnormdeg, hroot,
+      Or.inl hsep⟩
+  · obtain ⟨x, hx, hwx, hquot⟩ :=
+      exists_wronskian_root_of_not_separable_fiber hcop hsep
+    exact ⟨F, G, hcop, hG, hF, hGlt, hrel, hp0, hmonic, hnormdeg, hroot,
+      Or.inr ⟨x, hx, hwx, hquot⟩⟩
+
 /-- [DkMath.Lib] Vélu 有理式には、任意の有限例外集合を避ける分離ファイバーがある。
 
 分子・分母の互いに素性と `deg G < deg F` から Wronskian の非零性を得て、
@@ -164,6 +268,55 @@ theorem exists_veluX_separable_coprime_fiber_avoiding
       aeval (genericX E (AlgebraicClosure K)) G := by
     simpa [F, G] using hr
   exact ⟨F, G, c, hcop, hF, hGlt, hrel, hcsep, hcs, hdeg⟩
+
+/-- [DkMath.Lib] 有限例外集合を避ける、正規化済み分離 Vélu ファイバー。
+
+`exists_veluX_separable_coprime_fiber_avoiding` は分離値の存在と exact degree を
+供給する。この補題では、その同じ `F,G,c` に分母非零・非零ファイバー・標準
+モニック化・全ての核外点での根性を追加し、一般値の計算を後段で一つの証明
+オブジェクトとして再利用できるようにする。分離性は Wronskian の零点がその
+ファイバー根に現れないことを意味するので、分岐値を除外した軌道探索の入口に
+なる。
+-/
+theorem exists_veluX_normalized_separable_fiber_avoiding
+    (H : AddSubgroup (Points E)) [Fintype H]
+    {s : Set (AlgebraicClosure K)} (hs : s.Finite) :
+    ∃ F G : (AlgebraicClosure K)[X], ∃ c : AlgebraicClosure K,
+      IsCoprime F G ∧ G ≠ 0 ∧ F.natDegree = Nat.card H ∧
+        G.natDegree < F.natDegree ∧
+        veluX E H = aeval (genericX E (AlgebraicClosure K)) F /
+          aeval (genericX E (AlgebraicClosure K)) G ∧
+        fiberPolynomial F G c ≠ 0 ∧
+        (normalize (fiberPolynomial F G c)).Monic ∧
+        (normalize (fiberPolynomial F G c)).natDegree = Nat.card H ∧
+        (fiberPolynomial F G c).Separable ∧ c ∉ s ∧
+        ∀ (P : Points E) (hP : P ∉ H),
+          kernelXAt E H P hP = c →
+            (normalize (fiberPolynomial F G c)).IsRoot P.xc := by
+  obtain ⟨F, G, c, hcop, hF, hGlt, hrel, hcsep, hcs, hdeg⟩ :=
+    exists_veluX_separable_coprime_fiber_avoiding E H hs
+  have hG : G ≠ 0 := by
+    intro hz
+    have hzero := hrel
+    rw [hz, map_zero, div_zero] at hzero
+    exact veluX_ne_zero E H hzero
+  have hcard : 0 < Nat.card H := by omega
+  have hp0 : fiberPolynomial F G c ≠ 0 := by
+    intro hz
+    have hzdeg : (fiberPolynomial F G c).natDegree = 0 := by simp [hz]
+    exact (Nat.ne_of_gt hcard) (by rw [hdeg] at hzdeg; exact hzdeg)
+  have hmonic : (normalize (fiberPolynomial F G c)).Monic :=
+    Polynomial.monic_normalize hp0
+  have hnormdeg : (normalize (fiberPolynomial F G c)).natDegree = Nat.card H := by
+    rw [Polynomial.natDegree_normalize, hdeg]
+  refine ⟨F, G, c, hcop, hG, hF, hGlt, hrel, hp0, hmonic, hnormdeg, hcsep, hcs, ?_⟩
+  intro P hP hPc
+  have hroot : (fiberPolynomial F G c).IsRoot P.xc :=
+    fiberPolynomial_isRoot_of_veluX_eq_quotient E H F G hG hrel c P hP hPc
+  rw [← mem_roots hp0] at hroot
+  apply (mem_roots hmonic.ne_zero).mp
+  rw [Polynomial.roots_normalize]
+  exact hroot
 
 /-- [DkMath.Lib] 同じX_Hは各有限値を、同じ核の外の実際の点で取る。
 分母非零・源の有限性・核外性・有限評価との一致を全て内部供給する。 -/
