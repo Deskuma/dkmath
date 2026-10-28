@@ -208,6 +208,80 @@ theorem orbit_x_factor_eq_root_and_half_square
   simpa only [ξ, hzero] using hfactor
 
 omit [CharZero K] [E.IsElliptic] in
+/-- [DkMath.Lib] 核外の反転固定点から半核への x 軌道は単射である。
+
+`x(P+Q)=x(P+R)` なら、有限点の x 座標判定により
+`P+Q=P+R` または `P+Q=-(P+R)` となる。前者は `Q=R` を与え、後者は
+`Q=-R` を与えるが、半核が反転対を一方だけ選ぶことに反する。従って、
+`fiberFactor` の半核根は添字の衝突なしに扱える。 -/
+theorem orbit_x_injective_on_halfKernel
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P) :
+    Function.Injective (fun Q : halfKernel E H => (P + Q.val.val).xc) := by
+  intro Q R hQR
+  have hQ0 : P + Q.val.val ≠ 0 := by
+    intro hz
+    exact hP (by
+      rw [eq_neg_of_add_eq_zero_left hz]
+      exact H.neg_mem Q.val.property)
+  have hR0 : P + R.val.val ≠ 0 := by
+    intro hz
+    exact hP (by
+      rw [eq_neg_of_add_eq_zero_left hz]
+      exact H.neg_mem R.val.property)
+  rcases point_eq_or_eq_neg_of_xc_eq E (P + Q.val.val) (P + R.val.val)
+      hQ0 hR0 hQR with hsame | hneg'
+  · apply Subtype.ext
+    apply Subtype.ext
+    exact add_left_cancel hsame
+  · have hQRneg : Q.val.val = -R.val.val := by
+      calc
+        Q.val.val = (P + Q.val.val) - P := by abel
+        _ = (-(P + R.val.val)) - P := by rw [hneg']
+        _ = -P - R.val.val - P := by rw [neg_add]; abel
+        _ = -R.val.val := by rw [hneg]; abel
+    have hQRneg' : Q.val = -R.val := by
+      apply Subtype.ext
+      exact hQRneg
+    have hmem : -Q.val ∈ halfKernel E H := by
+      rw [hQRneg', neg_neg]
+      exact R.property
+    exact (neg_not_mem_halfKernel E H Q.val Q.property hmem).elim
+
+omit [CharZero K] [E.IsElliptic] in
+/-- [DkMath.Lib] 単純根 `P.xc` は半核軌道の x 根とは衝突しない。
+
+`P` 自身と `P+Q` の x 座標が等しければ、二点判定から両者が等しいか
+反転関係にある。`P=-P` を使うと、どちらの場合も `Q=0` に帰着するが、
+半核は零元を含まない。この補題は `fiberFactor` の単純根と二重根の分離を
+実座標側で供給する。 -/
+theorem orbit_x_root_ne_halfKernel
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P) (Q : halfKernel E H) :
+    P.xc ≠ (P + Q.val.val).xc := by
+  intro hxe
+  have hP0 : P ≠ 0 := fun hz => hP (hz ▸ H.zero_mem)
+  have hPQ0 : P + Q.val.val ≠ 0 := by
+    intro hz
+    exact hP (by
+      rw [eq_neg_of_add_eq_zero_left hz]
+      exact H.neg_mem Q.val.property)
+  rcases point_eq_or_eq_neg_of_xc_eq E P (P + Q.val.val) hP0 hPQ0 hxe with heq | hneg'
+  · have hz : Q.val.val = 0 := by
+      calc
+        Q.val.val = (P + Q.val.val) - P := by abel
+        _ = P - P := by rw [← heq]
+        _ = 0 := by abel
+    exact ((mem_halfKernel E H Q.val).mp Q.property).1 (Subtype.ext hz)
+  · have hz : Q.val.val = 0 := by
+      have hsum : P + Q.val.val = -P := by
+        have h := congrArg Neg.neg hneg'
+        simpa only [neg_neg] using h.symm
+      calc
+        Q.val.val = (P + Q.val.val) - P := by abel
+        _ = (-P) - P := by rw [hsum]
+        _ = 0 := by rw [hneg]; abel
+    exact ((mem_halfKernel E H Q.val).mp Q.property).1 (Subtype.ext hz)
+
+omit [CharZero K] [E.IsElliptic] in
 /-- [DkMath.Lib] x 軌道積を標準の `fiberFactor` 表記へ正規化する。
 
 前定理の積分解を、判別式組立で使う `fiberFactor` にそのまま同定する。
