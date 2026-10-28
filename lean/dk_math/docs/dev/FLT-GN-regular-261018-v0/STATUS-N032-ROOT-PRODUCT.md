@@ -377,11 +377,11 @@ Wronskian の幾何学的零点を優先し、既存の `veluX_half` と `veluZ_
 移すことである。さらに二捩れ点 `T` での反転固定と `T+Q` の根輸送を用いて、
 その組み立てた Wronskian が実際に消えることを示す必要がある。
 
-次に攻める具体的な補題は、半核添字 `Q` ごとの
-`(X-c_Q)^2` を共通分母とする有限積・有限和の微分公式である。これが閉じれば、
-`veluX_half` の分子 `F` と分母 `G` に対する Wronskian を、各 `zCorrection`
-の加重和へ帰着できる。その後、二捩れ点で平方完成座標が零となる局所評価を
-加えれば、目標の二重根／Wronskian 零点へ進める。
+次の具体的な補題は、半核添字 `Q` に対する `x(T+Q) ≠ x(S)` の幾何学的非衝突を
+証明し、`hxa : ∀ i ∈ s, x ≠ a i` を実際に供給することである。その後、
+`veluX_half` の関数体係数対と `finite_xCorrection_wronskian_eval_eq_denominator_sq_mul_one_add_z`
+を接続し、二捩れ点で平方完成座標が零となる局所評価を加えれば、目標の二重根／
+Wronskian 零点へ進める。
 
 ## Wronskian 層の検証
 
@@ -397,3 +397,48 @@ Wronskian の幾何学的零点を優先し、既存の `veluX_half` と `veluZ_
 回帰入口として `DkMathTest.Lib.NumberTheory.EllipticFiniteKernelWronskian` を追加し、
 公開した局所定理を一般の体上で再利用できることも focused build で確認した。
 重い `lake test` 全体は依頼の運用方針に従い、このサイクルでは省略した。
+
+## 有限積への Wronskian 持ち上げ
+
+レビューで指定された式 (1) を、曲線に依存しない新規モジュール
+`DkMath.Lib.Algebra.FiniteProductWronskian` に実装した。有限集合 `s`、
+分子族 `N`、分母族 `D` に対して、
+
+`Eᵢ = ∏ⱼ∈s.erase i Dⱼ`,
+`D = ∏ᵢ∈s Dᵢ`,
+`A = X D + Σᵢ Nᵢ Eᵢ`
+
+を定義し、
+
+`A' D - A D' = D² + Σᵢ Eᵢ² (Nᵢ' Dᵢ - Nᵢ Dᵢ')`
+
+を `commonNumerator_wronskian_eq` として証明した。有限積の微分は
+巨大展開に頼らず、積・和の微分則、除去積 `Finset.prod_erase_mul`、
+局所ごとの `ring` に分解している。
+
+さらに `commonNumerator_wronskian_eq_of_local` を追加し、局所 Wronskian を
+任意の `Z i` に置き換えられる形を公開した。これを既存の一対補正恒等式へ
+適用する `finite_xCorrection_wronskian_eq` も追加したため、Vélu 補正族について
+
+`A' D - A D' = D² + Σᵢ Eᵢ² (X-C(aᵢ)) Zᵢ`
+
+が無条件に得られる。これはレビューの式 (2) に対応する新しい確立部分である。
+
+さらに `finite_xCorrection_wronskian_eval_eq_denominator_sq_mul_one_add_z` を
+追加した。各 `x-aᵢ` の非零性を仮定すれば、点評価後に
+
+`W(A,D)(x) = D(x)² (1 + Σᵢ zCorrectionᵢ(x))`
+
+という式 (3) を得る。ここで必要な分母非零条件はまだ半核の幾何学から供給せず、
+`hxa : ∀ i ∈ s, x ≠ a i` として明示している。この分離により、次工程では
+`T+Q` と半核点の x 座標非衝突をこの仮定へ渡せばよい。
+
+この段階では、まだ `veluX_half` の実際の半核添字と関数体係数を代入していない。
+従って標準 `RatFunc` 表示の `F,G` との交差乗算、
+二捩れ点 `T+Q` での Wronskian 零点は未解決である。次の具体的な補題は、
+半核族の各分母 `Dᵢ(x)` の非零性と `D(x)=∏Dᵢ(x)` の非零性を接続し、
+この有限積恒等式を `veluZ_half` の評価式へ輸送することである。
+
+今回の検証では、対象の有限積モジュール、Vélu 補正族モジュール、回帰テスト、
+`DkMath.Lib` を focused build した。新規公開定理の `#print axioms` は
+いずれも `propext`, `Classical.choice`, `Quot.sound` のみである。

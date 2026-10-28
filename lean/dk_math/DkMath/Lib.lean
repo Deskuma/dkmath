@@ -362,6 +362,8 @@ import DkMath.Lib.TwoChannel
 -- 新規追加分（後でソート挿入する）
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelRootProduct
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskian
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianAssembly
+import DkMath.Lib.Algebra.FiniteProductWronskian
 import DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
 import DkMath.Lib.NumberTheory.WeierstrassTwoTorsionTranslate
 
