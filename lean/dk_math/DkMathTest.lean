@@ -302,6 +302,7 @@ import DkMathTest.RH.WeaveEtaPairPhaseSpan
 
 -- 新規追加分（後でソート挿入する）
 import DkMathTest.Lib.NumberTheory.WeierstrassDiscriminantRoots
+import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelWronskian
 import DkMathTest.Lib.NumberTheory.WeierstrassTwoTorsionTranslate
 
 #print "file: DkMathTest"

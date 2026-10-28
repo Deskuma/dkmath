@@ -348,3 +348,52 @@ Wronskian 軌道零点）の幾何学計算が必要であり、そこを仮定�
 このサイクルでも、二重根そのものや Wronskian の軌道零点は導入していない。
 従って、判別式積の局所計算は引き続き別入力であり、今回の成果は根の住所と
 重複度を接続する有限組合せ層に限定される。
+
+## 今回の Wronskian 局所接続
+
+Wronskian の幾何学的零点を優先し、既存の `veluX_half` と `veluZ_half` の
+各反転対補正を分母消去した新規モジュール
+`EllipticFiniteKernelWronskian` を追加した。半核全体の和を直接再展開せず、
+一対の補正項に対して
+
+* `xCorrectionNumerator` と `xCorrectionDenominator` による
+  `xCorrection = N / D` の評価表示を確立し、
+* `N' D - N D' = (X-a) Z` を多項式恒等式として証明し、
+* その評価版 `xCorrection_numerator_wronskian_eval` と、非零分母上で
+  `N'(x)D(x)-N(x)D'(x)=(x-a)^4 zCorrection(x)` と書く
+  `xCorrection_numerator_wronskian_eval_eq_pow_mul_zCorrection` を公開した。
+
+ここで `Z` は `zCorrection` の分母を払った分子であり、既存の
+`translated_pair` が使う平方完成座標補正と同じ係数を持つ。従って、今回実際に
+新しく証明した数学的内容は、Vélu の一対補正における形式微分と Wronskian の
+厳密な局所恒等式である。証明は `Field` 上の多項式微分、評価、分母消去、
+`ring` に限定され、有限核・楕円性・二捩れ点の仮定を必要としない。
+
+`veluX_half`、`veluZ_half`、`translated_pair` との関係は既存定理の組合せであり、
+今回のファイルではそれらを再証明していない。また、この局所恒等式だけから
+実際の半核和の係数対 `F,G` に対する
+`W(F,G)(x(T+Q)) = 0` を結論してはいない。未解決の義務は、各補正項の共通分母を
+半核全体で組み立て、`veluZ_half` の平方完成表示をその分子・分母の微分へ
+移すことである。さらに二捩れ点 `T` での反転固定と `T+Q` の根輸送を用いて、
+その組み立てた Wronskian が実際に消えることを示す必要がある。
+
+次に攻める具体的な補題は、半核添字 `Q` ごとの
+`(X-c_Q)^2` を共通分母とする有限積・有限和の微分公式である。これが閉じれば、
+`veluX_half` の分子 `F` と分母 `G` に対する Wronskian を、各 `zCorrection`
+の加重和へ帰着できる。その後、二捩れ点で平方完成座標が零となる局所評価を
+加えれば、目標の二重根／Wronskian 零点へ進める。
+
+## Wronskian 層の検証
+
+`lake build DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskian` と
+`lake build DkMath.Lib` は成功した。新規定理
+`xCorrection_eq_eval_numerator_div_denominator`、
+`xCorrection_numerator_wronskian_eq`、
+`xCorrection_numerator_wronskian_eval`、
+`xCorrection_numerator_wronskian_eval_eq_pow_mul_zCorrection` の
+`#print axioms` はいずれも
+`propext`, `Classical.choice`, `Quot.sound` のみで、新しい `sorry` や独自
+`axiom` は導入していない。`git diff --check` も実行済みである。
+回帰入口として `DkMathTest.Lib.NumberTheory.EllipticFiniteKernelWronskian` を追加し、
+公開した局所定理を一般の体上で再利用できることも focused build で確認した。
+重い `lake test` 全体は依頼の運用方針に従い、このサイクルでは省略した。
