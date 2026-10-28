@@ -214,6 +214,12 @@ Wronskian 軌道零点を仮定すると、`kernelXAt P = c` と平行移動不�
 残る未実装入力は、半核軌道上の Wronskian 零点を幾何学から供給する部分に限定
 された。
 
+さらに `normalize_fiberPolynomial_eq_orbit_x_fiberFactor_of_veluX_quotient_of_wronskian_roots`
+を追加した。実際の `F-cG` にモニック性を要求せず、非零性から `normalize` を
+取り、根の多重集合と次数上界を保存して因子同定する。これにより、exact-degree
+ファイバーの出力をそのまま受けて、モニックな `fiberFactor` へ進む代数層が完成
+した。二重根の根元である Wronskian 軌道零点は引き続き明示入力として残る。
+
 ## 次に必要なこと
 
 上の消去定理は一般判別式積公式の無条件の証明ではない。残る中心課題は、

@@ -7,6 +7,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelDepthProduct
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelRationalFiber
 import DkMath.Lib.NumberTheory.WeierstrassDiscriminantRoots
 import DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
+import Mathlib.Algebra.Polynomial.FieldDivision
 
 #print "file: DkMath.Lib.NumberTheory.EllipticFiniteKernelRootProduct"
 
@@ -576,5 +577,57 @@ theorem eq_orbit_x_fiberFactor_of_monic_of_veluX_quotient_of_wronskian_roots
     rw [kernelXAt_translation E H P hP Q.val, hPc]
   exact eq_orbit_x_fiberFactor_of_monic_of_wronskian_roots E H ho P hP hneg F G
     hcoprime c hp hroot horbit hwronskian hdeg
+
+omit [CharZero K] in
+/-- [DkMath.Lib] 非零な Vélu ファイバーを正規化して軌道因子へ同定する。
+
+実際の `F-cG` は先験的にモニックとは限らないため、前定理のモニック条件を
+`Polynomial.normalize` へ局所化する。非零多項式の normalize は最高係数だけを
+割るので、`roots_normalize` により根の多重集合を保ち、次数上界も
+`natDegree_normalize` で保たれる。従って、点評価根・Wronskian 軌道零点・
+exact degree から、正規化ファイバーを `fiberFactor` へ直接同定できる。
+-/
+theorem normalize_fiberPolynomial_eq_orbit_x_fiberFactor_of_veluX_quotient_of_wronskian_roots
+    (ho : Odd (Nat.card H))
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P)
+    (F G : Polynomial (AlgebraicClosure K)) (hcoprime : IsCoprime F G) (hG : G ≠ 0)
+    (hrel : veluX E H =
+      aeval (genericX E (AlgebraicClosure K)) F /
+        aeval (genericX E (AlgebraicClosure K)) G)
+    (c : AlgebraicClosure K)
+    (hp0 : fiberPolynomial F G c ≠ 0)
+    (hPc : kernelXAt E H P hP = c)
+    (hwronskian : ∀ Q : halfKernel E H,
+      (wronskian F G).IsRoot ((P + Q.val.val).xc))
+    (hdeg : (fiberPolynomial F G c).natDegree ≤ Nat.card H) :
+    normalize (fiberPolynomial F G c) =
+      fiberFactor (Finset.univ : Finset (halfKernel E H)) P.xc
+        (fun Q : halfKernel E H => (P + Q.val.val).xc) := by
+  let p := fiberPolynomial F G c
+  let q := normalize p
+  have hq : q.Monic := Polynomial.monic_normalize hp0
+  have hdegq : q.natDegree ≤ Nat.card H := by
+    rw [Polynomial.natDegree_normalize]
+    exact hdeg
+  have hrootp : p.IsRoot P.xc :=
+    fiberPolynomial_isRoot_of_veluX_eq_quotient E H F G hG hrel c P hP hPc
+  have hmult_eq (z : AlgebraicClosure K) :
+      q.rootMultiplicity z = p.rootMultiplicity z := by
+    rw [← Polynomial.count_roots q, ← Polynomial.count_roots p, Polynomial.roots_normalize]
+  have hsimple : 1 ≤ q.rootMultiplicity P.xc := by
+    rw [hmult_eq]
+    exact (Polynomial.rootMultiplicity_pos hp0).mpr hrootp
+  have hdouble : ∀ Q : halfKernel E H,
+      2 ≤ q.rootMultiplicity ((P + Q.val.val).xc) := by
+    intro Q
+    rw [hmult_eq]
+    exact rootMultiplicity_ge_two_of_fiberPolynomial_root_of_wronskian_root hcoprime hp0
+      (fiberPolynomial_isRoot_of_veluX_eq_quotient E H F G hG hrel c
+        (P + Q.val.val) (add_not_mem_kernel E H P hP Q.val) <| by
+          rw [kernelXAt_translation E H P hP Q.val, hPc])
+      (hwronskian Q)
+  change q = _
+  exact eq_orbit_x_fiberFactor_of_monic_of_rootMultiplicity E H ho P hP hneg q hq
+    hsimple hdouble hdegq
 
 end DkMath.Lib.NumberTheory.EllipticFiniteKernel
