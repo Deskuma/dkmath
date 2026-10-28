@@ -166,6 +166,39 @@ theorem wronskian_ne_zero [CharZero K] {F G : K[X]} (h : IsCoprime F G) (hF : 0 
   have hlt := Polynomial.natDegree_derivative_lt hF.ne'
   exact (not_le_of_gt hlt) hle
 
+/-- [DkMath.Lib] 非分離ファイバーの値は Wronskian の具体的な臨界値である。
+
+`finite_not_separable_fiber` は例外値の集合が有限であることだけを述べる。
+ここではその証明の核心を公開し、非分離性から根 `x` を一つ選び、
+`F-cG` の根、Wronskian の根、そして `c = F(x)/G(x)` を同時に得る。
+分母の非零性は `IsCoprime F G` から自動的に供給されるため、後段では
+「例外値」を単なる有限集合ではなく、具体的な臨界根データとして再利用できる。
+-/
+theorem exists_wronskian_root_of_not_separable_fiber [IsAlgClosed K]
+    {F G : K[X]} (h : IsCoprime F G) {c : K}
+    (hc : ¬ (fiberPolynomial F G c).Separable) :
+    ∃ x : K,
+      (fiberPolynomial F G c).IsRoot x ∧
+        (wronskian F G).IsRoot x ∧ F.eval x / G.eval x = c := by
+  have hn : ¬ IsCoprime (fiberPolynomial F G c) (fiberPolynomial F G c).derivative := hc
+  rw [Polynomial.isCoprime_iff_aeval_ne_zero_of_isAlgClosed (k := K) (K := K)] at hn
+  push Not at hn
+  obtain ⟨x, hx, hdx⟩ := hn
+  rw [coe_aeval_eq_eval] at hx hdx
+  have hxroot : (fiberPolynomial F G c).IsRoot x := hx
+  have hg := eval_denominator_ne_zero h hxroot
+  have hFx : F.eval x = c * G.eval x := by
+    simpa only [fiberPolynomial, eval_sub, eval_mul, eval_C, sub_eq_zero] using hx
+  have hFdx : F.derivative.eval x = c * G.derivative.eval x := by
+    simpa only [fiberPolynomial, derivative_sub, derivative_C_mul, eval_sub, eval_mul,
+      eval_C, sub_eq_zero] using hdx
+  have hw : (wronskian F G).IsRoot x := by
+    change (wronskian F G).eval x = 0
+    simp only [wronskian, eval_sub, eval_mul, hFx, hFdx]
+    ring
+  refine ⟨x, hxroot, hw, ?_⟩
+  rw [hFx, mul_div_cancel_right₀ _ hg]
+
 /-- 重根を持つファイバーの値はWronskianの根の像に含まれ、従って有限である。 -/
 theorem finite_not_separable_fiber [IsAlgClosed K] {F G : K[X]} (h : IsCoprime F G)
     (hw : wronskian F G ≠ 0) : {c : K | ¬ (fiberPolynomial F G c).Separable}.Finite := by
