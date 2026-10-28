@@ -52,6 +52,73 @@ theorem eval_denominator_ne_zero {F G : K[X]} (h : IsCoprime F G) {x c : K}
   simp only [eval_add, eval_mul, eval_one, hF, hG, mul_zero, zero_add] at hh
   exact zero_ne_one hh
 
+/-- [DkMath.Lib] ファイバーの重根条件を Wronskian の根条件へ移す。
+
+`H_c = F - cG` の根 `x` では、`G(x) ≠ 0` が互いに素性から従う。
+したがって `H_c'(x) = 0` は
+`F'(x)G(x) - F(x)G'(x) = 0`、すなわち Wronskian が `x` で消えることと
+同値である。この補題は「ファイバー側の微分零点」と「分子・分母比の
+臨界点」を結ぶ、有限例外値論の基本的な橋である。 -/
+theorem fiberPolynomial_derivative_isRoot_iff_wronskian_isRoot
+    {F G : K[X]} (h : IsCoprime F G) {x c : K}
+    (hx : (fiberPolynomial F G c).IsRoot x) :
+    (fiberPolynomial F G c).derivative.IsRoot x ↔
+      (wronskian F G).IsRoot x := by
+  have hg : G.eval x ≠ 0 := eval_denominator_ne_zero h hx
+  have hFx : F.eval x = c * G.eval x := by
+    have hx' := hx
+    change (fiberPolynomial F G c).eval x = 0 at hx'
+    simpa only [fiberPolynomial, eval_sub, eval_mul, eval_C, sub_eq_zero] using hx'
+  constructor
+  · intro hdx
+    have hdx' := hdx
+    change (fiberPolynomial F G c).derivative.eval x = 0 at hdx'
+    have hFdx : F.derivative.eval x - c * G.derivative.eval x = 0 := by
+      simpa only [fiberPolynomial, derivative_sub, derivative_C_mul, eval_sub, eval_mul,
+        eval_C, sub_eq_zero] using hdx'
+    change (wronskian F G).eval x = 0
+    simp only [wronskian, eval_sub, eval_mul]
+    rw [hFx]
+    calc
+      F.derivative.eval x * G.eval x - (c * G.eval x) * G.derivative.eval x =
+          (F.derivative.eval x - c * G.derivative.eval x) * G.eval x := by ring
+      _ = 0 := by rw [hFdx, zero_mul]
+  · intro hw
+    change (fiberPolynomial F G c).derivative.eval x = 0
+    have hprod : (F.derivative.eval x - c * G.derivative.eval x) * G.eval x = 0 := by
+      have hw' := hw
+      change (wronskian F G).eval x = 0 at hw'
+      simp only [wronskian, eval_sub, eval_mul] at hw'
+      change F.derivative.eval x * G.eval x - F.eval x * G.derivative.eval x = 0 at hw'
+      rw [hFx] at hw'
+      calc
+        (F.derivative.eval x - c * G.derivative.eval x) * G.eval x =
+            F.derivative.eval x * G.eval x - (c * G.eval x) * G.derivative.eval x := by ring
+        _ = 0 := hw'
+    have hFdx : F.derivative.eval x - c * G.derivative.eval x = 0 :=
+      (mul_eq_zero.mp hprod).resolve_right hg
+    simpa only [fiberPolynomial, derivative_sub, derivative_C_mul, eval_sub, eval_mul,
+      eval_C, sub_eq_zero] using hFdx
+
+/-- [DkMath.Lib] Wronskian の零点は、対応するファイバーの二重根を与える。
+
+非零ファイバー多項式 `H_c` の根 `x` で Wronskian も消えるなら、前補題により
+`H_c'(x) = 0` である。従って `Polynomial.one_lt_rootMultiplicity_iff_isRoot`
+を適用すれば、`x` の根多重度は少なくとも2になる。これは有限ファイバーの
+「分岐点なら二重因子」という主張を、幾何学的な分岐理論なしに使える
+一変数多項式の教科書形へ落としたものである。 -/
+theorem rootMultiplicity_ge_two_of_fiberPolynomial_root_of_wronskian_root
+    {F G : K[X]} (h : IsCoprime F G) {x c : K}
+    (hp : fiberPolynomial F G c ≠ 0)
+    (hx : (fiberPolynomial F G c).IsRoot x)
+    (hw : (wronskian F G).IsRoot x) :
+    2 ≤ (fiberPolynomial F G c).rootMultiplicity x := by
+  have hdx : (fiberPolynomial F G c).derivative.IsRoot x :=
+    (fiberPolynomial_derivative_isRoot_iff_wronskian_isRoot h hx).mpr hw
+  have hlt : 1 < (fiberPolynomial F G c).rootMultiplicity x :=
+    (Polynomial.one_lt_rootMultiplicity_iff_isRoot hp).mpr ⟨hx, hdx⟩
+  omega
+
 /-- 標数0の非定数の分子では、互いに素性と微分の次数減少からWronskianが非零となる。 -/
 theorem wronskian_ne_zero [CharZero K] {F G : K[X]} (h : IsCoprime F G) (hF : 0 < F.natDegree) :
     wronskian F G ≠ 0 := by

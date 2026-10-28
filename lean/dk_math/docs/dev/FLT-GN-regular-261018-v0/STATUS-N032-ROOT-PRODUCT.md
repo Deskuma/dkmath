@@ -155,6 +155,26 @@ coprime 性を得て、局所多重度 `1` と `2` を `Finset.prod_dvd_of_copri
 現在の完全な証明経路は、分子の構成 → モニック化 → 軌道値零点 → 軌道微分零点
 → 因子同定、という五段階に分離されている。
 
+今回、一般有理関数ファイバー層にもこの分岐入力を固定した。
+`fiberPolynomial_derivative_isRoot_iff_wronskian_isRoot` は、互いに素な分子・分母
+`F,G` のファイバー `F-cG` の根上で、その微分零点と Wronskian
+`F'G-FG'` の零点を同値にする。さらに
+`rootMultiplicity_ge_two_of_fiberPolynomial_root_of_wronskian_root` は非零性を
+加えて二重根を直接供給する。これにより、分子・分母の有理式計算で得た
+Wronskian 条件を、根多重度 API が要求する微分条件へ形式的に変換できる。
+
+この橋を奇数核の終端へ接続する
+`eq_orbit_x_fiberFactor_of_monic_of_wronskian_roots` も追加した。各半核移動点
+が同じファイバー根であり、かつ Wronskian がそこで消えるという入力から、上の
+同値で軌道微分零点を生成し、`fiberFactor` との多項式等号まで一段で進める。
+Wronskian の軌道零点自体は引き続き幾何学側の未解決入力であり、この定理は
+その入力を隠さず保った条件付きの教科書終端である。
+
+また `exists_veluX_coprime_rational` により、Vélu の `X_H` の RatFunc 表示から
+分子・分母 `F,G` と `IsCoprime F G`、および次数等式を同時に取り出せるように
+した。これで次段では、Wronskian の有限例外値論を `X_H` の実際の有理式へ
+適用する際に、互いに素性を別途再構成する必要がない。
+
 ## 次に必要なこと
 
 上の消去定理は一般判別式積公式の無条件の証明ではない。残る中心課題は、
@@ -172,5 +192,7 @@ coprime 性を得て、局所多重度 `1` と `2` を `Finset.prod_dvd_of_copri
 対象モジュールおよび具体例 `y²=x³-x` のテストをビルドし、三根と判別式64、
 消去定理の退化しない計算例、付値輸送の自明付値例を検査した。主要定理の
 `#print axioms` は `propext`, `Classical.choice`, `Quot.sound` のみ。
-本サイクルでは対象モジュールの focused build と `git diff --check` を実行した。
+本サイクルでは `RationalPolynomialFiber`、`EllipticFiniteKernelRationalFiber`、
+`EllipticFiniteKernelRootProduct` と既存テストモジュールの focused build、ならびに
+`git diff --check` を実行した。
 フルビルドは依頼側で確認済み、`lake test` はここでは実行していない。

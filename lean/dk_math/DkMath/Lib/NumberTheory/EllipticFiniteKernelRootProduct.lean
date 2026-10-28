@@ -20,6 +20,7 @@ import DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
 namespace DkMath.Lib.NumberTheory.EllipticFiniteKernel
 open WeierstrassCurve WeierstrassCurve.Affine
 open EllipticTorsionRepresentation WeierstrassDiscriminantRoots
+open DkMath.Lib.Algebra.RationalPolynomialFiber
 open DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
 open scoped BigOperators
 noncomputable local instance instDecidableEqEllipticFiniteKernelRootProduct {α : Type*} : DecidableEq α := Classical.decEq _
@@ -502,5 +503,38 @@ theorem eq_orbit_x_fiberFactor_of_monic_of_derivative_roots
   · exact orbit_x_fiberFactor_dvd_of_derivative_roots E H P hP hneg p hp.ne_zero
       hroot hderiv
   · exact hdeg
+
+omit [CharZero K] [E.IsElliptic] in
+/-- [DkMath.Lib] Wronskian の軌道零点から実軌道因子を同定する。
+
+`p = F - cG` を有理関数のファイバー多項式とし、分子・分母の互いに素性を
+仮定する。各半核移動点で `p` と Wronskian が同時に消えるなら、前段の
+`fiberPolynomial_derivative_isRoot_iff_wronskian_isRoot` が微分零点を供給し、
+軌道の二重根条件へ自動的に変換する。従って、モニック性と次数上界を加えれば
+既存の軌道 `fiberFactor` と多項式等号が得られる。
+
+ここで Wronskian の零点性自体は幾何学から供給すべき入力として残している。
+この分離により、関数体の有理式計算と有限核の根配置の証明を独立に再利用できる。
+-/
+theorem eq_orbit_x_fiberFactor_of_monic_of_wronskian_roots
+    (ho : Odd (Nat.card H))
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P)
+    (F G : Polynomial (AlgebraicClosure K))
+    (hcoprime : IsCoprime F G) (c : AlgebraicClosure K)
+    (hp : (fiberPolynomial F G c).Monic)
+    (hroot : (fiberPolynomial F G c).IsRoot P.xc)
+    (horbit : ∀ Q : halfKernel E H,
+      (fiberPolynomial F G c).IsRoot ((P + Q.val.val).xc))
+    (hwronskian : ∀ Q : halfKernel E H,
+      (wronskian F G).IsRoot ((P + Q.val.val).xc))
+    (hdeg : (fiberPolynomial F G c).natDegree ≤ Nat.card H) :
+    fiberPolynomial F G c = fiberFactor (Finset.univ : Finset (halfKernel E H)) P.xc
+      (fun Q : halfKernel E H => (P + Q.val.val).xc) := by
+  apply eq_orbit_x_fiberFactor_of_monic_of_derivative_roots E H ho P hP hneg
+    (fiberPolynomial F G c) hp hroot ?_ hdeg
+  intro Q
+  refine ⟨horbit Q, ?_⟩
+  exact (fiberPolynomial_derivative_isRoot_iff_wronskian_isRoot hcoprime (horbit Q)).mpr
+    (hwronskian Q)
 
 end DkMath.Lib.NumberTheory.EllipticFiniteKernel

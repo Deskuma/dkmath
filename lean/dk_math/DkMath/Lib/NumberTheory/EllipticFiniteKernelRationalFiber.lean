@@ -108,6 +108,22 @@ theorem exists_veluX_rational (H : AddSubgroup (Points E)) [Fintype H] :
   calc veluX E H = (e r : F) := hr.symm
     _ = _ := RatFunc.algEquivOfTranscendental_apply x hx r
 
+/-- [DkMath.Lib] Vélu の `X_H` を、互いに素な分子・分母の組として公開する。
+
+RatFunc の標準表示は分母をモニックに正規化し、分子と分母を互いに素に選ぶ。
+`exists_veluX_rational` の次数等式とこの正規化を同時に取り出すことで、
+有理関数ファイバー層の `IsCoprime F G` と次数上界へ直接渡せる形になる。
+ここではまだファイバー多項式の根多重度は主張せず、関数体から一変数多項式へ
+降ろすための係数側の住所だけを固定する。 -/
+theorem exists_veluX_coprime_rational (H : AddSubgroup (Points E)) [Fintype H] :
+    ∃ F G : (AlgebraicClosure K)[X],
+      IsCoprime F G ∧ max F.natDegree G.natDegree = Nat.card H ∧
+        veluX E H = aeval (genericX E (AlgebraicClosure K)) F /
+          aeval (genericX E (AlgebraicClosure K)) G := by
+  obtain ⟨r, hrdeg, hr⟩ := exists_veluX_rational E H
+  refine ⟨r.num, r.denom, r.isCoprime_num_denom, hrdeg, ?_⟩
+  exact hr
+
 /-- [DkMath.Lib] X_H=cの有限ファイバーのx座標を、次数高々|H|の非零多項式の根へ送る。
 分母が評価点で非零という追加仮定は不要。恒等式を先に払ってから正則評価する。 -/
 theorem exists_veluX_fiber_polynomial (H : AddSubgroup (Points E)) [Fintype H]
