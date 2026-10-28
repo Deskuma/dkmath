@@ -324,6 +324,66 @@ theorem orbit_x_injective_of_two_smul_not_mem
         _ = 0 := by rw [hneg]; abel
     exact (htwo (hsum ▸ H.neg_mem (H.add_mem Q.property R.property))).elim
 
+omit [CharZero K] [E.IsElliptic] in
+/-- [DkMath.Lib] 二捩れ分岐を避けた核軌道の相異なる x 根の個数。
+
+`orbit_x_injective_of_two_smul_not_mem` は、核の添字 `H` から x 座標への写像が
+単射であることを示す。この補題では、その有限集合版を明示的に数え、軌道が
+ちょうど `|H|` 個の相異なる根を持つことを記録する。有限ファイバー多項式の
+次数比較を使うとき、根の存在だけでなく「何個あるか」を直接渡せる教材入口に
+なる。二捩れ枝ではこの等式が失われるため、次の半核版を使う。
+-/
+theorem card_orbit_x_image_of_two_smul_not_mem
+    (P : Points E) (htwo : 2 • P ∉ H) :
+    (Finset.univ.image (fun Q : H => (P + Q.val).xc)).card = Nat.card H := by
+  rw [Finset.card_image_of_injective _
+    (orbit_x_injective_of_two_smul_not_mem E H P htwo)]
+  simp only [Finset.card_univ, Nat.card_eq_fintype_card]
+
+omit [CharZero K] [E.IsElliptic] in
+/-- [DkMath.Lib] 二捩れ代表の半核軌道は、半核の個数だけ相異なる x 根を持つ。
+
+反転固定点 `-P=P` では全核軌道の反転対が同じ x 値へ衝突する。しかし半核は
+各対から一方だけを選ぶため、`orbit_x_injective_on_halfKernel` により半核上の
+根は依然として単射である。この有限集合の濃度等式は、二重根を数える前の
+「異なる根の住所」を確定し、後段の Wronskian／微分計算と混同しないように
+する。
+-/
+theorem card_halfKernel_orbit_x_image
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P) :
+    (Finset.univ.image
+      (fun Q : halfKernel E H => (P + Q.val.val).xc)).card =
+      (halfKernel E H).card := by
+  rw [Finset.card_image_of_injective _
+    (orbit_x_injective_on_halfKernel E H P hP hneg)]
+  simp only [Finset.card_univ, Fintype.card_coe]
+
+omit [CharZero K] [E.IsElliptic] in
+/-- [DkMath.Lib] 二捩れ代表の単純根と半核根の住所は互いに異なる。
+
+`orbit_x_root_ne_halfKernel` が単純根 `P.x` と各半核軌道根の分離を与える。
+ここではその分離と半核上の単射性を有限集合の濃度へまとめ、単純根を一つ、
+半核根を `|halfKernel|` 個持つことを記録する。`fiberFactor` の次数
+`2 * |halfKernel| + 1` は各半核根を二重に数えるのに対し、この集合は
+「異なる根の住所」だけを数えるため、重複度計算の基準になる。
+-/
+theorem card_distinguished_halfKernel_root_set
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P) :
+    ({P.xc} ∪ (Finset.univ.image
+      (fun Q : halfKernel E H => (P + Q.val.val).xc))).card =
+      (halfKernel E H).card + 1 := by
+  have hdisj : Disjoint ({P.xc} : Finset (AlgebraicClosure K))
+      (Finset.univ.image
+        (fun Q : halfKernel E H => (P + Q.val.val).xc)) := by
+    apply Finset.disjoint_left.mpr
+    intro a ha hb
+    have ha' : a = P.xc := Finset.mem_singleton.mp ha
+    obtain ⟨Q, hQ, hQa⟩ := Finset.mem_image.mp hb
+    exact (orbit_x_root_ne_halfKernel E H P hP hneg Q) (ha'.symm.trans hQa.symm)
+  rw [Finset.card_union_of_disjoint hdisj, Finset.card_singleton,
+    card_halfKernel_orbit_x_image E H P hP hneg]
+  omega
+
 omit [CharZero K] [E.IsElliptic] [Fintype ↥H] in
 /-- [DkMath.Lib] 奇数核の倍写像で、二捩れ分岐を核外の代表へ移す。
 
