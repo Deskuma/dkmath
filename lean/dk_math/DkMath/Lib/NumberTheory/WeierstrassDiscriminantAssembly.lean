@@ -23,6 +23,7 @@ import Mathlib.RingTheory.Valuation.ValuationSubring
 -/
 namespace DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
 open Polynomial WeierstrassCurve WeierstrassCurve.Affine WeierstrassTwoTorsionTranslate
+open scoped Function
 variable {k : Type*} [Field k]
 
 /-- [DkMath.Lib] 一本の2捩れ根 `e` と半核の移動根 `ξ q` から作る
@@ -151,6 +152,83 @@ theorem fiberFactor_dvd_of_roots_le
     (fiberFactor_monic s e ξ) hcard_f
   rw [← hf_repr]
   exact (Multiset.prod_X_sub_C_dvd_iff_le_roots hp _).mpr hroots
+
+/-!
+The preceding theorem is phrased in terms of the root multiset because that is
+the canonical interface for polynomial divisibility.  In applications one
+usually knows the same fact as a collection of local multiplicity bounds:
+the distinguished root occurs once and every translated root occurs twice.
+The next lemma is the finite, pairwise-coprime bookkeeping which converts
+those local bounds into the global factor.  It deliberately asks for
+injectivity and separation of the displayed roots; the geometric proof of
+those hypotheses belongs to the orbit layer, not to this algebraic lemma.
+-/
+
+/-- [DkMath.Lib] Local root-multiplicity bounds imply divisibility by a
+`fiberFactor`.
+
+The index type is enlarged to `Option ι`: `none` represents the simple root
+`e`, while `some q` represents the square factor at `ξ q`.  Injectivity of
+this enlarged root map makes all displayed linear factors pairwise coprime;
+`Finset.prod_dvd_of_coprime` then assembles the local divisibilities.  This
+is the textbook bridge from geometric multiplicity statements to the
+polynomial numerator used by a finite fibre.
+-/
+theorem fiberFactor_dvd_of_rootMultiplicity
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (e : k) (ξ : ι → k) (p : k[X]) (hp : p ≠ 0)
+    (hinj : Function.Injective ξ) (hsep : ∀ q, e ≠ ξ q)
+    (he : 1 ≤ p.rootMultiplicity e)
+    (hξ : ∀ q, 2 ≤ p.rootMultiplicity (ξ q)) :
+    fiberFactor (Finset.univ : Finset ι) e ξ ∣ p := by
+  let g : Option ι → k := fun o => match o with
+    | none => e
+    | some q => ξ q
+  have hg : Function.Injective g := by
+    intro a b hab
+    cases a with
+    | none =>
+        cases b with
+        | none => rfl
+        | some q =>
+            exact (hsep q hab).elim
+    | some q =>
+        cases b with
+        | none =>
+            exact (hsep q hab.symm).elim
+        | some r =>
+            exact congrArg some (hinj hab)
+  let f : Option ι → k[X] := fun o => match o with
+    | none => X - C e
+    | some q => (X - C (ξ q)) ^ 2
+  have hf_pair : Pairwise (IsCoprime on f) := by
+    intro a b hab
+    cases a with
+    | none =>
+        cases b with
+        | none => exact (hab rfl).elim
+        | some q =>
+            simpa [f, g] using
+              (Polynomial.pairwise_coprime_X_sub_C hg hab).pow_right
+    | some q =>
+        cases b with
+        | none =>
+            simpa [f, g] using
+              ((Polynomial.pairwise_coprime_X_sub_C hg hab).pow_left)
+        | some r =>
+            simpa [f, g] using
+              ((Polynomial.pairwise_coprime_X_sub_C hg hab).pow)
+  have hf_dvd : ∀ o, f o ∣ p := by
+    intro o
+    cases o with
+    | none =>
+        simpa [f] using (le_rootMultiplicity_iff hp).mp he
+    | some q =>
+        simpa [f] using (le_rootMultiplicity_iff hp).mp (hξ q)
+  have hprod : (∏ o : Option ι, f o) ∣ p :=
+    Fintype.prod_dvd_of_coprime hf_pair hf_dvd
+  change (X - C e) * ∏ q : ι, (X - C (ξ q)) ^ 2 ∣ p
+  simpa [f, fiberFactor, Fintype.prod_option] using hprod
 
 /-- [DkMath.Lib] `fiberFactor` の根を多重度込みで含み、かつ次数が
 `fiberFactor` 以下であるモニック多項式は、`fiberFactor` と等しい。
