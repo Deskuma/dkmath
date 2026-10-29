@@ -541,3 +541,101 @@ Wronskian を輸送することである。次の具体的な補題は、点評�
 対象モジュール、回帰テスト、`DkMath.Lib` のビルドを実行した。新規橋渡し定理の
 `#print axioms` は既存層と同じく `propext`, `Classical.choice`, `Quot.sound` のみで、
 新しい `sorry` や独自 `axiom` は導入していない。`git diff --check` も成功した。
+
+## 二捩れ局所特殊化の入口
+
+新規モジュール
+`DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianSpecialization` を追加した。
+これは Wronskian 恒等式を再展開する層ではなく、既存の点評価 API と反転公式を
+二捩れ軌道へ接続する教科書用の局所入口である。
+
+新しく無条件で証明した定理は次の通りである。
+
+* `eq_neg_of_completedSquare_eq_zero`：有限点 `P ≠ 0` の平方完成座標
+  `2 y(P) + a₁ x(P) + a₃` が零なら `-P = P`。
+* `completedSquare_ne_zero_of_neg_ne`：反転で固定されない有限点では、同じ
+  平方完成座標が非零。
+* `kernelAt_completedSquare_eq_zero_of_neg_fixed`：核外の反転固定点の像は、
+  `kernelModel` の平方完成座標が零。
+* `kernelAt_completedSquare_eq_zero_of_neg_fixed_translation`：上の零性を
+  核点による平行移動 `P + Q` へ輸送する。
+
+前二定理は Weierstrass 反転公式の座標計算だけで閉じ、後二定理は既存の
+`kernelYAt_neg`、`kernelXAt_translation`、`kernelYAt_translation`、および
+モデル係数の書換えを組み合わせたものである。これにより、軌道点 `T + Q` に
+対して標的側の `z_H = 0` を供給する形式的な入口が得られた。ただし、ここでは
+まだ `T` の二捩れ性を自動生成しておらず、源側の `z(T+Q) ≠ 0`、共通分母
+`D_H(x(T+Q)) ≠ 0`、関数体恒等式の正則な点評価も未解決である。
+
+回帰テストへ三つの `example` と新定理の `#print axioms` を追加した。対象モジュール、
+`DkMathTest.Lib.NumberTheory.EllipticFiniteKernelWronskian`、`DkMath.Lib` を
+focused build し、いずれも成功した。新定理の依存公理は
+`propext`, `Classical.choice`, `Quot.sound` のみであり、`sorry` と独自 `axiom` は
+導入していない。`git diff --check` も成功した。
+
+次に攻める具体的な補題は、既存の二捩れ根 API から `T + Q` の源側反転非固定性を
+取り出し、`D_H` の各有限積因子が非零であることを同時に与える点評価補題である。
+それが閉じれば、既に確立した
+`D_H^2 z_H = z W(A_H,D_H)` を `T + Q` へ特殊化して、まず基底係数対の
+`W(A₀,D₀)(x(T+Q)) = 0` を得る段階へ進める。
+
+## `T + Q` の局所評価パケット
+
+局所特殊化モジュールを拡張し、
+`completedSquare_ne_zero_of_neg_ne_translation` と
+`completedSquare_translation_pair` を追加した。前者は `P ∉ H` から
+`P + Q ∉ H` を示し、反転非固定という明示的な入力のもとで源側の平方完成座標
+が非零であることを返す。後者はこの非零性と、既存の
+`kernelAt_completedSquare_eq_zero_of_neg_fixed_translation` による標的側零性を
+一つの論理積に束ね、次の点評価定理へ直接渡せる形にした。
+
+ここで `-(P + Q) ≠ P + Q` は意図的に仮定として保持している。奇数核の位数から
+この非反転性を供給する群論補題は、今回の座標・Wronskian 層と混ぜず、既存の
+`eq_zero_of_mem_odd_kernel_fixed` を利用する別の輸送補題で閉じるべき証明義務である。
+したがって、今回の追加は既存定理の組合せによる構造整理であり、まだ共通分母の
+点評価非零性や Wronskian 零点そのものを主張していない。
+
+新しい回帰例と `#print axioms` を追加し、対象モジュールおよび回帰テストの
+focused build は成功した。新定理の公理依存は
+`propext`, `Classical.choice`, `Quot.sound` のみである。
+
+## 奇数核による非反転性の閉包
+
+さらに `neg_ne_of_odd_kernel_twoTorsion_translate` を追加した。`P` が反転固定で、
+`Q : H` が非零なら、`H` の位数が奇数である限り `P + Q` は反転固定でない。
+証明は、反転固定を仮定して `P+P = 0` と `(P+Q)+(P+Q)=0` を比較し、
+`Q+Q = 0` を得る。`eq_zero_of_mem_odd_kernel_fixed` によって `Q = 0` となり、
+非零仮定に矛盾する。このため、`completedSquare_translation_pair_of_odd_kernel`
+では `hnegTranslation` を外部入力から除去し、奇数核・非零核点だけで源側非零性と
+標的側零性のペアを供給できるようになった。
+
+ここまでで、二捩れ核外点 `P` と非零核点 `Q` に対する平方完成座標の局所条件は、
+点評価へ渡せる形で閉じた。未解決なのは依然として `D_H` の有限積因子の点評価非零性と、
+関数体上の無分母 Wronskian 恒等式をこの点へ特殊化する正則性である。
+
+## 共通分母の点評価非零性
+
+最後に `veluHalfDenominatorBase_eval_ne_zero` を追加した。半核の各代表 `Q` と
+評価点 `R` の x 座標が衝突しないという条件から、基礎係数体側の共通分母
+`D_H` の評価が非零になることを、有限積の各因子へ分解して証明する。
+`xCorrectionDenominator a = (X - a)(X - a)` の形を直接評価するため、分母非零性を
+関数体の超越性に依存せず、実点側の衝突判定へ切り出せる。
+
+従って現在の局所データは、奇数核と非零半核代表から源側の平方完成座標非零性、
+標的側の平方完成座標零性、および x 座標非衝突を仮定した共通分母非零性をそれぞれ
+供給できる。残る中心課題は、この三つを
+`veluHalf_denominator_sq_mul_z_eq_z_mul_wronskian` へ正則に特殊化し、
+`W(A₀,D₀)(x(T+Q)) = 0` を閉じることである。
+
+さらに `translated_x_ne_halfKernel_of_kernel_outside` と
+`veluHalfDenominatorBase_eval_ne_zero_translation` を実装した。前者は、
+`P ∉ H` ならば `x(P + Q)` が半核の任意の代表 `S` の x 座標と一致しないことを
+示す。x 座標が一致した場合に `point_eq_or_eq_neg_of_xc_eq` を適用し、
+`P = S - Q` または `P = -S - Q` として核所属を導くため、二捩れ性や標的楕円性を
+追加仮定しない。後者はこの衝突排除を有限積の各因子へ代入し、任意の核点移動
+`P + Q` で `D_H(x(P+Q)) ≠ 0` を無条件に供給する。
+
+この結果、Wronskian の点特殊化に必要な分母非零性は、実点の x ファイバーの
+基本事実と `P ∉ H` だけで閉じた。残る未解決義務は、関数体恒等式の評価写像を
+基礎係数多項式へ移し、`z_H(P+Q)=0` と `z(P+Q)≠0` を用いて実際の
+`W(A₀,D₀)` 零点へ到達することである。

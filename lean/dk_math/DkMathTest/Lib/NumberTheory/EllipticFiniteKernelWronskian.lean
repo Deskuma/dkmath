@@ -6,6 +6,7 @@ Released under MIT license as described in the file LICENSE.
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianAssembly
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianHalf
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianBase
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianSpecialization
 
 #print "file: DkMathTest.Lib.NumberTheory.EllipticFiniteKernelWronskian"
 
@@ -119,5 +120,93 @@ example {R S : Type*} [Field R] [Field S] (f : R →+* S)
   map_wronskian f P Q
 
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.map_wronskian
+
+/-! 二捩れ局所特殊化の回帰例。源側の平方完成座標の非零性と、
+標的側での零性を別々の補題として再利用できることを確認する。 -/
+
+variable [NeZero (2 : F)]
+
+example (E : WeierstrassCurve F) (P : Points E) (hP : P ≠ 0)
+    (hz : 2 * P.yc + (E⁄(AlgebraicClosure F)).a₁ * P.xc +
+      (E⁄(AlgebraicClosure F)).a₃ = 0) :
+    -P = P :=
+  eq_neg_of_completedSquare_eq_zero E P hP hz
+
+example (E : WeierstrassCurve F) (P : Points E) (hP : P ≠ 0)
+    (hneg : -P ≠ P) :
+    2 * P.yc + (E⁄(AlgebraicClosure F)).a₁ * P.xc +
+      (E⁄(AlgebraicClosure F)).a₃ ≠ 0 :=
+  completedSquare_ne_zero_of_neg_ne E P hP hneg
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P) :
+    2 * kernelYAt E H P hP + (kernelModel E H).a₁ * kernelXAt E H P hP +
+      (kernelModel E H).a₃ = 0 :=
+  kernelAt_completedSquare_eq_zero_of_neg_fixed E H P hP hneg
+
+example (E : WeierstrassCurve F) (H : AddSubgroup (Points E))
+    (P : Points E) (hP : P ∉ H) (Q : H)
+    (hneg : -(P + Q.val) ≠ P + Q.val) :
+    2 * (P + Q.val).yc + (E⁄(AlgebraicClosure F)).a₁ * (P + Q.val).xc +
+      (E⁄(AlgebraicClosure F)).a₃ ≠ 0 :=
+  completedSquare_ne_zero_of_neg_ne_translation E H P hP Q hneg
+
+example (E : WeierstrassCurve F) (H : AddSubgroup (Points E))
+    (hodd : Odd (Nat.card H)) (P : Points E) (hneg : -P = P)
+    (Q : H) (hQ : Q ≠ 0) :
+    -(P + Q.val) ≠ P + Q.val :=
+  neg_ne_of_odd_kernel_twoTorsion_translate E H hodd P hneg Q hQ
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P) (Q : H)
+    (hnegTranslation : -(P + Q.val) ≠ P + Q.val) :
+    (2 * (P + Q.val).yc + (E⁄(AlgebraicClosure F)).a₁ * (P + Q.val).xc +
+        (E⁄(AlgebraicClosure F)).a₃ ≠ 0) ∧
+      (2 * kernelYAt E H (P + Q.val) (add_not_mem_kernel E H P hP Q) +
+        (kernelModel E H).a₁ * kernelXAt E H (P + Q.val)
+          (add_not_mem_kernel E H P hP Q) +
+        (kernelModel E H).a₃ = 0) :=
+  completedSquare_translation_pair E H P hP hneg Q hnegTranslation
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (hodd : Odd (Nat.card H)) (P : Points E) (hP : P ∉ H) (hneg : -P = P)
+    (Q : H) (hQ : Q ≠ 0) :
+    (2 * (P + Q.val).yc + (E⁄(AlgebraicClosure F)).a₁ * (P + Q.val).xc +
+        (E⁄(AlgebraicClosure F)).a₃ ≠ 0) ∧
+      (2 * kernelYAt E H (P + Q.val) (add_not_mem_kernel E H P hP Q) +
+        (kernelModel E H).a₁ * kernelXAt E H (P + Q.val)
+          (add_not_mem_kernel E H P hP Q) +
+        (kernelModel E H).a₃ = 0) :=
+  completedSquare_translation_pair_of_odd_kernel E H hodd P hP hneg Q hQ
+
+example (E : WeierstrassCurve F) (H : AddSubgroup (Points E)) [Fintype H]
+    (R : Points E) (hcollision : ∀ Q : halfKernel E H,
+      R.xc ≠ Q.val.val.xc) :
+    (veluHalfDenominatorBase E H).eval R.xc ≠ 0 :=
+  veluHalfDenominatorBase_eval_ne_zero E H R hcollision
+
+example (E : WeierstrassCurve F) (H : AddSubgroup (Points E)) [Fintype H]
+    (P : Points E) (hP : P ∉ H) (Q : H) (S : halfKernel E H) :
+    (P + Q.val).xc ≠ S.val.val.xc :=
+  translated_x_ne_halfKernel_of_kernel_outside E H P hP Q S
+
+example (E : WeierstrassCurve F) (H : AddSubgroup (Points E)) [Fintype H]
+    (P : Points E) (hP : P ∉ H) (Q : H) :
+    (veluHalfDenominatorBase E H).eval (P + Q.val).xc ≠ 0 :=
+  veluHalfDenominatorBase_eval_ne_zero_translation E H P hP Q
+
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.eq_neg_of_completedSquare_eq_zero
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.completedSquare_ne_zero_of_neg_ne
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelAt_completedSquare_eq_zero_of_neg_fixed
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.completedSquare_ne_zero_of_neg_ne_translation
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.neg_ne_of_odd_kernel_twoTorsion_translate
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.completedSquare_translation_pair
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.completedSquare_translation_pair_of_odd_kernel
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalfDenominatorBase_eval_ne_zero
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.translated_x_ne_halfKernel_of_kernel_outside
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalfDenominatorBase_eval_ne_zero_translation
 
 end DkMathTest.EllipticFiniteKernelWronskian
