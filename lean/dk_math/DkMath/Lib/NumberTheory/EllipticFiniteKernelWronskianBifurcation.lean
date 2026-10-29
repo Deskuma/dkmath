@@ -94,4 +94,152 @@ theorem exists_veluX_normalized_fiberFactor_or_fullKernel
       E H c P htwo ⟨hP, hPc⟩
     exact Or.inl ⟨htwo, hfactor⟩
 
+/-- 固定した係数対に対する二分岐の結論部分。
+
+`F,G` 自体はこの命題の外で一度だけ選択する。ここではファイバー値 `c` と
+核外点 `P` ごとに、同じ `F,G` が一般型または特殊型のどちらを取るかだけを
+記録する。
+-/
+def fixedPairFiberBranch
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (F G : (AlgebraicClosure K)[X]) (c : AlgebraicClosure K) (P : Points E)
+    (_hP : P ∉ H) : Prop :=
+    (2 • P ∉ H ∧
+      normalize (fiberPolynomial F G c) =
+        ∏ Q : H, (Polynomial.X - Polynomial.C ((P + Q.val).xc))) ∨
+    (2 • P ∈ H ∧
+      ∃ T : Points E, T ∉ H ∧ -T = T ∧
+        ∃ hT : T ∉ H, kernelXAt E H T hT = c ∧
+          normalize (fiberPolynomial F G c) =
+            fiberFactor (Finset.univ : Finset (halfKernel E H)) T.xc
+              (fun Q : halfKernel E H => (T + Q.val.val).xc))
+
+/-- [DkMath.Lib] 任意の固定標準係数対で、核外ファイバーの二分岐を閉じる。
+
+`hFdeg`、`hGlt`、`hrel` は `F,G` が無限遠点で一度選ばれた標準対であることを
+表す。`fiberPolynomial` の非零性、正規化モニック性、次数はこの次数条件から
+内部で構成する。一般枝では根積と次数比較、特殊枝では二捩れ代表と
+`normalize_fiberPolynomial_eq_orbit_x_fiberFactor_of_veluX_quotient_of_wronskian_roots`
+を使う。
+-/
+theorem fixedPairFiberBranch_of_veluX_quotient
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (F G : (AlgebraicClosure K)[X])
+    (hcop : IsCoprime F G) (hG : G ≠ 0)
+    (hFdeg : F.natDegree = Nat.card H) (hGlt : G.natDegree < F.natDegree)
+    (hrel : veluX E H =
+      aeval (genericX E (AlgebraicClosure K)) F /
+        aeval (genericX E (AlgebraicClosure K)) G)
+    (c : AlgebraicClosure K) (P : Points E) (hP : P ∉ H)
+    (hPc : kernelXAt E H P hP = c) :
+    fixedPairFiberBranch E H F G c P hP := by
+  have hGaeval : aeval (genericX E (AlgebraicClosure K)) G ≠ 0 := by
+    intro hzero
+    exact hG ((transcendental_iff.mp
+      (genericX_transcendental_for_wronskian E)) G hzero)
+  have hp0 : fiberPolynomial F G c ≠ 0 := by
+    intro hp
+    have hid : aeval (genericX E (AlgebraicClosure K))
+        (fiberPolynomial F G c) =
+        (veluX E H - algebraMap (AlgebraicClosure K)
+          (E.toAffine⁄(AlgebraicClosure K)).FunctionField c) *
+          aeval (genericX E (AlgebraicClosure K)) G := by
+      rw [fiberPolynomial, map_sub, map_mul, aeval_C, hrel]
+      field_simp [hGaeval]
+    have hv : aeval (genericX E (AlgebraicClosure K))
+        (fiberPolynomial F G c) ≠ 0 := by
+      rw [hid]
+      exact mul_ne_zero (sub_ne_zero.mpr (veluX_ne_const E H c)) hGaeval
+    exact hv (by rw [hp, map_zero])
+  have hnorm : (normalize (fiberPolynomial F G c)).Monic :=
+    Polynomial.monic_normalize hp0
+  have hdeg : (fiberPolynomial F G c).natDegree = Nat.card H := by
+    rw [fiberPolynomial_natDegree_eq_of_natDegree_lt hGlt, hFdeg]
+  by_cases htwo : 2 • P ∈ H
+  · obtain ⟨T, hT, hTneg, hTc⟩ :=
+      exists_two_torsion_kernelXAt_representative_of_two_smul_mem
+        E H ho P hP htwo c hPc
+    obtain ⟨hT', hTc'⟩ := hTc
+    have hwronskian : ∀ Q : halfKernel E H,
+        (wronskian F G).IsRoot ((T + Q.val.val).xc) := by
+      intro Q
+      have hQ : Q.val ≠ 0 := ((mem_halfKernel E H Q.val).mp Q.property).1
+      exact veluX_standard_pair_wronskian_root_of_odd_twoTorsion
+        E H ho F G hGaeval hrel T hT' hTneg Q.val hQ
+    have hfactor :=
+      normalize_fiberPolynomial_eq_orbit_x_fiberFactor_of_veluX_quotient_of_wronskian_roots
+        E H ho T hT' hTneg F G hcop hG hrel c hp0 hTc'
+        hwronskian hdeg.le
+    exact Or.inr ⟨htwo, T, hT, hTneg, hT', hTc', hfactor⟩
+  · have hroot : ∀ Q : H,
+        (normalize (fiberPolynomial F G c)).IsRoot ((P + Q.val).xc) := by
+      intro Q
+      have hQ : P + Q.val ∉ H := add_not_mem_kernel E H P hP Q
+      have hroot' := fiberPolynomial_isRoot_of_veluX_eq_quotient E H F G hG hrel c
+        (P + Q.val) hQ (by rw [kernelXAt_translation E H P hP Q, hPc])
+      rw [← mem_roots hp0] at hroot'
+      apply (mem_roots hnorm.ne_zero).mp
+      rw [Polynomial.roots_normalize]
+      exact hroot'
+    have hdeg_norm : (normalize (fiberPolynomial F G c)).natDegree ≤ Nat.card H := by
+      rw [Polynomial.natDegree_normalize]
+      exact hdeg.le
+    have hfactor := eq_fullKernel_factor_of_monic_of_injective_roots E H P htwo
+      (normalize (fiberPolynomial F G c)) hnorm hroot hdeg_norm
+    exact Or.inl ⟨htwo, hfactor⟩
+
+/-- [DkMath.Lib] 無限遠点で一度選んだ `(F,G)` を全ファイバーへ固定する。
+
+`exists_veluX_rational_at_infinity` から `F = r.num`, `G = r.denom` を一度だけ
+選ぶ。以後、任意の `c` と任意の核外点 `P` satisfying `kernelXAt P = c` に対し、
+同じ係数対を `fixedPairFiberBranch_of_veluX_quotient` へ渡せる。
+-/
+theorem exists_veluX_fixed_pair_factorization
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) :
+    ∃ F G : (AlgebraicClosure K)[X],
+      IsCoprime F G ∧ G ≠ 0 ∧ F.natDegree = Nat.card H ∧
+        G.natDegree < F.natDegree ∧
+        veluX E H = aeval (genericX E (AlgebraicClosure K)) F /
+          aeval (genericX E (AlgebraicClosure K)) G ∧
+        ∀ (c : AlgebraicClosure K) (P : Points E) (hP : P ∉ H),
+          kernelXAt E H P hP = c → fixedPairFiberBranch E H F G c P hP := by
+  obtain ⟨r, hgap, hnum, hrel⟩ := exists_veluX_rational_at_infinity E H
+  refine ⟨r.num, r.denom, r.isCoprime_num_denom, r.denom_ne_zero, hnum, ?_, hrel, ?_⟩
+  · omega
+  · intro c P hP hPc
+    exact fixedPairFiberBranch_of_veluX_quotient E H ho r.num r.denom
+      r.isCoprime_num_denom r.denom_ne_zero hnum (by omega) hrel c P hP hPc
+
+/-- [DkMath.Lib] 固定した標準係数対を全有限ファイバーへ実際に供給する。
+
+前定理は、与えられた核外点 `P` がファイバー値 `c` を実現しているときの
+分岐を返す。この定理では既存の `exists_kernelXAt_eq` を組み合わせ、任意の
+`c` に対してそのような `P` と核外証明を一つ選ぶ。従って `F,G` の選択は
+無限遠点で一度だけ行われ、有限ファイバーごとに係数を取り直す必要がない。
+この API は存在量化されたファイバー代表を明示するため、点評価の正則性や
+標数零の次数条件を隠さずに後続の商構成へ渡せる。
+-/
+theorem exists_veluX_fixed_pair_factorization_all_fibers
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) :
+    ∃ F G : (AlgebraicClosure K)[X],
+      IsCoprime F G ∧ G ≠ 0 ∧ F.natDegree = Nat.card H ∧
+        G.natDegree < F.natDegree ∧
+        veluX E H = aeval (genericX E (AlgebraicClosure K)) F /
+          aeval (genericX E (AlgebraicClosure K)) G ∧
+        ∀ c : AlgebraicClosure K, ∃ (P : Points E) (hP : P ∉ H),
+          kernelXAt E H P hP = c ∧ fixedPairFiberBranch E H F G c P hP := by
+  obtain ⟨F, G, hcop, hG, hFdeg, hGlt, hrel, hbranch⟩ :=
+    exists_veluX_fixed_pair_factorization E H ho
+  refine ⟨F, G, hcop, hG, hFdeg, hGlt, hrel, ?_⟩
+  intro c
+  obtain ⟨P, hP, hPc⟩ := exists_kernelXAt_eq E H c
+  exact ⟨P, hP, hPc, hbranch c P hP hPc⟩
+
 end DkMath.Lib.NumberTheory.EllipticFiniteKernel

@@ -60,4 +60,32 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
 
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_veluX_normalized_fiberFactor_or_fullKernel
 
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) :
+    ∃ A B : (AlgebraicClosure F)[X],
+      IsCoprime A B ∧ B ≠ 0 ∧ A.natDegree = Nat.card H ∧
+        B.natDegree < A.natDegree ∧
+        veluX E H = aeval (genericX E (AlgebraicClosure F)) A /
+          aeval (genericX E (AlgebraicClosure F)) B ∧
+        ∀ (c : AlgebraicClosure F) (P : Points E) (hP : P ∉ H),
+          kernelXAt E H P hP = c → fixedPairFiberBranch E H A B c P hP := by
+  exact exists_veluX_fixed_pair_factorization E H ho
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) :
+    ∃ A B : (AlgebraicClosure F)[X],
+      IsCoprime A B ∧ B ≠ 0 ∧ A.natDegree = Nat.card H ∧
+        B.natDegree < A.natDegree ∧
+        veluX E H = aeval (genericX E (AlgebraicClosure F)) A /
+          aeval (genericX E (AlgebraicClosure F)) B ∧
+        ∀ c : AlgebraicClosure F, ∃ (P : Points E) (hP : P ∉ H),
+          kernelXAt E H P hP = c ∧ fixedPairFiberBranch E H A B c P hP := by
+  exact exists_veluX_fixed_pair_factorization_all_fibers E H ho
+
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.fixedPairFiberBranch_of_veluX_quotient
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_veluX_fixed_pair_factorization
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_veluX_fixed_pair_factorization_all_fibers
+
 end DkMathTest.EllipticFiniteKernelWronskianBifurcation

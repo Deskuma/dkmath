@@ -791,3 +791,27 @@ Wronskian 零点から標準対への輸送は完了した。残る境界は、�
 `T = P - Q₀` を選び、`kernelXAt T = c` を輸送する。その後、今回完成した
 `exists_veluX_normalized_fiberFactor_of_odd_twoTorsion` を適用する。したがって、
 二分岐 API 自体に新しい群論・Wronskian 計算は導入していない。
+
+## 固定係数対による全ファイバー統合
+
+統合 API の次段として、`EllipticFiniteKernelWronskianBifurcation.lean` に
+`fixedPairFiberBranch` を導入した。これは、無限遠点で選んだ同じ係数対
+`(F,G)` と有限値 `c`、核外点 `P` を一つの命題に束ね、`2 • P ∉ H` なら全核の
+相異なる一次因子積、`2 • P ∈ H` なら二捩れ代表と半核の特殊因子積、という二枝を
+明示する。
+
+新定理 `fixedPairFiberBranch_of_veluX_quotient` は、任意の互いに素な固定対に対し、
+`G ≠ 0`、`deg G < deg F = |H|`、および `X_H = F/G` を入力してこの分岐を証明する。
+ファイバー多項式の非零性は `genericX` の超越性と `veluX_ne_const` から、次数は
+`fiberPolynomial_natDegree_eq_of_natDegree_lt` から構成した。一般枝では既存の根積・
+次数比較を、特殊枝では Wronskian 零点からの既存の半核因子定理を再利用している。
+
+さらに `exists_veluX_fixed_pair_factorization` は
+`exists_veluX_rational_at_infinity` から `F = r.num`, `G = r.denom` を一度だけ選び、
+任意の `c` と核外 `P` の実現に同じ係数対を渡す。`exists_veluX_fixed_pair_factorization_all_fibers`
+では、既存の `exists_kernelXAt_eq` を組み合わせ、任意の有限値 `c` に対して核外代表
+`P` とその証明を実際に供給するところまで閉じた。
+
+ここで閉じたのは標数零の有限ファイバー因子分解 API であり、これ自体は整数モデル、
+還元、または FLT の存在・矛盾を主張しない。残る次の境界は、この全ファイバー分岐を
+標的楕円曲線の isogeny と局所還元輸送へ接続することである。
