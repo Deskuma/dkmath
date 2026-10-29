@@ -903,3 +903,26 @@ resultant 基盤を逆向きに利用している。
 新たな幾何学的仮定は導入しておらず、全ファイバー代表の存在定理と前段の分岐同値を
 組み合わせた構造的な接続である。これにより、次に構成する判別式族
 `D_{F,G}(Y) = discr_X(F(X) - YG(X))` の零点判定へ、固定係数対をそのまま渡せる。
+
+さらに `exists_veluX_fixed_pair_discriminant_branch_iff_all_points` を追加し、同じ係数対に
+ついて任意の `c`、任意の核外代表 `P`、および `kernelXAt P = c` の仮定から同じ同値を
+返す全称版を固定した。存在形は代表を一つ選ぶ API、全称形はファイバー内の代表交換に
+不変な分岐判定として使い分ける。
+
+## 判別式族の代数層
+
+中立な代数モジュール `RationalPolynomialDiscriminant.lean` を新設した。
+`fiberPolynomialFamily F G` は `k[Y]` を係数環とする `X` の多項式
+`F(X) - YG(X)` を表し、`fiberDiscriminantFamily F G` はその `X` 判別式を
+`k[Y]` の多項式として定義する。
+
+係数写像については、`discr_map_of_natDegree_eq` を証明した。次数保存と写像後の
+先頭係数非零性のもとで、`Polynomial.discr` は係数写像と可換する。証明は
+`resultant_map_map` と `resultant_deriv` の比較で行い、評価写像のように単射でない
+特殊化も扱える形にしている。
+
+さらに `fiberPolynomialFamily_map_evalRingHom` と
+`fiberDiscriminantFamily_eval_of_natDegree_eq` を追加した。前者は係数特殊化が通常の
+`fiberPolynomial` に一致すること、後者は明示した次数条件のもとで判別式族の評価が
+通常のファイバー判別式に一致することを示す。固定係数対からの次数保存・先頭係数
+非零性の供給は次工程の残課題として仮定を保持している。

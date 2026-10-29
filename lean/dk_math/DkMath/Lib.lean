@@ -23,6 +23,7 @@ import DkMath.Lib.Algebra.PullbackPrincipalPrime
 import DkMath.Lib.Algebra.QuadraticFixedField
 import DkMath.Lib.Algebra.QuadraticInvolutionDegree
 import DkMath.Lib.Algebra.RationalPolynomialFiber
+import DkMath.Lib.Algebra.RationalPolynomialDiscriminant
 import DkMath.Lib.Algebra.RootUnitGauge
 import DkMath.Lib.Algebra.SingleSlopeRoot
 import DkMath.Lib.Algebra.SquareCompletion

@@ -174,4 +174,19 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
 
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_veluX_fixed_pair_discriminant_branch_iff
 
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (hcard : 1 < Nat.card H) :
+    ∃ A B : (AlgebraicClosure F)[X],
+      IsCoprime A B ∧ B ≠ 0 ∧ A.natDegree = Nat.card H ∧
+        B.natDegree < A.natDegree ∧
+        veluX E H = aeval (genericX E (AlgebraicClosure F)) A /
+          aeval (genericX E (AlgebraicClosure F)) B ∧
+        ∀ (c : AlgebraicClosure F) (P : Points E) (hP : P ∉ H),
+          kernelXAt E H P hP = c →
+            ((fiberPolynomial A B c).discr = 0 ↔ 2 • P ∈ H) :=
+  exists_veluX_fixed_pair_discriminant_branch_iff_all_points E H ho hcard
+
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_veluX_fixed_pair_discriminant_branch_iff_all_points
+
 end DkMathTest.EllipticFiniteKernelWronskianBifurcation
