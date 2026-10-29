@@ -6,6 +6,7 @@ Released under MIT license as described in the file LICENSE.
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianBase
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelSpecialization
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelTwoTorsion
+import DkMath.Lib.Algebra.WronskianCrossMultiplication
 
 #print "file: DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianSpecialization"
 
@@ -26,8 +27,10 @@ namespace DkMath.Lib.NumberTheory.EllipticFiniteKernel
 
 open Polynomial
 open WeierstrassCurve WeierstrassCurve.Affine
-open EllipticFunctionField EllipticTorsionRepresentation
+open EllipticFunctionField EllipticTorsionRepresentation EllipticPointEvaluation
+open DkMath.Lib.Algebra
 open DkMath.Lib.Algebra.FiniteProductWronskian
+open DkMath.Lib.Algebra.RationalPolynomialFiber
 open scoped BigOperators
 
 variable {K : Type*} [Field K] [NeZero (2 : K)]
@@ -51,6 +54,144 @@ theorem genericX_transcendental_for_wronskian
     (genericX E (AlgebraicClosure K))
   rw [pointValuation_zero_genericX, ← WithZero.exp_zero, WithZero.exp_lt_exp]
   norm_num
+
+omit [NeZero (2 : K)] in
+/-- Every base-coefficient polynomial in `genericX` is regular at a finite point.
+
+The proof is the valuation-theoretic form of polynomial substitution: `genericX`
+is congruent to the point's x-coordinate, and `Valuation.Cong.eval₂` propagates
+that congruence through the polynomial.  This lemma is the basic regularity
+input for evaluating the base Vélu numerator, denominator, and Wronskian.
+-/
+theorem pointValuation_aeval_le_one
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (P : Points E) (hP : P ≠ 0) (p : (AlgebraicClosure K)[X]) :
+    pointValuation E P
+        (Polynomial.aeval (genericX E (AlgebraicClosure K)) p) ≤ 1 := by
+  let F := (E.toAffine⁄(AlgebraicClosure K)).FunctionField
+  let x := genericX E (AlgebraicClosure K)
+  have hc : ∀ c : AlgebraicClosure K,
+      pointValuation E P (algebraMap (AlgebraicClosure K) F c) ≤ 1 := by
+    intro c
+    exact pointValuation_const_le_one E P c
+  have hxc : (pointValuation E P).Cong x
+      (algebraMap (AlgebraicClosure K) F P.xc) := by
+    have h := value_spec E P x (pointValuation_genericX_le_one E P hP)
+    rw [value_genericX E P hP] at h
+    exact h
+  have hh := (Valuation.Cong.eval₂ (algebraMap (AlgebraicClosure K) F)
+    hc hxc (hc P.xc) p).1
+  rw [eval₂_at_apply] at hh
+  exact hh.le_one (hc _)
+
+omit [NeZero (2 : K)] in
+/-- The finite value of a base polynomial is its ordinary x-coordinate evaluation. -/
+theorem value_aeval_eq_eval
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (P : Points E) (hP : P ≠ 0) (p : (AlgebraicClosure K)[X]) :
+    value E P (Polynomial.aeval (genericX E (AlgebraicClosure K)) p)
+        (pointValuation_aeval_le_one E P hP p) = p.eval P.xc := by
+  apply value_eq
+  have hc : ∀ c : AlgebraicClosure K,
+      pointValuation E P (algebraMap (AlgebraicClosure K)
+        (E.toAffine⁄(AlgebraicClosure K)).FunctionField c) ≤ 1 := by
+    intro c
+    exact pointValuation_const_le_one E P c
+  have hxc : (pointValuation E P).Cong (genericX E (AlgebraicClosure K))
+      (algebraMap (AlgebraicClosure K)
+        (E.toAffine⁄(AlgebraicClosure K)).FunctionField P.xc) := by
+    have h := value_spec E P (genericX E (AlgebraicClosure K))
+      (pointValuation_genericX_le_one E P hP)
+    rw [value_genericX E P hP] at h
+    exact h
+  have hh := (Valuation.Cong.eval₂
+    (algebraMap (AlgebraicClosure K)
+      (E.toAffine⁄(AlgebraicClosure K)).FunctionField)
+    hc hxc (hc P.xc) p).1
+  rw [eval₂_at_apply] at hh
+  exact hh
+
+omit [NeZero (2 : K)] in
+/-- The base-field common denominator is non-zero at the generic x-coordinate.
+
+Each finite-product factor is a square of `genericX - x(Q)`.  The generic
+coordinate is transcendental, hence cannot equal the algebraic x-coordinate of
+any half-kernel representative.  This is the function-field counterpart of
+the finite-point collision lemma proved below.
+-/
+theorem veluHalfDenominatorBase_eval_genericX_ne_zero
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H] :
+    Polynomial.aeval (genericX E (AlgebraicClosure K))
+      (veluHalfDenominatorBase E H) ≠ 0 := by
+  classical
+  unfold veluHalfDenominatorBase commonDenominator
+  simp only [map_prod]
+  exact Finset.prod_ne_zero_iff.mpr (fun Q hQ => by
+    simp only [xCorrectionDenominator, map_mul, map_sub, aeval_X, aeval_C]
+    exact mul_ne_zero (sub_ne_zero.mpr (genericX_ne_const E Q.val.xc))
+      (sub_ne_zero.mpr (genericX_ne_const E Q.val.xc)))
+
+omit [NeZero (2 : K)] in
+/-- The function-field Vélu quotient can be read from the base-coefficient pair.
+
+`map_veluHalfNumeratorBase` and `map_veluHalfDenominatorBase` identify the
+coefficient images.  `eval_map_algebraMap` then turns evaluation of those images
+back into `aeval` of the algebraic-closure polynomials, so the quotient is
+available in exactly the coefficient type required by `cross_relation_of_aeval_div_eq`.
+-/
+theorem veluX_eq_veluHalfNumeratorBase_div_denominator
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) :
+    veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure K))
+        (veluHalfNumeratorBase E H) /
+        Polynomial.aeval (genericX E (AlgebraicClosure K))
+          (veluHalfDenominatorBase E H) := by
+  have h := veluX_eq_veluHalfNumerator_div_denominator E H ho
+  have hN := map_veluHalfNumeratorBase E H
+  have hD := map_veluHalfDenominatorBase E H
+  dsimp only at hN hD
+  rw [← hN, ← hD] at h
+  simpa only [eval_map_algebraMap] using h
+
+omit [NeZero (2 : K)] in
+/-- A standard `RatFunc` presentation cross-multiplies with the base Vélu pair.
+
+The two quotient presentations of `veluX` are first aligned in the function
+field.  `genericX_transcendental_for_wronskian` and
+`cross_relation_of_aeval_div_eq` then turn that evaluated equality into the
+polynomial identity required for Wronskian transport.  The denominator guard is
+kept explicit rather than being inferred from a formal fraction.
+-/
+theorem veluX_standard_pair_cross_relation
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (F G : (AlgebraicClosure K)[X])
+    (hG : Polynomial.aeval (genericX E (AlgebraicClosure K)) G ≠ 0)
+    (hrel : veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure K)) F /
+        Polynomial.aeval (genericX E (AlgebraicClosure K)) G) :
+    F * veluHalfDenominatorBase E H =
+      veluHalfNumeratorBase E H * G := by
+  let x := genericX E (AlgebraicClosure K)
+  have hD : Polynomial.aeval x (veluHalfDenominatorBase E H) ≠ 0 := by
+    simpa [x] using veluHalfDenominatorBase_eval_genericX_ne_zero E H
+  have hbase := veluX_eq_veluHalfNumeratorBase_div_denominator E H ho
+  have hfrac : Polynomial.aeval x F / Polynomial.aeval x G =
+      Polynomial.aeval x (veluHalfNumeratorBase E H) /
+        Polynomial.aeval x (veluHalfDenominatorBase E H) := by
+    calc
+      Polynomial.aeval x F / Polynomial.aeval x G = veluX E H := by
+        simpa [x] using hrel.symm
+      _ = Polynomial.aeval x (veluHalfNumeratorBase E H) /
+          Polynomial.aeval x (veluHalfDenominatorBase E H) := by
+        simpa [x] using hbase
+  exact cross_relation_of_aeval_div_eq F G (veluHalfNumeratorBase E H)
+    (veluHalfDenominatorBase E H) x
+    (genericX_transcendental_for_wronskian E) hG hD hfrac
 
 omit [NeZero (2 : K)] in
 /-- 源曲線上で、有限点の平方完成座標が零なら反転固定点になる。 -/
@@ -224,6 +365,75 @@ theorem veluHalfDenominatorBase_eval_ne_zero_translation
   apply veluHalfDenominatorBase_eval_ne_zero E H (P + Q.val)
   intro S
   exact translated_x_ne_halfKernel_of_kernel_outside E H P hP Q S
+
+omit [NeZero (2 : K)] in
+/-- Transport a base-pair Wronskian root to any translated kernel point.
+
+The cross relation is supplied by the standard `veluX` quotient, while the
+finite denominator is discharged by the x-coordinate collision lemma for
+`P + Q`.  Thus the only geometric input left to the caller is the Wronskian
+root for the base pair itself.
+-/
+theorem veluX_standard_pair_wronskian_root_of_translation
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (F G : (AlgebraicClosure K)[X])
+    (hG : Polynomial.aeval (genericX E (AlgebraicClosure K)) G ≠ 0)
+    (hrel : veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure K)) F /
+        Polynomial.aeval (genericX E (AlgebraicClosure K)) G)
+    (P : Points E) (hP : P ∉ H) (Q : H)
+    (hbase :
+      (wronskian (veluHalfNumeratorBase E H)
+        (veluHalfDenominatorBase E H)).IsRoot (P + Q.val).xc) :
+    (wronskian F G).IsRoot (P + Q.val).xc := by
+  apply wronskian_isRoot_of_cross_relation F G
+    (veluHalfNumeratorBase E H) (veluHalfDenominatorBase E H)
+    (P + Q.val).xc
+    (veluX_standard_pair_cross_relation E H ho F G hG hrel)
+    (veluHalfDenominatorBase_eval_ne_zero_translation E H P hP Q)
+    hbase
+
+/-- Extract the base-pair Wronskian root from a cleared identity at `P + Q`.
+
+The odd-kernel two-torsion packet supplies the two scalar facts
+`z_source ≠ 0` and `z_target = 0`.  The remaining hypothesis is precisely the
+point-specialized, denominator-cleared Vélu identity; keeping it explicit
+marks the boundary where regular evaluation of the function-field identity
+must still be proved.
+-/
+theorem veluHalf_base_wronskian_root_of_cleared_identity
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P)
+    (Q : H) (hQ : Q ≠ 0)
+    (hidentity :
+      (veluHalfDenominatorBase E H).eval (P + Q.val).xc ^ 2 *
+          (2 * kernelYAt E H (P + Q.val) (add_not_mem_kernel E H P hP Q) +
+            (kernelModel E H).a₁ * kernelXAt E H (P + Q.val)
+              (add_not_mem_kernel E H P hP Q) + (kernelModel E H).a₃) =
+        (2 * (P + Q.val).yc + (E⁄(AlgebraicClosure K)).a₁ * (P + Q.val).xc +
+            (E⁄(AlgebraicClosure K)).a₃) *
+          (wronskian (veluHalfNumeratorBase E H)
+            (veluHalfDenominatorBase E H)).eval (P + Q.val).xc) :
+    (wronskian (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H)).IsRoot (P + Q.val).xc := by
+  have hnegTranslation := neg_ne_of_odd_kernel_twoTorsion_translate
+    E H ho P hneg Q hQ
+  have hz := completedSquare_ne_zero_of_neg_ne_translation E H P hP Q hnegTranslation
+  have hzH := kernelAt_completedSquare_eq_zero_of_neg_fixed_translation
+    E H P hP hneg Q
+  exact wronskian_isRoot_of_denominator_cleared_identity
+    (veluHalfNumeratorBase E H) (veluHalfDenominatorBase E H)
+    (P + Q.val).xc
+    (2 * (P + Q.val).yc + (E⁄(AlgebraicClosure K)).a₁ * (P + Q.val).xc +
+      (E⁄(AlgebraicClosure K)).a₃)
+    (2 * kernelYAt E H (P + Q.val) (add_not_mem_kernel E H P hP Q) +
+      (kernelModel E H).a₁ * kernelXAt E H (P + Q.val)
+        (add_not_mem_kernel E H P hP Q) + (kernelModel E H).a₃)
+    hidentity hz hzH
 
 /-! 点評価へ渡す最小の「源非零・標的零」パケット。 -/
 

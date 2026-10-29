@@ -25,6 +25,7 @@ open WeierstrassCurve WeierstrassCurve.Affine
 open DkMath.Lib.NumberTheory.WeierstrassVeluPair
 open DkMath.Lib.NumberTheory.EllipticTorsionRepresentation
 open DkMath.Lib.NumberTheory.EllipticFunctionField
+open DkMath.Lib.NumberTheory.EllipticPointEvaluation
 open DkMath.Lib.NumberTheory.EllipticFiniteKernel
 open DkMath.Lib.Algebra.FiniteProductWronskian
 open DkMath.Lib.Algebra.RationalPolynomialFiber
@@ -204,6 +205,77 @@ example (E : WeierstrassCurve F) [E.IsElliptic] :
     Transcendental (AlgebraicClosure F) (genericX E (AlgebraicClosure F)) :=
   genericX_transcendental_for_wronskian E
 
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H] :
+    Polynomial.aeval (genericX E (AlgebraicClosure F))
+      (veluHalfDenominatorBase E H) ≠ 0 :=
+  veluHalfDenominatorBase_eval_genericX_ne_zero E H
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) :
+    veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure F))
+        (veluHalfNumeratorBase E H) /
+        Polynomial.aeval (genericX E (AlgebraicClosure F))
+          (veluHalfDenominatorBase E H) :=
+  veluX_eq_veluHalfNumeratorBase_div_denominator E H ho
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P Q : (AlgebraicClosure F)[X])
+    (hQ : Polynomial.aeval (genericX E (AlgebraicClosure F)) Q ≠ 0)
+    (hrel : veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure F)) P /
+        Polynomial.aeval (genericX E (AlgebraicClosure F)) Q) :
+    P * veluHalfDenominatorBase E H = veluHalfNumeratorBase E H * Q :=
+  veluX_standard_pair_cross_relation E H ho P Q hQ hrel
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P QF : (AlgebraicClosure F)[X])
+    (hQF : Polynomial.aeval (genericX E (AlgebraicClosure F)) QF ≠ 0)
+    (hrel : veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure F)) P /
+        Polynomial.aeval (genericX E (AlgebraicClosure F)) QF)
+    (T : Points E) (hT : T ∉ H) (Q : H)
+    (hbase :
+      (wronskian (veluHalfNumeratorBase E H)
+        (veluHalfDenominatorBase E H)).IsRoot (T + Q.val).xc) :
+    (wronskian P QF).IsRoot (T + Q.val).xc :=
+  veluX_standard_pair_wronskian_root_of_translation E H ho P QF hQF hrel T hT Q hbase
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (T : Points E) (hT : T ∉ H) (hneg : -T = T)
+    (Q : H) (hQ : Q ≠ 0)
+    (hidentity :
+      (veluHalfDenominatorBase E H).eval (T + Q.val).xc ^ 2 *
+          (2 * kernelYAt E H (T + Q.val) (add_not_mem_kernel E H T hT Q) +
+            (kernelModel E H).a₁ * kernelXAt E H (T + Q.val)
+              (add_not_mem_kernel E H T hT Q) + (kernelModel E H).a₃) =
+        (2 * (T + Q.val).yc + (E⁄(AlgebraicClosure F)).a₁ * (T + Q.val).xc +
+            (E⁄(AlgebraicClosure F)).a₃) *
+          (wronskian (veluHalfNumeratorBase E H)
+            (veluHalfDenominatorBase E H)).eval (T + Q.val).xc) :
+    (wronskian (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H)).IsRoot (T + Q.val).xc :=
+  veluHalf_base_wronskian_root_of_cleared_identity E H ho T hT hneg Q hQ hidentity
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (T : Points E) (hT : T ≠ 0) (p : (AlgebraicClosure F)[X]) :
+    pointValuation E T
+        (Polynomial.aeval (genericX E (AlgebraicClosure F)) p) ≤ 1 :=
+  pointValuation_aeval_le_one E T hT p
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (T : Points E) (hT : T ≠ 0) (p : (AlgebraicClosure F)[X]) :
+    value E T (Polynomial.aeval (genericX E (AlgebraicClosure F)) p)
+        (pointValuation_aeval_le_one E T hT p) = p.eval T.xc :=
+  value_aeval_eq_eval E T hT p
+
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.eq_neg_of_completedSquare_eq_zero
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.completedSquare_ne_zero_of_neg_ne
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelAt_completedSquare_eq_zero_of_neg_fixed
@@ -215,6 +287,13 @@ example (E : WeierstrassCurve F) [E.IsElliptic] :
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.translated_x_ne_halfKernel_of_kernel_outside
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalfDenominatorBase_eval_ne_zero_translation
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.genericX_transcendental_for_wronskian
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalfDenominatorBase_eval_genericX_ne_zero
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_eq_veluHalfNumeratorBase_div_denominator
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_cross_relation
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_wronskian_root_of_translation
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_wronskian_root_of_cleared_identity
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.pointValuation_aeval_le_one
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.value_aeval_eq_eval
 
 example {F : Type*} [Field F] (A D P Q : F[X]) (hcross : A * D = P * Q) :
     wronskian A Q * D ^ 2 = wronskian P D * Q ^ 2 :=

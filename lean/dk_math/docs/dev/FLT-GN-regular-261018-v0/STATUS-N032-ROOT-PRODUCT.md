@@ -682,3 +682,38 @@ Wronskian 根条件へ直接接続できる。
 独立した教材定理になった。標準対との評価分数等式と、有限点での正則評価だけが
 残るため、次工程は「標準 `RatFunc` 対を基礎共通分母対へ接続する専用定理」に
 絞り込める。
+
+今回さらに、その接続の関数体側を閉じた。`veluHalfDenominatorBase_eval_genericX_ne_zero`
+は基礎共通分母の各因子を `genericX_ne_const` で評価し、一般座標上での分母非零性を
+供給する。`veluX_eq_veluHalfNumeratorBase_div_denominator` は、関数体係数版の
+Vélu 商を `eval_map_algebraMap` によって `AlgebraicClosure K[X]` の基底対へ戻す。
+そして `veluX_standard_pair_cross_relation` は、標準対 `F,G` の
+`veluX = aeval(F) / aeval(G)` 表示とその分母非零性を入力として、
+
+`F * veluHalfDenominatorBase = veluHalfNumeratorBase * G`
+
+を無条件に導出する。この定理により、係数降下の交差乗算は未解決義務ではなくなった。
+残る中心課題は、この交差乗算と有限点の正則評価を組み合わせ、基底対の Wronskian
+零点を `T+Q` で供給することである。
+
+この組合せも `veluX_standard_pair_wronskian_root_of_translation` として固定した。
+標準対の `veluX` 表示、`P ∉ H`、核点 `Q`、および基底対の Wronskian 根を入力すると、
+`veluHalfDenominatorBase_eval_ne_zero_translation` が分母非零性を供給し、
+`wronskian_isRoot_of_cross_relation` が標準対の Wronskian 根を返す。従って、現在
+残っているのは基底対
+`(veluHalfNumeratorBase, veluHalfDenominatorBase)` 自体について、
+`T + Q` の点で Wronskian が零になることを、平方完成恒等式の正則評価から導く部分である。
+
+その最後の消去を整理する `veluHalf_base_wronskian_root_of_cleared_identity` も追加した。
+奇数核の二捩れパケットから源側の平方完成座標非零・標的側零を取り出し、点で評価された
+無分母恒等式が与えられれば、基底対 Wronskian の根を返す。ここで無分母恒等式を
+仮定として残しているのは、関数体恒等式を `T+Q` へ正則に特殊化する境界を隠さない
+ためである。次に実装すべき具体的補題は、この `hidentity` を
+`veluHalf_denominator_sq_mul_z_eq_z_mul_wronskian` と点評価 API から構成することである。
+
+その準備として `pointValuation_aeval_le_one` と `value_aeval_eq_eval` を追加した。
+有限点 `P ≠ O` では、`genericX` と `P.xc` の付値合同を `Valuation.Cong.eval₂` で
+任意の基礎係数多項式へ持ち上げられる。従って `A₀,D₀`、その微分、Wronskian の
+すべてが正則で、有限値は通常の `Polynomial.eval` と一致する。この API により、
+次工程では関数体の無分母恒等式を `Cong` の積・和として評価し、`hidentity` を
+仮定なしで構成する道筋が明確になった。
