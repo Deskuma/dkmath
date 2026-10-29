@@ -1,0 +1,63 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+-/
+
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianBifurcation
+
+#print "file: DkMathTest.Lib.NumberTheory.EllipticFiniteKernelWronskianBifurcation"
+
+namespace DkMathTest.EllipticFiniteKernelWronskianBifurcation
+
+open Polynomial
+open WeierstrassCurve WeierstrassCurve.Affine
+open DkMath.Lib.Algebra.RationalPolynomialFiber
+open DkMath.Lib.NumberTheory.EllipticFiniteKernel
+open DkMath.Lib.NumberTheory.EllipticFunctionField
+open DkMath.Lib.NumberTheory.EllipticTorsionRepresentation
+open DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
+
+noncomputable local instance instDecidableEqEllipticFiniteKernelWronskianBifurcationTest
+    {α : Type*} : DecidableEq α := Classical.decEq _
+
+variable {F : Type*} [Field F] [CharZero F]
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (c : AlgebraicClosure F) (P : Points E)
+    (hPc : ∃ hP : P ∉ H, kernelXAt E H P hP = c) :
+    (2 • P ∉ H ∧
+      ∃ A B : (AlgebraicClosure F)[X],
+        IsCoprime A B ∧ B ≠ 0 ∧ A.natDegree = Nat.card H ∧
+          B.natDegree < A.natDegree ∧
+          veluX E H =
+            aeval (genericX E (AlgebraicClosure F)) A /
+              aeval (genericX E (AlgebraicClosure F)) B ∧
+          fiberPolynomial A B c ≠ 0 ∧
+          (normalize (fiberPolynomial A B c)).Monic ∧
+          (normalize (fiberPolynomial A B c)).natDegree = Nat.card H ∧
+          normalize (fiberPolynomial A B c) =
+            ∏ Q : H, (Polynomial.X - Polynomial.C ((P + Q.val).xc))) ∨
+    (2 • P ∈ H ∧
+      ∃ T : Points E, T ∉ H ∧ -T = T ∧
+        ∃ hT : T ∉ H, kernelXAt E H T hT = c ∧
+          ∃ A B : (AlgebraicClosure F)[X],
+            IsCoprime A B ∧ B ≠ 0 ∧ A.natDegree = Nat.card H ∧
+              B.natDegree < A.natDegree ∧
+              veluX E H =
+                aeval (genericX E (AlgebraicClosure F)) A /
+                  aeval (genericX E (AlgebraicClosure F)) B ∧
+              fiberPolynomial A B c ≠ 0 ∧
+              (normalize (fiberPolynomial A B c)).Monic ∧
+              (normalize (fiberPolynomial A B c)).natDegree = Nat.card H ∧
+              (∀ (R : Points E) (hR : R ∉ H),
+                kernelXAt E H R hR = c →
+                  (normalize (fiberPolynomial A B c)).IsRoot R.xc) ∧
+              normalize (fiberPolynomial A B c) =
+                fiberFactor (Finset.univ : Finset (halfKernel E H)) T.xc
+                  (fun Q : halfKernel E H => (T + Q.val.val).xc)) :=
+  exists_veluX_normalized_fiberFactor_or_fullKernel E H ho c P hPc
+
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_veluX_normalized_fiberFactor_or_fullKernel
+
+end DkMathTest.EllipticFiniteKernelWronskianBifurcation

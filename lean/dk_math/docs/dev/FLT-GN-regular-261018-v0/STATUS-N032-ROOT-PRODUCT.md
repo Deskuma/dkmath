@@ -779,3 +779,15 @@ Wronskian 零点から標準対への輸送は完了した。残る境界は、�
 既存の `exists_veluX_normalized_fiberFactor_of_wronskian_transport` の組合せであり、
 根多重度理論を再証明していない。一般枝 `2 • P ∉ H` との共通 API 化、及び標数零
 以外への拡張は次工程に残る。
+
+## 一般枝・特殊枝の二分岐 API
+
+次工程として `EllipticFiniteKernelWronskianBifurcation.lean` を追加した。
+公開定理 `exists_veluX_normalized_fiberFactor_or_fullKernel` は、核外点 `P` と
+そのファイバー値 `c` に対し、`2 • P ∉ H` の全核一次因子積か、`2 • P ∈ H` の
+二捩れ代表 `T` による特殊ファイバー因子分解かを一つの `Or` で返す。
+
+特殊枝では `exists_two_torsion_kernelXAt_representative_of_two_smul_mem` が
+`T = P - Q₀` を選び、`kernelXAt T = c` を輸送する。その後、今回完成した
+`exists_veluX_normalized_fiberFactor_of_odd_twoTorsion` を適用する。したがって、
+二分岐 API 自体に新しい群論・Wronskian 計算は導入していない。
