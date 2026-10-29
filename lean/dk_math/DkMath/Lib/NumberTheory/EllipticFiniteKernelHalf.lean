@@ -88,4 +88,19 @@ theorem card_halfKernel (H : AddSubgroup (Points E)) [Fintype H]
   have hp : 0 < Nat.card H := Nat.card_pos
   omega
 
+/-- [DkMath.Lib] 非自明な奇数核では半核が空でない。
+
+`card_halfKernel` の等式を `1 < Nat.card H` と組み合わせるだけの算術補題である。
+特殊ファイバー因子の二重根を選ぶ前に、半核の代表を実際に一つ供給する入口になる。
+自明核ではこの命題の仮定が成立しないため、一次因子の判別式を誤って零としない。
+-/
+theorem halfKernel_nonempty_of_one_lt_card (H : AddSubgroup (Points E)) [Fintype H]
+    (hodd : Odd (Nat.card H)) (hcard : 1 < Nat.card H) :
+    (halfKernel E H).Nonempty := by
+  by_contra h
+  have hempty : halfKernel E H = ∅ := Finset.not_nonempty_iff_eq_empty.mp h
+  have hc := card_halfKernel E H hodd
+  rw [hempty, Finset.card_empty] at hc
+  omega
+
 end DkMath.Lib.NumberTheory.EllipticFiniteKernel

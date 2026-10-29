@@ -11,6 +11,7 @@ blob 0c42a9282f1033d6d64cc213bb1f7c7c52b17d1e.
 import DkMath.Lib.NumberTheory.WeierstrassDiscriminantRoots
 import DkMath.Lib.NumberTheory.WeierstrassTwoTorsionTranslate
 import Mathlib.RingTheory.Valuation.ValuationSubring
+import Mathlib.RingTheory.Polynomial.Resultant.Basic
 
 #print "file: DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly"
 
@@ -57,6 +58,39 @@ theorem fiberFactor_ne_zero {ι : Type*} [DecidableEq ι] (s : Finset ι) (e : k
     (ξ : ι → k) : fiberFactor s e ξ ≠ 0 :=
   (fiberFactor_monic s e ξ).ne_zero
 
+/-- [DkMath.Lib] 二重一次因子を持つ正次数多項式の判別式は零である。
+
+`q ^ 2 ∣ p` なら、微分則から `q ∣ p.derivative` も得られる。`q` が単元でない
+ことを仮定すれば `p` と `p.derivative` は互いに素ではなく、resultant の零性から
+判別式の零性へ移る。Vélu や楕円曲線を含まない、重根判定の一般代数層である。
+-/
+theorem discr_eq_zero_of_sq_dvd [CharZero k] {p q : k[X]} (hp : 0 < p.degree)
+    (hdiv : q ^ 2 ∣ p) (hq : ¬ IsUnit q) : p.discr = 0 := by
+  have hp0 : p ≠ 0 := by
+    intro hp0
+    subst p
+    simp at hp
+  have hqderiv : q ∣ p.derivative :=
+    by simpa using (pow_sub_one_dvd_derivative_of_pow_dvd hdiv)
+  have hnotcop : ¬ IsCoprime p p.derivative := by
+    intro hcop
+    have hq_p : q ∣ p := dvd_trans (dvd_pow_self q (by norm_num)) hdiv
+    exact hq (hcop.isUnit_of_dvd' hq_p hqderiv)
+  have hres : resultant p p.derivative = 0 :=
+    (resultant_eq_zero_iff (K := k) (f := p) (g := p.derivative)).2
+      ⟨Or.inl hp0, hnotcop⟩
+  have hrel := resultant_deriv (R := k) hp
+  have hres' : resultant p p.derivative p.natDegree (p.natDegree - 1) = 0 := by
+    change resultant p p.derivative p.natDegree p.derivative.natDegree = 0 at hres
+    rw [natDegree_derivative] at hres
+    exact hres
+  rw [hres'] at hrel
+  have hscalar : (-1 : k) ^ (p.natDegree * (p.natDegree - 1) / 2) *
+      p.leadingCoeff ≠ 0 := by
+    exact mul_ne_zero (pow_ne_zero _ (neg_ne_zero.mpr one_ne_zero))
+      (leadingCoeff_ne_zero.mpr hp0)
+  exact (mul_eq_zero.mp hrel.symm).resolve_left hscalar
+
 /-- [DkMath.Lib] ファイバー因子の次数は、一本の単純根と
 各移動根の二重根から `2 |s| + 1` になる。 -/
 theorem fiberFactor_natDegree {ι : Type*} [DecidableEq ι] (s : Finset ι) (e : k)
@@ -71,6 +105,27 @@ theorem fiberFactor_natDegree {ι : Type*} [DecidableEq ι] (s : Finset ι) (e :
   · simp
     omega
   · exact fun q hq => (monic_X_sub_C (ξ q)).pow 2
+
+/-- [DkMath.Lib] 非空半核因子は特殊ファイバー因子の判別式を零にする。
+
+`fiberFactor s e ξ` は `s` の各元に対応する一次因子を二乗して含む。従って
+`s.Nonempty` なら、そのうち一つを `q` として平方因子を取り出し、一般補題
+`discr_eq_zero_of_sq_dvd` を適用できる。自明核の一次因子の場合を誤って含めない
+ため、非空性を明示的な仮定として残している。
+-/
+theorem fiberFactor_discr_eq_zero_of_nonempty [CharZero k] {ι : Type*} [DecidableEq ι]
+    (s : Finset ι) (hs : s.Nonempty) (e : k) (ξ : ι → k) :
+    (fiberFactor s e ξ).discr = 0 := by
+  classical
+  obtain ⟨q, hq⟩ := hs
+  have hdiv : (X - C (ξ q)) ^ 2 ∣ fiberFactor s e ξ := by
+    unfold fiberFactor
+    exact dvd_mul_of_dvd_right (Finset.dvd_prod_of_mem _ hq) _
+  have hdeg : 0 < (fiberFactor s e ξ).degree := by
+    rw [← natDegree_pos_iff_degree_pos, fiberFactor_natDegree]
+    omega
+  exact discr_eq_zero_of_sq_dvd hdeg hdiv
+    (not_isUnit_of_degree_pos _ (by simp))
 
 /-- [DkMath.Lib] `fiberFactor` がある点で消えることの評価形。
 根の集合を使う代わりに、一本の単純根 `e` または移動根 `ξ q` の

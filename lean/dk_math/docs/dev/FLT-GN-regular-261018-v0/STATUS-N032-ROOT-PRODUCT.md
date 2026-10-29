@@ -828,6 +828,23 @@ Wronskian 零点から標準対への輸送は完了した。残る境界は、�
 形式的に固定できる。この補題は固定係数対 API の直接の後続消費者であり、判別式族を
 一つの二変数多項式として扱う際の係数管理に用いる。
 
-今回の追加は先頭係数の不変性までであり、判別式の零性と二捩れ特殊値の同値性はまだ
-証明していない。次に攻めるべき具体的な補題は、`1 < Nat.card H` を仮定した上で、
-特殊枝の半核二重根から `Polynomial.discr` の零性を導く根・resultant の接続である。
+先頭係数の不変性だけでは判別式の零性までは得られないため、次に純粋代数の
+根・resultant 接続を実装する。
+
+## 非空 `fiberFactor` の判別式零性
+
+この次工程として、`WeierstrassDiscriminantAssembly.lean` に
+`discr_eq_zero_of_sq_dvd` と `fiberFactor_discr_eq_zero_of_nonempty` を追加した。
+前者は標数零体上で `q ^ 2 ∣ p` と `¬ IsUnit q` から、微分の可除性、
+`resultant_eq_zero_iff`、`resultant_deriv` を組み合わせて `p.discr = 0` を導く。
+後者は非空な `fiberFactor` から二乗一次因子を一つ選び、前者を適用する。
+
+これで特殊枝の因子分解から判別式零性へ向かう純粋代数の必要方向が閉じた。ただし、
+空の半核（自明核）を誤って含めないため `s.Nonempty` を保持している。実際の有限核へ
+戻す次の補題は、`1 < Nat.card H` と `card_halfKernel` から
+`(halfKernel E H).Nonempty` を構成し、特殊枝の `fiberFactor` にこの定理を適用すること。
+判別式の十分方向、一般枝での非零性、正規化前のファイバーへの輸送は未実装である。
+
+この半核供給補題 `halfKernel_nonempty_of_one_lt_card` も実装済みである。したがって、
+次の接続では `1 < Nat.card H` を仮定すれば、特殊枝の因子分解から判別式零性へ
+半核の存在を別途再構成せずに進められる。

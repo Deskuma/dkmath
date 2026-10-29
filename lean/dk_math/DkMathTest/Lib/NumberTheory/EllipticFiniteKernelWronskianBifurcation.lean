@@ -95,4 +95,11 @@ example (A B : (AlgebraicClosure F)[X]) (c : AlgebraicClosure F)
 
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.fiberPolynomial_leadingCoeff_eq_of_natDegree_lt
 
+example (E : WeierstrassCurve F) (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (hcard : 1 < Nat.card H) :
+    (halfKernel E H).Nonempty :=
+  halfKernel_nonempty_of_one_lt_card E H ho hcard
+
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernel_nonempty_of_one_lt_card
+
 end DkMathTest.EllipticFiniteKernelWronskianBifurcation

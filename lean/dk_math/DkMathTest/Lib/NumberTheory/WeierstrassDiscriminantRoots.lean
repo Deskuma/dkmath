@@ -116,6 +116,14 @@ example (n : ℕ) (Δ Δ' : ℚ) (h : Δ' * (1 : ℚ) ^ 4 = Δ ^ (2 * n + 1)) :
   apply discriminant_value_of_unit_factor (1 : Valuation ℚ ℚ≥0) n Δ Δ' 1 h
   simp
 
+example :
+    (fiberFactor ({0} : Finset ℕ) (1 : ℚ) (fun _ => (2 : ℚ) / 3)).discr = 0 := by
+  apply fiberFactor_discr_eq_zero_of_nonempty
+  simp
+
+#print axioms DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly.discr_eq_zero_of_sq_dvd
+#print axioms DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly.fiberFactor_discr_eq_zero_of_nonempty
+
 #print axioms discriminant_eq_root_differences
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.half_tangent_product_eq_root_products
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.half_x_sub_root_ne_zero
