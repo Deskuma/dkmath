@@ -77,6 +77,56 @@ theorem xCorrectionNumerator_natDegree_le_one
         omega
 
 omit [CharZero K] in
+/-- [DkMath.Lib] 主項より低次数の有限補正和を加えてもモニック性は保たれる。
+
+`commonNumerator = X * commonDenominator + Σ Nᵢ Eᵢ` の形で、各補正項の
+次数が主項より真に小さければ、最高次係数は主項の一だけである。この一般補題は
+半核の具体的な次数計算をここへ埋め込まず、後続の特殊化が供給すべき条件を
+明示する。
+-/
+theorem commonNumerator_monic_of_term_degree_lt
+    {ι : Type*} [DecidableEq ι]
+    (s : Finset ι) (N D : ι → (AlgebraicClosure K)[X])
+    (hD : (commonDenominator s D).Monic)
+    (hterm : ∀ i ∈ s,
+      (N i * erasedProduct s D i).degree <
+        (X * commonDenominator s D).degree) :
+    (commonNumerator s N D).Monic := by
+  unfold commonNumerator
+  apply (monic_X.mul hD).add_of_left
+  refine (degree_sum_le _ _).trans_lt ((Finset.sup_lt_iff ?_).2 ?_)
+  · exact bot_lt_iff_ne_bot.mpr (degree_ne_bot.mpr ((monic_X.mul hD).ne_zero))
+  · intro i hi
+    exact hterm i hi
+
+omit [CharZero K] in
+/-- [DkMath.Lib] 二次モニック因子の除去積の次数を数える。
+
+各 `D i` がモニック二次式なら、`erasedProduct s D i` の次数は
+`2 * (s.erase i).card` になる。半核補正項の次数を、全分母の主項と
+比較する際に使う有限積の数え上げ補題である。
+-/
+theorem erasedProduct_natDegree_eq_two_mul_card
+    {ι : Type*} [DecidableEq ι]
+    (s : Finset ι) (D : ι → (AlgebraicClosure K)[X])
+    (hmonic : ∀ i ∈ s, (D i).Monic)
+    (hdeg : ∀ i ∈ s, (D i).natDegree = 2)
+    {i : ι} (_hi : i ∈ s) :
+    (erasedProduct s D i).natDegree = 2 * (s.erase i).card := by
+  unfold erasedProduct
+  rw [natDegree_prod_of_monic]
+  · have hsum :
+        (∑ j ∈ s.erase i, (D j).natDegree) =
+          ∑ _j ∈ s.erase i, 2 := by
+      apply Finset.sum_congr rfl
+      intro j hj
+      exact hdeg j (Finset.mem_of_mem_erase hj)
+    rw [hsum]
+    simp [Nat.mul_comm]
+  · intro j hj
+    exact hmonic j (Finset.mem_of_mem_erase hj)
+
+omit [CharZero K] in
 /-- [DkMath.Lib] 半核共通分母はモニックである。 -/
 theorem veluHalfDenominatorBase_monic
     (E : WeierstrassCurve K) (H : AddSubgroup (Points E)) [Fintype H] :

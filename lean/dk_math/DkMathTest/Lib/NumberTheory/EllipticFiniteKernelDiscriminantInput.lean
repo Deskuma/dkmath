@@ -12,6 +12,7 @@ namespace DkMathTest.EllipticFiniteKernelDiscriminantInput
 open WeierstrassCurve WeierstrassCurve.Affine
 open DkMath.Lib.NumberTheory.EllipticFiniteKernel
 open DkMath.Lib.NumberTheory.EllipticTorsionRepresentation
+open DkMath.Lib.Algebra.FiniteProductWronskian
 open Polynomial
 
 variable {F : Type*} [Field F] [CharZero F]
@@ -40,6 +41,23 @@ example (W : WeierstrassCurve (AlgebraicClosure F)) (a b : AlgebraicClosure F) :
     (xCorrectionNumerator W a b).natDegree ≤ 1 :=
   xCorrectionNumerator_natDegree_le_one W a b
 
+example {ι : Type*} [DecidableEq ι] (s : Finset ι)
+    (N D : ι → (AlgebraicClosure F)[X])
+    (hD : (commonDenominator s D).Monic)
+    (hterm : ∀ i ∈ s,
+      (N i * erasedProduct s D i).degree <
+        (X * commonDenominator s D).degree) :
+    (commonNumerator s N D).Monic :=
+  commonNumerator_monic_of_term_degree_lt s N D hD hterm
+
+example {ι : Type*} [DecidableEq ι]
+    (s : Finset ι) (D : ι → (AlgebraicClosure F)[X])
+    (hmonic : ∀ i ∈ s, (D i).Monic)
+    (hdeg : ∀ i ∈ s, (D i).natDegree = 2)
+    {i : ι} (hi : i ∈ s) :
+    (erasedProduct s D i).natDegree = 2 * (s.erase i).card :=
+  erasedProduct_natDegree_eq_two_mul_card s D hmonic hdeg hi
+
 example (E : WeierstrassCurve F) (H : AddSubgroup (Points E)) [Fintype H] :
     (veluHalfDenominatorBase E H).Monic :=
   veluHalfDenominatorBase_monic E H
@@ -62,6 +80,10 @@ example {F₀ G₀ A₀ D₀ : (AlgebraicClosure F)[X]}
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.xCorrectionDenominator_natDegree
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.xCorrectionNumerator_natDegree_le_one
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.commonNumerator_monic_of_term_degree_lt
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.erasedProduct_natDegree_eq_two_mul_card
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalfDenominatorBase_monic
 #print axioms

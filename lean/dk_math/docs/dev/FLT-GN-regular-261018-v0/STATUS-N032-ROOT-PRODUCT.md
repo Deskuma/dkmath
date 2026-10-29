@@ -1001,3 +1001,10 @@ resultant 基盤を逆向きに利用している。
 `xCorrectionNumerator_natDegree_le_one` を証明した。これは線型項と定数項の
 和を直接評価したもので、半核共通分子の補正和が主項 `X * D` より低次数である
 ことを示す次の有限積次数補題の入力になる。
+
+さらに、有限積の主項を抽象化した `commonNumerator_monic_of_term_degree_lt` と、
+二次モニック因子に対する除去積の次数公式
+`erasedProduct_natDegree_eq_two_mul_card` を追加した。前者は補正項の次数比較を
+仮定して `X * D + Σ NᵢEᵢ` のモニック性を導き、後者はその比較に必要な
+`2 * (s.erase i).card` を供給する。半核分子そのものへの適用には、まだ有限積の
+次数比較と `halfKernel` の濃度条件を接続する補題が必要である。
