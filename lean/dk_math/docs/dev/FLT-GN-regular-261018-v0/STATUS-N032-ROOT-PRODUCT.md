@@ -507,3 +507,37 @@ Wronskian を輸送することである。次の具体的な補題は、点評�
 
 この新定理も回帰テストで再利用し、`#print axioms` は
 `propext`, `Classical.choice`, `Quot.sound` のみを報告した。
+
+## 代数閉包係数への基底橋渡し
+
+レビューで指摘された「関数体係数多項式を評価の単射性なしに比較しない」という
+境界を明示するため、新規モジュール
+`DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianBase` を追加した。
+ここではまず
+
+* `veluHalfNumeratorBase E H : (AlgebraicClosure K)[X]`、
+* `veluHalfDenominatorBase E H : (AlgebraicClosure K)[X]`
+
+を定義し、同じ半核の有限積を代数閉包係数で構成する。そのうえで
+`moments_map` と `Polynomial.map` の有限和・有限積との可換性から、
+
+`map_veluHalfNumeratorBase`、`map_veluHalfDenominatorBase`
+
+を証明した。従って、関数体係数の `A_H,D_H` は、係数埋め込み
+`AlgebraicClosure K →+* FunctionField` による基礎体側の `A₀,D₀` の像として
+扱える。評価写像の非単射性を使った多項式同一視は行っていない。
+
+さらに、任意の体準同型に対する
+`map_wronskian` を追加した。多項式の微分が係数写像と可換することを
+`derivative_map` で明示し、Wronskian の係数体輸送を代数的に固定した。
+これは将来、標準 `RatFunc` の分子分母対 `F,G` と `A₀,D₀` を交差乗算で比較する際の
+入口になる。
+
+新しく確立した内容は、半核有限積の係数体降下と Wronskian の写像可換性である。
+`veluX_half`、`veluZ_half`、および二捩れ点の幾何学的評価は既存定理を利用するだけで、
+この段階ではまだ閉じていない。未解決の証明義務は、`T+Q` における各分母因子の
+非零性、`z_H(T+Q)=0` と `z(T+Q)≠0` の同時供給、そして関数体恒等式の正則な点評価である。
+
+対象モジュール、回帰テスト、`DkMath.Lib` のビルドを実行した。新規橋渡し定理の
+`#print axioms` は既存層と同じく `propext`, `Classical.choice`, `Quot.sound` のみで、
+新しい `sorry` や独自 `axiom` は導入していない。`git diff --check` も成功した。

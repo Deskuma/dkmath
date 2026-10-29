@@ -5,6 +5,7 @@ Released under MIT license as described in the file LICENSE.
 
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianAssembly
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianHalf
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianBase
 
 #print "file: DkMathTest.Lib.NumberTheory.EllipticFiniteKernelWronskian"
 
@@ -24,6 +25,7 @@ open DkMath.Lib.NumberTheory.EllipticTorsionRepresentation
 open DkMath.Lib.NumberTheory.EllipticFunctionField
 open DkMath.Lib.NumberTheory.EllipticFiniteKernel
 open DkMath.Lib.Algebra.FiniteProductWronskian
+open DkMath.Lib.Algebra.RationalPolynomialFiber
 
 variable {F ι : Type*} [Field F] [DecidableEq ι]
 
@@ -91,5 +93,31 @@ example (E : WeierstrassCurve F) (H : AddSubgroup (Points E)) [Fintype H]
   veluHalf_denominator_sq_mul_z_eq_z_mul_wronskian E H ho
 
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_denominator_sq_mul_z_eq_z_mul_wronskian
+
+/-! 係数体ブリッジの回帰例。`A_H,D_H` は代数閉包係数で作ってから、
+関数体係数の既存 Vélu 表示へ `Polynomial.map` で送れる。 -/
+
+example (E : WeierstrassCurve F) (H : AddSubgroup (Points E)) [Fintype H] :
+    let F' := (E.toAffine⁄(AlgebraicClosure F)).FunctionField
+    let c := algebraMap (AlgebraicClosure F) F'
+    Polynomial.map c (veluHalfNumeratorBase E H) = veluHalfNumerator E H :=
+  map_veluHalfNumeratorBase E H
+
+example (E : WeierstrassCurve F) (H : AddSubgroup (Points E)) [Fintype H] :
+    let F' := (E.toAffine⁄(AlgebraicClosure F)).FunctionField
+    let c := algebraMap (AlgebraicClosure F) F'
+    Polynomial.map c (veluHalfDenominatorBase E H) = veluHalfDenominator E H :=
+  map_veluHalfDenominatorBase E H
+
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.map_veluHalfNumeratorBase
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.map_veluHalfDenominatorBase
+
+example {R S : Type*} [Field R] [Field S] (f : R →+* S)
+    (P Q : R[X]) :
+    Polynomial.map f (wronskian P Q) =
+      wronskian (Polynomial.map f P) (Polynomial.map f Q) :=
+  map_wronskian f P Q
+
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.map_wronskian
 
 end DkMathTest.EllipticFiniteKernelWronskian
