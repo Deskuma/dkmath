@@ -981,3 +981,23 @@ resultant 基盤を逆向きに利用している。
 `pair_relation` を接続するための明示的分母入力である。今回の範囲では、商モデルの
 三根差関係、`kernelModel` と明示的 Vélu モデルの一致、`U` の整数係数正規化、
 および `Δ' * U^4 = Δ^(2n+1)` の無条件導出はまだ閉じていない。
+
+同じモジュールで、各補正分母のモニック性と次数二、ならびに半核共通分母の
+モニック性と次数 `2 * (halfKernel E H).card` も固定した。これは根距離積の評価を
+「最高次係数が一である有限積」として扱うための代数入力であり、標準 `F,G` との
+正規化比較に先立つ安全な層である。対応する公開定理は
+`xCorrectionDenominator_monic`, `xCorrectionDenominator_natDegree`,
+`veluHalfDenominatorBase_monic`, `veluHalfDenominatorBase_natDegree` である。
+
+標準 `RatFunc` 対との比較に向けて、交差乗算
+`F * D = A * G` と `IsCoprime F G` から `F ∣ A` を取り出す
+`dvd_of_cross_relation_of_coprime` も追加した。これは既存の
+`veluX_standard_pair_cross_relation` を受ける最小の正規化橋であり、次数と
+モニック性を仮定して `F = A` まで短絡するものではない。したがって、未解決の
+証明義務（半核分子の厳密な次数・モニック性、標準対との同一性、三根差の
+`pair_relation`、および判別式積公式）は保ったままである。
+
+併せて局所分子の次数境界
+`xCorrectionNumerator_natDegree_le_one` を証明した。これは線型項と定数項の
+和を直接評価したもので、半核共通分子の補正和が主項 `X * D` より低次数である
+ことを示す次の有限積次数補題の入力になる。

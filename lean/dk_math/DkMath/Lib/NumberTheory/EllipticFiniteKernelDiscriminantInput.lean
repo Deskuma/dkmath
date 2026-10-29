@@ -28,14 +28,96 @@ open Polynomial
 open WeierstrassCurve WeierstrassCurve.Affine
 open DkMath.Lib.Algebra.FiniteProductWronskian
 open DkMath.Lib.NumberTheory.WeierstrassVeluPair
+open DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial
 open DkMath.Lib.NumberTheory.EllipticTorsionRepresentation
 open DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
+open DkMath.Lib.Algebra.RationalPolynomialFiber
 open scoped BigOperators
 
 noncomputable local instance instDecidableEqEllipticFiniteKernelDiscriminantInput
     {α : Type*} : DecidableEq α := Classical.decEq _
 
 variable {K : Type*} [Field K] [CharZero K]
+
+omit [CharZero K] in
+/-- [DkMath.Lib] 各 Vélu 補正分母はモニック二次式である。 -/
+theorem xCorrectionDenominator_monic (a : AlgebraicClosure K) :
+    (xCorrectionDenominator a).Monic := by
+  unfold xCorrectionDenominator
+  exact (monic_X_sub_C a).mul (monic_X_sub_C a)
+
+omit [CharZero K] in
+/-- [DkMath.Lib] 各 Vélu 補正分母の次数は二である。 -/
+theorem xCorrectionDenominator_natDegree (a : AlgebraicClosure K) :
+    (xCorrectionDenominator a).natDegree = 2 := by
+  change ((X - C a) * (X - C a)).natDegree = 2
+  rw [natDegree_mul (monic_X_sub_C a).ne_zero (monic_X_sub_C a).ne_zero]
+  simp
+
+omit [CharZero K] in
+/-- [DkMath.Lib] 各 Vélu 補正分子の次数は高々一である。
+
+`xCorrectionNumerator = C(t) (X - C(a)) + C(u)` なので、補正分子は
+線型項と定数項の和に過ぎない。この局所次数境界が、半核共通分子の
+補正和を主項 `X * D` より低次数に置くための入力になる。
+-/
+theorem xCorrectionNumerator_natDegree_le_one
+    (W : WeierstrassCurve (AlgebraicClosure K)) (a b : AlgebraicClosure K) :
+    (xCorrectionNumerator W a b).natDegree ≤ 1 := by
+  unfold xCorrectionNumerator
+  calc
+    (C (momentT W a) * (X - C a) + C ((2 * b + W.a₁ * a + W.a₃) ^ 2)).natDegree ≤
+        max (C (momentT W a) * (X - C a)).natDegree
+          (C ((2 * b + W.a₁ * a + W.a₃) ^ 2)).natDegree :=
+      natDegree_add_le _ _
+    _ ≤ 1 := by
+      apply max_le
+      · exact (natDegree_C_mul_le _ _).trans (natDegree_X_sub_C_le _)
+      · rw [natDegree_C]
+        omega
+
+omit [CharZero K] in
+/-- [DkMath.Lib] 半核共通分母はモニックである。 -/
+theorem veluHalfDenominatorBase_monic
+    (E : WeierstrassCurve K) (H : AddSubgroup (Points E)) [Fintype H] :
+    (veluHalfDenominatorBase E H).Monic := by
+  classical
+  unfold veluHalfDenominatorBase commonDenominator
+  apply monic_prod_of_monic
+  intro Q hQ
+  exact xCorrectionDenominator_monic Q.val.xc
+
+omit [CharZero K] in
+/-- [DkMath.Lib] 半核共通分母の次数は半核の濃度の二倍である。 -/
+theorem veluHalfDenominatorBase_natDegree
+    (E : WeierstrassCurve K) (H : AddSubgroup (Points E)) [Fintype H] :
+    (veluHalfDenominatorBase E H).natDegree = 2 * (halfKernel E H).card := by
+  classical
+  unfold veluHalfDenominatorBase commonDenominator
+  rw [natDegree_prod_of_monic]
+  · simp only [xCorrectionDenominator_natDegree,
+      Finset.sum_const, nsmul_eq_mul]
+    simp [Nat.mul_comm]
+  · intro Q hQ
+    exact xCorrectionDenominator_monic Q.val.xc
+
+/-! ## 標準分子への最小正規化入力 -/
+
+omit [CharZero K] in
+/-- [DkMath.Lib] 交差乗算と互いに素性から標準分子の可除性を得る。
+
+`F * D = A * G` は、評価写像の分数表示を多項式の恒等式へ戻したもの
+である。`IsCoprime F G` を使えば、ここから直ちに `F ∣ A` が従う。
+この補題は分子と共通分母が同じ多項式だと主張しない。後者には次数・
+モニック性の比較が別途必要であるため、正規化の最初の安全な段階として
+可除性だけを公開する。
+-/
+theorem dvd_of_cross_relation_of_coprime
+    {F G A D : (AlgebraicClosure K)[X]}
+    (hcop : IsCoprime F G) (hcross : F * D = A * G) : F ∣ A := by
+  apply hcop.dvd_of_dvd_mul_right
+  rw [← hcross]
+  exact dvd_mul_right F D
 
 omit [CharZero K] in
 /-- [DkMath.Lib] 半核分母を源の根距離積へ評価する。
