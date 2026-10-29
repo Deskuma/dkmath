@@ -26,7 +26,7 @@ namespace DkMath.Lib.NumberTheory.EllipticFiniteKernel
 
 open Polynomial
 open WeierstrassCurve WeierstrassCurve.Affine
-open EllipticTorsionRepresentation
+open EllipticFunctionField EllipticTorsionRepresentation
 open DkMath.Lib.Algebra.FiniteProductWronskian
 open scoped BigOperators
 
@@ -34,6 +34,23 @@ variable {K : Type*} [Field K] [NeZero (2 : K)]
 
 noncomputable local instance instDecidableEqEllipticFiniteKernelWronskianSpecialization
     {α : Type*} : DecidableEq α := Classical.decEq _
+
+omit [NeZero (2 : K)] in
+/-- `genericX` is transcendental over the algebraic closure, by its double pole at `O`.
+
+This is the coefficient-descent guard used when an equality of rational functions
+is upgraded to an equality in `(AlgebraicClosure K)[X]`.  The proof uses only the
+valuation of the Weierstrass x-coordinate at the point at infinity; it does not
+assume that evaluation at an arbitrary function-field element is injective.
+-/
+theorem genericX_transcendental_for_wronskian
+    (E : WeierstrassCurve K) [E.IsElliptic] :
+    Transcendental (AlgebraicClosure K) (genericX E (AlgebraicClosure K)) := by
+  apply transcendental_of_point_pole E 0
+  change 1 < pointValuation E (0 : (E⁄(AlgebraicClosure K)).Point)
+    (genericX E (AlgebraicClosure K))
+  rw [pointValuation_zero_genericX, ← WithZero.exp_zero, WithZero.exp_lt_exp]
+  norm_num
 
 omit [NeZero (2 : K)] in
 /-- 源曲線上で、有限点の平方完成座標が零なら反転固定点になる。 -/

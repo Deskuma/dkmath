@@ -7,6 +7,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianAssembly
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianHalf
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianBase
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianSpecialization
+import DkMath.Lib.Algebra.WronskianCrossMultiplication
 
 #print "file: DkMathTest.Lib.NumberTheory.EllipticFiniteKernelWronskian"
 
@@ -27,6 +28,7 @@ open DkMath.Lib.NumberTheory.EllipticFunctionField
 open DkMath.Lib.NumberTheory.EllipticFiniteKernel
 open DkMath.Lib.Algebra.FiniteProductWronskian
 open DkMath.Lib.Algebra.RationalPolynomialFiber
+open DkMath.Lib.Algebra
 
 variable {F ι : Type*} [Field F] [DecidableEq ι]
 
@@ -198,6 +200,10 @@ example (E : WeierstrassCurve F) (H : AddSubgroup (Points E)) [Fintype H]
     (veluHalfDenominatorBase E H).eval (P + Q.val).xc ≠ 0 :=
   veluHalfDenominatorBase_eval_ne_zero_translation E H P hP Q
 
+example (E : WeierstrassCurve F) [E.IsElliptic] :
+    Transcendental (AlgebraicClosure F) (genericX E (AlgebraicClosure F)) :=
+  genericX_transcendental_for_wronskian E
+
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.eq_neg_of_completedSquare_eq_zero
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.completedSquare_ne_zero_of_neg_ne
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelAt_completedSquare_eq_zero_of_neg_fixed
@@ -208,5 +214,42 @@ example (E : WeierstrassCurve F) (H : AddSubgroup (Points E)) [Fintype H]
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalfDenominatorBase_eval_ne_zero
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.translated_x_ne_halfKernel_of_kernel_outside
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalfDenominatorBase_eval_ne_zero_translation
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.genericX_transcendental_for_wronskian
+
+example {F : Type*} [Field F] (A D P Q : F[X]) (hcross : A * D = P * Q) :
+    wronskian A Q * D ^ 2 = wronskian P D * Q ^ 2 :=
+  wronskian_mul_denominator_sq_eq A Q P D hcross
+
+example {F : Type*} [Field F] (A D P Q : F[X]) (x : F)
+    (hcross : A * D = P * Q) (hD : D.eval x ≠ 0)
+    (hAD : (wronskian P D).IsRoot x) :
+    (wronskian A Q).IsRoot x :=
+  wronskian_isRoot_of_cross_relation A Q P D x hcross hD hAD
+
+example {F : Type*} [Field F] (A D P Q : F[X]) (x : F)
+    (hcross : A * D = P * Q) (hQ : Q.eval x ≠ 0)
+    (hAQ : (wronskian A Q).IsRoot x) :
+    (wronskian P D).IsRoot x :=
+  wronskian_isRoot_of_cross_relation_rev A Q P D x hcross hQ hAQ
+
+example {F : Type*} [Field F] (A D : F[X]) (x z zH : F)
+    (hidentity : D.eval x ^ 2 * zH = z * (wronskian A D).eval x)
+    (hz : z ≠ 0) (hzH : zH = 0) :
+    (wronskian A D).IsRoot x :=
+  wronskian_isRoot_of_denominator_cleared_identity A D x z zH hidentity hz hzH
+
+example {R S : Type*} [Field R] [Field S] [Algebra R S]
+    (A D F G : R[X]) (x : S) (hx : Transcendental R x)
+    (hG : Polynomial.aeval x G ≠ 0) (hD : Polynomial.aeval x D ≠ 0)
+    (hrel : Polynomial.aeval x F / Polynomial.aeval x G =
+      Polynomial.aeval x A / Polynomial.aeval x D) :
+    F * D = A * G :=
+  cross_relation_of_aeval_div_eq F G A D x hx hG hD hrel
+
+#print axioms DkMath.Lib.Algebra.wronskian_mul_denominator_sq_eq
+#print axioms DkMath.Lib.Algebra.wronskian_isRoot_of_cross_relation
+#print axioms DkMath.Lib.Algebra.wronskian_isRoot_of_cross_relation_rev
+#print axioms DkMath.Lib.Algebra.wronskian_isRoot_of_denominator_cleared_identity
+#print axioms DkMath.Lib.Algebra.cross_relation_of_aeval_div_eq
 
 end DkMathTest.EllipticFiniteKernelWronskian

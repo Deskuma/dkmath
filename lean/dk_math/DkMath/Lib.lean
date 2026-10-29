@@ -39,6 +39,7 @@ import DkMath.Lib.Algebra.ValuationPolynomial
 import DkMath.Lib.Algebra.ValuationQuadraticRoot
 import DkMath.Lib.Algebra.ValuationRationalPolynomial
 import DkMath.Lib.Algebra.ValuationSeparatedRoots
+import DkMath.Lib.Algebra.WronskianCrossMultiplication
 
 -- Cosmic
 import DkMath.Lib.Cosmic.Completion

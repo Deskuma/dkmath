@@ -639,3 +639,46 @@ focused build は成功した。新定理の公理依存は
 基本事実と `P ∉ H` だけで閉じた。残る未解決義務は、関数体恒等式の評価写像を
 基礎係数多項式へ移し、`z_H(P+Q)=0` と `z(P+Q)≠0` を用いて実際の
 `W(A₀,D₀)` 零点へ到達することである。
+
+## 標準分子・分母対への Wronskian 根輸送
+
+さらに `DkMath.Lib.Algebra.WronskianCrossMultiplication` を追加した。
+ここでは、同じ有理関数を表す多項式対について交差乗算
+`F * D = A * G` を仮定すると、微分後の整理だけから
+`W(F,G) * D^2 = W(A,D) * G^2` を得る
+`wronskian_mul_denominator_sq_eq` を証明している。この定理は体上の一変数
+多項式だけに依存し、Vélu や楕円曲線の構造を要求しない。
+
+その評価版として、`wronskian_isRoot_of_cross_relation` と
+`wronskian_isRoot_of_cross_relation_rev` を実装した。前者は共通分母 `D` の
+評価が非零なら、`W(A,D)` の根から `W(F,G)` の根を得る。後者は標準分母 `G`
+の非零性を使って逆向きに輸送する。したがって、今後 `A₀,D₀` と標準
+`RatFunc` 対 `F,G` の交差乗算だけが確立すれば、既存の軌道因子定理が要求する
+Wronskian 根条件へ直接接続できる。
+
+この段階でも、交差乗算そのものを関数体の評価一致から自動的に導くことはしていない。
+係数体 `AlgebraicClosure K[X]` での `A₀,D₀` と標準 `RatFunc` 表示の比較が、
+依然として次の独立した証明義務である。新定理の回帰例と `#print axioms` を追加し、
+公理依存は既存と同じく `propext`, `Classical.choice`, `Quot.sound` に限定した。
+
+さらに `wronskian_isRoot_of_denominator_cleared_identity` を追加した。これは評価済みの
+無分母式
+`D(x)^2 * z_H = z * W(A,D)(x)`
+に `z_H = 0` と `z ≠ 0` を代入し、`W(A,D)(x) = 0` を取り出す最後のスカラー消去を
+一般体上で閉じる補題である。したがって、実際の楕円曲線側では、正則な点評価と
+係数降下を用いてこの仮定を供給すればよく、二捩れ幾何と Wronskian の根抽出を
+別々の層に保てる。
+
+加えて `cross_relation_of_aeval_div_eq` を実装した。係数体 `R` 上の多項式対を
+拡大体 `S` の超越元 `x` で評価し、両分母の評価非零性と分数等式を与えると、
+`Polynomial.aeval` の単射性から `F * D = A * G` を係数多項式の等式として回収する。
+これは「関数体係数多項式をそのまま評価して係数等式と誤認する」危険を避けるための
+形式的な係数降下の入口である。残る作業は、実際の標準 `RatFunc` 対 `F,G` と
+`veluHalfNumeratorBase`, `veluHalfDenominatorBase` の評価分数等式、ならびに
+`genericX` の超越性と分母評価非零性を一つの専用補題へ束ねることである。
+
+このうち `genericX` の超越性は、`genericX_transcendental_for_wronskian` として
+既存の無限遠点の二位極評価から公開した。これで係数降下側に必要な単射性の入力は
+独立した教材定理になった。標準対との評価分数等式と、有限点での正則評価だけが
+残るため、次工程は「標準 `RatFunc` 対を基礎共通分母対へ接続する専用定理」に
+絞り込める。
