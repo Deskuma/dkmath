@@ -25,6 +25,14 @@ example (φ : K →+* K) {p : K[X]} (hp : 0 < p.degree)
 example (F G : K[X]) : K[X] :=
   fiberDiscriminantFamily F G
 
+example {F G : K[X]} (hdeg : G.natDegree < F.natDegree) :
+    (fiberPolynomialFamily F G).natDegree = F.natDegree :=
+  fiberPolynomialFamily_natDegree_eq_of_natDegree_lt hdeg
+
+example {F G : K[X]} (hdeg : G.natDegree < F.natDegree) :
+    (fiberPolynomialFamily F G).leadingCoeff = Polynomial.C F.leadingCoeff :=
+  fiberPolynomialFamily_leadingCoeff_eq_C_of_natDegree_lt hdeg
+
 example (F G : K[X]) (c : K) :
     (fiberPolynomialFamily F G).map (Polynomial.evalRingHom c) =
       DkMath.Lib.Algebra.RationalPolynomialFiber.fiberPolynomial F G c :=
@@ -39,8 +47,14 @@ example (F G : K[X]) (c : K)
       (DkMath.Lib.Algebra.RationalPolynomialFiber.fiberPolynomial F G c).discr :=
   fiberDiscriminantFamily_eval_of_natDegree_eq F G c hp hdeg hlc
 
+example (F G : K[X]) (hdeg : G.natDegree < F.natDegree) (c : K) :
+    (fiberDiscriminantFamily F G).eval c =
+      (DkMath.Lib.Algebra.RationalPolynomialFiber.fiberPolynomial F G c).discr :=
+  fiberDiscriminantFamily_eval_of_natDegree_lt F G hdeg c
+
 #print axioms DkMath.Lib.Algebra.RationalPolynomialDiscriminant.discr_map_of_natDegree_eq
 #print axioms DkMath.Lib.Algebra.RationalPolynomialDiscriminant.fiberDiscriminantFamily_eval_of_natDegree_eq
+#print axioms DkMath.Lib.Algebra.RationalPolynomialDiscriminant.fiberDiscriminantFamily_eval_of_natDegree_lt
 
 end
 end DkMathTest.Algebra.RationalPolynomialDiscriminant

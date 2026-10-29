@@ -926,3 +926,38 @@ resultant 基盤を逆向きに利用している。
 `fiberPolynomial` に一致すること、後者は明示した次数条件のもとで判別式族の評価が
 通常のファイバー判別式に一致することを示す。固定係数対からの次数保存・先頭係数
 非零性の供給は次工程の残課題として仮定を保持している。
+
+## 先頭係数単元性による評価条件の自動供給
+
+残っていた条件を `fiberPolynomialFamily_natDegree_eq_of_natDegree_lt`、
+`fiberPolynomialFamily_leadingCoeff_eq_C_of_natDegree_lt` で固定した。`deg G < deg F`
+から族多項式の `X` 次数は `F.natDegree` に一致し、先頭係数は
+`C F.leadingCoeff` になる。したがって体上では先頭係数が単元である。
+
+これを `natDegree_map_eq_of_isUnit_leadingCoeff` と `IsUnit.map` に渡し、
+`fiberDiscriminantFamily_eval_of_natDegree_lt` を追加した。現在は
+
+`G.natDegree < F.natDegree`
+
+だけを入力すれば、任意の `c` に対して判別式族の評価と通常のファイバー判別式の
+一致を得られる。判別式族から固定係数対の全代表分岐判定へ進むための代数側の
+次数条件は、このラッパーで閉じた。
+
+## 判別式族から幾何学的分岐への接続
+
+`EllipticFiniteKernelDiscriminantFamily.lean` を新設し、上の評価ラッパーと
+`exists_veluX_fixed_pair_discriminant_branch_iff_all_points` を接続した。
+`exists_veluX_fixed_pair_discriminant_family_branch_iff_all_points` は、無限遠点で
+一度選んだ同じ `F,G` について、任意の核外代表 `P` と
+`kernelXAt P = c` に対して
+
+`(fiberDiscriminantFamily F G).eval c = 0 ↔ 2 • P ∈ H`
+
+を返す。これは新しい分岐計算ではなく、既存の固定係数対の判別式同値へ
+`fiberDiscriminantFamily_eval_of_natDegree_lt` を適用した輸送である。
+
+さらに `exists_veluX_fixed_pair_discriminant_family_zero_iff_two_torsion_image` を
+追加した。`exists_kernelXAt_eq` で各有限値の代表を一つ選ぶことで、代表を量化
+消去し、判別式族の零性を `kernelXAt` の二捩れ枝の像として分類している。
+この段階の結論は代数閉包上の有限ファイバーの分類であり、商判別式の積公式や
+局所付値への輸送までは含まない。
