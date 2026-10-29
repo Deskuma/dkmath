@@ -762,3 +762,20 @@ Wronskian 零点へ到達できる。
 Wronskian 零点から標準対への輸送は完了した。残る境界は、この標準対を既存の
 `RatFunc`/fiber-polynomial 消費定理へ具体的に接続し、必要な分母非零条件と
 根の重複度情報を供給することである。
+
+## Wronskian から特殊ファイバー因子分解への統合
+
+この接続を `EllipticFiniteKernelWronskianFiber.lean` に実装した。新定理
+`exists_veluX_normalized_fiberFactor_of_odd_twoTorsion` は、標数零の
+既存 `RootProduct` 終端 API に、標準対の Wronskian 零点を直接供給する。
+分母の関数体評価非零性は `genericX_transcendental_for_wronskian` と
+`transcendental_iff` から、半核代表の非零性は `mem_halfKernel` から取り出した。
+
+これにより、二捩れ枝では Wronskian 零点の外部仮定なしに、
+
+`normalize (fiberPolynomial F G c) = fiberFactor ...`
+
+まで到達する終端定理が成立した。証明の実質は、今回の幾何学的 Wronskian 定理と
+既存の `exists_veluX_normalized_fiberFactor_of_wronskian_transport` の組合せであり、
+根多重度理論を再証明していない。一般枝 `2 • P ∉ H` との共通 API 化、及び標数零
+以外への拡張は次工程に残る。

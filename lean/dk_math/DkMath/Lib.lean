@@ -367,6 +367,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianAssembly
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianHalf
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianBase
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianSpecialization
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianFiber
 import DkMath.Lib.Algebra.FiniteProductWronskian
 import DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
 import DkMath.Lib.NumberTheory.WeierstrassTwoTorsionTranslate
