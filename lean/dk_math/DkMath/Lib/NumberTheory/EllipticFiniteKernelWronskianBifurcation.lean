@@ -365,4 +365,33 @@ theorem fixedPairFiberBranch_discr_eq_zero_iff_two_smul_mem
     exact fixedPairFiberBranch_discr_eq_zero_of_two_smul_mem E H ho hcard F G
       hFdeg hGlt c P hP hbranch htwo
 
+/-- [DkMath.Lib] 固定係数対を選び、全有限ファイバーで判別式分岐を判定する。
+
+`exists_veluX_fixed_pair_factorization_all_fibers` が一度だけ選んだ `F,G` を保持し、
+各有限値 `c` に対して核外代表 `P` と `kernelXAt P = c` を供給する。その代表に
+対する前定理を適用することで、同じ係数対の全ファイバーについて
+`discr (F - cG) = 0 ↔ 2 • P ∈ H` を得る。ここでは判別式族をまだ構成せず、
+ファイバーごとの幾何学的判定を一つの存在定理へ束ねている。
+-/
+theorem exists_veluX_fixed_pair_discriminant_branch_iff
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (hcard : 1 < Nat.card H) :
+    ∃ F G : (AlgebraicClosure K)[X],
+      IsCoprime F G ∧ G ≠ 0 ∧ F.natDegree = Nat.card H ∧
+        G.natDegree < F.natDegree ∧
+        veluX E H = aeval (genericX E (AlgebraicClosure K)) F /
+          aeval (genericX E (AlgebraicClosure K)) G ∧
+        ∀ c : AlgebraicClosure K, ∃ (P : Points E) (hP : P ∉ H),
+          kernelXAt E H P hP = c ∧
+            ((fiberPolynomial F G c).discr = 0 ↔ 2 • P ∈ H) := by
+  obtain ⟨F, G, hcop, hG, hFdeg, hGlt, hrel, hfibers⟩ :=
+    exists_veluX_fixed_pair_factorization_all_fibers E H ho
+  refine ⟨F, G, hcop, hG, hFdeg, hGlt, hrel, ?_⟩
+  intro c
+  obtain ⟨P, hP, hPc, hbranch⟩ := hfibers c
+  refine ⟨P, hP, hPc, ?_⟩
+  exact fixedPairFiberBranch_discr_eq_zero_iff_two_smul_mem E H ho hcard F G
+    hFdeg hGlt c P hP hbranch
+
 end DkMath.Lib.NumberTheory.EllipticFiniteKernel
