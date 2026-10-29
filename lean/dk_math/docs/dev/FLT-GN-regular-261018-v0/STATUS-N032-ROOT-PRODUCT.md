@@ -848,3 +848,20 @@ Wronskian 零点から標準対への輸送は完了した。残る境界は、�
 この半核供給補題 `halfKernel_nonempty_of_one_lt_card` も実装済みである。したがって、
 次の接続では `1 < Nat.card H` を仮定すれば、特殊枝の因子分解から判別式零性へ
 半核の存在を別途再構成せずに進められる。
+
+## 固定係数対の特殊枝から判別式零性へ
+
+判別式の単元倍公式を新設せず、`dvd_normalize_iff` を使って正規化を外す経路を
+固定した。`discr_eq_zero_of_sq_dvd_normalize` は、正規化ファイバーに二乗一次因子
+があれば、未正規化多項式へ可除性を戻して `discr_eq_zero_of_sq_dvd` を適用する。
+
+これを `fixedPairFiberBranch_discr_eq_zero_of_two_smul_mem` へ接続した。固定係数対の
+特殊枝から `halfKernel_nonempty_of_one_lt_card` で代表 `Q` を選び、
+`(X - C ((T + Q).xc))^2` が正規化ファイバーを割ることを明示的に構成する。
+次数は `fiberPolynomial_natDegree_eq_of_natDegree_lt` と `F.natDegree = |H|` から
+正にし、実際の `fiberPolynomial F G c` の判別式零性を得る。
+
+ここで確定した数学的内容は、非自明な奇数核の二捩れ特殊枝が有限ファイバーの
+重根を強制する必要方向である。既存の特殊枝因子分解・半核分割・resultant 判定を
+組み合わせた部分と、新規の正規化除去補題を分離している。一般枝の判別式非零性、
+判別式の十分方向、商曲線の判別式積公式や局所深さは依然として未解決である。

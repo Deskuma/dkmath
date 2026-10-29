@@ -266,4 +266,44 @@ theorem exists_veluX_fixed_pair_factorization_all_fibers
   obtain ⟨P, hP, hPc⟩ := exists_kernelXAt_eq E H c
   exact ⟨P, hP, hPc, hbranch c P hP hPc⟩
 
+/-- [DkMath.Lib] 固定係数対の二捩れ特殊枝では有限ファイバーの判別式が零になる。
+
+特殊枝の因子分解は、正規化ファイバーを一本の単純因子と半核因子の二乗積へ
+同定する。非自明な奇数核なら `halfKernel_nonempty_of_one_lt_card` で二乗因子を
+一つ選べるため、`discr_eq_zero_of_sq_dvd_normalize` が正規化を取り除き、実際の
+`fiberPolynomial F G c` の判別式零性を返す。一般枝はこの定理の対象外であり、
+根の分離からの非零性は別の補題として保持する。 -/
+theorem fixedPairFiberBranch_discr_eq_zero_of_two_smul_mem
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (hcard : 1 < Nat.card H)
+    (F G : (AlgebraicClosure K)[X])
+    (hFdeg : F.natDegree = Nat.card H) (hGlt : G.natDegree < F.natDegree)
+    (c : AlgebraicClosure K) (P : Points E) (hP : P ∉ H)
+    (hbranch : fixedPairFiberBranch E H F G c P hP)
+    (htwo : 2 • P ∈ H) :
+    (fiberPolynomial F G c).discr = 0 := by
+  rcases hbranch with hgeneral | hspecial
+  · exact (hgeneral.1 htwo).elim
+  · rcases hspecial with ⟨_, T, hT, hTneg, hT', hTc, hfactor⟩
+    obtain ⟨Q, hQ⟩ := halfKernel_nonempty_of_one_lt_card E H ho hcard
+    let Q' : halfKernel E H := ⟨Q, hQ⟩
+    have hdiv_factor :
+        (Polynomial.X - Polynomial.C ((T + Q'.val.val).xc)) ^ 2 ∣
+          fiberFactor (Finset.univ : Finset (halfKernel E H)) T.xc
+            (fun Q : halfKernel E H => (T + Q.val.val).xc) := by
+      unfold fiberFactor
+      exact dvd_mul_of_dvd_right (Finset.dvd_prod_of_mem _ (Finset.mem_univ Q')) _
+    have hdiv_norm :
+        (Polynomial.X - Polynomial.C ((T + Q'.val.val).xc)) ^ 2 ∣
+          normalize (fiberPolynomial F G c) := by
+      rw [hfactor]
+      exact hdiv_factor
+    have hdeg : 0 < (fiberPolynomial F G c).degree := by
+      rw [← natDegree_pos_iff_degree_pos,
+        fiberPolynomial_natDegree_eq_of_natDegree_lt hGlt, hFdeg]
+      omega
+    exact discr_eq_zero_of_sq_dvd_normalize hdeg hdiv_norm
+      (not_isUnit_of_degree_pos _ (by simp))
+
 end DkMath.Lib.NumberTheory.EllipticFiniteKernel

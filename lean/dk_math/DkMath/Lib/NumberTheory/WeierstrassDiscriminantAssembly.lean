@@ -10,6 +10,7 @@ blob 0c42a9282f1033d6d64cc213bb1f7c7c52b17d1e.
 -/
 import DkMath.Lib.NumberTheory.WeierstrassDiscriminantRoots
 import DkMath.Lib.NumberTheory.WeierstrassTwoTorsionTranslate
+import Mathlib.Algebra.Polynomial.FieldDivision
 import Mathlib.RingTheory.Valuation.ValuationSubring
 import Mathlib.RingTheory.Polynomial.Resultant.Basic
 
@@ -90,6 +91,17 @@ theorem discr_eq_zero_of_sq_dvd [CharZero k] {p q : k[X]} (hp : 0 < p.degree)
     exact mul_ne_zero (pow_ne_zero _ (neg_ne_zero.mpr one_ne_zero))
       (leadingCoeff_ne_zero.mpr hp0)
   exact (mul_eq_zero.mp hrel.symm).resolve_left hscalar
+
+/-- [DkMath.Lib] 正規化された多項式に二重因子があれば、元の判別式も零である。
+
+`Polynomial.normalize` は非零多項式を単元倍するだけなので、可除性は
+`dvd_normalize_iff` で元の多項式へ戻せる。従って判別式の単元倍公式を
+別途計算せずに、特殊ファイバーの因子分解から未正規化ファイバーの
+判別式零性へ直接移れる。 -/
+theorem discr_eq_zero_of_sq_dvd_normalize [CharZero k] [NormalizationMonoid k] {p q : k[X]}
+    (hp : 0 < p.degree) (hdiv : q ^ 2 ∣ normalize p) (hq : ¬ IsUnit q) :
+    p.discr = 0 := by
+  exact discr_eq_zero_of_sq_dvd hp (dvd_normalize_iff.mp hdiv) hq
 
 /-- [DkMath.Lib] ファイバー因子の次数は、一本の単純根と
 各移動根の二重根から `2 |s| + 1` になる。 -/

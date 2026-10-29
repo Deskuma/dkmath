@@ -102,4 +102,28 @@ example (E : WeierstrassCurve F) (H : AddSubgroup (Points E)) [Fintype H]
 
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernel_nonempty_of_one_lt_card
 
+example (A B : (AlgebraicClosure F)[X]) (c : AlgebraicClosure F)
+    (hdeg : 0 < (fiberPolynomial A B c).degree)
+    (hdiv : (Polynomial.X - Polynomial.C (1 : AlgebraicClosure F)) ^ 2 ∣
+      normalize (fiberPolynomial A B c)) :
+    (fiberPolynomial A B c).discr = 0 := by
+  apply discr_eq_zero_of_sq_dvd_normalize hdeg hdiv
+  exact not_isUnit_of_degree_pos _ (by rw [degree_X_sub_C]; norm_num)
+
+#print axioms DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly.discr_eq_zero_of_sq_dvd_normalize
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (hcard : 1 < Nat.card H)
+    (A B : (AlgebraicClosure F)[X])
+    (hFdeg : A.natDegree = Nat.card H) (hGlt : B.natDegree < A.natDegree)
+    (c : AlgebraicClosure F) (P : Points E) (hP : P ∉ H)
+    (hbranch : fixedPairFiberBranch E H A B c P hP)
+    (htwo : 2 • P ∈ H) :
+    (fiberPolynomial A B c).discr = 0 :=
+  fixedPairFiberBranch_discr_eq_zero_of_two_smul_mem E H ho hcard A B
+    hFdeg hGlt c P hP hbranch htwo
+
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.fixedPairFiberBranch_discr_eq_zero_of_two_smul_mem
+
 end DkMathTest.EllipticFiniteKernelWronskianBifurcation
