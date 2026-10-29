@@ -961,3 +961,23 @@ resultant 基盤を逆向きに利用している。
 消去し、判別式族の零性を `kernelXAt` の二捩れ枝の像として分類している。
 この段階の結論は代数閉包上の有限ファイバーの分類であり、商判別式の積公式や
 局所付値への輸送までは含まない。
+
+## Vélu 半核分母と `hP²` の明示的接続
+
+`EllipticFiniteKernelDiscriminantInput.lean` を追加した。Anthropic 版の
+`delta_identity` が使う半核多項式 `hP` に対応する DkMath の
+`veluHalfDenominatorBase` は、各 `Q ∈ halfKernel E H` に対して同じ線型因子を二度
+掛ける。そのため、評価点 `e` における値は単純な根距離積ではなく、
+
+`∏ Q ∈ halfKernel E H, (e - x(Q))²`
+
+となる。この事実を `veluHalfDenominatorBase_eval_eq_root_distance_product_sq` として
+定理化し、距離の向きを反転した
+`veluHalfDenominatorBase_eval_eq_root_product_sq` も証明した。後者では各因子を
+個別に符号反転するのではなく、二乗された因子ごとに `ring` で処理しているため、
+半核の濃度に依存する余分な符号を導入しない。
+
+これは `half_tangent_product_eq_root_products` と判別式の三つの
+`pair_relation` を接続するための明示的分母入力である。今回の範囲では、商モデルの
+三根差関係、`kernelModel` と明示的 Vélu モデルの一致、`U` の整数係数正規化、
+および `Δ' * U^4 = Δ^(2n+1)` の無条件導出はまだ閉じていない。
