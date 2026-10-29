@@ -88,4 +88,11 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_veluX_fixed_pair_factorization
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_veluX_fixed_pair_factorization_all_fibers
 
+example (A B : (AlgebraicClosure F)[X]) (c : AlgebraicClosure F)
+    (hdeg : B.natDegree < A.natDegree) :
+    (fiberPolynomial A B c).leadingCoeff = A.leadingCoeff :=
+  fiberPolynomial_leadingCoeff_eq_of_natDegree_lt hdeg
+
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.fiberPolynomial_leadingCoeff_eq_of_natDegree_lt
+
 end DkMathTest.EllipticFiniteKernelWronskianBifurcation

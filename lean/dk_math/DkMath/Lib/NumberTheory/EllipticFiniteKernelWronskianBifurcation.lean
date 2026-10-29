@@ -115,6 +115,30 @@ def fixedPairFiberBranch
             fiberFactor (Finset.univ : Finset (halfKernel E H)) T.xc
               (fun Q : halfKernel E H => (T + Q.val.val).xc))
 
+omit [CharZero K] in
+/-- [DkMath.Lib] 固定対の有限ファイバーは先頭係数を変えない。
+
+`deg G < deg F` なら `cG` は `F` より低次数なので、`F - cG` の最高次項は
+常に `F` から来る。従って正規化係数はファイバー値 `c` に依存しない。この
+一変数の次数比較は、全ファイバーを二変数族 `F(X) - C G(X)` として扱う際の
+基礎補題である。
+-/
+theorem fiberPolynomial_leadingCoeff_eq_of_natDegree_lt
+    {F G : (AlgebraicClosure K)[X]} {c : AlgebraicClosure K}
+    (hdeg : G.natDegree < F.natDegree) :
+    (fiberPolynomial F G c).leadingCoeff = F.leadingCoeff := by
+  have hF : F ≠ 0 := by
+    intro hzero
+    subst F
+    exact (Nat.not_lt_zero _ hdeg)
+  rw [fiberPolynomial, leadingCoeff_sub_of_degree_lt]
+  calc
+    degree (Polynomial.C c * G) ≤ (natDegree (Polynomial.C c * G) : WithBot ℕ) :=
+      degree_le_natDegree
+    _ < (F.natDegree : WithBot ℕ) := by
+      exact_mod_cast (natDegree_C_mul_le c G).trans_lt hdeg
+    _ = degree F := (degree_eq_natDegree hF).symm
+
 /-- [DkMath.Lib] 任意の固定標準係数対で、核外ファイバーの二分岐を閉じる。
 
 `hFdeg`、`hGlt`、`hrel` は `F,G` が無限遠点で一度選ばれた標準対であることを
