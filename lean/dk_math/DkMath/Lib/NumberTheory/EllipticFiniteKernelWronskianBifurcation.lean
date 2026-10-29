@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 -/
 
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianFiber
+import Mathlib.FieldTheory.Separable
 
 #print "file: DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianBifurcation"
 
@@ -305,5 +306,63 @@ theorem fixedPairFiberBranch_discr_eq_zero_of_two_smul_mem
       omega
     exact discr_eq_zero_of_sq_dvd_normalize hdeg hdiv_norm
       (not_isUnit_of_degree_pos _ (by simp))
+
+/-- [DkMath.Lib] 固定係数対の一般枝では有限ファイバーの判別式が零でない。
+
+`2 • P ∉ H` なら既存の軌道単射性により、正規化ファイバーの全一次因子積は
+`separable_prod_X_sub_C_iff` を満たす。`associated_normalize` で分離性を元の
+`fiberPolynomial F G c` へ戻し、`discr_ne_zero_of_separable` を適用する。
+特殊枝との場合分けは固定係数対の命題から直接消化し、ここでは一般枝の重根不存在
+だけを公開する。 -/
+theorem fixedPairFiberBranch_discr_ne_zero_of_two_smul_not_mem
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (_ho : Odd (Nat.card H))
+    (F G : (AlgebraicClosure K)[X])
+    (hFdeg : F.natDegree = Nat.card H) (hGlt : G.natDegree < F.natDegree)
+    (c : AlgebraicClosure K) (P : Points E) (hP : P ∉ H)
+    (hbranch : fixedPairFiberBranch E H F G c P hP)
+    (htwo : 2 • P ∉ H) :
+    (fiberPolynomial F G c).discr ≠ 0 := by
+  rcases hbranch with hgeneral | hspecial
+  · have hinj : Function.Injective (fun Q : H => ((P + Q.val).xc)) :=
+      orbit_x_injective_of_two_smul_not_mem E H P htwo
+    have hsep_norm : (normalize (fiberPolynomial F G c)).Separable := by
+      rw [hgeneral.2]
+      exact separable_prod_X_sub_C_iff.mpr hinj
+    have hsep : (fiberPolynomial F G c).Separable :=
+      (associated_normalize (fiberPolynomial F G c)).separable_iff.mpr hsep_norm
+    have hdeg : 0 < (fiberPolynomial F G c).degree := by
+      rw [← natDegree_pos_iff_degree_pos,
+        fiberPolynomial_natDegree_eq_of_natDegree_lt hGlt, hFdeg]
+      exact Nat.card_pos
+    exact discr_ne_zero_of_separable hdeg hsep
+  · exact (htwo hspecial.1).elim
+
+/-- [DkMath.Lib] 固定係数対の有限ファイバーでは、判別式零性と二捩れ分岐が同値である。
+
+特殊枝の因子分解から得た零性と、一般枝の軌道分離から得た非零性を、同じ
+`fixedPairFiberBranch` の二分岐に対して貼り合わせる。従って、この定理は
+判別式を別の族として再構成せず、既存の有限ファイバー分解をそのまま
+「二捩れが核に入るか」という幾何学的条件へ読み替える教科書用の入口になる。
+なお、非自明な半核を選ぶため `1 < Nat.card H` を明示的に仮定している。
+-/
+theorem fixedPairFiberBranch_discr_eq_zero_iff_two_smul_mem
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (hcard : 1 < Nat.card H)
+    (F G : (AlgebraicClosure K)[X])
+    (hFdeg : F.natDegree = Nat.card H) (hGlt : G.natDegree < F.natDegree)
+    (c : AlgebraicClosure K) (P : Points E) (hP : P ∉ H)
+    (hbranch : fixedPairFiberBranch E H F G c P hP) :
+    (fiberPolynomial F G c).discr = 0 ↔ 2 • P ∈ H := by
+  constructor
+  · intro hzero
+    by_contra hnot
+    exact (fixedPairFiberBranch_discr_ne_zero_of_two_smul_not_mem E H ho F G
+      hFdeg hGlt c P hP hbranch hnot) hzero
+  · intro htwo
+    exact fixedPairFiberBranch_discr_eq_zero_of_two_smul_mem E H ho hcard F G
+      hFdeg hGlt c P hP hbranch htwo
 
 end DkMath.Lib.NumberTheory.EllipticFiniteKernel

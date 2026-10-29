@@ -126,4 +126,37 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
 
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.fixedPairFiberBranch_discr_eq_zero_of_two_smul_mem
 
+example (A : (AlgebraicClosure F)[X]) (hsep : A.Separable)
+    (hdeg : 0 < A.degree) : A.discr ≠ 0 :=
+  discr_ne_zero_of_separable hdeg hsep
+
+#print axioms DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly.discr_ne_zero_of_separable
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (A B : (AlgebraicClosure F)[X])
+    (hFdeg : A.natDegree = Nat.card H) (hGlt : B.natDegree < A.natDegree)
+    (c : AlgebraicClosure F) (P : Points E) (hP : P ∉ H)
+    (hbranch : fixedPairFiberBranch E H A B c P hP)
+    (htwo : 2 • P ∉ H) :
+    (fiberPolynomial A B c).discr ≠ 0 :=
+  fixedPairFiberBranch_discr_ne_zero_of_two_smul_not_mem E H ho A B
+    hFdeg hGlt c P hP hbranch htwo
+
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.fixedPairFiberBranch_discr_ne_zero_of_two_smul_not_mem
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (hcard : 1 < Nat.card H)
+    (A B : (AlgebraicClosure F)[X])
+    (hFdeg : A.natDegree = Nat.card H) (hGlt : B.natDegree < A.natDegree)
+    (c : AlgebraicClosure F) (P : Points E) (hP : P ∉ H)
+    (hbranch : fixedPairFiberBranch E H A B c P hP) :
+    (fiberPolynomial A B c).discr = 0 ↔ 2 • P ∈ H :=
+  fixedPairFiberBranch_discr_eq_zero_iff_two_smul_mem E H ho hcard A B
+    hFdeg hGlt c P hP hbranch
+
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.fixedPairFiberBranch_discr_eq_zero_iff_two_smul_mem
+
 end DkMathTest.EllipticFiniteKernelWronskianBifurcation

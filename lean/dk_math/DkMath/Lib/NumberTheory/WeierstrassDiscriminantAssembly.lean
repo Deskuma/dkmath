@@ -11,6 +11,7 @@ blob 0c42a9282f1033d6d64cc213bb1f7c7c52b17d1e.
 import DkMath.Lib.NumberTheory.WeierstrassDiscriminantRoots
 import DkMath.Lib.NumberTheory.WeierstrassTwoTorsionTranslate
 import Mathlib.Algebra.Polynomial.FieldDivision
+import Mathlib.FieldTheory.Separable
 import Mathlib.RingTheory.Valuation.ValuationSubring
 import Mathlib.RingTheory.Polynomial.Resultant.Basic
 
@@ -102,6 +103,28 @@ theorem discr_eq_zero_of_sq_dvd_normalize [CharZero k] [NormalizationMonoid k] {
     (hp : 0 < p.degree) (hdiv : q ^ 2 ∣ normalize p) (hq : ¬ IsUnit q) :
     p.discr = 0 := by
   exact discr_eq_zero_of_sq_dvd hp (dvd_normalize_iff.mp hdiv) hq
+
+/-- [DkMath.Lib] 正次数の分離多項式の判別式は零でない。
+
+`Separable p` は `p` と `p'` の互いに素性そのものなので、resultant の零性判定の
+反対方向から `Res(p,p') ≠ 0` を得る。`resultant_deriv` はこの resultant を
+先頭係数と判別式の積へ戻すため、判別式が零なら直ちに矛盾する。前補題と同じ
+resultant 層を使う、重根不存在側の一般代数 API である。 -/
+theorem discr_ne_zero_of_separable [CharZero k] {p : k[X]}
+    (hp : 0 < p.degree) (hsep : p.Separable) : p.discr ≠ 0 := by
+  have hcop : IsCoprime p p.derivative := (separable_def p).mp hsep
+  have hres : resultant p p.derivative ≠ 0 := by
+    intro hzero
+    exact ((resultant_eq_zero_iff (K := k) (f := p) (g := p.derivative)).mp hzero).2 hcop
+  have hres' : resultant p p.derivative p.natDegree (p.natDegree - 1) ≠ 0 := by
+    intro hzero
+    apply hres
+    change resultant p p.derivative p.natDegree p.derivative.natDegree = 0
+    rw [natDegree_derivative]
+    exact hzero
+  intro hdiscr
+  apply hres'
+  rw [resultant_deriv (R := k) hp, hdiscr, mul_zero]
 
 /-- [DkMath.Lib] ファイバー因子の次数は、一本の単純根と
 各移動根の二重根から `2 |s| + 1` になる。 -/
