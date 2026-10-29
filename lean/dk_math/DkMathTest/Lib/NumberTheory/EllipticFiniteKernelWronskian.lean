@@ -265,6 +265,27 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
   veluHalf_base_wronskian_root_of_cleared_identity E H ho T hT hneg Q hQ hidentity
 
 example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (T : Points E) (hT : T ∉ H) (hneg : -T = T)
+    (Q : H) (hQ : Q ≠ 0) :
+    (wronskian (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H)).IsRoot (T + Q.val).xc :=
+  veluHalf_base_wronskian_root_of_odd_twoTorsion E H ho T hT hneg Q hQ
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P QF : (AlgebraicClosure F)[X])
+    (hQF : Polynomial.aeval (genericX E (AlgebraicClosure F)) QF ≠ 0)
+    (hrel : veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure F)) P /
+        Polynomial.aeval (genericX E (AlgebraicClosure F)) QF)
+    (T : Points E) (hT : T ∉ H) (hneg : -T = T)
+    (Q : H) (hQ : Q ≠ 0) :
+    (wronskian P QF).IsRoot (T + Q.val).xc :=
+  veluX_standard_pair_wronskian_root_of_odd_twoTorsion E H ho P QF hQF hrel T hT hneg Q hQ
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
     (T : Points E) (hT : T ≠ 0) (p : (AlgebraicClosure F)[X]) :
     pointValuation E T
         (Polynomial.aeval (genericX E (AlgebraicClosure F)) p) ≤ 1 :=
@@ -275,6 +296,66 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
     value E T (Polynomial.aeval (genericX E (AlgebraicClosure F)) p)
         (pointValuation_aeval_le_one E T hT p) = p.eval T.xc :=
   value_aeval_eq_eval E T hT p
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (T : Points E) (hT : T ≠ 0) (p : (AlgebraicClosure F)[X]) :
+    (pointValuation E T).Cong
+      (Polynomial.aeval (genericX E (AlgebraicClosure F)) p)
+      (algebraMap _ _ (p.eval T.xc)) :=
+  pointValuation_aeval_congr_eval E T hT p
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (T : Points E)
+    (d dp a ap z zH : AlgebraicClosure F)
+    (fD fDp fA fAp fZ fZH :
+      (E.toAffine⁄(AlgebraicClosure F)).FunctionField)
+    (hD : pointValuation E T fD ≤ 1)
+    (hDp : pointValuation E T fDp ≤ 1)
+    (hA : pointValuation E T fA ≤ 1)
+    (hAp : pointValuation E T fAp ≤ 1)
+    (hZ : pointValuation E T fZ ≤ 1)
+    (hZH : pointValuation E T fZH ≤ 1)
+    (hDval : (pointValuation E T).Cong fD (algebraMap _ _ d))
+    (hDpval : (pointValuation E T).Cong fDp (algebraMap _ _ dp))
+    (hAval : (pointValuation E T).Cong fA (algebraMap _ _ a))
+    (hApval : (pointValuation E T).Cong fAp (algebraMap _ _ ap))
+    (hZval : (pointValuation E T).Cong fZ (algebraMap _ _ z))
+    (hZHval : (pointValuation E T).Cong fZH (algebraMap _ _ zH))
+    (hidentity : fD ^ 2 * fZH = fZ * (fAp * fD - fA * fDp)) :
+    d ^ 2 * zH = z * (ap * d - a * dp) :=
+  evalHom_cleared_identity E T d dp a ap z zH fD fDp fA fAp fZ fZH
+    hD hDp hA hAp hZ hZH hDval hDpval hAval hApval hZval hZHval hidentity
+
+/-! 関数体恒等式を基礎係数対へ戻し、核外の有限点で正則評価する
+教科書経路の回帰例。 -/
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) :
+    let F' := (E.toAffine⁄(AlgebraicClosure F)).FunctionField
+    let W := E.map (algebraMap F F')
+    let x := genericX E (AlgebraicClosure F)
+    let z := 2 * genericY E (AlgebraicClosure F) + W.a₁ * x + W.a₃
+    (Polynomial.aeval x (veluHalfDenominatorBase E H)) ^ 2 *
+        (2 * veluY E H + W.a₁ * veluX E H + W.a₃) =
+      z * (Polynomial.aeval x (derivative (veluHalfNumeratorBase E H)) *
+          Polynomial.aeval x (veluHalfDenominatorBase E H) -
+        Polynomial.aeval x (veluHalfNumeratorBase E H) *
+          Polynomial.aeval x (derivative (veluHalfDenominatorBase E H))) :=
+  veluHalf_base_cleared_identity_function_field E H ho
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (R : Points E) (hR : R ∉ H) :
+    (veluHalfDenominatorBase E H).eval R.xc ^ 2 *
+        (2 * kernelYAt E H R hR +
+          (kernelModel E H).a₁ * kernelXAt E H R hR +
+          (kernelModel E H).a₃) =
+      (2 * R.yc + (E⁄(AlgebraicClosure F)).a₁ * R.xc +
+        (E⁄(AlgebraicClosure F)).a₃) *
+        (wronskian (veluHalfNumeratorBase E H)
+          (veluHalfDenominatorBase E H)).eval R.xc :=
+  veluHalf_cleared_identity_at_kernel_outside E H ho R hR
 
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.eq_neg_of_completedSquare_eq_zero
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.completedSquare_ne_zero_of_neg_ne
@@ -292,8 +373,14 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_cross_relation
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_wronskian_root_of_translation
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_wronskian_root_of_cleared_identity
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_wronskian_root_of_odd_twoTorsion
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_wronskian_root_of_odd_twoTorsion
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.pointValuation_aeval_le_one
 #print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.value_aeval_eq_eval
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.pointValuation_aeval_congr_eval
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.evalHom_cleared_identity
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_cleared_identity_function_field
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_cleared_identity_at_kernel_outside
 
 example {F : Type*} [Field F] (A D P Q : F[X]) (hcross : A * D = P * Q) :
     wronskian A Q * D ^ 2 = wronskian P D * Q ^ 2 :=

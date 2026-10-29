@@ -717,3 +717,48 @@ Vélu 商を `eval_map_algebraMap` によって `AlgebraicClosure K[X]` の基�
 すべてが正則で、有限値は通常の `Polynomial.eval` と一致する。この API により、
 次工程では関数体の無分母恒等式を `Cong` の積・和として評価し、`hidentity` を
 仮定なしで構成する道筋が明確になった。
+
+さらに `pointValuation_aeval_congr_eval` を追加し、上記評価の合同形を公開した。
+これにより、Wronskian の積・差や平方完成座標の線形結合を、`Cong.mul`、`Cong.sub`、
+`Cong.add` で段階的に組み立てられる。次の実装では、この合同形と `kernelAt_congr`
+を使い、関数体恒等式の左右を同じ有限値へ比較する。
+
+## 有限点への正則特殊化の完了
+
+この境界を `veluHalf_base_cleared_identity_function_field` と
+`evalHom_cleared_identity` により閉じた。前者は関数体版の既存恒等式を、
+`veluHalfNumeratorBase` と `veluHalfDenominatorBase` の基礎係数多項式へ戻す。
+後者は六つの関数体元について正則性と `Cong` を入力し、`evalHom` が積・冪・差を
+保存することから、点値のクリアド恒等式を抽出する。
+
+最終的に `veluHalf_cleared_identity_at_kernel_outside` を追加した。任意の
+`R ∉ H` について、`genericX`/`genericY` の有限点評価、基礎係数の正則性、
+`veluX_regular_outside`/`veluY_regular_outside`、および `kernelAt_congr` を
+組み合わせ、
+
+`D₀(x(R))² z_H(R) = z(R) W(A₀,D₀)(x(R))`
+
+を仮定なしで証明する。ここで `D₀,A₀` は基礎係数の半核分母・分子である。
+したがって、二捩れ移動点では既存の
+`completedSquare_translation_pair_of_odd_kernel` と
+`wronskian_isRoot_of_denominator_cleared_identity` を適用するだけで、基礎対の
+Wronskian 零点へ到達できる。
+
+この段階で残る具体的な仕事は、上の点特殊化を二捩れ点 `T + Q` に呼び出して
+`veluHalf_base_wronskian_root_of_cleared_identity` の `hidentity` を消去し、
+標準 `RatFunc` 対への既存の交差乗算輸送へ接続することである。新規定理の回帰例と
+`#print axioms` を追加し、公理依存は `[propext, Classical.choice, Quot.sound]` に
+限定されている。
+
+さらに `veluHalf_base_wronskian_root_of_odd_twoTorsion` を追加し、奇数核の
+非零半核代表 `Q` と核外二捩れ点 `P` から、基礎 Vélu 対の Wronskian 根を
+`hidentity` なしで直接得られるようにした。これは今回の点特殊化と既存の
+平方完成零点パケットを組み合わせた、二捩れ分岐の幾何学的入口である。
+
+その直後に `veluX_standard_pair_wronskian_root_of_odd_twoTorsion` を追加した。
+これは標準分子分母 `(F,G)` の `veluX` 表示を入力し、上記の基礎対の根を
+`veluX_standard_pair_wronskian_root_of_translation` へ渡すだけで、
+`(wronskian F G).IsRoot (P + Q.val).xc` を直接返す。従って、有限点の
+Wronskian 零点から標準対への輸送は完了した。残る境界は、この標準対を既存の
+`RatFunc`/fiber-polynomial 消費定理へ具体的に接続し、必要な分母非零条件と
+根の重複度情報を供給することである。
