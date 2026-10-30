@@ -314,5 +314,6 @@ import DkMathTest.FLT.FreyFiniteKernelDiscriminantDepth
 import DkMathTest.FLT.FreyStableLineDiscriminantCriterion
 import DkMathTest.FLT.FreyRationalTwoPTorsion
 import DkMathTest.Lib.NumberTheory.FiniteFieldWeierstrassCard
+import DkMathTest.Lib.NumberTheory.FreyLocalResidueField
 
 #print "file: DkMathTest"

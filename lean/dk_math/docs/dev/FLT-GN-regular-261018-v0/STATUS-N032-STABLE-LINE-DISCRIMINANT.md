@@ -45,6 +45,30 @@
     `2 * #ResidueField + 1` 以下に抑える。
   - これは有限剰余体を明示的に要求する抽象局所定理であり、`ℤ_(q)` の剰余体が
     `𝔽_q` であることや Frey 標的との同定までは含めない。
+- `localResidueFieldEquiv`
+  - `FreyLocalReduction.LocalRing q` の剰余体を `ZMod q` へ環同値で固定。
+  - `ℤ ⧸ (q)` と `ZMod q` の標準同値、および極大イデアルでの商から剰余体への
+    全単射性を組み合わせたもので、代数閉包の剰余体を誤って有限体とみなさない。
+- `localResidueField_natCard` / `localResidueField_card`
+  - 上の同値から剰余体の `Nat.card` および `Fintype.card` が正確に `q` であることを
+    証明。
+- `localResidueFieldEquiv_comp_algebraMap`
+  - 整数から局所環を経て剰余体へ送る写像が、`ZMod q` の通常の整数剰余と可換する
+    ことを証明。
+- `localResidue_weierstrass_points_card_le_two_mul_prime_add_one`
+  - 実際の `LocalRing q` 上の Weierstrass モデルを剰余体へ還元した点群について、
+    良還元（剰余判別式非零）を仮定すれば `#E(𝔽_q) ≤ 2*q+1` を直接供給。
+- `no_two_mul_order_of_localResidue_weierstrass_of_prime`
+  - `q < p` と剰余モデルの `IsElliptic` を仮定し、`ZMod q` 上の点群に厳密位数
+    `2*p` の点が存在しないことを、上の点数評価から導出。
+  - これは「有限剰余ファイバー上の排除」であり、有理 `2*p` 捩れ点の局所モデルへの
+    輸送をまだ含まない。
+- `finite_smooth_torsion_ncard_le_two_mul_prime_add_one_of_residueEquiv`
+  - 任意の付値部分環について、剰余体との明示的な環同値
+    `ResidueField A ≃+* ZMod q` があれば、抽象的な滑らか捩れ集合の上界を
+    `2*q+1` へ特殊化。
+  - `LocalRing q` そのものと付値部分環の輸送が完成した後に、還元単射性の定理を
+    直接消費するための再利用可能な橋である。
 
 ## 数学的境界
 
@@ -52,7 +76,10 @@
 Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までである。
 脱出元 `σ` の実在性、`E₀[p]` の大域非安定性、`hno` 自体、Mazur の分類を使った
 `p ≥ 7` の排除、`q = p` の局所理論、FLT の閉鎖はこのモジュールでは証明していない。
-有限体上の点数評価と、有限体上での `2 * p` 位数排除は無条件に証明したが、
+有限体上の点数評価と、有限体上での `2 * p` 位数排除は無条件に証明した。さらに、
+`FreyLocalReduction.LocalRing q` の剰余体については `ZMod q` との明示的な環同値と
+その整数写像との可換性を証明し、局所化された還元モデルの点数上界まで接続した。
+ただし、
 有理商曲線の良還元から `𝔽_q` の点群へ実際の還元準同型を構成する接続は未完成である。
 従って、現段階では `residual_cofixed_implies_rational_two_p_torsion` と
 `residual_integer_target_good_at_prime` を組み合わせた `hno` 排除までは到達していない。
@@ -65,6 +92,9 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 - `lake build DkMathTest.FLT.FreyRationalTwoPTorsion`
 - `lake build DkMath.Lib.NumberTheory.FiniteFieldWeierstrassCard`
 - `lake build DkMathTest.Lib.NumberTheory.FiniteFieldWeierstrassCard`
+- `lake build DkMath.Lib.NumberTheory.FreyLocalResidueField`
+- `lake build DkMathTest.Lib.NumberTheory.FreyLocalResidueField`
+- `lake build DkMath.Lib`
 - `lake build DkMath.FLT`
 - `git diff --check`
 
@@ -80,5 +110,11 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 排除する有限体点数評価は完了した。次は `FreyLocalReduction.LocalRing q` の剰余体を
 有限体モデルへ同定し、`reduce_injOn_torsion` をこの点数評価へ接続する。
 その後、必要なら Mazur 分類のうち依存部分だけを形式化する。
+
+今回の局所剰余体同定は、`EllipticSmoothTorsionReduction` の抽象定理を
+`LocalRing q` の具体的モデルへ適用するための係数体側の準備を完了したものだが、
+同定だけではまだ還元写像の単射性は得られない。次は `LocalRing q` とその付値部分環
+との環同値を用いて `reduce_injOn_torsion` を輸送するか、局所化版の還元単射補題を
+直接供給する必要がある。
 
 今回の追加定理は、この比較を論理的に完了したものであり、分解群外の元を構成したものではない。

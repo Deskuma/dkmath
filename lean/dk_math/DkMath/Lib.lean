@@ -382,6 +382,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelPairRelation
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDiscriminantProduct
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDiscriminantDepth
 import DkMath.Lib.NumberTheory.FiniteFieldWeierstrassCard
+import DkMath.Lib.NumberTheory.FreyLocalResidueField
 
 #print "file: DkMath.Lib"
 
