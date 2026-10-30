@@ -49,6 +49,9 @@ noncomputable example :
 example : Fintype.card (IsLocalRing.ResidueField (localValuationSubring q)) = q :=
   localValuationSubringResidueField_card q
 
+example : (q : ℚ) ∈ (localValuationSubring q).nonunits :=
+  localValuationSubring_liesOverPrime q
+
 example (W : WeierstrassCurve (LocalRing q)) :
     localResidueFieldValuationSubringEquiv q
         ((W.map (IsLocalRing.residue (LocalRing q))).Δ) =
@@ -62,6 +65,7 @@ example (W : WeierstrassCurve (LocalRing q)) :
 #print axioms localResidueFieldValuationSubringEquiv
 #print axioms localValuationSubringResidueFieldEquiv
 #print axioms localValuationSubringResidueField_card
+#print axioms localValuationSubring_liesOverPrime
 #print axioms mapModelToValuationSubring_residue_discriminant_map
 
 end

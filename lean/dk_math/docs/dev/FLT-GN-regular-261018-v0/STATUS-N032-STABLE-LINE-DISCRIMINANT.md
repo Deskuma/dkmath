@@ -125,6 +125,10 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 - `lake build DkMathTest.Lib.NumberTheory.EllipticSmoothTorsionOrderBound`
 - `lake build DkMath.Lib.NumberTheory.FreyLocalValuationSubring`
 - `lake build DkMathTest.Lib.NumberTheory.FreyLocalValuationSubring`
+- `lake build DkMath.Lib.NumberTheory.FreyLocalTorsionOrderBound`
+- `lake build DkMathTest.Lib.NumberTheory.FreyLocalTorsionOrderBound`
+- `lake build DkMath.FLT.FreyFiniteKernelGoodReduction`
+- `lake build DkMathTest.FLT.FreyFiniteKernelGoodReduction`
 - `lake build DkMath.Lib`
 - `lake build DkMath.FLT`
 - `git diff --check`
@@ -134,6 +138,33 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 `[propext, Classical.choice, Quot.sound]` の範囲であり、新しい `sorry` や独自 `axiom` は導入していない。
 
 ## 次の具体的課題
+
+## 追加実装: 整数モデルからの局所トーション上界
+
+`FreyLocalTorsionOrderBound.lean` に、レビューで指定された一般接続を追加した。
+`addOrderOf_le_two_mul_prime_add_one_of_integral_good` は、整数 Weierstrass モデル
+`W` の判別式が素数 `q` で割れず、`q ∤ n` かつ `n • Q = 0` である有理点 `Q` に対し、
+
+\[
+  \operatorname{addOrderOf}(Q) \le 2q+1
+\]
+
+を無条件に証明する。証明は、`LocalRing q` への基底変換、同じ付値を表す
+`localValuationSubring q` への環同値、剰余判別式の同値、付値単元性、そして
+`addOrderOf_le_two_mul_residue_card_add_one_of_good` の合成である。点そのものは
+`pointEquivOfModelEq` で輸送し、加法位数は `AddEquiv.addOrderOf_eq` で戻している。
+
+この結果は `hno` や Frey 固有の直線排除をまだ主張しない。次段では
+`residual_integer_target_good_at_prime` からこの定理の `hΔ` を供給する薄い Source
+ラッパーを追加し、`residual_cofixed_implies_rational_two_p_torsion` と組み合わせた
+`q=3` の条件付き排除へ接続する。
+
+この Source 側の第一段として、`residual_integer_target_discriminant_not_dvd_at_good_prime`
+を `FreyFiniteKernelGoodReduction.lean` に追加した。これは `q` 上の付値環を一つ選び、
+既存の `residual_integer_target_good_value_one` と
+`valuation_intCast_lt_one_of_dvd` を背理法で組み合わせるだけの薄い公開入口である。
+従って、局所良還元の構成を重複実装せず、次の `hno` 接続が必要とする整数判別式の
+非可除性をそのまま取り出せる。
 
 `residual_hno_iff_exists_zeroComponent_line_escape` の右辺に現れる脱出元を、
 既存の `a ≡ 7 mod 8` 側の分解群固定定理と比較する。局所分解群の外にある大域元の構成が、

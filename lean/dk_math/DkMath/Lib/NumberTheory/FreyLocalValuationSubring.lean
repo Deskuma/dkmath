@@ -103,6 +103,26 @@ theorem localRingValuationSubringEquiv_coe (x : LocalRing q) :
       algebraMap (LocalRing q) ℚ x := by
   rfl
 
+/-- The transported valuation subring lies over the prime `q`. -/
+theorem localValuationSubring_liesOverPrime :
+    ValuationInertia.LiesOverPrime (localValuationSubring q) q := by
+  let x : localValuationSubring q :=
+    localRingValuationSubringEquiv q (algebraMap ℤ (LocalRing q) (q : ℤ))
+  have hxcoe : (x : ℚ) = (q : ℚ) := by
+    dsimp [x]
+    rw [localRingValuationSubringEquiv_coe]
+    rw [← IsScalarTower.algebraMap_apply ℤ (LocalRing q) ℚ]
+    rfl
+  change (q : ℚ) ∈ (localValuationSubring q).nonunits
+  rw [← hxcoe]
+  apply ValuationSubring.coe_mem_nonunits_iff.mpr
+  by_contra hmem
+  have hu : IsUnit x := (IsLocalRing.notMem_maximalIdeal).mp hmem
+  have hu' := IsUnit.map (localRingValuationSubringEquiv q).symm hu
+  have hnot : ¬ (q : ℤ) ∣ (q : ℤ) :=
+    (isUnit_local_iff q (q : ℤ)).mp (by simpa [x] using hu')
+  exact hnot dvd_rfl
+
 /-- Transport an integral Weierstrass model to the valuation-subring presentation. -/
 noncomputable def mapModelToValuationSubring
     (W : WeierstrassCurve (LocalRing q)) :

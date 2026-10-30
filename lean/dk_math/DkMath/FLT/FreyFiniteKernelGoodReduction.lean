@@ -70,6 +70,29 @@ theorem residual_integer_target_good_at_prime (hp2 : p ≠ 2)
   rw [hi] at hh
   exact lt_irrefl _ hh
 
+/-!
+The preceding provider is phrased as a local model predicate.  For the
+integer torsion-order bridge we expose the exact arithmetic input instead:
+the integer discriminant is not divisible by `q`.  The proof reuses the
+valuation-one statement and does not duplicate the reduction construction.
+-/
+
+/-- A good odd prime away from the support of `a*b*c` does not divide the integer target discriminant. -/
+theorem residual_integer_target_discriminant_not_dvd_at_good_prime (hp2 : p ≠ 2)
+    (L : Submodule (ZMod p) S.ResidualSpace) (hl : Module.finrank (ZMod p) L = 1)
+    (hs : IsStable S.residualRepresentation L) {q : ℕ} [Fact q.Prime]
+    (hq2 : q ≠ 2) (hqp : q ≠ p) (hd : ¬ (q : ℤ) ∣ S.a * S.b * S.c) :
+    ¬ (q : ℤ) ∣ (S.residualIntegerKernelModel L hl hs).Δ := by
+  obtain ⟨A, hA⟩ :=
+    ValuationPrimeExistence.exists_liesOverPrime (L := AlgebraicClosure ℚ)
+      (Fact.out : q.Prime)
+  intro hdiv
+  have hone := S.residual_integer_target_good_value_one hp2 L hl hs hq2 hqp hd A hA
+  have hlt := valuation_intCast_lt_one_of_dvd A
+    ((ValuationSubring.mem_nonunits_iff _).mp hA) hdiv
+  rw [hone] at hlt
+  exact lt_irrefl _ hlt
+
 /-- p≥5なら同じ既存整数標的は、p以外の全素数で良還元または乗法的還元を持つ。
 2は前章の乗法的還元、奇素数はabcの支持で分岐する。pでの結論を混入しない。 -/
 theorem residual_integer_target_semistable_away (hp5 : 5 ≤ p)

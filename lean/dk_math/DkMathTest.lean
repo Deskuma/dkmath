@@ -311,11 +311,13 @@ import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelPairRelation
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelDiscriminantProduct
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelDiscriminantDepth
 import DkMathTest.FLT.FreyFiniteKernelDiscriminantDepth
+import DkMathTest.FLT.FreyFiniteKernelGoodReduction
 import DkMathTest.FLT.FreyStableLineDiscriminantCriterion
 import DkMathTest.FLT.FreyRationalTwoPTorsion
 import DkMathTest.Lib.NumberTheory.FiniteFieldWeierstrassCard
 import DkMathTest.Lib.NumberTheory.FreyLocalResidueField
 import DkMathTest.Lib.NumberTheory.EllipticSmoothTorsionOrderBound
 import DkMathTest.Lib.NumberTheory.FreyLocalValuationSubring
+import DkMathTest.Lib.NumberTheory.FreyLocalTorsionOrderBound
 
 #print "file: DkMathTest"
