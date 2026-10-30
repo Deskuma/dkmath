@@ -5,7 +5,9 @@ Released under MIT license as described in the file LICENSE.
 
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDiscriminantInput
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelRootProduct
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianBifurcation
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelWronskianSpecialization
+import DkMath.Lib.Algebra.PolynomialProportional
 
 #print "file: DkMath.Lib.NumberTheory.EllipticFiniteKernelDiscriminantNormalization"
 
@@ -189,6 +191,80 @@ theorem veluX_standard_pair_wronskian_eq_base_of_monic
   obtain ⟨hF_eq, hG_eq⟩ := veluX_standard_pair_eq_of_monic E H ho F G hG hrel hcop
     hF hGmonic hA hD hFdeg hGdeg
   rw [hF_eq, hG_eq]
+
+omit [NeZero (2 : K)] in
+/-- [DkMath.Lib] 半核共通分子・分母は互いに素である。
+
+無限遠点で選んだ標準対 `(F,G)` の存在だけを使い、交差乗算から半核対が
+標準対の共通非零スカラー倍になることを一般補題で取り出す。その後、単位倍
+による `IsCoprime` の不変性を適用する。標準対との完全一致やモニック性は要求しない。
+-/
+theorem veluHalf_base_isCoprime
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) :
+    IsCoprime (veluHalfNumeratorBase E H) (veluHalfDenominatorBase E H) := by
+  obtain ⟨F, G, hcop, hG, hFdeg, hGlt, hrel, _⟩ :=
+    exists_veluX_fixed_pair_factorization E H ho
+  have hGaeval : Polynomial.aeval (genericX E (AlgebraicClosure K)) G ≠ 0 := by
+    intro hzero
+    exact hG ((transcendental_iff.mp
+      (genericX_transcendental_for_wronskian E)) G hzero)
+  have hcross := veluX_standard_pair_cross_relation E H ho F G hGaeval hrel
+  have hFne : F ≠ 0 := by
+    intro hFzero
+    have hFnat : F.natDegree = 0 := by simp [hFzero]
+    omega
+  have hAne : veluHalfNumeratorBase E H ≠ 0 :=
+    (veluHalfNumeratorBase_monic E H).ne_zero
+  have hAdeg : (veluHalfNumeratorBase E H).natDegree = Nat.card H := by
+    calc
+      (veluHalfNumeratorBase E H).natDegree =
+          1 + 2 * (halfKernel E H).card := veluHalfNumeratorBase_natDegree E H
+      _ = 2 * (halfKernel E H).card + 1 := by omega
+      _ = Nat.card H := card_halfKernel E H ho
+  obtain ⟨u, hu, hAeq, hDeq⟩ := proportional_of_cross_relation_of_coprime
+    hcop hFne hAne hcross (by omega :
+      (veluHalfNumeratorBase E H).natDegree ≤ F.natDegree)
+  have huPoly : IsUnit (Polynomial.C u) :=
+    Polynomial.isUnit_C.mpr (isUnit_iff_ne_zero.mpr hu)
+  rw [hAeq, hDeq]
+  exact (isCoprime_mul_units_left huPoly huPoly F G).mpr hcop
+
+/-- [DkMath.Lib] 半核対を直接用いた特殊ファイバー因子分解。
+
+`veluX` の明示的半核表示、半核対の互いに素性、奇数核二捩れ枝の Wronskian 根を
+既存の有限ファイバー終端へまとめて渡す。標準 `RatFunc` 対の完全一致を経由しない
+短縮経路であり、ファイバーのモニック性と次数上界は呼び出し側に残す。
+-/
+theorem veluHalf_base_special_fiber
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P)
+    (c : AlgebraicClosure K)
+    (hPc : kernelXAt E H P hP = c)
+    (hp : (fiberPolynomial (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) c).Monic)
+    (hdeg : (fiberPolynomial (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) c).natDegree ≤ Nat.card H) :
+    fiberPolynomial (veluHalfNumeratorBase E H)
+        (veluHalfDenominatorBase E H) c =
+      fiberFactor (Finset.univ : Finset (halfKernel E H)) P.xc
+        (fun Q : halfKernel E H => (P + Q.val.val).xc) := by
+  have hcop := veluHalf_base_isCoprime E H ho
+  have hD : veluHalfDenominatorBase E H ≠ 0 :=
+    (veluHalfDenominatorBase_monic E H).ne_zero
+  have hrel := veluX_eq_veluHalfNumeratorBase_div_denominator E H ho
+  have hwronskian : ∀ Q : halfKernel E H,
+      (wronskian (veluHalfNumeratorBase E H)
+        (veluHalfDenominatorBase E H)).IsRoot ((P + Q.val.val).xc) := by
+    intro Q
+    have hQ : Q.val ≠ 0 := ((mem_halfKernel E H Q.val).mp Q.property).1
+    exact veluHalf_base_wronskian_root_of_odd_twoTorsion E H ho P hP hneg Q.val hQ
+  exact eq_orbit_x_fiberFactor_of_monic_of_veluX_quotient_of_wronskian_roots
+    E H ho P hP hneg (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) hcop hD hrel c hp hPc hwronskian hdeg
 
 omit [CharZero K] [NeZero (2 : K)] in
 /-- [DkMath.Lib] 正規化された標準分母は核外平行移動点で非零である。

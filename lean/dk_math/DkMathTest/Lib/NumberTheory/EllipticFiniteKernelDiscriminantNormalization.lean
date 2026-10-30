@@ -179,6 +179,28 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
   eq_orbit_x_fiberFactor_of_monic_of_veluX_quotient_of_monic_normalization
     E H ho T hT hneg P Q hcop hQ hrel c hp hPc hP hQmonic hA hD hPdeg hQdeg hdeg
 
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) :
+    IsCoprime (veluHalfNumeratorBase E H) (veluHalfDenominatorBase E H) :=
+  veluHalf_base_isCoprime E H ho
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (T : Points E) (hT : T ∉ H) (hneg : -T = T)
+    (c : AlgebraicClosure F)
+    (hTc : kernelXAt E H T hT = c)
+    (hp : (fiberPolynomial (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) c).Monic)
+    (hdeg : (fiberPolynomial (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) c).natDegree ≤ Nat.card H) :
+    fiberPolynomial (veluHalfNumeratorBase E H)
+        (veluHalfDenominatorBase E H) c =
+      fiberFactor (Finset.univ : Finset (halfKernel E H)) T.xc
+        (fun R : halfKernel E H => (T + R.val.val).xc) :=
+  veluHalf_base_special_fiber E H ho T hT hneg c hTc hp hdeg
+
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_numerator_dvd
 #print axioms
@@ -197,5 +219,9 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_wronskian_root_of_monic_normalization
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.eq_orbit_x_fiberFactor_of_monic_of_veluX_quotient_of_monic_normalization
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_isCoprime
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_special_fiber
 
 end DkMathTest.EllipticFiniteKernelDiscriminantNormalization

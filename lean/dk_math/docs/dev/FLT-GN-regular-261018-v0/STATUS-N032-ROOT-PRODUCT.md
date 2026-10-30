@@ -1065,3 +1065,16 @@ Wronskian を半核共通対の Wronskian と直接置換できるため、既�
 渡すことで、`fiberPolynomial = fiberFactor` を得る。ここでも `G ≠ 0`、ファイバーの
 モニック性、次数上界、標準対のモニック性・次数比較は入力として保持しているため、
 無条件の標準対選択や判別式積公式の閉包とは区別される。
+
+レビューで提案された短縮経路も実装した。一般代数モジュール
+`PolynomialProportional.lean` の `proportional_of_cross_relation_of_coprime` は、
+交差乗算・互いに素性・分子側の次数上界から、二つの多項式対が同じ非零定数倍で
+あることを証明する。標準対のモニック性や分母側次数比較は要求しない。
+
+この補題を無限遠点で選んだ標準対へ適用し、`veluHalf_base_isCoprime` を証明した。
+半核共通分子・分母が標準対の単位倍であることから、`IsCoprime` を直接輸送している。
+
+さらに `veluHalf_base_special_fiber` を追加した。明示的半核対の `veluX` 表示、
+互いに素性、既存の二捩れ Wronskian 根を既存の有限ファイバー終端へ渡し、
+`fiberPolynomial = fiberFactor` を得る短縮経路である。ファイバーのモニック性と
+次数上界は引き続き呼び出し側の条件として残しており、判別式積公式そのものは未完了である。
