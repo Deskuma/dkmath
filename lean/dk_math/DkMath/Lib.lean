@@ -381,6 +381,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelTranslatedRootProduct
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelPairRelation
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDiscriminantProduct
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDiscriminantDepth
+import DkMath.Lib.NumberTheory.FiniteFieldWeierstrassCard
 
 #print "file: DkMath.Lib"
 

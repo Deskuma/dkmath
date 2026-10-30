@@ -313,5 +313,6 @@ import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelDiscriminantDepth
 import DkMathTest.FLT.FreyFiniteKernelDiscriminantDepth
 import DkMathTest.FLT.FreyStableLineDiscriminantCriterion
 import DkMathTest.FLT.FreyRationalTwoPTorsion
+import DkMathTest.Lib.NumberTheory.FiniteFieldWeierstrassCard
 
 #print "file: DkMathTest"
