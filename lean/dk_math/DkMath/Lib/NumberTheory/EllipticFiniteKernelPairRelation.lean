@@ -87,4 +87,109 @@ theorem veluHalf_base_pair_relation_of_translated_root_product
     (pair_relation (k := AlgebraicClosure K) (halfKernel E H).card G Hj Hk Hl Xj Xk
       Pj.xc Pk.xc A hA hF hG)
 
+/-- [DkMath.Lib] 実際の2捩れ点座標から一組の pair relation を組み立てる。
+
+`halfKernel_translated_root_product_relation_of_points` が、第一の2捩れ点
+`Pj` と任意の核外点 `Pk` に対する移動根積を自動的に供給する。ここでは
+その定理を既存の交差評価へ渡し、抽象的な `htranslated` を呼び出し側から
+取り除く。三つの `xc` が二捩れ三根であることと、その分離だけは、商曲線の
+三枝を選ぶ幾何学的境界として明示的に残している。
+-/
+theorem veluHalf_base_pair_relation_of_two_torsion_points
+    (ho : Odd (Nat.card H))
+    (Pj Pk Pl : Points E)
+    (hPj : Pj ∉ H) (hPk : Pk ∉ H)
+    (hnegj : -Pj = Pj)
+    (hT : (E.map (algebraMap K (AlgebraicClosure K))).toAffine.Nonsingular Pj.xc Pj.yc)
+    (htor : 2 • (Affine.Point.some Pj.xc Pj.yc hT) = 0)
+    (h₁ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval Pj.xc = 0)
+    (h₂ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval Pk.xc = 0)
+    (h₃ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval Pl.xc = 0)
+    (h₁₂ : Pj.xc ≠ Pk.xc) (h₁₃ : Pj.xc ≠ Pl.xc)
+    (h₂₃ : Pk.xc ≠ Pl.xc) :
+    (kernelXAt E H Pj hPj - kernelXAt E H Pk hPk) ^ 2 *
+        (∏ Q ∈ halfKernel E H, (Q.val.xc - Pj.xc)) ^ 4 *
+        (∏ Q ∈ halfKernel E H, (Q.val.xc - Pk.xc)) ^ 4 =
+      (Pk.xc - Pj.xc) ^ (2 * (2 * (halfKernel E H).card + 1)) *
+        (∏ Q ∈ halfKernel E H, (Q.val.xc - Pl.xc)) ^ 4 := by
+  have htranslated :
+      (∏ Q : halfKernel E H, (Pk.xc - (Pj + Q.val.val).xc)) *
+          (∏ Q ∈ halfKernel E H, (Q.val.xc - Pj.xc)) =
+        (Pk.xc - Pj.xc) ^ (halfKernel E H).card *
+          ∏ Q ∈ halfKernel E H, (Q.val.xc - Pl.xc) := by
+    have hauto := halfKernel_translated_root_product_relation_of_points E H ho
+      Pj.xc Pk.xc Pl.xc Pj.yc h₁ h₂ h₃ h₁₂ h₁₃ h₂₃ hT htor Pj hPj
+      (by rfl) (by rfl)
+    have hbridge_j :
+        (∏ Q : halfKernel E H, (Q.val.val.xc - Pj.xc)) =
+          ∏ Q ∈ halfKernel E H, (Q.val.xc - Pj.xc) := by
+      exact Finset.prod_coe_sort (halfKernel E H)
+        (fun Q : H => Q.val.xc - Pj.xc)
+    have hbridge_l :
+        (∏ Q : halfKernel E H, (Q.val.val.xc - Pl.xc)) =
+          ∏ Q ∈ halfKernel E H, (Q.val.xc - Pl.xc) := by
+      exact Finset.prod_coe_sort (halfKernel E H)
+        (fun Q : H => Q.val.xc - Pl.xc)
+    rw [← hbridge_j, ← hbridge_l]
+    exact hauto
+  exact veluHalf_base_pair_relation_of_translated_root_product E H ho Pj Pk Pl
+    hPj hPk hnegj htranslated
+
+/-- [DkMath.Lib] 三つの実二捩れ枝から判別式積の代数組立てへ渡す入口。
+
+三つの順序付き一組を `P₁₂`, `P₁₃`, `P₂₃` として生成し、既存の
+`discriminant_product_of_pair_relations` に渡す。ここで `hH`、`hU`、二つの
+判別式表示は、商モデルの係数計算・接線積・非衝突性を供給する境界である。
+従って本定理は、三組の幾何学的根差積を一度に消費するが、商判別式そのものの
+係数計算を隠れた仮定として導入しない。
+-/
+theorem veluHalf_base_discriminant_product_of_three_two_torsion_points
+    (ho : Odd (Nat.card H))
+    (P₁ P₂ P₃ : Points E)
+    (hP₁ : P₁ ∉ H) (hP₂ : P₂ ∉ H) (hP₃ : P₃ ∉ H)
+    (hneg₁ : -P₁ = P₁) (hneg₂ : -P₂ = P₂)
+    (hT₁ : (E.map (algebraMap K (AlgebraicClosure K))).toAffine.Nonsingular P₁.xc P₁.yc)
+    (htor₁ : 2 • (Affine.Point.some P₁.xc P₁.yc hT₁) = 0)
+    (hT₂ : (E.map (algebraMap K (AlgebraicClosure K))).toAffine.Nonsingular P₂.xc P₂.yc)
+    (htor₂ : 2 • (Affine.Point.some P₂.xc P₂.yc hT₂) = 0)
+    (h₁ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval P₁.xc = 0)
+    (h₂ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval P₂.xc = 0)
+    (h₃ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval P₃.xc = 0)
+    (h₁₂ : P₁.xc ≠ P₂.xc) (h₁₃ : P₁.xc ≠ P₃.xc)
+    (h₂₃ : P₂.xc ≠ P₃.xc)
+    (Δ Δ' U : AlgebraicClosure K)
+    (hH :
+      (∏ Q ∈ halfKernel E H, (Q.val.xc - P₁.xc)) *
+        (∏ Q ∈ halfKernel E H, (Q.val.xc - P₂.xc)) *
+        (∏ Q ∈ halfKernel E H, (Q.val.xc - P₃.xc)) ≠ 0)
+    (hU : U = 4 ^ (halfKernel E H).card *
+      ((∏ Q ∈ halfKernel E H, (Q.val.xc - P₁.xc)) *
+        (∏ Q ∈ halfKernel E H, (Q.val.xc - P₂.xc)) *
+        (∏ Q ∈ halfKernel E H, (Q.val.xc - P₃.xc))))
+    (hΔ : Δ = 16 * ((P₂.xc - P₁.xc) * (P₃.xc - P₁.xc) *
+      (P₃.xc - P₂.xc)) ^ 2)
+    (hΔ' : Δ' = 16 *
+      ((kernelXAt E H P₁ hP₁ - kernelXAt E H P₂ hP₂) *
+        (kernelXAt E H P₁ hP₁ - kernelXAt E H P₃ hP₃) *
+        (kernelXAt E H P₂ hP₂ - kernelXAt E H P₃ hP₃)) ^ 2) :
+    Δ' * U ^ 4 = Δ ^ (2 * (halfKernel E H).card + 1) := by
+  let H₁ : AlgebraicClosure K := ∏ Q ∈ halfKernel E H, (Q.val.xc - P₁.xc)
+  let H₂ : AlgebraicClosure K := ∏ Q ∈ halfKernel E H, (Q.val.xc - P₂.xc)
+  let H₃ : AlgebraicClosure K := ∏ Q ∈ halfKernel E H, (Q.val.xc - P₃.xc)
+  let X₁ : AlgebraicClosure K := kernelXAt E H P₁ hP₁
+  let X₂ : AlgebraicClosure K := kernelXAt E H P₂ hP₂
+  let X₃ : AlgebraicClosure K := kernelXAt E H P₃ hP₃
+  have h₂₁ : P₂.xc ≠ P₁.xc := h₁₂.symm
+  have P₁₂ := veluHalf_base_pair_relation_of_two_torsion_points E H ho P₁ P₂ P₃
+    hP₁ hP₂ hneg₁ hT₁ htor₁ h₁ h₂ h₃ h₁₂ h₁₃ h₂₃
+  have P₁₃ := veluHalf_base_pair_relation_of_two_torsion_points E H ho P₁ P₃ P₂
+    hP₁ hP₃ hneg₁ hT₁ htor₁ h₁ h₃ h₂ h₁₃ h₁₂ h₂₃.symm
+  have P₂₃ := veluHalf_base_pair_relation_of_two_torsion_points E H ho P₂ P₃ P₁
+    hP₂ hP₃ hneg₂ hT₂ htor₂ h₂ h₃ h₁ h₂₃ h₂₁ h₁₃.symm
+  exact discriminant_product_of_pair_relations (k := AlgebraicClosure K)
+    (halfKernel E H).card P₁.xc P₂.xc P₃.xc X₁ X₂ X₃ Δ Δ' H₁ H₂ H₃ U hH hU hΔ hΔ'
+    (by simpa [H₁, H₂, H₃, X₁, X₂, X₃] using P₁₂)
+    (by simpa [H₁, H₂, H₃, X₁, X₂, X₃] using P₁₃)
+    (by simpa [H₁, H₂, H₃, X₁, X₂, X₃] using P₂₃)
+
 end DkMath.Lib.NumberTheory.EllipticFiniteKernel

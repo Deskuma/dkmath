@@ -140,4 +140,110 @@ theorem halfKernel_translated_root_product_relation_of_two_torsion
     h₁ h₂ h₃ h₁₂ h₁₃ h₂₃
     (two_torsion_y_condition (E.map (algebraMap K (AlgebraicClosure K))) hT htor)
 
+/-- [DkMath.Lib] 根差積を実際の点群平行移動の座標へ輸送する。
+
+前定理の左辺は affine の addX で書かれている。ここでは各半核点に対する
+座標一致 hcoord を一度だけ入力し、積全体を点群の移動根の形へ書き換える。
+従って、未解決の幾何学的責務は個々の点での加法公式と x 座標の一致に限定され、
+有限積の再展開は不要になる。
+-/
+theorem halfKernel_translated_root_product_relation_of_points_of_coord
+    (ho : Odd (Nat.card H))
+    (r₁ r₂ r₃ t₁ : AlgebraicClosure K)
+    (h₁ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₁ = 0)
+    (h₂ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₂ = 0)
+    (h₃ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₃ = 0)
+    (h₁₂ : r₁ ≠ r₂) (h₁₃ : r₁ ≠ r₃) (h₂₃ : r₂ ≠ r₃)
+    (hT : (E.map (algebraMap K (AlgebraicClosure K))).toAffine.Nonsingular r₁ t₁)
+    (htor : 2 • (Affine.Point.some r₁ t₁ hT) = 0)
+    (Pj : Points E)
+    (hcoord : ∀ Q : halfKernel E H,
+      (E.map (algebraMap K (AlgebraicClosure K))).toAffine.addX r₁
+          Q.val.val.xc
+          ((E.map (algebraMap K (AlgebraicClosure K))).toAffine.slope
+            r₁ Q.val.val.xc t₁ Q.val.val.yc) =
+        (Pj + Q.val.val).xc)
+    :
+    (∏ Q : halfKernel E H, (r₂ - (Pj + Q.val.val).xc)) *
+        (∏ Q : halfKernel E H, (Q.val.val.xc - r₁)) =
+      (r₂ - r₁) ^ (halfKernel E H).card *
+        ∏ Q : halfKernel E H, (Q.val.val.xc - r₃) := by
+  have h := halfKernel_translated_root_product_relation_of_two_torsion E H ho
+    r₁ r₂ r₃ t₁ h₁ h₂ h₃ h₁₂ h₁₃ h₂₃ hT htor
+  simp_rw [hcoord] at h
+  exact h
+
+/-- [DkMath.Lib] 非零2捩れ点との affine 加法公式を自動供給する根差積。
+
+点を有限 affine 座標へ分解し、奇数核の半核点との x 座標非衝突を
+half_x_sub_root_ne_zero から得る。その上で Mathlib の Point.add_of_X_ne
+を適用するだけで、各移動根を実際の群加法の x 座標へ同定する。
+この定理により、前段の hcoord は公開 API から消え、三根の分離と
+Pj の根座標一致、ならびに独立に選んだ affine 2 捩れ点の座標条件だけが
+呼び出し側に残る。`htcoord` は `t₁ = Pj.yc` を明示する境界条件であり、
+点群の加法公式そのものはこの定理内部で供給される。
+-/
+theorem halfKernel_translated_root_product_relation_of_points
+    (ho : Odd (Nat.card H))
+    (r₁ r₂ r₃ t₁ : AlgebraicClosure K)
+    (h₁ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₁ = 0)
+    (h₂ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₂ = 0)
+    (h₃ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₃ = 0)
+    (h₁₂ : r₁ ≠ r₂) (h₁₃ : r₁ ≠ r₃) (h₂₃ : r₂ ≠ r₃)
+    (hT : (E.map (algebraMap K (AlgebraicClosure K))).toAffine.Nonsingular r₁ t₁)
+    (htor : 2 • (Affine.Point.some r₁ t₁ hT) = 0)
+    (Pj : Points E) (hPj : Pj ∉ H) (hroot : Pj.xc = r₁)
+    (htcoord : Pj.yc = t₁) :
+    (∏ Q : halfKernel E H, (r₂ - (Pj + Q.val.val).xc)) *
+        (∏ Q : halfKernel E H, (Q.val.val.xc - r₁)) =
+      (r₂ - r₁) ^ (halfKernel E H).card *
+        ∏ Q : halfKernel E H, (Q.val.val.xc - r₃) := by
+  have hPj0 : Pj ≠ 0 := by
+    intro hzero
+    exact hPj (hzero ▸ H.zero_mem)
+  have hcoord0 : ∀ Q : halfKernel E H,
+      (Pj + Q.val.val).xc =
+        (E.map (algebraMap K (AlgebraicClosure K))).toAffine.addX Pj.xc
+          Q.val.val.xc
+          ((E.map (algebraMap K (AlgebraicClosure K))).toAffine.slope
+            Pj.xc Q.val.val.xc Pj.yc Q.val.val.yc) := by
+    intro Q
+    unfold Points at Pj
+    unfold Points at Q
+    let Qp : (E.toAffine⁄(AlgebraicClosure K)).Point := Q.val.val
+    change (Pj + Qp).xc =
+      (E.toAffine⁄(AlgebraicClosure K)).addX Pj.xc Qp.xc
+        ((E.toAffine⁄(AlgebraicClosure K)).slope Pj.xc Qp.xc Pj.yc Qp.yc)
+    have hQp0 : Qp ≠ 0 := by
+      intro hzero
+      have hzero' : Q.val.val = 0 := by simpa [Qp] using hzero
+      exact ((mem_halfKernel E H Q.val).mp Q.property).1
+        (Subtype.ext hzero')
+    have hxe : Pj.xc ≠ Qp.xc := by
+      intro he
+      exact (sub_ne_zero.mp
+        (half_x_sub_root_ne_zero E H ho r₁ r₂ r₃ h₁ h₂ h₃ h₁₂ h₁₃ h₂₃ Q).1)
+        (hroot ▸ he.symm)
+    rcases Pj with _ | ⟨xj, yj, hj⟩
+    · exact (hPj0 rfl).elim
+    rcases Qp with _ | ⟨xq, yq, hq⟩
+    · exact (hQp0 rfl).elim
+    simp only [Point.xc_some, Point.yc_some]
+    have hxe' : xj ≠ xq := by simpa only [Point.xc_some] using hxe
+    rw [Affine.Point.add_of_X_ne hxe']
+    rfl
+  have hcoord : ∀ Q : halfKernel E H,
+      (E.map (algebraMap K (AlgebraicClosure K))).toAffine.addX r₁
+          Q.val.val.xc
+          ((E.map (algebraMap K (AlgebraicClosure K))).toAffine.slope
+            r₁ Q.val.val.xc t₁ Q.val.val.yc) =
+        (Pj + Q.val.val).xc := by
+    intro Q
+    have h0 := hcoord0 Q
+    rw [hroot, htcoord] at h0
+    exact h0.symm
+  exact halfKernel_translated_root_product_relation_of_points_of_coord E H ho
+    r₁ r₂ r₃ t₁ h₁ h₂ h₃ h₁₂ h₁₃ h₂₃ hT htor Pj
+    hcoord
+
 end DkMath.Lib.NumberTheory.EllipticFiniteKernel

@@ -81,11 +81,56 @@ example (E : WeierstrassCurve K) (H : AddSubgroup (Points E)) [Fintype H]
   halfKernel_translated_root_product_relation_of_two_torsion E H ho r₁ r₂ r₃ t₁
     h₁ h₂ h₃ h₁₂ h₁₃ h₂₃ hT htor
 
+example (E : WeierstrassCurve K) (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (r₁ r₂ r₃ t₁ : AlgebraicClosure K)
+    (h₁ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₁ = 0)
+    (h₂ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₂ = 0)
+    (h₃ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₃ = 0)
+    (h₁₂ : r₁ ≠ r₂) (h₁₃ : r₁ ≠ r₃) (h₂₃ : r₂ ≠ r₃)
+    (hT : (E.map (algebraMap K (AlgebraicClosure K))).toAffine.Nonsingular r₁ t₁)
+    (htor : 2 • (Affine.Point.some r₁ t₁ hT) = 0)
+    (Pj : Points E)
+    (hcoord : ∀ Q : halfKernel E H,
+      (E.map (algebraMap K (AlgebraicClosure K))).toAffine.addX r₁
+          Q.val.val.xc
+          ((E.map (algebraMap K (AlgebraicClosure K))).toAffine.slope
+            r₁ Q.val.val.xc t₁ Q.val.val.yc) =
+        (Pj + Q.val.val).xc) :
+    (∏ Q : halfKernel E H, (r₂ - (Pj + Q.val.val).xc)) *
+        (∏ Q : halfKernel E H, (Q.val.val.xc - r₁)) =
+      (r₂ - r₁) ^ (halfKernel E H).card *
+        ∏ Q : halfKernel E H, (Q.val.val.xc - r₃) :=
+  halfKernel_translated_root_product_relation_of_points_of_coord E H ho
+    r₁ r₂ r₃ t₁ h₁ h₂ h₃ h₁₂ h₁₃ h₂₃ hT htor Pj hcoord
+
+example (E : WeierstrassCurve K) (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (r₁ r₂ r₃ t₁ : AlgebraicClosure K)
+    (h₁ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₁ = 0)
+    (h₂ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₂ = 0)
+    (h₃ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₃ = 0)
+    (h₁₂ : r₁ ≠ r₂) (h₁₃ : r₁ ≠ r₃) (h₂₃ : r₂ ≠ r₃)
+    (hT : (E.map (algebraMap K (AlgebraicClosure K))).toAffine.Nonsingular r₁ t₁)
+    (htor : 2 • (Affine.Point.some r₁ t₁ hT) = 0)
+    (Pj : Points E) (hPj : Pj ∉ H) (hroot : Pj.xc = r₁)
+    (htcoord : Pj.yc = t₁) :
+    (∏ Q : halfKernel E H, (r₂ - (Pj + Q.val.val).xc)) *
+        (∏ Q : halfKernel E H, (Q.val.val.xc - r₁)) =
+      (r₂ - r₁) ^ (halfKernel E H).card *
+        ∏ Q : halfKernel E H, (Q.val.val.xc - r₃) :=
+  halfKernel_translated_root_product_relation_of_points E H ho
+    r₁ r₂ r₃ t₁ h₁ h₂ h₃ h₁₂ h₁₃ h₂₃ hT htor Pj hPj hroot htcoord
+
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernel_translated_root_product_relation
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernel_translated_root_product_relation_of_roots
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernel_translated_root_product_relation_of_two_torsion
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernel_translated_root_product_relation_of_points_of_coord
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernel_translated_root_product_relation_of_points
 
 end DkMathTest.EllipticFiniteKernelTranslatedRootProduct

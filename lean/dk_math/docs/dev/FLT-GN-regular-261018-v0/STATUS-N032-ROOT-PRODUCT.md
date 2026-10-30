@@ -1237,3 +1237,54 @@ Hj,Hk,Hl と移動根積 G の具体的な値へ展開し、既存の pair_relat
 対象の新規モジュール、回帰テスト、DkMath.Lib をビルドした。
 新しい一組定理の #print axioms は [propext, Classical.choice, Quot.sound] で、
 独自公理や sorry は導入していない。
+
+続いて halfKernel_translated_root_product_relation_of_points_of_coord を追加した。
+これは affine の addX で得られた根差積に、各半核点の座標一致
+
+addX(r₁,x(Q),slope(...)) = x(Pj+Q)
+
+を一度だけ適用し、htranslated と同じ実点群の積へ輸送する定理である。
+これにより、根差積の有限積計算は完全に閉じ、残る幾何学的証明義務は各点での
+Point.add_of_X_ne による座標橋へ局所化された。現在の定理はこの座標橋を
+hcoord として明示入力に残しており、点群 API のモデル同一視を隠れた仮定には
+していない。
+
+この輸送定理の回帰テストを追加し、対象モジュール、DkMath.Lib、
+回帰テストを再ビルドした。新規定理の公理依存は既存層と同じく
+[propext, Classical.choice, Quot.sound] である。
+
+今回さらに `halfKernel_translated_root_product_relation_of_points` を追加した。
+`Point.add_of_X_ne` と `half_x_sub_root_ne_zero` を各半核点へ適用し、明示的な
+`hcoord` を呼び出し側から消去した自動化入口である。証明は、無限点・零点の除外を
+`Pj ∉ H` と半核の非零性から行い、有限 affine 点へ分解した後に Weierstrass の
+`add_of_X_ne` を適用する。したがって、点群加法の座標橋は無条件に閉じた。ただし
+`htcoord : Pj.yc = t₁` と `hroot : Pj.xc = r₁` は、独立に与えた二捩れ座標と
+実点 `Pj` を同一視するための明示的な境界条件として保持している。
+
+この自動化定理を回帰テストから直接使用し、対象モジュールと回帰テストをビルドした。
+`#print axioms` は `[propext, Classical.choice, Quot.sound]` で、`sorry` や独自公理は
+導入していない。次の未解決責務は、`hroot` を `Pj = T_j` の選択から供給して
+三組の pair relation を構成し、`discriminant_product_of_pair_relations` へ接続する
+ことである。
+
+この座標自動化をさらに `veluHalf_base_pair_relation_of_two_torsion_points` へ統合した。
+同定された三つの `xc` を源曲線の二捩れ根として与えると、移動根積を内部で生成し、
+交差評価と既存の `pair_relation` を一組分だけ直結する。ここで証明されたのは、
+実際の `kernelXAt` 差と半核距離積からなる一組の判別式因子であり、`htranslated` は
+もはや呼び出し側の入力ではない。根評価・根分離、2捩れ点の affine 条件、`Pj` と
+`Pk` の核外性は、後続の三枝組立てで再利用できる形に整理した。
+
+この一組自動化の回帰例と `#print axioms` を追加し、対象モジュール、回帰テスト、
+`DkMath.Lib` をビルドした。新定理の依存公理は既存と同じ
+`[propext, Classical.choice, Quot.sound]` である。未解決なのは、三つの実際の
+二捩れ点を同時に選び、三つの一組定理を `discriminant_product_of_pair_relations`
+へ渡す最終組立てと、`hH`・`hU`・源商の判別式表示を実際のモデルから供給する部分である。
+
+さらに `veluHalf_base_discriminant_product_of_three_two_torsion_points` を追加した。
+これは `P₁₂`、`P₁₃`、`P₂₃` の三つを点の順序入れ替えで生成し、既存の
+`discriminant_product_of_pair_relations` へ一括して渡す組立て入口である。従って、
+三組の根差積を別々の補題として手動接続する作業は完了し、代数的には
+`Δ' * U^4 = Δ^(2*n+1)` まで到達した。残る入力 `hH`（三距離積の非零性）、`hU`
+（接線積の値）、`hΔ` と `hΔ'`（源・商判別式の差積表示）は、実際のモデル係数と
+半核接線積から供給する境界として明示的に保持している。この定理も回帰テストから
+直接使用し、`#print axioms` は `[propext, Classical.choice, Quot.sound]` だった。
