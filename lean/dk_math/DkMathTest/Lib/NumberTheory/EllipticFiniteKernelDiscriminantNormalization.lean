@@ -201,6 +201,40 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
         (fun R : halfKernel E H => (T + R.val.val).xc) :=
   veluHalf_base_special_fiber E H ho T hT hneg c hTc hp hdeg
 
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (T : Points E) (hT : T ∉ H) (hneg : -T = T)
+    (c : AlgebraicClosure F)
+    (hTc : kernelXAt E H T hT = c) :
+    fiberPolynomial (veluHalfNumeratorBase E H)
+        (veluHalfDenominatorBase E H) c =
+      fiberFactor (Finset.univ : Finset (halfKernel E H)) T.xc
+        (fun R : halfKernel E H => (T + R.val.val).xc) :=
+  veluHalf_base_special_fiber_of_odd_twoTorsion E H ho T hT hneg c hTc
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (hcard : 1 < Nat.card H)
+    (T : Points E) (hT : T ∉ H) (hneg : -T = T)
+    (c : AlgebraicClosure F)
+    (hTc : kernelXAt E H T hT = c) :
+    (fiberPolynomial (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) c).discr = 0 :=
+  veluHalf_base_special_fiber_discr_eq_zero_of_one_lt_card
+    E H ho hcard T hT hneg c hTc
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (hcard : 1 < Nat.card H)
+    (P : Points E) (hP : P ∉ H) (hP2 : 2 • P ∈ H)
+    (c : AlgebraicClosure F)
+    (hPc : kernelXAt E H P hP = c) :
+    (fiberPolynomial (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) c).discr = 0 :=
+  veluHalf_base_special_fiber_discr_eq_zero_of_two_smul_mem
+    E H ho hcard P hP hP2 c hPc
+
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_numerator_dvd
 #print axioms
@@ -223,5 +257,11 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_isCoprime
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_special_fiber
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_special_fiber_of_odd_twoTorsion
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_special_fiber_discr_eq_zero_of_one_lt_card
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_special_fiber_discr_eq_zero_of_two_smul_mem
 
 end DkMathTest.EllipticFiniteKernelDiscriminantNormalization

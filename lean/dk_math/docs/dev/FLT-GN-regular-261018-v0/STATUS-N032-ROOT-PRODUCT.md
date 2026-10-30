@@ -1078,3 +1078,24 @@ Wronskian を半核共通対の Wronskian と直接置換できるため、既�
 互いに素性、既存の二捩れ Wronskian 根を既存の有限ファイバー終端へ渡し、
 `fiberPolynomial = fiberFactor` を得る短縮経路である。ファイバーのモニック性と
 次数上界は引き続き呼び出し側の条件として残しており、判別式積公式そのものは未完了である。
+
+その条件付き終端を `veluHalf_base_special_fiber_of_odd_twoTorsion` で閉じた。
+半核分子 `A_H` と分母 `D_H` のモニック性・次数公式、および
+`card_halfKernel` から `D_H.natDegree < A_H.natDegree` を導き、任意の有限値 `c`
+に対する `A_H - c D_H` のモニック性と `natDegree = Nat.card H` を自動供給する。
+したがって公開定理の入力は奇数核、核外二捩れ点、`kernelXAt = c` の有限評価だけに
+縮約された。これは既存の Wronskian 根・互いに素性・有限ファイバー終端を組み合わせた
+無条件の半核ファイバー因子分解であり、標準 `RatFunc` 対の選択や判別式積公式を
+新たに仮定・証明するものではない。
+
+さらに `veluHalf_base_special_fiber_discr_eq_zero_of_one_lt_card` を追加した。
+`1 < Nat.card H` から半核の非空性を得て、`fiberFactor` が平方因子を持つことを
+`fiberFactor_discr_eq_zero_of_nonempty` に渡す。これにより、実際の半核対から直接
+特殊ファイバーの判別式零性が得られる。ここでも新しい標準対・判別式積公式は導入せず、
+既存の半核因子分解と有限積判別式補題を組み合わせた構成である。
+
+最後に `veluHalf_base_special_fiber_discr_eq_zero_of_two_smul_mem` を追加し、
+`P` 自身が二捩れでなくても `2 • P ∈ H` なら同じ結論を得られるようにした。
+奇数核の倍写像逆元から選んだ二捩れ代表へ `kernelXAt = c` を輸送し、直前の
+特殊枝定理を適用するだけである。したがって半核対については、特殊枝の判別式零性が
+「二捩れ代表上」と「任意の特殊枝代表上」の両方で固定された。

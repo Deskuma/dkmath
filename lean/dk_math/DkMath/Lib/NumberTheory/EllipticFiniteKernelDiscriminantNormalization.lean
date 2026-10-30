@@ -266,6 +266,100 @@ theorem veluHalf_base_special_fiber
     E H ho P hP hneg (veluHalfNumeratorBase E H)
       (veluHalfDenominatorBase E H) hcop hD hrel c hp hPc hwronskian hdeg
 
+/-- [DkMath.Lib] 半核対の次数公式から特殊ファイバーの正規化条件を供給する。
+
+前定理では、ファイバー多項式のモニック性と次数上界を呼び出し側から受け取った。
+ここではその二つを追加仮定にせず、`veluHalfNumeratorBase` のモニック性・次数、
+`veluHalfDenominatorBase` の次数、および `card_halfKernel` から自動的に導く。
+従って残る入力は、奇数核、核外二捩れ点、そしてその点での有限値だけである。
+数学的には `D_H` の次数が `A_H` より小さいため、任意の有限値 `c` に対して
+`A_H - c D_H` は主項を失わずモニックであり、次数は `Nat.card H` に固定される。 -/
+theorem veluHalf_base_special_fiber_of_odd_twoTorsion
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P)
+    (c : AlgebraicClosure K)
+    (hPc : kernelXAt E H P hP = c) :
+    fiberPolynomial (veluHalfNumeratorBase E H)
+        (veluHalfDenominatorBase E H) c =
+      fiberFactor (Finset.univ : Finset (halfKernel E H)) P.xc
+        (fun Q : halfKernel E H => (P + Q.val.val).xc) := by
+  have hAmonic := veluHalfNumeratorBase_monic E H
+  have hDdeg : (veluHalfDenominatorBase E H).natDegree =
+      2 * (halfKernel E H).card := veluHalfDenominatorBase_natDegree E H
+  have hAdeg : (veluHalfNumeratorBase E H).natDegree = Nat.card H := by
+    calc
+      (veluHalfNumeratorBase E H).natDegree =
+          1 + 2 * (halfKernel E H).card := veluHalfNumeratorBase_natDegree E H
+      _ = 2 * (halfKernel E H).card + 1 := by omega
+      _ = Nat.card H := card_halfKernel E H ho
+  have hDlt : (veluHalfDenominatorBase E H).natDegree <
+      (veluHalfNumeratorBase E H).natDegree := by
+    rw [hDdeg, hAdeg]
+    have hc := card_halfKernel E H ho
+    omega
+  have hqdeg : (C c * veluHalfDenominatorBase E H).natDegree <
+      (veluHalfNumeratorBase E H).natDegree :=
+    (natDegree_C_mul_le c (veluHalfDenominatorBase E H)).trans_lt hDlt
+  have hp : (fiberPolynomial (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) c).Monic := by
+    unfold fiberPolynomial
+    exact hAmonic.sub_of_left (degree_lt_degree hqdeg)
+  have hdeg : (fiberPolynomial (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) c).natDegree ≤ Nat.card H := by
+    rw [fiberPolynomial_natDegree_eq_of_natDegree_lt hDlt, hAdeg]
+  exact veluHalf_base_special_fiber E H ho P hP hneg c hPc hp hdeg
+
+/-- [DkMath.Lib] 非自明な奇数核の特殊ファイバーは判別式零である。
+
+前定理の半核因子分解を `fiberFactor_discr_eq_zero_of_nonempty` へ接続する。
+`1 < Nat.card H` から `halfKernel_nonempty_of_one_lt_card` を得るため、
+平方因子が実際に存在することを明示的に確認できる。従って自明核の場合を誤って
+含めず、標準 `RatFunc` 対の正規化や判別式族の選択に依存しない特殊枝の判別式零性を
+直接供給する。 -/
+theorem veluHalf_base_special_fiber_discr_eq_zero_of_one_lt_card
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (hcard : 1 < Nat.card H)
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P)
+    (c : AlgebraicClosure K)
+    (hPc : kernelXAt E H P hP = c) :
+    (fiberPolynomial (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) c).discr = 0 := by
+  have hfactor := veluHalf_base_special_fiber_of_odd_twoTorsion
+    E H ho P hP hneg c hPc
+  rw [hfactor]
+  obtain ⟨Q, hQ⟩ := halfKernel_nonempty_of_one_lt_card E H ho hcard
+  have huniv : (Finset.univ : Finset (halfKernel E H)).Nonempty :=
+    ⟨⟨Q, hQ⟩, Finset.mem_univ _⟩
+  exact fiberFactor_discr_eq_zero_of_nonempty
+    (Finset.univ : Finset (halfKernel E H)) huniv P.xc
+      (fun R : halfKernel E H => (P + R.val.val).xc)
+
+/-- [DkMath.Lib] 二捩れ特殊枝の判別式零性を任意の代表へ輸送する。
+
+`P` 自身が二捩れであることは要求せず、`2 • P ∈ H` だけを仮定する。奇数核では
+倍写像の全単射性から同じ `kernelXAt` 値を持つ核外二捩れ代表 `T` を選べるため、
+前定理を `T` へ適用して元の有限値 `c` の半核ファイバー判別式零性を得る。
+これは特殊枝の幾何学的な「代表選択」と判別式計算を分離する教科書的な輸送定理である。
+-/
+theorem veluHalf_base_special_fiber_discr_eq_zero_of_two_smul_mem
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (hcard : 1 < Nat.card H)
+    (P : Points E) (hP : P ∉ H) (hP2 : 2 • P ∈ H)
+    (c : AlgebraicClosure K)
+    (hPc : kernelXAt E H P hP = c) :
+    (fiberPolynomial (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) c).discr = 0 := by
+  obtain ⟨T, hT, hTneg, hTc⟩ :=
+    exists_two_torsion_kernelXAt_representative_of_two_smul_mem
+      E H ho P hP hP2 c hPc
+  obtain ⟨hT', hTc'⟩ := hTc
+  exact veluHalf_base_special_fiber_discr_eq_zero_of_one_lt_card
+    E H ho hcard T hT' hTneg c hTc'
+
 omit [CharZero K] [NeZero (2 : K)] in
 /-- [DkMath.Lib] 正規化された標準分母は核外平行移動点で非零である。
 
