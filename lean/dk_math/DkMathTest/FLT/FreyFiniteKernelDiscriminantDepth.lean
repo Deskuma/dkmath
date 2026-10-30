@@ -13,6 +13,8 @@ open DkMath.FLT.Frey
 open DkMath.Lib.NumberTheory
 open DkMath.Lib.NumberTheory.EllipticTorsionRepresentation
 open DkMath.Lib.NumberTheory.EllipticFiniteKernel
+open DkMath.Lib.RepresentationTheory
+open DkMath.Lib.NumberTheory.ValuationInertia
 open DkMath.FLT.Frey.Source
 open WeierstrassCurve
 
@@ -32,8 +34,23 @@ example (hp2 : p ≠ 2)
       (S.rationalCurve.map (algebraMap ℚ (AlgebraicClosure ℚ))).Δ ^ p :=
   residual_kernel_discriminant_product S hp2 L hl
 
+/-- 教科書回帰例：整数標的と代数閉包上の商標的の局所判別式を比較する。 -/
+example (hp2 : p ≠ 2)
+    (L : Submodule (ZMod p) S.ResidualSpace)
+    (hl : Module.finrank (ZMod p) L = 1)
+    (hs : IsStable S.residualRepresentation L)
+    {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ))
+    (hA : LiesOverPrime A q) :
+    A.valuation ((S.residualIntegerKernelModel L hl hs).Δ : AlgebraicClosure ℚ) =
+      A.valuation (S.residualKernelModel L hl).Δ :=
+  residual_integer_kernel_discriminant_value_eq S hp2 L hl hs hq hqp A hA
+
 #print axioms DkMath.FLT.Frey.Source.residual_kernel_discriminant_product
 #print axioms DkMath.FLT.Frey.Source.residual_singular_discriminant_value
 #print axioms DkMath.FLT.Frey.Source.residual_smooth_discriminant_value
+#print axioms DkMath.FLT.Frey.Source.residual_integer_kernel_discriminant_value_eq
+#print axioms DkMath.FLT.Frey.Source.residual_integer_singular_discriminant_value
+#print axioms DkMath.FLT.Frey.Source.residual_integer_smooth_discriminant_value
 
 end DkMathTest.FreyFiniteKernelDiscriminantDepth

@@ -1357,3 +1357,20 @@ Frey facade `DkMath.FLT` と回帰テストへ登録し、対象モジュール�
 `lake build DkMath.FLT` を確認した。新規三定理の `#print axioms` はいずれも
 `[propext, Classical.choice, Quot.sound]` である。次の工程は、この局所付値関係を
 `residual_integer_target_invariant_values` と結び、`q ≠ p` の整数標的へ輸送することになる。
+
+この輸送橋を同じモジュールへ続けて実装した。新定理
+`residual_integer_kernel_discriminant_value_eq` は、既存の
+`residual_integer_valuation_kernel_values` と
+`residual_valuation_kernel_model_map` を一度ずつ合成し、整数標的の判別式付値と
+代数閉包上の `residualKernelModel` の判別式付値を一致させる。`map_Δ` による
+基底変換の自然性だけを追加し、整数化理論を再証明していない。
+
+さらに、`residual_integer_singular_discriminant_value` と
+`residual_integer_smooth_discriminant_value` を追加した。前者は特異枝の
+`v(Δ')^p = v(Δ)`、後者は滑らか枝の `v(Δ') = v(Δ)^p` を、上記の橋で整数標的へ
+輸送する。`IsStable`、`q ≠ p`、局所零成分・特異性条件は明示的に保持している。
+
+回帰テストでモデル比較定理と整数標的両枝の入口を使用し、全新規定理の公理依存は
+`[propext, Classical.choice, Quot.sound]`。対象モジュール、回帰テスト、`lake build DkMath.FLT`、
+`git diff --check` を確認済みである。残る工程は `q = p` の局所情報と、これらの深さ公式を
+有理 `p`-捩れ排除・`hno` の大域算術へ接続する部分である。

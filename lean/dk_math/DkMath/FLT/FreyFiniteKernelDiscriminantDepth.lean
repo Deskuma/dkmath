@@ -83,4 +83,61 @@ theorem residual_smooth_discriminant_value (hp2 : p ≠ 2)
   exact residual_smooth_discriminant_value_of_product_identity S hp2 L hl hq hqp A hA hle
     (residual_kernel_discriminant_product S hp2 L hl)
 
+/-- [DkMath.Lib] `q ≠ p` で整数標的と代数閉包上の商標的の判別式付値を同一視する。
+
+整数モデルと付値環モデルの比較、付値環モデルと `residualKernelModel` の基底変換を
+順に合成する。整数化の分母や商曲線の再構成をここで再証明せず、既存の二つのモデル
+比較定理だけを消費する教材用の橋である。
+-/
+theorem residual_integer_kernel_discriminant_value_eq (hp2 : p ≠ 2)
+    (L : Submodule (ZMod p) S.ResidualSpace)
+    (hl : Module.finrank (ZMod p) L = 1)
+    (hs : IsStable S.residualRepresentation L)
+    {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ))
+    (hA : LiesOverPrime A q) :
+    A.valuation ((S.residualIntegerKernelModel L hl hs).Δ : AlgebraicClosure ℚ) =
+      A.valuation (S.residualKernelModel L hl).Δ := by
+  have hv := S.residual_integer_valuation_kernel_values hp2 L hl hs hq hqp A hA
+  have hm := S.residual_valuation_kernel_model_map hp2 L hl hq hqp A hA
+  have hd := congrArg WeierstrassCurve.Δ hm
+  rw [map_Δ] at hd
+  exact hv.1.trans (congrArg A.valuation hd)
+
+/-- [DkMath.Lib] Frey 特異枝の判別式深さを整数標的へ輸送する。
+
+`residual_singular_discriminant_value` の左辺を、直前のモデル比較等式で一度だけ
+置換する。整数モデルの局所最小性や `hno` の大域算術はこの定理の結論に含めない。
+-/
+theorem residual_integer_singular_discriminant_value (hp5 : 5 ≤ p)
+    (L : Submodule (ZMod p) S.ResidualSpace)
+    (hl : Module.finrank (ZMod p) L = 1)
+    (hs : IsStable S.residualRepresentation L)
+    {q : ℕ} [Fact q.Prime] (hqp : q ≠ p)
+    (hbad : q = 2 ∨ (q : ℤ) ∣ S.a * S.b * S.c)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    (hd : Disjoint L (S.residualZeroComponent A)) :
+    A.valuation ((S.residualIntegerKernelModel L hl hs).Δ : AlgebraicClosure ℚ) ^ p =
+      A.valuation (S.rationalCurve.map (algebraMap ℚ (AlgebraicClosure ℚ))).Δ := by
+  have hq : q.Prime := Fact.out
+  have hsrc := residual_singular_discriminant_value S hp5 L hl hqp hbad A hA hd
+  have hbridge := residual_integer_kernel_discriminant_value_eq S (by omega) L hl hs hq hqp A hA
+  rw [hbridge]
+  exact hsrc
+
+/-- [DkMath.Lib] Frey 滑らか枝の判別式深さを整数標的へ輸送する。 -/
+theorem residual_integer_smooth_discriminant_value (hp2 : p ≠ 2)
+    (L : Submodule (ZMod p) S.ResidualSpace)
+    (hl : Module.finrank (ZMod p) L = 1)
+    (hs : IsStable S.residualRepresentation L)
+    {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    (hle : L ≤ S.residualZeroComponent A) :
+    A.valuation ((S.residualIntegerKernelModel L hl hs).Δ : AlgebraicClosure ℚ) =
+      A.valuation (S.rationalCurve.map (algebraMap ℚ (AlgebraicClosure ℚ))).Δ ^ p := by
+  have hsrc := residual_smooth_discriminant_value S hp2 L hl hq hqp A hA hle
+  have hbridge := residual_integer_kernel_discriminant_value_eq S hp2 L hl hs hq hqp A hA
+  rw [hbridge]
+  exact hsrc
+
 end DkMath.FLT.Frey.Source
