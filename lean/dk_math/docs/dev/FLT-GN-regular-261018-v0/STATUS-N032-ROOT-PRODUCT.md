@@ -1374,3 +1374,28 @@ Frey facade `DkMath.FLT` と回帰テストへ登録し、対象モジュール�
 `[propext, Classical.choice, Quot.sound]`。対象モジュール、回帰テスト、`lake build DkMath.FLT`、
 `git diff --check` を確認済みである。残る工程は `q = p` の局所情報と、これらの深さ公式を
 有理 `p`-捩れ排除・`hno` の大域算術へ接続する部分である。
+
+今回、Frey の `-8 mod p` による 2進指数非可除性を、整数標的の特異枝深さへ接続した。
+`residual_disjoint_kernel_impossible_at_two` は、`p ≥ 5`、安定一次元核、
+`L` と 2 の零成分の非交差を仮定すると、整数判別式の付値恒等式を
+`valuation_intCast_eq_pow_padicValInt` で指数恒等式へ戻し、
+`p ∣ padicValInt 2 S.curve.Δ` を得る。これは `not_exponent_dvd_curve_two_valuation` と
+矛盾するため、2上の特異枝を無条件に排除する。指数比較では同じ底の異なる冪を比較するため、
+`IsMulTorsionFree.pow_right_injective₀` と 2 の非単元性・非零性を明示的に使用した。
+
+さらに `residual_stable_line_le_zeroComponent_at_two` を追加した。これは既存の
+`residual_line_smooth_or_disjoint` の二分法に直前の排除定理を合成し、安定一次元核が
+2上では零成分に含まれることを示す。ここで `q = p` の局所理論、`hno`、有理捩れ排除は
+主張していない。回帰例と二定理の `#print axioms` を追加し、依存公理は
+`[propext, Classical.choice, Quot.sound]` のままである。対象モジュール、回帰テスト、
+`git diff --check` を確認済みである。次の具体的課題は、この2上零成分包含を既存の
+`E₀[p]` 同定・Cofixed 分岐へ接続するか、`q = p` の局所深さを別モジュールで供給することである。
+
+続いて `residual_stable_line_eq_zeroComponent_at_two` を追加した。既存の
+`residualZeroComponent_finrank_eq_one_at_two` と上記の包含を組み合わせ、2上の
+安定一次元核を実際の `E₀[p]`（`residualZeroComponent A`）へ同定する。従って、
+この同定は Cofixed 性を仮定せずに成立する一方、`hno` の閉鎖や `q = p` の局所情報を
+含まない。回帰例・`#print axioms` を更新し、三つの新定理はいずれも
+`[propext, Classical.choice, Quot.sound]` に留まる。次の具体的な接続先は、この局所同定を
+既存 `residual_cofixed_line_eq_zeroComponent_at_two` と比較して、Cofixed 枝の算術入力を
+明示化することである。

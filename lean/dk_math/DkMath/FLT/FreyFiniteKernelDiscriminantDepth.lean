@@ -4,6 +4,8 @@ Released under MIT license as described in the file LICENSE.
 -/
 
 import DkMath.FLT.FreyFiniteKernelDepthProduct
+import DkMath.FLT.FreyDyadicZeroComponent
+import DkMath.FLT.FreyPrimeProfile
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDiscriminantProduct
 
 #print "file: DkMath.FLT.FreyFiniteKernelDiscriminantDepth"
@@ -139,5 +141,85 @@ theorem residual_integer_smooth_discriminant_value (hp2 : p ≠ 2)
   have hbridge := residual_integer_kernel_discriminant_value_eq S hp2 L hl hs hq hqp A hA
   rw [hbridge]
   exact hsrc
+
+/-- [DkMath.Lib] 素数 `p ≥ 5` では、2で特異核となる安定一次元核は存在しない。
+
+整数標的の特異枝深さを `padicValInt` の指数へ戻し、源判別式の `-8 mod p` と衝突させる。
+この定理は `q = p` の局所理論や `hno` を仮定せず、2上の特異枝だけを排除する。
+-/
+theorem residual_disjoint_kernel_impossible_at_two (hp5 : 5 ≤ p)
+    (L : Submodule (ZMod p) S.ResidualSpace)
+    (hl : Module.finrank (ZMod p) L = 1)
+    (hs : IsStable S.residualRepresentation L)
+    (A : ValuationSubring (AlgebraicClosure ℚ))
+    (hA : LiesOverPrime A 2) :
+    ¬ Disjoint L (S.residualZeroComponent A) := by
+  intro hd
+  have hp2 : p ≠ 2 := by omega
+  have hdepth := residual_integer_singular_discriminant_value S hp5 L hl hs
+    (q := 2) (by omega) (Or.inl rfl) A hA hd
+  have hΔZ := residual_integer_kernel_model_discriminant_ne_zero S hp2 L hl hs
+  have hΔA : A.valuation ((S.residualIntegerKernelModel L hl hs).Δ : AlgebraicClosure ℚ) =
+      A.valuation (2 : AlgebraicClosure ℚ) ^
+        padicValInt 2 (S.residualIntegerKernelModel L hl hs).Δ :=
+    valuation_intCast_eq_pow_padicValInt A Nat.prime_two
+      ((ValuationSubring.mem_nonunits_iff _).mp hA) hΔZ
+  have hcurveA : A.valuation (S.rationalCurve.map (algebraMap ℚ (AlgebraicClosure ℚ))).Δ =
+      A.valuation (S.curve.Δ : AlgebraicClosure ℚ) := by
+    have h := congrArg
+      (fun W : WeierstrassCurve ℚ => A.valuation (W.map (algebraMap ℚ (AlgebraicClosure ℚ))).Δ)
+      S.curve_map
+    simpa only [map_map, map_Δ, RingHom.coe_comp, Function.comp_apply,
+      Int.coe_castRingHom, map_intCast] using h.symm
+  rw [hΔA, hcurveA] at hdepth
+  rw [valuation_intCast_eq_pow_padicValInt A Nat.prime_two
+      ((ValuationSubring.mem_nonunits_iff _).mp hA) S.curve_discriminant_ne_zero] at hdepth
+  rw [← pow_mul] at hdepth
+  have hval_lt : A.valuation (2 : AlgebraicClosure ℚ) < 1 :=
+    (ValuationSubring.mem_nonunits_iff _).mp hA
+  have hval_ne_one : A.valuation (2 : AlgebraicClosure ℚ) ≠ 1 :=
+    ne_of_lt hval_lt
+  have hval_ne_zero : A.valuation (2 : AlgebraicClosure ℚ) ≠ 0 :=
+    (Valuation.ne_zero_iff _).mpr (Nat.cast_ne_zero.mpr Nat.prime_two.ne_zero)
+  have hexp : padicValInt 2 (S.residualIntegerKernelModel L hl hs).Δ * p =
+      padicValInt 2 S.curve.Δ := by
+    exact (IsMulTorsionFree.pow_right_injective₀ hval_ne_one hval_ne_zero) hdepth
+  have hdvd : p ∣ padicValInt 2 S.curve.Δ := by
+    rw [← hexp]
+    exact dvd_mul_left _ _
+  exact S.not_exponent_dvd_curve_two_valuation hp5 hdvd
+
+/-- [DkMath.Lib] `p ≥ 5` の安定一次元核は、2上では必ず零成分に入る。
+
+`residual_line_smooth_or_disjoint` の二分法に、直前の特異枝排除を重ねる。
+ここで得るのは局所的な包含であり、残余表現全体の `hno` や大域的な捩れ排除ではない。
+-/
+theorem residual_stable_line_le_zeroComponent_at_two (hp5 : 5 ≤ p)
+    (L : Submodule (ZMod p) S.ResidualSpace)
+    (hl : Module.finrank (ZMod p) L = 1)
+    (hs : IsStable S.residualRepresentation L)
+    (A : ValuationSubring (AlgebraicClosure ℚ))
+    (hA : LiesOverPrime A 2) :
+    L ≤ S.residualZeroComponent A := by
+  rcases S.residual_line_smooth_or_disjoint L hl A with hle | hd
+  · exact hle
+  · exact (residual_disjoint_kernel_impossible_at_two S hp5 L hl hs A hA hd).elim
+
+/-- [DkMath.Lib] 2上の安定一次元核は、零成分の一次元性により一致する。
+
+直前の包含と `residualZeroComponent_finrank_eq_one_at_two` を
+`Submodule.eq_of_le_of_finrank_le` で組み合わせる。これは局所住所での同定であり、
+大域的な `hno` や Cofixed 性を追加しない。
+-/
+theorem residual_stable_line_eq_zeroComponent_at_two (hp5 : 5 ≤ p)
+    (L : Submodule (ZMod p) S.ResidualSpace)
+    (hl : Module.finrank (ZMod p) L = 1)
+    (hs : IsStable S.residualRepresentation L)
+    (A : ValuationSubring (AlgebraicClosure ℚ))
+    (hA : LiesOverPrime A 2) :
+    L = S.residualZeroComponent A := by
+  exact Submodule.eq_of_le_of_finrank_le
+    (residual_stable_line_le_zeroComponent_at_two S hp5 L hl hs A hA)
+    (by rw [S.residualZeroComponent_finrank_eq_one_at_two hp5 A hA, hl])
 
 end DkMath.FLT.Frey.Source
