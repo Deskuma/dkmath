@@ -1305,3 +1305,36 @@ hcoord として明示入力に残しており、点群 API のモデル同一�
 `veluHalf_base_discriminant_product_of_three_two_torsion_points` の呼び出し側は、
 接線積の値を根距離積へ手作業で展開する必要がなくなった。`hΔ` と `hΔ'` の
 モデル判別式表示だけが、現在も係数計算の境界として残っている。
+
+今回、`EllipticFiniteKernelDiscriminantProduct.lean` を新設し、実際の奇数有限核
+`H` に対する判別式積の最終入口
+`kernelModel_discriminant_product_of_odd_card` を実装した。`exists_three_nonzero_fixed_points`
+から源側の三つの非零反転固定点を選び、`eq_zero_of_mem_odd_kernel_fixed` で核外性を
+供給し、`kernelXAt_injective_on_twoTorsion` で商側の根の分離を閉じている。各点の
+二捩れ条件は `Point.eq_some_xc_yc` と `two_nsmul` を用いて affine 点へ明示的に
+輸送し、`Point.isRoot_twoTorsionPolynomial_of_add_self` から源判別式の三根条件を
+生成した。
+
+その結果、既存の
+`veluHalf_base_discriminant_product_of_three_two_torsion_points` を、抽象的な
+`Δ`・`Δ'`・`U` の入力なしに、`kernelModel E H`、`E.map (algebraMap K (AlgebraicClosure K))`
+および実際の半核接線平方積へ特殊化できた。指数は `card_halfKernel` によって
+`2 * |H⁺| + 1 = |H|` へ変換している。証明した数学的内容は、NOTE-032 の
+`hprod` に相当する判別式積恒等式である。
+
+対象モジュールの focused build、回帰テスト、`DkMath.Lib` をビルドした。
+新規定理の `#print axioms` は `[propext, Classical.choice, Quot.sound]` であり、
+新しい `sorry` や独自 `axiom` は導入していない。残る境界は、この積公式を局所付値・
+整数モデルの `hno` へ接続する工程であり、今回の定理自体はそれらを主張しない。
+
+続いて `EllipticFiniteKernelDiscriminantDepth.lean` を追加し、積公式を局所深さへ
+輸送する二つの公開入口を実装した。`singular_discriminant_value_of_odd_card` は
+`hcard` と `p ≠ 2` から奇数性を作り、`kernelModel_discriminant_product_of_odd_card`
+を既存の `singular_discriminant_value_of_product_identity` へ渡す。同様に
+`smooth_discriminant_value_of_odd_card` は滑らかな奇数核の `ho` を直接受け取り、
+`smooth_discriminant_value_of_product_identity` の `hprod` を内部供給する。
+
+これは既存の付値計算を再証明したものではなく、判別式積の具体化と既存の特異・滑らか
+枝の評価定理を接続した構造的な帰結である。回帰テストでは両入口を実際に呼び出し、
+`#print axioms` はいずれも `[propext, Classical.choice, Quot.sound]` だった。
+対象モジュール、回帰テスト、`DkMath.Lib`、`git diff --check` を確認済みである。
