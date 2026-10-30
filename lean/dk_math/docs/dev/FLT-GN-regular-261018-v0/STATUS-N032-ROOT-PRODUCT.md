@@ -1132,3 +1132,17 @@ Wronskian 根を個別に再仮定する必要がなくなった。一方、標�
 正規化ファイバー輸送を判別式零性・非零性へ接続することである。その後、標準対の
 存在定理が `F.natDegree = Nat.card H` を供給できれば、半核側の
 `discr = 0 ↔ 2 • P ∈ H` を標準 `RatFunc` 表示へ移せる。
+
+この方針を見直し、判別式スカラー倍公式を待たずに明示的半核対の判別式族を直接
+実装した。`veluHalf_base_discriminantFamily_eval_eq_zero_iff_two_smul_mem` は、
+`veluHalfNumeratorBase` と `veluHalfDenominatorBase` の次数公式から
+`deg D_H < deg A_H` を供給し、既存の `fiberDiscriminantFamily_eval_of_natDegree_lt`
+と `veluHalf_base_fiber_discr_eq_zero_iff_two_smul_mem` を合成する。これにより
+明示的族の評価値の零性が、核外代表 `P` の `2 • P ∈ H` と直接同値になった。
+
+さらに `veluHalf_base_discriminantFamily_eval_eq_zero_iff_two_torsion_image` を追加し、
+`exists_kernelXAt_eq` で有限値 `c` の代表を選ぶことで、族の零点集合を二捩れ枝の
+`kernelXAt` 値像として分類した。この二定理は標準係数対、正規化、非零スカラー倍の
+判別式変換則を一切必要としない。したがって `hprod` 主経路では、まず明示的族を
+使って分岐値を固定し、判別式スカラー倍則は標準対の値まで輸送する必要が生じた時点で
+独立に追加する方針とする。

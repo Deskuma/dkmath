@@ -49,9 +49,35 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
   exists_veluX_fixed_pair_discriminant_family_zero_iff_two_torsion_image
     E H ho hcard
 
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (hcard : 1 < Nat.card H)
+    (P : Points E) (hP : P ∉ H)
+    (c : AlgebraicClosure F)
+    (hPc : kernelXAt E H P hP = c) :
+    (fiberDiscriminantFamily (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H)).eval c = 0 ↔ 2 • P ∈ H :=
+  veluHalf_base_discriminantFamily_eval_eq_zero_iff_two_smul_mem
+    E H ho hcard P hP c hPc
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (hcard : 1 < Nat.card H)
+    (c : AlgebraicClosure F) :
+    (fiberDiscriminantFamily (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H)).eval c = 0 ↔
+      ∃ P : Points E, ∃ hP : P ∉ H,
+        kernelXAt E H P hP = c ∧ 2 • P ∈ H :=
+  veluHalf_base_discriminantFamily_eval_eq_zero_iff_two_torsion_image
+    E H ho hcard c
+
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_veluX_fixed_pair_discriminant_family_branch_iff_all_points
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_veluX_fixed_pair_discriminant_family_zero_iff_two_torsion_image
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_discriminantFamily_eval_eq_zero_iff_two_smul_mem
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_discriminantFamily_eval_eq_zero_iff_two_torsion_image
 
 end DkMathTest.EllipticFiniteKernelDiscriminantFamily
