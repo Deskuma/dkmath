@@ -74,10 +74,6 @@ example (E : WeierstrassCurve K) [E.IsElliptic]
     (h₁₂ : P₁.xc ≠ P₂.xc) (h₁₃ : P₁.xc ≠ P₃.xc)
     (h₂₃ : P₂.xc ≠ P₃.xc)
     (Δ Δ' U : AlgebraicClosure K)
-    (hH :
-      (∏ Q ∈ halfKernel E H, (Q.val.xc - P₁.xc)) *
-        (∏ Q ∈ halfKernel E H, (Q.val.xc - P₂.xc)) *
-        (∏ Q ∈ halfKernel E H, (Q.val.xc - P₃.xc)) ≠ 0)
     (hU : U = 4 ^ (halfKernel E H).card *
       ((∏ Q ∈ halfKernel E H, (Q.val.xc - P₁.xc)) *
         (∏ Q ∈ halfKernel E H, (Q.val.xc - P₂.xc)) *
@@ -91,7 +87,20 @@ example (E : WeierstrassCurve K) [E.IsElliptic]
     Δ' * U ^ 4 = Δ ^ (2 * (halfKernel E H).card + 1) :=
   veluHalf_base_discriminant_product_of_three_two_torsion_points E H ho P₁ P₂ P₃
     hP₁ hP₂ hP₃ hneg₁ hneg₂ hT₁ htor₁ hT₂ htor₂ h₁ h₂ h₃ h₁₂ h₁₃ h₂₃
-    Δ Δ' U hH hU hΔ hΔ'
+    Δ Δ' U hU hΔ hΔ'
+
+example (E : WeierstrassCurve K) (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (r₁ r₂ r₃ : AlgebraicClosure K)
+    (h₁ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₁ = 0)
+    (h₂ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₂ = 0)
+    (h₃ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₃ = 0)
+    (h₁₂ : r₁ ≠ r₂) (h₁₃ : r₁ ≠ r₃) (h₂₃ : r₂ ≠ r₃) :
+    (∏ Q ∈ halfKernel E H, (Q.val.xc - r₁)) *
+        (∏ Q ∈ halfKernel E H, (Q.val.xc - r₂)) *
+        (∏ Q ∈ halfKernel E H, (Q.val.xc - r₃)) ≠ 0 :=
+  halfKernel_three_root_distance_products_ne_zero E H ho r₁ r₂ r₃
+    h₁ h₂ h₃ h₁₂ h₁₃ h₂₃
 
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_pair_relation_of_translated_root_product
@@ -99,5 +108,7 @@ example (E : WeierstrassCurve K) [E.IsElliptic]
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_pair_relation_of_two_torsion_points
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_discriminant_product_of_three_two_torsion_points
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernel_three_root_distance_products_ne_zero
 
 end DkMathTest.EllipticFiniteKernelPairRelation

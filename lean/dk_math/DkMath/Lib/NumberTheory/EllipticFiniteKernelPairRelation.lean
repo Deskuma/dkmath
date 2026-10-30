@@ -135,12 +135,45 @@ theorem veluHalf_base_pair_relation_of_two_torsion_points
   exact veluHalf_base_pair_relation_of_translated_root_product E H ho Pj Pk Pl
     hPj hPk hnegj htranslated
 
+omit [E.IsElliptic] in
+/-- [DkMath.Lib] 奇数半核の三つの二捩れ根距離積は同時に非零である。
+
+各積因子の非零性は `half_x_sub_root_ne_zero` が三根を一度に供給する。
+`Finset.prod_ne_zero_iff` で三つの有限積へ持ち上げ、判別式組立てに必要な
+共通因子の非零性を根差分の再証明なしに得る。
+-/
+theorem halfKernel_three_root_distance_products_ne_zero
+    (ho : Odd (Nat.card H))
+    (r₁ r₂ r₃ : AlgebraicClosure K)
+    (h₁ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₁ = 0)
+    (h₂ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₂ = 0)
+    (h₃ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₃ = 0)
+    (h₁₂ : r₁ ≠ r₂) (h₁₃ : r₁ ≠ r₃) (h₂₃ : r₂ ≠ r₃) :
+    (∏ Q ∈ halfKernel E H, (Q.val.xc - r₁)) *
+        (∏ Q ∈ halfKernel E H, (Q.val.xc - r₂)) *
+        (∏ Q ∈ halfKernel E H, (Q.val.xc - r₃)) ≠ 0 := by
+  have hroot (e : AlgebraicClosure K) (he : ∀ Q : halfKernel E H,
+      Q.val.val.xc - e ≠ 0) :
+      (∏ Q ∈ halfKernel E H, (Q.val.xc - e)) ≠ 0 := by
+    apply Finset.prod_ne_zero_iff.mpr
+    intro Q hQ
+    exact he ⟨Q, hQ⟩
+  have h₁' := hroot r₁ (fun Q =>
+    (half_x_sub_root_ne_zero E H ho r₁ r₂ r₃ h₁ h₂ h₃ h₁₂ h₁₃ h₂₃ Q).1)
+  have h₂' := hroot r₂ (fun Q =>
+    (half_x_sub_root_ne_zero E H ho r₁ r₂ r₃ h₁ h₂ h₃ h₁₂ h₁₃ h₂₃ Q).2.1)
+  have h₃' := hroot r₃ (fun Q =>
+    (half_x_sub_root_ne_zero E H ho r₁ r₂ r₃ h₁ h₂ h₃ h₁₂ h₁₃ h₂₃ Q).2.2)
+  exact mul_ne_zero (mul_ne_zero h₁' h₂') h₃'
+
 /-- [DkMath.Lib] 三つの実二捩れ枝から判別式積の代数組立てへ渡す入口。
 
 三つの順序付き一組を `P₁₂`, `P₁₃`, `P₂₃` として生成し、既存の
 `discriminant_product_of_pair_relations` に渡す。ここで `hH`、`hU`、二つの
 判別式表示は、商モデルの係数計算・接線積・非衝突性を供給する境界である。
-従って本定理は、三組の幾何学的根差積を一度に消費するが、商判別式そのものの
+`hH` は半核の根非衝突から内部で自動生成され、`hU` と二つの判別式表示は
+商モデルの係数計算・接線積を供給する境界として残る。従って本定理は、三組の
+幾何学的根差積を一度に消費するが、商判別式そのものの
 係数計算を隠れた仮定として導入しない。
 -/
 theorem veluHalf_base_discriminant_product_of_three_two_torsion_points
@@ -158,10 +191,6 @@ theorem veluHalf_base_discriminant_product_of_three_two_torsion_points
     (h₁₂ : P₁.xc ≠ P₂.xc) (h₁₃ : P₁.xc ≠ P₃.xc)
     (h₂₃ : P₂.xc ≠ P₃.xc)
     (Δ Δ' U : AlgebraicClosure K)
-    (hH :
-      (∏ Q ∈ halfKernel E H, (Q.val.xc - P₁.xc)) *
-        (∏ Q ∈ halfKernel E H, (Q.val.xc - P₂.xc)) *
-        (∏ Q ∈ halfKernel E H, (Q.val.xc - P₃.xc)) ≠ 0)
     (hU : U = 4 ^ (halfKernel E H).card *
       ((∏ Q ∈ halfKernel E H, (Q.val.xc - P₁.xc)) *
         (∏ Q ∈ halfKernel E H, (Q.val.xc - P₂.xc)) *
@@ -179,6 +208,8 @@ theorem veluHalf_base_discriminant_product_of_three_two_torsion_points
   let X₁ : AlgebraicClosure K := kernelXAt E H P₁ hP₁
   let X₂ : AlgebraicClosure K := kernelXAt E H P₂ hP₂
   let X₃ : AlgebraicClosure K := kernelXAt E H P₃ hP₃
+  have hH := halfKernel_three_root_distance_products_ne_zero E H ho
+    P₁.xc P₂.xc P₃.xc h₁ h₂ h₃ h₁₂ h₁₃ h₂₃
   have h₂₁ : P₂.xc ≠ P₁.xc := h₁₂.symm
   have P₁₂ := veluHalf_base_pair_relation_of_two_torsion_points E H ho P₁ P₂ P₃
     hP₁ hP₂ hneg₁ hT₁ htor₁ h₁ h₂ h₃ h₁₂ h₁₃ h₂₃
