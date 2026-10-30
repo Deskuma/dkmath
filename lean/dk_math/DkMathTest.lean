@@ -310,5 +310,6 @@ import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelTranslatedRootProduct
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelPairRelation
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelDiscriminantProduct
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelDiscriminantDepth
+import DkMathTest.FLT.FreyFiniteKernelDiscriminantDepth
 
 #print "file: DkMathTest"

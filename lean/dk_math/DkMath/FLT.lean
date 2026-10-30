@@ -32,6 +32,7 @@ import DkMath.FLT.FreyFiniteKernelCollision
 import DkMath.FLT.FreyFiniteKernelDegree
 import DkMath.FLT.FreyFiniteKernelDepthProduct
 import DkMath.FLT.FreyFiniteKernelDenominatorSupport
+import DkMath.FLT.FreyFiniteKernelDiscriminantDepth
 import DkMath.FLT.FreyFiniteKernelGeneration
 import DkMath.FLT.FreyFiniteKernelGlobal
 import DkMath.FLT.FreyFiniteKernelGoodReduction

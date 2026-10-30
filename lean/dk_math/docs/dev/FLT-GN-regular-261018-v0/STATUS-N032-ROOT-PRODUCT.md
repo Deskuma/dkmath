@@ -1338,3 +1338,22 @@ hcoord として明示入力に残しており、点群 API のモデル同一�
 枝の評価定理を接続した構造的な帰結である。回帰テストでは両入口を実際に呼び出し、
 `#print axioms` はいずれも `[propext, Classical.choice, Quot.sound]` だった。
 対象モジュール、回帰テスト、`DkMath.Lib`、`git diff --check` を確認済みである。
+
+次工程として `DkMath/FLT/FreyFiniteKernelDiscriminantDepth.lean` を追加した。
+`residual_kernel_discriminant_product` は、Frey Source の
+`pointSubgroup S.rationalCurve p L` と `residualKernelModel` を一般奇数核の
+`kernelModel_discriminant_product_of_odd_card` へ直接特殊化する。一次元残余核の
+奇数性と `card_pointSubgroup` による指数 `p` の一致だけを供給し、別の商曲線や同型を
+導入していない。
+
+さらに、既存の `*_of_product_identity` を保持したまま、`hprod` を明示引数から除去した
+Source 専用入口 `residual_singular_discriminant_value` と
+`residual_smooth_discriminant_value` を追加した。前者は dyadic/bad-prime の局所幾何を、
+後者は滑らかな零成分条件をそのまま既存定理へ渡し、判別式積だけを内部 provider へ
+置き換えている。従って、`q ≠ p`、局所還元条件、`p`-torsion 条件は未解決境界として
+明示的に残る。
+
+Frey facade `DkMath.FLT` と回帰テストへ登録し、対象モジュール、回帰テスト、
+`lake build DkMath.FLT` を確認した。新規三定理の `#print axioms` はいずれも
+`[propext, Classical.choice, Quot.sound]` である。次の工程は、この局所付値関係を
+`residual_integer_target_invariant_values` と結び、`q ≠ p` の整数標的へ輸送することになる。
