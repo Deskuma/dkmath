@@ -100,6 +100,28 @@ theorem commonNumerator_monic_of_term_degree_lt
     exact hterm i hi
 
 omit [CharZero K] in
+/-- [DkMath.Lib] 主項より低次数の有限補正和を加えた分子の次数は主項と一致する。
+
+これはモニック性だけでなく `natDegree` の値を保持する版である。後続の
+`RatFunc` 正規化では、共通分母との交差乗算を次数比較へ渡すためにこの形を使う。
+-/
+theorem commonNumerator_natDegree_eq_of_term_degree_lt
+    {ι : Type*} [DecidableEq ι]
+    (s : Finset ι) (N D : ι → (AlgebraicClosure K)[X])
+    (hD : (commonDenominator s D).Monic)
+    (hterm : ∀ i ∈ s,
+      (N i * erasedProduct s D i).degree <
+        (X * commonDenominator s D).degree) :
+    (commonNumerator s N D).natDegree =
+      (X * commonDenominator s D).natDegree := by
+  unfold commonNumerator
+  apply natDegree_add_eq_left_of_degree_lt
+  refine (degree_sum_le _ _).trans_lt ((Finset.sup_lt_iff ?_).2 ?_)
+  · exact bot_lt_iff_ne_bot.mpr (degree_ne_bot.mpr ((monic_X.mul hD).ne_zero))
+  · intro i hi
+    exact hterm i hi
+
+omit [CharZero K] in
 /-- [DkMath.Lib] 二次モニック因子の除去積の次数を数える。
 
 各 `D i` がモニック二次式なら、`erasedProduct s D i` の次数は
@@ -125,6 +147,194 @@ theorem erasedProduct_natDegree_eq_two_mul_card
     simp [Nat.mul_comm]
   · intro j hj
     exact hmonic j (Finset.mem_of_mem_erase hj)
+
+omit [CharZero K] in
+/-- [DkMath.Lib] 半核共通分子はモニックである。
+
+各局所分子は高々一次、各局所分母はモニック二次なので、`Q` を一つ除いた
+積の次数は `2 * ((halfKernel E H).erase Q).card` である。従って各補正項は
+主項 `X * D_H` より低次数となり、前の一般有限積補題から
+`veluHalfNumeratorBase` のモニック性が得られる。
+-/
+theorem veluHalfNumeratorBase_monic
+    (E : WeierstrassCurve K) (H : AddSubgroup (Points E)) [Fintype H] :
+    (veluHalfNumeratorBase E H).Monic := by
+  classical
+  unfold veluHalfNumeratorBase
+  let W := E.map (algebraMap K (AlgebraicClosure K))
+  have hDmonic :
+      (commonDenominator (halfKernel E H)
+        (fun R => xCorrectionDenominator R.val.xc)).Monic := by
+    unfold commonDenominator
+    apply monic_prod_of_monic
+    intro Q hQ
+    exact xCorrectionDenominator_monic Q.val.xc
+  have hDnat :
+      (commonDenominator (halfKernel E H)
+        (fun R => xCorrectionDenominator R.val.xc)).natDegree =
+        2 * (halfKernel E H).card := by
+    unfold commonDenominator
+    rw [natDegree_prod_of_monic]
+    · simp only [xCorrectionDenominator_natDegree, Finset.sum_const,
+        nsmul_eq_mul]
+      simp [Nat.mul_comm]
+    · intro Q hQ
+      exact xCorrectionDenominator_monic Q.val.xc
+  apply commonNumerator_monic_of_term_degree_lt
+    (halfKernel E H)
+    (fun Q => xCorrectionNumerator W Q.val.xc Q.val.yc)
+    (fun Q => xCorrectionDenominator Q.val.xc)
+  · exact hDmonic
+  · intro Q hQ
+    change
+      (xCorrectionNumerator W Q.val.xc Q.val.yc *
+          erasedProduct (halfKernel E H)
+            (fun R => xCorrectionDenominator R.val.xc) Q).degree <
+        (X * commonDenominator (halfKernel E H)
+          (fun R => xCorrectionDenominator R.val.xc)).degree
+    have hN :
+        (xCorrectionNumerator W Q.val.xc Q.val.yc).natDegree ≤ 1 := by
+      exact xCorrectionNumerator_natDegree_le_one W Q.val.xc Q.val.yc
+    have hE :
+        (erasedProduct (halfKernel E H)
+          (fun R => xCorrectionDenominator R.val.xc) Q).natDegree =
+          2 * ((halfKernel E H).erase Q).card := by
+      apply erasedProduct_natDegree_eq_two_mul_card
+      · intro R hR
+        exact xCorrectionDenominator_monic R.val.xc
+      · intro R hR
+        exact xCorrectionDenominator_natDegree R.val.xc
+      · exact hQ
+    have htermNat :
+        (xCorrectionNumerator W Q.val.xc Q.val.yc *
+          erasedProduct (halfKernel E H)
+            (fun R => xCorrectionDenominator R.val.xc) Q).natDegree ≤
+          1 + 2 * ((halfKernel E H).erase Q).card := by
+      calc
+        _ ≤ (xCorrectionNumerator W Q.val.xc Q.val.yc).natDegree +
+            (erasedProduct (halfKernel E H)
+              (fun R => xCorrectionDenominator R.val.xc) Q).natDegree :=
+          natDegree_mul_le
+        _ ≤ 1 + (erasedProduct (halfKernel E H)
+            (fun R => xCorrectionDenominator R.val.xc) Q).natDegree :=
+          Nat.add_le_add_right hN _
+        _ = 1 + 2 * ((halfKernel E H).erase Q).card := by rw [hE]
+    have hmainNat :
+        (X * commonDenominator (halfKernel E H)
+          (fun R => xCorrectionDenominator R.val.xc)).natDegree =
+          1 + 2 * (halfKernel E H).card := by
+      rw [natDegree_mul X_ne_zero hDmonic.ne_zero, natDegree_X, hDnat]
+    have htermNatLt :
+        (xCorrectionNumerator W Q.val.xc Q.val.yc *
+          erasedProduct (halfKernel E H)
+            (fun R => xCorrectionDenominator R.val.xc) Q).natDegree <
+          (X * commonDenominator (halfKernel E H)
+            (fun R => xCorrectionDenominator R.val.xc)).natDegree := by
+      rw [hmainNat]
+      calc
+        _ ≤ 1 + 2 * ((halfKernel E H).erase Q).card := htermNat
+        _ < 1 + 2 * (halfKernel E H).card := by
+          have hc := Finset.card_erase_add_one hQ
+          omega
+    rw [degree_eq_natDegree (monic_X.mul hDmonic).ne_zero]
+    exact lt_of_le_of_lt degree_le_natDegree (WithBot.coe_lt_coe.mpr htermNatLt)
+
+omit [CharZero K] in
+/-- [DkMath.Lib] 半核共通分子の次数は主項 `X * D_H` の次数に一致する。
+
+モニック性の証明で得た「各補正項は主項より低次数」という事実を、
+`natDegree_add_eq_left_of_degree_lt` へ渡した正規化用の次数公式である。
+-/
+theorem veluHalfNumeratorBase_natDegree
+    (E : WeierstrassCurve K) (H : AddSubgroup (Points E)) [Fintype H] :
+    (veluHalfNumeratorBase E H).natDegree =
+      1 + 2 * (halfKernel E H).card := by
+  classical
+  unfold veluHalfNumeratorBase
+  let W := E.map (algebraMap K (AlgebraicClosure K))
+  have hDmonic :
+      (commonDenominator (halfKernel E H)
+        (fun R => xCorrectionDenominator R.val.xc)).Monic := by
+    unfold commonDenominator
+    apply monic_prod_of_monic
+    intro Q hQ
+    exact xCorrectionDenominator_monic Q.val.xc
+  have hDnat :
+      (commonDenominator (halfKernel E H)
+        (fun R => xCorrectionDenominator R.val.xc)).natDegree =
+        2 * (halfKernel E H).card := by
+    unfold commonDenominator
+    rw [natDegree_prod_of_monic]
+    · simp only [xCorrectionDenominator_natDegree, Finset.sum_const,
+        nsmul_eq_mul]
+      simp [Nat.mul_comm]
+    · intro Q hQ
+      exact xCorrectionDenominator_monic Q.val.xc
+  have hmainNat :
+      (X * commonDenominator (halfKernel E H)
+        (fun R => xCorrectionDenominator R.val.xc)).natDegree =
+        1 + 2 * (halfKernel E H).card := by
+    rw [natDegree_mul X_ne_zero hDmonic.ne_zero, natDegree_X, hDnat]
+  rw [← hmainNat]
+  change
+    (commonNumerator (halfKernel E H)
+      (fun Q => xCorrectionNumerator W Q.val.xc Q.val.yc)
+      (fun Q => xCorrectionDenominator Q.val.xc)).natDegree =
+      (X * commonDenominator (halfKernel E H)
+        (fun R => xCorrectionDenominator R.val.xc)).natDegree
+  apply commonNumerator_natDegree_eq_of_term_degree_lt
+    (halfKernel E H)
+    (fun Q => xCorrectionNumerator W Q.val.xc Q.val.yc)
+    (fun Q => xCorrectionDenominator Q.val.xc)
+  · exact hDmonic
+  · intro Q hQ
+    have hN :
+        (xCorrectionNumerator W Q.val.xc Q.val.yc).natDegree ≤ 1 := by
+      exact xCorrectionNumerator_natDegree_le_one W Q.val.xc Q.val.yc
+    have hE :
+        (erasedProduct (halfKernel E H)
+          (fun R => xCorrectionDenominator R.val.xc) Q).natDegree =
+          2 * ((halfKernel E H).erase Q).card := by
+      apply erasedProduct_natDegree_eq_two_mul_card
+      · intro R hR
+        exact xCorrectionDenominator_monic R.val.xc
+      · intro R hR
+        exact xCorrectionDenominator_natDegree R.val.xc
+      · exact hQ
+    have htermNat :
+        (xCorrectionNumerator W Q.val.xc Q.val.yc *
+          erasedProduct (halfKernel E H)
+            (fun R => xCorrectionDenominator R.val.xc) Q).natDegree ≤
+          1 + 2 * ((halfKernel E H).erase Q).card := by
+      calc
+        _ ≤ (xCorrectionNumerator W Q.val.xc Q.val.yc).natDegree +
+            (erasedProduct (halfKernel E H)
+              (fun R => xCorrectionDenominator R.val.xc) Q).natDegree :=
+          natDegree_mul_le
+        _ ≤ 1 + (erasedProduct (halfKernel E H)
+            (fun R => xCorrectionDenominator R.val.xc) Q).natDegree :=
+          Nat.add_le_add_right hN _
+        _ = 1 + 2 * ((halfKernel E H).erase Q).card := by rw [hE]
+    change
+      (xCorrectionNumerator W Q.val.xc Q.val.yc *
+          erasedProduct (halfKernel E H)
+            (fun R => xCorrectionDenominator R.val.xc) Q).degree <
+        (X * commonDenominator (halfKernel E H)
+          (fun R => xCorrectionDenominator R.val.xc)).degree
+    have htermNatLt :
+        (xCorrectionNumerator W Q.val.xc Q.val.yc *
+          erasedProduct (halfKernel E H)
+            (fun R => xCorrectionDenominator R.val.xc) Q).natDegree <
+          (X * commonDenominator (halfKernel E H)
+            (fun R => xCorrectionDenominator R.val.xc)).natDegree := by
+      rw [hmainNat]
+      calc
+        _ ≤ 1 + 2 * ((halfKernel E H).erase Q).card := htermNat
+        _ < 1 + 2 * (halfKernel E H).card := by
+          have hc := Finset.card_erase_add_one hQ
+          omega
+    rw [degree_eq_natDegree (monic_X.mul hDmonic).ne_zero]
+    exact lt_of_le_of_lt degree_le_natDegree (WithBot.coe_lt_coe.mpr htermNatLt)
 
 omit [CharZero K] in
 /-- [DkMath.Lib] 半核共通分母はモニックである。 -/

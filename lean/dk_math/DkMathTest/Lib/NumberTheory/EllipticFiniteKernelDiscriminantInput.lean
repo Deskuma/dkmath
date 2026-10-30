@@ -50,6 +50,16 @@ example {ι : Type*} [DecidableEq ι] (s : Finset ι)
     (commonNumerator s N D).Monic :=
   commonNumerator_monic_of_term_degree_lt s N D hD hterm
 
+example {ι : Type*} [DecidableEq ι] (s : Finset ι)
+    (N D : ι → (AlgebraicClosure F)[X])
+    (hD : (commonDenominator s D).Monic)
+    (hterm : ∀ i ∈ s,
+      (N i * erasedProduct s D i).degree <
+        (X * commonDenominator s D).degree) :
+    (commonNumerator s N D).natDegree =
+      (X * commonDenominator s D).natDegree :=
+  commonNumerator_natDegree_eq_of_term_degree_lt s N D hD hterm
+
 example {ι : Type*} [DecidableEq ι]
     (s : Finset ι) (D : ι → (AlgebraicClosure F)[X])
     (hmonic : ∀ i ∈ s, (D i).Monic)
@@ -61,6 +71,14 @@ example {ι : Type*} [DecidableEq ι]
 example (E : WeierstrassCurve F) (H : AddSubgroup (Points E)) [Fintype H] :
     (veluHalfDenominatorBase E H).Monic :=
   veluHalfDenominatorBase_monic E H
+
+example (E : WeierstrassCurve F) (H : AddSubgroup (Points E)) [Fintype H] :
+    (veluHalfNumeratorBase E H).Monic :=
+  veluHalfNumeratorBase_monic E H
+
+example (E : WeierstrassCurve F) (H : AddSubgroup (Points E)) [Fintype H] :
+    (veluHalfNumeratorBase E H).natDegree = 1 + 2 * (halfKernel E H).card :=
+  veluHalfNumeratorBase_natDegree E H
 
 example (E : WeierstrassCurve F) (H : AddSubgroup (Points E)) [Fintype H] :
     (veluHalfDenominatorBase E H).natDegree = 2 * (halfKernel E H).card :=
@@ -83,9 +101,15 @@ example {F₀ G₀ A₀ D₀ : (AlgebraicClosure F)[X]}
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.commonNumerator_monic_of_term_degree_lt
 #print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.commonNumerator_natDegree_eq_of_term_degree_lt
+#print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.erasedProduct_natDegree_eq_two_mul_card
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalfDenominatorBase_monic
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalfNumeratorBase_monic
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalfNumeratorBase_natDegree
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalfDenominatorBase_natDegree
 #print axioms

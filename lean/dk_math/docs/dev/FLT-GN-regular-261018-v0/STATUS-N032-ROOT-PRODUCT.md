@@ -1006,5 +1006,27 @@ resultant 基盤を逆向きに利用している。
 二次モニック因子に対する除去積の次数公式
 `erasedProduct_natDegree_eq_two_mul_card` を追加した。前者は補正項の次数比較を
 仮定して `X * D + Σ NᵢEᵢ` のモニック性を導き、後者はその比較に必要な
-`2 * (s.erase i).card` を供給する。半核分子そのものへの適用には、まだ有限積の
-次数比較と `halfKernel` の濃度条件を接続する補題が必要である。
+`2 * (s.erase i).card` を供給する。さらにこれらを半核へ特殊化し、
+`veluHalfNumeratorBase_monic` を証明した。各補正項の次数は
+`1 + 2 * ((halfKernel E H).erase Q).card` 以下であり、`card_erase_add_one` により
+主項 `X * D_H` の次数 `1 + 2 * (halfKernel E H).card` より厳密に小さい。
+したがって現段階では、半核共通分子・共通分母の双方のモニック性が確立している。
+ただし、半核分子の次数が主項と等しいこと、標準 `RatFunc` 対との係数付き同一性、
+三根差の `pair_relation`、および判別式積公式は依然として未解決である。
+
+さらに、一般補題 `commonNumerator_natDegree_eq_of_term_degree_lt` とその半核特殊化
+`veluHalfNumeratorBase_natDegree` を追加した。後者は
+`(veluHalfNumeratorBase E H).natDegree = 1 + 2 * (halfKernel E H).card` を与え、
+分子・分母の最高次数を同じ有限積の次数計算へ揃える。これで標準対との交差乗算を
+次数比較へ渡すためのモニック性・次数入力は揃ったが、標準 `F,G` の選択と
+`F * D_H = A_H * G` の実係数多項式版、および `F = A_H`, `G = D_H` の正規化は
+まだ未実装である。
+
+標準対との可除性橋は `EllipticFiniteKernelDiscriminantNormalization.lean` に分離した。
+既存の `veluX_standard_pair_cross_relation` を再利用し、
+`veluX_standard_pair_numerator_dvd` と
+`veluX_standard_pair_denominator_dvd` を証明した。さらに、標準分子と半核分子が
+ともにモニックで、半核分子の次数が標準分子以下であるという明示的な仮定の下で、
+`veluX_standard_pair_numerator_eq_of_monic` により両者の一致を得る。
+これは標準対の正規化を無条件に主張するものではなく、関数体から多項式への交差乗算、
+Euclid 型可除性、モニック次数比較を別々に保持する構造的な橋である。
