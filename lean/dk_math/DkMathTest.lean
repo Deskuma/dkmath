@@ -311,5 +311,6 @@ import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelPairRelation
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelDiscriminantProduct
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelDiscriminantDepth
 import DkMathTest.FLT.FreyFiniteKernelDiscriminantDepth
+import DkMathTest.FLT.FreyStableLineDiscriminantCriterion
 
 #print "file: DkMathTest"

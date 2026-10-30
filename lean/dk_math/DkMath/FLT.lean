@@ -92,6 +92,7 @@ import DkMath.FLT.FreySmoothReductionInertia
 import DkMath.FLT.FreySplitDyadic
 
 import DkMath.FLT.FreyStableLine
+import DkMath.FLT.FreyStableLineDiscriminantCriterion
 import DkMath.FLT.FreyStableLineLocalGlobal
 
 import DkMath.FLT.FreyTorsionAllCard
