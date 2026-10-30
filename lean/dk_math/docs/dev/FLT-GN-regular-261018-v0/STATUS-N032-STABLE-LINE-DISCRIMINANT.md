@@ -106,10 +106,11 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 有限体上の点数評価と、有限体上での `2 * p` 位数排除は無条件に証明した。さらに、
 `FreyLocalReduction.LocalRing q` の剰余体については `ZMod q` との明示的な環同値と
 その整数写像との可換性を証明し、局所化された還元モデルの点数上界まで接続した。
-ただし、
-有理商曲線の良還元から `𝔽_q` の点群へ実際の還元準同型を構成する接続は未完成である。
-従って、現段階では `residual_cofixed_implies_rational_two_p_torsion` と
-`residual_integer_target_good_at_prime` を組み合わせた `hno` 排除までは到達していない。
+さらに、整数モデルの判別式非可除性から有理 `2 * p` 捩れ点の局所次数上界を直接得る
+橋を追加した。`q = 3`、`p ≥ 5`、`Even S.b`、`3 ∤ a*b*c` の条件では、
+`residual_hno_of_three_good` が Cofixed 一次元核の存在を排除するところまで到達した。
+これは局所還元写像を別途構成せず、整数モデルの付値輸送と巡回部分群の濃度比較を
+使う経路である。一般の `q`、`q = p`、分解群外元の構成、FLT の閉鎖は依然として未完成である。
 
 ## 検証
 
@@ -129,8 +130,11 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 - `lake build DkMathTest.Lib.NumberTheory.FreyLocalTorsionOrderBound`
 - `lake build DkMath.FLT.FreyFiniteKernelGoodReduction`
 - `lake build DkMathTest.FLT.FreyFiniteKernelGoodReduction`
+- `lake build DkMath.FLT.FreyHnoThreeGood`
+- `lake build DkMathTest.FLT.FreyHnoThreeGood`
 - `lake build DkMath.Lib`
 - `lake build DkMath.FLT`
+- `lake build DkMathTest`
 - `git diff --check`
 
 回帰テストで既存の四定理と新しい `2 * p` 捩れ定理を直接使用した。
@@ -154,10 +158,9 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 `addOrderOf_le_two_mul_residue_card_add_one_of_good` の合成である。点そのものは
 `pointEquivOfModelEq` で輸送し、加法位数は `AddEquiv.addOrderOf_eq` で戻している。
 
-この結果は `hno` や Frey 固有の直線排除をまだ主張しない。次段では
-`residual_integer_target_good_at_prime` からこの定理の `hΔ` を供給する薄い Source
-ラッパーを追加し、`residual_cofixed_implies_rational_two_p_torsion` と組み合わせた
-`q=3` の条件付き排除へ接続する。
+この結果単体は `hno` を主張しないが、Source 側の薄い判別式 provider と
+`residual_cofixed_implies_rational_two_p_torsion` を組み合わせることで、下記の
+`q=3` 条件付き排除へ接続済みである。
 
 この Source 側の第一段として、`residual_integer_target_discriminant_not_dvd_at_good_prime`
 を `FreyFiniteKernelGoodReduction.lean` に追加した。これは `q` 上の付値環を一つ選び、
@@ -166,7 +169,9 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 従って、局所良還元の構成を重複実装せず、次の `hno` 接続が必要とする整数判別式の
 非可除性をそのまま取り出せる。
 
-`residual_hno_iff_exists_zeroComponent_line_escape` の右辺に現れる脱出元を、
+`residual_hno_of_three_good` によって `q = 3` の条件付き排除まで閉じた。次はこの
+構造を `q = 5` など別の良い住所へ再利用し、有限素数住所の選択を薄い provider として
+整理する。並行して、`residual_hno_iff_exists_zeroComponent_line_escape` の右辺に現れる脱出元を、
 既存の `a ≡ 7 mod 8` 側の分解群固定定理と比較する。局所分解群の外にある大域元の構成が、
 次の算術的な核心課題である。並行して、今回の有理 `2 * p` 捩れを良還元素数で
 排除する有限体点数評価は完了した。次は `FreyLocalReduction.LocalRing q` の剰余体を
@@ -186,4 +191,5 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 加えて、判別式非零性の係数輸送は完了したので、次はこの条件から付値部分環側の
 `HasSmoothReduction` を供給し、点の加法位数比較へ接続する。
 
-今回の追加定理は、この比較を論理的に完了したものであり、分解群外の元を構成したものではない。
+今回の追加定理は、`q = 3` の範囲でこの比較を論理的に完了したものであり、分解群外の元を
+構成したものではない。

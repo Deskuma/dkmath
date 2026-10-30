@@ -27,16 +27,13 @@ namespace DkMath.Lib.NumberTheory
 
 open WeierstrassCurve WeierstrassCurve.Affine
 
-variable {K : Type*} [Field K] [Fintype K]
-
-noncomputable local instance instDecidableEqFiniteFieldWeierstrassCard {α : Type*} : DecidableEq α :=
-  Classical.decEq _
+variable {K : Type*} [Field K] [Fintype K] [DecidableEq K]
 
 /-- 零点を除いた、指定有限 `x` 座標の Weierstrass 点の集合。 -/
 def nonzeroXFiber (W : WeierstrassCurve K) (x : K) : Set W.toAffine.Point :=
   {P | P ≠ 0 ∧ P.xc = x}
 
-omit [Fintype K] in
+omit [DecidableEq K] [Fintype K] in
 /-- 固定 `x` 座標の非零点は高々二点である。 -/
 theorem nonzeroXFiber_ncard_le_two (W : WeierstrassCurve K)
     [W.IsElliptic] (x : K) : (nonzeroXFiber W x).ncard ≤ 2 := by
@@ -70,6 +67,7 @@ theorem nonzeroXFiber_ncard_le_two (W : WeierstrassCurve K)
         Set.ncard_insert_le Q _
       _ = 2 := by simp
 
+omit [DecidableEq K] in
 /-- 有限体上の Weierstrass 点数は `2 * |K| + 1` 以下。 -/
 theorem card_weierstrass_points_le_two_mul_card_add_one
     (W : WeierstrassCurve K) [W.IsElliptic] :
@@ -184,7 +182,7 @@ theorem no_two_mul_order_of_weierstrass_of_card_le
 との接続は、この定理の外側で行う。
 -/
 theorem finite_smooth_torsion_ncard_le_two_mul_residue_card_add_one
-    {L : Type*} [Field L] [CharZero L] (A : ValuationSubring L)
+    {L : Type*} [Field L] [CharZero L] [DecidableEq L] (A : ValuationSubring L)
     (W : WeierstrassCurve A) [Fintype (IsLocalRing.ResidueField A)]
     (hgood : (W.map (IsLocalRing.residue A)).Δ ≠ 0) {n : ℕ}
     (hn : A.valuation (n : L) = 1) :

@@ -35,9 +35,6 @@ open DkMath.Lib.NumberTheory.WeierstrassVariableChange
 
 noncomputable section
 
-noncomputable local instance instDecidableEqFreyLocalTorsionOrderBound :
-    DecidableEq ℚ := instDecidableEqEllipticSmoothTorsionOrderBound
-
 /--
 For an integral Weierstrass model with good reduction at `q`, every point whose
 order is prime to `q` satisfies the elementary local bound `2*q+1`.

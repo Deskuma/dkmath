@@ -14,9 +14,6 @@ open DkMath.Lib.NumberTheory
 
 noncomputable section
 
-noncomputable local instance instDecidableEqFreyLocalTorsionOrderBoundTest :
-    DecidableEq ℚ := DkMath.Lib.NumberTheory.instDecidableEqFreyLocalTorsionOrderBound
-
 variable (q : ℕ) [Fact q.Prime]
 
 /-- 教科書回帰例：整数モデルの良還元と `q ∤ n` から局所位数上界を得る。 -/

@@ -32,10 +32,7 @@ open EllipticGoodReductionSeparation
 
 noncomputable section
 
-variable {L : Type*} [Field L] [CharZero L]
-
-noncomputable local instance instDecidableEqEllipticSmoothTorsionOrderBound
-    {α : Type*} : DecidableEq α := Classical.decEq _
+variable {L : Type*} [Field L] [CharZero L] [DecidableEq L]
 
 /--
 For a good-reduction model, a prime-to-residue-characteristic torsion point
@@ -63,8 +60,9 @@ theorem addOrderOf_le_two_mul_residue_card_add_one_of_good
   classical
   let S : Set (W.map A.subtype).toAffine.Point :=
     {P | HasSmoothReduction W P ∧ n • P = 0}
-  have hbound := finite_smooth_torsion_ncard_le_two_mul_residue_card_add_one
-    A W hgood hn
+  have hbound : S.Finite ∧ S.ncard ≤ 2 * Fintype.card (IsLocalRing.ResidueField A) + 1 := by
+    simpa [S] using
+      (finite_smooth_torsion_ncard_le_two_mul_residue_card_add_one A W hgood hn)
   have hsub : (↑(AddSubgroup.zmultiples Q) : Set (W.map A.subtype).toAffine.Point) ⊆ S := by
     intro P hP
     rcases AddSubgroup.mem_zmultiples_iff.mp hP with ⟨k, rfl⟩

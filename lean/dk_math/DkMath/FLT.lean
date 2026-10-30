@@ -36,6 +36,7 @@ import DkMath.FLT.FreyFiniteKernelDiscriminantDepth
 import DkMath.FLT.FreyFiniteKernelGeneration
 import DkMath.FLT.FreyFiniteKernelGlobal
 import DkMath.FLT.FreyFiniteKernelGoodReduction
+import DkMath.FLT.FreyHnoThreeGood
 import DkMath.FLT.FreyFiniteKernelHom
 import DkMath.FLT.FreyFiniteKernelIntegralModel
 import DkMath.FLT.FreyFiniteKernelLocalIntegrality
