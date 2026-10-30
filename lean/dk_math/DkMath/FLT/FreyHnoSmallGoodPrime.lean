@@ -81,6 +81,28 @@ theorem residual_hno_of_small_good_prime (hp5 : 5 ≤ p) (hbe : Even S.b)
     simpa [hQord] using hbound
   omega
 
+/--
+If a Cofixed stable line exists, every odd prime `q < p` must divide the
+Frey coefficient product. This is the contrapositive form of
+`residual_hno_of_small_good_prime`: it records the arithmetic support forced
+by the exceptional branch without pretending that the resulting primorial
+divisibility is already a contradiction.
+-/
+theorem residual_cofixed_forces_small_prime_support
+    (hp5 : 5 ≤ p) (hbe : Even S.b)
+    {L : Submodule (ZMod p) S.ResidualSpace}
+    (hline : Module.finrank (ZMod p) L = 1)
+    (hstable : S.IsGaloisStable L)
+    (hcofixed : IsCofixedOn S.residualRepresentation L) :
+    ∀ q : ℕ, Nat.Prime q → q ≠ 2 → q < p →
+      (q : ℤ) ∣ S.a * S.b * S.c := by
+  intro q hq hq2 hqp
+  let : Fact q.Prime := ⟨hq⟩
+  by_contra hd
+  exact
+    (S.residual_hno_of_small_good_prime hp5 hbe hq2 hqp hd)
+      ⟨L, hline, hstable, hcofixed⟩
+
 /-- `q = 3` の既存入口を、一般小素数定理の教材的特殊化として再公開する。 -/
 theorem residual_irreducible_of_three_good (hp5 : 5 ≤ p) (hbe : Even S.b)
     (hd : ¬ (3 : ℤ) ∣ S.a * S.b * S.c) :

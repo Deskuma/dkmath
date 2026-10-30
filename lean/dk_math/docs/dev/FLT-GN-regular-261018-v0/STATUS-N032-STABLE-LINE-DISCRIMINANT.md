@@ -205,6 +205,11 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
     Cofixed な一次元 Galois 安定直線の存在を排除。
   - `2*p` 位数の有理点、整数商モデルの判別式非可除性、局所上界 `2*q+1` を合成し、
     `2*p ≤ 2*q+1` と `q < p` の矛盾を得る。
+- `residual_cofixed_forces_small_prime_support`
+  - Cofixed な安定直線が実際に存在すると仮定し、`q < p` の全ての奇素数について
+    `q ∣ a*b*c` を導く。
+  - これは小さい良素数版 `hno` の対偶であり、プリモリアル型の可除性条件へ渡すための
+    算術的な必要条件である。これ自体は矛盾や FLT の結論を主張しない。
 - `residual_irreducible_of_three_good`
   - 上の一般定理を `q = 3` へ特殊化し、既存の oriented cofixed obstruction から
     `S.ResidualIsIrreducible` を直接供給。
@@ -223,7 +228,8 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 - `lake build DkMathTest.FLT.FreyHnoSmallGoodPrime`
 - `git diff --check`
 
-回帰テスト `DkMathTest.FLT.FreyHnoSmallGoodPrime` は一般 `q` の排除、`q = 3` の
-既約性、`a ≡ 7 mod 8` の分解群外逃避を `example` から使用する。三公開定理の
+回帰テスト `DkMathTest.FLT.FreyHnoSmallGoodPrime` は一般 `q` の排除、Cofixed 枝の
+小素数支持条件、`q = 3` の既約性、`a ≡ 7 mod 8` の分解群外逃避を `example` から使用する。
+四公開定理の
 `#print axioms` はいずれも `[propext, Classical.choice, Quot.sound]` であり、今回の
 追加ファイルには新しい `sorry` や独自 `axiom` はない。

@@ -28,6 +28,17 @@ example (hp5 : 5 ≤ p) (hbe : Even S.b)
         IsCofixedOn S.residualRepresentation L :=
   S.residual_hno_of_small_good_prime hp5 hbe hq2 hqp hd
 
+/-! The contrapositive support statement exposes the arithmetic footprint of
+    any surviving Cofixed line. -/
+example (hp5 : 5 ≤ p) (hbe : Even S.b)
+    {L : Submodule (ZMod p) S.ResidualSpace}
+    (hline : Module.finrank (ZMod p) L = 1)
+    (hstable : S.IsGaloisStable L)
+    (hcofixed : IsCofixedOn S.residualRepresentation L) :
+    ∀ q : ℕ, Nat.Prime q → q ≠ 2 → q < p →
+      (q : ℤ) ∣ S.a * S.b * S.c :=
+  S.residual_cofixed_forces_small_prime_support hp5 hbe hline hstable hcofixed
+
 /-! The `q = 3` instance supplies the oriented irreducibility conclusion. -/
 example (hp5 : 5 ≤ p) (hbe : Even S.b)
     (hd : ¬ (3 : ℤ) ∣ S.a * S.b * S.c) :
@@ -46,6 +57,7 @@ example (hp5 : 5 ≤ p) (ha8 : S.a % 8 = 7)
   S.residual_escape_outside_decomposition_of_three_good_seven hp5 ha8 hd A hA
 
 #print axioms DkMath.FLT.Frey.Source.residual_hno_of_small_good_prime
+#print axioms DkMath.FLT.Frey.Source.residual_cofixed_forces_small_prime_support
 #print axioms DkMath.FLT.Frey.Source.residual_irreducible_of_three_good
 #print axioms DkMath.FLT.Frey.Source.residual_escape_outside_decomposition_of_three_good_seven
 
