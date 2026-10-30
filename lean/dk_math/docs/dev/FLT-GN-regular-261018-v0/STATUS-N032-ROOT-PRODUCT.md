@@ -1099,3 +1099,11 @@ Wronskian を半核共通対の Wronskian と直接置換できるため、既�
 奇数核の倍写像逆元から選んだ二捩れ代表へ `kernelXAt = c` を輸送し、直前の
 特殊枝定理を適用するだけである。したがって半核対については、特殊枝の判別式零性が
 「二捩れ代表上」と「任意の特殊枝代表上」の両方で固定された。
+
+一般枝も同じ半核対へ直接接続した。`veluHalf_base_general_fiber_of_two_smul_not_mem`
+は `2 • P ∉ H` のとき `fiberPolynomial A_H D_H c` を全核軌道の一次因子積へ同定し、
+`veluHalf_base_general_fiber_discr_ne_zero_of_two_smul_not_mem` は軌道単射性から
+その判別式が非零であることを示す。これらを特殊枝の零性と貼り合わせ、
+`veluHalf_base_fiber_discr_eq_zero_iff_two_smul_mem` を得た。
+この同値は実際の半核対だけで成立し、標準 `RatFunc` 対・判別式族・判別式積公式を
+必要としない。残る標準対側の課題は、この直接分類を固定係数対へ輸送することである。

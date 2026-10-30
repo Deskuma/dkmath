@@ -361,6 +361,111 @@ theorem veluHalf_base_special_fiber_discr_eq_zero_of_two_smul_mem
     E H ho hcard T hT' hTneg c hTc'
 
 omit [CharZero K] [NeZero (2 : K)] in
+/-- [DkMath.Lib] 半核対の一般枝ファイバーは全核軌道因子へ分解する。
+
+`2 • P ∉ H` では軌道の x 座標が単射になる。半核分子・分母の次数公式から
+`fiberPolynomial A_H D_H c` のモニック性と次数上界を供給し、平行移動不変性で
+全軌道根を得た後、既存の単射根終端へ渡す。特殊枝の Wronskian はこの定理には
+現れず、一般枝と特殊枝の代数的役割を明確に分離する。 -/
+theorem veluHalf_base_general_fiber_of_two_smul_not_mem
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P : Points E) (hP : P ∉ H) (htwo : 2 • P ∉ H)
+    (c : AlgebraicClosure K)
+    (hPc : kernelXAt E H P hP = c) :
+    fiberPolynomial (veluHalfNumeratorBase E H)
+        (veluHalfDenominatorBase E H) c =
+      ∏ Q : H, (Polynomial.X - Polynomial.C ((P + Q.val).xc)) := by
+  have hAmonic := veluHalfNumeratorBase_monic E H
+  have hAdeg : (veluHalfNumeratorBase E H).natDegree = Nat.card H := by
+    calc
+      (veluHalfNumeratorBase E H).natDegree =
+          1 + 2 * (halfKernel E H).card := veluHalfNumeratorBase_natDegree E H
+      _ = 2 * (halfKernel E H).card + 1 := by omega
+      _ = Nat.card H := card_halfKernel E H ho
+  have hDdeg : (veluHalfDenominatorBase E H).natDegree =
+      2 * (halfKernel E H).card := veluHalfDenominatorBase_natDegree E H
+  have hDlt : (veluHalfDenominatorBase E H).natDegree <
+      (veluHalfNumeratorBase E H).natDegree := by
+    rw [hDdeg, hAdeg]
+    have hc := card_halfKernel E H ho
+    omega
+  have hp : (fiberPolynomial (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) c).Monic := by
+    unfold fiberPolynomial
+    exact hAmonic.sub_of_left (degree_lt_degree
+      ((natDegree_C_mul_le c (veluHalfDenominatorBase E H)).trans_lt hDlt))
+  have hdeg : (fiberPolynomial (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) c).natDegree ≤ Nat.card H := by
+    rw [fiberPolynomial_natDegree_eq_of_natDegree_lt hDlt, hAdeg]
+  have hD : veluHalfDenominatorBase E H ≠ 0 :=
+    (veluHalfDenominatorBase_monic E H).ne_zero
+  have hrel := veluX_eq_veluHalfNumeratorBase_div_denominator E H ho
+  have hroot : ∀ Q : H,
+      (fiberPolynomial (veluHalfNumeratorBase E H)
+        (veluHalfDenominatorBase E H) c).IsRoot ((P + Q.val).xc) := by
+    intro Q
+    have hQ : P + Q.val ∉ H := add_not_mem_kernel E H P hP Q
+    exact fiberPolynomial_isRoot_of_veluX_eq_quotient E H
+      (veluHalfNumeratorBase E H) (veluHalfDenominatorBase E H) hD hrel c
+      (P + Q.val) hQ (by rw [kernelXAt_translation E H P hP Q, hPc])
+  exact eq_fullKernel_factor_of_monic_of_injective_roots E H P htwo
+    (fiberPolynomial (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) c) hp hroot hdeg
+
+omit [NeZero (2 : K)] in
+/-- [DkMath.Lib] 半核対の一般枝ファイバーは判別式非零である。
+
+前定理の全核軌道因子分解と `orbit_x_injective_of_two_smul_not_mem` を
+`separable_prod_X_sub_C_iff` へ渡す。次数正性は半核分子の次数公式から供給されるため、
+判別式の非零性に標準係数対や正規化ファイバーを持ち込まない。 -/
+theorem veluHalf_base_general_fiber_discr_ne_zero_of_two_smul_not_mem
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P : Points E) (hP : P ∉ H) (htwo : 2 • P ∉ H)
+    (c : AlgebraicClosure K)
+    (hPc : kernelXAt E H P hP = c) :
+    (fiberPolynomial (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) c).discr ≠ 0 := by
+  rw [veluHalf_base_general_fiber_of_two_smul_not_mem E H ho P hP htwo c hPc]
+  have hinj : Function.Injective (fun Q : H => ((P + Q.val).xc)) :=
+    orbit_x_injective_of_two_smul_not_mem E H P htwo
+  have hsep : (∏ Q : H, (Polynomial.X - Polynomial.C ((P + Q.val).xc))).Separable := by
+    exact separable_prod_X_sub_C_iff.mpr hinj
+  have hdeg : 0 < (∏ Q : H,
+      (Polynomial.X - Polynomial.C ((P + Q.val).xc))).degree := by
+    rw [← natDegree_pos_iff_degree_pos,
+      Polynomial.natDegree_finsetProd_X_sub_C_eq_card]
+    simp only [Finset.card_univ]
+    exact Fintype.card_pos_iff.mpr ⟨(0 : H)⟩
+  exact discr_ne_zero_of_separable hdeg hsep
+
+/-- [DkMath.Lib] 半核対の有限ファイバー判別式は二捩れ分岐を正確に検出する。
+
+一般枝では前定理の分離性から判別式が非零、特殊枝では半核の平方因子から判別式が
+零になる。`1 < Nat.card H` は特殊枝で半核を一つ選ぶためだけに必要であり、
+この同値は標準 `RatFunc` 対の存在や判別式族の構成に依存しない。 -/
+theorem veluHalf_base_fiber_discr_eq_zero_iff_two_smul_mem
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H)) (hcard : 1 < Nat.card H)
+    (P : Points E) (hP : P ∉ H)
+    (c : AlgebraicClosure K)
+    (hPc : kernelXAt E H P hP = c) :
+    (fiberPolynomial (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) c).discr = 0 ↔ 2 • P ∈ H := by
+  constructor
+  · intro hzero
+    by_contra hnot
+    exact (veluHalf_base_general_fiber_discr_ne_zero_of_two_smul_not_mem
+      E H ho P hP hnot c hPc) hzero
+  · intro htwo
+    exact veluHalf_base_special_fiber_discr_eq_zero_of_two_smul_mem
+      E H ho hcard P hP htwo c hPc
+
+omit [CharZero K] [NeZero (2 : K)] in
 /-- [DkMath.Lib] 正規化された標準分母は核外平行移動点で非零である。
 
 `veluHalfDenominatorBase_eval_ne_zero_translation` が有限積分母の非衝突を
