@@ -210,6 +210,21 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
     `q ∣ a*b*c` を導く。
   - これは小さい良素数版 `hno` の対偶であり、プリモリアル型の可除性条件へ渡すための
     算術的な必要条件である。これ自体は矛盾や FLT の結論を主張しない。
+- `residual_cofixed_forces_prime_support`
+  - 既存の `2 ∣ a*b*c` と奇素数版を一つの点wise な入口へ統合し、素数 `q < p` 全体に
+    対して `(q : ℤ) ∣ a*b*c` を得る。
+  - `q = 2` は偶奇補題へ、`q ≠ 2` は小さい良素数の局所位数矛盾へ分岐する。
+- `residual_cofixed_forces_odd_prime_product_support`
+  - 上の点wise な可除性を、`p` 未満の奇素数の有限積が `a*b*c` を割るという一つの
+    整数係数定理へ束ねた。
+  - `Finset.prod_dvd_of_coprime` と相異なる素数の互いに素性だけを使い、primorial の
+    名前や正値性を仮定しない。従って後段で標準 `primorial (p - 1)` へ輸送できる。
+- `residual_cofixed_forces_primorial_support`
+  - `2` に対する既存の `two_dvd_product` と上記の奇素数支持を同じ有限積へ組み込み、
+    標準 primorial の形 `(primorial (p - 1) : ℤ) ∣ a*b*c` を得た。
+  - `primorial (p - 1)` を `p` 未満の素数積へ展開し、素数間の互いに素性で整数係数の
+    可除性を閉じている。これは依然として Cofixed 枝の必要条件であり、数値矛盾や FLT
+    の結論を意味しない。
 - `residual_irreducible_of_three_good`
   - 上の一般定理を `q = 3` へ特殊化し、既存の oriented cofixed obstruction から
     `S.ResidualIsIrreducible` を直接供給。
@@ -217,9 +232,10 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
   - `a ≡ 7 mod 8` のもとで、`q = 3` の排除を既存の分解群外逃避同値へ渡し、
     `σ ∉ A.decompositionSubgroup ℚ` と零成分からの脱出点の存在を供給。
 
-従って、今回新しく証明したのは `q` を一般化した局所位数矛盾であり、既約性と
-分解群外元の定理は既存の大域同値との合成である。`q ∣ a*b*c` の住所、`q = p`、
-全ての Frey 住所を覆う無条件 `hno`、および FLT の閉鎖は未解決のままである。
+従って、今回新しく証明したのは `q` を一般化した局所位数矛盾と、そこから得られる
+全素数の点wise 支持・有限積・primorial 支持であり、既約性と分解群外元の定理は既存の
+大域同値との合成である。`q ∣ a*b*c` の住所そのものを除く場合、`q = p`、全ての
+Frey 住所を覆う無条件 `hno`、および FLT の閉鎖は未解決のままである。
 
 ### 今回の検証
 
@@ -229,7 +245,7 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 - `git diff --check`
 
 回帰テスト `DkMathTest.FLT.FreyHnoSmallGoodPrime` は一般 `q` の排除、Cofixed 枝の
-小素数支持条件、`q = 3` の既約性、`a ≡ 7 mod 8` の分解群外逃避を `example` から使用する。
-四公開定理の
+小素数支持条件、全素数の点wise 支持条件とその有限積版、標準 primorial への輸送、
+`q = 3` の既約性、`a ≡ 7 mod 8` の分解群外逃避を `example` から使用する。七公開定理の
 `#print axioms` はいずれも `[propext, Classical.choice, Quot.sound]` であり、今回の
 追加ファイルには新しい `sorry` や独自 `axiom` はない。

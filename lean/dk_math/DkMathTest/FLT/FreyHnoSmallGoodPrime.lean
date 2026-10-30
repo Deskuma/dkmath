@@ -39,6 +39,37 @@ example (hp5 : 5 ≤ p) (hbe : Even S.b)
       (q : ℤ) ∣ S.a * S.b * S.c :=
   S.residual_cofixed_forces_small_prime_support hp5 hbe hline hstable hcofixed
 
+/-! The dyadic branch and the odd-prime branch share one pointwise support API. -/
+example (hp5 : 5 ≤ p) (hbe : Even S.b)
+    {L : Submodule (ZMod p) S.ResidualSpace}
+    (hline : Module.finrank (ZMod p) L = 1)
+    (hstable : S.IsGaloisStable L)
+    (hcofixed : IsCofixedOn S.residualRepresentation L) :
+    ∀ q : ℕ, Nat.Prime q → q < p →
+      (q : ℤ) ∣ S.a * S.b * S.c :=
+  S.residual_cofixed_forces_prime_support hp5 hbe hline hstable hcofixed
+
+/-! The finite product packages the same support condition without a hidden
+    primorial or positivity assumption. -/
+example (hp5 : 5 ≤ p) (hbe : Even S.b)
+    {L : Submodule (ZMod p) S.ResidualSpace}
+    (hline : Module.finrank (ZMod p) L = 1)
+    (hstable : S.IsGaloisStable L)
+    (hcofixed : IsCofixedOn S.residualRepresentation L) :
+    ((Finset.range p).filter (fun q => q.Prime ∧ q ≠ 2)).prod
+        (fun q => (q : ℤ)) ∣ S.a * S.b * S.c :=
+  S.residual_cofixed_forces_odd_prime_product_support
+    hp5 hbe hline hstable hcofixed
+
+/-! The same finite support is now expressed by the standard primorial. -/
+example (hp5 : 5 ≤ p) (hbe : Even S.b)
+    {L : Submodule (ZMod p) S.ResidualSpace}
+    (hline : Module.finrank (ZMod p) L = 1)
+    (hstable : S.IsGaloisStable L)
+    (hcofixed : IsCofixedOn S.residualRepresentation L) :
+    (primorial (p - 1) : ℤ) ∣ S.a * S.b * S.c :=
+  S.residual_cofixed_forces_primorial_support hp5 hbe hline hstable hcofixed
+
 /-! The `q = 3` instance supplies the oriented irreducibility conclusion. -/
 example (hp5 : 5 ≤ p) (hbe : Even S.b)
     (hd : ¬ (3 : ℤ) ∣ S.a * S.b * S.c) :
@@ -58,6 +89,9 @@ example (hp5 : 5 ≤ p) (ha8 : S.a % 8 = 7)
 
 #print axioms DkMath.FLT.Frey.Source.residual_hno_of_small_good_prime
 #print axioms DkMath.FLT.Frey.Source.residual_cofixed_forces_small_prime_support
+#print axioms DkMath.FLT.Frey.Source.residual_cofixed_forces_prime_support
+#print axioms DkMath.FLT.Frey.Source.residual_cofixed_forces_odd_prime_product_support
+#print axioms DkMath.FLT.Frey.Source.residual_cofixed_forces_primorial_support
 #print axioms DkMath.FLT.Frey.Source.residual_irreducible_of_three_good
 #print axioms DkMath.FLT.Frey.Source.residual_escape_outside_decomposition_of_three_good_seven
 

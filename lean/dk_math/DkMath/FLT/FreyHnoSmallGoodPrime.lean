@@ -9,6 +9,7 @@ import DkMath.FLT.FreyRationalTwoPTorsion
 import DkMath.FLT.FreyStableLineDiscriminantCriterion
 import DkMath.FLT.FreyStableLineLocalGlobal
 import DkMath.Lib.NumberTheory.FreyLocalTorsionOrderBound
+import Mathlib.NumberTheory.Primorial
 
 #print "file: DkMath.FLT.FreyHnoSmallGoodPrime"
 
@@ -102,6 +103,90 @@ theorem residual_cofixed_forces_small_prime_support
   exact
     (S.residual_hno_of_small_good_prime hp5 hbe hq2 hqp hd)
       ⟨L, hline, hstable, hcofixed⟩
+
+/--
+The dyadic factor can be folded into the same support statement. Thus every
+prime below `p`, not only every odd prime, is forced into the Frey coefficient
+product whenever a Cofixed line survives. The `q = 2` branch is supplied by
+the existing parity theorem; all other branches use the local good-prime
+obstruction above.
+-/
+theorem residual_cofixed_forces_prime_support
+    (hp5 : 5 ≤ p) (hbe : Even S.b)
+    {L : Submodule (ZMod p) S.ResidualSpace}
+    (hline : Module.finrank (ZMod p) L = 1)
+    (hstable : S.IsGaloisStable L)
+    (hcofixed : IsCofixedOn S.residualRepresentation L) :
+    ∀ q : ℕ, Nat.Prime q → q < p →
+      (q : ℤ) ∣ S.a * S.b * S.c := by
+  intro q hq hqp
+  by_cases hq2 : q = 2
+  · subst q
+    simpa using S.two_dvd_product
+  · exact
+      (S.residual_cofixed_forces_small_prime_support hp5 hbe hline hstable hcofixed)
+        q hq hq2 hqp
+
+/--
+The pointwise support condition can be assembled into one finite coprime
+product. The product ranges over the odd primes below `p`; this is the exact
+finite statement needed before introducing any separate primorial notation.
+-/
+theorem residual_cofixed_forces_odd_prime_product_support
+    (hp5 : 5 ≤ p) (hbe : Even S.b)
+    {L : Submodule (ZMod p) S.ResidualSpace}
+    (hline : Module.finrank (ZMod p) L = 1)
+    (hstable : S.IsGaloisStable L)
+    (hcofixed : IsCofixedOn S.residualRepresentation L) :
+    ((Finset.range p).filter (fun q => q.Prime ∧ q ≠ 2)).prod
+        (fun q => (q : ℤ)) ∣ S.a * S.b * S.c := by
+  classical
+  apply Finset.prod_dvd_of_coprime
+  · intro q hq r hr hqr
+    change IsCoprime (q : ℤ) (r : ℤ)
+    rw [Int.isCoprime_iff_nat_coprime]
+    have hq' := (Finset.mem_filter.mp hq).2.1
+    have hr' := (Finset.mem_filter.mp hr).2.1
+    simpa using (Nat.coprime_primes hq' hr').2 hqr
+  · intro q hq
+    rcases Finset.mem_filter.mp hq with ⟨hqrange, hqprime, hq2⟩
+    exact
+      (S.residual_cofixed_forces_small_prime_support hp5 hbe hline hstable hcofixed)
+        q hqprime hq2 (Finset.mem_range.mp hqrange)
+
+/--
+Including the forced factor `2` gives the standard primorial address below
+`p`. The proof keeps the integer target visible, so no positivity or
+nonzero-product hypothesis is smuggled into the divisibility statement.
+-/
+theorem residual_cofixed_forces_primorial_support
+    (hp5 : 5 ≤ p) (hbe : Even S.b)
+    {L : Submodule (ZMod p) S.ResidualSpace}
+    (hline : Module.finrank (ZMod p) L = 1)
+    (hstable : S.IsGaloisStable L)
+    (hcofixed : IsCofixedOn S.residualRepresentation L) :
+    (primorial (p - 1) : ℤ) ∣ S.a * S.b * S.c := by
+  have hp_sub : (p - 1) + 1 = p := by omega
+  have hcast : (primorial (p - 1) : ℤ) =
+      ((Finset.range p).filter Nat.Prime).prod (fun q => (q : ℤ)) := by
+    simp [primorial, hp_sub, Nat.cast_prod]
+  rw [hcast]
+  classical
+  apply Finset.prod_dvd_of_coprime
+  · intro q hq r hr hqr
+    change IsCoprime (q : ℤ) (r : ℤ)
+    rw [Int.isCoprime_iff_nat_coprime]
+    have hq' := (Finset.mem_filter.mp hq).2
+    have hr' := (Finset.mem_filter.mp hr).2
+    simpa using (Nat.coprime_primes hq' hr').2 hqr
+  · intro q hq
+    rcases Finset.mem_filter.mp hq with ⟨hqrange, hqprime⟩
+    by_cases hq2 : q = 2
+    · subst q
+      simpa using S.two_dvd_product
+    · exact
+        (S.residual_cofixed_forces_small_prime_support hp5 hbe hline hstable hcofixed)
+          q hqprime hq2 (Finset.mem_range.mp hqrange)
 
 /-- `q = 3` の既存入口を、一般小素数定理の教材的特殊化として再公開する。 -/
 theorem residual_irreducible_of_three_good (hp5 : 5 ≤ p) (hbe : Even S.b)
