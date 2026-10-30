@@ -312,6 +312,42 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
   veluX_standard_pair_special_fiber_of_odd_twoTorsion
     E H ho P Q hQ hrel hPdeg T hT hneg c hTc
 
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P)
+    (c e : AlgebraicClosure F)
+    (hPc : kernelXAt E H P hP = c) :
+    (fiberPolynomial (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) c).eval e =
+      (e - P.xc) *
+        (∏ Q : halfKernel E H, (e - (P + Q.val.val).xc)) ^ 2 :=
+  veluHalf_base_special_fiber_eval_eq_root_distance_product_sq
+    E H ho P hP hneg c hPc e
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (R : Points E) (hR : R ∉ H) (c : AlgebraicClosure F) :
+    (veluHalfNumeratorBase E H).eval R.xc -
+        c * (veluHalfDenominatorBase E H).eval R.xc =
+      (kernelXAt E H R hR - c) *
+        (veluHalfDenominatorBase E H).eval R.xc :=
+  veluHalf_base_eval_sub_eq_kernelXAt_sub_mul_denominator E H ho R hR c
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P R : Points E) (hP : P ∉ H) (hR : R ∉ H)
+    (hneg : -P = P) (c : AlgebraicClosure F)
+    (hPc : kernelXAt E H P hP = c) :
+    (kernelXAt E H R hR - c) *
+        (∏ Q ∈ halfKernel E H, (Q.val.xc - R.xc)) ^ 2 =
+      (R.xc - P.xc) *
+        (∏ Q : halfKernel E H,
+          (R.xc - (P + Q.val.val).xc)) ^ 2 :=
+  veluHalf_base_special_fiber_intersection_eval E H ho P hP hneg c hPc R hR
+
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_numerator_dvd
 #print axioms
@@ -354,5 +390,11 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.normalize_fiberPolynomial_eq_of_proportional
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_special_fiber_of_odd_twoTorsion
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_special_fiber_eval_eq_root_distance_product_sq
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_eval_sub_eq_kernelXAt_sub_mul_denominator
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_special_fiber_intersection_eval
 
 end DkMathTest.EllipticFiniteKernelDiscriminantNormalization

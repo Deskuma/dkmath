@@ -392,6 +392,138 @@ theorem veluHalf_base_special_fiber_of_odd_twoTorsion
     rw [fiberPolynomial_natDegree_eq_of_natDegree_lt hDlt, hAdeg]
   exact veluHalf_base_special_fiber E H ho P hP hneg c hPc hp hdeg
 
+/-- [DkMath.Lib] 特殊ファイバーを任意の有限 x 値で評価した根差積公式。
+
+二捩れ代表 `P` における半核ファイバー因子分解を `fiberFactor_eval` へ渡し、
+`A_H-cD_H` の評価を、単純根 `P.xc` と半核移動点の距離積の平方へ展開する。
+これは判別式積の `pair_relation` に必要な局所評価の直接入力であり、まだ別の
+二捩れ点における `kernelXAt` の値との商関係は仮定しない。
+-/
+theorem veluHalf_base_special_fiber_eval_eq_root_distance_product_sq
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P)
+    (c : AlgebraicClosure K)
+    (hPc : kernelXAt E H P hP = c)
+    (e : AlgebraicClosure K) :
+    (fiberPolynomial (veluHalfNumeratorBase E H)
+      (veluHalfDenominatorBase E H) c).eval e =
+      (e - P.xc) *
+        (∏ Q : halfKernel E H,
+          (e - (P + Q.val.val).xc)) ^ 2 := by
+  rw [veluHalf_base_special_fiber_of_odd_twoTorsion E H ho P hP hneg c hPc]
+  simpa using
+    (fiberFactor_eval (Finset.univ : Finset (halfKernel E H)) P.xc e
+      (fun Q : halfKernel E H => (P + Q.val.val).xc))
+
+omit [CharZero K] [NeZero (2 : K)] in
+/--
+[DkMath.Lib] 特殊ファイバー評価を `X_H-c` の値へ戻す。
+
+ `veluHalf_base_special_fiber_eval_eq_root_distance_product_sq` の左辺は
+ `fiberPolynomial A_H D_H c` の評価である。一方、Vélu の関数体表示を
+ 有限点 `R` の評価準同型へ通すと、分母が非零である限り
+
+ `A_H(R.x) - c D_H(R.x) = (X_H(R)-c) D_H(R.x)`
+
+ となる。本補題はこの橋だけを担当する。特殊枝の根積、分母の根積、
+ 二捩れ点の選択は仮定に押し込め、関数体の分数表示と正則評価の境界を
+一つの教材定理として固定する。
+-/
+theorem veluHalf_base_eval_sub_eq_kernelXAt_sub_mul_denominator
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (R : Points E) (hR : R ∉ H) (c : AlgebraicClosure K) :
+    (veluHalfNumeratorBase E H).eval R.xc -
+        c * (veluHalfDenominatorBase E H).eval R.xc =
+      (kernelXAt E H R hR - c) *
+        (veluHalfDenominatorBase E H).eval R.xc := by
+  let F := (E.toAffine⁄(AlgebraicClosure K)).FunctionField
+  let x := genericX E (AlgebraicClosure K)
+  let d' : regularAlgebra E R :=
+    ⟨Polynomial.aeval x (veluHalfDenominatorBase E H), by
+      exact pointValuation_aeval_le_one E R
+        (by intro h0; exact hR (h0 ▸ H.zero_mem)) _⟩
+  let a' : regularAlgebra E R :=
+    ⟨Polynomial.aeval x (veluHalfNumeratorBase E H), by
+      exact pointValuation_aeval_le_one E R
+        (by intro h0; exact hR (h0 ▸ H.zero_mem)) _⟩
+  let x' : regularAlgebra E R :=
+    ⟨veluX E H, veluX_regular_outside E H R hR⟩
+  have hDgeneric :
+      Polynomial.aeval x (veluHalfDenominatorBase E H) ≠ 0 := by
+    exact veluHalfDenominatorBase_eval_genericX_ne_zero E H
+  have hrel : veluX E H =
+      Polynomial.aeval x (veluHalfNumeratorBase E H) /
+        Polynomial.aeval x (veluHalfDenominatorBase E H) := by
+    simpa only [x] using veluX_eq_veluHalfNumeratorBase_div_denominator E H ho
+  have hcross : veluX E H *
+        Polynomial.aeval x (veluHalfDenominatorBase E H) =
+      Polynomial.aeval x (veluHalfNumeratorBase E H) := by
+    rw [hrel]
+    exact div_mul_cancel₀ _ hDgeneric
+  have hsub : x' * d' = a' := by
+    apply Subtype.ext
+    exact hcross
+  have hxeval : evalHom E R x' = kernelXAt E H R hR := by
+    rw [evalHom_apply]
+    exact value_eq E R (veluX E H) _ (kernelXAt E H R hR)
+      (kernelAt_congr E H R hR).1
+  have hdeval : evalHom E R d' =
+      (veluHalfDenominatorBase E H).eval R.xc := by
+    rw [evalHom_apply]
+    exact value_aeval_eq_eval E R
+      (by intro h0; exact hR (h0 ▸ H.zero_mem)) _
+  have haevel : evalHom E R a' =
+      (veluHalfNumeratorBase E H).eval R.xc := by
+    rw [evalHom_apply]
+    exact value_aeval_eq_eval E R
+      (by intro h0; exact hR (h0 ▸ H.zero_mem)) _
+  have hev := congrArg (evalHom E R) hsub
+  have hmain :
+      kernelXAt E H R hR * (veluHalfDenominatorBase E H).eval R.xc =
+        (veluHalfNumeratorBase E H).eval R.xc := by
+    simpa only [map_mul, hxeval, hdeval, haevel] using hev
+  rw [← hmain]
+  ring
+
+omit [NeZero (2 : K)] in
+/-- [DkMath.Lib] 二つの有限評価を一つの根差積へ接続する。
+
+源の二捩れ代表 `P` における特殊ファイバーを、別の核外点 `R` で評価する。
+前定理が左辺を `(X_H(R)-c) D_H(R.x)` へ戻し、分母評価の根積公式が
+`D_H(R.x) = (∏(x(Q)-R.x))²` を供給する。その結果、半核移動根の距離積と
+商座標の差が同じ等式に現れる。これは後続の `pair_relation` に渡す局所
+交差評価であり、まだ三つの二捩れ根を掛け合わせる段階ではない。
+-/
+theorem veluHalf_base_special_fiber_intersection_eval
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P)
+    (c : AlgebraicClosure K) (hPc : kernelXAt E H P hP = c)
+    (R : Points E) (hR : R ∉ H) :
+    (kernelXAt E H R hR - c) *
+        (∏ Q ∈ halfKernel E H, (Q.val.xc - R.xc)) ^ 2 =
+      (R.xc - P.xc) *
+        (∏ Q : halfKernel E H,
+          (R.xc - (P + Q.val.val).xc)) ^ 2 := by
+  have hspecial := veluHalf_base_special_fiber_eval_eq_root_distance_product_sq
+    E H ho P hP hneg c hPc R.xc
+  have hvalue := veluHalf_base_eval_sub_eq_kernelXAt_sub_mul_denominator
+    E H ho R hR c
+  have hden := veluHalfDenominatorBase_eval_eq_root_product_sq E H R.xc
+  have hfiber :
+      (fiberPolynomial (veluHalfNumeratorBase E H)
+        (veluHalfDenominatorBase E H) c).eval R.xc =
+        (veluHalfNumeratorBase E H).eval R.xc -
+          c * (veluHalfDenominatorBase E H).eval R.xc := by
+    simp only [fiberPolynomial, eval_sub, eval_mul, eval_C]
+  rw [hfiber, hvalue, hden] at hspecial
+  simpa only [← Finset.prod_pow] using hspecial
+
 omit [NeZero (2 : K)] in
 /-- [DkMath.Lib] 標準対の二捩れ特殊ファイバーを半核因子へ同定する。
 

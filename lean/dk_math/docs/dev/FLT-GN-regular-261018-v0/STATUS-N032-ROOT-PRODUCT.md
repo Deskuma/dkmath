@@ -1146,3 +1146,33 @@ Wronskian 根を個別に再仮定する必要がなくなった。一方、標�
 判別式変換則を一切必要としない。したがって `hprod` 主経路では、まず明示的族を
 使って分岐値を固定し、判別式スカラー倍則は標準対の値まで輸送する必要が生じた時点で
 独立に追加する方針とする。
+
+`hprod` の局所入力として、`veluHalf_base_special_fiber_eval_eq_root_distance_product_sq`
+も追加した。二捩れ代表 `P` の特殊ファイバー因子分解を `fiberFactor_eval` で評価し、
+任意の有限 `e` に対して
+`(A_H-cD_H)(e) = (e-P.xc) * (∏_Q (e-(P+Q).xc))^2`
+を得る。これは判別式積の `pair_relation` に必要な「特殊ファイバーを評価した根差積」
+を、実際の半核添字で直接供給する。なお、この段階では別の二捩れ点の商座標との関係や
+三組の根差積の乗法はまだ仮定・証明していない。
+
+今回、関数体上の半核表示を有限点へ評価する橋を補強した。
+`veluHalf_base_eval_sub_eq_kernelXAt_sub_mul_denominator` は任意の核外点 `R` と
+有限値 `c` に対し、
+`A_H(R.x)-c D_H(R.x) = (X_H(R)-c) D_H(R.x)`
+を証明する。証明は `veluX_eq_veluHalfNumeratorBase_div_denominator` を分母で
+交差乗算し、`regularAlgebra` の `evalHom` へ通している。従ってこの定理は、点での
+分母非零性を別仮定にせず、関数体の恒等式と正則評価だけを使う係数側の教科書橋である。
+
+さらに `veluHalf_base_special_fiber_intersection_eval` を追加した。上の評価橋、
+`veluHalfDenominatorBase_eval_eq_root_product_sq`、および二捩れ代表の特殊ファイバー
+因子分解を合成し、
+`(X_H(R)-c) (∏_Q (x(Q)-R.x))²`
+と
+`(R.x-P.x) (∏_Q (R.x-x(P+Q)))²`
+の一致を得る。これは `pair_relation` の `hF` に対応する、実際の半核を添字にした
+局所交差評価である。まだ `translated_root_product_relation` の点群特殊化、三組の
+二捩れ根の積、商判別式の積公式は閉じていない。
+
+次に攻める具体的な補題は、この交差評価の右辺の移動根積を
+`translated_root_product_relation` の左辺へ同定し、半核接線積 `U` と結ぶことである。
+その後に `pair_relation` を三組へ適用する。
