@@ -231,6 +231,87 @@ theorem veluHalf_base_isCoprime
   rw [hAeq, hDeq]
   exact (isCoprime_mul_units_left huPoly huPoly F G).mpr hcop
 
+omit [NeZero (2 : K)] in
+/-- [DkMath.Lib] 標準 `RatFunc` 対を半核対の共通非零スカラー倍へ戻す。
+
+標準対 `(F,G)` の交差乗算と互いに素性を、半核対 `(A_H,D_H)` を第一の対として
+`proportional_of_cross_relation_of_coprime` に渡す。標準分子の次数は半核分子と
+同じ `Nat.card H` なので商の次数が零となり、
+`F = C u * A_H`, `G = C u * D_H` を得る。これはモニック性を仮定せずに
+係数対の正規化自由度を明示する橋であり、後続の判別式・ファイバー輸送が
+「単位倍を除けば半核対である」ことを直接利用できるようにする。 -/
+theorem veluX_standard_pair_proportional_to_veluHalf_base
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (F G : (AlgebraicClosure K)[X])
+    (hG : Polynomial.aeval (genericX E (AlgebraicClosure K)) G ≠ 0)
+    (hrel : veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure K)) F /
+        Polynomial.aeval (genericX E (AlgebraicClosure K)) G)
+    (hFdeg : F.natDegree = Nat.card H) :
+    ∃ u : AlgebraicClosure K, u ≠ 0 ∧
+      F = Polynomial.C u * veluHalfNumeratorBase E H ∧
+      G = Polynomial.C u * veluHalfDenominatorBase E H := by
+  have hAne : veluHalfNumeratorBase E H ≠ 0 :=
+    (veluHalfNumeratorBase_monic E H).ne_zero
+  have hFne : F ≠ 0 := by
+    intro hF
+    have : F.natDegree = 0 := by simp [hF]
+    rw [hFdeg] at this
+    exact (Nat.ne_of_gt Nat.card_pos) this
+  have hcross := veluX_standard_pair_cross_relation E H ho F G hG hrel
+  have hAdeg : F.natDegree ≤
+      (veluHalfNumeratorBase E H).natDegree := by
+    rw [hFdeg]
+    calc
+      Nat.card H = 1 + 2 * (halfKernel E H).card := by
+        symm
+        rw [← card_halfKernel E H ho]
+        omega
+      _ = (veluHalfNumeratorBase E H).natDegree :=
+        (veluHalfNumeratorBase_natDegree E H).symm
+      _ ≤ (veluHalfNumeratorBase E H).natDegree := le_rfl
+  exact proportional_of_cross_relation_of_coprime
+    (veluHalf_base_isCoprime E H ho) hAne hFne hcross.symm hAdeg
+
+omit [CharZero K] [NeZero (2 : K)] in
+/-- [DkMath.Lib] 標準対のファイバーを半核対のファイバーへ輸送する。
+
+前定理の共通スカラー倍 `F = C u * A_H`, `G = C u * D_H` は、各ファイバー
+`F-cG` に同じ `C u` を因子として持たせる。ここでは割り算を使わず、
+`fiberPolynomial` の定義を展開して可換環の分配法則だけで
+`fiberPolynomial F G c = C u * fiberPolynomial A_H D_H c` を固定する。
+判別式を直接比較する前段として、単位倍の影響を一箇所に隔離する教科書的橋である。
+-/
+theorem fiberPolynomial_eq_C_mul_of_proportional
+    {A D F G : (AlgebraicClosure K)[X]} {u c : AlgebraicClosure K}
+    (hF : F = Polynomial.C u * A)
+    (hG : G = Polynomial.C u * D) :
+    fiberPolynomial F G c = Polynomial.C u * fiberPolynomial A D c := by
+  rw [fiberPolynomial, fiberPolynomial, hF, hG]
+  simp only [mul_sub]
+  ring
+
+omit [CharZero K] [NeZero (2 : K)] in
+/-- [DkMath.Lib] 共通非零スカラー倍はファイバーの正規化を変えない。
+
+`normalize` は多項式の単元倍を同じ代表へ送る。従って標準対と半核対の
+ファイバーが `C u` 倍で一致するなら、非零 `u` のもとで正規化ファイバーも
+一致する。これは根積の形を直接比較する際に、係数対の選択依存性を消す最後の
+代数的整理である。
+-/
+theorem normalize_fiberPolynomial_eq_of_proportional
+    {A D F G : (AlgebraicClosure K)[X]} {u c : AlgebraicClosure K}
+    (hu : u ≠ 0)
+    (hF : F = Polynomial.C u * A)
+    (hG : G = Polynomial.C u * D) :
+    normalize (fiberPolynomial F G c) = normalize (fiberPolynomial A D c) := by
+  rw [fiberPolynomial_eq_C_mul_of_proportional hF hG]
+  apply normalize_eq_normalize_iff_associated.mpr
+  exact associated_unit_mul_left _ _
+    (Polynomial.isUnit_C.mpr (isUnit_iff_ne_zero.mpr hu))
+
 /-- [DkMath.Lib] 半核対を直接用いた特殊ファイバー因子分解。
 
 `veluX` の明示的半核表示、半核対の互いに素性、奇数核二捩れ枝の Wronskian 根を
@@ -310,6 +391,45 @@ theorem veluHalf_base_special_fiber_of_odd_twoTorsion
       (veluHalfDenominatorBase E H) c).natDegree ≤ Nat.card H := by
     rw [fiberPolynomial_natDegree_eq_of_natDegree_lt hDlt, hAdeg]
   exact veluHalf_base_special_fiber E H ho P hP hneg c hPc hp hdeg
+
+omit [NeZero (2 : K)] in
+/-- [DkMath.Lib] 標準対の二捩れ特殊ファイバーを半核因子へ同定する。
+
+標準 `RatFunc` 対の次数条件と関数体表示から共通スカラー倍を取り出し、前二定理
+で正規化ファイバーを半核対へ輸送する。その後、半核対について既に証明済みの
+二捩れ特殊枝分解を使う。従って標準対側に互いに素性・モニック性・Wronskian
+零点を重ねて仮定する必要はなく、無限遠点での次数正規化だけが残る。
+-/
+theorem veluX_standard_pair_special_fiber_of_odd_twoTorsion
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (F G : (AlgebraicClosure K)[X])
+    (hG : Polynomial.aeval (genericX E (AlgebraicClosure K)) G ≠ 0)
+    (hrel : veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure K)) F /
+        Polynomial.aeval (genericX E (AlgebraicClosure K)) G)
+    (hFdeg : F.natDegree = Nat.card H)
+    (P : Points E) (hP : P ∉ H) (hneg : -P = P)
+    (c : AlgebraicClosure K)
+    (hPc : kernelXAt E H P hP = c) :
+    normalize (fiberPolynomial F G c) =
+      fiberFactor (Finset.univ : Finset (halfKernel E H)) P.xc
+        (fun Q : halfKernel E H => (P + Q.val.val).xc) := by
+  obtain ⟨u, hu, hF, hG'⟩ :=
+    veluX_standard_pair_proportional_to_veluHalf_base E H ho F G hG hrel hFdeg
+  have htransport := normalize_fiberPolynomial_eq_of_proportional (c := c) hu hF hG'
+  have hbase := veluHalf_base_special_fiber_of_odd_twoTorsion
+    E H ho P hP hneg c hPc
+  calc
+    normalize (fiberPolynomial F G c) =
+        normalize (fiberPolynomial (veluHalfNumeratorBase E H)
+          (veluHalfDenominatorBase E H) c) := htransport
+    _ = normalize (fiberFactor (Finset.univ : Finset (halfKernel E H)) P.xc
+          (fun Q : halfKernel E H => (P + Q.val.val).xc)) := by rw [hbase]
+    _ = fiberFactor (Finset.univ : Finset (halfKernel E H)) P.xc
+          (fun Q : halfKernel E H => (P + Q.val.val).xc) :=
+      (fiberFactor_monic _ _ _).normalize_eq_self
 
 /-- [DkMath.Lib] 非自明な奇数核の特殊ファイバーは判別式零である。
 

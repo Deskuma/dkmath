@@ -268,6 +268,50 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
   veluHalf_base_fiber_discr_eq_zero_iff_two_smul_mem
     E H ho hcard P hP c hPc
 
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P Q : (AlgebraicClosure F)[X])
+    (hQ : Polynomial.aeval (genericX E (AlgebraicClosure F)) Q ≠ 0)
+    (hrel : veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure F)) P /
+        Polynomial.aeval (genericX E (AlgebraicClosure F)) Q)
+    (hPdeg : P.natDegree = Nat.card H) :
+    ∃ u : AlgebraicClosure F, u ≠ 0 ∧
+      P = Polynomial.C u * veluHalfNumeratorBase E H ∧
+      Q = Polynomial.C u * veluHalfDenominatorBase E H :=
+  veluX_standard_pair_proportional_to_veluHalf_base
+    E H ho P Q hQ hrel hPdeg
+
+example (A D P Q : (AlgebraicClosure F)[X]) (u c : AlgebraicClosure F)
+    (hP : P = Polynomial.C u * A) (hQ : Q = Polynomial.C u * D) :
+    fiberPolynomial P Q c = Polynomial.C u * fiberPolynomial A D c :=
+  fiberPolynomial_eq_C_mul_of_proportional hP hQ
+
+example (A D P Q : (AlgebraicClosure F)[X]) (u c : AlgebraicClosure F)
+    (hu : u ≠ 0)
+    (hP : P = Polynomial.C u * A) (hQ : Q = Polynomial.C u * D) :
+    normalize (fiberPolynomial P Q c) = normalize (fiberPolynomial A D c) :=
+  normalize_fiberPolynomial_eq_of_proportional hu hP hQ
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P Q : (AlgebraicClosure F)[X])
+    (hQ : Polynomial.aeval (genericX E (AlgebraicClosure F)) Q ≠ 0)
+    (hrel : veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure F)) P /
+        Polynomial.aeval (genericX E (AlgebraicClosure F)) Q)
+    (hPdeg : P.natDegree = Nat.card H)
+    (T : Points E) (hT : T ∉ H) (hneg : -T = T)
+    (c : AlgebraicClosure F)
+    (hTc : kernelXAt E H T hT = c) :
+    normalize (fiberPolynomial P Q c) =
+      fiberFactor (Finset.univ : Finset (halfKernel E H)) T.xc
+        (fun R : halfKernel E H => (T + R.val.val).xc) :=
+  veluX_standard_pair_special_fiber_of_odd_twoTorsion
+    E H ho P Q hQ hrel hPdeg T hT hneg c hTc
+
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_numerator_dvd
 #print axioms
@@ -302,5 +346,13 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_general_fiber_discr_ne_zero_of_two_smul_not_mem
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_fiber_discr_eq_zero_iff_two_smul_mem
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_proportional_to_veluHalf_base
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.fiberPolynomial_eq_C_mul_of_proportional
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.normalize_fiberPolynomial_eq_of_proportional
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_special_fiber_of_odd_twoTorsion
 
 end DkMathTest.EllipticFiniteKernelDiscriminantNormalization

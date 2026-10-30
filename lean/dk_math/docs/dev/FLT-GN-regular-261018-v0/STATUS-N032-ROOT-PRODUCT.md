@@ -1107,3 +1107,28 @@ Wronskian を半核共通対の Wronskian と直接置換できるため、既�
 `veluHalf_base_fiber_discr_eq_zero_iff_two_smul_mem` を得た。
 この同値は実際の半核対だけで成立し、標準 `RatFunc` 対・判別式族・判別式積公式を
 必要としない。残る標準対側の課題は、この直接分類を固定係数対へ輸送することである。
+
+今回、標準 `RatFunc` 対の次数条件から半核共通対への共通スカラー倍を明示する
+`veluX_standard_pair_proportional_to_veluHalf_base` を追加した。交差乗算、半核対の
+互いに素性、および `F.natDegree = Nat.card H` を組み合わせ、標準側の互いに素性を
+追加仮定せずに `F = C u * A_H`, `G = C u * D_H` と `u ≠ 0` を得る。これは
+「標準対は半核対の単位倍」という係数体の曖昧さを、次数比較付きの一般代数補題へ
+分離した結果である。
+
+続いて `fiberPolynomial_eq_C_mul_of_proportional` と
+`normalize_fiberPolynomial_eq_of_proportional` を実装した。前者は `F-cG` の共通
+スカラー因子を分配法則だけで取り出し、後者は `C u` が多項式環の単元であることと
+`normalize_eq_normalize_iff_associated` から正規化ファイバーの一致を得る。したがって
+標準対の判別式・根積計算を行う前に、正規化ファイバーを半核対へ直接置換できる。
+
+さらに `veluX_standard_pair_special_fiber_of_odd_twoTorsion` を追加した。標準対の
+関数体表示、分子次数条件、核外二捩れ点での有限評価だけを入力に取り、共通スカラー
+倍による正規化輸送と、既存の半核特殊ファイバー因子分解を合成して、標準対の正規化
+ファイバーを半核 `fiberFactor` へ同定する。従来の標準側モニック性・分母次数比較・
+Wronskian 根を個別に再仮定する必要がなくなった。一方、標準対の存在、関数体表示、
+および無限遠点での分子次数条件自体は未解決の境界として残している。
+
+次の具体的な補題は、非零共通スカラー倍に対する判別式の変換則を固定し、上記の
+正規化ファイバー輸送を判別式零性・非零性へ接続することである。その後、標準対の
+存在定理が `F.natDegree = Nat.card H` を供給できれば、半核側の
+`discr = 0 ↔ 2 • P ∈ H` を標準 `RatFunc` 表示へ移せる。
