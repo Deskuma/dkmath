@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Lib.NumberTheory.FreyLocalResidueField
+import Mathlib.RingTheory.LocalRing.ResidueField.Basic
 
 #print "file: DkMath.Lib.NumberTheory.FreyLocalValuationSubring"
 
@@ -24,6 +25,9 @@ namespace DkMath.Lib.NumberTheory.FreyLocalReduction
 
 noncomputable section
 
+noncomputable local instance instDecidableEqFreyLocalValuationSubring {α : Type*} :
+    DecidableEq α := Classical.decEq _
+
 variable (q : ℕ) [Fact q.Prime]
 
 /-- The valuation subring of `ℚ` attached to the maximal ideal of `LocalRing q`. -/
@@ -40,6 +44,59 @@ noncomputable def localRingValuationSubringEquiv :
     LocalRing q ≃+* localValuationSubring q :=
   IsDiscreteValuationRing.equivValuationSubring
 
+/-!
+The residue-field functor is functorial for this local ring equivalence.  This
+is the missing finite-field bridge: the two presentations of the local ring
+have canonically equivalent residue fields, rather than merely residue fields
+of the same cardinality.
+-/
+
+/-- The residue-field equivalence induced by the valuation-subring presentation. -/
+noncomputable def localResidueFieldValuationSubringEquiv :
+    IsLocalRing.ResidueField (LocalRing q) ≃+*
+      IsLocalRing.ResidueField (localValuationSubring q) :=
+  IsLocalRing.ResidueField.mapEquiv (localRingValuationSubringEquiv q)
+
+@[simp]
+theorem localResidueFieldValuationSubringEquiv_residue (x : LocalRing q) :
+    localResidueFieldValuationSubringEquiv q (IsLocalRing.residue (LocalRing q) x) =
+      IsLocalRing.residue (localValuationSubring q)
+        (localRingValuationSubringEquiv q x) := by
+  let : IsLocalHom (localRingValuationSubringEquiv q).toRingHom :=
+    ⟨fun a ha => by
+      have h' : IsUnit ((localRingValuationSubringEquiv q).symm
+          (localRingValuationSubringEquiv q a)) := IsUnit.map
+        (localRingValuationSubringEquiv q).symm ha
+      simpa using h'⟩
+  exact IsLocalRing.ResidueField.map_residue
+    (localRingValuationSubringEquiv q).toRingHom x
+
+/-!
+Transporting the previously identified residue field of `LocalRing q` now
+gives an explicit equivalence for the valuation-subring presentation.  The
+finite and cardinality instances below are intentionally local to this
+module; consumers can use the theorem without unfolding any construction.
+-/
+
+/-- The valuation-subring residue field is canonically `ZMod q`. -/
+noncomputable def localValuationSubringResidueFieldEquiv :
+    IsLocalRing.ResidueField (localValuationSubring q) ≃+* ZMod q :=
+  (localResidueFieldValuationSubringEquiv q).symm.trans (localResidueFieldEquiv q)
+
+noncomputable instance localValuationSubringResidueField_finite :
+    Finite (IsLocalRing.ResidueField (localValuationSubring q)) :=
+  Finite.of_equiv (ZMod q) (localValuationSubringResidueFieldEquiv q).symm.toEquiv
+
+noncomputable instance localValuationSubringResidueField_fintype :
+    Fintype (IsLocalRing.ResidueField (localValuationSubring q)) :=
+  Fintype.ofFinite _
+
+/-- The transported valuation-subring residue field has exactly `q` elements. -/
+theorem localValuationSubringResidueField_card :
+    Fintype.card (IsLocalRing.ResidueField (localValuationSubring q)) = q := by
+  rw [← Nat.card_eq_fintype_card,
+    Nat.card_congr (localValuationSubringResidueFieldEquiv q).toEquiv, Nat.card_zmod]
+
 /-- The equivalence embeds a localised integer as the same rational number. -/
 theorem localRingValuationSubringEquiv_coe (x : LocalRing q) :
     ((localRingValuationSubringEquiv q x : localValuationSubring q) : ℚ) =
@@ -51,6 +108,22 @@ noncomputable def mapModelToValuationSubring
     (W : WeierstrassCurve (LocalRing q)) :
     WeierstrassCurve (localValuationSubring q) :=
   W.map (localRingValuationSubringEquiv q).toRingHom
+
+/-- Discriminants of the two residue models correspond under the residue-field equivalence. -/
+theorem mapModelToValuationSubring_residue_discriminant_map
+    (W : WeierstrassCurve (LocalRing q)) :
+    localResidueFieldValuationSubringEquiv q
+        ((W.map (IsLocalRing.residue (LocalRing q))).Δ) =
+      ((mapModelToValuationSubring q W).map
+        (IsLocalRing.residue (localValuationSubring q))).Δ := by
+  let : IsLocalHom (localRingValuationSubringEquiv q).toRingHom :=
+    ⟨fun a ha => by
+      have h' : IsUnit ((localRingValuationSubringEquiv q).symm
+          (localRingValuationSubringEquiv q a)) := IsUnit.map
+        (localRingValuationSubringEquiv q).symm ha
+      simpa using h'⟩
+  rw [WeierstrassCurve.map_Δ, WeierstrassCurve.map_Δ]
+  simp [mapModelToValuationSubring]
 
 /--
 After transporting coefficients, base change to `ℚ` is the same as base change from

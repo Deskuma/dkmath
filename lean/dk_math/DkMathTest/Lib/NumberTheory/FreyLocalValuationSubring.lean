@@ -34,9 +34,35 @@ example (W : WeierstrassCurve (LocalRing q)) :
       W.map (algebraMap (LocalRing q) ℚ) :=
   mapModelToValuationSubring_map_subtype q W
 
+/-! The residue-field transport is an actual equivalence, not only a cardinality
+statement.  This is the API consumed by the valuation-subring torsion bound. -/
+
+noncomputable example :
+    IsLocalRing.ResidueField (LocalRing q) ≃+*
+      IsLocalRing.ResidueField (localValuationSubring q) :=
+  localResidueFieldValuationSubringEquiv q
+
+noncomputable example :
+    IsLocalRing.ResidueField (localValuationSubring q) ≃+* ZMod q :=
+  localValuationSubringResidueFieldEquiv q
+
+example : Fintype.card (IsLocalRing.ResidueField (localValuationSubring q)) = q :=
+  localValuationSubringResidueField_card q
+
+example (W : WeierstrassCurve (LocalRing q)) :
+    localResidueFieldValuationSubringEquiv q
+        ((W.map (IsLocalRing.residue (LocalRing q))).Δ) =
+      ((mapModelToValuationSubring q W).map
+        (IsLocalRing.residue (localValuationSubring q))).Δ :=
+  mapModelToValuationSubring_residue_discriminant_map q W
+
 #print axioms localRingValuationSubringEquiv
 #print axioms localRingValuationSubringEquiv_coe
 #print axioms mapModelToValuationSubring_map_subtype
+#print axioms localResidueFieldValuationSubringEquiv
+#print axioms localValuationSubringResidueFieldEquiv
+#print axioms localValuationSubringResidueField_card
+#print axioms mapModelToValuationSubring_residue_discriminant_map
 
 end
 end DkMathTest.Lib.NumberTheory.FreyLocalValuationSubring

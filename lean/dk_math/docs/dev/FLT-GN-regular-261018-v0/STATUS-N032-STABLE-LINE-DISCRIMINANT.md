@@ -82,6 +82,20 @@
 - `mapModelToValuationSubring_map_subtype`
   - `LocalRing q` 上の Weierstrass モデルを付値部分環へ移した後の `ℚ` 基底変換が、
     元の局所化モデルの基底変換と一致することを証明。
+- `localResidueFieldValuationSubringEquiv`
+  - 上の環同値から、`ResidueField (LocalRing q)` と
+    `ResidueField (localValuationSubring q)` の環同値を構成。
+  - `localResidueFieldValuationSubringEquiv_residue` により、局所環の係数を
+    先に剰余へ送る場合と、付値部分環へ輸送してから剰余へ送る場合の可換性を固定。
+- `localValuationSubringResidueFieldEquiv` / `localValuationSubringResidueField_card`
+  - 付値部分環側の剰余体を `ZMod q` と同定し、その `Fintype.card` が厳密に `q` であることを証明。
+  - これで、局所化表現と `ValuationSubring ℚ` 表現の双方で、有限体のサイズを同じ
+    算術値として参照できる。
+- `mapModelToValuationSubring_residue_discriminant_map`
+  - 局所化モデルと付値部分環へ輸送したモデルの判別式が、上の剰余体環同値で
+    正確に対応することを証明。
+  - 従って、局所化表示での良還元判定を付値部分環表示へ移す際に、判別式非零性を
+    別の公理や同型の選択に依存せずに再利用できる。
 
 ## 数学的境界
 
@@ -134,5 +148,11 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 有理数体の付値部分環への係数輸送は今回完了した。次はこの環同値に沿って剰余体同値、
 滑らかな点の述語、そして `reduce_injOn_torsion` を輸送するか、局所化版の還元単射補題を
 直接供給する必要がある。
+
+今回、剰余体同値そのものとその `ZMod q` カード計算まで完了した。残る未解決義務は、
+この同値を点の座標・`HasSmoothReduction`・`reducePointSmooth` に持ち上げ、
+有理 `2*p` 捩れ点の巡回部分群を実際に有限剰余点群へ単射に送ることである。
+加えて、判別式非零性の係数輸送は完了したので、次はこの条件から付値部分環側の
+`HasSmoothReduction` を供給し、点の加法位数比較へ接続する。
 
 今回の追加定理は、この比較を論理的に完了したものであり、分解群外の元を構成したものではない。
