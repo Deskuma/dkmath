@@ -1220,3 +1220,20 @@ Wronskian 根を個別に再仮定する必要がなくなった。一方、標�
 `hTtwo` も `Affine.Point.some r₁ t₁ hT` と `2T=0` から自動供給する経路を用意した。
 この段階で、実際の半核根差積に残る局所入力は、三根の評価・分離と選択した affine
 2捩れ点の点群等式になった。
+
+今回さらに EllipticFiniteKernelPairRelation.lean を追加し、
+veluHalf_base_pair_relation_of_translated_root_product を実装した。これは
+veluHalf_base_special_fiber_intersection_eval の交差評価を、半核距離積
+Hj,Hk,Hl と移動根積 G の具体的な値へ展開し、既存の pair_relation へ
+直接渡す一組分の判別式組立てである。従って証明した内容は、
+
+(Xj-Xk)^2 Hj^4 Hk^4 = (ek-ej)^(2*(2*n+1)) Hl^4
+
+を、実際の kernelXAt と半核積について得ることじゃ。hF は新たな仮定ではなく
+交差評価から自動生成し、未確定の幾何学的責務は htranslated として明示的に
+残した。すなわち、一般 Weierstrass 根差積定理を実際の点群加法へ同定する作業と、
+三組を掛け合わせる discriminant_product_of_pair_relations は未完成である。
+
+対象の新規モジュール、回帰テスト、DkMath.Lib をビルドした。
+新しい一組定理の #print axioms は [propext, Classical.choice, Quot.sound] で、
+独自公理や sorry は導入していない。

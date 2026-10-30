@@ -307,5 +307,6 @@ import DkMathTest.Lib.Algebra.FiniteProductWronskian
 import DkMathTest.Lib.NumberTheory.WeierstrassTwoTorsionTranslate
 import DkMathTest.Lib.NumberTheory.WeierstrassTwoTorsionTranslateGeneral
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelTranslatedRootProduct
+import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelPairRelation
 
 #print "file: DkMathTest"
