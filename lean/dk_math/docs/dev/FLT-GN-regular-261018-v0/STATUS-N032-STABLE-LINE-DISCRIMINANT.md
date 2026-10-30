@@ -169,9 +169,10 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 従って、局所良還元の構成を重複実装せず、次の `hno` 接続が必要とする整数判別式の
 非可除性をそのまま取り出せる。
 
-`residual_hno_of_three_good` によって `q = 3` の条件付き排除まで閉じた。次はこの
-構造を `q = 5` など別の良い住所へ再利用し、有限素数住所の選択を薄い provider として
-整理する。並行して、`residual_hno_iff_exists_zeroComponent_line_escape` の右辺に現れる脱出元を、
+`residual_hno_of_three_good` によって `q = 3` の条件付き排除まで閉じ、さらに
+`residual_hno_of_small_good_prime` によって `q < p` の小さい良い住所へ一般化した。
+次は `q ∣ a*b*c` の住所と `q = p` の局所理論を別の入口として整理する。並行して、
+`residual_hno_iff_exists_zeroComponent_line_escape` の右辺に現れる脱出元を、
 既存の `a ≡ 7 mod 8` 側の分解群固定定理と比較する。局所分解群の外にある大域元の構成が、
 次の算術的な核心課題である。並行して、今回の有理 `2 * p` 捩れを良還元素数で
 排除する有限体点数評価は完了した。次は `FreyLocalReduction.LocalRing q` の剰余体を
@@ -193,3 +194,36 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 
 今回の追加定理は、`q = 3` の範囲でこの比較を論理的に完了したものであり、分解群外の元を
 構成したものではない。
+
+## 今回の追加実装: 小さい良素数の一般化
+
+`DkMath.FLT.FreyHnoSmallGoodPrime` を追加し、`q = 3` に固有だった排除を、次の
+明示的な有限住所へ一般化した。
+
+- `residual_hno_of_small_good_prime`
+  - `5 ≤ p`、`Even S.b`、`q` 素数、`q ≠ 2`、`q < p`、`q ∤ a*b*c` のもとで、
+    Cofixed な一次元 Galois 安定直線の存在を排除。
+  - `2*p` 位数の有理点、整数商モデルの判別式非可除性、局所上界 `2*q+1` を合成し、
+    `2*p ≤ 2*q+1` と `q < p` の矛盾を得る。
+- `residual_irreducible_of_three_good`
+  - 上の一般定理を `q = 3` へ特殊化し、既存の oriented cofixed obstruction から
+    `S.ResidualIsIrreducible` を直接供給。
+- `residual_escape_outside_decomposition_of_three_good_seven`
+  - `a ≡ 7 mod 8` のもとで、`q = 3` の排除を既存の分解群外逃避同値へ渡し、
+    `σ ∉ A.decompositionSubgroup ℚ` と零成分からの脱出点の存在を供給。
+
+従って、今回新しく証明したのは `q` を一般化した局所位数矛盾であり、既約性と
+分解群外元の定理は既存の大域同値との合成である。`q ∣ a*b*c` の住所、`q = p`、
+全ての Frey 住所を覆う無条件 `hno`、および FLT の閉鎖は未解決のままである。
+
+### 今回の検証
+
+- `lake build DkMath.FLT.FreyHnoSmallGoodPrime`
+- `lake build DkMath.FLT.FreyHnoThreeGood`
+- `lake build DkMathTest.FLT.FreyHnoSmallGoodPrime`
+- `git diff --check`
+
+回帰テスト `DkMathTest.FLT.FreyHnoSmallGoodPrime` は一般 `q` の排除、`q = 3` の
+既約性、`a ≡ 7 mod 8` の分解群外逃避を `example` から使用する。三公開定理の
+`#print axioms` はいずれも `[propext, Classical.choice, Quot.sound]` であり、今回の
+追加ファイルには新しい `sorry` や独自 `axiom` はない。
