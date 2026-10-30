@@ -315,5 +315,7 @@ import DkMathTest.FLT.FreyStableLineDiscriminantCriterion
 import DkMathTest.FLT.FreyRationalTwoPTorsion
 import DkMathTest.Lib.NumberTheory.FiniteFieldWeierstrassCard
 import DkMathTest.Lib.NumberTheory.FreyLocalResidueField
+import DkMathTest.Lib.NumberTheory.EllipticSmoothTorsionOrderBound
+import DkMathTest.Lib.NumberTheory.FreyLocalValuationSubring
 
 #print "file: DkMathTest"

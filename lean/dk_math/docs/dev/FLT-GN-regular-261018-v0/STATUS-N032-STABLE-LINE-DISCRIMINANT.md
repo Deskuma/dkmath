@@ -69,6 +69,19 @@
     `2*q+1` へ特殊化。
   - `LocalRing q` そのものと付値部分環の輸送が完成した後に、還元単射性の定理を
     直接消費するための再利用可能な橋である。
+- `addOrderOf_le_two_mul_residue_card_add_one_of_good`
+  - 一点 `Q` の `n • Q = 0` から `AddSubgroup.zmultiples Q` 全体を滑らかな
+    `n` 捩れ集合へ包含し、その部分群の濃度 `addOrderOf Q` を集合の `ncard` と
+    比較する一般定理を追加。
+  - これにより「一点だけを数えた」状態から、巡回部分群全体を数える正しい位数比較へ
+    進んだ。局所化と `ValuationSubring ℚ` の型輸送はまだ要求しない。
+- `localValuationSubring` / `localRingValuationSubringEquiv`
+  - `LocalRing q` を、その DVR の有理数体上の付値部分環へ環同値で輸送。
+  - `localRingValuationSubringEquiv_coe` により、輸送後の係数の有理数値が元の
+    `LocalRing q → ℚ` と一致することを確認。
+- `mapModelToValuationSubring_map_subtype`
+  - `LocalRing q` 上の Weierstrass モデルを付値部分環へ移した後の `ℚ` 基底変換が、
+    元の局所化モデルの基底変換と一致することを証明。
 
 ## 数学的境界
 
@@ -94,6 +107,10 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 - `lake build DkMathTest.Lib.NumberTheory.FiniteFieldWeierstrassCard`
 - `lake build DkMath.Lib.NumberTheory.FreyLocalResidueField`
 - `lake build DkMathTest.Lib.NumberTheory.FreyLocalResidueField`
+- `lake build DkMath.Lib.NumberTheory.EllipticSmoothTorsionOrderBound`
+- `lake build DkMathTest.Lib.NumberTheory.EllipticSmoothTorsionOrderBound`
+- `lake build DkMath.Lib.NumberTheory.FreyLocalValuationSubring`
+- `lake build DkMathTest.Lib.NumberTheory.FreyLocalValuationSubring`
 - `lake build DkMath.Lib`
 - `lake build DkMath.FLT`
 - `git diff --check`
@@ -113,8 +130,9 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 
 今回の局所剰余体同定は、`EllipticSmoothTorsionReduction` の抽象定理を
 `LocalRing q` の具体的モデルへ適用するための係数体側の準備を完了したものだが、
-同定だけではまだ還元写像の単射性は得られない。次は `LocalRing q` とその付値部分環
-との環同値を用いて `reduce_injOn_torsion` を輸送するか、局所化版の還元単射補題を
+同定だけではまだ有理点の還元写像は得られない。巡回部分群の位数比較と、局所化環から
+有理数体の付値部分環への係数輸送は今回完了した。次はこの環同値に沿って剰余体同値、
+滑らかな点の述語、そして `reduce_injOn_torsion` を輸送するか、局所化版の還元単射補題を
 直接供給する必要がある。
 
 今回の追加定理は、この比較を論理的に完了したものであり、分解群外の元を構成したものではない。

@@ -383,6 +383,8 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelDiscriminantProduct
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDiscriminantDepth
 import DkMath.Lib.NumberTheory.FiniteFieldWeierstrassCard
 import DkMath.Lib.NumberTheory.FreyLocalResidueField
+import DkMath.Lib.NumberTheory.EllipticSmoothTorsionOrderBound
+import DkMath.Lib.NumberTheory.FreyLocalValuationSubring
 
 #print "file: DkMath.Lib"
 
