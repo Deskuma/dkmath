@@ -18,7 +18,11 @@ open DkMath.Lib.NumberTheory.EllipticFunctionField
 open DkMath.Lib.Algebra
 open DkMath.Lib.Algebra.FiniteProductWronskian
 open DkMath.Lib.Algebra.RationalPolynomialFiber
+open DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
 open DkMath.Lib.NumberTheory.EllipticFiniteKernel
+
+noncomputable local instance instDecidableEqEllipticFiniteKernelDiscriminantNormalizationTest
+    {α : Type*} : DecidableEq α := Classical.decEq _
 
 variable {F : Type*} [Field F] [CharZero F] [NeZero (2 : F)]
 
@@ -77,6 +81,104 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
   veluX_standard_pair_denominator_eq_of_monic E H ho P Q hQ hrel hcop
     hQmonic hD hdeg
 
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P Q : (AlgebraicClosure F)[X])
+    (hQ : Polynomial.aeval (genericX E (AlgebraicClosure F)) Q ≠ 0)
+    (hrel : veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure F)) P /
+        Polynomial.aeval (genericX E (AlgebraicClosure F)) Q)
+    (hcop : IsCoprime P Q)
+    (hP : P.Monic) (hQmonic : Q.Monic)
+    (hA : (veluHalfNumeratorBase E H).Monic)
+    (hD : (veluHalfDenominatorBase E H).Monic)
+    (hPdeg : (veluHalfNumeratorBase E H).natDegree ≤ P.natDegree)
+    (hQdeg : (veluHalfDenominatorBase E H).natDegree ≤ Q.natDegree) :
+    P = veluHalfNumeratorBase E H ∧ Q = veluHalfDenominatorBase E H :=
+  veluX_standard_pair_eq_of_monic E H ho P Q hQ hrel hcop hP hQmonic hA hD hPdeg hQdeg
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P Q : (AlgebraicClosure F)[X])
+    (hQ : Polynomial.aeval (genericX E (AlgebraicClosure F)) Q ≠ 0)
+    (hrel : veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure F)) P /
+        Polynomial.aeval (genericX E (AlgebraicClosure F)) Q)
+    (hcop : IsCoprime P Q)
+    (hP : P.Monic) (hQmonic : Q.Monic)
+    (hA : (veluHalfNumeratorBase E H).Monic)
+    (hD : (veluHalfDenominatorBase E H).Monic)
+    (hPdeg : (veluHalfNumeratorBase E H).natDegree ≤ P.natDegree)
+    (hQdeg : (veluHalfDenominatorBase E H).natDegree ≤ Q.natDegree) :
+    wronskian P Q =
+      wronskian (veluHalfNumeratorBase E H) (veluHalfDenominatorBase E H) :=
+  veluX_standard_pair_wronskian_eq_base_of_monic E H ho P Q hQ hrel hcop
+    hP hQmonic hA hD hPdeg hQdeg
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P Q : (AlgebraicClosure F)[X])
+    (hQ : Polynomial.aeval (genericX E (AlgebraicClosure F)) Q ≠ 0)
+    (hrel : veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure F)) P /
+        Polynomial.aeval (genericX E (AlgebraicClosure F)) Q)
+    (hcop : IsCoprime P Q)
+    (hP : P.Monic) (hQmonic : Q.Monic)
+    (hA : (veluHalfNumeratorBase E H).Monic)
+    (hD : (veluHalfDenominatorBase E H).Monic)
+    (hPdeg : (veluHalfNumeratorBase E H).natDegree ≤ P.natDegree)
+    (hQdeg : (veluHalfDenominatorBase E H).natDegree ≤ Q.natDegree)
+    (T : Points E) (hT : T ∉ H) (R : H) :
+    Q.eval (T + R.val).xc ≠ 0 :=
+  veluX_standard_pair_denominator_eval_ne_zero_of_monic E H ho P Q hQ hrel hcop
+    hP hQmonic hA hD hPdeg hQdeg T hT R
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P Q : (AlgebraicClosure F)[X])
+    (hQ : Polynomial.aeval (genericX E (AlgebraicClosure F)) Q ≠ 0)
+    (hrel : veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure F)) P /
+        Polynomial.aeval (genericX E (AlgebraicClosure F)) Q)
+    (hcop : IsCoprime P Q)
+    (hP : P.Monic) (hQmonic : Q.Monic)
+    (hA : (veluHalfNumeratorBase E H).Monic)
+    (hD : (veluHalfDenominatorBase E H).Monic)
+    (hPdeg : (veluHalfNumeratorBase E H).natDegree ≤ P.natDegree)
+    (hQdeg : (veluHalfDenominatorBase E H).natDegree ≤ Q.natDegree)
+    (T : Points E) (hT : T ∉ H) (hneg : -T = T)
+    (R : H) (hR : R ≠ 0) :
+    (wronskian P Q).IsRoot (T + R.val).xc :=
+  veluX_standard_pair_wronskian_root_of_monic_normalization E H ho P Q hQ hrel hcop
+    hP hQmonic hA hD hPdeg hQdeg T hT hneg R hR
+
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (T : Points E) (hT : T ∉ H) (hneg : -T = T)
+    (P Q : (AlgebraicClosure F)[X]) (hcop : IsCoprime P Q) (hQ : Q ≠ 0)
+    (hrel : veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure F)) P /
+        Polynomial.aeval (genericX E (AlgebraicClosure F)) Q)
+    (c : AlgebraicClosure F)
+    (hp : (fiberPolynomial P Q c).Monic)
+    (hPc : kernelXAt E H T hT = c)
+    (hP : P.Monic) (hQmonic : Q.Monic)
+    (hA : (veluHalfNumeratorBase E H).Monic)
+    (hD : (veluHalfDenominatorBase E H).Monic)
+    (hPdeg : (veluHalfNumeratorBase E H).natDegree ≤ P.natDegree)
+    (hQdeg : (veluHalfDenominatorBase E H).natDegree ≤ Q.natDegree)
+    (hdeg : (fiberPolynomial P Q c).natDegree ≤ Nat.card H) :
+    fiberPolynomial P Q c =
+      fiberFactor (Finset.univ : Finset (halfKernel E H)) T.xc
+        (fun R : halfKernel E H => (T + R.val.val).xc) :=
+  eq_orbit_x_fiberFactor_of_monic_of_veluX_quotient_of_monic_normalization
+    E H ho T hT hneg P Q hcop hQ hrel c hp hPc hP hQmonic hA hD hPdeg hQdeg hdeg
+
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_numerator_dvd
 #print axioms
@@ -85,5 +187,15 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_numerator_eq_of_monic
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_denominator_eq_of_monic
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_eq_of_monic
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_wronskian_eq_base_of_monic
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_denominator_eval_ne_zero_of_monic
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_wronskian_root_of_monic_normalization
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.eq_orbit_x_fiberFactor_of_monic_of_veluX_quotient_of_monic_normalization
 
 end DkMathTest.EllipticFiniteKernelDiscriminantNormalization

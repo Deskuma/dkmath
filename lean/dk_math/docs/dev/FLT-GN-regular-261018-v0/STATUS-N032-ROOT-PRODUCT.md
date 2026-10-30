@@ -1035,3 +1035,33 @@ Euclid 型可除性、モニック次数比較を別々に保持する構造的�
 `G ∣ D_H`、`G` と `D_H` のモニック性、および
 `D_H.natDegree ≤ G.natDegree` から `G = D_H` を得る。これにより、標準対の
 分子・分母をそれぞれ半核共通分子・共通分母へ正規化する条件付き経路が対称に揃った。
+
+さらに `veluX_standard_pair_eq_of_monic` を追加し、二つの条件付き一致を一つの
+監査可能な結論
+`F = veluHalfNumeratorBase E H ∧ G = veluHalfDenominatorBase E H`
+へ束ねた。標準対のモニック性・次数比較は依然として呼び出し側の入力だが、
+以後の Wronskian・判別式消費者は分子分母を別々に再展開せず、この対全体の
+正規化定理を利用できる。
+
+この対全体の一致を微分不変量へ輸送する
+`veluX_standard_pair_wronskian_eq_base_of_monic` も追加した。標準対の
+Wronskian を半核共通対の Wronskian と直接置換できるため、既存の半核側二捩れ根
+定理を標準表示へ戻す境界が明示された。ここでも標準対のモニック性・次数条件は
+未供給のままであり、無条件の標準対存在定理を主張していない。
+
+さらに `veluX_standard_pair_denominator_eval_ne_zero_of_monic` を追加した。半核共通
+分母の平行移動点での非零性を、モニック・次数正規化で一致した標準分母へ輸送する
+ため、標準有理表示を実点評価へ渡す際の正則性条件が明示された。
+
+また `veluX_standard_pair_wronskian_root_of_monic_normalization` により、標準対を
+半核共通対へ正規化してから、奇数核の二捩れ平行移動点での Wronskian 根を得る経路を
+一つの条件付き教科書定理にまとめた。新しい幾何学的入力は追加しておらず、既存の
+`veluHalf_base_wronskian_root_of_odd_twoTorsion` と正規化等式の組合せである。
+標準対のモニック性・次数比較・関数体表示は依然として呼び出し側の未解決義務であり、
+この追加は無条件の標準対存在や判別式非零性を主張しない。
+
+最後に、固定された標準対について `eq_orbit_x_fiberFactor_of_monic_of_veluX_quotient_of_monic_normalization`
+を追加した。標準対の Wronskian 根を半核全体へ生成し、既存の有限ファイバー終端定理へ
+渡すことで、`fiberPolynomial = fiberFactor` を得る。ここでも `G ≠ 0`、ファイバーの
+モニック性、次数上界、標準対のモニック性・次数比較は入力として保持しているため、
+無条件の標準対選択や判別式積公式の閉包とは区別される。
