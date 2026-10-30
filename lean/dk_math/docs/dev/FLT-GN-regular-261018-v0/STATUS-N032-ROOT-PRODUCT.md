@@ -1297,3 +1297,11 @@ hcoord として明示入力に残しており、点群 API のモデル同一�
 回帰テストと `#print axioms` を追加し、依存公理は
 `[propext, Classical.choice, Quot.sound]` のままである。次はこの補題を三枝定理の
 呼び出し側から実際に消費し、残る `hU` と判別式表示だけを境界へ押し出す段階になる。
+
+続いて `halfKernel_tangent_square_product_eq_four_pow_mul_root_distance_products` を
+追加した。既存の `half_tangent_product_eq_root_products` を
+`Finset.prod_coe_sort` で明示的半核積へ輸送し、三枝定理の `hU` を接線平方積の
+定義から生成できるようにした。これにより
+`veluHalf_base_discriminant_product_of_three_two_torsion_points` の呼び出し側は、
+接線積の値を根距離積へ手作業で展開する必要がなくなった。`hΔ` と `hΔ'` の
+モデル判別式表示だけが、現在も係数計算の境界として残っている。

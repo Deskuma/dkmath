@@ -166,6 +166,43 @@ theorem halfKernel_three_root_distance_products_ne_zero
     (half_x_sub_root_ne_zero E H ho r₁ r₂ r₃ h₁ h₂ h₃ h₁₂ h₁₃ h₂₃ Q).2.2)
   exact mul_ne_zero (mul_ne_zero h₁' h₂') h₃'
 
+omit [E.IsElliptic] in
+/-- [DkMath.Lib] 半核接線平方積を判別式組立ての Finset 形へ輸送する。
+
+`half_tangent_product_eq_root_products` は半核を subtype の Fintype として
+走査する。ここでは `Finset.prod_coe_sort` で同じ積を `halfKernel E H` 上の
+明示的な有限積へ変換し、`hU` の供給元を固定する。
+-/
+theorem halfKernel_tangent_square_product_eq_four_pow_mul_root_distance_products
+    (r₁ r₂ r₃ : AlgebraicClosure K)
+    (h₁ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₁ = 0)
+    (h₂ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₂ = 0)
+    (h₃ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₃ = 0)
+    (h₁₂ : r₁ ≠ r₂) (h₁₃ : r₁ ≠ r₃) (h₂₃ : r₂ ≠ r₃) :
+    (∏ Q : halfKernel E H, (2 * Q.val.val.yc +
+      (E.map (algebraMap K (AlgebraicClosure K))).a₁ * Q.val.val.xc +
+      (E.map (algebraMap K (AlgebraicClosure K))).a₃) ^ 2) =
+      (4 : AlgebraicClosure K) ^ (halfKernel E H).card *
+        ((∏ Q ∈ halfKernel E H, (Q.val.xc - r₁)) *
+          (∏ Q ∈ halfKernel E H, (Q.val.xc - r₂)) *
+          (∏ Q ∈ halfKernel E H, (Q.val.xc - r₃))) := by
+  have h := half_tangent_product_eq_root_products E H r₁ r₂ r₃
+    h₁ h₂ h₃ h₁₂ h₁₃ h₂₃
+  have h₁' :
+      (∏ Q : halfKernel E H, (Q.val.val.xc - r₁)) =
+        ∏ Q ∈ halfKernel E H, (Q.val.xc - r₁) := by
+    exact Finset.prod_coe_sort (halfKernel E H) (fun Q : H => Q.val.xc - r₁)
+  have h₂' :
+      (∏ Q : halfKernel E H, (Q.val.val.xc - r₂)) =
+        ∏ Q ∈ halfKernel E H, (Q.val.xc - r₂) := by
+    exact Finset.prod_coe_sort (halfKernel E H) (fun Q : H => Q.val.xc - r₂)
+  have h₃' :
+      (∏ Q : halfKernel E H, (Q.val.val.xc - r₃)) =
+        ∏ Q ∈ halfKernel E H, (Q.val.xc - r₃) := by
+    exact Finset.prod_coe_sort (halfKernel E H) (fun Q : H => Q.val.xc - r₃)
+  rw [h₁', h₂', h₃'] at h
+  simpa only [mul_assoc] using h
+
 /-- [DkMath.Lib] 三つの実二捩れ枝から判別式積の代数組立てへ渡す入口。
 
 三つの順序付き一組を `P₁₂`, `P₁₃`, `P₂₃` として生成し、既存の
@@ -191,10 +228,9 @@ theorem veluHalf_base_discriminant_product_of_three_two_torsion_points
     (h₁₂ : P₁.xc ≠ P₂.xc) (h₁₃ : P₁.xc ≠ P₃.xc)
     (h₂₃ : P₂.xc ≠ P₃.xc)
     (Δ Δ' U : AlgebraicClosure K)
-    (hU : U = 4 ^ (halfKernel E H).card *
-      ((∏ Q ∈ halfKernel E H, (Q.val.xc - P₁.xc)) *
-        (∏ Q ∈ halfKernel E H, (Q.val.xc - P₂.xc)) *
-        (∏ Q ∈ halfKernel E H, (Q.val.xc - P₃.xc))))
+    (hU0 : U = ∏ Q : halfKernel E H, (2 * Q.val.val.yc +
+      (E.map (algebraMap K (AlgebraicClosure K))).a₁ * Q.val.val.xc +
+      (E.map (algebraMap K (AlgebraicClosure K))).a₃) ^ 2)
     (hΔ : Δ = 16 * ((P₂.xc - P₁.xc) * (P₃.xc - P₁.xc) *
       (P₃.xc - P₂.xc)) ^ 2)
     (hΔ' : Δ' = 16 *
@@ -210,6 +246,16 @@ theorem veluHalf_base_discriminant_product_of_three_two_torsion_points
   let X₃ : AlgebraicClosure K := kernelXAt E H P₃ hP₃
   have hH := halfKernel_three_root_distance_products_ne_zero E H ho
     P₁.xc P₂.xc P₃.xc h₁ h₂ h₃ h₁₂ h₁₃ h₂₃
+  have hU : U = 4 ^ (halfKernel E H).card *
+      ((∏ Q ∈ halfKernel E H, (Q.val.xc - P₁.xc)) *
+        (∏ Q ∈ halfKernel E H, (Q.val.xc - P₂.xc)) *
+        (∏ Q ∈ halfKernel E H, (Q.val.xc - P₃.xc))) := by
+    calc
+      U = ∏ Q : halfKernel E H, (2 * Q.val.val.yc +
+        (E.map (algebraMap K (AlgebraicClosure K))).a₁ * Q.val.val.xc +
+        (E.map (algebraMap K (AlgebraicClosure K))).a₃) ^ 2 := hU0
+      _ = _ := halfKernel_tangent_square_product_eq_four_pow_mul_root_distance_products
+        E H P₁.xc P₂.xc P₃.xc h₁ h₂ h₃ h₁₂ h₁₃ h₂₃
   have h₂₁ : P₂.xc ≠ P₁.xc := h₁₂.symm
   have P₁₂ := veluHalf_base_pair_relation_of_two_torsion_points E H ho P₁ P₂ P₃
     hP₁ hP₂ hneg₁ hT₁ htor₁ h₁ h₂ h₃ h₁₂ h₁₃ h₂₃

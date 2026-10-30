@@ -74,10 +74,9 @@ example (E : WeierstrassCurve K) [E.IsElliptic]
     (h₁₂ : P₁.xc ≠ P₂.xc) (h₁₃ : P₁.xc ≠ P₃.xc)
     (h₂₃ : P₂.xc ≠ P₃.xc)
     (Δ Δ' U : AlgebraicClosure K)
-    (hU : U = 4 ^ (halfKernel E H).card *
-      ((∏ Q ∈ halfKernel E H, (Q.val.xc - P₁.xc)) *
-        (∏ Q ∈ halfKernel E H, (Q.val.xc - P₂.xc)) *
-        (∏ Q ∈ halfKernel E H, (Q.val.xc - P₃.xc))))
+    (hU : U = ∏ Q : halfKernel E H, (2 * Q.val.val.yc +
+      (E.map (algebraMap K (AlgebraicClosure K))).a₁ * Q.val.val.xc +
+      (E.map (algebraMap K (AlgebraicClosure K))).a₃) ^ 2)
     (hΔ : Δ = 16 * ((P₂.xc - P₁.xc) * (P₃.xc - P₁.xc) *
       (P₃.xc - P₂.xc)) ^ 2)
     (hΔ' : Δ' = 16 *
@@ -102,6 +101,22 @@ example (E : WeierstrassCurve K) (H : AddSubgroup (Points E)) [Fintype H]
   halfKernel_three_root_distance_products_ne_zero E H ho r₁ r₂ r₃
     h₁ h₂ h₃ h₁₂ h₁₃ h₂₃
 
+example (E : WeierstrassCurve K) (H : AddSubgroup (Points E)) [Fintype H]
+    (r₁ r₂ r₃ : AlgebraicClosure K)
+    (h₁ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₁ = 0)
+    (h₂ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₂ = 0)
+    (h₃ : (E.map (algebraMap K (AlgebraicClosure K))).twoTorsionPolynomial.toPoly.eval r₃ = 0)
+    (h₁₂ : r₁ ≠ r₂) (h₁₃ : r₁ ≠ r₃) (h₂₃ : r₂ ≠ r₃) :
+    (∏ Q : halfKernel E H, (2 * Q.val.val.yc +
+      (E.map (algebraMap K (AlgebraicClosure K))).a₁ * Q.val.val.xc +
+      (E.map (algebraMap K (AlgebraicClosure K))).a₃) ^ 2) =
+      (4 : AlgebraicClosure K) ^ (halfKernel E H).card *
+        ((∏ Q ∈ halfKernel E H, (Q.val.xc - r₁)) *
+          (∏ Q ∈ halfKernel E H, (Q.val.xc - r₂)) *
+          (∏ Q ∈ halfKernel E H, (Q.val.xc - r₃))) :=
+  halfKernel_tangent_square_product_eq_four_pow_mul_root_distance_products E H
+    r₁ r₂ r₃ h₁ h₂ h₃ h₁₂ h₁₃ h₂₃
+
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_pair_relation_of_translated_root_product
 #print axioms
@@ -110,5 +125,7 @@ example (E : WeierstrassCurve K) (H : AddSubgroup (Points E)) [Fintype H]
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluHalf_base_discriminant_product_of_three_two_torsion_points
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernel_three_root_distance_products_ne_zero
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernel_tangent_square_product_eq_four_pow_mul_root_distance_products
 
 end DkMathTest.EllipticFiniteKernelPairRelation
