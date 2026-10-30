@@ -1176,3 +1176,47 @@ Wronskian 根を個別に再仮定する必要がなくなった。一方、標�
 次に攻める具体的な補題は、この交差評価の右辺の移動根積を
 `translated_root_product_relation` の左辺へ同定し、半核接線積 `U` と結ぶことである。
 その後に `pair_relation` を三組へ適用する。
+
+今回、一般 Weierstrass 形の二捩れ根差公式を独立モジュール
+`WeierstrassTwoTorsionTranslateGeneral.lean` に追加した。
+`translated_root_difference_general` は、`a₁` と `a₃` をゼロ化する変数変換を
+用いず、二捩れ点の y 座標条件、平方完成三次式の評価、三根の一次対称式から
+`(e₂ - x(T₁ + Q))(x(Q) - e₁) = (e₂ - e₁)(x(Q) - e₃)` を直接証明する。
+`translated_root_difference_general_of_roots` は既存の
+`tangent_square_eq_root_product` から平方完成式を供給する教科書入口である。
+
+さらに `translated_root_product_relation_general` を実装し、各添字での根差公式を
+既存の `product_root_difference_relation` へ持ち上げた。これにより、有限積の
+根差恒等式は一般形のまま利用できる。新しい定理は根の分離、三根の対称式、各点の
+曲線方程式、二捩れ点の y 条件を入力として保持しており、実際の `halfKernel` への
+特殊化や、`B_{jk}H_j=(e_k-e_j)^nH_l` の無条件化を先取りしていない。
+
+対象モジュールと `DkMath.Lib`、回帰テストをビルドし、三定理の `#print axioms` は
+いずれも `[propext, Classical.choice, Quot.sound]` だった。残る次工程は、実際の
+半核点を有限積の添字へ代入し、既存の `half_x_sub_root_ne_zero` と点の曲線方程式を
+用いて `translated_root_product_relation_general` の入力を閉じることである。
+
+この特殊化も続けて `EllipticFiniteKernelTranslatedRootProduct.lean` に実装した。
+`halfKernel_translated_root_product_relation` は、`E.map (algebraMap K (AlgebraicClosure K))`
+上の実際の半核点を一般有限積定理へ代入する。各点の Weierstrass 方程式は
+`Point.nonsingular_xc_yc`、第一根との非衝突は奇数核の
+`half_x_sub_root_ne_zero` から供給されるため、根差積の有限積層は無条件に閉じている。
+
+この結果により、`B_{jk}H_j` の幾何学的入力に必要な「平行移動後の根積」は、
+抽象添字ではなく `halfKernel E H` の実座標で直接利用できる状態になった。
+ただし、`hσ₁`（三根の一次対称式）と `hTtwo`（選択した二捩れ点の y 座標条件）は
+意図的に入力として残している。また、三組の根差積を `pair_relation` に渡す作業、
+接線積 `U` との符号・冪の整合、商判別式の積公式 `hprod` は未完成である。
+
+追加の教科書補題として、一般モジュールに `two_torsion_root_sum` と
+`two_torsion_y_condition` を固定した。前者は `Cubic.b_eq_three_roots` と
+`b₂ = a₁² + 4a₂` により、根の評価と分離から `hσ₁` を自動生成する。後者は
+`2 • (e,t) = 0` を `Affine.Point.neg_some` で座標化し、一般係数の
+`2t + a₁e + a₃ = 0` を直接得る。前者を消費する
+`halfKernel_translated_root_product_relation_of_roots` も追加し、実際の半核で
+残る入力を二捩れ点の y 条件と三根の分離へ縮約した。
+
+さらに `halfKernel_translated_root_product_relation_of_two_torsion` を加え、
+`hTtwo` も `Affine.Point.some r₁ t₁ hT` と `2T=0` から自動供給する経路を用意した。
+この段階で、実際の半核根差積に残る局所入力は、三根の評価・分離と選択した affine
+2捩れ点の点群等式になった。

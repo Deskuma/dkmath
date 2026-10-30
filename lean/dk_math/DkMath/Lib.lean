@@ -376,6 +376,8 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelDiscriminantNormalization
 import DkMath.Lib.Algebra.FiniteProductWronskian
 import DkMath.Lib.NumberTheory.WeierstrassDiscriminantAssembly
 import DkMath.Lib.NumberTheory.WeierstrassTwoTorsionTranslate
+import DkMath.Lib.NumberTheory.WeierstrassTwoTorsionTranslateGeneral
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelTranslatedRootProduct
 
 #print "file: DkMath.Lib"
 
