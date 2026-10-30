@@ -61,11 +61,29 @@ example (E : WeierstrassCurve F) [E.IsElliptic]
     P = veluHalfNumeratorBase E H :=
   veluX_standard_pair_numerator_eq_of_monic E H ho P Q hQ hrel hcop hP hA hdeg
 
+example (E : WeierstrassCurve F) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (P Q : (AlgebraicClosure F)[X])
+    (hQ : Polynomial.aeval (genericX E (AlgebraicClosure F)) Q ≠ 0)
+    (hrel : veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure F)) P /
+        Polynomial.aeval (genericX E (AlgebraicClosure F)) Q)
+    (hcop : IsCoprime P Q)
+    (hQmonic : Q.Monic)
+    (hD : (veluHalfDenominatorBase E H).Monic)
+    (hdeg : (veluHalfDenominatorBase E H).natDegree ≤ Q.natDegree) :
+    Q = veluHalfDenominatorBase E H :=
+  veluX_standard_pair_denominator_eq_of_monic E H ho P Q hQ hrel hcop
+    hQmonic hD hdeg
+
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_numerator_dvd
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_denominator_dvd
 #print axioms
   DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_numerator_eq_of_monic
+#print axioms
+  DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_standard_pair_denominator_eq_of_monic
 
 end DkMathTest.EllipticFiniteKernelDiscriminantNormalization

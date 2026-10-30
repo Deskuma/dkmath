@@ -1030,3 +1030,8 @@ resultant 基盤を逆向きに利用している。
 `veluX_standard_pair_numerator_eq_of_monic` により両者の一致を得る。
 これは標準対の正規化を無条件に主張するものではなく、関数体から多項式への交差乗算、
 Euclid 型可除性、モニック次数比較を別々に保持する構造的な橋である。
+
+分母側にも同じ橋を追加し、`veluX_standard_pair_denominator_eq_of_monic` を証明した。
+`G ∣ D_H`、`G` と `D_H` のモニック性、および
+`D_H.natDegree ≤ G.natDegree` から `G = D_H` を得る。これにより、標準対の
+分子・分母をそれぞれ半核共通分子・共通分母へ正規化する条件付き経路が対称に揃った。

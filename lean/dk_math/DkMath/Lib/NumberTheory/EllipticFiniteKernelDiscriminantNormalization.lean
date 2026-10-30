@@ -104,5 +104,29 @@ theorem veluX_standard_pair_numerator_eq_of_monic
   exact (Polynomial.eq_of_monic_of_dvd_of_natDegree_le hF hA
     (veluX_standard_pair_numerator_dvd E H ho F G hG hrel hcop) hdeg).symm
 
+omit [CharZero K] [NeZero (2 : K)] in
+/-- [DkMath.Lib] モニック・同次数の標準分母は半核分母に一致する。
+
+分母側の可除性 `G ∣ D_H` に対して、分子側と同じモニック次数比較を適用する。
+`D_H` の次数は `veluHalfDenominatorBase_natDegree` から供給できるが、標準分母の
+次数比較は呼び出し側の正規化条件として明示的に残す。
+-/
+theorem veluX_standard_pair_denominator_eq_of_monic
+    (E : WeierstrassCurve K) [E.IsElliptic]
+    (H : AddSubgroup (Points E)) [Fintype H]
+    (ho : Odd (Nat.card H))
+    (F G : (AlgebraicClosure K)[X])
+    (hG : Polynomial.aeval (genericX E (AlgebraicClosure K)) G ≠ 0)
+    (hrel : veluX E H =
+      Polynomial.aeval (genericX E (AlgebraicClosure K)) F /
+        Polynomial.aeval (genericX E (AlgebraicClosure K)) G)
+    (hcop : IsCoprime F G)
+    (hGmonic : G.Monic)
+    (hDmonic : (veluHalfDenominatorBase E H).Monic)
+    (hdeg : (veluHalfDenominatorBase E H).natDegree ≤ G.natDegree) :
+    G = veluHalfDenominatorBase E H := by
+  exact (Polynomial.eq_of_monic_of_dvd_of_natDegree_le hGmonic hDmonic
+    (veluX_standard_pair_denominator_dvd E H ho F G hG hrel hcop) hdeg).symm
+
 end DkMath.Lib.NumberTheory.EllipticFiniteKernel
 
