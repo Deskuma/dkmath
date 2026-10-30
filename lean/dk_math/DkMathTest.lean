@@ -312,5 +312,6 @@ import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelDiscriminantProduct
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelDiscriminantDepth
 import DkMathTest.FLT.FreyFiniteKernelDiscriminantDepth
 import DkMathTest.FLT.FreyStableLineDiscriminantCriterion
+import DkMathTest.FLT.FreyRationalTwoPTorsion
 
 #print "file: DkMathTest"

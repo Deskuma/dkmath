@@ -76,6 +76,8 @@ import DkMath.FLT.FreyRationalTorsionIdentities
 import DkMath.FLT.FreyRationalTorsionIntegral
 import DkMath.FLT.FreyRationalTorsionPositive
 import DkMath.FLT.FreyRationalTorsionValuation
+import DkMath.FLT.FreyRationalTwoPTorsion
+
 import DkMath.FLT.FreyResidualCyclotomic
 import DkMath.FLT.FreyResidualDimensionBound
 import DkMath.FLT.FreyResidualDimensionCriteria
