@@ -395,6 +395,7 @@ import DkMath.Lib.NumberTheory.FreyLocalValuationSubring
 import DkMath.Lib.NumberTheory.FreyLocalTorsionOrderBound
 import DkMath.Lib.NumberTheory.EllipticLocalComponentObstruction
 import DkMath.Lib.NumberTheory.EllipticLocalComponentObstructionCharTwo
+import DkMath.Lib.NumberTheory.EllipticBaseChangeTorsion
 
 #print "file: DkMath.Lib"
 

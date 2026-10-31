@@ -108,6 +108,24 @@ theorem prime_dvd_finite_component_of_ker_le
     exact hzero)
 
 /-- [DkMath.Lib]
+Doubling an element of exact order `2*q` produces an element of exact order
+`q`, provided the double is nonzero.  This is the elementary order-extraction
+step used when a Cofixed construction naturally supplies a `2*q`-torsion
+point.  The proof keeps the order equation explicit and does not invoke any
+classification of elliptic-curve torsion.
+-/
+theorem addOrderOf_two_nsmul_eq_prime_of_addOrder_eq_two_mul_prime
+    {G : Type*} [AddCommGroup G] {q : ℕ} [Fact q.Prime] (R : G)
+    (horder : addOrderOf R = 2 * q) (hdouble : 2 • R ≠ 0) :
+    addOrderOf (2 • R) = q := by
+  apply addOrderOf_eq_prime
+  · have htwoq : (2 * q) • R = 0 := by
+      rw [← horder]
+      exact addOrderOf_nsmul_eq_zero R
+    exact (mul_nsmul R 2 q).symm.trans htwoq
+  · exact hdouble
+
+/-- [DkMath.Lib]
 An element of exact additive order `2*q` forces `q`-torsion in the quotient
 unless its double is already in the subgroup.  If the subgroup has no
 nonzero `q`-torsion, the latter alternative is impossible and the prime must
