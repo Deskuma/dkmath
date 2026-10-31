@@ -34,8 +34,15 @@ example (H : AddSubgroup G) {q : ℕ} [Fact q.Prime] (R : G)
     2 • R ∈ H ∨ q ∣ Nat.card (G ⧸ H) :=
   two_nsmul_mem_or_prime_dvd_natCard_quotient_of_addOrder_eq_two_mul_prime H R horder
 
+example (H : AddSubgroup G) {q : ℕ} [Fact q.Prime] (R : G)
+    (horder : addOrderOf R = 2 * q)
+    (hker : ∀ x : G, x ∈ H → q • x = 0 → x = 0) :
+    q ∣ Nat.card (G ⧸ H) :=
+  prime_dvd_natCard_quotient_of_two_p_torsion H R horder hker
+
 #print axioms DkMath.Lib.Algebra.prime_dvd_natCard_quotient_of_nsmul_not_mem
 #print axioms DkMath.Lib.Algebra.two_nsmul_mem_or_prime_dvd_natCard_quotient_of_addOrder_eq_two_mul_prime
+#print axioms DkMath.Lib.Algebra.prime_dvd_natCard_quotient_of_two_p_torsion
 
 end
 end DkMathTest.Lib.Algebra.FiniteAdditiveTorsionQuotient

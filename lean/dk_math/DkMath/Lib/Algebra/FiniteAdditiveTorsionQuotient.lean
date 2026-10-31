@@ -49,6 +49,36 @@ theorem prime_dvd_natCard_quotient_of_nsmul_not_mem
   simpa only [QuotientAddGroup.ker_mk'] using hzero
 
 /-- [DkMath.Lib]
+An element of exact additive order `2*q` forces `q`-torsion in the quotient
+unless its double is already in the subgroup.  If the subgroup has no
+nonzero `q`-torsion, the latter alternative is impossible and the prime must
+divide the quotient cardinality.
+
+This is the small group-theoretic closure used by the Frey component argument:
+the geometric part only has to prove that a smooth `q`-torsion point is zero.
+-/
+theorem prime_dvd_natCard_quotient_of_two_p_torsion
+    (H : AddSubgroup G) {q : ℕ} [Fact q.Prime] (R : G)
+    (horder : addOrderOf R = 2 * q)
+    (hker : ∀ x : G, x ∈ H → q • x = 0 → x = 0) :
+    q ∣ Nat.card (G ⧸ H) := by
+  have htwoq : (2 * q) • R = 0 := by
+    rw [← horder]
+    exact addOrderOf_nsmul_eq_zero R
+  apply prime_dvd_natCard_quotient_of_nsmul_not_mem H (2 • R)
+    ((mul_nsmul R 2 q).symm.trans htwoq)
+  intro hdouble
+  have hpdouble : q • (2 • R) = 0 := by
+    exact (mul_nsmul R 2 q).symm.trans htwoq
+  have hzero : 2 • R = 0 := hker (2 • R) hdouble hpdouble
+  have hdiv : 2 * q ∣ 2 := by
+    rw [← horder]
+    exact addOrderOf_dvd_iff_nsmul_eq_zero.mpr hzero
+  have hle : 2 * q ≤ 2 := Nat.le_of_dvd (by decide) hdiv
+  have hqge : 2 ≤ q := (Fact.out : q.Prime).two_le
+  omega
+
+/-- [DkMath.Lib]
 For an element of exact order `2*q`, the obstruction remaining after passing
 to a component quotient has only two forms.  Either its double belongs to
 `H`, or `q` divides the quotient cardinality.

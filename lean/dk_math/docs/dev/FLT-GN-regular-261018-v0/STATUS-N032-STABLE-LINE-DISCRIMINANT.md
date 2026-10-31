@@ -427,6 +427,15 @@ group and discriminant-depth obligation required by a general `hno` proof.
 At a residue address `q < p` with the already-formalized rational critical
 centre, the same module combines this quotient theorem with the nodal smooth
 torsion exclusion.  The produced order-`2*p` point is then itself outside the
-zero component, and only the displayed double-or-`p`-component alternative
-remains.  This is a reduction of the general `hno` obligation, not its
-closure.
+zero component, and the new `residual_cofixed_forces_component_prime_dvd_of_criticalCentre`
+theorem eliminates the first branch by applying the smooth `p`-torsion
+exclusion to `2R`.  The remaining conclusion is precisely
+
+\[
+  \exists R,\quad \operatorname{ord}(R)=2p\ \land\ R\notin E_0
+    \ \land\ p\mid\#(E/E_0).
+\]
+
+This is a genuine local reduction of the general `hno` obligation, not its
+closure: one still needs a component-quotient cardinality or discriminant-depth
+argument to contradict the final divisibility alternative.

@@ -34,8 +34,11 @@ open DkMath.Lib.Algebra
 open DkMath.Lib.NumberTheory
 open DkMath.Lib.NumberTheory.EllipticCriticalCentre
 open DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation
+open DkMath.Lib.NumberTheory.EllipticNodalSmoothCard
+open DkMath.Lib.NumberTheory.EllipticNodalSmoothCentre
 open DkMath.Lib.NumberTheory.EllipticNodalSmoothTorsionExclusion
 open DkMath.Lib.NumberTheory.EllipticSmoothReduction
+open DkMath.Lib.NumberTheory.EllipticSmoothTorsionPrimeExclusion
 open DkMath.Lib.RepresentationTheory
 open DkMath.Lib.NumberTheory.WeierstrassVariableChange
 
@@ -118,6 +121,69 @@ theorem residual_cofixed_component_dichotomy_of_criticalCentre_card_bound
         hresidueCard hqp C hQsmooth) htransportOrder
   · exact two_nsmul_mem_or_prime_dvd_natCard_quotient_of_addOrder_eq_two_mul_prime
       (zeroComponentSubgroup W) (pointEquivOfModelEq hmodel.symm Q) htransportOrder
+
+/--
+At a critical centre below `p`, the smooth branch of the component dichotomy
+is eliminated.  The nodal cardinality bound gives
+`#E_sm ≤ #k + 1 < p`, so `p` cannot divide the reduced smooth-point group.
+Reduction injectivity then says that a smooth `p`-torsion point is zero.  The
+generic quotient lemma applies this to `2 • Q`, where `Q` has exact order
+`2*p`, and leaves only the component-quotient divisibility alternative.
+
+This is the strongest unconditional local conclusion in this layer.  It still
+assumes the integral model and a supplied `CriticalCentre`; it does not claim
+that multiplicative reduction alone constructs that centre, nor that the
+component quotient divisibility is impossible.
+-/
+theorem residual_cofixed_forces_component_prime_dvd_of_criticalCentre
+    (hp5 : 5 ≤ p) (hbe : Even S.b)
+    (L : Submodule (ZMod p) S.ResidualSpace)
+    (hline : Module.finrank (ZMod p) L = 1)
+    (hstable : S.IsGaloisStable L) (hcofixed : IsCofixedOn S.residualRepresentation L)
+    {q : ℕ} [Fact q.Prime] {A : ValuationSubring ℚ}
+    [Fintype (ResidueField A)] [DecidableEq (ResidueField A)]
+    (hunit : A.valuation (p : ℚ) = 1)
+    (hresidueCard : Fintype.card (ResidueField A) ≤ q) (hqp : q < p)
+    (W : WeierstrassCurve A)
+    (hmodel : W.map A.subtype =
+      (S.residualIntegerKernelModel L hline hstable).map (Int.castRingHom ℚ))
+    (C : CriticalCentre A (W.map A.subtype)) :
+    ∃ Q : ((S.residualIntegerKernelModel L hline hstable).map
+        (Int.castRingHom ℚ)).toAffine.Point,
+      addOrderOf Q = 2 * p ∧
+      ¬ HasSmoothReduction W (pointEquivOfModelEq hmodel.symm Q) ∧
+        p ∣ Nat.card (((W.map A.subtype).toAffine.Point) ⧸ zeroComponentSubgroup W) := by
+  obtain ⟨Q, hQorder⟩ := S.residual_cofixed_implies_rational_two_p_torsion
+    (by omega) hbe L hline hcofixed
+  have htransportOrder : addOrderOf (pointEquivOfModelEq hmodel.symm Q) = 2 * p :=
+    (pointEquivOfModelEq hmodel.symm).addOrderOf_eq Q |>.trans hQorder
+  let _ : Finite ((W.map (residue A)).toAffine.Point) :=
+    finitePoints (singularCentreOfCriticalCentre W C)
+  have hpos : 0 < Nat.card ((W.map (residue A)).toAffine.Point) :=
+    natCard_points_pos (singularCentreOfCriticalCentre W C)
+  have hbound : Nat.card ((W.map (residue A)).toAffine.Point) ≤
+      Fintype.card (ResidueField A) + 1 :=
+    natCard_points_le_card_add_one (singularCentreOfCriticalCentre W C)
+  have hlt : Nat.card ((W.map (residue A)).toAffine.Point) < p := by
+    calc
+      Nat.card ((W.map (residue A)).toAffine.Point) ≤ Fintype.card (ResidueField A) + 1 := hbound
+      _ ≤ q + 1 := Nat.add_le_add_right hresidueCard 1
+      _ < p := add_one_lt_of_prime_lt_of_five_le hp5 hqp
+  have hcard : ¬ p ∣ Nat.card ((W.map (residue A)).toAffine.Point) :=
+    prime_not_dvd_of_pos_of_lt hpos hlt
+  have hker : ∀ x : (W.map A.subtype).toAffine.Point,
+      x ∈ zeroComponentSubgroup W → p • x = 0 → x = 0 := by
+    intro x hx hpx
+    have hsmooth : HasSmoothReduction W x := (mem_zeroComponentSubgroup_iff W).mp hx
+    exact eq_zero_of_smooth_prime_torsion_of_residue_not_dvd_natCard W hunit hcard
+      hsmooth hpx
+  refine ⟨Q, hQorder, ?_, ?_⟩
+  · intro hQsmooth
+    exact
+      (not_addOrder_eq_two_mul_prime_of_smooth_of_criticalCentre_card_bound W hp5 hunit
+        hresidueCard hqp C hQsmooth) htransportOrder
+  · exact prime_dvd_natCard_quotient_of_two_p_torsion
+      (zeroComponentSubgroup W) (pointEquivOfModelEq hmodel.symm Q) htransportOrder hker
 
 end
 end DkMath.FLT.Frey.Source
