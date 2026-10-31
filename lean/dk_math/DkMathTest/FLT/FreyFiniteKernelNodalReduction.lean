@@ -24,6 +24,7 @@ open DkMath.Lib.NumberTheory
 open DkMath.Lib.NumberTheory.EllipticCriticalCentre
 open DkMath.Lib.NumberTheory.EllipticTangentDirections
 open DkMath.Lib.NumberTheory.EllipticNodalTorsion.NodalTorsion
+open DkMath.Lib.NumberTheory.EllipticNodalSmoothCard
 open DkMath.Lib.NumberTheory.ValuationInertia
 open WeierstrassCurve IsLocalRing
 
@@ -56,6 +57,19 @@ example (L : Submodule (ZMod p) S.ResidualSpace)
   S.residualValuationKernelModel_residue_frame_of_disjoint L hl hq hqp A hA hd C D
 
 #print axioms DkMath.FLT.Frey.Source.residualValuationKernelModel_residue_frame_of_disjoint
+
+example (hp2 : p ≠ 2) (L : Submodule (ZMod p) S.ResidualSpace)
+    (hl : Module.finrank (ZMod p) L = 1) {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    (hle : L ≤ S.residualZeroComponent A)
+    (C : CriticalCentre A (S.rationalCurve.baseChange (AlgebraicClosure ℚ)))
+    (D : TangentDirections C) :
+    SingularCentre ((S.residualValuationKernelModel L hl hq hqp A hA).map
+      (IsLocalRing.residue A)) :=
+  S.residualValuationKernelModel_residue_singularCentre_of_smooth
+    hp2 L hl hq hqp A hA hle C D
+
+#print axioms DkMath.FLT.Frey.Source.residualValuationKernelModel_residue_singularCentre_of_smooth
 
 example (L : Submodule (ZMod p) S.ResidualSpace)
     (hl : Module.finrank (ZMod p) L = 1) {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)

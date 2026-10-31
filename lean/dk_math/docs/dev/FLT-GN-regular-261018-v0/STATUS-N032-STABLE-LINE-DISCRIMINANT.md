@@ -467,3 +467,11 @@ same established equality
 residue `SingularCentre` to the residual valuation-kernel model.  The smooth
 branch remains separate: its residue target is obtained from the nodal Vélu
 invariant formulas rather than from residue-model equality.
+
+The smooth branch now also has an explicit centre constructor,
+`residualValuationKernelModel_residue_singularCentre_of_smooth`.  It uses the
+existing `exists_nodal_kernel_criticalCentre` on the valuation model and then
+`singularCentreOfCriticalCentre`; the source `CriticalCentre` is not assumed
+to be a rational point of the characteristic-zero quotient.  Thus both local
+branches now expose a residue `SingularCentre`, while their construction
+paths remain distinct.

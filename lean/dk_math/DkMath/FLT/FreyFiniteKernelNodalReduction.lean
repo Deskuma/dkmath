@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.FreyFiniteKernelReduction
 import DkMath.FLT.FreyDyadicGeometry
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalReduction
+import DkMath.Lib.NumberTheory.EllipticFiniteKernelCriticalCentre
 import DkMath.Lib.NumberTheory.EllipticNodalSmoothCentre
 
 #print "file: DkMath.FLT.FreyFiniteKernelNodalReduction"
@@ -23,7 +24,7 @@ namespace DkMath.FLT.Frey.Source
 open WeierstrassCurve WeierstrassCurve.Affine IsLocalRing
 open DkMath.Lib.NumberTheory EllipticTorsionRepresentation EllipticFiniteKernel
 open EllipticCriticalCentre EllipticTangentDirections ValuationInertia ValuationPrimeSupport
-open ValuationRationalPrimeSupport WeierstrassResidueModel
+open ValuationRationalPrimeSupport WeierstrassResidueModel EllipticGoodReductionSeparation
 open EllipticNodalSmoothCard EllipticNodalSmoothCentre
 open EllipticNodalTorsion.NodalTorsion
 open DkMath.Lib.RepresentationTheory
@@ -100,6 +101,48 @@ theorem residualValuationKernelModel_residue_frame_of_disjoint
     (S.valuationModel A) _ (S.valuationModel_map A) C D
   rw [S.residual_valuation_kernel_residue_eq_of_disjoint L hl hq hqp A hA hd]
   exact ⟨F, hsep⟩
+
+/-- [DkMath.Lib] On the smooth-kernel branch, the nodal quotient theorem
+constructs a characteristic-zero `CriticalCentre` for the same valuation
+model, and `singularCentreOfCriticalCentre` reduces it to the residue field.
+This is the complementary construction to the disjoint-branch transport
+above: it uses the smooth-kernel hypotheses, not equality with the source
+residue model, and therefore keeps the two local branches mathematically
+separate.
+-/
+noncomputable def residualValuationKernelModel_residue_singularCentre_of_smooth
+    (hp2 : p ≠ 2)
+    (L : Submodule (ZMod p) S.ResidualSpace) (hl : Module.finrank (ZMod p) L = 1)
+    {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    (hle : L ≤ S.residualZeroComponent A)
+    (C : CriticalCentre A (S.rationalCurve.baseChange (AlgebraicClosure ℚ)))
+    (D : TangentDirections C) :
+    SingularCentre ((S.residualValuationKernelModel L hl hq hqp A hA).map (residue A)) := by
+  let := S.finite_residualPointSubgroup L hl
+  let := Fintype.ofFinite (pointSubgroup S.rationalCurve p L)
+  have hp : A.valuation (p : AlgebraicClosure ℚ) = 1 := by
+    simpa only [pow_one] using prime_power_value_one A (Fact.out : p.Prime) hq
+      ((ValuationSubring.mem_nonunits_iff _).mp hA) hqp 1
+  have hs : ∀ Q : pointSubgroup S.rationalCurve p L,
+      HasSmoothReduction (S.valuationModel A) Q.val :=
+    S.residual_kernel_smooth_of_le L A hle
+  obtain ⟨F, hsep⟩ := WeierstrassNodalFrame.residue_frame_of_model A
+    (S.valuationModel A) _ (S.valuationModel_map A) C D
+  let T := Classical.choice (exists_nodal_kernel_criticalCentre S.rationalCurve
+    (pointSubgroup S.rationalCurve p L) p
+    (card_pointSubgroup S.rationalCurve p L hl) hp2
+    (S.residual_kernel_killed L) A (S.valuationModel A) (S.valuationModel_map A) hp hs F hsep)
+  let U := S.residualValuationKernelModel L hl hq hqp A hA
+  have ho : Odd (Nat.card (pointSubgroup S.rationalCurve p L)) :=
+    by simpa only [card_pointSubgroup S.rationalCurve p L hl] using
+      (Fact.out : p.Prime).odd_of_ne_two hp2
+  have hU : U.map A.subtype = kernelModel S.rationalCurve (pointSubgroup S.rationalCurve p L) := by
+    dsimp [U, residualValuationKernelModel]
+    exact valuationKernelModel_map S.rationalCurve (pointSubgroup S.rationalCurve p L)
+      p (S.residual_kernel_killed L) A (S.valuationModel A) (S.valuationModel_map A) hp ho
+  let T' : CriticalCentre A (U.map A.subtype) := hU.symm ▸ T
+  exact singularCentreOfCriticalCentre U T'
 
 /-- [DkMath.Lib] On the disjoint (singular-kernel) branch, the residue
 singular centre transports from the Frey valuation model to the residual
