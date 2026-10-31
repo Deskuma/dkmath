@@ -620,3 +620,33 @@ The public theorem exposes none of the auxiliary critical centre, tangent
 direction, finite-residue, or Néron-model data.  The quotient is still the
 abstract smooth-component quotient; its identification with a Néron component
 group and the global `hno` contradiction remain the next unresolved bridge.
+
+## Exact prime-order class in the dyadic quotient
+
+The next strengthening is implemented in
+`DkMath/Lib/Algebra/FiniteAdditiveTorsionQuotient.lean` and
+`DkMath/FLT/FreyDyadicComponentObstruction.lean`.
+
+The general lemma `quotient_addOrder_eq_prime_of_nsmul_not_mem` proves, without
+any finiteness assumption on `G ⧸ H`, that the class of a `q`-torsion element
+outside `H` has exact additive order `q`.  It uses only the natural quotient
+homomorphism and `QuotientAddGroup.ker_mk'`.
+
+The characteristic-two local layer now supplies
+`localValuationSubring_two_double_not_mem_zeroComponent_of_residue_invariants`.
+For an exact `2*p` point, the double is nonzero `p`-torsion and cannot be in
+the smooth zero component because the singular residue fibre has cardinality
+at most `3 < p`.
+
+Consequently, `residual_cofixed_forces_dyadic_component_prime_order`
+constructs the explicit class of `2 • Q` and proves
+
+```text
+∃ T : E₂(Q) / E₂,0(Q), addOrderOf T = p.
+```
+
+This is stronger than `p ∣ Nat.card (...)` when quotient finiteness has not
+yet been formalized.  The remaining boundary is unchanged: transporting this
+class to a finite Néron component group (or another finite local quotient) is
+still required before deriving a Tamagawa-number constraint or a global `hno`
+contradiction.

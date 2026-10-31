@@ -36,6 +36,8 @@ example (hp5 : 5 ≤ p) (hp2 : p ≠ 2)
     hp5 hp2 W hΔ hc4 hR
 
 #print axioms localValuationSubring_two_component_prime_dvd_of_residue_invariants
+#check localValuationSubring_two_double_not_mem_zeroComponent_of_residue_invariants
+#print axioms localValuationSubring_two_double_not_mem_zeroComponent_of_residue_invariants
 
 end
 end DkMathTest.Lib.NumberTheory.EllipticLocalComponentObstructionCharTwo

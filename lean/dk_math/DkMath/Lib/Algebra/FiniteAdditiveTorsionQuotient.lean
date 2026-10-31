@@ -49,6 +49,23 @@ theorem prime_dvd_natCard_quotient_of_nsmul_not_mem
   simpa only [QuotientAddGroup.ker_mk'] using hzero
 
 /-- [DkMath.Lib]
+The quotient class of a `q`-torsion element outside `H` has exact additive
+order `q`.  This is stronger than divisibility of `Nat.card (G ⧸ H)` and does
+not require the quotient to be finite: the canonical quotient map preserves
+the `q`-multiple, while its kernel is exactly `H`.
+-/
+theorem quotient_addOrder_eq_prime_of_nsmul_not_mem
+    (H : AddSubgroup G) {q : ℕ} [Fact q.Prime] (R : G)
+    (hRq : q • R = 0) (hR : R ∉ H) :
+    addOrderOf (QuotientAddGroup.mk' H R) = q := by
+  apply addOrderOf_eq_prime
+  · rw [← map_nsmul, hRq, map_zero]
+  · intro hzero
+    apply hR
+    rw [← AddMonoidHom.mem_ker] at hzero
+    simpa only [QuotientAddGroup.ker_mk'] using hzero
+
+/-- [DkMath.Lib]
 An element of exact additive order `2*q` forces `q`-torsion in the quotient
 unless its double is already in the subgroup.  If the subgroup has no
 nonzero `q`-torsion, the latter alternative is impossible and the prime must

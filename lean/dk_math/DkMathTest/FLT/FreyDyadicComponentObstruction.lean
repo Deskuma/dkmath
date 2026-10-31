@@ -16,7 +16,9 @@ open DkMath.FLT.Frey.Source
 #check residualDyadicValuationModel_map_subtype
 #check residualDyadicValuationModel_residue_invariants
 #check residual_cofixed_forces_dyadic_component_prime_dvd
+#check residual_cofixed_forces_dyadic_component_prime_order
 
 #print axioms DkMath.FLT.Frey.Source.residual_cofixed_forces_dyadic_component_prime_dvd
+#print axioms DkMath.FLT.Frey.Source.residual_cofixed_forces_dyadic_component_prime_order
 
 end DkMathTest.FLT.FreyDyadicComponentObstruction

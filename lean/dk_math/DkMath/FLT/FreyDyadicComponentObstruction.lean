@@ -187,5 +187,45 @@ theorem residual_cofixed_forces_dyadic_component_prime_dvd
       hp5 (by omega) Wv hΔ hc4 hQv
   exact ⟨Qv, hQv, hnot, hdiv⟩
 
+/--
+The Cofixed dyadic obstruction contains a concrete element of exact order `p`
+in the abstract quotient by the smooth zero component.  Unlike a divisibility
+statement involving `Nat.card`, this conclusion is meaningful without any
+finiteness assumption on the quotient: the element is the class of `2 • Q`.
+-/
+theorem residual_cofixed_forces_dyadic_component_prime_order
+    (hp5 : 5 ≤ p) (hbe : Even S.b)
+    (L : Submodule (ZMod p) S.ResidualSpace)
+    (hline : Module.finrank (ZMod p) L = 1)
+    (hcofixed : IsCofixedOn S.residualRepresentation L) :
+    ∃ T : ((S.residualDyadicValuationModel L hline hcofixed).map
+        (localValuationSubring 2).subtype).toAffine.Point ⧸
+        zeroComponentSubgroup (S.residualDyadicValuationModel L hline hcofixed),
+      addOrderOf T = p := by
+  obtain ⟨Q, hQ⟩ := S.residual_cofixed_implies_rational_two_p_torsion
+    (by omega) hbe L hline hcofixed
+  let Wint := S.residualIntegerKernelModel L hline hcofixed.isStable
+  let Wv := S.residualDyadicValuationModel L hline hcofixed
+  have hbase : Wv.map (localValuationSubring 2).subtype =
+      Wint.map (Int.castRingHom ℚ) :=
+    S.residualDyadicValuationModel_map_subtype L hline hcofixed
+  let Qv : (Wv.map (localValuationSubring 2).subtype).toAffine.Point :=
+    pointEquivOfModelEq hbase.symm Q
+  have hQv : addOrderOf Qv = 2 * p := by
+    exact (pointEquivOfModelEq hbase.symm).addOrderOf_eq Q |>.trans hQ
+  obtain ⟨hΔ, hc4⟩ := residualDyadicValuationModel_residue_invariants S
+    hp5 L hline hcofixed
+  have hdouble : 2 • Qv ∉ zeroComponentSubgroup Wv :=
+    localValuationSubring_two_double_not_mem_zeroComponent_of_residue_invariants
+      hp5 Wv hΔ hc4 hQv
+  have hpdouble : p • (2 • Qv) = 0 := by
+    have htwoq : (2 * p) • Qv = 0 := by
+      rw [← hQv]
+      exact addOrderOf_nsmul_eq_zero Qv
+    exact (mul_nsmul Qv 2 p).symm.trans htwoq
+  refine ⟨QuotientAddGroup.mk' (zeroComponentSubgroup Wv) (2 • Qv), ?_⟩
+  exact quotient_addOrder_eq_prime_of_nsmul_not_mem
+    (zeroComponentSubgroup Wv) (2 • Qv) hpdouble hdouble
+
 end
 end DkMath.FLT.Frey.Source
