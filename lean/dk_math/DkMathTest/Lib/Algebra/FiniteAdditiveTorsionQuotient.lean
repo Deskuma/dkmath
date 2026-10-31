@@ -36,6 +36,13 @@ example {F : Type*} [AddCommGroup F] [Finite F]
     q ∣ Nat.card F :=
   prime_dvd_finite_component_of_ker H φ hker R hRq hRnot
 
+example {F : Type*} [AddCommGroup F] [Finite F]
+    (H : AddSubgroup G) (φ : G →+ F) (hker : φ.ker ≤ H)
+    {q : ℕ} [Fact q.Prime] (R : G)
+    (hRq : q • R = 0) (hRnot : R ∉ H) :
+    q ∣ Nat.card F :=
+  prime_dvd_finite_component_of_ker_le H φ hker R hRq hRnot
+
 example (H : AddSubgroup G) {q : ℕ} [Fact q.Prime] (R : G)
     (horder : addOrderOf R = 2 * q) :
     2 • R ∈ H ∨ q ∣ Nat.card (G ⧸ H) :=
@@ -49,6 +56,7 @@ example (H : AddSubgroup G) {q : ℕ} [Fact q.Prime] (R : G)
 
 #print axioms DkMath.Lib.Algebra.prime_dvd_natCard_quotient_of_nsmul_not_mem
 #print axioms DkMath.Lib.Algebra.prime_dvd_finite_component_of_ker
+#print axioms DkMath.Lib.Algebra.prime_dvd_finite_component_of_ker_le
 #print axioms DkMath.Lib.Algebra.two_nsmul_mem_or_prime_dvd_natCard_quotient_of_addOrder_eq_two_mul_prime
 #print axioms DkMath.Lib.Algebra.prime_dvd_natCard_quotient_of_two_p_torsion
 

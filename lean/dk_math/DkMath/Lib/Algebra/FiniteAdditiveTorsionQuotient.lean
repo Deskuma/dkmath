@@ -87,6 +87,27 @@ theorem prime_dvd_finite_component_of_ker
   exact hzero
 
 /-- [DkMath.Lib]
+The finite component-cardinality argument only needs the one-sided kernel
+inclusion `φ.ker ≤ H`.  A future local component map therefore need not prove
+the converse inclusion before this theorem can be applied: vanishing of the
+image already places the source point in `H`.  This is the minimal interface
+for the dyadic component obstruction; it remains entirely independent of
+Néron models and reduction theory.
+-/
+theorem prime_dvd_finite_component_of_ker_le
+    {G F : Type*} [AddCommGroup G] [AddCommGroup F] [Finite F]
+    (H : AddSubgroup G) (φ : G →+ F) (hker : φ.ker ≤ H)
+    {q : ℕ} [Fact q.Prime] (R : G)
+    (hRq : q • R = 0) (hRnot : R ∉ H) :
+    q ∣ Nat.card F := by
+  apply prime_dvd_natCard_of_addMonoidHom_map_nsmul_eq_zero_of_map_ne_zero φ R hRq
+  intro hzero
+  apply hRnot
+  exact hker (by
+    change φ R = 0
+    exact hzero)
+
+/-- [DkMath.Lib]
 An element of exact additive order `2*q` forces `q`-torsion in the quotient
 unless its double is already in the subgroup.  If the subgroup has no
 nonzero `q`-torsion, the latter alternative is impossible and the prime must

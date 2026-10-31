@@ -674,3 +674,18 @@ remaining work is to construct a finite local component target and prove that
 the rational-to-local component map has the required kernel; only after that
 interface is supplied can the explicit dyadic class of exact order `p` be
 transported to a finite component-cardinality divisibility statement.
+
+The interface is now also available in the weaker form
+`prime_dvd_finite_component_of_ker_le`.  It replaces the kernel equality by
+the single inclusion `φ.ker ≤ H`.  This is the exact logical direction used by
+the cardinality argument: a zero image implies membership in `H`, while the
+converse implication is not needed.  The equality theorem remains available
+for later quotient-identification results, but a local component construction
+may now target only the implication
+
+```text
+φ P = 0  →  P ∈ H.
+```
+
+No local or Néron theorem has been smuggled into this weakening; it is a
+standalone additive-group deduction from the same finite-target torsion lemma.
