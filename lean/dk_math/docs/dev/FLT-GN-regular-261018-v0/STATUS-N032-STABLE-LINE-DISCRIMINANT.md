@@ -518,3 +518,11 @@ double from the smooth zero component.  This is the explicit Lean form of the
 mathematical implication `2R ∈ E₀ ⇒ 2R = 0`, hence `2R ∉ E₀`.
 The component divisibility conclusion still uses the abstract quotient
 interface, and no finite Néron component-group calculation has been added.
+
+The same first-branch exclusion is now consumed on the integral Frey model by
+`residual_cofixed_two_nsmul_not_mem_zeroComponent_of_criticalCentre`.  Starting
+from the existing Cofixed rational `2*p`-torsion constructor and the established
+critical-centre component divisibility theorem, it additionally records
+`2 • Q ∉ E₀` for the transported point.  Thus the integral consumer now
+exposes the one-way local conclusion while retaining the explicit model and
+critical-centre hypotheses.

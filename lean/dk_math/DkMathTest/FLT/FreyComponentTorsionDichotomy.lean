@@ -97,5 +97,28 @@ example (hp5 : 5 ≤ p) (hbe : Even S.b)
 #print axioms DkMath.FLT.Frey.Source.residual_cofixed_component_dichotomy_of_criticalCentre_card_bound
 #print axioms DkMath.FLT.Frey.Source.residual_cofixed_forces_component_prime_dvd_of_criticalCentre
 
+example (hp5 : 5 ≤ p) (hbe : Even S.b)
+    (L : Submodule (ZMod p) S.ResidualSpace)
+    (hline : Module.finrank (ZMod p) L = 1)
+    (hstable : S.IsGaloisStable L) (hcofixed : IsCofixedOn S.residualRepresentation L)
+    {q : ℕ} [Fact q.Prime] {A : ValuationSubring ℚ}
+    [Fintype (ResidueField A)] [DecidableEq (ResidueField A)]
+    (hunit : A.valuation (p : ℚ) = 1)
+    (hresidueCard : Fintype.card (ResidueField A) ≤ q) (hqp : q < p)
+    (W : WeierstrassCurve A)
+    (hmodel : W.map A.subtype =
+      (S.residualIntegerKernelModel L hline hstable).map (Int.castRingHom ℚ))
+    (C : CriticalCentre A (W.map A.subtype)) :
+    ∃ Q : ((S.residualIntegerKernelModel L hline hstable).map
+        (Int.castRingHom ℚ)).toAffine.Point,
+      addOrderOf Q = 2 * p ∧
+      ¬ HasSmoothReduction W (pointEquivOfModelEq hmodel.symm Q) ∧
+      2 • pointEquivOfModelEq hmodel.symm Q ∉ zeroComponentSubgroup W ∧
+      p ∣ Nat.card (((W.map A.subtype).toAffine.Point) ⧸ zeroComponentSubgroup W) :=
+  S.residual_cofixed_two_nsmul_not_mem_zeroComponent_of_criticalCentre
+    hp5 hbe L hline hstable hcofixed hunit hresidueCard hqp W hmodel C
+
+#print axioms DkMath.FLT.Frey.Source.residual_cofixed_two_nsmul_not_mem_zeroComponent_of_criticalCentre
+
 end
 end DkMathTest.FLT.FreyComponentTorsionDichotomy

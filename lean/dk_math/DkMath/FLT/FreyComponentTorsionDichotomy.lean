@@ -185,5 +185,74 @@ theorem residual_cofixed_forces_component_prime_dvd_of_criticalCentre
   · exact prime_dvd_natCard_quotient_of_two_p_torsion
       (zeroComponentSubgroup W) (pointEquivOfModelEq hmodel.symm Q) htransportOrder hker
 
+/-- [DkMath.Lib] The first component branch is explicitly excluded for the
+same Cofixed point.  The preceding theorem already supplies the point,
+non-smoothness, and quotient divisibility.  Here the residue cardinality
+bound is reused to show that `2 • Q` cannot lie in the smooth zero component:
+it is nonzero `p`-torsion, while every smooth `p`-torsion point is zero.
+
+This is a strengthening of the consumer interface, not an identification of
+the quotient with a finite Néron component group.  The latter local theory
+remains separate.
+-/
+theorem residual_cofixed_two_nsmul_not_mem_zeroComponent_of_criticalCentre
+    (hp5 : 5 ≤ p) (hbe : Even S.b)
+    (L : Submodule (ZMod p) S.ResidualSpace)
+    (hline : Module.finrank (ZMod p) L = 1)
+    (hstable : S.IsGaloisStable L) (hcofixed : IsCofixedOn S.residualRepresentation L)
+    {q : ℕ} [Fact q.Prime] {A : ValuationSubring ℚ}
+    [Fintype (ResidueField A)] [DecidableEq (ResidueField A)]
+    (hunit : A.valuation (p : ℚ) = 1)
+    (hresidueCard : Fintype.card (ResidueField A) ≤ q) (hqp : q < p)
+    (W : WeierstrassCurve A)
+    (hmodel : W.map A.subtype =
+      (S.residualIntegerKernelModel L hline hstable).map (Int.castRingHom ℚ))
+    (C : CriticalCentre A (W.map A.subtype)) :
+    ∃ Q : ((S.residualIntegerKernelModel L hline hstable).map
+        (Int.castRingHom ℚ)).toAffine.Point,
+      addOrderOf Q = 2 * p ∧
+      ¬ HasSmoothReduction W (pointEquivOfModelEq hmodel.symm Q) ∧
+      2 • pointEquivOfModelEq hmodel.symm Q ∉ zeroComponentSubgroup W ∧
+      p ∣ Nat.card (((W.map A.subtype).toAffine.Point) ⧸ zeroComponentSubgroup W) := by
+  obtain ⟨Q, hQorder, hQnonsmooth, hdiv⟩ :=
+    S.residual_cofixed_forces_component_prime_dvd_of_criticalCentre
+      hp5 hbe L hline hstable hcofixed hunit hresidueCard hqp W hmodel C
+  let P := pointEquivOfModelEq hmodel.symm Q
+  have hPorder : addOrderOf P = 2 * p :=
+    (pointEquivOfModelEq hmodel.symm).addOrderOf_eq Q |>.trans hQorder
+  let _ : Finite ((W.map (residue A)).toAffine.Point) :=
+    finitePoints (singularCentreOfCriticalCentre W C)
+  have hpos : 0 < Nat.card ((W.map (residue A)).toAffine.Point) :=
+    natCard_points_pos (singularCentreOfCriticalCentre W C)
+  have hbound : Nat.card ((W.map (residue A)).toAffine.Point) ≤
+      Fintype.card (ResidueField A) + 1 :=
+    natCard_points_le_card_add_one (singularCentreOfCriticalCentre W C)
+  have hlt : Nat.card ((W.map (residue A)).toAffine.Point) < p := by
+    calc
+      Nat.card ((W.map (residue A)).toAffine.Point) ≤ Fintype.card (ResidueField A) + 1 := hbound
+      _ ≤ q + 1 := Nat.add_le_add_right hresidueCard 1
+      _ < p := add_one_lt_of_prime_lt_of_five_le hp5 hqp
+  have hcard : ¬ p ∣ Nat.card ((W.map (residue A)).toAffine.Point) :=
+    prime_not_dvd_of_pos_of_lt hpos hlt
+  have hdouble_ne : 2 • P ≠ 0 := by
+    intro hz
+    have hdiv₂ : 2 * p ∣ 2 := by
+      rw [← hPorder]
+      exact addOrderOf_dvd_iff_nsmul_eq_zero.mpr hz
+    have hle : 2 * p ≤ 2 := Nat.le_of_dvd (by decide) hdiv₂
+    have hpge : 2 ≤ p := (Fact.out : p.Prime).two_le
+    omega
+  have hdouble_p : p • (2 • P) = 0 := by
+    have htwo : (2 * p) • P = 0 := by
+      rw [← hPorder]
+      exact addOrderOf_nsmul_eq_zero P
+    exact (mul_nsmul P 2 p).symm.trans htwo
+  have hdouble_not : 2 • P ∉ zeroComponentSubgroup W := by
+    intro hmem
+    have hsmooth : HasSmoothReduction W (2 • P) := (mem_zeroComponentSubgroup_iff W).mp hmem
+    exact hdouble_ne (eq_zero_of_smooth_prime_torsion_of_residue_not_dvd_natCard W hunit hcard
+      hsmooth hdouble_p)
+  exact ⟨Q, hQorder, hQnonsmooth, hdouble_not, hdiv⟩
+
 end
 end DkMath.FLT.Frey.Source
