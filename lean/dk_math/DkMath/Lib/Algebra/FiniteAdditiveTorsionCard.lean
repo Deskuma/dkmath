@@ -59,5 +59,26 @@ theorem prime_dvd_natCard_of_addMonoidHom_map_nsmul_eq_zero_of_map_ne_zero
   · rw [← map_nsmul, hQq, map_zero]
   · exact hφQ
 
+/--
+Let `φ : A →+ G` be the prospective component map.  If its kernel has no
+nonzero `q`-torsion, then every nonzero `q`-torsion point of `A` has nonzero
+image.  Consequently `q` divides `Nat.card G`.
+
+This is the precise group-theoretic form needed for multiplicative reduction:
+the local geometry need only prove that a `q`-torsion point lying in the zero
+component (the kernel of the component map) is zero.  It does *not* construct
+a component group, prove its finiteness, or assert this kernel condition for a
+particular elliptic curve.
+-/
+theorem prime_dvd_natCard_of_torsion_kernel_trivial
+    {A : Type*} [AddGroup A] {q : ℕ} [Fact q.Prime]
+    (φ : A →+ G)
+    (hker : ∀ x : A, q • x = 0 → φ x = 0 → x = 0)
+    (R : A) (hRq : q • R = 0) (hR0 : R ≠ 0) :
+    q ∣ Nat.card G := by
+  apply prime_dvd_natCard_of_addMonoidHom_map_nsmul_eq_zero_of_map_ne_zero φ R hRq
+  intro hφR
+  exact hR0 (hker R hRq hφR)
+
 end
 end DkMath.Lib.Algebra

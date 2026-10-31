@@ -37,7 +37,20 @@ example : 3 ∣ Nat.card (ZMod 3) := by
     decide
   · decide
 
+/-- The identity map has trivial `3`-torsion kernel, so the kernel criterion
+turns the same nonzero torsion point into the cardinality divisibility. -/
+example : 3 ∣ Nat.card (ZMod 3) := by
+  have : Fact (Nat.Prime 3) := ⟨by decide⟩
+  let φ : ZMod 3 →+ ZMod 3 := AddMonoidHom.id (ZMod 3)
+  refine prime_dvd_natCard_of_torsion_kernel_trivial (φ := φ) (R := 1) ?_ ?_ ?_
+  · intro x _ hx
+    simpa [φ] using hx
+  · change (3 : ZMod 3) = 0
+    decide
+  · decide
+
 #print axioms prime_dvd_natCard_of_nsmul_eq_zero_of_ne_zero
 #print axioms prime_dvd_natCard_of_addMonoidHom_map_nsmul_eq_zero_of_map_ne_zero
+#print axioms prime_dvd_natCard_of_torsion_kernel_trivial
 
 end DkMathTest.Lib.Algebra.FiniteAdditiveTorsionCard
