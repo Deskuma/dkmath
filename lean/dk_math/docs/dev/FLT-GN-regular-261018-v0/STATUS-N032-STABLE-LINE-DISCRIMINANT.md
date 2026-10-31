@@ -585,3 +585,38 @@ general finite-residue theorem, with the residue centre constructed internally.
 The remaining inputs are precisely the residue invariant conditions and the
 exact-order point.  Néron component-group transport and the global `hno`
 contradiction remain outside this closure.
+
+## Frey Cofixed dyadic component endpoint
+
+The actual Frey bridge is now implemented in
+`DkMath/FLT/FreyDyadicComponentObstruction.lean`.
+
+`residualDyadicValuationModel` is the explicit transport
+
+```text
+residualIntegerKernelModel (over ℤ)
+  → LocalRing 2
+  → localValuationSubring 2.
+```
+
+`residualDyadicValuationModel_residue_invariants` consumes the existing
+`residual_integer_target_nodal_conditions`.  It extracts the integer facts
+`2 ∣ Δ` and `¬ 2 ∣ c₄` by contradiction with the algebraic-closure valuation,
+then evaluates those facts in `localValuationSubring 2` to obtain residue
+`Δ = 0` and `c₄ ≠ 0`.
+
+The public theorem
+`residual_cofixed_forces_dyadic_component_prime_dvd` combines that invariant
+transport with `residual_cofixed_implies_rational_two_p_torsion` and the
+characteristic-two local component theorem.  A Cofixed stable line therefore
+produces an exact `2 * p` point on the explicit dyadic valuation model, proves
+that it is outside the smooth zero component, and proves
+
+```text
+p ∣ Nat.card (E₂(Q) / zeroComponentSubgroup E₂).
+```
+
+The public theorem exposes none of the auxiliary critical centre, tangent
+direction, finite-residue, or Néron-model data.  The quotient is still the
+abstract smooth-component quotient; its identification with a Néron component
+group and the global `hno` contradiction remain the next unresolved bridge.
