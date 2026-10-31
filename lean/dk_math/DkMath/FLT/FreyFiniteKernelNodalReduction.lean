@@ -9,6 +9,7 @@ import DkMath.FLT.FreyDyadicGeometry
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalReduction
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelCriticalCentre
 import DkMath.Lib.NumberTheory.EllipticNodalSmoothCentre
+import DkMath.Lib.NumberTheory.EllipticNodalSmoothTorsionExclusion
 
 #print "file: DkMath.FLT.FreyFiniteKernelNodalReduction"
 
@@ -27,6 +28,7 @@ open EllipticCriticalCentre EllipticTangentDirections ValuationInertia Valuation
 open ValuationRationalPrimeSupport WeierstrassResidueModel EllipticGoodReductionSeparation
 open EllipticNodalSmoothCard EllipticNodalSmoothCentre
 open EllipticNodalTorsion.NodalTorsion
+open EllipticNodalSmoothTorsionExclusion
 open DkMath.Lib.RepresentationTheory
 noncomputable local instance instDecidableEqFreyFiniteKernelNodalReduction {α : Type*} : DecidableEq α :=
   Classical.decEq _
@@ -166,6 +168,68 @@ noncomputable def residualValuationKernelModel_residue_singularCentre_of_disjoin
   obtain ⟨F, -⟩ := S.residualValuationKernelModel_residue_frame_of_disjoint
     L hl hq hqp A hA hd C D
   exact singularCentreOfFrame _ F
+
+/-- [DkMath.Lib] A residue singular centre immediately gives the finite-point
+cardinality bound needed by the component-group argument.  The proof is
+branch-independent: callers may supply the centre constructed from either
+the smooth or disjoint local branch above.  No identification with a finite
+field point set, and no assertion about the characteristic-zero model, is
+added here.
+-/
+theorem residualValuationKernelModel_residue_pointCard_le
+    {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    [Fintype (ResidueField A)]
+    (L : Submodule (ZMod p) S.ResidualSpace) (hl : Module.finrank (ZMod p) L = 1)
+    (C : SingularCentre ((S.residualValuationKernelModel L hl hq hqp A hA).map (residue A))) :
+    Nat.card ((S.residualValuationKernelModel L hl hq hqp A hA).map
+      (residue A)).toAffine.Point ≤ Fintype.card (ResidueField A) + 1 := by
+  let _ : Finite ((S.residualValuationKernelModel L hl hq hqp A hA).map
+      (residue A)).toAffine.Point := finitePoints C
+  exact natCard_points_le_card_add_one C
+
+/-- [DkMath.Lib] If the residue field has size at most a prime address
+`q < p`, the same centre bound is strictly below `p`.  This is the numerical
+form consumed by the prime-divisibility obstruction; it still concerns only
+the affine residue point group.
+-/
+theorem residualValuationKernelModel_residue_pointCard_lt_of_prime_lt
+    (hp5 : 5 ≤ p) {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    [Fintype (ResidueField A)]
+    (hresidueCard : Fintype.card (ResidueField A) ≤ q) (hqp' : q < p)
+    (L : Submodule (ZMod p) S.ResidualSpace) (hl : Module.finrank (ZMod p) L = 1)
+    (C : SingularCentre ((S.residualValuationKernelModel L hl hq hqp A hA).map (residue A))) :
+    Nat.card ((S.residualValuationKernelModel L hl hq hqp A hA).map
+      (residue A)).toAffine.Point < p := by
+  let : Fact q.Prime := ⟨hq⟩
+  calc
+    Nat.card ((S.residualValuationKernelModel L hl hq hqp A hA).map
+        (residue A)).toAffine.Point ≤ Fintype.card (ResidueField A) + 1 :=
+      residualValuationKernelModel_residue_pointCard_le S hq hqp A hA L hl C
+    _ ≤ q + 1 := Nat.add_le_add_right hresidueCard 1
+    _ < p := add_one_lt_of_prime_lt_of_five_le hp5 hqp'
+
+/-- [DkMath.Lib] Under the preceding strict bound, the residue affine point
+group has cardinality not divisible by `p`.  Positivity comes from the same
+singular centre, so this is a direct finite-group consequence rather than an
+assertion about the component quotient.
+-/
+theorem residualValuationKernelModel_residue_pointCard_not_dvd_of_prime_lt
+    (hp5 : 5 ≤ p) {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    [Fintype (ResidueField A)]
+    (hresidueCard : Fintype.card (ResidueField A) ≤ q) (hqp' : q < p)
+    (L : Submodule (ZMod p) S.ResidualSpace) (hl : Module.finrank (ZMod p) L = 1)
+    (C : SingularCentre ((S.residualValuationKernelModel L hl hq hqp A hA).map (residue A))) :
+    ¬ p ∣ Nat.card ((S.residualValuationKernelModel L hl hq hqp A hA).map
+      (residue A)).toAffine.Point := by
+  let : Fact q.Prime := ⟨hq⟩
+  let _ : Finite ((S.residualValuationKernelModel L hl hq hqp A hA).map
+      (residue A)).toAffine.Point := finitePoints C
+  apply prime_not_dvd_of_pos_of_lt (natCard_points_pos C)
+  exact residualValuationKernelModel_residue_pointCard_lt_of_prime_lt S hp5 hq hqp A hA
+    hresidueCard hqp' L hl C
 
 /-- 同じ中心・方向から同じ整数標的の正式な乗法的還元へ進む。q=2も除外しない。 -/
 theorem residual_integer_target_multiplicative_of_geometry (hp2 : p ≠ 2)

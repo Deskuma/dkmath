@@ -71,6 +71,45 @@ example (hp2 : p ≠ 2) (L : Submodule (ZMod p) S.ResidualSpace)
 
 #print axioms DkMath.FLT.Frey.Source.residualValuationKernelModel_residue_singularCentre_of_smooth
 
+example {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    [Fintype (ResidueField A)] (L : Submodule (ZMod p) S.ResidualSpace)
+    (hl : Module.finrank (ZMod p) L = 1)
+    (C : SingularCentre ((S.residualValuationKernelModel L hl hq hqp A hA).map
+      (IsLocalRing.residue A))) :
+    Nat.card ((S.residualValuationKernelModel L hl hq hqp A hA).map
+      (IsLocalRing.residue A)).toAffine.Point ≤ Fintype.card (ResidueField A) + 1 :=
+  S.residualValuationKernelModel_residue_pointCard_le hq hqp A hA L hl C
+
+#print axioms DkMath.FLT.Frey.Source.residualValuationKernelModel_residue_pointCard_le
+
+example (hp5 : 5 ≤ p) {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    [Fintype (ResidueField A)] (hresidueCard : Fintype.card (ResidueField A) ≤ q)
+    (hqp' : q < p) (L : Submodule (ZMod p) S.ResidualSpace)
+    (hl : Module.finrank (ZMod p) L = 1)
+    (C : SingularCentre ((S.residualValuationKernelModel L hl hq hqp A hA).map
+      (IsLocalRing.residue A))) :
+    Nat.card ((S.residualValuationKernelModel L hl hq hqp A hA).map
+      (IsLocalRing.residue A)).toAffine.Point < p :=
+  S.residualValuationKernelModel_residue_pointCard_lt_of_prime_lt
+    hp5 hq hqp A hA hresidueCard hqp' L hl C
+
+example (hp5 : 5 ≤ p) {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    [Fintype (ResidueField A)] (hresidueCard : Fintype.card (ResidueField A) ≤ q)
+    (hqp' : q < p) (L : Submodule (ZMod p) S.ResidualSpace)
+    (hl : Module.finrank (ZMod p) L = 1)
+    (C : SingularCentre ((S.residualValuationKernelModel L hl hq hqp A hA).map
+      (IsLocalRing.residue A))) :
+    ¬ p ∣ Nat.card ((S.residualValuationKernelModel L hl hq hqp A hA).map
+      (IsLocalRing.residue A)).toAffine.Point :=
+  S.residualValuationKernelModel_residue_pointCard_not_dvd_of_prime_lt
+    hp5 hq hqp A hA hresidueCard hqp' L hl C
+
+#print axioms DkMath.FLT.Frey.Source.residualValuationKernelModel_residue_pointCard_lt_of_prime_lt
+#print axioms DkMath.FLT.Frey.Source.residualValuationKernelModel_residue_pointCard_not_dvd_of_prime_lt
+
 example (L : Submodule (ZMod p) S.ResidualSpace)
     (hl : Module.finrank (ZMod p) L = 1) {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
     (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)

@@ -475,3 +475,17 @@ existing `exists_nodal_kernel_criticalCentre` on the valuation model and then
 to be a rational point of the characteristic-zero quotient.  Thus both local
 branches now expose a residue `SingularCentre`, while their construction
 paths remain distinct.
+
+The branch-independent consumer
+`residualValuationKernelModel_residue_pointCard_le` now turns either centre
+into the finite-point estimate
+`Nat.card (...) ≤ Fintype.card (ResidueField A) + 1`.  This is the exact
+residue-field input for the existing component-quotient torsion dichotomy;
+it does not identify the residue point group with a Néron component group.
+
+For prime addresses `q < p` with `p ≥ 5`, the two arithmetic consumers
+`residualValuationKernelModel_residue_pointCard_lt_of_prime_lt` and
+`residualValuationKernelModel_residue_pointCard_not_dvd_of_prime_lt` now close
+the numerical step: the residue affine point group has cardinality `< p` and
+is therefore not divisible by `p`.  The remaining component-group alternative
+is intentionally not eliminated by this statement alone.
