@@ -193,6 +193,9 @@ import DkMath.Lib.NumberTheory.EllipticMultiplicationValuation
 import DkMath.Lib.NumberTheory.EllipticNodalInertia
 import DkMath.Lib.NumberTheory.EllipticNodalReduction
 import DkMath.Lib.NumberTheory.EllipticNodalReductionKernel
+import DkMath.Lib.NumberTheory.EllipticNodalSmoothCard
+import DkMath.Lib.NumberTheory.EllipticNodalSmoothCentre
+import DkMath.Lib.NumberTheory.EllipticNodalSmoothTorsionExclusion
 import DkMath.Lib.NumberTheory.EllipticNodalTorsion
 import DkMath.Lib.NumberTheory.EllipticNodalTorsionBound
 import DkMath.Lib.NumberTheory.EllipticOppositeDepth

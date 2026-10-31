@@ -178,6 +178,8 @@ import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelVeluEquation
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelZeroComponent
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelZeroComponentExact
 import DkMathTest.Lib.NumberTheory.EllipticFrobeniusBranchSwap
+import DkMathTest.Lib.NumberTheory.EllipticNodalSmoothCard
+import DkMathTest.Lib.NumberTheory.EllipticNodalSmoothTorsionExclusion
 import DkMathTest.Lib.NumberTheory.EllipticNodalTorsionBound
 import DkMathTest.Lib.NumberTheory.EllipticSplitDyadic
 import DkMathTest.Lib.NumberTheory.EllipticThreeKernelDiscriminant

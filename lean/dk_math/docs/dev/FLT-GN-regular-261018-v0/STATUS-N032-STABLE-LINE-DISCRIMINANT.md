@@ -324,3 +324,59 @@ Néron 模型を構成する定理ではなく、後段の局所幾何学から�
 局所幾何の義務である。一方、この濃度公式が供給されれば、零成分の `p`-torsion
 消滅と、厳密位数 `2 * p` 点の零成分からの排除は今回の定理で閉じる。大域的な
 `2 * p`-torsion の不存在や成分群像の消滅を主張するものではない。
+
+## 今回の追加実装: 有理節点の傾き座標による零成分の上界
+
+`DkMath.Lib.NumberTheory.EllipticNodalSmoothCard` と
+`DkMath.Lib.NumberTheory.EllipticNodalSmoothTorsionExclusion` を追加した。
+ここでの目的は、分裂・非分裂の判定や接方向の選択を先送りしつつ、有理な節点を
+持つ Weierstrass 三次曲線の滑らかな点群に、この局所排除に十分な濃度上界を与えることである。
+
+- `SingularCentre`
+  - 曲線方程式と二つの偏微分が零となる有理アファイン点を、節点候補として明示的に
+    まとめる。これは乗法的還元から中心を構成する定理ではなく、その幾何学的出力を
+    受け取るための最小のデータである。
+- `SingularCentre.translated_equation`
+  - 中心を原点へ平行移動すると
+    \(Y^2+a_1XY-(a_2+3x_0)X^2=X^3\) となることを証明する。
+- `SingularCentre.slopeAt_injective`
+  - 中心以外の滑らかな点を傾き \(Y/X\) へ、中心そのものを `none` へ送る
+    `Option K` 値写像が単射であることを証明する。接線因子の分解を仮定しないため、
+    分裂・非分裂の節点を同じ定理で扱う。
+- `natCard_points_le_card_add_one`
+  - 有限体上では上の単射から
+    \(\#E_{\rm sm}(K)\leq\#K+1\) を導く。ここで `toAffine.Point` は既に
+    非特異点だけからなるため、別途「滑らか部分」を切り出す必要はない。
+- `not_addOrder_eq_two_mul_prime_of_smooth_of_nodal_card_bound`
+  - 剰余体濃度 \(\leq q\)、素数 \(q<p\)、\(5\leq p\) のもとで、上界
+    \(\#E_{\rm sm}\leq q+1<p\) を素数可除性の排除へ通し、滑らかな一般
+    ファイバーの厳密位数 \(2p\) 点を排除する。従来の `q-1` / `q+1` の正確な
+    点数公式を要求しない。
+- `singularCentreOfCriticalCentre`
+  - 既存の `CriticalCentre A (W.map A.subtype)` の積分座標を還元し、
+    `CriticalCentre.residue_singular` が供給する方程式と偏微分の消滅を
+    `SingularCentre (W.map (residue A))` へ束ね直す。これにより、節点の傾き座標は
+    既存の付値論的中心データをそのまま消費できる。
+- `not_addOrder_eq_two_mul_prime_of_smooth_of_criticalCentre_card_bound`
+  - 上の変換を内部で適用した `CriticalCentre` 入力版である。利用側は剰余特異点を
+    もう一度選択・証明せず、零成分の厳密位数 `2*p` 排除を使える。
+
+従って、乗法的還元から既存の形の `CriticalCentre` と剰余体濃度の小さい住所を供給できれば、
+零成分にある Cofixed 由来の `2*p`-torsion は直接矛盾する。今回まだ証明していないのは、
+実際の Frey 商曲線の乗法的還元からその `CriticalCentre` を構成すること、および零成分の外にある
+点を成分群で扱うことである。したがって `hno` 全体や大域的な torsion 不存在は閉じていない。
+
+### 今回の検証
+
+- `lake build DkMath.Lib.NumberTheory.EllipticNodalSmoothCard`
+- `lake build DkMathTest.Lib.NumberTheory.EllipticNodalSmoothCard`
+- `lake build DkMath.Lib.NumberTheory.EllipticNodalSmoothCentre`
+- `lake build DkMath.Lib.NumberTheory.EllipticNodalSmoothTorsionExclusion`
+- `lake build DkMathTest.Lib.NumberTheory.EllipticNodalSmoothTorsionExclusion`
+- `lake build DkMath.Lib`
+- `git diff --check`
+
+二つの新規回帰テストは傾き写像の単射、点数上界、正性、および零成分での厳密位数
+`2*p` の排除を `example` から使用する。`#print axioms` の対象はすべて
+`[propext, Classical.choice, Quot.sound]` のみであり、新規ファイルには `sorry` や独自
+`axiom` を導入していない。
