@@ -188,6 +188,47 @@ theorem residual_cofixed_forces_primorial_support
         (S.residual_cofixed_forces_small_prime_support hp5 hbe hline hstable hcofixed)
           q hqprime hq2 (Finset.mem_range.mp hqrange)
 
+/--
+The primorial support criterion can be read contrapositively as an `hno`
+entry point. A single non-divisibility hypothesis now excludes every Cofixed
+stable line at once; no choice of a witness prime below `p` is required from
+the caller.
+-/
+theorem residual_hno_of_not_primorial_dvd
+    (hp5 : 5 ≤ p) (hbe : Even S.b)
+    (hd : ¬ (primorial (p - 1) : ℤ) ∣ S.a * S.b * S.c) :
+    ¬ ∃ L : Submodule (ZMod p) S.ResidualSpace,
+      Module.finrank (ZMod p) L = 1 ∧ S.IsGaloisStable L ∧
+        IsCofixedOn S.residualRepresentation L := by
+  rintro ⟨L, hline, hstable, hcofixed⟩
+  exact hd (S.residual_cofixed_forces_primorial_support
+    hp5 hbe hline hstable hcofixed)
+
+/--
+If a Cofixed line survives, every prime address below `p` is a bad address of
+the integer quotient model. The existing local reduction theorem then turns
+the pointwise support statement into multiplicative reduction, including the
+dyadic address through its separate parity branch. The conclusion deliberately
+stops at `q < p`; the self-address `q = p` remains a distinct local problem.
+-/
+theorem residual_cofixed_forces_multiplicative_below_p
+    (hp5 : 5 ≤ p) (hbe : Even S.b)
+    {L : Submodule (ZMod p) S.ResidualSpace}
+    (hline : Module.finrank (ZMod p) L = 1)
+    (hstable : S.IsGaloisStable L)
+    (hcofixed : IsCofixedOn S.residualRepresentation L)
+    {q : ℕ} [Fact q.Prime] (hqp : q < p) :
+    HasMultiplicativeReduction (FreyLocalReduction.LocalRing q)
+      ((S.residualIntegerKernelModel L hline hstable).map (Int.castRingHom ℚ)) := by
+  have hbad : q = 2 ∨ (q : ℤ) ∣ S.a * S.b * S.c := by
+    by_cases hq2 : q = 2
+    · exact Or.inl hq2
+    · exact Or.inr
+        ((S.residual_cofixed_forces_small_prime_support hp5 hbe hline hstable hcofixed)
+          q (Fact.out : q.Prime) hq2 hqp)
+  exact S.residual_integer_target_multiplicative_at_bad_place
+    hp5 L hline hstable (by omega) hbad
+
 /-- `q = 3` の既存入口を、一般小素数定理の教材的特殊化として再公開する。 -/
 theorem residual_irreducible_of_three_good (hp5 : 5 ≤ p) (hbe : Even S.b)
     (hd : ¬ (3 : ℤ) ∣ S.a * S.b * S.c) :

@@ -12,6 +12,8 @@ namespace DkMathTest.FLT.FreyHnoSmallGoodPrime
 
 open DkMath.FLT.Frey
 open DkMath.FLT.Frey.Source
+open WeierstrassCurve
+open DkMath.Lib.NumberTheory
 open DkMath.Lib.NumberTheory.ValuationInertia
 open DkMath.Lib.RepresentationTheory
 
@@ -70,6 +72,27 @@ example (hp5 : 5 ≤ p) (hbe : Even S.b)
     (primorial (p - 1) : ℤ) ∣ S.a * S.b * S.c :=
   S.residual_cofixed_forces_primorial_support hp5 hbe hline hstable hcofixed
 
+/-! A single primorial non-divisibility hypothesis gives the contrapositive hno. -/
+example (hp5 : 5 ≤ p) (hbe : Even S.b)
+    (hd : ¬ (primorial (p - 1) : ℤ) ∣ S.a * S.b * S.c) :
+    ¬ ∃ L : Submodule (ZMod p) S.ResidualSpace,
+      Module.finrank (ZMod p) L = 1 ∧ S.IsGaloisStable L ∧
+        IsCofixedOn S.residualRepresentation L :=
+  S.residual_hno_of_not_primorial_dvd hp5 hbe hd
+
+/-! Every prime below `p` is a multiplicative-reduction address for a surviving
+    Cofixed line; the `q = p` address is intentionally excluded. -/
+example (hp5 : 5 ≤ p) (hbe : Even S.b)
+    {L : Submodule (ZMod p) S.ResidualSpace}
+    (hline : Module.finrank (ZMod p) L = 1)
+    (hstable : S.IsGaloisStable L)
+    (hcofixed : IsCofixedOn S.residualRepresentation L)
+    {q : ℕ} [Fact q.Prime] (hqp : q < p) :
+    HasMultiplicativeReduction (FreyLocalReduction.LocalRing q)
+      ((S.residualIntegerKernelModel L hline hstable).map (Int.castRingHom ℚ)) :=
+  S.residual_cofixed_forces_multiplicative_below_p
+    hp5 hbe hline hstable hcofixed hqp
+
 /-! The `q = 3` instance supplies the oriented irreducibility conclusion. -/
 example (hp5 : 5 ≤ p) (hbe : Even S.b)
     (hd : ¬ (3 : ℤ) ∣ S.a * S.b * S.c) :
@@ -92,6 +115,8 @@ example (hp5 : 5 ≤ p) (ha8 : S.a % 8 = 7)
 #print axioms DkMath.FLT.Frey.Source.residual_cofixed_forces_prime_support
 #print axioms DkMath.FLT.Frey.Source.residual_cofixed_forces_odd_prime_product_support
 #print axioms DkMath.FLT.Frey.Source.residual_cofixed_forces_primorial_support
+#print axioms DkMath.FLT.Frey.Source.residual_hno_of_not_primorial_dvd
+#print axioms DkMath.FLT.Frey.Source.residual_cofixed_forces_multiplicative_below_p
 #print axioms DkMath.FLT.Frey.Source.residual_irreducible_of_three_good
 #print axioms DkMath.FLT.Frey.Source.residual_escape_outside_decomposition_of_three_good_seven
 
