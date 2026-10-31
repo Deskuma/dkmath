@@ -232,6 +232,9 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
   - `q < p` の各素数住所について、点wise 支持条件を既存の
     `residual_integer_target_multiplicative_at_bad_place` へ渡し、整数商標的の乗法的還元を
     得る。`q = 2` は dyadic 分岐、奇素数は primorial 支持へ分け、`q = p` は意図的に除外する。
+- `residual_cofixed_forces_not_good_reduction_below_p`
+  - 上の乗法的還元と Mathlib の還元型排反性を組み合わせ、Cofixed 枝が残る限り
+    `q < p` で同じ整数商標的が良還元を持たないことを明示する。
 - `residual_irreducible_of_three_good`
   - 上の一般定理を `q = 3` へ特殊化し、既存の oriented cofixed obstruction から
     `S.ResidualIsIrreducible` を直接供給。
@@ -240,8 +243,8 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
     `σ ∉ A.decompositionSubgroup ℚ` と零成分からの脱出点の存在を供給。
 
 従って、今回新しく証明したのは `q` を一般化した局所位数矛盾と、そこから得られる
-全素数の点wise 支持・有限積・primorial 支持、primorial 非可除性からの `hno`、および
-小素数住所での乗法的還元であり、既約性と分解群外元の定理は既存の大域同値との合成である。
+全素数の点wise 支持・有限積・primorial 支持、primorial 非可除性からの `hno`、小素数住所での
+乗法的還元と良還元排除であり、既約性と分解群外元の定理は既存の大域同値との合成である。
 `q ∣ a*b*c` の住所そのものを除く場合、`q = p`、全ての Frey 住所を覆う無条件 `hno`、
 および FLT の閉鎖は未解決のままである。
 
@@ -254,7 +257,7 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 
 回帰テスト `DkMathTest.FLT.FreyHnoSmallGoodPrime` は一般 `q` の排除、Cofixed 枝の
 小素数支持条件、全素数の点wise 支持条件とその有限積版、標準 primorial への輸送、
-primorial 非可除性からの `hno`、`q < p` の乗法的還元、`q = 3` の既約性、`a ≡ 7 mod 8`
-の分解群外逃避を `example` から使用する。九公開定理の
+primorial 非可除性からの `hno`、`q < p` の乗法的還元と良還元排除、`q = 3` の既約性、
+`a ≡ 7 mod 8` の分解群外逃避を `example` から使用する。十公開定理の
 `#print axioms` はいずれも `[propext, Classical.choice, Quot.sound]` であり、今回の
 追加ファイルには新しい `sorry` や独自 `axiom` はない。

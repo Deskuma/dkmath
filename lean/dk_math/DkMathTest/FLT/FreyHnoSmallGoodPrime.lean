@@ -93,6 +93,19 @@ example (hp5 : 5 ≤ p) (hbe : Even S.b)
   S.residual_cofixed_forces_multiplicative_below_p
     hp5 hbe hline hstable hcofixed hqp
 
+/-! The same local conclusion is exposed as the impossibility of good
+    reduction at a prime below `p`. -/
+example (hp5 : 5 ≤ p) (hbe : Even S.b)
+    {L : Submodule (ZMod p) S.ResidualSpace}
+    (hline : Module.finrank (ZMod p) L = 1)
+    (hstable : S.IsGaloisStable L)
+    (hcofixed : IsCofixedOn S.residualRepresentation L)
+    {q : ℕ} [Fact q.Prime] (hqp : q < p) :
+    ¬ HasGoodReduction (FreyLocalReduction.LocalRing q)
+      ((S.residualIntegerKernelModel L hline hstable).map (Int.castRingHom ℚ)) :=
+  S.residual_cofixed_forces_not_good_reduction_below_p
+    hp5 hbe hline hstable hcofixed hqp
+
 /-! The `q = 3` instance supplies the oriented irreducibility conclusion. -/
 example (hp5 : 5 ≤ p) (hbe : Even S.b)
     (hd : ¬ (3 : ℤ) ∣ S.a * S.b * S.c) :
@@ -117,6 +130,7 @@ example (hp5 : 5 ≤ p) (ha8 : S.a % 8 = 7)
 #print axioms DkMath.FLT.Frey.Source.residual_cofixed_forces_primorial_support
 #print axioms DkMath.FLT.Frey.Source.residual_hno_of_not_primorial_dvd
 #print axioms DkMath.FLT.Frey.Source.residual_cofixed_forces_multiplicative_below_p
+#print axioms DkMath.FLT.Frey.Source.residual_cofixed_forces_not_good_reduction_below_p
 #print axioms DkMath.FLT.Frey.Source.residual_irreducible_of_three_good
 #print axioms DkMath.FLT.Frey.Source.residual_escape_outside_decomposition_of_three_good_seven
 

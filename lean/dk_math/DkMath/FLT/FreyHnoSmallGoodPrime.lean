@@ -229,6 +229,25 @@ theorem residual_cofixed_forces_multiplicative_below_p
   exact S.residual_integer_target_multiplicative_at_bad_place
     hp5 L hline hstable (by omega) hbad
 
+/--
+The multiplicative conclusion has the expected reduction-type corollary:
+while a Cofixed line survives, the same quotient model cannot have good
+reduction at any prime `q < p`. This is recorded separately because later
+local arguments may naturally produce a good-reduction witness rather than
+the arithmetic non-divisibility witness used by `hno`.
+-/
+theorem residual_cofixed_forces_not_good_reduction_below_p
+    (hp5 : 5 ≤ p) (hbe : Even S.b)
+    {L : Submodule (ZMod p) S.ResidualSpace}
+    (hline : Module.finrank (ZMod p) L = 1)
+    (hstable : S.IsGaloisStable L)
+    (hcofixed : IsCofixedOn S.residualRepresentation L)
+    {q : ℕ} [Fact q.Prime] (hqp : q < p) :
+    ¬ HasGoodReduction (FreyLocalReduction.LocalRing q)
+      ((S.residualIntegerKernelModel L hline hstable).map (Int.castRingHom ℚ)) := by
+  exact (S.residual_cofixed_forces_multiplicative_below_p
+    hp5 hbe hline hstable hcofixed hqp).not_hasGoodReduction
+
 /-- `q = 3` の既存入口を、一般小素数定理の教材的特殊化として再公開する。 -/
 theorem residual_irreducible_of_three_good (hp5 : 5 ≤ p) (hbe : Even S.b)
     (hd : ¬ (3 : ℤ) ∣ S.a * S.b * S.c) :
