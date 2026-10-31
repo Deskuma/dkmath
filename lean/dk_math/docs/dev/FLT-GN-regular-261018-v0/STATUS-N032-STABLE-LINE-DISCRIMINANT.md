@@ -444,7 +444,10 @@ The residue-side interface now also contains `singularCentreOfFrame`.  It
 forgets the chosen tangent direction from an existing `Frame` and packages
 the equation and both vanishing partial derivatives as a `SingularCentre`.
 This is deliberately weaker than constructing a rational centre from
-`Δ = 0` and `c₄ ≠ 0`: nonsplit nodes may have no rational singular point.
+`Δ = 0` and `c₄ ≠ 0`: a nonsplit node may still be a rational singular point;
+what may fail over the base field is the splitting of its two tangent
+directions.  `singularCentreOfFrame` therefore still requires a supplied frame
+and does not construct a centre from `Δ = 0` and `c₄ ≠ 0` alone.
 The next geometric task is therefore to supply such a residue frame or centre
 from the concrete Frey reduction data, rather than to assert a false general
 rationality implication.
@@ -526,3 +529,35 @@ critical-centre component divisibility theorem, it additionally records
 `2 • Q ∉ E₀` for the transported point.  Thus the integral consumer now
 exposes the one-way local conclusion while retaining the explicit model and
 critical-centre hypotheses.
+
+## Finite-residue correction for an actual `q`-adic address
+
+The earlier `residualValuationKernelModel_*` family is intentionally an
+abstract geometric interface.  Its assumptions
+`A : ValuationSubring (AlgebraicClosure ℚ)` and
+`[Fintype (ResidueField A)]` should not be read as a concrete construction of
+the `q`-adic residue field: an algebraically closed residue field is not the
+finite field `𝔽_q` used in the arithmetic application.
+
+`EllipticLocalComponentObstruction` supplies the corrected finite layer.  It
+uses `localValuationSubring q`, whose residue field is canonically `ZMod q`,
+and proves
+`localValuationSubring_component_prime_dvd_of_singularCentre`.  For
+`q < p`, `p ≥ 5`, a supplied residue `SingularCentre`, and an exact-order
+`2*p` point, this theorem gives both
+
+* `¬ HasSmoothReduction W R`, and
+* `p ∣ Nat.card (E(A) ⧸ zeroComponentSubgroup W)`.
+
+The valuation-one lemma for `p` is proved from the explicit
+`localValuationSubring_liesOverPrime q` address and prime distinctness; the
+finite residue cardinality is obtained from
+`localValuationSubringResidueField_card`.  Thus the theorem is applicable to
+the actual local arithmetic model without changing the old algebraically
+closed geometric statements.
+
+This correction still does not identify the abstract quotient with a Néron
+component group, construct a rational singular centre from `Δ = 0` and
+`c₄ ≠ 0`, or close the global `hno` contradiction.  Those remain separate
+local/global theories rather than hidden assumptions of the finite-residue
+theorem.

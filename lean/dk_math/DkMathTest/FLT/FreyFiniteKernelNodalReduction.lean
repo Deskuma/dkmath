@@ -131,7 +131,7 @@ example (hp5 : 5 ≤ p) {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
       p ∣ Nat.card (((S.residualValuationKernelModel L hl hq hqp A hA).map A.subtype).toAffine.Point ⧸
         zeroComponentSubgroup (S.residualValuationKernelModel L hl hq hqp A hA)) :=
   by
-    letI : DecidableEq (ResidueField A) := Classical.decEq _
+    let : DecidableEq (ResidueField A) := Classical.decEq _
     exact S.residualValuationKernelModel_component_prime_dvd_of_residue_centre
       hp5 hq hqp A hA hresidueCard hqp' L hl C hR
 
@@ -150,7 +150,7 @@ example (hp5 : 5 ≤ p) (hp2 : p ≠ 2)
     ¬ HasSmoothReduction (S.residualValuationKernelModel L hl hq hqp A hA) R ∧
       p ∣ Nat.card (((S.residualValuationKernelModel L hl hq hqp A hA).map A.subtype).toAffine.Point ⧸
         zeroComponentSubgroup (S.residualValuationKernelModel L hl hq hqp A hA)) := by
-  letI : DecidableEq (ResidueField A) := Classical.decEq _
+  let : DecidableEq (ResidueField A) := Classical.decEq _
   exact S.residualValuationKernelModel_component_prime_dvd_of_smooth_branch
     hp5 hp2 L hl hq hqp A hA hle hresidueCard hqp' C D hR
 
@@ -169,7 +169,7 @@ example (hp5 : 5 ≤ p)
     ¬ HasSmoothReduction (S.residualValuationKernelModel L hl hq hqp A hA) R ∧
       p ∣ Nat.card (((S.residualValuationKernelModel L hl hq hqp A hA).map A.subtype).toAffine.Point ⧸
         zeroComponentSubgroup (S.residualValuationKernelModel L hl hq hqp A hA)) := by
-  letI : DecidableEq (ResidueField A) := Classical.decEq _
+  let : DecidableEq (ResidueField A) := Classical.decEq _
   exact S.residualValuationKernelModel_component_prime_dvd_of_disjoint_branch
     hp5 L hl hq hqp A hA hresidueCard hqp' hd C D hR
 
@@ -187,7 +187,7 @@ example (hp5 : 5 ≤ p)
     ¬ HasSmoothReduction (S.residualValuationKernelModel L hl hq hqp A hA) R ∧
       p ∣ Nat.card (((S.residualValuationKernelModel L hl hq hqp A hA).map A.subtype).toAffine.Point ⧸
         zeroComponentSubgroup (S.residualValuationKernelModel L hl hq hqp A hA)) := by
-  letI : DecidableEq (ResidueField A) := Classical.decEq _
+  let : DecidableEq (ResidueField A) := Classical.decEq _
   exact S.residualValuationKernelModel_component_prime_dvd_of_geometry
     hp5 L hl hq hqp A hA hresidueCard hqp' C D hR
 
@@ -203,7 +203,7 @@ example (hp5 : 5 ≤ p) {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
     {R : ((S.residualValuationKernelModel L hl hq hqp A hA).map A.subtype).toAffine.Point}
     (hR : addOrderOf R = 2 * p) :
     2 • R ∉ zeroComponentSubgroup (S.residualValuationKernelModel L hl hq hqp A hA) := by
-  letI : DecidableEq (ResidueField A) := Classical.decEq _
+  let : DecidableEq (ResidueField A) := Classical.decEq _
   exact S.residualValuationKernelModel_two_nsmul_not_mem_zeroComponent_of_geometry
     hp5 hq hqp A hA hresidueCard hqp' L hl C hR
 

@@ -392,6 +392,7 @@ import DkMath.Lib.NumberTheory.FreyLocalResidueField
 import DkMath.Lib.NumberTheory.EllipticSmoothTorsionOrderBound
 import DkMath.Lib.NumberTheory.FreyLocalValuationSubring
 import DkMath.Lib.NumberTheory.FreyLocalTorsionOrderBound
+import DkMath.Lib.NumberTheory.EllipticLocalComponentObstruction
 
 #print "file: DkMath.Lib"
 
