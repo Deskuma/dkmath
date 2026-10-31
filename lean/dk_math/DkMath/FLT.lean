@@ -37,6 +37,7 @@ import DkMath.FLT.FreyFiniteKernelGeneration
 import DkMath.FLT.FreyFiniteKernelGlobal
 import DkMath.FLT.FreyFiniteKernelGoodReduction
 import DkMath.FLT.FreyHnoSmallGoodPrime
+import DkMath.FLT.FreyNodalSmoothTorsionExclusion
 import DkMath.FLT.FreyHnoThreeGood
 import DkMath.FLT.FreyFiniteKernelHom
 import DkMath.FLT.FreyFiniteKernelIntegralModel

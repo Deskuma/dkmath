@@ -380,3 +380,27 @@ Néron 模型を構成する定理ではなく、後段の局所幾何学から�
 `2*p` の排除を `example` から使用する。`#print axioms` の対象はすべて
 `[propext, Classical.choice, Quot.sound]` のみであり、新規ファイルには `sorry` や独自
 `axiom` を導入していない。
+
+## 今回の追加実装: Cofixed 点を局所零成分外へ輸送
+
+`DkMath.FLT.FreyNodalSmoothTorsionExclusion` を追加した。
+
+- `residual_cofixed_exists_two_p_torsion_not_smooth_of_criticalCentre`
+  - Cofixed な安定一次元直線から既存の
+    `residual_cofixed_implies_rational_two_p_torsion` が構成する、同じ整数商の
+    厳密位数 `2*p` の有理点を使用する。
+  - 局所積分モデル `W` の一般ファイバーと整数商モデルの等式を
+    `pointEquivOfModelEq` で明示的に通し、`addOrderOf` がその加法同型で保存される
+    ことを使う。従って、`CriticalCentre`、`q < p`、`p ≥ 5`、および剰余体濃度の
+    上界のもとで、その具体的な点が `HasSmoothReduction W` を満たさないことを得る。
+  - 結論は
+    \[
+      \mathrm{Cofixed}\Rightarrow
+      \exists Q,\quad \operatorname{ord}(Q)=2p\ \land\ Q\notin E_0
+    \]
+    の局所的な形であり、`HasSmoothReduction` を零成分の表現としている。
+
+この定理は、Frey 商の乗法的還元だけから `W`、一般ファイバーの等式、または
+`CriticalCentre` を構成したとは主張しない。特に、零成分外の点の成分群像が
+`p`-torsion を持つ可能性は残る。したがって一般 `hno`、成分群の可除性、あるいは
+FLT の閉鎖は、この接続定理だけからは導かれない。
