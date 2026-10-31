@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-01",
+  "external_checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "external_head": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "entry": "P2M.Sol.S_WeierstrassCurve_mazurStepThree_not_inZeroComponentAt",
+  "syntactic_transitive_imports_excluding_mathlib": 11111,
+  "count_scope": "Definitions.*, Theorems.*, P2M.*; includes wrappers and utility dependencies; not a minimal port estimate",
+  "required_global_endpoints": [
+    "heckeOperatorsCommuteBar",
+    "eisensteinQuotientInvariantsFiniteAt_heckeModuleBar",
+    "cuspidalClassSurvives_heckeModuleBar",
+    "mazurQuotientSpecialization_heckeModuleBar",
+    "moduliPointExists_jQuotVelu_of_mult_two",
+    "tateCuspCriterion_jQuotVelu"
+  ],
+  "sources": {
+    "Theorems/Thm_WeierstrassCurve_mazurStepThree_not_inZeroComponentAt.lean": "1c52404fcc3d3db58d1be0ed8e51f6078bbb170a57807b9156fe44f3076f51fa",
+    "Definitions/Def_ModularCurve_MazurStepThree.lean": "918821a168a353596f0ee76377a17f3159196c72c1b2d99ebadeeffb7014ee3d",
+    "Definitions/Def_ModularCurve_MazurStepThreeInputs.lean": "6edab6c94b6a7a5a26094a9f67cea993d6f16d37366d0dfc1d31586cebcdf0e5",
+    "P2M/Sol/S_WeierstrassCurve_mazurStepThree_not_inZeroComponentAt.lean": "e848ebcd31ff24f4dd7fe9d5c39c7fb0811c2aab158f67478faff421075a8a90",
+    "P2M/Sol/S_FreyPackage_frey_no_cofixed_large.lean": "16750fcba1f02ba21bcbfa5999103c03be4f85c2359913c51c0b83cef66d2413"
+  },
+  "boundary": "Local point and 2/3 inputs are implemented. Global Step Three and the later cofixed exclusion are not proved in DkMath."
+}

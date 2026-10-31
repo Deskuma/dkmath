@@ -396,6 +396,9 @@ import DkMath.Lib.NumberTheory.FreyLocalTorsionOrderBound
 import DkMath.Lib.NumberTheory.EllipticLocalComponentObstruction
 import DkMath.Lib.NumberTheory.EllipticLocalComponentObstructionCharTwo
 import DkMath.Lib.NumberTheory.EllipticBaseChangeTorsion
+import DkMath.Lib.NumberTheory.WeierstrassNodalCenterCharThree
+import DkMath.Lib.NumberTheory.EllipticLocalComponentObstructionCharThree
+import DkMath.Lib.NumberTheory.EllipticRationalLocalTransport
 
 #print "file: DkMath.Lib"
 

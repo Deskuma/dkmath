@@ -329,5 +329,8 @@ import DkMathTest.Lib.NumberTheory.EllipticSmoothTorsionOrderBound
 import DkMathTest.Lib.NumberTheory.EllipticSmoothTorsionPrimeExclusion
 import DkMathTest.Lib.NumberTheory.FreyLocalValuationSubring
 import DkMathTest.Lib.NumberTheory.FreyLocalTorsionOrderBound
+import DkMathTest.Lib.NumberTheory.WeierstrassNodalCenterCharThree
+import DkMathTest.Lib.NumberTheory.EllipticRationalLocalTransport
+import DkMathTest.FLT.FreyMazurLocalInputs
 
 #print "file: DkMathTest"

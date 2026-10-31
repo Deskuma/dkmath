@@ -6,7 +6,8 @@ Released under MIT license as described in the file LICENSE.
 import DkMath.FLT.FreyFiniteKernelIntegralModel
 import DkMath.FLT.FreyFiniteKernelSpecialization
 import DkMath.FLT.FreyRationalTorsionBounds
-import DkMath.Lib.NumberTheory.EllipticFixedTorsion
+import DkMath.Lib.NumberTheory.EllipticBaseChangeTorsion
+import DkMath.Lib.Algebra.FiniteAdditiveTorsionQuotient
 
 #print "file: DkMath.FLT.FreyRationalTwoPTorsion"
 
@@ -168,6 +169,33 @@ theorem residual_cofixed_implies_rational_two_p_torsion (hp2 : p ≠ 2)
         rw [Nat.mul_div_cancel 2 (Nat.Prime.pos (Fact.out : p.Prime))]
         exact h2Q
   exact ⟨Q, hQ_order⟩
+
+/-- A Cofixed line supplies an exact-order `p` geometric point fixed by every
+absolute Galois element.  The witness is the base change of the double of the
+same rational `2*p` point; no local transport or Mazur theorem is assumed. -/
+theorem residual_cofixed_implies_geometric_rational_prime_torsion (hp2 : p ≠ 2)
+    (hbe : Even S.b) (L : Submodule (ZMod p) S.ResidualSpace)
+    (hline : Module.finrank (ZMod p) L = 1)
+    (hL : IsCofixedOn S.residualRepresentation L) :
+    ∃ Q : ((S.residualIntegerKernelModel L hline hL.isStable).map
+        (Int.castRingHom ℚ)).toAffine.Point,
+      addOrderOf Q = 2 * p ∧
+      addOrderOf (baseChangePoint
+        ((S.residualIntegerKernelModel L hline hL.isStable).map (Int.castRingHom ℚ))
+        (2 • Q)) = p ∧
+      ∀ σ : Field.absoluteGaloisGroup ℚ,
+        pointAction
+          ((S.residualIntegerKernelModel L hline hL.isStable).map (Int.castRingHom ℚ)) σ
+          (baseChangePoint
+            ((S.residualIntegerKernelModel L hline hL.isStable).map (Int.castRingHom ℚ))
+            (2 • Q)) =
+          baseChangePoint
+            ((S.residualIntegerKernelModel L hline hL.isStable).map (Int.castRingHom ℚ))
+            (2 • Q) := by
+  obtain ⟨Q, hQ⟩ := S.residual_cofixed_implies_rational_two_p_torsion hp2 hbe L hline hL
+  refine ⟨Q, hQ, ?_, fun σ => pointAction_baseChange _ σ (2 • Q)⟩
+  rw [addOrderOf_baseChangePoint_eq]
+  exact DkMath.Lib.Algebra.addOrderOf_two_nsmul_eq_prime_of_addOrder_eq_two_mul_prime' Q hQ
 
 /--
 `a ≡ 7 mod 8` から `Even S.b` を既存の正規化補題で供給する公開ラッパー。

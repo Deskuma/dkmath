@@ -125,6 +125,20 @@ theorem addOrderOf_two_nsmul_eq_prime_of_addOrder_eq_two_mul_prime
     exact (mul_nsmul R 2 q).symm.trans htwoq
   · exact hdouble
 
+/-- Doubling an exact `2*q` point has exact order `q`; non-vanishing follows
+from the order equation and primality, so callers supply no extra guard. -/
+theorem addOrderOf_two_nsmul_eq_prime_of_addOrder_eq_two_mul_prime'
+    {G : Type*} [AddCommGroup G] {q : ℕ} [Fact q.Prime] (R : G)
+    (horder : addOrderOf R = 2 * q) : addOrderOf (2 • R) = q := by
+  apply addOrderOf_two_nsmul_eq_prime_of_addOrder_eq_two_mul_prime R horder
+  intro hz
+  have hdiv : 2 * q ∣ 2 := by
+    rw [← horder]
+    exact addOrderOf_dvd_iff_nsmul_eq_zero.mpr hz
+  have hle := Nat.le_of_dvd (by decide : 0 < 2) hdiv
+  have hqge : 2 ≤ q := (Fact.out : q.Prime).two_le
+  omega
+
 /-- [DkMath.Lib]
 An element of exact additive order `2*q` forces `q`-torsion in the quotient
 unless its double is already in the subgroup.  If the subgroup has no

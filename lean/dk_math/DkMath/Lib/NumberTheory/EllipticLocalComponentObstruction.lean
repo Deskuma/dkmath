@@ -124,5 +124,54 @@ theorem localValuationSubring_component_prime_dvd_of_singularCentre
   exact prime_dvd_natCard_quotient_of_two_p_torsion
     (zeroComponentSubgroup W) R hR hker
 
+/-- The double of any exact `2*p` point is outside the smooth zero component
+at a nodal rational address `q < p`.  The point-count bound is used only on
+the finite residue field of `ℚ` at `q`. -/
+theorem localValuationSubring_double_not_mem_zeroComponent_of_singularCentre
+    (hp5 : 5 ≤ p) (hqp : q < p)
+    (W : WeierstrassCurve (localValuationSubring q))
+    (C : SingularCentre (W.map (IsLocalRing.residue (localValuationSubring q))))
+    {R : (W.map (localValuationSubring q).subtype).toAffine.Point}
+    (hR : addOrderOf R = 2 * p) :
+    2 • R ∉ zeroComponentSubgroup W := by
+  let A := localValuationSubring q
+  have hunit : A.valuation (p : ℚ) = 1 :=
+    localValuationSubring_prime_valuation_eq_one (q := q) (p := p) hqp.ne
+  have hresidueCard : Fintype.card (IsLocalRing.ResidueField A) ≤ q := by
+    rw [localValuationSubringResidueField_card q]
+  let _ : Finite ((W.map (IsLocalRing.residue A)).toAffine.Point) := finitePoints C
+  have hpos : 0 < Nat.card ((W.map (IsLocalRing.residue A)).toAffine.Point) :=
+    natCard_points_pos C
+  have hbound : Nat.card ((W.map (IsLocalRing.residue A)).toAffine.Point) ≤
+      Fintype.card (IsLocalRing.ResidueField A) + 1 :=
+    natCard_points_le_card_add_one C
+  have hlt : Nat.card ((W.map (IsLocalRing.residue A)).toAffine.Point) < p := by
+    calc
+      Nat.card ((W.map (IsLocalRing.residue A)).toAffine.Point) ≤
+          Fintype.card (IsLocalRing.ResidueField A) + 1 := hbound
+      _ ≤ q + 1 := Nat.add_le_add_right hresidueCard 1
+      _ < p := add_one_lt_of_prime_lt_of_five_le hp5 hqp
+  have hcard : ¬ p ∣ Nat.card ((W.map (IsLocalRing.residue A)).toAffine.Point) :=
+    prime_not_dvd_of_pos_of_lt hpos hlt
+  have hdouble_ne : 2 • R ≠ 0 := by
+    intro hz
+    have hdiv : 2 * p ∣ 2 := by
+      rw [← hR]
+      exact addOrderOf_dvd_iff_nsmul_eq_zero.mpr hz
+    have hqge : 2 ≤ p := (Fact.out : p.Prime).two_le
+    have hle : 2 * p ≤ 2 := Nat.le_of_dvd (by decide) hdiv
+    omega
+  intro hdouble
+  have hsmooth : HasSmoothReduction W (2 • R) :=
+    (mem_zeroComponentSubgroup_iff W).mp hdouble
+  have hpdouble : p • (2 • R) = 0 := by
+    have htwoq : (2 * p) • R = 0 := by
+      rw [← hR]
+      exact addOrderOf_nsmul_eq_zero R
+    exact (mul_nsmul R 2 p).symm.trans htwoq
+  exact hdouble_ne (eq_zero_of_smooth_prime_torsion_of_residue_not_dvd_natCard
+    W hunit hcard hsmooth hpdouble)
+
+
 end
 end DkMath.Lib.NumberTheory.EllipticLocalComponentObstruction
