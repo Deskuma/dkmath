@@ -26,6 +26,7 @@ import DkMathTest.FLT.FreyArithmetic
 import DkMathTest.FLT.FreyArithmeticDependencyAudit
 import DkMathTest.FLT.FreyBranchComparison
 import DkMathTest.FLT.FreyCriticalCentre
+import DkMathTest.FLT.FreyComponentTorsionDichotomy
 import DkMathTest.FLT.FreyDoublingDepth
 import DkMathTest.FLT.FreyDyadicInertia
 import DkMathTest.FLT.FreyGeometricWeilPairing
@@ -147,6 +148,7 @@ import DkMathTest.KUSStructuralRatio
 
 import DkMathTest.Lib.Algebra.BinomTail
 import DkMathTest.Lib.Algebra.FiniteAdditiveTorsionCard
+import DkMathTest.Lib.Algebra.FiniteAdditiveTorsionQuotient
 import DkMathTest.Lib.Cosmic.CompletionCoprime
 import DkMathTest.Lib.Cosmic.GNSuccessorSupport
 import DkMathTest.Lib.FiniteSpectrumProjectors

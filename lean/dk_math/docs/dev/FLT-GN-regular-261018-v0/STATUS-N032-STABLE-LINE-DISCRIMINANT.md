@@ -404,3 +404,29 @@ Néron 模型を構成する定理ではなく、後段の局所幾何学から�
 `CriticalCentre` を構成したとは主張しない。特に、零成分外の点の成分群像が
 `p`-torsion を持つ可能性は残る。したがって一般 `hno`、成分群の可除性、あるいは
 FLT の閉鎖は、この接続定理だけからは導かれない。
+
+# Component quotient: exact remaining local alternatives
+
+The zero-component exclusion at a nodal address below `p` does not itself
+contradict the rational point of order `2*p` supplied by a Cofixed line.  The
+new `FiniteAdditiveTorsionQuotient` module records the next exact group-theory
+step for any additive component quotient `G ⧸ H`:
+
+\[
+\operatorname{ord}(R)=2p
+\quad\Longrightarrow\quad
+2R\in H\;\;\text{or}\;\;p\mid\#(G/H).
+\]
+
+`FreyComponentTorsionDichotomy` specializes this with
+`H = zeroComponentSubgroup W`.  It retains the integral-model identification
+as an input and deliberately makes no finiteness or order claim for the
+quotient.  Thus it isolates, rather than conceals, the remaining component
+group and discriminant-depth obligation required by a general `hno` proof.
+
+At a residue address `q < p` with the already-formalized rational critical
+centre, the same module combines this quotient theorem with the nodal smooth
+torsion exclusion.  The produced order-`2*p` point is then itself outside the
+zero component, and only the displayed double-or-`p`-component alternative
+remains.  This is a reduction of the general `hno` obligation, not its
+closure.

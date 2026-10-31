@@ -16,6 +16,7 @@ import DkMath.Lib.Algebra.FiniteInversionHalf
 import DkMath.Lib.Algebra.FiniteInversionHalfTransport
 import DkMath.Lib.Algebra.FiniteOrbitMinimum
 import DkMath.Lib.Algebra.FiniteAdditiveTorsionCard
+import DkMath.Lib.Algebra.FiniteAdditiveTorsionQuotient
 import DkMath.Lib.Algebra.FiniteTorsionSum
 import DkMath.Lib.Algebra.OddPowerRecovery
 import DkMath.Lib.Algebra.PoleSpaceDegree
