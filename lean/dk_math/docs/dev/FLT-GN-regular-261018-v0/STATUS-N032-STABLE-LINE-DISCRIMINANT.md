@@ -124,6 +124,8 @@ Cofixed 枝から有理 `2 * p` 捩れを構成する構造的帰結までであ
 - `lake build DkMathTest.Lib.NumberTheory.FreyLocalResidueField`
 - `lake build DkMath.Lib.NumberTheory.EllipticSmoothTorsionOrderBound`
 - `lake build DkMathTest.Lib.NumberTheory.EllipticSmoothTorsionOrderBound`
+- `lake build DkMath.Lib.NumberTheory.EllipticSmoothTorsionPrimeExclusion`
+- `lake build DkMathTest.Lib.NumberTheory.EllipticSmoothTorsionPrimeExclusion`
 - `lake build DkMath.Lib.NumberTheory.FreyLocalValuationSubring`
 - `lake build DkMathTest.Lib.NumberTheory.FreyLocalValuationSubring`
 - `lake build DkMath.Lib.NumberTheory.FreyLocalTorsionOrderBound`
@@ -300,8 +302,15 @@ Néron 模型を構成する定理ではなく、後段の局所幾何学から�
     一般ファイバーの滑らかな `p`-torsion 点は零点である。
   - 証明は `nsmul_reduce_eq_zero`、上の有限群対偶、そして
     `reduce_injOn_torsion` の三段階だけからなる。
+- `not_addOrder_eq_two_mul_prime_of_smooth_of_residue_not_dvd_natCard`
+  - 同じ仮定の下で、滑らかな一般ファイバーの点は厳密位数 `2 * p` を持てない。
+  - もし `Q` がその位数を持てば、`2 • Q` は滑らかな非零 `p`-torsion である。
+    前定理がこれを零にし、`addOrderOf Q ∣ 2` と `addOrderOf Q = 2 * p` が
+    素数の下界 `2 ≤ p` と矛盾する。これは Cofixed 枝から構成済みの有理
+    `2 * p`-torsion を零成分から排除する、直接の局所インターフェースである。
 
 これは乗法的還元の滑らかな群が `q - 1` または `q + 1` 個であるという濃度公式を
 証明したものではない。その公式、分裂・非分裂の区別、成分群写像の構成は、次に残る
 局所幾何の義務である。一方、この濃度公式が供給されれば、零成分の `p`-torsion
-消滅へ接続する部分は今回の定理で閉じる。
+消滅と、厳密位数 `2 * p` 点の零成分からの排除は今回の定理で閉じる。大域的な
+`2 * p`-torsion の不存在や成分群像の消滅を主張するものではない。

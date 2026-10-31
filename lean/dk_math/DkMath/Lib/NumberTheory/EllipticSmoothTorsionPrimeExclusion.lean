@@ -55,4 +55,41 @@ theorem eq_zero_of_smooth_prime_torsion_of_residue_not_dvd_natCard
     ⟨hasSmoothReduction_zero W _, nsmul_zero _⟩
   simpa only [reducePointSmooth_zero] using hredzero
 
+/--
+Under the same residue-cardinality hypothesis, a smooth point cannot have
+exact order `2 * p`.  Indeed, twice such a point is a nonzero `p`-torsion
+point and remains in the smooth zero component; the preceding theorem makes
+that double zero, contradicting the asserted order.
+
+This is the direct local interface for the rational `2*p`-torsion point
+produced by a Cofixed line.  It only excludes that point from the zero
+component.  It does not say that the point cannot exist globally: a nonzero
+component-group image remains possible and is precisely the next issue.
+-/
+theorem not_addOrder_eq_two_mul_prime_of_smooth_of_residue_not_dvd_natCard
+    {p : ℕ} [Fact p.Prime] (hunit : A.valuation (p : L) = 1)
+    (hcard : ¬ p ∣ Nat.card ((W.map (residue A)).toAffine.Point))
+    {Q : (W.map A.subtype).toAffine.Point}
+    (hQ : HasSmoothReduction W Q) : addOrderOf Q ≠ 2 * p := by
+  classical
+  intro horder
+  let Q₀ : zeroComponentSubgroup W := ⟨Q, hQ⟩
+  have hdouble_smooth : HasSmoothReduction W (2 • Q) := by
+    change HasSmoothReduction W (2 • Q₀).val
+    exact (2 • Q₀).property
+  have htwo_p : (2 * p) • Q = 0 := by
+    rw [← horder]
+    exact addOrderOf_nsmul_eq_zero Q
+  have hpdouble : p • (2 • Q) = 0 := by
+    exact (mul_nsmul Q 2 p).symm.trans htwo_p
+  have hdouble_zero : 2 • Q = 0 :=
+    eq_zero_of_smooth_prime_torsion_of_residue_not_dvd_natCard W hunit hcard
+      hdouble_smooth hpdouble
+  have hdiv : 2 * p ∣ 2 := by
+    rw [← horder]
+    exact addOrderOf_dvd_iff_nsmul_eq_zero.mpr hdouble_zero
+  have hle : 2 * p ≤ 2 := Nat.le_of_dvd (by decide) hdiv
+  have hpge : 2 ≤ p := (Fact.out : p.Prime).two_le
+  omega
+
 end DkMath.Lib.NumberTheory.EllipticSmoothTorsionPrimeExclusion

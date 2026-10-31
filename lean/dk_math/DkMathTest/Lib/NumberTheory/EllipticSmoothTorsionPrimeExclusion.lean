@@ -34,6 +34,13 @@ example {p : ℕ} [Fact p.Prime] (hunit : A.valuation (p : L) = 1)
     (hP : HasSmoothReduction W P) (hp : p • P = 0) : P = 0 :=
   eq_zero_of_smooth_prime_torsion_of_residue_not_dvd_natCard W hunit hcard hP hp
 
+example {p : ℕ} [Fact p.Prime] (hunit : A.valuation (p : L) = 1)
+    (hcard : ¬ p ∣ Nat.card ((W.map (IsLocalRing.residue A)).toAffine.Point))
+    {Q : (W.map A.subtype).toAffine.Point}
+    (hQ : HasSmoothReduction W Q) : addOrderOf Q ≠ 2 * p :=
+  not_addOrder_eq_two_mul_prime_of_smooth_of_residue_not_dvd_natCard W hunit hcard hQ
+
 #print axioms eq_zero_of_smooth_prime_torsion_of_residue_not_dvd_natCard
+#print axioms not_addOrder_eq_two_mul_prime_of_smooth_of_residue_not_dvd_natCard
 
 end DkMathTest.Lib.NumberTheory.EllipticSmoothTorsionPrimeExclusion
