@@ -561,3 +561,27 @@ component group, construct a rational singular centre from `Δ = 0` and
 `c₄ ≠ 0`, or close the global `hno` contradiction.  Those remain separate
 local/global theories rather than hidden assumptions of the finite-residue
 theorem.
+
+## Characteristic-two singular-centre entry point
+
+The direct finite-field bridge is now implemented in
+`WeierstrassNodalCenterCharTwo`:
+`singularCentre_of_char_two_of_delta_zero_of_c4_ne_zero` constructs the
+singular point
+
+`x₀ = a₃ / a₁`, `y₀ = (x₀² + a₄) / a₁`
+
+from `Δ = 0` and `c₄ ≠ 0` under `CharP k 2`.  The proof uses `c₄ = a₁⁴`,
+the two derivative equations, and the cleared-denominator identity
+`a₁⁶ * equationDefect = Δ`; no tangent-direction splitting or square-root
+choice is introduced.
+
+`EllipticLocalComponentObstructionCharTwo` composes this construction with the
+finite local theorem at `localValuationSubring 2`.  Thus a dyadic residue model
+with the two invariant conditions and an exact-order `2*p` point yields the
+same non-smoothness and abstract component-quotient `p`-divisibility as the
+general finite-residue theorem, with the residue centre constructed internally.
+
+The remaining inputs are precisely the residue invariant conditions and the
+exact-order point.  Néron component-group transport and the global `hno`
+contradiction remain outside this closure.

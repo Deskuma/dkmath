@@ -324,6 +324,7 @@ import DkMath.Lib.NumberTheory.WeierstrassIntegralModelTransport
 import DkMath.Lib.NumberTheory.WeierstrassModelReduction
 import DkMath.Lib.NumberTheory.WeierstrassNegativeValuation
 import DkMath.Lib.NumberTheory.WeierstrassNodalCenter
+import DkMath.Lib.NumberTheory.WeierstrassNodalCenterCharTwo
 import DkMath.Lib.NumberTheory.WeierstrassNodalCenterSmallChar
 import DkMath.Lib.NumberTheory.WeierstrassNodalDistance
 import DkMath.Lib.NumberTheory.WeierstrassNodalFrame
@@ -393,6 +394,7 @@ import DkMath.Lib.NumberTheory.EllipticSmoothTorsionOrderBound
 import DkMath.Lib.NumberTheory.FreyLocalValuationSubring
 import DkMath.Lib.NumberTheory.FreyLocalTorsionOrderBound
 import DkMath.Lib.NumberTheory.EllipticLocalComponentObstruction
+import DkMath.Lib.NumberTheory.EllipticLocalComponentObstructionCharTwo
 
 #print "file: DkMath.Lib"
 
