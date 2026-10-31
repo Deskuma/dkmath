@@ -509,3 +509,12 @@ branch-free theorem for later Frey case analysis.  These wrappers are
 structural compositions only; the unresolved boundary remains the
 identification of the abstract quotient with the relevant Néron component
 group and the resulting `hno` contradiction.
+
+The first branch is now separately closed by
+`residualValuationKernelModel_two_nsmul_not_mem_zeroComponent_of_geometry`.
+For an exact-order `2*p` point `R`, its double is proved nonzero and
+`p`-torsion; the residue point-cardinality non-divisibility then excludes that
+double from the smooth zero component.  This is the explicit Lean form of the
+mathematical implication `2R ∈ E₀ ⇒ 2R = 0`, hence `2R ∉ E₀`.
+The component divisibility conclusion still uses the abstract quotient
+interface, and no finite Néron component-group calculation has been added.

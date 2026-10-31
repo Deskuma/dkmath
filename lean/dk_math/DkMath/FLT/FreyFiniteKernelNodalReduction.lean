@@ -362,6 +362,53 @@ theorem residualValuationKernelModel_component_prime_dvd_of_geometry
   · exact S.residualValuationKernelModel_component_prime_dvd_of_disjoint_branch
       hp5 L hl hq hqp A hA hresidueCard hqp' hd C D hR
 
+/-- [DkMath.Lib] The first branch of the component dichotomy is now
+explicitly closed at a nodal residue address. If `R` has exact order `2*p`,
+then `2 • R` is a nonzero `p`-torsion point. The residue point-cardinality
+bound forces every smooth `p`-torsion point to vanish, so the double cannot
+belong to the smooth zero-component subgroup.
+
+This theorem is intentionally independent of the component quotient: it is
+the reusable geometric input that turns the general two-way quotient lemma
+into one-way divisibility. It makes no claim about a Néron model or about the
+finiteness of the abstract quotient.
+-/
+theorem residualValuationKernelModel_two_nsmul_not_mem_zeroComponent_of_geometry
+    (hp5 : 5 ≤ p)
+    {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    [Fintype (ResidueField A)] (hresidueCard : Fintype.card (ResidueField A) ≤ q)
+    (hqp' : q < p) (L : Submodule (ZMod p) S.ResidualSpace)
+    (hl : Module.finrank (ZMod p) L = 1)
+    (C : SingularCentre ((S.residualValuationKernelModel L hl hq hqp A hA).map (residue A)))
+    {R : ((S.residualValuationKernelModel L hl hq hqp A hA).map A.subtype).toAffine.Point}
+    (hR : addOrderOf R = 2 * p) :
+    2 • R ∉ zeroComponentSubgroup (S.residualValuationKernelModel L hl hq hqp A hA) := by
+  let : Fact q.Prime := ⟨hq⟩
+  have hp : A.valuation (p : AlgebraicClosure ℚ) = 1 := by
+    simpa only [pow_one] using prime_power_value_one A (Fact.out : p.Prime) hq
+      ((ValuationSubring.mem_nonunits_iff _).mp hA) hqp 1
+  have hcard := residualValuationKernelModel_residue_pointCard_not_dvd_of_prime_lt S hp5 hq hqp
+    A hA hresidueCard hqp' L hl C
+  have hdouble_ne : 2 • R ≠ 0 := by
+    intro hzero
+    have hdiv : 2 * p ∣ 2 := by
+      rw [← hR]
+      exact addOrderOf_dvd_iff_nsmul_eq_zero.mpr hzero
+    have hle : 2 * p ≤ 2 := Nat.le_of_dvd (by decide) hdiv
+    have hpge : 2 ≤ p := (Fact.out : p.Prime).two_le
+    omega
+  have hdouble_p : p • (2 • R) = 0 := by
+    have htwoq : (2 * p) • R = 0 := by
+      rw [← hR]
+      exact addOrderOf_nsmul_eq_zero R
+    exact (mul_nsmul R 2 p).symm.trans htwoq
+  intro hdouble
+  have hsmooth := (mem_zeroComponentSubgroup_iff
+    (S.residualValuationKernelModel L hl hq hqp A hA)).mp hdouble
+  exact hdouble_ne (eq_zero_of_smooth_prime_torsion_of_residue_not_dvd_natCard
+    (S.residualValuationKernelModel L hl hq hqp A hA) hp hcard hsmooth hdouble_p)
+
 /-- 同じ中心・方向から同じ整数標的の正式な乗法的還元へ進む。q=2も除外しない。 -/
 theorem residual_integer_target_multiplicative_of_geometry (hp2 : p ≠ 2)
     (L : Submodule (ZMod p) S.ResidualSpace) (hl : Module.finrank (ZMod p) L = 1)

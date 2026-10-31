@@ -193,6 +193,22 @@ example (hp5 : 5 ≤ p)
 
 #print axioms DkMath.FLT.Frey.Source.residualValuationKernelModel_component_prime_dvd_of_geometry
 
+example (hp5 : 5 ≤ p) {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    [Fintype (ResidueField A)] (hresidueCard : Fintype.card (ResidueField A) ≤ q)
+    (hqp' : q < p) (L : Submodule (ZMod p) S.ResidualSpace)
+    (hl : Module.finrank (ZMod p) L = 1)
+    (C : SingularCentre ((S.residualValuationKernelModel L hl hq hqp A hA).map
+      (IsLocalRing.residue A)))
+    {R : ((S.residualValuationKernelModel L hl hq hqp A hA).map A.subtype).toAffine.Point}
+    (hR : addOrderOf R = 2 * p) :
+    2 • R ∉ zeroComponentSubgroup (S.residualValuationKernelModel L hl hq hqp A hA) := by
+  letI : DecidableEq (ResidueField A) := Classical.decEq _
+  exact S.residualValuationKernelModel_two_nsmul_not_mem_zeroComponent_of_geometry
+    hp5 hq hqp A hA hresidueCard hqp' L hl C hR
+
+#print axioms DkMath.FLT.Frey.Source.residualValuationKernelModel_two_nsmul_not_mem_zeroComponent_of_geometry
+
 example (L : Submodule (ZMod p) S.ResidualSpace)
     (hl : Module.finrank (ZMod p) L = 1) {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
     (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
