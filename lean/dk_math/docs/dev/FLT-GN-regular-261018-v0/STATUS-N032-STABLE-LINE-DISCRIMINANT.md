@@ -439,3 +439,12 @@ exclusion to `2R`.  The remaining conclusion is precisely
 This is a genuine local reduction of the general `hno` obligation, not its
 closure: one still needs a component-quotient cardinality or discriminant-depth
 argument to contradict the final divisibility alternative.
+
+The residue-side interface now also contains `singularCentreOfFrame`.  It
+forgets the chosen tangent direction from an existing `Frame` and packages
+the equation and both vanishing partial derivatives as a `SingularCentre`.
+This is deliberately weaker than constructing a rational centre from
+`Δ = 0` and `c₄ ≠ 0`: nonsplit nodes may have no rational singular point.
+The next geometric task is therefore to supply such a residue frame or centre
+from the concrete Frey reduction data, rather than to assert a false general
+rationality implication.

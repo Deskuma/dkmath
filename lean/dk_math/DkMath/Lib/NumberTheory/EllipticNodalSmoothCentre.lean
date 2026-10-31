@@ -31,6 +31,7 @@ namespace DkMath.Lib.NumberTheory.EllipticNodalSmoothCentre
 
 open WeierstrassCurve IsLocalRing
 open EllipticCriticalCentre EllipticNodalSmoothCard
+open EllipticNodalTorsion.NodalTorsion
 
 variable {L : Type*} [Field L] {A : ValuationSubring L}
 
@@ -54,6 +55,22 @@ noncomputable def singularCentreOfCriticalCentre (W : WeierstrassCurve A)
       equation := hC.1
       derivativeX := hX
       derivativeY := hY }
+
+/-- [DkMath.Lib] A nodal frame already contains exactly the three data needed
+by `SingularCentre`: the equation and the two vanishing partial derivatives.
+The tangent direction is deliberately discarded here.  This is the residue
+field bridge used when a local argument supplies a frame rather than a
+characteristic-zero critical centre.
+-/
+def singularCentreOfFrame {K : Type*} [Field K] (W : WeierstrassCurve K)
+    {x₀ y₀ α : K} (F : Frame W x₀ y₀ α) : SingularCentre W :=
+  { x := x₀
+    y := y₀
+    equation := by
+      rw [WeierstrassCurve.Affine.equation_iff]
+      simpa only [sub_eq_zero] using F.he
+    derivativeX := F.hFX
+    derivativeY := F.hFY }
 
 /-!
 ## Cardinality corollaries

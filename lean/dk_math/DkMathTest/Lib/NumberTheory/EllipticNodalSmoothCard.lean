@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.Lib.NumberTheory.EllipticNodalSmoothCard
+import DkMath.Lib.NumberTheory.EllipticNodalSmoothCentre
 import Lean.Util.CollectAxioms
 
 #print "file: DkMathTest.Lib.NumberTheory.EllipticNodalSmoothCard"
@@ -20,6 +20,7 @@ namespace DkMathTest.Lib.NumberTheory.EllipticNodalSmoothCard
 
 open WeierstrassCurve
 open DkMath.Lib.NumberTheory.EllipticNodalSmoothCard
+open DkMath.Lib.NumberTheory.EllipticNodalTorsion.NodalTorsion
 
 variable {K : Type*} [Field K] {W : WeierstrassCurve K}
 
@@ -33,9 +34,13 @@ example [Fintype K] (C : SingularCentre W) :
 example [Finite K] (C : SingularCentre W) : 0 < Nat.card W.toAffine.Point :=
   natCard_points_pos C
 
+example {x₀ y₀ α : K} (F : Frame W x₀ y₀ α) : SingularCentre W :=
+  DkMath.Lib.NumberTheory.EllipticNodalSmoothCentre.singularCentreOfFrame W F
+
 #print axioms SingularCentre.translated_equation
 #print axioms SingularCentre.slopeAt_injective
 #print axioms natCard_points_pos
 #print axioms natCard_points_le_card_add_one
+#print axioms DkMath.Lib.NumberTheory.EllipticNodalSmoothCentre.singularCentreOfFrame
 
 end DkMathTest.Lib.NumberTheory.EllipticNodalSmoothCard
