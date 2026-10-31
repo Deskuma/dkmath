@@ -66,6 +66,27 @@ theorem quotient_addOrder_eq_prime_of_nsmul_not_mem
     simpa only [QuotientAddGroup.ker_mk'] using hzero
 
 /-- [DkMath.Lib]
+If a finite additive target is reached by a homomorphism whose kernel is `H`,
+then a `q`-torsion source point outside `H` forces `q` to divide the target's
+cardinality.  This is the abstract component-map interface: the later
+elliptic-curve development supplies a finite component group and proves the
+kernel identity, while this theorem supplies the entire group-theoretic
+transport.  No Néron model, reduction map, or local-field hypothesis is used.
+-/
+theorem prime_dvd_finite_component_of_ker
+    {G F : Type*} [AddCommGroup G] [AddCommGroup F] [Finite F]
+    (H : AddSubgroup G) (φ : G →+ F) (hker : φ.ker = H)
+    {q : ℕ} [Fact q.Prime] (R : G)
+    (hRq : q • R = 0) (hRnot : R ∉ H) :
+    q ∣ Nat.card F := by
+  apply prime_dvd_natCard_of_addMonoidHom_map_nsmul_eq_zero_of_map_ne_zero φ R hRq
+  intro hzero
+  apply hRnot
+  rw [← AddMonoidHom.mem_ker] at hzero
+  rw [hker] at hzero
+  exact hzero
+
+/-- [DkMath.Lib]
 An element of exact additive order `2*q` forces `q`-torsion in the quotient
 unless its double is already in the subgroup.  If the subgroup has no
 nonzero `q`-torsion, the latter alternative is impossible and the prime must

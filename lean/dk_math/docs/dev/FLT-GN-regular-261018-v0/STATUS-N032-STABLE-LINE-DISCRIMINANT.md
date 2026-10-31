@@ -650,3 +650,27 @@ yet been formalized.  The remaining boundary is unchanged: transporting this
 class to a finite Néron component group (or another finite local quotient) is
 still required before deriving a Tamagawa-number constraint or a global `hno`
 contradiction.
+
+## Finite component-map interface
+
+The first step of the next transport phase is now fixed in
+`DkMath/Lib/Algebra/FiniteAdditiveTorsionQuotient.lean` by
+`prime_dvd_finite_component_of_ker`.  For additive groups `G` and `F`, with
+`F` finite, an additive homomorphism `φ : G →+ F` whose kernel is an explicit
+subgroup `H` sends every `q`-torsion point outside `H` to a nonzero `q`-torsion
+point.  The existing finite-target torsion lemma then gives
+
+```text
+q ∣ Nat.card F
+```
+
+The proof is purely group-theoretic: it rewrites a zero image as membership in
+`φ.ker`, uses the supplied equality `φ.ker = H`, and applies
+`prime_dvd_natCard_of_addMonoidHom_map_nsmul_eq_zero_of_map_ne_zero`.  No local
+field, reduction map, Néron model, or Tamagawa identification is assumed.
+
+This theorem is the exact contract needed for the next local stage.  The
+remaining work is to construct a finite local component target and prove that
+the rational-to-local component map has the required kernel; only after that
+interface is supplied can the explicit dyadic class of exact order `p` be
+transported to a finite component-cardinality divisibility statement.
