@@ -10,6 +10,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalReduction
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelCriticalCentre
 import DkMath.Lib.NumberTheory.EllipticNodalSmoothCentre
 import DkMath.Lib.NumberTheory.EllipticNodalSmoothTorsionExclusion
+import DkMath.Lib.Algebra.FiniteAdditiveTorsionQuotient
 
 #print "file: DkMath.FLT.FreyFiniteKernelNodalReduction"
 
@@ -24,11 +25,14 @@ import DkMath.Lib.NumberTheory.EllipticNodalSmoothTorsionExclusion
 namespace DkMath.FLT.Frey.Source
 open WeierstrassCurve WeierstrassCurve.Affine IsLocalRing
 open DkMath.Lib.NumberTheory EllipticTorsionRepresentation EllipticFiniteKernel
+open DkMath.Lib.Algebra
 open EllipticCriticalCentre EllipticTangentDirections ValuationInertia ValuationPrimeSupport
 open ValuationRationalPrimeSupport WeierstrassResidueModel EllipticGoodReductionSeparation
+open EllipticSmoothReduction
 open EllipticNodalSmoothCard EllipticNodalSmoothCentre
 open EllipticNodalTorsion.NodalTorsion
 open EllipticNodalSmoothTorsionExclusion
+open EllipticSmoothTorsionPrimeExclusion
 open DkMath.Lib.RepresentationTheory
 noncomputable local instance instDecidableEqFreyFiniteKernelNodalReduction {α : Type*} : DecidableEq α :=
   Classical.decEq _
@@ -230,6 +234,133 @@ theorem residualValuationKernelModel_residue_pointCard_not_dvd_of_prime_lt
   apply prime_not_dvd_of_pos_of_lt (natCard_points_pos C)
   exact residualValuationKernelModel_residue_pointCard_lt_of_prime_lt S hp5 hq hqp A hA
     hresidueCard hqp' L hl C
+
+/-- [DkMath.Lib] A residue node and a generic point of exact order `2*p` now
+feed directly into the component-quotient obstruction.  The node/cardinality
+bound excludes the point from the smooth zero component, while the finite
+additive quotient lemma supplies the remaining divisibility
+`p ∣ Nat.card (E(A) / E₀(A))`.
+
+The theorem intentionally stops at this divisibility.  It does not identify
+the abstract quotient with a Néron component group and does not claim that
+the divisibility is impossible.
+-/
+theorem residualValuationKernelModel_component_prime_dvd_of_residue_centre
+    (hp5 : 5 ≤ p) {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    [Fintype (ResidueField A)] (hresidueCard : Fintype.card (ResidueField A) ≤ q)
+    (hqp' : q < p) (L : Submodule (ZMod p) S.ResidualSpace)
+    (hl : Module.finrank (ZMod p) L = 1)
+    (C : SingularCentre ((S.residualValuationKernelModel L hl hq hqp A hA).map (residue A)))
+    {R : ((S.residualValuationKernelModel L hl hq hqp A hA).map A.subtype).toAffine.Point}
+    (hR : addOrderOf R = 2 * p) :
+    ¬ HasSmoothReduction (S.residualValuationKernelModel L hl hq hqp A hA) R ∧
+      p ∣ Nat.card (((S.residualValuationKernelModel L hl hq hqp A hA).map A.subtype).toAffine.Point ⧸
+        zeroComponentSubgroup (S.residualValuationKernelModel L hl hq hqp A hA)) := by
+  let : Fact q.Prime := ⟨hq⟩
+  have hp : A.valuation (p : AlgebraicClosure ℚ) = 1 := by
+    simpa only [pow_one] using prime_power_value_one A (Fact.out : p.Prime) hq
+      ((ValuationSubring.mem_nonunits_iff _).mp hA) hqp 1
+  have hcard := residualValuationKernelModel_residue_pointCard_not_dvd_of_prime_lt S hp5 hq hqp
+    A hA hresidueCard hqp' L hl C
+  have hnot : ¬ HasSmoothReduction
+      (S.residualValuationKernelModel L hl hq hqp A hA) R := by
+    intro hRsmooth
+    exact (not_addOrder_eq_two_mul_prime_of_smooth_of_nodal_card_bound
+      (S.residualValuationKernelModel L hl hq hqp A hA) hp5 hp hresidueCard hqp' C hRsmooth) hR
+  have hker : ∀ x : ((S.residualValuationKernelModel L hl hq hqp A hA).map A.subtype).toAffine.Point,
+      x ∈ zeroComponentSubgroup (S.residualValuationKernelModel L hl hq hqp A hA) →
+        p • x = 0 → x = 0 := by
+    intro x hx hpx
+    have hsmooth := (mem_zeroComponentSubgroup_iff
+      (S.residualValuationKernelModel L hl hq hqp A hA)).mp hx
+    exact eq_zero_of_smooth_prime_torsion_of_residue_not_dvd_natCard
+      (S.residualValuationKernelModel L hl hq hqp A hA) hp hcard hsmooth hpx
+  refine ⟨hnot, ?_⟩
+  exact prime_dvd_natCard_quotient_of_two_p_torsion
+    (zeroComponentSubgroup (S.residualValuationKernelModel L hl hq hqp A hA)) R hR hker
+
+/-- [DkMath.Lib] The smooth local branch can now consume the component
+obstruction without asking callers to manufacture the residue `SingularCentre`
+by hand.  The constructor above is deliberately kept visible in the proof:
+this wrapper records that the only extra geometric input is `L ≤ E₀` together
+with the original characteristic-zero centre and tangent direction.
+
+The conclusion is still the precise abstract boundary
+`¬ HasSmoothReduction R ∧ p ∣ Nat.card (E(A) / E₀(A))`; no Néron component
+identification or contradiction is hidden in this specialization.
+-/
+theorem residualValuationKernelModel_component_prime_dvd_of_smooth_branch
+    (hp5 : 5 ≤ p) (hp2 : p ≠ 2)
+    (L : Submodule (ZMod p) S.ResidualSpace) (hl : Module.finrank (ZMod p) L = 1)
+    {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    (hle : L ≤ S.residualZeroComponent A)
+    [Fintype (ResidueField A)] (hresidueCard : Fintype.card (ResidueField A) ≤ q)
+    (hqp' : q < p) (C : CriticalCentre A (S.rationalCurve.baseChange (AlgebraicClosure ℚ)))
+    (D : TangentDirections C)
+    {R : ((S.residualValuationKernelModel L hl hq hqp A hA).map A.subtype).toAffine.Point}
+    (hR : addOrderOf R = 2 * p) :
+    ¬ HasSmoothReduction (S.residualValuationKernelModel L hl hq hqp A hA) R ∧
+      p ∣ Nat.card (((S.residualValuationKernelModel L hl hq hqp A hA).map A.subtype).toAffine.Point ⧸
+        zeroComponentSubgroup (S.residualValuationKernelModel L hl hq hqp A hA)) := by
+  let Cres := S.residualValuationKernelModel_residue_singularCentre_of_smooth
+    hp2 L hl hq hqp A hA hle C D
+  exact S.residualValuationKernelModel_component_prime_dvd_of_residue_centre
+    hp5 hq hqp A hA hresidueCard hqp' L hl Cres hR
+
+/-- [DkMath.Lib] The disjoint local branch has the same consumer-facing
+component obstruction, but its residue centre is transported through the
+residue-model equality rather than through the nodal quotient construction.
+This is the branch-separated form useful to later Frey case analyses.
+
+As in the generic theorem, the result stops at divisibility in the abstract
+quotient by the smooth zero component.  Any identification with a Néron
+component group remains a separate arithmetic-geometric lemma.
+-/
+theorem residualValuationKernelModel_component_prime_dvd_of_disjoint_branch
+    (hp5 : 5 ≤ p)
+    (L : Submodule (ZMod p) S.ResidualSpace) (hl : Module.finrank (ZMod p) L = 1)
+    {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    [Fintype (ResidueField A)] (hresidueCard : Fintype.card (ResidueField A) ≤ q)
+    (hqp' : q < p) (hd : Disjoint L (S.residualZeroComponent A))
+    (C : CriticalCentre A (S.rationalCurve.baseChange (AlgebraicClosure ℚ)))
+    (D : TangentDirections C)
+    {R : ((S.residualValuationKernelModel L hl hq hqp A hA).map A.subtype).toAffine.Point}
+    (hR : addOrderOf R = 2 * p) :
+    ¬ HasSmoothReduction (S.residualValuationKernelModel L hl hq hqp A hA) R ∧
+      p ∣ Nat.card (((S.residualValuationKernelModel L hl hq hqp A hA).map A.subtype).toAffine.Point ⧸
+        zeroComponentSubgroup (S.residualValuationKernelModel L hl hq hqp A hA)) := by
+  let Cres := S.residualValuationKernelModel_residue_singularCentre_of_disjoint
+    L hl hq hqp A hA hd C D
+  exact S.residualValuationKernelModel_component_prime_dvd_of_residue_centre
+    hp5 hq hqp A hA hresidueCard hqp' L hl Cres hR
+
+/-- [DkMath.Lib] Branch-free consumer for the component obstruction.  The line
+dichotomy selects the smooth or disjoint centre constructor, so callers retain
+only the original Frey centre, tangent direction, and exact-order point.
+The result remains deliberately abstract: it is divisibility in the quotient
+by the smooth zero component, not yet a Néron component-group contradiction.
+-/
+theorem residualValuationKernelModel_component_prime_dvd_of_geometry
+    (hp5 : 5 ≤ p)
+    (L : Submodule (ZMod p) S.ResidualSpace) (hl : Module.finrank (ZMod p) L = 1)
+    {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    [Fintype (ResidueField A)] (hresidueCard : Fintype.card (ResidueField A) ≤ q)
+    (hqp' : q < p) (C : CriticalCentre A (S.rationalCurve.baseChange (AlgebraicClosure ℚ)))
+    (D : TangentDirections C)
+    {R : ((S.residualValuationKernelModel L hl hq hqp A hA).map A.subtype).toAffine.Point}
+    (hR : addOrderOf R = 2 * p) :
+    ¬ HasSmoothReduction (S.residualValuationKernelModel L hl hq hqp A hA) R ∧
+      p ∣ Nat.card (((S.residualValuationKernelModel L hl hq hqp A hA).map A.subtype).toAffine.Point ⧸
+        zeroComponentSubgroup (S.residualValuationKernelModel L hl hq hqp A hA)) := by
+  rcases S.residual_line_smooth_or_disjoint L hl A with hle | hd
+  · exact S.residualValuationKernelModel_component_prime_dvd_of_smooth_branch
+      hp5 (by omega) L hl hq hqp A hA hle hresidueCard hqp' C D hR
+  · exact S.residualValuationKernelModel_component_prime_dvd_of_disjoint_branch
+      hp5 L hl hq hqp A hA hresidueCard hqp' hd C D hR
 
 /-- 同じ中心・方向から同じ整数標的の正式な乗法的還元へ進む。q=2も除外しない。 -/
 theorem residual_integer_target_multiplicative_of_geometry (hp2 : p ≠ 2)

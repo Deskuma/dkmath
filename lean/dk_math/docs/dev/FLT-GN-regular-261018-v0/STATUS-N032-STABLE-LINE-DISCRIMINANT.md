@@ -489,3 +489,23 @@ For prime addresses `q < p` with `p ≥ 5`, the two arithmetic consumers
 the numerical step: the residue affine point group has cardinality `< p` and
 is therefore not divisible by `p`.  The remaining component-group alternative
 is intentionally not eliminated by this statement alone.
+
+The concrete bridge
+`residualValuationKernelModel_component_prime_dvd_of_residue_centre` now
+consumes a residue `SingularCentre` and a generic point of exact order `2*p`.
+It proves both that the point is not smoothly reduced and that `p` divides
+the abstract quotient by the smooth zero-component subgroup.  This is the
+precise component-quotient boundary; it still does not identify that quotient
+with a Néron component group or derive a contradiction.
+
+The two branch-specialized consumers
+`residualValuationKernelModel_component_prime_dvd_of_smooth_branch` and
+`residualValuationKernelModel_component_prime_dvd_of_disjoint_branch` now hide
+the respective residue-centre construction while preserving the same
+conclusion.  Finally,
+`residualValuationKernelModel_component_prime_dvd_of_geometry` consumes the
+canonical `residual_line_smooth_or_disjoint` dichotomy and exposes one
+branch-free theorem for later Frey case analysis.  These wrappers are
+structural compositions only; the unresolved boundary remains the
+identification of the abstract quotient with the relevant Néron component
+group and the resulting `hno` contradiction.
