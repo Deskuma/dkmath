@@ -320,6 +320,7 @@ import DkMathTest.FLT.FreyRationalTwoPTorsion
 import DkMathTest.Lib.NumberTheory.FiniteFieldWeierstrassCard
 import DkMathTest.Lib.NumberTheory.FreyLocalResidueField
 import DkMathTest.Lib.NumberTheory.EllipticSmoothTorsionOrderBound
+import DkMathTest.Lib.NumberTheory.EllipticSmoothTorsionPrimeExclusion
 import DkMathTest.Lib.NumberTheory.FreyLocalValuationSubring
 import DkMathTest.Lib.NumberTheory.FreyLocalTorsionOrderBound
 

@@ -40,6 +40,18 @@ theorem prime_dvd_natCard_of_nsmul_eq_zero_of_ne_zero
   rw [← horder]
   exact addOrderOf_dvd_natCard Q
 
+/--
+If the natural cardinality of an additive group is not divisible by a prime
+`q`, then its only `q`-torsion point is zero.  This is the contrapositive of
+`prime_dvd_natCard_of_nsmul_eq_zero_of_ne_zero` and is the form used for a
+smooth reduced point group whose cardinality has already been computed.
+-/
+theorem eq_zero_of_nsmul_eq_zero_of_not_dvd_natCard
+    {q : ℕ} [Fact q.Prime] (hcard : ¬ q ∣ Nat.card G) (Q : G)
+    (hQq : q • Q = 0) : Q = 0 := by
+  by_contra hQ0
+  exact hcard (prime_dvd_natCard_of_nsmul_eq_zero_of_ne_zero Q hQq hQ0)
+
 /-
 The component-group interface used later is naturally a homomorphism.  This
 corollary records the exact transport step separately: the source need not be

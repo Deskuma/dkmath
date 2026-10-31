@@ -50,6 +50,7 @@ example : 3 ∣ Nat.card (ZMod 3) := by
   · decide
 
 #print axioms prime_dvd_natCard_of_nsmul_eq_zero_of_ne_zero
+#print axioms eq_zero_of_nsmul_eq_zero_of_not_dvd_natCard
 #print axioms prime_dvd_natCard_of_addMonoidHom_map_nsmul_eq_zero_of_map_ne_zero
 #print axioms prime_dvd_natCard_of_torsion_kernel_trivial
 

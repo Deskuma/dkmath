@@ -208,6 +208,7 @@ import DkMath.Lib.NumberTheory.EllipticReductionSlope
 import DkMath.Lib.NumberTheory.EllipticShallowSlope
 import DkMath.Lib.NumberTheory.EllipticSmoothReduction
 import DkMath.Lib.NumberTheory.EllipticSmoothTorsionReduction
+import DkMath.Lib.NumberTheory.EllipticSmoothTorsionPrimeExclusion
 import DkMath.Lib.NumberTheory.EllipticSplitDyadic
 import DkMath.Lib.NumberTheory.EllipticStableLine
 import DkMath.Lib.NumberTheory.EllipticTangentDirections

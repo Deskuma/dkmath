@@ -273,6 +273,9 @@ Néron 模型を構成する定理ではなく、後段の局所幾何学から�
     `addOrderOf_dvd_natCard` を組み合わせて `q ∣ Nat.card G` を得る。
   - 有限群では通常の群の位数の可除性を意味し、有限性を要求しない形では無限群の
     `Nat.card = 0` も含む。有限成分群へ適用する際には、そのまま有限群の結論になる。
+- `eq_zero_of_nsmul_eq_zero_of_not_dvd_natCard`
+  - 前定理の対偶として、剰余点群の濃度が `p` で割れないなら、その群の `p`-torsion
+    は零だけであることを固定した。
 - `prime_dvd_natCard_of_addMonoidHom_map_nsmul_eq_zero_of_map_ne_zero`
   - 加法準同型 `φ : A →+ G` が `q` 捩れ点を `G` の非零点へ送る場合、前定理を
     `φ Q` へ適用する。`map_nsmul` による捩れ輸送だけを使うため、源 `A` の有限性や
@@ -287,3 +290,18 @@ Néron 模型を構成する定理ではなく、後段の局所幾何学から�
 この三定理により、次段の成分群実装は「成分群への加法写像」「その核の `q` 捩れ消滅」
 「有限性」の三つを供給する問題へ縮約された。現時点では、乗法的還元から実際の
 成分群写像を構成したこと、また `q = p` の局所理論を閉じたことは意味しない。
+
+## 今回の追加実装: 滑らかな零成分の素数捩れ排除
+
+`DkMath.Lib.NumberTheory.EllipticSmoothTorsionPrimeExclusion` を追加した。
+
+- `eq_zero_of_smooth_prime_torsion_of_residue_not_dvd_natCard`
+  - `p` が付値環で単元であり、滑らかな剰余点群の `Nat.card` を `p` が割らないなら、
+    一般ファイバーの滑らかな `p`-torsion 点は零点である。
+  - 証明は `nsmul_reduce_eq_zero`、上の有限群対偶、そして
+    `reduce_injOn_torsion` の三段階だけからなる。
+
+これは乗法的還元の滑らかな群が `q - 1` または `q + 1` 個であるという濃度公式を
+証明したものではない。その公式、分裂・非分裂の区別、成分群写像の構成は、次に残る
+局所幾何の義務である。一方、この濃度公式が供給されれば、零成分の `p`-torsion
+消滅へ接続する部分は今回の定理で閉じる。
