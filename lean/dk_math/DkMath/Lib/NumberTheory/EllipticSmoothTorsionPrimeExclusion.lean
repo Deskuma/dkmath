@@ -92,4 +92,81 @@ theorem not_addOrder_eq_two_mul_prime_of_smooth_of_residue_not_dvd_natCard
   have hpge : 2 ≤ p := (Fact.out : p.Prime).two_le
   omega
 
+/--
+For distinct prime addresses below a prime exponent, the split
+multiplicative cardinality `q - 1` is not divisible by `p`.
+
+This is deliberately only an arithmetic lemma.  The geometric assertion that a
+split nodal smooth special fiber has exactly `q - 1` points belongs to the
+separate multiplicative-reduction construction.  Keeping the two statements
+apart lets that construction discharge precisely one cardinality equality.
+-/
+theorem prime_not_dvd_sub_one_of_prime_lt
+    {p q : ℕ} [Fact p.Prime] [Fact q.Prime] (hqp : q < p) :
+    ¬ p ∣ q - 1 := by
+  intro hdiv
+  have hqpos : 0 < q - 1 := by
+    have hqge : 2 ≤ q := (Fact.out : q.Prime).two_le
+    omega
+  have hle : p ≤ q - 1 := Nat.le_of_dvd hqpos hdiv
+  omega
+
+/--
+For prime addresses `q < p` and `p ≥ 5`, the nonsplit multiplicative
+cardinality `q + 1` is not divisible by `p`.
+
+The only boundary case in which a prime can divide this positive number without
+being larger is `p = q + 1`.  Then `q` would be an even prime, hence `q = 2`
+and `p = 3`, which contradicts `p ≥ 5`.  This finite arithmetic is the exact
+input needed once the nonsplit nodal point-count formula is supplied.
+-/
+theorem prime_not_dvd_add_one_of_prime_lt
+    {p q : ℕ} [Fact p.Prime] [Fact q.Prime] (hp5 : 5 ≤ p) (hqp : q < p) :
+    ¬ p ∣ q + 1 := by
+  intro hdiv
+  have hle : p ≤ q + 1 := Nat.le_of_dvd (by omega) hdiv
+  have heq : p = q + 1 := by omega
+  rcases (Fact.out : q.Prime).eq_two_or_odd with hq | hq
+  · omega
+  · have hpeven : Even p := by
+      rw [heq, Nat.even_iff]
+      omega
+    have hptwo : p = 2 := (Fact.out : p.Prime).even_iff.mp hpeven
+    omega
+
+/--
+The split multiplicative cardinality formula closes the zero-component branch.
+If a smooth reduced point group has `q - 1` elements, then a smooth point of
+exact order `2 * p` cannot occur for a prime address `q < p`.
+
+The hypothesis is written as an equality of `Nat.card`, rather than as a new
+structure class for split reduction: this is the exact output expected from a
+future nodal-geometry construction and keeps this theorem usable for any model
+that supplies the same count.
+-/
+theorem not_addOrder_eq_two_mul_prime_of_smooth_of_residue_card_eq_sub_one
+    {p q : ℕ} [Fact p.Prime] [Fact q.Prime] (hunit : A.valuation (p : L) = 1)
+    (hqp : q < p) (hcard : Nat.card ((W.map (residue A)).toAffine.Point) = q - 1)
+    {Q : (W.map A.subtype).toAffine.Point}
+    (hQ : HasSmoothReduction W Q) : addOrderOf Q ≠ 2 * p := by
+  exact not_addOrder_eq_two_mul_prime_of_smooth_of_residue_not_dvd_natCard W hunit
+    (by simpa only [hcard] using prime_not_dvd_sub_one_of_prime_lt hqp) hQ
+
+/--
+The nonsplit multiplicative cardinality formula closes the same
+zero-component branch.  The lower bound `5 ≤ p` removes the exceptional
+identity `3 = 2 + 1`, the only possible prime collision for `q + 1`.
+
+As in the split case, this is a transport theorem from a concrete point-count
+identity, not a proof of the identity or of nonsplit multiplicative reduction.
+-/
+theorem not_addOrder_eq_two_mul_prime_of_smooth_of_residue_card_eq_add_one
+    {p q : ℕ} [Fact p.Prime] [Fact q.Prime] (hp5 : 5 ≤ p)
+    (hunit : A.valuation (p : L) = 1) (hqp : q < p)
+    (hcard : Nat.card ((W.map (residue A)).toAffine.Point) = q + 1)
+    {Q : (W.map A.subtype).toAffine.Point}
+    (hQ : HasSmoothReduction W Q) : addOrderOf Q ≠ 2 * p := by
+  exact not_addOrder_eq_two_mul_prime_of_smooth_of_residue_not_dvd_natCard W hunit
+    (by simpa only [hcard] using prime_not_dvd_add_one_of_prime_lt hp5 hqp) hQ
+
 end DkMath.Lib.NumberTheory.EllipticSmoothTorsionPrimeExclusion

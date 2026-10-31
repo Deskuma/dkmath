@@ -308,6 +308,16 @@ Néron 模型を構成する定理ではなく、後段の局所幾何学から�
     前定理がこれを零にし、`addOrderOf Q ∣ 2` と `addOrderOf Q = 2 * p` が
     素数の下界 `2 ≤ p` と矛盾する。これは Cofixed 枝から構成済みの有理
     `2 * p`-torsion を零成分から排除する、直接の局所インターフェースである。
+- `prime_not_dvd_sub_one_of_prime_lt` と `prime_not_dvd_add_one_of_prime_lt`
+  - `q < p` の素数住所について、`p ∤ q - 1` は無条件に、`p ≥ 5` なら
+    `p ∤ q + 1` も成立することを固定した。後者の唯一の数論的境界
+    `p = q + 1 = 3` は、明示的に除外している。
+- `not_addOrder_eq_two_mul_prime_of_smooth_of_residue_card_eq_sub_one` と
+  `not_addOrder_eq_two_mul_prime_of_smooth_of_residue_card_eq_add_one`
+  - 剰余滑らか点群の濃度がそれぞれ `q - 1`、`q + 1` であるという等式を一つ
+    受け取れば、上の素数非可除性を通して、滑らかな厳密位数 `2 * p` 点を排除する。
+  - したがって残る乗法的還元の幾何学的義務は、分裂・非分裂の判定とこの一点数等式を
+    供給することへ正確に縮約された。
 
 これは乗法的還元の滑らかな群が `q - 1` または `q + 1` 個であるという濃度公式を
 証明したものではない。その公式、分裂・非分裂の区別、成分群写像の構成は、次に残る

@@ -40,7 +40,23 @@ example {p : ℕ} [Fact p.Prime] (hunit : A.valuation (p : L) = 1)
     (hQ : HasSmoothReduction W Q) : addOrderOf Q ≠ 2 * p :=
   not_addOrder_eq_two_mul_prime_of_smooth_of_residue_not_dvd_natCard W hunit hcard hQ
 
+example {p q : ℕ} [Fact p.Prime] [Fact q.Prime]
+    (hunit : A.valuation (p : L) = 1) (hqp : q < p)
+    (hcard : Nat.card ((W.map (IsLocalRing.residue A)).toAffine.Point) = q - 1)
+    {Q : (W.map A.subtype).toAffine.Point}
+    (hQ : HasSmoothReduction W Q) : addOrderOf Q ≠ 2 * p :=
+  not_addOrder_eq_two_mul_prime_of_smooth_of_residue_card_eq_sub_one W hunit hqp hcard hQ
+
+example {p q : ℕ} [Fact p.Prime] [Fact q.Prime] (hp5 : 5 ≤ p)
+    (hunit : A.valuation (p : L) = 1) (hqp : q < p)
+    (hcard : Nat.card ((W.map (IsLocalRing.residue A)).toAffine.Point) = q + 1)
+    {Q : (W.map A.subtype).toAffine.Point}
+    (hQ : HasSmoothReduction W Q) : addOrderOf Q ≠ 2 * p :=
+  not_addOrder_eq_two_mul_prime_of_smooth_of_residue_card_eq_add_one W hp5 hunit hqp hcard hQ
+
 #print axioms eq_zero_of_smooth_prime_torsion_of_residue_not_dvd_natCard
 #print axioms not_addOrder_eq_two_mul_prime_of_smooth_of_residue_not_dvd_natCard
+#print axioms not_addOrder_eq_two_mul_prime_of_smooth_of_residue_card_eq_sub_one
+#print axioms not_addOrder_eq_two_mul_prime_of_smooth_of_residue_card_eq_add_one
 
 end DkMathTest.Lib.NumberTheory.EllipticSmoothTorsionPrimeExclusion
