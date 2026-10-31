@@ -448,3 +448,22 @@ This is deliberately weaker than constructing a rational centre from
 The next geometric task is therefore to supply such a residue frame or centre
 from the concrete Frey reduction data, rather than to assert a false general
 rationality implication.
+
+`FreyFiniteKernelNodalReduction` now supplies this first concrete instance:
+`valuationModel_residue_singularCentre_of_geometry` transports the existing
+critical centre and tangent direction through `residue_frame_of_model`, then
+uses `singularCentreOfFrame`.  The result is a `SingularCentre` for the Frey
+valuation model over the residue field.  It intentionally stops before
+transporting that centre through the residual kernel polynomial model; that
+remaining comparison is the next algebraic bridge.
+
+The disjoint (singular-kernel) branch now closes that comparison with
+`residualValuationKernelModel_residue_frame_of_disjoint`, which transports the
+whole residue frame (centre and chosen tangent direction).  Its packaged
+consequence
+`residualValuationKernelModel_residue_singularCentre_of_disjoint` consumes the
+same established equality
+`residual_valuation_kernel_residue_eq_of_disjoint` and transports the same
+residue `SingularCentre` to the residual valuation-kernel model.  The smooth
+branch remains separate: its residue target is obtained from the nodal Vélu
+invariant formulas rather than from residue-model equality.

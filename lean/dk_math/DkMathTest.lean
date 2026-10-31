@@ -317,6 +317,7 @@ import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelDiscriminantProduct
 import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelDiscriminantDepth
 import DkMathTest.FLT.FreyFiniteKernelDiscriminantDepth
 import DkMathTest.FLT.FreyFiniteKernelGoodReduction
+import DkMathTest.FLT.FreyFiniteKernelNodalReduction
 import DkMathTest.FLT.FreyHnoSmallGoodPrime
 import DkMathTest.FLT.FreyNodalSmoothTorsionExclusion
 import DkMathTest.FLT.FreyHnoThreeGood

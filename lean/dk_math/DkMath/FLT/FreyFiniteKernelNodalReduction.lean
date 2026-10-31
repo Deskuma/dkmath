@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.FreyFiniteKernelReduction
 import DkMath.FLT.FreyDyadicGeometry
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalReduction
+import DkMath.Lib.NumberTheory.EllipticNodalSmoothCentre
 
 #print "file: DkMath.FLT.FreyFiniteKernelNodalReduction"
 
@@ -23,6 +24,8 @@ open WeierstrassCurve WeierstrassCurve.Affine IsLocalRing
 open DkMath.Lib.NumberTheory EllipticTorsionRepresentation EllipticFiniteKernel
 open EllipticCriticalCentre EllipticTangentDirections ValuationInertia ValuationPrimeSupport
 open ValuationRationalPrimeSupport WeierstrassResidueModel
+open EllipticNodalSmoothCard EllipticNodalSmoothCentre
+open EllipticNodalTorsion.NodalTorsion
 open DkMath.Lib.RepresentationTheory
 noncomputable local instance instDecidableEqFreyFiniteKernelNodalReduction {α : Type*} : DecidableEq α :=
   Classical.decEq _
@@ -55,6 +58,71 @@ theorem residual_integer_target_nodal_conditions (hp2 : p ≠ 2)
   have hv := S.residual_integer_valuation_kernel_values hp2 L hl hs hq hqp A hA
   rw [hv.1,hv.2]
   exact ⟨(residue_zero_iff A _).mp hi.1,(residue_ne_zero_iff A _).mp hi.2⟩
+
+/-- [DkMath.Lib] The concrete Frey valuation geometry supplies a rational
+singular centre on the residue model without lifting that centre to
+characteristic zero.  `residue_frame_of_model` provides the equation and the
+two vanishing derivatives; `singularCentreOfFrame` packages exactly those
+three fields and forgets the auxiliary tangent direction.
+
+This theorem is intentionally about the valuation model itself.  It does not
+identify the singular centre with a point of the residual kernel quotient;
+that transport remains a separate polynomial-model argument.
+-/
+noncomputable def valuationModel_residue_singularCentre_of_geometry (A : ValuationSubring (AlgebraicClosure ℚ))
+    (C : CriticalCentre A (S.rationalCurve.baseChange (AlgebraicClosure ℚ)))
+    (D : TangentDirections C) :
+    SingularCentre ((S.valuationModel A).map (residue A)) := by
+  obtain ⟨F, hsep⟩ := WeierstrassNodalFrame.residue_frame_of_model A (S.valuationModel A) _
+    (S.valuationModel_map A) C D
+  exact singularCentreOfFrame _ F
+
+/-- [DkMath.Lib] The disjoint branch transports the complete residue frame,
+not merely its packaged centre, to the residual valuation-kernel model.
+Keeping the two tangent directions in the `Frame` is useful for later slope
+and smooth-point arguments; the subsequent `SingularCentre` definition may
+forget the chosen direction when only the node is needed.
+-/
+theorem residualValuationKernelModel_residue_frame_of_disjoint
+    (L : Submodule (ZMod p) S.ResidualSpace) (hl : Module.finrank (ZMod p) L = 1)
+    {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    (hd : Disjoint L (S.residualZeroComponent A))
+    (C : CriticalCentre A (S.rationalCurve.baseChange (AlgebraicClosure ℚ)))
+    (D : TangentDirections C) :
+    Frame ((S.residualValuationKernelModel L hl hq hqp A hA).map (residue A))
+        (residue A ⟨C.x, C.x_mem⟩) (residue A ⟨C.y, C.y_mem⟩)
+        (residue A ⟨D.α, D.α_mem⟩) ∧
+      residue A ⟨D.α, D.α_mem⟩ ≠
+        -((S.residualValuationKernelModel L hl hq hqp A hA).map (residue A)).a₁ -
+          residue A ⟨D.α, D.α_mem⟩ := by
+  obtain ⟨F, hsep⟩ := WeierstrassNodalFrame.residue_frame_of_model A
+    (S.valuationModel A) _ (S.valuationModel_map A) C D
+  rw [S.residual_valuation_kernel_residue_eq_of_disjoint L hl hq hqp A hA hd]
+  exact ⟨F, hsep⟩
+
+/-- [DkMath.Lib] On the disjoint (singular-kernel) branch, the residue
+singular centre transports from the Frey valuation model to the residual
+kernel model by the already established residue-model equality.  No point of
+the characteristic-zero curve is introduced: the centre lives entirely over
+the residue field, and the equality is the exact bridge supplied by
+`residual_valuation_kernel_residue_eq_of_disjoint`.
+
+This is deliberately restricted to the disjoint branch.  The smooth branch
+has a different residue model and must use the nodal Vélu invariant formulas
+instead of this equality.
+-/
+noncomputable def residualValuationKernelModel_residue_singularCentre_of_disjoint
+    (L : Submodule (ZMod p) S.ResidualSpace) (hl : Module.finrank (ZMod p) L = 1)
+    {q : ℕ} (hq : q.Prime) (hqp : q ≠ p)
+    (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : LiesOverPrime A q)
+    (hd : Disjoint L (S.residualZeroComponent A))
+    (C : CriticalCentre A (S.rationalCurve.baseChange (AlgebraicClosure ℚ)))
+    (D : TangentDirections C) :
+    SingularCentre ((S.residualValuationKernelModel L hl hq hqp A hA).map (residue A)) := by
+  obtain ⟨F, -⟩ := S.residualValuationKernelModel_residue_frame_of_disjoint
+    L hl hq hqp A hA hd C D
+  exact singularCentreOfFrame _ F
 
 /-- 同じ中心・方向から同じ整数標的の正式な乗法的還元へ進む。q=2も除外しない。 -/
 theorem residual_integer_target_multiplicative_of_geometry (hp2 : p ≠ 2)
