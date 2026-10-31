@@ -261,3 +261,23 @@ primorial 非可除性からの `hno`、`q < p` の乗法的還元と良還元�
 `a ≡ 7 mod 8` の分解群外逃避を `example` から使用する。十公開定理の
 `#print axioms` はいずれも `[propext, Classical.choice, Quot.sound]` であり、今回の
 追加ファイルには新しい `sorry` や独自 `axiom` はない。
+
+## 今回の追加実装: 成分群へ差し込む有限群インターフェース
+
+`DkMath.Lib.Algebra.FiniteAdditiveTorsionCard` を追加した。これは成分群や
+Néron 模型を構成する定理ではなく、後段の局所幾何学から供給される「有限加法群への
+非零な捩れ像」を受け取るための一般群論の核である。
+
+- `prime_dvd_natCard_of_nsmul_eq_zero_of_ne_zero`
+  - `q • Q = 0` かつ `Q ≠ 0` から、`addOrderOf Q = q` と
+    `addOrderOf_dvd_natCard` を組み合わせて `q ∣ Nat.card G` を得る。
+  - 有限群では通常の群の位数の可除性を意味し、有限性を要求しない形では無限群の
+    `Nat.card = 0` も含む。有限成分群へ適用する際には、そのまま有限群の結論になる。
+- `prime_dvd_natCard_of_addMonoidHom_map_nsmul_eq_zero_of_map_ne_zero`
+  - 加法準同型 `φ : A →+ G` が `q` 捩れ点を `G` の非零点へ送る場合、前定理を
+    `φ Q` へ適用する。`map_nsmul` による捩れ輸送だけを使うため、源 `A` の有限性や
+    成分群の具体的構成を仮定しない。
+
+この二定理により、次段の成分群実装は「成分群への加法写像」「有理捩れ点の非零像」
+「有限性」の三つを供給する問題へ縮約された。現時点では、乗法的還元から実際の
+成分群写像を構成したこと、また `q = p` の局所理論を閉じたことは意味しない。
