@@ -193,3 +193,12 @@ residual_cyclic_tower_step_of_character_trivial
 一般 `hno`、普遍的な extension 消滅、既存 FLT 終点を仮定として追加していない。
 
 検証記録: `evidence/validation-note032-cyclotomic-extension-character.txt`。
+
+## 9. 次章: 最終矛盾の `hCH` 入力を除去
+
+[Frobenius 固定点の計数](TEXTBOOK-N032-FROBENIUS-FIXED-COUNT-261102.md)で、
+同じ良還元素数の実際の点数を塔の指数に固定し、作用差の核・像の個数と
+実際の良還元単射を組み合わせる最終矛盾を実装した。
+一般の Frobenius 特性方程式そのものは未実装だが、この新経路に `hCH` は不要。
+上記の残件のうち、その関係式の構成は新経路の必須入力から外れた。
+共鳴する悪い住所、指標消滅、必要な長さの巡回塔とその幾何学的入力は残る。

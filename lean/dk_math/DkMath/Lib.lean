@@ -34,6 +34,7 @@ import DkMath.Lib.Algebra.TorsionMultiplication
 import DkMath.Lib.Algebra.TorsionPowerLifting
 import DkMath.Lib.Algebra.MazurStepThreeTwoAnchor
 import DkMath.Lib.Algebra.TorsionTowerFrobenius
+import DkMath.Lib.Algebra.FiniteFixedQuotient
 import DkMath.Lib.Algebra.TorsionPreimageQuotient
 import DkMath.Lib.Algebra.PrimePowerCyclicCriterion
 import DkMath.Lib.Algebra.CyclicPrimePowerScalar
@@ -178,6 +179,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelZeroComponentExact
 import DkMath.Lib.NumberTheory.EllipticFinitePointApproximation
 import DkMath.Lib.NumberTheory.EllipticFixedTorsion
 import DkMath.Lib.NumberTheory.EllipticFrobeniusBranchSwap
+import DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction
 import DkMath.Lib.NumberTheory.EllipticFunctionEigenvalue
 import DkMath.Lib.NumberTheory.EllipticFunctionField
 import DkMath.Lib.NumberTheory.EllipticFunctionFieldConstants
@@ -406,6 +408,7 @@ import DkMath.Lib.NumberTheory.EllipticFiniteKernelPairRelation
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDiscriminantProduct
 import DkMath.Lib.NumberTheory.EllipticFiniteKernelDiscriminantDepth
 import DkMath.Lib.NumberTheory.FiniteFieldWeierstrassCard
+import DkMath.Lib.NumberTheory.FiniteFieldFrobeniusFixed
 import DkMath.Lib.NumberTheory.FreyLocalResidueField
 import DkMath.Lib.NumberTheory.EllipticSmoothTorsionOrderBound
 import DkMath.Lib.NumberTheory.FreyLocalValuationSubring

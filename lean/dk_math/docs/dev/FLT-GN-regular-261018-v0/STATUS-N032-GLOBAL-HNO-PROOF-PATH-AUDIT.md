@@ -227,3 +227,29 @@ Mazur Step Three の実際の大域幾何への適用と一般 hno は、引き�
 共鳴する悪い住所、類群・単数との接続と消滅、巡回塔の反復、実際の Frobenius 関係と
 Mazur/Eisenstein specialization の幾何は残る。**一般 `hno` は未完成である。**
 位数20のアフィン群による局所補直線・大域非分裂・全射指標・逆指標の共役の回帰例を追加した。
+
+
+## 2026-11-02 追補: 実際の良還元による固定点計数で `hCH` を除去
+
+教科書: `TEXTBOOK-N032-FROBENIUS-FIXED-COUNT-261102.md`。
+実装: `FiniteFixedQuotient`、`FiniteFieldFrobeniusFixed`、
+`EllipticFrobeniusFixedReduction`、`FreyGoodReductionTowerObstruction`。
+
+- 有限群上で `φ-id` の像を吸収先へ入れ、核・像の濃度公式から固定点の下界を得た。
+- 任意の拡大体で `x^#F=x` を満たす元が実際の有限体 `F` の像に入ることを、多項式の次数で証明した。
+- 同じ整数モデルの実際の還元を構成し、prime-to-`q` 捩れ上の単射性を既存の滑らかな還元から供給した。
+- 実際の Frobenius 固定捩れ点の二座標を `ZMod q` に降ろし、`#E[n]^σ≤#E(F_q)` を証明した。
+  延長付値環の剰余体全体を有限体と仮定していない。
+- 一般の曲線で、位数 `n` の吸収先から `n≤#E(F_q)` を得た。特性方程式は不要である。
+- `ell≠p` の良還元素数の存在と、その実際の点数 `N>0` を証明した。
+- 新しい Frey 終点は `#K=p^(goodReductionPointCount ell)` と同じ指数の局所吸収を明示し、
+  内部で選ぶ実際の Frobenius によって `p^N≤N<p^N` の矛盾を得る。
+
+`residual_cofixed_point_count_tower_resonant_inertia_impossible` は `hCH`、`hfixed`、
+独立の指数 `N`、Frobenius 元や付値環の存在 provider を要求しない。
+旧 `TorsionTowerFrobenius` 経路と旧条件付き Frobenius 終点を再帰依存監査で拒否する。
+
+一般の Frobenius 特性方程式そのものは未実装だが、新経路の不足入力からは外れた。
+残るのは共鳴する悪い住所での吸収、円分体の類群・単数による具体的な指標の消滅、
+必要な長さの大域巡回塔の反復構成、およびそれらを供給する Mazur/Eisenstein の幾何。
+**一般 `hno` は引き続き未完成である。**

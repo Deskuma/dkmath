@@ -1,0 +1,115 @@
+NOTE-032 actual Frobenius fixed-point reduction and final counting obstruction
+Date: 2026-11-02
+Working directory: lean/dk_math
+
+Performed validation, all commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyGoodReductionTowerObstruction DkMathTest.FLT.Note032GoodReductionTowerDependencyAudit
+   Final revision: Build completed successfully (11061 jobs).
+2. lake test
+   Normal repository test driver passed (12150 jobs), including both new test modules.
+3. lake env lean DkMathTest.lean
+   Normal test import entrance passed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032GoodReductionTowerSmoke.lean
+   Root DkMath exposes actual reduction, finite-field descent, fixed-point counts and the no-hCH endpoint.
+5. git diff --check
+   Passed.
+
+Regression scope:
+- Actual extension field GaloisField 5 2: every fifth-power fixed element descends to ZMod 5.
+- There exists an element of that 25-element extension not fixed by fifth power; the residue field
+  is not silently treated as the finite prime field.
+- Shear on ZMod 25 x ZMod 25: the 625-element group and 25-element absorber give at least 25 fixed points.
+- Negation supplies an explicit failure of absorption into zero; the absorption hypothesis is essential.
+- Actual elliptic curve y^2=x^3+x+1 over ZMod 5: nonzero discriminant and exactly 9 points including infinity.
+  The point count uses the actual affine point equivalence and an explicit 25-pair finite enumeration.
+- The finite arithmetic comparison 9 < 5^9 is checked.
+- Finite evaluations use kernel-checked decide/decide +kernel; no native_decide.
+
+Source checks:
+- Four production and two test modules pass the forbidden-construct scan:
+  no sorry, admit, native_decide, unsafe, or custom axiom declarations.
+- No new-module warnings/errors in the final root/focused build or normal test suite.
+- Historical sorry/linter warnings remain in unrelated modules; successful root validation is
+  not a claim that every repository declaration is sorry-free.
+
+Selected axiom audits (14 declarations; standard axioms only):
+DkMath.Lib.Algebra.FiniteFixedQuotient.card_le_card_fixed_mul: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.FiniteFixedQuotient.le_card_fixed_of_card_square: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.FiniteFieldFrobeniusFixed.exists_preimage_of_pow_card_eq: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction.integerReduction: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction.integerReduction_injOn_torsion: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction.residue_pow_eq_of_frobenius_fixed: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction.finitePointEmbedding: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction.exists_finite_point_of_fixed_torsion: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction.card_fixed_torsion_le_finite_points: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction.torsion_index_le_finite_point_count_of_absorbing: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.goodReductionPointCount_pos: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.exists_good_prime_ne: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.prime_power_pointAction_sub_mem_of_resonant_inertia: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cofixed_point_count_tower_resonant_inertia_impossible: Classical.choice, Quot.sound, propext
+
+Recursive dependency audit (types, constructors and opaque proof bodies):
+PASS: DkMath.Lib.NumberTheory.FiniteFieldFrobeniusFixed.exists_preimage_of_pow_card_eq; 11598 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction.exists_finite_point_of_fixed_torsion; 28488 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction.card_fixed_torsion_le_finite_points; 28719 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction.torsion_index_le_finite_point_count_of_absorbing; 29694 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.exists_good_prime_ne; 12186 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.prime_power_pointAction_sub_mem_of_resonant_inertia; 79104 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cofixed_point_count_tower_resonant_inertia_impossible; 79174 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.FiniteFieldFrobeniusFixed.exists_preimage_of_pow_card_eq; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction.exists_finite_point_of_fixed_torsion; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction.card_fixed_torsion_le_finite_points; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction.torsion_index_le_finite_point_count_of_absorbing; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.exists_good_prime_ne; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.prime_power_pointAction_sub_mem_of_resonant_inertia; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cofixed_point_count_tower_resonant_inertia_impossible; remaining arithmetic inputs explicit.
+PASS index: actual finite point count occurs in final public type; no independent N or hCH input.
+
+Seven full dependency traversals, seven public-input audits and one actual-index audit passed.
+Required proof dependencies include polynomial root bounds, actual torsion coordinate integrality,
+actual residue Frobenius, same-model smooth reduction injectivity, finite-group kernel/image counts,
+all-index torsion cardinality, actual good prime existence, global inertia generation, and actual
+at-p/nonresonant absorption. The final endpoint internally constructs the extension valuation and
+arithmetic Frobenius. Its public type retains the resonant hbad and the stable cyclic stage hcard,
+with goodReductionPointCount ell as the actual exponent and no independent N or hCH input.
+
+The recursive audit rejects sorryAx, custom axioms, P2M/P2MW, FltRegular, FreyPackage,
+DkMath.FLT.Kummer, completed FLT endpoints, FrobeniusEndo, TorsionTowerFrobenius,
+and old *_inertia_frobenius_impossible endpoints. Thus the new final proof does not reuse an
+old conditional characteristic-equation obstruction behind the new interface.
+
+Import audit: note032-frobenius-fixed-count-import-audit.json
+All four new local import closures are acyclic (247 local modules in their union) and exclude
+FreyHnoSmallIndex, FreyHnoRegularPrime and FreyHnoHardCase. Historical conditional modules may
+remain syntactically imported; exclusion of their proof use is checked by the recursive audit.
+
+Mathematical boundary:
+PROVED: same-model reduction is injective on prime-to-q torsion at good reduction; actual
+Frobenius-fixed torsion coordinates descend to ZMod q; hence #E[n]^sigma <= #E(F_q).
+Absorption of sigma-1 into a finite subgroup of cardinal n, together with #E[n]=n^2, gives
+n <= #E(F_q). For N=#E(F_ell), ell good and ell!=p, a stable cyclic stage #K=p^N containing
+the cofixed base plus the retained resonant bad-place absorption gives p^N <= N < p^N.
+The final arithmetic obstruction is proved without any characteristic-equation input.
+The existence of a good prime distinct from p and positivity of its actual point count are proved.
+STILL OPEN: the required global cyclic stage at that same point-count length; global cyclotomic
+character vanishing and tower iteration; resonant bad q>=5, q!=p, q|abc, q mod p=+/-1 absorption;
+Mazur/Eisenstein geometry supplying the missing inputs. General hno is unfinished.
+The general elliptic Frobenius Cayley-Hamilton theorem itself is not proved; it is no longer
+required as an input on this new final path. No replacement hCH, universal ExtVanishing,
+global tower-existence or hno provider was introduced.
+
+Reviewed external proof route (read locally, not imported or copied as new proof modules):
+S_WeierstrassCurve_frobenius_cayleyHamilton_on_torsion
+S_FrobeniusEndo_frobCharEqOnPoints_of_frobenius
+S_FrobeniusEndo_frobCharEqOnPoints_of_line
+S_FrobeniusEndo_kerDeg_frobEnd_line_one
+The new implementation instead uses existing DkMath reduction and direct finite kernel/image counting.
+
+SHA256 of new source/test/smoke artifacts:
+879af27d061ba19bb9151b54d2f220ff7e97c3d6dd5311be27a1ddc470fb213a  DkMath/Lib/Algebra/FiniteFixedQuotient.lean
+a316131e19ddb81f1eedd11c96234591ecddaa9918705e7efad986393acaa290  DkMath/Lib/NumberTheory/FiniteFieldFrobeniusFixed.lean
+a0e60bac133edc2afd2f9e118efe39650e60e2712ba53adf3c7373351494c2c9  DkMath/Lib/NumberTheory/EllipticFrobeniusFixedReduction.lean
+708c3cbe1429954945b8740fb2a429dd0034d4c927d09eed47d8f740fb3c3926  DkMath/FLT/FreyGoodReductionTowerObstruction.lean
+e7b280ae45a847973095a7e8215884a898eef3a3bbc35bf6b3f4754d46e65cd6  DkMathTest/FLT/FreyGoodReductionTowerObstruction.lean
+b93d3a4abe702306e177ef76f021ff244e495d0384a0dd0ec7700fc8a34a89f2  DkMathTest/FLT/Note032GoodReductionTowerDependencyAudit.lean
+91460c410e214b624e5d01e311038c9823a5fea6b848c44935f211972977fe45  docs/dev/FLT-GN-regular-261018-v0/evidence/Note032GoodReductionTowerSmoke.lean
