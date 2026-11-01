@@ -35,6 +35,8 @@ import DkMathTest.FLT.FreyLocalReduction
 import DkMathTest.FLT.FreyNodalReduction
 import DkMathTest.FLT.FreyPrimeFiltration
 import DkMathTest.FLT.FreyPrimeFiltrationComplete
+import DkMathTest.FLT.FreyPrimePowerFiltration
+import DkMathTest.FLT.Note032PrimePowerFiltrationDependencyAudit
 import DkMathTest.FLT.FreyRationalTorsion
 import DkMathTest.FLT.FreyRationalTorsionBounds
 import DkMathTest.FLT.FreyRationalTorsionBridge

@@ -39,6 +39,7 @@ import DkMath.Lib.Algebra.PrimePowerCyclicCriterion
 import DkMath.Lib.Algebra.CyclicPrimePowerScalar
 import DkMath.Lib.Algebra.TorsionPreimageScalar
 import DkMath.Lib.Algebra.TorsionPreimageLocalComplement
+import DkMath.Lib.Algebra.AbsorbingTorsionFiltration
 import DkMath.Lib.Algebra.TranscendentalFiniteDegree
 import DkMath.Lib.Algebra.UnitPowerClass
 import DkMath.Lib.Algebra.ValuationCubicModel
@@ -98,6 +99,7 @@ import DkMath.Lib.NumberTheory.CyclotomicLayerValuation
 import DkMath.Lib.NumberTheory.CyclotomicPhaseCoefficientRigidity
 import DkMath.Lib.NumberTheory.CyclotomicRamifiedPhase
 import DkMath.Lib.NumberTheory.CyclotomicRootModule
+import DkMath.Lib.NumberTheory.CyclotomicInertia
 import DkMath.Lib.NumberTheory.CyclotomicThirteenPID
 import DkMath.Lib.NumberTheory.DedekindFractionalValuation
 import DkMath.Lib.NumberTheory.DedekindLocalParameter
@@ -201,6 +203,7 @@ import DkMath.Lib.NumberTheory.EllipticMultiplicationValuation
 import DkMath.Lib.NumberTheory.EllipticNodalInertia
 import DkMath.Lib.NumberTheory.EllipticNodalReduction
 import DkMath.Lib.NumberTheory.EllipticNodalReductionKernel
+import DkMath.Lib.NumberTheory.EllipticNodalPrimePowerKernel
 import DkMath.Lib.NumberTheory.EllipticNodalSmoothCard
 import DkMath.Lib.NumberTheory.EllipticNodalSmoothCentre
 import DkMath.Lib.NumberTheory.EllipticNodalSmoothTorsionExclusion

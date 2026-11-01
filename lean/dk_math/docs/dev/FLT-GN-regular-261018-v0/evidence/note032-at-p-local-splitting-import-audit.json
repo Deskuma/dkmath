@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-01",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.CyclotomicInertia",
+    "DkMath.Lib.Algebra.AbsorbingTorsionFiltration",
+    "DkMath.Lib.NumberTheory.EllipticNodalPrimePowerKernel",
+    "DkMath.FLT.FreyPrimePowerFiltration"
+  ],
+  "acyclic_local_import_closure": true,
+  "new_local_closure_size": 235,
+  "checks": {
+    "DkMath.Lib.NumberTheory.CyclotomicInertia": {
+      "local_module_count": 8,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.Algebra.AbsorbingTorsionFiltration": {
+      "local_module_count": 3,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.EllipticNodalPrimePowerKernel": {
+      "local_module_count": 20,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyPrimePowerFiltration": {
+      "local_module_count": 235,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "upstream_blobs": [
+    "394ae95ec48cc4d879df49e06a7b8ff8493d6bc9",
+    "125214f2533c1c8fcf1e358ab3d7147cf42d27d9",
+    "cf7466796d1f8a4e4a57df2d4471e858379963a6"
+  ],
+  "boundary": "At-p filtration existence, exact cardinality, cyclicity, local splitting and at-p absorption at the same exponent are proved. Bad q != p absorption, global splitting, full tower, actual Frobenius/Eisenstein geometry and general hno remain open."
+}

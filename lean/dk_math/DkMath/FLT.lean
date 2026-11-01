@@ -80,6 +80,7 @@ import DkMath.FLT.FreyModEightIrreducibility
 import DkMath.FLT.FreyNodalReduction
 
 import DkMath.FLT.FreyPrimeFiltration
+import DkMath.FLT.FreyPrimePowerFiltration
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile
 

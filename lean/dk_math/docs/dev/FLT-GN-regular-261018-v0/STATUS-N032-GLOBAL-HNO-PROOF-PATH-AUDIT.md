@@ -149,3 +149,30 @@ Mazur Step Three の実際の大域幾何への適用と一般 hno は、引き�
 実際の Frobenius 関係と Eisenstein specialization の入力は残る。
 各分解群に安定な局所補直線を、一つの大域安定な補直線と同一視していない。
 模範解答の大域 extension 消滅を未証明の `hEXT` として導入していない。
+
+
+## 2026-11-01 追補: `p` 上の局所部分群と局所分裂の存在を実装
+
+教科書: `TEXTBOOK-N032-AT-P-LOCAL-SPLITTING-261101.md`。
+
+- `CyclotomicInertia.exists_inertia_cyclotomic_eq` により、任意の指定された `p` 上の
+  付値環で円分指標の慣性への制限が全射。有限円分体の完全分岐と既存の有限慣性
+  持ち上げ・付値環の共役を使い、別の存在 provider を置いていない。
+- 節点還元の `p` 捩れ消滅を実際の剰余点群で `p^m` へ反復し、同じ臨界中心と
+  還元準同型を使って高次捩れの慣性差も還元核に入ることを証明した。
+- `F_m=E[p^m]∩H_A` を同じ還元核との実際の交わりで定義した。
+  底の真部分空間性から上界を、倍写像の全射性・吸収・非自明な底の作用から下界を得て、
+  全正指数で `#F_m=p^m` と巡回性を証明した。
+- 元の Cofixed 直線を含む大域安定な巡回段 `K` は `F_m` そのものと証明した。
+- 実際の次段 `F_(m+1)` の像から、同じ商の分解群安定な補直線を構成した。
+  `residual_cofixed_cyclic_extension_locally_split_at_p` の入力に、局所部分群・局所濃度・
+  局所降下・局所安定性・補直線の存在は残っていない。`p≥5`, `m≥1`、元の Cofixed 直線、
+  同じ大域巡回段の不変量、指定した `A` の `p` 上の条件は明示している。
+
+一般 `hno` は未完成。今回の局所分裂は大域安定な補直線の存在ではない。
+悪い `q≠p` での必要な吸収、円分体の類群・単数の固有成分からの大域 extension 消滅、
+巡回塔の反復構成、実際の Frobenius 関係と Eisenstein specialization は引き続き残る。
+
+同じ指数 `N` の巡回段については `p` 上の高次捩れの吸収も `K=F_N` から供給した。
+新しい最終終点 `residual_cofixed_cyclic_tower_inertia_frobenius_impossible` の `hbad` は、
+`q≠p` で `q=2` または `q∣abc` の住所だけに限定された。
