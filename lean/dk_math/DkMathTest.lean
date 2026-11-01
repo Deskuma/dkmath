@@ -333,6 +333,10 @@ import DkMathTest.Lib.NumberTheory.WeierstrassNodalCenterCharThree
 import DkMathTest.Lib.NumberTheory.EllipticRationalLocalTransport
 import DkMathTest.FLT.FreyMazurLocalInputs
 import DkMathTest.FLT.FreyHnoHardCase
+import DkMathTest.FLT.FreyCofixedTorsionExtension
+import DkMathTest.FLT.Note032TorsionExtensionDependencyAudit
+import DkMathTest.Lib.Algebra.TorsionPreimageQuotient
+import DkMathTest.Lib.NumberTheory.EllipticTorsionInertiaAbsorption
 import DkMathTest.Lib.Algebra.MazurStepThreeTwoAnchor
 import DkMathTest.Lib.Algebra.TorsionTowerFrobenius
 

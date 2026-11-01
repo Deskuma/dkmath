@@ -108,3 +108,21 @@ filtration、torsion tower、連続 extension 消滅、Frobenius の Cayley–Ha
 小指数・正則素数の結果は既存 FLT を使用する上位層であり、その FLT 証明へ戻さない。
 二アンカーの実際の Eisenstein 商への適用と、Frey の Cofixed 枝からの Galois 捩れ塔の
 構成は残る。**一般 hno は引き続き未完成である。**
+
+
+## 2026-11-01 追補: 具体的な捩れ extension と慣性吸収の大域化
+
+`TEXTBOOK-N032-TORSION-EXTENSION-INERTIA-261101.md` に今回の教科書コードを記録した。
+
+- `EllipticTorsionInertiaAbsorption` と `FreyTorsionInertiaAbsorption` は、既存の
+  絶対慣性生成を再利用し、悪い住所の局所吸収から全 Galois 元の差の吸収を証明する。
+  最終矛盾の大域固定性 `hfixed` は局所条件から供給される。
+- `TorsionPreimageQuotient` は実際の商 `(p⁻¹K)/K`、作用、捩れ像、補部分加群の持ち上げを構成する。
+- `EllipticTorsionPreimageExtension` と `FreyCofixedTorsionExtension` は、Cofixed 直線から
+  実際の二次元 extension の固定直線・円分商・開核を供給する。
+- 安定な補直線が得られれば、次段の包含・位数・巡回性・捩れ指数・安定性・底への降下を証明する。
+  巡回性は `PrimePowerCyclicCriterion` によって捩れ濃度から確認する。
+
+安定な補直線の存在は未証明であり、必要な局所条件と大域 extension 消滅を構成する必要がある。
+高位捩れの悪い住所での吸収と、実際の Frobenius 関係式も明示入力として残る。
+Mazur Step Three の実際の大域幾何への適用と一般 hno は、引き続き未完成である。

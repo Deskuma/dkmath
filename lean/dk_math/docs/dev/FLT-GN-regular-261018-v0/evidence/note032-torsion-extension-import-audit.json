@@ -1,0 +1,41 @@
+{
+  "date": "2026-11-01",
+  "new_modules": [
+    "DkMath.Lib.Algebra.TorsionPreimageQuotient",
+    "DkMath.Lib.Algebra.PrimePowerCyclicCriterion",
+    "DkMath.Lib.NumberTheory.EllipticTorsionInertiaAbsorption",
+    "DkMath.Lib.NumberTheory.EllipticTorsionPreimageExtension",
+    "DkMath.FLT.FreyTorsionInertiaAbsorption",
+    "DkMath.FLT.FreyCofixedTorsionExtension"
+  ],
+  "acyclic_local_import_closure": true,
+  "new_local_closure_size": 227,
+  "checks": {
+    "DkMath.Lib.Algebra.TorsionPreimageQuotient": {
+      "local_module_count": 2,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.Algebra.PrimePowerCyclicCriterion": {
+      "local_module_count": 1,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.EllipticTorsionInertiaAbsorption": {
+      "local_module_count": 25,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.EllipticTorsionPreimageExtension": {
+      "local_module_count": 31,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyTorsionInertiaAbsorption": {
+      "local_module_count": 131,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCofixedTorsionExtension": {
+      "local_module_count": 222,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "cyclic_criterion_upstream_blob": "f822d78971d75cb0036dcd0474e0f36b234ef36a",
+  "boundary": "Global point differences are derived from local inertia absorption. Actual preimage extension and fixed/cyclotomic lines are built. Stable complements and required bad-place inputs are not constructed, so general hno is not claimed."
+}

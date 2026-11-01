@@ -34,6 +34,8 @@ import DkMath.Lib.Algebra.TorsionMultiplication
 import DkMath.Lib.Algebra.TorsionPowerLifting
 import DkMath.Lib.Algebra.MazurStepThreeTwoAnchor
 import DkMath.Lib.Algebra.TorsionTowerFrobenius
+import DkMath.Lib.Algebra.TorsionPreimageQuotient
+import DkMath.Lib.Algebra.PrimePowerCyclicCriterion
 import DkMath.Lib.Algebra.TranscendentalFiniteDegree
 import DkMath.Lib.Algebra.UnitPowerClass
 import DkMath.Lib.Algebra.ValuationCubicModel
@@ -221,6 +223,8 @@ import DkMath.Lib.NumberTheory.EllipticTangentDirections
 import DkMath.Lib.NumberTheory.EllipticThreeKernelDiscriminant
 import DkMath.Lib.NumberTheory.EllipticTorsionAllCard
 import DkMath.Lib.NumberTheory.EllipticTorsionTowerObstruction
+import DkMath.Lib.NumberTheory.EllipticTorsionInertiaAbsorption
+import DkMath.Lib.NumberTheory.EllipticTorsionPreimageExtension
 import DkMath.Lib.NumberTheory.EllipticTorsionCardBound
 import DkMath.Lib.NumberTheory.EllipticTorsionContinuity
 import DkMath.Lib.NumberTheory.EllipticTorsionDepth
