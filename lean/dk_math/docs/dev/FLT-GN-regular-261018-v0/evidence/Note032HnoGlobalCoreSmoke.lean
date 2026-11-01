@@ -1,0 +1,17 @@
+import DkMath
+
+open DkMath.FLT.Frey.Source
+open DkMath.Lib.Algebra.MazurStepThreeTwoAnchor
+open DkMath.Lib.Algebra.TorsionTowerFrobenius
+
+#check residual_hno_of_small_prime_index
+#check residual_hno_of_regular_prime
+#check residual_hno_iff_no_irregular_hard_case
+#check ofCounterexample_hard_case_of_cofixed
+#check nonzero_cusp_not_killed_after_two_anchors
+#check residual_line_tower_frobenius_impossible
+
+#print axioms residual_hno_of_regular_prime
+#print axioms residual_hno_iff_no_irregular_hard_case
+#print axioms nonzero_cusp_not_killed_after_two_anchors
+#print axioms residual_line_tower_frobenius_impossible

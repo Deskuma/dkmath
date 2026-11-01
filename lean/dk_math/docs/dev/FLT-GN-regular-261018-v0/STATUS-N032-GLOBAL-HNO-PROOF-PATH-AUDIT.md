@@ -89,3 +89,22 @@ filtration、torsion tower、連続 extension 消滅、Frobenius の Cayley–Ha
 実行した検証と結果は `evidence/validation-note032-mazur-local-inputs.txt` に記録する。
 新しい定理の `#print axioms` と禁止構文走査は、今回の局所結果の検証であり、
 未移植の大域定理や一般 `hno` の検証を意味しない。
+
+
+## 2026-11-01 追補: 残存分岐と大域証明の群論
+
+`TEXTBOOK-N032-HNO-GLOBAL-CORE-261101.md` に教科書コードの証明順序を記録した。
+
+- `FreyHnoSmallIndex` は既存 FLT5/7/11/13 を用いて対応する Source と Cofixed 枝を排除する。
+- `FreyHnoRegularPrime` は既存一般 GN–Kummer FLT から正則素数の hno を得る。
+  従って残存 Source は `p ∣ #ClassGroup(𝓞(CyclotomicField p ℚ))` を満たす。
+- `FreyHnoHardCase` は同じ直線・同じ原始化と向き付けの証拠を保ち、非正則側・
+  `p ≥ 17`・7側・primorial 支持ありの残存分岐へ一般 hno を正確に縮約する。
+- `MazurStepThreeTwoAnchor` は finite subgroup と実 specialization の仮定から、
+  prime-power 消滅、二アンカー消滅、非零 cusp 類の反証を証明する。
+- `TorsionTowerFrobenius`、`EllipticTorsionTowerObstruction`、`FreyTorsionTowerObstruction`
+  は、Frobenius 関係式と塔の仮定から、同じ実際の点群で最後の `p² ≤ p` の矛盾を証明する。
+
+小指数・正則素数の結果は既存 FLT を使用する上位層であり、その FLT 証明へ戻さない。
+二アンカーの実際の Eisenstein 商への適用と、Frey の Cofixed 枝からの Galois 捩れ塔の
+構成は残る。**一般 hno は引き続き未完成である。**

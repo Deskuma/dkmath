@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-01",
+  "new_modules": [
+    "DkMath.FLT.FreyHnoHardCase",
+    "DkMath.FLT.FreyHnoRegularPrime",
+    "DkMath.FLT.FreyHnoSmallIndex",
+    "DkMath.FLT.FreyTorsionTowerObstruction",
+    "DkMath.Lib.Algebra.MazurStepThreeTwoAnchor",
+    "DkMath.Lib.Algebra.TorsionTowerFrobenius",
+    "DkMath.Lib.NumberTheory.EllipticTorsionTowerObstruction"
+  ],
+  "acyclic_new_import_closure": true,
+  "completed_FLT_and_local_core_checks": {
+    "DkMath.FLT.Five.Main": {
+      "local_module_count": 33,
+      "upper_layer_dependencies": []
+    },
+    "DkMath.FLT.Kummer.SevenGNDescent": {
+      "local_module_count": 321,
+      "upper_layer_dependencies": []
+    },
+    "DkMath.FLT.Kummer.RegularPrimeFLT": {
+      "local_module_count": 67,
+      "upper_layer_dependencies": []
+    },
+    "DkMath.FLT.Kummer.ElevenThirteenFLT": {
+      "local_module_count": 72,
+      "upper_layer_dependencies": []
+    },
+    "DkMath.FLT.FreyMazurLocalInputs": {
+      "local_module_count": 391,
+      "upper_layer_dependencies": []
+    }
+  },
+  "boundary": "Small/regular-prime hno consumes existing independent FLT; hard-case equivalences and global group-theoretic cores do not prove general hno."
+}

@@ -332,5 +332,8 @@ import DkMathTest.Lib.NumberTheory.FreyLocalTorsionOrderBound
 import DkMathTest.Lib.NumberTheory.WeierstrassNodalCenterCharThree
 import DkMathTest.Lib.NumberTheory.EllipticRationalLocalTransport
 import DkMathTest.FLT.FreyMazurLocalInputs
+import DkMathTest.FLT.FreyHnoHardCase
+import DkMathTest.Lib.Algebra.MazurStepThreeTwoAnchor
+import DkMathTest.Lib.Algebra.TorsionTowerFrobenius
 
 #print "file: DkMathTest"
