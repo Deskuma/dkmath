@@ -15,6 +15,7 @@ import DkMath.Lib.NumberTheory.CyclotomicCharacterField
 同じ逆像商の実際の指標の核の固定体を構成する。
 非分裂なら一つの全射指標を選び、円分体を含む有限 Galois 拡大と相対次数 `p`、
 巡回 Galois 群を得る。`p` 上の分解群・`p` 外の慣性の作用も同じ固定体で消える。
+同じ体の Kummer 根への接続は `FreyCyclotomicKummer` で実装する。
 類群・単数への写像、Kummer の omega 二乗への捩り、大域消滅は未実装である。
 -/
 

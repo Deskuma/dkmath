@@ -84,6 +84,7 @@ import DkMath.FLT.FreyPrimePowerFiltration
 import DkMath.FLT.FreyNonresonantInertia
 import DkMath.FLT.FreyCyclotomicExtensionCharacter
 import DkMath.FLT.FreyCyclotomicCharacterField
+import DkMath.FLT.FreyCyclotomicKummer
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile
