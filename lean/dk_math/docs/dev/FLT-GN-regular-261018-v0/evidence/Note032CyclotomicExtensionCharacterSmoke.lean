@@ -1,0 +1,14 @@
+import DkMath
+
+#check DkMath.Lib.RepresentationTheory.FixedLineExtension.stable_complement_iff_kernel_trivial
+#check DkMath.Lib.RepresentationTheory.FixedLineExtension.deviationAt_conjugate
+#check DkMath.FLT.Frey.Source.residualCyclicExtensionCharacter
+#check DkMath.FLT.Frey.Source.residual_cyclic_extension_character_at_p
+#check DkMath.FLT.Frey.Source.residual_cyclic_extension_character_kernel_isOpen
+#check DkMath.FLT.Frey.Source.residual_cyclic_extension_character_inertia_away
+#check DkMath.FLT.Frey.Source.residual_cyclic_extension_nonsplit_has_surjective_character
+#check DkMath.FLT.Frey.Source.residual_cyclic_tower_step_of_character_trivial
+
+#print axioms DkMath.FLT.Frey.Source.residual_cyclic_extension_character_at_p
+#print axioms DkMath.FLT.Frey.Source.residual_cyclic_extension_nonsplit_has_surjective_character
+#print axioms DkMath.FLT.Frey.Source.residual_cyclic_tower_step_of_character_trivial

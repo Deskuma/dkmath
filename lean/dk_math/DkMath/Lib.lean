@@ -376,6 +376,7 @@ import DkMath.Lib.RepresentationTheory.CofixedImage
 import DkMath.Lib.RepresentationTheory.ConjugateLocalConditions
 import DkMath.Lib.RepresentationTheory.ConjugateSquare
 import DkMath.Lib.RepresentationTheory.FixedCofixed
+import DkMath.Lib.RepresentationTheory.FixedLineExtension
 import DkMath.Lib.RepresentationTheory.InvariantLine
 import DkMath.Lib.RepresentationTheory.LocalFixedCofixed
 import DkMath.Lib.RepresentationTheory.MatrixRealization

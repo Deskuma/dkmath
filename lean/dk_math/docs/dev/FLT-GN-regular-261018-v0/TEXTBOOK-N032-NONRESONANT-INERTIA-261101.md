@@ -191,3 +191,11 @@ q\text{ は素数},\quad q\ne p,\quad q\ge5,\quad q\mid abc,\quad q\equiv\pm1\pm
 
 検証記録: `evidence/validation-note032-nonresonant-inertia.txt`。
 公開入口は `DkMath.Lib`、`DkMath.FLT`、`DkMathTest` へ接続する。
+
+## 10. 次章での進展
+
+[円分指標核上の有限加法指標](TEXTBOOK-N032-CYCLOTOMIC-EXTENSION-CHARACTER-261102.md)では、
+同じ逆像商の固定直線値の加法指標を構成し、今回の `p` 外の不分岐性をその局所消滅へ接続した。
+`p` 上の分解群と指標核の交わりでの消滅、開核、逆指標の共役則、
+非分裂時の位数 `p` の全射商も実装した。共鳴住所の `hbad` は引き続き明示入力である。
+類群・単数による大域消滅は未実装で、局所消滅だけから大域分裂を結論していない。

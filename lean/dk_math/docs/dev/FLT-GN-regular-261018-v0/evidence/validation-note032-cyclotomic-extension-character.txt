@@ -1,0 +1,103 @@
+NOTE-032 actual cyclotomic-kernel extension characters
+Date: 2026-11-02
+Working directory: lean/dk_math
+
+Performed validation, all commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCyclotomicExtensionCharacter DkMathTest.FLT.Note032CyclotomicExtensionCharacterDependencyAudit
+   Final revision: Build completed successfully (11057 jobs).
+2. lake test
+   Normal repository test driver passed (12144 jobs), including both new test modules.
+3. lake env lean DkMathTest.lean
+   Normal test import entrance passed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicExtensionCharacterSmoke.lean
+   Root DkMath exposes the new linear-algebra, arithmetic character and conditional tower endpoints.
+5. git diff --check
+   Passed.
+
+Regression scope:
+- Construct the affine group of order 20 over ZMod 5, acting by [[1,b],[0,a]].
+- Verify the actual group cardinality, fixed horizontal line, nontrivial quotient character a,
+  and explicitly constructed eigen-kernel complement for diag(1,2).
+- The diagonal subgroup preserves the vertical complement; the full affine group admits no
+  stable complement because the shear lies in the character kernel and acts nontrivially.
+- The actual evaluated deviation character surjects onto the horizontal fixed line.
+- Conjugation by diag(1,2) multiplies the shear deviation by 2^-1=3, confirming inverse weight.
+  The last finite calculation uses decide +kernel, not native_decide.
+- These are finite-group algebra tests, not a Galois extension satisfying all arithmetic local conditions.
+
+Source checks:
+- Two production and two test modules pass the forbidden-construct scan:
+  no sorry, admit, native_decide, unsafe, or custom axiom declarations.
+- No new-module warnings/errors in the final root/focused build or normal test suite.
+- Unrelated historical sorry/linter warnings remain in the repository. A passing root build is
+  not an assertion that every repository declaration is sorry-free.
+
+Selected axiom audits (15 declarations; standard three axioms only):
+DkMath.Lib.RepresentationTheory.FixedLineExtension.isCompl_eigenKernel: Classical.choice, Quot.sound, propext
+DkMath.Lib.RepresentationTheory.FixedLineExtension.stable_complement_iff_kernel_trivial: Classical.choice, Quot.sound, propext
+DkMath.Lib.RepresentationTheory.FixedLineExtension.deviationHom: Classical.choice, Quot.sound, propext
+DkMath.Lib.RepresentationTheory.FixedLineExtension.deviation_conjugate: Classical.choice, Quot.sound, propext
+DkMath.Lib.RepresentationTheory.FixedLineExtension.deviationAt: Classical.choice, Quot.sound, propext
+DkMath.Lib.RepresentationTheory.FixedLineExtension.kernel_trivial_iff_deviationAt_trivial: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residualCyclicExtensionCharacter: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cyclic_extension_character_at_p: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cyclic_extension_character_conjugate: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cyclic_extension_character_kernel_isOpen: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cyclic_extension_character_range_card_le: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cyclic_extension_character_inertia_away: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cyclic_extension_splits_iff_character_trivial: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cyclic_extension_nonsplit_has_surjective_character: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cyclic_tower_step_of_character_trivial: Classical.choice, Quot.sound, propext
+
+Recursive dependency audit (types, constructors and opaque proof bodies):
+PASS: DkMath.FLT.Frey.Source.residual_cyclic_extension_character_conjugate; 42189 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cyclic_extension_character_at_p; 54132 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cyclic_extension_character_kernel_isOpen; 42193 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cyclic_extension_character_inertia_away; 49188 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cyclic_extension_splits_iff_character_trivial; 53292 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cyclic_extension_nonsplit_has_surjective_character; 53297 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cyclic_tower_step_of_character_trivial; 53364 reachable constants; required actual theorems present.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cyclic_extension_character_conjugate; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cyclic_extension_character_at_p; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cyclic_extension_character_kernel_isOpen; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cyclic_extension_character_inertia_away; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cyclic_extension_splits_iff_character_trivial; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cyclic_extension_nonsplit_has_surjective_character; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cyclic_tower_step_of_character_trivial; remaining arithmetic inputs explicit.
+
+Seven full dependency traversals and seven public-input audits passed.
+Required dependencies include the actual same-stage cyclotomic quotient and fixed line,
+actual at-p local splitting and cyclotomic inertia, high torsion representation open kernel,
+nonresonant/good reduction inertia, the explicit eigen-kernel complement, the actual
+order-p torsion image, and cyclic tower lifting via the prime-power cyclic criterion.
+The audit rejects sorryAx, custom axioms, P2M/P2MW, FltRegular, FreyPackage,
+DkMath.FLT.Kummer and completed FLT endpoints. The resonant hbad, nonsplitting hns and
+conditional tower-step hzero hypotheses are retained at their relevant public endpoints.
+
+Import audit: note032-cyclotomic-extension-character-import-audit.json
+Both new local import closures are acyclic (241 local modules in their union) and exclude
+FreyHnoSmallIndex, FreyHnoRegularPrime and FreyHnoHardCase.
+
+Mathematical boundary:
+PROVED: on the same stable cyclic stage K containing the cofixed line, evaluated deviations
+on ker(chi_p) are actual fixed-line-valued additive characters. Their codomain has p elements;
+their images have cardinal at most p; they have open kernels and inverse-cyclotomic
+conjugation weight. At p they vanish on ker(chi_p) intersect the decomposition group.
+Away from p they vanish on ker(chi_p) intersect inertia, conditional only on the retained
+resonant bad-place preimage absorption. Global stable complement existence is equivalent
+to vanishing of this concrete character family. Nonsplitting supplies a surjective order-p
+character. Vanishing, as an explicit arithmetic input, constructs the next cyclic stage
+with inclusion, exact cardinality, cyclicity, exponent, global stability and socle descent.
+STILL OPEN: resonant bad q>=5, q!=p, q|abc, q mod p=+/-1 absorption; construction of the
+actual number-field/Kummer/class-group/unit bridge and proof of global character vanishing;
+full tower iteration; actual Frobenius relation and exponent choice; Mazur/Eisenstein geometry.
+The subgroup local conditions are not yet identified with all prime ideals of a cyclotomic
+number field. Inverse-character conjugation is not itself the omega^2 Kummer bridge.
+General hno is unfinished. No universal ExtVanishing or hno provider was introduced.
+
+SHA256 of new source/test/smoke artifacts:
+a15fea736a4d0ad1b084ae2448a6c158058bf743368e9aab660e40951bcd283b  DkMath/Lib/RepresentationTheory/FixedLineExtension.lean
+97a6573f8df36300ef2dfda988b92a07a73d997f6b731c22017e1d84a27f689e  DkMath/FLT/FreyCyclotomicExtensionCharacter.lean
+4ef5d8346a78d1d924d8db21b082730b41cf0c2481041e69c59c84201222aa27  DkMathTest/FLT/FreyCyclotomicExtensionCharacter.lean
+43226c7fe3ae3b0d99006ad6d16432df80742e4bfbed647fea3bf1583ef02280  DkMathTest/FLT/Note032CyclotomicExtensionCharacterDependencyAudit.lean
+b7f0bda1f01379db0a7f750cf95b05d9df48562bb9c383aef4985baa7a6aeaa2  docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicExtensionCharacterSmoke.lean

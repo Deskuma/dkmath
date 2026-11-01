@@ -39,6 +39,8 @@ import DkMathTest.FLT.FreyPrimePowerFiltration
 import DkMathTest.FLT.Note032PrimePowerFiltrationDependencyAudit
 import DkMathTest.FLT.FreyNonresonantInertia
 import DkMathTest.FLT.Note032NonresonantInertiaDependencyAudit
+import DkMathTest.FLT.FreyCyclotomicExtensionCharacter
+import DkMathTest.FLT.Note032CyclotomicExtensionCharacterDependencyAudit
 import DkMathTest.FLT.FreyRationalTorsion
 import DkMathTest.FLT.FreyRationalTorsionBounds
 import DkMathTest.FLT.FreyRationalTorsionBridge
