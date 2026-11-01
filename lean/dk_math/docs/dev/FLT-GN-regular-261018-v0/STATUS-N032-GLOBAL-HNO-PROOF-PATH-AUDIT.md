@@ -126,3 +126,26 @@ filtration、torsion tower、連続 extension 消滅、Frobenius の Cayley–Ha
 安定な補直線の存在は未証明であり、必要な局所条件と大域 extension 消滅を構成する必要がある。
 高位捩れの悪い住所での吸収と、実際の Frobenius 関係式も明示入力として残る。
 Mazur Step Three の実際の大域幾何への適用と一般 hno は、引き続き未完成である。
+
+
+## 2026-11-01 追補: 巡回塔の全段の円分商と局所補直線
+
+教科書: `TEXTBOOK-N032-CYCLIC-TOWER-QUOTIENT-261101.md`。
+実装: `CyclicPrimePowerScalar`、`TorsionPreimageScalar`、
+`TorsionPreimageLocalComplement`、`FreyCofixedTorsionTower`。
+
+- 第一段の `pK=0` を外し、実際の `V → K/pK` を構成。核が同じ捩れ像 `C` であることと、
+  `V/C ≃ K/pK` を証明した。
+- 巡回 `p^m` 群で `pK=K[p^(m-1)]` を証明し、底のスカラー作用を最上商へ輸送した。
+- 同じ Cofixed 直線の底を含む全巡回段で `K[p]=B` を証明し、円分商公式を全段に拡張した。
+  二次元性・固定像の一次元性・点ごとの固定性・開核も、同じ実際の段から供給する。
+- 局所部分群 `K≤F≤p^-1 K` の実像から補直線を作り、指定した分解群安定性を輸送する。
+  像の持ち上げが `F` 自体に戻ることも証明した。
+- 商表現の `p` 外の不分岐性で良還元素数を内部供給し、`2` と `abc` の住所での逆像上の吸収を残す。
+- 最終の局所慣性・Frobenius 矛盾から `hdown` を除去し、巡回性と底への包含から内部供給する。
+
+一般 `hno` は未完成。局所部分群 `F` の幾何学的構成、悪い素点の高次捩れの吸収、
+円分体の omega 二乗類群・単数固有成分による大域分裂、塔の反復、
+実際の Frobenius 関係と Eisenstein specialization の入力は残る。
+各分解群に安定な局所補直線を、一つの大域安定な補直線と同一視していない。
+模範解答の大域 extension 消滅を未証明の `hEXT` として導入していない。

@@ -334,6 +334,9 @@ import DkMathTest.Lib.NumberTheory.EllipticRationalLocalTransport
 import DkMathTest.FLT.FreyMazurLocalInputs
 import DkMathTest.FLT.FreyHnoHardCase
 import DkMathTest.FLT.FreyCofixedTorsionExtension
+import DkMathTest.FLT.FreyCofixedTorsionTower
+import DkMathTest.FLT.Note032CyclicTowerDependencyAudit
+import DkMathTest.Lib.Algebra.TorsionPreimageScalar
 import DkMathTest.FLT.Note032TorsionExtensionDependencyAudit
 import DkMathTest.Lib.Algebra.TorsionPreimageQuotient
 import DkMathTest.Lib.NumberTheory.EllipticTorsionInertiaAbsorption

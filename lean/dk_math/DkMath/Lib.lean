@@ -36,6 +36,9 @@ import DkMath.Lib.Algebra.MazurStepThreeTwoAnchor
 import DkMath.Lib.Algebra.TorsionTowerFrobenius
 import DkMath.Lib.Algebra.TorsionPreimageQuotient
 import DkMath.Lib.Algebra.PrimePowerCyclicCriterion
+import DkMath.Lib.Algebra.CyclicPrimePowerScalar
+import DkMath.Lib.Algebra.TorsionPreimageScalar
+import DkMath.Lib.Algebra.TorsionPreimageLocalComplement
 import DkMath.Lib.Algebra.TranscendentalFiniteDegree
 import DkMath.Lib.Algebra.UnitPowerClass
 import DkMath.Lib.Algebra.ValuationCubicModel

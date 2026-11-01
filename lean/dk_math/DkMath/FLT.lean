@@ -48,6 +48,7 @@ import DkMath.FLT.FreyHnoHardCase
 import DkMath.FLT.FreyTorsionTowerObstruction
 import DkMath.FLT.FreyTorsionInertiaAbsorption
 import DkMath.FLT.FreyCofixedTorsionExtension
+import DkMath.FLT.FreyCofixedTorsionTower
 import DkMath.FLT.FreyHnoThreeGood
 import DkMath.FLT.FreyFiniteKernelHom
 import DkMath.FLT.FreyFiniteKernelIntegralModel

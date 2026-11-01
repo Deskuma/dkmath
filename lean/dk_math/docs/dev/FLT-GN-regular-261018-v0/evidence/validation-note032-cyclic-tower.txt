@@ -1,0 +1,96 @@
+NOTE-032 all-stage cyclic torsion quotient and local complement transport
+Date: 2026-11-01
+Working directory: lean/dk_math
+
+Performed commands, all returned exit code 0:
+- lake build DkMath.FLT.FreyCofixedTorsionTower
+  Build completed successfully (4066 jobs).
+- lake build DkMathTest.Lib.Algebra.TorsionPreimageScalar
+  Final proof/style revision: Build completed successfully (1787 jobs).
+- lake build DkMathTest.FLT.Note032CyclicTowerDependencyAudit
+  Build completed successfully (4067 jobs).
+- lake build DkMath
+  Root/facades: Build completed successfully (11045 jobs).
+- lake test
+  Final revision passed; includes all three new test modules.
+- lake env lean DkMathTest.lean
+  Final normal test entrance passed.
+- lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclicTowerSmoke.lean
+  Root import DkMath exposes the new public declarations.
+- git diff --check
+  Passed.
+
+Regression cases:
+- ZMod 9: multiplication by 4 fixes the 3-socle and acts by 1 modulo 3K,
+  while not fixing all of K.
+- ZMod 9 x ZMod 3: an explicit shear fixes K[3] but is nontrivial on K/3K;
+  demonstrates that dropping cyclicity would make the scalar transport false.
+- (ZMod 4)^2: an actual local subgroup's image lifts back to itself and is
+  disjoint from the original torsion image.
+- ZMod 8, K=2G: pK is nonzero, and the general map to K/pK takes a concrete
+  higher-stage quotient class to a nonzero class.
+
+Source and axiom checks:
+- Forbidden-construct scan: four production and three test modules passed.
+- No warning/error from the new modules in the final suite/focused builds.
+- Historical sorry/linter warnings remain elsewhere in the full repository;
+  root build success is not a claim that all repository declarations are sorry-free.
+- Fifteen selected axiom checks follow (only the three standard axioms):
+DkMath.FLT.Frey.Source.residual_cofixed_cyclic_extension_profile: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cofixed_cyclic_extension_quotient_cyclotomic: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cyclic_extension_complement_of_local_subgroup: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cyclic_tower_inertia_frobenius_impossible: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cyclic_tower_socle_mem_base: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_preimage_unramified_away_of_bad_inertia: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.CyclicPrimePowerScalar.range_nsmul_eq_ker: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.CyclicPrimePowerScalar.socle_mem_of_prime_subgroup: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.CyclicPrimePowerScalar.sub_nsmul_mem_range_of_socle: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.TorsionPreimageQuotient.isCompl_imageSubmodule: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.TorsionPreimageQuotient.lift_imageSubmodule: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.TorsionPreimageQuotient.mem_torsionImage_iff_quotientMultiplyMod_eq_zero: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.TorsionPreimageQuotient.quotientMultiplyMod_surjective: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.TorsionPreimageQuotient.representation_sub_nsmul_mem_torsionImage_of_cyclic: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.TorsionPreimageQuotient.torsionImageQuotientEquiv: Classical.choice, Quot.sound, propext
+
+Proof dependency audit (types and opaque bodies, including imports):
+PASS: DkMath.Lib.Algebra.TorsionPreimageQuotient.torsionImageQuotientEquiv; 3577 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cofixed_cyclic_extension_quotient_cyclotomic; 41830 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cofixed_cyclic_extension_profile; 32984 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cyclic_extension_complement_of_local_subgroup; 32559 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_preimage_unramified_away_of_bad_inertia; 28492 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cyclic_tower_inertia_frobenius_impossible; 75197 reachable constants; required actual theorems present.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cofixed_cyclic_extension_quotient_cyclotomic; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cofixed_cyclic_extension_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cyclic_extension_complement_of_local_subgroup; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_preimage_unramified_away_of_bad_inertia; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cyclic_tower_inertia_frobenius_impossible; remaining arithmetic inputs explicit.
+
+All six root traversals and five public-input checks passed. The recursive audit
+rejects sorryAx, custom axioms, external P2M/P2MW, FltRegular, FreyPackage,
+DkMath.FLT.Kummer and completed FLT endpoints. Actual cyclic multiplication,
+elliptic cardinality/openness, inertia generation and good reduction are required.
+
+Import audit: note032-cyclic-tower-import-audit.json
+All new local closures are acyclic and do not include FreyHnoSmallIndex,
+FreyHnoRegularPrime or FreyHnoHardCase.
+
+Mathematical boundary:
+Proved: V/C is concretely K/pK; all cyclic stages transport the bottom's
+cyclotomic character to this quotient; K[p] is the original bottom line;
+local subgroup images yield actual decomposition-stable complements and lift
+back to the same subgroup; good primes supply inertia fixedness internally;
+the final obstruction no longer assumes the separate hdown input.
+Not proved: existence of the local filtration subgroups, the bad-place inertia
+absorption, global extension splitting from cyclotomic class/unit eigenspaces,
+the complete tower, actual Frobenius Cayley-Hamilton and Eisenstein specialization.
+No hEXT or general hno provider was introduced. General hno remains unfinished.
+
+SHA256 of new sources and smoke:
+45d80eb6c2a8aaca02c6bf9dc0f3986b37abd01d1c01e2fc61eaa12a3d885ae8  DkMath/Lib/Algebra/CyclicPrimePowerScalar.lean
+7cc8683b36bfb31f329a0c8e8d305d643ea394c0779eb6c2075fadf9eb23d6d9  DkMath/Lib/Algebra/TorsionPreimageScalar.lean
+44d37272988df4ee2fc82e2234e151405347d3e45259752e8177d8f543434f6a  DkMath/Lib/Algebra/TorsionPreimageLocalComplement.lean
+99ed26b5cff4716ea851c7d55d74cca4a0be79fedeb83ae1f1e5687e5a08b189  DkMath/FLT/FreyCofixedTorsionTower.lean
+d496c2429b2dfe0ac5b1e38629e69c3e9a10900036d0ad8be87da1c93c2b6319  DkMathTest/Lib/Algebra/TorsionPreimageScalar.lean
+948a76dcf2ff6cd9280b3d79ea15bc79898dfac852c4f5cf2d36e516b61e577e  DkMathTest/FLT/FreyCofixedTorsionTower.lean
+e305be5a4226aeb03b66fb54146ecedb6bdb29aa7f641d6e714d8df83112fa87  DkMathTest/FLT/Note032CyclicTowerDependencyAudit.lean
+aded9204a1bf469a639bee0e19f7d7b43b5b7c14ba48a9c7c3737b61b60e64db  docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclicTowerSmoke.lean

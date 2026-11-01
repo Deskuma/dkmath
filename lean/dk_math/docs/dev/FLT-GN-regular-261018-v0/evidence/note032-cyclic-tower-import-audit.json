@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-01",
+  "new_modules": [
+    "DkMath.Lib.Algebra.CyclicPrimePowerScalar",
+    "DkMath.Lib.Algebra.TorsionPreimageScalar",
+    "DkMath.Lib.Algebra.TorsionPreimageLocalComplement",
+    "DkMath.FLT.FreyCofixedTorsionTower"
+  ],
+  "acyclic_local_import_closure": true,
+  "new_local_closure_size": 231,
+  "checks": {
+    "DkMath.Lib.Algebra.CyclicPrimePowerScalar": {
+      "local_module_count": 1,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.Algebra.TorsionPreimageScalar": {
+      "local_module_count": 4,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.Algebra.TorsionPreimageLocalComplement": {
+      "local_module_count": 5,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCofixedTorsionTower": {
+      "local_module_count": 231,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "boundary": "All-stage quotient character, local complement transport and cyclic socle descent are proved. Arithmetic existence of local subgroups, bad-place absorption, global splitting, tower existence and actual Frobenius/Eisenstein inputs remain open."
+}
