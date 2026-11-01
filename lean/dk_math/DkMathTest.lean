@@ -41,6 +41,8 @@ import DkMathTest.FLT.FreyNonresonantInertia
 import DkMathTest.FLT.Note032NonresonantInertiaDependencyAudit
 import DkMathTest.FLT.FreyCyclotomicExtensionCharacter
 import DkMathTest.FLT.Note032CyclotomicExtensionCharacterDependencyAudit
+import DkMathTest.FLT.FreyCyclotomicCharacterField
+import DkMathTest.FLT.Note032CyclotomicCharacterFieldDependencyAudit
 import DkMathTest.FLT.FreyGoodReductionTowerObstruction
 import DkMathTest.FLT.Note032GoodReductionTowerDependencyAudit
 import DkMathTest.FLT.FreyRationalTorsion

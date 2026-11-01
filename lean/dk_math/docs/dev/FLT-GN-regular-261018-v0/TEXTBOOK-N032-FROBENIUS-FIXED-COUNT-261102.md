@@ -209,3 +209,11 @@ Mazur/Eisenstein specialization の幾何は、共鳴住所などの入力を実
 実際の Frobenius・還元単射・素体への降下・全捩れ濃度への到達を要求する。
 
 検証記録: `evidence/validation-note032-frobenius-fixed-count.txt`。
+
+## 10. 次章: 指標から円分体上の実際の巡回拡大へ
+
+[円分指標の核の固定体](TEXTBOOK-N032-CYCLOTOMIC-CHARACTER-FIELD-261102.md)では、
+同じ指標の開核から、実際の円分体を含む有限 Galois 拡大を構成した。
+非分裂から得る全射指標の場合、その相対次数と Galois 群の位数は `p`、群は巡回となる。
+円分体上の分解群・慣性群の所属も同じ付値環で輸送し、構成体の全元の局所固定性へ接続した。
+類群・単数による排除と共鳴住所は未実装であり、一般 `hno` は未完成である。

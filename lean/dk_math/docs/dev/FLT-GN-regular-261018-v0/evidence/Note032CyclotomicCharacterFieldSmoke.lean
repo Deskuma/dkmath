@@ -1,0 +1,15 @@
+import DkMath
+
+#check DkMath.Lib.NumberTheory.CyclotomicKernelField.rootField_numberField
+#check DkMath.Lib.NumberTheory.CyclotomicKernelField.fixingSubgroup_eq_kernel
+#check DkMath.Lib.NumberTheory.CyclotomicKernelField.kernelEquiv_mem_inertia_iff
+#check DkMath.Lib.NumberTheory.CyclotomicCharacterField.characterField_numberField
+#check DkMath.Lib.NumberTheory.CyclotomicCharacterField.relative_finrank
+#check DkMath.Lib.NumberTheory.CyclotomicCharacterField.relative_isCyclic
+#check DkMath.FLT.Frey.Source.residual_nonsplit_has_cyclotomic_cyclic_extension
+#check DkMath.FLT.Frey.Source.residual_characterField_decomposition_fixed_at_p
+#check DkMath.FLT.Frey.Source.residual_characterField_inertia_fixed_away
+
+#print axioms DkMath.FLT.Frey.Source.residual_nonsplit_has_cyclotomic_cyclic_extension
+#print axioms DkMath.FLT.Frey.Source.residual_characterField_decomposition_fixed_at_p
+#print axioms DkMath.FLT.Frey.Source.residual_characterField_inertia_fixed_away
