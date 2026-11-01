@@ -176,3 +176,32 @@ Mazur Step Three の実際の大域幾何への適用と一般 hno は、引き�
 同じ指数 `N` の巡回段については `p` 上の高次捩れの吸収も `K=F_N` から供給した。
 新しい最終終点 `residual_cofixed_cyclic_tower_inertia_frobenius_impossible` の `hbad` は、
 `q≠p` で `q=2` または `q∣abc` の住所だけに限定された。
+
+
+## 2026-11-01 追補: 非共鳴の悪い素点と2・3の吸収を実装
+
+教科書: `TEXTBOOK-N032-NONRESONANT-INERTIA-261101.md`。
+実装: `FreyNonresonantInertia`、`CyclicSignSeparation`、`CyclotomicFrobenius`、
+`EllipticNodalDecomposition`。
+
+- 同じ付値環の実際の Frobenius から円分指標 `q mod p` を導いた。
+- `864F=c₆+c₄(b₂+12C.x)` と付値の比較により、臨界中心の分解群固定性を全素点で証明した。
+  432を付値の単元とは仮定しないので2・3も扱える。
+- 奇数単元次数の高次捩れに対する、同じ深さでの二枝比較から和差の滑らかさを供給した。
+- `q mod p≠±1` の底の作用を用い、巡回段全体の滑らかな部分群への包含を証明した。
+  実際の滑らかな捩れの濃度上界と `#K=p^m` より `K=E[p^m]∩H_A` を得た。
+- 同じ指数の捩れ点、および `p⁻¹K` 上の慣性差が同じ `K` に入ることを証明した。
+  逆像の場合は滑らかな底の慣性固定性で、差の指数を一段下げる。
+- `p≥5` の2・3は非共鳴。良還元の住所と前章の `p` 上の吸収も内部供給される。
+
+新しい公開終点
+`residual_preimage_unramified_away_of_resonant_inertia` と
+`residual_cofixed_tower_resonant_inertia_frobenius_impossible` に残る局所入力は、
+`q≥5`、`q≠p`、`q∣abc`、`q mod p=±1` の住所のみ。
+この条件を持たない吸収 provider に置き換えていない。
+
+一般 `hno` は未完成。共鳴する悪い住所の吸収・実際の Mazur/Eisenstein 幾何、
+円分体の omega 二乗類群・単数固有成分からの大域 extension 消滅、
+必要な長さの巡回塔と実際の Frobenius 関係の構成は残る。
+符号反転の有限群反例と `p=5,q=11,19` の合同例により、今回の符号条件を外す誤った一般化を避ける。
+再帰依存監査は実際の還元・点群・濃度評価への到達と、既存 FLT 終点への非依存を要求する。

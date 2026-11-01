@@ -189,3 +189,11 @@ residual_cofixed_cyclic_tower_inertia_frobenius_impossible
 主要15宣言の公理依存、5終点の型と opaque 本体の再帰的依存、6終点の公開入力を監査する。
 局所分裂の証明が、完全分岐・有限慣性持ち上げ・整な点・実際の還元へ到達することを要求する。
 検証記録は `evidence/validation-note032-at-p-local-splitting.txt` に保存する。
+
+## 10. 次章での進展
+
+[非共鳴住所での慣性吸収](TEXTBOOK-N032-NONRESONANT-INERTIA-261101.md)では、
+上記残件1のうち `q mod p ≠ ±1` の悪い `q≠p` の住所を閉じた。
+`p≥5` で2・3も含まれ、新しい終点の局所入力は
+`q≥5`、`q≠p`、`q∣abc`、`q mod p = ±1` の住所だけである。
+大域分裂・塔の反復・実際の Frobenius 関係・Eisenstein の幾何は引き続き残る。

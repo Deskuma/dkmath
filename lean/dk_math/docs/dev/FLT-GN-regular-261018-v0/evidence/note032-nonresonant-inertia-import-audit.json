@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-01",
+  "new_modules": [
+    "DkMath.Lib.Algebra.CyclicSignSeparation",
+    "DkMath.Lib.NumberTheory.CyclotomicFrobenius",
+    "DkMath.Lib.NumberTheory.EllipticNodalDecomposition",
+    "DkMath.FLT.FreyNonresonantInertia"
+  ],
+  "acyclic_local_import_closure": true,
+  "new_local_closure_size": 239,
+  "checks": {
+    "DkMath.Lib.Algebra.CyclicSignSeparation": {
+      "local_module_count": 4,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.CyclotomicFrobenius": {
+      "local_module_count": 8,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.EllipticNodalDecomposition": {
+      "local_module_count": 36,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyNonresonantInertia": {
+      "local_module_count": 239,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "boundary": "Nonresonant bad q != p inertia absorption and the addresses 2,3 are proved, conditional on the same stable cyclic stage and cofixed line. Resonant bad q >= 5 with q mod p = +/-1, global extension splitting, full tower existence, actual Frobenius/Eisenstein geometry and general hno remain open."
+}
