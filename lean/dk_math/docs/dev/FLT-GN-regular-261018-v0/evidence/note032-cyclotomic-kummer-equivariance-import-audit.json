@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-02",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.KummerSelmerEquivariance",
+    "DkMath.Lib.NumberTheory.CyclotomicKummerEquivariance",
+    "DkMath.FLT.FreyCyclotomicKummerEquivariance"
+  ],
+  "acyclic_local_import_closure": true,
+  "new_local_closure_size": 263,
+  "checks": {
+    "DkMath.Lib.NumberTheory.KummerSelmerEquivariance": {
+      "local_module_count": 21,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.CyclotomicKummerEquivariance": {
+      "local_module_count": 25,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclotomicKummerEquivariance": {
+      "local_module_count": 263,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "boundary": "Syntactic import audit only; recursive proof/type/constructor audits are separate Lean tests. Actual semilinear ideal transport, Selmer stability, equality of the same ideal root, equivariance of the actual Selmer class map, and an actual number-field Galois action on the class group. Conditional on original Frey Selmer membership, the same class image satisfies omega squared. Its nonzero or vanishing status, original Selmer membership, unit-side eigenspace transport/vanishing, local pth powers, resonant geometry and tower iteration remain open; general hno is unfinished."
+}

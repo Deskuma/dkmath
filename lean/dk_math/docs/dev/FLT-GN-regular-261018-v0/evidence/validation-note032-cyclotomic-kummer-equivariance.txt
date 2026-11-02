@@ -1,0 +1,97 @@
+NOTE-032 actual Selmer equivariance and same-class-image omega-squared transport
+Date: 2026-11-02
+Working directory: lean/dk_math
+
+Performed validation (exit code 0):
+1. lake build DkMath DkMathTest.FLT.FreyCyclotomicKummerEquivariance DkMathTest.FLT.Note032CyclotomicKummerEquivarianceDependencyAudit
+   Build completed successfully (11081 jobs).
+2. lake test
+   Normal repository test driver passed (12182/12182 jobs).
+3. lake env lean DkMathTest.lean
+   Normal test import entrance passed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerEquivarianceSmoke.lean
+   Root import exposes actual ideal-root transport, class-group automorphisms/action,
+   Selmer-to-class-group equivariance and the same Frey class-image weight-square theorem.
+5. git diff --check
+   Passed. All six new Lean artifacts were also scanned directly for trailing whitespace.
+
+Regression scope:
+- F is the actual quadratic number field AdjoinRoot (X^2+1) over Q.
+- An actual algebra automorphism i -> -i is constructed from two inverse algebra homomorphisms.
+  Its value on i is proved different from i; the test does not use only an identity action.
+- The semilinear fractional-ideal map sends the actual principal ideal (2+i) to (2-i).
+- The actual cube (2+i)^3 satisfies the empty-support Selmer condition; no Selmer provider
+  is assumed by this example. Its selected ideal root is moved to the actual principal
+  ideal of the conjugate generator, using the same root uniqueness theorem.
+- Multiplication and identity of the actual number-field Galois-to-class-group action are
+  checked on arbitrary elements of the actual class group.
+
+Source/import checks:
+- Three new production modules, two new tests and root smoke contain no sorry, admit,
+  native_decide, unsafe or custom axiom declarations. The dependency audit intentionally
+  contains the name sorryAx as a forbidden-name check and the word axiom in error messages.
+- No diagnostics in the new modules/tests in the final root/focused build.
+- Unrelated historical sorry/linter warnings remain elsewhere in the repository.
+- Earlier production constructors and theorem statements/proofs are unchanged.
+- Lib/FLT public facades, root DkMath and the normal test import entrance expose the new modules.
+- The separate JSON records acyclic syntactic local import closures of 21, 25 and 263 modules,
+  no FreyHnoSmallIndex/RegularPrime/HardCase consumer imports, and public/root reachability.
+  Both new Lib modules have no FLT imports in their local closures.
+- Syntactic import checks are distinct from the Lean recursive proof dependency audits below.
+
+Selected axiom reports (12 declarations, standard axioms only):
+DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.idealMap_span: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.idealMap_refl: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.idealMap_trans: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.classGroupEquiv: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.map_mem: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.rootIdeal_map: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.toClassGroup_equivariant: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.toClassTorsion_equivariant: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.classImage_weight: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerEquivariance.classGroupAction: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerEquivariance.classImage_weight_square: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_kummer_classImage_weight_square: Classical.choice, Quot.sound, propext
+
+Recursive type/constructor/opaque-proof-body audit and input audit (10 + 7):
+PASS: DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.idealMap_span; 5163 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.classGroupEquiv; 6451 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.map_mem; 18213 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.rootIdeal_map; 18223 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.toClassGroup_equivariant; 18379 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.toClassTorsion_equivariant; 18386 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.classImage_weight; 18406 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicKummerEquivariance.classGroupAction; 27650 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicKummerEquivariance.classImage_weight_square; 38722 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_kummer_classImage_weight_square; 45778 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.rootIdeal_map; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.toClassGroup_equivariant; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.toClassTorsion_equivariant; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmerEquivariance.CompatibleAut.classImage_weight; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKummerEquivariance.classGroupAction; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKummerEquivariance.classImage_weight_square; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_kummer_classImage_weight_square; remaining arithmetic inputs explicit.
+
+Mathematical boundary:
+The actual ideal action preserves principal ideals and membership of an already-Selmer
+representative. Positive-exponent ideal-root uniqueness proves J_(gamma x)=gamma J_x;
+this proves Phi(gamma z)=gamma Phi(z) for the same representative-independent Phi.
+The actual integer-ring restriction supplies the number-field Galois action internally.
+On p-torsion the action is ZMod p linear, with identity/composition laws. Original Kummer
+weight-square plus this actual equivariance gives the same classImage's omega-squared law.
+
+The Frey receiver keeps the same S,L,K,m,v,P. It requires hsurj and original hval and supplies
+open-kernel/conjugation laws from the existing same character. It assumes neither hzero nor
+an equivariance/vanishing/FLT provider. The class-group image may be zero. Unit-side action
+and eigenspace transport, original Frey Selmer membership, arithmetic class/unit vanishing,
+local pth powers at p, resonant geometry and tower iteration remain open. General hno is
+unfinished; the existing final fixed-point count still requires no hCH.
+
+SHA256 of the new production, tests, root smoke and textbook at validation:
+106e5c0cc4fdf4940e835bf3c5641b0b35ee1beff7246bd43e3d45a45535310f  DkMath/Lib/NumberTheory/KummerSelmerEquivariance.lean
+3f0ed1202977dd4891b667f2dcfb6c6f8f90b3a1c1c14e381fd790fc0bbfce10  DkMath/Lib/NumberTheory/CyclotomicKummerEquivariance.lean
+6315073ff8e59ecb15cb17d8001d29492cf923568a92650adcba2766a1451c05  DkMath/FLT/FreyCyclotomicKummerEquivariance.lean
+ad0b6d4de22c49e3b13e52780381c813536af0ea8afc6a1bc63ef5ea07e75dda  DkMathTest/FLT/FreyCyclotomicKummerEquivariance.lean
+9d9cfbf94116f4b25922494fae21058baa8c4d5d91c1b0a219e98c10165705b2  DkMathTest/FLT/Note032CyclotomicKummerEquivarianceDependencyAudit.lean
+b5923381cb1a129504464f994bb63d4b523499b970698e602e58fb2a54f0b391  docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerEquivarianceSmoke.lean
+a728e718a2e96935afd02ea8cf75f02b10a946deb27aae4ad70f44a882473555  docs/dev/FLT-GN-regular-261018-v0/TEXTBOOK-N032-CYCLOTOMIC-KUMMER-EQUIVARIANCE-261102.md

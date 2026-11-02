@@ -1,0 +1,18 @@
+import DkMath
+
+open DkMath.Lib.NumberTheory
+
+#check KummerSelmerEquivariance.CompatibleAut.idealMap_span
+#check KummerSelmerEquivariance.CompatibleAut.map_mem
+#check KummerSelmerEquivariance.CompatibleAut.rootIdeal_map
+#check KummerSelmerEquivariance.CompatibleAut.classGroupEquiv
+#check KummerSelmerEquivariance.CompatibleAut.classGroupMap_trans
+#check KummerSelmerEquivariance.CompatibleAut.toClassGroup_equivariant
+#check KummerSelmerEquivariance.CompatibleAut.toClassTorsion_equivariant
+#check KummerSelmerEquivariance.CompatibleAut.classTorsionLinearMap_refl
+#check KummerSelmerEquivariance.CompatibleAut.classTorsionLinearMap_trans
+#check CyclotomicKummerEquivariance.integerAut
+#check CyclotomicKummerEquivariance.classGroupAction
+#check CyclotomicKummerEquivariance.classImage_weight_square
+#check DkMath.FLT.Frey.Source.residual_kummer_classImage_weight_square
+#print axioms DkMath.FLT.Frey.Source.residual_kummer_classImage_weight_square

@@ -115,6 +115,8 @@ import DkMath.Lib.NumberTheory.CyclotomicKummerArithmetic
 import DkMath.Lib.NumberTheory.KummerSelmerClassMap
 import DkMath.Lib.NumberTheory.KummerSelmerExact
 import DkMath.Lib.NumberTheory.CyclotomicKummerClassMap
+import DkMath.Lib.NumberTheory.KummerSelmerEquivariance
+import DkMath.Lib.NumberTheory.CyclotomicKummerEquivariance
 import DkMath.Lib.NumberTheory.CyclotomicThirteenPID
 import DkMath.Lib.NumberTheory.DedekindFractionalValuation
 import DkMath.Lib.NumberTheory.DedekindLocalParameter
