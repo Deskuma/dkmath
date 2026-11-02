@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.Lib.NumberTheory.WeierstrassNodalCenterCharThree
 import Mathlib.Algebra.Field.ZMod
 
+#print "file: DkMathTest.Lib.NumberTheory.WeierstrassNodalCenterCharThree"
+
 namespace DkMathTest.Lib.NumberTheory.WeierstrassNodalCenterCharThree
 
 open DkMath.Lib.NumberTheory.WeierstrassNodalCenterCharThree

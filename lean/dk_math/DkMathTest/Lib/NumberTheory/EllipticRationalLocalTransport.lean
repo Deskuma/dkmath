@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Lib.NumberTheory.EllipticRationalLocalTransport
 
+#print "file: DkMathTest.Lib.NumberTheory.EllipticRationalLocalTransport"
+
 namespace DkMathTest.Lib.NumberTheory.EllipticRationalLocalTransport
 
 open DkMath.Lib.NumberTheory

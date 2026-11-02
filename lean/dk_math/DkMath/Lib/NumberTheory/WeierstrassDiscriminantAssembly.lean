@@ -8,6 +8,7 @@ Adapted from the delta_identity argument in
 S_WeierstrassCurve_veluQuotient_oddOrderSummingSet_discriminant_prod_veluU_pow.lean,
 blob 0c42a9282f1033d6d64cc213bb1f7c7c52b17d1e.
 -/
+
 import DkMath.Lib.NumberTheory.WeierstrassDiscriminantRoots
 import DkMath.Lib.NumberTheory.WeierstrassTwoTorsionTranslate
 import Mathlib.Algebra.Polynomial.FieldDivision

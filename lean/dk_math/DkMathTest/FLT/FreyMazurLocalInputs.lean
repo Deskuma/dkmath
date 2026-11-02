@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.FreyMazurLocalInputs
 
+#print "file: DkMathTest.FLT.FreyMazurLocalInputs"
+
 namespace DkMathTest.FLT.FreyMazurLocalInputs
 
 open DkMath.FLT.Frey.Source
