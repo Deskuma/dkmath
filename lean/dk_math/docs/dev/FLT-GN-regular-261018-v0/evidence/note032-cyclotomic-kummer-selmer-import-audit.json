@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-03",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.KummerLocalValuation",
+    "DkMath.Lib.NumberTheory.CyclotomicKummerSelmer",
+    "DkMath.FLT.FreyCyclotomicKummerSelmer"
+  ],
+  "acyclic_local_import_closure": true,
+  "new_local_closure_size": 272,
+  "checks": {
+    "DkMath.Lib.NumberTheory.KummerLocalValuation": {
+      "local_module_count": 19,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.CyclotomicKummerSelmer": {
+      "local_module_count": 24,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclotomicKummerSelmer": {
+      "local_module_count": 272,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/NumberTheory/KummerLocalValuation.lean": true,
+    "DkMath/Lib/NumberTheory/CyclotomicKummerSelmer.lean": true,
+    "DkMath/FLT/FreyCyclotomicKummerSelmer.lean": true,
+    "DkMathTest/FLT/FreyCyclotomicKummerSelmer.lean": true,
+    "DkMathTest/FLT/Note032CyclotomicKummerSelmerDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerSelmerSmoke.lean": true
+  },
+  "textbook_lean_blocks_with_module_markers": 2,
+  "boundary": "Syntactic local import and module-marker checks only; recursive proof/type/constructor audits are separate Lean tests. Actual valuation/ramification comparison, finite inertia cardinality, and same-radical generation prove local count divisibility. Existing absolute inertia lifting transports finite relative inertia while preserving the same cyclotomic root, field and radical. Original Frey hval follows internally from hp5 and the unchanged resonant hbad; the final unit receiver derives hval and hzero internally and retains hbad, hsurj and arithmetic quotient vanishing. Resonant absorption, arithmetic quotient/unit vanishing, local pth powers at p and tower iteration remain open; general hno is unfinished."
+}

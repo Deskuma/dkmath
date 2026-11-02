@@ -1,0 +1,123 @@
+NOTE-032 original Frey Kummer Selmer membership conditional on resonant absorption
+Date: 2026-11-03
+Working directory: lean/dk_math
+
+Performed validation, all commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCyclotomicKummerSelmer DkMathTest.FLT.Note032CyclotomicKummerSelmerDependencyAudit
+   Build completed successfully (11090 jobs).
+2. lake test
+   Normal repository test driver passed (12197/12197 jobs).
+3. lake env lean DkMathTest.lean
+   Normal test import entrance passed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerSelmerSmoke.lean
+   Root import exposes local valuation/ramification comparison, finite inertia triviality,
+   existing absolute lift transport, original Frey valuation-space/Selmer membership and
+   same-unit weight-square reduction deriving hval and hzero internally.
+5. Both Lean code blocks from TEXTBOOK-N032-CYCLOTOMIC-KUMMER-SELMER-261103.md were copied
+   verbatim into /tmp/dkmath-kummer-selmer-book-1.lean and book-2.lean and checked separately
+   with lake env lean. Both include imports and their exact module print marker.
+6. git diff --check
+   Passed. All six new Lean artifacts were scanned directly for trailing whitespace.
+
+Module metadata checks requested by the user:
+- Each of the three production files, two test/audit files and root smoke contains exactly
+  one matching #print "file: module.name" immediately after its import group.
+- Each textbook Lean block also includes imports followed by #print "file: module.name".
+- The import-audit JSON records the six exact file-to-marker checks and two extracted blocks.
+
+Regression scope:
+- The identity extension Z -> Z has actual ramification index one at (2), with actual
+  self-lying-over data. The exponent of the principal ideal (2) over Q is proved to be one.
+- The valuation divisibility theorem proves 2 is not a rational square. This constructs the
+  actual irreducible quadratic presentation alpha^2=2 over Q in AdjoinRoot (X^2-2).
+- An actual height-one prime of that number field's integer ring above (2) is supplied by
+  lying-over. Its ramification index is proved NOT one: e=1 would force 2 to divide 1.
+  A Kummer equation alone therefore does not justify the unramified/Selmer conclusion.
+- The actual fractional constant 1/4 has principal-ideal exponent -2 at (2); its actual
+  rational root 1/2 supplies the divisibility theorem, preserving signs and normalization.
+
+Source/import checks:
+- Three new production modules, two new tests and root smoke contain no sorry, admit,
+  native_decide, unsafe or custom axiom declarations. The audit intentionally contains the
+  forbidden name sorryAx and axiom-related diagnostic strings.
+- No new-module/test warnings or errors in the final root/focused build or normal suite.
+- Unrelated historical sorry/linter warnings remain elsewhere in the repository.
+- Earlier production constructors and theorem statements/proofs are unchanged.
+- Lib/FLT public facades, root DkMath and the normal test entrance expose the new modules.
+- The separate JSON records acyclic syntactic local import closures of 19, 24 and 272 modules,
+  no FreyHnoSmallIndex/RegularPrime/HardCase consumer imports, and public/root reachability.
+  Both new Lib modules have no FLT imports in their local closures.
+- These syntactic import checks are distinct from the recursive Lean proof dependency audits.
+
+Selected axiom reports (9 declarations, standard axioms only):
+DkMath.Lib.NumberTheory.KummerLocalValuation.log_pow_eq_ramification_mul: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerLocalValuation.count_dvd_of_ramification_eq_one: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerLocalValuation.ramification_eq_one_of_inertia_fixes_radical: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerLocalValuation.count_dvd_of_inertia_fixes_radical: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerSelmer.finite_inertia_fixes_radical: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerSelmer.constantVector_mem_valuationSpace_of_absolute_inertia: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_kummer_mem_valuationSpace: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_kummer_mem_selmer: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_kummer_unit_weight_square_of_resonant_absorption: Classical.choice, Quot.sound, propext
+
+Recursive type/constructor/opaque-proof-body and input audits (9 + 8):
+PASS: DkMath.Lib.NumberTheory.KummerLocalValuation.log_pow_eq_ramification_mul; 17194 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerLocalValuation.count_dvd_of_ramification_eq_one; 17236 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerLocalValuation.ramification_eq_one_of_inertia_fixes_radical; 37582 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerLocalValuation.count_dvd_of_inertia_fixes_radical; 38035 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicKummerSelmer.finite_inertia_fixes_radical; 41220 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicKummerSelmer.constantVector_mem_valuationSpace_of_absolute_inertia; 46780 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_kummer_mem_valuationSpace; 54730 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_kummer_mem_selmer; 54737 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_kummer_unit_weight_square_of_resonant_absorption; 55915 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.KummerLocalValuation.log_pow_eq_ramification_mul; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerLocalValuation.count_dvd_of_ramification_eq_one; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerLocalValuation.ramification_eq_one_of_inertia_fixes_radical; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKummerSelmer.finite_inertia_fixes_radical; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKummerSelmer.constantVector_mem_valuationSpace_of_absolute_inertia; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_kummer_mem_valuationSpace; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_kummer_mem_selmer; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_kummer_unit_weight_square_of_resonant_absorption; remaining arithmetic inputs explicit.
+
+Mathematical boundary:
+The same alpha^p=b and actual normalized valuations give p log(v_w(alpha)) = e log(v_v(b)).
+For e=1 the same nonzero constant's principal fractional-ideal exponent is p-divisible.
+If the actual finite relative inertia fixes the same generating radical, its elements are
+identity by Presentation.algHom_ext. Its actual cardinality equals e, hence e=1 internally.
+Number-field finite residue fields supply the separability used by the inertia theorem.
+
+For the same character field inside Qbar, each relative inertia element restricts to an
+absolute-over-Q finite inertia element and lifts through the existing proven absolute
+inertia theorem. Its lift preserves the same primitive root because its original relative
+element fixes the same base field. Thus it is in the original cyclotomic character kernel.
+The same valuation-ring inertia comparison and the given same-radical local fixedness
+transport back to the original finite relative inertia element. Fields, inclusion, radical,
+constant and character are not replaced. The auxiliary valuation address may vary with the
+element; the original local condition quantifies all such addresses.
+
+Actual lying-over supplies primes above every base height-one prime. The above divisibility
+at every place and the original mem_valuationSpace_mk_iff prove original hval. On the Frey
+side, the existing decomposition-fixed theorem at p and inertia-fixed theorem away from p
+supply all local fixedness internally, retaining exactly hp5 and the original resonant hbad.
+The actual empty-support Selmer membership is also returned. Surjectivity is not needed for
+the membership theorem; the given same presentation and local facts are retained.
+
+The new unit reduction retains the same S,L,K,m,v,P and requires hp5, unchanged hbad, hsurj
+and arithmetic quotient vanishing hvanish. It derives original hval and same classImage's
+hzero internally and applies the existing same-constant, same-vector, nontrivial omega-squared
+unit-class reduction. The generic local criterion is supplied by actual previous Frey local
+theorems, not an extra unproved finite-inertia/unramified/Selmer provider.
+
+The resonant geometric absorption hbad, arithmetic quotient vanishing, local pth powers at p,
+arithmetic unit vanishing and tower iteration remain open. The p-decomposition fixedness is
+used for inertia and valuation divisibility, NOT asserted to be local pth-power membership.
+General hno is unfinished; final fixed-point counting still requires no hCH.
+
+SHA256 of new production, tests, root smoke and textbook at validation:
+48c5dd11b0480c658085d37e08d84a6e7f58b3b1f814dc13111b18052c7cbdd5  DkMath/Lib/NumberTheory/KummerLocalValuation.lean
+f1149b72ece648bdda196bc46249961b72979a9f4847098229099d53413bafa1  DkMath/Lib/NumberTheory/CyclotomicKummerSelmer.lean
+2f51a50e7f44225b5d2ddae1f053042460b8863b4150a4b8f001282e9c036b4c  DkMath/FLT/FreyCyclotomicKummerSelmer.lean
+08ad51a40098ed5d0613e6479b3506d0e71823f69dfcf05b57aba1605e131525  DkMathTest/FLT/FreyCyclotomicKummerSelmer.lean
+38b3c545acfd1caf3b573f4837f8a3366d02f4845302be541204ab788c38886c  DkMathTest/FLT/Note032CyclotomicKummerSelmerDependencyAudit.lean
+733d436e3bb796e5b906cd9c86e273b816b4b50b19af086e1e89e81d4b916da3  docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerSelmerSmoke.lean
+99083cb7606718c78ccd67a21016980131589f101f25f411b85458ab3bfcadec  docs/dev/FLT-GN-regular-261018-v0/TEXTBOOK-N032-CYCLOTOMIC-KUMMER-SELMER-261103.md
