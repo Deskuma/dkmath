@@ -49,6 +49,8 @@ import DkMathTest.FLT.FreyCyclotomicKummerWeight
 import DkMathTest.FLT.Note032CyclotomicKummerWeightDependencyAudit
 import DkMathTest.FLT.FreyCyclotomicKummerArithmetic
 import DkMathTest.FLT.Note032CyclotomicKummerArithmeticDependencyAudit
+import DkMathTest.FLT.FreyCyclotomicKummerClassMap
+import DkMathTest.FLT.Note032CyclotomicKummerClassMapDependencyAudit
 import DkMathTest.FLT.FreyGoodReductionTowerObstruction
 import DkMathTest.FLT.Note032GoodReductionTowerDependencyAudit
 import DkMathTest.FLT.FreyRationalTorsion
