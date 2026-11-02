@@ -1,0 +1,18 @@
+import DkMath
+
+open DkMath.Lib.Algebra.FiniteEigenTorsionBridge
+open DkMath.Lib.NumberTheory.CyclotomicClassVanishing
+
+#check torsion_kernel_eq_zero
+#check quotientAction
+#check weightedSum_eigen
+#check liftedWeightedSum_quotient
+#check liftedWeightedSum_torsion
+#check torsion_eigen_eq_zero
+#check classTorsion_eq_one_of_quotient_eigen_vanishing
+#check root_galois_card
+#check root_galois_card_isUnit
+#check classImage_eq_one_of_quotient_weight_square_vanishing
+#check DkMath.FLT.Frey.Source.residual_kummer_classImage_eq_one_of_quotient_vanishing
+#check DkMath.FLT.Frey.Source.residual_kummer_unit_weight_square_of_quotient_vanishing
+#print axioms DkMath.FLT.Frey.Source.residual_kummer_unit_weight_square_of_quotient_vanishing

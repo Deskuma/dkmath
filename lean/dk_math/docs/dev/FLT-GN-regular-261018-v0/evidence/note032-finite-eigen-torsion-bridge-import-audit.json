@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-03",
+  "new_modules": [
+    "DkMath.Lib.Algebra.FiniteEigenTorsionBridge",
+    "DkMath.Lib.NumberTheory.CyclotomicClassVanishing",
+    "DkMath.FLT.FreyCyclotomicClassVanishing"
+  ],
+  "acyclic_local_import_closure": true,
+  "new_local_closure_size": 269,
+  "checks": {
+    "DkMath.Lib.Algebra.FiniteEigenTorsionBridge": {
+      "local_module_count": 1,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.CyclotomicClassVanishing": {
+      "local_module_count": 27,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclotomicClassVanishing": {
+      "local_module_count": 269,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "boundary": "Syntactic local import audit only; recursive proof/type/constructor audits are separate Lean tests. Actual finite-group Fitting kernel theorem and weighted-sum lift transfer quotient eigen vanishing to torsion. Same actual finite class group, quotient and Galois action; cyclotomic Galois order invertibility internal. Frey receivers explicitly retain original hval and quotient eigen vanishing; hzero follows internally. Arithmetic quotient vanishing, comparison with any external action/quotient convention, local pth powers, resonant geometry, unit vanishing and tower iteration remain open. General hno is unfinished."
+}
