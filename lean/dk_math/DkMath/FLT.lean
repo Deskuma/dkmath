@@ -89,6 +89,7 @@ import DkMath.FLT.FreyCyclotomicKummerWeight
 import DkMath.FLT.FreyCyclotomicKummerArithmetic
 import DkMath.FLT.FreyCyclotomicKummerClassMap
 import DkMath.FLT.FreyCyclotomicKummerEquivariance
+import DkMath.FLT.FreyCyclotomicKummerUnitEquivariance
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile

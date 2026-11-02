@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-02",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance",
+    "DkMath.Lib.NumberTheory.CyclotomicKummerUnitEquivariance",
+    "DkMath.FLT.FreyCyclotomicKummerUnitEquivariance"
+  ],
+  "acyclic_local_import_closure": true,
+  "new_local_closure_size": 266,
+  "checks": {
+    "DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance": {
+      "local_module_count": 22,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.CyclotomicKummerUnitEquivariance": {
+      "local_module_count": 27,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclotomicKummerUnitEquivariance": {
+      "local_module_count": 266,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "boundary": "Syntactic import audit only; recursive proof/type/constructor audits are separate Lean tests. Actual Galois actions on unit power quotient, Selmer group and class-group torsion; exactness and equivariance of the same two maps; unique same unit preimage and its nontriviality and omega-squared condition. The Frey receiver retains original hval and hzero and the same S,L,K,m,v,P. Original Selmer membership, arithmetic class/unit vanishing, local pth powers, resonant geometry, tower iteration, and a torsion-versus-power-quotient vanishing bridge remain open; general hno is unfinished."
+}
