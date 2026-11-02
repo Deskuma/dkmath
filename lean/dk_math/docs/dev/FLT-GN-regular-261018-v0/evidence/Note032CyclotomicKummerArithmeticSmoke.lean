@@ -1,0 +1,15 @@
+import DkMath
+
+#check DkMath.Lib.NumberTheory.CyclicKummerIntegral.IntegralModel
+#check DkMath.Lib.NumberTheory.CyclicKummerIntegral.exists_integral_model
+#check DkMath.Lib.NumberTheory.CyclotomicKummerArithmetic.exists_integral_model_same_vector
+#check DkMath.Lib.NumberTheory.CyclotomicKummerArithmetic.rescale_mem_valuationSpace_iff
+#check DkMath.Lib.NumberTheory.CyclotomicKummerArithmetic.constantVector_mem_valuationSpace_iff
+#check DkMath.Lib.NumberTheory.KummerSelmer.mem_valuationSpace_iff_selmer
+#check DkMath.Lib.NumberTheory.KummerSelmer.exists_fractionalIdeal_pow
+#check DkMath.Lib.NumberTheory.KummerSelmer.fractionalIdeal_pow_injective
+#check DkMath.Lib.NumberTheory.KummerSelmer.exists_classGroup_torsion
+#check DkMath.FLT.Frey.Source.residual_nonsplit_has_integral_weight_two_kummer_model
+
+#print axioms DkMath.Lib.NumberTheory.KummerSelmer.exists_classGroup_torsion
+#print axioms DkMath.FLT.Frey.Source.residual_nonsplit_has_integral_weight_two_kummer_model

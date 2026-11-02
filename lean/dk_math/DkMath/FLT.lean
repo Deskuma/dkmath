@@ -86,6 +86,7 @@ import DkMath.FLT.FreyCyclotomicExtensionCharacter
 import DkMath.FLT.FreyCyclotomicCharacterField
 import DkMath.FLT.FreyCyclotomicKummer
 import DkMath.FLT.FreyCyclotomicKummerWeight
+import DkMath.FLT.FreyCyclotomicKummerArithmetic
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile

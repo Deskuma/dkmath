@@ -15,7 +15,8 @@ import DkMath.Lib.NumberTheory.CyclotomicKummerWeight
 同じ巡回段・同じ指標・同じ核の固定体の同じ Kummer 表示を保つ。
 元の加法指標の逆円分共役則から、底体の全自己同型について
 `γ[b]=[b]^(ω(γ)^2)` を導く。非零類・重み・持ち上げの provider は要求しない。
-類群・単数の消滅、整数化、共鳴住所と巡回塔の反復は未実装であり、一般 `hno` は未完成。
+同じベクトルの整数化は `FreyCyclotomicKummerArithmetic` で扱う。
+類群・単数の消滅、共鳴住所と巡回塔の反復は未実装であり、一般 `hno` は未完成。
 -/
 
 namespace DkMath.FLT.Frey.Source

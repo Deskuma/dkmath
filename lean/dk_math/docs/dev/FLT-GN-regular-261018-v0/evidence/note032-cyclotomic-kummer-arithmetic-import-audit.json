@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-02",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.CyclicKummerIntegral",
+    "DkMath.Lib.NumberTheory.KummerSelmer",
+    "DkMath.Lib.NumberTheory.CyclotomicKummerArithmetic",
+    "DkMath.FLT.FreyCyclotomicKummerArithmetic"
+  ],
+  "acyclic_local_import_closure": true,
+  "new_local_closure_size": 256,
+  "checks": {
+    "DkMath.Lib.NumberTheory.CyclicKummerIntegral": {
+      "local_module_count": 2,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.KummerSelmer": {
+      "local_module_count": 18,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.CyclotomicKummerArithmetic": {
+      "local_module_count": 20,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclotomicKummerArithmetic": {
+      "local_module_count": 256,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "boundary": "The same original nonzero omega^2 Kummer vector has a same-field integral model with actual nonzero roots/constants in both rings of integers. The vector, every finite-prime valuation residue and Selmer membership remain identical. The valuation submodule is the actual Mathlib S=empty Selmer group, with membership equivalent to p-divisibility of all principal-fractional-ideal counts. Conditional on this membership, an actual unique nonzero pth-root fractional ideal (for positive p) and actual ideal-class-group p-torsion witness are constructed. The original Frey vector membership is not supplied. Quotient-level/equivariant class-group maps and exactness, local arithmetic including resonant places and local pth powers at p, arithmetic vanishing and tower iteration remain open; general hno is unfinished."
+}
