@@ -107,6 +107,8 @@ import DkMath.Lib.NumberTheory.CyclotomicKernelField
 import DkMath.Lib.NumberTheory.CyclotomicCharacterField
 import DkMath.Lib.NumberTheory.CyclicKummer
 import DkMath.Lib.NumberTheory.CyclotomicCharacterKummer
+import DkMath.Lib.NumberTheory.KummerRadicalCharacter
+import DkMath.Lib.NumberTheory.CyclotomicKummerWeight
 import DkMath.Lib.NumberTheory.CyclotomicThirteenPID
 import DkMath.Lib.NumberTheory.DedekindFractionalValuation
 import DkMath.Lib.NumberTheory.DedekindLocalParameter

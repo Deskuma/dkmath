@@ -16,7 +16,8 @@ import DkMath.Lib.NumberTheory.CyclotomicCharacterKummer
 `α^p=b` と既約性、生成性を同時に得るので、`b` は底体の `p` 乗ではない。
 元の指標核は同じ根の固定群であり、同じ付値環での局所固定性も保たれる。
 根・多項式・生成性の provider は要求しない。
-`ω²` 固有成分、整数化、類群・単数による消滅は引き続き未実装である。
+同じ類の `ω²` 作用は `FreyCyclotomicKummerWeight` で実装する。
+整数化、類群・単数による消滅は引き続き未実装である。
 -/
 
 namespace DkMath.FLT.Frey.Source

@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-02",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.KummerRadicalCharacter",
+    "DkMath.Lib.NumberTheory.CyclotomicKummerWeight",
+    "DkMath.FLT.FreyCyclotomicKummerWeight"
+  ],
+  "acyclic_local_import_closure": true,
+  "new_local_closure_size": 251,
+  "checks": {
+    "DkMath.Lib.NumberTheory.KummerRadicalCharacter": {
+      "local_module_count": 11,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.CyclotomicKummerWeight": {
+      "local_module_count": 16,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclotomicKummerWeight": {
+      "local_module_count": 251,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "boundary": "The same actual radical gives a roots-of-unity character with exactly the original kernel. Its factorization transports inverse-character conjugation, and actual cyclotomic root action supplies the second character factor. The conjugate radical ratio descends to the same F=Q(zeta_p); actual base automorphisms lift internally. The original nonzero Kummer class in F^*/(F^*)^p and its nonzero F_p vector satisfy omega^2 transformation for every base automorphism. This quotient is not the ideal class group. Integralization, ideal valuations and local arithmetic, class-group/unit maps and vanishing, resonant-place geometry and tower iteration remain open; general hno is unfinished."
+}

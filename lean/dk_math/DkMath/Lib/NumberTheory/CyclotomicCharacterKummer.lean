@@ -13,8 +13,8 @@ import DkMath.Lib.NumberTheory.CyclotomicCharacterField
 # 指標の同じ固定体の Kummer 根
 
 開核・全射性・逆指標の共役則から、同じ `M/F` に Kummer 表示を与える。
-元の指標の核は同じ根の固定群と一致する。この段階では
-Kummer 根の円分共役の重み、整数化、類群・単数の消滅は未実装である。
+元の指標の核は同じ根の固定群と一致する。円分共役の二乗の重みは
+`CyclotomicKummerWeight` で扱う。整数化、類群・単数の消滅は未実装である。
 -/
 
 namespace DkMath.Lib.NumberTheory.CyclotomicCharacterKummer
