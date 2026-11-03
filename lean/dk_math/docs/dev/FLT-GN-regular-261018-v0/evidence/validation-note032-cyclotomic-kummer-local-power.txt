@@ -1,0 +1,101 @@
+NOTE-032 canonical completion comparison and the SAME Frey Kummer local pth powers
+Date: 2026-11-03
+Working directory: lean/dk_math
+
+Performed validation, all commands listed below returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCyclotomicKummerLocalPower DkMathTest.FLT.Note032CyclotomicKummerLocalPowerDependencyAudit
+   Build completed successfully (11097 jobs).
+2. lake test
+   Normal repository test driver passed; the build reached 12208/12208 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test import entrance passed; output was its existing file marker only.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerLocalPowerSmoke.lean
+   Root import exposes all fifteen selected new theorems and the final endpoint axiom report.
+5. Two Lean blocks from TEXTBOOK-N032-CYCLOTOMIC-KUMMER-LOCAL-POWER-261103.md were
+   extracted verbatim to /tmp/n032-local-power-book-1.lean and book-2.lean.
+   lake env lean was run on each file separately. Both passed without warnings.
+6. python3 /tmp/n032-local-power-import-audit.py
+   Syntactic imports excluding Lean comments, acyclicity, forbidden-consumer separation,
+   facade/root/test reachability, six exact module markers, source hashes/scans and
+   two exact source-to-textbook copies passed.
+7. git diff --check
+   Passed. All new Lean artifacts were also checked directly for trailing whitespace.
+
+Implemented proof, with no completion or local-root provider:
+- NumberFieldCompletionComparison constructs the canonical map between the same two
+  HeightOneSpectrum.adicCompletion fields from the actual base-field algebraMap.
+  completionMap_algebraMap proves its commuting square with the global inclusions.
+- The actual inertia degree f=1 gives surjectivity of the actual residue-field map.
+  A locally integral x=n/d (d outside w) therefore has a first digit from the BASE
+  global integer ring. The argument applies to locally integral fractions as well.
+- Actual ramification e=1 preserves a chosen BASE uniformizer's normalized value.
+  Induction on the digit count gives errors at most exp(-n). Rescaling by powers of
+  that same base uniformizer gives arbitrary-radius approximation of every M element.
+- This proves density in WithVal of the base-field image. The canonical completion map
+  is uniform-inducing for e=1; its complete range is closed. Density then proves actual
+  surjectivity, and field-map injectivity gives bijectivity and a RingEquiv.
+- With the extension algebra supplied by that SAME map, the local finrank is one.
+  This proves the required e=f=1 case directly, without claiming the general ef formula.
+  The comparison library requires no Galois assumption on M/F.
+- KummerLocalPower descends the image of the SAME P.radical. It returns a nonzero local
+  unit t, its image equaling the same radical in M_w, and t^p equal to the image of the
+  SAME P.constant b. Commutativity and injectivity prove that equation.
+- The algebraic transfer b=epsilon*c^p, t^p=b gives the SAME epsilon as (t/c)^p.
+  This general transfer lemma does not require number-field structure or integrality.
+
+Frey endpoints and remaining arithmetic inputs:
+- residual_kummer_local_radical_at_p uses the existing SAME finite-prime e=f=1 theorem.
+- residual_kummer_constant_is_local_power_at_p states the local power at each BASE
+  prime above p, and supplies the upstairs prime internally by actual lying-over.
+- Both retain S,L,K,m,v,P and hp5. Neither adds hbad, hsurj, hvanish, he, hf, hval,
+  hzero, local-degree assumptions, completion surjectivity, or a local-root provider.
+- residual_kummer_unit_is_local_power_at_p transfers that local root to the SAME
+  integer-ring unit u in the given decomposition b=u*c^p.
+- residual_kummer_unit_weight_square_and_local_power uses the existing same-unit
+  receiver and preserves that SAME u,c, the SAME nonzero unit class, its equality
+  with the SAME Kummer vector, and the SAME omega-square weight law. It adds local
+  pth powers at all primes above p for that same u. The original hbad, hsurj and
+  arithmetic class-quotient vanishing hvanish remain explicit; hval/hzero are not added.
+
+Regression scope using the actual 2-adic completion of Q:
+- Transport (2) from Z into the actual ring of integers of Q via Rat.ringOfIntegersEquiv.
+- Supply actual self-lying-over and e=f=1 in the identity extension. Prove the canonical
+  completion map equals identity on the ENTIRE completion, using density/continuity.
+- Check local finrank one with the module explicitly supplied by the natural algebra;
+  avoid silently selecting the canonical self-module when the two types coincide.
+- Verify that the locally integral fraction 1/3 admits an actual GLOBAL integer
+  matching its first residue digit.
+- Prove that 2 has NO square root in the actual 2-adic completion. The same principal
+  ideal's exponent is 1; valuation preservation would force 2*log|t|=-1, impossible
+  for an integer log. Thus the code does not fabricate unconditional local roots.
+- Track b=1/4, epsilon=9, c=1/6, t=1/2 through the transfer. Prove t/c is the actual
+  image of 3, and its square is the image of the SAME epsilon. Here epsilon=9 is a
+  field factor, not an integer-ring unit; the Frey receiver uses a genuine global unit.
+
+Proof dependency, import and metadata checks:
+- Fifteen selected #print axioms reports contain only propext, Classical.choice, Quot.sound.
+- Fifteen recursive audits inspect types, constructors and opaque proof bodies, exclude
+  sorryAx, P2M/P2MW/FltRegular/FreyPackage, old Kummer consumers and FLT endpoints,
+  and require the actual approximation, completion, root descent and same-unit lemmas.
+- Fifteen public-input audits pass, including traversal of dependent let binders.
+  The local Frey root inputs exclude the remaining arithmetic hypotheses; the final
+  merged same-unit receiver keeps the exact original arithmetic hypotheses.
+- Three new production modules, two test/audit files and root smoke all contain exactly
+  one matching #print "file: module.name" immediately after imports. The two textbook
+  blocks exactly equal their production sources from imports onward, including markers.
+- Lib, FLT and root facades and the normal test entrance expose the new code. Local
+  import closure sizes (including the module itself) are 1, 3 and 279. Both Lib closures
+  contain no FLT modules. No new production closure imports a FreyHnoSmallIndex,
+  RegularPrime or HardCase consumer. Syntactic import checks are separate from proof audits.
+- The import-audit JSON records the six markers, source hashes and textbook-copy checks.
+- No sorry, admit, native_decide, unsafe or custom axiom declarations in the new code.
+  The audit intentionally names the forbidden sorryAx. No new-file warnings or errors
+  in the final root/focused build or normal suite; unrelated historical warnings remain.
+- Existing theorem statements/proofs and the reviewed __REVIEW.md are unchanged.
+
+Boundary:
+The SAME b's local pth power at p, completion descent of the SAME radical, and transfer
+to the SAME epsilon are now implemented. This does not prove arithmetic class-quotient
+vanishing, resonant geometric absorption hbad, vanishing of the actual omega-square
+unit class with these local conditions, or cyclic tower iteration. General hno remains
+unfinished. No assumption or opaque axiom replaces any of these remaining proofs.

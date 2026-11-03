@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-03",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.NumberFieldCompletionComparison",
+    "DkMath.Lib.NumberTheory.KummerLocalPower",
+    "DkMath.FLT.FreyCyclotomicKummerLocalPower"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.NumberTheory.NumberFieldCompletionComparison": {
+      "local_module_count": 1,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.KummerLocalPower": {
+      "local_module_count": 3,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclotomicKummerLocalPower": {
+      "local_module_count": 279,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/NumberTheory/NumberFieldCompletionComparison.lean": true,
+    "DkMath/Lib/NumberTheory/KummerLocalPower.lean": true,
+    "DkMath/FLT/FreyCyclotomicKummerLocalPower.lean": true,
+    "DkMathTest/FLT/FreyCyclotomicKummerLocalPower.lean": true,
+    "DkMathTest/FLT/Note032CyclotomicKummerLocalPowerDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerLocalPowerSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_production_code_verbatim": 2,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/NumberTheory/NumberFieldCompletionComparison.lean": "0fe35cc4c937022e8677d3b9414b09a7417b97d927fc5d1af01a26769965992b",
+    "DkMath/Lib/NumberTheory/KummerLocalPower.lean": "6b6a120401a32d24bf83231a6c5ccf3a9afaa5cd430da35bac96640091d9f736",
+    "DkMath/FLT/FreyCyclotomicKummerLocalPower.lean": "7a9d762a7d5389563dfdddfa2d89978ce7a642e51a7da33ce8ea3fa0f30ee9e5",
+    "DkMathTest/FLT/FreyCyclotomicKummerLocalPower.lean": "a1def8706e2f8fc0e02ce1d8001a7071778b50665a89a4f543910665f3d1d740",
+    "DkMathTest/FLT/Note032CyclotomicKummerLocalPowerDependencyAudit.lean": "38ab1fde99d9968b6f96f067623cc760c46c1482172a9734d12353c9017f490c",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerLocalPowerSmoke.lean": "bde37503dc77f61eb5007945f589452cb7c31fd55fc4f7f93ee73ebad9d2d5e4"
+  },
+  "boundary": "Syntactic local import (excluding Lean comments), marker, source and exact textbook-copy checks. Recursive Lean proof/type/constructor and input audits are separate. Same-prime e=f=1 gives the canonical completion map bijective and local degree one by discrete digit approximation, density and closed complete range, not a local-degree provider. The same Frey radical descends and the same b is a local pth power at every v above p without hbad/hsurj/hvanish. Same-epsilon transport is proved. The final nonzero omega-square unit receiver retains the original hbad/hsurj/hvanish and adds local powers for the same unit. General ef-degree comparison beyond e=f=1, arithmetic quotient/unit vanishing, resonant absorption and cyclic tower iteration are not claimed; general hno is unfinished."
+}
