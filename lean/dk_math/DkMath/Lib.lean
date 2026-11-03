@@ -123,6 +123,9 @@ import DkMath.Lib.Algebra.FiniteEigenTorsionBridge
 import DkMath.Lib.NumberTheory.CyclotomicClassVanishing
 import DkMath.Lib.NumberTheory.KummerLocalValuation
 import DkMath.Lib.NumberTheory.CyclotomicKummerSelmer
+import DkMath.Lib.NumberTheory.AbsoluteDecompositionLift
+import DkMath.Lib.NumberTheory.KummerDecomposition
+import DkMath.Lib.NumberTheory.CyclotomicKummerDecomposition
 import DkMath.Lib.NumberTheory.CyclotomicThirteenPID
 import DkMath.Lib.NumberTheory.DedekindFractionalValuation
 import DkMath.Lib.NumberTheory.DedekindLocalParameter

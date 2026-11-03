@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-03",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.AbsoluteDecompositionLift",
+    "DkMath.Lib.NumberTheory.KummerDecomposition",
+    "DkMath.Lib.NumberTheory.CyclotomicKummerDecomposition",
+    "DkMath.FLT.FreyCyclotomicKummerDecomposition"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.NumberTheory.AbsoluteDecompositionLift": {
+      "local_module_count": 3,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.KummerDecomposition": {
+      "local_module_count": 20,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.CyclotomicKummerDecomposition": {
+      "local_module_count": 24,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclotomicKummerDecomposition": {
+      "local_module_count": 259,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/NumberTheory/AbsoluteDecompositionLift.lean": true,
+    "DkMath/Lib/NumberTheory/KummerDecomposition.lean": true,
+    "DkMath/Lib/NumberTheory/CyclotomicKummerDecomposition.lean": true,
+    "DkMath/FLT/FreyCyclotomicKummerDecomposition.lean": true,
+    "DkMathTest/FLT/FreyCyclotomicKummerDecomposition.lean": true,
+    "DkMathTest/FLT/Note032CyclotomicKummerDecompositionDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerDecompositionSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_production_code_verbatim": 2,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/NumberTheory/AbsoluteDecompositionLift.lean": "a04076ffc79abe6de7012f24a60bda3ec8b96b291ff6f48fab6593faa798aa7a",
+    "DkMath/Lib/NumberTheory/KummerDecomposition.lean": "b0c9a8f8a38d79d07877d87776406e6e74b9dd0e0057589697b266bb500a25ad",
+    "DkMath/Lib/NumberTheory/CyclotomicKummerDecomposition.lean": "46ddf9cb5f60199d6d262bc847fb3db8a6cd54924c29faa691ae12559687eaf2",
+    "DkMath/FLT/FreyCyclotomicKummerDecomposition.lean": "e5d5b31af67c0d71b7a39121b730e11bc0c5581af6359d2131144633c71e9c43",
+    "DkMathTest/FLT/FreyCyclotomicKummerDecomposition.lean": "41129ba32b5d4553028472baff8bd00bbbb38b087759709a882173a33fb32cca",
+    "DkMathTest/FLT/Note032CyclotomicKummerDecompositionDependencyAudit.lean": "cf87be8244455400112c3689db087a6c47fa5c399645e854e3326c5c66ae78fd",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerDecompositionSmoke.lean": "4f5387d3bf8fd48a450d2061924a508501cae2bc30e900a06ab9e8945ece5770"
+  },
+  "boundary": "Syntactic local import (excluding Lean comments), source, module-marker and exact textbook-copy checks. Recursive Lean proof/type/constructor and input audits are separate. The same Frey Kummer presentation gives finite decomposition triviality and actual e=f=1 at p, without hbad, hsurj, hval, hzero or hvanish. No completion-degree comparison, descent of the radical to the actual base completion, local pth root of b or epsilon, or general hno closure is implemented."
+}

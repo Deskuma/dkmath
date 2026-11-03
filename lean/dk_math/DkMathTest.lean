@@ -59,6 +59,8 @@ import DkMathTest.FLT.FreyCyclotomicClassVanishing
 import DkMathTest.FLT.Note032CyclotomicClassVanishingDependencyAudit
 import DkMathTest.FLT.FreyCyclotomicKummerSelmer
 import DkMathTest.FLT.Note032CyclotomicKummerSelmerDependencyAudit
+import DkMathTest.FLT.FreyCyclotomicKummerDecomposition
+import DkMathTest.FLT.Note032CyclotomicKummerDecompositionDependencyAudit
 import DkMathTest.FLT.FreyGoodReductionTowerObstruction
 import DkMathTest.FLT.Note032GoodReductionTowerDependencyAudit
 import DkMathTest.FLT.FreyRationalTorsion

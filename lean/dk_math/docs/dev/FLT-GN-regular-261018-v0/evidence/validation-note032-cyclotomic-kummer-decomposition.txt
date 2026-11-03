@@ -1,0 +1,75 @@
+NOTE-032 same Frey Kummer finite decomposition group at p and actual e=f=1
+Date: 2026-11-03
+Working directory: lean/dk_math
+
+Performed validation, all listed commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCyclotomicKummerDecomposition DkMathTest.FLT.Note032CyclotomicKummerDecompositionDependencyAudit
+   Build completed successfully (11094 jobs).
+2. lake test
+   Normal repository test driver passed; the build reached 12203/12203 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test import entrance passed; output was the existing file marker only.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerDecompositionSmoke.lean
+   Root import exposes all eleven new production theorems; final endpoint axiom report passed.
+5. The two Lean blocks in TEXTBOOK-N032-CYCLOTOMIC-KUMMER-DECOMPOSITION-261103.md
+   were extracted verbatim to /tmp/n032-decomposition-book-1.lean and book-2.lean.
+   lake env lean was run separately on each file. Both passed without warnings.
+   Each block exactly equals the production source from its imports through its end.
+6. python3 /tmp/n032-decomposition-import-audit.py
+   Syntactic local import closures, forbidden-consumer separation, facade/root/test
+   reachability, seven exact module markers, source scans and two exact textbook copies passed.
+7. git diff --check
+   Passed. All seven new Lean artifacts were also checked directly for trailing whitespace.
+
+Implementation and public scope:
+- Four new production modules: AbsoluteDecompositionLift, KummerDecomposition,
+  CyclotomicKummerDecomposition and FreyCyclotomicKummerDecomposition.
+- The absolute lift of a finite decomposition element preserves its restriction to
+  the same finite normal field, and gives an actual valuation ring over the same prime.
+  It uses prime transitivity and integral fraction representations; residue action is
+  not canceled as it would be in an inertia lift.
+- Relative transport tracks the same cyclotomic root and the same P.radical.
+  Generation forces the actual finite decomposition group to be trivial.
+- The actual cardinality identities |D|=|I|*f and |I|=e give e=f=1 at the same v,w.
+- The three Frey endpoints preserve the same S,L,K,m,v,P and hp5; the existence of P
+  is retained. Number-field structure is supplied internally by the existing open-kernel
+  theorem. No hbad, hval, hzero, hvanish, hsurj or local-degree provider is added.
+- Lib, FLT and root facades and the normal test entrance expose the new declarations.
+  The local import closures (including each module itself) have sizes 3, 20, 24 and 259.
+  The three Lib closures contain no FLT modules. No new production closure imports a
+  FreyHnoSmallIndex, RegularPrime or HardCase consumer.
+- Existing theorem statements, proof bodies and the reviewed __REVIEW.md are unchanged.
+
+Regression scope:
+- A genuine quadratic number field Q(sqrt(2)) is constructed with its irreducible
+  presentation alpha^2=2 and its Galois structure.
+- Rat.ringOfIntegersEquiv transports the same prime (2) into the actual ring of integers
+  of Q. Its principal ideal exponent for the same constant 2 is proved to be 1.
+- A genuine prime of the quadratic integer ring is selected by lying-over. Both its
+  decomposition group being nontrivial and its ramification index differing from 1
+  are proved: D=1 would give e=1, and e=1 would force 2 to divide 1.
+- The actual self-prime in the identity extension gives both e=1 and residue degree f=1.
+
+Proof dependency and source checks:
+- Eleven selected #print axioms reports contain only propext, Classical.choice, Quot.sound.
+- Eleven recursive audits inspect types, constructors and opaque proof bodies, exclude
+  sorryAx, P2M/P2MW/FltRegular/FreyPackage, old Kummer consumers and FLT endpoints,
+  and require the actual lift, restriction/kernel transport, generation and cardinality lemmas.
+- Eleven public-input audits pass, including traversal through let binders. They keep
+  the actual presentation and hypotheses and ban hbad/hval/hzero/hvanish/hsurj and
+  finite decomposition, local degree or completion providers in these new endpoints.
+- All four production files, two test/audit files and root smoke have exactly one
+  matching #print "file: module.name" immediately after imports. Both textbook blocks
+  retain their source module marker. The import-audit JSON records these checks and hashes.
+- New sources/tests/smoke contain no sorry, admit, native_decide, unsafe or custom axiom
+  declarations. The dependency audit deliberately names forbidden sorryAx.
+- No new-file warnings or errors in the final root/focused build or normal suite.
+  Unrelated historical warnings elsewhere in the repository remain outside this change.
+
+Boundary:
+This proves finite decomposition triviality and actual e=f=1 for the same p-adic finite
+prime pair. It does not implement the completion degree = decomposition cardinality
+comparison, descend the same radical to the actual base completion, construct a local
+pth root of the same b, or transfer that root to the same epsilon. Resonant absorption
+hbad, arithmetic class quotient/unit vanishing, and cyclic tower iteration remain open.
+General hno is unfinished. No completion or hno provider replaces these missing proofs.

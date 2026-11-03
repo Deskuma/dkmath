@@ -1,0 +1,18 @@
+import DkMath
+
+#print "file: docs.dev.FLT-GN-regular-261018-v0.evidence.Note032CyclotomicKummerDecompositionSmoke"
+
+open DkMath.Lib.NumberTheory
+
+#check AbsoluteDecompositionLift.exists_lift_mem_integral_decomposition
+#check AbsoluteDecompositionLift.exists_valuation_decomposition_of_integral_stabilizer
+#check AbsoluteDecompositionLift.exists_lift_mem_valuation_decomposition
+#check KummerDecomposition.subgroup_eq_bot_of_fixes_radical
+#check KummerDecomposition.ramification_and_inertiaDeg_eq_one_of_decomposition_fixes_radical
+#check CyclotomicKummerDecomposition.finite_decomposition_fixes_radical_at_p
+#check CyclotomicKummerDecomposition.finite_decomposition_eq_bot_at_p
+#check CyclotomicKummerDecomposition.ramification_and_inertiaDeg_eq_one_at_p
+#check DkMath.FLT.Frey.Source.residual_kummer_finite_decomposition_fixes_radical_at_p
+#check DkMath.FLT.Frey.Source.residual_kummer_decomposition_eq_bot_at_p
+#check DkMath.FLT.Frey.Source.residual_kummer_ramification_and_inertiaDeg_eq_one_at_p
+#print axioms DkMath.FLT.Frey.Source.residual_kummer_ramification_and_inertiaDeg_eq_one_at_p
