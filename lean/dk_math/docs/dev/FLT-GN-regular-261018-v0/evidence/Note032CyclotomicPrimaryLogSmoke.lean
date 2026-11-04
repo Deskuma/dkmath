@@ -1,0 +1,11 @@
+import DkMath
+
+#print "file: docs.dev.FLT-GN-regular-261018-v0.evidence.Note032CyclotomicPrimaryLogSmoke"
+
+#check DkMath.Lib.NumberTheory.CyclotomicTruncatedLog.tlog_mul
+#check DkMath.Lib.NumberTheory.CyclotomicPrimaryLog.primaryLog
+#check DkMath.Lib.NumberTheory.CyclotomicPrimaryLog.primaryLog_mk_eq_zero_of_local_power
+#check DkMath.Lib.NumberTheory.CyclotomicPrimaryLog.primaryLog_smul
+#check DkMath.Lib.NumberTheory.CyclotomicPrimaryLogCriterion.primaryWeightSquareSpace_eq_bot_of_rank_one_of_detection
+#check DkMath.FLT.Frey.Source.residual_cyclic_extension_has_stable_complement
+#print axioms DkMath.Lib.NumberTheory.CyclotomicPrimaryLogCriterion.primaryWeightSquareSpace_eq_bot_of_rank_one_of_detection

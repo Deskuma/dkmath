@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-04",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.CyclotomicTruncatedLog",
+    "DkMath.Lib.NumberTheory.CyclotomicPrimaryLog",
+    "DkMath.Lib.NumberTheory.CyclotomicPrimaryLogCriterion"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.NumberTheory.CyclotomicTruncatedLog": {
+      "local_module_count": 1,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.CyclotomicPrimaryLog": {
+      "local_module_count": 31,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.CyclotomicPrimaryLogCriterion": {
+      "local_module_count": 32,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/NumberTheory/CyclotomicTruncatedLog.lean": true,
+    "DkMath/Lib/NumberTheory/CyclotomicPrimaryLog.lean": true,
+    "DkMath/Lib/NumberTheory/CyclotomicPrimaryLogCriterion.lean": true,
+    "DkMathTest/FLT/CyclotomicPrimaryLog.lean": true,
+    "DkMathTest/FLT/Note032CyclotomicPrimaryLogDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicPrimaryLogSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 3,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/NumberTheory/CyclotomicTruncatedLog.lean": "fbf78cd4d71bd51a163c360938166d1b3fb90426c8e5a252fb8609a479fba2c4",
+    "DkMath/Lib/NumberTheory/CyclotomicPrimaryLog.lean": "a8eb92e117dca7f40da2c0f490e54f5994d260127d5cf08a6bfd22721522e539",
+    "DkMath/Lib/NumberTheory/CyclotomicPrimaryLogCriterion.lean": "5db4f827181582427b92ab4ae638f9b896b68df907ded5796ab54b1cfd0d6699",
+    "DkMathTest/FLT/CyclotomicPrimaryLog.lean": "b4278b68d6d08069094cb12a066d82f2f6cb3863bc6ea0c685935c9bdb192ded",
+    "DkMathTest/FLT/Note032CyclotomicPrimaryLogDependencyAudit.lean": "a74ad658138cf3929edd5c64c5420ce6d05aef5af20e707f346d2eb0dbbf02f7",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicPrimaryLogSmoke.lean": "ff2c32786379ea9aaf0fdd9ff3a084a8717dd54ce0b7255a14b9df93e1672ad3"
+  },
+  "boundary": "Syntactic comment-aware local import closures and source checks only; recursive Lean type/constructor/proof and input audits are separate. Actual same-root truncated log descends to the actual unit power quotient, vanishes on the local-power space and respects ZMod scalars. Conditional criterion retains rank one and an actual nonzero log evaluation in the same omega-square subspace. Neither rank nor the cyclotomic-unit projected nonzero evaluation is supplied; general hno remains unfinished. No external theorem import.",
+  "adapted_source": {
+    "repository": "anthropics/fermats-last-theorem",
+    "local_read_only_checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+    "head": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+    "path": "P2M/Sol/S_ExtCitation_Cyclotomic_unitsOmegaEigenvector_two_eq_zero_of_local_pow.lean",
+    "blob": "89f85644f3cc853c293396363bd290c9ff81a237",
+    "scope": "Read/adapt finite truncated-log ring identities and the cubic-quotient unit logarithm only. No upstream build or axiom audit and no external theorem import. Rank-one/nonzero final upstream theorem not adopted."
+  }
+}
