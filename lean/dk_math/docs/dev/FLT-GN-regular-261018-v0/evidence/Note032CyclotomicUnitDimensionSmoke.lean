@@ -1,0 +1,13 @@
+import DkMath
+
+#print "file: docs.dev.FLT-GN-regular-261018-v0.evidence.Note032CyclotomicUnitDimensionSmoke"
+
+#check DkMath.Lib.NumberTheory.NumberFieldUnitPowerDimension.unitClassFinite
+#check DkMath.Lib.NumberTheory.NumberFieldUnitPowerDimension.exists_unitClass_basis
+#check DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.root_unitClass_finrank
+#check DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.weightSquareSpace_finrank_pos
+#check DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.trace_omegaSquareProjector_eq_finrank
+#check DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.trace_eq_one_iff_finrank_eq_one
+#check DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.primaryWeightSquareSpace_eq_bot_of_trace
+#check DkMath.FLT.Frey.Source.residual_cyclic_extension_has_stable_complement_of_unit_rank_one
+#print axioms DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.primaryWeightSquareSpace_eq_bot_of_trace

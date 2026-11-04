@@ -1,6 +1,6 @@
 # NOTE-032: 一般 `hno` の証明経路監査
 
-更新日: 2026-11-04。`__REVIEW.md` を参考に実ソースを照合し、局所入力を形式化した。
+更新日: 2026-11-05。`__REVIEW.md` を参考に実ソースを照合し、局所入力を形式化した。
 
 ## 現在の証明境界
 
@@ -668,3 +668,37 @@ hbad、hclass、巡回塔の反復も引き続き残る。**一般 hno は未完
 **射影子と実際の大域円分単元の非零検出という、今回の2ステップは完成。**
 同じ ω² 単元空間の次元1 hrank、hclass、hbad、巡回塔の反復は未完成である。
 非零元の存在と finrank の正値は有限次元性なしに同一視しない。**一般 hno は引き続き未完成。**
+
+
+## 2026-11-05: 2ステップ — 単元商の有限次元性と正確な次元
+
+1. `NumberFieldUnitPowerDimension.unitClassFinite` で、Dirichlet の有限生成性の
+   全射像として同じ実際の UnitClass の有限生成性を証明した。
+   一般の数体と任意の指数で成立し、素数指数では有限次元性を供給する。
+   別の ModP 商への取り替えや新しい有限性 provider は使わない。
+2. 同じ単元商に、捩れ群の巡回生成元と Dirichlet の基本単元からなる実際の基底を構成した。
+   p が実際の捩れ位数を割る場合の次元 rank(F)+1 を証明する。
+   円分体では同じ原始根がその割り切りを内部供給する。
+   無限素点の個数と合わせ、同じ rootField の単元商の次元 (p−1)/2 を無条件に証明した。
+
+- 有限次元性を確立した後、前段の同じ非零固有元から
+  0<finrank(weightSquareSpace hζ)≤(p−1)/2<p を証明した。
+- 同じ既存 omegaSquareProjector の冪等性と像の一致により、
+  trace(e₂)=(finrank(weightSquareSpace hζ):ZMod p) を証明した。
+- 厳密な次元上界を使い、同じ射影子の trace=1 と同じ空間の自然数次元1の同値を証明した。
+  `primaryWeightSquareSpace_eq_bot_of_trace` は trace=1 を htrace 入力に保持する。
+  **この同値は残条件の整理であり、trace=1 の算術的証明ではない。**
+- 実際の原始5乗根・7乗根の同じ rootField で単元商の次元2・3を確認する。
+  同じ固有空間の正の次元と上界、射影子の実際の trace 等式、
+  6=1 mod 5 と 6≠1 in ℕ の例で自然数上界の必要性も確認する。
+- 2 production を Lib/root、2 test を通常の DkMathTest 入口へ公開した。
+  既存の Frey 分裂定理の公開入力は変更せず、hrank・hbad・hclass が必要なままである。
+- 教科書 `TEXTBOOK-N032-CYCLOTOMIC-UNIT-DIMENSION-261105.md` の2ブロックは
+  production 全文に一致し、import 直後の正確な `#print "file: …"` を保持する。
+- 13宣言の公理・再帰依存監査と8件の公開入力監査を追加した。
+  記録は `evidence/validation-note032-cyclotomic-unit-dimension.txt`。
+
+**今回の2ステップ（有限次元性と単元商全体の次元公式）は完成。**
+同じ unitAction のトレースの捩れ・自由部分への分解、対数埋め込みと無限素点の置換作用の比較、
+同じ射影子の trace=1 の算術的証明は未実装である。一般の hrank は未完成。
+hclass・hbad・巡回塔の反復も残り、**一般 hno は引き続き未完成。**

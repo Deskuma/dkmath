@@ -1,0 +1,111 @@
+NOTE-032 TWO STEPS: actual unit power quotient finite generation and cyclotomic dimension
+Date: 2026-11-05
+Working directory: lean/dk_math
+
+Performed validations, listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.CyclotomicOmegaSquareUnitRank DkMathTest.FLT.Note032CyclotomicOmegaSquareUnitRankDependencyAudit
+   Build completed successfully (11109 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12228/12228 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed; only the existing file marker printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicUnitDimensionSmoke.lean
+   Root exposes actual quotient finite generation, actual basis and dimension,
+   positive eigenspace dimension, SAME projector trace/rank identity and conditional
+   trace criterion, as well as the existing rank-one conditional Frey complement.
+5. Two full-source textbook blocks extracted to /tmp/n032-rank-book-{1,2}.lean.
+   lake env lean run on each individually; both passed without warnings.
+   Each block includes copyright and exact module marker immediately after imports.
+6. python3 /tmp/n032-rank-import-audit.py
+   Comment-aware syntactic local import closures, acyclicity, source scans/hashes,
+   Lib/root/normal-test reachability, five exact markers and two full textbook copies passed.
+   New Lib closure sizes including self: 29 and 38; neither imports DkMath.FLT.
+   Closures exclude old FreyHnoSmallIndex/RegularPrime/HardCase consumers.
+7. git diff --check and direct trailing-whitespace checks on new Lean/textbook files passed.
+
+Step 1 IMPLEMENTED unconditionally:
+- unitProjection is the actual quotient map to the SAME DkMath UnitClass, additively tagged.
+- Prove its surjectivity and that zero means a SAME original unit is a pth power.
+- Dirichlet finite generation of integer-ring units over Z descends through this actual
+  surjective map; extending scalars gives Module.Finite (ZMod p) of the SAME quotient.
+- This statement holds for every number field and every exponent, even p=0.
+  When p is prime it is actual finite-dimensionality, with no rank/trace provider.
+
+Step 2 IMPLEMENTED unconditionally in cyclotomic fields:
+- General basis theorem: if prime p divides the actual torsion-unit-group order,
+  a cyclic generator of that whole torsion group and the SAME Dirichlet fundamental
+  units give an Option(Fin(rank F))-indexed basis of the SAME unit power quotient.
+- Linear independence lifts a mod-p relation to an actual global pth-power equality.
+  Uniqueness of Dirichlet decomposition forces each free coefficient to vanish mod p;
+  order of the actual cyclic torsion generator and p-divisibility force the torsion
+  coefficient to vanish too. Spanning uses actual Dirichlet decomposition.
+- Obtain finrank U=rank F+1 in the general p-divisible torsion-order case.
+- In the SAME p-cyclotomic field, the SAME primitive root supplies that divisibility
+  internally. Actual real-place count 0, complex-place count (p-1)/2 and Dirichlet rank
+  imply finrank U=(p-1)/2 as a NATURAL-NUMBER equality, for p>=5.
+- Specialized root_unitClass_finrank retains SAME rootField and specified primitive root.
+
+Connection to remaining rank arithmetic:
+- The SAME eigenspace is now finitely dimensional. The prior actual nonzero projected
+  cyclotomic unit then proves 0<finrank W, and dim U gives dim W <=(p-1)/2<p.
+- SAME omegaSquareProjector, its proved idempotence and actual range=W imply
+  trace(e2)=(finrank W : ZMod p) via Mathlib's projection trace theorem.
+- Given explicit htrace:trace(e2)=1, take ZMod.val and use the strict natural dimension
+  bound <p to obtain finrank W=1. Converse also holds, giving an exact equivalence.
+- primaryWeightSquareSpace_eq_bot_of_trace composes that CONDITIONAL implication with
+  the previously proved actual detection. It RETAINS htrace; no trace arithmetic was
+  silently supplied. Existing Frey endpoint and its hrank,hbad,hclass inputs are unchanged.
+
+Regression scope:
+- Actual fifth/seventh primitive roots in the rational algebraic closure and their SAME
+  rootField integer rings. Actual quotient dimensions are exactly 2 and 3 respectively.
+- Actual omega-square eigenspaces have positive finite dimension and proved bounds.
+- SAME projector's trace equals the cast of SAME eigenspace dimension.
+- A trace=1 regression application keeps the missing equality as an explicit input.
+- The counterexample 6=1 in ZMod 5 but 6!=1 in N shows why the strict bound is necessary.
+- Over Q, verify finite generation for exponents 0 and 3, without cyclotomic assumptions.
+
+Audit scope:
+- Thirteen selected #print axioms reports contain only propext, Classical.choice, Quot.sound.
+- Thirteen recursive traversals inspect types, constructors and opaque proof bodies;
+  reject sorryAx, external P2M/P2MW/FltRegular/FreyPackage, old Kummer consumers,
+  FLT endpoints and every axiom outside the three standard ones.
+- Eight public-input audits check that finite generation and actual cyclotomic dimension
+  have no hrank/htrace/hunit; generic basis dimension retains necessary hdiv, but the
+  cyclotomic dimension supplies hdiv internally. Conditional rank/vanishing retains htrace.
+- No new warnings or new sorry/admit/native_decide/unsafe/custom axioms.
+  Root output replays historical sorry warnings in unrelated existing modules;
+  this is not a whole-repository axiom-clean assertion.
+
+Remaining mathematical boundary:
+- No action decomposition of torsion/free unit components or logarithmic embedding
+  comparison with infinite-place permutation trace is proved in this increment.
+- trace(omegaSquareProjector)=1 is NOT proved. The trace criterion is an equivalence
+  with the previous missing hrank, NOT a completed replacement of that arithmetic proof.
+- General hrank, hclass, hbad and cyclic tower iteration remain open. General hno unfinished.
+- Adapted basis proof retains Apache copyright, License/NOTICE paths and upstream blob.
+  Local HEAD/blob were re-read. No external theorem imported or external checkout built
+  or independently axiom-audited. See matching JSON provenance.
+
+Decisive recursive proof and input audits from the successful root build:
+PASS: DkMath.Lib.NumberTheory.NumberFieldUnitPowerDimension.unitClassFinite; 54872 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.NumberFieldUnitPowerDimension.exists_unitClass_basis; 62373 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.NumberFieldUnitPowerDimension.finrank_unitClass; 62378 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.finrank_unitClass_cyclotomic; 63461 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.unitClass_finite; 54992 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.weightSquareSpace_finite; 55145 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.root_unitClass_finrank; 63481 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.weightSquareSpace_finrank_pos; 67570 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.weightSquareSpace_finrank_lt_prime; 63624 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.trace_omegaSquareProjector_eq_finrank; 67548 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.weightSquareSpace_finrank_eq_one_of_trace; 72439 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.trace_eq_one_iff_finrank_eq_one; 72440 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.primaryWeightSquareSpace_eq_bot_of_trace; 73720 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.NumberFieldUnitPowerDimension.unitClassFinite; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.NumberFieldUnitPowerDimension.finrank_unitClass; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.finrank_unitClass_cyclotomic; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.root_unitClass_finrank; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.weightSquareSpace_finrank_pos; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.trace_omegaSquareProjector_eq_finrank; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.weightSquareSpace_finrank_eq_one_of_trace; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.primaryWeightSquareSpace_eq_bot_of_trace; remaining arithmetic inputs explicit.
