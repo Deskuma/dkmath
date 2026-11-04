@@ -128,6 +128,9 @@ import DkMath.Lib.NumberTheory.KummerDecomposition
 import DkMath.Lib.NumberTheory.CyclotomicKummerDecomposition
 import DkMath.Lib.NumberTheory.NumberFieldCompletionComparison
 import DkMath.Lib.NumberTheory.KummerLocalPower
+import DkMath.Lib.NumberTheory.KummerLocalPrimaryUnit
+import DkMath.Lib.NumberTheory.CyclotomicPrimaryUnitSpace
+import DkMath.Lib.NumberTheory.CyclotomicPrimaryCongruence
 import DkMath.Lib.NumberTheory.CyclotomicThirteenPID
 import DkMath.Lib.NumberTheory.DedekindFractionalValuation
 import DkMath.Lib.NumberTheory.DedekindLocalParameter

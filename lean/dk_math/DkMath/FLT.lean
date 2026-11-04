@@ -94,6 +94,7 @@ import DkMath.FLT.FreyCyclotomicClassVanishing
 import DkMath.FLT.FreyCyclotomicKummerSelmer
 import DkMath.FLT.FreyCyclotomicKummerDecomposition
 import DkMath.FLT.FreyCyclotomicKummerLocalPower
+import DkMath.FLT.FreyCyclotomicConditionalSplit
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile

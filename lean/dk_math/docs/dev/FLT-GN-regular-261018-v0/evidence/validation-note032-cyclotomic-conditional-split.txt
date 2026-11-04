@@ -1,0 +1,108 @@
+NOTE-032 actual primary-unit space, cubic congruence and CONDITIONAL Frey splitting
+Date: 2026-11-04
+Working directory: lean/dk_math
+
+Performed validation, all listed commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCyclotomicConditionalSplit DkMathTest.FLT.Note032CyclotomicConditionalSplitDependencyAudit
+   Build completed successfully (11101 jobs).
+2. lake test
+   Normal repository test driver passed; the build reached 12214/12214 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test import entrance passed; output was its existing file marker only.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicConditionalSplitSmoke.lean
+   Root import exposes all thirteen selected new theorems and the final splitting axiom report.
+5. Three Lean blocks from TEXTBOOK-N032-CYCLOTOMIC-CONDITIONAL-SPLIT-261104.md were
+   extracted verbatim to /tmp/n032-primary-book-1.lean, book-2.lean and book-3.lean.
+   lake env lean was run on each separately. All three passed without warnings.
+   Each block equals its full production source, including copyright and module marker.
+6. python3 /tmp/n032-primary-import-audit.py
+   Comment-aware syntactic import closures, acyclicity, forbidden-consumer separation,
+   facade/root/test reachability, seven exact markers, source scans/hashes and
+   three exact full-source textbook copies passed.
+7. git diff --check
+   Passed. All new source, textbook and evidence files were also checked for trailing whitespace.
+
+Actual arithmetic implemented:
+- For the SAME unit u at the SAME Dedekind-domain prime v, an actual local pth root,
+  u^(p-1)-1 in v, and p in v^2 imply u^(p-1)-1 in v^3, for prime p>=5.
+- The proof establishes valuation one for the SAME local root, uses the prime binomial
+  identity, bounds its middle-term coefficient sum, and uses discrete integer valuations.
+  The concluding valuation bound is transported back to the SAME original ideal power.
+- For a specified primitive root in a specified cyclotomic number field, construct
+  the actual prime (zeta-1). Mathlib's ideal factorization gives p in its powers up to p-1;
+  the actual residue cardinality is p. The first residue congruence and p in v^2
+  are supplied internally in the cyclotomic cubic theorem.
+- The general congruence and ramified-prime arguments were adapted from the identified
+  upstream source with Apache copyright, notices and blob provenance retained.
+  No upstream theorem or namespace is imported by the new production modules.
+
+Actual unit-space definitions:
+- classMapAlong descends the specified ring hom on unit power quotients. Its kernel
+  condition is equivalent to existence of an actual root for the SAME representative.
+- localClassMap uses the natural map from the SAME integer ring to the specified completion.
+- localPowerSpace is the intersection of the actual local linear-map kernels over primes
+  above p. primaryWeightSquareSpace intersects it with the omega-square eigenspace of
+  the SAME integerAut, unitClassLinearMap and baseCharacter as the Frey receiver.
+- Vanishing of that actual subspace is proved equivalent to all its unit representatives
+  being GLOBAL integer-ring unit pth powers. This is a structural equivalence; neither
+  side's arithmetic truth is proved in this increment.
+
+Conditional Frey endpoints:
+- residual_kummer_primary_unit_witness retains the SAME u,c, b=u*c^p, equality with the
+  original Kummer vector and nonzero class. It adds membership in the actual primary
+  omega-square space and the cubic congruence at the SAME baseRoot prime.
+  This witness theorem requires no hunit.
+- residual_kummer_impossible_of_primary_unit_vanishing uses the explicit hunit=bottom
+  hypothesis to contradict the SAME unit class's nonzero property.
+- residual_cyclic_extension_nonsplit_impossible supplies v, the surjective character
+  and P INTERNALLY from the original nonsplit hypothesis and existing Kummer construction.
+- residual_cyclic_extension_has_stable_complement produces an actual globally stable
+  complement to the SAME torsion-image line in the SAME quotient representation.
+  It retains hp5 and the original Source/line/Cofixed/cyclic-stage/stability/cardinality/base
+  conditions, hbad, hclass and hunit. It does not add v,P,hsurj,hns,hval,hzero or hEXT.
+
+Regression scope:
+- Over the actual finite field F_7, the unit 2 has no cube root and its cube-quotient
+  image is nontrivial. Thus being a unit alone does not force the local-map kernel condition.
+- The actual unit 6 differs from 1 as a value, yet has cube root 3 and trivial cube class.
+  Quotient triviality is distinguished from equality of representatives.
+- In the actual fifth cyclotomic number field, verify residue cardinality 5 and
+  membership 5 in (zeta-1)^4, for the SAME chosen primitive root.
+- Prove (zeta-1)^2 NOT in (zeta-1)^3, so the cubic quotient retains nontrivial information.
+- Construct the actual cyclotomic unit c=1+zeta using the geometric-sum unit theorem.
+  Its SAME fifth power belongs to the local-power kernel and satisfies the cubic congruence.
+  That regression class is a global fifth power, not a claimed nonzero Frey class.
+
+Proof dependency, metadata and source checks:
+- Thirteen selected #print axioms reports contain only propext, Classical.choice, Quot.sound.
+- Thirteen recursive audits inspect types, constructors and opaque proof bodies, exclude
+  sorryAx, P2M/P2MW/FltRegular/FreyPackage, old Kummer consumers and FLT endpoints,
+  and require actual binomial/valuation/ramification/residue, quotient-kernel, same-unit,
+  nonsplit-presentation and contradiction declarations.
+- Thirteen public-input audits pass, including traversal through let binders. They require
+  the generic cubic guards, require hbad/hclass/hunit in conditional splitting, and ban
+  v,P,hsurj as new final inputs and hns as an input of complement existence.
+- Four production files, two test/audit files and root smoke contain exactly one matching
+  #print "file: module.name" immediately after imports. All three textbook blocks retain it.
+- Lib, FLT and root facades and the normal test entrance expose the new code. Local import
+  closure sizes (including the module itself) are 1,28,29,283. The three Lib closures contain
+  no FLT modules. No new production closure imports a FreyHnoSmallIndex, RegularPrime or
+  HardCase consumer. These syntactic import checks are distinct from recursive proof audits.
+- New Lean files contain no sorry, admit, native_decide, unsafe or custom axiom declarations.
+  The audit deliberately names forbidden sorryAx. No new-file warnings or errors in the final
+  root/focused build or normal suite; unrelated historical warnings remain outside this change.
+- Existing production theorem statements/proofs and the reviewed __REVIEW.md are unchanged.
+
+External proof-path comparison:
+The separate note032-primary-unit-external-proof-path.json records the read-only source
+comparison, exact commit/blobs/hashes and the checked parts of the external final proof.
+It identifies the remaining rank-one omega-square unit-space and truncated-log Lambda
+nonzero-evaluation work. The external checkout's independent build or kernel audit is not
+part of this validation; all new DkMath declarations have their own checks above.
+
+Boundary:
+Concrete cubic primary congruence and the implication from explicit arithmetic hypotheses
+to ORIGINAL nonsplit exclusion and stable-complement existence are implemented. Arithmetic
+truth of hunit and hclass, resonant geometric absorption hbad, cyclic tower iteration and
+the final general hno connection remain open. General hno is unfinished. No assumption
+or opaque axiom replaces any of those remaining proofs.
