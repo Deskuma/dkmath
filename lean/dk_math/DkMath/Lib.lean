@@ -134,6 +134,8 @@ import DkMath.Lib.NumberTheory.CyclotomicPrimaryCongruence
 import DkMath.Lib.NumberTheory.CyclotomicTruncatedLog
 import DkMath.Lib.NumberTheory.CyclotomicPrimaryLog
 import DkMath.Lib.NumberTheory.CyclotomicPrimaryLogCriterion
+import DkMath.Lib.NumberTheory.CyclotomicOmegaSquareProjector
+import DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero
 import DkMath.Lib.NumberTheory.CyclotomicThirteenPID
 import DkMath.Lib.NumberTheory.DedekindFractionalValuation
 import DkMath.Lib.NumberTheory.DedekindLocalParameter

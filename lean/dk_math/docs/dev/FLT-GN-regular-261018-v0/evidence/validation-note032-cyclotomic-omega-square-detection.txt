@@ -1,0 +1,119 @@
+NOTE-032 TWO STEPS: actual omega-square projector and projected global-unit nonzero log
+Date: 2026-11-04
+Working directory: lean/dk_math
+
+Performed validations, listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.CyclotomicPrimaryLogNonzero DkMathTest.FLT.Note032CyclotomicPrimaryLogNonzeroDependencyAudit
+   Build completed successfully (11107 jobs).
+2. lake test
+   Normal repository test driver passed, reached 12224/12224 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test import entrance passed, only its existing file marker was printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicOmegaSquareDetectionSmoke.lean
+   Root import exposes actual projector/range, SAME-root character transport,
+   explicit log value and nonzero evaluation, nonzero eigenspace, rank-one unit
+   vanishing and the new rank-one conditional SAME Frey complement endpoint.
+5. Three blocks from TEXTBOOK-N032-CYCLOTOMIC-OMEGA-SQUARE-DETECTION-261104.md
+   extracted to /tmp/n032-proj-book-{1,2,3}.lean. lake env lean run on each individually.
+   All passed without warnings. Each equals its full production source, including
+   copyright and exact module marker immediately after imports.
+6. python3 /tmp/n032-proj-import-audit.py
+   Comment-aware syntactic local import closures, acyclicity, source scans/hashes,
+   public Lib/FLT/root/test reachability, six exact markers and three textbook
+   full-source copies passed. Local closure sizes including self: 31,36,289.
+   The two new Lib closures do not import DkMath.FLT.
+   New production closures exclude old FreyHnoSmallIndex/RegularPrime/HardCase consumers.
+7. lake env lean DkMathTest/FLT/CyclotomicPrimaryLogNonzero.lean
+   Actual fifth/seventh root-field regressions and fourteen axiom reports passed.
+8. git diff --check and direct trailing-whitespace checks on all new Lean/textbook files.
+   Passed.
+
+Step 1 IMPLEMENTED:
+- unitAction is a monoid hom into actual linear endomorphisms of the SAME integer
+  unit power quotient; multiplication follows from actual integerAut composition.
+- omegaSquareProjector uses SAME baseCharacter, inverse-square weights and inverse
+  actual Galois group cardinality. Cardinality p-1 and its unit property come from
+  existing arithmetic proofs, not new providers.
+- Prove image eigenspace membership, identity on that space, idempotence, and range
+  equal to the SAME existing weightSquareSpace.
+- characterEquiv strengthens the SAME specified-root baseCharacter to a MulEquiv,
+  using its actual injectivity and cardinalities. The inverse transports the SAME
+  root to its d.val power. Reindex the projector by this actual equivalence.
+
+Step 2 IMPLEMENTED:
+- Construct the actual integer unit c=1+zeta via the geometric-sum unit theorem.
+  projectedCyclotomicUnit is g=e2[c] in the SAME weightSquareSpace.
+- Prove finite nilpotent binomial expansion, exact (2+s)^(p-1) and truncated log
+  formulas in characteristic p. No infinite-series argument or unproved remainder.
+- Actual integerAut_root identifies conjugation of the SAME integer root with the
+  power specified by the SAME character. unitLog_conjugate evaluates the SAME unit.
+- Sum inverse-square-weighted conjugate evaluations over actual Fp units.
+  FiniteField.sum_pow_units and inverse permutation give sum d^-1=0, while the
+  normalization inverse cardinality p-1 is -1 in Fp.
+- Prove actual DkMath primaryLog(g) = -(half^3 * parameter^2).
+- Nonzero follows from SAME parameter_sq_ne_zero and two_mul_half by multiplying
+  by 2^3; the cubic quotient is NOT assumed to be a field/domain.
+- Prove actual log nonzero, g nonzero and weightSquareSpace non-bottom WITHOUT
+  rank-one or finite-dimensionality inputs.
+
+Integration IMPLEMENTED:
+- primaryWeightSquareSpace_eq_bot_of_rank_one supplies the concrete g and hdetect
+  internally. The SAME actual omega-square space's rank-one hypothesis REMAINS.
+- residual_cyclic_extension_has_stable_complement_of_unit_rank_one preserves all
+  SAME Source/line/cofixed/cyclic-stage/stability/cardinality/base guards and hbad,hclass.
+  It derives hunit from hrank and returns a stable complement to the SAME torsionImage
+  in the SAME preimageRepresentation. No g,hdetect,hunit,v,P,hsurj,hns inputs.
+
+Regression scope:
+- Choose actual primitive fifth/seventh roots in the actual rational algebraic closure;
+  keep their SAME rootField, root, integer ring, action, projector and log.
+- At p=5 check actual Galois cardinality 4 and inverse-character root action,
+  projected global unit eigenmembership and projector identity.
+- Check normalization Lambda(g)=3*lambda^2 at p=5, using inverse of 2 in F5 and
+  characteristic of the SAME cubic quotient. Then actual Lambda(g) and g are nonzero.
+- Derive that the ORIGINAL cyclotomic integer unit is not a fifth power of a global
+  integer unit. This is not merely the old quotient-ring 1+lambda^2 test.
+- At p=7 also verify actual projected-unit log nonzero and eigenspace non-bottom.
+
+Audit scope:
+- Fourteen #print axioms reports contain only propext, Classical.choice, Quot.sound.
+- Fourteen recursive traversals inspect types, inductive constructors and opaque
+  proof bodies, reject sorryAx and external P2M/P2MW/FltRegular/FreyPackage,
+  old Kummer consumers, FLT endpoints and every nonstandard axiom.
+- Six public-input audits ensure the projector takes no rank/detection/unit-vanishing
+  provider, SAME nonzero evaluation takes no hrank/hdetect/hunit, and the rank-one
+  vanishing/complement endpoints retain hrank but not g,hdetect,hunit.
+  The complement audit also requires the original cyclic-stage guards and hbad,hclass.
+- New production has no sorry/admit/native_decide/unsafe/custom axioms or new warnings.
+  Root builds replay historical sorry warnings in unrelated existing modules; no
+  whole-repository axiom-clean claim is made.
+
+Remaining boundary:
+- The SAME actual omega-square unit-space dimension one is NOT proved.
+- Nonzero eigenspace does not assert positive finrank without finite-dimensionality.
+- hclass, hbad and cyclic tower iteration remain open. General hno remains unfinished.
+- Source adaptation preserves Apache copyright, license/NOTICE paths and upstream blob.
+  Local source HEAD/blob were re-read. No external theorem was imported and no external
+  checkout build/axiom audit was performed. Provenance is in the matching JSON record.
+
+Decisive recursive proof and public-input audit results from the successful root build:
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareProjector.omegaSquareProjector_mem; 23898 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareProjector.omegaSquareProjector_eq_self; 48531 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareProjector.omegaSquareProjector_idempotent; 48533 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareProjector.omegaSquareProjector_range; 48533 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareProjector.characterEquiv; 48428 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareProjector.characterEquiv_symm_root; 48429 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero.unitLog_conjugate; 39015 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero.e2_sum; 39010 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero.primaryLog_projectedCyclotomicUnit; 48677 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero.primaryLog_projectedCyclotomicUnit_ne_zero; 48681 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero.projectedCyclotomicUnit_ne_zero; 48682 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero.weightSquareSpace_ne_bot; 48683 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero.primaryWeightSquareSpace_eq_bot_of_rank_one; 50556 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cyclic_extension_has_stable_complement_of_unit_rank_one; 58343 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareProjector.omegaSquareProjector_mem; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareProjector.omegaSquareProjector_eq_self; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero.primaryLog_projectedCyclotomicUnit; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero.primaryLog_projectedCyclotomicUnit_ne_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero.primaryWeightSquareSpace_eq_bot_of_rank_one; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cyclic_extension_has_stable_complement_of_unit_rank_one; remaining arithmetic inputs explicit.

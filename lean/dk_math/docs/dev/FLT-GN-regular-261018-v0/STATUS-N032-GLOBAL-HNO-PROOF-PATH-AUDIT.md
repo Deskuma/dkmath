@@ -634,3 +634,37 @@ hbad、実際の類群商の算術的消滅 hclass、実際の単元空間の算
 ω² 空間の次元1・円分単元の射影の非零評価を供給していないため、hunit の算術的消滅は未完成。
 hbad、hclass、巡回塔の反復も引き続き残る。**一般 hno は未完成。**
 検証の詳細は `evidence/validation-note032-cyclotomic-primary-log.txt` を参照する。
+
+
+## 2026-11-04: 2ステップ — 同じ ω² 射影子と同じ大域円分単元の非零評価
+
+1. `CyclotomicOmegaSquareProjector` を実装した。
+   実際の `unitClassLinearMap p (integerAut γ)` を表現としてまとめ、
+   同じ `baseCharacter hζ` の ω² 平均射影 e₂ を `Module.End` として定義する。
+   実際の群の位数 p−1 と可逆性を内部供給し、像が `weightSquareSpace hζ` と一致すること、
+   固有空間上の恒等性・冪等性を証明した。同じ指定根の指標同型も構成した。
+2. `CyclotomicPrimaryLogNonzero` を実装した。
+   同じ大域円分単元 c=1+ζ とその射影 g=e₂[c] を実際に構成する。
+   同じ根・同じ整数環作用による共役の式を証明し、有限体上の重み付き和を計算した。
+   DkMath の同じ Λ について Λ(g)=−h³λ²≠0 を証明した。
+   可逆な h の逆元のみを使用し、3次商を整域と仮定していない。
+   g≠0 と同じ固有空間が零でないことも、次元1を仮定せず証明した。
+
+- 前段の「商環内の 1+λ²」の計算と違い、今回は実際の大域単元の ω² 射影の非零評価である。
+- `primaryWeightSquareSpace_eq_bot_of_rank_one` は具体的な g と hdetect を内部供給する。
+  以前の二条件のうち非零検出は閉じ、残る単元側の算術入力は同じ空間の次元1である。
+- `FreyCyclotomicPrimaryLogSplit.lean` 内の
+  `DkMath.FLT.Frey.Source.residual_cyclic_extension_has_stable_complement_of_unit_rank_one` で
+  同じ大域分裂へ接続した。
+  公開入力には hunit・g・hdetect・v・P・hsurj・hns を残さず、hrank を明示する。
+  hbad・hclass・巡回段の全安定性・位数・底の包含条件は従来どおり保持する。
+- 回帰例は実際の原始5乗根・原始7乗根の同じ rootField を使う。
+  p=5 では Λ(g)=3λ² の符号・正規化と、元の円分単元が整数環単元の5乗でないことも確認する。
+- 教科書 `TEXTBOOK-N032-CYCLOTOMIC-OMEGA-SQUARE-DETECTION-261104.md` の3ブロックは
+  新規 production 全文に一致し、すべて import 直後の正確な `#print "file: …"` を保持する。
+- 14宣言の公理・再帰依存監査と6件の公開入力監査を追加した。
+  検証記録は `evidence/validation-note032-cyclotomic-omega-square-detection.txt`。
+
+**射影子と実際の大域円分単元の非零検出という、今回の2ステップは完成。**
+同じ ω² 単元空間の次元1 hrank、hclass、hbad、巡回塔の反復は未完成である。
+非零元の存在と finrank の正値は有限次元性なしに同一視しない。**一般 hno は引き続き未完成。**
