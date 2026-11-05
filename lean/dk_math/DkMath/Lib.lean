@@ -137,6 +137,8 @@ import DkMath.Lib.NumberTheory.CyclotomicPrimaryLogCriterion
 import DkMath.Lib.NumberTheory.CyclotomicOmegaSquareProjector
 import DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero
 import DkMath.Lib.NumberTheory.NumberFieldUnitPowerDimension
+import DkMath.Lib.NumberTheory.NumberFieldUnitGaloisTrace
+import DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace
 import DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank
 import DkMath.Lib.NumberTheory.CyclotomicThirteenPID
 import DkMath.Lib.NumberTheory.DedekindFractionalValuation

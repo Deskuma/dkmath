@@ -1,0 +1,44 @@
+{
+  "date": "2026-11-05",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.NumberFieldUnitGaloisTrace",
+    "DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.NumberTheory.NumberFieldUnitGaloisTrace": {
+      "local_module_count": 30,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace": {
+      "local_module_count": 34,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/NumberTheory/NumberFieldUnitGaloisTrace.lean": true,
+    "DkMath/Lib/NumberTheory/NumberFieldUnitLogTrace.lean": true,
+    "DkMathTest/FLT/NumberFieldUnitLogTrace.lean": true,
+    "DkMathTest/FLT/Note032NumberFieldUnitTraceDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032NumberFieldUnitTraceSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 2,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/NumberTheory/NumberFieldUnitGaloisTrace.lean": "1984471e733b7a86f482c6744a9b54adfc54441bf570dcb61fd2724ca271129e",
+    "DkMath/Lib/NumberTheory/NumberFieldUnitLogTrace.lean": "603438628fcfdf539325eefcb4d0cf296990db9f6ecb5f8dd2a725a51f079d4e",
+    "DkMathTest/FLT/NumberFieldUnitLogTrace.lean": "2494e3ba3b779ea6ac26538f2ca2b8d85e6f8eaf938057a148f7dc471f9fa7ed",
+    "DkMathTest/FLT/Note032NumberFieldUnitTraceDependencyAudit.lean": "8ddb6f3c0bceac87f596cd42298e65c7055c60ac5f88f3c79138ba3a8e700c88",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032NumberFieldUnitTraceSmoke.lean": "c175841ae7b074d36e51a6c64182da3935ebf7c91e658f08aca8b78b2eba9ab6"
+  },
+  "boundary": "Syntactic comment-aware local import closures and source checks only; recursive Lean type/constructor/proof and input audits are separate. SAME integerAut/UnitClass action decomposes into actual torsion exponent plus cast of actual free-quotient integer trace. Dirichlet weighted logarithm and explicit integer-to-real action matrices prove free trace = actual infinite-place fixed count minus one. For the SAME rootField and characterEquiv, the actual existing unitAction has trace d+#Fix(d)-1 with no trace provider. Cyclotomic fixed-place classification by d=+-1 and weighted projector trace=1 remain unproved. General hrank,hclass,hbad,tower and hno remain unfinished. No external theorem import.",
+  "adapted_source": {
+    "repository": "anthropics/fermats-last-theorem",
+    "local_read_only_checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+    "head": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+    "path": "P2M/Sol/S_ExtCitation_Cyclotomic_finrank_unitsOmegaEigenspace_two.lean",
+    "blob": "6801f82a5eec740ce4d5d658b7a1dc35040f2aba",
+    "scope": "Adapt the actual torsion/free trace decomposition, weighted Dirichlet logarithm, integer-to-real matrix comparison and infinite-place permutation trace. Retain Apache notices. Use SAME DkMath integerAut, UnitClass, unitProjection, actual basis, rootField and characterEquiv. External ModP, trace theorems, fixed-place classification and final rank-one theorem are not imported. No external build/axiom audit."
+  }
+}

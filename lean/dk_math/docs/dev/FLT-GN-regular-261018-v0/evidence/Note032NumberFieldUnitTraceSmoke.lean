@@ -1,0 +1,12 @@
+import DkMath
+
+#print "file: docs.dev.FLT-GN-regular-261018-v0.evidence.Note032NumberFieldUnitTraceSmoke"
+
+#check DkMath.Lib.NumberTheory.NumberFieldUnitGaloisTrace.freeUnitAction
+#check DkMath.Lib.NumberTheory.NumberFieldUnitGaloisTrace.trace_vMap
+#check DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.logQuot_quotMap
+#check DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.trace_quotMap_eq
+#check DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.integerAut_on_pth_roots
+#check DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.trace_unitAction_eq_character_add_fixedPlaces
+#check DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank.weightSquareSpace_finrank_eq_one_of_trace
+#print axioms DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.trace_unitAction_eq_character_add_fixedPlaces
