@@ -140,6 +140,8 @@ import DkMath.Lib.NumberTheory.NumberFieldUnitPowerDimension
 import DkMath.Lib.NumberTheory.NumberFieldUnitGaloisTrace
 import DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace
 import DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank
+import DkMath.Lib.NumberTheory.CyclotomicInfinitePlaceFixed
+import DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace
 import DkMath.Lib.NumberTheory.CyclotomicThirteenPID
 import DkMath.Lib.NumberTheory.DedekindFractionalValuation
 import DkMath.Lib.NumberTheory.DedekindLocalParameter

@@ -1,8 +1,12 @@
 # NOTE-032: 一般 `hno` の証明経路監査
 
-更新日: 2026-11-05。`__REVIEW.md` を参考に実ソースを照合し、局所入力を形式化した。
+更新日: 2026-11-06。`__REVIEW.md` を参考に実ソースを照合し、局所入力を形式化した。
 
 ## 現在の証明境界
+
+2026-11-06 時点で、同じ円分単元 ω² 空間の次元1と primary 単元空間の消滅は証明済み。
+新しい Frey 分裂入口は単元側の hrank/htrace/hunit/hdetect を要求せず、
+hbad・実際の hclass・同じ巡回段の全条件を保持する。一般 hno は未完成。
 
 **位数 `p` の Galois 固定幾何点と、同じ点についての2進・3進の全延長付値環での
 零成分外性は実装済み。一般 `hno` は未完成である。**
@@ -739,3 +743,40 @@ hclass・hbad・巡回塔の反復も残り、**一般 hno は引き続き未完
 同じ円分体の #Fix(d) の d=±1 による分類と、同じ射影子の重み付きトレース和は未実装。
 従って trace(e₂)=1・一般 hrank はまだ未完成である。
 hclass・hbad・巡回塔の反復も残り、**一般 hno は引き続き未完成。**
+
+
+## 2026-11-06: 2ステップ — 固定無限素点と同じ射影子の trace=1、単元側算術の完成
+
+1. `CyclotomicInfinitePlaceFixed` を実装した。
+   同じ rootField・原始根・characterEquiv を保持し、逆自己同型の指数 d⁻¹ を明示する。
+   同じ複素埋め込みが一致する場合と複素共役で一致する場合を分け、
+   任意の無限素点 w について σd•w=w ↔ d=1∨d=−1 を証明した。
+   同じ円分体の無限素点数により、固定点数が (p−1)/2 または0となることを証明した。
+2. `CyclotomicOmegaSquareTrace` を実装した。
+   既存の同じ unitAction の実際のトレースに固定点数を代入する。
+   既存の同じ omegaSquareProjector の有限和表示にトレースを適用し、
+   有限体の逆冪和と d=±1 の指示関数和を計算して trace(e₂)=1 を証明した。
+   その結果、同じ weightSquareSpace の自然数次元1と同じ primary 単元空間の零化を
+   hrank/htrace/hdetect/hunit の provider なしで証明した（素数 p≥5）。
+
+- `exists_global_unit_pow_of_primary` は同じ整数環単元 u の実際の固有・局所条件から、
+  同じ整数環の大域単元 a の存在 a^p=u を返す。
+- `FreyCyclotomicUnitSplit.lean` の
+  `DkMath.FLT.Frey.Source.residual_cyclic_extension_has_stable_complement_of_class_vanishing`
+  は、単元側の算術入力をすべて内部供給して同じ Frey 分裂へ接続した。
+  公開入口に hrank/htrace/hunit/hdetect/g/v/P/hsurj/hns を残さない。
+  **hbad・実際の hclass・同じ巡回段の全安定性・位数・底の包含条件は保持する。**
+- 回帰例は実際の5次・7次円分 rootField を使用する。
+  5次では d=2 の逆作用の指数3、固定点数2/0、d=−1 の全トレース0と d=2 の全トレース1、
+  同じ射影子の trace=1・同じ空間の次元1・primary 単元消滅を確認する。
+  同じ固有・局所条件の整数環単元の大域5乗根の存在も確認する。
+  7次では d=−1 の固定点数3と、同じ trace/次元/消滅を確認する。
+- 新規3 production を Lib/FLT/root、2 test を通常の DkMathTest 入口へ公開した。
+  教科書 `TEXTBOOK-N032-CYCLOTOMIC-UNIT-CLOSURE-261106.md` の3ブロックは全文一致し、
+  import 直後の正確な `#print "file: …"` を保持する。
+- 主要12宣言の公理・再帰依存監査、8件の公開入力監査を追加した。
+  詳細は `evidence/validation-note032-cyclotomic-unit-closure.txt`。
+
+**今回の2ステップと、単元側の hrank/hunit の算術実装は完成（素数 p≥5）。**
+同じ円分類群商の hclass、共鳴素点での hbad、巡回塔の反復と最終接続は残る。
+**一般 hno は引き続き未完成。**
