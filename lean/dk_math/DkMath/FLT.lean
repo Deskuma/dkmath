@@ -102,6 +102,7 @@ import DkMath.FLT.FreyCyclotomicConditionalTower
 import DkMath.FLT.FreyCyclicTowerCharacter
 import DkMath.FLT.FreyPadicTowerCharacter
 import DkMath.FLT.FreyCyclicTateVector
+import DkMath.FLT.FreyCyclicTateLine
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile

@@ -76,6 +76,8 @@ import DkMathTest.FLT.FreyPadicTowerCharacter
 import DkMathTest.FLT.Note032FreyPadicTowerCharacterDependencyAudit
 import DkMathTest.FLT.FreyCyclicTateVector
 import DkMathTest.FLT.Note032FreyCyclicTateVectorDependencyAudit
+import DkMathTest.FLT.FreyCyclicTateLine
+import DkMathTest.FLT.Note032FreyCyclicTateLineDependencyAudit
 import DkMathTest.FLT.Note032FreyCyclotomicConditionalTowerDependencyAudit
 import DkMathTest.FLT.Note032CyclotomicUnitClosureDependencyAudit
 import DkMathTest.FLT.Note032NumberFieldUnitTraceDependencyAudit
