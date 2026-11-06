@@ -40,6 +40,7 @@ import DkMath.Lib.Algebra.PrimePowerCyclicCriterion
 import DkMath.Lib.Algebra.CyclicPrimePowerScalar
 import DkMath.Lib.Algebra.CyclicActionCharacter
 import DkMath.Lib.Algebra.PadicCharacterLimit
+import DkMath.Lib.Algebra.PrimePowerTateSequence
 import DkMath.Lib.Algebra.TorsionPreimageScalar
 import DkMath.Lib.Algebra.TorsionPreimageLocalComplement
 import DkMath.Lib.Algebra.AbsorbingTorsionFiltration
