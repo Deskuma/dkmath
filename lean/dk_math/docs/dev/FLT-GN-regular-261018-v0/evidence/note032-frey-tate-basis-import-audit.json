@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-06",
+  "new_modules": [
+    "DkMath.Lib.Algebra.PrimePowerTatePairSpan",
+    "DkMath.Lib.NumberTheory.EllipticTatePairBasis",
+    "DkMath.FLT.FreyTateBasis"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.Algebra.PrimePowerTatePairSpan": {
+      "local_module_count": 5,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.EllipticTatePairBasis": {
+      "local_module_count": 29,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyTateBasis": {
+      "local_module_count": 321,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/Algebra/PrimePowerTatePairSpan.lean": true,
+    "DkMath/Lib/NumberTheory/EllipticTatePairBasis.lean": true,
+    "DkMath/FLT/FreyTateBasis.lean": true,
+    "DkMathTest/FLT/FreyTateBasis.lean": true,
+    "DkMathTest/FLT/Note032FreyTateBasisDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateBasisSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 3,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/Algebra/PrimePowerTatePairSpan.lean": "5d83010a34aa07b5ee60146fa9342fca754ec9164abde1a727aba1a019c5fe28",
+    "DkMath/Lib/NumberTheory/EllipticTatePairBasis.lean": "b7318536b5aeb5c1bb91e267b741b8b205161b9f9551c69d438795c46d6c493b",
+    "DkMath/FLT/FreyTateBasis.lean": "d3a9bcd6e4f112f2faa19ed796079fe3f79d6655e5b8a0e40ae9b8a42846e0f9",
+    "DkMathTest/FLT/FreyTateBasis.lean": "0ab622a196132b77f3a2dbdbc9e4fd632639616917bbfce4bcca6bf21bcf444e",
+    "DkMathTest/FLT/Note032FreyTateBasisDependencyAudit.lean": "017b4879f87af42b4d5fd11a65b25c3bf2f716c5be0782ee23397f715b377196",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateBasisSmoke.lean": "114b35cc97092888db4a783f32d912da1e3846c66cb4ceb45770bf2de46a3e2d"
+  },
+  "boundary": "Comment-aware local source/import audit only. Actual base p-torsion generation lifts to all finite levels by induction; actual finite surjectivity plus elliptic torsion cardinality gives finite linear equivalences; SAME compatible coefficient sequences and actual Cauchy lifts give full Tate pair equivalence. Frey internally supplies base generation from actual residual rank two and actual lifted second point, keeps original first vector/line and proves actual action matrix first column chi,0. SAME hclass and uniform all-stage hbad retained at adapted Frey endpoint. Generic hbase remains explicit. Higher determinant/second character/Frobenius arithmetic and general hno unfinished. Recursive/input audits separate."
+}

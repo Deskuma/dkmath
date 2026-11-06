@@ -44,6 +44,8 @@ import DkMath.Lib.Algebra.PadicCharacterLimit
 import DkMath.Lib.Algebra.PrimePowerTateSequence
 import DkMath.Lib.Algebra.PrimePowerTateModule
 import DkMath.Lib.Algebra.PrimePowerTateReduction
+import DkMath.Lib.Algebra.PrimePowerTatePairSpan
+import DkMath.Lib.NumberTheory.EllipticTatePairBasis
 import DkMath.Lib.NumberTheory.EllipticTateReduction
 import DkMath.Lib.Algebra.TorsionPreimageScalar
 import DkMath.Lib.Algebra.TorsionPreimageLocalComplement

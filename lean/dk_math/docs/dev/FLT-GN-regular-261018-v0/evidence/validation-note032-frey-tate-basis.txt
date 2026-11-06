@@ -1,0 +1,120 @@
+NOTE-032 THREE STEPS: compatible finite bases to SAME full Frey Tate basis and action matrix
+Date: 2026-11-06
+Working directory: lean/dk_math
+
+Performed validations; listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyTateBasis DkMathTest.FLT.Note032FreyTateBasisDependencyAudit
+   Build completed successfully (11132 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12271/12271 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed; only existing file marker printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateBasisSmoke.lean
+   Root exposes actual finite-level generation/equivalences, full Tate pair equivalence,
+   actual second-point lift, SAME adapted full basis/line and actual matrix first column.
+5. Three textbook blocks extracted verbatim to /tmp/n032-tatebasis-book-{1,2,3}.lean.
+   lake env lean run on each individually; all passed without warnings.
+   Full production source matches; exact file marker immediately after imports retained.
+6. python3 /tmp/n032-tatebasis-import-audit.py
+   Comment-aware local import closures, acyclicity, source scans/SHA256, six exact markers,
+   three full textbook copies, Lib/FLT/root and normal test reachability passed.
+   Closure sizes including self: generic 5, elliptic 29, Frey 321. Both Lib modules have
+   no FLT imports. No FreyHnoSmallIndex/RegularPrime/HardCase consumers. JSON saved alongside.
+7. git diff --check and direct trailing-whitespace checks on all new files passed.
+
+Step 1 IMPLEMENTED:
+- SAME two compatible Tate sequences v,w in actual abelian G; explicit generic input
+  hbase says their degree-zero components generate actual G[p] by natural multiples.
+- Inductively generate ALL p^(n+1)-killed points at degree n: expand highest p-power
+  multiple in degree zero, subtract SAME two next components, apply lower-level induction.
+  Actual coefficients update by a+p*c,b+p*d. No freeness/rank/finiteness/Nakayama input.
+  This additive lemma needs no prime hypothesis.
+
+Step 2 IMPLEMENTED:
+- SAME characteristic-zero elliptic curve and SAME two Tate sequences. Standard ZMod N
+  linear map (ZMod N)^2 -> actual E[N], N=p^(n+1), sends coordinates to actual same points.
+- Actual finite surjectivity from Step 1. Domain card N^2 equals PROVED actual elliptic
+  torsion card N^2; finite cardinal comparison supplies injectivity, hence LINEAR equivalence.
+- Read both actual coordinates of arbitrary SAME full Tate point with these finite
+  equivalences. Actual p-transitions plus finite injectivity prove STANDARD residue
+  compatibility of BOTH coefficients. No supplied compatible-coordinate provider.
+- Actual Cauchy lift of BOTH coefficient sequences gives full surjectivity of
+  (a,b)->a*v+b*w. Finite injectivity and p-adic residue extensionality give injectivity.
+- Construct actual LINEAR equivalence (Zp x Zp) -> FULL Tate module. Generic entry retains
+  precise finite degree-zero generation hbase; no assumed full rank two or bijectivity.
+
+Step 3 IMPLEMENTED:
+- SAME Source/L/rootField/tower/first compatible generator v; original first residual
+  point is nonzero by SAME seed proof. Actual residual finrank two supplies independent Q.
+- Actual previous evaluation surjectivity lifts SAME Q to actual second Tate point w.
+- Actual independent residual pair and finrank two construct residual basis. Its expansion
+  proves generic hbase internally, with no hbase/hbasis/hrank/hfree/hbij provider at Frey entry.
+- Construct actual full Frey Tate pair equivalence and Fin 2 basis, first/second images
+  EXACTLY SAME original v and actual lifted w. Thus full free rank two in THIS retained
+  conditional setting is implemented, not merely mod-p quotient rank two.
+- OLD SAME Tate line is EXACTLY second coordinate zero in new basis; w is outside it.
+- Matrix is LinearMap.toMatrix of SAME actual full Galois linear action in actual basis.
+  First column is SAME prior p-adic character chi and zero, using SAME old scalar formula.
+  No triangularity assumption. Matrix identity at Galois identity is regression checked.
+
+Conditional arithmetic and mathematical scope:
+- Original hclass and uniform ALL-stage hbad are retained throughout SAME adapted Frey basis.
+  This is NOT advertised as a new unconditional basis-construction entrance for every E.
+  Generic pair theorem retains hbase; actual Frey implementation supplies it internally.
+- SAME Source preserves original curve/point action and arithmetic invariants.
+- Second diagonal character arithmetic, high-level cyclotomic determinant/Weil pairing,
+  Frobenius characteristic polynomial and final Galois arithmetic remain unfinished.
+  A matrix first-column/triangular result alone is NOT an arithmetic contradiction.
+- No topological basis isomorphism/new full Tate action continuity theorem constructed.
+- hclass and ALL-stage hbad remain unfinished. General hno UNFINISHED.
+  No external class/isogeny classification theorem imported.
+
+Regression scope:
+- Arbitrary FULL Tate point round trip through actual two coordinates.
+- Original v and lifted w have exact coordinates (1,0),(0,1); w outside SAME prior line.
+- Arbitrary actual p^3-torsion point generated by SAME degree-two components and recovered
+  under actual finite level equivalence. Finite and infinite points checked separately.
+- Actual matrix of identity Galois element is identity, not a hard-coded triangular array.
+- SAME abstract Source with retained arithmetic; no impossible numeric Fermat Source used.
+
+Audit scope:
+- Fifteen selected #print axioms reports: only propext, Classical.choice, Quot.sound.
+- Fifteen recursive traversals inspect checked types, inductive constructors and opaque
+  proof bodies. Reject sorryAx, nonstandard axioms, P2M/P2MW/FltRegular/FreyPackage,
+  old Kummer consumers and FLT endpoints. Require actual finite elliptic card theorem,
+  compatible coefficient/Cauchy proofs, original nonzero seed, actual residual rank/lift,
+  actual constructed basis and SAME prior line/character action.
+- Twelve public input audits retain generic hbase and original hclass/uniform-stage hbad,
+  reject hbase/hbasis/hrank/hfree/hbij/htriangle/hscalar/hdet at final Frey entrance.
+- No new sorry/admit/native_decide/unsafe/custom axioms and no new warnings.
+  Root/suite replay historical sorry warnings in five unrelated existing modules.
+  No whole-repository axiom-clean assertion.
+
+Decisive audits from successful root build:
+PASS: DkMath.Lib.Algebra.PrimePowerTateSequence.pair_span; 1466 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.tatePairLevelEquiv; 28620 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.tatePairCoefficients_compatible; 28637 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.tatePairParametrization_injective; 32858 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.tatePairParametrization_surjective; 32841 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.tatePairEquiv; 32894 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateFirstReduction_ne_zero; 80625 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateSecondResidual_exists; 80684 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateSecond; 80700 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateResidualBasis; 80695 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTatePair_base_span; 80707 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateEquiv; 81280 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateBasis; 81281 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateEquiv_mem_line_iff; 81322 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateActionMatrix_first_column; 81381 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.Algebra.PrimePowerTateSequence.pair_span; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.tatePairLevelEquiv; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.tatePairCoefficients_compatible; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.tatePairEquiv; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateSecondResidual_exists; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateSecond; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateResidualBasis; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTatePair_base_span; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateEquiv; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateBasis; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateEquiv_mem_line_iff; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateActionMatrix_first_column; remaining arithmetic inputs explicit.
