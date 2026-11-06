@@ -108,6 +108,7 @@ import DkMath.FLT.FreyCyclicTateReduction
 import DkMath.FLT.FreyTateBasis
 import DkMath.FLT.FreyTateCharacters
 import DkMath.FLT.FreyTateCharactersModP
+import DkMath.FLT.FreyTateCyclotomicDeterminant
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile

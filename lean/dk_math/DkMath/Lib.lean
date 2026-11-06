@@ -303,6 +303,7 @@ import DkMath.Lib.NumberTheory.EllipticTorsionRootCount
 import DkMath.Lib.NumberTheory.EllipticTorsionStandardEquiv
 import DkMath.Lib.NumberTheory.EllipticTorsionValuationIntegrality
 import DkMath.Lib.NumberTheory.EllipticTorsionWeilDeterminant
+import DkMath.Lib.NumberTheory.EllipticWeilDeterminantAll
 import DkMath.Lib.NumberTheory.EllipticTranslationInfinity
 import DkMath.Lib.NumberTheory.EllipticTranslationValuation
 import DkMath.Lib.NumberTheory.EllipticTwoTorsionRank
@@ -420,6 +421,7 @@ import DkMath.Lib.NumberTheory.WeierstrassXReflection
 -- RepresentationTheory
 import DkMath.Lib.RepresentationTheory.AbsorbingSubspace
 import DkMath.Lib.RepresentationTheory.AlternatingDeterminant
+import DkMath.Lib.RepresentationTheory.AlternatingDeterminantRing
 import DkMath.Lib.RepresentationTheory.CofixedBranchSwap
 import DkMath.Lib.RepresentationTheory.CofixedDeterminant
 import DkMath.Lib.RepresentationTheory.TriangularTwoCharacter
