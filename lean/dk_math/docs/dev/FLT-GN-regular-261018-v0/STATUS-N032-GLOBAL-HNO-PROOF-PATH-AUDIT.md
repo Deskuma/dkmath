@@ -7,6 +7,9 @@
 2026-11-06 時点で、同じ円分単元 ω² 空間の次元1と primary 単元空間の消滅は証明済み。
 新しい Frey 分裂入口は単元側の hrank/htrace/hunit/hdetect を要求せず、
 hbad・実際の hclass・同じ巡回段の全条件を保持する。一般 hno は未完成。
+同じ hclass と各段の hbad の明示入力のもとで、実際の巡回次段・互換な塔・
+無限で安定な p-primary/p-divisible 合併まで構成済み。各段の入力の算術的証明と、
+高位捩れ全体の慣性吸収・良還元矛盾への接続は未完成。
 
 **位数 `p` の Galois 固定幾何点と、同じ点についての2進・3進の全延長付値環での
 零成分外性は実装済み。一般 `hno` は未完成である。**
@@ -780,3 +783,38 @@ hclass・hbad・巡回塔の反復も残り、**一般 hno は引き続き未完
 **今回の2ステップと、単元側の hrank/hunit の算術実装は完成（素数 p≥5）。**
 同じ円分類群商の hclass、共鳴素点での hbad、巡回塔の反復と最終接続は残る。
 **一般 hno は引き続き未完成。**
+
+
+## 2026-11-06: 2ステップ — 算術条件付き次段から同じ巡回塔・合併へ
+
+1. `FreyCyclotomicTowerStep` の `ResidualCyclicStage` は同じ Source と同じ L を固定し、
+   同じ点群内の部分群・位数 p^(n+1)・巡回性・Galois 安定性・元の底への包含を保持する。
+   有限性、指数による零化、p-socle の元の底への降下は不変量から内部導出する。
+   第0段は元の pointSubgroup から構成し、hbad/hclass を要求しない。
+   次段は以前の実際の hbad/hclass 付き安定補空間から持ち上げ、
+   その存在・位数・巡回性・安定性・底の包含・socle の降下を出力する。
+2. `FreyCyclotomicConditionalTower` で次段を選び、Nat.rec により同じ底のもとで反復した。
+   各 n で無関係な部分群を選ぶのでなく、隣接包含を持つ同じ単調な塔を構成する。
+   同じ次段内の実際の p 倍の逆像も、有限巡回群の p 倍像=核公式から導く。
+   同じ点群内の合併は Galois 安定・p-primary・p-divisible・無限であり、
+   その p-socle は元の同じ pointSubgroup と正確に一致する。
+
+- hclass は従来の同じ ClassModP の特定 ω² 固有成分の消滅のまま保持する。
+- 一段では同じ p•y∈K の共鳴素点条件 `ResonantAbsorptionAt K` が必要。
+  反復ではそれをすべての適格な段に供給する hbad を明示入力にする。
+  **これは一つの K の hbad より強い段ごとの入力であり、保存性を算術的に証明したものではない。**
+- 次段存在・指標消滅・分裂・hrank/htrace/hunit を新しい provider として仮定しない。
+  前回完成した実際の単元算術と同じ Frey 分裂をそのまま利用する。
+- 2回の互換な p 倍逆像から、元の底の点の p² 倍の逆像が同じ第2段へ入る回帰例を確認する。
+  段0/1/2の位数 p,p²,p³、第4段の socle の元の底への降下、
+  合併の可除性と Infinite なのに Nat.card=0 となる区別も確認する。
+- 新規2 production を FLT/root、2 test を通常の DkMathTest 入口へ公開した。
+  教科書 `TEXTBOOK-N032-FREY-CONDITIONAL-TOWER-261106.md` の2ブロックは全文一致し、
+  import 直後の正確な `#print "file: …"` を保持する。
+- 主要15宣言の公理・再帰依存監査、8件の公開入力監査を追加した。
+  詳細は `evidence/validation-note032-frey-conditional-tower.txt`。
+
+**今回の2ステップは条件付きの実際の巡回塔構成として完成。**
+外部の類群 ω² 消滅 source は Thaine 関係等を使う経路として照合したが、今回移植していない。
+hclass、各段の hbad、高位捩れ全体の慣性吸収、良還元点数による最後の大域矛盾は未完成。
+Galois 安定性を商の自明作用と混同せず、**一般 hno は引き続き未完成。**

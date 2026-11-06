@@ -1,0 +1,68 @@
+{
+  "date": "2026-11-06",
+  "new_modules": [
+    "DkMath.FLT.FreyCyclotomicTowerStep",
+    "DkMath.FLT.FreyCyclotomicConditionalTower"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.FLT.FreyCyclotomicTowerStep": {
+      "local_module_count": 296,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclotomicConditionalTower": {
+      "local_module_count": 297,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/FLT/FreyCyclotomicTowerStep.lean": true,
+    "DkMath/FLT/FreyCyclotomicConditionalTower.lean": true,
+    "DkMathTest/FLT/FreyCyclotomicConditionalTower.lean": true,
+    "DkMathTest/FLT/Note032FreyCyclotomicConditionalTowerDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyConditionalTowerSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 2,
+  "new_lean_file_sha256": {
+    "DkMath/FLT/FreyCyclotomicTowerStep.lean": "9cbbb23980caf5f51c3254567ffca599d61fa28855f17f3680bb17556aa0b9ef",
+    "DkMath/FLT/FreyCyclotomicConditionalTower.lean": "4dab62a5e9afd7a8f67066601d82a970e0a866be36ff9e5d974a8f8dfbecc2cd",
+    "DkMathTest/FLT/FreyCyclotomicConditionalTower.lean": "23aaae4df9ea5ef7b21afb2bf58836fcace6fe63e91a2616adcb330156ce0ff5",
+    "DkMathTest/FLT/Note032FreyCyclotomicConditionalTowerDependencyAudit.lean": "7e5fbf7baf30de3f754b7be3d041f9b806f78c772a05e8bd5b297caf1516ea7e",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyConditionalTowerSmoke.lean": "0cc6b1712dd0a986e75a33fab846cbbcd7f06000eb45ba1ac0aaff3ee6eaa9ea"
+  },
+  "boundary": "Syntactic comment-aware local import closures and source checks only; recursive Lean type/constructor/proof and input audits are separate. Actual same-Source cyclic-stage successor is supplied by proved unit arithmetic plus retained SAME hclass and stage-specific resonant absorption. Dependent recursion constructs coherent monotone stages, finite sizes p^(n+1), actual next-stage p-lifts, and infinite stable p-primary p-divisible union with SAME original socle. Iteration EXPLICITLY retains uniform absorption over all eligible stages, stronger than the single-stage input. Neither class vanishing nor resonant arithmetic nor high-torsion-wide inertia/Frobenius closure is supplied. General hno unfinished. No external theorem import.",
+  "external_class_proof_path_reference": {
+    "repository": "anthropics/fermats-last-theorem",
+    "head": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+    "class_solution_blob": "015cbc0e5638c4e4846b5004b8b6d7cd4e3e9a84",
+    "files": [
+      {
+        "path": "P2M/Sol/S_ExtCitation_Cyclotomic_clGalAction_omegaEigenspace_two_eq_bot.lean",
+        "sha256": "1f57239043c18f0bba72475c99b2a040070920e8e2e169348da866472fcbc37f",
+        "lines": 1208,
+        "read_scope": "Read imports, initial transport section and terminal class-generator/Thaine argument; not full kernel proof audit."
+      },
+      {
+        "path": "Theorems/Thm_ExtCitation_Cyclotomic_thaine_relation_plusField.lean",
+        "sha256": "6ecce42fce71b21bfed13d6f8b15fed68d5cfec183e7be355d0fd15830aed51a",
+        "lines": 33,
+        "read_scope": "Read theorem interface."
+      },
+      {
+        "path": "Theorems/Thm_NumberField_classGroup_eq_closure_nonSplit_degOne.lean",
+        "sha256": "42e33d50285ac088a4270c6a3b89488446c97af343f54c4cd9b2128da2ac73c7",
+        "lines": 14,
+        "read_scope": "Read theorem interface."
+      },
+      {
+        "path": "Theorems/Thm_ExtCitation_Cyclotomic_omegaIdempotent_two_cycloUnitTwo_ne_zero.lean",
+        "sha256": "4b3b85373a147ded9825ef8dfab3e15c5f3f92646f450e140d404207d66c14f3",
+        "lines": 13,
+        "read_scope": "Read theorem interface."
+      }
+    ],
+    "interpretation": "Source path uses a SPECIFIC omega-square class quotient, a Thaine relation in the real subfield, generation by nonsplit degree-one prime ideal classes, and an actual cyclotomic-unit nonzero projection. No assertion of whole plus-part p-vanishing. These class arithmetic results are NOT implemented/imported in this increment; hclass retained. Source/interface comparison only, no external build or recursive axiom audit."
+  }
+}

@@ -69,6 +69,8 @@ import DkMathTest.FLT.CyclotomicPrimaryLogNonzero
 import DkMathTest.FLT.CyclotomicOmegaSquareUnitRank
 import DkMathTest.FLT.NumberFieldUnitLogTrace
 import DkMathTest.FLT.CyclotomicUnitClosure
+import DkMathTest.FLT.FreyCyclotomicConditionalTower
+import DkMathTest.FLT.Note032FreyCyclotomicConditionalTowerDependencyAudit
 import DkMathTest.FLT.Note032CyclotomicUnitClosureDependencyAudit
 import DkMathTest.FLT.Note032NumberFieldUnitTraceDependencyAudit
 import DkMathTest.FLT.Note032CyclotomicOmegaSquareUnitRankDependencyAudit
