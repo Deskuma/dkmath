@@ -1,0 +1,93 @@
+NOTE-032 TWO STEPS: actual finite unit characters on SAME cyclic tower
+Date: 2026-11-06
+Working directory: lean/dk_math
+
+Performed validations; listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCyclicTowerCharacter DkMathTest.FLT.Note032FreyCyclicTowerCharacterDependencyAudit
+   Build completed successfully (11118 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12245/12245 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed; only its existing module marker printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTowerCharacterSmoke.lean
+   Root exposes character independence, actual stage action/scalar formula/fixedness,
+   open kernel, standard residue compatibility, original mod-p cyclotomic equality,
+   explicitly conditional good-reduction bound and actual tower character compatibility.
+5. Two textbook blocks extracted verbatim to /tmp/n032-towerchar-book-{1,2}.lean.
+   lake env lean run on each individually; both passed without warnings.
+   Both equal their full production source, exact module marker immediately after imports.
+6. python3 /tmp/n032-towerchar-import-audit.py
+   Comment-aware local import closures, acyclicity, source scans and SHA256 recorded in
+   note032-frey-tower-character-import-audit.json. Closure sizes including self: 1,307.
+   Generic character exposed through Lib, actual stage through FLT, both through root;
+   both tests through normal test entrance. Five exact markers and two full copies passed.
+   Generic Lib has no FLT import; no FreyHnoSmallIndex/RegularPrime/HardCase consumers.
+7. git diff --check and direct trailing-whitespace checks on all new files passed.
+
+Step 1 IMPLEMENTED:
+- Construct coefficient e^-1(rho(g)(e(1))) from SAME actual group action on cyclic group.
+- Prove coordinate scalar action and multiplicativity. Inverse comes from g^-1; no
+  unit/character provider. Construct actual unit-valued monoid homomorphism.
+- For nonzero N, prove actual natural scalar action, uniqueness from scalar action,
+  character=1 iff every point fixed, and independence of the chosen cyclic coordinates.
+
+Step 2 IMPLEMENTED:
+- Restrict SAME Frey pointAction to SAME stable cyclic stage; actual card p^(n+1)
+  supplies cyclic coordinates and actual action supplies finite unit character.
+- Kernel is open because it contains the SAME full torsion representation's open kernel.
+- Inclusion of actual cyclic stages implies character compatibility through STANDARD
+  unit residue homomorphism, even when their generators are independently chosen.
+- Original SAME cofixed residual line identifies reduction mod p with cyclotomicCharacter.
+- Apply to previous SAME dependent tower, retaining SAME hclass/uniform-stage hbad;
+  construct actual character family and prove adjacent compatibility.
+- Good-reduction bound injects SAME stage into actual Frobenius-fixed torsion and uses
+  actual finite-point reduction theorem. Explicit Frobenius character=1 is retained.
+
+Regression scope:
+- Concrete multiplicative-unit action on additive ZMod 5. Stable whole group is NOT
+  pointwise fixed: -1 moves 1 and has character -1 != 1. Sign-changed coordinates give
+  identical actual character, not a different conjugated action or supplied equality.
+- SAME abstract Source/stages: open kernel and mod-p equality need no hclass/hbad.
+- SAME conditional tower: two-stage residue compatibility checked, not only adjacent
+  reduction; fixedness iff character=1 checked without asserting value 1.
+
+Audit scope and remaining boundaries:
+- Eleven selected #print axioms reports contain only propext, Classical.choice, Quot.sound.
+- Eleven recursive traversals inspect types, constructors and opaque proof bodies,
+  reject sorryAx, P2M/P2MW/FltRegular/FreyPackage, old Kummer consumers, FLT endpoints
+  and nonstandard axioms. Require actual scalar action, representation open kernel,
+  SAME cofixed cyclotomic point action, fixed-torsion reduction and preceding tower step.
+- Ten public input audits reject hchar/hfixed/hcompat providers in actual character
+  construction and compatibility, retain hchar in the good bound, retain actual prior
+  hclass/uniform-stage hbad in tower family. No renaming arithmetic input as closure.
+- Stability alone is NOT pointwise fixedness or high-torsion-wide quotient absorption.
+  New sufficient condition character(Frob)=1 is not supplied arithmetically, nor claimed
+  interchangeable with the old ALL-torsion quotient absorption route.
+- Class arithmetic, all-stage resonant absorption and final Galois arithmetic remain
+  unfinished. No Zp inverse-limit character or Tate module constructed. General hno unfinished.
+- No new sorry/admit/native_decide/unsafe/custom axioms; no new warnings.
+  Root/suite replay historical sorry warnings in five unrelated existing modules.
+  No whole-repository axiom-clean claim. No external theorem import or new upstream port.
+
+Decisive audits from successful root build:
+PASS: DkMath.Lib.Algebra.CyclicActionCharacter.character; 2264 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.CyclicActionCharacter.action_eq_nsmul; 2274 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.CyclicActionCharacter.character_eq_one_iff; 2272 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.CyclicActionCharacter.character_independent; 2277 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.character_spec; 24695 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.character_eq_one_iff; 24652 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.character_kernel_isOpen; 29297 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.character_compatible; 24714 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.character_mod_prime; 41796 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.card_le_good_points_of_character_one; 29131 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTowerCharacter_compatible; 80618 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.Algebra.CyclicActionCharacter.character; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.CyclicActionCharacter.character_independent; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.character; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.character_spec; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.character_eq_one_iff; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.character_kernel_isOpen; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.character_compatible; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.character_mod_prime; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.card_le_good_points_of_character_one; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualCyclicTowerCharacter_compatible; remaining arithmetic inputs explicit.

@@ -38,6 +38,7 @@ import DkMath.Lib.Algebra.FiniteFixedQuotient
 import DkMath.Lib.Algebra.TorsionPreimageQuotient
 import DkMath.Lib.Algebra.PrimePowerCyclicCriterion
 import DkMath.Lib.Algebra.CyclicPrimePowerScalar
+import DkMath.Lib.Algebra.CyclicActionCharacter
 import DkMath.Lib.Algebra.TorsionPreimageScalar
 import DkMath.Lib.Algebra.TorsionPreimageLocalComplement
 import DkMath.Lib.Algebra.AbsorbingTorsionFiltration
