@@ -254,6 +254,7 @@ import DkMath.Lib.NumberTheory.EllipticMultiplicationPullback
 import DkMath.Lib.NumberTheory.EllipticMultiplicationSurjective
 import DkMath.Lib.NumberTheory.EllipticMultiplicationValuation
 import DkMath.Lib.NumberTheory.EllipticNodalInertia
+import DkMath.Lib.NumberTheory.EllipticNodalUnipotence
 import DkMath.Lib.NumberTheory.EllipticNodalDecomposition
 import DkMath.Lib.NumberTheory.EllipticNodalReduction
 import DkMath.Lib.NumberTheory.EllipticNodalReductionKernel

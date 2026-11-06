@@ -1,0 +1,11 @@
+{
+  "date": "2026-11-07",
+  "external_checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "external_head": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files_sha256": {
+    "P2M/Sol/S_FreyPackage_frey_no_cofixed_large.lean": "16750fcba1f02ba21bcbfa5999103c03be4f85c2359913c51c0b83cef66d2413",
+    "Theorems/Thm_WeierstrassCurve_inZeroComponentAt_smul_sub_of_mem_inertiaSubgroupIn.lean": "86df39ccdbfa8fa05424c41c16bf40995b860c2bd68da4452a777acd7fcf1731",
+    "Theorems/Thm_WeierstrassCurve_exists_torsion_zeroComponent_submodule_of_multiplicativeReduction.lean": "0c24fde9b5d348b8dde0705a0b71dc2471a7be52555cdfaa121be348e6772084"
+  },
+  "reference_scope": "Compared local absorption at lines 1110-1142 of frey_no_cofixed_large and two public zero-component theorem statements. No external source port or P2M/P2MW imports. DkMath connects its existing actual nodal inertia-difference smoothness with actual smooth torsion inertia fixedness to obtain local nilpotence. Does not port global Step Three or classification."
+}

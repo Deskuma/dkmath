@@ -92,6 +92,8 @@ import DkMathTest.FLT.FreyTateFrobenius
 import DkMathTest.FLT.Note032FreyTateFrobeniusDependencyAudit
 import DkMathTest.FLT.FreyTateResonantWitness
 import DkMathTest.FLT.Note032FreyTateQuotientDependencyAudit
+import DkMathTest.FLT.FreyConditionalCofixedExclusion
+import DkMathTest.FLT.Note032FreyTateUnipotenceDependencyAudit
 import DkMathTest.FLT.Note032FreyCyclotomicConditionalTowerDependencyAudit
 import DkMathTest.FLT.Note032CyclotomicUnitClosureDependencyAudit
 import DkMathTest.FLT.Note032NumberFieldUnitTraceDependencyAudit

@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-07",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.EllipticNodalUnipotence",
+    "DkMath.FLT.FreyTateInertiaUnipotent",
+    "DkMath.FLT.FreyTateInertiaCharacters",
+    "DkMath.FLT.FreyConditionalCofixedExclusion"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.NumberTheory.EllipticNodalUnipotence": {
+      "local_module_count": 43,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyTateInertiaUnipotent": {
+      "local_module_count": 317,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyTateInertiaCharacters": {
+      "local_module_count": 333,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyConditionalCofixedExclusion": {
+      "local_module_count": 336,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/NumberTheory/EllipticNodalUnipotence.lean": true,
+    "DkMath/FLT/FreyTateInertiaUnipotent.lean": true,
+    "DkMath/FLT/FreyTateInertiaCharacters.lean": true,
+    "DkMath/FLT/FreyConditionalCofixedExclusion.lean": true,
+    "DkMathTest/FLT/FreyConditionalCofixedExclusion.lean": true,
+    "DkMathTest/FLT/Note032FreyTateUnipotenceDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateUnipotenceSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 4,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/NumberTheory/EllipticNodalUnipotence.lean": "9f9b2d657de7cff9eef9c279c44b5b3227e2391cc48e459302a9bfd61961eac0",
+    "DkMath/FLT/FreyTateInertiaUnipotent.lean": "58279e244a8325af8aa032877061b144b1ad256941c56c508d0d07697099295d",
+    "DkMath/FLT/FreyTateInertiaCharacters.lean": "7c8d14a8494aeaaa91ee48ca7160cd07d91ccddb058ee97c22691f82225d501e",
+    "DkMath/FLT/FreyConditionalCofixedExclusion.lean": "fcecac97add264dd15247643e8b95ec41124ee5d05d7c1c5776a84d10748c22a",
+    "DkMathTest/FLT/FreyConditionalCofixedExclusion.lean": "278856d0b11d0081f4968e8badf5f9219e62d7da5bf4d7e9007c6fdf43b1ad33",
+    "DkMathTest/FLT/Note032FreyTateUnipotenceDependencyAudit.lean": "5359369a5f8c10394e96634d6c834ba3e08c5c62a23a102819a2f5fd05df63e3",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateUnipotenceSmoke.lean": "38e99cf67951b6df1f7059d9187b020da2449ae4f27ad6b6b25fd889ce2c5901"
+  },
+  "boundary": "Comment-aware local source/import audit only. Actual nodal inertia difference is smooth; actual valuation-unit smooth torsion is inertia-fixed; derive finite product-zero/square-zero and SAME full Tate square-zero without conditional tower inputs. SAME adapted full matrix and integral-domain Z_p give second character=1 on bad q!=p inertia. Prior SAME resonant nontrivial witness closes Cofixed exclusion with retained hclass and uniform narrow hbad; exact hno interface with explicit all-line hbadAll is proved. With hclass and Cofixed but NO hbad input, derive a narrow absorption failure stage and actual point within its antecedent. No unconditional arithmetic supply of hclass/hbadAll, no general unconditional hno, no external classification imports."
+}

@@ -1,0 +1,17 @@
+import DkMath
+
+#print "file: docs.dev.FLT-GN-regular-261018-v0.evidence.Note032FreyTateUnipotenceSmoke"
+
+#check DkMath.Lib.NumberTheory.EllipticNodalUnipotence.inertia_difference_product_zero
+#check DkMath.Lib.NumberTheory.EllipticNodalUnipotence.inertia_difference_square_zero
+#check DkMath.FLT.Frey.Source.prime_power_inertia_difference_square_zero
+#check DkMath.FLT.Frey.Source.tate_inertia_difference_square_zero
+#check DkMath.FLT.Frey.Source.residualTateActionMatrix_inertia_square_zero
+#check DkMath.FLT.Frey.Source.residualTateSecondCharacter_inertia_eq_one
+#check DkMath.FLT.Frey.Source.residualFinite_inertia_absorbs_at_bad
+#check DkMath.FLT.Frey.Source.residual_not_cofixed_of_class_vanishing_and_resonant_absorption
+#check DkMath.FLT.Frey.Source.residual_exists_narrow_absorption_failure
+#check DkMath.FLT.Frey.Source.residual_exists_narrow_absorption_counterexample
+#check DkMath.FLT.Frey.Source.residual_hno_of_class_vanishing_and_resonant_absorption
+
+#print axioms DkMath.FLT.Frey.Source.residual_hno_of_class_vanishing_and_resonant_absorption
