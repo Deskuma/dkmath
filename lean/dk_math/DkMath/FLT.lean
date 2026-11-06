@@ -110,6 +110,10 @@ import DkMath.FLT.FreyTateCharacters
 import DkMath.FLT.FreyTateCharactersModP
 import DkMath.FLT.FreyTateCyclotomicDeterminant
 import DkMath.FLT.FreyTateFrobenius
+import DkMath.FLT.FreyTateFiniteQuotient
+import DkMath.FLT.FreyTateInertiaQuotient
+import DkMath.FLT.FreyTateGoodReductionCharacter
+import DkMath.FLT.FreyTateResonantWitness
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile
