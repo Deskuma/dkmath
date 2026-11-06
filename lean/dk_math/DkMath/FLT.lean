@@ -100,6 +100,7 @@ import DkMath.FLT.FreyCyclotomicUnitSplit
 import DkMath.FLT.FreyCyclotomicTowerStep
 import DkMath.FLT.FreyCyclotomicConditionalTower
 import DkMath.FLT.FreyCyclicTowerCharacter
+import DkMath.FLT.FreyPadicTowerCharacter
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile

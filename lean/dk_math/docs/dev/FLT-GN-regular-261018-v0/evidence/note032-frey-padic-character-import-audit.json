@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-06",
+  "new_modules": [
+    "DkMath.Lib.Algebra.PadicCharacterLimit",
+    "DkMath.FLT.FreyPadicTowerCharacter"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.Algebra.PadicCharacterLimit": {
+      "local_module_count": 1,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyPadicTowerCharacter": {
+      "local_module_count": 309,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/Algebra/PadicCharacterLimit.lean": true,
+    "DkMath/FLT/FreyPadicTowerCharacter.lean": true,
+    "DkMathTest/FLT/FreyPadicTowerCharacter.lean": true,
+    "DkMathTest/FLT/Note032FreyPadicTowerCharacterDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyPadicCharacterSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 2,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/Algebra/PadicCharacterLimit.lean": "86ffded90e93fcc6d59c4b1c6bf7f6030a26c1f3b4ff42958ada29ba0620286e",
+    "DkMath/FLT/FreyPadicTowerCharacter.lean": "d8679bbd58e67258ee52567994b839e34cd89e197e61f689cb042c5a9b2069d2",
+    "DkMathTest/FLT/FreyPadicTowerCharacter.lean": "474ec18c7a28d0a8ddf5549127397813fe31fd7a6316965f9bf4989d1372ba9e",
+    "DkMathTest/FLT/Note032FreyPadicTowerCharacterDependencyAudit.lean": "93a35b78b1e34b6861125853f378a4f99f1419112d1382bdd992f06d6a532642",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyPadicCharacterSmoke.lean": "583043dbd39dc3a4c9098e6ce9e1159cd5e480576d1e2688baae7dfa96e3216c"
+  },
+  "boundary": "Comment-aware local source/import audit only. Actual integer Cauchy limits construct unit-valued p-adic character, exact finite residues, uniqueness and continuity from finite open kernels. SAME Frey tower supplies finite characters/compatibility/open kernels; retained SAME hclass and uniform all-stage hbad. Good reduction gives finite-stage and limit Frobenius NONTRIVIALITY, not contradiction, triviality, or general hno closure. No Tate submodule or isogeny classification constructed/imported. Recursive Lean type/constructor/proof and public input audits are separate."
+}
