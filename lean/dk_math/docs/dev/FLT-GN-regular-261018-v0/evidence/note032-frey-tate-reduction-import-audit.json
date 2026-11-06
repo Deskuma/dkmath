@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-06",
+  "new_modules": [
+    "DkMath.Lib.Algebra.PrimePowerTateReduction",
+    "DkMath.Lib.NumberTheory.EllipticTateReduction",
+    "DkMath.FLT.FreyCyclicTateReduction"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.Algebra.PrimePowerTateReduction": {
+      "local_module_count": 4,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.EllipticTateReduction": {
+      "local_module_count": 27,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclicTateReduction": {
+      "local_module_count": 318,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/Algebra/PrimePowerTateReduction.lean": true,
+    "DkMath/Lib/NumberTheory/EllipticTateReduction.lean": true,
+    "DkMath/FLT/FreyCyclicTateReduction.lean": true,
+    "DkMathTest/FLT/FreyCyclicTateReduction.lean": true,
+    "DkMathTest/FLT/Note032FreyCyclicTateReductionDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateReductionSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 3,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/Algebra/PrimePowerTateReduction.lean": "bb92fa61d89a2fc7166fb22adf1225bd1eeb8058e2654b1fe9129318bf515d01",
+    "DkMath/Lib/NumberTheory/EllipticTateReduction.lean": "7e357149548098f97198e441f7b530dd55c5ab3c155a91d5e9281f8f590f4eee",
+    "DkMath/FLT/FreyCyclicTateReduction.lean": "077cf63e9ab356b8cc121d4656d6c8866c6fe5834f8c61eaa43211b3e5c81c0f",
+    "DkMathTest/FLT/FreyCyclicTateReduction.lean": "acb8b42a3e7e54be99dddb83288d0a88be985ef6eac1a539f2d0e247cf4ae338",
+    "DkMathTest/FLT/Note032FreyCyclicTateReductionDependencyAudit.lean": "89790516bcc8c5c4b78305e7f5be2d46f2e764d052297aa1772b7f3edc706066",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateReductionSmoke.lean": "a2e13d021c8cdb6dc1369074c25508ef5ed24c3abcc8c3f6acaf1348555a4365"
+  },
+  "boundary": "Comment-aware local source/import audit only. Actual shift proves kernel reduction=p image and p injectivity. Actual elliptic multiplication surjectivity supplies compatible lifts: STANDARD Tate/p Tate is LINEARLY same E[p], mod-p quotient rank two. SAME Frey line is p-saturated; SAME U divisibility supplies lifts; line/p line identifies LINEARLY with SAME residual L of rank one, preserving geometric reduction point. Full ambient Tate rank two/basis extension/completeness not proved. SAME hclass/uniform-stage hbad retained for line. General hno unfinished. Recursive and input audits separate."
+}

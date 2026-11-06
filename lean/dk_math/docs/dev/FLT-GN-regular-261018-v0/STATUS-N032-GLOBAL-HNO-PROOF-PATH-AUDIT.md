@@ -1000,3 +1000,40 @@ hclass・全段 hbad・最終矛盾の作用算術は未完成であり、**一�
 全 Tate 加群の階数2・原始元の基底への拡張・Weil pairing・Frobenius 特性多項式は未完成。
 点列群の位相や作用の連続性も今回追加していない。
 hclass・全段 hbad・最終矛盾の作用算術も未完成であり、**一般 hno は引き続き未完成。**
+
+
+## 2026-11-06: 3ステップ — 第0評価の完全性・全 Tate 商 mod p・同じ直線の還元
+
+1. `PrimePowerTateReduction` を実装した。
+   第0評価 Tate p G→G[p] の核は、同じ Tate 点列内の p 倍像と証明した。
+   第0成分が零なら一段シフトが実際の p 倍逆像となり、p 倍写像自体は単射でもある。
+   G の p 倍全射性がある場合には、直前の点の逆像を依存再帰で選び、
+   第0評価の全射性と Tate p G/p(Tate p G)≃+G[p] を構成した。
+   汎用加法群論では p の素数性は不要で、全射性の hdiv は明示保持する。
+2. `EllipticTateReduction` を実装した。
+   同じ標数0楕円曲線の実際の multiplication_surjective から hdiv を内部供給した。
+   標準 Tate 商 mod p は、同じ実際の E[p] と ZMod p 線形同型となる。
+   商の実際の濃度 p²・次元2を既存の有限捩れ次元から導いた。
+   第0評価は元の同じ Galois 点作用と可換する。
+3. `FreyCyclicTateReduction` を実装した。
+   同じ直線 C について p•x∈C↔x∈C を、隣接段と低位捩れ判定から証明した。
+   第0評価を元の同じ L へ制限し、同じ U の既存可除性と互換逆像列から全射性を導いた。
+   第0成分が零の全 Tate 逆像は p 飽和性で C 内へ戻り、C 自身でも核=p 倍像となる。
+   標準商 C/pC≃ₗ[ZMod p]L と実際の次元1、全加群の還元との同じ点の図式を証明した。
+
+- 全 Frey Tate 商 mod p の次元2は、同じ曲線の楕円曲線性から供給し、hclass/hbad を要求しない。
+- 同じ C の構成には従来の hclass と全適格段での hbad を保持する。
+  hfree/hrank/hker/hsurj/hlift/hsat/hequiv を新しい provider にしない。
+- 有限群 ZMod 25 の5進 Tate 点列は零だが非零5捩れがあるため、
+  第0評価の全射性は自動ではないことを回帰例で確認した。
+  同じ Frey 残余点の持ち上げ、L での商同型の往復、p² 飽和性、同じ還元点も検証した。
+- 新規3 production を Lib/FLT/root、2 test を通常の DkMathTest 入口へ公開した。
+  教科書 `TEXTBOOK-N032-FREY-TATE-REDUCTION-261106.md` の3ブロックは全文一致し、
+  import 直後の正確な `#print "file: …"` を保持する。
+- 主要15宣言の公理・再帰依存監査、12件の公開入力監査を追加した。
+  詳細は `evidence/validation-note032-frey-tate-reduction.txt`。
+
+**今回の3ステップは、評価の完全性・実際の全 Tate 商 mod p・同じ直線の還元として完成。**
+次元2の定理は mod p 商に対するものであり、全 Tate 加群の自由階数2や基底拡張ではない。
+完備性・Nakayama から自由性を導く議論、全加群の基底・高位 Weil pairing・Frobenius 特性多項式は未完成。
+hclass・全段 hbad・最終矛盾の作用算術も未完成であり、**一般 hno は引き続き未完成。**
