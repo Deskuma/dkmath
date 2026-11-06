@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-06",
+  "new_modules": [
+    "DkMath.Lib.RepresentationTheory.TriangularTwoCharacter",
+    "DkMath.FLT.FreyTateCharacters",
+    "DkMath.FLT.FreyTateCharactersModP"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.RepresentationTheory.TriangularTwoCharacter": {
+      "local_module_count": 2,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyTateCharacters": {
+      "local_module_count": 323,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyTateCharactersModP": {
+      "local_module_count": 324,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/RepresentationTheory/TriangularTwoCharacter.lean": true,
+    "DkMath/FLT/FreyTateCharacters.lean": true,
+    "DkMath/FLT/FreyTateCharactersModP.lean": true,
+    "DkMathTest/FLT/FreyTateCharacters.lean": true,
+    "DkMathTest/FLT/Note032FreyTateCharactersDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateCharactersSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 3,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/RepresentationTheory/TriangularTwoCharacter.lean": "4231f611193c8181455ad2bb3c979b1601b94041249628da824aa7a251ed372d",
+    "DkMath/FLT/FreyTateCharacters.lean": "97547e976a638194efe065fdf4292160b3601cf1ce54d05b6c28bbdce8f0612a",
+    "DkMath/FLT/FreyTateCharactersModP.lean": "77965873aba11d7bfb8a722f7e15a2588871dee222ebca8d69696ee8fd92f3a2",
+    "DkMathTest/FLT/FreyTateCharacters.lean": "462ed0d53b229431d5df46f0e02ff339787351f9f2a98bba3e3f483e8040a56c",
+    "DkMathTest/FLT/Note032FreyTateCharactersDependencyAudit.lean": "3f4b499a64fa7212606ddb7b1bee0b96fb0ee8cd3a303dd8b624d07a579ba7e7",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateCharactersSmoke.lean": "4c1f699f41821fef685e007bfcb960055363845357c6497d6072c3430da9b0f7"
+  },
+  "boundary": "Comment-aware local source/import audit only. Actual triangular matrix group hom constructs two unit characters, off-diagonal multiplication law and determinant product. SAME Frey second character is continuous via actual full-torsion open kernels. SAME residual Cofixed condition, SAME line evaluation lift and actual p-shift prove SECOND CHARACTER MOD p=1; determinant MOD p equals original cyclotomic character. No higher triviality, Galois splitting, high-level Weil/determinant identification or final contradiction claimed. SAME hclass/uniform ALL-stage hbad retained. General hno unfinished. Recursive/input audits separate."
+}

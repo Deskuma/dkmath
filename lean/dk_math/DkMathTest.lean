@@ -84,6 +84,8 @@ import DkMathTest.FLT.FreyCyclicTateReduction
 import DkMathTest.FLT.Note032FreyCyclicTateReductionDependencyAudit
 import DkMathTest.FLT.FreyTateBasis
 import DkMathTest.FLT.Note032FreyTateBasisDependencyAudit
+import DkMathTest.FLT.FreyTateCharacters
+import DkMathTest.FLT.Note032FreyTateCharactersDependencyAudit
 import DkMathTest.FLT.Note032FreyCyclotomicConditionalTowerDependencyAudit
 import DkMathTest.FLT.Note032CyclotomicUnitClosureDependencyAudit
 import DkMathTest.FLT.Note032NumberFieldUnitTraceDependencyAudit

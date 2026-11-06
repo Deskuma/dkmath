@@ -422,6 +422,7 @@ import DkMath.Lib.RepresentationTheory.AbsorbingSubspace
 import DkMath.Lib.RepresentationTheory.AlternatingDeterminant
 import DkMath.Lib.RepresentationTheory.CofixedBranchSwap
 import DkMath.Lib.RepresentationTheory.CofixedDeterminant
+import DkMath.Lib.RepresentationTheory.TriangularTwoCharacter
 import DkMath.Lib.RepresentationTheory.CofixedImage
 import DkMath.Lib.RepresentationTheory.ConjugateLocalConditions
 import DkMath.Lib.RepresentationTheory.ConjugateSquare
