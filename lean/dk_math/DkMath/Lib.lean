@@ -112,6 +112,7 @@ import DkMath.Lib.NumberTheory.CyclotomicRamifiedPhase
 import DkMath.Lib.NumberTheory.CyclotomicRootModule
 import DkMath.Lib.NumberTheory.CyclotomicInertia
 import DkMath.Lib.NumberTheory.CyclotomicFrobenius
+import DkMath.Lib.NumberTheory.CyclotomicFrobeniusAll
 import DkMath.Lib.NumberTheory.CyclotomicKernelField
 import DkMath.Lib.NumberTheory.CyclotomicCharacterField
 import DkMath.Lib.NumberTheory.CyclicKummer
@@ -425,6 +426,7 @@ import DkMath.Lib.RepresentationTheory.AlternatingDeterminantRing
 import DkMath.Lib.RepresentationTheory.CofixedBranchSwap
 import DkMath.Lib.RepresentationTheory.CofixedDeterminant
 import DkMath.Lib.RepresentationTheory.TriangularTwoCharacter
+import DkMath.Lib.RepresentationTheory.TriangularTwoCharacteristic
 import DkMath.Lib.RepresentationTheory.CofixedImage
 import DkMath.Lib.RepresentationTheory.ConjugateLocalConditions
 import DkMath.Lib.RepresentationTheory.ConjugateSquare
