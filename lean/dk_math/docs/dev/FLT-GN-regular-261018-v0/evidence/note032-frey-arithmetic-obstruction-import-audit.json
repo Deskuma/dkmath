@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-07",
+  "new_modules": [
+    "DkMath.FLT.FreySmoothStageAbsorption",
+    "DkMath.FLT.FreyNarrowFailureGeometry",
+    "DkMath.FLT.FreyCofixedArithmeticObstruction",
+    "DkMath.FLT.FreyCandidateCofixedExclusion"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.FLT.FreySmoothStageAbsorption": {
+      "local_module_count": 312,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyNarrowFailureGeometry": {
+      "local_module_count": 313,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCofixedArithmeticObstruction": {
+      "local_module_count": 339,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCandidateCofixedExclusion": {
+      "local_module_count": 340,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/FLT/FreySmoothStageAbsorption.lean": true,
+    "DkMath/FLT/FreyNarrowFailureGeometry.lean": true,
+    "DkMath/FLT/FreyCofixedArithmeticObstruction.lean": true,
+    "DkMath/FLT/FreyCandidateCofixedExclusion.lean": true,
+    "DkMathTest/FLT/FreyCandidateCofixedExclusion.lean": true,
+    "DkMathTest/FLT/Note032FreyArithmeticObstructionDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyArithmeticObstructionSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 4,
+  "new_lean_file_sha256": {
+    "DkMath/FLT/FreySmoothStageAbsorption.lean": "8a7e80e8fb8b0be4374613dee66c3658d81d8f3fbf2896d6ecb8f95fc9a2425a",
+    "DkMath/FLT/FreyNarrowFailureGeometry.lean": "c3bfc113dcce7b6a47bd3ba491a4627a0fe60b9a3b303860452ac05aa44ee68d",
+    "DkMath/FLT/FreyCofixedArithmeticObstruction.lean": "87b4c8f0d21c3dc603b761ecc9bb10d9aed4ce9f8b0e31f8d89c8afb36923a4d",
+    "DkMath/FLT/FreyCandidateCofixedExclusion.lean": "b5fca14eac7caf5b4a27915e4109887c477a3caa78c7257213da4d0767be0be1",
+    "DkMathTest/FLT/FreyCandidateCofixedExclusion.lean": "22e8cdc663bd077c5a6743ab7d55462de9664b43b04c74fac4556f89d3981cb2",
+    "DkMathTest/FLT/Note032FreyArithmeticObstructionDependencyAudit.lean": "de5043ea241db42a8404ee388feabe658fb9538dffa8371b3992ba7e495945f0",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyArithmeticObstructionSmoke.lean": "5f2f9c141b81e08e598efed14608eca53a18467845824835fc8482e94bdfa16c"
+  },
+  "boundary": "Comment-aware local source/import audit only. SAME smooth cyclic stage equals SAME smooth torsion filtration and absorbs p-preimage inertia differences. Given actual narrow failure, derive p-power annihilation bounds, actual smooth inertia-fixed nonzero difference, p*difference in SAME stage, and nonsmooth SAME coordinate generator with actual critical-centre depth. hclass+Cofixed gives actual obstruction certificate without hbad or placement input. Conditional hno weakened to Cofixed candidates; optional hplacement criterion remains explicit UNPROVED arithmetic input. Domains of narrow and high absorption are generally incomparable. No supply of hclass/candidate absorption/placement or unconditional hno claimed."
+}

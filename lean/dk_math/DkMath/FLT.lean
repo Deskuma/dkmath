@@ -117,6 +117,10 @@ import DkMath.FLT.FreyTateResonantWitness
 import DkMath.FLT.FreyTateInertiaUnipotent
 import DkMath.FLT.FreyTateInertiaCharacters
 import DkMath.FLT.FreyConditionalCofixedExclusion
+import DkMath.FLT.FreySmoothStageAbsorption
+import DkMath.FLT.FreyNarrowFailureGeometry
+import DkMath.FLT.FreyCofixedArithmeticObstruction
+import DkMath.FLT.FreyCandidateCofixedExclusion
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile

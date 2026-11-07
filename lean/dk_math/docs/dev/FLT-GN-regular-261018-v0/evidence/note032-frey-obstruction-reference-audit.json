@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-07",
+  "external_checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "external_head": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files_sha256": {
+    "P2M/Sol/S_FreyPackage_frey_no_cofixed_large.lean": "16750fcba1f02ba21bcbfa5999103c03be4f85c2359913c51c0b83cef66d2413",
+    "Theorems/Thm_AddSubgroup_inZeroComponentAt_of_cyclic_stable_scalar_dichotomy.lean": "6e734aa398acf59524778160dac868657b3beffc83b8e36c96ead668b45fc991"
+  },
+  "reference_scope": "Read htoric and scalar-dichotomy part at lines867-917, preimage absorption at1110-1158, and public scalar-dichotomy statement. Implement DkMath smooth-placement-to-absorption criterion with actual existing nodal torsion bound and smooth torsion inertia fixedness. Do not port global htoric, m3c_escape or Step Three, or assert resonant smooth placement. No external source copied/imported into production."
+}
