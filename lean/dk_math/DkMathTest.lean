@@ -108,6 +108,8 @@ import DkMathTest.FLT.FreyTameResonance
 import DkMathTest.FLT.Note032FreyTameResonanceDependencyAudit
 import DkMathTest.FLT.FreyFixedCoefficientH1
 import DkMathTest.FLT.Note032FreyFixedH1DependencyAudit
+import DkMathTest.FLT.FreyConnectingPrimeOrder
+import DkMathTest.FLT.Note032FreyConnectingDependencyAudit
 import DkMathTest.FLT.Note032FreyCyclotomicConditionalTowerDependencyAudit
 import DkMathTest.FLT.Note032CyclotomicUnitClosureDependencyAudit
 import DkMathTest.FLT.Note032NumberFieldUnitTraceDependencyAudit

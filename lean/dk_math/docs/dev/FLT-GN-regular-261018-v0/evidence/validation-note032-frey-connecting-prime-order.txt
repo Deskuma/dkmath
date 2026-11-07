@@ -1,0 +1,127 @@
+NOTE-032 FIVE STEPS: actual H1 inflation, SAME short exact sequence, invariant coset obstruction, actual connecting image, EXACT prime order
+Date: 2026-11-08
+Working directory: lean/dk_math
+
+Successful final validations (listed Lean/Lake commands exited 0):
+1. lake build DkMath.FLT.FreyFixedH1PrimeOrder
+   Focused implementation build passed (4444 jobs).
+2. lake build DkMath DkMathTest.FLT.FreyConnectingPrimeOrder DkMathTest.FLT.Note032FreyConnectingDependencyAudit
+   Build completed successfully (11182 jobs).
+3. lake test
+   Normal repository test driver passed; reached 12347/12347 jobs.
+4. lake env lean DkMathTest.lean
+   Rechecked after suite dependencies built; passed, only existing marker printed.
+5. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyConnectingSmoke.lean
+   Root exposes all twenty new production declarations; final endpoint standard axioms only.
+6. FIVE full textbook blocks extracted to /tmp/n032-connecting-book-{1,2,3,4,5}.lean.
+   lake env lean run on each separately; all passed without warnings.
+   Exact full production source and exact markers immediately after imports retained.
+7. python3 /tmp/n032-connecting-import-audit.py
+   Comment-aware local imports acyclic; EIGHT exact markers, FIVE full source copies,
+   FLT/root/test reachability, forbidden-construct scans and source SHA256 passed.
+   Closure sizes including self: actual inflation359, coefficient sequence360,
+   invariant coset361, connecting362, exact-prime-order363.
+   All five new production modules are Frey-specific; no new Lib module this cycle.
+   No FreyHnoSmallIndex/RegularPrime/HardCase consumers in their import closures.
+8. git diff --check and direct trailing-whitespace checks on new files passed.
+9. Local model answer HEAD 115356cbc627159d0d16add0da6e9a2bb3655ed8.
+   Read inflation-image representative proof and delta-cochain coboundary/invariant-lift
+   equivalences. Actual Mathlib ordinary delta0 API is used, without external custom
+   cochain/continuous theorem providers. No P2M/P2MW imports.
+   Reference and Mathlib source SHA256 saved in note032-frey-connecting-reference-audit.json.
+
+Implemented content:
+Step 1. SAME actual quotient I->J and SAME F give explicit restricted-coefficient morphism
+        and actual groupCohomology.map inflation. Actual degree1 naturality proves
+        inflation(SAME alpha_J)=SAME alpha_I, beyond representative-value comparison.
+Step 2. SAME F=Q^I is read as integer submodule of SAME actual Q inertia representation.
+        Actual quotient Rep Q/F, SAME inclusion and projection give actual ShortComplex.
+        SAME inclusion injective, projection surjective, image=kernel give ShortExact.
+        No short-exactness provider. Stored module structure of arbitrary Rep objects is
+        used locally in proof of exactness; no new module assumption or global instance.
+Step 3. SAME original point class u=[x] gives invariant ubar=u+F in SAME Q/F.
+        Actual product-zero fixed-difference membership supplies invariance internally.
+        SAME obstruction nonzero character value proves ubar!=0. Any INVARIANT Q lift
+        would lie in SAME F, hence project to0: no invariant lift exists. Plain lift u
+        DOES exist; no claim that all lifts are absent.
+Step 4. Actual Mathlib groupCohomology.delta for SAME ShortExact sequence, degree0->1.
+        SAME ubar gives H0 element via H0Iso. Actual delta0_apply uses SAME lift u and
+        SAME fixed-coefficient cocycle with inclusion=coboundary d01(u).
+        Prove delta(ubar)=SAME original alpha_I with Mathlib sign convention.
+Step 5. Original SAME preimage p*y in T and Galois stability imply for EVERY inertia sigma:
+        p*(sigma*y-y)=sigma*(p*y)-p*y in T. Thus ALL SAME Q difference values and SAME
+        F-valued character values are killed by p. After tame descent ALL values still
+        killed by p. Cocycle as a whole killed by p, hence BOTH ordinary H1 classes killed
+        by p. Combine SAME prior nonzero classes and prime p: EXACT additive order p.
+        Not inferred merely from one exact-order-p value.
+        SAME exact hclass+Cofixed candidate supplies original n,T,q,A,tau,y,h, both exact
+        orders, actual inflation equality, actual connecting equality, invariant-lift
+        obstruction and actual coefficient-map image zero together. No new exactness,
+        connecting/inflation/order/all-values-killed/placement providers.
+
+Regression and audit scope:
+- ZMod5 identity character: ALL values killed by5, then actual ordinary H1 class has
+  EXACT additive order5 using actual class nonzero.
+- ZMod25 identity character: SAME value at5 has exact order5, but class is NOT killed
+  by5 (detected by actual H1 trivial-coefficient isomorphism evaluation at1).
+  This checks the logical gap that ALL-value zeroing closes in actual Frey proof.
+- #print axioms for all20 new declarations: standard propext/Classical.choice/Quot.sound,
+  no sorryAx. Checked type/constructor/opaque-value recursive audits require actual
+  H1 naturality, original sequence inclusion/projection, actual ShortExact/delta0,
+  original nontrivial witness, SAME preimage/stability, ALL-value zeroing and prior
+  nonzero classes. No forbidden FLT consumers/nonstandard axioms.
+- Seventeen public-input audits keep only original final hclass/Cofixed arithmetic;
+  no new shortExact/delta/order/killed/inflation/continuity provider.
+
+Boundaries:
+- Exactly five pre-existing unrelated sorry warnings in root/suite, no new warning.
+  No repository-wide sorry-free claim.
+- H0/H1 here are ORDINARY group cohomology. No continuous H1 comparison/nonzero claim.
+- Nonzero connecting image with zero coefficient-map image is consistent exact-sequence
+  behavior, NOT arithmetic contradiction. Exact order p of a class is NOT a claim that
+  whole character IMAGE has cardinal p.
+- No general inflation injectivity theorem added; SAME actual class image is proved.
+- No cyclotomic ClassModP identification, arithmetic conjugacy invariance/branch exclusion,
+  hclass supply or unconditional general hno proof completed.
+- UNCONDITIONAL GENERAL hno REMAINS INCOMPLETE.
+
+Twenty checked roots and required dependencies:
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedInflationCoefficient; 25198 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedH1Inflation; 29657 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedTameClass_inflation; 39130 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCoefficientSubmodule; 24789 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCoefficient_stable; 24792 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedQuotientCoefficient; 24801 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCoefficientProjection; 24861 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCoefficientSequence; 24985 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCoefficientSequence_shortExact; 28848 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCosetInvariant; 34628 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedCoset_ne_zero; 34866 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.no_invariant_lift; 34867 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedConnecting; 31474 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCosetH0; 39719 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCoset_connecting; 41518 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_character_values_killed; 34758 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_inertia_class_killed; 39197 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_tame_class_killed; 39280 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_H1_order_eq_prime; 39318 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_exists_connecting_prime_order_H1; 90182 reachable constants; required actual theorems present.
+
+Seventeen public input reports:
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedInflationCoefficient; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedH1Inflation; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCoefficient_stable; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedQuotientCoefficient; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCoefficientProjection; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCoefficientSequence; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCoefficientSequence_shortExact; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedConnecting; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedTameClass_inflation; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCosetInvariant; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCosetH0; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCoset_connecting; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedCoset_ne_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.no_invariant_lift; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_character_values_killed; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_H1_order_eq_prime; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_exists_connecting_prime_order_H1; remaining arithmetic inputs explicit.

@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-08",
+  "checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": {
+    "P2M/Sol/S_groupCohomology_mem_inflationImage_iff_exists_cocycles1_apply_eq_zero.lean": "a72c5686c9b2dd02241a93cc1be289f9a6ce74963b50c71313244adcf4d1818b",
+    "P2M/Sol/S_groupCohomology_deltaCochain0_mem_coboundaries1_iff.lean": "94ccc785d51e956ac8e25ba81f8f16f303e0170ec7bfa180da7c14377f64eadc",
+    "P2M/Sol/S_groupCohomology_comp_mem_coboundaries1_iff_exists_invariants_sub_deltaCochain0.lean": "ff1800d5432a4391b9175925a480edf6a94b9428f6f49add1fb3ccb8cd4ce225"
+  },
+  "comparison": "Read actual H1 inflation-image representative proof and cochain/coboundary invariant-lift equivalences. DkMath constructs SAME actual Rep short exact sequence and uses Mathlib ordinary delta0, retaining SAME x, coefficient F and original Q. Original p*y in T plus stability proves ALL character values killed by p; only then derive actual H1 classes of exact order p. No external custom cochain/continuous provider imports, no global class identification/supply, arithmetic contradiction or unconditional hno.",
+  "mathlib_source_sha256": {
+    "Mathlib/RepresentationTheory/Homological/GroupCohomology/LongExactSequence.lean": "42c9ad4ed8ece771a0c79fb892332d586768989852ec651852c5a2325afbb2ff",
+    "Mathlib/RepresentationTheory/Homological/GroupCohomology/Functoriality.lean": "a11cd4eb2fd7a0ade8db338d7a715fc6c428c20fb9321a50352a520253fac260"
+  }
+}

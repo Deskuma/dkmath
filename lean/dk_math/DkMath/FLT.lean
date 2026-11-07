@@ -135,6 +135,11 @@ import DkMath.FLT.FreyTameResonance
 import DkMath.FLT.FreyFixedTameCharacter
 import DkMath.FLT.FreyFixedInertiaH1
 import DkMath.FLT.FreyInertiaH1CoefficientBoundary
+import DkMath.FLT.FreyFixedH1Inflation
+import DkMath.FLT.FreyFixedCoefficientSequence
+import DkMath.FLT.FreyInvariantCosetObstruction
+import DkMath.FLT.FreyFixedH1Connecting
+import DkMath.FLT.FreyFixedH1PrimeOrder
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile

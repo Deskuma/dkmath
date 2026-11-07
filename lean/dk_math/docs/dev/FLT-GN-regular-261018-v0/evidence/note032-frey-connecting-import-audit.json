@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-08",
+  "new_modules": [
+    "DkMath.FLT.FreyFixedH1Inflation",
+    "DkMath.FLT.FreyFixedCoefficientSequence",
+    "DkMath.FLT.FreyInvariantCosetObstruction",
+    "DkMath.FLT.FreyFixedH1Connecting",
+    "DkMath.FLT.FreyFixedH1PrimeOrder"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.FLT.FreyFixedH1Inflation": {
+      "local_module_count": 359,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyFixedCoefficientSequence": {
+      "local_module_count": 360,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyInvariantCosetObstruction": {
+      "local_module_count": 361,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyFixedH1Connecting": {
+      "local_module_count": 362,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyFixedH1PrimeOrder": {
+      "local_module_count": 363,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/FLT/FreyFixedH1Inflation.lean": true,
+    "DkMath/FLT/FreyFixedCoefficientSequence.lean": true,
+    "DkMath/FLT/FreyInvariantCosetObstruction.lean": true,
+    "DkMath/FLT/FreyFixedH1Connecting.lean": true,
+    "DkMath/FLT/FreyFixedH1PrimeOrder.lean": true,
+    "DkMathTest/FLT/FreyConnectingPrimeOrder.lean": true,
+    "DkMathTest/FLT/Note032FreyConnectingDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyConnectingSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 5,
+  "new_lean_file_sha256": {
+    "DkMath/FLT/FreyFixedH1Inflation.lean": "9d10d4670e45a14f795433ea3c90e6a9ae884f518ae383170c49f24b731b05c8",
+    "DkMath/FLT/FreyFixedCoefficientSequence.lean": "e7864f4dbbbf27c7924f4bea8613c87dfd3851fbdc4bbb51c9070a8099a8f8f2",
+    "DkMath/FLT/FreyInvariantCosetObstruction.lean": "8708e0e0aba50ef41f6d344eb547a594ebfc4ce0e8451cf62dd42653dad07e34",
+    "DkMath/FLT/FreyFixedH1Connecting.lean": "1d203f508eacd231da1dd39a13dd6b89cfdf12d96af976f068eee0eab8dd3729",
+    "DkMath/FLT/FreyFixedH1PrimeOrder.lean": "de226fe2ef0b4a7bcd33dda9d9c68d29f4ce197793cd9707dc895d3dae603ec8",
+    "DkMathTest/FLT/FreyConnectingPrimeOrder.lean": "873cf657bd5dc6d019daa5d56cee50a7ec66561b70863243a0de543250306f38",
+    "DkMathTest/FLT/Note032FreyConnectingDependencyAudit.lean": "9adab11bc8241208a5cd7a00e67cb77cc9164604bb0ba9dc68e25422852c8b9a",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyConnectingSmoke.lean": "662d19c471b4584c780d4656e73238f1a4791e0fc611403370f34d850fdc9791"
+  },
+  "boundary": "FIVE production modules. SAME actual H1 inflation maps SAME tame class to SAME inertia class. SAME F,Q,Q/F Rep short exact sequence supplies Mathlib ordinary delta0; SAME invariant coset image is SAME original fixed-coefficient class. SAME obstruction has nonzero invariant coset with no INVARIANT Q lift. Original p*y in T and Galois stability prove ALL character values killed by p; BOTH ordinary H1 classes therefore have EXACT additive order p. SAME hclass+Cofixed witness retained, no new short-exact/connecting/order/killed provider. No class-group identification, continuous H1 comparison, arithmetic contradiction, hclass supply or unconditional hno."
+}
