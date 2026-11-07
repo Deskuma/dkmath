@@ -121,6 +121,9 @@ import DkMath.FLT.FreySmoothStageAbsorption
 import DkMath.FLT.FreyNarrowFailureGeometry
 import DkMath.FLT.FreyCofixedArithmeticObstruction
 import DkMath.FLT.FreyCandidateCofixedExclusion
+import DkMath.FLT.FreyStageLocalComponent
+import DkMath.FLT.FreyStageUpperQuotient
+import DkMath.FLT.FreyIntersectionQuotientObstruction
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile

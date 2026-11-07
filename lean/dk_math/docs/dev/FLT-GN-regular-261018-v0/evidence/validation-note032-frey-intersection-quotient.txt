@@ -1,0 +1,127 @@
+NOTE-032 FOUR STEPS: SAME intersection, local image and exact order-p inertia-fixed finite quotient class
+Date: 2026-11-07
+Working directory: lean/dk_math
+
+Performed validations; listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyIntersectionQuotientObstruction DkMathTest.FLT.Note032FreyIntersectionQuotientDependencyAudit
+   Build completed successfully (11157 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12310/12310 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed; only existing file marker printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyIntersectionQuotientSmoke.lean
+   Root exposes SAME intersection/image cardinal factorization, actual Frey local
+   image and upper finite torsion quotient with actual Galois action, exact prime
+   order class and strengthened SAME obstruction endpoint.
+5. Four full textbook blocks extracted to /tmp/n032-component-book-{1,2,3,4}.lean.
+   lake env lean run on each separately; all passed without warnings.
+   Exact production source and exact file markers immediately after imports retained.
+6. python3 /tmp/n032-component-import-audit.py
+   Comment-aware local import closures, acyclicity, source scans/SHA256, seven markers,
+   four full textbook copies, Lib/FLT/root and normal test reachability passed.
+   Closure sizes including self: generic intersection1, Frey local component314,
+   upper finite quotient308, intersection-quotient obstruction343.
+   Generic Lib has no FLT imports. No FreyHnoSmallIndex/RegularPrime/HardCase consumers.
+   JSON saved alongside; new Lean source hashes checked again at evidence generation.
+7. git diff --check and direct trailing-whitespace checks on new files passed.
+8. Local model-answer comparison: external checkout HEAD and two file SHA256 saved in
+   note032-frey-component-reference-audit.json. Read htoric/hKdown uses, actual
+   local smooth torsion membership at1291-1308, and public subgroup zero-component
+   membership theorem retaining StepThree condition. No external source/proof port/import.
+
+Step 1 IMPLEMENTED:
+- Actual additive equivalence SAME K intersect H with kernel of K->G/H.
+- First isomorphism theorem and actual image equality prove
+  card(K)=card(K intersect H)*card(image(K->G/H)).
+- If card(K)=p^m with prime p, divisor classification and SAME product give exact
+  complementary exponents r<=m, card intersection=p^r, card image=p^(m-r).
+  No component-group geometry/classification provider.
+
+Step 2 IMPLEMENTED:
+- SAME actual Frey stage T, SAME valuation smooth subgroup H and SAME quotient G/H.
+- Define actual smoothIntersection and localComponentImage of original T.
+- Previous non-smooth SAME coordinate generator excludes full intersection cardinal:
+  r<=n, card intersection=p^r, card local image=p^(n+1-r)>=p.
+- This local algebraic stage result has no hclass/Cofixed/hbad input.
+  Quotient is actual point-group quotient by implemented smooth subgroup; no
+  Neron component-group identification or discriminant-order formula asserted.
+
+Step 3 IMPLEMENTED:
+- Original T retained inside SAME E[p^(n+2)] as actual subgroup upperStage.
+- Actual upperQuotient is finite, internally from actual finite elliptic torsion.
+- Original T.stable descends SAME actual torsion Galois representation to a
+  monoid hom into additive endomorphisms of SAME finite quotient. No new action
+  or stable-subgroup provider.
+- For SAME x outside T with p*x in T, SAME quotient class has EXACT addOrderOf=p.
+  Exact order is for quotient class, not for original point x.
+- SAME point fixedness descends to SAME quotient action fixedness.
+
+Step 4 IMPLEMENTED:
+- SAME previous obstruction T,q,A,tau,y,delta=tau*y-y supplies non-smooth generator,
+  p^(n+2)-annihilation, delta outside T, p*delta in T and ALL-inertia delta fixedness.
+- Obtain SAME intersection/local image complementary cardinal exponents r<=n.
+- SAME delta is zero in actual local quotient G/H because it is smooth.
+- SAME delta in E[p^(n+2)]/T has EXACT order p and is fixed by ALL actual inertia
+  elements under SAME constructed quotient Galois action.
+- Prior hclass+Cofixed obstruction existence supplies all data jointly; no new
+  hbad, placement, order, quotient-witness or cardinal-profile assumption added.
+- Zero in G/H and nonzero in E[p^(n+2)]/T are NOT a contradiction: kernels H,T differ.
+
+Regression scope:
+- Actual G=(ZMod25)^2, K=first axis, H=kernel(first coordinate mod5), SAME delta=(0,5).
+- delta is zero in G/H; SAME delta class has EXACT order5 in G/K.
+- Kernel-checked finite enumeration gives card(K)=25 and card(K intersect H)=5.
+- Actual generic cardinal product then proves card(image(K->G/H))=5.
+  This configuration is possible in generic groups; no fake numeric Fermat Source.
+
+Audit scope and retained boundaries:
+- Seventeen selected #print axioms reports: only propext, Classical.choice, Quot.sound.
+- Seventeen recursive traversals inspect checked types, constructors and opaque proofs.
+  Reject sorryAx, nonstandard axioms, P2M/P2MW/FltRegular/FreyPackage, old Kummer
+  consumers and FLT endpoints. Require actual intersection-kernel equivalence,
+  first isomorphism, SAME stage cardinal, original stable point action, exact
+  prime-order theorem, actual previous geometric obstruction and SAME witnesses.
+- Thirteen public-input audits: generic cardinal hp/hcard explicit; Frey profile
+  supplies stage cardinal internally and retains tested non-smooth generator.
+  Actual quotient action uses original T, no new hstable/hclass/hbad. Final
+  strengthened obstruction keeps original hclass/Cofixed but NO new hbad/placement/
+  witness/profile/order inputs.
+- No new sorry/admit/native_decide/unsafe/custom axioms or new-code warnings.
+  Root/suite replay historical sorry warnings in five unrelated existing modules.
+  No whole-repository axiom-clean assertion.
+- Formalized exact inertia-fixed prime-order quotient class and SAME local cardinal
+  decomposition. No arithmetic exclusion of this configuration or supply of hclass,
+  no component-group/discriminant order formula or global StepThree port.
+  General UNCONDITIONAL hno remains UNFINISHED. No Galois splitting or FLT closure.
+
+Decisive audits from successful root build:
+PASS: DkMath.Lib.Algebra.FiniteSubgroupIntersection.intersectionKerEquiv; 2095 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.FiniteSubgroupIntersection.card_intersection_mul_image; 6941 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.FiniteSubgroupIntersection.prime_power_profile; 7435 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.smoothIntersection; 26136 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.localComponentImage; 26141 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.local_component_profile; 26224 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.local_component_profile_of_not_smooth; 26529 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperStage; 24324 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperQuotient; 24325 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperQuotient_finite; 29915 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperQuotientAction; 24402 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperClass_order_eq_prime; 24398 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperClass_fixed; 24403 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.intersection_profile; 26717 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.difference_component_zero; 26576 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.finite_quotient_witness; 25259 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_exists_intersection_quotient_obstruction; 83828 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.Algebra.FiniteSubgroupIntersection.intersectionKerEquiv; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.FiniteSubgroupIntersection.card_intersection_mul_image; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.FiniteSubgroupIntersection.prime_power_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.local_component_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.local_component_profile_of_not_smooth; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperQuotient_finite; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperQuotientAction; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperClass_order_eq_prime; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperClass_fixed; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.intersection_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.difference_component_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.finite_quotient_witness; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_exists_intersection_quotient_obstruction; remaining arithmetic inputs explicit.

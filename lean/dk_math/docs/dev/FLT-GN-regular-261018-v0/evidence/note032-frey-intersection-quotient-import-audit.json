@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-07",
+  "new_modules": [
+    "DkMath.Lib.Algebra.FiniteSubgroupIntersection",
+    "DkMath.FLT.FreyStageLocalComponent",
+    "DkMath.FLT.FreyStageUpperQuotient",
+    "DkMath.FLT.FreyIntersectionQuotientObstruction"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.Algebra.FiniteSubgroupIntersection": {
+      "local_module_count": 1,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyStageLocalComponent": {
+      "local_module_count": 314,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyStageUpperQuotient": {
+      "local_module_count": 308,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyIntersectionQuotientObstruction": {
+      "local_module_count": 343,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/Algebra/FiniteSubgroupIntersection.lean": true,
+    "DkMath/FLT/FreyStageLocalComponent.lean": true,
+    "DkMath/FLT/FreyStageUpperQuotient.lean": true,
+    "DkMath/FLT/FreyIntersectionQuotientObstruction.lean": true,
+    "DkMathTest/FLT/FreyIntersectionQuotientObstruction.lean": true,
+    "DkMathTest/FLT/Note032FreyIntersectionQuotientDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyIntersectionQuotientSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 4,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/Algebra/FiniteSubgroupIntersection.lean": "f035b587fa285a50450287ec97ff6943ab4379ae00c510ab3e4db5648eb64857",
+    "DkMath/FLT/FreyStageLocalComponent.lean": "b8d29bfa679674d71a2694603652d2e56aced369e75c76d1bc438bf29c94f534",
+    "DkMath/FLT/FreyStageUpperQuotient.lean": "1b2674644a4691ff3f6c6e7944901134ffaa5f2018a3c9bd8eb2ac3e13c67288",
+    "DkMath/FLT/FreyIntersectionQuotientObstruction.lean": "0e3ca39f1b7136c70cae91185d1afc357200f67f11add84081237fca90a4f764",
+    "DkMathTest/FLT/FreyIntersectionQuotientObstruction.lean": "9ca6362f3617e67ca5f2694104ac2171942143741926c9c9b4250ef95b2897c2",
+    "DkMathTest/FLT/Note032FreyIntersectionQuotientDependencyAudit.lean": "fe92a96e09cb7f0bbdf8b495c207fd06d10ce689848ffe4fe03db503d675c3df",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyIntersectionQuotientSmoke.lean": "6f73da18013c33338afb044e79e6a9dea384ab0bf68dec00d85e1872067385a7"
+  },
+  "boundary": "Comment-aware local source/import audit only. SAME intersection kernel and actual quotient image give complementary prime-power cardinal exponents. SAME nonsmooth Frey stage generator gives intersection exponent r<=n and local quotient image cardinal>=p. SAME upper finite torsion quotient by original stage has actual Galois action; escaped delta with p*delta in stage gives exact order-p class fixed by actual inertia. SAME delta is zero in distinct local quotient by smooth subgroup. hclass+Cofixed produces strengthened SAME obstruction without new hbad/placement/order/cardinality provider. No component-group identification/discriminant order formula, arithmetic obstruction exclusion or unconditional hno."
+}
