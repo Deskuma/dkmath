@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-08",
+  "new_modules": [
+    "DkMath.FLT.FreyFixedDifferencePrimeOrder",
+    "DkMath.FLT.FreyConnectingKernelSharpProfile",
+    "DkMath.FLT.FreyConnectingKernelEvaluation",
+    "DkMath.FLT.FreyKernelEvaluationImage",
+    "DkMath.FLT.FreyKernelEvaluationCertificate"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.FLT.FreyFixedDifferencePrimeOrder": {
+      "local_module_count": 369,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyConnectingKernelSharpProfile": {
+      "local_module_count": 370,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyConnectingKernelEvaluation": {
+      "local_module_count": 371,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyKernelEvaluationImage": {
+      "local_module_count": 372,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyKernelEvaluationCertificate": {
+      "local_module_count": 373,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/FLT/FreyFixedDifferencePrimeOrder.lean": true,
+    "DkMath/FLT/FreyConnectingKernelSharpProfile.lean": true,
+    "DkMath/FLT/FreyConnectingKernelEvaluation.lean": true,
+    "DkMath/FLT/FreyKernelEvaluationImage.lean": true,
+    "DkMath/FLT/FreyKernelEvaluationCertificate.lean": true,
+    "DkMathTest/FLT/FreyKernelEvaluation.lean": true,
+    "DkMathTest/FLT/Note032FreyEvaluationDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyEvaluationSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 5,
+  "new_lean_file_sha256": {
+    "DkMath/FLT/FreyFixedDifferencePrimeOrder.lean": "31501943535a94dab0bb8a50fb5cefae883aeaa88836ec2bde2548330d9c4226",
+    "DkMath/FLT/FreyConnectingKernelSharpProfile.lean": "a548aac662173c62c7c2c046990317ad3d3e386b778d5143f9be3b14388782ef",
+    "DkMath/FLT/FreyConnectingKernelEvaluation.lean": "950c6e426b10f0fe266acd0a25eef1c599b4f7f37eaf6aaa49feab0e8d561c9a",
+    "DkMath/FLT/FreyKernelEvaluationImage.lean": "92d8e1bf59c314a1eaa84c9a74f5cfacafad4d3bee9e0b958f38f1a9fb7f06e3",
+    "DkMath/FLT/FreyKernelEvaluationCertificate.lean": "275bd03d344d6ab6139133fca6b28f06d6efb043b1bd03c82e01d49447bc07b4",
+    "DkMathTest/FLT/FreyKernelEvaluation.lean": "7779a947e91cce5c13b6fc87f20fc299db30cabed2dfb64b125fca3a98378ed7",
+    "DkMathTest/FLT/Note032FreyEvaluationDependencyAudit.lean": "6f5e18156979004442976d86e4bbbc14925003d0e55f9c373ed6879f0f93abf4",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyEvaluationSmoke.lean": "378cf37ced2c62c7c18f56b831d5f84136fa3a865e72c7ac6aa219f1b0cb6979"
+  },
+  "boundary": "FIVE Frey-specific production modules. SAME original fixed difference d has exactorderp and p divides actual F cardinal. SAME actual coefficient kernel K and F have cardinalp^s,p^r with r,s positive, r+s=n+3 and both <=n+2. Actual ordinary H1IsoOfIsTrivial gives K evaluation ev_sigma into F; all evaluations jointly separate, same k evaluates to same original c_y(sigma). SAME ev_tau range/ker cardinal product equals K cardinal; SAME evaluated image element has exactorderp. Cardinal exponents r,t,u satisfy r,t>=1, u>=0, r+t+u=n+3, u<=n+1. Original hclass/Cofixed remain in endpoint. No new provider; no single-evaluation injectivity, whole-kernel/image-card-p, continuous H1 comparison, global class supply, arithmetic contradiction or unconditional hno."
+}

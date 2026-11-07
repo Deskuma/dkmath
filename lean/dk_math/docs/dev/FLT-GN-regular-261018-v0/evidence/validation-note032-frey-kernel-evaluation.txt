@@ -1,0 +1,116 @@
+NOTE-032 FIVE STEPS: SAME fixed difference, improved cardinal bound, actual inertia evaluation and three-exponent certificate
+Date: 2026-11-08
+Working directory: lean/dk_math
+
+Successful final validations (listed Lean/Lake commands exited 0):
+1. lake build DkMath.FLT.FreyKernelEvaluationCertificate
+   Build completed successfully (4454 jobs).
+2. lake build DkMath DkMathTest.FLT.FreyKernelEvaluation DkMathTest.FLT.Note032FreyEvaluationDependencyAudit
+   Build completed successfully (11192 jobs).
+3. lake test
+   Normal repository test driver passed; reached 12361/12361 jobs.
+4. lake env lean DkMathTest.lean
+   Rechecked after suite dependencies built; passed, existing module marker printed.
+5. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyEvaluationSmoke.lean
+   Root exposes all eighteen new declarations; final endpoint standard axioms only.
+6. FIVE full textbook production blocks extracted to /tmp/n032-sharp-book-{1,2,3,4,5}.lean.
+   lake env lean run on each independently, all passed without warnings.
+   Full-source copies and exact module markers immediately after imports retained.
+7. python3 /tmp/n032-sharp-import-audit.py
+   Comment-aware local imports acyclic; EIGHT exact module markers, FIVE full copies,
+   FLT/root/test reachability, forbidden-construct scans and source SHA256 passed.
+   Local closure sizes including self: 369,370,371,372,373.
+   All five production modules are Frey-specific; no new Lib module.
+   No FreyHnoSmallIndex/RegularPrime/HardCase consumer in their import closures.
+8. git diff --check and trailing-whitespace checks on all new files passed.
+9. Re-read local model-answer invariant-lift/coboundary and connecting naturality solutions.
+   HEAD 115356cbc627159d0d16add0da6e9a2bb3655ed8.
+   Reference files and Mathlib LowDegree/Isomorphisms/Quotient.Card/Coset.Card source
+   SHA256 saved in note032-frey-kernel-evaluation-reference-audit.json.
+   No external provider, P2M or P2MW import.
+
+Implemented content:
+Step1. SAME h,y,tau supplies fixed difference d in original F. Whole-character p-killing
+       and SAME nonabsorption prove exactorder(d)=p. SAME zmultiples(d) cardinalp.
+       Lagrange proves p divides actual F cardinal; no assertion whole F cyclic/cardp.
+Step2. SAME actual coefficient kernel K and F cardinal product=p^(n+3).
+       SAME d and SAME k make both exponents positive: cardF=p^r, cardK=p^s,
+       r+s=n+3, 1<=r,s<=n+2. Review upper bound improvement implemented internally,
+       no new arithmetic assumption.
+Step3. Actual ordinary H1IsoOfIsTrivial followed by SAME kernel inclusion and evaluation
+       constructs integer-linear ev_sigma:K->F. All evaluations jointly separate K.
+       SAME k evaluates to SAME original c_y(sigma), retaining old k.val=alpha_I.
+       Evaluation definition/separation do not require local geometry/hclass/Cofixed.
+Step4. SAME ev_tau actual linear range B and kernel U; actual first isomorphism theorem
+       plus subgroup cardinal formula give cardB*cardU=cardK. SAME image element b
+       has b.val=d, exactorder(b)=p, hence p divides cardB. Single evaluation is NOT
+       asserted injective, nor whole image cardinalp.
+Step5. SAME F,B,U have cardinals p^r,p^t,p^u with r,t>=1, r+t+u=n+3,
+       r,t<=n+2, u<=n+1, and actual cardK=p^(t+u). Final original hclass+Cofixed
+       witness supplies SAME n,T,q,A,tau,y,h,k,d,b and these exact orders/values/cards.
+       No new fixedness, range, evaluation, cardinality or profile provider.
+
+Regression and audit scope:
+- Concrete ZMod5 first-coordinate evaluation is nonzero but noninjective; (0,1)
+  survives in its kernel. Both coordinates jointly separate.
+- Actual evaluation range/ker cardinals 5 and5, whole domain cardinal25, and
+  F*(domain) cardinal125. This realizes r=t=u=1 at n=0 and attains improved
+  s=n+2 and u=n+1 bounds, guarding against a false contradiction/trivial kernel.
+- SAME actual evaluated image element retains value1 and exactorder5.
+- #print axioms all18 new declarations: standard propext/Classical.choice/Quot.sound;
+  no sorryAx. Recursive checked types/constructors/opaque values require actual
+  original character p-killing/nonabsorption, actual prior cardinal formulas,
+  H1IsoOfIsTrivial, same character value recovery, first isomorphism theorem,
+  actual orderp image and original hclass+Cofixed arithmetic witness.
+- Eighteen public-input audits preserve original final hclass/Cofixed and reject
+  new injectivity/equivalence/range/order/cardinality/fixedness/evaluation/profile
+  providers. Pure evaluation/separation/cardinality theorem inputs omit geometry.
+
+Boundaries:
+- Five pre-existing unrelated sorry warnings in root/suite; no new warning.
+  No repository-wide sorry-free claim.
+- ORDINARY group cohomology only. Continuous H1 comparison, global cyclotomic class
+  identification/supply, arithmetic resonance exclusion remain unimplemented.
+- SAME K, its evaluated image B and evaluation kernel U are DISTINCT objects.
+  Nonzero K/B and positive exponent balance are consistent structure, not contradiction.
+- General UNCONDITIONAL hno REMAINS INCOMPLETE; hclass still required in endpoint.
+
+Eighteen checked roots and required dependencies:
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedDifference; 34758 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedDifference_order_eq_prime; 34774 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedDifference_cyclic_card; 34775 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.prime_dvd_fixed_card; 34799 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_positive_profile; 42596 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_kernel_balanced_profile; 42624 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_kernel_sharp_profile; 42627 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelEvaluation; 29568 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelEvaluation_separates; 29575 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelEvaluation_coset; 42088 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelEvaluation_card; 29594 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedKernelEvaluation_obstruction; 42304 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedEvaluationImageElement; 41928 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedEvaluationImageElement_val; 42311 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedEvaluationImage_order_eq_prime; 42328 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.prime_dvd_evaluation_image_card; 42429 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_evaluation_balanced_profile; 43122 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_exists_evaluated_coefficient_kernel; 90742 reachable constants; required actual theorems present.
+
+Eighteen public-input reports:
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedDifference; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedDifference_order_eq_prime; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedDifference_cyclic_card; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.prime_dvd_fixed_card; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_positive_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_kernel_balanced_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_kernel_sharp_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelEvaluation; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelEvaluation_separates; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelEvaluation_coset; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelEvaluation_card; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedKernelEvaluation_obstruction; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedEvaluationImageElement; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedEvaluationImageElement_val; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedEvaluationImage_order_eq_prime; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.prime_dvd_evaluation_image_card; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_evaluation_balanced_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_exists_evaluated_coefficient_kernel; remaining arithmetic inputs explicit.

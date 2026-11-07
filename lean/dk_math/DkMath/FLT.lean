@@ -145,6 +145,11 @@ import DkMath.FLT.FreyFixedConnectingInjective
 import DkMath.FLT.FreyFixedConnectingKernel
 import DkMath.FLT.FreyConnectingKernelPrimeOrder
 import DkMath.FLT.FreyConnectingKernelCertificate
+import DkMath.FLT.FreyFixedDifferencePrimeOrder
+import DkMath.FLT.FreyConnectingKernelSharpProfile
+import DkMath.FLT.FreyConnectingKernelEvaluation
+import DkMath.FLT.FreyKernelEvaluationImage
+import DkMath.FLT.FreyKernelEvaluationCertificate
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile

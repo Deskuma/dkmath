@@ -4,6 +4,12 @@
 
 ## 現在の証明境界
 
+最新の局所構造では、同じ固定差分 d∈F の厳密位数 p により、
+|F|=p^r と |K|=p^s の正の指数に r+s=n+3、1≤r,s≤n+2 を証明した。
+実際の慣性評価 ev_τ:K→F を構成し、同じ核元 k の値が同じ d となることを証明した。
+評価像・評価核の濃度を p^t,p^u として r+t+u=n+3、t≥1、u≤n+1 も証明済み。
+これらの濃度制約から算術的矛盾は導いていない。
+
 2026-11-08 時点で、同じ円分単元 ω² 空間の次元1と primary 単元空間の消滅は証明済み。
 新しい Frey 分裂入口は単元側の hrank/htrace/hunit/hdetect を要求せず、
 hbad・実際の hclass・同じ巡回段の全条件を保持する。一般 hno は未完成。
@@ -1642,5 +1648,33 @@ hclass・全段の狭い hbad の算術的供給、トレースと点数の同�
 
 **同じ連結準同型は単射であり、同じ不変剰余類と実際の係数核の同型、位数p巡回部分群を実装済み。**
 核全体の濃度は正の p 冪で、常に p と主張しない。非零連結像は整合した構造であり矛盾ではない。
+通常の群コホモロジーであり、連続 H¹ 比較・大域類群との同定・共鳴障害の算術的排除・hclass の供給は残る。
+**無条件の一般 hno は引き続き未完成。**
+
+
+## 2026-11-08: 5ステップ — 固定差分・上界 n+2・実際の慣性評価と上界 n+1
+
+1. `FreyFixedDifferencePrimeOrder`：同じ y,τ の固定差分 d∈F を保持し、厳密位数 p、
+   その巡回部分群の濃度 p、p∣|F| を証明した。
+2. `FreyConnectingKernelSharpProfile`：同じ |K|·|F|=p^(n+3) と両群の非零元から、
+   正の指数 r,s と r+s=n+3 を証明し、両指数の上界を n+2 に改善した。
+3. `FreyConnectingKernelEvaluation`：実際の通常 H¹ 自明係数同型により ev_σ:K→ₗ[ℤ]F を構成した。
+   全評価の分離性、および元の同じ k の値が c_y(σ) であることを証明した。
+4. `FreyKernelEvaluationImage`：同じ ev_τ の実際の像・核に第一同型定理を適用し、
+   |range ev|·|ker ev|=|K| を証明した。同じ k の像は d を値とし、像の中でも厳密位数 p。
+5. `FreyKernelEvaluationCertificate`：|F|=p^r、|range ev|=p^t、|ker ev|=p^u、
+   r+t+u=n+3、r,t≥1、u≤n+1 を内部計算した。
+   元の同じ hclass と Cofixed 候補から同じ全データ・厳密位数・評価・指数を出力した。
+
+- 模範解答の同じ連結 cochain の値と不変持ち上げの経路を再照合した。
+  実装は Mathlib の実際の H¹ 同型・同じ代表の値回収・第一同型定理を使う。
+  参照 HEAD と SHA-256 は `evidence/note032-frey-kernel-evaluation-reference-audit.json`。
+- 新規5 production と2 test を FLT/root と通常テスト入口へ公開した。
+  教科書 `TEXTBOOK-N032-FREY-KERNEL-EVALUATION-261108.md` は5 production 全文と正確な #print を保持する。
+  18宣言の再帰依存監査と18件の公開入力監査、非単射評価と改善上界達成の有限回帰検査を追加した。
+  実行結果は `evidence/validation-note032-frey-kernel-evaluation.txt`。
+
+一つの慣性評価の単射性、評価核の零性、F や K や評価像の濃度が常に p とは主張しない。
+**同じ濃度制約は局所障害と整合する構造であり、算術的矛盾ではない。**
 通常の群コホモロジーであり、連続 H¹ 比較・大域類群との同定・共鳴障害の算術的排除・hclass の供給は残る。
 **無条件の一般 hno は引き続き未完成。**

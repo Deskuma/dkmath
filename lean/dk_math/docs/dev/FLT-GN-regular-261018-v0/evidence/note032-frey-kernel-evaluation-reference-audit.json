@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-08",
+  "checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": {
+    "P2M/Sol/S_groupCohomology_deltaCochain0_mem_coboundaries1_iff.lean": "94ccc785d51e956ac8e25ba81f8f16f303e0170ec7bfa180da7c14377f64eadc",
+    "P2M/Sol/S_groupCohomology_map_delta_eq_delta_map.lean": "096c0bf36dcdee1e5fec24576a73075ff22c930c1d10e9e6c5a453acd93ebe9e"
+  },
+  "comparison": "Re-read invariant-lift/coboundary and actual connecting-map naturality solutions; retain same alpha_I and character values. Actual Mathlib ordinary H1IsoOfIsTrivial recovers same values; actual first isomorphism theorem and subgroup cardinal formulas split cardinal exponents. No external provider import. Review upper bound n+2 proved from same fixed difference orderp. Actual evaluation image/kernel exponents give r+t+u=n+3 with r,t>=1 and u<=n+1. No continuous H1/global class supply/arithmetic contradiction/unconditional hno.",
+  "mathlib_source_sha256": {
+    "Mathlib/RepresentationTheory/Homological/GroupCohomology/LowDegree.lean": "32c37df86754e60d015037a2c7a14df9cd443df67c1831734c7e0d8824e880b8",
+    "Mathlib/LinearAlgebra/Isomorphisms.lean": "9b09cba140051ca8b9aa93f6cf22a85c3d9fd4d1c108939c6a6e0b44a0192d73",
+    "Mathlib/LinearAlgebra/Quotient/Card.lean": "84951ff5a128380b1ab0d5119dd576ead26ed5cacf5293574689ee2f6c029569",
+    "Mathlib/GroupTheory/Coset/Card.lean": "d67acfb8198451b8f37d4946a276f5a48d62c6d65689deb82f5030cfa3e829d3"
+  }
+}
