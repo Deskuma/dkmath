@@ -140,6 +140,11 @@ import DkMath.FLT.FreyFixedCoefficientSequence
 import DkMath.FLT.FreyInvariantCosetObstruction
 import DkMath.FLT.FreyFixedH1Connecting
 import DkMath.FLT.FreyFixedH1PrimeOrder
+import DkMath.FLT.FreyFixedQuotientTrivial
+import DkMath.FLT.FreyFixedConnectingInjective
+import DkMath.FLT.FreyFixedConnectingKernel
+import DkMath.FLT.FreyConnectingKernelPrimeOrder
+import DkMath.FLT.FreyConnectingKernelCertificate
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile

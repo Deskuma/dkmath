@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-08",
+  "new_modules": [
+    "DkMath.FLT.FreyFixedQuotientTrivial",
+    "DkMath.FLT.FreyFixedConnectingInjective",
+    "DkMath.FLT.FreyFixedConnectingKernel",
+    "DkMath.FLT.FreyConnectingKernelPrimeOrder",
+    "DkMath.FLT.FreyConnectingKernelCertificate"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.FLT.FreyFixedQuotientTrivial": {
+      "local_module_count": 364,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyFixedConnectingInjective": {
+      "local_module_count": 364,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyFixedConnectingKernel": {
+      "local_module_count": 366,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyConnectingKernelPrimeOrder": {
+      "local_module_count": 367,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyConnectingKernelCertificate": {
+      "local_module_count": 368,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/FLT/FreyFixedQuotientTrivial.lean": true,
+    "DkMath/FLT/FreyFixedConnectingInjective.lean": true,
+    "DkMath/FLT/FreyFixedConnectingKernel.lean": true,
+    "DkMath/FLT/FreyConnectingKernelPrimeOrder.lean": true,
+    "DkMath/FLT/FreyConnectingKernelCertificate.lean": true,
+    "DkMathTest/FLT/FreyConnectingKernel.lean": true,
+    "DkMathTest/FLT/Note032FreyKernelDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyKernelSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 5,
+  "new_lean_file_sha256": {
+    "DkMath/FLT/FreyFixedQuotientTrivial.lean": "b7ff11e9723ae87f8a33b2724501b1f85a144fb93f6d27f76f3a7a84ffdb929c",
+    "DkMath/FLT/FreyFixedConnectingInjective.lean": "525f8077acf9602c6e067934694691543bae25ce855ac79e7ce6a325b4f9cbbc",
+    "DkMath/FLT/FreyFixedConnectingKernel.lean": "2820a1bddb9e02d8dc7aa8f0cb0007081e1c2c1a5bba15ffec6f22667ab9b444",
+    "DkMath/FLT/FreyConnectingKernelPrimeOrder.lean": "e1eb5c9355b9bd133a5991dbeb4bd198b787e0bda2dfc539feb0e5efab4f1845",
+    "DkMath/FLT/FreyConnectingKernelCertificate.lean": "5ef3688e26443800d1ce4b15b2bda71dc7e2ee41a64e5bb3ea4ca3775ce8815e",
+    "DkMathTest/FLT/FreyConnectingKernel.lean": "f90adee9e2e5c0b476495b4e991f05d3ea2daa379f04c8551daf89819e837f51",
+    "DkMathTest/FLT/Note032FreyKernelDependencyAudit.lean": "9aacbfe234a0318dad0bd0c4b9782684bb6957151b3f106c3ff98c94049fdda9",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyKernelSmoke.lean": "8e36ce031f6919d0d94a54d54f74f79aec92f6a80818434eff000f330f365313"
+  },
+  "boundary": "FIVE production modules. SAME Q/F (not Q) entirely inertia-fixed under original local geometry. SAME actual H0 projection map zero gives delta injective by actual LES exactness; actual range(delta)=kernel of SAME H1 coefficient map. Construct actual linear equivalences H0(Q/F), (Q/F)^I and under geometry whole Q/F with SAME kernel. SAME coset/H0/kernel element exact order p, SAME kernel value=original alpha_I, SAME cyclic subgroup cardinal p. Whole kernel card times SAME F card=p^(n+3); SAME hclass+Cofixed witness gives kernel card p^s with1<=s<=n+3. No new injectivity/equivalence/cardinality provider, no Q triviality, whole-kernel-card-p, continuous H1 comparison, global class supply, arithmetic contradiction or unconditional hno."
+}

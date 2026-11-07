@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-08",
+  "checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": {
+    "P2M/Sol/S_groupCohomology_deltaCochain0_mem_coboundaries1_iff.lean": "94ccc785d51e956ac8e25ba81f8f16f303e0170ec7bfa180da7c14377f64eadc",
+    "P2M/Sol/S_groupCohomology_map_delta_eq_delta_map.lean": "096c0bf36dcdee1e5fec24576a73075ff22c930c1d10e9e6c5a453acd93ebe9e"
+  },
+  "comparison": "Read invariant-lift/coboundary equivalence and actual short-exact/connecting-map naturality solution. DkMath uses actual ordinary Mathlib long-exact exactness and H0 naturality. SAME F=Q^I makes H0 projection MAP zero (not H0(Q)=0). Delta injective, actual coefficient kernel equals its range; build actual equivalences. Original nodal geometry makes Q/F (not Q) entirely inertia-fixed. SAME obstruction gives exact-order-p coset/H0/kernel element, cyclic subgroup cardinal p, whole kernel cardinal p^s with1<=s<=n+3. No external providers, kernel-whole-card-p claim, continuous H1 comparison, global class identification/supply, arithmetic contradiction or unconditional hno.",
+  "mathlib_source_sha256": {
+    "Mathlib/RepresentationTheory/Homological/GroupCohomology/LongExactSequence.lean": "42c9ad4ed8ece771a0c79fb892332d586768989852ec651852c5a2325afbb2ff",
+    "Mathlib/RepresentationTheory/Homological/GroupCohomology/Functoriality.lean": "a11cd4eb2fd7a0ade8db338d7a715fc6c428c20fb9321a50352a520253fac260"
+  }
+}
