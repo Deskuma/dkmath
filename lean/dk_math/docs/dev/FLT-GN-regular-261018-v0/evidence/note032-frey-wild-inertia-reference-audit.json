@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-07",
+  "checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": {
+    "P2M/Sol/S_ValuationSubring_apply_eq_self_of_pow_apply_eq_self_of_wild.lean": "f49090a17818b2f7f3207030f2a04e735fb36fbaa484700a7dfcba22fe5cb17d",
+    "P2M/Sol/S_ValuationSubring_exists_forall_pow_prime_pow_apply_eq_of_wild_of_normal.lean": "e7cc63a103194c169afc909cd4fca1217a76fd8d76e75507c64bed7d1c5f4789",
+    "P2M/Sol/S_ValuationSubring_exists_forall_pow_prime_pow_apply_eq_self_of_wild.lean": "3bbbdf7b10aee49b6be2916fe1fd061d32c3c7ff0ff1633dbd8f2a90e8f4a104",
+    "P2M/Sol/S_ValuationSubring_exists_algEquiv_conj_mul_pow_inv_wild_of_liesOverPrime.lean": "9fb02e51beb0e3d2da791a6032ab21904e9fed08eb40cf0cd57821297d155496"
+  },
+  "comparison": "Wild unit-period telescoping argument ported under original Apache notices; DkMath existing Bezout prime-support supplies unit period. Related normal finite-field wild-order routes read, not ported. Actual Frey inertia product-zero gives p-power period directly. Frobenius error calculation refactored from existing DkMath ValuationTameCharacter and retains IsFrobeniusAt witness. No P2M/P2MW imports/providers; no pro-q/finite-normal-field provider. Only ordinary character evaluated on conjugate gets q-power identity, not module transport identity.",
+  "existing_DkMath_source_sha256": {
+    "DkMath/Lib/NumberTheory/ValuationTameCharacter.lean": "a26ec9fdfdcf9eda382352721b6ba787e454a28e2869648ccc1113a71f53c87d",
+    "DkMath/Lib/NumberTheory/ValuationPrimeSupport.lean": "5c8f389c9caeedde17facba7fe2638454250ec16ea37271997a61927e08a1386"
+  }
+}

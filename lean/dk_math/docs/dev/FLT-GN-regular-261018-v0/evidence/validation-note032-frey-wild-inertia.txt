@@ -1,0 +1,122 @@
+NOTE-032 FOUR STEPS: wild unit-period rigidity, actual finite p-power torsion wild fixedness and SAME character Frobenius conjugate value
+Date: 2026-11-07
+Working directory: lean/dk_math
+
+Successful final validations (listed Lean/Lake commands exited 0):
+1. lake build DkMath.FLT.FreyWildInertia
+   Focused implementation build passed (4219 jobs).
+2. lake build DkMath DkMathTest.FLT.FreyWildInertia DkMathTest.FLT.Note032FreyWildInertiaDependencyAudit
+   Build completed successfully (11169 jobs).
+3. lake test
+   Normal repository test driver passed; reached 12328/12328 jobs.
+4. lake env lean DkMathTest.lean
+   Rechecked after suite dependencies built; passed, only existing marker printed.
+5. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyWildInertiaSmoke.lean
+   Root exposes all twenty-one production declarations; standard axioms only at final endpoint.
+6. Four full textbook blocks extracted to /tmp/n032-wild-book-{1,2,3,4}.lean.
+   lake env lean run on each separately; all passed without warnings.
+   Exact full production source and exact markers immediately after imports retained.
+7. python3 /tmp/n032-wild-import-audit.py
+   Comment-aware local imports are acyclic; seven exact markers, four full source copies,
+   Lib/FLT/root/test reachability, forbidden-construct scans and source SHA256 passed.
+   Closure sizes including self: valuation rigidity3, difference power2, elliptic rigidity5,
+   actual Frey wild module350. No FLT imports in three generic Lib modules.
+   No FreyHnoSmallIndex/RegularPrime/HardCase consumers in new production import closures.
+8. git diff --check and direct trailing-whitespace checks on new files passed.
+9. Local model answer HEAD 115356cbc627159d0d16add0da6e9a2bb3655ed8.
+   Read unit-period wild rigidity solution and two related finite-normal-field wild-order
+   solutions. Compared existing DkMath tame Frobenius error calculation with original
+   solution signature. Reference sources and existing DkMath bridge SHA256 saved in
+   note032-frey-wild-inertia-reference-audit.json. Apache-2.0 notices retained for ports.
+   No external P2M/P2MW theorem/provider imports.
+
+Implemented content and proof route:
+Step 1. SAME wild ratio condition for every nonzero field element is equivalent to strict
+        valuation of action difference. It defines actual automorphism subgroup, closed
+        under composition/inversion/powers and preserving original valuation.
+        Telescoping action-difference orbit sum is zero for actual period m; its main
+        term m*w cannot cancel smaller errors if v(m)=1. Hence wild automorphism fixes
+        SAME element of unit period. Existing Bezout prime support supplies v(m)=1
+        from SAME address q and gcd(m,q)=1. No completeness/discreteness normalization.
+Step 2. SAME ordinary unipotent difference hom gives exact power identity
+        rho(sigma^m)x-x=m*(rho(sigma)x-x). A point killed by m is fixed by sigma^m.
+Step 3. SAME geometric point period implies periods for SAME x,y coordinates.
+        Apply actual wild coordinate rigidity and transport to SAME torsion representation.
+        Zero point included; no finiteness or pro-q provider used.
+Step 4. SAME inertia subgroup and SAME wild congruence subgroup pullback.
+        At actual Frey bad address q!=p, SAME existing nodal product-zero supplies
+        p^(n+1)-period of every SAME finite torsion point; q-coprimality and wild
+        rigidity give actual trivial wild action on ENTIRE E[p^(n+1)].
+        SAME original quotient difference hom therefore kills actual wild subgroup.
+        Construct actual Frobenius phi and retain IsFrobeniusAt proof in conclusions.
+        Error phi*tau*phi^-1*(tau^q)^-1 is inertia and wild by original tame-character
+        residue identities. Its SAME character value is1 by actual wild elimination.
+        Ordinary hom laws imply c(phi*tau*phi^-1)=c(tau)^q at SAME fixed basepoint.
+        SAME exact hclass+Cofixed obstruction gives SAME nonzero exact-order-p value,
+        wild-kernel inclusion and actual Frobenius character power formula together.
+        No new wild-vanishing, period, pro-q, Frobenius, absorption or placement provider.
+
+Regression and audits:
+- Actual shear representation of additive ZMod25 on (ZMod25)^2 has difference product0.
+- Actual power5 difference at (0,1) is (5,0), not0. Power25 fixes SAME (0,1).
+- SAME point (0,5), killed by5, has power5 action period despite nontrivial single action.
+- Zero-power formula included. Examples ensure unipotence alone does not imply fixedness;
+  the actual wild condition and q-coprime period guard in the valuation step matter.
+- #print axioms for all21 declarations: only propext/Classical.choice/Quot.sound; no sorryAx.
+- Recursive checked type/constructor/opaque-value audits require actual previous nodal
+  product-zero, valuation unit-period rigidity, actual coordinate transport, SAME wild
+  kernel inclusion, actual Frobenius construction, SAME narrow witness dependencies.
+- Thirteen public-input audits verify internal period/wild/Frobenius supply at Frey
+  endpoints and retain original hclass/Cofixed only in final arithmetic existence.
+
+Boundaries:
+- Exactly five pre-existing unrelated sorry warnings in root/suite. No new warning.
+  Selected new dependency paths reject sorryAx/nonstandard axioms; no repository-wide
+  sorry-free claim.
+- Wild subgroup is defined by SAME explicit all-nonzero ratio condition. No equivalence
+  to a separate ramification filtration/pro-q API, no normality/tame quotient descent
+  added. These are not new hypotheses hidden in actual Frey fixedness theorem.
+- Frobenius identity evaluates ordinary c on conjugate, not module transport
+  rho(phi)c(tau)=q*c(tau), and not basepoint invariance under phi.
+- Multiplicative is a type tag on SAME additive quotient. SAME difference remains in
+  coboundary form; no nonzero H1 claim. Continuous finite p-image may survive on tame
+  inertia. No arithmetic exclusion of that obstruction or supply of hclass proved.
+- UNCONDITIONAL GENERAL hno REMAINS INCOMPLETE.
+
+Twenty-one checked roots and required dependencies:
+PASS: DkMath.Lib.NumberTheory.ValuationWildRigidity.valuation_lt_iff_div_mem_nonunits; 4992 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.ValuationWildRigidity.IsWildAt; 4781 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.ValuationWildRigidity.isWildAt_of_forall_mem_nonunits; 5020 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.ValuationWildRigidity.IsWildAt.valuation_apply; 4957 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.ValuationWildRigidity.IsWildAt.mul; 5097 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.ValuationWildRigidity.IsWildAt.inv; 5100 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.ValuationWildRigidity.isWildAt_iff; 5024 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.ValuationWildRigidity.wildSubgroup; 5139 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.ValuationWildRigidity.IsWildAt.pow; 5109 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.ValuationWildRigidity.IsWildAt.fixed_of_unit_period; 6560 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.ValuationWildRigidity.fixed_of_coprime_period; 8032 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.UnipotentDifferenceCharacter.difference_pow; 1803 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.UnipotentDifferenceCharacter.fixed_by_pow_of_killed; 1808 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointAction_fixed_of_wild_coprime_period; 24158 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.representation_fixed_of_wild_coprime_period; 24259 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.wildInertiaSubgroup; 16159 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.prime_power_wild_inertia_fixed; 34486 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.frobenius_conjugate_error_wild; 19836 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.wildInertia_le_character_kernel; 34529 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.exists_frobenius_character_power; 42146 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_exists_tame_inertia_character; 83848 reachable constants; required actual theorems present.
+
+Thirteen public input reports:
+PASS inputs: DkMath.Lib.NumberTheory.ValuationWildRigidity.wildSubgroup; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.ValuationWildRigidity.IsWildAt.fixed_of_unit_period; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.ValuationWildRigidity.fixed_of_coprime_period; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.RepresentationTheory.UnipotentDifferenceCharacter.difference_pow; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.RepresentationTheory.UnipotentDifferenceCharacter.fixed_by_pow_of_killed; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointAction_fixed_of_wild_coprime_period; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.representation_fixed_of_wild_coprime_period; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.wildInertiaSubgroup; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.prime_power_wild_inertia_fixed; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.frobenius_conjugate_error_wild; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.wildInertia_le_character_kernel; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.exists_frobenius_character_power; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_exists_tame_inertia_character; remaining arithmetic inputs explicit.

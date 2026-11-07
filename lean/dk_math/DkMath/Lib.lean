@@ -377,6 +377,9 @@ import DkMath.Lib.NumberTheory.ValuationFrobenius
 import DkMath.Lib.NumberTheory.ValuationInertia
 import DkMath.Lib.NumberTheory.ValuationInertiaLift
 import DkMath.Lib.NumberTheory.ValuationInertiaPower
+import DkMath.Lib.NumberTheory.ValuationWildRigidity
+import DkMath.Lib.RepresentationTheory.UnipotentDifferencePower
+import DkMath.Lib.NumberTheory.EllipticWildRigidity
 import DkMath.Lib.NumberTheory.ValuationPlaceConjugacy
 import DkMath.Lib.NumberTheory.ValuationPrimeExistence
 import DkMath.Lib.NumberTheory.ValuationPrimeSupport
