@@ -132,6 +132,9 @@ import DkMath.FLT.FreyInertiaCharacterFiniteImage
 import DkMath.FLT.FreyWildInertia
 import DkMath.FLT.FreyTameInertiaQuotient
 import DkMath.FLT.FreyTameResonance
+import DkMath.FLT.FreyFixedTameCharacter
+import DkMath.FLT.FreyFixedInertiaH1
+import DkMath.FLT.FreyInertiaH1CoefficientBoundary
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile

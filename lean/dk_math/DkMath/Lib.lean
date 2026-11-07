@@ -381,6 +381,7 @@ import DkMath.Lib.NumberTheory.ValuationInertiaPower
 import DkMath.Lib.NumberTheory.ValuationWildRigidity
 import DkMath.Lib.NumberTheory.ValuationWildNormality
 import DkMath.Lib.RepresentationTheory.UnipotentDifferencePower
+import DkMath.Lib.RepresentationTheory.TrivialCharacterH1
 import DkMath.Lib.NumberTheory.EllipticWildRigidity
 import DkMath.Lib.NumberTheory.ValuationPlaceConjugacy
 import DkMath.Lib.NumberTheory.ValuationPrimeExistence

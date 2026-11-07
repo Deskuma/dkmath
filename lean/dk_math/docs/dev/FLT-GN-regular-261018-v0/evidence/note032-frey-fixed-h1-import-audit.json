@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-08",
+  "new_modules": [
+    "DkMath.Lib.RepresentationTheory.TrivialCharacterH1",
+    "DkMath.FLT.FreyFixedTameCharacter",
+    "DkMath.FLT.FreyFixedInertiaH1",
+    "DkMath.FLT.FreyInertiaH1CoefficientBoundary"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.RepresentationTheory.TrivialCharacterH1": {
+      "local_module_count": 1,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyFixedTameCharacter": {
+      "local_module_count": 355,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyFixedInertiaH1": {
+      "local_module_count": 357,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyInertiaH1CoefficientBoundary": {
+      "local_module_count": 358,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/RepresentationTheory/TrivialCharacterH1.lean": true,
+    "DkMath/FLT/FreyFixedTameCharacter.lean": true,
+    "DkMath/FLT/FreyFixedInertiaH1.lean": true,
+    "DkMath/FLT/FreyInertiaH1CoefficientBoundary.lean": true,
+    "DkMathTest/FLT/FreyFixedCoefficientH1.lean": true,
+    "DkMathTest/FLT/Note032FreyFixedH1DependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyFixedH1Smoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 4,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/RepresentationTheory/TrivialCharacterH1.lean": "e25991f30126eda8d25794bc76eaee0a4862d2b11aa3cf90bd9f43eb826b6e7e",
+    "DkMath/FLT/FreyFixedTameCharacter.lean": "b58d50d018a0fa72d5a3babc10b26b20748d2484558a4a94fe0935f5054e00cc",
+    "DkMath/FLT/FreyFixedInertiaH1.lean": "aa9fd798c8da5142e634abe135ea4351b510900b1d9733577de4f73e11cd59d5",
+    "DkMath/FLT/FreyInertiaH1CoefficientBoundary.lean": "ebeffc614f69aa1c5c0e52f5a556eda377789df62db520b648964432deffe2ed",
+    "DkMathTest/FLT/FreyFixedCoefficientH1.lean": "9bf63c2a871c41d33d2c3a708798bb9a0a51250ac661d6dbfa0f7ab3906e8be0",
+    "DkMathTest/FLT/Note032FreyFixedH1DependencyAudit.lean": "8fe12227553fc920929217dd0ad4e405932b616ed89add6ef4b069a37a09bb7a",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyFixedH1Smoke.lean": "280fe953ec8c35bc163f8dca4c42df80fd9938bd6c4a181c8f15934cce7d5ebe"
+  },
+  "boundary": "SAME actual F=Q^I with trivial coefficients; actual continuous F-valued tame character. SAME original hclass+Cofixed witness supplies nonzero ORDINARY H1 classes for I and J=I/W. SAME original Q actual inertia representation, actual F->Q representation morphism, SAME included cocycle is d[x], and actual groupCohomology.map at degree1 sends SAME nonzero inertia class to zero. Not a contradiction between different coefficients. No continuousCohomology1 nonzero/comparison, H1 inflation comparison, global ClassModP identification/supply, conjugacy-invariance supply, arithmetic obstruction exclusion or unconditional hno."
+}
