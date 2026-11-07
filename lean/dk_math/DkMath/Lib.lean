@@ -37,6 +37,7 @@ import DkMath.Lib.Algebra.TorsionTowerFrobenius
 import DkMath.Lib.Algebra.FiniteFixedQuotient
 import DkMath.Lib.Algebra.FiniteSubgroupIntersection
 import DkMath.Lib.Algebra.CyclicIntersectionGenerator
+import DkMath.Lib.Algebra.FinitePrimePowerCharacter
 import DkMath.Lib.Algebra.TorsionPreimageQuotient
 import DkMath.Lib.Algebra.PrimePowerCyclicCriterion
 import DkMath.Lib.Algebra.CyclicPrimePowerScalar

@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-07",
+  "new_modules": [
+    "DkMath.Lib.Algebra.FinitePrimePowerCharacter",
+    "DkMath.FLT.FreyStageUpperQuotientCard",
+    "DkMath.FLT.FreyStageUpperQuotientTopology",
+    "DkMath.FLT.FreyInertiaCharacterFiniteImage"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.Algebra.FinitePrimePowerCharacter": {
+      "local_module_count": 1,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyStageUpperQuotientCard": {
+      "local_module_count": 309,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyStageUpperQuotientTopology": {
+      "local_module_count": 344,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyInertiaCharacterFiniteImage": {
+      "local_module_count": 346,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/Algebra/FinitePrimePowerCharacter.lean": true,
+    "DkMath/FLT/FreyStageUpperQuotientCard.lean": true,
+    "DkMath/FLT/FreyStageUpperQuotientTopology.lean": true,
+    "DkMath/FLT/FreyInertiaCharacterFiniteImage.lean": true,
+    "DkMathTest/FLT/FreyFiniteInertiaCharacter.lean": true,
+    "DkMathTest/FLT/Note032FreyFiniteCharacterDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyFiniteCharacterSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 4,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/Algebra/FinitePrimePowerCharacter.lean": "128a1c649dde30873eab9363e46cb4fd19415fb82902c0580a29f5272b9f8dea",
+    "DkMath/FLT/FreyStageUpperQuotientCard.lean": "ac6640dbfd56e0ff52e3db7fcab8397b1e1136ce2a22bc81593d9ae83dcb580f",
+    "DkMath/FLT/FreyStageUpperQuotientTopology.lean": "a67e81e7e3ecd898ec5ad29172c2f1da48af9187bfaf19047de5ead33d2e5a09",
+    "DkMath/FLT/FreyInertiaCharacterFiniteImage.lean": "4b9946dd8ed053350ac7aaa39bd7dbc8c85dfd033ed03386b9df0a5013827eb6",
+    "DkMathTest/FLT/FreyFiniteInertiaCharacter.lean": "ddbaa1603b87ecdf28a0a946a37bd4f1b80d37a445f03d17879535fbce05e718",
+    "DkMathTest/FLT/Note032FreyFiniteCharacterDependencyAudit.lean": "8b49c6ec99a05acd168ad8ca592a039182d4bd95ace571eea070efb3c3d3773e",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyFiniteCharacterSmoke.lean": "06fe5212e81b1f3b89e8be901464b5cfedd75a84a28cbb7efd4379227f04c79d"
+  },
+  "boundary": "SAME actual T upper quotient has exact card p^(n+3); SAME actual quotient action and inertia difference are continuous in original Krull/subgroup/canonical quotient topologies. Kernel clopen is RELATIVE to inertia. SAME character factors into actual inertia-fixed subgroup. SAME hclass+Cofixed obstruction supplies nontrivial exact-order-p value and image/kernel quotient/index p^s for 1<=s<=n+3. No new continuity/finite/image/index/placement provider. Explicit action-difference identity is coboundary form, not nonzero H1 class. No wild vanishing, fixed-basepoint Frobenius q-scaling, arithmetic obstruction exclusion, hclass supply or unconditional hno."
+}

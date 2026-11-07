@@ -126,6 +126,9 @@ import DkMath.FLT.FreyStageUpperQuotient
 import DkMath.FLT.FreyIntersectionQuotientObstruction
 import DkMath.FLT.FreyStageIntersectionGenerator
 import DkMath.FLT.FreyInertiaDifferenceCharacter
+import DkMath.FLT.FreyStageUpperQuotientCard
+import DkMath.FLT.FreyStageUpperQuotientTopology
+import DkMath.FLT.FreyInertiaCharacterFiniteImage
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile
