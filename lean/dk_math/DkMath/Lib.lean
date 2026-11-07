@@ -38,6 +38,7 @@ import DkMath.Lib.Algebra.FiniteFixedQuotient
 import DkMath.Lib.Algebra.FiniteSubgroupIntersection
 import DkMath.Lib.Algebra.CyclicIntersectionGenerator
 import DkMath.Lib.Algebra.FinitePrimePowerCharacter
+import DkMath.Lib.Algebra.PrimeOrderResonance
 import DkMath.Lib.Algebra.TorsionPreimageQuotient
 import DkMath.Lib.Algebra.PrimePowerCyclicCriterion
 import DkMath.Lib.Algebra.CyclicPrimePowerScalar
@@ -378,6 +379,7 @@ import DkMath.Lib.NumberTheory.ValuationInertia
 import DkMath.Lib.NumberTheory.ValuationInertiaLift
 import DkMath.Lib.NumberTheory.ValuationInertiaPower
 import DkMath.Lib.NumberTheory.ValuationWildRigidity
+import DkMath.Lib.NumberTheory.ValuationWildNormality
 import DkMath.Lib.RepresentationTheory.UnipotentDifferencePower
 import DkMath.Lib.NumberTheory.EllipticWildRigidity
 import DkMath.Lib.NumberTheory.ValuationPlaceConjugacy

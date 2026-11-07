@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-08",
+  "checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": {
+    "P2M/Sol/S_ValuationSubring_exists_algEquiv_conj_mul_pow_inv_wild_of_liesOverPrime.lean": "9fb02e51beb0e3d2da791a6032ab21904e9fed08eb40cf0cd57821297d155496",
+    "P2M/Sol/S_ValuationSubring_IsFrobeniusAt_conj_mul_pow_inv_mem_inertiaSubgroupIn_and_wild.lean": "dd6b78681daa9ce112e9db38a6e284957dc64097e749a3f6a27bca213024341b",
+    "P2M/Sol/S_Subgroup_exists_wild_tame_cyclic_unramified_chain_of_le.lean": "acf492f9787d54140083cf900a5511433d2471a238c05fb3765c4fd066439f50"
+  },
+  "read_scope": [
+    "first solution: inertia conjugate preservation and solution342-366",
+    "second solution: Frobenius wild-error statement and proof",
+    "third solution: theorem inputs and first quotient conjugacy calculation, lines1-72"
+  ],
+  "comparison": "DkMath derives SAME explicit wild-congruence subgroup normality, canonical inertia quotient and continuous SAME difference character descent. Actual IsFrobeniusAt yields quotient ELEMENT q-power formula; exact-order-p SAME witness yields fixed iff residue1, inversion and nonfixedness in negative branch. External finite-index/generation conditions not transferred into actual quotient finiteness/cyclicity. No external theorem/provider imports, arithmetic conjugacy-invariance supply, contradiction, hclass supply or unconditional hno."
+}

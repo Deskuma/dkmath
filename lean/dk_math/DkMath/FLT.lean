@@ -130,6 +130,8 @@ import DkMath.FLT.FreyStageUpperQuotientCard
 import DkMath.FLT.FreyStageUpperQuotientTopology
 import DkMath.FLT.FreyInertiaCharacterFiniteImage
 import DkMath.FLT.FreyWildInertia
+import DkMath.FLT.FreyTameInertiaQuotient
+import DkMath.FLT.FreyTameResonance
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile

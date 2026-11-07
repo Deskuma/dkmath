@@ -104,6 +104,8 @@ import DkMathTest.FLT.FreyFiniteInertiaCharacter
 import DkMathTest.FLT.Note032FreyFiniteCharacterDependencyAudit
 import DkMathTest.FLT.FreyWildInertia
 import DkMathTest.FLT.Note032FreyWildInertiaDependencyAudit
+import DkMathTest.FLT.FreyTameResonance
+import DkMathTest.FLT.Note032FreyTameResonanceDependencyAudit
 import DkMathTest.FLT.Note032FreyCyclotomicConditionalTowerDependencyAudit
 import DkMathTest.FLT.Note032CyclotomicUnitClosureDependencyAudit
 import DkMathTest.FLT.Note032NumberFieldUnitTraceDependencyAudit
