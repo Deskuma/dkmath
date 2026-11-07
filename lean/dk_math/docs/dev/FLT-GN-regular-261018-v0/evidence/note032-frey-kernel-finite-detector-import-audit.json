@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-08",
+  "new_modules": [
+    "DkMath.FLT.FreyKernelEvaluationConstraints",
+    "DkMath.FLT.FreyKernelCharacterContinuity",
+    "DkMath.FLT.FreyKernelTameDescent",
+    "DkMath.FLT.FreyKernelCommonTameQuotient",
+    "DkMath.FLT.FreyKernelFiniteDetector"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.FLT.FreyKernelEvaluationConstraints": {
+      "local_module_count": 374,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyKernelCharacterContinuity": {
+      "local_module_count": 375,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyKernelTameDescent": {
+      "local_module_count": 376,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyKernelCommonTameQuotient": {
+      "local_module_count": 377,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyKernelFiniteDetector": {
+      "local_module_count": 378,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/FLT/FreyKernelEvaluationConstraints.lean": true,
+    "DkMath/FLT/FreyKernelCharacterContinuity.lean": true,
+    "DkMath/FLT/FreyKernelTameDescent.lean": true,
+    "DkMath/FLT/FreyKernelCommonTameQuotient.lean": true,
+    "DkMath/FLT/FreyKernelFiniteDetector.lean": true,
+    "DkMathTest/FLT/FreyKernelFiniteDetector.lean": true,
+    "DkMathTest/FLT/Note032FreyDetectorDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyDetectorSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 5,
+  "new_lean_file_sha256": {
+    "DkMath/FLT/FreyKernelEvaluationConstraints.lean": "9a63cccdbbfac4de85b9398ed267ac98989120e93b3e421c58321632aeaf6e6e",
+    "DkMath/FLT/FreyKernelCharacterContinuity.lean": "b21cdbb279b08a3a7f6096594d19a1e981ff5fb73ad0903ef0d54b628940c9de",
+    "DkMath/FLT/FreyKernelTameDescent.lean": "8b559e3114c95934ebb6b6b97500e70930c2ae11ebcdb27c1d3da7f203e28a02",
+    "DkMath/FLT/FreyKernelCommonTameQuotient.lean": "c3d86634e32adda2738554ac5818435eb334f9390ad070db2b5b19648e0e67b0",
+    "DkMath/FLT/FreyKernelFiniteDetector.lean": "f69c24a69f259ad1d8f55de8e97092061eb2055143b303a20635a6d41eecb829",
+    "DkMathTest/FLT/FreyKernelFiniteDetector.lean": "7d11de04304c0b0923361eda31a3fabe165e777b106ce643bf9c97e38e3f6dad",
+    "DkMathTest/FLT/Note032FreyDetectorDependencyAudit.lean": "99f8f4661ebff50d80c92a7b30a21d38aa5af59897c72a0446bcaf3def5ac6cb",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyDetectorSmoke.lean": "2d5abbb85cbbd0821cf45b1822f5fd952a47951f3e4d64e097f21a146b2ef39a"
+  },
+  "boundary": "FIVE Frey-specific production modules. Actual evaluation image inclusion yields t<=r and n+3-2r<=u. Every actual coefficient kernel element is the SAME connecting image of an original finite torsion point; SAME character continuous, wild-annihilated, descends to SAME J and ordinary inflation returns SAME k.val. Common actual J quotient by all-character kernel is finite, kernel open; values factor and separate K. Internally construct finite actual inertia detector containing specified/original tau, size<=cardK; joint evaluation injective, exponent t+u<=r*size. Original hclass/Cofixed retained in final endpoint. Only generic cardinal corollary has explicit injection hypothesis; final supplies it internally. No generator/cyclicity/continuity/wildness provider, no W-standard-wild identification, singleton evaluation injectivity, finite-level generator existence, continuous H1 comparison/global class supply/arithmetic contradiction/unconditional hno."
+}

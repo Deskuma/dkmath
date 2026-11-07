@@ -1,0 +1,146 @@
+NOTE-032 FIVE STEPS: SAME all-kernel continuous tame characters, common finite quotient and finite actual inertia detector
+Date: 2026-11-08
+Working directory: lean/dk_math
+
+Successful final validations (listed Lean/Lake commands exited 0):
+1. lake build DkMath.FLT.FreyKernelFiniteDetector
+   Build completed successfully (4459 jobs).
+2. lake build DkMath DkMathTest.FLT.FreyKernelFiniteDetector DkMathTest.FLT.Note032FreyDetectorDependencyAudit
+   Build completed successfully (11197 jobs).
+3. lake test
+   Normal repository test driver passed; reached 12368/12368 jobs.
+4. lake env lean DkMathTest.lean
+   Rechecked after suite dependencies built; passed, existing module marker printed.
+5. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyDetectorSmoke.lean
+   Root exposes all twenty-eight new declarations; final endpoint standard axioms only.
+6. FIVE full textbook blocks extracted to /tmp/n032-detect-book-{1,2,3,4,5}.lean.
+   lake env lean on each independently passed without warnings.
+   Exact full production source and exact module markers immediately after imports retained.
+7. python3 /tmp/n032-detect-import-audit.py
+   Comment-aware local imports acyclic; EIGHT exact markers, FIVE full copies,
+   FLT/root/test reachability, forbidden-construct scans and source SHA256 passed.
+   Local import closure sizes including self: 374,375,376,377,378.
+   All five production modules are Frey-specific; no new Lib module.
+   No FreyHnoSmallIndex/RegularPrime/HardCase consumer in these import closures.
+8. git diff --check and direct trailing-whitespace checks on new files passed.
+9. Local model-answer HEAD 115356cbc627159d0d16add0da6e9a2bb3655ed8.
+   Read finite-level tame generator proof, including tail-root hypothesis and its discharge
+   by an external valuation theorem. External result is tau=gamma^j*x^(p^m)*w^(p^m).
+   No generator/tail-root theorem ported or added as provider. Source/Mathlib SHA256 saved
+   in note032-frey-kernel-finite-detector-reference-audit.json.
+
+Implemented content:
+Step1. SAME actual evaluation image is an actual subgroup of F. Its cardinal divides F's
+       cardinal, yielding t<=r and n+3-2r<=u in SAME original three-exponent profile.
+Step2. EVERY actual coefficient kernel element k is SAME connecting image of an ORIGINAL
+       finite torsion point x, by SAME Q/F~K equivalence and two actual quotient surjections.
+       x need NOT satisfy original obstruction y's special preimage/nonabsorption guards.
+       Standard ordinary H1 character of k equals SAME original fixed difference character
+       of x; actual continuous finite-torsion character gives continuity for EVERY k in K.
+Step3. EVERY such character kills SAME W, descends to SAME actual J=I/W, preserving original
+       values and continuity. Actual ordinary descended class beta_k inflates by SAME
+       previously constructed map to SAME k.val for every k. No continuity claim for all
+       ordinary H1 or comparison with a continuous H1 theory.
+Step4. Assemble SAME all-kernel tame character family Psi:J->product_(k in K) Multiplicative F.
+       Actual K cardinal formula proves K finite. Original F finite/discrete makes this
+       finite product discrete. Continuity gives open actual common normal kernel N.
+       Actual first isomorphism theorem proves SAME H=J/N finite. SAME all-values map
+       factors through H, retaining original values and separating original K elements.
+       Neither H cyclicity nor a singleton generator is asserted.
+Step5. For each nonzero k choose an ACTUAL inertia element detecting k; form finite image
+       and insert designated sigma0. Nonzero-only enumeration ensures sizeOmega<=cardK.
+       Prove actual finite evaluation K->(Omega->F) injective internally, no provider.
+       A general injection-cardinality corollary gives cardK divides cardF^sizeOmega.
+       Final SAME hclass+Cofixed witness keeps SAME n,T,q,A,tau,y,h, tau in Omega,
+       finite joint detection, common quotient finite, all-kernel continuity/inflation,
+       SAME exponent constraints and t+u<=r*sizeOmega.
+
+Regression and audit scope:
+- Actual bilinear family on (ZMod5)^2 separates via two basis evaluations, kernel bot.
+- NO linear map (ZMod5)^2->ZMod5 is injective, by cardinal25>5. This prevents deriving
+  singleton evaluation injectivity from finite simultaneous detection.
+- Actual quotient by simultaneous kernel has cardinal25; original group killed by5.
+  Finite common quotient is not silently identified with a one-generator group.
+- Identity evaluation example confirms conditional singleton/cardinality conclusions
+  where injectivity really holds.
+- #print axioms all28 declarations: standard propext/Classical.choice/Quot.sound;
+  no sorryAx. Recursive checked types/constructors/opaque values require original
+  same quotient/connecting equivalence, finite torsion continuity, wild fixedness,
+  actual tame descent and SAME inflation, actual finite cardinal formulas and quotient
+  first isomorphism, all-evaluation separation, finite detector construction and SAME
+  original hclass+Cofixed arithmetic witness.
+- Twenty-eight public-input audits retain local geometry where needed and original
+  hclass/Cofixed in final endpoint. Reject new generator, cyclicity, continuity,
+  wildness, cardinality, finite, profile, evaluation, equivalence or range providers.
+  Only general cardinal corollary takes explicitly named hinj; final supplies it internally.
+
+Boundaries:
+- Five pre-existing unrelated sorry warnings in root/suite, no new warning.
+  No repository-wide sorry-free claim.
+- Actual W is SAME wild CONGRUENCE subgroup, not identified with standard wild inertia.
+- Finite-level generator/tail-root existence not implemented; original tau not claimed
+  a generator. Finite detector Omega is not claimed singleton or optimally small.
+- ORDINARY H1 with continuous character representatives for K only; no continuous-H1
+  comparison isomorphism, global cyclotomic class identification/supply, arithmetic
+  resonance exclusion or contradiction.
+- General UNCONDITIONAL hno REMAINS INCOMPLETE; original hclass still in endpoint.
+
+Twenty-eight checked roots and required dependencies:
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedEvaluation_image_card_dvd; 29595 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_evaluation_constrained_profile; 43128 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCharacter; 29576 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCharacter_apply; 29577 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.exists_torsion_fixedKernelElement; 41621 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCharacter_coset; 42097 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCharacter_continuous; 42862 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.wild_le_fixedKernelCharacter_kernel; 42147 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameCharacter; 42198 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameCharacter_mk; 42199 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameCharacter_continuous; 42955 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameCharacter_coset; 42204 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameClass; 42199 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameClass_inflation; 42224 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernel_finite; 42438 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameFamily; 42202 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.mem_fixedKernelTameFamily_kernel; 42203 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameFamily_continuous; 42968 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameFamily_kernel_isOpen; 43955 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTameQuotient; 42203 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTameQuotient_finite; 43081 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTameValues; 42206 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTameValues_mk; 42207 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTameValues_separates; 42208 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedFiniteEvaluation; 29574 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedFiniteEvaluation_card_dvd; 29618 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.exists_finite_inertia_detector; 42559 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_exists_finitely_detected_coefficient_kernel; 90848 reachable constants; required actual theorems present.
+
+Twenty-eight public-input reports:
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedEvaluation_image_card_dvd; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_evaluation_constrained_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCharacter; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCharacter_apply; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.exists_torsion_fixedKernelElement; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCharacter_coset; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCharacter_continuous; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.wild_le_fixedKernelCharacter_kernel; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameCharacter; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameCharacter_mk; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameCharacter_continuous; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameCharacter_coset; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameClass; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameClass_inflation; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernel_finite; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameFamily; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.mem_fixedKernelTameFamily_kernel; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameFamily_continuous; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelTameFamily_kernel_isOpen; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTameQuotient; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTameQuotient_finite; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTameValues; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTameValues_mk; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTameValues_separates; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedFiniteEvaluation; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedFiniteEvaluation_card_dvd; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.exists_finite_inertia_detector; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_exists_finitely_detected_coefficient_kernel; remaining arithmetic inputs explicit.

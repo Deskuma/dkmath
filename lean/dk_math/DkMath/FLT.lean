@@ -150,6 +150,11 @@ import DkMath.FLT.FreyConnectingKernelSharpProfile
 import DkMath.FLT.FreyConnectingKernelEvaluation
 import DkMath.FLT.FreyKernelEvaluationImage
 import DkMath.FLT.FreyKernelEvaluationCertificate
+import DkMath.FLT.FreyKernelEvaluationConstraints
+import DkMath.FLT.FreyKernelCharacterContinuity
+import DkMath.FLT.FreyKernelTameDescent
+import DkMath.FLT.FreyKernelCommonTameQuotient
+import DkMath.FLT.FreyKernelFiniteDetector
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile

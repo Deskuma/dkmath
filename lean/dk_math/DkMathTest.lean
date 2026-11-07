@@ -114,6 +114,8 @@ import DkMathTest.FLT.FreyConnectingKernel
 import DkMathTest.FLT.Note032FreyKernelDependencyAudit
 import DkMathTest.FLT.FreyKernelEvaluation
 import DkMathTest.FLT.Note032FreyEvaluationDependencyAudit
+import DkMathTest.FLT.FreyKernelFiniteDetector
+import DkMathTest.FLT.Note032FreyDetectorDependencyAudit
 import DkMathTest.FLT.Note032FreyCyclotomicConditionalTowerDependencyAudit
 import DkMathTest.FLT.Note032CyclotomicUnitClosureDependencyAudit
 import DkMathTest.FLT.Note032NumberFieldUnitTraceDependencyAudit
