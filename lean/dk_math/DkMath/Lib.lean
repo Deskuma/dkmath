@@ -36,6 +36,7 @@ import DkMath.Lib.Algebra.MazurStepThreeTwoAnchor
 import DkMath.Lib.Algebra.TorsionTowerFrobenius
 import DkMath.Lib.Algebra.FiniteFixedQuotient
 import DkMath.Lib.Algebra.FiniteSubgroupIntersection
+import DkMath.Lib.Algebra.CyclicIntersectionGenerator
 import DkMath.Lib.Algebra.TorsionPreimageQuotient
 import DkMath.Lib.Algebra.PrimePowerCyclicCriterion
 import DkMath.Lib.Algebra.CyclicPrimePowerScalar
@@ -429,6 +430,7 @@ import DkMath.Lib.RepresentationTheory.CofixedBranchSwap
 import DkMath.Lib.RepresentationTheory.CofixedDeterminant
 import DkMath.Lib.RepresentationTheory.TriangularTwoCharacter
 import DkMath.Lib.RepresentationTheory.TriangularTwoCharacteristic
+import DkMath.Lib.RepresentationTheory.UnipotentDifferenceCharacter
 import DkMath.Lib.RepresentationTheory.CofixedImage
 import DkMath.Lib.RepresentationTheory.ConjugateLocalConditions
 import DkMath.Lib.RepresentationTheory.ConjugateSquare

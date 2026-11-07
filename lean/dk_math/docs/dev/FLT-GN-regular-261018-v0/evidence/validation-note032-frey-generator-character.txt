@@ -1,0 +1,134 @@
+NOTE-032 FOUR STEPS: SAME intersection generator, exact local order and ordinary inertia difference character
+Date: 2026-11-07
+Working directory: lean/dk_math
+
+Performed validations; listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyGeneratorDifferenceCharacter DkMathTest.FLT.Note032FreyGeneratorCharacterDependencyAudit
+   Build completed successfully (11161 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12316/12316 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed; only existing file marker printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyGeneratorCharacterSmoke.lean
+   Root exposes SAME actual intersection generator, exact local generator order,
+   p-power smoothness threshold, ordinary additive difference hom, actual SAME Frey
+   inertia quotient character and actual nontrivial prime-order value.
+5. Four full textbook blocks extracted to /tmp/n032-generator-book-{1,2,3,4}.lean.
+   lake env lean run on each separately; all passed without warnings.
+   Exact production source and exact file markers immediately after imports retained.
+6. python3 /tmp/n032-generator-import-audit.py
+   Comment-aware local import closures, acyclicity, source scans/SHA256, seven markers,
+   four full textbook copies, Lib/FLT/root and normal test reachability passed.
+   Closure sizes including self: cyclic generator2, unipotent difference1,
+   actual Frey stage generator316, actual inertia character342.
+   Generic Lib has no FLT imports. No FreyHnoSmallIndex/RegularPrime/HardCase consumers.
+   JSON saved alongside; new Lean source hashes checked again at evidence generation.
+7. git diff --check and direct trailing-whitespace checks on new files passed.
+8. Local model-answer comparison: external checkout HEAD and two file SHA256 saved in
+   note032-frey-generator-reference-audit.json. Read htoric original stage invariants
+   at870-887 and public Frobenius conjugate-power wild-error statement. No external
+   source/proof port/import; no representation q-scaling inferred from field-ratio congruence.
+
+Step 1 IMPLEMENTED:
+- SAME actual coordinate e:ZMod(p^m)~=K, SAME generator g=e(1).val spans original K.
+- SAME local quotient generator order equals actual cardinal of image(K->G/H).
+- Given original cardK=p^m, intersection card=p^r,r<=m, exact quotient order=p^(m-r).
+- Actual SAME intersection=zmultiples(p^(m-r)*g), using exact order of actual multiple
+  and SAME cardinal inclusion. No replacement by merely isomorphic unrelated group.
+
+Step 2 IMPLEMENTED:
+- Actual representation with all difference products zero fixes every actual difference.
+- For SAME basepoint x, c_x(sigma*tau)=c_x(sigma)+c_x(tau). Construct ordinary
+  MonoidHom to Multiplicative ORIGINAL additive group; no cocycle/hom provider.
+- Generic conjugation transport identity uses MOVED basepoint rho(phi)*x.
+  This identity has no nilpotence/Frobenius/wild input. It does NOT prove fixed-
+  basepoint q-scaling or external normalizer conjugacy invariance.
+
+Step 3 IMPLEMENTED:
+- SAME actual Frey T.coordinates generator and SAME valuation smooth subgroup.
+- Exact local quotient order, actual smooth intersection generator, and arbitrary
+  natural k multiple smooth iff actual local image cardinal divides k.
+- For SAME nonsmooth generator, previous r<=n gives exact first p-power smooth
+  threshold: p^k*g smooth iff n+1-r<=k.
+- No hclass/Cofixed/hbad in this local group-theoretic generator analysis.
+  No Neron component-group identification or discriminant valuation order formula.
+
+Step 4 IMPLEMENTED:
+- SAME actual bad address q!=p, SAME A, SAME actual inertia subgroup.
+- For every pair of inertia elements, actual finite torsion difference product=0,
+  internally supplied by existing nodal geometry, actual smooth torsion fixedness
+  and unit valuation of all positive p powers. No product-zero provider at Frey API.
+- Actual finite point x gives ordinary inertia hom to ORIGINAL additive torsion.
+  All values fixed by SAME inertia. Compose with SAME original upper finite quotient
+  to actual ordinary quotient-valued hom; all values fixed under SAME quotient action.
+- Prior actual narrow witness y is SAME basepoint. At SAME witness tau, quotient
+  value is actual delta=tau*y-y class, nonzero and EXACT order p.
+- SAME hclass+Cofixed supplies existence of canonical nontrivial hom/value; no new
+  hbad, placement, character or order input. This hom differs from unit-valued Tate
+  chi/d: Multiplicative here is only a type tag on an original additive group.
+
+Regression scope:
+- Actual ZMod25 top cyclic group with SAME coordinate1 and H=kernel(mod5).
+  Kernel-checked finite enumeration gives intersection card5; exact local quotient
+  generator order5 and actual H=zmultiples(5) tested using generic generator results.
+- Actual shear representation on (ZMod25)^2: t maps (a,b)->(a+t*b,b), actual monoid
+  multiplication and difference-product zero proved. Difference character of (0,1)
+  takes actual value(t,0); t=5 gives nonzero exact order5. No fabricated Fermat Source.
+
+Audit scope and retained boundaries:
+- Twenty selected #print axioms reports: only propext, Classical.choice, Quot.sound.
+- Twenty recursive traversals inspect checked types, constructors and opaque proofs.
+  Reject sorryAx, nonstandard axioms, P2M/P2MW/FltRegular/FreyPackage, old Kummer
+  consumers and FLT endpoints. Require actual SAME coordinate generator and nsmul
+  order formula, original cardinal product, actual difference fixedness/hom law,
+  actual finite geometry product-zero, original quotient map/action and narrow witness.
+- Sixteen public-input audits: generic cardinal r/hr/hI and generic product-zero
+  hypothesis explicit; actual stage supplies original card and Frey actual geometry
+  supplies product-zero internally. Generic conjugation omits hprod/Frobenius/wild.
+  Actual local APIs omit hclass/hbad/Cofixed; final existence retains original
+  hclass/Cofixed but no new absorption/placement/character/order/wild provider.
+- No new sorry/admit/native_decide/unsafe/custom axioms or new-code warnings.
+  Root/suite replay historical sorry warnings in five unrelated existing modules.
+  No whole-repository axiom-clean assertion.
+- No new continuity theorem, Frobenius q-scaling, wild-action triviality, whole-
+  quotient inertia triviality or Galois splitting. Nontrivial inertia hom existence
+  is NOT a contradiction. Frey-specific extra arithmetic and hclass supply remain.
+  General UNCONDITIONAL hno remains UNFINISHED. No FLT closure claimed.
+
+Decisive audits from successful root build:
+PASS: DkMath.Lib.Algebra.CyclicIntersectionGenerator.zmultiples_generator; 3162 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.CyclicIntersectionGenerator.quotient_generator_order; 7849 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.CyclicIntersectionGenerator.quotient_generator_order_prime_power; 7950 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.CyclicIntersectionGenerator.intersection_eq_zmultiples; 8066 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.UnipotentDifferenceCharacter.difference_fixed; 1129 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.UnipotentDifferenceCharacter.difference_mul; 1710 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.UnipotentDifferenceCharacter.character; 1793 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.UnipotentDifferenceCharacter.difference_conjugate; 1203 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.local_generator_order; 26404 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.smooth_intersection_generator; 26504 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.generator_multiple_smooth_iff; 26407 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.local_generator_profile_of_not_smooth; 26580 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.prime_power_inertia_difference_product_zero; 34445 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.inertiaDifferenceCharacter; 34454 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.inertiaDifferenceCharacter_fixed; 34455 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaQuotientDifferenceCharacter; 34490 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaQuotientDifferenceCharacter_apply; 34494 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaQuotientDifferenceCharacter_values_fixed; 34509 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.inertia_character_nontrivial; 34733 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_exists_nontrivial_inertia_quotient_character; 83804 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.Algebra.CyclicIntersectionGenerator.zmultiples_generator; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.CyclicIntersectionGenerator.quotient_generator_order; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.CyclicIntersectionGenerator.quotient_generator_order_prime_power; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.CyclicIntersectionGenerator.intersection_eq_zmultiples; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.RepresentationTheory.UnipotentDifferenceCharacter.difference_fixed; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.RepresentationTheory.UnipotentDifferenceCharacter.character; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.RepresentationTheory.UnipotentDifferenceCharacter.difference_conjugate; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.generator_multiple_smooth_iff; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.local_generator_profile_of_not_smooth; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.prime_power_inertia_difference_product_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.inertiaDifferenceCharacter; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.inertiaDifferenceCharacter_fixed; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaQuotientDifferenceCharacter; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaQuotientDifferenceCharacter_values_fixed; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.inertia_character_nontrivial; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_exists_nontrivial_inertia_quotient_character; remaining arithmetic inputs explicit.

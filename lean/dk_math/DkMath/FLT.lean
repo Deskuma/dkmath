@@ -124,6 +124,8 @@ import DkMath.FLT.FreyCandidateCofixedExclusion
 import DkMath.FLT.FreyStageLocalComponent
 import DkMath.FLT.FreyStageUpperQuotient
 import DkMath.FLT.FreyIntersectionQuotientObstruction
+import DkMath.FLT.FreyStageIntersectionGenerator
+import DkMath.FLT.FreyInertiaDifferenceCharacter
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile

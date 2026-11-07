@@ -1,0 +1,26 @@
+import DkMath
+
+#print "file: docs.dev.FLT-GN-regular-261018-v0.evidence.Note032FreyGeneratorCharacterSmoke"
+
+#check DkMath.Lib.Algebra.CyclicIntersectionGenerator.zmultiples_generator
+#check DkMath.Lib.Algebra.CyclicIntersectionGenerator.quotient_generator_order
+#check DkMath.Lib.Algebra.CyclicIntersectionGenerator.quotient_generator_order_prime_power
+#check DkMath.Lib.Algebra.CyclicIntersectionGenerator.intersection_eq_zmultiples
+#check DkMath.Lib.RepresentationTheory.UnipotentDifferenceCharacter.difference_fixed
+#check DkMath.Lib.RepresentationTheory.UnipotentDifferenceCharacter.difference_mul
+#check DkMath.Lib.RepresentationTheory.UnipotentDifferenceCharacter.character
+#check DkMath.Lib.RepresentationTheory.UnipotentDifferenceCharacter.difference_conjugate
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.local_generator_order
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.smooth_intersection_generator
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.generator_multiple_smooth_iff
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.local_generator_profile_of_not_smooth
+#check DkMath.FLT.Frey.Source.prime_power_inertia_difference_product_zero
+#check DkMath.FLT.Frey.Source.inertiaDifferenceCharacter
+#check DkMath.FLT.Frey.Source.inertiaDifferenceCharacter_fixed
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaQuotientDifferenceCharacter
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaQuotientDifferenceCharacter_apply
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaQuotientDifferenceCharacter_values_fixed
+#check DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.inertia_character_nontrivial
+#check DkMath.FLT.Frey.Source.residual_exists_nontrivial_inertia_quotient_character
+
+#print axioms DkMath.FLT.Frey.Source.residual_exists_nontrivial_inertia_quotient_character
