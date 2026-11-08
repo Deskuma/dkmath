@@ -1,0 +1,131 @@
+NOTE-032 FIVE STEPS: SAME kernel-comparison equivalences and ACTUAL residue/fixed-lift/unit-approximation inputs in constructed tail field
+Date: 2026-11-08
+Working directory: lean/dk_math
+
+Successful final validations (listed Lean/Lake commands exited 0):
+1. lake build DkMath.FLT.FreyRadicalKernelComparison DkMath.Lib.NumberTheory.InertiaRadicalTailField
+   Build completed successfully (4474 jobs).
+2. lake build DkMath.Lib DkMath DkMathTest.FLT.FreyRadicalTailInputs DkMathTest.FLT.Note032FreyTailDependencyAudit
+   Build completed successfully (11212 jobs).
+3. lake test
+   Normal repository test driver passed; reached 12389/12389 jobs.
+4. lake env lean DkMathTest.lean
+   After suite dependencies built: passed, existing module marker printed.
+5. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTailSmoke.lean
+   Root exposes all25 new declarations; both principal endpoints standard axioms only.
+6. lake env lean /tmp/Note032TailLibSmoke.lean
+   import DkMath.Lib ALONE exposes all21 new Lib declarations and actual tail unit
+   approximations, standard axioms only; no Frey Source needed.
+7. FIVE full textbook production blocks extracted to /tmp/n032-tail-book-{1,2,3,4,5}.lean.
+   lake env lean on each separately passed without warnings; exact full sources and
+   exact markers immediately after imports retained.
+8. python3 /tmp/n032-tail-import-audit.py
+   Comment-aware local imports acyclic; EIGHT repository module markers, FIVE full copies,
+   proper Lib/FLT/root/test reachability, forbidden constructs and SHA256 passed.
+   Local closures including self: Frey389, Lib13,14,15,16. FOUR Lib modules have NO FLT
+   dependency, ONE Frey module exposed by FLT facade. Apache2 commit/LICENSE/NOTICE retained.
+9. git diff --check and all-new-file trailing whitespace checks passed.
+10. Model HEAD 115356cbc627159d0d16add0da6e9a2bb3655ed8.
+    Read residue powers/torsion, fixed-field root lifts, unit p-root congruences and their
+    hdiv_Kinf consumption. Port the residue-side inputs, NOT hdiv_Kinf/exact tail roots.
+    Reference/reused/Mathlib/license SHA256 in note032-frey-radical-tail-inputs-reference-audit.json.
+
+Implemented content:
+Step1. SAME pi kernel iff all SAME K evaluations vanish; iff all original finite torsion
+       fixed differences are1, using actual torsion presentation and faithful values.
+       SAME radical kernel containment iff root-fixing inertia has all these SAME zero
+       evaluations/differences. EQUIVALENCE proved, NOT containment itself.
+Step2. Actual residue power roots from algebraic closedness; root integrality proved by
+       original valuation, not provider. Algebraic-over-Q residue nonzero element torsion
+       from primitive INTEGER polynomial, actual modq nonzero polynomial and finite
+       adjoin subalgebra. Residue charq supplied by SAME q-address; no whole-residue finite claim.
+Step3. Unit-exponent roots with SAME residue equal; reduction injective. Primitive root
+       powers and residue polynomial root-count bound give actual residue root lift.
+       p!=q and SAME address internally give unit exponentp^i and primitive root existence;
+       SAME inertia fixes lifted root, placing it in ACTUAL K0=fixedField(I).
+Step4. Actual intermediate E containing K0, and original unit u: construct residue p-root,
+       finite order, split p-primary/prime-to-p order, lift only root-of-unity part into K0,
+       combine with original u power to construct z in SAME comap valuation ring.
+       z^p-u in maximal ideal, and z itself UNIT. NO hroots/htor/hlifts providers.
+       This is CONGRUENCE, NOT z^p=u.
+Step5. Construct ACTUAL tail field E_infty=Q(K0 union all q p-power roots). Prove K0 inclusion,
+       all radical membership, SAME compatible tower INSIDE E_infty. Supply residue p-power
+       root lifts and UNIT p-root approximations there and in any actual overfield.
+       Structural inclusion supplied internally for E_infty; arbitrary overfield relation explicit.
+
+Regression and audit scope:
+- ZMod9 unit u=4 and unit z=1: square congruent modulo ideal(3), but z^2!=u.
+- Exponent2 residue reduction separates roots of unity; exponent3 has distinct roots
+  1,4 with same mod3 residue. Guards UNIT EXPONENT/p!=q not dropped.
+- Coordinate kernel noncontainment on (ZMod5)^2 keeps radical vs common kernel target distinct.
+- #print axioms all25: standard propext/Classical.choice/Quot.sound, no sorryAx.
+  Checked types/constructors/opaque values require SAME evaluation/finite torsion bridges,
+  actual algebraic closedness, primitive integer polynomial, finite adjoin, actual root-count
+  argument, original unit-root inertia rigidity, actual residue inputs and constructed tail field.
+- Twenty-five public-input audits: structural containment hE, unit hu, generic unit exponent
+  hmu and primitive root h-zeta retained where needed; no new hcompare, hgen, htail,
+  Henselian, root/torsion/lift/fixedness/cardinality/injection/continuity provider.
+  New Lib APIs have NO hclass/Cofixed/Source input; existing arithmetic endpoint unmodified.
+
+Boundaries:
+- Five pre-existing unrelated sorry warnings in root/suite, no new warning; no global sorry-free claim.
+- Kernel comparison EQUIVALENCES and actual tail RESIDUE INPUTS completed, not kernel inclusion.
+- Approximate UNIT root is not exact root. No exact-root/Henselian lifting, value-group
+  p-divisibility, all-nonzero field p-closure, finite Galois index proof, profinite-tail
+  p-root construction or strong inertia error decomposition completed this cycle.
+- Frey H cyclicity/singleton detection, global class supply/arithmetic exclusion,
+  continuous H1 comparison and UNCONDITIONAL general hno remain INCOMPLETE.
+
+Twenty-five checked roots and required dependencies:
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.mem_commonProjection_kernel_iff_evaluations; 42233 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.mem_commonProjection_kernel_iff_fixed_differences; 42234 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.radical_kernel_comparison_iff_evaluations; 42274 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.radical_kernel_comparison_iff_fixed_differences; 42275 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.AlgebraicResidue.power_surjective; 10235 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.AlgebraicResidue.nonzero_finite_order; 14218 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.eq_of_pow_eq_one_of_sub_mem; 6342 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.root_mem; 4932 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.residueRoot; 6089 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.residueRoot_pow; 6091 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.residueRoot_injective; 7667 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.exists_root_lift; 11465 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.fixedField; 15945 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.primePower_root_lift; 28633 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.approximate_unit_pRoot; 29455 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.approximate_unit_pRoot_isUnit; 29458 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.radicals; 15183 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.tailField; 15971 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.fixedField_le_tailField; 15974 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.radical_mem_tailField; 15973 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.tower_mem_tailField; 19607 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.compatible_roots_in_tailField; 19681 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.tailField_primePower_root_lifts; 28651 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.tailField_unit_roots; 29471 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaResidue.tailOverfield_unit_roots; 29471 reachable constants; required actual theorems present.
+
+Twenty-five public-input reports:
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.mem_commonProjection_kernel_iff_evaluations; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.mem_commonProjection_kernel_iff_fixed_differences; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.radical_kernel_comparison_iff_evaluations; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.radical_kernel_comparison_iff_fixed_differences; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.AlgebraicResidue.power_surjective; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.AlgebraicResidue.nonzero_finite_order; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.eq_of_pow_eq_one_of_sub_mem; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.root_mem; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.residueRoot; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.residueRoot_pow; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.residueRoot_injective; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.exists_root_lift; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.fixedField; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.primePower_root_lift; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.approximate_unit_pRoot; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.approximate_unit_pRoot_isUnit; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.radicals; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.tailField; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.fixedField_le_tailField; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.radical_mem_tailField; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.tower_mem_tailField; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.compatible_roots_in_tailField; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.tailField_primePower_root_lifts; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.tailField_unit_roots; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaResidue.tailOverfield_unit_roots; remaining arithmetic inputs explicit.

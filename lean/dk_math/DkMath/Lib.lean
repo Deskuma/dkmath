@@ -351,6 +351,10 @@ import DkMath.Lib.NumberTheory.PrimeRadicalTower
 import DkMath.Lib.NumberTheory.InertiaRadicalCharacter
 import DkMath.Lib.NumberTheory.InertiaRadicalGenerator
 import DkMath.Lib.NumberTheory.InertiaRadicalCorrection
+import DkMath.Lib.NumberTheory.AlgebraicResiduePowers
+import DkMath.Lib.NumberTheory.InertiaResidueRootLifts
+import DkMath.Lib.NumberTheory.InertiaResidueUnitRoots
+import DkMath.Lib.NumberTheory.InertiaRadicalTailField
 import DkMath.Lib.NumberTheory.NumberFieldInertiaGeneration
 import DkMath.Lib.NumberTheory.NumberFieldInertiaRepresentation
 import DkMath.Lib.NumberTheory.OddRootPairMoments

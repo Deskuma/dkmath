@@ -120,6 +120,8 @@ import DkMathTest.FLT.FreyCommonTameStructure
 import DkMathTest.FLT.Note032FreyCommonStructureDependencyAudit
 import DkMathTest.FLT.FreyRadicalGenerator
 import DkMathTest.FLT.Note032FreyRadicalDependencyAudit
+import DkMathTest.FLT.FreyRadicalTailInputs
+import DkMathTest.FLT.Note032FreyTailDependencyAudit
 import DkMathTest.FLT.Note032FreyCyclotomicConditionalTowerDependencyAudit
 import DkMathTest.FLT.Note032CyclotomicUnitClosureDependencyAudit
 import DkMathTest.FLT.Note032NumberFieldUnitTraceDependencyAudit
