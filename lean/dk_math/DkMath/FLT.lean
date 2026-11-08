@@ -155,6 +155,11 @@ import DkMath.FLT.FreyKernelCharacterContinuity
 import DkMath.FLT.FreyKernelTameDescent
 import DkMath.FLT.FreyKernelCommonTameQuotient
 import DkMath.FLT.FreyKernelFiniteDetector
+import DkMath.FLT.FreyCommonTameFaithful
+import DkMath.FLT.FreyCommonTamePGroup
+import DkMath.FLT.FreyCommonTameEvaluation
+import DkMath.FLT.FreyCommonTameGeneratorCriterion
+import DkMath.FLT.FreyCommonTameStructureCertificate
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile

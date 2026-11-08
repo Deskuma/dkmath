@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-08",
+  "new_modules": [
+    "DkMath.FLT.FreyCommonTameFaithful",
+    "DkMath.FLT.FreyCommonTamePGroup",
+    "DkMath.FLT.FreyCommonTameEvaluation",
+    "DkMath.FLT.FreyCommonTameGeneratorCriterion",
+    "DkMath.FLT.FreyCommonTameStructureCertificate"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.FLT.FreyCommonTameFaithful": {
+      "local_module_count": 379,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCommonTamePGroup": {
+      "local_module_count": 380,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCommonTameEvaluation": {
+      "local_module_count": 381,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCommonTameGeneratorCriterion": {
+      "local_module_count": 382,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCommonTameStructureCertificate": {
+      "local_module_count": 383,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/FLT/FreyCommonTameFaithful.lean": true,
+    "DkMath/FLT/FreyCommonTamePGroup.lean": true,
+    "DkMath/FLT/FreyCommonTameEvaluation.lean": true,
+    "DkMath/FLT/FreyCommonTameGeneratorCriterion.lean": true,
+    "DkMath/FLT/FreyCommonTameStructureCertificate.lean": true,
+    "DkMathTest/FLT/FreyCommonTameStructure.lean": true,
+    "DkMathTest/FLT/Note032FreyCommonStructureDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyCommonStructureSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 5,
+  "new_lean_file_sha256": {
+    "DkMath/FLT/FreyCommonTameFaithful.lean": "c1ef2f78a5fa22821442c74b0630b7da72b2255104216f71bc8d28079812c9f9",
+    "DkMath/FLT/FreyCommonTamePGroup.lean": "eb238a6ad9c97c33f4bac216d6c33004a032a6a53a89bb9c7247a90d67181d71",
+    "DkMath/FLT/FreyCommonTameEvaluation.lean": "492888d695fc156c71fe9ef8ef479bda7444bc802f06bda7bc5258a45d1157b2",
+    "DkMath/FLT/FreyCommonTameGeneratorCriterion.lean": "8077973562404d114a4364eef04c7ba932c263d8f877eff4d7409293ebe61bbf",
+    "DkMath/FLT/FreyCommonTameStructureCertificate.lean": "595da07daac27ae5f6ee157ce8fd3a4aff20550ea316393755099527cb6e11de",
+    "DkMathTest/FLT/FreyCommonTameStructure.lean": "bc75758a572f4269d2fc4610fe6817e9e1e83f4966999cf2ca96d741683e1094",
+    "DkMathTest/FLT/Note032FreyCommonStructureDependencyAudit.lean": "28dc800de6ba1556968c52e8628163d65bede4489053cd601df308124469d001",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyCommonStructureSmoke.lean": "30a4f295c73dab05bc0d4f5d3ee89e6e9c40a155dd1714c4268bc33e2d9cb8c1"
+  },
+  "boundary": "FIVE Frey-specific production modules. SAME H values faithful, same Group commutative; original I-to-H projection surjective. Actual cardH divides cardF^cardK, H IsPGroup, h^cardF=1 and stage exponent p^(n+3) kills H. Actual H-to-K linear evaluations and K-to-H characters separate on both sides. Explicit hg/hcyclic/hgen ONLY in conditional generator-consumption lemmas. Actual finite-level decomposition consumption yields SAME gamma singleton evaluation injective, not generator existence. SAME obstruction tau maps nontrivially, giving positive cardH exponent and sharp F exponent. Final SAME hclass/Cofixed endpoint has NO hg/hgen/hcyclic input and returns cyclic consequences only as implication. R1 complete, R2 existence incomplete; no noncyclic-to-cyclic inference, strict orderp for projected tau, continuous H1 comparison/global class supply/arithmetic contradiction/unconditional hno."
+}
