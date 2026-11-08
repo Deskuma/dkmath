@@ -1,0 +1,32 @@
+import DkMath
+
+#print "file: docs.dev.FLT-GN-regular-261018-v0.evidence.Note032ContinuousKernelBridgeSmoke"
+
+#check DkMath.Lib.NumberTheory.CyclotomicClassVanishing.weightTwoComponent
+#check DkMath.Lib.NumberTheory.CyclotomicClassVanishing.weightTwo_eq_bot_iff
+#check DkMath.Lib.NumberTheory.CyclotomicClassVanishing.bernoulli_two_numerator
+#check DkMath.Lib.NumberTheory.CyclotomicClassVanishing.prime_not_dvd_bernoulli_two_numerator
+#check DkMath.Lib.RepresentationTheory.ContinuousTrivialCharacterH1.cocycle
+#check DkMath.Lib.RepresentationTheory.ContinuousTrivialCharacterH1.cocycle_continuous
+#check DkMath.Lib.RepresentationTheory.ContinuousTrivialCharacterH1.forgetClass
+#check DkMath.Lib.RepresentationTheory.ContinuousTrivialCharacterH1.forgetClass_evaluate
+#check DkMath.Lib.RepresentationTheory.ContinuousTrivialCharacterH1.forgetClass_injective
+#check DkMath.Lib.RepresentationTheory.ContinuousTrivialCharacterH1.forgetClass_ne_zero
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.continuousKernelCharacter
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.continuousKernelCharacter_apply
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.continuousKernelCharacter_injective
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.continuousKernelCharacter_forget
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.continuousConnectingCocycle
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.continuousConnectingCocycle_continuous
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.continuousConnectingCocycle_eq
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.continuousConnectingClass_eq_delta
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.continuousKernelTameCharacter
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.continuousKernelTameCharacter_mk
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.continuousKernelTameCocycle_mk
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.continuousKernelTameClass_inflation
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.continuousKernelTameCharacter_injective
+#check DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.cyclic_balanced_profile
+#check DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.stage_zero_card_profile
+#check DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.stage_one_card_profile
+#check DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.continuous_kernel_detected
+#check DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.continuous_class_nonzero

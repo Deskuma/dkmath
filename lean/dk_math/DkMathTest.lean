@@ -448,4 +448,7 @@ import DkMathTest.FLT.Note032InertiaTailDependencyAudit
 import DkMathTest.FLT.FreyFiniteKernelClosure
 import DkMathTest.FLT.Note032FiniteKernelDependencyAudit
 
+import DkMathTest.FLT.FreyContinuousKernelBridge
+import DkMathTest.FLT.Note032ContinuousKernelDependencyAudit
+
 #print "file: DkMathTest"

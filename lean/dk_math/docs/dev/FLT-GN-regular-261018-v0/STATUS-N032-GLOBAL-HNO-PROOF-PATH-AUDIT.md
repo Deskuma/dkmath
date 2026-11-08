@@ -1,6 +1,6 @@
 # NOTE-032: 一般 `hno` の証明経路監査
 
-更新日: 2026-11-08。`__REVIEW.md` を参考に実ソースを照合し、局所入力を形式化した。
+更新日: 2026-11-09。`__REVIEW.md` を参考に実ソースを照合し、局所入力を形式化した。
 
 ## 現在の証明境界
 
@@ -8,7 +8,13 @@
 同じ全段原始生成元と H の一様指数を用い、指定した ker χ_(n+3)⊆ker π まで引き下ろした。
 同じ具体的な γ の像が実際の共通商 H を生成し、H の巡回性と ev_γ の単射性、|K|∣|F| を証明した。
 新しい hgen/hcyclic/hcompare/hopen/hcontinuous を公開入力にしていない。元の段・局所住所条件は保持する。
-hclass の算術的供給、共鳴障害排除、連続 H¹ 比較、大域矛盾と一般 hno 無条件閉鎖は未完成。
+hclass の算術的供給、共鳴障害排除、大域連続 H¹/Selmer 比較、大域矛盾と一般 hno 無条件閉鎖は未完成。
+
+今回、実際の全 K を連続指標へ埋め込み、同じ cocycle の通常 H¹ 類・連結像・tame inflation を厳密に回収した。
+同じ非零障害核元は、同じ具体的 γ の連続指標値で検出される。
+障害の指数は s≤r、s≤(n+3)/2。n=0 は (r,s)=(2,1)、n=1 は (3,1) または (2,2)。
+hclass の実際の ω² 部分加群と零性の同値条件、B₂ の分子=1 を形式化したが、類群消滅は未証明。
+Herbrand・反射定理の適用、大域 Selmer/非分岐条件と共鳴障害排除は依然として別工程である。
 
 根の塔側の生成元存在を実装した。代数閉性から同じ q の互換根の塔を構成し、
 既存 Kummer 慣性算術で第1段を動かす同じ γ を選び、全正段の原始作用を証明した。
@@ -1857,3 +1863,20 @@ H の巡回性・同じ γ の単一評価・大域算術排除・hclass の供�
 検証: `evidence/validation-note032-finite-kernel-closure.txt`。
 以前の日付付き節の「有限段核包含・H 巡回性・単一評価は未完成」は当時の記録であり、今回解消した。
 **指定段核包含・共通商巡回性・単一評価は完成。hclass の算術的供給・共鳴障害排除・連続 H¹ 比較・大域矛盾・一般 hno 無条件閉鎖は未完成。**
+
+
+## 2026-11-09: 7ステップ — ω² 対象・連続核指標・同じ H¹ 代表比較・鋭い障害指数
+
+1. `CyclotomicWeightTwoTarget`（Lib）: 元の classModPAction の ω² 固有部分加群を定義し、現行 hclass との同値条件、B₂ の分子=1 を証明。消滅自体は未証明。
+2. `ContinuousTrivialCharacterH1`（Lib）: 自明係数連続指標の同じ cocycle の連続性と通常 H¹ 忘却の単射性。
+3. `FreyContinuousKernelCharacters`（FLT）: 実際の全 K の連続指標埋め込みと同じ k.val の回収。
+4. `FreyContinuousConnectingComparison`（FLT）: 元の有限捩れ連結 cocycle の連続性・既存代表との等式・同じ δ₀ 像。
+5. `FreyContinuousTameInflation`（FLT）: 同じ連続 tame 指標と cocycle の商上の値、元の通常 inflation による k.val 回収。
+6. `FreyCyclicKernelBalancedProfile`（FLT）: s≤r と s≤(n+3)/2、n=0 と n=1 の指数分類。追加の巡回性 provider なし。
+7. `FreyContinuousObstructionCertificate`（FLT）: 元の同じ非零核元の連続代表・同じ具体的 γ での非自明検出・同じ通常 H¹ 類。
+
+28宣言の再帰依存・標準公理監査と、実際の Frey 入口18件の追加 provider 不在を通常テストへ接続した。
+教科書: `TEXTBOOK-N032-CONTINUOUS-KERNEL-BRIDGE-261109.md`（全7モジュール、必須 #print 保持）。
+検証: `evidence/validation-note032-continuous-kernel-bridge.txt`。
+過去の日付付き節の連続 H¹ 比較未完成は、今回扱った実際の自明係数核の狭い比較では解消した。
+**一般の連続 H¹ 全体・大域 Selmer 条件を形式化したとは主張しない。hclass の供給・共鳴障害排除・無条件一般 hno は未完成。**

@@ -226,6 +226,12 @@ import DkMath.FLT.FreyRadicalFiniteDetection
 import DkMath.FLT.FreyRadicalKernelClosure
 import DkMath.FLT.FreyCommonTameCyclicClosure
 
+import DkMath.FLT.FreyContinuousKernelCharacters
+import DkMath.FLT.FreyContinuousConnectingComparison
+import DkMath.FLT.FreyContinuousTameInflation
+import DkMath.FLT.FreyCyclicKernelBalancedProfile
+import DkMath.FLT.FreyContinuousObstructionCertificate
+
 #print "file: DkMath.FLT"
 
 set_option linter.style.longLine false

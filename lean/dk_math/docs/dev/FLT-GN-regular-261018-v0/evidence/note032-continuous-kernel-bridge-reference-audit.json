@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-09",
+  "checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": {
+    "P2M/Sol/S_groupCohomology_nonempty_continuousH1Sr_inf_linearEquiv_eqLevelConstantHom.lean": "3645056eacf39d7edc5b174f0ee54ba2fc17d3cdf6cf2491903d8be0bf13a1cc"
+  },
+  "review_sha256": "446ac45abdf35cce95933a43e1aaf57845dbe52f957ee3872008a7849a2ef455",
+  "primary_literature": [
+    {
+      "url": "https://www.math.ucla.edu/~sharifi/aws-iwasawa.pdf",
+      "sections": "2.2.1 Leopoldt reflection and 2.2.3 Herbrand-Ribet",
+      "use": "Research audit for omega2 target; NOT a Lean provider and NOT implemented arithmetic vanishing."
+    }
+  ],
+  "comparison": "Model uses trivial-action cocycle uniqueness plus separate continuous/unramified/global level constraints. New DkMath code packages actual existing continuous characters, compares same cocycle and ordinary H1/connecting/inflation only. Does not import external continuousH1Sr or claim global Selmer comparison.",
+  "hclass_audit": "Current ClassModP and classModPAction used unchanged in weightTwoComponent; zero iff current hclass. B2 numerator1 checked. Inspected local CyclotomicClassVanishing and Mathlib cyclotomic sources; no arithmetic vanishing theorem supplied or assumed by this iteration. Herbrand/reflection and identification of classical primary class quotient remain required.",
+  "new_code": "Two Lib modules and five FLT modules; original DkMath composition, no external imports/providers.",
+  "remaining": "Arithmetic omega2 class vanishing, global Selmer/unramified conditions, resonance obstruction, global contradiction and unconditional general hno."
+}

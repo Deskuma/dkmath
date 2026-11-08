@@ -505,6 +505,9 @@ import DkMath.Lib.NumberTheory.InertiaTailGaloisRoots
 
 import DkMath.Lib.NumberTheory.InertiaRadicalKernelTopology
 
+import DkMath.Lib.NumberTheory.CyclotomicWeightTwoTarget
+import DkMath.Lib.RepresentationTheory.ContinuousTrivialCharacterH1
+
 #print "file: DkMath.Lib"
 
 /-!
