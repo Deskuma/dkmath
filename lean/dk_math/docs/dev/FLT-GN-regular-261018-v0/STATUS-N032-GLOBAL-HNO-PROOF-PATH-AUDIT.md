@@ -16,6 +16,11 @@ hclass の算術的供給、共鳴障害排除、大域連続 H¹/Selmer 比較�
 hclass の実際の ω² 部分加群と零性の同値条件、B₂ の分子=1 を形式化したが、類群消滅は未証明。
 Herbrand・反射定理の適用、大域 Selmer/非分岐条件と共鳴障害排除は依然として別工程である。
 
+今回、元の全 G 作用の Q 表現と連続大域 coboundary を構成し、同じ局所 F cocycle の係数包含がその制限となる図式を証明した。
+実際の分解群は F を保存し、同じ cocycle は点の輸送と慣性共役について共変となる。
+元の障害点とその分解群による像で、局所 F 類の非零性と大域 Q 類の零性が両立することを証明した。
+これは係数を区別した Q 値の大域起源であり、F 値の大域 Selmer 類を構成したという意味ではない。
+
 根の塔側の生成元存在を実装した。代数閉性から同じ q の互換根の塔を構成し、
 既存 Kummer 慣性算術で第1段を動かす同じ γ を選び、全正段の原始作用を証明した。
 実際の根核商 C_m=I/ker χ_m は巡回で濃度 p^m。各 τ は有界な γ^j と根を固定する ε に分かれる。
@@ -1880,3 +1885,19 @@ H の巡回性・同じ γ の単一評価・大域算術排除・hclass の供�
 検証: `evidence/validation-note032-continuous-kernel-bridge.txt`。
 過去の日付付き節の連続 H¹ 比較未完成は、今回扱った実際の自明係数核の狭い比較では解消した。
 **一般の連続 H¹ 全体・大域 Selmer 条件を形式化したとは主張しない。hclass の供給・共鳴障害排除・無条件一般 hno は未完成。**
+
+
+## 2026-11-09: 次の7ステップ — 実際の Q 大域代表・局所制限・分解群共変性・F 障害の係数境界
+
+1. `ValuationInertiaNormalizer`（Lib）: 同じ D 内で元の I が正規化されることを内部証明。
+2. `FreyGlobalUpperCoefficient`（FLT）: 元の Q の全 G 表現、同じ商位相、連続大域 coboundary とその大域類の零性。
+3. `FreyGlobalInertiaRestriction`（FLT）: 同じ係数射と群包含による制限で、以前の同じ慣性代表を回収。
+4. `FreyDecompositionFixedCoefficient`（FLT）: 元の F の D 安定性と実際の D 表現、各作用の単射性。
+5. `FreyDecompositionCocycleCovariance`（FLT）: 同じ点の輸送と共役についての大域 Q cocycle・連続 F cocycle の共変性。
+6. `FreyRelativeGlobalOrigin`（FLT）: F→Q と I→G の二経路が同じ代表・同じ通常 H¹ 類を与える図式。
+7. `FreyRelativeGlobalObstructionCertificate`（FLT）: 同じ障害点とその D 像で、局所 F 類≠0 と大域 Q 類=0 を同時に保持。
+
+新規27宣言（instance 含む）の再帰依存・標準公理監査と、公開入力27件を通常テスト入口へ接続した。
+教科書: `TEXTBOOK-N032-RELATIVE-GLOBAL-ORIGIN-261109.md`（全7モジュール、必須 #print 保持）。
+検証: `evidence/validation-note032-relative-global-origin.txt`。
+**F 値の大域 Selmer 類やその算術条件は未供給。hclass の消滅・共鳴障害排除・無条件一般 hno は未完成。**

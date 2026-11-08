@@ -451,4 +451,7 @@ import DkMathTest.FLT.Note032FiniteKernelDependencyAudit
 import DkMathTest.FLT.FreyContinuousKernelBridge
 import DkMathTest.FLT.Note032ContinuousKernelDependencyAudit
 
+import DkMathTest.FLT.FreyRelativeGlobalOrigin
+import DkMathTest.FLT.Note032RelativeOriginDependencyAudit
+
 #print "file: DkMathTest"

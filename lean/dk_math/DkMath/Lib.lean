@@ -508,6 +508,8 @@ import DkMath.Lib.NumberTheory.InertiaRadicalKernelTopology
 import DkMath.Lib.NumberTheory.CyclotomicWeightTwoTarget
 import DkMath.Lib.RepresentationTheory.ContinuousTrivialCharacterH1
 
+import DkMath.Lib.NumberTheory.ValuationInertiaNormalizer
+
 #print "file: DkMath.Lib"
 
 /-!

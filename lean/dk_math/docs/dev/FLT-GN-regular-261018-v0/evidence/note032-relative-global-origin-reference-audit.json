@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-09",
+  "checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": {
+    "P2M/Sol/S_groupCohomology_locRes_extArithLoc_apply_mem_continuousH1.lean": "31e2b6f32beacbafe90819d0ed7234367f9f007adca3afb4e7a8febeb8054a8b"
+  },
+  "review_sha256": "e7e130e1638d987732d267ee8d635d8ac7659aa22831b1eb3a69ab855e0ab385",
+  "comparison": "Model restricts the SAME global cocycle with its specified coefficient representation to local continuous H1. New DkMath code explicitly constructs the existing global Q representation/coboundary, restricts it to SAME local Q and compares with inclusion of SAME continuous local F cocycle. It does NOT replace Q with F or infer a global F Selmer class.",
+  "new_math": "Actual inertia normalization inside D, actual F stability and D representation, conjugate covariance of SAME Q and F cocycles; original and D-translated obstruction retain local F nonzero class while SAME point has global Q zero class.",
+  "scope": "One Lib and six FLT modules, no extra hclass/hglobal/hselmer/F-stability/origin provider. Original DkMath composition of checked coefficient/action interfaces; no external theorem imports.",
+  "remaining": "Arithmetic omega2 vanishing, global F-valued class and Selmer/unramified conditions, resonance exclusion, global contradiction, unconditional general hno."
+}

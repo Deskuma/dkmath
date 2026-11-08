@@ -232,6 +232,13 @@ import DkMath.FLT.FreyContinuousTameInflation
 import DkMath.FLT.FreyCyclicKernelBalancedProfile
 import DkMath.FLT.FreyContinuousObstructionCertificate
 
+import DkMath.FLT.FreyGlobalUpperCoefficient
+import DkMath.FLT.FreyGlobalInertiaRestriction
+import DkMath.FLT.FreyDecompositionFixedCoefficient
+import DkMath.FLT.FreyDecompositionCocycleCovariance
+import DkMath.FLT.FreyRelativeGlobalOrigin
+import DkMath.FLT.FreyRelativeGlobalObstructionCertificate
+
 #print "file: DkMath.FLT"
 
 set_option linter.style.longLine false
