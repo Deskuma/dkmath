@@ -160,6 +160,7 @@ import DkMath.FLT.FreyCommonTamePGroup
 import DkMath.FLT.FreyCommonTameEvaluation
 import DkMath.FLT.FreyCommonTameGeneratorCriterion
 import DkMath.FLT.FreyCommonTameStructureCertificate
+import DkMath.FLT.FreyRadicalGeneratorCertificate
 import DkMath.FLT.FreyGoodReductionTowerObstruction
 import DkMath.FLT.FreyPrimeGoodFiltration
 import DkMath.FLT.FreyPrimeProfile

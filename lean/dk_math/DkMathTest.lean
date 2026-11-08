@@ -118,6 +118,8 @@ import DkMathTest.FLT.FreyKernelFiniteDetector
 import DkMathTest.FLT.Note032FreyDetectorDependencyAudit
 import DkMathTest.FLT.FreyCommonTameStructure
 import DkMathTest.FLT.Note032FreyCommonStructureDependencyAudit
+import DkMathTest.FLT.FreyRadicalGenerator
+import DkMathTest.FLT.Note032FreyRadicalDependencyAudit
 import DkMathTest.FLT.Note032FreyCyclotomicConditionalTowerDependencyAudit
 import DkMathTest.FLT.Note032CyclotomicUnitClosureDependencyAudit
 import DkMathTest.FLT.Note032NumberFieldUnitTraceDependencyAudit

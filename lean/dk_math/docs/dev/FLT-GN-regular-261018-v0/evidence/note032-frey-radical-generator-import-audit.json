@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-08",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.PrimeRadicalTower",
+    "DkMath.Lib.NumberTheory.InertiaRadicalCharacter",
+    "DkMath.Lib.NumberTheory.InertiaRadicalGenerator",
+    "DkMath.Lib.NumberTheory.InertiaRadicalCorrection",
+    "DkMath.FLT.FreyRadicalGeneratorCertificate"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.NumberTheory.PrimeRadicalTower": {
+      "local_module_count": 1,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.InertiaRadicalCharacter": {
+      "local_module_count": 5,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.InertiaRadicalGenerator": {
+      "local_module_count": 12,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.InertiaRadicalCorrection": {
+      "local_module_count": 13,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyRadicalGeneratorCertificate": {
+      "local_module_count": 388,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/NumberTheory/PrimeRadicalTower.lean": true,
+    "DkMath/Lib/NumberTheory/InertiaRadicalCharacter.lean": true,
+    "DkMath/Lib/NumberTheory/InertiaRadicalGenerator.lean": true,
+    "DkMath/Lib/NumberTheory/InertiaRadicalCorrection.lean": true,
+    "DkMath/FLT/FreyRadicalGeneratorCertificate.lean": true,
+    "DkMathTest/FLT/FreyRadicalGenerator.lean": true,
+    "DkMathTest/FLT/Note032FreyRadicalDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyRadicalSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 5,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/NumberTheory/PrimeRadicalTower.lean": "ef9f64a52bcc751ef5f55289d0db1fa0c13148c741c2e2ba16ad791599b15e4a",
+    "DkMath/Lib/NumberTheory/InertiaRadicalCharacter.lean": "0dd534d3bff09fe894ae9376f4c49ef91eeda5b2e381ab6aa2b2578f2d20b0ad",
+    "DkMath/Lib/NumberTheory/InertiaRadicalGenerator.lean": "f275737f290f0bd32078a18af52b3bcab7821a13553665073371fcdd60ac3de1",
+    "DkMath/Lib/NumberTheory/InertiaRadicalCorrection.lean": "4e46424e2e2bd3941405cd2530217e5a2e52e675c3abf2b2f282d3b5192e69c2",
+    "DkMath/FLT/FreyRadicalGeneratorCertificate.lean": "c327f9226a7e3fea3d2801021434edf2a74568e240086f6b18f5200ca1122a80",
+    "DkMathTest/FLT/FreyRadicalGenerator.lean": "9b0c476ca7af1f171dccbed9e1165649ad6704399ab9bfa914f06c46f0d367c8",
+    "DkMathTest/FLT/Note032FreyRadicalDependencyAudit.lean": "8b7405a3ab041b5e42c077c34695eae099e942c1db0a15dc1100d5a9cf31ee69",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyRadicalSmoke.lean": "4bc3f2eac54939dbe4e79ff8a664a4712911b0232e3b8da82aa21ae3d9fe9063"
+  },
+  "Lib_facade_reachability_and_no_FLT_dependency": true,
+  "four_Lib_files_Apache2_provenance_preserved": true,
+  "boundary": "FOUR Lib arithmetic modules and ONE Frey application. Construct actual compatible radical tower and ordinary unit-valued inertia character using actual unit-power rigidity. Actual first-root Kummer inertia movement supplies SAME gamma primitive at ALL positive stages, no hgen/hcyclic/htail/hclass/Source provider. Actual root inertia quotient C_m cyclic/cardp^m, bounded gamma powers with SAME root-fixing epsilon. Generic of_primitive helpers have explicit hprimitive supplied internally by actual existence. Frey SAME n,T,q,A,tau,y,h,k,d: common projection factorization and d=j*ev_gamma(k)+ev_epsilon(k), correction retained. C_m is NOT SAME H; NO ker(chi_m)<=ker(pi), correction wildness or p-power divisibility, H cyclicity, continuous H1 comparison/global class supply/arithmetic contradiction/unconditional hno."
+}

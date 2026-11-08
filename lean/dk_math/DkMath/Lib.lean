@@ -347,6 +347,10 @@ import DkMath.Lib.NumberTheory.IdealGaloisTransport
 import DkMath.Lib.NumberTheory.IdealPowerObstruction
 import DkMath.Lib.NumberTheory.IntegralClosureInertiaLift
 import DkMath.Lib.NumberTheory.KummerInertia
+import DkMath.Lib.NumberTheory.PrimeRadicalTower
+import DkMath.Lib.NumberTheory.InertiaRadicalCharacter
+import DkMath.Lib.NumberTheory.InertiaRadicalGenerator
+import DkMath.Lib.NumberTheory.InertiaRadicalCorrection
 import DkMath.Lib.NumberTheory.NumberFieldInertiaGeneration
 import DkMath.Lib.NumberTheory.NumberFieldInertiaRepresentation
 import DkMath.Lib.NumberTheory.OddRootPairMoments
