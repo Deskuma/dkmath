@@ -498,6 +498,11 @@ import DkMath.Lib.NumberTheory.InertiaUnitExactRoots
 import DkMath.Lib.NumberTheory.ValuationRadicalDivisibility
 import DkMath.Lib.NumberTheory.InertiaRadicalExactRoots
 
+import DkMath.Lib.NumberTheory.InertiaKrullClosed
+import DkMath.Lib.NumberTheory.KummerPrimeQuotientExclusion
+import DkMath.Lib.NumberTheory.ProfiniteCoprimeRoots
+import DkMath.Lib.NumberTheory.InertiaTailGaloisRoots
+
 #print "file: DkMath.Lib"
 
 /-!

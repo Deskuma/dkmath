@@ -219,6 +219,8 @@ import DkMath.FLT.QuadraticEssence
 
 import DkMath.FLT.Samples
 
+import DkMath.FLT.FreyTailKernelVanishing
+
 #print "file: DkMath.FLT"
 
 set_option linter.style.longLine false

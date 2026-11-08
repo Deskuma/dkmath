@@ -442,4 +442,7 @@ import DkMathTest.Lib.Algebra.TorsionTowerFrobenius
 import DkMathTest.NumberTheory.InertiaRadicalExactRoots
 import DkMathTest.NumberTheory.Note032ExactRadicalDependencyAudit
 
+import DkMathTest.FLT.InertiaTailKernelVanishing
+import DkMathTest.FLT.Note032InertiaTailDependencyAudit
+
 #print "file: DkMathTest"

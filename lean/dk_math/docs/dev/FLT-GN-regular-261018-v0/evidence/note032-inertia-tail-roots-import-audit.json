@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-08",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.InertiaKrullClosed",
+    "DkMath.Lib.NumberTheory.KummerPrimeQuotientExclusion",
+    "DkMath.Lib.NumberTheory.ProfiniteCoprimeRoots",
+    "DkMath.Lib.NumberTheory.InertiaTailGaloisRoots",
+    "DkMath.FLT.FreyTailKernelVanishing"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.NumberTheory.InertiaKrullClosed": {
+      "local_module_count": 18,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.KummerPrimeQuotientExclusion": {
+      "local_module_count": 19,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.ProfiniteCoprimeRoots": {
+      "local_module_count": 1,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.InertiaTailGaloisRoots": {
+      "local_module_count": 25,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyTailKernelVanishing": {
+      "local_module_count": 403,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/NumberTheory/InertiaKrullClosed.lean": true,
+    "DkMath/Lib/NumberTheory/KummerPrimeQuotientExclusion.lean": true,
+    "DkMath/Lib/NumberTheory/ProfiniteCoprimeRoots.lean": true,
+    "DkMath/Lib/NumberTheory/InertiaTailGaloisRoots.lean": true,
+    "DkMath/FLT/FreyTailKernelVanishing.lean": true,
+    "DkMathTest/FLT/InertiaTailKernelVanishing.lean": true,
+    "DkMathTest/FLT/Note032InertiaTailDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032InertiaTailSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 5,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/NumberTheory/InertiaKrullClosed.lean": "802f7c9e56ae9ef5528048c391585f4c45a03896465529f9cccd4120cdc1ff37",
+    "DkMath/Lib/NumberTheory/KummerPrimeQuotientExclusion.lean": "872ddc9bd72d8aec7961ca268cb31df1033e218c00bac8f46be4fbfc2106c61d",
+    "DkMath/Lib/NumberTheory/ProfiniteCoprimeRoots.lean": "40e3f2af26da0b8702f6d1d3170af6b04a646d3a60d5d796095f6bde7709ebb4",
+    "DkMath/Lib/NumberTheory/InertiaTailGaloisRoots.lean": "e3184dcdc4d712be859032d58727d6272a77be9c49c5fa7e065281e60e4d1abf",
+    "DkMath/FLT/FreyTailKernelVanishing.lean": "db5412b56bc2201741042c5df72d1f3ced85bd3097135433915f75fb299cbcca",
+    "DkMathTest/FLT/InertiaTailKernelVanishing.lean": "527da1524dcb2cc0f2561920f025720bc7b27356103cd609179176420a59603e",
+    "DkMathTest/FLT/Note032InertiaTailDependencyAudit.lean": "c346226fbf908b132b1d67e1a5b70664063bffaa87fecdba71894be7ce33ac9c",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032InertiaTailSmoke.lean": "30fb2c249a7fd853e7eae61f0d3d1400e420aa2098e3cac7ec105d1af6331733"
+  },
+  "proper_Lib_and_FLT_facade_reachability": true,
+  "four_Lib_files_no_FLT_dependency_and_Apache2_provenance": true,
+  "boundary": "Four Lib modules and one FLT module. Actual all-radical-fixing inertia tail has exact p-power roots in same inertia and same tail-fixing subgroup. Full finite-overfield power divisibility feeds Kummer exclusion of all p-divisible finite quotient orders, then profinite compactness. Actual Frey common quotient exponent kills this tail; original evaluations and finite torsion differences vanish. Finite-stage radical kernel inclusion and correction decomposition, common quotient cyclicity, global hclass supply and unconditional hno are not proved."
+}

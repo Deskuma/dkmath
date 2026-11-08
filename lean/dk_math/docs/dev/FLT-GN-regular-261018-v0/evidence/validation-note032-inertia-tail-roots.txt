@@ -1,0 +1,25 @@
+NOTE-032 inertia-tail roots and actual Frey tail kernel validation
+Date: 2026-11-08
+Lake cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+PASS production modules: 5 (four Lib without FLT import closure; one actual Frey consumer)
+PASS new theorem roots: 24 recursive checked dependency audits (types, opaque proofs, constructors)
+PASS actual endpoint public inputs: 11 (no root/finite-index/cyclicity/stability providers)
+PASS #print axioms: 24 (only propext, Classical.choice, Quot.sound)
+PASS focused production build: 4485 jobs
+PASS targeted tests and audit build: 4487 jobs
+PASS lake build DkMath DkMath.Lib DkMath.FLT and both new tests: 11222 jobs
+PASS lake test: 12403 jobs (command exited0)
+PASS lake env lean DkMathTest.lean (after suite)
+PASS root smoke: all 24 theorem roots reachable via import DkMath
+PASS Lib smoke: all 20 new Lib roots reachable via import DkMath.Lib
+PASS textbook: 5 full-source blocks byte-identical to production; each independently compiled
+PASS exact file module markers immediately after imports: 8 new checked Lean files
+PASS comment-aware import DAG, proper public facades/root and normal test entrance
+PASS forbidden source construct scan and source whitespace; git diff --check
+PASS upstream source HEAD and hashes; Apache2 LICENSE and ANTHROPIC-NOTICE preserved
+
+Finite boundary regressions: cube map of Perm(Fin3) need not be surjective; fixing a first quotient does not imply vanishing in a deeper quotient.
+Existing warnings: 5 historical sorry warnings in each root/suite build; none in new modules/tests/book/smoke.
+Completed: Krull-closed actual inertia; Kummer all-finite-quotient prime-to-p indices using ALL finite overfield exact roots; compactness gives actual group roots; same tail-fixing roots belong to original inertia; all-radical-fixing tail vanishes in original Frey common quotient/evaluations/finite torsion differences.
+Remaining: FINITE-stage correction decomposition and radical-character kernel inclusion, H cyclicity/single evaluation, continuous H1 comparison, hclass arithmetic supply, global contradiction and unconditional general hno.
