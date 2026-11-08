@@ -492,6 +492,12 @@ import DkMath.Lib.NumberTheory.WeierstrassNodalCenterCharThree
 import DkMath.Lib.NumberTheory.EllipticLocalComponentObstructionCharThree
 import DkMath.Lib.NumberTheory.EllipticRationalLocalTransport
 
+import DkMath.Lib.NumberTheory.InertiaFixedValuationStability
+import DkMath.Lib.NumberTheory.StableValuationHenselian
+import DkMath.Lib.NumberTheory.InertiaUnitExactRoots
+import DkMath.Lib.NumberTheory.ValuationRadicalDivisibility
+import DkMath.Lib.NumberTheory.InertiaRadicalExactRoots
+
 #print "file: DkMath.Lib"
 
 /-!

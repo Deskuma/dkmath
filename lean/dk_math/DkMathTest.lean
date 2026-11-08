@@ -439,4 +439,7 @@ import DkMathTest.Lib.NumberTheory.EllipticTorsionInertiaAbsorption
 import DkMathTest.Lib.Algebra.MazurStepThreeTwoAnchor
 import DkMathTest.Lib.Algebra.TorsionTowerFrobenius
 
+import DkMathTest.NumberTheory.InertiaRadicalExactRoots
+import DkMathTest.NumberTheory.Note032ExactRadicalDependencyAudit
+
 #print "file: DkMathTest"
