@@ -1,0 +1,25 @@
+NOTE-032 finite radical kernel and actual common cyclicity validation
+Date: 2026-11-08
+Lake cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+PASS production modules: 5 (one Lib without FLT import closure; four actual Frey modules)
+PASS new theorem roots: 16 recursive checked dependency audits (types, opaque proofs, constructors)
+PASS actual endpoint public inputs: 15 (no generator/cyclicity/kernel-comparison/open-kernel/continuity providers)
+PASS #print axioms: 16 (only propext, Classical.choice, Quot.sound)
+PASS focused production build: 4490 jobs
+PASS targeted tests and audit build: 4492 jobs
+PASS lake build DkMath DkMath.Lib DkMath.FLT and both new tests: 11227 jobs
+PASS lake test: 12410 jobs (command exited0)
+PASS lake env lean DkMathTest.lean (after suite)
+PASS root smoke: all 16 theorem roots reachable via import DkMath
+PASS Lib smoke: all 7 new Lib roots reachable via import DkMath.Lib
+PASS textbook: 5 full-source blocks byte-identical to production; each independently compiled
+PASS exact file module markers immediately after imports: 8 new checked Lean files
+PASS comment-aware import DAG, proper public facades/root and normal test entrance
+PASS forbidden source construct scan and source whitespace; git diff --check
+PASS upstream source HEAD/hashes and review hash; novel MIT DkMath composition, no external theorem imports
+
+Boundary regressions: descending closed tails of Nat never enter empty (compactness needed); first-level root kernel need not vanish in a larger-exponent quotient (exponent bound needed).
+Existing warnings: 5 historical sorry warnings in each root/suite build; none in new modules/tests/book/smoke.
+Completed: actual common projection open kernel; radical closed antitone kernels with exact tail intersection; compact finite detection; EXACT n+3 radical kernel inclusion; actual H cyclicity with same explicit generator; same evaluation injectivity; kernel card divides fixed coefficient card.
+Remaining: hclass arithmetic supply, resonance obstruction, continuous H1 comparison, global contradiction and unconditional general hno. Strong upstream three-factor power decomposition is not claimed.

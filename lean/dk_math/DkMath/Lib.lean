@@ -503,6 +503,8 @@ import DkMath.Lib.NumberTheory.KummerPrimeQuotientExclusion
 import DkMath.Lib.NumberTheory.ProfiniteCoprimeRoots
 import DkMath.Lib.NumberTheory.InertiaTailGaloisRoots
 
+import DkMath.Lib.NumberTheory.InertiaRadicalKernelTopology
+
 #print "file: DkMath.Lib"
 
 /-!

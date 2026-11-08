@@ -221,6 +221,11 @@ import DkMath.FLT.Samples
 
 import DkMath.FLT.FreyTailKernelVanishing
 
+import DkMath.FLT.FreyCommonProjectionTopology
+import DkMath.FLT.FreyRadicalFiniteDetection
+import DkMath.FLT.FreyRadicalKernelClosure
+import DkMath.FLT.FreyCommonTameCyclicClosure
+
 #print "file: DkMath.FLT"
 
 set_option linter.style.longLine false

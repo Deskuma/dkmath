@@ -445,4 +445,7 @@ import DkMathTest.NumberTheory.Note032ExactRadicalDependencyAudit
 import DkMathTest.FLT.InertiaTailKernelVanishing
 import DkMathTest.FLT.Note032InertiaTailDependencyAudit
 
+import DkMathTest.FLT.FreyFiniteKernelClosure
+import DkMathTest.FLT.Note032FiniteKernelDependencyAudit
+
 #print "file: DkMathTest"
