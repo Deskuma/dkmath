@@ -1,0 +1,24 @@
+NOTE-032 resonant signs and conditional decomposition lift validation
+Date: 2026-11-09
+Lake cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+PASS seven actual Frey Source production modules; no new Lib modules
+PASS 33 recursive checked dependency audits including types, opaque proofs, constructors, topology instances and abbrevs
+PASS 33 public input audits; hz and hD REQUIRED in the conditional constructions
+PASS 33 #print axioms; only propext, Classical.choice, Quot.sound
+PASS focused build: 4517 jobs
+PASS check build: 4519 jobs
+PASS root build: 11255 jobs
+Root build command: lake build DkMath DkMath.Lib DkMath.FLT DkMathTest.FLT.FreyResonantDecompositionLift DkMathTest.FLT.Note032ResonantDecompositionLiftAudit
+PASS lake test: 12446 jobs; command exit0
+PASS lake env lean DkMathTest.lean after lake test
+PASS root and FLT smoke imports expose all 33 declarations
+PASS 7 byte-identical textbook Lean source blocks independently compiled
+PASS 10 exact module markers immediately after imports, local acyclic import DAG, facades/root/test reachability
+PASS forbidden construct and whitespace scans; git diff --check
+PASS reviewed model solution reference HEAD and source/review hashes recorded
+
+Finite boundary tests: resonance scalars 11 and19 in ZMod5 yield +v and -v; action by2 need not yield either sign.
+Historical warnings: 5 pre-existing sorry warnings in root and suite; no warnings in new sources/tests/book/smokes.
+Completed: exact order p of SAME gamma obstruction value; resonance q*v=+/-v; iff Frobenius sign criteria; original topology orbit continuity and closed stabilizer; actual D short exact coefficient sequence; explicit D connecting cocycle with continuity and delta0 equality under hz; actual inertia inclusion/coefficient map/H1 restriction recovers SAME original cocycle and kernel class; nonzero D lift under hD.
+Remaining: hD and actual Frobenius eigenvalue arithmetic, D/I Frobenius density, global F Selmer coefficient comparison, hclass arithmetic supply, resonance exclusion and unconditional general hno. Conditional D lift is NOT an unconditional or global Selmer construction.

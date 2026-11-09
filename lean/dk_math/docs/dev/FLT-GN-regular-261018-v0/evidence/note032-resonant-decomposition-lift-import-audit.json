@@ -1,0 +1,73 @@
+{
+  "date": "2026-11-09",
+  "new_modules": [
+    "DkMath.FLT.FreyPrimeOrderGeneratorValue",
+    "DkMath.FLT.FreyResonantFrobeniusSigns",
+    "DkMath.FLT.FreyDecompositionOrbitContinuity",
+    "DkMath.FLT.FreyDecompositionCoefficientSequence",
+    "DkMath.FLT.FreyDecompositionConnectingCocycle",
+    "DkMath.FLT.FreyDecompositionConnectingRestriction",
+    "DkMath.FLT.FreyResonantDecompositionLift"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.FLT.FreyPrimeOrderGeneratorValue": {
+      "local_module_count": 429,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyResonantFrobeniusSigns": {
+      "local_module_count": 430,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyDecompositionOrbitContinuity": {
+      "local_module_count": 431,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyDecompositionCoefficientSequence": {
+      "local_module_count": 432,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyDecompositionConnectingCocycle": {
+      "local_module_count": 433,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyDecompositionConnectingRestriction": {
+      "local_module_count": 434,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyResonantDecompositionLift": {
+      "local_module_count": 435,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/FLT/FreyPrimeOrderGeneratorValue.lean": true,
+    "DkMath/FLT/FreyResonantFrobeniusSigns.lean": true,
+    "DkMath/FLT/FreyDecompositionOrbitContinuity.lean": true,
+    "DkMath/FLT/FreyDecompositionCoefficientSequence.lean": true,
+    "DkMath/FLT/FreyDecompositionConnectingCocycle.lean": true,
+    "DkMath/FLT/FreyDecompositionConnectingRestriction.lean": true,
+    "DkMath/FLT/FreyResonantDecompositionLift.lean": true,
+    "DkMathTest/FLT/FreyResonantDecompositionLift.lean": true,
+    "DkMathTest/FLT/Note032ResonantDecompositionLiftAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032ResonantDecompositionLiftSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 7,
+  "new_lean_file_sha256": {
+    "DkMath/FLT/FreyPrimeOrderGeneratorValue.lean": "2a63e1e183b3138d7a60abcf4cee77486a667c0eea3e9e3ffd9c6f0f1bf34f7d",
+    "DkMath/FLT/FreyResonantFrobeniusSigns.lean": "4f2de400b38d754eef135e55e002bc69b45b27db9fd6a23a1ff279738554d06b",
+    "DkMath/FLT/FreyDecompositionOrbitContinuity.lean": "653776e7970299d74733e35b0dc83d91274ab095494baf7a4db35ebb47d1b3ba",
+    "DkMath/FLT/FreyDecompositionCoefficientSequence.lean": "891e62aac113df49c01b901eaf7493ec86377301121168161b9c4815564077b1",
+    "DkMath/FLT/FreyDecompositionConnectingCocycle.lean": "ea6840e196199a1ecee5cd2e598df1140339e19c707289cdc056568b279311b6",
+    "DkMath/FLT/FreyDecompositionConnectingRestriction.lean": "7099ccaf44caf04029f2dfd31eb0860bdb2b50579d669be335d3745902536af5",
+    "DkMath/FLT/FreyResonantDecompositionLift.lean": "84d3e1cc029521adff40cbc2b3e0cdf83e090f8604249e69354135e04985424d",
+    "DkMathTest/FLT/FreyResonantDecompositionLift.lean": "a97f8e2f9050228f2cc10e474ebc4ef07b5e558aae35007bb5af23c9e02cc931",
+    "DkMathTest/FLT/Note032ResonantDecompositionLiftAudit.lean": "afce7a6382b313077fd14377c7bdc885ce5bd6d5bd0e3a2a339a498c86e7230f",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032ResonantDecompositionLiftSmoke.lean": "31ec906482b87c5457ba4e987a450b1d50341ac37efb1db70360aaf5090938e0"
+  },
+  "proper_FLT_facade_reachability": true,
+  "all_seven_modules_actual_FLT": true,
+  "boundary": "Same obstruction gamma value exact order p; resonance yields q*v=+/-v and iff Frobenius criterion. Original topologies, continuous D orbits and closed stabilizer. Actual D coefficient short exact sequence and explicit continuous D connecting cocycle REQUIRE hz. Same actual inertia restriction recovers same kernel class. Obstruction lift is nonzero conditional on hD, which remains explicit and unproved. No actual eigenvalue/D invariance/density/global F Selmer/hclass/unconditional hno."
+}

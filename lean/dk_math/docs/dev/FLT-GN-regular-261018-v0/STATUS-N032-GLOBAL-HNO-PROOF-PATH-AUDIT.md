@@ -24,7 +24,14 @@ Herbrand・反射定理の適用、大域 Selmer/非分岐条件と共鳴障害�
 今回、既存の同じ Q/F≃K を D 同変化し、元の F,Q/F,K の作用を実際の D/I へ降ろした。
 全核の評価は ev_τ(σk)=σ_F(ev_(σ⁻¹τσ)(k)) を満たし、実際の Frobenius で q•ev_γ(φk)=φ_F(ev_γ(k)) を証明した。
 元の同じ障害核元の不変性は、同じ γ の非零値 v に対する φ_F(v)=q•v と同値。
-この不変性・固有値条件自体の算術的証明は未供給であり、H¹(D,F) や大域 Selmer への持ち上げは未完成。
+この不変性・固有値条件自体の算術的証明は未供給。H¹(D,F) への持ち上げは下記の hD を明示した条件付き構成まで進展し、無条件供給と大域 Selmer への接続は未完成。
+
+
+今回の次の7ステップでは、同じ v=ev_γ(k_x) の厳密位数 p と共鳴時の q•v=±v を証明した。
+元の位相による D 軌道の連続性と閉固定条件、同じ D 上の短完全列を構成した。
+商類の D 不変性 hz を明示的に仮定して連続 cocycle c_D(σ)=σ[x]−[x]∈F を構成し、[c_D]=δ_D(z) と元の同じ慣性 cocycle への制限を証明した。
+障害核元の D 不変性 hD があれば、実際の制限が非零 k_x.val となる非零 D 類を構成できる。
+**hD の供給、φ_F(v)=±v の算術、Frobenius の D/I 位相的生成性、hclass、大域 F Selmer、無条件一般 hno は未完成。**
 
 根の塔側の生成元存在を実装した。代数閉性から同じ q の互換根の塔を構成し、
 既存 Kummer 慣性算術で第1段を動かす同じ γ を選び、全正段の原始作用を証明した。
@@ -1922,3 +1929,18 @@ H の巡回性・同じ γ の単一評価・大域算術排除・hclass の供�
 教科書: `TEXTBOOK-N032-DECOMPOSITION-EQUIVARIANCE-261109.md`（全7モジュール、必須 #print 保持）。
 検証: `evidence/validation-note032-decomposition-equivariance.txt`。
 **障害類の不変性そのもの・Frobenius 固有値の算術的判定・H¹(D,F) への持ち上げ・hclass の供給・無条件一般 hno は未完成。**
+
+
+## 2026-11-09: 共鳴符号・連続性・条件付き D 持ち上げの7ステップ
+
+1. `FreyPrimeOrderGeneratorValue`: 同じ障害値の厳密位数。
+2. `FreyResonantFrobeniusSigns`: 共鳴二分岐の符号条件。
+3. `FreyDecompositionOrbitContinuity`: 元の位相での軌道連続性と閉固定条件。
+4. `FreyDecompositionCoefficientSequence`: 実際の D 上の同じ短完全列。
+5. `FreyDecompositionConnectingCocycle`: D 不変商類から連続 cocycle と連結像。
+6. `FreyDecompositionConnectingRestriction`: 実際の群包含による元の I 類への制限。
+7. `FreyResonantDecompositionLift`: 同じ障害への符号証明書と条件付き持ち上げ。
+
+33宣言の再帰依存・入力監査を追加。hz/hD は必須入力として保持。
+教科書: `TEXTBOOK-N032-RESONANT-DECOMPOSITION-LIFT-261109.md`。
+検証: `evidence/validation-note032-resonant-decomposition-lift.txt`。

@@ -24,10 +24,16 @@ NOTE-032は研究設計資料として読み、模範解答の入力をDkMathの
 D による F の保存と cocycle 共変性、障害点の D 像でも局所 F 非零性が残ることを証明した。
 既存 Q/F≃K の D 同変化と実際の D/I 作用への降下も完成。
 同じ γ の非零値で、障害の Frobenius 固定性を φ_F(v)=q•v という条件として判定できる。
-次の焦点はこの固有値条件・不変性の算術的判定、H¹(D,F) への持ち上げ、ω² 類群消滅と大域 Selmer/非分岐条件への係数照合。
+
+今回の次の7ステップでは、同じ v=ev_γ(k_x) の厳密位数 p と共鳴時の q•v=±v を証明した。
+元の位相による D 軌道の連続性と閉固定条件、同じ D 上の短完全列を構成した。
+商類の D 不変性 hz を明示的に仮定して連続 cocycle c_D(σ)=σ[x]−[x]∈F を構成し、[c_D]=δ_D(z) と元の同じ慣性 cocycle への制限を証明した。
+障害核元の D 不変性 hD があれば、実際の制限が非零 k_x.val となる非零 D 類を構成できる。
+**hD の供給、φ_F(v)=±v の算術、Frobenius の D/I 位相的生成性、hclass、大域 F Selmer、無条件一般 hno は未完成。**
+
 一般 hno の無条件閉鎖は未完成であり、この可除性だけから矛盾を結論しない。
-[今回の教科書](TEXTBOOK-N032-DECOMPOSITION-EQUIVARIANCE-261109.md) と
-[検証記録](evidence/validation-note032-decomposition-equivariance.txt) を参照。
+[今回の教科書](TEXTBOOK-N032-RESONANT-DECOMPOSITION-LIFT-261109.md) と
+[検証記録](evidence/validation-note032-resonant-decomposition-lift.txt) を参照。
 
 [001報告](IMPLEMENTATION-NOTE032-001-261025.md) と
 [002報告](IMPLEMENTATION-NOTE032-002-261025.md)、

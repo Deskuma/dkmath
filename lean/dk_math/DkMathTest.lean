@@ -457,4 +457,7 @@ import DkMathTest.FLT.Note032RelativeOriginDependencyAudit
 import DkMathTest.FLT.FreyDecompositionEquivariance
 import DkMathTest.FLT.Note032DecompositionEquivarianceAudit
 
+import DkMathTest.FLT.FreyResonantDecompositionLift
+import DkMathTest.FLT.Note032ResonantDecompositionLiftAudit
+
 #print "file: DkMathTest"

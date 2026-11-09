@@ -247,6 +247,14 @@ import DkMath.FLT.FreyKernelFrobeniusCovariance
 import DkMath.FLT.FreyKernelFrobeniusFixedCriterion
 import DkMath.FLT.FreyDecompositionInvariantObstruction
 
+import DkMath.FLT.FreyPrimeOrderGeneratorValue
+import DkMath.FLT.FreyResonantFrobeniusSigns
+import DkMath.FLT.FreyDecompositionOrbitContinuity
+import DkMath.FLT.FreyDecompositionCoefficientSequence
+import DkMath.FLT.FreyDecompositionConnectingCocycle
+import DkMath.FLT.FreyDecompositionConnectingRestriction
+import DkMath.FLT.FreyResonantDecompositionLift
+
 #print "file: DkMath.FLT"
 
 set_option linter.style.longLine false
