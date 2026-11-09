@@ -22,10 +22,12 @@ NOTE-032は研究設計資料として読み、模範解答の入力をDkMathの
 障害の指数には半分の上界と n=0/1 分類を追加した。
 同じ局所 F cocycle を Q へ含めると、同じ連続大域 Q coboundary の慣性制限となる図式も完成。
 D による F の保存と cocycle 共変性、障害点の D 像でも局所 F 非零性が残ることを証明した。
-次の焦点は ω² 類群消滅の算術的供給、F 値大域類の構成と Selmer/非分岐条件、共鳴障害排除と大域矛盾への接続。
+既存 Q/F≃K の D 同変化と実際の D/I 作用への降下も完成。
+同じ γ の非零値で、障害の Frobenius 固定性を φ_F(v)=q•v という条件として判定できる。
+次の焦点はこの固有値条件・不変性の算術的判定、H¹(D,F) への持ち上げ、ω² 類群消滅と大域 Selmer/非分岐条件への係数照合。
 一般 hno の無条件閉鎖は未完成であり、この可除性だけから矛盾を結論しない。
-[今回の教科書](TEXTBOOK-N032-FINITE-KERNEL-CLOSURE-261108.md) と
-[検証記録](evidence/validation-note032-finite-kernel-closure.txt) を参照。
+[今回の教科書](TEXTBOOK-N032-DECOMPOSITION-EQUIVARIANCE-261109.md) と
+[検証記録](evidence/validation-note032-decomposition-equivariance.txt) を参照。
 
 [001報告](IMPLEMENTATION-NOTE032-001-261025.md) と
 [002報告](IMPLEMENTATION-NOTE032-002-261025.md)、

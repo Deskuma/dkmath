@@ -21,6 +21,11 @@ Herbrand・反射定理の適用、大域 Selmer/非分岐条件と共鳴障害�
 元の障害点とその分解群による像で、局所 F 類の非零性と大域 Q 類の零性が両立することを証明した。
 これは係数を区別した Q 値の大域起源であり、F 値の大域 Selmer 類を構成したという意味ではない。
 
+今回、既存の同じ Q/F≃K を D 同変化し、元の F,Q/F,K の作用を実際の D/I へ降ろした。
+全核の評価は ev_τ(σk)=σ_F(ev_(σ⁻¹τσ)(k)) を満たし、実際の Frobenius で q•ev_γ(φk)=φ_F(ev_γ(k)) を証明した。
+元の同じ障害核元の不変性は、同じ γ の非零値 v に対する φ_F(v)=q•v と同値。
+この不変性・固有値条件自体の算術的証明は未供給であり、H¹(D,F) や大域 Selmer への持ち上げは未完成。
+
 根の塔側の生成元存在を実装した。代数閉性から同じ q の互換根の塔を構成し、
 既存 Kummer 慣性算術で第1段を動かす同じ γ を選び、全正段の原始作用を証明した。
 実際の根核商 C_m=I/ker χ_m は巡回で濃度 p^m。各 τ は有界な γ^j と根を固定する ε に分かれる。
@@ -1901,3 +1906,19 @@ H の巡回性・同じ γ の単一評価・大域算術排除・hclass の供�
 教科書: `TEXTBOOK-N032-RELATIVE-GLOBAL-ORIGIN-261109.md`（全7モジュール、必須 #print 保持）。
 検証: `evidence/validation-note032-relative-global-origin.txt`。
 **F 値の大域 Selmer 類やその算術条件は未供給。hclass の消滅・共鳴障害排除・無条件一般 hno は未完成。**
+
+
+## 2026-11-09: 次の7ステップ — 同じ連結同型の D 同変性・D/I 降下・Frobenius 不変性判定
+
+1. `FreyDecompositionQuotientAction`: 元の同じ Q/F の D 作用と商写像・元の点の輸送の可換性。
+2. `FreyConnectingDecompositionEquivariance`: 既存 δ:Q/F≃K を保持して D 同変化。同じ k_x を k_(σx) に輸送。
+3. `FreyKernelDecompositionEvaluation`: 全ての元の核元の評価を同じ cocycle 共役と同定。同じ γ だけで D 固定性を判定。
+4. `FreyResidueDecompositionAction`: 元の I の F,Q/F,K 上の自明性から、同じ実際の D/I 作用へ降下。
+5. `FreyKernelFrobeniusCovariance`: 実際の tame Frobenius 公式を全核指標へ輸送し、q•ev_τ(φk)=φ_F(ev_τ(k))。
+6. `FreyKernelFrobeniusFixedCriterion`: 元の有限 p 冪係数で q 倍の単射性を証明し、φk=k と同じ γ の値の q 固有値条件を同値化。
+7. `FreyDecompositionInvariantObstruction`: 同じ商類・同じ障害核元の固定性判定と、元の住所から内部選択した Frobenius、同じ γ の非零値。
+
+7 production は全て実際の Frey Source を保持する FLT 層。新規23宣言の再帰依存・標準公理監査と公開入力23件を通常入口へ追加。
+教科書: `TEXTBOOK-N032-DECOMPOSITION-EQUIVARIANCE-261109.md`（全7モジュール、必須 #print 保持）。
+検証: `evidence/validation-note032-decomposition-equivariance.txt`。
+**障害類の不変性そのもの・Frobenius 固有値の算術的判定・H¹(D,F) への持ち上げ・hclass の供給・無条件一般 hno は未完成。**

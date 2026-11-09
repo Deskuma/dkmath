@@ -1,0 +1,25 @@
+NOTE-032 actual D and D/I connecting equivariance and Frobenius fixedness criterion validation
+Date: 2026-11-09
+Lake cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+PASS production modules: 7 (all seven preserve actual Frey Source; no new Lib modules)
+PASS new theorem roots: 23 recursive checked dependency audits (types, opaque proofs, constructors)
+PASS actual endpoint public inputs: 23 (no hclass/hglobal/hselmer/eigenvalue/fixedness providers)
+PASS #print axioms: 23 (only propext, Classical.choice, Quot.sound)
+PASS focused production build: 4510 jobs
+PASS targeted tests and audit build: 4512 jobs
+PASS lake build DkMath DkMath.Lib DkMath.FLT and both new tests: 11248 jobs
+PASS lake test: 12437 jobs (command exited0)
+PASS lake env lean DkMathTest.lean (after suite)
+PASS root smoke: all 23 theorem roots reachable via import DkMath
+PASS FLT smoke: all 23 new roots reachable via import DkMath.FLT
+PASS textbook: 7 full-source blocks byte-identical to production; each independently compiled
+PASS exact file module markers immediately after imports: 10 new checked Lean files
+PASS comment-aware import DAG, proper public facades/root and normal test entrance
+PASS forbidden source construct scan and source whitespace; git diff --check
+PASS upstream source HEAD/hashes and review hash; novel MIT DkMath composition, no external theorem imports
+
+Boundary regressions: q=3, F=ZMod5, F-action by2 and K-action by4 satisfy Frobenius covariance but preserve nonzero without fixing it. q-multiplication injectivity and eigenvalue condition checked in finite model.
+Existing warnings: 5 historical sorry warnings in each root/suite build; none in new modules/tests/book/smoke.
+Completed: SAME Q/F D action; OLD connecting equivalence D-equivariant with SAME coset/cocycle evaluation; actual F,Q/F,K D/I actions; exact Frobenius q-evaluation relation; actual q-multiplication injectivity; same-gamma iff fixedness criterion; actual Frobenius internally chosen and SAME obstruction gamma value nonzero.
+Remaining: actual fixedness/eigenvalue arithmetic, H1(D,F) lift, global F/Selmer coefficient comparison, hclass arithmetic supply, resonance exclusion and unconditional general hno. Transport, iff criterion and nonzero value are NOT assertions of invariance.

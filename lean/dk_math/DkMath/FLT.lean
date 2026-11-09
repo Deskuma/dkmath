@@ -239,6 +239,14 @@ import DkMath.FLT.FreyDecompositionCocycleCovariance
 import DkMath.FLT.FreyRelativeGlobalOrigin
 import DkMath.FLT.FreyRelativeGlobalObstructionCertificate
 
+import DkMath.FLT.FreyDecompositionQuotientAction
+import DkMath.FLT.FreyConnectingDecompositionEquivariance
+import DkMath.FLT.FreyKernelDecompositionEvaluation
+import DkMath.FLT.FreyResidueDecompositionAction
+import DkMath.FLT.FreyKernelFrobeniusCovariance
+import DkMath.FLT.FreyKernelFrobeniusFixedCriterion
+import DkMath.FLT.FreyDecompositionInvariantObstruction
+
 #print "file: DkMath.FLT"
 
 set_option linter.style.longLine false
