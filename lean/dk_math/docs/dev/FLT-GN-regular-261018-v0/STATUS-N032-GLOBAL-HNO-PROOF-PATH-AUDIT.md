@@ -33,6 +33,13 @@ Herbrand・反射定理の適用、大域 Selmer/非分岐条件と共鳴障害�
 障害核元の D 不変性 hD があれば、実際の制限が非零 k_x.val となる非零 D 類を構成できる。
 **hD の供給、φ_F(v)=±v の算術、Frobenius の D/I 位相的生成性、hclass、大域 F Selmer、無条件一般 hno は未完成。**
 
+
+次の7ステップでは、元の K の閉安定化部分群と慣性の包含を接続し、明示的密度の下で Frobenius 固定性から hD を内部供給した。
+二つの実際の q-Frobenius の商が慣性に入ることから、F,E,K の作用および生成部分群・密度条件が持ち上げの選択によらないことを証明した。
+密度の下で hD と同じ γ の固有値・共鳴符号条件を同値化し、hdense と hsign から同じ非零連続 D cocycle への終点を追加した。
+終点は hD を新たな公開入力にしないが、hdense と hsign は明示した未解決の算術的入力である。
+**実際の密度・符号の供給、大域 F Selmer、hclass、共鳴障害排除、無条件一般 hno は未完成。**
+
 根の塔側の生成元存在を実装した。代数閉性から同じ q の互換根の塔を構成し、
 既存 Kummer 慣性算術で第1段を動かす同じ γ を選び、全正段の原始作用を証明した。
 実際の根核商 C_m=I/ker χ_m は巡回で濃度 p^m。各 τ は有界な γ^j と根を固定する ε に分かれる。
@@ -1944,3 +1951,18 @@ H の巡回性・同じ γ の単一評価・大域算術排除・hclass の供�
 33宣言の再帰依存・入力監査を追加。hz/hD は必須入力として保持。
 教科書: `TEXTBOOK-N032-RESONANT-DECOMPOSITION-LIFT-261109.md`。
 検証: `evidence/validation-note032-resonant-decomposition-lift.txt`。
+
+
+## 2026-11-09: 閉安定化群・選択不変性・密度と符号の7ステップ
+
+1. `ClosedFixedSubgroup`: 閉部分群と密度の汎用補題。
+2. `FreyClosedKernelStabilizer`: 元の K の閉安定化部分群。
+3. `FreyDenseKernelFixed`: 同じ一元固定性から全 D 固定性へ。
+4. `FrobeniusInertiaCoset`: 二つの実際の Frobenius の差を慣性で検出。
+5. `FreyFrobeniusLiftIndependence`: 持ち上げによらない同じ係数作用・密度条件。
+6. `FreyDenseResonantFixed`: 同じ γ の固有値・共鳴符号による hD 判定。
+7. `FreyDenseResonantLift`: 明示的な密度・符号から元の非零 D 類へ。
+
+汎用2 Lib / 実際の Source の5 FLT、20宣言の再帰依存・入力監査。
+教科書: `TEXTBOOK-N032-DENSE-RESONANT-LIFT-261109.md`。
+検証: `evidence/validation-note032-dense-resonant-lift.txt`。

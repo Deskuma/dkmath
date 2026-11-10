@@ -31,9 +31,16 @@ D による F の保存と cocycle 共変性、障害点の D 像でも局所 F 
 障害核元の D 不変性 hD があれば、実際の制限が非零 k_x.val となる非零 D 類を構成できる。
 **hD の供給、φ_F(v)=±v の算術、Frobenius の D/I 位相的生成性、hclass、大域 F Selmer、無条件一般 hno は未完成。**
 
+
+次の7ステップでは、元の K の閉安定化部分群と慣性の包含を接続し、明示的密度の下で Frobenius 固定性から hD を内部供給した。
+二つの実際の q-Frobenius の商が慣性に入ることから、F,E,K の作用および生成部分群・密度条件が持ち上げの選択によらないことを証明した。
+密度の下で hD と同じ γ の固有値・共鳴符号条件を同値化し、hdense と hsign から同じ非零連続 D cocycle への終点を追加した。
+終点は hD を新たな公開入力にしないが、hdense と hsign は明示した未解決の算術的入力である。
+**実際の密度・符号の供給、大域 F Selmer、hclass、共鳴障害排除、無条件一般 hno は未完成。**
+
 一般 hno の無条件閉鎖は未完成であり、この可除性だけから矛盾を結論しない。
-[今回の教科書](TEXTBOOK-N032-RESONANT-DECOMPOSITION-LIFT-261109.md) と
-[検証記録](evidence/validation-note032-resonant-decomposition-lift.txt) を参照。
+[今回の教科書](TEXTBOOK-N032-DENSE-RESONANT-LIFT-261109.md) と
+[検証記録](evidence/validation-note032-dense-resonant-lift.txt) を参照。
 
 [001報告](IMPLEMENTATION-NOTE032-001-261025.md) と
 [002報告](IMPLEMENTATION-NOTE032-002-261025.md)、

@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-09",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "reference_sha256": {
+    "P2M/Sol/S_ValuationSubring_exists_isFrobeniusAt_pow_of_isDiscreteValuationRing.lean": "1f41856bd591da35f52006044c99374415540517fce10abd8a8709e9f918bb31"
+  },
+  "local_reused_source_sha256": {
+    "DkMath/Lib/NumberTheory/ValuationFrobenius.lean": "afdd33704ba7733541e8a52f9b9626e580aa85997647d99ecc0028ea3b65a265",
+    "DkMath/FLT/FreyResidueDecompositionAction.lean": "def88eb6a123a1076012b045c3fa914b846b9d411b097e9571bae92657ab26cd",
+    "DkMath/FLT/FreyDecompositionOrbitContinuity.lean": "653776e7970299d74733e35b0dc83d91274ab095494baf7a4db35ebb47d1b3ba",
+    "DkMath/FLT/FreyResonantDecompositionLift.lean": "84d3e1cc029521adff40cbc2b3e0cdf83e090f8604249e69354135e04985424d",
+    ".lake/packages/mathlib/Mathlib/Topology/Algebra/Group/Subgroup.lean": "dd72e541a6f6ae13bcaf581d08b168d3ffee3bc739f497fd0be2da967f645007"
+  },
+  "review_sha256": "2e08dabf6c892fae78f344e56c7d2c533ca9a34422b6734e4161c35c73774d33",
+  "comparison": "Read residue action helpers, finite residue/Frobenius lifting and final DVR solution. Its existence of a Frobenius power fixing a finite intermediate field does not itself assert required actual density. Novel MIT DkMath composition uses original residue action kernel and Mathlib closed subgroup minimality.",
+  "boundary": "No arithmetic proof of actual hdense or hsign. Endpoint derives hD internally from these explicit premises and reuses original continuous D lift; does not yield global F/Selmer, hclass, resonance exclusion or unconditional hno."
+}

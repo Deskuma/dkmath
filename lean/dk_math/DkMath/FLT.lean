@@ -255,6 +255,12 @@ import DkMath.FLT.FreyDecompositionConnectingCocycle
 import DkMath.FLT.FreyDecompositionConnectingRestriction
 import DkMath.FLT.FreyResonantDecompositionLift
 
+import DkMath.FLT.FreyClosedKernelStabilizer
+import DkMath.FLT.FreyDenseKernelFixed
+import DkMath.FLT.FreyFrobeniusLiftIndependence
+import DkMath.FLT.FreyDenseResonantFixed
+import DkMath.FLT.FreyDenseResonantLift
+
 #print "file: DkMath.FLT"
 
 set_option linter.style.longLine false

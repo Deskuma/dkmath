@@ -510,6 +510,9 @@ import DkMath.Lib.RepresentationTheory.ContinuousTrivialCharacterH1
 
 import DkMath.Lib.NumberTheory.ValuationInertiaNormalizer
 
+import DkMath.Lib.RepresentationTheory.ClosedFixedSubgroup
+import DkMath.Lib.NumberTheory.FrobeniusInertiaCoset
+
 #print "file: DkMath.Lib"
 
 /-!
