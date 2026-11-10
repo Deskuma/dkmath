@@ -1988,3 +1988,13 @@ H の巡回性・同じ γ の単一評価・大域算術排除・hclass の供�
 汎用2 Lib / 同じ Source の5 FLT、22宣言の再帰依存・入力監査。
 教科書: `TEXTBOOK-N032-FINITE-DECOMPOSITION-IMAGE-261111.md`。
 検証: `evidence/validation-note032-finite-decomposition-image.txt`。
+
+
+## 2026-11-11: 実際の剰余作用と障害核元の軌道判定（7ステップ）
+
+元の D の剰余体作用の核 I を固定し、D/I の忠実な剰余作用、実際の Frobenius の q 乗作用、
+同じ有限 K 作用への全射を証明した。障害核元 k の軌道生成条件を導入し、
+有限像生成からの含意、Frobenius 持ち上げ選択からの独立性、
+k の D 固定性・γ 固有値・共鳴符号・同じ非零連続 D 類まで接続した。
+教科書: `TEXTBOOK-N032-RESIDUE-KERNEL-ORBIT-261111.md`。
+**軌道条件と符号の算術的供給、有限剰余拡大因子化、大域 Selmer・hclass、無条件一般 hno は未完成。**

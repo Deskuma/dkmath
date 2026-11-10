@@ -266,6 +266,9 @@ import DkMath.FLT.FreyOpenDecompositionActionKernel
 import DkMath.FLT.FreyFiniteFrobeniusImage
 import DkMath.FLT.FreyFiniteImageFixedCriterion
 import DkMath.FLT.FreyFiniteImageResonantLift
+import DkMath.FLT.FreyResidueFiniteActionFactor
+import DkMath.FLT.FreyKernelOrbitCriterion
+import DkMath.FLT.FreyOrbitResonantLift
 
 #print "file: DkMath.FLT"
 
