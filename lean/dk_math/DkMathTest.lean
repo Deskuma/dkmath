@@ -463,4 +463,7 @@ import DkMathTest.FLT.Note032ResonantDecompositionLiftAudit
 import DkMathTest.FLT.FreyDenseResonantLift
 import DkMathTest.FLT.Note032DenseResonantLiftAudit
 
+import DkMathTest.FLT.FreyFiniteDecompositionImage
+import DkMathTest.FLT.Note032FiniteDecompositionImageAudit
+
 #print "file: DkMathTest"

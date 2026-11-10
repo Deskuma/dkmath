@@ -1,0 +1,24 @@
+NOTE-032 actual finite decomposition image and Frobenius generation validation
+Date: 2026-11-11
+Lake cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+PASS seven production modules: two generic Lib and five original Frey Source FLT modules
+PASS 22 recursive checked dependency audits including types, opaque proofs, constructors, abbrevs and instances
+PASS 22 public input audits; himage and hsign REQUIRED at final endpoint; hdense/hD/hz/hclass/hglobal/hselmer excluded as new final public inputs
+PASS 22 #print axioms; only propext, Classical.choice, Quot.sound
+PASS focused build: 4531 jobs
+PASS check build: 4533 jobs
+PASS root build: 11269 jobs
+Root build command: lake build DkMath DkMath.Lib DkMath.FLT DkMathTest.FLT.FreyFiniteDecompositionImage DkMathTest.FLT.Note032FiniteDecompositionImageAudit
+PASS lake test: 12464 jobs; command exit0
+PASS lake env lean DkMathTest.lean after lake test
+PASS root and FLT smoke imports expose all 22 declarations; Lib smoke exposes four generic declarations
+PASS 7 byte-identical textbook Lean source blocks independently compiled
+PASS 10 exact module markers immediately after imports, local acyclic import DAG, proper Lib/FLT facades, root and test reachability
+PASS forbidden construct and whitespace scans; git diff --check
+PASS model global FrobeniusPowerDense definition distinguished from fixed local generation; reference HEAD/source/review hashes recorded
+
+Boundary tests: Klein four group second coordinate detects an element not in the integer multiples of chosen generator; finite alone is insufficient for cyclic generation. Finite field theorem instantiated on actual degree1 prime field extension. Exact order5 element need not satisfy either sign for action by2.
+Historical warnings: 5 pre-existing sorry warnings in root and suite; no warnings in new sources/tests/book/smokes.
+Completed under original Source/prime/support/local address guards: same K action lifted to units with unchanged kernel, faithful finite action kernel quotient and projection; open original kernel from finite intersections of same gamma continuous evaluation conditions; original quotient topology discrete; actual inertia killed. Finite-field Frobenius bounded generation. Explicit density or actual finite-field factorization supplies finite image generation. Under himage original linear actions are bounded Frobenius powers, same sign criterion supplies hD and same original nonzero continuous D lift.
+Remaining: arithmetic himage or actual finite field hfactor/hdense, actual hsign, global F Selmer coefficient comparison, hclass arithmetic, resonance exclusion and unconditional general hno. Finite/open/discrete quotient does NOT imply cyclic generation. Global variable-prime density does NOT prove fixed local generation.

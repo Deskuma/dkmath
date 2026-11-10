@@ -1,6 +1,6 @@
 # NOTE-032: 一般 `hno` の証明経路監査
 
-更新日: 2026-11-09。`__REVIEW.md` を参考に実ソースを照合し、局所入力を形式化した。
+更新日: 2026-11-11。`__REVIEW.md` を参考に実ソースを照合し、局所入力を形式化した。
 
 ## 現在の証明境界
 
@@ -39,6 +39,13 @@ Herbrand・反射定理の適用、大域 Selmer/非分岐条件と共鳴障害�
 密度の下で hD と同じ γ の固有値・共鳴符号条件を同値化し、hdense と hsign から同じ非零連続 D cocycle への終点を追加した。
 終点は hD を新たな公開入力にしないが、hdense と hsign は明示した未解決の算術的入力である。
 **実際の密度・符号の供給、大域 F Selmer、hclass、共鳴障害排除、無条件一般 hno は未完成。**
+
+
+2026-11-11 の次の7ステップでは、同じ K 作用を単元群へ忠実に持ち上げ、実際の有限作用核商 P_K と射影 π_K を構成した。
+同じ γ の連続評価と K の有限性から作用核の開性を証明し、P_K の元の商位相の離散性と慣性による零化を得た。
+有限体 Galois 群の有界 Frobenius 生成と、密度または実際の有限体因子化から同じ有限像の生成へ進む条件付き橋を実装した。
+終点は、全 D の密度に代えて himage（実際の P_K が π_Kφ で生成される条件）と hsign から hD と同じ非零 D 類を構成する。
+**himage/hfactor/hdense の算術的供給、実際の符号、大域 F Selmer、hclass、共鳴障害排除、無条件一般 hno は未完成。有限性・開核から巡回性は結論しない。**
 
 根の塔側の生成元存在を実装した。代数閉性から同じ q の互換根の塔を構成し、
 既存 Kummer 慣性算術で第1段を動かす同じ γ を選び、全正段の原始作用を証明した。
@@ -1966,3 +1973,18 @@ H の巡回性・同じ γ の単一評価・大域算術排除・hclass の供�
 汎用2 Lib / 実際の Source の5 FLT、20宣言の再帰依存・入力監査。
 教科書: `TEXTBOOK-N032-DENSE-RESONANT-LIFT-261109.md`。
 検証: `evidence/validation-note032-dense-resonant-lift.txt`。
+
+
+## 2026-11-11: 有限分解群作用像・開核・有限体 Frobenius の7ステップ
+
+1. `FiniteFieldFrobeniusImage`: 有限体 Galois 群の有界 Frobenius 生成。
+2. `FreyFiniteDecompositionAction`: 元の K 作用の忠実な有限群像。
+3. `FreyOpenDecompositionActionKernel`: 同じ作用核の開性と有限商の離散性。
+4. `DenseFiniteImageGeneration`: 明示密度から連続有限像の生成へ。
+5. `FreyFiniteFrobeniusImage`: 実際の有限作用像への二つの供給経路。
+6. `FreyFiniteImageFixedCriterion`: 有限像生成による hD と同じ固有値・符号判定。
+7. `FreyFiniteImageResonantLift`: 有限像生成・共鳴符号から同じ非零 D 類へ。
+
+汎用2 Lib / 同じ Source の5 FLT、22宣言の再帰依存・入力監査。
+教科書: `TEXTBOOK-N032-FINITE-DECOMPOSITION-IMAGE-261111.md`。
+検証: `evidence/validation-note032-finite-decomposition-image.txt`。

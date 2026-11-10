@@ -261,6 +261,12 @@ import DkMath.FLT.FreyFrobeniusLiftIndependence
 import DkMath.FLT.FreyDenseResonantFixed
 import DkMath.FLT.FreyDenseResonantLift
 
+import DkMath.FLT.FreyFiniteDecompositionAction
+import DkMath.FLT.FreyOpenDecompositionActionKernel
+import DkMath.FLT.FreyFiniteFrobeniusImage
+import DkMath.FLT.FreyFiniteImageFixedCriterion
+import DkMath.FLT.FreyFiniteImageResonantLift
+
 #print "file: DkMath.FLT"
 
 set_option linter.style.longLine false

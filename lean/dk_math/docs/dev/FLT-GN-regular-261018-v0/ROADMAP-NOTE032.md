@@ -1,6 +1,6 @@
 # NOTE-032 — hnoの研究工程
 
-2026-11-09 更新（初版 2026-10-25）。作業ブランチ `dev/FLT-GN-regular-261018-v0`。
+2026-11-11 更新（初版 2026-10-25）。作業ブランチ `dev/FLT-GN-regular-261018-v0`。
 GN一般核を統合済みのcheckoutから再開した。
 NOTE-032は研究設計資料として読み、模範解答の入力をDkMathの同じSourceへ接続する。
 
@@ -38,9 +38,16 @@ D による F の保存と cocycle 共変性、障害点の D 像でも局所 F 
 終点は hD を新たな公開入力にしないが、hdense と hsign は明示した未解決の算術的入力である。
 **実際の密度・符号の供給、大域 F Selmer、hclass、共鳴障害排除、無条件一般 hno は未完成。**
 
+
+2026-11-11 の次の7ステップでは、同じ K 作用を単元群へ忠実に持ち上げ、実際の有限作用核商 P_K と射影 π_K を構成した。
+同じ γ の連続評価と K の有限性から作用核の開性を証明し、P_K の元の商位相の離散性と慣性による零化を得た。
+有限体 Galois 群の有界 Frobenius 生成と、密度または実際の有限体因子化から同じ有限像の生成へ進む条件付き橋を実装した。
+終点は、全 D の密度に代えて himage（実際の P_K が π_Kφ で生成される条件）と hsign から hD と同じ非零 D 類を構成する。
+**himage/hfactor/hdense の算術的供給、実際の符号、大域 F Selmer、hclass、共鳴障害排除、無条件一般 hno は未完成。有限性・開核から巡回性は結論しない。**
+
 一般 hno の無条件閉鎖は未完成であり、この可除性だけから矛盾を結論しない。
-[今回の教科書](TEXTBOOK-N032-DENSE-RESONANT-LIFT-261109.md) と
-[検証記録](evidence/validation-note032-dense-resonant-lift.txt) を参照。
+[今回の教科書](TEXTBOOK-N032-FINITE-DECOMPOSITION-IMAGE-261111.md) と
+[検証記録](evidence/validation-note032-finite-decomposition-image.txt) を参照。
 
 [001報告](IMPLEMENTATION-NOTE032-001-261025.md) と
 [002報告](IMPLEMENTATION-NOTE032-002-261025.md)、

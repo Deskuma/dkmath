@@ -1,0 +1,26 @@
+import DkMath
+
+#print "file: docs.dev.FLT-GN-regular-261018-v0.evidence.Note032FiniteDecompositionImageSmoke"
+
+#check DkMath.Lib.NumberTheory.FiniteFieldFrobeniusImage.exists_bounded_power
+#check DkMath.Lib.NumberTheory.FiniteFieldFrobeniusImage.factor_image_bounded_power
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.kernelDecompositionUnits
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.kernelDecompositionUnits_ker
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.finiteDecompositionImage
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.finiteDecompositionProjection
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.finiteDecompositionEmbedding
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.finiteDecompositionEmbedding_injective
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.finiteDecompositionImage_finite
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.kernelDecomposition_stabilizer_isOpen
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.kernelDecompositionUnits_kernel_isOpen
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.finiteDecompositionImage_discrete
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.inertia_le_finiteDecompositionProjection_kernel
+#check DkMath.Lib.RepresentationTheory.DenseFiniteImageGeneration.mem_zpowers_of_dense
+#check DkMath.Lib.RepresentationTheory.DenseFiniteImageGeneration.bounded_power_of_mem_zpowers
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.finiteDecomposition_generated_of_dense
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.finiteDecomposition_generated_of_field_factor
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.finiteDecomposition_bounded_action_power
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.kernel_fixed_of_finite_image
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.decomposition_fixed_iff_eigenvalue_of_finite_image
+#check DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.decomposition_fixed_iff_resonant_sign_of_finite_image
+#check DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.decomposition_lift_of_finite_image_sign

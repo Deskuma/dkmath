@@ -513,6 +513,9 @@ import DkMath.Lib.NumberTheory.ValuationInertiaNormalizer
 import DkMath.Lib.RepresentationTheory.ClosedFixedSubgroup
 import DkMath.Lib.NumberTheory.FrobeniusInertiaCoset
 
+import DkMath.Lib.NumberTheory.FiniteFieldFrobeniusImage
+import DkMath.Lib.RepresentationTheory.DenseFiniteImageGeneration
+
 #print "file: DkMath.Lib"
 
 /-!
