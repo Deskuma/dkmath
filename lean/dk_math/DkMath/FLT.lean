@@ -273,6 +273,11 @@ import DkMath.FLT.FreyResidueFrobeniusApproximation
 import DkMath.FLT.FreyResidueOpenKernelDetection
 import DkMath.FLT.FreyResidueFrobeniusOpenQuotient
 import DkMath.FLT.FreyResidueFrobeniusResonantLift
+import DkMath.FLT.FreyResidueFrobeniusDense
+import DkMath.FLT.FreyResidualCofixedUpperClass
+import DkMath.FLT.FreyResidualObstructionSign
+import DkMath.FLT.FreyResidualObstructionMinusBranch
+import DkMath.FLT.FreyResidualObstructionBranches
 
 #print "file: DkMath.FLT"
 

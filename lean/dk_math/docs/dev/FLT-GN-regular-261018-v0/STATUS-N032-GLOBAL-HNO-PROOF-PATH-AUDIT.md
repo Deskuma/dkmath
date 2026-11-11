@@ -2008,3 +2008,15 @@ k の D 固定性・γ 固有値・共鳴符号・同じ非零連続 D 類まで
 元の局所データから供給した。Frobenius の符号を仮定すれば同じ非零通常 H¹(D,F) 類を得る。
 教科書: `TEXTBOOK-N032-LOCAL-FROBENIUS-GENERATION-261111.md`。
 **符号の算術的供給、大域 Selmer・hclass、無条件一般 hno は未完成。**
+
+
+## 2026-11-12: 局所 Frobenius 稠密性と残余 p 捩れ像による共鳴枝
+
+実際の分解群 D は慣性と局所 Frobenius で稠密生成される。
+同じ cofixed 直線が含まれる上段商では底の像が零となり、
+E[p] の像は全 Galois 元で固定される。
+同じ障害値が E[p] の像に入る条件と大域 cofixed 性の下で、
+D 固定性は正の共鳴枝 q≡1 と同値となり、その枝で非零連続 D cocycle を構成した。
+負の枝で D 固定性は成立しない。
+教科書: `TEXTBOOK-N032-DENSE-RESIDUAL-BRANCHES-261112.md`。
+**E[p] 代表の存在、大域 cofixed 性の供給、大域 Selmer・hclass と無条件一般 hno は未完成。**
