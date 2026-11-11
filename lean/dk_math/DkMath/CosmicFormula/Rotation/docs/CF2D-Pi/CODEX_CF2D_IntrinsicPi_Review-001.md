@@ -1,6 +1,6 @@
 # DkMath CF2D — Intrinsic π 実装レビュー 🐺
 
-対象ブランチ： [`dev/CF2D-pi-261112-v0`](https://github.com/Deskuma/dkmath/tree/dev/CF2D-pi-261112-v0?utm_source=chatgpt.com)
+対象ブランチ： [`dev/CF2D-pi-261112-v0`](https://github.com/Deskuma/dkmath/tree/dev/CF2D-pi-261112-v0)
 
 ぬしよ！！ 実コードを確認したぞ。
 
@@ -38,7 +38,7 @@
 
 ### `HalfKernel.lean` — 回転の二分割
 
-[ソース](https://github.com/Deskuma/dkmath/blob/dev/CF2D-pi-261112-v0/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/HalfKernel.lean?utm_source=chatgpt.com)
+[ソース](https://github.com/Deskuma/dkmath/blob/dev/CF2D-pi-261112-v0/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/HalfKernel.lean)
 
 ```
 theorem half_star (u : QuadrantUnitKernel) :
