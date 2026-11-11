@@ -515,6 +515,9 @@ import DkMath.Lib.NumberTheory.FrobeniusInertiaCoset
 
 import DkMath.Lib.NumberTheory.FiniteFieldFrobeniusImage
 import DkMath.Lib.RepresentationTheory.DenseFiniteImageGeneration
+import DkMath.Lib.NumberTheory.ValuationResidueAlgebraicClosure
+import DkMath.Lib.NumberTheory.AlgebraicFiniteFieldApproximation
+import DkMath.Lib.RepresentationTheory.CompactFiniteDetection
 
 #print "file: DkMath.Lib"
 

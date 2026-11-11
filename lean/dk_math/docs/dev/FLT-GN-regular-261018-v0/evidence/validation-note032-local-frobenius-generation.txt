@@ -1,0 +1,11 @@
+NOTE-032 local Frobenius generation, 2026-11-11
+Seven production modules, 20 named declarations; textbook blocks equal sources, exact file markers 7/7.
+Focused target: lake build DkMathTest.FLT.FreyResidueFrobeniusGeneration, passed; 20 #print axioms show only propext, Classical.choice, Quot.sound.
+Recursive dependency and input audit: 2 roots passed, 59066 and 59307 reachable constants, hsign required on the lift; himage/horbit/hdense/hfactor absent from public inputs.
+Root build: lake build DkMath DkMath.Lib DkMath.FLT DkMathTest.FLT.FreyResidueFrobeniusGeneration DkMathTest.FLT.Note032ResidueFrobeniusGenerationAudit, 11279 jobs, passed.
+Suite: lake test, 12477 jobs, exit 0. Both include a transient audit style warning subsequently fixed and rechecked by focused audit; five historical sorry warnings remain in unrelated files.
+Final entrance: lake env lean DkMathTest.lean, passed after naming a local test instance uniquely.
+Root import smoke: lake env lean /tmp/Note032LocalFrobeniusSmoke.lean, passed.
+No forbidden constructs in seven new sources; git diff --check passed.
+Model: P2M/Sol/S_ValuationSubring_nonempty_residueField_ringEquiv_algebraicClosure_zmod_of_liesOverPrime.lean and S_ValuationSubring_isAlgClosed_residueField_of_isAlgClosed.lean, local checkout 115356cbc627159d0d16add0da6e9a2bb3655ed8; attribution in source.
+Boundary: Frobenius coefficient sign, global Selmer comparison, hclass and unconditional general hno remain open.

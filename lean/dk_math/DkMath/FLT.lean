@@ -269,6 +269,10 @@ import DkMath.FLT.FreyFiniteImageResonantLift
 import DkMath.FLT.FreyResidueFiniteActionFactor
 import DkMath.FLT.FreyKernelOrbitCriterion
 import DkMath.FLT.FreyOrbitResonantLift
+import DkMath.FLT.FreyResidueFrobeniusApproximation
+import DkMath.FLT.FreyResidueOpenKernelDetection
+import DkMath.FLT.FreyResidueFrobeniusOpenQuotient
+import DkMath.FLT.FreyResidueFrobeniusResonantLift
 
 #print "file: DkMath.FLT"
 

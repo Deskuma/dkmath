@@ -466,5 +466,7 @@ import DkMathTest.FLT.Note032DenseResonantLiftAudit
 import DkMathTest.FLT.FreyFiniteDecompositionImage
 import DkMathTest.FLT.Note032FiniteDecompositionImageAudit
 import DkMathTest.FLT.FreyResidueKernelOrbit
+import DkMathTest.FLT.FreyResidueFrobeniusGeneration
+import DkMathTest.FLT.Note032ResidueFrobeniusGenerationAudit
 
 #print "file: DkMathTest"
