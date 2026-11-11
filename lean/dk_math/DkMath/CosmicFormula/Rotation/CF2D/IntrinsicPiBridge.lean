@@ -1,4 +1,12 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPi
+
+#print "file: DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPiBridge"
 
 /-!
 # 内在的定数と標準の円周率の比較

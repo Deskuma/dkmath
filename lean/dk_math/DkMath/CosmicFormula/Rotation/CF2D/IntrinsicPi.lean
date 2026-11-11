@@ -1,4 +1,12 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygon
+
+#print "file: DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPi"
 
 /-!
 # 面積候補の上限による内在的定数

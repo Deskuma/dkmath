@@ -1,4 +1,12 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
 import DkMath.CosmicFormula.Rotation.CF2D.HalfKernel
+
+#print "file: DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygon"
 
 /-!
 # 二分核から作る面積・半周長の候補
