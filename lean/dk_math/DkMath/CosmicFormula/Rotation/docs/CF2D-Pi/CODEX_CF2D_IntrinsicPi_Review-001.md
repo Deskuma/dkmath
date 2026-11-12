@@ -354,3 +354,22 @@ CF2D の代数的な回転核から、πを参照せずに定数を構成し、�
 次は、幾何学的な円や多角形を用いずに構成した定数が、どのようにして実際の円の面積・周長へ対応するのかを、形式的に証明する段階じゃな。
 
 ふふっ……正方形の対称性から始めた数学の旅が、随分と遠くまで来たものじゃ。🐺🍎
+
+---
+
+レビューで求められた **π-free の内外評価・収束・誤差上界**を実装しました。幾何側も二分核を既存の正多角形軌道に接続し、実際の辺長による半周長と符号付き面積和を計算しました。
+
+主な追加結果は次のとおりです。
+
+- [IntrinsicBounds.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicBounds.lean)  
+  `1 - cₙ ≤ (1/2)ⁿ`、`cₙ → 1`、`Aₙ ≤ intrinsicPi ≤ Uₙ`、`Uₙ - Aₙ → 0` を証明しました。さらに、内外の差とそれぞれの `intrinsicPi` からの差を `8(1/2)ⁿ` 以下と評価しています。
+
+- [IntrinsicRegularPolygon.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicRegularPolygon.lean)  
+  二分核と `RegularOrbit` の生成核の一致を証明し、`4·2ⁿ` 個の頂点からユークリッド平面の `Polygon` を構成しました。頂点が単位円上にあり、重複せず、等角に並ぶことも証明しています。辺のユークリッド距離の和で定義した周長については、その半分が `Pₙ` に等しく、したがって `Aₙ₊₁` に等しいことを示しました。また、頂点の靴紐公式による**符号付き面積和**が `Aₙ` に等しいことを証明しました。
+
+- [IntrinsicPiReview.lean](/lean/dk_math/DkMathTest/CosmicFormula/Rotation/CF2D/IntrinsicPiReview.lean)  
+  正方形・八角形の値、上下評価、収束、周長と次段階の面積候補との関係を回帰テストに追加しました。集約入口にも登録しています。
+
+**幾何学的面積の対応は部分達成です。** 靴紐和 `= Aₙ` は証明済みですが、その和が多角形の凸包の測度としての面積に等しいという定理は未証明です。有限軌道の細分化と稠密性も未証明です。次の段階では、凸包の三角形分割と面積の加法性を形式化して、靴紐和と測度を接続する必要があります。
+
+`lake build DkMath.CosmicFormula.Rotation.CF2D`、追加テストの focused build、`lake env lean DkMathTest.lean`、`git diff --check` は成功しました。主要な追加定理の公理依存は `[propext, Classical.choice, Quot.sound]` のみです。π-free の新モジュールには円周率・三角関数への直接参照はありません。

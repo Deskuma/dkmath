@@ -225,3 +225,18 @@ CF2D の内在的定数の構成・収束・誤差評価は、一つの自立し
 これなら、これまで積み上げた CF2D の保存量、二分核、代数的面積、誤差上界が、すべて同じ証明の中で働く。
 
 ふふっ。実に美しい数学的な構造になってきたのう！🐺🍎
+
+---
+
+レビューで提案された測度による挟み込みについて、**代数恒等式、拡大による測度の倍率、条件付きの挟み込み定理**まで実装しました。三角形の面積公式と凸包の分割は未証明のため、円盤面積との無条件の一致にはまだ到達していません。
+
+追加した主な結果は次のとおりです。
+
+- [IntrinsicPolygon.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicPolygon.lean) で、π-free の恒等式 `Uₙ = Aₙ / cₙ₊₁²` を証明しました。
+- [IntrinsicBounds.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicBounds.lean) で、有限段階の `cₙ < 1` と `sₙ > 0` を証明しました。`4⁻ⁿ` は等比的な誤差上界であり、数値解析上の二次収束ではないことも明記しました。
+- [IntrinsicPolygonCircumscribed.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicPolygonCircumscribed.lean) で、原点と隣接頂点からなる三角形、拡大領域、および拡大による二次元測度の倍率を形式化しました。隣接頂点の外積が正であることも証明しました。
+- 原点ファンの被覆・測度零の重なり・各三角形の面積公式を仮定すれば凸包の測度が `Aₙ` になる定理、および凸包の面積公式と円盤の拡大領域への包含を仮定すれば円盤の測度が `intrinsicPi` に等しくなる定理を追加しました。**いずれも未証明の幾何条件を明示した条件付き定理です。**
+
+固定版 Mathlib では、レビューに挙げられた `Affine.Simplex.volume_eq_volume_real_closedInterior` と `Affine.Simplex.volume_eq` をソース検索と `#check` で確認できませんでした。残る作業は、三角形の測度公式、原点ファンによる被覆と測度零の重なり、単位円盤の拡大領域への包含です。
+
+CF2D 集約モジュールと [回帰テスト](/lean/dk_math/DkMathTest/CosmicFormula/Rotation/CF2D/IntrinsicPiReview.lean) の focused build、`git diff --check` は成功しました。主要追加定理の `#print axioms` はいずれも `[propext, Classical.choice, Quot.sound]` でした。

@@ -214,3 +214,23 @@ theorem intrinsicPolygonPerimeter_div_two (n : ℕ) :
 次は、誤差の \(4^{-n}\) 評価を取り込みつつ、凸包の測度と靴紐和を接続する。
 
 ここまで進めば、DkMath の `IntrinsicPi` は、数学的にもソフトウェア的にも一層完成度の高いモジュールになるぞ。🐺🍎
+
+---
+
+誤差上界を **π-free の `8(1/4)ⁿ` に強化**しました。凸包の測度との接続は、可測な領域と三角形分割の候補まで実装しましたが、面積の等式はまだ未証明です。
+
+[IntrinsicBounds.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicBounds.lean) に、保存量から得る厳密な差の式と、次の評価を追加しました。
+
+\[
+\begin{aligned}
+0 &\le U_n-A_n \le 8(1/4)^n,\\
+0 &\le \mathrm{intrinsicPi}-A_n \le 8(1/4)^n,\\
+0 &\le U_n-\mathrm{intrinsicPi} \le 8(1/4)^n.
+\end{aligned}
+\]
+
+[IntrinsicPolygonMeasure.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicPolygonMeasure.lean) では、頂点の凸包を実際のユークリッド平面の集合として定義し、コンパクト性、可測性、単位閉円盤への包含を証明しました。共通頂点を持つ三角形の候補についても、それぞれがコンパクトで凸包に含まれることを示しました。
+
+**未達成の箇所**は、凸包の測度が `Aₙ` に等しいという定理と、そこから円盤面積への収束を得る独立した幾何学的経路です。三角形候補が凸包全体を覆うこと、重なりが測度ゼロであること、各三角形の測度と行列式の関係が必要です。追加した凸包の測度上界は、既存の `intrinsicPi = Real.pi` と円盤面積公式に依存しています。
+
+[回帰テスト](/lean/dk_math/DkMathTest/CosmicFormula/Rotation/CF2D/IntrinsicPiReview.lean) と CF2D 集約モジュールのビルド、`git diff --check` は成功しました。主要追加定理の公理依存は `[propext, Classical.choice, Quot.sound]` のみです。
