@@ -144,4 +144,17 @@ example (n : ℕ) (j : Fin (dyadicSides n))
       ENNReal.ofReal ((QuadrantUnitKernel.sequence n).beam / 2) :=
   intrinsicOriginTriangle_volume_of_standard n j h
 
+
+example : MeasureTheory.volume standardTriangle = ENNReal.ofReal (1 / 2) :=
+  standardTriangle_volume
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    MeasureTheory.volume (intrinsicOriginTriangle n j) =
+      ENNReal.ofReal ((QuadrantUnitKernel.sequence n).beam / 2) :=
+  intrinsicOriginTriangle_volume n j
+
+example (n : ℕ) :
+    Metric.closedBall (0 : EuclideanPlane) (QuadrantUnitKernel.sequence (n + 1)).core ⊆
+      intrinsicEdgeHalfSpaces n := intrinsicInnerBall_subset_edgeHalfSpaces n
+
 end DkMathTest.CosmicFormula.Rotation.CF2D

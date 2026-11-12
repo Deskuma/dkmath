@@ -19,6 +19,7 @@ import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicRegularPolygon
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonMeasure
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonCircumscribed
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicOriginTriangleLinear
+import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicStandardTriangleMeasure
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPiBridge
 
 #print "file: DkMath.CosmicFormula.Rotation.CF2D"

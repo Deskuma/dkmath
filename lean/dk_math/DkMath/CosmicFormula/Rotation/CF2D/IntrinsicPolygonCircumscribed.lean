@@ -12,14 +12,14 @@ import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicBounds
 /-!
 # 原点を中心とする三角形と拡大領域
 
-内接多角形の凸包を `c_(n+1)⁻¹` 倍した集合を定義する。スカラー拡大による
-測度の倍率は二次元で `c_(n+1)⁻²` となる。また、原点と隣接頂点から作る
+内接多角形の凸包を `c_(n + 1)⁻¹` 倍した集合を定義する。スカラー拡大による
+測度の倍率は二次元で `c_(n + 1)⁻²` となる。また、原点と隣接頂点から作る
 三角形を定義する。これらの定理は、原点ファンの被覆・重なりや、単位円盤が
 拡大領域に含まれることを仮定せず、そうした未証明の包含も主張しない。
 -/
 namespace DkMath.CosmicFormula.Rotation.CF2D
 open QuadrantUnitKernel Filter
-open scoped Pointwise Topology
+open scoped Pointwise Topology InnerProductSpace
 
 
 /-- 正多角形の半周先にある頂点の添字。 -/
@@ -130,21 +130,21 @@ theorem intrinsicPolygonRegion_volume_of_origin_fan (n : ℕ)
   ring
 
 
-/-- 各辺の中点から原点までの距離は `c_(n+1)` に等しい。
+/-- 各辺の中点から原点までの距離は `c_(n + 1)` に等しい。
 
 隣接頂点の二乗和と核の保存量を使った局所的な距離公式であり、
 この定理だけでは閉円盤の凸包への包含は意味しない。 -/
 theorem intrinsicPolygon_edge_midpoint_norm (n : ℕ) (j : Fin (dyadicSides n)) :
     ‖midpoint ℝ ((intrinsicRegularPolygon n).vertices j)
       ((intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j))‖ =
-      (sequence (n+1)).core := by
+      (sequence (n + 1)).core := by
   have hv := regularVertex_next (dyadicSides_pos n) j
   rw [regularKernel_dyadic n] at hv
   have hq := regularVertex_q2 (dyadicSides n) j
   simp only [Vec.q2] at hq
   have hk := (sequence n).norm
   have hsq := core_succ_sq n
-  have hp : 0 ≤ (sequence (n+1)).core := le_of_lt (core_succ_pos n)
+  have hp : 0 ≤ (sequence (n + 1)).core := le_of_lt (core_succ_pos n)
   apply (sq_eq_sq₀ (norm_nonneg _) hp).mp
   rw [midpoint_eq_smul_add, EuclideanSpace.real_norm_sq_eq, Fin.sum_univ_two]
   unfold intrinsicRegularPolygon euclideanRegularVertex
@@ -175,13 +175,33 @@ theorem intrinsicPolygon_edge_midpoint_norm (n : ℕ) (j : Fin (dyadicSides n)) 
   rw [hq, mul_one, hf] at hfact
   nlinarith [hfact]
 
-/-- 内接多角形の凸包を `c_(n+1)⁻¹` 倍した外側の領域候補。 -/
+
+/-- 隣接頂点の中点へ向かうベクトルは、その辺の方向と直交する。
+
+両頂点が単位円上にあることから、内積を展開して平方ノルムの差を消す。
+この局所的な直交性だけでは辺が凸包を支持することは主張しない。 -/
+theorem intrinsicPolygon_edge_midpoint_orthogonal (n : ℕ) (j : Fin (dyadicSides n)) :
+    ⟪midpoint ℝ ((intrinsicRegularPolygon n).vertices j)
+      ((intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j)),
+      (intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j) -
+        (intrinsicRegularPolygon n).vertices j ⟫_ℝ = 0 := by
+  have hp := norm_euclideanRegularVertex (dyadicSides n) j
+  have hq := norm_euclideanRegularVertex (dyadicSides n) (regularVertexNext (dyadicSides_pos n) j)
+  change ‖(intrinsicRegularPolygon n).vertices j‖ = 1 at hp
+  change ‖(intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j)‖ = 1 at hq
+  rw [midpoint_eq_smul_add]
+  simp only [real_inner_smul_left, inner_add_left, inner_sub_right, real_inner_self_eq_norm_sq, hp, hq]
+  rw [real_inner_comm ((intrinsicRegularPolygon n).vertices j)
+    ((intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j))]
+  ring
+
+/-- 内接多角形の凸包を `c_(n + 1)⁻¹` 倍した外側の領域候補。 -/
 noncomputable def intrinsicPolygonOuterRegion (n : ℕ) : Set EuclideanPlane :=
-  ((sequence (n+1)).core)⁻¹ • intrinsicPolygonRegion n
+  ((sequence (n + 1)).core)⁻¹ • intrinsicPolygonRegion n
 
 
 /--
-半径 `c_(n+1)` の閉円盤が内接領域に含まれれば、単位閉円盤は拡大領域に含まれる。
+半径 `c_(n + 1)` の閉円盤が内接領域に含まれれば、単位閉円盤は拡大領域に含まれる。
 必要な内接円の包含は明示的な仮定である。
 -/
 theorem closedBall_subset_outerRegion_of_innerBall_subset (n : ℕ)
@@ -190,29 +210,29 @@ theorem closedBall_subset_outerRegion_of_innerBall_subset (n : ℕ)
   intro x hx
   have hp := core_succ_pos n
   have hxnorm : ‖x‖ ≤ 1 := by simpa [Metric.mem_closedBall, dist_zero_right] using hx
-  have hy : (sequence (n+1)).core • x ∈ intrinsicPolygonRegion n := by
+  have hy : (sequence (n + 1)).core • x ∈ intrinsicPolygonRegion n := by
     apply hin
     rw [Metric.mem_closedBall, dist_zero_right, norm_smul, Real.norm_eq_abs, abs_of_pos hp]
     nlinarith
   unfold intrinsicPolygonOuterRegion
   apply Set.mem_smul_set.2
-  refine ⟨(sequence (n+1)).core • x, hy, ?_⟩
+  refine ⟨(sequence (n + 1)).core • x, hy, ?_⟩
   rw [smul_smul, inv_mul_cancel₀ (ne_of_gt hp), one_smul]
 
 
 /--
-単位円盤が拡大領域に含まれることと、半径 `c_(n+1)` の円盤が
+単位円盤が拡大領域に含まれることと、半径 `c_(n + 1)` の円盤が
 元の多角形領域に含まれることは同値である。
 -/
 theorem closedBall_subset_outerRegion_iff_innerBall_subset (n : ℕ) :
     Metric.closedBall (0 : EuclideanPlane) 1 ⊆ intrinsicPolygonOuterRegion n ↔
-      Metric.closedBall (0 : EuclideanPlane) (sequence (n+1)).core ⊆ intrinsicPolygonRegion n := by
+      Metric.closedBall (0 : EuclideanPlane) (sequence (n + 1)).core ⊆ intrinsicPolygonRegion n := by
   constructor
   · intro hout y hy
     have hp := core_succ_pos n
-    have hynorm : ‖y‖ ≤ (sequence (n+1)).core := by
+    have hynorm : ‖y‖ ≤ (sequence (n + 1)).core := by
       simpa [Metric.mem_closedBall, dist_zero_right] using hy
-    have hx : (sequence (n+1)).core⁻¹ • y ∈ Metric.closedBall (0 : EuclideanPlane) 1 := by
+    have hx : (sequence (n + 1)).core⁻¹ • y ∈ Metric.closedBall (0 : EuclideanPlane) 1 := by
       rw [Metric.mem_closedBall, dist_zero_right, norm_smul, Real.norm_eq_abs,
         abs_of_pos (inv_pos.mpr hp)]
       rw [← div_eq_inv_mul]
@@ -221,25 +241,63 @@ theorem closedBall_subset_outerRegion_iff_innerBall_subset (n : ℕ) :
     unfold intrinsicPolygonOuterRegion at hmem
     obtain ⟨z, hz, heq⟩ := Set.mem_smul_set.1 hmem
     have heq' : z = y := by
-      apply_fun (fun v : EuclideanPlane => (sequence (n+1)).core • v) at heq
+      apply_fun (fun v : EuclideanPlane => (sequence (n + 1)).core • v) at heq
       simpa [smul_smul, mul_inv_cancel₀ (ne_of_gt hp)] using heq
     simpa [heq'] using hz
   · exact closedBall_subset_outerRegion_of_innerBall_subset n
 
+
+/-- 半径 `c_(n + 1)` の円盤上の点は、各辺の中点が定める半平面に入る。
+
+コーシー・シュワルツの不等式と中点のノルムの公式を使う。この主張は
+それらの半平面の共通部分が多角形の凸包に含まれることとは独立である。 -/
+theorem innerBall_mem_edge_halfspace (n : ℕ) (j : Fin (dyadicSides n)) (x : EuclideanPlane)
+    (hx : x ∈ Metric.closedBall (0 : EuclideanPlane) (sequence (n + 1)).core) :
+    ⟪midpoint ℝ ((intrinsicRegularPolygon n).vertices j)
+      ((intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j)), x⟫_ℝ ≤
+      (sequence (n + 1)).core ^ 2 := by
+  have hx' : ‖x‖ ≤ (sequence (n + 1)).core := by
+    simpa [Metric.mem_closedBall, dist_zero_right] using hx
+  have hp := core_succ_pos n
+  have hh := real_inner_le_norm
+    (midpoint ℝ ((intrinsicRegularPolygon n).vertices j)
+      ((intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j))) x
+  rw [intrinsicPolygon_edge_midpoint_norm n j] at hh
+  nlinarith
+
+/-- 各辺の中点を法線とする内側の半平面の共通部分。 -/
+def intrinsicEdgeHalfSpaces (n : ℕ) : Set EuclideanPlane :=
+  {x | ∀ j : Fin (dyadicSides n),
+    ⟪midpoint ℝ ((intrinsicRegularPolygon n).vertices j)
+      ((intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j)), x⟫_ℝ ≤
+      (sequence (n + 1)).core ^ 2}
+
+/-- 半径 `c_(n + 1)` の円盤は辺の半平面の共通部分に含まれる。 -/
+theorem intrinsicInnerBall_subset_edgeHalfSpaces (n : ℕ) :
+    Metric.closedBall (0 : EuclideanPlane) (sequence (n + 1)).core ⊆ intrinsicEdgeHalfSpaces n := by
+  intro x hx j
+  exact innerBall_mem_edge_halfspace n j x hx
+
+/-- 辺の半平面の共通部分が凸包に含まれれば、必要な内接円盤の包含が従う。 -/
+theorem intrinsicPolygonRegion_innerBall_subset_of_halfSpaces (n : ℕ)
+    (h : intrinsicEdgeHalfSpaces n ⊆ intrinsicPolygonRegion n) :
+    Metric.closedBall (0 : EuclideanPlane) (sequence (n + 1)).core ⊆ intrinsicPolygonRegion n :=
+  (intrinsicInnerBall_subset_edgeHalfSpaces n).trans h
+
 /-- 拡大領域もコンパクトかつ可測である。 -/
 theorem intrinsicPolygonOuterRegion_compact (n : ℕ) :
     IsCompact (intrinsicPolygonOuterRegion n) := by
-  change IsCompact ((fun x : EuclideanPlane => (sequence (n+1)).core⁻¹ • x) '' intrinsicPolygonRegion n)
-  exact (intrinsicPolygonRegion_compact n).image (continuous_id.const_smul ((sequence (n+1)).core⁻¹))
+  change IsCompact ((fun x : EuclideanPlane => (sequence (n + 1)).core⁻¹ • x) '' intrinsicPolygonRegion n)
+  exact (intrinsicPolygonRegion_compact n).image (continuous_id.const_smul ((sequence (n + 1)).core⁻¹))
 
 /-- 平面の測度は拡大倍率の二乗で変化する。 -/
 theorem intrinsicPolygonOuterRegion_volume (n : ℕ) :
     MeasureTheory.volume (intrinsicPolygonOuterRegion n) =
-      ENNReal.ofReal (((sequence (n+1)).core)⁻¹ ^ 2) *
+      ENNReal.ofReal (((sequence (n + 1)).core)⁻¹ ^ 2) *
         MeasureTheory.volume (intrinsicPolygonRegion n) := by
   unfold intrinsicPolygonOuterRegion
   rw [MeasureTheory.Measure.addHaar_smul]
-  simp only [finrank_euclideanSpace_fin, abs_of_nonneg (sq_nonneg ((sequence (n+1)).core⁻¹))]
+  simp only [finrank_euclideanSpace_fin, abs_of_nonneg (sq_nonneg ((sequence (n + 1)).core⁻¹))]
 
 
 /--
@@ -282,7 +340,7 @@ theorem disk_measureReal_eq_intrinsicPi_of_polygon_sandwich
     rw [intrinsicPolygonOuterRegion_volume_of_region n (harea n), ENNReal.toReal_ofReal] at h
     · exact h
     · unfold outerApprox
-      exact div_nonneg (areaApprox_nonneg (n+1)) (le_of_lt (core_succ_pos n))
+      exact div_nonneg (areaApprox_nonneg (n + 1)) (le_of_lt (core_succ_pos n))
   apply le_antisymm
   · exact le_of_tendsto_of_tendsto' tendsto_const_nhds tendsto_outerApprox_intrinsicPi hupper
   · exact le_of_tendsto_of_tendsto' tendsto_areaApprox_intrinsicPi tendsto_const_nhds hlower

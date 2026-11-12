@@ -208,3 +208,15 @@ theorem intrinsicPolygon_edge_midpoint_norm ...
 具体的な集合の等式と測度の等式にまで分解されておる。
 
 ここから先は、一つずつ仕留めていくのじゃ。🐺🍎
+
+---
+
+レビューの最優先事項だった**標準三角形の測度 `1/2`** と、**全原点三角形の測度 `sₙ/2`** を無条件で証明しました。
+
+[IntrinsicStandardTriangleMeasure.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicStandardTriangleMeasure.lean) では、標準三角形を座標不等式で特徴付け、単位正方形をその三角形と中心反転像に分割しました。反転による測度保存と、共通部分が測度零の直線に含まれることから `standardTriangle_volume` を証明しています。これを既存の線形変換の測度公式に接続し、`intrinsicOriginTriangle_volume` を得ました。
+
+[IntrinsicPolygonCircumscribed.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicPolygonCircumscribed.lean) には、各辺の中点方向と辺の直交性、および半径 `cₙ₊₁` の円盤が各辺の中点を法線とする半平面の共通部分に含まれる定理を追加しました。
+
+**未完了**なのは、原点ファンによる凸包の被覆、三角形同士の重なりの測度零、そして半平面の共通部分が凸包に含まれることです。したがって、凸包の測度 `= Aₙ` と円盤測度 `= intrinsicPi` の無条件定理はまだ証明していません。幾何モジュールは既存の標準角度 bridge に依存しています。
+
+CF2D 集約モジュールと [専用回帰テスト](/lean/dk_math/DkMathTest/CosmicFormula/Rotation/CF2D/IntrinsicPiReview.lean) の focused build、`git diff --check` は成功しました。主要追加定理の `#print axioms` はすべて `[propext, Classical.choice, Quot.sound]` でした。
