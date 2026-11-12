@@ -1,0 +1,20 @@
+import DkMath
+
+#print "file: docs.dev.FLT-GN-regular-261018-v0.evidence.Note032CyclotomicConditionalSplitSmoke"
+
+open DkMath.Lib.NumberTheory CyclotomicPrimaryUnitSpace CyclotomicPrimaryCongruence
+
+#check KummerLocalPrimaryUnit.pow_sub_one_mem_cube_of_local_pow
+#check classMapAlong_mk_eq_one_iff
+#check mk_mem_localPowerSpace_iff
+#check mk_mem_primaryWeightSquareSpace_iff
+#check primaryWeightSquareSpace_eq_bot_iff_global_power
+#check natCast_mem_ramifiedIdeal_pow
+#check ramified_residue_card
+#check unit_pow_sub_one_mem_ramifiedIdeal
+#check pow_sub_one_mem_ramifiedIdeal_cube_of_local_power
+#check DkMath.FLT.Frey.Source.residual_kummer_primary_unit_witness
+#check DkMath.FLT.Frey.Source.residual_kummer_impossible_of_primary_unit_vanishing
+#check DkMath.FLT.Frey.Source.residual_cyclic_extension_nonsplit_impossible
+#check DkMath.FLT.Frey.Source.residual_cyclic_extension_has_stable_complement
+#print axioms DkMath.FLT.Frey.Source.residual_cyclic_extension_has_stable_complement

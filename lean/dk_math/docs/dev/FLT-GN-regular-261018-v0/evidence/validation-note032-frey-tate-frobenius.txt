@@ -1,0 +1,110 @@
+NOTE-032 THREE STEPS: SAME Frobenius cyclotomic value, characteristic polynomial and finite action relation
+Date: 2026-11-07
+Working directory: lean/dk_math
+
+Performed validations; listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyTateFrobenius DkMathTest.FLT.Note032FreyTateFrobeniusDependencyAudit
+   Build completed successfully (11141 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12286/12286 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed; only existing file marker printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateFrobeniusSmoke.lean
+   Root exposes actual finite/p-adic Frobenius cyclotomic values, triangular
+   characteristic polynomial, actual SAME Frey determinant/trace and full/finite
+   torsion action relations. Endpoint axiom reports contain standard axioms only.
+5. Three full textbook blocks extracted to /tmp/n032-tatefrob-book-{1,2,3}.lean.
+   lake env lean run on each separately; all passed without warnings.
+   Exact production source and exact file markers immediately after imports retained.
+6. python3 /tmp/n032-tatefrob-import-audit.py
+   Comment-aware local import closures, acyclicity, source scans/SHA256, six markers,
+   three full textbook copies, Lib/FLT/root and normal test reachability passed.
+   Closure sizes including self: cyclotomic Frobenius 80, triangular characteristic 3,
+   actual Frey 330. Generic Lib modules have no FLT imports. No
+   FreyHnoSmallIndex/RegularPrime/HardCase consumers. JSON saved alongside.
+7. git diff --check and direct trailing-whitespace checks on new files passed.
+
+Step 1 IMPLEMENTED:
+- SAME valuation ring A and SAME actual Frobenius sigma. Any nonzero valuation-unit
+  torsion degree n: root action lifts from residue congruence, and primitive-root
+  order identifies actual modular cyclotomic character value with q modulo n.
+- At q-prime valuation with q!=p, p and all its positive powers are valuation units.
+- Mathlib actual p-adic cyclotomic character evaluated on SAME sigma equals integer q
+  in Z_p, by ALL positive-power residues. No good-reduction input needed for this
+  cyclotomic calculation. Actual IsFrobeniusAt and LiesOverPrime retained.
+
+Step 2 IMPLEMENTED:
+- SAME actual upper triangular representation: trace=first+second and characteristic
+  polynomial=(X-first)*(X-second). No off-diagonal-zero or representation splitting.
+- Commutative-ring quadratic identity for triangular matrices and arbitrary 2x2
+  matrices. No Field/nonzero cancellation argument.
+- Actual basis matrix-algebra equivalence transports matrix identity back to SAME
+  linear action on every vector. Generic trace/determinant values remain inputs;
+  actual Frey application supplies them internally.
+
+Step 3 IMPLEMENTED:
+- SAME Source/L/rootField/tower/two sequences/finite and full bases/Galois action.
+- Actual finite trace is standard residue of actual full trace, via SAME entrywise
+  matrix-reduction theorem.
+- SAME Frobenius sigma: actual determinant=q from previous geometric Weil determinant
+  and actual cyclotomic value=q. Actual trace=chi+q*chi_inverse from previous SAME
+  second-character ratio. Actual characteristic polynomial:
+  X^2 - (chi+q*chi_inverse)*X + q.
+- Actual full Tate point sequences and finite E[p^(n+1)] points themselves satisfy
+  phi(phi(x))+q*x=actual_trace*phi(x). Finite trace scalar is standard residue of
+  SAME actual full trace. Actual finite geometric Weil determinant and actual finite
+  basis provide finite relation; no new Cayley-Hamilton provider at final endpoint.
+
+Regression scope:
+- Actual ZMod25 matrix [[1,5],[0,1]] has characteristic polynomial (X-1)^2 and is NOT
+  identity. Repeated-root factorization does not eliminate actual upper-right entry.
+- Actual NONTRIANGULAR matrix [[2,5],[3,4]] over ZMod25 satisfies quadratic relation
+  with trace6 and determinant18. Tests retain composite-ring, off-diagonal behavior.
+
+Audit scope and retained boundaries:
+- Fifteen selected #print axioms reports: only propext, Classical.choice, Quot.sound.
+- Fifteen recursive traversals inspect checked types, constructors and opaque proofs.
+  Reject sorryAx, nonstandard axioms, P2M/P2MW/FltRegular/FreyPackage, old Kummer
+  consumers and FLT endpoints. Require actual root-action lift, Mathlib cyclotomic
+  residues, actual p-adic extensionality, previous geometric determinant and ratio,
+  SAME finite trace/matrix comparison and actual matrix-to-linear transport.
+- Twelve public-input audits retain q!=p, SAME A/LiesOverPrime/IsFrobeniusAt, and
+  SAME hclass/uniform ALL-stage hbad at actual Frey endpoints. No added
+  htrace/hdet/hCH/hpointcount providers at final endpoints.
+- No new sorry/admit/native_decide/unsafe/custom axioms or new-code warnings.
+  Root/suite replay historical sorry warnings in five unrelated existing modules.
+  No whole-repository axiom-clean assertion.
+- The coefficient trace=chi+q*chi_inverse has NOT been identified with integer
+  a_q=q+1-#E(F_q). No good-reduction point-count characteristic polynomial, Hasse
+  bound or completed final torsion-tower contradiction claimed.
+- Higher quotient fixedness, d=1, Galois splitting, hclass/ALL-stage hbad arithmetic
+  and final contradiction remain unfinished. General hno UNFINISHED.
+
+Decisive audits from successful root build:
+PASS: DkMath.Lib.NumberTheory.CyclotomicFrobenius.torsionCyclotomicCharacter_eq_natCast; 28504 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicFrobenius.prime_power_valuation_eq_one; 16202 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicFrobenius.padicCyclotomicCharacter_eq_natCast; 29757 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.TriangularTwoCharacter.trace; 4695 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.TriangularTwoCharacter.charpoly_factor; 12611 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.TriangularTwoCharacter.quadratic; 5072 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.TriangularTwoCharacter.matrix_quadratic; 8298 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.TriangularTwoCharacter.linear_quadratic; 9514 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTate_trace_reduction; 81323 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.tateCyclotomicCharacter_frobenius; 29762 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTate_frobenius_det; 81366 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTate_frobenius_trace; 81470 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTate_frobenius_charpoly; 81480 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTate_frobenius_relation; 81370 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTate_finite_frobenius_relation; 81372 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicFrobenius.torsionCyclotomicCharacter_eq_natCast; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicFrobenius.prime_power_valuation_eq_one; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicFrobenius.padicCyclotomicCharacter_eq_natCast; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.RepresentationTheory.TriangularTwoCharacter.charpoly_factor; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.RepresentationTheory.TriangularTwoCharacter.linear_quadratic; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTate_trace_reduction; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.tateCyclotomicCharacter_frobenius; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTate_frobenius_det; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTate_frobenius_trace; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTate_frobenius_charpoly; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTate_frobenius_relation; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTate_finite_frobenius_relation; remaining arithmetic inputs explicit.

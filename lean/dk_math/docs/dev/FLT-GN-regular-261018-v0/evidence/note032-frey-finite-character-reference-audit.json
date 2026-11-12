@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-07",
+  "checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": {
+    "Theorems/Thm_WeierstrassCurve_isOpen_torsionBy_fixingSubgroup.lean": "d0306703aace52eb34871cbc96ed17f757aa76d910c88c9ea221e310d3d60778",
+    "P2M/Sol/S_WeierstrassCurve_isOpen_torsionBy_fixingSubgroup.lean": "863742f9d5b7894ddc7307b18c04cc73df2c96c1be84a4dd8a58058a63fc682f",
+    "P2M/Sol/S_FreyPackage_frey_no_cofixed_large.lean": "16750fcba1f02ba21bcbfa5999103c03be4f85c2359913c51c0b83cef66d2413"
+  },
+  "read_scope": [
+    "public theorem statement",
+    "solution lines35-90: finite torsion coordinates, finite intermediate field, open fixing subgroup inclusion",
+    "global consumer lines1230-1260 and hopen+hInert call at1316"
+  ],
+  "comparison": "Reference establishes openness for full torsion fixing subgroup; DkMath composes its own checked actual torsion orbit continuity with SAME canonical finite quotient and difference. Kernel clopen is relative to SAME inertia subgroup topology. No external imports or proof providers; no wild vanishing or Frobenius q-scaling inferred."
+}

@@ -1,0 +1,24 @@
+NOTE-032 closed stabilizers, Frobenius lift independence, dense resonant lift validation
+Date: 2026-11-09
+Lake cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+PASS seven production modules: two generic Lib and five actual Frey Source FLT modules
+PASS 20 recursive checked dependency audits including types, opaque proofs and constructors
+PASS 20 public input audits; hdense and hsign REQUIRED at final endpoint; hD/hz/hclass/hglobal/hselmer excluded as new public inputs
+PASS 20 #print axioms; only propext, Classical.choice, Quot.sound
+PASS focused build: 4524 jobs
+PASS check build: 4526 jobs
+PASS root build: 11262 jobs
+Root build command: lake build DkMath DkMath.Lib DkMath.FLT DkMathTest.FLT.FreyDenseResonantLift DkMathTest.FLT.Note032DenseResonantLiftAudit
+PASS lake test: 12455 jobs; command exit0
+PASS lake env lean DkMathTest.lean after lake test
+PASS root and FLT smoke imports expose all 20 declarations; Lib smoke exposes six generic declarations
+PASS 7 byte-identical textbook Lean source blocks independently compiled
+PASS 10 exact module markers immediately after imports, local acyclic import DAG, proper Lib/FLT facades, root and test reachability
+PASS forbidden construct and whitespace scans; git diff --check
+PASS reviewed model source HEAD and source/review hashes recorded
+
+Boundary tests: a proper closed subgroup contains the chosen element1 in the finite group Multiplicative(ZMod2); fixedness alone is insufficient without density. Exact order5 element in ZMod5 need not satisfy either sign for action by2.
+Historical warnings: 5 pre-existing sorry warnings in root and suite; no warnings in new sources/tests/book/smokes.
+Completed: closed K stabilizer subgroup contains original inertia; explicit density upgrades one-element fixedness to actual D invariance; two actual Frobenius lifts differ by inertia; SAME F/E/K actions, generated subgroup and density premise are independent of lift; density gives SAME gamma eigenvalue/resonant sign iff D invariance; endpoint derives hD internally from explicit hdense and hsign and reuses SAME nonzero continuous D lift with original inertia restriction.
+Remaining: actual hdense and hsign arithmetic, global F Selmer coefficient comparison, hclass arithmetic, resonance exclusion and unconditional general hno. No reverse local-to-global H1 map and no continuous cohomology comparison theory are constructed.

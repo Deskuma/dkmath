@@ -13,10 +13,12 @@ namespace DkMathTest.LegendreDeletionProvenance
 
 open DkMath.NumberTheory.Legendre
 
+/- # disable heavy test: 2026/10/24 20:13
 /-- The same existential conclusion is preserved via two separately named routes. -/
 theorem both1031_named_routes :
     (∃ p, p.Prime ∧ SquareCell 1031 p) ∧ (∃ p, p.Prime ∧ SquareCell 1031 p) :=
   ⟨DkMathTest.LegendreDeletion1031Calibration.exists_prime_squareCell_1031_of_coarseTownDeletion,
     DkMathTest.LegendreSqrtQuotientCalibration.quotient1031_structural_endpoint⟩
+-/
 
 end DkMathTest.LegendreDeletionProvenance

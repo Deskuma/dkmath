@@ -1,0 +1,87 @@
+NOTE-017 verification evidence — 2026-10-21
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Focused implementation:
+  lake build DkMath.Lib.RepresentationTheory.MatrixRealization
+  exit 0; Build completed successfully (2221 jobs).
+  General finite-basis GL realization, coordinate action, conjugation,
+    kernel equality, determinant character, characteristic polynomial, irreducibility transport.
+
+  lake build DkMath.FLT.FreyResidualGL2
+  exit 0; Build completed successfully (3180 jobs).
+  Actual prime torsion basis uses finrank_torsion_prime, not an input rank/cardinality hypothesis.
+  Same Source, actual residual space, existing action and irreducibility/stability predicates.
+  GL2 kernel equals original kernel; open kernel and normal finite level are retained.
+
+Focused regression:
+  lake build DkMathTest.FLT.FreyResidualGL2
+  exit 0; Build completed successfully (3182 jobs).
+  11 named theorems and 2 named basis abbreviations.
+  Actual Source 2 curve at E[37], with two provably distinct bases (swap 0 and 1).
+  Checks actual action, conjugation, determinant character, charpoly, irreducibility equivalence,
+    kernel and normal finite level; Source 37 stable-line criterion has no additional arithmetic inputs.
+  Actual Source 2 E[2] is dimension 2 and reducible: rational nonzero (0,0) generates a stable line.
+
+Dependency audit:
+  lake build DkMathTest.FLT.Note017DependencyAudit
+  Initial focused run exit 0; then explanatory heartbeat comment added to remove linter warning.
+  Final audit rebuilt and passed within integrated build below, with no warning.
+  45 public production declarations and 13 regression declarations.
+  13 selected routes traverse types and opaque bodies and require listed providers.
+  Allowed axioms: propext, Classical.choice, Quot.sound only.
+  Forbidden: sorryAx, external FltRegular/P2MW/P2M/FreyPackage, FLT endpoints,
+    Herbrand/Ribet, listed global regularity providers and old conditional cardinality/rank providers.
+  Library-only selected routes also forbid all DkMath.FLT dependencies.
+
+Integrated public entrances:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11574 jobs).
+  All 6 new source/test modules reached with matching file markers.
+  No warnings/errors in these 6 modules; historical warnings in other modules remain.
+
+Root smoke:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE017.lean
+  Final exit 0; corrected smoke's noncomputable context for the chosen-basis construction.
+  import DkMath exposes actual rational-curve GL2 and kernel,
+    Source 37 stable-line criterion and normal finite level.
+  Printed axiom sets for generic criterion, Source criterion and Source profile:
+    propext, Classical.choice, Quot.sound only.
+
+Direct suite entrance:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest
+
+Marker and hygiene checks:
+  python3 check_tracker_mismatch.py /tmp/note017-full.log
+  exit 0; OK: no mismatches found.
+  Static check: all 6 new source/test markers and root smoke marker match paths and follow imports.
+  No sorry/admit/native_decide/unsafe/implemented_by or custom axiom declarations in those 7 files.
+  No trailing whitespace in those 7 files.
+  git diff --check: exit 0.
+
+Scope:
+  4 production modules, 407 lines including Japanese textbook comments; 45 public declarations.
+  Actual characteristic-zero elliptic E, prime p. Basis choice is noncomputable.
+  GL2 matrices represent the original action, not a replacement representation.
+  Stable-line criterion is an equivalence, not an arithmetic proof of Frey irreducibility.
+  Determinant character is constructed and basis independent; no cyclotomic identification yet.
+  Weil pairing, Mazur-type arithmetic, local inertia, Artin conductor and FLT closure remain separate.
+  No new external code was copied or imported in this increment; existing local Mathlib APIs reused.
+
+Final integrated audit output:
+PASS: 45 production and 13 regression declarations; standard logical axioms only.
+PASS: DkMath.Lib.RepresentationTheory.isIrreducible_iff_no_stable_line; 15316 reachable constants; expected providers present.
+PASS: DkMath.Lib.RepresentationTheory.matrixGroupHom; 7043 reachable constants; expected providers present.
+PASS: DkMath.Lib.RepresentationTheory.matrixGroupHom_basis_change; 7079 reachable constants; expected providers present.
+PASS: DkMath.Lib.RepresentationTheory.matrixGroupHom_ker; 7147 reachable constants; expected providers present.
+PASS: DkMath.Lib.RepresentationTheory.coordinate_isIrreducible_iff; 3737 reachable constants; expected providers present.
+PASS: DkMath.Lib.RepresentationTheory.determinantCharacterWithBasis_independent; 13921 reachable constants; expected providers present.
+PASS: DkMath.Lib.RepresentationTheory.matrixGroupHom_charpoly_basis_independent; 16035 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsionGL2; 28581 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsionGL2_normal_finite_level; 30370 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.residualGL2; 31793 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.residual_gl2_profile; 33367 reachable constants; expected providers present.
+PASS: FreyResidualGL2Test.actual37_conjugate; 31827 reachable constants; expected providers present.
+PASS: FreyResidualGL2Test.actual2_rank_two_reducible; 31932 reachable constants; expected providers present.

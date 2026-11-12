@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-08",
+  "checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": {
+    "P2M/Sol/S_ValuationSubring_exists_tame_generator_inertiaSubgroupIn.lean": "b87b01d84d9e0c57b58dbe169e02e46b019fae8eea995d37e8b8b45d6d9935f5",
+    "P2M/Sol/S_ValuationSubring_exists_mem_inertiaSubgroupIn_pow_eq_of_forall_apply_eq.lean": "2c082725e35f481433429f13825da019adfeb63829a5ec969687926f0931cc97"
+  },
+  "review_sha256": "e6ec63539e12c51ec8a942de4a93657903d15665a64761d3f28d44877fc9baca",
+  "comparison": "Read upstream exists_tame_generator: primitive ratios, exponent divisibility, compact correction construction, all-radical tail root consumption and three-factor p-power decomposition. DkMath follows the reviewed alternative: actual projection open kernel + compact intersection gives eventual finite detection, then same primitive generator and actual H exponent lower to n+3. Proves actual common quotient cyclicity and evaluation injectivity. Does NOT claim to port strong upstream three-factor decomposition.",
+  "new_code": "Original DkMath-specific composition of existing checked lemmas and Mathlib compactness; no P2M/P2MW imports, no hgen/hcyclic/hcompare/hopen/hcontinuous provider.",
+  "remaining": "hclass arithmetic supply, resonance obstruction, continuous H1 comparison, global contradiction and unconditional general hno."
+}

@@ -1,0 +1,10 @@
+NOTE-032-NODAL-DISTANCE validation / 2026-10-27
+base: 7a015b821d0ab485704532a1e82a3f9e700d68e1
+
+PASS ./lean-build.sh DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalDistance (0 warnings)
+PASS ./lean-build.sh DkMathTest.Lib.NumberTheory.WeierstrassNodalDistance (0 warnings)
+PASS lake env lean tmp/note032-node-distance/Axioms.lean (0 warnings)
+
+10 declarations: Classical.choice, Quot.sound, propext; no sorryAx.
+Actual characteristic-2 37-point orbit and ZMod 47 source/target node calculations passed.
+General target center identification and target nonsingularity remain open.

@@ -1,0 +1,16 @@
+import DkMath
+
+#check DkMath.Lib.NumberTheory.CyclicKummer.Presentation
+#check DkMath.Lib.NumberTheory.CyclicKummer.exists_presentation
+#check DkMath.Lib.NumberTheory.CyclicKummer.Presentation.constant_not_pow
+#check DkMath.Lib.NumberTheory.CyclicKummer.Presentation.autEquivRoots_ratio
+#check DkMath.Lib.NumberTheory.CyclotomicCharacterKummer.exists_presentation
+#check DkMath.Lib.NumberTheory.CyclotomicCharacterKummer.character_eq_one_iff_fix_radical
+#check DkMath.FLT.Frey.Source.residual_nonsplit_has_kummer_presentation
+#check DkMath.FLT.Frey.Source.residual_character_eq_one_iff_fix_kummer_radical
+#check DkMath.FLT.Frey.Source.residual_kummer_radical_decomposition_fixed_at_p
+#check DkMath.FLT.Frey.Source.residual_kummer_radical_inertia_fixed_away
+
+#print axioms DkMath.FLT.Frey.Source.residual_nonsplit_has_kummer_presentation
+#print axioms DkMath.FLT.Frey.Source.residual_character_eq_one_iff_fix_kummer_radical
+#print axioms DkMath.FLT.Frey.Source.residual_kummer_radical_inertia_fixed_away

@@ -19,7 +19,7 @@ theorem pascalCancellationDefect_zero_iff_dial_pos {d p k : ℕ}
     (hp : p.Prime) (hk : k < d) :
     pascalCancellationDefect d p k = 0 ↔ 0 < pascalPrimeDialHeight p (d + 1) (k + 1) := by
   rw [pascalCancellationDefect_eq_zero_iff]
-  exact (DkMath.ABC.Vp_ge_one_iff hp (Nat.choose_ne_zero (by omega))).symm
+  exact (DkMath.Lib.NumberTheory.Vp_ge_one_iff hp (Nat.choose_ne_zero (by omega))).symm
 
 /-- Before the first prime boundary every in-range adjacent defect is nonzero. -/
 theorem pascalCancellationDefect_ne_zero_of_next_row_lt {d p k : ℕ}

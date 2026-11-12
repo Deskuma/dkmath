@@ -1,0 +1,132 @@
+NOTE-032 same-vector integerization, Selmer valuations and conditional class-group torsion
+Date: 2026-11-02
+Working directory: lean/dk_math
+
+Performed validation, all commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCyclotomicKummerArithmetic DkMathTest.FLT.Note032CyclotomicKummerArithmeticDependencyAudit
+   Final revision: Build completed successfully (11074 jobs).
+2. lake test
+   Normal repository test driver passed (12171/12171 jobs), including both new test modules.
+3. lake env lean DkMathTest.lean
+   Normal test import entrance passed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerArithmeticSmoke.lean
+   Root import exposes actual integral models, original-vector equality, invariant valuation
+   residues/Selmer membership, the actual Mathlib Selmer subgroup, conditional ideal roots,
+   their positive-exponent uniqueness and actual class-group torsion witnesses.
+5. git diff --check
+   Passed. All seven new Lean artifacts were scanned directly for trailing whitespace.
+
+Regression scope:
+- In the actual quadratic field AdjoinRoot (X^2+1) over Q, start with radical i/2 and
+  constant -1/4. Integerization constructs actual nonzero elements of BOTH rings of integers
+  satisfying the same quadratic equation for the same inclusion.
+- The correct fifth-power denominator correction for 1/2 is 2^5*(1/2)=16.
+- At the actual height-one prime (2) of Z, the principal fractional ideal of 2 has count 1.
+  The integral element 2 therefore fails the p=5 Selmer valuation condition.
+- The inverse fractional representative 1/2 is nontrivial in the same Kummer quotient;
+  multiplying once by its denominator would incorrectly change its class to 1.
+- An actual fifth power and the actual integer-ring unit -1 satisfy the all-prime valuation
+  condition. Integrality alone is not sufficient, and integrality is not unit status.
+- Concrete decidable arithmetic uses kernel-checked decide; quadratic irreducibility uses
+  the checked rational square-nonnegativity argument. No native evaluation oracle is used.
+
+Source checks:
+- Four new production modules, two new tests and root smoke pass the forbidden-construct
+  scan: no sorry, admit, native_decide, unsafe or custom axiom declarations.
+- No new-module diagnostics in the final root/focused build or normal suite.
+- Only a documentation pointer was changed in the preceding production module;
+  its existing theorem statements and proofs remain unchanged.
+- Unrelated historical sorry/linter warnings remain in the repository; these checks do not
+  assert that every declaration in the repository is sorry-free.
+
+Selected axiom audits (19 declarations; standard axioms only):
+DkMath.Lib.NumberTheory.CyclicKummerIntegral.rescale: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclicKummerIntegral.exists_integral_multiple: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclicKummerIntegral.exists_integral_power_multiple: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclicKummerIntegral.exists_integral_rescale: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclicKummerIntegral.exists_integral_model: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclicKummerIntegral.IntegralModel.radical_pow: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerArithmetic.rescale_constantClass: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerArithmetic.exists_integral_model_same_vector: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerArithmetic.rescale_mem_valuationSpace_iff: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerArithmetic.constantVector_mem_valuationSpace_iff: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmer.mem_valuationSpace_iff_selmer: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmer.count_span_eq_neg_valuation: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmer.valuationLinear_eq_zero_iff: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmer.unit_mem_valuationSpace: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmer.count_span_mul_pow: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmer.exists_fractionalIdeal_pow: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmer.fractionalIdeal_pow_injective: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmer.exists_classGroup_torsion: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_nonsplit_has_integral_weight_two_kummer_model: Classical.choice, Quot.sound, propext
+
+Recursive dependency audit (types, constructors and opaque proof bodies):
+PASS: DkMath.Lib.NumberTheory.CyclicKummerIntegral.exists_integral_model; 21363 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicKummerArithmetic.exists_integral_model_same_vector; 34831 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmer.mem_valuationSpace_iff_selmer; 17411 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicKummerArithmetic.constantVector_mem_valuationSpace_iff; 37576 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmer.exists_fractionalIdeal_pow; 16902 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmer.fractionalIdeal_pow_injective; 16853 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmer.exists_classGroup_torsion; 18273 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_nonsplit_has_integral_weight_two_kummer_model; 53867 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.CyclicKummerIntegral.exists_integral_model; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKummerArithmetic.exists_integral_model_same_vector; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmer.mem_valuationSpace_iff_selmer; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKummerArithmetic.constantVector_mem_valuationSpace_iff; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmer.exists_fractionalIdeal_pow; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmer.fractionalIdeal_pow_injective; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmer.exists_classGroup_torsion; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_nonsplit_has_integral_weight_two_kummer_model; remaining arithmetic inputs explicit.
+
+Eight full traversals and eight public-input audits passed. Required dependencies include actual
+integer denominator clearing through Z -> Q localization, integral roots of integral powers,
+same-field rescaling and exact original-class/vector equality, the actual Mathlib Selmer group
+and modular valuations, the signed principal-fractional-ideal count/valuation comparison,
+integer divisibility modulo p, finite support of fractional-ideal counts, actual finite products
+and count extensionality, the actual ClassGroup.mk/principality criterion, and the original
+Frey nonsplitting/omega^2 vector construction. The audit rejects sorryAx, custom axioms,
+external P2M/P2MW, FltRegular, FreyPackage, DkMath.FLT.Kummer and completed FLT endpoints.
+
+The generic ideal-root theorem explicitly retains all-count divisibility hdiv. The class-group
+witness theorem explicitly retains Selmer membership hx. These conditions were NOT moved to
+inputs of the Frey construction endpoint; the Frey endpoint only constructs the integral model
+of the same original vector and preserves all valuation residues. It adds no integer, denominator,
+same-vector, Selmer-membership, unramified, valuation-divisibility or arithmetic-vanishing provider.
+
+Import audit: note032-cyclotomic-kummer-arithmetic-import-audit.json
+All four new local import closures are acyclic (256 local modules in their union) and exclude
+FreyHnoSmallIndex, FreyHnoRegularPrime and FreyHnoHardCase. This local syntactic import audit is
+separate from the recursive proof dependency audit.
+
+Mathematical boundary:
+PROVED: alpha' = iota(d)*alpha and b'=d^p*b for an internally constructed nonzero integer d
+are actual nonzero elements of O_M and O_F. Their presentation has the SAME M/F, inclusion,
+generation and irreducibility. Its actual Kummer class/vector equals the original one; nonzero
+omega^2 eigencondition and every finite-prime valuation residue are preserved.
+The common kernel of actual modular valuation maps on the same Kummer quotient is exactly the
+Mathlib S=empty Selmer group. Membership of the same representative is equivalent to p dividing
+all counts of its principal fractional ideal, with the valuation/count sign proved explicitly.
+The actual integer-ring unit map gives Selmer membership for units.
+CONDITIONAL: all-count divisibility constructs a nonzero J by dividing the finitely supported
+counts and taking the corresponding product of prime-ideal powers, and J^p=I for the SAME I.
+Positive p gives uniqueness of a nonzero ideal root. For a Selmer representative x, the SAME
+principal ideal (x) has such a root J and its ACTUAL ideal class satisfies [J]^p=1.
+This class-group class is allowed to be trivial; a nonzero field Kummer class may come from units.
+
+STILL OPEN: the original Frey vector's membership in that valuation space; local fixedness ->
+all-prime valuation congruences and the required unramified/splitting predicates; resonant-place
+absorption and local pth powers at p; quotient-level well-defined/equivariant maps to the class
+and unit components, exactness and arithmetic vanishing; global character vanishing and the
+required tower iteration. The review's exact sequence is a design target, not completed here.
+Integerization is not Selmer membership, nor is it unit status. General hno is unfinished.
+The existing final fixed-point-counting path still requires no hCH. No global ExtVanishing,
+Selmer-membership, class-group/unit vanishing, tower-existence or hno provider was introduced.
+
+SHA256 of new source/test/smoke artifacts:
+4b2fcb671556d5c03321f00f9e63f6148048732abaca1c2de42abd965a6062de  DkMath/Lib/NumberTheory/CyclicKummerIntegral.lean
+2c975962641fbfeb730788d7971fde2c0d04fae822d0a97d9da903f17f8f5986  DkMath/Lib/NumberTheory/KummerSelmer.lean
+11fb2a93a0afa7987a0692e93d89c87d80b1bd5c1491657a5ff3c5edf5a778b4  DkMath/Lib/NumberTheory/CyclotomicKummerArithmetic.lean
+127ca0f900b7ac2d747a2dd66cf74bf7d86964e432c278a072a47fe3a326b0cc  DkMath/FLT/FreyCyclotomicKummerArithmetic.lean
+7ea7660f77617e430682eea092e447bc87079f5f37850e3bae51d864bd948279  DkMathTest/FLT/FreyCyclotomicKummerArithmetic.lean
+5b29781a53e801988dad217bf4d49399cd6775ddd93482166efa7a37e2eacd5c  DkMathTest/FLT/Note032CyclotomicKummerArithmeticDependencyAudit.lean
+0de158976bcf041a554801aa88590ccf1db6b51d4c0a195ab88e8e15ad4d0a95  docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerArithmeticSmoke.lean

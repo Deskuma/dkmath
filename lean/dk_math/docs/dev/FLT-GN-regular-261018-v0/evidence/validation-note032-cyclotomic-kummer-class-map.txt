@@ -1,0 +1,134 @@
+NOTE-032 actual Selmer class map, group short exact sequence and same-unit recovery
+Date: 2026-11-02
+Working directory: lean/dk_math
+
+Performed validation, all commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCyclotomicKummerClassMap DkMathTest.FLT.Note032CyclotomicKummerClassMapDependencyAudit
+   Final revision: Build completed successfully (11078 jobs).
+2. lake test
+   Normal repository test driver passed (12177/12177 jobs), including both new test modules.
+3. lake env lean DkMathTest.lean
+   Normal test import entrance passed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerClassMapSmoke.lean
+   Root import exposes representative independence, actual Selmer-to-class-group and linear
+   maps, unit quotient injection, kernel/image equality, torsion surjection, the bundled short
+   exactness conditions, same-class rescaling and conditional same-unit recovery.
+5. git diff --check
+   Passed. All seven new Lean artifacts were also scanned directly for trailing whitespace.
+
+Regression scope:
+- The actual integer unit -1 has a nontrivial class modulo squares. Its actual Selmer class
+  over Q is nontrivial by the unit-quotient injection, while its ideal-class-group image is 1.
+  Zero class-group image must not be confused with zero Selmer/Kummer class.
+- The same class represented by -4 is passed through actual unit_decomposition to recover
+  an integer-ring unit times a rational-unit square, preserving the same representative.
+- At exponent 1 every Selmer class is 1, consistently with the general positive-exponent API.
+- At exponent 0 the actual nonzero fractional ideals (2) and 1 are distinct but have the same
+  zeroth power. Positive exponent is required for the ideal-root uniqueness used by Phi.
+- The sign and ideal-distinctness arguments are kernel-checked using square nonnegativity,
+  the actual height-one prime (2), and its fractional-ideal count. No native oracle is used.
+
+Source checks:
+- Four new production modules, two new tests and root smoke pass the forbidden-construct
+  scan: no sorry, admit, native_decide, unsafe or custom axiom declarations.
+- No new-module diagnostics in the final root/focused build or normal suite.
+- Earlier production constructors and theorem statements/proofs are unchanged. Facades and
+  the normal test import entrance expose the new results.
+- Unrelated historical sorry/linter warnings remain in the repository; these checks do not
+  assert that every repository declaration is sorry-free.
+
+Selected axiom audits (19 declarations; standard axioms only):
+DkMath.Lib.NumberTheory.KummerSelmerClassMap.rootIdeal_pow: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerClassMap.idealUnits_pow_injective: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerClassMap.rootIdeal_change_representative: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerClassMap.rootClass_independent: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerClassMap.rootIdeal_mul: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerClassMap.toClassGroup: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerClassMap.toClassGroup_pow: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerClassMap.toClassTorsionLinear: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerExact.principal_of_class_eq_one: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerExact.toClassGroup_eq_one_iff_unit: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerExact.unit_decomposition: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerExact.unitInclusion_injective: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerExact.kernel_eq_unit_range: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerExact.toClassTorsion_surjective: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerExact.short_exact: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerClassMap.classImage_via_root: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerClassMap.rescale_classImage: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerClassMap.unit_of_classImage_eq_one: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_kummer_unit_of_classImage_eq_one: Classical.choice, Quot.sound, propext
+
+Recursive dependency audit (types, constructors and opaque proof bodies):
+PASS: DkMath.Lib.NumberTheory.KummerSelmerClassMap.rootClass_independent; 18291 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmerClassMap.toClassGroup; 18316 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmerClassMap.toClassTorsionLinear; 18352 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmerExact.short_exact; 25009 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmerExact.kernel_eq_unit_range; 24957 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmerExact.toClassTorsion_surjective; 18331 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicKummerClassMap.rescale_classImage; 38257 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicKummerClassMap.unit_of_classImage_eq_one; 40178 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_kummer_unit_of_classImage_eq_one; 46529 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmerClassMap.rootClass_independent; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmerClassMap.toClassGroup; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmerClassMap.toClassTorsionLinear; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmerExact.short_exact; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmerExact.kernel_eq_unit_range; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmerExact.toClassTorsion_surjective; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKummerClassMap.rescale_classImage; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKummerClassMap.unit_of_classImage_eq_one; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_kummer_unit_of_classImage_eq_one; remaining arithmetic inputs explicit.
+
+Nine full traversals and nine public-input audits passed. Required dependencies include actual
+same-principal-ideal roots and their positive-exponent uniqueness, representative change by a
+principal ideal, representative-independent class images, product roots and homomorphism laws,
+actual class-group p-torsion and ZMod linearization, the Mathlib unit-map kernel using integral
+closure, kernel-to-actual-unit recovery via equality of principal fractional ideals, actual class
+representatives and construction of a Selmer preimage for every p-torsion class, invariance under
+the original integer rescaling, the original constant's nontrivial Kummer class and the same
+Frey evaluated character. The audit rejects sorryAx, custom axioms, external P2M/P2MW,
+FltRegular, FreyPackage, DkMath.FLT.Kummer and completed FLT endpoints.
+
+The general short exact sequence requires only the Dedekind domain/fraction-field structures
+and positive exponent. No injection, exactness, surjection or class-map provider is assumed.
+The new Frey endpoint is a CONDITIONAL RECEIVER: P, hval and hzero are explicit inputs and
+required by its public-input audit. It preserves the original Source, line, cyclic stage,
+cardinality, base and evaluated character. It constructs the actual unit and field pth root,
+original-vector equality and nontrivial unit quotient class, without an added unit provider.
+It does not supply the original vector's Selmer membership or its class image's vanishing.
+Earlier nonsplitting-to-Kummer/integral-model constructors received no new arithmetic inputs.
+
+Import audit: note032-cyclotomic-kummer-class-map-import-audit.json
+All four new local import closures are acyclic (260 local modules in their union) and exclude
+FreyHnoSmallIndex, FreyHnoRegularPrime and FreyHnoHardCase. This local syntactic import check
+is separate from the recursive proof-dependency audit.
+
+Mathematical boundary:
+PROVED: for positive exponent p, the actual group short exact sequence
+1 -> R^*/(R^*)^p -> Selmer(empty,p) -> Cl(R)[p] -> 1.
+The same principal-ideal root's class is representative-independent and preserves products.
+Phi is defined as an actual homomorphism, restricts to actual class-group p-torsion, and yields
+a ZMod p linear map from the same valuation submodule. The unit quotient injects; its image is
+Phi's kernel; every p-torsion ideal class has an actual Selmer preimage. These are the three
+properties bundled by short_exact, not an assumed exactness predicate.
+The original cyclotomic constant's class image is computed by any of its same ideal roots and
+is unchanged by the earlier integer rescaling. Conditional on original membership hval and zero
+class image hzero, b=iota(epsilon)*c^p with an ACTUAL epsilon in O_F^* and c in F^*. Its field
+Kummer vector equals the original nonzero vector, and epsilon's unit quotient class is nontrivial.
+
+STILL OPEN: Galois equivariance of the maps and transport into the ideal-class-group omega^2
+component; the original Frey vector's Selmer membership from local arithmetic; class and unit
+eigenspace vanishing, local pth powers at p, resonant-place geometry and required tower iteration.
+ZMod linearity alone is not Galois equivariance. Zero class-group image leaves a unit class;
+it does not imply that the original Kummer vector is zero. The quotient root c remains in F^*
+and is not asserted integral without further proof. General hno is unfinished. The previous
+final fixed-point counting path still requires no hCH. No global ExtVanishing, Selmer-membership,
+arithmetic-vanishing, tower-existence or hno provider was introduced.
+
+SHA256 of new source/test/smoke artifacts:
+f34a3464478929472f42e759c86012b5ec19bc44e9c672205482a276358a2819  DkMath/Lib/NumberTheory/KummerSelmerClassMap.lean
+9d40e4d009336f95eaaef31b33ab96716ee2bd3b2a7b7fed0c20d87843d3d73e  DkMath/Lib/NumberTheory/KummerSelmerExact.lean
+6a792ab46a0bf567a015b1e56891da28d88024bdce1e209faa373c925bfbda60  DkMath/Lib/NumberTheory/CyclotomicKummerClassMap.lean
+9beccef153678c2a3305b15e1508051cd9b77b8c9f9cff00086b7b3158d2518e  DkMath/FLT/FreyCyclotomicKummerClassMap.lean
+25c25ed518f516dcffc20b8a2422a6cbee69017df21534d50f10e0d5fbaf80eb  DkMathTest/FLT/FreyCyclotomicKummerClassMap.lean
+87298fe63e30ffde2cb7fb71cf3344d8dd6f6b45b63f96a737e0c8f20084821d  DkMathTest/FLT/Note032CyclotomicKummerClassMapDependencyAudit.lean
+114647ae7385e7661ee40c2b587f092f2459a5d8519b2d4387f4f3c7b88dc75d  docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerClassMapSmoke.lean

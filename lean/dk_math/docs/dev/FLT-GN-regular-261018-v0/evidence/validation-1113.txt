@@ -1,0 +1,40 @@
+FLT11 / FLT13 regular State transport validation (2026-10-18)
+CWD: lean/dk_math
+Lean: 4.34.1
+
+PASS: lake build DkMath DkMath.FLT.Kummer
+Build completed successfully (10563 jobs).
+
+PASS: lake build DkMathTest
+Build completed successfully (11456 jobs).
+
+PASS: lake build DkMathTest.FLT.Kummer.ElevenThirteenDependencyAudit
+Build completed successfully (8989 jobs).
+PASS: 142 new explicit declarations; standard logical axioms only.
+PASS: DkMath.FLT.Kummer.regular_kummer_unit_power_criterion; 83582 reachable constants; expected providers present.
+PASS: DkMath.FLT.Kummer.RegularDescent.no_eleven_state; 84603 reachable constants; expected providers present.
+PASS: DkMath.FLT.Kummer.RegularDescent.no_thirteen_state; 84523 reachable constants; expected providers present.
+
+PASS: lake env lean DkMathTest.lean
+PASS: lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmoke1113.lean
+The root import exposes no_eleven_state/no_thirteen_state with arbitrary field universes.
+Existing FLT3/5/7 and general State regression modules were included in DkMathTest.
+
+PASS: 14 new production modules; no sorry/admit/native_decide/custom axiom constructs.
+PASS: 17 new Lean modules/artifacts have no trailing whitespace.
+PASS: no external FltRegular/P2M imports in new production modules.
+PASS: standard axiom whitelist only: propext, Classical.choice, Quot.sound.
+PASS: recursive dependency checks include opaque bodies, types, and constructors.
+PASS: no completed FLT endpoints, old seventh-degree base/step, or external proof namespaces.
+PASS: required Hilbert 92/94, unramified Kummer extension, PID, and shared State descent present.
+PASS: no warnings from new source/test modules in the full test-library build.
+PASS: git diff --check
+PASS: existing RegularStateTransport.lean unchanged.
+
+Full builds also replay historical warnings in unrelated existing modules.
+Scope: positive-depth State exclusion for exponents 11 and 13.
+General Case I and integer-counterexample orientation remain outside this result.
+
+Index-specific source sizes (comments/blank lines included):
+Eleven: PID 195 lines; provider/state glue 64 lines; State proof body one shared no_state application.
+Thirteen: PID 747 lines; provider/state glue 64 lines; State proof body one shared no_state application.

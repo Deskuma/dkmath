@@ -1,0 +1,18 @@
+NOTE-032-POINT-DESCENT-NORM validation (2026-10-26)
+Base HEAD: e22e0d63ab580adf2e4717466e469e66c7d06094
+Branch: dev/FLT-GN-regular-261018-v0
+PASS focused production module build: DkMath.FLT.FreyFiniteKernelPointDescent
+PASS focused test module build (includes norm owner): DkMathTest.Lib.NumberTheory.EllipticFiniteKernelPointDescent
+PASS Source37 direct Lean check: 5 theorems
+PASS axiom audit: 59 declarations; only propext, Classical.choice, Quot.sound
+PASS new proof source scan: no prohibited proof constructs or external proof imports
+PASS Lib dependency direction, textbook docstrings and promotion markers
+PASS file markers after imports and tracker mismatch check
+PASS facade import registration (static check)
+PASS previous proof owners and checkpoint documents unchanged
+PASS cached upstream additivity-solution blob hash
+PASS local report links, git diff --check
+Counts: production 3 owners, 33 theorems, 6 definitions, 536 lines
+Actual tests: 13 theorems, 2 definitions/abbreviations; same E[3] of order 9
+Boundary: Galois equivariance completed; additivity and target-point order comparison remain open
+Boundary: nonzero rational Cofixed images are not yet proved p-torsion

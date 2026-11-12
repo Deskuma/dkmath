@@ -1,0 +1,158 @@
+{
+  "unit": "NOTE-032-REDUCTION-SQUARE-INTEGER",
+  "date": "2026-10-27",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "a9518a88fb9be1187ee172e66fd9e56076192b88",
+  "status": "same actual quotient point map commutes with reduction on the whole source zero component in the singular-kernel branch; the same existing integer point map transports zero-component points at bad primes distinct from p, including two; integerization smoothness equivalence at every prime distinct from p retains the same actual point maps",
+  "production": {
+    "owners": 5,
+    "theorems": 15,
+    "definitions": 2
+  },
+  "regression": {
+    "theorems": 5,
+    "definitions": 2
+  },
+  "smoke_theorems": 3,
+  "axiom_audit": {
+    "declarations": 27,
+    "batches": [
+      15,
+      9,
+      3
+    ],
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "sorryAx": false
+  },
+  "checks": [
+    {
+      "command": "./lean-build.sh DkMath.FLT.FreyFiniteKernelReductionSquare",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMathTest.Lib.NumberTheory.FreyReductionTransport",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032ReductionSquareSmoke.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "9e17ddb4d64c70cec78da9920c7534850ade54aeb45d0187b65f75a044a39881"
+    },
+    {
+      "command": "lake env lean tmp/note032-reduction-square/Axioms1.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "4a4e388b5a54805c794ff7e067fc1e46c66695538b70054bcc92257e14767889"
+    },
+    {
+      "command": "lake env lean tmp/note032-reduction-square/Axioms2.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "6a0dffe620ae9069c92c6cf124e45bccfee63b7b0f8966a36f3d4d3b8a32e5e7"
+    }
+  ],
+  "files": [
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassModelReduction.lean",
+      "sha256": "173be77fbe25f8731be84038d002ba1ced50ab31664e2654ab0028faeca689e8",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.WeierstrassModelReduction.modelReduce",
+        "DkMath.Lib.NumberTheory.WeierstrassModelReduction.modelReduce_zero",
+        "DkMath.Lib.NumberTheory.WeierstrassModelReduction.modelReduce_some",
+        "DkMath.Lib.NumberTheory.WeierstrassModelReduction.modelReduce_some_not_mem",
+        "DkMath.Lib.NumberTheory.WeierstrassModelReduction.residuePoint_eq"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassIntegralChangeReduction.lean",
+      "sha256": "baf6e866f70c6bdfb926317220d4abbff5fbf90ab27d10be4ed81a991b759fe4",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.WeierstrassIntegralChangeReduction.coordinates_mem_iff",
+        "DkMath.Lib.NumberTheory.WeierstrassIntegralChangeReduction.residue_coordinates",
+        "DkMath.Lib.NumberTheory.WeierstrassIntegralChangeReduction.smoothCoordinates_iff"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassIntegerReductionTransport.lean",
+      "sha256": "708f5a771c3249114e1c1fdb0b7ffc9d84b9697d682e1e880eff4eff16e2668b",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.integerValuationModel",
+        "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.integerValuationModel_map",
+        "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.exists_integral_clearingChange",
+        "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.geometricPointEquiv_smooth_iff"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelReductionSquare.lean",
+      "sha256": "9c52fce42bf303f6b488747e6a8f16109d09a6a006d60608d200f5ac61ac63d3",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_reduction_square"
+      ]
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelReductionSquare.lean",
+      "sha256": "7f16fc4e9c56211ad5c2577798f24d04645d698e8c3662dcbc9358928cb07e76",
+      "public_declarations": [
+        "DkMath.FLT.Frey.Source.residual_pointHom_reduction_square",
+        "DkMath.FLT.Frey.Source.residual_pointHom_reduction_square_at_bad_place",
+        "DkMath.FLT.Frey.Source.residual_integer_pointHom_smooth_iff",
+        "DkMath.FLT.Frey.Source.residual_integer_pointHom_smooth_at_bad_place_of_disjoint"
+      ]
+    },
+    {
+      "path": "DkMathTest/Lib/NumberTheory/FreyReductionTransport.lean",
+      "sha256": "8fec088271efc7d9bb4f224c1cddedd68bac8bc3490282d2653795e8462e8a90",
+      "public_declarations": [
+        "FreyReductionTransportTest.actual_reduction_square",
+        "FreyReductionTransportTest.toy",
+        "FreyReductionTransportTest.toy_integer_model",
+        "FreyReductionTransportTest.localToy",
+        "FreyReductionTransportTest.actual_integer_smooth_iff",
+        "FreyReductionTransportTest.exists_actual_integer_smooth_point",
+        "FreyReductionTransportTest.nonunit_scale_boundary"
+      ]
+    },
+    {
+      "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032ReductionSquareSmoke.lean",
+      "sha256": "2bddaddfb19052932ed4d6be7c9f90b66b31b5b372154ab3d0fd4b12e49442d7"
+    }
+  ],
+  "static_checks": [
+    "six production/test module file markers match paths",
+    "public Lib textbook docstrings and promotion markers",
+    "no forbidden proof constructs or increased heartbeat limits",
+    "Lib imports do not depend on FLT or external solution modules",
+    "six facade imports statically registered; no facade build",
+    "all existing mathematical owners and prior NOTE/evidence unchanged",
+    "index unchanged",
+    "git diff HEAD --check passed"
+  ],
+  "remaining": [
+    "smooth kernel branch zero-component transport and reduction",
+    "inverse-image zero-component criterion",
+    "exact discriminant depth",
+    "q=p",
+    "scheme isogeny",
+    "arithmetic exclusion of target rational torsion",
+    "general hno"
+  ],
+  "scope_notes": [
+    "the reduction point equality uses the same source and valuation-ring quotient residue models, equal in the singular-kernel branch",
+    "integerization uses a unit change of residue coordinates; no direct equality of integerized reduction with the old residue point is claimed",
+    "Source final bad-place endpoint retains stability, Disjoint, p at least five, and source smoothness"
+  ],
+  "full_build": {
+    "performed": false,
+    "reason": "user handles full build; no root build or lake test"
+  },
+  "provenance": "new MIT owners combine existing DkMath APIs; no new external proof code copied"
+}

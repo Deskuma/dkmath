@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.ABC.PadicValNat
+import DkMath.Lib.NumberTheory.BinomialPrimePower
 import DkMath.NumberTheory.BinomialPrime
 import Mathlib.Data.Nat.Choose.Factorization
 import Mathlib.Data.Nat.Multiplicity
@@ -66,7 +66,7 @@ theorem FilteredBeamHeight.dvd_choose_of_height_ge
     p ^ r ∣ Nat.choose d k := by
   have hchoose_ne : Nat.choose d k ≠ 0 := Nat.choose_ne_zero hkd.le
   have hv : padicValNat p (Nat.choose d k) = h := H k hk0 hkd hPk
-  exact (DkMath.ABC.padicValNat_le_iff_dvd hp hchoose_ne r).mp (by omega)
+  exact (DkMath.Lib.NumberTheory.padicValNat_le_iff_dvd hp hchoose_ne r).mp (by omega)
 
 /--
 A uniform beam-height observation gives a divisibility statement for any
@@ -202,20 +202,25 @@ theorem prime_power_rowSupport
   ⟨hp, hn, prime_power_innerRowSupportPrime hp⟩
 
 /--
+[DkMath.Lib] Promoted to
+`DkMath.Lib.NumberTheory.padicValNat_choose_prime_pow`.
+The public hypotheses and conclusion are preserved; the proof now delegates to Lib.
+
 Kummer's prime-power binomial valuation in `padicValNat` form.
 
 Mathlib proves this first as a `Nat.factorization` identity; this lemma exposes
-the same statement through the ABC valuation API used elsewhere in DkMath.
+the same statement through the neutral Lib valuation API.
 -/
 theorem padicValNat_choose_prime_pow
     {p n k : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0) :
     padicValNat p (Nat.choose (p ^ n) k) = n - padicValNat p k := by
-  have hfac := Nat.factorization_choose_prime_pow hp hkn hk0
-  rw [Nat.factorization_def (Nat.choose (p ^ n) k) hp,
-    Nat.factorization_def k hp] at hfac
-  exact hfac
+  exact DkMath.Lib.NumberTheory.padicValNat_choose_prime_pow hp hkn hk0
 
 /--
+[DkMath.Lib] Promoted to
+`DkMath.Lib.NumberTheory.padicValNat_choose_prime_pow_add_index`.
+The public hypotheses and conclusion are preserved; the proof now delegates to Lib.
+
 Kummer's prime-power binomial valuation in additive form.
 
 This is often the most convenient formulation for filters: the support carried
@@ -225,12 +230,13 @@ row exponent.
 theorem padicValNat_choose_prime_pow_add_index
     {p n k : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0) :
     padicValNat p (Nat.choose (p ^ n) k) + padicValNat p k = n := by
-  have hfac := Nat.factorization_choose_prime_pow_add_factorization hp hkn hk0
-  rw [Nat.factorization_def (Nat.choose (p ^ n) k) hp,
-    Nat.factorization_def k hp] at hfac
-  exact hfac
+  exact DkMath.Lib.NumberTheory.padicValNat_choose_prime_pow_add_index hp hkn hk0
 
 /--
+[DkMath.Lib] Promoted to
+`DkMath.Lib.NumberTheory.prime_power_pow_dvd_choose_of_padicValNat_index`.
+The public hypotheses and conclusion are preserved; the proof now delegates to Lib.
+
 Prime-power row filter.
 
 If the requested layer `r` plus the `p`-support already present in the index
@@ -240,14 +246,7 @@ theorem prime_power_pow_dvd_choose_of_padicValNat_index
     {p n k r : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
     (hr : r + padicValNat p k ≤ n) :
     p ^ r ∣ Nat.choose (p ^ n) k := by
-  have hchoose_ne : Nat.choose (p ^ n) k ≠ 0 := Nat.choose_ne_zero hkn
-  have hvchoose :
-      padicValNat p (Nat.choose (p ^ n) k) = n - padicValNat p k :=
-    padicValNat_choose_prime_pow hp hkn hk0
-  have hr_le : r ≤ padicValNat p (Nat.choose (p ^ n) k) := by
-    rw [hvchoose]
-    omega
-  exact (DkMath.ABC.padicValNat_le_iff_dvd hp hchoose_ne r).mp hr_le
+  exact DkMath.Lib.NumberTheory.prime_power_pow_dvd_choose_of_padicValNat_index hp hkn hk0 hr
 
 /--
 Positive uniform beam height implies ordinary inner coefficient divisibility.
@@ -264,7 +263,7 @@ theorem UniformBeamHeight.allInnerChooseDivisible
   have hchoose_ne : Nat.choose d k ≠ 0 := Nat.choose_ne_zero hk_le
   have hv : padicValNat p (Nat.choose d k) = h := H k hk0 hkd
   simpa using
-    (DkMath.ABC.padicValNat_le_iff_dvd hp hchoose_ne 1).mp (by omega)
+    (DkMath.Lib.NumberTheory.padicValNat_le_iff_dvd hp hchoose_ne 1).mp (by omega)
 
 /--
 Uniform beam height refines an inner row support prime when the height is
@@ -303,7 +302,7 @@ theorem below_prime_not_dvd_inner_choose
   have hk_le : k ≤ d := hkd.le
   have hchoose_ne : Nat.choose d k ≠ 0 := Nat.choose_ne_zero hk_le
   have hv : padicValNat p (Nat.choose d k) = 0 := H k hk0 hkd
-  exact (DkMath.ABC.padicValNat_eq_zero_iff hp hchoose_ne).mp hv
+  exact (DkMath.Lib.NumberTheory.padicValNat_eq_zero_iff hp hchoose_ne).mp hv
 
 /--
 Prime rows have uniform beam height `1` at their own prime.
@@ -319,7 +318,7 @@ theorem prime_uniformBeamHeight_self
     have hple : p ≤ k := Nat.le_of_dvd hk0 hdiv
     omega
   have hvk : padicValNat p k = 0 :=
-    (DkMath.ABC.padicValNat_eq_zero_iff hp hk_ne).mpr hpk
+    (DkMath.Lib.NumberTheory.padicValNat_eq_zero_iff hp hk_ne).mpr hpk
   have hkp_pow : k ≤ p ^ 1 := by simpa using hkp_le
   simpa [hvk] using
     (padicValNat_choose_prime_pow (p := p) (n := 1) (k := k) hp hkp_pow hk_ne)
@@ -432,10 +431,14 @@ theorem prime_power_unitFilteredBeamHeight
   have hk_le : k ≤ p ^ n := hkp.le
   have hk_ne : k ≠ 0 := hk0.ne'
   have hvk : padicValNat p k = 0 :=
-    (DkMath.ABC.padicValNat_eq_zero_iff hp hk_ne).mpr hpk
+    (DkMath.Lib.NumberTheory.padicValNat_eq_zero_iff hp hk_ne).mpr hpk
   rw [padicValNat_choose_prime_pow hp hk_le hk_ne, hvk, Nat.sub_zero]
 
 /--
+[DkMath.Lib] Promoted to
+`DkMath.Lib.NumberTheory.prime_power_dvd_choose_of_not_dvd_index`.
+The public hypotheses and conclusion are preserved; the proof now delegates to Lib.
+
 If the inner index is a `p`-unit, the row `p^n` coefficient carries the full
 `p^n` divisibility.
 -/
@@ -443,9 +446,7 @@ theorem prime_power_dvd_choose_of_not_dvd_index
     {p n k : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)
     (hpk : ¬ p ∣ k) :
     p ^ n ∣ Nat.choose (p ^ n) k := by
-  have hvk : padicValNat p k = 0 :=
-    (DkMath.ABC.padicValNat_eq_zero_iff hp hk0).mpr hpk
-  exact prime_power_pow_dvd_choose_of_padicValNat_index hp hkn hk0 (by omega)
+  exact DkMath.Lib.NumberTheory.prime_power_dvd_choose_of_not_dvd_index hp hkn hk0 hpk
 
 /--
 The unit-index layer of a prime-power row carries the full `p^n` divisibility,

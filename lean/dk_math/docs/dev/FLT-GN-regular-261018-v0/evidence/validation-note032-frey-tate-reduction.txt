@@ -1,0 +1,119 @@
+NOTE-032 THREE STEPS: actual Tate reduction exactness and SAME residual line
+Date: 2026-11-06
+Working directory: lean/dk_math
+
+Performed validations; listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCyclicTateReduction DkMathTest.FLT.Note032FreyCyclicTateReductionDependencyAudit
+   Build completed successfully (11129 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12266/12266 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed; only existing file marker printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateReductionSmoke.lean
+   Root exposes actual reduction kernel/p-image, p injectivity, actual elliptic lifts,
+   ZMod p linear quotient equivalence, SAME ambient mod-p rank two, SAME saturated line
+   and line mod p equivalence to original L with actual rank one/reduction compatibility.
+5. Three textbook blocks extracted verbatim to /tmp/n032-tatered-book-{1,2,3}.lean.
+   lake env lean run on each individually; all passed without warnings.
+   Full production source matches, exact file marker immediately after imports retained.
+6. python3 /tmp/n032-tatered-import-audit.py
+   Comment-aware local import closures, acyclicity, source scans/SHA256, six exact markers,
+   three full textbook copies, Lib/FLT/root and normal test reachability passed.
+   Closure sizes including self: generic 4, elliptic 27, Frey 318. Both Lib modules have
+   no FLT imports. No FreyHnoSmallIndex/RegularPrime/HardCase consumers. JSON saved alongside.
+7. git diff --check and direct trailing-whitespace checks on all new files passed.
+
+Step 1 IMPLEMENTED:
+- SAME generic Tate sequence evaluation at zero lands in actual G[p] multiplication kernel.
+  Iterate actual transitions to prove p^n*x_n=x_0. Zero first component makes the ONE-STEP
+  SHIFT a valid Tate sequence; its actual p-multiple is the original sequence.
+- Prove range(p on Tate)=kernel(reduction), and p multiplication on full sequences is
+  injective by comparing next components. Evaluation itself is not claimed injective.
+- With explicit original-group p-divisibility, choose actual compatible preimages by
+  dependent recursion; prove exact annihilation and evaluation surjectivity.
+- Construct actual additive quotient equivalence Tate/p Tate -> SAME original G[p].
+  Generic additive results require no prime assumption. Surjectivity/quotient equivalence
+  retain actual hdiv; kernel and p injectivity do not require it.
+
+Step 2 IMPLEMENTED:
+- SAME characteristic-zero elliptic curve over K, SAME algebraic-closure point group.
+  Actual multiplication_surjective supplies hdiv, not a new lift/surjectivity provider.
+- Actual first evaluation to existing Torsion E p commutes with SAME Galois point action.
+- Quotient by actual natural p-multiplication range is killed by p, so has STANDARD
+  ZMod p module structure. Actual first-isomorphism additive equivalence becomes LINEAR
+  to SAME E[p], using natural integer scalar compatibility.
+- Actual quotient cardinality p^2 and MOD-p quotient finrank 2 follow from proved actual
+  finite torsion cardinality/dimension. No full Tate freeness/rank-two hypothesis.
+  Natural p multiplication agrees with standard p-adic scalar p for prime p.
+
+Step 3 IMPLEMENTED:
+- SAME Source/L/rootField/tower/union/standard Tate line, SAME hclass and uniform-stage hbad.
+- Prove p*x in SAME line iff x in line: next-coordinate transition gives x_n in K_(n+1),
+  then actual lower-torsion criterion puts it in SAME K_n. No supplied saturation.
+- Restrict actual first evaluation to ORIGINAL residual L via SAME torsion inclusion.
+  SAME U's proved divisibility supplies actual preimage sequence, and SAME union Tate
+  equivalence gives a line point with prescribed original L first coordinate.
+- Zero reduction in line has full Tate shift preimage; saturation returns it to SAME line.
+  Thus line's own p-multiplication range equals reduction kernel.
+- Construct actual ZMod p LINEAR equivalence line/p line -> SAME L; finrank is 1 from
+  retained original hline. Reduction inclusion diagram returns SAME geometric p-torsion point.
+- Actual ambient Tate mod-p quotient has finrank 2 without hclass/hbad inputs.
+
+Regression scope:
+- Finite G=ZMod 25: Tate 5 G=0 but actual G[5] contains nonzero 5; evaluation NOT surjective.
+  This guards necessary hdiv in general surjectivity. Actual shift gives p-preimage when
+  first coordinate zero, not for an arbitrary torsion point without divisibility.
+- SAME abstract Frey curve: arbitrary residual point lifts to FULL Tate sequence without
+  class/resonance data. Under retained line arithmetic, arbitrary ORIGINAL L point
+  recovers under quotient linear equivalence round trip.
+- Two saturation steps show p^2*x in line forces SAME x in line.
+- Actual reduction point inclusion agrees. No impossible numerical Fermat Source used.
+
+Audit scope and boundaries:
+- Fifteen selected #print axioms reports: only propext, Classical.choice, Quot.sound.
+- Fifteen recursive traversals inspect checked types, inductive constructors and opaque
+  proof bodies. Reject sorryAx, nonstandard axioms, P2M/P2MW/FltRegular/FreyPackage,
+  old Kummer consumers and FLT endpoints. Require actual shift/transitions/annihilation,
+  actual elliptic multiplication surjectivity and finite torsion dimension, SAME U
+  divisibility, SAME line saturation/lower torsion and exact quotient kernels.
+- Twelve public input audits retain hdiv only where required generically and supply it
+  internally at elliptic/line application; retain SAME hclass/uniform-stage hbad for line.
+  Reject hfree/hrank/hker/hsurj/hlift/hsat/hequiv providers. Ambient quotient rank two
+  requires actual curve/prime conditions, not line arithmetic.
+- No new sorry/admit/native_decide/unsafe/custom axioms; no new warnings.
+  Root/suite replay historical sorry warnings in five unrelated existing modules.
+  No whole-repository axiom-clean assertion.
+- Rank two PROVED FOR MOD-p QUOTIENT ONLY. Full ambient Tate free rank two, completion/
+  Nakayama argument, basis extension, upper triangular matrix display, higher Weil pairing,
+  Frobenius characteristic polynomial and new Tate topology NOT supplied.
+- SAME hclass, ALL-stage hbad and final Galois arithmetic remain unfinished.
+  General hno UNFINISHED. No external class/isogeny classification theorem imported.
+
+Decisive audits from successful root build:
+PASS: DkMath.Lib.Algebra.PrimePowerTateSequence.nsmul_shiftOfZero; 967 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.PrimePowerTateSequence.nsmul_injective; 915 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.PrimePowerTateSequence.range_nsmul_eq_reduction_ker; 1310 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.PrimePowerTateSequence.reduction_surjective; 969 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.PrimePowerTateSequence.quotientEquiv; 2549 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.tateReduction_surjective; 27437 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.tateModPLinearEquiv; 27748 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.tateModP_finrank; 28421 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateModP_finrank; 31631 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTateLine_p_saturated; 81061 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateLineReduction_surjective; 81130 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateLineReduction_ker; 81090 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateLineModPLinearEquiv; 81147 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateLineModP_finrank; 81148 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateLineReduction_inclusion; 81081 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.Algebra.PrimePowerTateSequence.range_nsmul_eq_reduction_ker; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.PrimePowerTateSequence.reduction_surjective; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.tateReduction_surjective; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.tateModP_finrank; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateModP_finrank; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualCyclicTateLine_p_saturated; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateLineReduction_surjective; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateLineReduction_ker; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateLineModPLinearEquiv; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateLineModP_finrank; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTowerUnion_nsmul_surjective; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateLineReduction_inclusion; remaining arithmetic inputs explicit.

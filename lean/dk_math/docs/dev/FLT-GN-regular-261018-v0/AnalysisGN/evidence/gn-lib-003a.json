@@ -1,0 +1,176 @@
+{
+  "checkpoint": "GN-LIB-003a",
+  "base_head": "70dc72858c730d4571e1a53012b294e4e9a1a3d2",
+  "scope": "ownership migration of the existing general binomial tail and positivity kernel",
+  "declarations": [
+    {
+      "name": "DkMath.Algebra.BinomTail.add_pow_tail_exists",
+      "old_owner": "DkMath/Algebra/BinomTail.lean",
+      "new_owner": "DkMath/Lib/Algebra/BinomTail.lean",
+      "statement_and_proof_sha256": "dc58cb4f39f78f363e0297aa13c8d943c934158e03a0703340c8377cbfead213",
+      "line": 61,
+      "statement": "lemma add_pow_tail_exists [CommSemiring α] (a b : α) {n : ℕ} (hn : 2 ≤ n) :\n    ∃ H : α, (a + b) ^ n = b ^ n + (n : α) * b ^ (n - 1) * a + a ^ 2 * H",
+      "statement_and_proof_unchanged": true,
+      "elaborated_check": "DkMath.Algebra.BinomTail.add_pow_tail_exists.{u_1} {α : Type u_1} [CommSemiring α] (a b : α) {n : ℕ} (hn : 2 ≤ n) :\n  ∃ H, (a + b) ^ n = b ^ n + ↑n * b ^ (n - 1) * a + a ^ 2 * H"
+    },
+    {
+      "name": "DkMath.Algebra.BinomTail.binom_tail_nat_dvd",
+      "old_owner": "DkMath/Algebra/BinomTail.lean",
+      "new_owner": "DkMath/Lib/Algebra/BinomTail.lean",
+      "statement_and_proof_sha256": "5378525c4c98ac730fc483d3a9db43f0540c49fbfd26eb5b2aaca8b79c3cbb75",
+      "line": 147,
+      "statement": "lemma binom_tail_nat_dvd (u y : ℕ) {n : ℕ} (hn : 2 ≤ n) :\n    u ^ 2 ∣ ((u + y) ^ n - y ^ n - n * y ^ (n - 1) * u)",
+      "statement_and_proof_unchanged": true,
+      "elaborated_check": "DkMath.Algebra.BinomTail.binom_tail_nat_dvd (u y : ℕ) {n : ℕ} (hn : 2 ≤ n) :\n  u ^ 2 ∣ (u + y) ^ n - y ^ n - n * y ^ (n - 1) * u"
+    },
+    {
+      "name": "DkMath.Algebra.BinomTail.add_pow_gt_sum_pows_nat",
+      "old_owner": "DkMath/Algebra/BinomTail.lean",
+      "new_owner": "DkMath/Lib/Algebra/BinomTail.lean",
+      "statement_and_proof_sha256": "2ffc4ae0c5a7aef96baf0a36b5471e38ef422b81c39518bdb274d0ad1375bbee",
+      "line": 177,
+      "statement": "lemma add_pow_gt_sum_pows_nat (a b : ℕ) (ha : 0 < a) (hb : 0 < b) (k : ℕ) :\n    a ^ (k + 2) + b ^ (k + 2) < (a + b) ^ (k + 2)",
+      "statement_and_proof_unchanged": true,
+      "elaborated_check": "DkMath.Algebra.BinomTail.add_pow_gt_sum_pows_nat (a b : ℕ) (ha : 0 < a) (hb : 0 < b) (k : ℕ) :\n  a ^ (k + 2) + b ^ (k + 2) < (a + b) ^ (k + 2)"
+    },
+    {
+      "name": "DkMath.Algebra.BinomTail.add_pow_gt_sum_pows_nat_of_two_le",
+      "old_owner": "DkMath/Algebra/BinomTail.lean",
+      "new_owner": "DkMath/Lib/Algebra/BinomTail.lean",
+      "statement_and_proof_sha256": "4936ad449bab16837aa494843a4bb1b0c3ebccee30014a02a60a8a87830d1fc2",
+      "line": 227,
+      "statement": "lemma add_pow_gt_sum_pows_nat_of_two_le (a b : ℕ) {n : ℕ}\n    (hn : 2 ≤ n) (ha : 0 < a) (hb : 0 < b) :\n    a ^ n + b ^ n < (a + b) ^ n",
+      "statement_and_proof_unchanged": true,
+      "elaborated_check": "DkMath.Algebra.BinomTail.add_pow_gt_sum_pows_nat_of_two_le (a b : ℕ) {n : ℕ} (hn : 2 ≤ n) (ha : 0 < a) (hb : 0 < b) :\n  a ^ n + b ^ n < (a + b) ^ n"
+    },
+    {
+      "name": "DkMath.Algebra.BinomTail.add_pow_ne_sum_pows_nat_of_two_le",
+      "old_owner": "DkMath/Algebra/BinomTail.lean",
+      "new_owner": "DkMath/Lib/Algebra/BinomTail.lean",
+      "statement_and_proof_sha256": "8b893dafaf7678434b6a36944e7800e390bd4788ed1ef460f77a739eb95eb7b6",
+      "line": 244,
+      "statement": "lemma add_pow_ne_sum_pows_nat_of_two_le (a b : ℕ) {n : ℕ}\n    (hn : 2 ≤ n) (ha : 0 < a) (hb : 0 < b) :\n    (a + b) ^ n ≠ a ^ n + b ^ n",
+      "statement_and_proof_unchanged": true,
+      "elaborated_check": "DkMath.Algebra.BinomTail.add_pow_ne_sum_pows_nat_of_two_le (a b : ℕ) {n : ℕ} (hn : 2 ≤ n) (ha : 0 < a) (hb : 0 < b) :\n  (a + b) ^ n ≠ a ^ n + b ^ n"
+    }
+  ],
+  "new_source_sha256": "b083a834e1d62482fe768acdfba21e98b82076595e0f0b94a05c3eb9ffc8fc0c",
+  "imports": [
+    "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+    "Mathlib.Data.Nat.Choose.Sum",
+    "Mathlib.Tactic.Linarith",
+    "Mathlib.Tactic.NormNum",
+    "Mathlib.Tactic.Positivity",
+    "Mathlib.Tactic.Ring",
+    "Lean.Elab.Tactic.Omega"
+  ],
+  "full_names_preserved": true,
+  "statement_and_proof_bodies_preserved": true,
+  "neutral_to_application_edges": 0,
+  "neutral_import_cycles": 0,
+  "legacy_consumer_sources": {
+    "DkMath/CosmicFormula/CosmicFormulaBinom.lean": {
+      "source_unchanged": true,
+      "sha256": "0a87e4ad954b978bed373cd747f5582a0d085cadba4804b01aa55af380fabc83"
+    },
+    "DkMath/FLT/Basic.lean": {
+      "source_unchanged": true,
+      "sha256": "0f24c05c0be51f6de221747c6e0c4262f5f526e3b06f68406ae73719c1653bec"
+    }
+  },
+  "boundary_examples": 17,
+  "validation": {
+    "owners": {
+      "command": "lake build DkMath.Lib.Algebra.BinomTail DkMath.Algebra.BinomTail",
+      "exit_code": 0,
+      "jobs": 1056
+    },
+    "focused": {
+      "command": "lake build DkMath.Lib.Algebra.BinomTail DkMath.Algebra.BinomTail DkMathTest.Lib.Algebra.BinomTail DkMath.CosmicFormula.CosmicFormulaBinom DkMath.FLT.Basic",
+      "exit_code": 0,
+      "jobs": 8979,
+      "new_code_warnings": 0,
+      "axiom_checks": 5
+    },
+    "allowed_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "source_checks": {
+      "original_material_sha256": "24 of 24 preserved",
+      "baseline_declaration_sha256": "5 of 5 identical",
+      "legacy_consumer_sources": "2 of 2 unchanged",
+      "module_markers": "3 of 3 match paths",
+      "marked_declarations": 5,
+      "forbidden_construct_scan": "PASS",
+      "legacy_file_has_no_redefinitions": true
+    },
+    "tracker_checks": {
+      "owner_log": "PASS",
+      "focused_log": "PASS"
+    },
+    "lib_smoke": {
+      "command": "lake env lean /tmp/GNLib003aLibSmoke.lean",
+      "imports": [
+        "DkMath.Lib"
+      ],
+      "exit_code": 0,
+      "check_count": 5
+    },
+    "legacy_smoke": {
+      "command": "lake env lean /tmp/GNLib003aLegacySmoke.lean",
+      "imports": [
+        "DkMath.Algebra.BinomTail"
+      ],
+      "exit_code": 0,
+      "check_count": 5
+    },
+    "libraries": {
+      "command": "lake build DkMath.Lib DkMath DkMathTest",
+      "exit_code": 0,
+      "jobs": 11796,
+      "new_code_warnings": 0,
+      "existing_sorry_warnings": [
+        "warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`",
+        "warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`",
+        "warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`",
+        "warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`",
+        "warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`"
+      ]
+    },
+    "test_root": {
+      "command": "lake env lean DkMathTest.lean",
+      "exit_code": 0
+    },
+    "root_smoke": {
+      "command": "lake env lean /tmp/GNLib003aRootSmoke.lean",
+      "imports": [
+        "DkMath"
+      ],
+      "exit_code": 0,
+      "check_count": 5
+    },
+    "user_reported_checks": {
+      "commands": [
+        "lake build",
+        "lake test"
+      ],
+      "result": "completed successfully, reported by user before final verification resumed",
+      "provenance": "user report; these two commands were not rerun as such by the assistant"
+    },
+    "prior_integration_attempt": {
+      "result": "earlier retained log reports build failed",
+      "errors": [
+        "missing SevenBaseTerminalPrimePowerFiniteScaleGluing.olean",
+        "missing ZeroDerivedDualEndpointPositiveScalarCoercivityAudit.olean",
+        "unexpected end of input in EtaCriticalMirrorPairedFrameMovingLineCollisionClosure.setup.json"
+      ],
+      "resolution": "fresh cached lake build DkMath.Lib DkMath DkMathTest exited 0; no Lean source changes needed during closeout",
+      "cause": "not established"
+    }
+  },
+  "status": "COMPLETE: ownership migration, focused verification and public-entry closeout passed",
+  "lean_version": "4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)",
+  "mathlib_commit": "d13f23b723b8a846827a245b89c10fc7d3f11612"
+}

@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-08",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.ValuationWildNormality",
+    "DkMath.FLT.FreyTameInertiaQuotient",
+    "DkMath.Lib.Algebra.PrimeOrderResonance",
+    "DkMath.FLT.FreyTameResonance"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.NumberTheory.ValuationWildNormality": {
+      "local_module_count": 8,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyTameInertiaQuotient": {
+      "local_module_count": 352,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.Algebra.PrimeOrderResonance": {
+      "local_module_count": 1,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyTameResonance": {
+      "local_module_count": 354,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/NumberTheory/ValuationWildNormality.lean": true,
+    "DkMath/FLT/FreyTameInertiaQuotient.lean": true,
+    "DkMath/Lib/Algebra/PrimeOrderResonance.lean": true,
+    "DkMath/FLT/FreyTameResonance.lean": true,
+    "DkMathTest/FLT/FreyTameResonance.lean": true,
+    "DkMathTest/FLT/Note032FreyTameResonanceDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTameResonanceSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 4,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/NumberTheory/ValuationWildNormality.lean": "8fb997bc537b9da52247c963395b56250e073f7eb3ce051fca4e42e284906895",
+    "DkMath/FLT/FreyTameInertiaQuotient.lean": "e40666f7b035457808094891074b6f13a97c05ee56ab9d09964fc098954f4ead",
+    "DkMath/Lib/Algebra/PrimeOrderResonance.lean": "6614e64e89c26126d2d7302a313aef81ac3b3cca5002519936a5a9251e6baa70",
+    "DkMath/FLT/FreyTameResonance.lean": "be6766aeb13fcc76f5a6c5ea8f9b333014f30809196e148c02949672acabaaf9",
+    "DkMathTest/FLT/FreyTameResonance.lean": "7819a11f90086c0903b4f72865e5549c3bf46677ba2daa5cd18772fc9bdc2714",
+    "DkMathTest/FLT/Note032FreyTameResonanceDependencyAudit.lean": "e1d886d76db77d25b0cf3d75bc9e543937ec00ad6ef3508f7ec776c0d49e2b41",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTameResonanceSmoke.lean": "63483b0ab6a69acd6406bceb980126c37e0a77a0b35b16f495cea69d20adbf3e"
+  },
+  "boundary": "SAME explicit wild-congruence subgroup normality in SAME inertia; actual canonical I/W quotient and SAME difference character continuous descent preserve SAME values and exact image. Actual IsFrobeniusAt gives quotient ELEMENT q-power relation. SAME hclass+Cofixed original witness has SAME nonzero exact-order-p character value on tame quotient. Original resonance field gives positive fixed branch or negative inverse/nonfixed branch. No new normality/continuity/Frobenius/invariance provider. No actual quotient finiteness/cyclicity/Hausdorff claim, no different ramification API identification, module transport eigen-equation, arithmetic invariance or contradiction, hclass supply or unconditional hno."
+}

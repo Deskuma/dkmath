@@ -1,0 +1,16 @@
+import DkMath
+
+#print "file: docs.dev.FLT-GN-regular-261018-v0.evidence.Note032CyclotomicKummerSelmerSmoke"
+
+open DkMath.Lib.NumberTheory
+
+#check KummerLocalValuation.log_pow_eq_ramification_mul
+#check KummerLocalValuation.count_dvd_of_ramification_eq_one
+#check KummerLocalValuation.ramification_eq_one_of_inertia_fixes_radical
+#check KummerLocalValuation.count_dvd_of_inertia_fixes_radical
+#check CyclotomicKummerSelmer.finite_inertia_fixes_radical
+#check CyclotomicKummerSelmer.constantVector_mem_valuationSpace_of_absolute_inertia
+#check DkMath.FLT.Frey.Source.residual_kummer_mem_valuationSpace
+#check DkMath.FLT.Frey.Source.residual_kummer_mem_selmer
+#check DkMath.FLT.Frey.Source.residual_kummer_unit_weight_square_of_resonant_absorption
+#print axioms DkMath.FLT.Frey.Source.residual_kummer_unit_weight_square_of_resonant_absorption

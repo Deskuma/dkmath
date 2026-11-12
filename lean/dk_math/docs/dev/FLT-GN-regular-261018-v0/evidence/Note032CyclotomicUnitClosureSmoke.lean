@@ -1,0 +1,13 @@
+import DkMath
+
+#print "file: docs.dev.FLT-GN-regular-261018-v0.evidence.Note032CyclotomicUnitClosureSmoke"
+
+#check DkMath.Lib.NumberTheory.CyclotomicInfinitePlaceFixed.smul_infinitePlace_eq_self_iff
+#check DkMath.Lib.NumberTheory.CyclotomicInfinitePlaceFixed.card_fixedPlaces_prime
+#check DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.trace_unitAction
+#check DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.trace_omegaSquareProjector
+#check DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.weightSquareSpace_finrank_eq_one
+#check DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.primaryWeightSquareSpace_eq_bot
+#check DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.exists_global_unit_pow_of_primary
+#check DkMath.FLT.Frey.Source.residual_cyclic_extension_has_stable_complement_of_class_vanishing
+#print axioms DkMath.FLT.Frey.Source.residual_cyclic_extension_has_stable_complement_of_class_vanishing

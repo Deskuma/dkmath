@@ -1,0 +1,126 @@
+NOTE-032 same-character, same-field omega^2 Kummer classes and vectors
+Date: 2026-11-02
+Working directory: lean/dk_math
+
+Performed validation, all commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCyclotomicKummerWeight DkMathTest.FLT.Note032CyclotomicKummerWeightDependencyAudit
+   Final revision: Build completed successfully (11070 jobs).
+2. lake test
+   Normal repository test driver passed (12165/12165 jobs), including both new test modules.
+3. lake env lean DkMathTest.lean
+   Normal test import entrance passed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerWeightSmoke.lean
+   Root import exposes actual radical characters, kernel agreement, conjugate-radical
+   descent, base automorphism lifts, nontrivial actual quotient classes, linear weight
+   condition and the Frey construction endpoint.
+5. git diff --check
+   Passed. The six new Lean artifacts were also scanned directly for trailing whitespace.
+
+Regression scope:
+- A fifth power of the nonzero rational 2 has trivial Kummer class, although 2^5 != 1.
+  Thus the actual quotient relation must not be strengthened to equality of representatives.
+- The actual class of 2 in F_11^*/(F_11^*)^5 is nontrivial.
+- At 2 mod 5 the square weight is 4 and inverse weight is 3; these give distinct powers
+  of that actual nontrivial class. The two weight conventions cannot be interchanged.
+- Every element of F_7^* is a fifth power, so its Kummer quotient is trivial.
+  Nontrivial classes cannot be asserted for arbitrary fields without the original hypotheses.
+- The square weight of -1 mod 5 is 1.
+- Finite concrete computations use kernel-checked decide, not a native evaluation oracle.
+  These finite quotient examples check the algebra of classes and weights, not Frey local arithmetic.
+
+Source checks:
+- The three new production modules, two new test modules and root smoke pass the forbidden-
+  construct scan: no sorry, admit, native_decide, unsafe or custom axiom declarations.
+- No new-module diagnostics in the final root/focused build or normal suite.
+- Only documentation pointers were changed in the two preceding production modules;
+  their existing theorem statements and proofs remain unchanged.
+- Unrelated historical sorry/linter warnings remain in the repository. These checks do not
+  assert that every declaration in the repository is sorry-free.
+
+Selected axiom audits (17 declarations; standard axioms only):
+DkMath.Lib.NumberTheory.KummerRadicalCharacter.radicalCharacter: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerRadicalCharacter.radicalCharacter_eq_one_iff: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerRadicalCharacter.factor_apply: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerRadicalCharacter.map_scalar: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerRadicalCharacter.conjugate_ratio: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerWeight.baseCharacter_lift: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerWeight.presentationCharacter_kernel: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerWeight.conjugate_ratio: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerWeight.conjugate_radical_div_mem: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerWeight.constant_weight_square: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerWeight.base_constant_weight_square: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerWeight.constantClass_ne_one: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerWeight.constantClass_weight_square: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerWeight.classLinearMap: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerWeight.constantVector_ne_zero: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerWeight.constantVector_weight_square: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_nonsplit_has_weight_two_kummer_class: Classical.choice, Quot.sound, propext
+
+Recursive dependency audit (types, constructors and opaque proof bodies):
+PASS: DkMath.Lib.NumberTheory.KummerRadicalCharacter.radicalCharacter; 28192 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerRadicalCharacter.conjugate_ratio; 28344 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicKummerWeight.presentationCharacter_kernel; 35011 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicKummerWeight.conjugate_radical_div_mem; 35151 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicKummerWeight.base_constant_weight_square; 35177 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicKummerWeight.constantVector_weight_square; 35210 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_nonsplit_has_weight_two_kummer_class; 53775 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.KummerRadicalCharacter.radicalCharacter; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerRadicalCharacter.conjugate_ratio; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKummerWeight.presentationCharacter_kernel; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKummerWeight.conjugate_radical_div_mem; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKummerWeight.base_constant_weight_square; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKummerWeight.constantVector_weight_square; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_nonsplit_has_weight_two_kummer_class; remaining arithmetic inputs explicit.
+
+Seven full traversals and seven public-input audits passed. Required dependencies include
+actual cyclotomic action on every pth root, same-root radical ratios, quotient factorization
+and ZMod linearity, original exact kernel agreement, the fixed field of the actual cyclotomic
+kernel, actual normal lifts and their action on the same primitive root, the actual quotient
+map and F_p module, the original Frey nonsplitting/Kummer construction, character open kernel
+and inverse-character conjugation. The audit rejects sorryAx, custom axioms, external
+P2M/P2MW, FltRegular, FreyPackage, DkMath.FLT.Kummer and completed FLT endpoints.
+
+The generic conjugate-ratio lemma explicitly retains surjectivity, kernel inclusion and the
+original inverse-character conjugation law. The same-field application supplies the kernel
+inclusion from exact kernel agreement. The final Frey endpoint internally supplies the
+presentation, character surjectivity/open kernel/conjugation, nontrivial class/vector, omega^2
+condition and actual automorphism lift. None is an added provider at that endpoint.
+The preceding same-valuation local fixedness theorems still apply to the same P. Their
+away-prime resonant hbad is not discharged by this weight calculation.
+
+Import audit: note032-cyclotomic-kummer-weight-import-audit.json
+All three new local import closures are acyclic (251 local modules in their union) and exclude
+FreyHnoSmallIndex, FreyHnoRegularPrime and FreyHnoHardCase. This syntactic local-import audit
+is separate from the proof-dependency traversal.
+
+Mathematical boundary:
+PROVED: kappa(u)=u(alpha)/alpha is an actual mu_p-valued homomorphism with exactly the
+original psi kernel. Factoring through the original surjective psi transports its scalar
+conjugation law. With w=sigma^-1*u*sigma, the inverse-character law gives one chi(sigma)
+factor; the actual cyclotomic action on mu_p supplies the other. Hence
+u(sigma alpha)/(sigma alpha) = (u(alpha)/alpha)^r, r=(chi(sigma)^2).val.
+The same ratio sigma(alpha)/alpha^r is fixed by every element of ker chi and descends to
+the same F=Q(zeta_p), giving a nonzero c in F with sigma(b)=b^r*c^p.
+Any actual base automorphism gamma lifts internally to the same Qbar, and its character
+value agrees with the base primitive-root character omega. The same nonzero constant b
+therefore gives a nontrivial element of the actual group F^*/(F^*)^p satisfying
+gamma[b]=[b]^(omega(gamma)^2). Reading multiplication as addition gives an actual F_p module,
+actual linear maps and the same nonzero vector w satisfying gamma(w)=omega(gamma)^2*w.
+The final Frey endpoint supplies that same presentation, class and vector from nonsplitting.
+
+STILL OPEN: integralization of the same constant; ideal valuations and local arithmetic;
+ring-of-integers unramified/splitting predicates; maps to the relevant ideal-class-group and
+unit eigenspaces and their arithmetic vanishing; global character vanishing, resonant bad-place
+geometry and the required tower iteration. KummerClass here is the quotient of the FIELD
+multiplicative group, not the ideal class group Cl(F). The corrected identity retains c^p;
+it does not assert gamma(b)=b^r. No global ExtVanishing, arithmetic vanishing, tower-existence
+or hno provider was added. General hno is unfinished. The previous final fixed-point counting
+path still requires no hCH.
+
+SHA256 of new source/test/smoke artifacts:
+f7de8df8aa5dd1a96c7eea19ed927b20a2ce819141dfa27f2b46a6ca080f3d07  DkMath/Lib/NumberTheory/KummerRadicalCharacter.lean
+478b40c1fcffe0c1166df3c9e3cd56ee80f86dc860f3cb7c3f82379226536cd0  DkMath/Lib/NumberTheory/CyclotomicKummerWeight.lean
+7b1f3ed8224e1a014a097405a643991e9f7d25bde9e33353342a3c4bf5ba8eb7  DkMath/FLT/FreyCyclotomicKummerWeight.lean
+af1a5ac7576a41c40a8d337b88bfcb0838f22295fcfc1869bc7776b87ddb6804  DkMathTest/FLT/FreyCyclotomicKummerWeight.lean
+b1af268909d3d0e76013400e81d7b02604ca63ca21e8aaa2da154033149077bb  DkMathTest/FLT/Note032CyclotomicKummerWeightDependencyAudit.lean
+78999075ed61a6c88ec8c91a687be217709da72875395a8583e71fbe810b43f2  docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerWeightSmoke.lean

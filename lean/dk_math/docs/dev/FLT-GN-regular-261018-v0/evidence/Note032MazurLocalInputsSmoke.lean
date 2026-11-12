@@ -1,0 +1,14 @@
+import DkMath
+
+open DkMath.FLT.Frey.Source
+open DkMath.Lib.NumberTheory.EllipticRationalLocalTransport
+open DkMath.Lib.NumberTheory.WeierstrassNodalCenterCharThree
+
+#check residual_cofixed_mazur_integer_invariants
+#check residual_cofixed_implies_geometric_prime_torsion_local_inputs
+#check hasSmoothReduction_localValuationSubring_baseChange_iff
+#check hasSmoothReduction_iff_zero_or_exists
+#check candidate_defect_identity
+
+#print axioms residual_cofixed_mazur_integer_invariants
+#print axioms residual_cofixed_implies_geometric_prime_torsion_local_inputs

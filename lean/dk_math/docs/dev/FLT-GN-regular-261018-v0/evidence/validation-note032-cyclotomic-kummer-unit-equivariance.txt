@@ -1,0 +1,118 @@
+NOTE-032 equivariant short exact sequence and the same nontrivial omega-squared unit class
+Date: 2026-11-02
+Working directory: lean/dk_math
+
+Performed validation, all commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCyclotomicKummerUnitEquivariance DkMathTest.FLT.Note032CyclotomicKummerUnitEquivarianceDependencyAudit
+   Build completed successfully (11084 jobs).
+2. lake test
+   Normal repository test driver passed (12187/12187 jobs).
+3. lake env lean DkMathTest.lean
+   Normal test import entrance passed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerUnitEquivarianceSmoke.lean
+   Root import exposes actual actions on unit quotient, Selmer group and class torsion,
+   equivariance of both existing maps, exactness, the unique same unit preimage, its
+   nontriviality and weight-square law, and same-Frey-constant unit-times-power recovery.
+5. git diff --check
+   Passed. All six new Lean artifacts were also scanned directly for trailing whitespace.
+
+Regression scope:
+- F is the actual quadratic number field AdjoinRoot (X^2+1) over Q. Its actual conjugation
+  is constructed and the quadratic generator is proved integral over Z by a monic Z polynomial.
+- An actual integer-ring unit i, with inverse -i, is constructed. The actual conjugation maps
+  it to -i. At exponent 0 the quotient is by {1}; conjugation genuinely moves this unit class.
+  This tests the all-exponent action API only; positive-exponent exactness is not used at 0.
+- The actual nonidentity conjugation commutes with the existing unit inclusion at exponent 2.
+- The actual sign unit -1 is nontrivial modulo squares in Z units, while the class-group image
+  of its actual Selmer class over Q is 1. The unique unit inverse image is that same sign class.
+  Eigenvalue one is transferred through the actual inclusion to the same nonzero unit class.
+- In Multiplicative (ZMod 9), ofAdd 3 is nonidentity 3-torsion and has identity image in the
+  quotient by cubes. This guards the distinction between p-torsion and a quotient by powers.
+- Finite calculations use decide +kernel; no native oracle is used.
+
+Source/import checks:
+- Three new production modules, two new tests and root smoke contain no sorry, admit,
+  native_decide, unsafe or custom axiom declarations. The dependency audit intentionally
+  contains the forbidden name sorryAx and mentions axioms in its diagnostic strings.
+- No new-module/test warnings or errors in the final root/focused build or normal suite.
+- Unrelated historical sorry/linter warnings remain elsewhere in the repository.
+- Earlier production constructors and theorem statements/proofs are unchanged.
+- Public Lib/FLT facades, root DkMath and the normal test entrance expose the new modules.
+- The separate JSON records acyclic syntactic local import closures of 22, 27 and 266 modules,
+  no FreyHnoSmallIndex/RegularPrime/HardCase consumer imports, and public/root reachability.
+  Both new Lib modules have no FLT imports in their local closures.
+- These syntactic import checks are separate from the recursive Lean proof dependency audits.
+
+Selected axiom reports (17 declarations, standard axioms only):
+DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.unitClassEquiv: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.selmerEquiv: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.classTorsionEquiv: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.unitInclusion_equivariant: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.short_exact_equivariant: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.existsUnique_unitClass: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.unitPreimage_spec: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.unitPreimage_equivariant: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.unitClassLinearMap_weight: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerUnitEquivariance.unitClassAction: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerUnitEquivariance.selmerAction: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerUnitEquivariance.classTorsionAction: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerUnitEquivariance.numberField_short_exact_equivariant: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerUnitEquivariance.unitImage_ne_one: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerUnitEquivariance.unitImage_weight_square: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKummerUnitEquivariance.unit_of_classImage_eq_one_weight_square: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_kummer_unit_weight_square: Classical.choice, Quot.sound, propext
+
+Recursive type/constructor/opaque-proof-body audit and input audit (12 + 9):
+PASS: DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.unitClassEquiv; 2822 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.selmerEquiv; 18255 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.unitInclusion_equivariant; 18366 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.short_exact_equivariant; 25075 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.existsUnique_unitClass; 25005 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.unitPreimage_equivariant; 25079 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.unitClassLinearMap_weight; 18428 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicKummerUnitEquivariance.numberField_short_exact_equivariant; 31463 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicKummerUnitEquivariance.unitImage_ne_one; 40233 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicKummerUnitEquivariance.unitImage_weight_square; 40686 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicKummerUnitEquivariance.unit_of_classImage_eq_one_weight_square; 40691 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_kummer_unit_weight_square; 46940 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.unitInclusion_equivariant; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.short_exact_equivariant; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.unitPreimage_equivariant; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.KummerSelmerUnitEquivariance.unitClassLinearMap_weight; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKummerUnitEquivariance.numberField_short_exact_equivariant; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKummerUnitEquivariance.unitImage_ne_one; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKummerUnitEquivariance.unitImage_weight_square; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKummerUnitEquivariance.unit_of_classImage_eq_one_weight_square; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_kummer_unit_weight_square; remaining arithmetic inputs explicit.
+
+Mathematical boundary:
+Actual integer automorphisms descend to actual unit power quotient automorphisms. The same
+unitInclusion commutes with these actions by the embedding's commutes field. Identity,
+composition and inverses are implemented on the same unit quotient, Selmer group and class
+torsion. For number fields these are actual Galois-to-automorphism-group homomorphisms.
+The same two maps retain injectivity, kernel/image equality, surjectivity and equivariance.
+Exactness on eigenspaces is not asserted.
+
+If the same Selmer class has zero class-group image, its unit quotient inverse image exists
+uniquely. It commutes with automorphisms and stays nontrivial when the original class is
+nontrivial. The actual injective unit inclusion transports the original weight condition
+to that same unit class. The same original cyclotomic constant has one actual unit-times-
+pth-power decomposition whose same nontrivial unit class satisfies omega squared for every
+base-field Galois automorphism, and equals the unique unitImage.
+
+The Frey receiver retains the same S,L,K,m,v,P and explicitly requires hsurj, original hval
+and the same classImage's hzero. Open-kernel and conjugation laws are supplied from the
+existing same character. It assumes no unit/existence/equivariance/weight/vanishing/FLT
+provider. Original Selmer membership, local pth powers at p, resonant geometry, arithmetic
+class/unit vanishing and tower iteration remain open. The class-group codomain is p-torsion;
+a separate finite-group vanishing bridge from a quotient by powers is still unimplemented.
+General hno is unfinished; the existing final fixed-point count still requires no hCH.
+
+SHA256 of new production, tests, root smoke and textbook at validation:
+bdf8d5591d05c3521088cc8924346d742c375ef893e48f38b969c2a609a63800  DkMath/Lib/NumberTheory/KummerSelmerUnitEquivariance.lean
+7ba3e09c4d19866893bb6c7e8df49d1c5fca75c9542854ba59a30a655ff3a216  DkMath/Lib/NumberTheory/CyclotomicKummerUnitEquivariance.lean
+07d16470f0ac90d40847964374baf968d55fe2d80d23fabe0d217d139fa0fb74  DkMath/FLT/FreyCyclotomicKummerUnitEquivariance.lean
+e606a87b863474f35a959fb2b486c7136ee8aadd0ec9427163809707c6db192f  DkMathTest/FLT/FreyCyclotomicKummerUnitEquivariance.lean
+3317243b2fed910b61278be7b1deb39a938c8101f2c1c83620fb79d565fef851  DkMathTest/FLT/Note032CyclotomicKummerUnitEquivarianceDependencyAudit.lean
+628a4c35d8601db1f43085f2a3d19e50a7fc5c88897786fd24bd808dcbb0f681  docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerUnitEquivarianceSmoke.lean
+06b513c61e358bc7d53abd725d066a9b4ec2c98355f923bee3d25d050f890679  docs/dev/FLT-GN-regular-261018-v0/TEXTBOOK-N032-CYCLOTOMIC-KUMMER-UNIT-EQUIVARIANCE-261102.md

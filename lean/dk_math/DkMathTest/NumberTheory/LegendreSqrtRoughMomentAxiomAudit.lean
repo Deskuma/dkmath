@@ -5,8 +5,10 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.Legendre
-import DkMathTest.NumberTheory.LegendreSqrtRoughMomentCalibration
-import DkMathTest.NumberTheory.LegendreSqrtRoughMomentRegression
+
+-- disable heavy test: 2026/10/24 14:22
+-- import DkMathTest.NumberTheory.LegendreSqrtRoughMomentCalibration
+-- import DkMathTest.NumberTheory.LegendreSqrtRoughMomentRegression
 
 #print "file: DkMathTest.NumberTheory.LegendreSqrtRoughMomentAxiomAudit"
 
@@ -142,6 +144,7 @@ import DkMathTest.NumberTheory.LegendreSqrtRoughMomentRegression
 #print axioms DkMath.NumberTheory.Legendre.sqrtRoughTripleProductsInShell
 #check DkMath.NumberTheory.Legendre.sqrt_roughTripleMoment_eq_product_count
 #print axioms DkMath.NumberTheory.Legendre.sqrt_roughTripleMoment_eq_product_count
+/-
 #check DkMathTest.LegendreSqrtRoughMomentCalibration.MomentRow
 #print axioms DkMathTest.LegendreSqrtRoughMomentCalibration.MomentRow
 #check DkMathTest.LegendreSqrtRoughMomentCalibration.momentData
@@ -202,3 +205,4 @@ import DkMathTest.NumberTheory.LegendreSqrtRoughMomentRegression
 #print axioms DkMathTest.LegendreSqrtRoughMomentRegression.two_support_lower_repeat
 #check DkMathTest.LegendreSqrtRoughMomentRegression.two_support_upper_repeat
 #print axioms DkMathTest.LegendreSqrtRoughMomentRegression.two_support_upper_repeat
+-/

@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-07",
+  "external_checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "external_head": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files_sha256": {
+    "P2M/Sol/S_FreyPackage_frey_no_cofixed_large.lean": "16750fcba1f02ba21bcbfa5999103c03be4f85c2359913c51c0b83cef66d2413",
+    "Theorems/Thm_ValuationSubring_exists_algEquiv_conj_mul_pow_inv_wild_of_liesOverPrime.lean": "90a6b02f1ca8b40d6a6c37a6dd8bec1f2bc7df3dc7f257558914489903a7c31a"
+  },
+  "reference_scope": "Read htoric original cyclic-stage/cardinality/socle invariants at870-887 and public Frobenius conjugate-power wild-error statement. Current implementation keeps SAME coordinate generator and proves ordinary inertia difference hom from actual product-zero geometry. No q-scaling of representation from field-ratio congruence, no wild-action triviality, StepThree or external proof/source port/import."
+}

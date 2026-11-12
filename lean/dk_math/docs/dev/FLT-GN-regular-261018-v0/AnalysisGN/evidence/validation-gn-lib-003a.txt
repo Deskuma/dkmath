@@ -1,0 +1,86 @@
+GN-LIB-003a verification — 2026-10-23
+
+Branch: lib/FLT-GN-Completion-261023-v0
+Base HEAD: 70dc72858c730d4571e1a53012b294e4e9a1a3d2
+Lake cwd: lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+5 existing declarations moved from Algebra.BinomTail to Lib.Algebra.BinomTail.
+Original namespace and all full names retained; old path is an import-only compatibility entry.
+Baseline statement/proof SHA256: 5 of 5 identical.
+Existing consumer source SHA256: CosmicFormulaBinom and FLT.Basic unchanged.
+New owner imports only 7 Mathlib/Lean modules; no application edges/cycles.
+3 source file markers match paths; 5 promoted lemma docstrings are marked.
+All 24 original input materials are unchanged.
+
+Executed validation:
+
+owners:
+  lake build DkMath.Lib.Algebra.BinomTail DkMath.Algebra.BinomTail
+  exit 0; 1056 jobs
+
+focused:
+  lake build DkMath.Lib.Algebra.BinomTail DkMath.Algebra.BinomTail DkMathTest.Lib.Algebra.BinomTail DkMath.CosmicFormula.CosmicFormulaBinom DkMath.FLT.Basic
+  exit 0; 8979 jobs
+
+libraries:
+  lake build DkMath.Lib DkMath DkMathTest
+  exit 0; 11796 jobs
+
+test_root:
+  lake env lean DkMathTest.lean
+  exit 0
+
+legacy_smoke:
+  lake env lean /tmp/GNLib003aLegacySmoke.lean
+  exit 0
+
+lib_smoke:
+  lake env lean /tmp/GNLib003aLibSmoke.lean
+  exit 0
+
+root_smoke:
+  lake env lean /tmp/GNLib003aRootSmoke.lean
+  exit 0
+
+The direct Lib regression has 17 boundary examples and audits the transitive
+axioms of all 5 promoted declarations. Standard logical axioms only:
+propext, Classical.choice, Quot.sound. New-source warnings: 0.
+
+Each smoke imports only its listed module and #checks all 5 legacy full names.
+The registered test library was built, then the DkMathTest.lean root was
+checked directly; the existing child-module globs were left unchanged.
+
+Existing library sorry warnings (5):
+  warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+  warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+  warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+  warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+  warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+
+Tracker checks (exit 0, no mismatches):
+  python3 check_tracker_mismatch.py /tmp/gn-lib-003a-owners.log
+  python3 check_tracker_mismatch.py /tmp/gn-lib-003a-focused.log
+
+Static checks: git diff --check, changed/new document links and whitespace,
+module markers, public import/test registration and original material hashes.
+No sorry/sorryAx/native_decide or axiom/unsafe declarations in the 3 new/touched
+owner, compatibility and regression files.
+
+Scope: ownership migration of existing generic binomial tail/positivity APIs.
+No new mathematical generalization, GN-LIB-003b/003c, hno provider or FLT closure.
+
+Completion provenance:
+  User reported lake build and lake test completed successfully before resumption.
+  Assistant independently reran the cached library targets listed above and the
+  remaining DkMath-only smoke / direct DkMathTest.lean check; all exited 0.
+  No Lean source changes were made during this final verification.
+
+Earlier integration attempt:
+  The retained /tmp/gn-lib-003a-libraries.log reports build failed: two missing
+  .olean outputs and one truncated .setup.json read. Its cause is not established.
+  This earlier log is not used as success evidence. The successful final cached
+  build is recorded separately in /tmp/gn-lib-003a-libraries-final.log.
+
+GN-LIB-003a is complete. No pending final-verification items remain.

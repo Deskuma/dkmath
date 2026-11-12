@@ -1,0 +1,111 @@
+NOTE-032 same-field cyclotomic Kummer radicals
+Date: 2026-11-02
+Working directory: lean/dk_math
+
+Performed validation, all commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCyclotomicKummer DkMathTest.FLT.Note032CyclotomicKummerDependencyAudit
+   Final revision: Build completed successfully (11067 jobs).
+2. lake test
+   Normal repository test driver passed (12160/12160 jobs), including both new test modules.
+3. lake env lean DkMathTest.lean
+   Normal test import entrance passed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerSmoke.lean
+   Root import exposes the same-field Kummer presentation, non-pth-power constant,
+   Galois-group/roots-of-unity equivalence and action ratio, original kernel detection,
+   and same-valuation local fixedness.
+5. git diff --check
+   Passed; all six new Lean artifacts were also scanned directly for trailing whitespace.
+
+Regression scope:
+- Actual F_9/F_3 has an irreducible degree-2 Kummer presentation with constant 2,
+  the unique nonsquare in F_3.
+- A nontrivial relative automorphism obtained through the inverse Kummer equivalence
+  moves the same radical.
+- The trivial extension F_3/F_3 has no irreducible degree-2 Kummer presentation.
+- Degree-1 presentations over Q exist and their constants are first powers:
+  the n != 1 guard cannot be omitted.
+- Concrete decidable computations are kernel-checked; no native evaluation oracle.
+
+Source checks:
+- All three new production modules, two new test modules and root smoke pass the
+  forbidden-construct scan: no sorry, admit, native_decide, unsafe or custom axiom declarations.
+- No new-module diagnostics in the final root/focused build or normal suite.
+- The preceding production module only receives a documentation pointer to the new chapter;
+  its existing statements and proofs are preserved.
+- Unrelated historical sorry/linter warnings remain in the repository; a successful build
+  does not assert that every repository declaration is sorry-free.
+
+Selected axiom audits (17 declarations; standard axioms only):
+DkMath.Lib.NumberTheory.CyclicKummer.exists_presentation: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclicKummer.Presentation.constant_not_pow: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclicKummer.Presentation.constant_ne_zero: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclicKummer.Presentation.radical_ne_zero: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclicKummer.Presentation.algHom_ext: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclicKummer.Presentation.aut_fix_radical_iff: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclicKummer.Presentation.isSplittingField: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclicKummer.Presentation.autEquivRoots: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclicKummer.Presentation.autEquivRoots_smul: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclicKummer.Presentation.autEquivRoots_ratio: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicCharacterKummer.rootField_primitiveRoots: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicCharacterKummer.exists_presentation: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicCharacterKummer.character_eq_one_iff_fix_radical: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_nonsplit_has_kummer_presentation: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_character_eq_one_iff_fix_kummer_radical: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_kummer_radical_decomposition_fixed_at_p: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_kummer_radical_inertia_fixed_away: Classical.choice, Quot.sound, propext
+
+Recursive dependency audit (types, constructors and opaque proof bodies):
+PASS: DkMath.Lib.NumberTheory.CyclicKummer.exists_presentation; 23871 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclicKummer.Presentation.autEquivRoots_ratio; 21223 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicCharacterKummer.exists_presentation; 48757 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_nonsplit_has_kummer_presentation; 53657 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_character_eq_one_iff_fix_kummer_radical; 43913 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_kummer_radical_decomposition_fixed_at_p; 54165 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_kummer_radical_inertia_fixed_away; 49224 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.CyclicKummer.exists_presentation; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclicKummer.Presentation.autEquivRoots_smul; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicCharacterKummer.exists_presentation; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_nonsplit_has_kummer_presentation; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_character_eq_one_iff_fix_kummer_radical; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_kummer_radical_decomposition_fixed_at_p; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_kummer_radical_inertia_fixed_away; remaining arithmetic inputs explicit.
+
+Seven complete dependency traversals and seven public-input audits passed. Required dependencies
+include Mathlib's eigenvector-based reverse Kummer theorem, irreducibility, the same-field
+splitting-field construction and Kummer action, actual character-field degree/Galois/cyclicity,
+original nonsplitting and surjectivity, open kernel and inverse-character conjugation,
+exact infinite Galois correspondence, adjoin induction, same-valuation at-p local splitting
+and away nonresonant/good reduction inertia. The audit rejects sorryAx, custom axioms,
+external P2M/P2MW, FltRegular, FreyPackage, DkMath.FLT.Kummer and completed FLT endpoints.
+No radical, constant, generating-element, irreducible polynomial, field, degree or character-
+surjectivity provider is added to the Frey construction endpoint. The local fixedness/kernel
+lemmas take an explicit presentation P of the same original characterField; the construction
+endpoint supplies such a P internally. The away theorem retains the original resonant hbad.
+
+Import audit: note032-cyclotomic-kummer-import-audit.json
+All three local import closures are acyclic (247 modules in their union) and exclude
+FreyHnoSmallIndex, FreyHnoRegularPrime and FreyHnoHardCase. This is a local syntactic import
+check, separate from the recursive proof dependency audit.
+
+Mathematical boundary:
+PROVED: the same character-kernel fixed field M over F=Q(zeta_p) has an actual radical alpha
+and constant b: alpha^p=iota(b), F(alpha)=M, X^p-b irreducible; b is not a pth power in F;
+alpha,b are nonzero. The same M is its splitting field. The relative Galois group is
+isomorphic to mu_p(F), with sigma(alpha)/alpha=iota(e(sigma)). The original character is zero
+exactly when the same absolute automorphism fixes the same radical. At-p decomposition
+fixes it; away inertia does so conditional on original resonant absorption, at the same A.
+STILL OPEN: omega^2 cyclotomic conjugation of the Kummer class/line; integralization;
+ideal-valuation arguments and ring-of-integers unramified/splitting predicates; class-group/
+unit maps preserving eigenspaces and their vanishing; global character vanishing,
+required tower iteration and resonant bad-place geometry. General hno is unfinished.
+Constructing a nontrivial radical extension does not exclude it. The previous final
+fixed-point counting path still requires no hCH. No ExtVanishing, class-group/unit
+vanishing, tower-existence or hno provider was added.
+
+SHA256 of new source/test/smoke artifacts:
+2b95124392bb59189fbf12eb7849837fa2eea936500af509d7acd8364bd870d9  DkMath/Lib/NumberTheory/CyclicKummer.lean
+53230feb41a3e3d5fbc336c1146ba12d11e50d5b9a41b9e59dd558c53e1b08ea  DkMath/Lib/NumberTheory/CyclotomicCharacterKummer.lean
+ea30e6f51e3bcf7a1a7e040d26f10ad28f71d9edc733023c2563fba8166afbdc  DkMath/FLT/FreyCyclotomicKummer.lean
+3c98272eef4bc55d755fbf2216378de83a27a9ad979c7e4139ae90e1ade61c29  DkMathTest/FLT/FreyCyclotomicKummer.lean
+be82d521c2d72892bc54b6f99f83fa51fd2a55264db8074b39df4dbc1402ed2a  DkMathTest/FLT/Note032CyclotomicKummerDependencyAudit.lean
+8d22c63c63bb5e79e3883950f5ccc8c363eb35abdf81824d6fd5aade44e4e13a  docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicKummerSmoke.lean

@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-08",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.InertiaFixedValuationStability",
+    "DkMath.Lib.NumberTheory.StableValuationHenselian",
+    "DkMath.Lib.NumberTheory.InertiaUnitExactRoots",
+    "DkMath.Lib.NumberTheory.ValuationRadicalDivisibility",
+    "DkMath.Lib.NumberTheory.InertiaRadicalExactRoots"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.NumberTheory.InertiaFixedValuationStability": {
+      "local_module_count": 17,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.StableValuationHenselian": {
+      "local_module_count": 18,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.InertiaUnitExactRoots": {
+      "local_module_count": 19,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.ValuationRadicalDivisibility": {
+      "local_module_count": 20,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.InertiaRadicalExactRoots": {
+      "local_module_count": 21,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/NumberTheory/InertiaFixedValuationStability.lean": true,
+    "DkMath/Lib/NumberTheory/StableValuationHenselian.lean": true,
+    "DkMath/Lib/NumberTheory/InertiaUnitExactRoots.lean": true,
+    "DkMath/Lib/NumberTheory/ValuationRadicalDivisibility.lean": true,
+    "DkMath/Lib/NumberTheory/InertiaRadicalExactRoots.lean": true,
+    "DkMathTest/NumberTheory/InertiaRadicalExactRoots.lean": true,
+    "DkMathTest/NumberTheory/Note032ExactRadicalDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032ExactRadicalSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 5,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/NumberTheory/InertiaFixedValuationStability.lean": "c832a7bf0f85215d85d145b47c4884339c3a2d87beada5ef3e25b83a7908be93",
+    "DkMath/Lib/NumberTheory/StableValuationHenselian.lean": "4b2ef89dcb247d9bd115fea90cdead1cd50f758c45af6c5995998c9299ec2363",
+    "DkMath/Lib/NumberTheory/InertiaUnitExactRoots.lean": "633ec5c16edd8f33e6017c31d529d9cb320f57395c21aaba45bf0f78d19c88f0",
+    "DkMath/Lib/NumberTheory/ValuationRadicalDivisibility.lean": "c04cd4a81642ff9f675ed181e8f1de532eb9f05955bff940d90e50f7c846a0f4",
+    "DkMath/Lib/NumberTheory/InertiaRadicalExactRoots.lean": "985f6d9141c88dc3e310a0483744a5588c72155ea17df1ef3b6d2bc790c5a3c7",
+    "DkMathTest/NumberTheory/InertiaRadicalExactRoots.lean": "b3234a5e4db65507e515f54eb37c9b234df52b719ecac11c4c13f70a54d6905d",
+    "DkMathTest/NumberTheory/Note032ExactRadicalDependencyAudit.lean": "565b61b21df3160ac78dc9c9a3a155ede3c3fe45dc060b49ada1131c968f786c",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032ExactRadicalSmoke.lean": "bc532bdc4dc464801987db6356b603ed9a3198ab8082310426ab0a1b4f973031"
+  },
+  "proper_Lib_facade_reachability": true,
+  "five_Lib_files_no_FLT_dependency_and_Apache2_provenance": true,
+  "boundary": "All five modules are Lib and do not import FLT. Actual tail overfield endpoints prove every p^n-power map surjective with no new stability/Henselian/root/residue/algebraicity provider. Generic helpers retain explicit mathematical hypotheses. Inertia-tail group p-divisibility, Frey kernel inclusion, common quotient cyclicity, global hclass supply and unconditional hno are not proved."
+}

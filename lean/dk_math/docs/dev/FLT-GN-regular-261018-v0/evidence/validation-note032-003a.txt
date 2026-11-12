@@ -1,0 +1,108 @@
+NOTE-032-003A — 2026-10-25
+Branch: dev/FLT-GN-regular-261018-v0
+Base HEAD: c81a7a3a34802e6ccb8e18cdcd704b4f574527ce; initially clean.
+
+lake build DkMath.Lib.Algebra.ValuationQuadraticRoot DkMath.Lib.NumberTheory.EllipticDyadicGeometry DkMath.FLT.FreyDyadicGeometry
+Exit 0. Build completed successfully (4037 jobs). Warnings: 0.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032DyadicGeometryBoundary.lean
+Exit 0. 4 theorems and 1 definition. Exact normal test body elaborated independently.
+Boundaries: missing small leading coefficient; missing unit linear coefficient.
+Concrete curve: y^2+xy=x^3+x^2+2x, discriminant=-412, c4=-71;
+centre and separated integral directions constructed with actual inertia fixedness.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032DyadicGeometrySmoke.lean
+Exit 0. 5 theorems at exponent 37. Same Source and actual residual point.
+No Source existence asserted; proper zero component and branch swap remain explicit.
+
+lake env lean /tmp/Note032DyadicGeometryAxioms.lean
+Exit 0. Imports production module, elaborates both evidence proof bodies,
+then prints axioms for 22 production + 5 boundary/example + 5 smoke declarations.
+'DkMath.Lib.Algebra.ValuationQuadraticRoot.mem_of_monic_quadratic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.Algebra.ValuationQuadraticRoot.valuation_linear_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.Algebra.ValuationQuadraticRoot.eq_of_integral_quadratic_roots' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticDyadicGeometry.criticalQuadratic_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticDyadicGeometry.valuation_b2_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticDyadicGeometry.coordinates_eq_of_derivatives' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticDyadicGeometry.coordinates_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticDyadicGeometry.decomposition_fixed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticDyadicGeometry.inertia_fixed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticDyadicGeometry.exists_tangentDirections' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticDyadicGeometry.tangentDirections_inertia_fixed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.valuation_c4_eq_one_at_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.two_dvd_curve_discriminant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.exists_criticalCentre_at_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.criticalCentre_decomposition_fixed_at_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.criticalCentre_inertia_fixed_at_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.tangentDirections_inertia_fixed_at_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.exists_dyadic_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.residual_exists_inertia_ne_of_not_smooth_at_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_exists_dyadic_inertia_ne_of_zeroComponent_ne_top' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_no_cofixed_line_of_dyadic_branch_swap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_isIrreducible_of_dyadic_branch_swap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'EllipticDyadicGeometryTest.leading_coefficient_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticDyadicGeometryTest.linear_coefficient_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticDyadicGeometryTest.exampleCurve' depends on axioms: [propext, Quot.sound]
+'EllipticDyadicGeometryTest.example_invariants' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticDyadicGeometryTest.example_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032DyadicGeometrySmoke.source37_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032DyadicGeometrySmoke.source37_point_moves' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032DyadicGeometrySmoke.source37_inertia_of_proper' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032DyadicGeometrySmoke.source37_no_cofixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032DyadicGeometrySmoke.source37_irreducible' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Static checks:
+- Forbidden constructs: no sorry, sorryAx, admit, axiom, unsafe, native_decide, FltRegular, P2MW in new Lean code after stripping comments.
+- Every new Lean file has its file marker.
+- All 11 public Lib theorem docstrings have [DkMath.Lib].
+- Lib dependency closure: 11 DkMath nodes, all under DkMath.Lib.
+- 15 prior proof owners and NOTE-032 match baseline HEAD byte for byte.
+- Production and normal test entrance registration: checked statically.
+- Independent boundary body matches normal test except file marker.
+- python3 check_tracker_mismatch.py /tmp/note032-003a-modules.log: OK: no mismatches found
+- git diff --check: passed.
+- Full build / root / DkMathTest / lake test builds: user validation split, not run.
+
+Mathematical boundary:
+Centre and directions are supplied for the same Source at two.
+Centre fixed by decomposition group; directions fixed individually by inertia.
+Nontrivial Frey inertia still needs an actual point outside E0[p].
+Conditional hno also needs branch swap. Unconditional hno remains open.
+
+Local document links checked: 14.
+New-file whitespace checks: 9 files passed.
+JSON round-trip checked.

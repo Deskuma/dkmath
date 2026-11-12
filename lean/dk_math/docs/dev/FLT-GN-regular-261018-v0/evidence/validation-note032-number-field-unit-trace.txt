@@ -1,0 +1,116 @@
+NOTE-032 TWO STEPS: actual torsion/free unit trace and Dirichlet infinite-place trace
+Date: 2026-11-05
+Working directory: lean/dk_math
+
+Performed validations, listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.NumberFieldUnitLogTrace DkMathTest.FLT.Note032NumberFieldUnitTraceDependencyAudit
+   Build completed successfully (11111 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12232/12232 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed, only its existing file marker printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032NumberFieldUnitTraceSmoke.lean
+   Root exposes actual free-unit group action, torsion/free trace decomposition,
+   log equivariance, integer free trace, all-pth-root action and SAME unitAction trace.
+   The previous conditional trace-to-rank endpoint remains reachable.
+5. Two textbook blocks extracted verbatim to /tmp/n032-unittrace-book-{1,2}.lean.
+   lake env lean on each passed without warnings. Each equals a full production
+   source, including Apache notices and exact module marker immediately after imports.
+6. python3 /tmp/n032-unittrace-import-audit.py
+   Comment-aware syntactic local import closures, acyclicity, source scans/hashes,
+   facade/root/normal-test reachability, five exact markers and two textbook copies passed.
+   New Lib closure sizes including self: 30 and 34; neither imports DkMath.FLT or
+   old FreyHnoSmallIndex/RegularPrime/HardCase consumers.
+7. git diff --check and direct trailing-whitespace checks on new Lean/textbook files passed.
+
+Step 1 IMPLEMENTED:
+- unitsMap uses SAME existing integerAut on SAME integer-ring units.
+  Finite-order units are preserved; actual torsion quotient map and integer linear map follow.
+- freeUnitAction is an actual monoid hom from SAME Galois group to linear endomorphisms
+  of SAME torsion quotient. Identity and multiplication laws are proved.
+- Actual unit power quotient action vMap is SAME existing unitClassLinearMap, with
+  SAME actual unitProjection. No external ModP or replacement vector space.
+- In general number fields, retain genuine assumptions p divides actual torsionOrder
+  and sigma acts by nth power on every pth root in the integer ring.
+- SAME torsion/fundamental-unit basis yields actual mod-p trace = n plus the explicit
+  mod-p cast of the integer free-quotient trace.
+- If torsion generator has order p*q and image exponent e, compare action on t^q.
+  Integer congruence cancellation of nonzero q gives e=n mod p; q need not be invertible mod p.
+- Fundamental units may mix with torsion factors. Diagonal free coefficients are the
+  SAME Dirichlet quotient integer matrix coefficients; invariant fundamental units are
+  NOT assumed. Taking matrix diagonal sums proves trace additivity.
+
+Step 2 IMPLEMENTED:
+- logFull is actual weighted logarithm on all infinite places; coordinate sum zero
+  follows from the unit product formula. Its actual kernel is the torsion unit group.
+- Descend to SAME free-unit quotient logQuot, prove equivariance with SAME integer
+  action and actual infinite-place coordinate permutation permL(sigma).
+- Prove Dirichlet basis log images span the sum-zero hyperplane and complement the
+  constant-function line, with both spaces invariant. Constant line trace is one.
+- Compare the actual integer free-action matrix with its coefficientwise Int.cast
+  matrix over R. This explicitly connects integer and real traces.
+- Coordinate-basis trace of the actual pullback on infinite places counts fixed places.
+  Complement decomposition and the integer-to-real coefficient comparison prove:
+  trace_Z(quotMapLin sigma) = (#Fix(sigma):Z)-1.
+  Integer and real traces are NOT silently identified; the matrix map is proved.
+
+Same cyclotomic action integration IMPLEMENTED:
+- For SAME rootField, primitive root, characterEquiv and inverse image sigma_d,
+  every integer-ring pth root is a power of that SAME root, so sigma_d acts on ALL
+  those roots by d.val power. The general hdiv and root-action hSigma are internal.
+- Combine actual integer trace with mod-p trace via explicit Int.cast to obtain:
+  trace_Fp(SAME existing unitAction sigma_d) = d + (#Fix(sigma_d):Fp)-1.
+- Final public theorem requires SAME hZeta and d, no hdiv/n/hSigma/trace/fixed-count
+  provider and no rank/unit-vanishing hypothesis. It holds for prime p without hp5.
+
+Regression scope:
+- Actual identity coordinate pullback on rational infinite places has trace equal
+  to actual coordinate cardinality.
+- Actual swap of two out of three coordinates has real trace 1; permutation order
+  is distinguished from fixed-coordinate count. Finite calculation is kernel checked.
+- In actual fifth cyclotomic rootField, choose actual nontrivial d=2 and its SAME
+  inverse-character Galois element. Verify action on ALL fifth roots, weighted-log
+  equivariance and integer free trace/mod-5 unitAction trace formulas.
+- No claim #Fix(2)=0 is made by these tests; classification remains open.
+- Identity Galois total trace is actually 2, using the previous actual quotient dimension.
+
+Audit scope:
+- Eleven selected #print axioms reports contain only propext, Classical.choice, Quot.sound.
+- Eleven recursive traversals inspect types, constructors and opaque proof bodies,
+  reject sorryAx, external P2M/P2MW/FltRegular/FreyPackage, old Kummer consumers,
+  FLT endpoints and every nonstandard axiom; require actual basis/log/permutation bridges.
+- Eight public-input audits retain genuine generic hdiv/hSigma, expose that the integer
+  free trace formula is unconditional, and check these hypotheses are supplied internally
+  in the SAME cyclotomic unitAction trace formula. No hidden trace/rank/unit provider.
+- No new warnings, sorry/admit/native_decide/unsafe/custom axioms.
+  Root output replays historical sorry warnings in unrelated existing modules;
+  no whole-repository axiom-clean assertion is made.
+
+Remaining mathematics:
+- SAME cyclotomic fixed-place count by d=+/-1 is NOT proved.
+- SAME omegaSquareProjector weighted trace sum and trace(e2)=1 are NOT proved.
+- General hrank, hclass, hbad and cyclic tower iteration remain open; general hno unfinished.
+- Both adapted sources retain Apache copyright, License/NOTICE paths and blob.
+  Local external HEAD/blob were re-read. No external theorem imported and no external
+  checkout built or independently axiom-audited. See matching JSON provenance.
+
+Decisive recursive proof and input audits from the successful root build:
+PASS: DkMath.Lib.NumberTheory.NumberFieldUnitGaloisTrace.unitsMap_torsion_le; 15169 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.NumberFieldUnitGaloisTrace.quotMap_mk; 15454 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.NumberFieldUnitGaloisTrace.freeUnitAction; 15603 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.NumberFieldUnitGaloisTrace.trace_vMap; 62445 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.logFull_eq_zero_iff; 54462 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.logQuot_quotMap; 54605 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.trace_funLeft; 22962 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.trace_quotMap_eq; 64414 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.trace_vMap_eq_exponent_add_fixedPlaces; 64634 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.integerAut_on_pth_roots; 48448 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.trace_unitAction_eq_character_add_fixedPlaces; 72531 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.NumberFieldUnitGaloisTrace.freeUnitAction; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.NumberFieldUnitGaloisTrace.trace_vMap; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.logFull_eq_zero_iff; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.logQuot_quotMap; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.trace_quotMap_eq; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.trace_vMap_eq_exponent_add_fixedPlaces; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.integerAut_on_pth_roots; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.NumberFieldUnitLogTrace.trace_unitAction_eq_character_add_fixedPlaces; remaining arithmetic inputs explicit.

@@ -1,0 +1,108 @@
+NOTE-032 TWO STEPS: STANDARD p-adic Tate module and SAME rank-one Frey Tate line
+Date: 2026-11-06
+Working directory: lean/dk_math
+
+Performed validations; listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCyclicTateLine DkMathTest.FLT.Note032FreyCyclicTateLineDependencyAudit
+   Build completed successfully (11124 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12257/12257 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed; only existing file marker printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateLineSmoke.lean
+   Root exposes STANDARD module/scalar, linear maps/action, general residue recovery,
+   SAME rank-one linear equivalence/injective linear inclusion and actual scalar action.
+5. Two textbook blocks extracted verbatim to /tmp/n032-tateline-book-{1,2}.lean.
+   lake env lean run on each individually; both passed without warnings.
+   Both equal full production source, with exact file marker immediately after imports.
+6. python3 /tmp/n032-tateline-import-audit.py
+   Comment-aware local import closures, acyclicity, source scans/SHA256, five exact markers,
+   two full textbook copies, Lib/FLT/root and normal test reachability passed.
+   Closure sizes including self: generic 3, Frey 313. Generic has no FLT imports.
+   No FreyHnoSmallIndex/RegularPrime/HardCase consumers. JSON saved alongside this record.
+7. git diff --check and direct trailing-whitespace checks on new files passed.
+
+Step 1 IMPLEMENTED:
+- Prove natural multiple of N-killed point depends only on residue modulo N, using
+  Euclidean division and actual annihilation, not a supplied module/rank structure.
+- Define actual STANDARD p-adic scalar on SAME ambient Tate point sequences by
+  evaluation n (a*x)=(toZModPow(n+1) a).val * evaluation n x.
+  Prove annihilation and transitions via same residues/point compatibility; prove all
+  module axioms before constructing any line equivalence. No transported abstract scalar.
+- SAME componentwise additive maps are p-adic linear, including SAME group actions.
+- Construct p-adic integer from GENERAL compatible residues (not necessarily units),
+  using actual integer representatives, divisibility and PadicInt.ofIntSeq Cauchy limit.
+  Prove exact finite residues via actual PadicInt sequence theorem.
+
+Step 2 IMPLEMENTED:
+- SAME Source/L/rootField/conditional tower, original class input and uniform ALL-stage
+  resonant absorption retained. SAME old Tate subgroup is closed under STANDARD scalar,
+  thus a submodule of SAME ambient geometric point Tate module. Inclusion is linear/injective.
+- Coordinates of SAME selected compatible generator at every stage: construct cyclic
+  equivalence sending 1 to SAME generator, using actual proved order and stage cardinality.
+- Read actual coefficients of arbitrary SAME line point; prove coordinate specification
+  and STANDARD adjacent residue compatibility from both point/generator p-transitions.
+- Define actual linear map a->a*v on STANDARD modules. Injective by finite cyclic
+  coordinates and p-adic residue extensionality. Surjective by actual Cauchy lift of
+  SAME compatible coefficient sequence. No injectivity/surjectivity/equivalence provider.
+- Construct actual Zp-linear equivalence Zp -> SAME line. Rank-one terminology refers
+  to this explicit linear equivalence, not a newly assumed freeness/rank hypothesis.
+- For EVERY SAME line point, actual pointwise Galois action equals scalar by SAME prior
+  continuous p-adic tower character. Use actual finite action formula and character's
+  exact finite residues, not merely character=1 fixedness criterion.
+- Linear inclusion respects SAME actual ambient linear action and scalar expression.
+
+Regression scope:
+- Reconstruct ANY actual 5-adic integer from all standard finite residues.
+  Actual nonunit 5 is recovered and nonzero, despite its first residue being zero.
+- STANDARD scalar and componentwise map from original additive hom commute at each level.
+- SAME abstract Source/conditional line: linear equivalence and inverse recover arbitrary x.
+- Actual p*v has ZERO first component but is NONZERO as a full point sequence, by actual
+  parametrization injectivity. First component alone is not a test of Tate vector zero.
+- SAME inclusion's p-adic linearity checked. No impossible numerical Fermat Source used.
+
+Audit scope and boundaries:
+- Thirteen selected #print axioms reports: only propext, Classical.choice, Quot.sound.
+- Thirteen recursive traversals inspect checked types, inductive constructors and opaque
+  proof bodies. Reject sorryAx, nonstandard axioms, P2M/P2MW/FltRegular/FreyPackage,
+  old Kummer consumers and FLT endpoints. Require STANDARD scalar/module proof, actual
+  Cauchy residue theorem, SAME generator orders/transitions/coefficients, actual
+  injectivity/surjectivity and SAME finite action/p-adic residue identity.
+- Ten input audits retain SAME hclass/uniform-stage hbad, reject hmodule/hrank/hfree/
+  hsurj/hequiv/hscalar providers. Generic residue lift explicitly takes c/hc, no unit
+  or limit existence provider. Frey application supplies compatibility internally.
+- No new sorry/admit/native_decide/unsafe/custom axioms and no new warnings.
+  Root/suite replay historical sorry warnings in five unrelated existing modules.
+  No whole-repository axiom-clean assertion.
+- Standard module, actual rank-one linear equivalence, linear inclusion and full scalar
+  action formula are now IMPLEMENTED. Generator basis can depend on original choice;
+  SAME tower character is the previously coordinate-independent character.
+- Union torsion/stage equality and identification with T_p(U), full Tate rank two,
+  Weil pairing, Frobenius characteristic polynomial and new Tate topology are NOT supplied.
+- hclass, ALL-stage hbad and final Galois arithmetic remain unfinished. General hno
+  UNFINISHED. No external class vanishing or isogeny classification theorem imported.
+
+Decisive audits from successful root build:
+PASS: DkMath.Lib.Algebra.PrimePowerTateSequence.padicModule; 15256 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.PrimePowerTateSequence.mapLinear; 15267 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.PrimePowerTateSequence.actionLinear; 15455 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.PrimePowerTateSequence.liftResidues_mod; 15140 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTateLine; 81055 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateGeneratorCoordinates; 80619 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateCoefficient_compatible; 81115 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTateParametrization_injective; 81166 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTateParametrization_surjective; 81161 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTateLineEquiv; 81201 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTateLine_inclusion_injective; 81057 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTateLine_action_scalar; 81220 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTateLine_inclusion_scalar; 81228 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.Algebra.PrimePowerTateSequence.padicModule; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.PrimePowerTateSequence.mapLinear; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.PrimePowerTateSequence.liftResidues; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualCyclicTateLine; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateCoefficient_compatible; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualCyclicTateParametrization_injective; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualCyclicTateParametrization_surjective; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualCyclicTateLineEquiv; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualCyclicTateLine_action_scalar; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualCyclicTateLine_inclusion_scalar; remaining arithmetic inputs explicit.

@@ -27,6 +27,7 @@ private theorem leftChain : leftList.IsChain (· < ·) := by decide +kernel
 private def leftSeats : Finset ℕ :=
   ⟨leftList, leftChain.pairwise.nodup⟩
 
+/- # disable heavy test: 2026/10/24 20:13
 set_option maxHeartbeats 30000000 in
 -- Check the entire arithmetic remainder carrier, not only its card.
 theorem left_carrier_checked : coarseTownPackingRemainder (primeScalesUpTo 10) 1031 = leftSeats := by
@@ -46,6 +47,7 @@ theorem left_represented_checked : (coarseTownRepresentedPrimes (primeScalesUpTo
   unfold boundedSquareSupport
   rw [oldPrimes1031_eq_production]
   decide +kernel
+-/
 
 private def rightList : List ℕ := [6, 12, 16, 18, 22, 28, 30, 36, 40, 42, 46, 48, 58, 60, 70, 72, 78, 82, 96, 100, 102, 106, 118, 120, 126, 130, 132, 138, 142, 148, 162, 172, 180, 186, 190, 196, 198, 208, 216, 228, 232, 238, 240, 250, 252, 258, 268, 280, 282, 286, 312, 316, 328, 340, 342, 358, 366, 390, 408, 418, 436, 438, 448, 460, 462, 466, 468, 480, 492, 496, 502, 510, 516, 520, 522, 532, 540, 546, 550, 562, 568, 580, 586, 588, 592, 600, 606, 622, 630, 636, 642, 646, 648, 652, 658, 666, 676, 688, 700, 732, 736, 748, 756, 760, 762, 768, 778, 786, 796, 810, 820, 828, 840, 852, 862, 870, 876, 886, 888, 898, 910, 912, 930, 936, 942, 952, 958, 960, 966, 1000, 1002, 1006, 1008, 1012, 1026, 1038, 1056, 1068, 1092, 1098, 1108, 1110, 1126, 1138, 1150, 1156, 1170, 1192, 1198, 1216, 1218, 1230, 1236, 1240, 1282, 1288, 1296, 1302, 1308, 1320, 1350, 1356, 1360, 1372, 1378, 1380, 1398, 1416, 1422, 1446, 1450, 1462, 1470, 1488, 1506, 1510, 1512, 1516, 1540, 1546, 1558, 1560, 1572, 1588, 1626, 1632, 1638, 1668, 1692, 1702, 1708, 1710, 1720, 1728, 1738, 1758, 1770, 1776, 1782, 1786, 1792, 1810, 1822, 1836, 1840, 1842, 1852, 1866, 1876, 1878]
 
@@ -54,6 +56,7 @@ private theorem rightChain : rightList.IsChain (· < ·) := by decide +kernel
 private def rightSeats : Finset ℕ :=
   ⟨rightList, rightChain.pairwise.nodup⟩
 
+/- # disable heavy test: 2026/10/24 20:13
 set_option maxHeartbeats 30000000 in
 -- Check the entire arithmetic remainder carrier, not only its card.
 theorem right_carrier_checked : coarseTownRightPackingRemainder (primeScalesUpTo 10) 1031 = rightSeats := by
@@ -123,5 +126,6 @@ theorem exists_prime_squareCell_1031_of_better_selector : ∃ p, p.Prime ∧ Squ
   apply exists_prime_squareCell_of_coarseTownBetter_deficit (knownPrimeScales_primeScalesUpTo 10) (by decide)
   rw [outside1031_card_checked,better_cards_checked.1]
   decide +kernel
+-/
 
 end DkMathTest.LegendreRetained1031Calibration

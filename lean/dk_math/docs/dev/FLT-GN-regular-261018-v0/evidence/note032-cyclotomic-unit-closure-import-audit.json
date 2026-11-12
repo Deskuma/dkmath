@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-06",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.CyclotomicInfinitePlaceFixed",
+    "DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace",
+    "DkMath.FLT.FreyCyclotomicUnitSplit"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.NumberTheory.CyclotomicInfinitePlaceFixed": {
+      "local_module_count": 35,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace": {
+      "local_module_count": 42,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclotomicUnitSplit": {
+      "local_module_count": 295,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/NumberTheory/CyclotomicInfinitePlaceFixed.lean": true,
+    "DkMath/Lib/NumberTheory/CyclotomicOmegaSquareTrace.lean": true,
+    "DkMath/FLT/FreyCyclotomicUnitSplit.lean": true,
+    "DkMathTest/FLT/CyclotomicUnitClosure.lean": true,
+    "DkMathTest/FLT/Note032CyclotomicUnitClosureDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicUnitClosureSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 3,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/NumberTheory/CyclotomicInfinitePlaceFixed.lean": "bd4f1c73f728ec9ac2bf59f04246a2974bcc788f865a3657c0fe55eb67282341",
+    "DkMath/Lib/NumberTheory/CyclotomicOmegaSquareTrace.lean": "b737e4c1e45f564b6cd7bf5dc2b07dafb59680239b6f3ce6516f7914271804fc",
+    "DkMath/FLT/FreyCyclotomicUnitSplit.lean": "0ed93f1cf9ded2263f8af07a695721b6f9a4d23fbe6be2db3550b081d4dd3eff",
+    "DkMathTest/FLT/CyclotomicUnitClosure.lean": "108588aeb4198792a8f78b656114200393716ad535ac1019f94549dd0cc2bbc0",
+    "DkMathTest/FLT/Note032CyclotomicUnitClosureDependencyAudit.lean": "5264028f929a65c72aa051666c4c8fd7d90e65d899b1284a57bc6c47f7ae8668",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicUnitClosureSmoke.lean": "c21a081abd3015876dd09aefcf006a7d49dd3c49f9aa7bb81fb2285c939f3b1b"
+  },
+  "boundary": "Syntactic comment-aware local import closures and source checks only; recursive Lean type/constructor/proof and input audits are separate. SAME rootField and characterEquiv yield actual fixed-place criterion d=+-1 and counts. Actual SAME unitAction trace and finite weighted sums prove SAME omegaSquareProjector trace=1. SAME omega-square unit space finrank one and actual primary-unit space vanishing now need no rank/trace/unit provider; global integer-unit pth root is supplied for the actual eigenspace/local conditions. New SAME Frey complement endpoint removes hrank,htrace,hunit,hdetect while RETAINING hbad,hclass and original cyclic-stage guards. hbad,hclass,tower and general hno remain unfinished. No external theorem import.",
+  "adapted_source": {
+    "repository": "anthropics/fermats-last-theorem",
+    "local_read_only_checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+    "head": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+    "path": "P2M/Sol/S_ExtCitation_Cyclotomic_finrank_unitsOmegaEigenspace_two.lean",
+    "blob": "6801f82a5eec740ce4d5d658b7a1dc35040f2aba",
+    "scope": "Adapt actual infinite-place fixed-point classification and finite-field weighted projector trace, retaining Apache notices. Retain SAME DkMath rootField, primitive root, characterEquiv, unitAction, UnitClass and omegaSquareProjector. External galEquivZMod/ModP/unitsGalAction/omegaIdempotent/final rank-one theorem not imported. No external checkout build or axiom audit."
+  }
+}

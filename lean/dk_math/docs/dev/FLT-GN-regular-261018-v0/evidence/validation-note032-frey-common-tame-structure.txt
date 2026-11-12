@@ -1,0 +1,147 @@
+NOTE-032 FIVE STEPS: SAME common finite quotient is abelian p-group; actual generator consumption and nontrivial structure certificate
+Date: 2026-11-08
+Working directory: lean/dk_math
+
+Successful final validations (listed Lean/Lake commands exited 0):
+1. lake build DkMath.FLT.FreyCommonTameStructureCertificate
+   Build completed successfully (4464 jobs).
+2. lake build DkMath DkMathTest.FLT.FreyCommonTameStructure DkMathTest.FLT.Note032FreyCommonStructureDependencyAudit
+   Build completed successfully (11202 jobs).
+3. lake test
+   Normal repository test driver passed; reached 12375/12375 jobs.
+4. lake env lean DkMathTest.lean
+   After suite dependencies built: passed, existing module marker printed.
+5. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyCommonStructureSmoke.lean
+   Root exposes all thirty declarations; final endpoint standard axioms only.
+6. FIVE full production textbook blocks extracted to /tmp/n032-structure-book-{1,2,3,4,5}.lean.
+   lake env lean on each separately passed without warnings; full source and exact
+   module markers immediately after imports retained.
+7. python3 /tmp/n032-structure-import-audit.py
+   Comment-aware local imports acyclic; EIGHT exact markers, FIVE full copies,
+   FLT/root/test reachability, forbidden-construct scans and source SHA256 passed.
+   Local import closure sizes including self: 379,380,381,382,383.
+   All five production modules Frey-specific; no new Lib module and no
+   FreyHnoSmallIndex/RegularPrime/HardCase consumer in these import closures.
+8. git diff --check and new-file trailing-whitespace checks passed.
+9. Local model-answer HEAD 115356cbc627159d0d16add0da6e9a2bb3655ed8.
+   Re-read finite-level generator conclusion and public tail-root discharge.
+   External tau=gamma^j*x^(p^m)*w^(p^m); consumer here fixes m=n+3, kills SAME
+   projected power errors internally. Generator/tail-root EXISTENCE NOT ported.
+   Reference and Mathlib source SHA256 saved in
+   note032-frey-common-tame-structure-reference-audit.json.
+
+Implemented content:
+Step1. SAME actual H values map injective, by actual quotient equality and SAME family
+       kernel. Infer commutativity of SAME H operations from original abelian target.
+       Named CommGroup definition extends ORIGINAL Group (no arbitrary group replacement
+       or new global ambiguous instance). Original I->J->H projection surjective, SAME
+       character values retained.
+Step2. Actual faithful embedding gives cardH divides cardF^cardK; original cardK*cardF
+       gives cardF=p^r and cardH=p^m, r<=n+3, m<=r*cardK. Construct actual IsPGroup.
+       Every SAME H element h satisfies h^cardF=1, hence h^(p^r)=1 and uniform
+       stage annihilation h^(p^(n+3))=1. No cyclicity input.
+Step3. SAME H element defines integer-linear evaluation K->F, recovering SAME ev_sigma
+       on original projection; identity evaluates to zero. Fixed k defines actual H
+       character. SAME pair separates elements on BOTH sides. No perfect-dual isomorphism.
+Step4. EXPLICIT CONDITIONAL consumer lemmas only: hg generating SAME H gives evaluation
+       injective; hcyclic gives a genuine gamma in original I via projection surjectivity.
+       hgen:forall tau exists j,x,w, tau=gamma^j*x^(p^(n+3))*w^(p^(n+3)) gives SAME
+       projected gamma generates H and SAME gamma evaluation injective. Existence of
+       hg/hcyclic/hgen NOT supplied; finite p-group is NOT inferred cyclic.
+Step5. SAME original obstruction tau image evaluates SAME k to SAME orderp difference d;
+       hence projected tau !=1 (its full exact order is NOT asserted p). SAME H cardinal
+       exponent positive: cardF=p^r,1<=r<=n+2, cardH=p^m,1<=m<=r*cardK,
+       h^(p^r)=1. Conditional cyclic branch gives real singleton evaluation,
+       r+s=n+3, s<=r, n+3<=2r. Final SAME hclass+Cofixed certificate has NO generator
+       input: it returns finite/abelian/p-group/nontrivial H and exponent profile,
+       plus cyclic consequences AS IMPLICATION, not unconditional generator existence.
+
+Regression and audit scope:
+- Formal noncyclicity of Multiplicative((ZMod5)^2), despite finite/abelian/p-group
+  and exponent5, using a cyclic generator's order/card25 against annihilation5.
+- Cyclic Multiplicative(ZMod5) and injective singleton R->R^2 coexist with nonzero K;
+  cardK*cardF=5^3 (n=0,r=2,s=1). Singleton detection is NOT arithmetic contradiction.
+- ZMod5*ZMod3 ACTUAL stage exponent125 decomposition retains prime-to5 power error;
+  projected power error triviality does NOT mean original inertia error is identity.
+- #print axioms all30: standard propext/Classical.choice/Quot.sound, no sorryAx.
+  Recursive checked types/constructors/opaque values require actual SAME quotient,
+  faithful map/cardinality/stage annihilation, actual dual evaluations, integer-power
+  character transport, actual original same difference and arithmetic witness.
+- Thirty public-input audits require hg/hgen/hcyclic EXACTLY in conditional lemmas;
+  ban them in other structure theorems/final endpoint. Final original hclass/Cofixed
+  retained; no new commutativity, p-group, exponent, finite, range, order, injection,
+  equivalence or cardinality provider.
+
+Boundaries:
+- Five pre-existing unrelated sorry warnings in root/suite; no new warning.
+  No repository-wide sorry-free claim.
+- R1 COMPLETE: SAME common finite abelian p-group and exponent bounds.
+- R2 CONSUMER COMPLETE, EXISTENCE INCOMPLETE: finite-level generator/tail-root theorem
+  and actual cyclicity not proved. Original tau not claimed generator/orderp in H.
+- Ordinary H1 only; no continuous-H1 comparison, W-standard-wild identification,
+  global class supply, resonance exclusion or arithmetic contradiction.
+- General UNCONDITIONAL hno REMAINS INCOMPLETE; hclass still in original endpoint.
+
+Thirty checked roots and required dependencies:
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTameValues_injective; 42226 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTame_mul_comm; 42227 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTameCommGroup; 42230 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonProjection; 42209 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonProjection_surjective; 42211 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonProjection_value; 42213 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTame_card_dvd; 43068 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTame_pow_card_fixed; 42394 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTame_prime_power_profile; 43069 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTame_isPGroup; 43135 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTame_exponent_profile; 43131 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTame_pow_stage; 43132 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonEvaluation; 42221 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonEvaluation_projection; 42222 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonEvaluation_one; 42222 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonCharacter; 42216 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonCharacter_apply; 42230 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonEvaluation_separates_kernel; 42224 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonEvaluation_separates_quotient; 42241 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommon_generator_evaluation_injective; 42243 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.exists_single_evaluation_of_common_isCyclic; 42276 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.commonProjection_generates_of_power_decomposition; 43144 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.common_isCyclic_of_power_decomposition; 43180 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.single_evaluation_of_power_decomposition; 43166 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.commonInertiaElement; 42422 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.commonInertiaElement_evaluation; 42443 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.commonInertiaElement_ne_one; 42460 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.commonTame_positive_profile; 43335 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.single_evaluation_profile_of_common_isCyclic; 43253 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_exists_nontrivial_common_tame_pGroup; 90836 reachable constants; required actual theorems present.
+
+Thirty public-input reports:
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTameValues_injective; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTame_mul_comm; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTameCommGroup; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonProjection; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonProjection_surjective; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonProjection_value; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTame_card_dvd; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTame_pow_card_fixed; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTame_prime_power_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTame_isPGroup; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTame_exponent_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonTame_pow_stage; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonEvaluation; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonEvaluation_projection; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonEvaluation_one; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonCharacter; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonCharacter_apply; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonEvaluation_separates_kernel; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommonEvaluation_separates_quotient; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernelCommon_generator_evaluation_injective; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.exists_single_evaluation_of_common_isCyclic; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.commonProjection_generates_of_power_decomposition; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.common_isCyclic_of_power_decomposition; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.single_evaluation_of_power_decomposition; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.commonInertiaElement; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.commonInertiaElement_evaluation; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.commonInertiaElement_ne_one; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.commonTame_positive_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.single_evaluation_profile_of_common_isCyclic; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_exists_nontrivial_common_tame_pGroup; remaining arithmetic inputs explicit.

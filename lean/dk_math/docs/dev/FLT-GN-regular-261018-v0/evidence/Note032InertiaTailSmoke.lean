@@ -1,0 +1,28 @@
+import DkMath
+
+#print "file: docs.dev.FLT-GN-regular-261018-v0.evidence.Note032InertiaTailSmoke"
+
+#check DkMath.Lib.NumberTheory.InertiaClosed.fixedField_topologicalClosure_eq
+#check DkMath.Lib.NumberTheory.InertiaClosed.fixingSubgroup_fixedField_eq_topologicalClosure
+#check DkMath.Lib.NumberTheory.InertiaClosed.exists_mem_apply_eq_of_mem_fixingSubgroup
+#check DkMath.Lib.NumberTheory.InertiaClosed.isOpen_setOf_apply
+#check DkMath.Lib.NumberTheory.InertiaClosed.isClosed_setOf_apply
+#check DkMath.Lib.NumberTheory.InertiaClosed.mem_inertia_map_iff
+#check DkMath.Lib.NumberTheory.InertiaClosed.isClosed_inertia_map
+#check DkMath.Lib.NumberTheory.InertiaClosed.topologicalClosure_inertia_map
+#check DkMath.Lib.NumberTheory.InertiaClosed.fixingSubgroup_fixedField_inertia
+#check DkMath.Lib.NumberTheory.KummerPrimeQuotient.index_coprime_of_forall_pow_surjective
+#check DkMath.Lib.NumberTheory.ProfiniteCoprimeRoots.eq_one_of_forall_mem_openNormalSubgroup
+#check DkMath.Lib.NumberTheory.ProfiniteCoprimeRoots.exists_pow_mul_inv_mem
+#check DkMath.Lib.NumberTheory.ProfiniteCoprimeRoots.exists_pow_pow_eq
+#check DkMath.Lib.NumberTheory.InertiaResidue.tailIntermediate_exact_pRoot
+#check DkMath.Lib.NumberTheory.InertiaResidue.tailField_primitiveRoot
+#check DkMath.Lib.NumberTheory.InertiaResidue.tailGalois_index_coprime
+#check DkMath.Lib.NumberTheory.InertiaResidue.tailFixing_inertia_pRoot
+#check DkMath.Lib.NumberTheory.InertiaResidue.mem_tailFixing_iff_all_radicals
+#check DkMath.Lib.NumberTheory.InertiaResidue.allRadicals_inertia_pRoot
+#check DkMath.Lib.NumberTheory.InertiaResidue.allRadicals_map_eq_one
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.allRadicals_commonProjection_eq_one
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.allRadicals_evaluations_eq_zero
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.allRadicals_fixed_differences_eq_one
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.tailFixing_le_commonProjection_kernel

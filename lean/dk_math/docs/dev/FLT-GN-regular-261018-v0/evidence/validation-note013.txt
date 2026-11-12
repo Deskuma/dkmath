@@ -1,0 +1,83 @@
+NOTE-013 verification evidence — 2026-10-20
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Focused regression:
+  lake build DkMathTest.FLT.FreyResidualDimensionBound
+  exit 0; Build completed successfully (3166 jobs).
+  6 named regression lemmas and 4 examples.
+  Actual Source 2 curve: its 37-torsion has dimension <= 2 and cardinality <= 1369.
+  The same curve has 0 < dimension of E[2] <= 2, using the existing nonzero twoPoint.
+  Its affine x=0 fibre is a singleton, so the bound of two is not treated as exact.
+  Nonzero degree n=1 and prime p=2 arithmetic boundary are also checked.
+
+Focused dependency audit:
+  lake build DkMathTest.FLT.Note013DependencyAudit
+  exit 0; Build completed successfully (3167 jobs).
+  Initial successful run reported a maxHeartbeats comment warning; the explanatory
+  comment was added and the final integrated build reran the audit without warnings.
+  16 public named production declarations and 6 named regression lemmas.
+  11 selected routes inspect types and opaque proof bodies and require actual providers.
+  Allowed axioms: propext, Classical.choice, Quot.sound only.
+  Forbidden: sorryAx, FLT endpoints, FltRegular/P2MW/P2M/FreyPackage,
+    Herbrand/Ribet, listed global regularity providers,
+    finite_of_card_sq, finrank_eq_two_of_card_sq,
+    finrank_eq_two_of_standard_card_sq, residual_profile_of_card_sq.
+  Geometry-only routes also forbid all DkMath.FLT dependencies.
+
+Integrated public entrances:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11552 jobs).
+  All 5 new source/test modules appear with matching file markers.
+  No warnings/errors in these 5 modules; historical warnings elsewhere remain.
+  Final audit results below are from this integrated run.
+
+Root smoke:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE013.lean
+  exit 0; dimension/cardinality bounds and Frey bounded profile exposed by import DkMath.
+  Both printed axiom sets contain only the 3 allowed logical axioms.
+  Examples use arbitrary rational curves and Source 37 without cardinality/rank inputs.
+
+Direct suite entrance after integrated build:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest
+
+Marker checker:
+  python3 check_tracker_mismatch.py /tmp/note013-full.log
+  exit 0; OK: no mismatches found
+  Static check: all 5 source/test markers and the root smoke marker follow imports and match paths.
+
+Hygiene:
+  Static scan: no sorry/admit/native_decide/unsafe/implemented_by or axiom declarations
+    in the 5 new source/test modules.
+  All 16 named production declarations included in the axiom audit.
+  No trailing whitespace in the 5 new source/test modules and root smoke.
+  git diff --check: exit 0.
+
+Scope:
+  3 production modules, 246 lines including textbook comments.
+  Geometric field characteristic zero, n nonzero for the crude cardinality bound.
+  For primes, actual finite E[p] has dimension <= 2 and cardinality <= p^2.
+  No finite/cardinality/rank input is assumed; the standard torsionBy adapter is included.
+  Dimension possibilities: 0, 1, 2; cardinality possibilities: 1, p, p^2.
+  Exact dimension two/cardinality p^2, GL2, irreducibility, Weil pairing and inertia
+    remain separate. No exact generic fibre counting was imported or proved.
+
+Reference investigated, not imported or newly ported:
+  anthropics/fermats-last-theorem
+  P2M/Sol/S_WeierstrassCurve_card_torsion_of_isAlgClosed.lean
+  1336 lines; blob 865709609f50e0e2ef445df7c01d01768ca731c5
+
+PASS: 16 public named NOTE-013 declarations and 6 named regression declarations; standard logical axioms only.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.affineXFiber_ncard_le_two; 23636 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.card_torsion_le_degree_bound; 26382 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finrank_torsion_le_two; 26808 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.card_torsion_le_prime_sq; 26813 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.card_torsion_prime_cases; 26811 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finrank_standardTorsion_le_two; 26839 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.residual_bounded_profile; 29740 reachable constants; expected providers present.
+PASS: FreyResidualDimensionBoundTest.actualCurve37_card; 26851 reachable constants; expected providers present.
+PASS: FreyResidualDimensionBoundTest.actualCurve2_dimension; 26912 reachable constants; expected providers present.
+PASS: FreyResidualDimensionBoundTest.zero_fiber_singleton; 24187 reachable constants; expected providers present.
+PASS: FreyResidualDimensionBoundTest.source37_profile; 29755 reachable constants; expected providers present.

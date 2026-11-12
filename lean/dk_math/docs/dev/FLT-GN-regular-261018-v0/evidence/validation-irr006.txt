@@ -1,0 +1,52 @@
+IRR-006 GaloisPhaseObstructionTransport, 2026-10-19
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+Scope: real ideal maps and class-group equivalences; ramifier-unit-corrected normalized factors;
+integer/fixed-coordinate phase covariance; actual roots of the existing observed 37-state.
+No class-group regularity supplier, new axioms, Herbrand-Ribet bridge or FLT37 closure is used.
+
+PASS: import-following marker DkMath.Lib.NumberTheory.IdealGaloisTransport
+PASS: import-following marker DkMath.Lib.NumberTheory.GaloisPhaseObstructionTransport
+PASS: import-following marker DkMath.FLT.Kummer.IrregularGalois37
+PASS: import-following marker DkMathTest.FLT.Kummer.GaloisPhaseObstruction
+PASS: import-following marker DkMathTest.FLT.Kummer.GaloisPhaseObstructionDependencyAudit
+PASS: import-following smoke marker RootSmokeIRR006
+PASS: 3 production files; no sorry/admit/native_decide, extra axiom declarations or external FLT imports
+PASS: RegularStateTransport, RegularDescentState, RegularPrimeFLT and ElevenThirteenFLT byte-identical to HEAD
+PASS: no new production/test warnings; historical warnings outside these modules remain.
+
+$ lake build DkMath DkMath.FLT.Kummer DkMathTest
+exit 0
+Build completed successfully (11487 jobs).
+info: DkMathTest/FLT/Kummer/GaloisPhaseObstructionDependencyAudit.lean:71:0: PASS: 30 public IRR-006 declarations; standard logical axioms only.
+info: DkMathTest/FLT/Kummer/GaloisPhaseObstructionDependencyAudit.lean:71:0: PASS: DkMath.Lib.NumberTheory.RamifiedPhasePacket.phase_obstruction_galois; 17648 reachable constants; expected providers present.
+info: DkMathTest/FLT/Kummer/GaloisPhaseObstructionDependencyAudit.lean:71:0: PASS: DkMath.Lib.NumberTheory.CyclotomicPhaseGalois.obstruction_int; 39355 reachable constants; expected providers present.
+info: DkMathTest/FLT/Kummer/GaloisPhaseObstructionDependencyAudit.lean:71:0: PASS: DkMath.FLT.Kummer.IrregularPrime37.observe_galois; 39559 reachable constants; expected providers present.
+
+$ lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeIRR006.lean
+exit 0
+file: RootSmokeIRR006
+'DkMath.Lib.NumberTheory.IdealPowerObstruction.root_transport_of_unit' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.RamifiedPhasePacket.quotient_galois' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.NumberTheory.CyclotomicPhaseGalois.obstruction_int' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Kummer.IrregularPrime37.observe_galois' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+$ lake env lean DkMathTest.lean
+exit 0
+file: DkMathTest
+
+$ python3 check_tracker_mismatch.py /tmp/irr006-full-final.log
+exit 0
+OK: no mismatches found
+PASS: 2283 Built/Replayed-marker pairs agree; all 5 new source/test modules are represented.
+
+Tracker repair: corrected only the marker string in existing
+DkMathTest/NumberTheory/PrimitivBeam/CheckAxioms.lean to its actual module path.
+The final integrated build and tracker check above include this repair.
+
+$ git diff --check
+exit 0

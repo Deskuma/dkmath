@@ -1,0 +1,114 @@
+NOTE-032 FOUR STEPS: SAME finite quotient, absorption criterion, point-count bound and resonant witness
+Date: 2026-11-07
+Working directory: lean/dk_math
+
+Performed validations; listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyTateResonantWitness DkMathTest.FLT.Note032FreyTateQuotientDependencyAudit
+   Build completed successfully (11145 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12292/12292 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed; only existing file marker printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateQuotientSmoke.lean
+   Root exposes SAME finite quotient equivalence and actual original cyclic-stage kernel,
+   second-character action/absorption criteria, good-reduction bound and actual local witness.
+5. Four full textbook blocks extracted to /tmp/n032-quotient-book-{1,2,3,4}.lean.
+   lake env lean run on each separately; all passed without warnings.
+   Exact production source and exact file markers immediately after imports retained.
+6. python3 /tmp/n032-quotient-import-audit.py
+   Comment-aware local import closures, acyclicity, source scans/SHA256, seven markers,
+   four full textbook copies, FLT/root and normal test reachability passed.
+   Closure sizes including self: finite quotient328, inertia quotient329,
+   good reduction330, resonant witness331. No FreyHnoSmallIndex/RegularPrime/HardCase
+   consumers. JSON saved alongside.
+7. git diff --check and direct trailing-whitespace checks on new files passed.
+
+Step 1 IMPLEMENTED:
+- SAME actual finite basis second coordinate as a surjective linear map.
+- SAME first basis vector is previous actual stage generator. Prove second(x)=0
+  iff actual x.val belongs to SAME original cyclic tower stage K_n, using SAME
+  generator's zmultiples equality and actual basis expansion.
+- Construct actual linear equivalence E[p^(n+1)]/ker(second) with ZMod(p^(n+1)).
+  Kernel is original stage by point membership, not merely an equal-cardinality model.
+
+Step 2 IMPLEMENTED:
+- Actual SAME finite quotient action: second(sigma*x)=red(d(sigma))*second(x),
+  via SAME full/finite matrix-entry bridge and actual lower-left zero.
+- Full p^(n+1)-torsion action-difference absorption into SAME K_n iff SAME second
+  character standard reduction is1. Reverse implication uses surjective second map.
+- Extend exact criterion to every element of SAME actual inertia group.
+- No extension of narrow p*y in K antecedent to all p-power torsion.
+
+Step 3 IMPLEMENTED:
+- SAME good prime q!=p, SAME A over q and SAME actual Frobenius sigma.
+- If SAME second character reduction is1 at degree n, full absorption follows from
+  Step2. Actual fixed-torsion reduction injectivity and SAME cyclic stage card give
+  p^(n+1)<=#E(Fq), using existing torsion_index_le_finite_point_count_of_absorbing.
+- At any degree with p^(n+1)>#E(Fq), SAME reduction is not1.
+- N=#E(Fq)>0 and n=N-1 give actual units value d(sigma)!=1.
+  This is compatible with previous d modulo p=1. No trace-pointcount formula needed.
+
+Step 4 IMPLEMENTED:
+- SAME actual stage K_(N-1), card=p^N, is supplied to previous actual point-count
+  tower contradiction. Negating ALL high resonant absorptions yields actual witness:
+  prime q>=5, q!=p, q|abc, q=+/-1 modulo p; SAME A over q; SAME inertia tau;
+  actual p^N-torsion point y with tau*y-y outside SAME K_(N-1).
+- Narrow uniform hbad on THIS stage and THIS q,A,tau,y proves p*y ALSO outside K.
+  Witness is OUTSIDE antecedent of existing narrow ResonantAbsorptionAt input.
+- Exact quotient criterion proves SAME second-character reduction mod p^N is not1.
+- Actual good-prime existence supplied internally; conclude actual second character
+  nontrivial on some resonant bad-prime inertia element. No witness provider added.
+
+Regression scope:
+- Actual ZMod25^2 action diag(1,6): if 5*y lies on first axis, its action difference
+  lies on first axis, but y=(0,1) has action difference second coordinate5!=0.
+- Actual6 is1 mod5 but not1 mod25. Narrow and high absorption are distinct conditions.
+  No fabricated numeric Fermat Source or arithmetic Frobenius fixture.
+
+Audit scope and retained boundaries:
+- Fourteen selected #print axioms reports: only propext, Classical.choice, Quot.sound.
+- Fourteen recursive traversals inspect checked types, constructors and opaque proofs.
+  Reject sorryAx, nonstandard axioms, P2M/P2MW/FltRegular/FreyPackage, old Kummer
+  consumers and FLT endpoints. Require SAME generator, actual finite matrix bridge,
+  quotient kernel/second-coordinate surjectivity, actual fixed-torsion reduction
+  point-count bound, SAME point-count tower contradiction and actual good-prime existence.
+- Twelve public-input audits retain SAME hclass/uniform NARROW hbad. Good-prime
+  results preserve q!=p, good discriminant, A/LiesOverPrime/IsFrobeniusAt; the bound
+  theorem intentionally accepts tested finite reduction=1, then proves a bound.
+  Final witnesses require no new high-absorption/fixedness/triviality/pointcount/CH provider.
+- No new sorry/admit/native_decide/unsafe/custom axioms or new-code warnings.
+  Root/suite replay historical sorry warnings in five unrelated existing modules.
+  No whole-repository axiom-clean assertion.
+- Nontrivial second character and explicit HIGH absorption failure are CONDITIONAL
+  on prior hclass/uniform narrow hbad. They do not contradict narrow hbad because
+  witness p*y is outside K. No arithmetic supply of those retained inputs claimed.
+- No trace=q+1-#E(Fq) identification, Galois splitting, local arithmetic exclusion
+  of the witness or general hno closure proved. General hno UNFINISHED.
+
+Decisive audits from successful root build:
+PASS: DkMath.FLT.Frey.Source.residualFiniteSecond; 80748 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualFiniteSecond_surjective; 80749 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualFiniteBasis_first; 80740 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualFiniteSecond_eq_zero_iff; 80761 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualFiniteQuotientEquiv; 80750 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualFiniteSecond_action; 81427 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualFinite_absorption_iff; 81441 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualFinite_inertia_absorption_iff; 81442 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualSecond_frobenius_bound; 81507 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualSecond_frobenius_ne_one_at; 81508 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualSecond_frobenius_ne_one; 81512 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_resonant_high_absorption_failure; 82849 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_resonant_second_witness; 83735 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualSecond_nontrivial_resonant_inertia; 83745 reachable constants; required actual theorems present.
+PASS inputs: DkMath.FLT.Frey.Source.residualFiniteSecond; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualFiniteQuotientEquiv; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualFiniteSecond_eq_zero_iff; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualFiniteSecond_action; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualFinite_absorption_iff; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualFinite_inertia_absorption_iff; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualSecond_frobenius_bound; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualSecond_frobenius_ne_one_at; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualSecond_frobenius_ne_one; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_resonant_high_absorption_failure; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_resonant_second_witness; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualSecond_nontrivial_resonant_inertia; remaining arithmetic inputs explicit.

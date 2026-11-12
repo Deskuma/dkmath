@@ -1,0 +1,31 @@
+NOTE-032 TARGET-NONSINGULAR — 2026-10-26 JST
+branch: dev/FLT-GN-regular-261018-v0
+base HEAD: cadb45a294d7c0a6920aa9fa60e9fed392417b8a
+
+PASS lake build DkMath.FLT.FreyFiniteKernelNonsingular (4094 jobs, zero warnings)
+PASS lake env lean evidence/Note032TargetNonsingularBoundary.lean (10 theorems, 1 definition)
+PASS lake env lean evidence/Note032TargetNonsingularSmoke.lean (5 Source37 theorems)
+PASS lake env lean tmp/note032-nonsingular/Axioms.lean (42 declarations; actual boundary/smoke bodies re-elaborated)
+PASS axiom dependencies limited to propext, Classical.choice, Quot.sound
+PASS forbidden-construct/external-proof-import scans
+PASS textbook docstrings, DkMath.Lib markers and import-adjacent file markers
+PASS Lib-only transitive DkMath import closure
+PASS check_tracker_mismatch.py
+PASS facade imports statically registered; normal test equals independent boundary except marker
+PASS prior Lean owners unchanged except additive facade imports
+PASS NOTE-032 and previous point-specialization contract/evidence preserved
+PASS pinned upstream orbit/fiber proof Git blob verification; Apache LICENSE/NOTICE retained
+PASS JSON roundtrip, local document links, new-file whitespace, git diff --check
+
+COMPLETED for characteristic zero and actual odd finite H:
+same X_H rational in original x, exact reduced rational degree |H|, actual finite
+x-fiber bound, two-torsion image separation, same target Delta!=0 and IsElliptic;
+same stable-kernel K-model elliptic; same all-point FUNCTION and exact zero fiber H
+without external target ellipticity, H-orbit invariance; Source37 entrance.
+EXAMPLE actual y^2=x^3-x and full E[3] of cardinal9; no cyclic generator assumed.
+REMAINING additivity/isogeny, point-map Galois equivariance, integral models,
+local reduction and zero-component transport, hno. Even-kernel nonsingularity
+is not supplied by this odd-kernel unit.
+
+Full/root builds and lake test were not run; user performs the full build.
+Raw logs under tmp/note032-nonsingular; pinned inspection source under tmp/note032-isogeny.

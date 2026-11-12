@@ -1,0 +1,26 @@
+NOTE-032-NONCOLLISION validation / 2026-10-27
+base: bf8cb28597673d51ccc48647f989a942cd8a64c1
+
+PASS ./lean-build.sh DkMath.Lib.NumberTheory.EllipticFiniteKernelNoncollision (0 warnings)
+PASS ./lean-build.sh DkMath.FLT.FreyFiniteKernelNoncollision (0 warnings)
+PASS ./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNoncollision (0 warnings)
+PASS lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032NoncollisionSmoke.lean (0 warnings)
+PASS lake env lean tmp/note032-noncollision/Axioms1.lean (0 warnings)
+PASS lake env lean tmp/note032-noncollision/Axioms2.lean (0 warnings)
+
+Production: 2 owners, 10 theorems.
+Regression: 4 theorems; actual x=1 point and actual 3-point kernel at 47, smoothness, noncollision and both quotient coordinate reductions.
+Source37 smoke: 1 theorem.
+Axiom audit: 15 public declarations in batches 10 + 4 + 1.
+Observed axioms: propext, Classical.choice, Quot.sound; no sorryAx.
+
+PASS three production/test file markers match paths
+PASS Lib public textbook docstrings include promotion markers
+PASS no forbidden proof constructs or raised heartbeat limits
+PASS Lib has no FLT or external-solution imports
+PASS three facade imports registered exactly once; no facade build
+PASS only three facade and three documentation files changed among tracked files; previous mathematical owners and evidence unchanged
+PASS index unchanged
+PASS git diff HEAD --check passed; new Lean files have no trailing whitespace
+
+Boundary: target node center and image nonsingularity, full smooth-kernel E0 transport, reduction square, inverse-image criterion, exact discriminant depth, q=p and general hno remain open.

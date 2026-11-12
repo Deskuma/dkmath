@@ -1,0 +1,20 @@
+NOTE-032-ABEL-HOM validation (2026-10-26)
+Base HEAD: cfb1ebd6f8e491731c26cca1009d6df483c668b9
+Branch: dev/FLT-GN-regular-261018-v0
+PASS focused production build: DkMath.FLT.FreyFiniteKernelHom
+PASS focused test build: DkMathTest.Lib.NumberTheory.EllipticFiniteKernelHom
+PASS Source37 direct Lean: 5 theorems
+PASS axiom audit: 56 declarations; only propext, Classical.choice, Quot.sound
+PASS forbidden-construct and external-proof-import scan
+PASS Lib dependency direction, textbook docstrings, promotion markers
+PASS file markers after imports and tracker mismatch check
+PASS facade import registration (static)
+PASS previous owners and checkpoint documents unchanged
+PASS cached upstream Pic0/point-map solution blob hash
+PASS git diff --check and new-file whitespace
+Counts: 5 production owners, 34 theorems, 8 definitions, 551 lines
+Actual tests: 9 theorems; same noncyclic E[3] of order 9, nonzero Weil divisor, nonprincipal point difference, actual rational 2-torsion image
+Completed: affine Abel criterion with integer correction at O; principal-preserving O-preserving point maps are additive
+Completed: same odd-kernel point hom, exact kernel H, surjectivity and point-group quotient equivalence
+Completed: same descended equivariant point hom, torsion image cardinal p, cofixed nonzero rational p-torsion image
+Boundary: full Pic0 equivalence and product formula not asserted; scheme isogeny, target integral/local models and hno remain open

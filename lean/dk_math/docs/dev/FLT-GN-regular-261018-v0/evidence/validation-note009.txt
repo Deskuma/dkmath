@@ -1,0 +1,71 @@
+NOTE-009 verification evidence — 2026-10-19
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+
+Focused regression:
+  lake build DkMathTest.FLT.Note009Transport
+  exit 0; Build completed successfully (9007 jobs).
+  20 examples: actual character action and labels, State guards, primitive reductions,
+  parity/sign edge cases, and the conditional exponent-37 counterexample entrance.
+
+Focused audit:
+  lake build DkMathTest.FLT.Note009DependencyAudit
+  exit 0; Build completed successfully (9008 jobs).
+
+Integrated build:
+  lake build DkMath DkMath.FLT.Kummer DkMath.FLT DkMath.NumberTheory.Legendre DkMathTest
+  exit 0; Build completed successfully (11525 jobs).
+  All 5 new source/test modules occur as Built/Replayed with matching file markers.
+  No warnings in the 5 new modules. Historical warnings elsewhere are outside this change.
+
+Root smoke:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE009.lean
+  exit 0; import DkMath reaches Source.ofCounterexample and both character transports.
+
+Direct test entrance after integrated build:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest
+
+Marker checker:
+  python3 check_tracker_mismatch.py /tmp/note009-full-build.log
+  exit 0; OK: no mismatches found
+  Static check: all 5 new module markers follow imports and match their module paths.
+
+Hygiene:
+  All 3 new production modules exclude sorry/admit/axiom/native_decide.
+  New Lean modules have no trailing whitespace.
+  git diff --check: exit 0.
+
+Axiom audit: 49 declarations, including PrimitiveReduction constructor and projections.
+Allowed axioms: propext, Classical.choice, Quot.sound only.
+Dependency audit: 10 routes traverse types and opaque bodies, require actual arithmetic providers,
+and reject FLT endpoints, FltRegular/P2MW, Herbrand/Ribet, and global regularity providers.
+
+PASS: 49 public NOTE-009 declarations, including reduction constructor and fields; standard logical axioms only.
+PASS: DkMath.Lib.NumberTheory.Cyclotomic37CharacterDecomposition.projector_action; 36166 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.Cyclotomic37CharacterDecomposition.characterSupport_action; 38309 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.Cyclotomic37CharacterDecomposition.bernoulli32_target_certificate; 19008 reachable constants; expected providers present.
+PASS: DkMath.FLT.Kummer.IrregularPrime37.observe_nonzero_characterSupport_eq; 41791 reachable constants; expected providers present.
+PASS: DkMath.FLT.Kummer.IrregularPrime37.observe_bernoulli32_projector_galois; 39849 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.exists_primitiveReduction; 13423 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.exists_source_of_coprime; 4847 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.ofCounterexample; 14041 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.ofCounterexample_spec; 14042 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.ofCounterexample_local_profile; 27737 reachable constants; expected providers present.
+
+Scope:
+  Source.ofCounterexample assumes p prime, p>=5, a*b*c nonzero, and a^p+b^p=c^p.
+  PrimitiveReduction retains a=d*A, b=d*B, c=d*C, d!=0, nonzero primitive coordinates,
+  Bezout coprimality, and the same exponent equation.
+  OrientationTrace retains the exact common sign and one of the three parity permutations.
+  Source.ofCounterexample_local_profile uses the same selected Source and its actual curve.
+  State phase transport retains integer-coordinate hypotheses and i!=0 on support comparison.
+  The residual exponent 1-32 mod36 is 5; character(generator^5) is exactly a -> a^5.
+  The Bernoulli32 certificate and character identity do not assert a nonzero class or component.
+  No Herbrand-Ribet theorem, Artin conductor, residual Galois representation, modularity,
+  level lowering, general FLT endpoint, or new Legendre capacity constraint is supplied.
+
+Raw logs remain transient:
+  /tmp/note009-full-build.log
+  /tmp/note009-root-smoke.log
+  /tmp/note009-test-entrance.log

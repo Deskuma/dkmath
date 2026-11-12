@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-07",
+  "new_modules": [
+    "DkMath.Lib.RepresentationTheory.AlternatingDeterminantRing",
+    "DkMath.Lib.NumberTheory.EllipticWeilDeterminantAll",
+    "DkMath.FLT.FreyTateCyclotomicDeterminant"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.RepresentationTheory.AlternatingDeterminantRing": {
+      "local_module_count": 6,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.EllipticWeilDeterminantAll": {
+      "local_module_count": 71,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyTateCyclotomicDeterminant": {
+      "local_module_count": 327,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/RepresentationTheory/AlternatingDeterminantRing.lean": true,
+    "DkMath/Lib/NumberTheory/EllipticWeilDeterminantAll.lean": true,
+    "DkMath/FLT/FreyTateCyclotomicDeterminant.lean": true,
+    "DkMathTest/FLT/FreyTateCyclotomicDeterminant.lean": true,
+    "DkMathTest/FLT/Note032FreyTateCyclotomicDeterminantDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateDeterminantSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 3,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/RepresentationTheory/AlternatingDeterminantRing.lean": "fb3bf88b726c3e7cc356fba7b52254dc5594d7c0e508662130cbb0c73d6ddce4",
+    "DkMath/Lib/NumberTheory/EllipticWeilDeterminantAll.lean": "a56e1c11ae71bea7e7a5c15bcf5203906deacbef488771abbc4528dd18c30daa",
+    "DkMath/FLT/FreyTateCyclotomicDeterminant.lean": "71389c3fe3dd62fe5bf7a22ad2b92c985e26bf46214710f40eb3be6461a039ee",
+    "DkMathTest/FLT/FreyTateCyclotomicDeterminant.lean": "b915b313ac7a28ca94c6e66d167a4ae938e06645a635c5cb317fbcd1f2faca5e",
+    "DkMathTest/FLT/Note032FreyTateCyclotomicDeterminantDependencyAudit.lean": "c4e89d387fbf21fab4af1d080d110fb3b585ce6353e0fd83730c378839b3b254",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateDeterminantSmoke.lean": "a25c37a8c02ce13fbc53ce0d3ebe6db7dc4d98a41f49524e72e0ef8a8d391d8c"
+  },
+  "boundary": "Comment-aware local source/import audit only. Commutative-ring alternating pairing coefficient faithfulness; actual geometric Weil pairing proves finite determinant for each nonzero n with explicit finite basis. SAME Frey finite/full bases and actual matrix entries are compared in every positive-power residue; full determinant equals Mathlib cyclotomic character, and SECOND CHARACTER equals cyclotomic times inverse FIRST CHARACTER. SAME hclass/uniform ALL-stage hbad retained. No Frobenius relation, arithmetic provider closure, Galois splitting or general hno closure claimed. Recursive/input audits separate."
+}

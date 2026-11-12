@@ -1,0 +1,22 @@
+import DkMath
+
+#print "file: docs.dev.FLT-GN-regular-261018-v0.evidence.Note032CyclotomicKummerLocalPowerSmoke"
+
+open DkMath.Lib.NumberTheory NumberFieldCompletionComparison KummerLocalPower
+
+#check exists_integer_digit_of_inertiaDeg_eq_one
+#check exists_approximation_of_ef_eq_one
+#check exists_valuation_sub_lt_of_ef_eq_one
+#check completionMap_algebraMap
+#check completionMap_isUniformInducing_of_ramification_eq_one
+#check denseRange_valuedMap_of_ef_eq_one
+#check completionMap_denseRange_of_ef_eq_one
+#check completionMap_bijective_of_ef_eq_one
+#check finrank_completion_eq_one_of_ef_eq_one
+#check exists_unit_pow_constant_of_ef_eq_one
+#check unit_pow_of_constant_pow
+#check DkMath.FLT.Frey.Source.residual_kummer_local_radical_at_p
+#check DkMath.FLT.Frey.Source.residual_kummer_constant_is_local_power_at_p
+#check DkMath.FLT.Frey.Source.residual_kummer_unit_is_local_power_at_p
+#check DkMath.FLT.Frey.Source.residual_kummer_unit_weight_square_and_local_power
+#print axioms DkMath.FLT.Frey.Source.residual_kummer_unit_weight_square_and_local_power

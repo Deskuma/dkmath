@@ -1,0 +1,86 @@
+NOTE-023 verification evidence — 2026-10-21
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Mathematical scope:
+  Actual finite places from existing point/HeightOneSpectrum correspondence.
+  Distinct point-ideal product: generator lies in the selected prime but not its square.
+  Generic product generator has intValuation exp(-1) on support, 1 off support.
+  Different generators of the same product have equal finite-point valuations.
+  Actual geometric coordinate ring Dedekindity supplied from the proved NOTE-021 provider.
+  finitePointValuation uses HeightOneSpectrum.valuation on the same actual function field.
+  finitePointOrder = -log(valuation) requires P != O and f != 0.
+  Quotient order is the difference, with nonzero valuations supplied before log_div.
+  Existing weilNumerator has order 1 iff nP=T, otherwise 0.
+  Existing weilFunction has order 1_[nP=T] - 1_[nP=O].
+  Actual Source 2: zero at 2R=T, pole at nonzero two-torsion T, order 0 off both fibers.
+  Zero-target cancellation, n=1 and n=37 boundaries, arbitrary-generator local equality.
+  No norm-degree formula, place at infinity, translation valuation transport,
+    proportionality constant, WeilPairingData existence or unconditional det=cyclotomic asserted.
+
+Static checks performed:
+  git diff --check: exit 0.
+  All 6 new Lean files: exact file markers, whitespace and proof-placeholder/bypass scan.
+  Two adapted library modules: Apache-2.0 headers, upstream blobs, existing LICENSE/NOTICE paths.
+
+Focused implementation, regression and audit:
+  lake build DkMathTest.FLT.Note023DependencyAudit
+  exit 0; Build completed successfully (3187 jobs).
+  All 3 production modules and actual Source 2 regressions compiled.
+  Final focused build warnings: none.
+  15 production and 20 regression declarations; standard logical axioms only.
+  13 selected type-and-opaque-body dependency traversals.
+  Allowed axioms: propext, Classical.choice, Quot.sound only.
+  Required: prime-product argument, nonzero ideal-factor cancellation,
+    intValuation_le_pow_iff_mem, placeOf_injective, actual Dedekind provider,
+    span_weilNumerator, valuation division and guarded WithZero.log_div.
+  Generic point-ideal routes additionally forbid EllipticTorsionRepresentation providers.
+  All selected routes forbid WeilPairingData, RootPairing, torsion basis selection,
+    external FltRegular/P2MW/P2M, FLT endpoints and listed global Kummer providers.
+
+Audit output:
+  PASS: 15 production and 20 regression declarations; standard logical axioms only.
+  PASS: DkMath.Lib.NumberTheory.EllipticPointIdealValuation.intValuation_of_span_eq_prod; 19148 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticPointIdealValuation.intValuation_generator_independent; 19149 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.geometricCoordinateRing_isDedekindDomain; 25549 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finitePointValuation; 28533 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finitePointOrder_div; 28548 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.valuation_weilNumerator; 32084 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.valuation_weilFunction; 32090 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.order_weilNumerator; 32091 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.order_weilFunction; 32102 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.curve_weilFunction_order; 35208 reachable constants; expected providers present.
+  PASS: FreyWeilValuationTest.actual_function_simple_zero; 35254 reachable constants; expected providers present.
+  PASS: FreyWeilValuationTest.actual_function_simple_pole; 35249 reachable constants; expected providers present.
+  PASS: FreyWeilValuationTest.arbitrary_generator_same_local_value; 35149 reachable constants; expected providers present.
+
+Facade, root and complete test-library build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11613 jobs).
+  All new modules reachable through DkMath.Lib/DkMath.FLT and root DkMath.
+  New regression and audit imported by DkMathTest.
+  New NOTE-023 module warnings: none.
+  Five existing sorry warnings replayed from unrelated modules.
+
+Tracker checks:
+  python3 check_tracker_mismatch.py /tmp/note023-focused.log
+  python3 check_tracker_mismatch.py /tmp/note023-full.log
+  Both exit 0; OK: no mismatches found.
+
+Root smoke and explicit axiom reports:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE023.lean
+  exit 0.
+  import DkMath reaches arbitrary point-product generator valuation,
+    generator independence, actual finite-place valuation and guarded quotient order.
+  Generic characteristic-zero curve and same-Source order formulas checked.
+  #print axioms: valuation_weilNumerator, order_weilFunction:
+    propext, Classical.choice, Quot.sound only.
+
+Direct suite entrance:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest.
+
+Final hygiene:
+  git diff --check: exit 0.
+  Raw build logs remain disposable in /tmp/note023-*.log.

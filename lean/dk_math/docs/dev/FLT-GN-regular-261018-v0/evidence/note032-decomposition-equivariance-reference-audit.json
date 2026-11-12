@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-09",
+  "checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": {
+    "P2M/Sol/S_ValuationSubring_exists_mem_inertiaSubgroupIn_pow_eq_frobConj.lean": "b93eec4433516914a82e87c26c30e035ec7fdab7f958ed9f22e837a1687e184b"
+  },
+  "local_reused_source_sha256": {
+    "DkMath/FLT/FreyTameInertiaQuotient.lean": "e40666f7b035457808094891074b6f13a97c05ee56ab9d09964fc098954f4ead",
+    "DkMath/FLT/FreyFixedConnectingKernel.lean": "2820a1bddb9e02d8dc7aa8f0cb0007081e1c2c1a5bba15ffec6f22667ab9b444",
+    "DkMath/FLT/FreyDecompositionCocycleCovariance.lean": "573f579b8c5c634d4f30c91f9985a86b069f75d4689215c629948d059f41e011"
+  },
+  "review_sha256": "14cc3e778a035d335f2cc4ad44cb7302411a1ae6eb696e294385e94511220e35",
+  "comparison": "Read Frobenius conjugate error solution and tail-root consumption. New DkMath composition uses existing actual tame quotient power equality, actual K tame characters and same cocycle covariance. Extends OLD connecting equivalence to actual D and D/I actions, proves q*evaluation(phi*k)=phi_F(evaluation(k)) and iff fixedness criterion.",
+  "boundary": "No eigenvalue, invariance, hclass, H1(D,F) lift or global Selmer provider supplied/assumed. Actual obstruction Frobenius chosen internally and SAME gamma value nonzero; fixedness and q-eigenvalue remain an iff, NOT assertions.",
+  "new_code": "Seven FLT modules using same original Source, quotient, fixed coefficient, cohomology kernel and connecting equivalence. No external theorem imports."
+}

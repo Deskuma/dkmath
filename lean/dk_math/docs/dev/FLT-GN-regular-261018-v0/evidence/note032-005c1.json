@@ -1,0 +1,265 @@
+{
+  "checkpoint": "NOTE-032-005C1",
+  "date": "2026-10-25",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "bf899495cd500e2990590754e2dbf624e9252498",
+  "status": "conditional image and rational torsion bridge completed; quotient curve and isogeny construction remain open",
+  "production": [
+    {
+      "path": "DkMath/Lib/RepresentationTheory/CofixedImage.lean",
+      "public_theorems": [
+        "image_fixed",
+        "image_ne_zero_iff",
+        "quotientEquivRange_apply_val",
+        "cofixed_iff_image_fixed",
+        "finrank_range",
+        "exists_nonzero_fixed_image"
+      ],
+      "definitions": [
+        "quotientEquivRange"
+      ],
+      "sha256": "59a6ad21aff16d3837b30a7294a5928b362ecba199de6239cba7a7f499da6c9c"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticCofixedImage.lean",
+      "public_theorems": [
+        "torsionPointMap_val",
+        "torsionPointMap_equivariant",
+        "torsionPointMap_ker",
+        "cofixed_pointMap_image_fixed",
+        "finrank_torsionPointMap_range",
+        "card_torsionPointMap_range",
+        "exists_rational_torsion_of_cofixed_pointMap"
+      ],
+      "definitions": [
+        "torsionPointMap"
+      ],
+      "sha256": "2d9650daf4e13efb1f24189062182a44d930e928bb9d2081434265ebabeeeb28"
+    },
+    {
+      "path": "DkMath/FLT/FreyCofixedImage.lean",
+      "public_theorems": [
+        "card_residual_pointMap_image",
+        "exists_rational_torsion_of_cofixed_residual_pointMap"
+      ],
+      "definitions": [],
+      "sha256": "0f80e5bea3ec44dc05dcad1b80cdb731ebde7b898e50a726abf394ab9bf2180e"
+    }
+  ],
+  "mathematical_changes": {
+    "linear": "cofixedness iff fixed image under an equivariant map with exact kernel; quotient equivalent to same image; rank-one image from rank-two source and rank-one kernel",
+    "points": "actual additive point map restricted to torsion; same actual subgroup kernel gives same linear kernel",
+    "rational": "nonzero fixed image descends to an actual rational p-torsion point on target with original P outside L and base-change equality to same phi(P)",
+    "Source": "same Source torsion image has cardinal p; target nonzero rational torsion bridge",
+    "zero_component": "Source37 smoke retains original P outside same E0[37]; target zero-component location not proved"
+  },
+  "inputs_retained": [
+    "target curve",
+    "actual additive point map",
+    "kernel equality with same pointSubgroup",
+    "Galois equivariance",
+    "given global cofixed line and dimension one"
+  ],
+  "inventory": {
+    "search_scopes": [
+      "DkMath (all modules)",
+      "Mathlib/AlgebraicGeometry/EllipticCurve"
+    ],
+    "search_terms": [
+      "isogeny",
+      "velu",
+      "Vélu",
+      "quotientDatum",
+      "curve/quotient"
+    ],
+    "result": "no owner constructing arbitrary stable prime-cardinality quotient curve/isogeny identified in these scopes",
+    "not_a_universal_nonexistence_claim": true
+  },
+  "reference_inspection": {
+    "url": "https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/P2M/Sol/S_FreyPackage_frey_no_cofixed_large.lean",
+    "scope": "imports include quotientDatum primeCard and primePowCard owners",
+    "separate_owner_file_fetch": "failed via raw and GitHub web cache",
+    "separate_owner_implementation_reviewed": false,
+    "upstream_code_copied": false,
+    "external_proof_imports_added": false
+  },
+  "checks": {
+    "target_build": {
+      "command": "lake build DkMath.FLT.FreyCofixedImage",
+      "includes_three_new_production_modules": true,
+      "jobs": 4056,
+      "exit_code": 0,
+      "warnings": 0
+    },
+    "standalone_boundary_theorems": 5,
+    "standalone_example_definitions": 1,
+    "same_Source37_smoke_theorems": 4,
+    "audited_declarations": 27,
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "axiom_results": {
+      "DkMath.Lib.RepresentationTheory.CofixedImage.image_fixed": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.RepresentationTheory.CofixedImage.image_ne_zero_iff": [
+        "propext",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.RepresentationTheory.CofixedImage.quotientEquivRange": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.RepresentationTheory.CofixedImage.quotientEquivRange_apply_val": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.RepresentationTheory.CofixedImage.cofixed_iff_image_fixed": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.RepresentationTheory.CofixedImage.finrank_range": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.RepresentationTheory.CofixedImage.exists_nonzero_fixed_image": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsionPointMap": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsionPointMap_val": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsionPointMap_equivariant": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsionPointMap_ker": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.cofixed_pointMap_image_fixed": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finrank_torsionPointMap_range": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.card_torsionPointMap_range": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.exists_rational_torsion_of_cofixed_pointMap": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.card_residual_pointMap_image": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.exists_rational_torsion_of_cofixed_residual_pointMap": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedImageTest.unitScalar": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedImageTest.projection_positive": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedImageTest.zero_map_boundary": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedImageTest.equivariance_boundary": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedImageTest.cofixed_boundary": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "CofixedImageTest.multiplication_kernel_boundary": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032CofixedImageSmoke.source37_image": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032CofixedImageSmoke.source37_rational_image": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032CofixedImageSmoke.source37_quotient_image": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032CofixedImageSmoke.source37_zeroComponent_outside_image": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    "forbidden_construct_scan": "passed",
+    "lib_only_dependency_nodes": 27,
+    "prior_owners_unchanged": 21,
+    "original_note032_and_005b_report_and_evidence_unchanged": true,
+    "tracker": "OK: no mismatches found",
+    "normal_test_body_matches_independent_boundary": true,
+    "entrance_and_test_registration": "static only",
+    "git_diff_check": "passed",
+    "full_root_and_test_builds": "user validation split; not run",
+    "local_document_links": 100,
+    "new_file_whitespace_checks": 9
+  },
+  "boundary_examples": [
+    "same projection, fixed image and representative preserved by quotient-to-range equivalence",
+    "zero map kills line but kernel not equal and no nonzero image",
+    "different target action breaks equivariance despite same cofixed source and kernel",
+    "equivariant projection with stable kernel but noncofixed source has nonfixed image",
+    "actual elliptic [p] multiplication kills all E[p], cannot have one-dimensional kernel"
+  ],
+  "remaining": [
+    "005C2 construct target quotient curve and point map; prove actual curve morphism, ellipticity, additivity, exact kernel and Galois descent",
+    "005C zero-component transport at same place",
+    "005D global arithmetic exclusion or alternative",
+    "005E stable cyclic higher torsion tower if following reference route",
+    "general hno and general FLT"
+  ]
+}

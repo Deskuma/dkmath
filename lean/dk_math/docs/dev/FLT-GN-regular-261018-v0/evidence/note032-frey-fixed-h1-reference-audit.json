@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-08",
+  "checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": {
+    "P2M/Sol/S_groupCohomology_exists_submodule_mem_iff_conjInvariant.lean": "a7f5b819741bd762c3464858ed524f9319683caf0a30cac50ab354f3ab1fd379",
+    "P2M/Sol/S_groupCohomology_H2res_comp_H2inf_eq_zero.lean": "fe55b00df856646ea1cb74f4eecf535a1ca04bd7600322b636c16f21cf1b4438"
+  },
+  "comparison": "Read ordinary H1 representative/conjugacy-with-coboundary-correction solution and H2 map naturality/coboundary proof. No external theorem/provider imports, no transfer of H2 statement. DkMath uses Mathlib ordinary H1 low-degree isomorphism and actual degree1 coefficient map naturality. SAME fixed-coefficient nonzero classes and continuous representatives, actual inclusion-induced H1 map sends SAME inertia class to zero in original Q. No continuousCohomology1 nonzero claim, no global ClassModP identification/supply, arithmetic exclusion or unconditional hno.",
+  "mathlib_source_sha256": {
+    "Mathlib/RepresentationTheory/Homological/GroupCohomology/LowDegree.lean": "32c37df86754e60d015037a2c7a14df9cd443df67c1831734c7e0d8824e880b8",
+    "Mathlib/RepresentationTheory/Homological/GroupCohomology/Functoriality.lean": "a11cd4eb2fd7a0ade8db338d7a715fc6c428c20fb9321a50352a520253fac260",
+    "Mathlib/RepresentationTheory/Homological/ContCohomology/LowDegree.lean": "ad6c05f864c7d843036ede6bc4da0d5bcb0df6f4915e7e68d0af3f4a9cb0ef0d"
+  }
+}

@@ -1,0 +1,465 @@
+{
+  "unit": "NOTE-032-ABEL-HOM",
+  "date": "2026-10-26",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "cfb1ebd6f8e491731c26cca1009d6df483c668b9",
+  "status": "affine Abel criterion with an integer correction at O proved from actual finite valuations and Point.toClass; same all-point function is additive, surjective, with kernel H and equivariant on the same descended model; cofixed line forces actual nonzero rational p-torsion on the same target",
+  "production": [
+    {
+      "path": "DkMath/Lib/NumberTheory/DedekindFractionalValuation.lean",
+      "sha256": "26619cb43ca854400d6d5426cd6a36f4ca5a7217574efdd43fb625919c983f67",
+      "theorems": [
+        "ext_count",
+        "count_spanSingleton"
+      ],
+      "definitions": [],
+      "lines": 58
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassDivisorAbel.lean",
+      "sha256": "042d5a8ff324c6eb381f68050dd3ace4c793e4fd3133455298dc00e3e3a7a683",
+      "theorems": [
+        "pointSum_single",
+        "pointSum_pointDivisor",
+        "finitePlace_injective",
+        "finitePlace_surjective",
+        "pointIdealProduct_isPrincipal_iff",
+        "count_pointIdealUnit",
+        "count_pointIdealProduct",
+        "pointIdealProduct_eq_span_of_finite_orders",
+        "pointSum_eq_zero_of_isPrincipal",
+        "exists_principal_correction",
+        "addition_principal_correction",
+        "exists_principal_correction_iff"
+      ],
+      "definitions": [
+        "pointSum",
+        "pointIdealProduct"
+      ],
+      "lines": 179
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassPrincipalPushHom.lean",
+      "sha256": "90ff5c64d03966c5953fc9faa17286ff40841f2bdd177640d8c20b22221254f6",
+      "theorems": [
+        "map_add_of_principal_push",
+        "pointHomOfPrincipalPush_apply"
+      ],
+      "definitions": [
+        "pointHomOfPrincipalPush"
+      ],
+      "lines": 66
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelHom.lean",
+      "sha256": "6d96c5c9df276f2c26c42f1593cfe21208ca268ddb894c9cda944dd14e5699f2",
+      "theorems": [
+        "geometric_modelPointValuation",
+        "oddKernelPointMap_add",
+        "oddKernelPointHom_apply",
+        "oddKernelPointHom_ker",
+        "oddKernelPointHom_surjective",
+        "oddKernelQuotientEquiv_mk",
+        "descendedKernelPointHom_apply",
+        "descendedKernelPointHom_ker",
+        "descendedKernelPointHom_surjective",
+        "descendedKernelPointHom_equivariant"
+      ],
+      "definitions": [
+        "oddKernelPointHom",
+        "oddKernelQuotientEquiv",
+        "descendedKernelPointHom"
+      ],
+      "lines": 130
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelHom.lean",
+      "sha256": "72b46de0a25b9716e9732607c902fa9ba66731e2a2f461dab37485026a6431dd",
+      "theorems": [
+        "residualOddKernelPointHom_apply",
+        "residual_odd_kernel_pointHom_ker",
+        "residual_odd_kernel_pointHom_surjective",
+        "residualDescendedKernelPointHom_apply",
+        "residual_descended_kernel_pointHom_ker",
+        "residual_descended_kernel_pointHom_equivariant",
+        "card_residual_kernel_torsion_image",
+        "exists_rational_torsion_of_cofixed_kernel"
+      ],
+      "definitions": [
+        "residualOddKernelPointHom",
+        "residualDescendedKernelPointHom"
+      ],
+      "lines": 118
+    }
+  ],
+  "tests": [
+    {
+      "path": "DkMathTest/Lib/NumberTheory/EllipticFiniteKernelHom.lean",
+      "sha256": "b97f20717e437dad8e0933ea115ce7fab9522e083b4fa639559298cb64b71db0",
+      "theorems": [
+        "actual_additivity",
+        "actual_hom_kernel",
+        "actual_quotient_bijective",
+        "actual_descended_additivity",
+        "actual_weil_abel",
+        "actual_point_difference_not_principal",
+        "actual_addition_principal",
+        "actual_image_two_torsion",
+        "actual_nonzero_rational_two_torsion"
+      ],
+      "definitions": [],
+      "lines": 100
+    },
+    {
+      "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032AbelHomSmoke.lean",
+      "sha256": "b20b79443fe98feede0eb7f31c484a64fbde15e685e39ba1cefe0ae547305de1",
+      "theorems": [
+        "source37_additivity",
+        "source37_kernel",
+        "source37_equivariant",
+        "source37_torsion_image_card",
+        "source37_rational_torsion"
+      ],
+      "definitions": [],
+      "lines": 52
+    }
+  ],
+  "counts": {
+    "production_owners": 5,
+    "production_theorems": 34,
+    "production_definitions": 8,
+    "production_lines": 551,
+    "test_theorems": 9,
+    "test_definitions": 0,
+    "source37_theorems": 5,
+    "audited_declarations": 56
+  },
+  "completed": [
+    "nonzero fractional ideals determined by all prime exponents",
+    "principal fractional ideal exponent equals negative log of the same normalized valuation",
+    "finite-point ideal product realizes same divisor coefficients",
+    "actual principal divisor has zero point sum",
+    "zero point sum iff an integer correction at O makes the divisor actually principal",
+    "O-preserving principal-pushforward point functions are additive without a Pic0 or product-formula provider",
+    "same oddKernelPointMap is an actual point-group homomorphism, with kernel H and surjectivity",
+    "same point quotient E/H additively equivalent to same target point group",
+    "same descended K model and point function form an equivariant surjective homomorphism with kernel H",
+    "same Source torsion image has cardinal p",
+    "cofixed line yields actual nonzero rational p-torsion on same descended rational target without map/kernel/equivariance providers"
+  ],
+  "boundaries": [
+    "full point/Pic0 equivalence not constructed",
+    "integer correction at O not identified with negative divisor degree; principal degree formula not introduced",
+    "no general finite-support divisor theorem for every function and arbitrary valuation family",
+    "scheme morphism, scheme quotient and isogeny structure not constructed",
+    "target integral model, local-reduction preservation and component transport remain open",
+    "rational torsion exclusion on original Source not reused on different target",
+    "general hno and general FLT not proved"
+  ],
+  "validation": {
+    "focused_builds": [
+      "./lean-build.sh DkMath.FLT.FreyFiniteKernelHom",
+      "./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelHom"
+    ],
+    "direct_lean": [
+      "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032AbelHomSmoke.lean",
+      "lake env lean tmp/note032-abel/Axioms.lean"
+    ],
+    "results": "passed without warnings",
+    "source_scan": "passed",
+    "lib_dependency_direction": "passed",
+    "docstrings_markers_tracker": "passed",
+    "facades": "static registration checked",
+    "previous_owners_and_contract": "unchanged",
+    "diff_and_new_file_whitespace": "passed",
+    "full_build_and_full_test_suite": "not run; user handles full build"
+  },
+  "upstream": {
+    "blob": "fa5eda1fdc857b6445c21720c78805e7ecded543",
+    "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032AbelHomSmoke.lean",
+    "hash": "verified",
+    "role": "inspected Pic0 pushforward and point-map seam; used existing DkMath ideal-class criterion and infinity coefficient correction instead of importing upstream Pic0 theory"
+  },
+  "axioms": {
+    "DkMath.Lib.NumberTheory.DedekindFractionalValuation.ext_count": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.DedekindFractionalValuation.count_spanSingleton": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassDivisorAbel.pointSum": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassDivisorAbel.pointSum_single": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassDivisorAbel.pointSum_pointDivisor": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassDivisorAbel.finitePlace_injective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassDivisorAbel.finitePlace_surjective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassDivisorAbel.pointIdealProduct": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassDivisorAbel.pointIdealProduct_isPrincipal_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassDivisorAbel.count_pointIdealUnit": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassDivisorAbel.count_pointIdealProduct": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassDivisorAbel.pointIdealProduct_eq_span_of_finite_orders": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassDivisorAbel.pointSum_eq_zero_of_isPrincipal": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassDivisorAbel.exists_principal_correction": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassDivisorAbel.addition_principal_correction": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassDivisorAbel.exists_principal_correction_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassPrincipalPushHom.map_add_of_principal_push": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassPrincipalPushHom.pointHomOfPrincipalPush": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassPrincipalPushHom.pointHomOfPrincipalPush_apply": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.geometric_modelPointValuation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_add": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointHom": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointHom_apply": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointHom_ker": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointHom_surjective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelQuotientEquiv": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelQuotientEquiv_mk": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelPointHom": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelPointHom_apply": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelPointHom_ker": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelPointHom_surjective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelPointHom_equivariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualOddKernelPointHom": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualOddKernelPointHom_apply": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_odd_kernel_pointHom_ker": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_odd_kernel_pointHom_surjective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualDescendedKernelPointHom": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualDescendedKernelPointHom_apply": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_descended_kernel_pointHom_ker": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_descended_kernel_pointHom_equivariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.card_residual_kernel_torsion_image": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.exists_rational_torsion_of_cofixed_kernel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelHomTest.actual_additivity": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelHomTest.actual_hom_kernel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelHomTest.actual_quotient_bijective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelHomTest.actual_descended_additivity": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelHomTest.actual_weil_abel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelHomTest.actual_point_difference_not_principal": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelHomTest.actual_addition_principal": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelHomTest.actual_image_two_torsion": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelHomTest.actual_nonzero_rational_two_torsion": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032AbelHomSmoke.source37_additivity": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032AbelHomSmoke.source37_kernel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032AbelHomSmoke.source37_equivariant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032AbelHomSmoke.source37_torsion_image_card": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032AbelHomSmoke.source37_rational_torsion": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  }
+}

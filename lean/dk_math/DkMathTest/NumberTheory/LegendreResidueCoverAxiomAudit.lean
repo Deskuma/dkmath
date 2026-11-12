@@ -5,7 +5,9 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.Legendre
-import DkMathTest.NumberTheory.LegendreResidueCoverCalibration
+
+-- disable heavy test: 2026/10/24 14:37
+-- import DkMathTest.NumberTheory.LegendreResidueCoverCalibration
 
 #print "file: DkMathTest.NumberTheory.LegendreResidueCoverAxiomAudit"
 
@@ -131,6 +133,7 @@ import DkMathTest.NumberTheory.LegendreResidueCoverCalibration
 #print axioms DkMath.NumberTheory.Legendre.fullyCovered_three_lower_owner_change
 #check DkMath.NumberTheory.Legendre.primorial_sqrt_address
 #print axioms DkMath.NumberTheory.Legendre.primorial_sqrt_address
+/-
 #check DkMathTest.LegendreResidueCoverRegression.small_periods
 #print axioms DkMathTest.LegendreResidueCoverRegression.small_periods
 #check DkMathTest.LegendreResidueCoverRegression.small_collisions
@@ -183,3 +186,4 @@ import DkMathTest.NumberTheory.LegendreResidueCoverCalibration
 #print axioms DkMathTest.LegendreResidueCoverCalibration.residue1031_corrected_balance_fails
 #check DkMathTest.LegendreResidueCoverCalibration.residue1031_preserved_endpoint
 #print axioms DkMathTest.LegendreResidueCoverCalibration.residue1031_preserved_endpoint
+-/

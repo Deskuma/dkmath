@@ -1,0 +1,125 @@
+NOTE-032-005C2C1 — 2026-10-25
+Branch: dev/FLT-GN-regular-261018-v0
+Base HEAD: 69770a06657f9423169e273c674c6c7d2bdabcb9; initially clean.
+
+lake build DkMath.FLT.FreyFiniteKernelDegree
+Exit 0. Build completed successfully (4068 jobs). Warnings: 0.
+Includes all four new production owners: 17 theorems, 1 definition.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FiniteKernelDegreeBoundary.lean
+Exit 0. Warnings: 0. 8 theorems, 1 definition.
+Normal test body independently elaborated; previous actual curve/kernel owner imported.
+Arbitrary k(t^n) exact degree n; exchange for n>0; degrees2,3 generate top;
+ambient degrees4,6 generate same k(t^2); repeated degree2 does not generate top;
+zero common-factor/finrank0 guard checked. Same actual elliptic curve/kernel:
+finite positive degrees and an actual positive-degree monic relation.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FiniteKernelDegreeSmoke.lean
+Exit 0. Warnings: 0. Four same-Source37 theorem checks.
+Finite degrees and actual monic relation unconditional.
+Same fixed-field generation RETAINS ambient degrees74,111 as hypotheses.
+Same E0[37] pointSubgroup identification RETAINS global cofixedness.
+No Source37, cofixed line, target curve or isogeny existence asserted.
+
+lake env lean /tmp/Note032FiniteKernelDegreeAxioms.lean
+Exit 0. Warnings: 0. 18 production + 9 boundary/example + 4 smoke declarations audited.
+Both independent proof bodies re-elaborated in audit file.
+file: Note032FiniteKernelDegreeAxioms
+'DkMath.Lib.Algebra.TranscendentalFiniteDegree.finiteDimensional_of_pair' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.Algebra.TranscendentalFiniteDegree.finiteDimensional_of_transcendental' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.Algebra.CoprimeFieldGeneration.sup_eq_of_coprime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.Lib.Algebra.CoprimeFieldGeneration.relfinrank_eq_of_ambient_degrees' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.Algebra.CoprimeFieldGeneration.sup_eq_of_ambient_degrees' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.finiteDimensional_over_genericX' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.finiteDimensional_over_transcendental' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.finiteDimensional_over_velu' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCoordinateField' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCoordinateField_le_fixedField' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_simple_degrees_pos' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_velu_monic_relation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_degree_towers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluCoordinateField_eq_fixedField_of_degrees' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_kernel_function_degrees_finite' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_kernel_coordinateField_le_fixedField' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.exists_residual_kernel_monic_relation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_kernel_coordinateField_eq_fixedField_of_degrees' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'EllipticFiniteKernelDegreeTest.powerField' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelDegreeTest.powerField_degree' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelDegreeTest.exchange_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelDegreeTest.coprime_two_three' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelDegreeTest.common_factor_four_six' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelDegreeTest.noncoprime_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelDegreeTest.zero_finrank_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelDegreeTest.actual_finite_degrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EllipticFiniteKernelDegreeTest.actual_monic_relation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FiniteKernelDegreeSmoke.source37_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FiniteKernelDegreeSmoke.source37_monic_relation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032FiniteKernelDegreeSmoke.source37_generation_of_degrees' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Note032FiniteKernelDegreeSmoke.source37_zeroComponent_generation_of_degrees' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+Static checks:
+- All seven new Lean files: forbidden constructs/imports scan passed after nested-comment removal.
+- All new Lean files have file markers; public theorems/definitions have docstrings.
+- All 14 public Lib theorem/definition docstrings have [DkMath.Lib].
+- Lib dependency closure: 48 DkMath nodes, all under DkMath.Lib.
+- 35 prior owners unchanged against baseline HEAD.
+- Original NOTE-032 and 005C2B report/JSON/validation unchanged against baseline HEAD.
+- Production and test entrances checked statically; normal test glob retained.
+- Normal test body matches independent boundary after header removal and marker normalization.
+- Apache license/notice relative paths exist.
+- Tracker: OK: no mismatches found
+- git diff --check: passed.
+- Full/root/DkMathTest/lake test builds: user validation split, not run.
+
+Mathematical boundary:
+Same actual functions give finite positive function-field degrees, actual monic relation,
+and same fixed-field degree towers. Exact ambient degrees2|H|,3|H| remain hypotheses.
+No total-pole-order/field-degree identity or unconditional fixed-field generation proved.
+Monic relation is over k(X_H); exact degree2, coefficients in k[X_H], target equation
+and nonsingularity remain open. No actual point morphism, additivity, exact point
+kernel or isogeny constructed. 005C1 point homomorphism remains an input.
+Function-field point valuation is distinct from coefficient-field dyadic valuation.
+No target zero-component transport, global escape, general hno or general FLT proved.
+005C2C1 finite-degree unit complete; 005C2C and 005C as a whole remain incomplete.
+
+Local document links checked: 117.
+New-file whitespace checks: 10 files passed.
+JSON round-trip checked.

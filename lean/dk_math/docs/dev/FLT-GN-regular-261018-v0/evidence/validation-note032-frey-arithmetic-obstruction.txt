@@ -1,0 +1,117 @@
+NOTE-032 FOUR STEPS: smooth placement, narrow failure geometry and candidate-only conditional hno
+Date: 2026-11-07
+Working directory: lean/dk_math
+
+Performed validations; listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCandidateCofixedExclusion DkMathTest.FLT.Note032FreyArithmeticObstructionDependencyAudit
+   Build completed successfully (11153 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12304/12304 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed; only existing file marker printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyArithmeticObstructionSmoke.lean
+   Root exposes SAME smooth-stage absorption, SAME narrow-failure point geometry,
+   actual obstruction certificate and candidate-only conditional hno APIs.
+5. Four full textbook blocks extracted to /tmp/n032-obstruction-book-{1,2,3,4}.lean.
+   lake env lean run on each separately; all passed without warnings.
+   Exact production source and exact file markers immediately after imports retained.
+6. python3 /tmp/n032-obstruction-import-audit.py
+   Comment-aware local import closures, acyclicity, source scans/SHA256, seven markers,
+   four full textbook copies, FLT/root and normal test reachability passed.
+   Closure sizes including self: smooth stage312, narrow geometry313,
+   arithmetic obstruction339, candidate exclusion340. No
+   FreyHnoSmallIndex/RegularPrime/HardCase consumers. JSON saved alongside.
+   New Lean source hashes checked again at evidence generation.
+7. git diff --check and direct trailing-whitespace checks on new files passed.
+8. Local model-answer comparison: external checkout HEAD and two SHA256 saved in
+   note032-frey-obstruction-reference-audit.json. Read htoric at867-917,
+   preimage absorption at1110-1158, and public scalar-dichotomy theorem statement.
+   No import/port of full htoric, m3c_escape or Step Three; no external source copied.
+
+Step 1 IMPLEMENTED:
+- SAME actual cyclic stage inclusion in subgroup iff actual coordinate generator1
+  belongs to that subgroup, via SAME ZMod additive coordinates and natural multiples.
+- If SAME stage lies in SAME valuation smooth subgroup, actual nodal smooth torsion
+  cardinal upper bound and actual stage cardinal p^(n+1) identify SAME smooth-torsion
+  filtration with stage. No sign-nonresonance input, but smooth placement REMAINS input.
+- Keep p*y in T. Higher multiple p^(n+1)*y is a smooth residual p-torsion point and
+  hence inertia-fixed. Actual inertia difference is smooth and killed one degree
+  lower; SAME smooth-torsion identification puts it in T. Derive narrow absorption.
+
+Step 2 IMPLEMENTED:
+- Given SAME actual narrow failure p*y in T, delta=tau*y-y outside T:
+  actual y and delta killed by p^(n+2); delta smooth, nonzero and fixed by ALL
+  elements of SAME inertia group; p*delta belongs to SAME original T by stability.
+- SAME coordinate generator of T is NOT smooth: smooth placement would absorb delta.
+- Construct actual centre C/tangent-direction existence and affine generator
+  coordinates x,z on SAME general fibre, with actual valuation(x-C.x)<1.
+- No hclass, hbad or Cofixed in this local failure analysis. Annihilation is an
+  UPPER BOUND on order, not a claimed exact order; existence is not numeric computation.
+
+Step 3 IMPLEMENTED:
+- Logical NarrowAbsorptionObstruction certificate retains SAME T,q,A,tau,y and all
+  actual local facts including generator nonsmoothness/depth and fixed smooth delta.
+- SAME original class-mod-p weight-two vanishing and SAME Cofixed candidate supply
+  prior actual narrow failure; new local analysis fills certificate internally.
+- No uniform hbad, no placement or witness provider at this existence endpoint.
+  Certificate existence is NOT exclusion of that geometric obstruction.
+
+Step 4 IMPLEMENTED:
+- Weaken all-line hbadAll to hbadCandidate ONLY on one-dimensional COFIXED candidate
+  lines. Prove no such Cofixed line (without redundant stability) and exact existing
+  hno-shaped no stable Cofixed line. hclass and hbadCandidate explicit.
+- Optional actual sufficient criterion: if SAME candidate stage coordinate generators
+  are smooth at each resonant bad address, Step1 proves narrow absorption internally.
+- hplacement is explicit UNPROVED ARITHMETIC INPUT, not constructed or renamed as
+  a completed unconditional theorem. No supply of hclass/candidate absorption or
+  resonant smooth placement, no unconditional general hno closure.
+
+Regression scope:
+- SAME actual G=(ZMod125)^2 and K=zmultiples(5,0).
+- (1,0) has 5-multiple IN K but is NOT killed by25. Generator(5,0) is killed by25.
+- (0,5) IS killed by25 but its 5-multiple is OUTSIDE SAME K, detected by second coordinate.
+- Narrow p-preimage and high p-power torsion domains are GENERALLY INCOMPARABLE;
+  neither is silently treated as stronger by simple domain inclusion.
+
+Audit scope and retained boundaries:
+- Eleven selected #print axioms reports: only propext, Classical.choice, Quot.sound.
+- Eleven recursive traversals inspect checked types, constructors and opaque proofs.
+  Certificate constructor/all fields included. Reject sorryAx, nonstandard axioms,
+  P2M/P2MW/FltRegular/FreyPackage, old Kummer consumers and FLT endpoints.
+  Require actual nodal torsion cardinal bound, actual smooth residual fixedness,
+  actual smooth inertia difference, SAME generator/critical-centre depth criterion,
+  prior actual narrow witness and conditional exclusion.
+- Eleven input audits retain explicit local hsm or actual hy/hfail, without
+  hclass/hbad/Cofixed at local geometry APIs. Certificate existence has hclass/Cofixed
+  but NO hbad/placement input. Candidate endpoints retain hbadCandidate or optional
+  hplacement and reject old all-line hbadAll/hno providers.
+- No new sorry/admit/native_decide/unsafe/custom axioms or new-code warnings.
+  Root/suite replay historical sorry warnings in five unrelated existing modules.
+  No whole-repository axiom-clean assertion.
+- Fixed smooth delta need NOT lie in unrelated nonsmooth T. Excluding actual
+  obstruction, arithmetic supply of hclass/candidate absorption/placement, and
+  general UNCONDITIONAL hno remain UNFINISHED. No Galois splitting or FLT closure.
+
+Decisive audits from successful root build:
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.le_iff_generator_mem; 24589 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.eq_smooth_torsion_of_le; 34700 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.preimage_absorbs_of_smooth; 34852 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.narrow_failure_profile; 34666 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.generator_not_smooth_of_narrow_failure; 35026 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.exists_generator_depth_of_narrow_failure; 35027 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction; 25185 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_exists_narrow_geometric_obstruction; 83767 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_no_cofixed_of_candidate_absorption; 83757 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_hno_of_candidate_absorption; 83760 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_no_cofixed_of_candidate_smooth_generators; 83761 reachable constants; required actual theorems present.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.le_iff_generator_mem; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.eq_smooth_torsion_of_le; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.preimage_absorbs_of_smooth; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.narrow_failure_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.generator_not_smooth_of_narrow_failure; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.exists_generator_depth_of_narrow_failure; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_exists_narrow_geometric_obstruction; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_no_cofixed_of_candidate_absorption; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_hno_of_candidate_absorption; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_no_cofixed_of_candidate_smooth_generators; remaining arithmetic inputs explicit.

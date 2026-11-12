@@ -1,0 +1,27 @@
+NOTE-032 QUOTIENT-MODEL — 2026-10-25
+branch: dev/FLT-GN-regular-261018-v0
+base HEAD: 04f54ce47a7d79d2e930211b271df27b2ffb01b8
+
+PASS lake build DkMath.FLT.FreyFiniteKernelModel (4084 jobs, zero warnings)
+PASS lake env lean evidence/Note032QuotientModelBoundary.lean (12 theorems, 1 definition)
+PASS lake env lean evidence/Note032QuotientModelSmoke.lean (5 Source37 theorems)
+PASS lake env lean tmp/note032-model/Axioms.lean (87 declarations; boundary/smoke bodies re-elaborated)
+PASS axioms limited to propext, Classical.choice, Quot.sound
+PASS forbidden-construct and external-proof-import scan of new Lean code
+PASS textbook docstrings and DkMath.Lib markers on all new public Lib declarations
+PASS import-adjacent file markers and check_tracker_mismatch.py
+PASS Lib-only transitive DkMath import closure
+PASS facade registration (static); normal-test body equals independent boundary body
+PASS existing Lean owners unchanged except additive facade imports
+PASS NOTE-032 and previous 005C2C report/evidence preserved
+PASS JSON roundtrip, local documentation links and whitespace
+PASS git diff --check
+
+Completed: same cubic model/equation/uniqueness; actual coordinate/function-field injections;
+image same F_H and degree |H|; stable-kernel coefficient descent to K; Source37 degree37.
+Contrast: trivial-kernel model discriminant64; cusp has nonsingular generic point,
+degrees2/3 and field generation but discriminant0 and singular origin.
+Remaining: target ellipticity, all-point isogeny, target zero-component transport, hno.
+
+Full/root builds and lake test were not run; user performs the full build.
+Raw logs are temporary under tmp/note032-model; compact evidence is this file and the JSON.

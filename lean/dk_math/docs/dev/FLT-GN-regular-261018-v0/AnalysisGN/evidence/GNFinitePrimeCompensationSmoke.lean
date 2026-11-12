@@ -1,0 +1,77 @@
+import DkMath.Lib.Cosmic.Completion
+
+#print "file: GNFinitePrimeCompensationSmoke"
+
+/-! New local-completion APIs and all 38 previously audited public endpoints. -/
+
+#check DkMath.Lib.NumberTheory.exists_pow_eq_of_dvd_padicValNat
+#check DkMath.Lib.NumberTheory.exists_pow_eq_iff_dvd_padicValNat
+#check DkMath.Lib.NumberTheory.exists_prime_padicValNat_not_dvd
+#check DkMath.Lib.NumberTheory.exists_prime_outside_of_local_power
+#check DkMath.Lib.NumberTheory.not_pow_of_between_consecutive_powers
+#check DkMath.Lib.NumberTheory.pow_sub_one_between
+#check DkMath.Lib.NumberTheory.not_pow_pow_sub_one
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.gap
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.base
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.residual
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.gap_pos
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.prime_dvd_gap
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.not_dvd_base_of_dvd_gap
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.cofactor_valuation
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.prime_mul_residual
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.residual_valuation
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.reconstruction
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.residual_pos
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.not_dvd_residual_of_dvd_gap
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.local_valuation
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.residual_not_pow
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.residual_prime_address
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.primeProduct
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.primeProduct_pos
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.prime_not_dvd_primeProduct
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.small_prime_product_valuation
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.small_prime_dvd_gap
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.small_prime_local_completion
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.small_prime_valuation_exact
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.exists_prime_escape
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.exists_prime_escape_with_address
+#check DkMath.Lib.NumberTheory.PrimePowerCompensation.finite_set_compensation_and_escape
+
+#check DkMath.CosmicFormula.add_pow_eq_prefix_add_xpow_mul_GTail
+#check DkMath.NumberTheory.GapFocusing.GN_succ_right
+#check DkMath.NumberTheory.GapFocusing.dvd_anchor_pow_of_dvd_adjacent_GN
+#check DkMath.Lib.NumberTheory.prod_cyclotomicEval_eq_geomSum
+#check DkMath.CosmicFormula.gcd_GTail_eq_gcd_boundary
+#check DkMath.CosmicFormula.GTail_congr_of_modEq
+#check DkMath.CosmicFormula.pow_dvd_higher_tail
+#check DkMath.CosmicFormula.padicValNat_GTail_eq_zero_of_head_unit_of_prime_dvd_x
+#check DkMath.CosmicFormula.GTail_split_at
+#check DkMath.Algebra.BinomTail.add_pow_tail_exists
+#check DkMath.Lib.Algebra.square_add_band
+#check DkMath.Lib.Cosmic.completion_body_add_gap
+#check DkMath.Lib.Cosmic.powerDifferenceCofactor_add_eq_GTail
+#check DkMath.Lib.Cosmic.powerDifferenceCofactor_symm
+#check DkMath.Lib.Cosmic.signedCompletionDefect_add_cofactor
+#check DkMath.Lib.NumberTheory.gcd_gap_powerDifferenceCofactor_eq_gcd_degree
+#check DkMath.Lib.NumberTheory.coprime_powerDifferenceCofactor_right
+#check DkMath.Lib.NumberTheory.gcd_eq_of_padicValNat_eq_on_support
+#check DkMath.Lib.Cosmic.completionLoan_numerators_add
+#check DkMath.Lib.NumberTheory.padicValNat_split
+#check DkMath.Lib.NumberTheory.padicValNat_choose_prime_pow
+#check DkMath.NumberTheory.GapFocusing.primeRatio_ne_zero
+#check DkMath.NumberTheory.GapFocusing.isRoot_cyclotomic_iff_prime_pow_mul_orderOf
+#check DkMath.NumberTheory.GapFocusing.padicValInt_cyclotomicEval_eq_pow_sub_one_of_orderOf_eq
+#check DkMath.Lib.NumberTheory.padicValNat_pow_sub_pow_of_four_dvd
+#check DkMath.Lib.NumberTheory.primeOrder_eq_one_iff_dvd_gap
+#check DkMath.CFBRC.cyclotomicShiftedEval_eq_cyclotomicEval_div_mul_pow
+#check DkMath.NumberTheory.GapFocusing.map_cyclotomicShiftedEval
+#check DkMath.NumberTheory.GapFocusing.eval_homogenize_zero_second
+#check DkMath.Lib.NumberTheory.map_homogeneousCyclotomicEval
+#check DkMath.Lib.Cosmic.powerDifferenceCofactor_recurrence
+#check DkMath.Lib.Cosmic.completionDefect_pos
+#check DkMath.Lib.Cosmic.completion_pairwise_coprime
+#check DkMath.Lib.NumberTheory.isStrongDvdSequence_powerDifferenceCofactor
+#check DkMath.Lib.NumberTheory.gcd_cofactor_completionDefect
+#check DkMath.Lib.Cosmic.completionLoan_primitive_triple
+#check DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_order_ray
+#check DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_dvd_first_of_dvd_second

@@ -1,0 +1,81 @@
+NOTE-032-002 — 2026-10-25
+Branch: dev/FLT-GN-regular-261018-v0
+Base HEAD: a81c260ec01e6a25747f18cfd613d9f5d12e9559; initially clean.
+
+lake build DkMath.Lib.NumberTheory.ValuationInertiaPower DkMath.Lib.NumberTheory.KummerInertia DkMath.FLT.FreyDyadicNontrivial
+Exit 0. Build completed successfully (4034 jobs). Warnings: 0.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032KummerBoundary.lean
+Exit 0. 4 theorems; exact normal test body elaborated independently.
+
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032DyadicSmoke.lean
+Exit 0. 4 theorems at exponent 37. Same Source and residual point.
+No existence of a Frey Source is asserted; geometric inputs remain explicit.
+
+lake env lean /tmp/Note032DyadicAxioms.lean
+Exit 0. Imports production module, elaborates both evidence proof bodies,
+then prints axioms for 13 production + 4 boundary + 4 smoke declarations.
+'DkMath.Lib.NumberTheory.ValuationInertiaPower.natCast_eq_one_sub_mul_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.ValuationInertiaPower.valuation_sub_one_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.ValuationInertiaPower.inertia_fixed_of_unit_pow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.ValuationInertiaPower.inertia_fixed_of_pow_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.KummerInertia.exists_inertia_ne_of_pow_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.KummerInertia.exists_inertia_ne_of_valuation_pow_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.Lib.NumberTheory.KummerInertia.dvd_depth_of_inertia_fixed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.curve_two_valuation_natCast_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.not_exponent_dvd_curve_two_valuation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.exists_inertia_ne_of_two_depth' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DkMath.FLT.Frey.Source.residual_exists_inertia_ne_of_not_smooth' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_exists_dyadic_inertia_ne_of_geometry' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'DkMath.FLT.Frey.Source.residual_no_cofixed_line_of_dyadic_geometry' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'KummerInertiaTest.nonunit_power_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KummerInertiaTest.odd_residue_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KummerInertiaTest.divisible_depth_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KummerInertiaTest.residue_characteristic_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032DyadicSmoke.source37_depth' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032DyadicSmoke.source37_point_moves' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032DyadicSmoke.source37_no_cofixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Note032DyadicSmoke.source37_irreducible' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Static checks:
+- Forbidden constructs: no sorry, sorryAx, admit, axiom, unsafe, native_decide, FltRegular, P2MW in new Lean code after stripping comments.
+- Every new Lean file has its file marker.
+- All 7 public Lib theorem docstrings have [DkMath.Lib].
+- Lib dependency closure: 9 DkMath nodes, all under DkMath.Lib.
+- 10 prior proof owners and NOTE-032 match baseline HEAD byte for byte.
+- Production and normal test entrance registration: checked statically.
+- Independent boundary body matches normal test except file marker.
+- python3 check_tracker_mismatch.py /tmp/note032-002-modules.log: OK: no mismatches found
+- git diff --check: passed.
+- Full build / root / DkMathTest / lake test builds: user validation split, not run.
+
+Mathematical boundary:
+Kummer arithmetic is proved without regularity assumptions.
+Nontrivial Frey inertia requires C,D, inertia-fixed C.x and an actual point outside E0.
+New conditional hno removes the independent nontrivial-inertia provider;
+geometric suppliers and branch swap remain inputs. Unconditional hno remains open.
+
+Local document links checked: 12.
+JSON round-trip checked.
+New-file whitespace checks: 9 files passed.
+Cached reference SHA256 matches NOTE-032-001 provenance.

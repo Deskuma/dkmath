@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-08",
+  "checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": {
+    "P2M/Sol/S_ValuationSubring_exists_tame_generator_inertiaSubgroupIn.lean": "b87b01d84d9e0c57b58dbe169e02e46b019fae8eea995d37e8b8b45d6d9935f5",
+    "Theorems/Thm_ValuationSubring_exists_forall_tame_generator_inertiaSubgroupIn.lean": "85906e235dc4056135bfaeb90d390da33df4d52ea266ba75923ed6af0bbda7ea"
+  },
+  "comparison": "Read finite-level tame generator proof and its prime-power tail-root hypothesis discharged by an external valuation theorem. External conclusion tau=gamma^j*x^(p^m)*w^(p^m), not an assumed procyclic interface. This cycle does not port generator/tail-root existence, identify W with standard wild inertia, or add hgen/htail. Internally construct all-K finite torsion presentations, actual continuous characters, wild annihilation, SAME J descent and SAME ordinary inflation. Build common finite quotient with open kernel and finite actual inertia detector containing original tau; no singleton/cyclic claim or unconditional hno.",
+  "mathlib_source_sha256": {
+    "Mathlib/RepresentationTheory/Homological/GroupCohomology/LowDegree.lean": "32c37df86754e60d015037a2c7a14df9cd443df67c1831734c7e0d8824e880b8",
+    "Mathlib/GroupTheory/QuotientGroup/Basic.lean": "c2cf8cef6161a1bebaca1bd10e30f79648877f02cc020d0e06645ca6a70b8d65",
+    "Mathlib/SetTheory/Cardinal/Finite.lean": "d0bb8f1f00469a940dcc8ca404a9d4f7157516c40a4d6aa0fbbc622e50c42e94",
+    "Mathlib/GroupTheory/Coset/Card.lean": "d67acfb8198451b8f37d4946a276f5a48d62c6d65689deb82f5030cfa3e829d3"
+  }
+}

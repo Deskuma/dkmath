@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-04",
+  "external_checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "external_head": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": [
+    {
+      "path": "Theorems/Thm_ExtCitation_Cyclotomic_unitsOmegaEigenvector_two_eq_zero_of_local_pow.lean",
+      "git_blob": "a82603e369ac3fc3eb417723eab07c40df9a9183",
+      "sha256": "e77d7852a7e8f4bb67019dc3a60d556f4bbfc8616f8b550d312d9bc9f92633d2",
+      "lines": 17
+    },
+    {
+      "path": "Definitions/Def_ExtCitation_CyclotomicUnits.lean",
+      "git_blob": "cdbd384e3c5e97b446a343e4b6d94eddd5eea50d",
+      "sha256": "6148f89ab6ecd6a48023ee15899e6d0dd62f2540bc9e4f15263334a3438ae2c3",
+      "lines": 68
+    },
+    {
+      "path": "P2M/Sol/S_ExtCitation_Cyclotomic_unitsOmegaEigenvector_two_eq_zero_of_local_pow.lean",
+      "git_blob": "89f85644f3cc853c293396363bd290c9ff81a237",
+      "sha256": "be80447b3f3e8e88aa6118d0c3e9394f22ae01f075331f4d7f9ac6be5da79b48",
+      "lines": 800
+    },
+    {
+      "path": "P2M/Sol/S_ExtCitation_Cyclotomic_finrank_unitsOmegaEigenspace_two.lean",
+      "git_blob": "6801f82a5eec740ce4d5d658b7a1dc35040f2aba",
+      "sha256": "be9ee002a9cb512d08db3dfc71c2da73a909806976316d61f1321993af11b2be",
+      "lines": 996
+    }
+  ],
+  "read_scope": [
+    "public local-power unit vanishing statement",
+    "unit-action and eigenspace definitions",
+    "complete generic local-power-to-cube proof",
+    "ramified-prime and residue-field arguments",
+    "final local-power unit vanishing proof and its named private prerequisites",
+    "rank-one eigenspace proof entry and final solution"
+  ],
+  "proof_path": [
+    "omega-square unit eigenspace dimension one",
+    "nonzero Lambda on the omega-idempotent of the unit 1+zeta",
+    "local pth power implies u^(p-1)-1 in (zeta-1)^3",
+    "Lambda vanishes on that same class",
+    "one-dimensional eigenspace comparison gives the zero class"
+  ],
+  "implemented_this_increment": [
+    "generic local power to cubic congruence, adapted independently of upstream namespaces",
+    "same specified primitive root, ramified ideal, residue size and canonical cubic congruence",
+    "actual DkMath local Kummer kernels and omega-square unit subspace",
+    "conditional nonsplit exclusion and stable complement for the original Frey extension"
+  ],
+  "remaining": [
+    "dimension-one theorem for the actual DkMath unit eigenspace",
+    "truncated logarithm Lambda and its nonzero cyclotomic-unit evaluation",
+    "arithmetic vanishing of the actual DkMath primary omega-square space",
+    "arithmetic class quotient vanishing, resonant absorption, tower iteration"
+  ],
+  "boundary": "Read-only source comparison; the external checkout was not built or imported. No external kernel/axiom audit is claimed. New production declarations are independently checked in DkMath and have their own recursive proof audits; adapted source carries Apache notices and blob provenance."
+}

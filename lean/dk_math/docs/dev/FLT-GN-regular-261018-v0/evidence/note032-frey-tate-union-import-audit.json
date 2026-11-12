@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-06",
+  "new_modules": [
+    "DkMath.Lib.Algebra.CyclicPrimePowerTorsion",
+    "DkMath.FLT.FreyCyclicTateUnion"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.Algebra.CyclicPrimePowerTorsion": {
+      "local_module_count": 1,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclicTateUnion": {
+      "local_module_count": 315,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/Algebra/CyclicPrimePowerTorsion.lean": true,
+    "DkMath/FLT/FreyCyclicTateUnion.lean": true,
+    "DkMathTest/FLT/FreyCyclicTateUnion.lean": true,
+    "DkMathTest/FLT/Note032FreyCyclicTateUnionDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateUnionSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 2,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/Algebra/CyclicPrimePowerTorsion.lean": "81221e38cb0b998be43372204edc709e5f2d32d76b0632e57908cfd61b88038c",
+    "DkMath/FLT/FreyCyclicTateUnion.lean": "2c325131eeea7d3cae2ddcddbd0fcfddf1cbe4a6ca174e5a477f884ed4b0cd88",
+    "DkMathTest/FLT/FreyCyclicTateUnion.lean": "3692af591f02efce50c55b0a42147381daf31c89618449b36a14c37e96db7564",
+    "DkMathTest/FLT/Note032FreyCyclicTateUnionDependencyAudit.lean": "d387145dc08e5f3020399455451d79637f835f6bd87404eb29aaff4020e29dec",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateUnionSmoke.lean": "9743b507b742108686180b659bcacae7419b22f431198f560c427233bce8b49e"
+  },
+  "boundary": "Comment-aware local source/import audit only. Finite cyclic kernel cardinality identifies lower p-power torsion with SAME contained lower stage. ALL p^(n+1)-torsion WITHIN SAME union U equals SAME K_n, not all ambient torsion. Standard Tate p U naturally identifies linearly with SAME prior rank-one line, preserves ambient inclusion and SAME Galois scalar action. Original generator sequence is not p-multiple in full Tate module, with no ambient rank hypothesis. SAME hclass and uniform ALL-stage hbad retained. Ambient rank two, basis extension, Weil pairing and final arithmetic contradiction unfinished. General hno unfinished. Lean recursive and input audits separate."
+}

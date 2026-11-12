@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-04",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.KummerLocalPrimaryUnit",
+    "DkMath.Lib.NumberTheory.CyclotomicPrimaryUnitSpace",
+    "DkMath.Lib.NumberTheory.CyclotomicPrimaryCongruence",
+    "DkMath.FLT.FreyCyclotomicConditionalSplit"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.NumberTheory.KummerLocalPrimaryUnit": {
+      "local_module_count": 1,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.CyclotomicPrimaryUnitSpace": {
+      "local_module_count": 28,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.CyclotomicPrimaryCongruence": {
+      "local_module_count": 29,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclotomicConditionalSplit": {
+      "local_module_count": 283,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/NumberTheory/KummerLocalPrimaryUnit.lean": true,
+    "DkMath/Lib/NumberTheory/CyclotomicPrimaryUnitSpace.lean": true,
+    "DkMath/Lib/NumberTheory/CyclotomicPrimaryCongruence.lean": true,
+    "DkMath/FLT/FreyCyclotomicConditionalSplit.lean": true,
+    "DkMathTest/FLT/FreyCyclotomicConditionalSplit.lean": true,
+    "DkMathTest/FLT/Note032CyclotomicConditionalSplitDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicConditionalSplitSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 3,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/NumberTheory/KummerLocalPrimaryUnit.lean": "aed835d0a21bc6a91b3589ad63767f70e3691f9aeaa170f1b55d1470477e4cb9",
+    "DkMath/Lib/NumberTheory/CyclotomicPrimaryUnitSpace.lean": "ef427bd40fce6d394719c6ac5ff09eec770af6838a225cae6e1afce2790c212e",
+    "DkMath/Lib/NumberTheory/CyclotomicPrimaryCongruence.lean": "d94176212e334b43ab5b40441ff60ddc8e809125c20476e6f1cecd87c737f451",
+    "DkMath/FLT/FreyCyclotomicConditionalSplit.lean": "82163a97c418e264bfe37b4a79a9a42df55e05dfcab1e4a201b28a48644cc404",
+    "DkMathTest/FLT/FreyCyclotomicConditionalSplit.lean": "6acd5fd7dd0095937598d2f644375afd4ee3528564bed093d39e69364797810a",
+    "DkMathTest/FLT/Note032CyclotomicConditionalSplitDependencyAudit.lean": "e0e445878bd84354c1840b49ef059027c872b3486f89d9cfe575da2e6862294a",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicConditionalSplitSmoke.lean": "1903e0601f8fd80740c0ecd91d0668e2a95287f4e6be0731ec4d9ecbedef200b"
+  },
+  "boundary": "Syntactic local import (excluding Lean comments), marker, source and full textbook-copy checks. Recursive Lean proof/type/constructor and input audits are separate. Actual local pth powers imply the same-unit cubic congruence at the same primitive-root prime; the local-power kernel and actual omega-square unit subspace are defined. Conditional nonsplit exclusion internally supplies v,P,hsurj and produces a stable complement of the same Frey extension while retaining the exact hbad,hclass,hunit hypotheses. Arithmetic unit/class vanishing, resonant absorption and cyclic tower iteration remain unproved; general hno is unfinished. Upstream source fingerprints and comparison scope are recorded separately; no upstream theorem is imported."
+}

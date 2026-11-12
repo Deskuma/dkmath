@@ -1,0 +1,103 @@
+NOTE-018 verification evidence — 2026-10-21
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Focused geometry and pairing connection:
+  lake build DkMath.Lib.NumberTheory.EllipticTorsionWeilDeterminant DkMath.Lib.NumberTheory.EllipticMultiplicationSurjective
+  exit 0; Build completed successfully (2869 jobs).
+  Actual prime torsion and same Galois action; explicit WeilPairingData input retained.
+  Basis pairing value is primitive and determinant is cyclotomic conditional on this input.
+  Nonzero natural multiplication is surjective for actual characteristic-zero elliptic curves,
+    independently of any pairing input, including composite n.
+
+Focused regression:
+  lake build DkMathTest.FLT.FreyResidualCyclotomic
+  exit 0; Build completed successfully (3199 jobs).
+  17 named declarations including concrete plane, area pairing, diagonal maps and representation.
+  Nontrivial F37^2 diagonal representation: area equivariance and nondegeneracy determine determinant.
+  Zero pairing counterexample: equivariance alone does not determine determinant character.
+  Actual cyclotomic root action and ZMod scalar-power conversion checked at p=37.
+  Actual Source 2 curve: multiplication by 37 and 4 surjective; multiplication by 0 not surjective.
+  Actual E[37] determinant and primitive basis value retain explicit WeilPairingData input.
+  Source 37 determinant entry also retains this input; no existence of Source 37 assumed globally.
+
+Dependency audit:
+  lake build DkMathTest.FLT.Note018DependencyAudit
+  exit 0; Build completed successfully (3200 jobs).
+  37 public named production declarations (including structures and instance).
+  17 regression declarations; 18 selected type-and-opaque-body dependency traversals.
+  Allowed axioms: propext, Classical.choice, Quot.sound only.
+  Conditional determinant paths require pairing data, nondegeneracy, equivariance and general alternating algebra.
+  Unconditional cyclotomic character and multiplication-surjectivity paths forbid pairing-data dependencies.
+  Forbidden: sorryAx, external FltRegular/P2MW/P2M/FreyPackage, FLT endpoints,
+    Herbrand/Ribet, listed global regularity providers and old conditional cardinality/rank providers.
+  Library-only selected routes also forbid all DkMath.FLT dependencies.
+  This audit does not prove existence of the explicit pairing input.
+
+Integrated entrances:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11583 jobs).
+  All 9 new source/test modules reached with matching file markers.
+  No warnings/errors in those 9 modules; historical warnings in other modules remain.
+
+Root smoke:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE018.lean
+  exit 0; import DkMath exposes all new public interfaces.
+  Includes unconditional root cardinality and composite multiplication surjectivity,
+    conditional arbitrary-root action and conditional Source 37 determinant.
+  Printed axiom sets: propext, Classical.choice, Quot.sound only.
+
+Direct suite entrance:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest
+
+Markers and hygiene:
+  python3 check_tracker_mismatch.py /tmp/note018-full.log
+  exit 0; OK: no mismatches found.
+  Static check: 9 source/test markers and root smoke marker follow imports and match paths.
+  No sorry/admit/native_decide/unsafe/implemented_by or custom axiom declarations in those 10 files.
+  No trailing whitespace in those 10 files.
+  git diff --check: exit 0.
+
+Scope:
+  7 production modules, 502 lines including Japanese textbook comments; 37 named declarations.
+  Actual mod p cyclotomic character constructed without a primitive-root choice.
+  Multiplicative pairing values are translated to Additive rootsOfUnity and ZMod bilinear maps.
+  General determinant theorem uses alternation and nondegeneracy, including characteristic 2.
+  Actual WeilPairingData is a supply contract, not a constructed geometric pairing.
+  No unconditional determinant-cyclotomic theorem for actual E[37] or general Frey Source yet.
+  Stable-line adapted matrices are upper triangular; diagonal product is determinant and,
+    conditional on pairing, cyclotomic. Separate diagonal characters not constructed in this increment.
+  Weil geometry, Mazur-type irreducibility, inertia, Artin conductor and FLT closure remain separate.
+
+Reference checks (read, not copied/imported): anthropics/fermats-last-theorem
+  S_WeierstrassCurve_exists_pairing_torsionBy.lean: 89 lines, blob 54e84fd2cf33c04f0db723f5289f87f7d19b2573
+  S_WeierstrassCurve_apply_eq_pow_det_galoisRep_of_pow_eq_one.lean: 123 lines, blob 61485795881143ba3b2aee16c237c67dba373734
+  Def_EllipticCurve_WeilPairingFun.lean: 70 lines, blob 87db2103488123818b08bf0d9302badff87ac510
+  S_WeierstrassCurve_Affine_CoordinateRing_isDedekindDomain.lean: 188 lines, blob 08c1b731e747c7eab951239a306657dac633d42f
+  S_WeierstrassCurve_Affine_weilPairing0_galois.lean: 233 lines, blob cc05c14d0a942efea28586bee5cc9b8d1bea7c41
+  Local source search: no corresponding CoordinateRing.isDedekindDomain, weilFun, weilPairing0,
+    transEquiv definitions or valuation_weilFun implementation in DkMath/current Mathlib elliptic sources.
+  No external code was copied or imported in this increment; existing Mathlib APIs were reused.
+
+Audit output:
+PASS: 37 production and 17 regression declarations; standard logical axioms only.
+PASS: DkMath.Lib.RepresentationTheory.alternating_map_eq_det_smul; 14769 reachable constants; expected providers present.
+PASS: DkMath.Lib.RepresentationTheory.determinantCharacter_eq_of_equivariant_pairing; 14871 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicRootModule.cyclotomicCharacter; 28162 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicRootModule.cyclotomicCharacter_spec; 28166 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.RootPairing.rootForm; 2689 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.RootPairing.determinant_eq_cyclotomic_of_pairing; 30830 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weil_basis_isPrimitiveRoot; 28670 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsion_determinant_eq_cyclotomic_of_pairing; 35743 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsion_apply_eq_pow_det_of_pairing; 35744 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.residual_determinant_eq_cyclotomic_of_pairing; 35802 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.residual_stable_line_diagonal_product_of_pairing; 35811 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.multiplication_surjective; 27409 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.residual_curve_multiplication_surjective; 30692 reachable constants; expected providers present.
+PASS: FreyResidualCyclotomicTest.diagonal_determinant; 15318 reachable constants; expected providers present.
+PASS: FreyResidualCyclotomicTest.degenerate_pairing_does_not_determine_character; 15322 reachable constants; expected providers present.
+PASS: FreyResidualCyclotomicTest.actual37_determinant_of_pairing; 35820 reachable constants; expected providers present.
+PASS: FreyResidualCyclotomicTest.actual4_multiplication_surjective; 30706 reachable constants; expected providers present.
+PASS: FreyResidualCyclotomicTest.zero_multiplication_not_surjective; 24175 reachable constants; expected providers present.

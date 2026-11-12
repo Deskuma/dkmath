@@ -1,0 +1,172 @@
+{
+  "unit": "NOTE-032-NODAL-ORBIT-COLLISION",
+  "date": "2026-10-27",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "bb59b81de5daebe9e206959efb7728844080349c",
+  "status": "arbitrary-characteristic nodal cyclic coordinate sums and actual quotient transport at reduction collisions; noncollision integral specialization to the same quotient residue model remains open",
+  "production": {
+    "owners": 3,
+    "theorems": 16,
+    "definitions": 0
+  },
+  "regression": {
+    "theorems": 7,
+    "definitions": 1
+  },
+  "smoke_theorems": 2,
+  "axiom_audit": {
+    "declarations": 26,
+    "batches": [
+      14,
+      10,
+      2
+    ],
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "sorryAx": false
+  },
+  "checks": [
+    {
+      "command": "./lean-build.sh DkMath.Lib.NumberTheory.WeierstrassNodalOrbit",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMath.FLT.FreyFiniteKernelCollision",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMathTest.Lib.NumberTheory.WeierstrassNodalOrbit",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelCollision",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032NodalOrbitCollisionSmoke.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "1c92669c90d6da246f5be364db0c569260458bdde0899122323bf4bf47b7e918"
+    },
+    {
+      "command": "lake env lean tmp/note032-nodal-orbit/Axioms1.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "b60426484d204111d30ab277d338074cb8fd7de36bc73cfed15811ca3815e640"
+    },
+    {
+      "command": "lake env lean tmp/note032-nodal-orbit/Axioms2.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "738275fdfda4cb8884ab58d70aeaf7f80d1fbb329998d5c26f7cd16cd4c0de1a"
+    }
+  ],
+  "files": [
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassNodalOrbit.lean",
+      "sha256": "a2d6aa0a74b6ea5431e8294959383c1b4e30cad7fb35a8f8cb93792a9cc54d30",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.WeierstrassNodalOrbit.root_power_sum",
+        "DkMath.Lib.NumberTheory.WeierstrassNodalOrbit.orbit_x_sum",
+        "DkMath.Lib.NumberTheory.WeierstrassNodalOrbit.tc_injective",
+        "DkMath.Lib.NumberTheory.WeierstrassNodalOrbit.nsmul_eq_zero_iff",
+        "DkMath.Lib.NumberTheory.WeierstrassNodalOrbit.nsmul_eq_zero_iff_mem_zmultiples",
+        "DkMath.Lib.NumberTheory.WeierstrassNodalOrbit.translated_x_sum",
+        "DkMath.Lib.NumberTheory.WeierstrassNodalOrbit.translated_x_sum_nsmul",
+        "DkMath.Lib.NumberTheory.WeierstrassNodalOrbit.normalized_x_sum"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelCollision.lean",
+      "sha256": "f2063901fa6660e922fbe3504b509e4c32a0b0a99c6a6b55badba8d9ef4f6bfa",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.WeierstrassModelReduction.smooth_add_of_model",
+        "DkMath.Lib.NumberTheory.WeierstrassModelReduction.modelReduce_add",
+        "DkMath.Lib.NumberTheory.WeierstrassModelReduction.modelReduce_sub",
+        "DkMath.Lib.NumberTheory.WeierstrassModelReduction.modelReduce_eq_zero_iff",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_of_reduce_zero",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_of_reduction_collision"
+      ]
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelCollision.lean",
+      "sha256": "0b37a758e195f51f5472794a190f5e173dc5f811fa61a631a16a37980559909d",
+      "public_declarations": [
+        "DkMath.FLT.Frey.Source.residual_pointHom_of_reduction_collision",
+        "DkMath.FLT.Frey.Source.residual_integer_pointHom_smooth_of_reduction_collision"
+      ]
+    },
+    {
+      "path": "DkMathTest/Lib/NumberTheory/WeierstrassNodalOrbit.lean",
+      "sha256": "4981ff627879cec162d24497f093d119bf945fb5b1888b1484467f43d971b7ce",
+      "public_declarations": [
+        "WeierstrassNodalOrbitTest.rootPoint",
+        "WeierstrassNodalOrbitTest.actual_orbit",
+        "WeierstrassNodalOrbitTest.actual_collision",
+        "WeierstrassNodalOrbitTest.characteristic_two_actual_orbit",
+        "WeierstrassNodalOrbitTest.characteristic_three_actual_orbit"
+      ]
+    },
+    {
+      "path": "DkMathTest/Lib/NumberTheory/EllipticFiniteKernelCollision.lean",
+      "sha256": "072410f8445108916174297c02e168e76a5faa678f60acdc11153c128edc917d",
+      "public_declarations": [
+        "EllipticFiniteKernelCollisionTest.actual_collision_image",
+        "EllipticFiniteKernelCollisionTest.exists_actual_collision_outside_kernel",
+        "EllipticFiniteKernelCollisionTest.exists_actual_collision_image"
+      ]
+    },
+    {
+      "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032NodalOrbitCollisionSmoke.lean",
+      "sha256": "4cce3515065c2b6d65b9f70cf34bb8b163872030d2ea692a80301beef0edbfad"
+    }
+  ],
+  "static_checks": [
+    "five production/test file markers match paths",
+    "Lib public textbook docstrings include promotion markers",
+    "no forbidden proof constructs or raised heartbeat limits",
+    "Lib has no FLT or external-solution imports",
+    "five facade imports registered exactly once; no facade build",
+    "only three facade files and three documentation files changed among tracked files; prior mathematical owners, NOTE and evidence unchanged",
+    "index unchanged",
+    "git diff HEAD --check passed; new Lean files have no trailing whitespace"
+  ],
+  "provenance": {
+    "upstream_path": "P2M/Sol/S_cyclotomic_velu_xLaw.lean",
+    "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_cyclotomic_velu_xLaw.lean",
+    "blob": "3070fac325fbd76952d37b988b13682b20dcadb4",
+    "verified_blob": true,
+    "license": "Apache-2.0 for adapted finite sum owner; existing license and notices referenced",
+    "adaptation": "finite geometric sums and root power sums generalized to arbitrary order and characteristic; actual point connection uses existing DkMath Frame and tc; collision proof reconstructed from existing DkMath homomorphism and formal-neighborhood APIs"
+  },
+  "remaining": [
+    "noncollision integral point specialization to same quotient residue model",
+    "whole zero-component transport and reduction square in smooth kernel branch",
+    "inverse-image zero-component criterion",
+    "exact discriminant depth",
+    "q=p",
+    "scheme isogeny",
+    "arithmetic exclusion of target rational torsion",
+    "general hno"
+  ],
+  "scope_notes": [
+    "nodal orbit sums retain same Frame and actual P,Q, but have not yet been identified with reduction of actual general-fiber quotient coordinates",
+    "collision theorem requires an actual Q in same H, source smoothness of P and Q, and equal reductions",
+    "Source integer endpoint retains stability and q distinct from p; no literal identification of integer and valuation-target residue points is claimed"
+  ],
+  "full_build": {
+    "performed": false,
+    "reason": "user handles full build and full tests"
+  }
+}

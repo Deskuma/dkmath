@@ -1,0 +1,135 @@
+{
+  "unit": "NOTE-032-NONCOLLISION",
+  "date": "2026-10-27",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "bf8cb28597673d51ccc48647f989a942cd8a64c1",
+  "status": "same quotient X,Y integral and their reductions equal normalized sums over the same reduced smooth kernel; prime-order nodal X reduction expressed via the same source point multiplied by n; target nonsingularity remains open",
+  "production": {
+    "owners": 2,
+    "theorems": 10
+  },
+  "regression": {
+    "theorems": 4
+  },
+  "smoke_theorems": 1,
+  "axiom_audit": {
+    "declarations": 15,
+    "batches": [
+      10,
+      4,
+      1
+    ],
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "sorryAx": false
+  },
+  "checks": [
+    {
+      "command": "./lean-build.sh DkMath.Lib.NumberTheory.EllipticFiniteKernelNoncollision",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMath.FLT.FreyFiniteKernelNoncollision",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNoncollision",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032NoncollisionSmoke.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "101134732aa903dffc7fb914b8faf13b696aeae210a62ffcd701d63635a115eb"
+    },
+    {
+      "command": "lake env lean tmp/note032-noncollision/Axioms1.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "9715343d7f5c659aa828893b11e4944b378967a499ba9b0758ddbc7997290df7"
+    },
+    {
+      "command": "lake env lean tmp/note032-noncollision/Axioms2.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "0ff4720b46c584d2db135c9da74c99e22b1adfc4873d62c9b19221ccdabff37c"
+    }
+  ],
+  "files": [
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelNoncollision.lean",
+      "sha256": "82b35ff8afb2be265c49cba9c8e7d5e1f7aa876361316687fa28630c96889ce9",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.WeierstrassModelReduction.modelReduce_coordinates_of_ne_zero",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.not_mem_of_reduction_noncollision",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.translated_reduction_ne_zero",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.translated_coordinates_mem",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.translated_coordinates_residue",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelAt_coordinates_mem",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelAt_coordinates_residue",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt_residue_nodal_orbit",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt_residue_nodal_prime"
+      ]
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelNoncollision.lean",
+      "sha256": "59454d8a33f65b44c6ed94f4fe71fc3c9ea254e315849c803176033d9d4e44d5",
+      "public_declarations": [
+        "DkMath.FLT.Frey.Source.residual_kernelXAt_nodal_of_noncollision"
+      ]
+    },
+    {
+      "path": "DkMathTest/Lib/NumberTheory/EllipticFiniteKernelNoncollision.lean",
+      "sha256": "5bf40322d2dfe6b676086fe3eb426737149a88ba86a73db6c49a2636e4c90987",
+      "public_declarations": [
+        "EllipticFiniteKernelNoncollisionTest.smooth_at_fortySeven_of_x_one",
+        "EllipticFiniteKernelNoncollisionTest.noncollision_of_x_one",
+        "EllipticFiniteKernelNoncollisionTest.actual_noncollision_coordinates",
+        "EllipticFiniteKernelNoncollisionTest.actual_noncollision_residue"
+      ]
+    },
+    {
+      "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032NoncollisionSmoke.lean",
+      "sha256": "bf4eacc0bd498ed5097fa1026cb76e3c325154e930c406be36abba1f4954392b"
+    }
+  ],
+  "static_checks": [
+    "three production/test file markers match paths",
+    "Lib public textbook docstrings include promotion markers",
+    "no forbidden proof constructs or raised heartbeat limits",
+    "Lib has no FLT or external-solution imports",
+    "three facade imports registered exactly once; no facade build",
+    "only three facade and three documentation files changed among tracked files; previous mathematical owners and evidence unchanged",
+    "index unchanged",
+    "git diff HEAD --check passed; new Lean files have no trailing whitespace"
+  ],
+  "scope_notes": [
+    "noncollision theorem retains source smoothness and smooth reduction of every actual kernel point",
+    "prime nodal formula constructs the same kernel enumeration and primitive root from its prime cardinality and injective reduction",
+    "Frey source theorem retains L inside E0, q distinct from p, source Frame, distinct tangent directions and noncollision",
+    "no claim that the reduced quotient coordinates are nonsingular on the target"
+  ],
+  "remaining": [
+    "identify target residue node center with the constant in the X formula",
+    "prove noncollision image nonsingularity and whole smooth-kernel E0 transport",
+    "reduction point square and inverse-image criterion",
+    "exact discriminant depth",
+    "q=p",
+    "scheme isogeny",
+    "arithmetic exclusion of target rational torsion",
+    "general hno"
+  ],
+  "full_build": {
+    "performed": false,
+    "reason": "user handles full build and full tests"
+  }
+}

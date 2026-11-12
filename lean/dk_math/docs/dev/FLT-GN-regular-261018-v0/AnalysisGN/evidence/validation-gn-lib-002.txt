@@ -1,0 +1,67 @@
+GN-LIB-002 verification — 2026-10-23
+
+Branch: lib/FLT-GN-Completion-261023-v0
+Base HEAD: 46395439edf5f31729a3f648f9378bc75b2e8eef
+Lake cwd: lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Owner: DkMath.Lib.Cosmic.CompletionCoprime
+13 public declarations with [DkMath.Lib] docstrings and a matching file marker.
+19 regression examples; transitive axiom check for all 13 declarations.
+Allowed axioms only: propext, Classical.choice, Quot.sound.
+Owner local dependency closure: 3 Lib modules; no application edges or cycles.
+All original 24 input material hashes are unchanged.
+
+Executed validation:
+
+owners:
+  lake build DkMath.Lib.Cosmic.CompletionCoprime
+  exit 0; 1148 jobs
+
+regression:
+  lake build DkMathTest.Lib.Cosmic.CompletionCoprime
+  exit 0; 1149 jobs
+
+libraries:
+  lake build DkMath.Lib DkMath DkMathTest
+  exit 0; 11794 jobs
+
+test_root:
+  lake env lean DkMathTest.lean
+  exit 0
+
+lib_smoke:
+  lake env lean /tmp/GNLib002LibSmoke.lean
+  exit 0
+
+root_smoke:
+  lake env lean /tmp/GNLib002RootSmoke.lean
+  exit 0
+
+Both public smoke inputs import one facade and #check all 13 full names.
+Elaborated signatures are retained in gn-lib-002.json.
+New regression warnings: 0. New production warnings: 0.
+Library warnings: five existing sorry declarations, outside the new declaration closures.
+  warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+  warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+  warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+  warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+  warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+
+Tracker checks (exit 0, no mismatches):
+  python3 check_tracker_mismatch.py /tmp/gn-lib-002-owner.log
+  python3 check_tracker_mismatch.py /tmp/gn-lib-002-regression.log
+
+DkMath.Lib.lean imports the owner once; DkMath already imports DkMath.Lib.
+DkMathTest.lean registers the regression. Its root was checked directly,
+because the registered DkMathTest library uses child-module globs.
+No Completion facade or Lake configuration changes.
+
+Static closeout: git diff --check; changed/new text whitespace and relative links;
+module markers; no sorry/sorryAx/native_decide or axiom/unsafe declarations
+in the new owner or regression.
+
+Scope: Nat completion arithmetic, primitive coprimality, prime support and
+the existing power-valuation specialization. No primality construction,
+Cofixed/hno provider, or general FLT closure.

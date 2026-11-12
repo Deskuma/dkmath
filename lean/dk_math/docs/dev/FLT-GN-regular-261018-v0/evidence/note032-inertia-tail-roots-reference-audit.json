@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-08",
+  "checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": {
+    "P2M/Sol/S_ValuationSubring_exists_mem_inertiaSubgroupIn_pow_eq_of_forall_apply_eq.lean": "2c082725e35f481433429f13825da019adfeb63829a5ec969687926f0931cc97"
+  },
+  "read_sections": "WCOTTameU closure and fixing field, WCOTTameUI inertia closedness, WCOTTameJ finite quotient/Cauchy/Kummer and compact inverse-limit roots, WCOTTameGen exists_mem_Iner_pow_eq, solution all-radical fixation.",
+  "adaptation": "Four Lib modules adapt the closed inertia/Kummer/compact roots pipeline. Actual Qbar tail endpoints internally supply all finite-overfield exact roots and primitive root. Root additionally retains membership in same tail fixing subgroup. One FLT module consumes actual existing common quotient exponent to kill all-radical-fixing tail, evaluations and finite torsion differences. No external P2M/P2MW imports.",
+  "remaining": "Finite-stage correction decomposition and ker chi_(n+3) <= ker common projection are not proved. No common quotient cyclicity or unconditional general hno.",
+  "notices": {
+    "DkMath/Lib/NumberTheory/RegularKummer/LICENSE": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+    "DkMath/Lib/NumberTheory/RegularKummer/ANTHROPIC-NOTICE": "42b1821f19a6aaa25e6811d22ab8f2fdc6433d4a37bc810b1cfafa5b6dd6b0b6"
+  }
+}

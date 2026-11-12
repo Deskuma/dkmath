@@ -1,0 +1,93 @@
+NOTE-031-002C1 verification evidence — 2026-10-22 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Completed scope:
+  Pointwise smooth residue condition, with infinity/nonintegral-coordinate branches retained.
+  Same-model prime-to-residue-characteristic torsion congruence injectivity at a smooth point.
+  Actual inertia fixedness of the same E[n] point, via coordinate congruence and difference-point integrality.
+  Same Frey Source supplies model equality and unit exponent at every q!=p.
+  Previous good-reduction public APIs preserved as specializations.
+  No Source/common-factor/orientation/curve/point replacement.
+
+Remaining scope:
+  Critical centres, branches and depth comparison for points reducing to the singular point.
+  Discriminant p-divisibility to full multiplicative-reduction inertia fixedness.
+  Zero-component subgroup/submodule construction, full point-reduction homomorphism.
+  031-002C and 031-002 overall remain incomplete; 031-003 through 005, hcases/hno and general FLT remain separate.
+
+Regressions:
+  Actual curve y^2+xy=x^3+4x^2+x, discriminant 225, c4=241.
+  Over ZMod 3: discriminant zero, c4 nonzero, (0,0) smooth, (2,2) on the curve and singular.
+  Same actual E[2] point (0,0) nonzero; new theorem proves fixedness at every inertia over 3.
+  Point (-4,2) fails SmoothCoordinates at every valuation subring of Qbar over 3.
+  Same Source 37 at bad prime 3: c4 valuation one and same smooth residual point fixed.
+  No Source 37/counterexample existence or full residual fixedness asserted.
+
+Source provenance:
+  Read-only upstream source cache from NOTE-031-002A, no new remote fetch in this step.
+  Definition/basic smooth-reduction lemmas adapted in the existing Apache-2.0 separation module.
+  Same-model inertia proof reconstructed with DkMath torsion integrality.
+  Outside-zero-component assembly inspected for remaining dependencies, not ported.
+  Blob/path/sections recorded in upstream-note031-002C1.json; LICENSE/NOTICE retained.
+
+Focused build:
+  lake build DkMathTest.FLT.Note031SmoothReductionDependencyAudit DkMathTest.FLT.Note031GoodReductionDependencyAudit
+  exit 0; Build completed successfully (3188 jobs).
+  12 new production and 8 regression declarations: standard logical axioms only.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Eight new type/opaque-body graph checks and three public-input checks passed.
+  Actual pointwise smoothness, chord pole, difference torsion integrality, inertia residue kernel,
+    same-Source model/unit data and concrete singular boundary all required on applicable paths.
+  No hgood/hfix/hinj/hcases/hno inputs in the new smooth path.
+  Forbidden graph: sorryAx, old FLT endpoints, external FltRegular/P2M/P2MW/FreyPackage,
+    Kummer, RegularKummer, FoldedValuationOrbit.
+  Neutral library/concrete-boundary roots additionally forbid DkMath.FLT dependencies.
+  Previous good-reduction audit also passed: 10 production/10 regression declarations,
+    eight graph and three input checks; two required-provider names updated to shared smooth lemmas.
+
+Facade/root/test build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11723 jobs).
+  New code: no warnings or errors.
+  Five existing unrelated broad-root sorry warnings:
+    DkMath/CosmicFormula/TriominoFLT.lean:1919:6
+    DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6
+    DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8
+    DkMath/NumberTheory/GcdNextResearch.lean:850:6
+    DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8
+
+Entrance checks:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest; no warnings/errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE031SmoothReduction.lean
+  exit 0; four endpoints checked through import DkMath, standard-only Frey axiom print,
+    same Source 37 actual point fixed under explicit smoothness; no warnings/errors.
+  python3 check_tracker_mismatch.py /tmp/note031-002C1-full.log
+  exit 0; OK: no mismatches found.
+
+Static checks:
+  11 changed/new Lean files (six modified, five new).
+  Exact file markers, public textbook docstrings, final newlines, tabs/trailing spaces: PASS.
+  All 12 new production and 8 regression declarations listed in axiom audit: PASS.
+  No sorry/admit/native_decide/custom axiom/opaque/unsafe in checked Lean files.
+  No Lib-to-FLT imports; upstream LICENSE/NOTICE exists.
+  git diff --check: exit 0.
+
+This records the checked new paths and scope; it does not assert whole-repository axiom freedom.
+Disposable raw logs: /tmp/note031-002C1-{focused,full,entrance,smoke}.log.
+
+Compact new audit output:
+  PASS: 12 production and 8 regression declarations; standard logical axioms only.
+  PASS: DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation.notMem_nonunits_of_sub_negY_mem_nonunits_of_smooth; 16246 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticGoodReductionSeparation.slope_notMem_of_sub_mem_nonunits_of_smooth; 16272 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticGoodReductionInertia.torsion_eq_of_coordinate_congruence_of_smooth; 26738 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticSmoothReductionInertia.fixed_of_inertia_of_smooth_reduction; 28023 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.residual_fixed_of_smooth_reduction; 28218 reachable constants; expected providers present.
+  PASS: FreySmoothReductionInertiaTest.smooth_fixed_at_bad_three; 28229 reachable constants; expected providers present.
+  PASS: FreySmoothReductionInertiaTest.singular_coordinates_excluded; 15961 reachable constants; expected providers present.
+  PASS: FreySmoothReductionInertiaTest.source37_bad_smooth_fixed; 31744 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticGoodReductionInertia.torsion_eq_of_coordinate_congruence_of_smooth; explicit arithmetic guards and remaining inputs retained.
+  PASS: DkMath.Lib.NumberTheory.EllipticSmoothReductionInertia.fixed_of_inertia_of_smooth_reduction; explicit arithmetic guards and remaining inputs retained.
+  PASS: DkMath.FLT.Frey.Source.residual_fixed_of_smooth_reduction; explicit arithmetic guards and remaining inputs retained.

@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-09",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "reference_sha256": {
+    "P2M/Sol/S_groupCohomology_map_delta_eq_delta_map.lean": "096c0bf36dcdee1e5fec24576a73075ff22c930c1d10e9e6c5a453acd93ebe9e"
+  },
+  "review_sha256": "38f39195745b5607c341f6c30c7d1dab3d6fb1eead4e5f3e364444114787644c",
+  "comparison": "Explicit original D coefficient sequence and delta0 cocycle; restriction along actual inertia inclusion recovers same original class. No general higher-degree naturality port or external imports.",
+  "boundary": "Sign criterion is iff only. D lift requires explicit original kernel invariance hD, derived hz retained throughout. Neither hD nor global Selmer/class vanishing nor unconditional hno is supplied."
+}

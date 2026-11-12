@@ -1,0 +1,462 @@
+{
+  "unit": "NOTE-032-LOCAL-VALUATION",
+  "date": "2026-10-26",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "80f38a06aea1123419381ef6c5bf8bc29a62c7c9",
+  "status": "same all-point function and same function-field pullback preserve normalized valuations at every source point, including H and infinity; target orbit-product order formula proved at every image point without a local-comparison or ramification provider; global principal-divisor pushforward and additivity remain open",
+  "production": [
+    {
+      "path": "DkMath/Lib/NumberTheory/DiscreteValuationPullback.lean",
+      "sha256": "572e042412981fbecf6a623283e725647be399a727e47c99f0849d6cca140c89",
+      "theorems": [
+        "map_le_of_mem_pow",
+        "map_le_of_le",
+        "map_eq_one_of_eq_one",
+        "exists_pos_order_scaling"
+      ],
+      "definitions": [],
+      "lines": 120
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/DedekindLocalParameter.lean",
+      "sha256": "5dbd9a188ed3bb82efa81bd657e51c7fe532b283c7c9e5ebbe0897c0a4bf1c2a",
+      "theorems": [
+        "exists_parameter"
+      ],
+      "definitions": [],
+      "lines": 59
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassFinitePlace.lean",
+      "sha256": "870fba523f875724f76ab6a8cb17c75f1aa6d407b4edd04a53a286403e05fca9",
+      "theorems": [
+        "finiteEval_mk",
+        "finiteEval_of_mem",
+        "mem_finitePlace_iff",
+        "modelPointValuation_zero",
+        "modelPointValuation_of_ne_zero",
+        "coordinateEval_congr",
+        "coordinateEval_center"
+      ],
+      "definitions": [
+        "finitePlace",
+        "finiteEval",
+        "modelPointValuation"
+      ],
+      "lines": 147
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassPolePullback.lean",
+      "sha256": "3625f8c79c417c1de6d0a61206826340ddfb18f1e2755a8043810be6c4fe3906",
+      "theorems": [
+        "coordinateEval_valuation_infty",
+        "functionPull_valuation_infty"
+      ],
+      "definitions": [],
+      "lines": 80
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelLocalTransport.lean",
+      "sha256": "9e199498f1fd7718a05cc9083e9b13ab28bcd2736e4cdc8b52c87843c1005f41",
+      "theorems": [
+        "kernelModelPull_algebraMap",
+        "kernelModelCoordinateHom_congr",
+        "kernelModelPull_center",
+        "exists_pos_kernel_order_scaling",
+        "exists_pos_kernel_norm_order_formula"
+      ],
+      "definitions": [
+        "kernelImagePlace",
+        "kernelImageValuation"
+      ],
+      "lines": 129
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelUnramified.lean",
+      "sha256": "2ac314bdafde8f8431c088091d662dba55caf0fa795ec0da3dd1b9cecb5715c6",
+      "theorems": [
+        "exists_orbit_parameter",
+        "exists_kernel_pull_uniformizer",
+        "kernelModelPull_order_eq",
+        "kernelModelPull_valuation_eq",
+        "kernelModelNorm_order_eq"
+      ],
+      "definitions": [],
+      "lines": 116
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelValuation.lean",
+      "sha256": "fa13e52da6aae45d6d8acbb57907489bd7dc171afa494741b6cb2f0648d9cc7a",
+      "theorems": [
+        "kernelModelPull_valuation_of_mem",
+        "kernelTargetValuation_zero",
+        "kernelTargetValuation_image_of_not_mem",
+        "kernelModelPull_valuation_all",
+        "kernelModelNorm_order_all"
+      ],
+      "definitions": [
+        "kernelTargetValuation"
+      ],
+      "lines": 94
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelValuation.lean",
+      "sha256": "9d8065ca4146be9ac00e3b7c10454a88801c7a14e7d342aa9e62a2e563d8093a",
+      "theorems": [
+        "residual_kernel_model_pull_valuation_all",
+        "residual_kernel_model_norm_order_all"
+      ],
+      "definitions": [
+        "residualKernelTargetValuation",
+        "residualKernelModelNorm"
+      ],
+      "lines": 78
+    }
+  ],
+  "tests": [
+    {
+      "path": "DkMathTest/Lib/NumberTheory/EllipticFiniteKernelValuation.lean",
+      "sha256": "75a519cdb34ec074fe16645226249e40998b0e98d1abf53b30d09da439ca7b11",
+      "theorems": [
+        "actual_allpoint_valuation",
+        "actual_kernel_infinity",
+        "actual_finite_valuation",
+        "actual_orbit_parameter",
+        "actual_target_uniformizer",
+        "actual_norm_allpoint",
+        "actual_target_norm_pole_order",
+        "actual_doubled_order",
+        "actual_normalization_guard"
+      ],
+      "definitions": [
+        "doubledValuation"
+      ],
+      "lines": 114
+    },
+    {
+      "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032ValuationSmoke.lean",
+      "sha256": "fd06e7a3896d3b79dedeafdb546e44df380b99d1792fa69879bf0682cc43d057",
+      "theorems": [
+        "source37_allpoint",
+        "source37_infinity",
+        "source37_norm"
+      ],
+      "definitions": [],
+      "lines": 46
+    }
+  ],
+  "counts": {
+    "production_owners": 8,
+    "production_theorems": 31,
+    "production_definitions": 8,
+    "production_lines": 823,
+    "test_theorems": 9,
+    "test_definitions": 1,
+    "source37_theorems": 3,
+    "audited_declarations": 52
+  },
+  "completed": [
+    "coordinate-ring evaluation congruence and exact local center at the same finite image",
+    "common positive integral scaling for arbitrary centered discrete-valuation pullback",
+    "CRT parameter at one point and units at the remaining distinct orbit points",
+    "orbit product yields a pullback uniformizer; positive scaling equals one",
+    "weights two and three identify normalized infinity valuation",
+    "all-point equality v_P(iota g)=v_phi(P)(g), including zero function",
+    "all-point target orbit-product order equals same H-orbit source-order sum",
+    "same Source37 and same line/kernel/map/pullback retained"
+  ],
+  "boundaries": [
+    "arbitrary fibers not yet identified with H cosets",
+    "surjectivity onto target places not proved",
+    "global principal-divisor pushforward not constructed",
+    "point additivity, isogeny and rational-image p-torsion remain open",
+    "integral models, reduction/components and general hno remain open",
+    "no scheme etale structure claimed"
+  ],
+  "validation": {
+    "focused_builds": [
+      "./lean-build.sh DkMath.FLT.FreyFiniteKernelValuation",
+      "./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelValuation"
+    ],
+    "direct_lean": [
+      "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032ValuationSmoke.lean",
+      "lake env lean tmp/note032-valuation/Axioms.lean"
+    ],
+    "results": "passed without warnings",
+    "source_scan": "passed",
+    "lib_dependency_direction": "passed",
+    "docstrings_markers_tracker": "passed",
+    "facades": "static registration checked",
+    "previous_owners_and_contract": "unchanged",
+    "diff_and_new_file_whitespace": "passed",
+    "full_build_and_full_test_suite": "delegated to user"
+  },
+  "upstream": {
+    "blob": "ed062b17e3fb1b5cfe9e452a95c32a266a067425",
+    "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032ValuationSmoke.lean",
+    "hash": "verified",
+    "role": "inspected same-map place restriction used before principal-divisor pushforward; no upstream proof-library imports"
+  },
+  "axioms": {
+    "DkMath.Lib.NumberTheory.DiscreteValuationPullback.map_le_of_mem_pow": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.DiscreteValuationPullback.map_le_of_le": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.DiscreteValuationPullback.map_eq_one_of_eq_one": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.DiscreteValuationPullback.exists_pos_order_scaling": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.DedekindLocalParameter.exists_parameter": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassFinitePlace.finitePlace": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassFinitePlace.finiteEval": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassFinitePlace.finiteEval_mk": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassFinitePlace.finiteEval_of_mem": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassFinitePlace.mem_finitePlace_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassFinitePlace.modelPointValuation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassFinitePlace.modelPointValuation_zero": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassFinitePlace.modelPointValuation_of_ne_zero": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassFinitePlace.coordinateEval_congr": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassFinitePlace.coordinateEval_center": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassPolePullback.coordinateEval_valuation_infty": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassPolePullback.functionPull_valuation_infty": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelPull_algebraMap": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelImagePlace": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelImageValuation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelCoordinateHom_congr": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelPull_center": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_pos_kernel_order_scaling": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_pos_kernel_norm_order_formula": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_orbit_parameter": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_kernel_pull_uniformizer": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelPull_order_eq": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelPull_valuation_eq": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelNorm_order_eq": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelPull_valuation_of_mem": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelTargetValuation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelTargetValuation_zero": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelTargetValuation_image_of_not_mem": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelPull_valuation_all": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModelNorm_order_all": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualKernelTargetValuation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_model_pull_valuation_all": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualKernelModelNorm": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_model_norm_order_all": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelValuationTest.actual_allpoint_valuation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelValuationTest.actual_kernel_infinity": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelValuationTest.actual_finite_valuation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelValuationTest.actual_orbit_parameter": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelValuationTest.actual_target_uniformizer": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelValuationTest.actual_norm_allpoint": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelValuationTest.actual_target_norm_pole_order": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelValuationTest.doubledValuation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelValuationTest.actual_doubled_order": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelValuationTest.actual_normalization_guard": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032ValuationSmoke.source37_allpoint": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032ValuationSmoke.source37_infinity": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032ValuationSmoke.source37_norm": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  }
+}

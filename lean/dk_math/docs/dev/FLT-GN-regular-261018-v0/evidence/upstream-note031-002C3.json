@@ -1,0 +1,32 @@
+{
+  "implementation_date": "2026-10-22",
+  "repository": "anthropics/fermats-last-theorem",
+  "adapted": [
+    {
+      "path": "P2M/Sol/S_WeierstrassCurve_not_inZeroComponentAt_some_iff_of_criticalCentre.lean",
+      "blob_sha": "7f417364bbc9f0369ceaec5cda32107156ecb069",
+      "transport": "Read-only GitHub fetch_file in this step",
+      "scope": "NE0Aux.nonsingular_of_isNode_of_ne; reconstruction of finite-point classification over arbitrary valuation-ring models using existing DkMath smoothness, integrality and residue singularity"
+    },
+    {
+      "path": "P2M/Sol/S_WeierstrassCurve_exists_criticalCentre_of_multiplicativeReduction.lean",
+      "blob_sha": "e3a454fddddd39651f2791c4a538ec90c9e926d4",
+      "transport": "Local source cache from NOTE-031-002C2",
+      "scope": "Tangent directions from the existing centre, unit 2 integrality and existing DkMath inertia square-root separation"
+    }
+  ],
+  "inspected_not_ported": {
+    "path": "P2M/Sol/S_WeierstrassCurve_slope_mem_of_shallow.lean",
+    "blob_sha": "0b9d8a2eb9bfd9e038a8a875189907fdafd76f58",
+    "transport": "Read-only GitHub fetch_file in this step",
+    "scope": "Shallow slopes, opposite slopes and larger addition/doubling identities inspected for the next stage"
+  },
+  "preserved": "Same Source, same valuation model, same existing centre as a type index, same actual finite residual point and coordinate action",
+  "nonclaims": [
+    "additive zero-component submodule or external InZeroComponentAt formal identification",
+    "shallow slope integrality or per-point branch labels",
+    "equal-depth branch comparison or torsion depth recurrence",
+    "inertia fixedness of singular-reduction torsion points",
+    "full multiplicative unramifiedness, hcases or general FLT"
+  ]
+}

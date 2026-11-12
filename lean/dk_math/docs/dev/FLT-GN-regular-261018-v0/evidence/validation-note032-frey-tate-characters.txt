@@ -1,0 +1,116 @@
+NOTE-032 THREE STEPS: actual second Tate character, continuity and mod-p arithmetic
+Date: 2026-11-06
+Working directory: lean/dk_math
+
+Performed validations; listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyTateCharacters DkMathTest.FLT.Note032FreyTateCharactersDependencyAudit
+   Build completed successfully (11135 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12276/12276 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed; only existing file marker printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateCharactersSmoke.lean
+   Root exposes triangular unit characters, SAME actual matrix representation/second character,
+   finite-kernel continuity, off-diagonal product/determinant and SAME mod-p arithmetic.
+5. Three textbook blocks extracted verbatim to /tmp/n032-tatechars-book-{1,2,3}.lean.
+   lake env lean run on each individually; all passed without warnings.
+   Full production source matches; exact file marker immediately after imports retained.
+6. python3 /tmp/n032-tatechars-import-audit.py
+   Comment-aware local import closures, acyclicity, source scans/SHA256, six exact markers,
+   three full textbook copies, Lib/FLT/root and normal test reachability passed.
+   Closure sizes including self: generic 2, Frey 323, mod-p 324. Generic Lib has no FLT
+   imports. No FreyHnoSmallIndex/RegularPrime/HardCase consumers. JSON saved alongside.
+7. git diff --check and direct trailing-whitespace checks on new files passed.
+
+Step 1 IMPLEMENTED:
+- Actual group hom to upper triangular 2x2 matrices over a commutative ring.
+  Actual diagonal multiplication laws and group inverse supply TWO unit-valued characters.
+  No invertibility or character provider. Off-diagonal multiplication law proved:
+  b(gh)=a(g)*b(h)+b(g)*d(h). Actual determinant=a(g)*d(g).
+- Standard finite reductions of a p-adic unit character are compatible. Actual prior
+  character-limit uniqueness and continuity imply continuity of SAME character from
+  finite-reduction open kernels; no infinite-kernel openness assertion.
+
+Step 2 IMPLEMENTED:
+- SAME Source/L/rootField/tower/adapted basis/point action. Matrix algebra equivalence
+  composes SAME actual actionLinear to actual matrix MONOID HOM; its values are SAME
+  previously constructed residualTateActionMatrix, not an independently selected array.
+- Previous first column internally supplies lower-left zero; first unit character
+  equals SAME previous p-adic tower character chi. Construct actual second unit character
+  d with value SAME M(σ)[1,1]; obtain off-diagonal law and actual determinant chi*d.
+- Actual coordinates of SAME action on second basis point w have second coefficient d.
+  Full torsion kernel at p^(n+1) fixes degree-n w; SAME actual finite coordinate
+  equivalence is injective, so action coordinates reduce to (0,1), and d reduces to 1.
+- Each finite-reduction kernel contains actual full torsion OPEN kernel; conclude d
+  CONTINUOUS using generic continuity result. No supplied hopen/hcont/unit provider.
+  No new topology on full Tate module/basis used.
+
+Step 3 IMPLEMENTED:
+- SAME ORIGINAL residual Cofixed condition puts degree-zero evaluation of y=σ(w)-w in L.
+  SAME prior line reduction surjectivity lifts it to c in SAME line C. Difference y-c
+  has zero first component, so actual one-step shift supplies z with y-c=p*z.
+- SAME coordinates give second coordinate c=0, w=1 and σ(w)=d(σ). Thus d(σ)-1=p*z_2.
+  Canonical p-adic residue map pi (toZModPow 1 followed by p^1-to-p cast) sends p to zero,
+  proving Units.map pi (d σ)=1. No higher fixedness/triviality assumed or inferred.
+- Actual determinant product and SAME earlier chi modulo p cyclotomic identity give
+  pi(det M σ)=original cyclotomicCharacter p σ. MOD-p identity only, not a new high-level
+  Weil pairing proof or full p-adic cyclotomic determinant identity.
+
+Regression scope:
+- Actual group (ZMod 25)^units acts by [[u,1-u],[0,1]], with actual multiplication proved.
+  Generic two unit characters are u and 1. Actual u=6 inverse21 has NONZERO off-diagonal.
+  Second character=1 does not imply off-diagonal=0. No Galois splitting conclusion.
+- Actual 6 is 1 mod 5 but not 1 mod 25, guarding finite vs higher triviality.
+- SAME abstract Frey Source with retained arithmetic: second character inverse formula,
+  off-diagonal law with inverse Galois element reducing to zero, and actual mod-p value1.
+  No impossible numeric Fermat Source manufactured.
+
+Audit scope and retained boundaries:
+- Fifteen selected #print axioms reports: only propext, Classical.choice, Quot.sound.
+- Fifteen recursive traversals inspect checked types, constructors and opaque proofs.
+  Reject sorryAx, nonstandard axioms, P2M/P2MW/FltRegular/FreyPackage, old Kummer consumers
+  and FLT endpoints. Require actual matrix action/basis, finite coordinate isomorphism,
+  full torsion open kernel, SAME line reduction lift, actual p-shift inverse and prior
+  SAME first character modulo p identity.
+- Twelve input audits retain generic triangularity ht/open kernels hopen and supply
+  them internally at actual Frey application. Preserve SAME hclass/uniform-stage hbad
+  and original hcofixed; reject hunit/hsecond/hcont/hcocycle/hsplit/htrivial/hmodp/hdet.
+- No new sorry/admit/native_decide/unsafe/custom axioms, no new warnings.
+  Root/suite replay historical sorry warnings in five unrelated existing modules.
+  No whole-repository axiom-clean assertion.
+- Cofixed used at ORIGINAL residual level. Only y in C+p*Tate and d mod p=1 proved;
+  y in C, d=1 at all levels, trivial full quotient action or Galois splitting NOT proved.
+- Second character higher arithmetic, high Weil pairing/full p-adic determinant,
+  Frobenius characteristic polynomial and final arithmetic contradiction unfinished.
+  Off-diagonal/full-matrix continuity and new topological basis theorem not constructed.
+- hclass, ALL-stage hbad remain unfinished. General hno UNFINISHED.
+  No external class/isogeny classification theorem imported.
+
+Decisive audits from successful root build:
+PASS: DkMath.Lib.RepresentationTheory.TriangularTwoCharacter.second; 4685 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.TriangularTwoCharacter.offDiagonal_mul; 4692 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.TriangularTwoCharacter.determinant; 8291 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.PadicCharacterLimit.continuous_of_reduction_kernels; 16232 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateMatrixRepresentation; 81310 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateMatrix_first_character; 81399 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateSecondCharacter; 81399 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateSecond_coordinate; 81402 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateSecondCharacter_finite_kernel; 81405 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateSecondCharacter_finite_kernel_isOpen; 81406 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateSecondCharacter_continuous; 81422 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTate_offDiagonal_mul; 81406 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTate_determinant; 81406 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateSecondCharacter_mod_prime; 81489 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTate_determinant_mod_prime; 81501 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.RepresentationTheory.TriangularTwoCharacter.second; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.RepresentationTheory.TriangularTwoCharacter.offDiagonal_mul; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.PadicCharacterLimit.continuous_of_reduction_kernels; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateSecondCharacter; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateSecond_coordinate; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateSecondCharacter_finite_kernel; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateSecondCharacter_finite_kernel_isOpen; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateSecondCharacter_continuous; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTate_offDiagonal_mul; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTate_determinant; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateSecondCharacter_mod_prime; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTate_determinant_mod_prime; remaining arithmetic inputs explicit.

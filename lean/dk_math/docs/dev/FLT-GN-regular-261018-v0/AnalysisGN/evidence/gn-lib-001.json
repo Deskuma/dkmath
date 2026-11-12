@@ -1,0 +1,269 @@
+{
+  "checkpoint": "GN-LIB-001",
+  "base_head": "9ddb79b97e37e03bcc8609d5f7fc9a5715b2cd91",
+  "scope": "ownership migration; existing signatures and proof bodies preserved",
+  "promoted_declarations": [
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.GN_succ_right",
+      "old_owner": "DkMath/NumberTheory/GapFocusing/Successor.lean",
+      "new_owner": "DkMath/Lib/Cosmic/GNSuccessor.lean",
+      "declaration_sha256": "5c62cb6d058d238b0fbf37658e51a66c9629a401888fc8d51223d8bdca13ff25",
+      "line": 46,
+      "statement": "theorem GN_succ_right {R : Type*} [CommSemiring R] (d : ℕ) (x u : R) :\n    GTail (d + 1) 1 x u = u * GTail d 1 x u + (x + u) ^ d",
+      "statement_and_proof_unchanged": true,
+      "new_source_sha256": "2475129c8c6963eddde9b19d48f7e82cb700b6085db063c2bfaec7b61de7125f"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.GN_succ_left",
+      "old_owner": "DkMath/NumberTheory/GapFocusing/Successor.lean",
+      "new_owner": "DkMath/Lib/Cosmic/GNSuccessor.lean",
+      "declaration_sha256": "05a012af361bf16c0a33c8e6dcb69737bd79dfa55dc98fb00f31568fbfcc921c",
+      "line": 60,
+      "statement": "theorem GN_succ_left {R : Type*} [CommSemiring R] (d : ℕ) (x u : R) :\n    GTail (d + 1) 1 x u = (x + u) * GTail d 1 x u + u ^ d",
+      "statement_and_proof_unchanged": true,
+      "new_source_sha256": "2475129c8c6963eddde9b19d48f7e82cb700b6085db063c2bfaec7b61de7125f"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.GN_succ_unit_anchor",
+      "old_owner": "DkMath/NumberTheory/GapFocusing/Successor.lean",
+      "new_owner": "DkMath/Lib/Cosmic/GNSuccessor.lean",
+      "declaration_sha256": "cda624716b8919b6e62c658969273df26c8f4ece3f785698d60fa5c6c040c50f",
+      "line": 74,
+      "statement": "theorem GN_succ_unit_anchor {R : Type*} [CommSemiring R] (d : ℕ) (x : R) :\n    GTail (d + 1) 1 x 1 = (x + 1) * GTail d 1 x 1 + 1",
+      "statement_and_proof_unchanged": true,
+      "new_source_sha256": "2475129c8c6963eddde9b19d48f7e82cb700b6085db063c2bfaec7b61de7125f"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.GN_succ_bezout",
+      "old_owner": "DkMath/NumberTheory/GapFocusing/Successor.lean",
+      "new_owner": "DkMath/Lib/Cosmic/GNSuccessor.lean",
+      "declaration_sha256": "a16acb0744a0ab5daae53476fb0cdb7cd9f4baf948d6c79cf9e86b8591952852",
+      "line": 87,
+      "statement": "theorem GN_succ_bezout {R : Type*} [CommRing R] (d : ℕ) (x : R) :\n    GTail (d + 1) 1 x 1 - (x + 1) * GTail d 1 x 1 = 1",
+      "statement_and_proof_unchanged": true,
+      "new_source_sha256": "2475129c8c6963eddde9b19d48f7e82cb700b6085db063c2bfaec7b61de7125f"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.GN_succ_isCoprime_unit_anchor",
+      "old_owner": "DkMath/NumberTheory/GapFocusing/Successor.lean",
+      "new_owner": "DkMath/Lib/Cosmic/GNSuccessor.lean",
+      "declaration_sha256": "0346ed7e577018397f891b8fcac41294d60bb9583e14c0b16d8309412b54d487",
+      "line": 101,
+      "statement": "theorem GN_succ_isCoprime_unit_anchor {R : Type*} [CommRing R] (d : ℕ) (x : R) :\n    IsCoprime (GTail d 1 x 1) (GTail (d + 1) 1 x 1)",
+      "statement_and_proof_unchanged": true,
+      "new_source_sha256": "2475129c8c6963eddde9b19d48f7e82cb700b6085db063c2bfaec7b61de7125f"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.dvd_anchor_pow_of_dvd_adjacent_GN",
+      "old_owner": "DkMath/NumberTheory/GapFocusing/Support.lean",
+      "new_owner": "DkMath/Lib/Cosmic/GNSupport.lean",
+      "declaration_sha256": "06c354089045e5c0a6e990369ef26fd3febb3e80fa6cb24c12cb7050b0b1c5ff",
+      "line": 50,
+      "statement": "theorem dvd_anchor_pow_of_dvd_adjacent_GN\n    {R : Type*} [CommRing R] (d : ℕ) (x u q : R)\n    (hd : q ∣ GTail d 1 x u) (hs : q ∣ GTail (d + 1) 1 x u) :\n    q ∣ u ^ d",
+      "statement_and_proof_unchanged": true,
+      "new_source_sha256": "dd2e2be212cbcd574972524929ed50aab5d1d8b7ab97d6650ced08d3bb399d08"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.dvd_sum_pow_of_dvd_adjacent_GN",
+      "old_owner": "DkMath/NumberTheory/GapFocusing/Support.lean",
+      "new_owner": "DkMath/Lib/Cosmic/GNSupport.lean",
+      "declaration_sha256": "364fcb4b6c2cd179351d06192725491e2e74826332e3f55a905d51e2ed386a57",
+      "line": 66,
+      "statement": "theorem dvd_sum_pow_of_dvd_adjacent_GN\n    {R : Type*} [CommRing R] (d : ℕ) (x u q : R)\n    (hd : q ∣ GTail d 1 x u) (hs : q ∣ GTail (d + 1) 1 x u) :\n    q ∣ (x + u) ^ d",
+      "statement_and_proof_unchanged": true,
+      "new_source_sha256": "dd2e2be212cbcd574972524929ed50aab5d1d8b7ab97d6650ced08d3bb399d08"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.nat_dvd_powers_of_dvd_adjacent_GN",
+      "old_owner": "DkMath/NumberTheory/GapFocusing/Support.lean",
+      "new_owner": "DkMath/Lib/Cosmic/GNSupport.lean",
+      "declaration_sha256": "bd35fe2f31b93167fde3d3836155d65fad9c8acb70c2364a29832491ade3cb07",
+      "line": 82,
+      "statement": "theorem nat_dvd_powers_of_dvd_adjacent_GN\n    (d x u q : ℕ) (hd : q ∣ GTail d 1 x u)\n    (hs : q ∣ GTail (d + 1) 1 x u) :\n    q ∣ u ^ d ∧ q ∣ (x + u) ^ d",
+      "statement_and_proof_unchanged": true,
+      "new_source_sha256": "dd2e2be212cbcd574972524929ed50aab5d1d8b7ab97d6650ced08d3bb399d08"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.nat_prime_dvd_coordinates_of_dvd_adjacent_GN",
+      "old_owner": "DkMath/NumberTheory/GapFocusing/Support.lean",
+      "new_owner": "DkMath/Lib/Cosmic/GNSupport.lean",
+      "declaration_sha256": "773252a6a590ba6d457fb4907f2092c48a091c5cc5423354fad8cef1eb5883fc",
+      "line": 103,
+      "statement": "theorem nat_prime_dvd_coordinates_of_dvd_adjacent_GN\n    (d x u : ℕ) {p : ℕ} (hp : p.Prime)\n    (hd : p ∣ GTail d 1 x u) (hs : p ∣ GTail (d + 1) 1 x u) :\n    p ∣ x ∧ p ∣ u",
+      "statement_and_proof_unchanged": true,
+      "new_source_sha256": "dd2e2be212cbcd574972524929ed50aab5d1d8b7ab97d6650ced08d3bb399d08"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.nat_coprime_adjacent_GN",
+      "old_owner": "DkMath/NumberTheory/GapFocusing/Support.lean",
+      "new_owner": "DkMath/Lib/Cosmic/GNSupport.lean",
+      "declaration_sha256": "353772db0802ca4f6eef2a25e3427631df8406cdfd46b9135834c1f677202450",
+      "line": 122,
+      "statement": "theorem nat_coprime_adjacent_GN (d x u : ℕ) (h : x.Coprime u) :\n    (GTail d 1 x u).Coprime (GTail (d + 1) 1 x u)",
+      "statement_and_proof_unchanged": true,
+      "new_source_sha256": "dd2e2be212cbcd574972524929ed50aab5d1d8b7ab97d6650ced08d3bb399d08"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.nat_one_lt_GN_succ",
+      "old_owner": "DkMath/NumberTheory/GapFocusing/Support.lean",
+      "new_owner": "DkMath/Lib/Cosmic/GNSupport.lean",
+      "declaration_sha256": "453f014b9aa067884e929dc6b62b4a1267bb49dbbe7b2589ab04174b64d3bbe8",
+      "line": 139,
+      "statement": "theorem nat_one_lt_GN_succ (d x u : ℕ)\n    (hd : 0 < d) (hx : 0 < x) (hu : 0 < u) :\n    1 < GTail (d + 1) 1 x u",
+      "statement_and_proof_unchanged": true,
+      "new_source_sha256": "dd2e2be212cbcd574972524929ed50aab5d1d8b7ab97d6650ced08d3bb399d08"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.nat_exists_prime_dvd_GN_succ_not_dvd_GN",
+      "old_owner": "DkMath/NumberTheory/GapFocusing/Support.lean",
+      "new_owner": "DkMath/Lib/Cosmic/GNSupport.lean",
+      "declaration_sha256": "5870716ad60d579a2801b1ed937b5cd6237475b52f1d6d5e67bde185d694a758",
+      "line": 158,
+      "statement": "theorem nat_exists_prime_dvd_GN_succ_not_dvd_GN (d x u : ℕ)\n    (hd : 0 < d) (hx : 0 < x) (hu : 0 < u) (h : x.Coprime u) :\n    ∃ p : ℕ, p.Prime ∧ p ∣ GTail (d + 1) 1 x u ∧ ¬p ∣ GTail d 1 x u",
+      "statement_and_proof_unchanged": true,
+      "new_source_sha256": "dd2e2be212cbcd574972524929ed50aab5d1d8b7ab97d6650ced08d3bb399d08"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.dvd_GN_of_dvd_coordinates",
+      "old_owner": "DkMath/NumberTheory/GapFocusing/Support.lean",
+      "new_owner": "DkMath/Lib/Cosmic/GNSupport.lean",
+      "declaration_sha256": "e82dfa94534db306eac002e7de03a2b028f3d3bba61c26e3ff7e56afc2b75a26",
+      "line": 176,
+      "statement": "theorem dvd_GN_of_dvd_coordinates\n    {R : Type*} [CommSemiring R] (d : ℕ) (x u q : R)\n    (hx : q ∣ x) (hu : q ∣ u) :\n    q ∣ GTail (d + 2) 1 x u",
+      "statement_and_proof_unchanged": true,
+      "new_source_sha256": "dd2e2be212cbcd574972524929ed50aab5d1d8b7ab97d6650ced08d3bb399d08"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.nat_prime_dvd_adjacent_GN_iff",
+      "old_owner": "DkMath/NumberTheory/GapFocusing/Support.lean",
+      "new_owner": "DkMath/Lib/Cosmic/GNSupport.lean",
+      "declaration_sha256": "a655da287ce528d1e85826ffb4a237d993d0d1c7ef5876229be7e17bfdad3e07",
+      "line": 193,
+      "statement": "theorem nat_prime_dvd_adjacent_GN_iff\n    (d x u : ℕ) {p : ℕ} (hp : p.Prime) :\n    (p ∣ GTail (d + 2) 1 x u ∧ p ∣ GTail (d + 3) 1 x u) ↔\n      p ∣ x ∧ p ∣ u",
+      "statement_and_proof_unchanged": true,
+      "new_source_sha256": "dd2e2be212cbcd574972524929ed50aab5d1d8b7ab97d6650ced08d3bb399d08"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.nat_coprime_adjacent_GN_iff",
+      "old_owner": "DkMath/NumberTheory/GapFocusing/Support.lean",
+      "new_owner": "DkMath/Lib/Cosmic/GNSupport.lean",
+      "declaration_sha256": "8633ab0764e1fa3b0a953a047e20980638536f9b08a154f677833ef53a1ef916",
+      "line": 214,
+      "statement": "theorem nat_coprime_adjacent_GN_iff (d x u : ℕ) :\n    (GTail (d + 2) 1 x u).Coprime (GTail (d + 3) 1 x u) ↔ x.Coprime u",
+      "statement_and_proof_unchanged": true,
+      "new_source_sha256": "dd2e2be212cbcd574972524929ed50aab5d1d8b7ab97d6650ced08d3bb399d08"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.isCoprime_adjacent_GN",
+      "old_owner": "DkMath/NumberTheory/GapFocusing/Support.lean",
+      "new_owner": "DkMath/Lib/Cosmic/GNSupport.lean",
+      "declaration_sha256": "6200ca59d8c84fe11a203ebae6ac6f20e0ef758d14d9990a60137ec31feda580",
+      "line": 235,
+      "statement": "theorem isCoprime_adjacent_GN\n    {R : Type*} [CommRing R] (d : ℕ) (x u : R) (h : IsCoprime x u) :\n    IsCoprime (GTail d 1 x u) (GTail (d + 1) 1 x u)",
+      "statement_and_proof_unchanged": true,
+      "new_source_sha256": "dd2e2be212cbcd574972524929ed50aab5d1d8b7ab97d6650ced08d3bb399d08"
+    },
+    {
+      "name": "DkMath.NumberTheory.GapFocusing.int_gcd_adjacent_GN_eq_one",
+      "old_owner": "DkMath/NumberTheory/GapFocusing/Support.lean",
+      "new_owner": "DkMath/Lib/Cosmic/GNSupport.lean",
+      "declaration_sha256": "8e1d4c37c5cee8b7694c393dc78e308642c7c18619ed3f7b356f1db047058edb",
+      "line": 264,
+      "statement": "theorem int_gcd_adjacent_GN_eq_one (d : ℕ) (x u : ℤ) (h : Int.gcd x u = 1) :\n    Int.gcd (GTail d 1 x u) (GTail (d + 1) 1 x u) = 1",
+      "statement_and_proof_unchanged": true,
+      "new_source_sha256": "dd2e2be212cbcd574972524929ed50aab5d1d8b7ab97d6650ced08d3bb399d08"
+    }
+  ],
+  "neutral_import_graph": {
+    "DkMath.Lib.Cosmic.GNSuccessor": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic",
+      "Mathlib.RingTheory.Coprime.Basic"
+    ],
+    "DkMath.Lib.Cosmic.GTailCyclotomic": [
+      "DkMath.Lib.Cosmic.GTail",
+      "Mathlib.RingTheory.Polynomial.Cyclotomic.Basic"
+    ],
+    "DkMath.Lib.Cosmic.GTail": [
+      "Mathlib.Data.Nat.Choose.Sum",
+      "Lean.Elab.Tactic.Omega"
+    ],
+    "DkMath.Lib.Cosmic.GNSupport": [
+      "DkMath.Lib.Cosmic.GNSuccessor",
+      "Mathlib.Data.Nat.Prime.Basic",
+      "Mathlib.RingTheory.Coprime.Lemmas"
+    ]
+  },
+  "neutral_import_cycles": 0,
+  "neutral_to_application_edges": 0,
+  "full_names_preserved": true,
+  "production_proof_bodies_preserved": true,
+  "validation": {
+    "owners": {
+      "command": "lake build DkMath.Lib.Cosmic.GNSuccessor DkMath.Lib.Cosmic.GNSupport DkMath.NumberTheory.GapFocusing.Successor DkMath.NumberTheory.GapFocusing.Support",
+      "exit_code": 0,
+      "jobs": 2790
+    },
+    "regression": {
+      "command": "lake build DkMathTest.Lib.Cosmic.GNSuccessorSupport DkMathTest.GapFocusingSupport DkMathTest.NumberTheory.GapFocusingSuccessorCalibration DkMathTest.NumberTheory.GapFocusingSuccessorAxiomAudit DkMathTest.NumberTheory.GapFocusingHomogeneousAddress DkMath.NumberTheory.GapFocusing",
+      "exit_code": 0,
+      "jobs": 8974
+    },
+    "final_new_test": {
+      "command": "lake build DkMathTest.Lib.Cosmic.GNSuccessorSupport",
+      "exit_code": 0,
+      "jobs": 2789,
+      "warnings": 0,
+      "boundary_examples": 10,
+      "axiom_checks": 17
+    },
+    "libraries": {
+      "command": "lake build DkMath DkMathTest",
+      "exit_code": 0,
+      "jobs": 11792,
+      "existing_sorry_warnings": [
+        "warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`",
+        "warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`",
+        "warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`",
+        "warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`",
+        "warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`"
+      ],
+      "new_code_warnings": 0
+    },
+    "test_root": {
+      "command": "lake env lean DkMathTest.lean",
+      "exit_code": 0
+    },
+    "root_smoke": {
+      "command": "lake env lean /tmp/GNLib001RootSmoke.lean",
+      "imports": [
+        "DkMath"
+      ],
+      "check_count": 17,
+      "exit_code": 0
+    },
+    "legacy_successor_smoke": {
+      "command": "lake env lean /tmp/GNLib001LegacySuccessorSmoke.lean",
+      "imports": [
+        "DkMath.NumberTheory.GapFocusing.Successor"
+      ],
+      "check_count": 5,
+      "exit_code": 0
+    },
+    "allowed_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "tracker_checks": {
+      "owner_log": "PASS",
+      "final_test_log": "PASS"
+    },
+    "source_checks": {
+      "baseline_and_current_declaration_sha256": "17 of 17 identical",
+      "compatibility_files_have_no_theorem_redefinitions": true,
+      "module_markers": "5 of 5 match paths",
+      "forbidden_construct_scan": "PASS",
+      "original_material_sha256": "24 of 24 preserved"
+    }
+  }
+}

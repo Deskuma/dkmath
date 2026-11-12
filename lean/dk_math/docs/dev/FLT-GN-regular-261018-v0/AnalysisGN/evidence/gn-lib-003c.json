@@ -1,0 +1,142 @@
+{
+  "checkpoint": "GN-LIB-003c",
+  "date": "2026-10-24",
+  "base_head": "e8bfe9f4ef9f101bcc2317508b51e38b73c8cbe2",
+  "scope": "prime-power binomial valuation kernel; legacy beam carriers retained",
+  "promoted_theorems": [
+    {
+      "legacy_name": "DkMath.NumberTheory.padicValNat_choose_prime_pow",
+      "lib_name": "DkMath.Lib.NumberTheory.padicValNat_choose_prime_pow",
+      "signature_preserved": true,
+      "source_signature": "theorem padicValNat_choose_prime_pow\n    {p n k : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0) :\n    padicValNat p (Nat.choose (p ^ n) k) = n - padicValNat p k",
+      "legacy_line": 214,
+      "lib_line": 41
+    },
+    {
+      "legacy_name": "DkMath.NumberTheory.padicValNat_choose_prime_pow_add_index",
+      "lib_name": "DkMath.Lib.NumberTheory.padicValNat_choose_prime_pow_add_index",
+      "signature_preserved": true,
+      "source_signature": "theorem padicValNat_choose_prime_pow_add_index\n    {p n k : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0) :\n    padicValNat p (Nat.choose (p ^ n) k) + padicValNat p k = n",
+      "legacy_line": 230,
+      "lib_line": 59
+    },
+    {
+      "legacy_name": "DkMath.NumberTheory.prime_power_pow_dvd_choose_of_padicValNat_index",
+      "lib_name": "DkMath.Lib.NumberTheory.prime_power_pow_dvd_choose_of_padicValNat_index",
+      "signature_preserved": true,
+      "source_signature": "theorem prime_power_pow_dvd_choose_of_padicValNat_index\n    {p n k r : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)\n    (hr : r + padicValNat p k ≤ n) :\n    p ^ r ∣ Nat.choose (p ^ n) k",
+      "legacy_line": 245,
+      "lib_line": 76
+    },
+    {
+      "legacy_name": "DkMath.NumberTheory.prime_power_dvd_choose_of_not_dvd_index",
+      "lib_name": "DkMath.Lib.NumberTheory.prime_power_dvd_choose_of_not_dvd_index",
+      "signature_preserved": true,
+      "source_signature": "theorem prime_power_dvd_choose_of_not_dvd_index\n    {p n k : ℕ} (hp : p.Prime) (hkn : k ≤ p ^ n) (hk0 : k ≠ 0)\n    (hpk : ¬ p ∣ k) :\n    p ^ n ∣ Nat.choose (p ^ n) k",
+      "legacy_line": 445,
+      "lib_line": 97
+    }
+  ],
+  "unchanged_definitions_and_structures": [
+    "PrimePowerRowSupport",
+    "UniformBeamHeight",
+    "FilteredBeamHeight",
+    "BeamBirthBoundary",
+    "BeamBirthBoundaryObstruction",
+    "PascalPrebirthAlternationMod",
+    "pascalCancellationDefect",
+    "PrimePrebirthAlternation"
+  ],
+  "inline_kernel_checked_examples": 8,
+  "owner_direct_imports": [
+    "DkMath.Lib.NumberTheory.PadicValNat",
+    "Mathlib.Data.Nat.Choose.Factorization"
+  ],
+  "compatibility_fix": {
+    "path": "DkMath/NumberTheory/PascalPrimeDial.lean",
+    "change": "one valuation zero criterion call now uses the Lib namespace instead of the transitively imported ABC name"
+  },
+  "descendant_ABC_reference_audit": [
+    {
+      "module": "DkMath.ABC.GNDepthPressure",
+      "refs": [
+        "DkMath.ABC.padicValNat_le_iff_dvd"
+      ],
+      "has_ABC_PadicValNat_import_closure": true
+    },
+    {
+      "module": "DkMath.Collatz.PetalBridge.Residues",
+      "refs": [
+        "DkMath.ABC.padicValNat_le_iff_dvd"
+      ],
+      "has_ABC_PadicValNat_import_closure": true
+    },
+    {
+      "module": "DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentDepthLedger",
+      "refs": [
+        "DkMath.ABC.padic_val_two_of_even"
+      ],
+      "has_ABC_PadicValNat_import_closure": true
+    },
+    {
+      "module": "DkMath.Collatz.PetalBridge.FloatWindow.RawLowSignatureObstruction",
+      "refs": [
+        "DkMath.ABC.padic_val_two_of_even"
+      ],
+      "has_ABC_PadicValNat_import_closure": true
+    },
+    {
+      "module": "DkMath.Collatz.PetalBridge.FloatWindow.CanonicalSourceAgeHorizon",
+      "refs": [
+        "DkMath.ABC.padic_val_two_of_even"
+      ],
+      "has_ABC_PadicValNat_import_closure": true
+    },
+    {
+      "module": "DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentAmplitude",
+      "refs": [
+        "DkMath.ABC.padic_val_two_of_even"
+      ],
+      "has_ABC_PadicValNat_import_closure": true
+    },
+    {
+      "module": "DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentBlockNormalForm",
+      "refs": [
+        "DkMath.ABC.padic_val_two_of_even"
+      ],
+      "has_ABC_PadicValNat_import_closure": true
+    },
+    {
+      "module": "DkMath.Collatz.PetalBridge.FloatWindow.PressureIncidenceBridge",
+      "refs": [
+        "DkMath.ABC.padicValNat_le_iff_dvd"
+      ],
+      "has_ABC_PadicValNat_import_closure": true
+    },
+    {
+      "module": "DkMath.Collatz.PetalBridge.FloatWindow.UniversalPaymentRepayment",
+      "refs": [
+        "DkMath.ABC.padic_val_two_of_even"
+      ],
+      "has_ABC_PadicValNat_import_closure": true
+    }
+  ],
+  "original_material_hashes_verified": 24,
+  "source_sha256": {
+    "DkMath/NumberTheory/BinomialPrimePower.lean": "e3bdadd590b67c6fb61e10c501301c01cd78a563d2b8e01c928a6c1e511a5585",
+    "DkMath/Lib/NumberTheory/BinomialPrimePower.lean": "97bbd1670bc42794a3051330fea934d026615b6dcb864c4c81e3ef901099ab11",
+    "DkMath/NumberTheory/PascalPrimeDial.lean": "9090f65e4a60f05c8d502a08915a3bd11a923788e3b32ded42955598c7abc682"
+  },
+  "validation": {
+    "build_command": "lake build DkMath.Lib.NumberTheory.BinomialPrimePower DkMath.NumberTheory.BinomialPrimePower DkMath.NumberTheory.PascalPrimeDial DkMath.NumberTheory.WeightedBinomial",
+    "result": "Build completed successfully (8931 jobs).",
+    "warnings": 0,
+    "type_and_axiom_audit": "8 declarations checked; standard logical axioms only",
+    "allowed_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "scope": "four production targets only; Lib aggregator import registration checked statically; full build and DkMathTest/lake test excluded by user request"
+  }
+}

@@ -15,6 +15,7 @@ open DkMath.NumberTheory.Legendre DkMath.NumberTheory.Primitive
 open DkMath.NumberTheory.StructuralArithmetic
 open DkMathTest.LegendreDeletion1031Data DkMathTest.LegendreDeletion1031Calibration
 
+/- # disable heavy test: 2026/10/24 20:13
 set_option maxRecDepth 100000
 
 set_option maxHeartbeats 20000000 in
@@ -79,5 +80,6 @@ theorem master1031_checked : (216 : ℕ) + 151 = 144 + 128 + 95 := by
   simpa only [remainder1031_card, conservation1031_coordinates.1, uncovered1031_checked,
     active1031_checked, conservation1031_coordinates.2.2] using
     (coarseTown_remainder_conservation (knownPrimeScales_primeScalesUpTo 10) 1031)
+-/
 
 end DkMathTest.LegendreSurvivor1031Calibration

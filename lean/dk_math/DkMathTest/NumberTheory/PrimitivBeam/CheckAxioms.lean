@@ -1,6 +1,6 @@
 import DkMath.NumberTheory.PrimitiveBeam
 
-#print "file: DkMathTest.NumberTheory.PrimitiveBeam.CheckAxioms"
+#print "file: DkMathTest.NumberTheory.PrimitivBeam.CheckAxioms"
 
 namespace DkMath.NumberTheory
 

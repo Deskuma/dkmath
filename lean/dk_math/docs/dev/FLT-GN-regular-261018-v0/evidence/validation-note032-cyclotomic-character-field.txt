@@ -1,0 +1,106 @@
+NOTE-032 actual cyclotomic character-kernel fixed fields
+Date: 2026-11-02
+Working directory: lean/dk_math
+
+Performed validation, all commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCyclotomicCharacterField DkMathTest.FLT.Note032CyclotomicCharacterFieldDependencyAudit
+   Final revision: Build completed successfully (11064 jobs).
+2. lake test
+   Normal repository test driver passed (12155 jobs), including both new test modules.
+3. lake env lean DkMathTest.lean
+   Normal test import entrance passed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicCharacterFieldSmoke.lean
+   Root DkMath exposes actual cyclotomic fields, number-field structures, cyclic extensions and local fixedness.
+5. git diff --check
+   Passed.
+
+Regression scope:
+- The actual field Q(zeta_5) inside the same algebraic closure has degree 4.
+- The zero character's fixed field is exactly that original cyclotomic field; its absolute degree
+  is 4, not 20. Nonsplitting/nonzero image cannot be omitted when producing a degree-p extension.
+- A surjective character onto PUnit gives relative degree 1. Surjectivity does not replace the
+  requirement that the codomain have cardinal p.
+- Inertia membership is transported between the actual cyclotomic kernel and Gal(Qbar/Q(zeta_5)).
+- The prime-2 boundary has cyclotomic-kernel index 1; the general field API and Frey p>=5 guard stay separate.
+
+Source checks:
+- Three production and two test modules pass the forbidden-construct scan:
+  no sorry, admit, native_decide, unsafe, or custom axiom declarations.
+- No new-module warnings/errors in the final root/focused build or normal suite.
+- Unrelated historical sorry/linter warnings remain in the repository; successful validation
+  does not assert that every repository declaration is sorry-free.
+- The named absolute Galois group is definitionally the same AlgEquiv group. A documented local
+  elaborator transparency option lets the field-theory APIs unfold that alias; it changes no axioms.
+
+Selected axiom audits (14 declarations; standard axioms only):
+DkMath.Lib.NumberTheory.CyclotomicKernelField.fixingSubgroup_eq_kernel: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKernelField.kernelEquiv_mem_inertia_iff: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKernelField.kernel_isOpen: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKernelField.rootField_isCyclotomic: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicKernelField.rootField_finrank: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicCharacterField.kernelInGalois_normal: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicCharacterField.fixingSubgroup_characterField: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicCharacterField.characterField_finrank: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicCharacterField.relative_finrank: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicCharacterField.relative_isGalois: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicCharacterField.relative_isCyclic: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_nonsplit_has_cyclotomic_cyclic_extension: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_characterField_decomposition_fixed_at_p: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_characterField_inertia_fixed_away: Classical.choice, Quot.sound, propext
+
+Recursive dependency audit (types, constructors and opaque proof bodies):
+PASS: DkMath.Lib.NumberTheory.CyclotomicKernelField.fixingSubgroup_eq_kernel; 28370 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicKernelField.kernelEquiv_mem_inertia_iff; 28929 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicCharacterField.fixingSubgroup_characterField; 32801 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicCharacterField.relative_finrank; 48630 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_nonsplit_has_cyclotomic_cyclic_extension; 53573 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_characterField_decomposition_fixed_at_p; 54152 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_characterField_inertia_fixed_away; 49211 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKernelField.fixingSubgroup_eq_kernel; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicKernelField.kernelEquiv_mem_inertia_iff; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicCharacterField.fixingSubgroup_characterField; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicCharacterField.relative_finrank; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_nonsplit_has_cyclotomic_cyclic_extension; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_characterField_decomposition_fixed_at_p; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_characterField_inertia_fixed_away; remaining arithmetic inputs explicit.
+
+Seven full dependency traversals and seven public-input audits passed.
+Required dependencies include actual cyclotomic root action, adjoining the primitive root,
+same-valuation inertia criteria, exact infinite Galois correspondence, open subgroup transport,
+field-degree tower formula, the original nonsplitting/surjective-character theorem, actual
+character open kernel and inverse-character conjugation, actual at-p local splitting and
+nonresonant/good reduction inertia.
+The audit rejects sorryAx, custom axioms, external P2M/P2MW, FltRegular, FreyPackage,
+DkMath.FLT.Kummer and completed FLT endpoints. The final extension endpoint retains the actual
+cofixed line, stable cyclic stage/cardinality/base, primitive root and nonsplitting. No field,
+finiteness, Galois, degree, character-surjectivity or vanishing provider is added to that endpoint.
+The away local fixedness endpoint explicitly retains the resonant hbad input.
+
+Import audit: note032-cyclotomic-character-field-import-audit.json
+All three new local import closures are acyclic (244 local modules in their union) and exclude
+FreyHnoSmallIndex, FreyHnoRegularPrime and FreyHnoHardCase.
+
+Mathematical boundary:
+PROVED: ker(chi_p) is the fixing subgroup of the actual F=Q(zeta_p) in Qbar, with same-action
+Galois-group equivalence and exact decomposition/inertia membership transport at the same A.
+F is an actual cyclotomic number field of degree p-1. The original evaluated character kernel,
+embedded into G_Q, has an actual fixed field M; openness gives a number field and exact return
+to that same kernel under Galois correspondence. Inverse-character conjugation gives M/Q
+Galois. Surjectivity gives [M:Q]=#C*(p-1), [M:F]=#C and #Gal(M/F)=#C, for the same inclusion.
+For the actual Frey nonsplitting character #C=p, the constructed extension is cyclic of degree p
+and has absolute degree p*(p-1). The same relative decomposition group above p fixes every
+M-element; relative inertia away from p does so conditional on the original resonant absorption.
+STILL OPEN: prime-ideal/ring-of-integers unramified predicates; Artin/class-group and unit
+maps preserving the required eigenspaces; the roots-of-unity twist and Kummer duality giving
+omega^2 arithmetic; global character vanishing; required tower iteration and resonant bad-place
+geometry. General hno is unfinished. Constructing a degree-p extension is not excluding it.
+The previous final counting path still needs no hCH input. No universal ExtVanishing,
+global tower-existence, class-group vanishing or hno provider was introduced.
+
+SHA256 of new source/test/smoke artifacts:
+8855f05a74d7aa6a3898a2e77d5e62059411aa575f7c8dc7093a2b083e7a7fcf  DkMath/Lib/NumberTheory/CyclotomicKernelField.lean
+7e3dfef0622ca565a322670d6339855e0b0ad96cdb0b7482517cad2a1c76809b  DkMath/Lib/NumberTheory/CyclotomicCharacterField.lean
+c0e9cef8f9dc52b85e570b8c5445a20f1bc5753a09a07ba0b39f1a425ed9daef  DkMath/FLT/FreyCyclotomicCharacterField.lean
+133e316f894f8cb07a41b53916788f648ea88fd191d32afa647619281eb29448  DkMathTest/FLT/FreyCyclotomicCharacterField.lean
+ab2cef9393bd375ffd80687d28b4cf4bfe5d0a1202de67700f8f2e07f129591c  DkMathTest/FLT/Note032CyclotomicCharacterFieldDependencyAudit.lean
+a4bb0d30622804384869c794bebae96344dc95c38b65ae97c9f4d045f9a5a0b2  docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicCharacterFieldSmoke.lean

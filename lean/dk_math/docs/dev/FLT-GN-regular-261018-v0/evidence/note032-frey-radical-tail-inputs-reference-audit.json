@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-08",
+  "checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": {
+    "P2M/Sol/S_ValuationSubring_exists_mem_inertiaSubgroupIn_pow_eq_of_forall_apply_eq.lean": "2c082725e35f481433429f13825da019adfeb63829a5ec969687926f0931cc97",
+    "P2M/Sol/S_ValuationSubring_exists_pow_eq_of_kummer_descent.lean": "b7c934ac0490daf8faf64bbc27cb3f47b122f269dc20f18c7f1ba26bb9a77fd0"
+  },
+  "comparison": "Read actual residue power roots/torsion, fixed roots-of-unity lifts and unit p-root congruence construction and hdiv_Kinf consumption. Port these inputs, supply actual q-address/algebraicity and constructed fixed-field root lifts internally. New actual tail field and same compatible tower have unit-root APPROXIMATIONS, not exact roots. Kernel inclusion iff all-kernel evaluations or same finite-torsion differences vanish formalized but inclusion NOT proved. Henselian exact lifting/value group normalization/all-nonzero power divisibility/profinite inertia-tail roots not ported; no new providers pretending otherwise. Four Lib adaptations retain Apache2 source/commit/NOTICE.",
+  "reused_local_source_sha256": {
+    "DkMath/Lib/NumberTheory/InertiaRadicalCharacter.lean": "0dd534d3bff09fe894ae9376f4c49ef91eeda5b2e381ab6aa2b2578f2d20b0ad",
+    "DkMath/Lib/NumberTheory/RegularKummer/LICENSE": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+    "DkMath/Lib/NumberTheory/RegularKummer/ANTHROPIC-NOTICE": "42b1821f19a6aaa25e6811d22ab8f2fdc6433d4a37bc810b1cfafa5b6dd6b0b6"
+  },
+  "mathlib_source_sha256": {
+    "Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.lean": "226fe247c20101f787ea6fb3bfafb92bf73fd62674150eb7b8207342354a8efb",
+    "Mathlib/RingTheory/Polynomial/Content.lean": "85bf1eb66f427594255629fc47c138aa63a1eed1fff47edb7edc56594b5a4a51",
+    "Mathlib/Algebra/Algebra/ZMod.lean": "1b2a50fac88df9cc8ac68528de5a96b2f4b4e2aea8fe41a848958aa4438327cb"
+  }
+}

@@ -1,0 +1,98 @@
+NOTE-032 actual same-root truncated logarithm on the actual unit power quotient
+Date: 2026-11-04
+Working directory: lean/dk_math
+
+Performed validations, all listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.CyclotomicPrimaryLog DkMathTest.FLT.Note032CyclotomicPrimaryLogDependencyAudit
+   Build completed successfully (11104 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12219/12219 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed with its existing file marker only.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicPrimaryLogSmoke.lean
+   Root facade exposes the actual log, local-power zero theorem, scalar formula,
+   conditional hunit criterion and the preceding conditional stable-complement endpoint.
+5. Three textbook Lean blocks extracted verbatim to /tmp/n032-log-book-{1,2,3}.lean.
+   lake env lean on each passed without warnings. Each equals a full production source,
+   including copyright and the exact module marker immediately after imports.
+6. python3 /tmp/n032-log-import-audit.py
+   Comment-aware acyclic local import closures, facade/root/test reachability,
+   six exact module markers, source scans, source hashes, three textbook copies passed.
+   New Lib closures have 1,31,32 local modules (including self) respectively;
+   none imports DkMath.FLT or old FreyHnoSmallIndex/RegularPrime/HardCase consumers.
+7. lake env lean DkMathTest/FLT/CyclotomicPrimaryLog.lean
+   Actual cyclotomic regressions and ten axiom reports passed without warnings.
+8. git diff --check and direct trailing-whitespace checks on all new Lean/textbook files.
+   Passed.
+
+Implemented mathematics:
+- For a cubic-nilpotent ideal J in a commutative ring and 2h=1, prove
+  tlog(h,z*w)=tlog(h,z)+tlog(h,w) for z,w in 1+J by a finite ring identity.
+- Retain the SAME primitive root in the SAME cyclotomic number field.
+  Q=O_F/(zeta-1)^3 has lambda^3=0, lambda^2 nonzero and characteristic p for p>=5.
+  Characteristic is derived from actual p-ramification, not added as an input.
+- Construct actual scalarMap:ZMod p ->+* Q and half=scalarMap(2^-1).
+- The SAME unit u has u^(p-1) in 1+(lambda), by the prior residue-field theorem.
+  unitLog is additive and kills u^p by characteristic p.
+- QuotientGroup.lift descends this map to Additive(UnitClass O_F p), not an unrelated
+  additive quotient or a representative-dependent choice function.
+- The SAME cubic congruence implies primaryLog([u])=0. The local-power zero theorem
+  derives that congruence internally. The representative-free localPowerSpace zero
+  theorem covers every element of the actual subspace.
+- Prove actual scalar compatibility Lambda(a*x)=scalarMap(a)*Lambda(x).
+- Given finrank W=1, g in W and actual Lambda(g) nonzero, the log has zero kernel on W.
+  The proof cancels only the image of a nonzero FIELD SCALAR using its inverse;
+  Q is not assumed to be a field or domain.
+- Specialize to SAME rootField, baseRoot_primitive and weightSquareSpace. From explicit
+  hrank,g,hdetect, construct primaryWeightSquareSpace=bottom, the existing hunit input.
+
+Regression scope:
+- Actual fifth cyclotomic field and specified root, actual residue cardinality 5,
+  p-ramification, lambda^2 not in lambda^3, characteristic 5, twice half equals one.
+- Uncorrected z-1 fails additivity at z=w=1+lambda, while the corrected log is additive.
+- tlog(half,1+lambda^2)=lambda^2: the cubic quotient retains information.
+  This is a quotient-ring calculation, NOT a projected global omega-square unit witness.
+- Actual cyclotomic unit c=1+zeta; its fifth power is local everywhere above 5 and has
+  zero log. This class is a GLOBAL fifth power, not a nonzero Frey unit class.
+- Multiplying the representative by an actual fifth power preserves unitLog.
+
+Audit scope:
+- Ten #print axioms reports contain only propext, Classical.choice, Quot.sound.
+- Ten recursive traversals inspect types, constructors and opaque proof bodies;
+  reject sorryAx, external P2M/P2MW/FltRegular/FreyPackage, old Kummer consumers,
+  FLT endpoints and every axiom outside the three standard ones.
+- Five public-input audits ensure Lambda is constructed without hrank,hdetect,hunit,
+  local-power zero needs its actual local membership, and the conditional criterion
+  RETAINS hp5,hrank,g,hdetect without assuming hunit.
+- No new-code warnings, sorry/admit/native_decide/unsafe/custom axioms.
+  Root output replays historical sorry warnings in unrelated existing modules;
+  this evidence is not an axiom-clean claim about the whole repository.
+
+Retained scope and next arithmetic:
+- omega-square rank one is NOT proved here.
+- No omega-square projector of [1+zeta] and no general nonzero Lambda evaluation
+  on that projected global unit is supplied here.
+- Conditional vanishing is not unconditional hunit closure and does not remove hunit
+  from the existing Frey endpoint. Its conclusion can be supplied to that endpoint
+  once its explicit rank/detection inputs are proved.
+- hbad, hclass and cyclic tower iteration remain open. General hno remains unfinished.
+- Adapted sources retain Apache copyright, license/NOTICE locations and upstream blob.
+  External checkout fingerprints were re-read; no external proof theorem was imported,
+  built or independently axiom-audited. See the JSON provenance record.
+
+Decisive recursive audit results from the successful root build:
+PASS: DkMath.Lib.NumberTheory.CyclotomicTruncatedLog.tlog_mul; 1523 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicPrimaryLog.parameter_sq_ne_zero; 38507 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicPrimaryLog.residueCharP; 38901 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicPrimaryLog.unitLog_pow; 38977 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicPrimaryLog.primaryLog; 39050 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicPrimaryLog.primaryLog_mk_eq_zero_of_local_power; 41251 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicPrimaryLog.primaryLog_eq_zero_of_mem_localPowerSpace; 41254 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicPrimaryLog.primaryLog_smul; 39085 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicPrimaryLogCriterion.eq_zero_of_rank_one_of_log_eq_zero; 39244 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicPrimaryLogCriterion.primaryWeightSquareSpace_eq_bot_of_rank_one_of_detection; 41469 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicPrimaryLog.primaryLog; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicPrimaryLog.primaryLog_mk_eq_zero_of_local_power; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicPrimaryLog.primaryLog_eq_zero_of_mem_localPowerSpace; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicPrimaryLogCriterion.eq_zero_of_rank_one_of_log_eq_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicPrimaryLogCriterion.primaryWeightSquareSpace_eq_bot_of_rank_one_of_detection; remaining arithmetic inputs explicit.

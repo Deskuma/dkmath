@@ -1,0 +1,752 @@
+{
+  "checkpoint": "GN-PUB-002",
+  "date": "2026-10-24",
+  "base_head": "3dc80ab01c5b0f2753a7984d5276979bbc1f4bb9",
+  "number_theory_import_groups": {
+    "一般核": [
+      "DkMath.Lib.Cosmic.Completion"
+    ],
+    "Pascal の素数行": [
+      "DkMath.NumberTheory.BinomialPrime"
+    ],
+    "原始支持と周期世界": [
+      "DkMath.NumberTheory.Primitive.SquareBody",
+      "DkMath.NumberTheory.Primitive.SquarePrimeExpansion",
+      "DkMath.NumberTheory.Primitive.PeriodicPrimeWorld",
+      "DkMath.NumberTheory.Primitive.PrimeWorldResidues",
+      "DkMath.NumberTheory.Primitive.PrimeWorldRefinement"
+    ],
+    "primorial 世界との橋": [
+      "DkMath.NumberTheory.PrimorialUniverse.SquareBodyBridge",
+      "DkMath.NumberTheory.PrimorialUniverse.ThirtySquareWorld",
+      "DkMath.NumberTheory.PrimorialUniverse.UnitCoordinateRefinement"
+    ],
+    "Legendre consumer": [
+      "DkMath.NumberTheory.Legendre.PrimeWorldPacketBridge",
+      "DkMath.NumberTheory.Legendre.PrimorialWheelBridge",
+      "DkMath.NumberTheory.Legendre.GnomonPascalCell",
+      "DkMath.NumberTheory.Legendre.PacketCoprimality",
+      "DkMath.NumberTheory.Legendre.GnomonBridge"
+    ]
+  },
+  "research_imports": [
+    "DkMath.Lib.Cosmic.Completion",
+    "DkMath.NumberTheory.Completion",
+    "DkMath.CosmicFormula.CosmicFormulaBinom",
+    "DkMath.Gnomon.Algebra",
+    "DkMath.Gnomon.CosmicBridge",
+    "DkMath.Lib.Cosmic.GTailSeven",
+    "DkMath.Lib.Cosmic.GTailSevenArithmetic"
+  ],
+  "representative_declarations": [
+    {
+      "owner": "DkMath.NumberTheory.BinomialPrime",
+      "name": "DkMath.NumberTheory.prime_allInnerChooseDivisible_self"
+    },
+    {
+      "owner": "DkMath.NumberTheory.Primitive.SquareBody",
+      "name": "DkMath.NumberTheory.Primitive.unitSquare_body_eq"
+    },
+    {
+      "owner": "DkMath.NumberTheory.Primitive.SquarePrimeExpansion",
+      "name": "DkMath.NumberTheory.Primitive.mem_squarePrimeExpansion_iff"
+    },
+    {
+      "owner": "DkMath.NumberTheory.Primitive.PeriodicPrimeWorld",
+      "name": "DkMath.NumberTheory.Primitive.dvd_primeWorldModulus_of_mem"
+    },
+    {
+      "owner": "DkMath.NumberTheory.Primitive.PrimeWorldResidues",
+      "name": "DkMath.NumberTheory.Primitive.mem_primeWorldResidues_iff_supportDisjointFrom"
+    },
+    {
+      "owner": "DkMath.NumberTheory.Primitive.PrimeWorldRefinement",
+      "name": "DkMath.NumberTheory.Primitive.supportDisjointFrom_insert_prime_iff"
+    },
+    {
+      "owner": "DkMath.NumberTheory.PrimorialUniverse.SquareBodyBridge",
+      "name": "DkMath.NumberTheory.PrimorialUniverse.finitePrimeBasis_subset_primeScalesUpTo_product"
+    },
+    {
+      "owner": "DkMath.NumberTheory.PrimorialUniverse.ThirtySquareWorld",
+      "name": "DkMath.NumberTheory.PrimorialUniverse.primeBasis235_subset_primeScalesUpTo_thirty"
+    },
+    {
+      "owner": "DkMath.NumberTheory.PrimorialUniverse.UnitCoordinateRefinement",
+      "name": "DkMath.NumberTheory.PrimorialUniverse.unitCoordinate_unique"
+    },
+    {
+      "owner": "DkMath.NumberTheory.Legendre.PrimeWorldPacketBridge",
+      "name": "DkMath.NumberTheory.Legendre.primeWorldResidues_eq_packetBase"
+    },
+    {
+      "owner": "DkMath.NumberTheory.Legendre.PrimorialWheelBridge",
+      "name": "DkMath.NumberTheory.Legendre.primeScalesUpTo_isFinitePrimeBasis"
+    },
+    {
+      "owner": "DkMath.NumberTheory.Legendre.GnomonPascalCell",
+      "name": "DkMath.NumberTheory.Legendre.gnomonPascalCell_mul_factorial"
+    },
+    {
+      "owner": "DkMath.NumberTheory.Legendre.PacketCoprimality",
+      "name": "DkMath.NumberTheory.Legendre.coprime_squarePacketPoints_of_coprime_offset"
+    },
+    {
+      "owner": "DkMath.NumberTheory.Legendre.GnomonBridge",
+      "name": "DkMath.NumberTheory.Legendre.squareOffset_iff_open_oddGnomon"
+    },
+    {
+      "owner": "DkMath.CosmicFormula.CosmicFormulaBinom",
+      "name": "DkMath.CosmicFormulaBinom.mul_G_eq_GZ"
+    },
+    {
+      "owner": "DkMath.Gnomon.Algebra",
+      "name": "DkMath.Gnomon.oddGnomon_succ"
+    },
+    {
+      "owner": "DkMath.Gnomon.CosmicBridge",
+      "name": "DkMath.Gnomon.GTail_two_one_eq_square_shell"
+    },
+    {
+      "owner": "DkMath.Lib.Cosmic.GTailSeven",
+      "name": "DkMath.CosmicFormula.GTail_seven_six"
+    },
+    {
+      "owner": "DkMath.Lib.Cosmic.GTailSevenArithmetic",
+      "name": "DkMath.CosmicFormula.coprime_left_seven_quadratic"
+    }
+  ],
+  "additional_endpoint_checks": [
+    "DkMath.Lib.Cosmic.completionLoan_primitive_triple",
+    "DkMath.Lib.NumberTheory.gcd_cofactor_completionDefect",
+    "DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_order_ray",
+    "DkMath.NumberTheory.Legendre.legendreConjecture_iff_projectedWheelEscape_from_two",
+    "DkMath.NumberTheory.Legendre.legendreConjecture_iff_pascalOldBudget",
+    "DkMath.NumberTheory.Legendre.legendreConjecture_iff_open_oddGnomon_prime",
+    "DkMath.Gnomon.squareGnomonBand_eq_mul_GTail_two_one",
+    "DkMath.NumberTheory.PrimorialUniverse.squareBody_thirty_add_one_eq_thirtyOne_sq"
+  ],
+  "existing_root_dependency_nodes": 1885,
+  "new_root_owner_dependencies": [
+    "DkMath.NumberTheory.PrimorialUniverse.ThirtySquareWorld"
+  ],
+  "existing_owner_sha256": {
+    "DkMath.Lib.Cosmic.GTailCyclotomic": "9b303ba64bfabaa9edc40215eb2e6275d66d3fc516430fb7c33841aab944cf62",
+    "DkMath.Lib.Cosmic.GTail": "d1d4317332effa93864454de2e367e020cd7d103ff163f438ea80ef7472108ef",
+    "DkMath.Lib.NumberTheory.PadicValNat": "30f22ea62f19845d8542a7d1ac5b5350b5c31975b92e0bb32afb205da36212ff",
+    "DkMath.Lib.Algebra.BinomTail": "b083a834e1d62482fe768acdfba21e98b82076595e0f0b94a05c3eb9ffc8fc0c",
+    "DkMath.Lib.Algebra.SquareCompletion": "4c749628b6985781daa7cb0de0fd1c4e2f89fc1542d5a2f15b656057cdcac24a",
+    "DkMath.Lib.NumberTheory.BinomialPrimePower": "97bbd1670bc42794a3051330fea934d026615b6dcb864c4c81e3ef901099ab11",
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd": "0eec961820c5ae2be81183ad167e0ae8c7ff6d5d9ac866ffbb6e307d950a35b5",
+    "DkMath.Lib.Cosmic.CompletionDefect": "84f0af4389cdae47d99eb611dfdc7ae938bbb16d2c35eb3c68530340452f80f8",
+    "DkMath.Lib.Cosmic.PowerDifferenceCofactor": "709f197f88d347762f628f0db9fbbb57be626e404e1de1270be4e230b47e78b1",
+    "DkMath.Lib.Cosmic.GNSuccessor": "2475129c8c6963eddde9b19d48f7e82cb700b6085db063c2bfaec7b61de7125f",
+    "DkMath.Lib.Cosmic.GNSupport": "dd2e2be212cbcd574972524929ed50aab5d1d8b7ab97d6650ced08d3bb399d08",
+    "DkMath.Lib.Cosmic.GTailBoundary": "d329436625c9d454560a3ccbb766801c7068e48d2e17ca73db8e4e48bcfb6ff6",
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorValuation": "d0f4888f46613462d7024699fb323ca628065f9de8eddf112a401a43168199d1",
+    "DkMath.Lib.Cosmic.PowerDifferenceCofactorArithmetic": "3b5e21b2ebbb76c68c63c613861119b4567c95c732b7f2a1cd63dea9c8cd0303",
+    "DkMath.Lib.NumberTheory.CompletionDefectGcd": "c60a562e5e615079dd147fe9585b5d4a49132fc77a407ed97a874a269e521ae7",
+    "DkMath.Lib.NumberTheory.PrimeRatioOrder": "2dac6a5143da7d64be4c9b5e44d0b25e3b39bba0af83870ebc8bb1d2eba6e119",
+    "DkMath.Lib.NumberTheory.CyclotomicAddress": "4dca003ceab028b0235813a5eb8313ae72d8d1e5cab93d7680f44b517d961f36",
+    "DkMath.Lib.NumberTheory.CyclotomicLayerValuation": "7b50bf344a8b652563edcff7b22517ef7c04bda68a8810ab492c91e6e2b3d9a6",
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorPrimeAddress": "d8301095b840767a159643d9740706644e94bcada3a8c091e0523a6d074708e5",
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomic": "e475845997badbdd916d1404b0ad0391fef311280b57d62f7c4b48c057e3e136",
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomicAddress": "332768125f000f2789e05efb20163b1f7e7bc23eb54a0ac85f42b2c64a69a04c",
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomicBoundary": "af58eeb41438e553126ad03da01ffbd98d5c9ba875314387741a9f1714bf26b1",
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomicPrimeAddress": "47dff3c02b95bb63e98b7f67748cb40d222c5bd247bd53610f79847326ac929a",
+    "DkMath.CosmicFormula.Defs": "a9751c1c6c685cf6884cb78f87dfc6c914925eb5f4b4ccbb305cc9f27b4cd63c",
+    "DkMath.CosmicFormula.GTail": "d107c5e6bca7445f501a5b83d116ee9bc928bb446591fda4d9a09a27feac9e0e",
+    "DkMath.Lib.Cosmic.GTailCongruence": "8cb13b609fd5a51b66780360504cf0c36307214118b948edff54d06bb3a60398",
+    "DkMath.Lib.Cosmic.GTailNat": "9271078c373f3e62fa94103c568dd0c7113e3373473de2e3e5cbb7c2271a5f4a",
+    "DkMath.Lib.Cosmic.GTailPadic": "97cad4e34331fb0309567297ba55c3e8f3fc4d6f203d5f48083c8e5fb9904503",
+    "DkMath.Algebra.DiffPow": "9d0f8a358bd31487a35cafb18251e7b782ebd9b01552c741cbccc36a64e99e2e",
+    "DkMath.Lib.Cosmic.Completion": "d04c5bdd924d4e15a19bc06925251fcbc3ffb638308175f7db567a65c1f5ae95",
+    "DkMath.Lib.Cosmic.GTailPascal": "0652ee2d1112c4ab0d91c376862463ab94b2c04b4fc0cd872494173478fd2004",
+    "DkMath.Lib.Cosmic.CompletionCoprime": "579b9fe6563b699eb3436cd0bcb491a83bba16af76e40cfe0f3d12eeb5f2517e",
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorStrongDivisibility": "a86bb8cdc609e2f0fedfbfcbc9bdaad6b0fbda38beff19657de42c6d00c275cb",
+    "DkMath.Lib.Cosmic.CompletionLoan": "b13d217d94a2b5cdbcd6f978f711c0bf5e1b91b2e270fe67e7f1a3011f9d3aa8",
+    "DkMath.Lib.Cosmic.GTailSelection": "15c1c499061cf699350000621f92630b0a760553e8a52618f18c062b49f73b32",
+    "DkMath.Lib.Cosmic.GTailFactor": "74ac0fe053ca6b24a3fca1a1c5778524bfa9905887ffcc80b1633e4a557c053e",
+    "DkMath.Lib.Cosmic.GTailTransport": "e701b2868acedcb01c32e24a208408a2cd4944c6eb5525f48125de9dc9362122",
+    "DkMath.Lib.Cosmic.GTailSeven": "681ab7e1aa4d9e334230256246c190bc48230495f5991b298574a6654f842dfc",
+    "DkMath.Lib.Cosmic.GTailSevenArithmetic": "28fb1bc73b457f35f1a4ebd6cfb42dd26ccc57a99a2d5ffa99b8c427994923f9",
+    "DkMath.CosmicFormula.CoreBeamGap": "e2c566e4fd454d43b63a006fb93a117bfd48efc611969d9f9ee28c8bc9386ae6",
+    "DkMath.CosmicFormula.CosmicFormulaBinom": "0a87e4ad954b978bed373cd747f5582a0d085cadba4804b01aa55af380fabc83",
+    "DkMath.Algebra.BinomTail": "88812555dd61724b10caca2f0c360c669c9ff6473d9220248de45bd74edea8d5",
+    "DkMath.CosmicFormula.RealCore": "65d2e83856919418f872dff7b456d5b69abd731912219ff96c70ef36593993e3",
+    "DkMath.ABC.PadicValNat": "1c5d0067cda7db0d26c40c3c645528ad376928e216516e1cdd0a62826e28a29c",
+    "DkMath.NumberTheory.GdcDivD": "7f6b0555ac887abd14e18a2fe5287a3fb9a666f5bce3edb412cd1a5d6b83a51f",
+    "DkMath.NumberTheory.GcdNatAbsDivD": "f13baab57c45596e979b676c12266e3da68300d1abb6cc71314862ac41bcb2d7",
+    "DkMath.NumberTheory.GcdLemmas": "0dd12d53b5bae2c4c65c324b50d5ef18802d86de25ffb15cd3faf3aa47dcf4b7",
+    "DkMath.NumberTheory.GcdDiffPow": "199827eb0ebac7ae62bde81a4d561d5778f9a8b0783d68378a5ca7cfc469ec1c",
+    "DkMath.NumberTheory.ZsigmondyCyclotomic": "fdd7ed95ef262ea4cbc499776401ad2de1793f2e2f85687638c000bd78827a1f",
+    "DkMath.CosmicFormula.Mass.BodyGapSplit": "a760246404cef9d7d460887ceee9cd0c2135e8f3d16fa7fb2f2f027f70be68d9",
+    "DkMath.NumberTheory.WeightedBinomial": "a86fd13c9dad9b3965cc3b600091e3b6ced0db67451eaef22643b57dcf36aaad",
+    "DkMath.NumberTheory.BinomialPrimePower": "e3bdadd590b67c6fb61e10c501301c01cd78a563d2b8e01c928a6c1e511a5585",
+    "DkMath.NumberTheory.BinomialPrime": "837a33cff177c81173e8d53a97d3e38f0679cd2834023870492dd146530bf7c8",
+    "DkMath.Zsigmondy": "6889a889e9ded0b4d89b7dca2ae2a52c0cf0869d424bff202608fb792a813465",
+    "DkMath.Gnomon.Algebra": "a1d80323d08e7f42d1491c542a09ff4bd8dbae84fb5c1089ac49ce95def8de88",
+    "DkMath.NumberTheory.PascalPrimeDial": "9090f65e4a60f05c8d502a08915a3bd11a923788e3b32ded42955598c7abc682",
+    "DkMath.NumberTheory.PascalPrimeCoordinateDecoder": "7d0fb4d381641097e1e37453326ad19c1040baaa28679e8d7a0fea09a3b2c2a5",
+    "DkMath.NumberTheory.PascalPrebirthBoundary": "7c514d72bdbea11982d8b0da7419d966cd2ea724b7369bea54756d390a60633b",
+    "DkMath.NumberTheory.PascalPrebirthBirth": "30871485c5ac86ca41c3c5c0b82f7ed01789449c1571f2d7e31d515c8c06b49c",
+    "DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection": "57de9f139a9851bdf33e9632c878e3e6b973e6f56ab4b354e082005bdfbec0e7",
+    "DkMath.NumberTheory.Primitive.FinitePrimeWorld": "e1b26d31d05097393cc91a2ec7fd24526c20c09fa38c85cba2f5f6d228235692",
+    "DkMath.NumberTheory.Primitive.PeriodicPrimeWorld": "9d31d6bf0f1ff909aff0b9dd8f825a01bbd2da59365b65987119ade00c33c618",
+    "DkMath.NumberTheory.Primitive.PrimeWorldRefinement": "0434fdab55d678112d3dca6b6cf02a79966e7cc19f85f5a9a105178423cacc83",
+    "DkMath.NumberTheory.Primitive.PrimeWorldResidues": "fc373fe504a94a72535da09e0a357897a67b1d98088d7946d77ca369667231d9",
+    "DkMath.NumberTheory.Primitive.SquareBody": "6bb5a1d699aa177260b0bbd95d469bb7a93245ea22fab95178197af883b928e6",
+    "DkMath.NumberTheory.Primitive.SquarePrimeExpansion": "9adb023661f65c22c7df9216cd433f10641bb9a1d3152d69d2c17ad8e696abf9",
+    "DkMath.NumberTheory.PrimorialUniverse.FiniteReservationEscape": "ff2881e46c45030968a0e93fed40b397b7ab5e9c6da7f34654b4e9c544511192",
+    "DkMath.NumberTheory.PrimorialUniverse.UnitCoordinateRefinement": "704be1e8b5fe64c19ccea8fa2f2122aa8c29e450e581c4cc480dd3126b9c285a",
+    "DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization": "12efd7ab727992640fe733329df77abf74d489a2087c59b3cfcb0372a4bef6b3",
+    "DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor": "556f16788c8cdb80fa69ab3db92848577c9dc0e04afaac8cd37b922a18d1691e",
+    "DkMath.NumberTheory.PrimorialUniverse.FreshPrimeLift": "d8d36bb293caf0ccfe0d3f60f6d1d66603f1e506775321323d0d607017ef95af",
+    "DkMath.NumberTheory.PrimorialUniverse.WheelReplication": "01deb8ba4e9d19d661445a28caa54d636823850da7ea0ddfeb220e2bf3164aa3",
+    "DkMath.NumberTheory.PrimorialUniverse.WheelProjection": "59cc46d9ef67f50a4e777b339aa4abfa43077d265b9a0b8a6d5209a189d7b291",
+    "DkMath.NumberTheory.PrimorialUniverse.SquareBodyBridge": "0ecd262d4d40500152a4117adc93fbc27dc5366eea4b7e6dbb14e3943407f5e0",
+    "DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOrbit": "1433e907c395f3e87f85ec7f51e145314e76718d807c6654a7e00155510fc925",
+    "DkMath.NumberTheory.Legendre.Frontier": "5dde522ace7be2cf7c8a6d1ba426319df14860b8d264b75bfb11b251a328698b",
+    "DkMath.NumberTheory.Legendre.LocalizedObstruction": "c4cea68c227375f8570629fe83c1800fc16decd9672b34767857c83c428b778f",
+    "DkMath.NumberTheory.Legendre.Obstruction": "e6fc65c9d10782215f50b8326ec15add82ad1a3d6d3ded07237d5c3758a8c110",
+    "DkMath.NumberTheory.Legendre.QuotientSupport": "de0bdd7507cb3c30cc8acbda17cc3d9d16e06e18ccdd615f314b748cdb41375d",
+    "DkMath.NumberTheory.Legendre.Quotient": "aa2b4fabfd2677a2e3c6aa11f0858d7eea6d22cceb7e1bb1a463e9c139e7bdb0",
+    "DkMath.NumberTheory.Legendre.CoprimePacket": "07aba94d8c39a70f3f2bec13f5afc411a5c5e5bbc935269a850754418d202fe6",
+    "DkMath.NumberTheory.Legendre.PairOverlap": "12bc80a2d256c7cd16ac8417814dd3055b3f1b5ccc39b5ac52409b7ed2bc8a21",
+    "DkMath.NumberTheory.Legendre.Wave": "07790f4fcd864753d20dea625b5b11d3a4bb6e1b2de7b7ee8564c407c0999d15",
+    "DkMath.NumberTheory.Legendre.Basic": "79d929aaab9557979edbd17978565fe6b6116977685773fd8fb3cd029ee213c6",
+    "DkMath.NumberTheory.Legendre.Internal.PairCombinatorics": "60081f3b2247a78c1cddb6e9fd2ba25e1b4f95c2f8407be2e2233575f3ee5511",
+    "DkMath.NumberTheory.Legendre.PacketUnitResidue": "c6dbf72b57e25a630df95a1a2a0b3ce32a91dbe54b9d8dd17b2f16cc43944a6b",
+    "DkMath.NumberTheory.Legendre.PacketCoprimality": "970c84ca3d0dda92d9cbe1e4310f44c612ba8d7fe1137ae33c3e02f0bb03adac",
+    "DkMath.NumberTheory.Legendre.PacketCross": "bc1123a1d4d31ae42b1aa64cb78f2ac63c6f3fb263d998134252c93586481b10",
+    "DkMath.NumberTheory.Primitive.CrossPeriod": "9aea6cb73bbb9363244c0c963898c167728e4f7921bfd4419abc1c243384664b",
+    "DkMath.NumberTheory.Legendre.SmallCofactor": "648687d24bec28e97b2f322129ed7e305684adc028c05c32c24dab5085836ace",
+    "DkMath.NumberTheory.Legendre.GnomonBridge": "39bbd32cae7798d4df45bcb0dc8125b7e68683b5522626db1ed19033700d6dbe",
+    "DkMath.Gnomon.CosmicBridge": "9e765bfecbc5169570dbc2bf980f74a6f43a87ccebc156caa22ce279010d05a0",
+    "DkMath.NumberTheory.Legendre.GnomonSuccessor": "c24cb22bf902f64de92d5d106bd444918cdd94545f546bfeacf6cf3b5f166eba",
+    "DkMath.NumberTheory.Legendre.PrimorialWheelSuccessor": "e6a567f57511da29ecfed4bbc752421599dbe324c40c784b69c6ce95e29f059d",
+    "DkMath.NumberTheory.Legendre.PrimorialWheelBridge": "85e8f6dc304f2d395eebadbe4febc0fef87e7777716b4698673ddbe60229ef3c",
+    "DkMath.NumberTheory.Legendre.GnomonSupportTurnover": "592ba7683f7245455424e686d670a08cbb133648361426ee57f38367567709ca",
+    "DkMath.NumberTheory.Legendre.CyclotomicPersistence": "6598b7d1e86c76df71c85d375c9169dfec9b9cdd3bbcb58ab6ce6b3e9a5a446c",
+    "DkMath.NumberTheory.GapFocusing.HomogeneousAddress": "42f90c6513909909d53bfafcbcc1ca7cc82bdd6151a91073fa48cbb29c0bffc5",
+    "DkMath.NumberTheory.GapFocusing.PrimeOrder": "8b84d89ee878a223e9d848ed5f55a2912b5fb26e532d10f361001b2a2557de78",
+    "DkMath.NumberTheory.Legendre.CenteredPair": "afb95f2c737131b0cbbb24d69ce71397dc9c7c7dde16b7cf2282195435630863",
+    "DkMath.NumberTheory.Legendre.CenteredPacketTriangle": "c1188bf91ef89bdd474ef7aac17d177e35a0a5ab907fe69ca41dbd02a1a93db2",
+    "DkMath.NumberTheory.Legendre.CoprimeSeatCapacity": "77c414ebecff0ca60c8e1f61fd2c8f761118e1dbf285acc311766cee5100d55d",
+    "DkMath.NumberTheory.Legendre.OldSupportCapacity": "004bea636addf3d5b5530596ed7f97668b39f805f312c8bed7d34c1bcccf83e5",
+    "DkMath.NumberTheory.Legendre.OldSupportGcd": "9a1bb691b1d46c6cb8dada90a989131ed06343b98821d0b020b0cb8278eec4c6",
+    "DkMath.NumberTheory.Legendre.GnomonResidueCover": "f39babdf51dfd010b185820194aa4d82dff9355955f0c13fdf834bc63d2c0c37",
+    "DkMath.NumberTheory.Legendre.GnomonPrimorialTransition": "41235e1a6b3cefe2819fd9b0d16902a80f2d7797023f57e0b433eecf7d686bdd",
+    "DkMath.NumberTheory.Legendre.CenteredFoldSupportNorm": "b95131041a7bfd3828550b732862d382233d9977041a13fce07cc75de8d334a8",
+    "DkMath.NumberTheory.Legendre.CenteredOwnerFold": "9c84493f63e5597b33685f7d020eaa126c5324cf100adb3ecfef829d8eab6795",
+    "DkMath.NumberTheory.Legendre.QuadraticGnomonFold": "8844dc1b3fe67fe0c010d0532978351925af52356a0dce8666b0a90cd65960d0",
+    "DkMath.NumberTheory.Legendre.CenteredFoldGcdAggregate": "6a10549c2914d68d9bcaf783c7b21123c4cbb3ac8b49b546b5f6d69e5d86b752",
+    "DkMath.NumberTheory.Legendre.PrimeWorldPacketBridge": "06463780bab9151f3c55a888ae6d88d8e4e1c7e3590136bb2f251b168a57a939",
+    "DkMath.NumberTheory.Legendre.GnomonPascalCell": "a6bab17f7a7ddfbc303d53f6a152d75ef6bdd9ba2475495f7514dac23dcfc66a",
+    "DkMath.NumberTheory.PrimorialUniverse.ThirtySquareWorld": "bb3a3088bc7efc2c449710cdc48c8943888eb51b487a2a2c281fe676eafda4e9"
+  },
+  "local_import_graph": {
+    "DkMath.Completion": [
+      "DkMath.Lib.Cosmic.Completion",
+      "DkMath.NumberTheory.Completion",
+      "DkMath.CosmicFormula.CosmicFormulaBinom",
+      "DkMath.Gnomon.Algebra",
+      "DkMath.Gnomon.CosmicBridge",
+      "DkMath.Lib.Cosmic.GTailSeven",
+      "DkMath.Lib.Cosmic.GTailSevenArithmetic"
+    ],
+    "DkMath.Lib.Cosmic.Completion": [
+      "DkMath.Lib.Cosmic.GTail",
+      "DkMath.Lib.Cosmic.GNSuccessor",
+      "DkMath.Lib.Cosmic.GNSupport",
+      "DkMath.Lib.Cosmic.GTailCyclotomic",
+      "DkMath.Lib.Cosmic.GTailBoundary",
+      "DkMath.Lib.Cosmic.GTailCongruence",
+      "DkMath.Lib.Cosmic.GTailNat",
+      "DkMath.Lib.Cosmic.GTailPadic",
+      "DkMath.Lib.Cosmic.GTailPascal",
+      "DkMath.Lib.Algebra.BinomTail",
+      "DkMath.Lib.Algebra.SquareCompletion",
+      "DkMath.Lib.Cosmic.CompletionCoprime",
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactor",
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactorArithmetic",
+      "DkMath.Lib.Cosmic.CompletionDefect",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorStrongDivisibility",
+      "DkMath.Lib.NumberTheory.CompletionDefectGcd",
+      "DkMath.Lib.Cosmic.CompletionLoan",
+      "DkMath.Lib.NumberTheory.PadicValNat",
+      "DkMath.Lib.NumberTheory.BinomialPrimePower",
+      "DkMath.Lib.NumberTheory.PrimeRatioOrder",
+      "DkMath.Lib.NumberTheory.CyclotomicAddress",
+      "DkMath.Lib.NumberTheory.CyclotomicLayerValuation",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorValuation",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorPrimeAddress",
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomic",
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomicAddress",
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomicBoundary",
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomicPrimeAddress"
+    ],
+    "DkMath.Lib.Cosmic.GTail": [],
+    "DkMath.Lib.Cosmic.GNSuccessor": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic"
+    ],
+    "DkMath.Lib.Cosmic.GTailCyclotomic": [
+      "DkMath.Lib.Cosmic.GTail"
+    ],
+    "DkMath.Lib.Cosmic.GNSupport": [
+      "DkMath.Lib.Cosmic.GNSuccessor"
+    ],
+    "DkMath.Lib.Cosmic.GTailBoundary": [
+      "DkMath.Lib.Cosmic.GTail"
+    ],
+    "DkMath.Lib.Cosmic.GTailCongruence": [
+      "DkMath.Lib.Cosmic.GTailNat"
+    ],
+    "DkMath.Lib.Cosmic.GTailNat": [
+      "DkMath.Lib.Cosmic.GTail"
+    ],
+    "DkMath.Lib.Cosmic.GTailPadic": [
+      "DkMath.Lib.Cosmic.GTailNat",
+      "DkMath.Lib.Cosmic.GTailBoundary",
+      "DkMath.Lib.Cosmic.GTailCongruence",
+      "DkMath.Lib.NumberTheory.PadicValNat"
+    ],
+    "DkMath.Lib.NumberTheory.PadicValNat": [],
+    "DkMath.Lib.Cosmic.GTailPascal": [
+      "DkMath.Lib.Cosmic.GTail"
+    ],
+    "DkMath.Lib.Algebra.BinomTail": [],
+    "DkMath.Lib.Algebra.SquareCompletion": [],
+    "DkMath.Lib.Cosmic.CompletionCoprime": [
+      "DkMath.Lib.Cosmic.GTail",
+      "DkMath.Lib.NumberTheory.PadicValNat"
+    ],
+    "DkMath.Lib.Cosmic.PowerDifferenceCofactor": [
+      "DkMath.Lib.Cosmic.GNSuccessor"
+    ],
+    "DkMath.Lib.Cosmic.PowerDifferenceCofactorArithmetic": [
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactor"
+    ],
+    "DkMath.Lib.Cosmic.CompletionDefect": [
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactor"
+    ],
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd": [
+      "DkMath.Lib.Cosmic.CompletionDefect",
+      "DkMath.Lib.Cosmic.GNSupport",
+      "DkMath.Lib.Cosmic.GTailBoundary"
+    ],
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorStrongDivisibility": [
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactorArithmetic",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd"
+    ],
+    "DkMath.Lib.NumberTheory.CompletionDefectGcd": [
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorValuation",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd",
+      "DkMath.Lib.NumberTheory.PadicValNat"
+    ],
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorValuation": [
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactorArithmetic"
+    ],
+    "DkMath.Lib.Cosmic.CompletionLoan": [
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorStrongDivisibility"
+    ],
+    "DkMath.Lib.NumberTheory.BinomialPrimePower": [
+      "DkMath.Lib.NumberTheory.PadicValNat"
+    ],
+    "DkMath.Lib.NumberTheory.PrimeRatioOrder": [],
+    "DkMath.Lib.NumberTheory.CyclotomicAddress": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic"
+    ],
+    "DkMath.Lib.NumberTheory.CyclotomicLayerValuation": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic",
+      "DkMath.Lib.NumberTheory.CyclotomicAddress"
+    ],
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorPrimeAddress": [
+      "DkMath.Lib.NumberTheory.PrimeRatioOrder",
+      "DkMath.Lib.NumberTheory.CyclotomicLayerValuation",
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactor"
+    ],
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomic": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic"
+    ],
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomicAddress": [
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomic",
+      "DkMath.Lib.NumberTheory.CyclotomicAddress",
+      "DkMath.Lib.NumberTheory.PrimeRatioOrder"
+    ],
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomicBoundary": [
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomicAddress"
+    ],
+    "DkMath.Lib.NumberTheory.HomogeneousCyclotomicPrimeAddress": [
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomicBoundary",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorPrimeAddress"
+    ],
+    "DkMath.NumberTheory.Completion": [
+      "DkMath.Lib.Cosmic.Completion",
+      "DkMath.NumberTheory.BinomialPrime",
+      "DkMath.NumberTheory.Primitive.SquareBody",
+      "DkMath.NumberTheory.Primitive.SquarePrimeExpansion",
+      "DkMath.NumberTheory.Primitive.PeriodicPrimeWorld",
+      "DkMath.NumberTheory.Primitive.PrimeWorldResidues",
+      "DkMath.NumberTheory.Primitive.PrimeWorldRefinement",
+      "DkMath.NumberTheory.PrimorialUniverse.SquareBodyBridge",
+      "DkMath.NumberTheory.PrimorialUniverse.ThirtySquareWorld",
+      "DkMath.NumberTheory.PrimorialUniverse.UnitCoordinateRefinement",
+      "DkMath.NumberTheory.Legendre.PrimeWorldPacketBridge",
+      "DkMath.NumberTheory.Legendre.PrimorialWheelBridge",
+      "DkMath.NumberTheory.Legendre.GnomonPascalCell",
+      "DkMath.NumberTheory.Legendre.PacketCoprimality",
+      "DkMath.NumberTheory.Legendre.GnomonBridge"
+    ],
+    "DkMath.NumberTheory.BinomialPrime": [],
+    "DkMath.NumberTheory.Primitive.SquareBody": [
+      "DkMath.Lib.Algebra.SquareCompletion",
+      "DkMath.CosmicFormula.CosmicFormulaBinom",
+      "DkMath.NumberTheory.Primitive.FinitePrimeWorld"
+    ],
+    "DkMath.CosmicFormula.CosmicFormulaBinom": [
+      "DkMath.Algebra.BinomTail",
+      "DkMath.CosmicFormula.Defs",
+      "DkMath.CosmicFormula.RealCore",
+      "DkMath.ABC.PadicValNat"
+    ],
+    "DkMath.Algebra.BinomTail": [
+      "DkMath.Lib.Algebra.BinomTail"
+    ],
+    "DkMath.CosmicFormula.Defs": [
+      "DkMath.CosmicFormula.GTail"
+    ],
+    "DkMath.CosmicFormula.GTail": [
+      "DkMath.Lib.Cosmic.GTailCongruence",
+      "DkMath.Lib.Cosmic.GTailPadic"
+    ],
+    "DkMath.CosmicFormula.RealCore": [],
+    "DkMath.ABC.PadicValNat": [
+      "DkMath.Lib.NumberTheory.PadicValNat"
+    ],
+    "DkMath.NumberTheory.Primitive.FinitePrimeWorld": [
+      "DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection"
+    ],
+    "DkMath.NumberTheory.StructuralArithmetic.PrimitiveDirection": [],
+    "DkMath.NumberTheory.Primitive.SquarePrimeExpansion": [
+      "DkMath.NumberTheory.Primitive.SquareBody"
+    ],
+    "DkMath.NumberTheory.Primitive.PeriodicPrimeWorld": [
+      "DkMath.NumberTheory.Primitive.FinitePrimeWorld"
+    ],
+    "DkMath.NumberTheory.Primitive.PrimeWorldResidues": [
+      "DkMath.NumberTheory.Primitive.PrimeWorldRefinement"
+    ],
+    "DkMath.NumberTheory.Primitive.PrimeWorldRefinement": [
+      "DkMath.NumberTheory.Primitive.PeriodicPrimeWorld"
+    ],
+    "DkMath.NumberTheory.PrimorialUniverse.SquareBodyBridge": [
+      "DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization",
+      "DkMath.NumberTheory.Primitive.SquarePrimeExpansion"
+    ],
+    "DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization": [
+      "DkMath.NumberTheory.PrimorialUniverse.FiniteReservationEscape"
+    ],
+    "DkMath.NumberTheory.PrimorialUniverse.FiniteReservationEscape": [],
+    "DkMath.NumberTheory.PrimorialUniverse.ThirtySquareWorld": [
+      "DkMath.NumberTheory.PrimorialUniverse.SquareBodyBridge"
+    ],
+    "DkMath.NumberTheory.PrimorialUniverse.UnitCoordinateRefinement": [
+      "DkMath.NumberTheory.PrimorialUniverse.FiniteReservationEscape"
+    ],
+    "DkMath.NumberTheory.Legendre.PrimeWorldPacketBridge": [
+      "DkMath.NumberTheory.Primitive.PrimeWorldResidues",
+      "DkMath.NumberTheory.Legendre.PacketUnitResidue",
+      "DkMath.NumberTheory.Legendre.PrimorialWheelBridge",
+      "DkMath.NumberTheory.Legendre.CenteredFoldGcdAggregate"
+    ],
+    "DkMath.NumberTheory.Legendre.PacketUnitResidue": [
+      "DkMath.NumberTheory.Legendre.PacketCoprimality"
+    ],
+    "DkMath.NumberTheory.Legendre.PacketCoprimality": [
+      "DkMath.NumberTheory.Legendre.PacketCross"
+    ],
+    "DkMath.NumberTheory.Legendre.PacketCross": [
+      "DkMath.NumberTheory.Legendre.Quotient",
+      "DkMath.NumberTheory.Primitive.CrossPeriod"
+    ],
+    "DkMath.NumberTheory.Legendre.Quotient": [
+      "DkMath.NumberTheory.Legendre.CoprimePacket"
+    ],
+    "DkMath.NumberTheory.Legendre.CoprimePacket": [
+      "DkMath.NumberTheory.Legendre.PairOverlap"
+    ],
+    "DkMath.NumberTheory.Legendre.PairOverlap": [
+      "DkMath.NumberTheory.Legendre.Wave",
+      "DkMath.NumberTheory.Legendre.Internal.PairCombinatorics"
+    ],
+    "DkMath.NumberTheory.Legendre.Wave": [
+      "DkMath.NumberTheory.Legendre.Basic"
+    ],
+    "DkMath.NumberTheory.Legendre.Basic": [
+      "DkMath.NumberTheory.Primitive.SquareBody"
+    ],
+    "DkMath.NumberTheory.Legendre.Internal.PairCombinatorics": [],
+    "DkMath.NumberTheory.Primitive.CrossPeriod": [],
+    "DkMath.NumberTheory.Legendre.PrimorialWheelBridge": [
+      "DkMath.NumberTheory.Legendre.Frontier",
+      "DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOrbit"
+    ],
+    "DkMath.NumberTheory.Legendre.Frontier": [
+      "DkMath.NumberTheory.Legendre.LocalizedObstruction",
+      "DkMath.NumberTheory.Legendre.PacketUnitResidue",
+      "DkMath.NumberTheory.Legendre.SmallCofactor"
+    ],
+    "DkMath.NumberTheory.Legendre.LocalizedObstruction": [
+      "DkMath.NumberTheory.Legendre.Obstruction",
+      "DkMath.NumberTheory.Legendre.Internal.PairCombinatorics"
+    ],
+    "DkMath.NumberTheory.Legendre.Obstruction": [
+      "DkMath.NumberTheory.Legendre.QuotientSupport"
+    ],
+    "DkMath.NumberTheory.Legendre.QuotientSupport": [
+      "DkMath.NumberTheory.Legendre.Quotient"
+    ],
+    "DkMath.NumberTheory.Legendre.SmallCofactor": [
+      "DkMath.NumberTheory.Legendre.QuotientSupport"
+    ],
+    "DkMath.NumberTheory.PrimorialUniverse.SquareAnchorOrbit": [
+      "DkMath.NumberTheory.PrimorialUniverse.WheelProjection"
+    ],
+    "DkMath.NumberTheory.PrimorialUniverse.WheelProjection": [
+      "DkMath.NumberTheory.PrimorialUniverse.WheelReplication"
+    ],
+    "DkMath.NumberTheory.PrimorialUniverse.WheelReplication": [
+      "DkMath.NumberTheory.PrimorialUniverse.FreshPrimeLift"
+    ],
+    "DkMath.NumberTheory.PrimorialUniverse.FreshPrimeLift": [
+      "DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor"
+    ],
+    "DkMath.NumberTheory.PrimorialUniverse.WheelSurvivor": [
+      "DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization"
+    ],
+    "DkMath.NumberTheory.Legendre.CenteredFoldGcdAggregate": [
+      "DkMath.NumberTheory.Legendre.CenteredFoldSupportNorm",
+      "DkMath.NumberTheory.PrimorialUniverse.FinitePrimeSynchronization"
+    ],
+    "DkMath.NumberTheory.Legendre.CenteredFoldSupportNorm": [
+      "DkMath.NumberTheory.Legendre.CenteredOwnerFold"
+    ],
+    "DkMath.NumberTheory.Legendre.CenteredOwnerFold": [
+      "DkMath.NumberTheory.Legendre.QuadraticGnomonFold",
+      "DkMath.NumberTheory.Legendre.GnomonPrimorialTransition",
+      "DkMath.NumberTheory.Legendre.OldSupportGcd"
+    ],
+    "DkMath.NumberTheory.Legendre.QuadraticGnomonFold": [
+      "DkMath.NumberTheory.Legendre.CenteredPair",
+      "DkMath.NumberTheory.Legendre.GnomonResidueCover"
+    ],
+    "DkMath.NumberTheory.Legendre.CenteredPair": [
+      "DkMath.NumberTheory.Legendre.PacketCoprimality"
+    ],
+    "DkMath.NumberTheory.Legendre.GnomonResidueCover": [
+      "DkMath.NumberTheory.Legendre.GnomonSuccessor"
+    ],
+    "DkMath.NumberTheory.Legendre.GnomonSuccessor": [
+      "DkMath.NumberTheory.Legendre.GnomonBridge",
+      "DkMath.NumberTheory.Legendre.PrimorialWheelSuccessor"
+    ],
+    "DkMath.NumberTheory.Legendre.GnomonBridge": [
+      "DkMath.Gnomon.CosmicBridge",
+      "DkMath.NumberTheory.Legendre.Frontier"
+    ],
+    "DkMath.Gnomon.CosmicBridge": [
+      "DkMath.Gnomon.Algebra",
+      "DkMath.Lib.Cosmic.GTail"
+    ],
+    "DkMath.Gnomon.Algebra": [
+      "DkMath.Lib.Algebra.SquareCompletion"
+    ],
+    "DkMath.NumberTheory.Legendre.PrimorialWheelSuccessor": [
+      "DkMath.NumberTheory.Legendre.PrimorialWheelBridge"
+    ],
+    "DkMath.NumberTheory.Legendre.GnomonPrimorialTransition": [
+      "DkMath.NumberTheory.Legendre.GnomonResidueCover",
+      "DkMath.NumberTheory.Legendre.CyclotomicPersistence"
+    ],
+    "DkMath.NumberTheory.Legendre.CyclotomicPersistence": [
+      "DkMath.NumberTheory.Legendre.GnomonSupportTurnover",
+      "DkMath.NumberTheory.GapFocusing.HomogeneousAddress"
+    ],
+    "DkMath.NumberTheory.Legendre.GnomonSupportTurnover": [
+      "DkMath.NumberTheory.Legendre.GnomonSuccessor"
+    ],
+    "DkMath.NumberTheory.GapFocusing.HomogeneousAddress": [
+      "DkMath.Lib.NumberTheory.HomogeneousCyclotomicAddress",
+      "DkMath.NumberTheory.GapFocusing.PrimeOrder"
+    ],
+    "DkMath.NumberTheory.GapFocusing.PrimeOrder": [
+      "DkMath.Zsigmondy",
+      "DkMath.Lib.NumberTheory.PrimeRatioOrder"
+    ],
+    "DkMath.Zsigmondy": [
+      "DkMath.Algebra.DiffPow",
+      "DkMath.CosmicFormula.CoreBeamGap",
+      "DkMath.NumberTheory.ZsigmondyCyclotomic"
+    ],
+    "DkMath.Algebra.DiffPow": [],
+    "DkMath.CosmicFormula.CoreBeamGap": [
+      "DkMath.CosmicFormula.CosmicFormulaBinom"
+    ],
+    "DkMath.NumberTheory.ZsigmondyCyclotomic": [
+      "DkMath.ABC.PadicValNat",
+      "DkMath.Algebra.DiffPow",
+      "DkMath.NumberTheory.GcdDiffPow",
+      "DkMath.NumberTheory.GdcDivD",
+      "DkMath.CosmicFormula.CosmicFormulaBinom"
+    ],
+    "DkMath.NumberTheory.GcdDiffPow": [
+      "DkMath.Algebra.DiffPow"
+    ],
+    "DkMath.NumberTheory.GdcDivD": [
+      "DkMath.Algebra.DiffPow",
+      "DkMath.NumberTheory.GcdNatAbsDivD"
+    ],
+    "DkMath.NumberTheory.GcdNatAbsDivD": [
+      "DkMath.Algebra.DiffPow",
+      "DkMath.NumberTheory.GcdLemmas"
+    ],
+    "DkMath.NumberTheory.GcdLemmas": [
+      "DkMath.Algebra.DiffPow"
+    ],
+    "DkMath.NumberTheory.Legendre.OldSupportGcd": [
+      "DkMath.NumberTheory.Legendre.OldSupportCapacity",
+      "DkMath.NumberTheory.Primitive.PeriodicPrimeWorld"
+    ],
+    "DkMath.NumberTheory.Legendre.OldSupportCapacity": [
+      "DkMath.NumberTheory.Legendre.CoprimeSeatCapacity"
+    ],
+    "DkMath.NumberTheory.Legendre.CoprimeSeatCapacity": [
+      "DkMath.NumberTheory.Legendre.CenteredPacketTriangle",
+      "DkMath.NumberTheory.Legendre.Frontier"
+    ],
+    "DkMath.NumberTheory.Legendre.CenteredPacketTriangle": [
+      "DkMath.NumberTheory.Legendre.CenteredPair"
+    ],
+    "DkMath.NumberTheory.Legendre.GnomonPascalCell": [
+      "DkMath.NumberTheory.Legendre.Basic",
+      "DkMath.NumberTheory.PascalPrebirthBirth"
+    ],
+    "DkMath.NumberTheory.PascalPrebirthBirth": [
+      "DkMath.NumberTheory.PascalPrebirthBoundary",
+      "DkMath.NumberTheory.PascalPrimeCoordinateDecoder"
+    ],
+    "DkMath.NumberTheory.PascalPrebirthBoundary": [
+      "DkMath.NumberTheory.BinomialPrimePower"
+    ],
+    "DkMath.NumberTheory.BinomialPrimePower": [
+      "DkMath.Lib.NumberTheory.BinomialPrimePower",
+      "DkMath.NumberTheory.BinomialPrime"
+    ],
+    "DkMath.NumberTheory.PascalPrimeCoordinateDecoder": [
+      "DkMath.NumberTheory.PascalPrimeDial"
+    ],
+    "DkMath.NumberTheory.PascalPrimeDial": [
+      "DkMath.NumberTheory.WeightedBinomial"
+    ],
+    "DkMath.NumberTheory.WeightedBinomial": [
+      "DkMath.NumberTheory.BinomialPrimePower",
+      "DkMath.CosmicFormula.Mass.BodyGapSplit",
+      "DkMath.Lib.Cosmic.GTail"
+    ],
+    "DkMath.CosmicFormula.Mass.BodyGapSplit": [],
+    "DkMath.Lib.Cosmic.GTailSeven": [
+      "DkMath.Lib.Cosmic.GTailTransport"
+    ],
+    "DkMath.Lib.Cosmic.GTailTransport": [
+      "DkMath.Lib.Cosmic.GTailFactor",
+      "DkMath.Lib.Cosmic.GTailPascal"
+    ],
+    "DkMath.Lib.Cosmic.GTailFactor": [
+      "DkMath.Lib.Cosmic.GTailSelection"
+    ],
+    "DkMath.Lib.Cosmic.GTailSelection": [
+      "DkMath.Lib.Cosmic.GTail"
+    ],
+    "DkMath.Lib.Cosmic.GTailSevenArithmetic": [
+      "DkMath.Lib.Cosmic.GTailCongruence"
+    ]
+  },
+  "completion_dependency_nodes": 115,
+  "validation": {
+    "focused_build": {
+      "command": "lake build DkMath.NumberTheory.Completion DkMath.Completion",
+      "exit_code": 0,
+      "jobs": 9038,
+      "warning_count": 0
+    },
+    "smokes": {
+      "number_theory": {
+        "sole_import": "DkMath.NumberTheory.Completion",
+        "theorem_checks": 14,
+        "exit_code": 0
+      },
+      "research": {
+        "sole_import": "DkMath.Completion",
+        "theorem_checks": 27,
+        "typed_examples": 2,
+        "exit_code": 0
+      }
+    },
+    "registered_test_body_matches_elaborated_smoke": true,
+    "axiom_audit": {
+      "theorems": 27,
+      "allowed_axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "results": {
+        "DkMath.NumberTheory.prime_allInnerChooseDivisible_self": "propext, Classical.choice, Quot.sound",
+        "DkMath.NumberTheory.Primitive.unitSquare_body_eq": "propext, Classical.choice, Quot.sound",
+        "DkMath.NumberTheory.Primitive.mem_squarePrimeExpansion_iff": "propext, Classical.choice, Quot.sound",
+        "DkMath.NumberTheory.Primitive.dvd_primeWorldModulus_of_mem": "propext, Classical.choice, Quot.sound",
+        "DkMath.NumberTheory.Primitive.mem_primeWorldResidues_iff_supportDisjointFrom": "propext,\n Classical.choice,\n Quot.sound",
+        "DkMath.NumberTheory.Primitive.supportDisjointFrom_insert_prime_iff": "propext,\n Classical.choice,\n Quot.sound",
+        "DkMath.NumberTheory.PrimorialUniverse.finitePrimeBasis_subset_primeScalesUpTo_product": "propext,\n Classical.choice,\n Quot.sound",
+        "DkMath.NumberTheory.PrimorialUniverse.primeBasis235_subset_primeScalesUpTo_thirty": "propext,\n Classical.choice,\n Quot.sound",
+        "DkMath.NumberTheory.PrimorialUniverse.unitCoordinate_unique": "propext, Classical.choice, Quot.sound",
+        "DkMath.NumberTheory.Legendre.primeWorldResidues_eq_packetBase": "propext,\n Classical.choice,\n Quot.sound",
+        "DkMath.NumberTheory.Legendre.primeScalesUpTo_isFinitePrimeBasis": "propext,\n Classical.choice,\n Quot.sound",
+        "DkMath.NumberTheory.Legendre.gnomonPascalCell_mul_factorial": "propext, Classical.choice, Quot.sound",
+        "DkMath.NumberTheory.Legendre.coprime_squarePacketPoints_of_coprime_offset": "propext, Quot.sound",
+        "DkMath.NumberTheory.Legendre.squareOffset_iff_open_oddGnomon": "propext,\n Classical.choice,\n Quot.sound",
+        "DkMath.CosmicFormulaBinom.mul_G_eq_GZ": "propext, Classical.choice, Quot.sound",
+        "DkMath.Gnomon.oddGnomon_succ": "propext",
+        "DkMath.Gnomon.GTail_two_one_eq_square_shell": "propext, Classical.choice, Quot.sound",
+        "DkMath.CosmicFormula.GTail_seven_six": "propext, Classical.choice, Quot.sound",
+        "DkMath.CosmicFormula.coprime_left_seven_quadratic": "propext, Quot.sound",
+        "DkMath.Lib.Cosmic.completionLoan_primitive_triple": "propext, Classical.choice, Quot.sound",
+        "DkMath.Lib.NumberTheory.gcd_cofactor_completionDefect": "propext, Classical.choice, Quot.sound",
+        "DkMath.Lib.NumberTheory.prime_dvd_homogeneousCyclotomicEval_iff_order_ray": "propext,\n Classical.choice,\n Quot.sound",
+        "DkMath.NumberTheory.Legendre.legendreConjecture_iff_projectedWheelEscape_from_two": "propext,\n Classical.choice,\n Quot.sound",
+        "DkMath.NumberTheory.Legendre.legendreConjecture_iff_pascalOldBudget": "propext,\n Classical.choice,\n Quot.sound",
+        "DkMath.NumberTheory.Legendre.legendreConjecture_iff_open_oddGnomon_prime": "propext,\n Classical.choice,\n Quot.sound",
+        "DkMath.Gnomon.squareGnomonBand_eq_mul_GTail_two_one": "propext, Classical.choice, Quot.sound",
+        "DkMath.NumberTheory.PrimorialUniverse.squareBody_thirty_add_one_eq_thirtyOne_sq": "propext"
+      }
+    },
+    "existing_owners_unchanged_from_head": 113,
+    "normal_root_registration": "static check only",
+    "normal_test_registration": "static check only; existing Lake glob covers module",
+    "acyclic_root_dependency_nodes": 1888,
+    "baseline_root_dependency_nodes": 1885,
+    "new_root_dependency_nodes": [
+      "DkMath.Completion",
+      "DkMath.NumberTheory.Completion",
+      "DkMath.NumberTheory.PrimorialUniverse.ThirtySquareWorld"
+    ],
+    "lib_completion_dependency_nodes": 31,
+    "original_material_hashes_verified": 24,
+    "marker_tracker": "OK: no mismatches found",
+    "relative_markdown_links_checked": 178,
+    "git_diff_check": "passed",
+    "full_root_and_test_builds": "not run per user validation split"
+  }
+}

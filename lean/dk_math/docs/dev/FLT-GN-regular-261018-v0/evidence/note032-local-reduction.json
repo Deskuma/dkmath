@@ -1,0 +1,584 @@
+{
+  "unit": "NOTE-032-LOCAL-REDUCTION",
+  "date": "2026-10-26",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "4bceb51a56ea8a149577e47ba3dff9e878f4f5a5",
+  "status": "same actual valuation-ring kernel target and residue compatibility; singular-kernel branch multiplicative reduction for same integer target; unconditional dyadic minimality from 240 correction; smooth-kernel reduction plumbing complete, nodal quotient invariants remain unproved",
+  "production": [
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassVeluReduction.lean",
+      "sha256": "9c3badfabc2dae33f58992ae1db25619e95f085c24b79a038268ed75bd474adf",
+      "theorems": [
+        "moments_eq_zero_of_singular",
+        "polynomialModel_eq_of_singular",
+        "polynomialModel_c_invariants",
+        "polynomialModel_c4_eq_of_240_eq_zero"
+      ],
+      "definitions": [],
+      "lines": 73
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassResidueModel.lean",
+      "sha256": "7e2103cccd6eff628dd1c70db0bfff11508fa6770779489c8655cacbd986e8e2",
+      "theorems": [
+        "residue_zero_iff",
+        "residue_ne_zero_iff",
+        "invariant_conditions_iff",
+        "polynomialModel_residue",
+        "polynomialModel_residue_eq_of_singular",
+        "polynomialModel_c4_value_one"
+      ],
+      "definitions": [],
+      "lines": 76
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelReduction.lean",
+      "sha256": "cfdf3df6b9eb5e013c9cb941eea004e9aaa56bcdb6507a06185adb7d6597e687",
+      "theorems": [
+        "valuationKernelModel_map",
+        "valuationKernelModel_residue",
+        "kernelPoint_smooth_iff_residue",
+        "valuationKernelModel_residue_eq_of_not_smooth",
+        "kernelModel_invariant_conditions_of_not_smooth",
+        "kernelModel_c4_value_one_of_small_240"
+      ],
+      "definitions": [
+        "valuationKernelModel"
+      ],
+      "lines": 129
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelSmoothReduction.lean",
+      "sha256": "9b337ac2add8760270c52190cf5e1abf14420499e099e0946bdb933e18df48dc",
+      "theorems": [
+        "smooth_pointEquiv_of_model",
+        "smoothKernelReduction_injective",
+        "card_smoothKernelReduction_range",
+        "finite_smoothKernelReduction_range",
+        "card_reduced_halfKernel",
+        "smoothKernelReduction_coordinates",
+        "valuationKernelModel_residue_of_smooth"
+      ],
+      "definitions": [
+        "kernelIntegralPointHom",
+        "smoothKernelReduction"
+      ],
+      "lines": 140
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelReduction.lean",
+      "sha256": "589485a9456978298f3bd7cdd27d457c664b56826ce64960b129a626320e3509",
+      "theorems": [
+        "residual_valuation_kernel_model_map",
+        "residual_line_smooth_or_disjoint",
+        "residual_kernel_not_smooth_of_disjoint",
+        "residual_valuation_kernel_residue_eq_of_disjoint",
+        "residual_integer_valuation_kernel_values",
+        "residual_integer_target_conditions_of_disjoint",
+        "residual_integer_target_multiplicative_of_disjoint",
+        "residual_integer_target_c4_of_dvd240",
+        "residual_integer_target_c4_odd",
+        "residual_integer_target_minimal_at_two",
+        "residual_integer_target_minimal_of_dvd240",
+        "residual_integer_target_minimal_at_bad_small_prime",
+        "residual_kernel_smooth_of_le",
+        "residual_kernel_reduction_cases",
+        "residual_smooth_kernel_range_card",
+        "residual_valuation_kernel_residue_of_smooth"
+      ],
+      "definitions": [
+        "residualValuationKernelModel",
+        "residualSmoothKernelReduction"
+      ],
+      "lines": 294
+    }
+  ],
+  "tests": [
+    {
+      "path": "DkMathTest/Lib/NumberTheory/EllipticFiniteKernelReduction.lean",
+      "sha256": "06408bde3c8238b11a7f8cd25831c131ddf78718a7e100a8c95a1e0b8959fcb1",
+      "theorems": [
+        "sample_double",
+        "sample_neg_ne",
+        "sampleKernel_card",
+        "sample_actual_model",
+        "sample_actual_discriminant",
+        "sample_integer_invariants",
+        "sample_killed",
+        "sample_kernel_coordinates",
+        "localSource_map",
+        "sample_kernel_singular_at_seven",
+        "sample_singular_branch_residue",
+        "sample_kernel_smooth_at_fortySeven",
+        "sample_smooth_branch_card",
+        "sample_models_differ_mod_fortySeven"
+      ],
+      "definitions": [
+        "sample",
+        "q0",
+        "Q",
+        "sampleKernel",
+        "localSource"
+      ],
+      "lines": 259
+    },
+    {
+      "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032LocalReductionSmoke.lean",
+      "sha256": "c5f920e6e6baee91d2c7e9ffac6dd8de3b423cc4f742a4867eb350b55f4b1d57",
+      "theorems": [
+        "source37_same_local_target",
+        "source37_kernel_cases",
+        "source37_singular_residue",
+        "source37_target_c4_odd",
+        "source37_target_minimal_at_two",
+        "source37_target_minimal_at_bad_five",
+        "source37_target_multiplicative",
+        "source37_smooth_kernel_card"
+      ],
+      "definitions": [],
+      "lines": 76
+    }
+  ],
+  "counts": {
+    "new_production_owners": 5,
+    "public_production_theorems": 39,
+    "production_definitions": 5,
+    "test_theorems": 14,
+    "test_definitions": 5,
+    "source37_theorems": 8,
+    "audited_public_declarations": 71
+  },
+  "completed": [
+    "same H valuation-ring polynomial model with generic fiber original kernelModel, for odd finite kernel",
+    "coefficient construction commutes with residue using same indices even when reduction collides",
+    "singular affine points have t=a1 Fy-2 Fx=0 and w=Fy squared+x t=0 in arbitrary characteristic",
+    "all nonzero kernel points nonsmooth implies same source and quotient residue models equal",
+    "residue model equality transports discriminant nonunit and c4 unit conditions, without equality of valuation depths",
+    "same Source one-dimensional line is contained in or disjoint from actual E0[p]",
+    "disjoint branch internally supplies nonsmooth kernel; same existing integer target formally multiplicative at bad odd q distinct from p",
+    "c4 and c6 correction formulas over arbitrary commutative rings; c4 unit preserved when valuation(240)<1 without kernel-branch assumption",
+    "same actual Source integer target has odd c4 and formal IsMinimal at 2 for odd p; bad 3/5 minimality away from p",
+    "same smooth kernel actual reduction hom injective on unit-annihilator torsion, finite range and exact cardinal, half-kernel image cardinal",
+    "same valuation target residue realized using same reduced kernel coordinates in smooth branch",
+    "actual order-3 kernel on y2+xy+7y=x3 and original quotient y2+xy+7y=x3-35x-350; exact integer invariants",
+    "same kernel singular at 7 with source residue equality; smooth at 47 with three-point range and source residue inequality"
+  ],
+  "boundaries": [
+    "disjoint hypothesis remains for general bad odd prime multiplicative reduction; dichotomy alone does not close both branches",
+    "smooth-kernel nodal quotient formulas c4 prime=n fourth c4 and discriminant prime=0 are not yet proved",
+    "unconditional dyadic minimality does not prove dyadic discriminant nonunit or multiplicative reduction",
+    "same residue model does not imply discriminant depth equality; sample source and quotient have different powers of 7 and 47",
+    "general good reduction preservation and discriminant depth laws remain unproved",
+    "reduction hom domain is H, not all source zero-component points; full zero-component transport remains open",
+    "scheme isogeny, target rational torsion exclusion and general hno remain open"
+  ],
+  "validation": {
+    "focused_builds": [
+      "./lean-build.sh DkMath.FLT.FreyFiniteKernelReduction",
+      "./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelReduction"
+    ],
+    "direct_lean": [
+      "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032LocalReductionSmoke.lean",
+      "lake env lean tmp/note032-local-reduction/Axioms.lean"
+    ],
+    "results": "passed without warnings",
+    "source_scan": "passed",
+    "lib_dependency_direction": "passed",
+    "docstrings_markers_tracker": "passed",
+    "facades": "static registration checked",
+    "protected_predecessors_and_contracts": "unchanged",
+    "diff_and_new_file_whitespace": "passed",
+    "full_build_and_full_test_suite": "not run; user handles full build"
+  },
+  "upstream": {
+    "inspected_files": [
+      {
+        "path": "P2M/Sol/S_WeierstrassCurve_dvd_discriminant_not_dvd_c4_integral_veluQuotient_rescale.lean",
+        "blob_sha": "bb843e9595da6d9ce0e35ac31265d6a7faf55628",
+        "bytes": 9404,
+        "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_dvd_discriminant_not_dvd_c4_integral_veluQuotient_rescale.lean"
+      },
+      {
+        "path": "P2M/Sol/S_WeierstrassCurve_exists_map_eq_veluQuotient_and_map_residue_eq_veluQuotient_reduceHom.lean",
+        "blob_sha": "e5fa016e031b0aaa4cfcb5c5dce3b9ada5e526ed",
+        "bytes": 9314,
+        "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_map_eq_veluQuotient_and_map_residue_eq_veluQuotient_reduceHom.lean"
+      },
+      {
+        "path": "P2M/Sol/S_WeierstrassCurve_valuation_c4_add_veluTSum_lt_one_of_formal_kernel.lean",
+        "blob_sha": "2b1131a74343c767372dd1b5fd627297d9c6e918",
+        "bytes": 68513,
+        "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_valuation_c4_add_veluTSum_lt_one_of_formal_kernel.lean"
+      },
+      {
+        "path": "P2M/Sol/S_WeierstrassCurve_valuation_veluQuotient_oddOrderSummingSet_c4_of_multiplicative.lean",
+        "blob_sha": "3cc425db800fb824f7030fb6592f50b7f6b8dde8",
+        "bytes": 29741,
+        "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_valuation_veluQuotient_oddOrderSummingSet_c4_of_multiplicative.lean"
+      },
+      {
+        "path": "P2M/Sol/S_WeierstrassCurve_veluQuotient_oddOrderSummingSet_c4_c6_discriminant_of_nodal.lean",
+        "blob_sha": "fbe8b46b385ec6f97df009c8cb22a7e62c104cc8",
+        "bytes": 88186,
+        "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_veluQuotient_oddOrderSummingSet_c4_c6_discriminant_of_nodal.lean"
+      }
+    ],
+    "hashes": "verified",
+    "role": "compared same valuation-model and kernel reduction branches; adapted c4/c6 correction identities only; no external solution imports",
+    "licenses": "WeierstrassVeluReduction Apache-2.0 with upstream blob and existing notices; other four new owners MIT"
+  },
+  "axioms": {
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.moments_eq_zero_of_singular": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.polynomialModel_eq_of_singular": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.polynomialModel_c_invariants": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.polynomialModel_c4_eq_of_240_eq_zero": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassResidueModel.residue_zero_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassResidueModel.residue_ne_zero_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassResidueModel.invariant_conditions_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassResidueModel.polynomialModel_residue": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassResidueModel.polynomialModel_residue_eq_of_singular": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassResidueModel.polynomialModel_c4_value_one": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.valuationKernelModel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.valuationKernelModel_map": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.valuationKernelModel_residue": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelPoint_smooth_iff_residue": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.valuationKernelModel_residue_eq_of_not_smooth": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_invariant_conditions_of_not_smooth": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_c4_value_one_of_small_240": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.smooth_pointEquiv_of_model": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelIntegralPointHom": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.smoothKernelReduction": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.smoothKernelReduction_injective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.card_smoothKernelReduction_range": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.finite_smoothKernelReduction_range": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.card_reduced_halfKernel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.smoothKernelReduction_coordinates": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.valuationKernelModel_residue_of_smooth": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualValuationKernelModel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_valuation_kernel_model_map": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_line_smooth_or_disjoint": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_not_smooth_of_disjoint": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_valuation_kernel_residue_eq_of_disjoint": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_valuation_kernel_values": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_target_conditions_of_disjoint": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_target_multiplicative_of_disjoint": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_target_c4_of_dvd240": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_target_c4_odd": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_target_minimal_at_two": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_target_minimal_of_dvd240": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_integer_target_minimal_at_bad_small_prime": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_smooth_of_le": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_reduction_cases": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualSmoothKernelReduction": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_smooth_kernel_range_card": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_valuation_kernel_residue_of_smooth": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.sample": [
+      "propext",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.q0": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.Q": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.sample_double": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.sample_neg_ne": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.sampleKernel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.sampleKernel_card": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.sample_actual_model": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.sample_actual_discriminant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.sample_integer_invariants": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.sample_killed": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.sample_kernel_coordinates": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.localSource": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.localSource_map": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.sample_kernel_singular_at_seven": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.sample_singular_branch_residue": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.sample_kernel_smooth_at_fortySeven": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.sample_smooth_branch_card": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelReductionTest.sample_models_differ_mod_fortySeven": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032LocalReductionSmoke.source37_same_local_target": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032LocalReductionSmoke.source37_kernel_cases": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032LocalReductionSmoke.source37_singular_residue": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032LocalReductionSmoke.source37_target_c4_odd": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032LocalReductionSmoke.source37_target_minimal_at_two": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032LocalReductionSmoke.source37_target_minimal_at_bad_five": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032LocalReductionSmoke.source37_target_multiplicative": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032LocalReductionSmoke.source37_smooth_kernel_card": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  }
+}

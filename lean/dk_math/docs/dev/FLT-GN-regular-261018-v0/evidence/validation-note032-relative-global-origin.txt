@@ -1,0 +1,25 @@
+NOTE-032 same global Q restriction and local F coefficient boundary validation
+Date: 2026-11-09
+Lake cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+PASS production modules: 7 (one Lib without FLT import closure; six actual Frey modules)
+PASS new theorem roots: 27 recursive checked dependency audits (types, opaque proofs, constructors)
+PASS actual endpoint public inputs: 27 (no hclass/hglobal/hselmer/F-stability/origin providers)
+PASS #print axioms: 27 (only propext, Classical.choice, Quot.sound)
+PASS focused production build: 4503 jobs
+PASS targeted tests and audit build: 4505 jobs
+PASS lake build DkMath DkMath.Lib DkMath.FLT and both new tests: 11241 jobs
+PASS lake test: 12428 jobs (command exited0)
+PASS lake env lean DkMathTest.lean (after suite)
+PASS root smoke: all 27 theorem roots reachable via import DkMath
+PASS Lib smoke: all 3 new Lib roots reachable via import DkMath.Lib
+PASS textbook: 7 full-source blocks byte-identical to production; each independently compiled
+PASS exact file module markers immediately after imports: 10 new checked Lean files
+PASS comment-aware import DAG, proper public facades/root and normal test entrance
+PASS forbidden source construct scan and source whitespace; git diff --check
+PASS upstream source HEAD/hashes and review hash; novel MIT DkMath composition, no external theorem imports
+
+Boundary regressions: order5 action by6 on ZMod25 has nonzero invariant coboundary value5; a conjugation need not preserve a chosen subgroup without the normalizer condition.
+Existing warnings: 5 historical sorry warnings in each root/suite build; none in new modules/tests/book/smoke.
+Completed: actual D normalization of I; SAME global Q representation/topology/continuous coboundary and zero global class; SAME inertia restriction and local F inclusion cocycle/ordinary H1 square; D-stability and actual D representation of F; conjugate covariance; original and D-translated obstruction retain local F nonzero and global Q zero classes.
+Remaining: arithmetic omega2 vanishing/hclass; global F-valued class with Selmer/unramified conditions; resonance exclusion, global contradiction, unconditional general hno. Q-valued global coboundary is NOT a global F Selmer class; full-G stability of F is not claimed.

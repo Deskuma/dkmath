@@ -1,0 +1,61 @@
+{
+  "implementation_date": "2026-10-23",
+  "sources": [
+    {
+      "path": "P2M/Sol/S_WeierstrassCurve_level_add_of_branch_eq.lean",
+      "blob_sha": "82120c24b217c48ebb7dbbc488d0dd94daf9d629",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_level_add_of_branch_eq.lean",
+      "transport": "Read-only GitHub connector fetch during NOTE-031-002 closeout",
+      "usage": "NodeChord.level_core and actual tangent/chord frame; remove repeated root existence"
+    },
+    {
+      "path": "P2M/Sol/S_WeierstrassCurve_level_add_of_branch_ne_of_level_lt.lean",
+      "blob_sha": "8bf0c52bab9d664cd941063ad7f43e9d7e0a0416",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_level_add_of_branch_ne_of_level_lt.lean",
+      "transport": "Read-only GitHub connector fetch during NOTE-031-002 closeout",
+      "usage": "Adapt same-centre actual coordinate addition; reuse DkMath directions and shallow estimates"
+    },
+    {
+      "path": "P2M/Sol/S_WeierstrassCurve_level_add_of_antipodal_of_shallow.lean",
+      "blob_sha": "cbbcd3946ef7342ff6d114fd0b576355e4738dcc",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_level_add_of_antipodal_of_shallow.lean",
+      "transport": "Read-only GitHub connector fetch during NOTE-031-002 closeout",
+      "usage": "Adapt same-centre actual coordinate addition; reuse DkMath directions and shallow estimates"
+    },
+    {
+      "path": "P2M/Sol/S_WeierstrassCurve_inZeroComponentAt_add_of_antipodal.lean",
+      "blob_sha": "5e3cb7b635d90a3e089f4bf18d1b4c851641b746",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_inZeroComponentAt_add_of_antipodal.lean",
+      "transport": "Read-only GitHub connector fetch during NOTE-031-002 closeout",
+      "usage": "Equal chord-deviation comparison; reconstruct tangent case from existing DkMath doubling numerator"
+    },
+    {
+      "path": "P2M/Sol/S_WeierstrassCurve_level_add_of_inZeroComponentAt.lean",
+      "blob_sha": "7c7bd988f3573a71575f7e2b76190684a4857367",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_level_add_of_inZeroComponentAt.lean",
+      "transport": "Read-only GitHub connector fetch during NOTE-031-002 closeout",
+      "usage": "Read to identify return requirements; replaced general subgroup route by direct integral finite-point return"
+    },
+    {
+      "path": "P2M/Sol/S_WeierstrassCurve_valuation_pow_eq_of_torsion_of_not_inZeroComponentAt.lean",
+      "blob_sha": "94e0bb0c302237deddfc439eca64e6321c1f553c",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_valuation_pow_eq_of_torsion_of_not_inZeroComponentAt.lean",
+      "transport": "Read-only local cache fetched in C6a",
+      "usage": "Four-state all-multiple induction and exponent ledger; generalize from prime to odd unit order and supply integral torsion return internally"
+    }
+  ],
+  "reconstructed": [
+    "Actual same-centre addition transitions over arbitrary field/model",
+    "Tangent critical-pair proof from existing doubling numerator",
+    "Direct return for integral smooth finite point, with torsion integrality supplying its input",
+    "All odd-unit-order torsion depth, not just prime order",
+    "Fixed rational scale -> stricter inertia X difference -> torsion point equality",
+    "Same Frey Source full inertia fixedness at all q != 2,p for odd prime p"
+  ],
+  "not_claimed": [
+    "A new mathematical proof of FLT",
+    "General zero-component additive subgroup for all nonintegral points",
+    "Local inertia at 2 or at p",
+    "031-003 through 005 or general FLT closure"
+  ]
+}

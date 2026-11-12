@@ -1,0 +1,44 @@
+{
+  "date": "2026-11-05",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.NumberFieldUnitPowerDimension",
+    "DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.NumberTheory.NumberFieldUnitPowerDimension": {
+      "local_module_count": 29,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.CyclotomicOmegaSquareUnitRank": {
+      "local_module_count": 38,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/NumberTheory/NumberFieldUnitPowerDimension.lean": true,
+    "DkMath/Lib/NumberTheory/CyclotomicOmegaSquareUnitRank.lean": true,
+    "DkMathTest/FLT/CyclotomicOmegaSquareUnitRank.lean": true,
+    "DkMathTest/FLT/Note032CyclotomicOmegaSquareUnitRankDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicUnitDimensionSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 2,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/NumberTheory/NumberFieldUnitPowerDimension.lean": "7c8e4a2395e7ea25c87aba7a493f274d5ec7d279b494ff467b591cadcab36b5b",
+    "DkMath/Lib/NumberTheory/CyclotomicOmegaSquareUnitRank.lean": "8988f53c84b64bf4fc01d9776636d884e8bb470cb0027b07213813d899dfd4aa",
+    "DkMathTest/FLT/CyclotomicOmegaSquareUnitRank.lean": "eec0fc14dfefdbef303e0edc8da1bdceb5f79de53ac631bb951f0e46ae571571",
+    "DkMathTest/FLT/Note032CyclotomicOmegaSquareUnitRankDependencyAudit.lean": "cb5db9fc94741f6a42c0a67817cf7ab8ea5a52762ee455865ea09fedf8a2ddd3",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicUnitDimensionSmoke.lean": "f71ec82252df902a61f3c4ad9af05abfe38a63049f8e0df68b08fcbd56657312"
+  },
+  "boundary": "Syntactic comment-aware local import closures and source checks only; recursive Lean type/constructor/proof and input audits are separate. Actual unit power quotient is finitely generated for every number field and every exponent, and in the SAME p-cyclotomic root field its dimension is unconditionally (p-1)/2. Finite-dimensionality plus the proved same projected nonzero unit yields positive finrank of the actual omega-square space. The SAME idempotent projector trace equals the cast of its dimension. Strict dimension <p makes trace=1 equivalent to dimension=1. The arithmetic computation trace=1 is NOT supplied. hclass,hbad,tower and general hno remain unfinished. No external theorem import.",
+  "adapted_source": {
+    "repository": "anthropics/fermats-last-theorem",
+    "local_read_only_checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+    "head": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+    "path": "P2M/Sol/S_ExtCitation_Cyclotomic_finrank_unitsOmegaEigenspace_two.lean",
+    "blob": "6801f82a5eec740ce4d5d658b7a1dc35040f2aba",
+    "scope": "Adapt the actual torsion-generator/fundamental-unit basis proof only, retaining Apache notices. Use DkMath actual UnitClass projection, not external ModP. External final trace/rank path was read as reference, not imported, built or independently axiom-audited. No external character/trace theorem is supplied."
+  }
+}

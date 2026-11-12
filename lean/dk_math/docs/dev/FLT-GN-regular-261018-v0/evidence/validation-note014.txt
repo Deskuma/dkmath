@@ -1,0 +1,85 @@
+NOTE-014 verification evidence — 2026-10-20
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Focused production:
+  lake build DkMath.Lib.NumberTheory.EllipticTorsionNontrivial
+  exit 0; Build completed successfully (2241 jobs).
+  An affine coordinate root is lifted through the actual division polynomial bridge.
+  Base-change ellipticity is explicitly supplied before constructing the nonsingular point.
+
+Focused regression:
+  lake build DkMathTest.FLT.FreyResidualNontrivial
+  exit 0; Build completed successfully (3168 jobs).
+  8 named lemmas, 1 named curve definition, and 4 examples.
+  Actual Source 2 curve: its E[37] has a nonzero point, dimension between 1 and 2,
+    and cardinality between 37 and 1369; standard torsionBy has positive dimension.
+  The same curve has a nonzero 4-torsion point; exact point order 4 is not asserted.
+  No nonzero 1-torsion exists.
+  The cuspidal origin solves the equation but is singular, testing the nonsingularity guard.
+  Source 37 profile uses no input point, cardinality, finiteness or dimension hypothesis.
+
+Focused dependency audit:
+  lake build DkMathTest.FLT.Note014DependencyAudit
+  exit 0; Build completed successfully (3169 jobs).
+  19 public named production declarations and 9 named regression declarations.
+  12 selected routes inspect types and opaque proof bodies and require actual providers.
+  Allowed axioms: propext, Classical.choice, Quot.sound only.
+  Forbidden: sorryAx, FLT endpoints, FltRegular/P2MW/P2M/FreyPackage,
+    Herbrand/Ribet, listed global regularity providers,
+    finite_of_card_sq, finrank_eq_two_of_card_sq,
+    finrank_eq_two_of_standard_card_sq, residual_profile_of_card_sq.
+  Geometry-only routes also forbid all DkMath.FLT dependencies.
+
+Integrated public entrances:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11556 jobs).
+  All 4 new source/test modules appear with matching file markers.
+  No warnings/errors in these 4 modules; historical warnings elsewhere remain.
+
+Root smoke:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE014.lean
+  exit 0; nonzero actual torsion, dimension bounds and Frey profile exposed by import DkMath.
+  Both printed axiom sets contain only the 3 allowed logical axioms.
+  Examples include arbitrary rational elliptic curves and composite degree 4.
+
+Direct suite entrance after integrated build:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest
+
+Marker checker:
+  python3 check_tracker_mismatch.py /tmp/note014-full.log
+  exit 0; OK: no mismatches found
+  Static check: all 4 source/test markers and root smoke marker follow imports and match paths.
+
+Hygiene:
+  Static scan: no sorry/admit/native_decide/unsafe/implemented_by or axiom declarations
+    in the 4 new source/test modules and root smoke.
+  All 19 named production declarations included in the axiom audit.
+  No trailing whitespace in the 4 new source/test modules and root smoke.
+  git diff --check: exit 0.
+
+Scope:
+  2 production modules, 214 lines including textbook comments.
+  Nonzero actual n-torsion exists for geometric characteristic zero, elliptic E and n > 1.
+  n-torsion means killed by n, with no exact additive-order assertion for composite n.
+  For prime p, dimension is 1 or 2 and cardinality is p or p^2.
+  Frey profile retains the same Source and its finite Galois level.
+  Dimension one is not excluded. Exact dimension two/cardinality p^2, GL2,
+    Weil pairing, irreducibility and inertia remain separate.
+  No new external code was ported; the existing NOTE-012 bridge and Mathlib providers are used.
+
+PASS: 19 public named NOTE-014 declarations and 9 named regression declarations; standard logical axioms only.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.exists_affine_equation_y; 18562 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsion_some_iff_coordinate_root; 26036 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.exists_nonzero_torsion_of_one_lt; 27339 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finrank_torsion_pos; 27676 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finrank_torsion_bounds; 27896 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.card_torsion_prime_or_prime_sq; 27899 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finrank_standardTorsion_pos; 27707 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.residual_exists_ne_zero; 30627 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.residual_nontrivial_profile; 32688 reachable constants; expected providers present.
+PASS: FreyResidualNontrivialTest.actualCurve37_exists_ne_zero; 30633 reachable constants; expected providers present.
+PASS: FreyResidualNontrivialTest.actualCurve4_exists_ne_zero; 30633 reachable constants; expected providers present.
+PASS: FreyResidualNontrivialTest.source37_profile; 32703 reachable constants; expected providers present.

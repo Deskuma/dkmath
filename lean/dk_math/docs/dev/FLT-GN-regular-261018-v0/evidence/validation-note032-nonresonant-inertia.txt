@@ -1,0 +1,95 @@
+NOTE-032 actual nonresonant bad-prime inertia absorption
+Date: 2026-11-01
+Working directory: lean/dk_math
+
+Performed validation, all commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyNonresonantInertia DkMathTest.FLT.Note032NonresonantInertiaDependencyAudit
+   Final revision: Build completed successfully (11055 jobs).
+2. lake test
+   Normal repository test driver passed (12140 jobs), including both new test modules.
+3. lake env lean DkMathTest.lean
+   Normal test import entrance passed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032NonresonantInertiaSmoke.lean
+   Root DkMath exposes the new arithmetic, geometry, absorption and conditional obstruction endpoints.
+5. git diff --check
+   Passed.
+
+Regression scope:
+- On ZMod 25, multiplication by 2 is separated from both signs on the actual 5-socle.
+  Either-sign absorption into any subgroup forces that subgroup to be the whole group.
+- Sign reversal on ZMod 5 has identically zero sums but does not force containment in zero.
+  Nonidentity alone cannot replace separation from both signs.
+- The actual prime addresses 11,19 have residues +1,-1 modulo 5; the resonant case is nonempty
+  as arithmetic data. This does not assert existence of a Frey.Source at exponent 5.
+- Above 2, an actual arithmetic Frobenius is constructed and its 5-cyclotomic character is 2.
+
+Source checks:
+- Four production and two test modules pass the forbidden-construct scan:
+  no sorry, admit, native_decide, unsafe, or custom axiom declarations.
+- No new-module warnings/errors in the final root/focused build or normal test suite.
+- Existing unrelated modules emit historical sorry/linter warnings. These validations do not
+  assert that every repository declaration is sorry-free.
+
+Selected axiom audits (15 declarations; standard three axioms only):
+DkMath.Lib.NumberTheory.CyclotomicFrobenius.roots_eq_of_congruent: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicFrobenius.apply_root_eq_pow: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicFrobenius.cyclotomicCharacter_eq_natCast: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticNodalDecomposition.defect_identity: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticNodalDecomposition.centre_decomposition_fixed: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticNodalDecomposition.sub_or_add_smooth_of_odd_torsion: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.CyclicSignSeparation.le_of_sub_or_add_mem: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cofixed_frobenius_sign_separated: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.cyclic_tower_eq_smooth_torsion_of_nonresonant: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.inertia_difference_smooth_at_bad_address: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.prime_power_pointAction_sub_mem_of_nonresonant_bad: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.preimage_pointAction_sub_mem_of_nonresonant_bad: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.small_prime_sign_separated: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_preimage_unramified_away_of_resonant_inertia: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cofixed_tower_resonant_inertia_frobenius_impossible: Classical.choice, Quot.sound, propext
+
+Recursive dependency audit (types, constructors and opaque proof bodies):
+PASS: DkMath.Lib.NumberTheory.CyclotomicFrobenius.cyclotomicCharacter_eq_natCast; 28734 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.EllipticNodalDecomposition.centre_decomposition_fixed; 20029 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.cyclic_tower_eq_smooth_torsion_of_nonresonant; 48859 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.preimage_pointAction_sub_mem_of_nonresonant_bad; 48870 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_preimage_unramified_away_of_resonant_inertia; 48933 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cofixed_tower_resonant_inertia_frobenius_impossible; 79158 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicFrobenius.cyclotomicCharacter_eq_natCast; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.EllipticNodalDecomposition.sub_or_add_smooth_of_odd_torsion; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.cyclic_tower_eq_smooth_torsion_of_nonresonant; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.preimage_pointAction_sub_mem_of_nonresonant_bad; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_preimage_unramified_away_of_resonant_inertia; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cofixed_tower_resonant_inertia_frobenius_impossible; remaining arithmetic inputs explicit.
+
+Six full dependency traversals and six public-input audits passed.
+The required dependencies include actual Frobenius/root rigidity, the critical-centre identity,
+valuation preservation, actual odd-torsion depth and branch comparison, the smooth-torsion
+cardinality bound, smooth/good reduction inertia, at-p absorption, absolute inertia generation
+and the final Frobenius group-theoretic relation.
+The recursive audit rejects sorryAx, custom axioms, P2M/P2MW, FltRegular, FreyPackage,
+DkMath.FLT.Kummer and completed FLT endpoints. The hbad and hCH inputs are explicitly retained.
+
+Import audit: note032-nonresonant-inertia-import-audit.json
+All four new local import closures are acyclic (239 local modules in their union) and exclude
+FreyHnoSmallIndex, FreyHnoRegularPrime and FreyHnoHardCase.
+
+Mathematical boundary:
+PROVED: for q != p, q=2 or q|abc, q mod p != +/-1, and every specified valuation above q,
+the same stable cyclic stage K of order p^m containing the original cofixed line equals
+E[p^m] intersect the same model's smooth-reduction subgroup. All E[p^m] inertia differences,
+and all differences on p^-1 K, are absorbed into K. The inverse-image case includes the
+necessary one-step exponent lowering. Addresses 2,3 satisfy sign separation for p>=5.
+Good addresses and at-p absorption are supplied internally in the corresponding endpoints.
+STILL OPEN: resonant bad q>=5, q!=p, q|abc with q mod p=+/-1; global cyclotomic extension
+splitting; existence of the full global cyclic tower; actual Frobenius relation and exponent
+selection; the required Mazur/Eisenstein specialization geometry. General hno is unfinished.
+No unproved hEXT or hno provider was introduced.
+
+SHA256 of new source/test/smoke artifacts:
+f4541d769adb662796a300e4b755a55768705196474bbfd1656692ea866bb46a  DkMath/Lib/Algebra/CyclicSignSeparation.lean
+1779ed7c52122624b6d0f2859b98572a7dca214a3145321701bfed0b24fd4484  DkMath/Lib/NumberTheory/CyclotomicFrobenius.lean
+a918af7a8063777942be28fe580a8587c31b305bc4f90ae0529e967fbbfe5029  DkMath/Lib/NumberTheory/EllipticNodalDecomposition.lean
+c8ee3475ebf08d3890cc7606634981c0a4cb5977a965400f01ae467650049f55  DkMath/FLT/FreyNonresonantInertia.lean
+4abe59eb9ba8d0a69c5e330fd29b4045c78e965d592ec2cf914ed019aaf6e1ae  DkMathTest/FLT/FreyNonresonantInertia.lean
+46676f3d0a75f611a1d4f9bd8d14bb64e1245ce5274af6468df0de9f73e1713d  DkMathTest/FLT/Note032NonresonantInertiaDependencyAudit.lean
+35d5b81a14f7072b26c158bda138cb0ae4107d32e3b5c1043fed70bdafe727d8  docs/dev/FLT-GN-regular-261018-v0/evidence/Note032NonresonantInertiaSmoke.lean

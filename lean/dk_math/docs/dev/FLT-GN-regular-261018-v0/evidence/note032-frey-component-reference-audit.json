@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-07",
+  "external_checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "external_head": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files_sha256": {
+    "P2M/Sol/S_FreyPackage_frey_no_cofixed_large.lean": "16750fcba1f02ba21bcbfa5999103c03be4f85c2359913c51c0b83cef66d2413",
+    "Theorems/Thm_AddSubgroup_mem_of_torsion_inZeroComponentAt_of_forall_not_inZeroComponentAt_sub.lean": "52c67cc846322c898921c773f9d74fca89d896a2d58fdf919363bed76cfa65cf"
+  },
+  "reference_scope": "Read htoric/hKdown uses and local smooth torsion membership at1291-1308 plus public subgroup zero-component torsion membership statement retaining K-cardinality/torsion and StepThree condition. New code retains SAME intersection, actual local image and finite torsion quotient action. No StepThree, component/discriminant order formula or external source/proof port/import."
+}

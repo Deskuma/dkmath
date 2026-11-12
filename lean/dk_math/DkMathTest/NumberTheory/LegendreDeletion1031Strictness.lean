@@ -42,6 +42,7 @@ theorem fiber11_card1031 :
   rw [town1031Seats_eq_production]
   decide +kernel
 
+/- # disable heavy test: 2026/10/24 20:13
 /-- The strict deletion improvement at the large anchor is kernel-proved without counting all edges. -/
 theorem strict_deletion_vs_edge1031 :
     (primeScalesUpTo 1031).card + (coarseTownDeletionVertices (primeScalesUpTo 10) 1031).card <
@@ -54,5 +55,6 @@ theorem strict_deletion_vs_edge1031 :
   rw [oldPrimes1031_card_checked, deletion1031_symbolic_card,
     DkMathTest.LegendreFullTownRegression.large_anchor_grid.2.2]
   omega
+-/
 
 end DkMathTest.LegendreDeletion1031Strictness

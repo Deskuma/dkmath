@@ -1,0 +1,119 @@
+NOTE-032 FOUR STEPS: actual inertia unipotence and conditional hno closure
+Date: 2026-11-07
+Working directory: lean/dk_math
+
+Performed validations; listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyConditionalCofixedExclusion DkMathTest.FLT.Note032FreyTateUnipotenceDependencyAudit
+   Build completed successfully (11149 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12298/12298 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed; only existing file marker printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateUnipotenceSmoke.lean
+   Root exposes actual local finite/full Tate nilpotence, SAME second-character inertia
+   triviality, actual high absorption, conditional Cofixed/hno exclusion and narrow failure.
+5. Four full textbook blocks extracted to /tmp/n032-unipotent-book-{1,2,3,4}.lean.
+   lake env lean run on each separately; all passed without warnings.
+   Exact production source and exact file markers immediately after imports retained.
+6. python3 /tmp/n032-unipotent-import-audit.py
+   Comment-aware local import closures, acyclicity, source scans/SHA256, seven markers,
+   four full textbook copies, Lib/FLT/root and normal test reachability passed.
+   Closure sizes including self: generic nodal43, actual Frey local317,
+   SAME inertia characters333, conditional Cofixed exclusion336.
+   Generic Lib has no FLT imports. No FreyHnoSmallIndex/RegularPrime/HardCase consumers.
+   JSON saved alongside; new Lean source hashes checked again at evidence generation.
+7. git diff --check and direct trailing-whitespace checks on new files passed.
+8. Local model-answer comparison: actual external checkout HEAD and three SHA256
+   recorded in note032-frey-unipotence-reference-audit.json. Read final Frey proof
+   local absorption lines1110-1142 and public zero-component difference/fixed torsion
+   theorem statements. No external proof import or source port in new implementation.
+
+Step 1 IMPLEMENTED:
+- SAME actual rational elliptic-point representation at arbitrary valuation-unit n.
+- Existing actual nodal inertia-difference smoothness supplies Q=tau(P)-P in smooth
+  reduction. SAME Q is n-torsion, and existing actual smooth torsion inertia theorem
+  fixes Q under any sigma in SAME inertia group.
+- Actual linear-map equality (rho(sigma)-1)*(rho(tau)-1)=0. In particular square-zero
+  difference for tau. Model/centre/tangent directions/unit valuation explicit; no
+  new difference-smoothness/centre-fixedness/unipotence provider.
+
+Step 2 IMPLEMENTED:
+- SAME Frey curve, SAME bad address q=2 or q|abc, q!=p, SAME A over q and SAME tau.
+- Actual centre/tangent geometry and valuation-unit property of all positive p powers
+  supplied internally. Actual finite E[p^(n+1)] difference square-zero at every n.
+- Evaluate SAME full Tate sequences in every finite component and use sequence
+  extensionality: actual full Tate (actionLinear(tau)-1)^2=0.
+- No L/Cofixed, adapted basis, class vanishing or uniform narrow hbad input in these
+  two Frey LOCAL theorems. No assertion at q=p.
+
+Step 3 IMPLEMENTED:
+- SAME prior conditional full Tate basis and actual matrix. Actual matrix-algebra
+  equivalence transports full linear difference nilpotence to (M(tau)-I)^2=0.
+- SAME prior lower-left zero identifies bottom diagonal as (d(tau)-1)^2=0.
+- Integral-domain Z_p proves actual unit d(tau)=1, without finite nonreduced-ring
+  cancellation. SAME high finite absorption follows from prior quotient criterion.
+- Existing hclass/uniform narrow hbad retained for SAME basis and character.
+  No new high-absorption/unipotence/trivial-character input. No off-diagonal-zero
+  or Galois representation splitting conclusion.
+
+Step 4 IMPLEMENTED:
+- Prior SAME resonant bad-prime witness gives actual d(tau)!=1. Step3 applies at
+  SAME q|abc,q!=p,A,tau and proves d(tau)=1. This closes Cofixed exclusion with
+  explicit original hclass and uniform NARROW hbad inputs.
+- Exact existing hno-shaped conclusion (no 1-dimensional stable Cofixed line) with
+  explicit hclass and ALL-line/ALL-stage narrow hbadAll. hno is NOT an input.
+- With hclass and SAME Cofixed line, derive a stage T where narrow absorption fails.
+  This theorem omits hbad/hbadAll from its public inputs.
+- Unfold narrow condition to output actual q>=5, q!=p, q|abc, q=+/-1 modulo p,
+  SAME A, inertia tau and actual point y with p*y IN T but tau*y-y OUTSIDE T.
+  Unlike prior HIGH witness, this actual NARROW witness lies inside p-preimage
+  antecedent. It assumes hclass/Cofixed, NOT global narrow hbad.
+
+Regression scope:
+- Actual ZMod25 scalar6: (6-1)^2=0 but6!=1. Finite nilpotence does not permit
+  the diagonal cancellation used only after passing to integral-domain Z_p.
+- Actual Z_5 matrix [[1,1],[0,1]]: (U-I)^2=0 but U!=I. Actual nonzero upper-right
+  entry retained; unipotence does not assert identity of full action.
+
+Audit scope and retained boundaries:
+- Eleven selected #print axioms reports: only propext, Classical.choice, Quot.sound.
+- Eleven recursive traversals inspect checked types, constructors and opaque proofs.
+  Reject sorryAx, nonstandard axioms, P2M/P2MW/FltRegular/FreyPackage, old Kummer
+  consumers and FLT endpoints. Require actual smooth difference/fixed torsion,
+  actual same geometry, finite-to-full action, prior lower-left-zero, actual
+  resonant witness and SAME full p-adic character.
+- Eleven input audits: local geometry has explicit C/D/unit condition but no
+  centre-fixed/smoothness/unipotence provider. Actual Frey local input does not
+  include hclass/hbad/Cofixed/basis. Conditional character keeps original inputs.
+  Final conditional hno retains hclass/hbadAll; narrow failure outputs OMIT hbad.
+- No new sorry/admit/native_decide/unsafe/custom axioms or new-code warnings.
+  Root/suite replay historical sorry warnings in five unrelated existing modules.
+  No whole-repository axiom-clean assertion.
+- Conditional hno and local inertia unipotence are NOW IMPLEMENTED. Arithmetic
+  supply of class vanishing/uniform narrow absorption is NOT proved. General
+  UNCONDITIONAL hno remains UNFINISHED. No trace-pointcount identification,
+  Galois splitting, global classification/Step Three port or FLT closure claimed.
+
+Decisive audits from successful root build:
+PASS: DkMath.Lib.NumberTheory.EllipticNodalUnipotence.inertia_difference_product_zero; 28486 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.EllipticNodalUnipotence.inertia_difference_square_zero; 28487 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.prime_power_inertia_difference_square_zero; 34446 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.tate_inertia_difference_square_zero; 35261 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateActionMatrix_inertia_square_zero; 81310 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateSecondCharacter_inertia_eq_one; 81407 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualFinite_inertia_absorbs_at_bad; 81450 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_not_cofixed_of_class_vanishing_and_resonant_absorption; 83755 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_exists_narrow_absorption_failure; 83756 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_exists_narrow_absorption_counterexample; 83757 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_hno_of_class_vanishing_and_resonant_absorption; 83758 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.EllipticNodalUnipotence.inertia_difference_product_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.EllipticNodalUnipotence.inertia_difference_square_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.prime_power_inertia_difference_square_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.tate_inertia_difference_square_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateActionMatrix_inertia_square_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateSecondCharacter_inertia_eq_one; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualFinite_inertia_absorbs_at_bad; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_not_cofixed_of_class_vanishing_and_resonant_absorption; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_exists_narrow_absorption_failure; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_exists_narrow_absorption_counterexample; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_hno_of_class_vanishing_and_resonant_absorption; remaining arithmetic inputs explicit.

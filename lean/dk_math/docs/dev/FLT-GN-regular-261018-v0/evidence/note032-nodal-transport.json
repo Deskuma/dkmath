@@ -1,0 +1,63 @@
+{
+  "unit": "NOTE-032-NODAL-TRANSPORT",
+  "date": "2026-10-27",
+  "base_head": "2dd5296f78dd6491d030bbdfc41806af4245ef4a",
+  "checks": [
+    {
+      "command": "./lean-build.sh DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalTransport",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMath.FLT.FreyFiniteKernelNodalTransport",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNodalTransport",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032NodalTransportSmoke.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "4e4f54a9648ac542f5965a9c7edfcf4050dd352e0175a8591c664dc25d6f1b0b"
+    },
+    {
+      "command": "lake env lean tmp/note032-transport/Axioms.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "b59d7f6e978ce8e938e6f3390901abaeecdfd78edd418cb4a791bdaa1d99c911"
+    }
+  ],
+  "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "axiom_declarations": 10,
+  "production_theorems": 6,
+  "production_definitions": 1,
+  "test_theorems": 2,
+  "smoke_theorems": 1,
+  "files": [
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelNodalTransport.lean",
+      "sha256": "2770b6e0dd83926f264ba76a90d1a4f704e570dbd84523b02772b43d6e13876b"
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelNodalTransport.lean",
+      "sha256": "e36c29943e6794563cd9c428923ec0e46fa9095cf84ff95ba0af5daa30cdb22c"
+    },
+    {
+      "path": "DkMathTest/Lib/NumberTheory/EllipticFiniteKernelNodalTransport.lean",
+      "sha256": "f4db3dd6ce3eb50cc6d9e1589c9f71bf88182abb631fcafe9bcab67a37333199"
+    }
+  ],
+  "scope": "All E0 transport and its restricted homomorphism/zero fiber are conditional on the target critical center residue equaling the candidate; source frame and separation also remain hypotheses. General center equality is not proved.",
+  "full_build": "user handles full build and tests"
+}

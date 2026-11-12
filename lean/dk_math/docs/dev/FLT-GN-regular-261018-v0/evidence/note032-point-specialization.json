@@ -1,0 +1,505 @@
+{
+  "unit": "NOTE-032-POINT-SPECIALIZATION",
+  "date": "2026-10-26",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "a212cc31359647f7b1ea36b09bf34d8a2d5d3b04",
+  "status": "finite evaluation, same coordinate sums/equation/translation/negation, actual fixed-point-to-two-torsion-root landing completed; separated actual three images imply target discriminant nonzero; all-point FUNCTION constructed with explicit target IsElliptic input; additivity/isogeny remain open",
+  "numbering": "one point-specialization unit; no additional internal checkpoint suffix",
+  "production": [
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticPointEvaluation.lean",
+      "public_theorems": [
+        "exists_pole",
+        "exists_value",
+        "constants_eq",
+        "value_unique",
+        "value_spec",
+        "value_eq",
+        "value_proof_irrel",
+        "value_const",
+        "value_eq_zero_iff",
+        "value_add",
+        "value_mul",
+        "evalHom_apply",
+        "evalHom_surjective",
+        "value_genericX",
+        "value_genericY",
+        "value_translation",
+        "equation_value"
+      ],
+      "public_definitions": [
+        "value",
+        "regularAlgebra",
+        "evalHom"
+      ],
+      "sha256": "6ae45e11a28dd9f4369447b674815c3adf384d98fe45bd61dbc7c183d0a94cbb"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassTwoTorsionSeparation.lean",
+      "public_theorems": [
+        "root_of_equation_of_neg_fixed",
+        "discriminant_ne_zero_of_three_roots",
+        "discriminant_ne_zero_of_three_fixed_solutions"
+      ],
+      "public_definitions": [],
+      "sha256": "ee69da429b192a95f8f6f9a198053ef024147e1d8cc51a0896f2568e6928b967"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelSpecialization.lean",
+      "public_theorems": [
+        "kernelAt_congr",
+        "kernelAt_equation",
+        "add_not_mem_kernel",
+        "kernelXAt_translation",
+        "kernelYAt_translation",
+        "normalized_trace_congr",
+        "kernelXAt_eq_sum",
+        "kernelYAt_eq_sum",
+        "kernelXAt_neg",
+        "kernelYAt_neg",
+        "kernelAt_twoTorsion_root",
+        "kernelModel_discriminant_of_twoTorsion_separation",
+        "kernelAt_nonsingular",
+        "kernelPointMap_of_mem",
+        "kernelPointMap_of_not_mem",
+        "kernelPointMap_eq_zero_iff",
+        "kernelPointMap_translation"
+      ],
+      "public_definitions": [
+        "kernelXAt",
+        "kernelYAt",
+        "kernelPointMap"
+      ],
+      "sha256": "c0e2fc5be9099401f460faa4568643d4960f2013812e9767d7668d042d29e22d"
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelSpecialization.lean",
+      "public_theorems": [
+        "residual_kernel_at_equation",
+        "residual_twoTorsion_outside",
+        "residual_kernel_at_twoTorsion_root",
+        "residual_kernel_model_discriminant_of_separation",
+        "residual_kernel_pointMap_eq_zero_iff"
+      ],
+      "public_definitions": [
+        "residualKernelXAt",
+        "residualKernelYAt",
+        "residualKernelPointMap"
+      ],
+      "sha256": "8c1895f2ac15be4e05056cd734584dbd3331406b7cc403b6a37df34ad3b0bb6d"
+    }
+  ],
+  "counts": {
+    "production_modules": 4,
+    "production_theorems": 42,
+    "production_definitions": 9,
+    "production_lines": 659,
+    "boundary_theorems": 11,
+    "source37_theorems": 5,
+    "audited_declarations": 67
+  },
+  "completed": {
+    "evaluation": "same all-point valuation; regular f has unique c with v_P(f-c)<1 via translated generic-x pole and existing highest-term cancellation; actual surjective k-algebra evaluation hom",
+    "laws": "constants/addition/multiplication/generic coordinates/translation; value zero iff positive vanishing",
+    "same_coordinates": "actual kernelXAt/kernelYAt outside same H; same point-coordinate normalized sums, same equation and H-translation invariance",
+    "negation": "same XAt negation invariant, same YAt transforms as -YAt-a1XAt-a3; identity correction retained",
+    "root_landing": "source P=-P outside H gives actual target two-torsion-polynomial root without target ellipticity",
+    "source_outside": "nonzero reflection-fixed P cannot lie in same p-kernel for prime p!=2, by actual additive-order divisibility"
+  },
+  "conditional": {
+    "discriminant": "actual three specialized x-values are required to be injective; root landing supplied internally; then same target Delta!=0",
+    "all_point_function": "explicit [(kernelModel E H).IsElliptic]; maps H to O and other points to same specialized coordinates",
+    "zero_fiber": "with same ellipticity input, phi(P)=O iff P in same H; H-orbit invariance; phi is NOT yet an additive hom"
+  },
+  "generality": [
+    "evaluation and finite coordinate sums/negation work in arbitrary characteristic",
+    "same model equation and model point function retain characteristic-zero assumption from previous owner",
+    "three-root discriminant criterion works over any field with 2!=0; root identity needs no such guard",
+    "Source odd-prime nonzero-two-torsion outside proof needs p!=2; no line existence asserted",
+    "kernel subgroup stability and Cofixed are not required for finite specialization"
+  ],
+  "examples": {
+    "same_curve": "y^2=x^3-x; Q=(1,0); H={O,Q}; R=(-1,0)",
+    "actual_values": "R+Q=(0,0); actual target coordinates (-2,0) satisfy same model equation and two-torsion polynomial",
+    "pole_guard": "Q in H is a genuine pole so regularity input is impossible",
+    "three_roots": "0,1,-1 on original curve pass the actual three-fixed-solution criterion",
+    "cusp_guard": "y^2=x^3 has no three separated reflection-fixed affine solutions",
+    "trivial_kernel": "target ellipticity actually supplied from original-model equality; exact all-point zero fiber tested",
+    "even_kernel_collision": "R!=R+Q but their specialized x-values coincide, forbidding unconditional separation for arbitrary finite kernels"
+  },
+  "provenance": {
+    "repository": "https://github.com/anthropics/fermats-last-theorem",
+    "inspected_blobs": {
+      "S_WeierstrassCurve_veluQuotient_oddOrderSummingSet_discriminant_ne_zero": "f66586eb1bb501437c601e7af2bd9a79c0f77a48",
+      "S_WeierstrassCurve_veluX_oddOrderSummingSet_injOn_psi2Sq_roots": "7d20d1868f13706680f16addb3fdaaeb58be9c51",
+      "S_WeierstrassCurve_exists_veluPointHom_oddOrderSummingSet_of_isAlgClosed": "fa5eda1fdc857b6445c21720c78805e7ecded543"
+    },
+    "adapted": "three-root discriminant argument generalized to arbitrary Weierstrass models and actual Equation solutions",
+    "license": "Apache-2.0 and existing LICENSE/NOTICE retained in WeierstrassTwoTorsionSeparation",
+    "external_proof_imports_added": false
+  },
+  "validation": {
+    "focused_build": "lake build DkMath.FLT.FreyFiniteKernelSpecialization",
+    "focused_build_jobs": 4088,
+    "boundary": "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032PointSpecializationBoundary.lean",
+    "smoke": "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032PointSpecializationSmoke.lean",
+    "axioms": "lake env lean tmp/note032-isogeny/Axioms.lean; actual boundary/smoke bodies re-elaborated with Source import",
+    "warnings": 0,
+    "tracker": "OK: no mismatches found",
+    "lib_import_closure_count": 72,
+    "prior_owners_unchanged": true,
+    "prior_contract_unchanged": true,
+    "test_boundary_bodies_equal": true,
+    "facade_registration": "static check only",
+    "full_build_run": false,
+    "lake_test_run": false,
+    "root_test_build_run": false,
+    "git_diff_check": "pass"
+  },
+  "axioms": {
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.exists_pole": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.exists_value": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.constants_eq": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.value_unique": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.value": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.value_spec": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.value_eq": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.value_proof_irrel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.value_const": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.value_eq_zero_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.regularAlgebra": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.value_add": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.value_mul": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.evalHom": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.evalHom_apply": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.evalHom_surjective": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.value_genericX": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.value_genericY": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.value_translation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticPointEvaluation.equation_value": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassTwoTorsionSeparation.root_of_equation_of_neg_fixed": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassTwoTorsionSeparation.discriminant_ne_zero_of_three_roots": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassTwoTorsionSeparation.discriminant_ne_zero_of_three_fixed_solutions": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelYAt": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelAt_congr": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelAt_equation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.add_not_mem_kernel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt_translation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelYAt_translation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.normalized_trace_congr": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt_eq_sum": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelYAt_eq_sum": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt_neg": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelYAt_neg": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelAt_twoTorsion_root": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_discriminant_of_twoTorsion_separation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelAt_nonsingular": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelPointMap": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelPointMap_of_mem": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelPointMap_of_not_mem": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelPointMap_eq_zero_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelPointMap_translation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualKernelXAt": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualKernelYAt": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_at_equation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_twoTorsion_outside": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_at_twoTorsion_root": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_model_discriminant_of_separation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualKernelPointMap": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_pointMap_eq_zero_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelSpecializationTest.actual_generic_values": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelSpecializationTest.R_add_Q_coordinates": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelSpecializationTest.actual_kernel_values": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelSpecializationTest.actual_specialized_equation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelSpecializationTest.actual_twoTorsion_root": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelSpecializationTest.evaluation_pole_guard": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelSpecializationTest.three_roots_discriminant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelSpecializationTest.cusp_separation_guard": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelSpecializationTest.trivial_zero_fiber": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelSpecializationTest.actual_orbit_values": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelSpecializationTest.even_kernel_collision": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032PointSpecializationSmoke.source37_equation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032PointSpecializationSmoke.source37_twoTorsion_root": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032PointSpecializationSmoke.source37_twoTorsion_outside": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032PointSpecializationSmoke.source37_discriminant_of_separation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032PointSpecializationSmoke.source37_zero_fiber": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  "remaining": [
+    "actual three specialized x-values separated for odd kernels",
+    "unconditional kernelModel IsElliptic",
+    "all-point function additivity, geometric regularity and equivariance",
+    "point isogeny and degree",
+    "target zero-component/reduction transport",
+    "hno/general Frey irreducibility/general FLT"
+  ],
+  "next_connection": "same X_H in original k(x) via reflection; existing function-field degree to reduced-rational fiber polynomial degree; actual evaluation to polynomial roots; odd-kernel half-orbit counting gives separation; then use implemented discriminant criterion"
+}

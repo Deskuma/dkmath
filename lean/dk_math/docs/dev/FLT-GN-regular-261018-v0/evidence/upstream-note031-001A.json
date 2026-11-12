@@ -1,0 +1,62 @@
+{
+  "retrieved_date": "2026-10-22",
+  "transport": "GitHub connector fetch_file (read only)",
+  "files": [
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "P2M/Sol/S_NumberField_subgroup_eq_top_of_forall_inertia_le.lean",
+      "blob_sha": "9a2a7d73e9687c61b7dfeacc102b4c0e60a84af3",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_NumberField_subgroup_eq_top_of_forall_inertia_le.lean",
+      "purpose": "ported and refactored finite arithmetic core"
+    },
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "P2M/Sol/S_AlgebraicClosure_subgroup_eq_top_of_inertiaSubgroupIn_le.lean",
+      "blob_sha": "184332c9dba26f74e44b61e9e2fc1a4a86cd36ab",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_AlgebraicClosure_subgroup_eq_top_of_inertiaSubgroupIn_le.lean",
+      "purpose": "inspected; absolute bridge remains for 031-001B"
+    },
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "Definitions/Def_FLTPrelim_Ramification.lean",
+      "blob_sha": "718a9af252c4f10631ff70d4152977f046dccd0b",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/Definitions/Def_FLTPrelim_Ramification.lean",
+      "purpose": "inspected; valuation inertia definitions remain for 031-001B"
+    },
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "P2M/Sol/S_WeierstrassCurve_galois_action_trivial_on_submodule_of_inertia_trivial.lean",
+      "blob_sha": "af62f88ffdc7db166b747b1026a466f1bdffc96c",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_galois_action_trivial_on_submodule_of_inertia_trivial.lean",
+      "purpose": "inspected; DkMath general subgroup transport reconstructed independently"
+    },
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "P2M/Sol/S_WeierstrassCurve_galois_action_trivial_on_quotient_of_inertia_trivial.lean",
+      "blob_sha": "576ba4a818f484608ce8826835fb2372a71c750c",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_galois_action_trivial_on_quotient_of_inertia_trivial.lean",
+      "purpose": "inspected; DkMath general subgroup transport reconstructed independently"
+    },
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "P2M/Sol/S_NumberField_exists_lift_mem_inertia_integralClosure.lean",
+      "blob_sha": "8bcd2f8014a5e5a4d662d04860376e53c208bbea",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_NumberField_exists_lift_mem_inertia_integralClosure.lean",
+      "purpose": "inspected; profinite integral closure inertia lift remains"
+    },
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "P2M/Sol/S_ValuationSubring_exists_liesOverPrime_mem_inertiaSubgroupIn.lean",
+      "blob_sha": "1746a3df52b0c33d05b30dfaa491b0836924edf0",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_ValuationSubring_exists_liesOverPrime_mem_inertiaSubgroupIn.lean",
+      "purpose": "inspected; valuation subring bridge remains"
+    },
+    {
+      "repository": "anthropics/fermats-last-theorem",
+      "path": "P2M/Sol/S_FreyPackage_frey_stable_submodule_fixed_or_cofixed.lean",
+      "blob_sha": "4ae2516ff54e967fa4da4c9bf096259d24f20420",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_stable_submodule_fixed_or_cofixed.lean",
+      "purpose": "inspected; Frey local-to-global assembly remains"
+    }
+  ]
+}

@@ -1,0 +1,287 @@
+{
+  "checkpoint": "NOTE-032-005A",
+  "date": "2026-10-25",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "69bc5ca9222e62181bb250a00c5e552051d0ac13",
+  "status": "split dyadic structure and global candidate reduction completed; general hno remains open",
+  "mathematical_changes": {
+    "arithmetic": "a=7 mod8, b even, odd n>=3 imply numerator=0 mod8 and integer a2 even",
+    "residue": "split quadratic roots reduce to 0 or 1 and any decomposition element fixes their residues",
+    "geometry": "same tangent directions fixed by full decomposition group; all actual point differences smooth, via shallow/critical/smooth cases",
+    "same_Source": "decomposition cofixed on E[p]/E0[p]; no decomposition branch swap of plus type",
+    "candidate": "any global cofixed line equals same E0[p] using nontrivial inertia and dimensions one",
+    "open_contract": "hno iff an actual Galois difference escapes E0[p]; in seven case escape element must be outside decomposition group; existence not supplied"
+  },
+  "production": [
+    {
+      "path": "DkMath/Lib/NumberTheory/FreySplitModEight.lean",
+      "public_theorems": [
+        "power_difference_mod_eight",
+        "integral_a2_even"
+      ],
+      "sha256": "95668961a10183d2ccf610bed72fea20725d983bc8f7f6feaab66815837a419c"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/ValuationSplitQuadratic.lean",
+      "public_theorems": [
+        "eq_zero_or_one",
+        "apply_sub_mem_nonunits"
+      ],
+      "sha256": "0fe3e7572cecd49ee0fb2947a31106f38742f7181f3258da3452b79a5df82073"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticSplitDyadic.lean",
+      "public_theorems": [
+        "quadratic_residue_eq_zero",
+        "directions_decomposition_fixed",
+        "slope_difference_small",
+        "decomposition_difference_smooth"
+      ],
+      "sha256": "c9ba811aa8f17ff8a910a1ca24965c6279c399f31deb74fda69e2b6befdb47f3"
+    },
+    {
+      "path": "DkMath/FLT/FreySplitDyadic.lean",
+      "public_theorems": [
+        "b_even_of_a_mod_eight_seven",
+        "curve_a2_even_of_a_mod_eight_seven",
+        "dyadic_split_residue_profile",
+        "dyadic_directions_decomposition_fixed_of_seven",
+        "residual_decomposition_difference_smooth_of_seven",
+        "residualZeroComponent_cofixed_decomposition_of_seven",
+        "residual_no_decomposition_branch_swap_of_seven",
+        "residual_cofixed_line_eq_zeroComponent_at_two",
+        "residual_exists_cofixed_line_iff_zeroComponent_cofixed",
+        "residual_hno_iff_exists_zeroComponent_escape",
+        "residual_zeroComponent_escape_not_decomposition_of_seven"
+      ],
+      "sha256": "63d6adb1e1f4b229ba30bbe7727517f678d043db2fe9e060db894c2f3f8290cf"
+    }
+  ],
+  "reference_inspection": {
+    "pinned_commit": "6e837e75355538c7f80bab5b956861e86c4eacc2",
+    "transport": "web: immutable primary-source URLs",
+    "references": [
+      {
+        "url": "https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/PROOF-PATH.md",
+        "scope": "irreducibility step 3, a=3 mod8 and large/small exponent routes"
+      },
+      {
+        "url": "https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/P2M/Sol/S_FreyPackage_frey_no_cofixed_large.lean",
+        "scope": "imports, candidate subgroup setup, quotient zero-component transfer near Step Three, tower excerpts"
+      },
+      {
+        "url": "https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/Theorems/Thm_WeierstrassCurve_mazurStepThree_not_inZeroComponentAt.lean",
+        "scope": "public theorem signature and arithmetic hypotheses"
+      }
+    ],
+    "upstream_build_or_full_dependency_audit": false,
+    "direct_upstream_code_imports_added": false
+  },
+  "inventory": {
+    "search_scopes": [
+      "DkMath/Lib/NumberTheory",
+      "DkMath/Lib/RepresentationTheory",
+      "DkMath/FLT",
+      ".lake/packages/mathlib/Mathlib/AlgebraicGeometry/EllipticCurve",
+      "DkMath/Lib/Cosmic and DkMath/Lib/NumberTheory/GN*.lean"
+    ],
+    "live_confirmed": [
+      "actual E[p], prime cardinality p^2, finrank two",
+      "full higher torsion cardinality p^(2m) and Galois-equivariant short exact sequence",
+      "geometric Weil pairing and unconditional cyclotomic determinant",
+      "stable line to actual cyclic point subgroup",
+      "dyadic centre, tangent directions, nontrivial inertia, E0[p] dimension one",
+      "a=3 mod8 hno and irreducibility"
+    ],
+    "not_confirmed_in_search_scope": [
+      "same-kernel quotient elliptic curve/isogeny and zero-component transport",
+      "Mazur Step Three arithmetic theorem",
+      "corresponding stable cyclic p-power tower and final exclusion",
+      "GN-to-same-Source Galois escape bridge"
+    ],
+    "next": "cofixed line action equals determinant, then actual cyclotomic scalar action (005B)"
+  },
+  "checks": {
+    "target_build": {
+      "command": "lake build DkMath.FLT.FreySplitDyadic",
+      "includes_all_four_new_production_modules": true,
+      "jobs": 4050,
+      "exit_code": 0,
+      "warnings": 0
+    },
+    "standalone_boundary_theorems": 4,
+    "standalone_example_definitions": 1,
+    "same_Source37_smoke_theorems": 5,
+    "audited_declarations": 29,
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "axiom_results": {
+      "DkMath.Lib.NumberTheory.FreySplitModEight.power_difference_mod_eight": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.FreySplitModEight.integral_a2_even": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.ValuationSplitQuadratic.eq_zero_or_one": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.ValuationSplitQuadratic.apply_sub_mem_nonunits": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticSplitDyadic.quadratic_residue_eq_zero": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticSplitDyadic.directions_decomposition_fixed": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticSplitDyadic.slope_difference_small": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticSplitDyadic.decomposition_difference_smooth": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.b_even_of_a_mod_eight_seven": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.curve_a2_even_of_a_mod_eight_seven": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.dyadic_split_residue_profile": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.dyadic_directions_decomposition_fixed_of_seven": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_decomposition_difference_smooth_of_seven": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residualZeroComponent_cofixed_decomposition_of_seven": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_no_decomposition_branch_swap_of_seven": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_cofixed_line_eq_zeroComponent_at_two": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_exists_cofixed_line_iff_zeroComponent_cofixed": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_hno_iff_exists_zeroComponent_escape": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_zeroComponent_escape_not_decomposition_of_seven": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticSplitDyadicTest.exponent37_split_arithmetic": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticSplitDyadicTest.characteristic_boundary": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticSplitDyadicTest.splitCurve_invariants": [
+        "propext",
+        "Quot.sound"
+      ],
+      "EllipticSplitDyadicTest.splitCurve_frobenius_boundary": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032SplitDyadicSmoke.source37_decomposition_cofixed": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032SplitDyadicSmoke.source37_no_local_swap": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032SplitDyadicSmoke.source37_candidate_identification": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032SplitDyadicSmoke.source37_escape_contract": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032SplitDyadicSmoke.source37_escape_outside_decomposition": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticSplitDyadicTest.splitCurve": []
+    },
+    "forbidden_construct_scan": "passed",
+    "lib_only_dependency_nodes": 50,
+    "prior_owners_unchanged": 26,
+    "original_note032_and_004_report_and_evidence_unchanged": true,
+    "tracker": "OK: no mismatches found",
+    "normal_test_body_matches_independent_boundary": true,
+    "entrance_and_test_registration": "static only",
+    "git_diff_check": "passed",
+    "full_root_and_test_builds": "user validation split; not run",
+    "local_document_links": 92,
+    "new_file_whitespace_checks": 10
+  },
+  "boundary_examples": [
+    "exponent 37 negative input: even a2 in seven case",
+    "without characteristic two, -1 is a split root distinct from 0 and 1",
+    "non-Frey y^2+xy=x^3+2x, Delta=-508,c4=-95; actual Frobenius fixes both directions; actual outside 3-torsion P with smooth sigmaP-P and nonsmooth sigmaP+P"
+  ],
+  "remaining": [
+    "005B cyclotomic scalar action on same cofixed line",
+    "005C quotient elliptic curve and zero-component transport",
+    "005D global arithmetic exclusion or proved alternative",
+    "005E stable cyclic higher torsion tower if following upstream route",
+    "seven-case Galois escape existence, general hno and general FLT"
+  ]
+}

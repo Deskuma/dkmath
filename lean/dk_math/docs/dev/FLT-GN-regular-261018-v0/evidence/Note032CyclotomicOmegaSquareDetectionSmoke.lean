@@ -1,0 +1,12 @@
+import DkMath
+
+#print "file: docs.dev.FLT-GN-regular-261018-v0.evidence.Note032CyclotomicOmegaSquareDetectionSmoke"
+
+#check DkMath.Lib.NumberTheory.CyclotomicOmegaSquareProjector.omegaSquareProjector_range
+#check DkMath.Lib.NumberTheory.CyclotomicOmegaSquareProjector.characterEquiv_symm_root
+#check DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero.primaryLog_projectedCyclotomicUnit
+#check DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero.primaryLog_projectedCyclotomicUnit_ne_zero
+#check DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero.weightSquareSpace_ne_bot
+#check DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero.primaryWeightSquareSpace_eq_bot_of_rank_one
+#check DkMath.FLT.Frey.Source.residual_cyclic_extension_has_stable_complement_of_unit_rank_one
+#print axioms DkMath.FLT.Frey.Source.residual_cyclic_extension_has_stable_complement_of_unit_rank_one

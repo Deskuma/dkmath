@@ -1,0 +1,192 @@
+GN-LIB-005b — 2026-10-24
+
+lake build DkMath.Lib.Cosmic.PowerDifferenceCofactorArithmetic DkMath.Lib.NumberTheory.PowerDifferenceCofactorStrongDivisibility DkMath.Lib.Cosmic.CompletionLoan
+Build completed successfully (2796 jobs).
+Final build warnings/errors: 0/0
+
+lake env lean /tmp/GNLib005bAudit.lean
+file: GNLib005bAudit
+DkMath.Lib.Cosmic.powerDifferenceCofactor.{u_1} {R : Type u_1} [CommSemiring R] (n : ℕ) (x y : R) : R
+DkMath.Lib.Cosmic.powerDifferenceCofactor_zero.{u_1} {R : Type u_1} [CommSemiring R] (x y : R) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor 0 x y = 0
+DkMath.Lib.Cosmic.powerDifferenceCofactor_one.{u_1} {R : Type u_1} [CommSemiring R] (x y : R) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor 1 x y = 1
+DkMath.Lib.Cosmic.powerDifferenceCofactor_add_eq_GTail.{u_1} {R : Type u_1} [CommSemiring R] (n : ℕ) (g y : R) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor n (g + y) y = DkMath.CosmicFormula.GTail n 1 g y
+DkMath.Lib.Cosmic.powerDifferenceCofactor_eq_GTail_sub.{u_1} {R : Type u_1} [CommRing R] (n : ℕ) (x y : R) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor n x y = DkMath.CosmicFormula.GTail n 1 (x - y) y
+DkMath.Lib.Cosmic.powerDifferenceCofactor_eq_GTail_nat_sub (n x y : ℕ) (hyx : y ≤ x) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor n x y = DkMath.CosmicFormula.GTail n 1 (x - y) y
+DkMath.Lib.Cosmic.powerDifferenceCofactor_add_succ.{u_1} {R : Type u_1} [CommSemiring R] (n : ℕ) (g y : R) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor (n + 1) (g + y) y =
+    y * DkMath.Lib.Cosmic.powerDifferenceCofactor n (g + y) y + (g + y) ^ n
+DkMath.Lib.Cosmic.powerDifferenceCofactor_succ.{u_1} {R : Type u_1} [CommSemiring R] (n : ℕ) (x y : R) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor (n + 1) x y = y * DkMath.Lib.Cosmic.powerDifferenceCofactor n x y + x ^ n
+DkMath.Lib.Cosmic.powerDifferenceCofactor_two.{u_1} {R : Type u_1} [CommSemiring R] (x y : R) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor 2 x y = x + y
+DkMath.Lib.Cosmic.powerDifferenceCofactor_recurrence.{u_1} {R : Type u_1} [CommSemiring R] (k : ℕ) (x y : R) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor (k + 2) x y + x * y * DkMath.Lib.Cosmic.powerDifferenceCofactor k x y =
+    (x + y) * DkMath.Lib.Cosmic.powerDifferenceCofactor (k + 1) x y
+DkMath.Lib.Cosmic.sub_mul_powerDifferenceCofactor.{u_1} {R : Type u_1} [CommRing R] (n : ℕ) (x y : R) :
+  (x - y) * DkMath.Lib.Cosmic.powerDifferenceCofactor n x y = x ^ n - y ^ n
+DkMath.Lib.Cosmic.powerDifferenceCofactor_diagonal.{u_1} {R : Type u_1} [CommSemiring R] (n : ℕ) (x : R) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor n x x = ↑n * x ^ (n - 1)
+DkMath.Lib.Cosmic.cast_powerDifferenceCofactor.{u_1} {R : Type u_1} [CommSemiring R] (n x y : ℕ) :
+  ↑(DkMath.Lib.Cosmic.powerDifferenceCofactor n x y) = DkMath.Lib.Cosmic.powerDifferenceCofactor n ↑x ↑y
+DkMath.Lib.Cosmic.powerDifferenceCofactor_le (n x y : ℕ) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor n x y ≤ (x + y) ^ (n - 1)
+DkMath.Lib.Cosmic.powerDifferenceCofactor_pos (k x y : ℕ) (hx : 0 < x) :
+  0 < DkMath.Lib.Cosmic.powerDifferenceCofactor (k + 1) x y
+DkMath.Lib.Cosmic.signedCompletionDefect.{u_1} {R : Type u_1} [CommRing R] (n : ℕ) (x y : R) : R
+DkMath.Lib.Cosmic.signedCompletionDefect_add_cofactor.{u_1} {R : Type u_1} [CommRing R] (n : ℕ) (x y : R) :
+  DkMath.Lib.Cosmic.signedCompletionDefect n x y + DkMath.Lib.Cosmic.powerDifferenceCofactor n x y = (x + y) ^ (n - 1)
+DkMath.Lib.Cosmic.signedCompletionDefect_recurrence.{u_1} {R : Type u_1} [CommRing R] (k : ℕ) (x y : R) :
+  DkMath.Lib.Cosmic.signedCompletionDefect (k + 3) x y =
+    (x + y) * DkMath.Lib.Cosmic.signedCompletionDefect (k + 2) x y +
+      x * y * DkMath.Lib.Cosmic.powerDifferenceCofactor (k + 1) x y
+DkMath.Lib.Cosmic.completionDefect (n x y : ℕ) : ℕ
+DkMath.Lib.Cosmic.completionDefect_add_cofactor (n x y : ℕ) :
+  DkMath.Lib.Cosmic.completionDefect n x y + DkMath.Lib.Cosmic.powerDifferenceCofactor n x y = (x + y) ^ (n - 1)
+DkMath.Lib.Cosmic.completionDefect_zero (x y : ℕ) : DkMath.Lib.Cosmic.completionDefect 0 x y = 1
+DkMath.Lib.Cosmic.completionDefect_one (x y : ℕ) : DkMath.Lib.Cosmic.completionDefect 1 x y = 0
+DkMath.Lib.Cosmic.completionDefect_two (x y : ℕ) : DkMath.Lib.Cosmic.completionDefect 2 x y = 0
+DkMath.Lib.Cosmic.completionDefect_recurrence (k x y : ℕ) :
+  DkMath.Lib.Cosmic.completionDefect (k + 3) x y =
+    (x + y) * DkMath.Lib.Cosmic.completionDefect (k + 2) x y +
+      x * y * DkMath.Lib.Cosmic.powerDifferenceCofactor (k + 1) x y
+DkMath.Lib.Cosmic.completionDefect_three (x y : ℕ) : DkMath.Lib.Cosmic.completionDefect 3 x y = x * y
+DkMath.Lib.Cosmic.completionDefect_pos {n x y : ℕ} (hn : 3 ≤ n) (hx : 0 < x) (hy : 0 < y) :
+  0 < DkMath.Lib.Cosmic.completionDefect n x y
+DkMath.Lib.Cosmic.powerDifferenceCofactor_lt {n x y : ℕ} (hn : 3 ≤ n) (hx : 0 < x) (hy : 0 < y) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor n x y < (x + y) ^ (n - 1)
+DkMath.Lib.Cosmic.cast_completionDefect.{u_1} {R : Type u_1} [CommRing R] (n x y : ℕ) :
+  ↑(DkMath.Lib.Cosmic.completionDefect n x y) = DkMath.Lib.Cosmic.signedCompletionDefect n ↑x ↑y
+DkMath.Lib.NumberTheory.gcd_gap_powerDifferenceCofactor_eq_gcd_degree {n x y : ℕ} (hn : 1 ≤ n) (hyx : y ≤ x)
+  (hxy : x.Coprime y) : (x - y).gcd (DkMath.Lib.Cosmic.powerDifferenceCofactor n x y) = (x - y).gcd n
+DkMath.Lib.NumberTheory.isCoprime_adjacent_powerDifferenceCofactor.{u_1} {R : Type u_1} [CommRing R] (n : ℕ) (x y : R)
+  (hxy : IsCoprime x y) :
+  IsCoprime (DkMath.Lib.Cosmic.powerDifferenceCofactor n x y) (DkMath.Lib.Cosmic.powerDifferenceCofactor (n + 1) x y)
+DkMath.Lib.NumberTheory.coprime_adjacent_powerDifferenceCofactor (n x y : ℕ) (hxy : x.Coprime y) :
+  (DkMath.Lib.Cosmic.powerDifferenceCofactor n x y).Coprime (DkMath.Lib.Cosmic.powerDifferenceCofactor (n + 1) x y)
+DkMath.Lib.NumberTheory.sum_dvd_powerDifferenceCofactor_odd_sub.{u_1} {R : Type u_1} [CommRing R] (k : ℕ) (x y : R) :
+  x + y ∣ DkMath.Lib.Cosmic.powerDifferenceCofactor (2 * k + 1) x y - (-(x * y)) ^ k
+DkMath.Lib.NumberTheory.isCoprime_sum_powerDifferenceCofactor_odd.{u_1} {R : Type u_1} [CommRing R] (k : ℕ) (x y : R)
+  (hxy : IsCoprime x y) : IsCoprime (x + y) (DkMath.Lib.Cosmic.powerDifferenceCofactor (2 * k + 1) x y)
+DkMath.Lib.NumberTheory.coprime_sum_powerDifferenceCofactor_odd (k x y : ℕ) (hxy : x.Coprime y) :
+  (x + y).Coprime (DkMath.Lib.Cosmic.powerDifferenceCofactor (2 * k + 1) x y)
+DkMath.Lib.NumberTheory.coprime_sum_powerDifferenceCofactor_of_odd {n x y : ℕ} (hn : Odd n) (hxy : x.Coprime y) :
+  (x + y).Coprime (DkMath.Lib.Cosmic.powerDifferenceCofactor n x y)
+DkMath.Lib.NumberTheory.gcd_powerDifferenceCofactor_completionDefect_eq_gcd_budget (n x y : ℕ) :
+  (DkMath.Lib.Cosmic.powerDifferenceCofactor n x y).gcd (DkMath.Lib.Cosmic.completionDefect n x y) =
+    (DkMath.Lib.Cosmic.powerDifferenceCofactor n x y).gcd ((x + y) ^ (n - 1))
+DkMath.Lib.NumberTheory.isCoprime_powerDifferenceCofactor_signedCompletionDefect_odd.{u_1} {R : Type u_1} [CommRing R]
+  (k : ℕ) (x y : R) (hxy : IsCoprime x y) :
+  IsCoprime (DkMath.Lib.Cosmic.powerDifferenceCofactor (2 * k + 1) x y)
+    (DkMath.Lib.Cosmic.signedCompletionDefect (2 * k + 1) x y)
+DkMath.Lib.NumberTheory.coprime_powerDifferenceCofactor_completionDefect_odd (k x y : ℕ) (hxy : x.Coprime y) :
+  (DkMath.Lib.Cosmic.powerDifferenceCofactor (2 * k + 1) x y).Coprime
+    (DkMath.Lib.Cosmic.completionDefect (2 * k + 1) x y)
+DkMath.Lib.NumberTheory.coprime_powerDifferenceCofactor_completionDefect_of_odd {n x y : ℕ} (hn : Odd n)
+  (hxy : x.Coprime y) :
+  (DkMath.Lib.Cosmic.powerDifferenceCofactor n x y).Coprime (DkMath.Lib.Cosmic.completionDefect n x y)
+DkMath.Lib.Cosmic.powerDifferenceCofactor_symm.{u_1} {R : Type u_1} [CommSemiring R] (n : ℕ) (x y : R) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor n x y = DkMath.Lib.Cosmic.powerDifferenceCofactor n y x
+DkMath.Lib.Cosmic.powerDifferenceCofactor_add.{u_1} {R : Type u_1} [CommSemiring R] (a b : ℕ) (x y : R) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor (a + b) x y =
+    x ^ a * DkMath.Lib.Cosmic.powerDifferenceCofactor b x y + y ^ b * DkMath.Lib.Cosmic.powerDifferenceCofactor a x y
+DkMath.Lib.Cosmic.powerDifferenceCofactor_mul.{u_1} {R : Type u_1} [CommSemiring R] (a b : ℕ) (x y : R) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor (a * b) x y =
+    DkMath.Lib.Cosmic.powerDifferenceCofactor a (x ^ b) (y ^ b) * DkMath.Lib.Cosmic.powerDifferenceCofactor b x y
+DkMath.Lib.Cosmic.powerDifferenceCofactor_even.{u_1} {R : Type u_1} [CommSemiring R] (m : ℕ) (x y : R) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor (2 * m) x y =
+    (x + y) * DkMath.Lib.Cosmic.powerDifferenceCofactor m (x ^ 2) (y ^ 2)
+DkMath.Lib.Cosmic.powerDifferenceCofactor_square_loan.{u_1} {R : Type u_1} [CommSemiring R] (k : ℕ) (x y : R) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor (2 * k + 3) x y +
+      x * y * DkMath.Lib.Cosmic.powerDifferenceCofactor (2 * k + 1) x y =
+    (x + y) ^ 2 * DkMath.Lib.Cosmic.powerDifferenceCofactor (k + 1) (x ^ 2) (y ^ 2)
+DkMath.Lib.NumberTheory.coprime_powerDifferenceCofactor_right {n x y : ℕ} (hn : 0 < n) (hxy : x.Coprime y) :
+  (DkMath.Lib.Cosmic.powerDifferenceCofactor n x y).Coprime y
+DkMath.Lib.NumberTheory.coprime_powerDifferenceCofactor_left {n x y : ℕ} (hn : 0 < n) (hxy : x.Coprime y) :
+  (DkMath.Lib.Cosmic.powerDifferenceCofactor n x y).Coprime x
+DkMath.Lib.NumberTheory.coprime_powerDifferenceCofactor_coordinates {n x y : ℕ} (hn : 0 < n) (hxy : x.Coprime y) :
+  (DkMath.Lib.Cosmic.powerDifferenceCofactor n x y).Coprime (x * y)
+DkMath.Lib.NumberTheory.gcd_powerDifferenceCofactor_add_self (m n x y : ℕ) (hxy : x.Coprime y) :
+  (DkMath.Lib.Cosmic.powerDifferenceCofactor m x y).gcd (DkMath.Lib.Cosmic.powerDifferenceCofactor (n + m) x y) =
+    (DkMath.Lib.Cosmic.powerDifferenceCofactor m x y).gcd (DkMath.Lib.Cosmic.powerDifferenceCofactor n x y)
+DkMath.Lib.NumberTheory.gcd_powerDifferenceCofactor_add_mul_self (m n k x y : ℕ) (hxy : x.Coprime y) :
+  (DkMath.Lib.Cosmic.powerDifferenceCofactor m x y).gcd (DkMath.Lib.Cosmic.powerDifferenceCofactor (n + k * m) x y) =
+    (DkMath.Lib.Cosmic.powerDifferenceCofactor m x y).gcd (DkMath.Lib.Cosmic.powerDifferenceCofactor n x y)
+DkMath.Lib.NumberTheory.gcd_powerDifferenceCofactor (m n x y : ℕ) (hxy : x.Coprime y) :
+  (DkMath.Lib.Cosmic.powerDifferenceCofactor m x y).gcd (DkMath.Lib.Cosmic.powerDifferenceCofactor n x y) =
+    DkMath.Lib.Cosmic.powerDifferenceCofactor (m.gcd n) x y
+DkMath.Lib.NumberTheory.isStrongDvdSequence_powerDifferenceCofactor (x y : ℕ) (hxy : x.Coprime y) :
+  Nat.IsStrongDvdSequence fun n => DkMath.Lib.Cosmic.powerDifferenceCofactor n x y
+DkMath.Lib.NumberTheory.powerDifferenceCofactor_dvd_of_dvd {a b : ℕ} (hab : a ∣ b) (x y : ℕ) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor a x y ∣ DkMath.Lib.Cosmic.powerDifferenceCofactor b x y
+DkMath.Lib.NumberTheory.gcd_powerDifferenceCofactor_loan (n x y : ℕ) (hxy : x.Coprime y) :
+  (DkMath.Lib.Cosmic.powerDifferenceCofactor (n + 2) x y).gcd
+      (x * y * DkMath.Lib.Cosmic.powerDifferenceCofactor n x y) =
+    DkMath.Lib.Cosmic.powerDifferenceCofactor (n.gcd 2) x y
+DkMath.Lib.NumberTheory.gcd_powerDifferenceCofactor_loan_odd (k x y : ℕ) (hxy : x.Coprime y) :
+  (DkMath.Lib.Cosmic.powerDifferenceCofactor (2 * k + 3) x y).gcd
+      (x * y * DkMath.Lib.Cosmic.powerDifferenceCofactor (2 * k + 1) x y) =
+    1
+DkMath.Lib.NumberTheory.gcd_powerDifferenceCofactor_loan_even (k x y : ℕ) (hxy : x.Coprime y) :
+  (DkMath.Lib.Cosmic.powerDifferenceCofactor (2 * k + 4) x y).gcd
+      (x * y * DkMath.Lib.Cosmic.powerDifferenceCofactor (2 * k + 2) x y) =
+    x + y
+DkMath.Lib.Cosmic.completionLoanFactor (n x y : ℕ) : ℕ
+DkMath.Lib.Cosmic.completionLoanA (n x y : ℕ) : ℕ
+DkMath.Lib.Cosmic.completionLoanB (n x y : ℕ) : ℕ
+DkMath.Lib.Cosmic.completionLoanC (n x y : ℕ) : ℕ
+DkMath.Lib.Cosmic.completionLoan_numerators_add {n : ℕ} (hn : 2 ≤ n) (x y : ℕ) :
+  DkMath.Lib.Cosmic.powerDifferenceCofactor n x y + x * y * DkMath.Lib.Cosmic.powerDifferenceCofactor (n - 2) x y =
+    (x + y) * DkMath.Lib.Cosmic.powerDifferenceCofactor (n - 1) x y
+DkMath.Lib.Cosmic.completionLoanFactor_eq_gcd {n x y : ℕ} (hn : 2 ≤ n) (hxy : x.Coprime y) :
+  DkMath.Lib.Cosmic.completionLoanFactor n x y =
+    (DkMath.Lib.Cosmic.powerDifferenceCofactor n x y).gcd
+      (x * y * DkMath.Lib.Cosmic.powerDifferenceCofactor (n - 2) x y)
+DkMath.Lib.Cosmic.completionLoanFactor_pos (n x y : ℕ) (hx : 0 < x) : 0 < DkMath.Lib.Cosmic.completionLoanFactor n x y
+DkMath.Lib.Cosmic.completionLoanFactor_dvd_numerators {n x y : ℕ} (hn : 2 ≤ n) (hxy : x.Coprime y) :
+  DkMath.Lib.Cosmic.completionLoanFactor n x y ∣ DkMath.Lib.Cosmic.powerDifferenceCofactor n x y ∧
+    DkMath.Lib.Cosmic.completionLoanFactor n x y ∣ x * y * DkMath.Lib.Cosmic.powerDifferenceCofactor (n - 2) x y ∧
+      DkMath.Lib.Cosmic.completionLoanFactor n x y ∣ (x + y) * DkMath.Lib.Cosmic.powerDifferenceCofactor (n - 1) x y
+DkMath.Lib.Cosmic.completionLoan_reconstruct {n x y : ℕ} (hn : 2 ≤ n) (hxy : x.Coprime y) :
+  DkMath.Lib.Cosmic.completionLoanA n x y * DkMath.Lib.Cosmic.completionLoanFactor n x y =
+      DkMath.Lib.Cosmic.powerDifferenceCofactor n x y ∧
+    DkMath.Lib.Cosmic.completionLoanB n x y * DkMath.Lib.Cosmic.completionLoanFactor n x y =
+        x * y * DkMath.Lib.Cosmic.powerDifferenceCofactor (n - 2) x y ∧
+      DkMath.Lib.Cosmic.completionLoanC n x y * DkMath.Lib.Cosmic.completionLoanFactor n x y =
+        (x + y) * DkMath.Lib.Cosmic.powerDifferenceCofactor (n - 1) x y
+DkMath.Lib.Cosmic.completionLoan_add {n x y : ℕ} (hn : 2 ≤ n) (hx : 0 < x) (hxy : x.Coprime y) :
+  DkMath.Lib.Cosmic.completionLoanA n x y + DkMath.Lib.Cosmic.completionLoanB n x y =
+    DkMath.Lib.Cosmic.completionLoanC n x y
+DkMath.Lib.Cosmic.completionLoan_pos {n x y : ℕ} (hn : 3 ≤ n) (hx : 0 < x) (hy : 0 < y) (hxy : x.Coprime y) :
+  0 < DkMath.Lib.Cosmic.completionLoanA n x y ∧
+    0 < DkMath.Lib.Cosmic.completionLoanB n x y ∧ 0 < DkMath.Lib.Cosmic.completionLoanC n x y
+DkMath.Lib.Cosmic.completionLoan_pairwise_coprime {n x y : ℕ} (hn : 2 ≤ n) (hx : 0 < x) (hxy : x.Coprime y) :
+  (DkMath.Lib.Cosmic.completionLoanA n x y).Coprime (DkMath.Lib.Cosmic.completionLoanB n x y) ∧
+    (DkMath.Lib.Cosmic.completionLoanB n x y).Coprime (DkMath.Lib.Cosmic.completionLoanC n x y) ∧
+      (DkMath.Lib.Cosmic.completionLoanA n x y).Coprime (DkMath.Lib.Cosmic.completionLoanC n x y)
+DkMath.Lib.Cosmic.completionLoan_primitive_triple {n x y : ℕ} (hn : 3 ≤ n) (hx : 0 < x) (hy : 0 < y)
+  (hxy : x.Coprime y) :
+  0 < DkMath.Lib.Cosmic.completionLoanA n x y ∧
+    0 < DkMath.Lib.Cosmic.completionLoanB n x y ∧
+      0 < DkMath.Lib.Cosmic.completionLoanC n x y ∧
+        DkMath.Lib.Cosmic.completionLoanA n x y + DkMath.Lib.Cosmic.completionLoanB n x y =
+            DkMath.Lib.Cosmic.completionLoanC n x y ∧
+          (DkMath.Lib.Cosmic.completionLoanA n x y).Coprime (DkMath.Lib.Cosmic.completionLoanB n x y) ∧
+            (DkMath.Lib.Cosmic.completionLoanB n x y).Coprime (DkMath.Lib.Cosmic.completionLoanC n x y) ∧
+              (DkMath.Lib.Cosmic.completionLoanA n x y).Coprime (DkMath.Lib.Cosmic.completionLoanC n x y)
+GN-LIB-005b: 68 declarations checked; standard logical axioms only.
+
+Static checks: 29 new declarations (4 definitions, 25 theorems), all with [DkMath.Lib] documentation; 16 inline examples.
+Prior 39-declaration owner source files unchanged byte-for-byte relative to baseline HEAD.
+Forbidden constructs absent in three new modules; file markers present.
+Local DkMath import closure contains Lib modules only.
+24 original material SHA256 hashes verified.
+Aggregator registrations checked statically; full/root/test builds excluded by user request.
+File tracker: OK, no mismatches found.
+Markdown: 131 local links checked for target existence and line-anchor bounds.
+Evidence JSON: both files parse successfully.
+Git diff --check: passed.

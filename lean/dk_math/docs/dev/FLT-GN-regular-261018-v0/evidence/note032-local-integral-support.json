@@ -1,0 +1,480 @@
+{
+  "unit": "NOTE-032-LOCAL-INTEGRAL-SUPPORT",
+  "date": "2026-10-26",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "cc1104f4325a652b9c6ac859b32bd1851e8f11e2",
+  "status": "same actual kernel coordinates and explicit half-kernel polynomial candidate are integral away from p; actual target p-power denominator proved only under the explicit unresolved same-function-field equation premise",
+  "production": [
+    {
+      "path": "DkMath/Lib/NumberTheory/RationalPrimeDenominator.lean",
+      "sha256": "f3a09b98dc0550d1fbafa2e0bdee1559aaebc69272c39f7ffd9be035a80ab797",
+      "theorems": [
+        "not_dvd_num_of_dvd_den",
+        "padicValRat_neg_of_dvd_den",
+        "padicValRat_nonneg_iff",
+        "primeFactors_subset_iff",
+        "exists_den_eq_pow",
+        "exists_den_eq_pow_iff"
+      ],
+      "definitions": [],
+      "lines": 93
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/ValuationRationalPrimeSupport.lean",
+      "sha256": "524be950632a5b2ab189ca86ac481944d66fa0d80a461851c114fdb313707225",
+      "theorems": [
+        "ratCast_mem_iff",
+        "ratCast_mem_iff_padicValRat_nonneg",
+        "all_valuation_mem_iff",
+        "den_eq_pow_of_all_valuation_mem",
+        "prime_power_value_one"
+      ],
+      "definitions": [],
+      "lines": 82
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassDenominatorSupport.lean",
+      "sha256": "c0ca8f77b31f9ecf26888baf057981d5b51453254cb5c440c27a648ce1665100",
+      "theorems": [
+        "coeffIntegralAt_iff_not_dvd",
+        "exists_commonDenominator_pow_iff",
+        "coeffIntegralAt_iff_mem",
+        "commonDenominator_value_one",
+        "integerModel_invariants_of_coeffIntegralAt"
+      ],
+      "definitions": [
+        "CoeffIntegralAt"
+      ],
+      "lines": 86
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelHalf.lean",
+      "sha256": "18e4755ef2e42570a17794511adcd7fb818e961280f6d1ef70af8d0e256bca91",
+      "theorems": [
+        "mem_halfKernel",
+        "neg_ne_self_of_odd_kernel",
+        "mem_halfKernel_or_neg",
+        "neg_not_mem_halfKernel",
+        "halfKernel_partition",
+        "card_halfKernel"
+      ],
+      "definitions": [
+        "halfKernel"
+      ],
+      "lines": 91
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassVeluPolynomial.lean",
+      "sha256": "1e5bdfa85b0726defc33ed3530fda9edfa8ebcf13d059bba7590eb62ddf51784",
+      "theorems": [
+        "momentW_negY",
+        "polynomialModel_map",
+        "polynomialModel_coefficientsIn"
+      ],
+      "definitions": [
+        "momentT",
+        "momentW",
+        "polynomialModel",
+        "CoefficientsIn"
+      ],
+      "lines": 81
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelLocalIntegrality.lean",
+      "sha256": "e7e4aa8f30f10b5c25f21b854648cfeda3412227c20504d1ea371eb8866e3091",
+      "theorems": [
+        "kernel_coordinates_mem",
+        "halfKernelPolynomialModel_coefficientsIn",
+        "halfKernelPolynomialModel_eq_kernelModel_of_equation"
+      ],
+      "definitions": [
+        "halfKernelPolynomialModel"
+      ],
+      "lines": 69
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelLocalIntegrality.lean",
+      "sha256": "28a200b44180b3d8ee0a2c9b6aaa8245f08803e5ff6c6e77b2ff786ce6401aef",
+      "theorems": [
+        "residual_kernel_killed",
+        "residual_kernel_coordinates_mem",
+        "card_residual_halfKernel",
+        "residual_halfKernelPolynomialModel_coefficientsIn",
+        "residual_target_denominator_power_iff",
+        "residual_target_coeffIntegralAt_of_polynomial_equation",
+        "residual_target_denominator_power_of_polynomial_equation"
+      ],
+      "definitions": [
+        "residualHalfKernelPolynomialModel"
+      ],
+      "lines": 125
+    }
+  ],
+  "tests": [
+    {
+      "path": "DkMathTest/Lib/NumberTheory/EllipticFiniteKernelLocalIntegrality.lean",
+      "sha256": "ef5c203d7799d5e702d76f7bd5093d3ed8a9f7cc031183f7e412269eeb042d26",
+      "theorems": [
+        "actual_nine_point_half",
+        "actual_half_partition",
+        "rational_single_exception",
+        "rational_two_exceptions",
+        "actual_sample_places",
+        "toy_candidate",
+        "toy_reduction_at_two"
+      ],
+      "definitions": [
+        "toy"
+      ],
+      "lines": 105
+    },
+    {
+      "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032LocalIntegralSupportSmoke.lean",
+      "sha256": "6639952cda97547f66171ce6fa909a9aca80d4a75f8fd2a087f85efc5dd76261",
+      "theorems": [
+        "source37_kernel_killed",
+        "source37_kernel_integral_at_two",
+        "source37_half_card",
+        "source37_candidate_integral_at_two",
+        "source37_actual_denominator_criterion",
+        "source37_conditional_denominator_power"
+      ],
+      "definitions": [],
+      "lines": 59
+    }
+  ],
+  "counts": {
+    "production_owners": 7,
+    "public_production_theorems": 35,
+    "production_definitions": 8,
+    "test_theorems": 7,
+    "test_definitions": 1,
+    "source37_theorems": 6,
+    "audited_public_declarations": 57
+  },
+  "completed": [
+    "rational local integrality iff prime does not divide reduced denominator, including zero",
+    "finite exceptional prime support and prime-power denominator criteria",
+    "arbitrary valuation extension membership iff rational local integrality; existence prevents vacuous universal",
+    "same existing common denominator criterion and integerization invariant valuations at coefficient-integral places",
+    "odd kernel half, disjoint inversion partition and exact cardinality without cyclicity",
+    "polynomial coefficient candidate over arbitrary commutative rings; ring-map compatibility and subring integrality without inverse of two",
+    "same actual Source kernel p-annihilation and coordinate integrality away from p, including two",
+    "same half-kernel candidate coefficient integrality away from p",
+    "same function-field candidate equation implies equality to original kernelModel and actual descended target p-power common denominator"
+  ],
+  "boundaries": [
+    "candidate equation for same actual X_H,Y_H is unproved",
+    "candidate coefficient integrality does not yet prove unconditional actual target coefficient integrality",
+    "actual target p-power denominator is conditional, not complete",
+    "integerization invariant comparison does not compare source with quotient",
+    "source-to-quotient reduction, minimal models, zero components, scheme isogeny, target torsion exclusion and general hno remain open"
+  ],
+  "validation": {
+    "focused_builds": [
+      "./lean-build.sh DkMath.FLT.FreyFiniteKernelLocalIntegrality",
+      "./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelLocalIntegrality"
+    ],
+    "direct_lean": [
+      "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032LocalIntegralSupportSmoke.lean",
+      "lake env lean tmp/note032-local-integral/Axioms.lean"
+    ],
+    "results": "passed without warnings",
+    "source_scan": "passed",
+    "lib_dependency_direction": "passed",
+    "docstrings_markers_tracker": "passed",
+    "facades": "static registration checked",
+    "previous_owners_and_contract": "unchanged",
+    "diff_and_new_file_whitespace": "passed",
+    "full_build_and_full_test_suite": "not run; user handles full build"
+  },
+  "upstream": {
+    "cached_files": [
+      {
+        "path": "tmp/note032-local-integral/Velu.lean",
+        "sha": "35bd154a52a4e83267a2930da2438ece8cc64a54"
+      },
+      {
+        "path": "tmp/note032-integral/S_WeierstrassCurve_exists_integral_veluQuotient_rescale_of_galois_stable.lean",
+        "sha": "361e2b2a3f20b849206fe0142b58063452ace691"
+      }
+    ],
+    "hashes": "verified",
+    "licenses": "Apache-2.0 adaptation notices in two owners; existing license and notice retained",
+    "role": "polynomial formulas and reduced-denominator prime-support argument adapted; explicit upstream quotient not identified with current implicit DkMath target"
+  },
+  "axioms": {
+    "DkMath.Lib.NumberTheory.RationalPrimeDenominator.not_dvd_num_of_dvd_den": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.RationalPrimeDenominator.padicValRat_neg_of_dvd_den": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.RationalPrimeDenominator.padicValRat_nonneg_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.RationalPrimeDenominator.primeFactors_subset_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.RationalPrimeDenominator.exists_den_eq_pow": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.RationalPrimeDenominator.exists_den_eq_pow_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.ValuationRationalPrimeSupport.ratCast_mem_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.ValuationRationalPrimeSupport.ratCast_mem_iff_padicValRat_nonneg": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.ValuationRationalPrimeSupport.all_valuation_mem_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.ValuationRationalPrimeSupport.den_eq_pow_of_all_valuation_mem": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.ValuationRationalPrimeSupport.prime_power_value_one": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.CoeffIntegralAt": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.coeffIntegralAt_iff_not_dvd": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.exists_commonDenominator_pow_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.coeffIntegralAt_iff_mem": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.commonDenominator_value_one": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassRationalIntegralModel.integerModel_invariants_of_coeffIntegralAt": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.mem_halfKernel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.neg_ne_self_of_odd_kernel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.mem_halfKernel_or_neg": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.neg_not_mem_halfKernel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernel_partition": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.card_halfKernel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.momentT": [
+      "propext"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.momentW": [
+      "propext"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.momentW_negY": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.polynomialModel": [
+      "propext",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.polynomialModel_map": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.CoefficientsIn": [
+      "propext"
+    ],
+    "DkMath.Lib.NumberTheory.WeierstrassVeluPolynomial.polynomialModel_coefficientsIn": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernel_coordinates_mem": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernelPolynomialModel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernelPolynomialModel_coefficientsIn": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.halfKernelPolynomialModel_eq_kernelModel_of_equation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_killed": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_coordinates_mem": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.card_residual_halfKernel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualHalfKernelPolynomialModel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_halfKernelPolynomialModel_coefficientsIn": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_target_denominator_power_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_target_coeffIntegralAt_of_polynomial_equation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_target_denominator_power_of_polynomial_equation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelLocalIntegralityTest.actual_nine_point_half": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelLocalIntegralityTest.actual_half_partition": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelLocalIntegralityTest.rational_single_exception": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelLocalIntegralityTest.rational_two_exceptions": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelLocalIntegralityTest.actual_sample_places": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelLocalIntegralityTest.toy_candidate": [
+      "propext",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelLocalIntegralityTest.toy_reduction_at_two": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032LocalIntegralSupportSmoke.source37_kernel_killed": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032LocalIntegralSupportSmoke.source37_kernel_integral_at_two": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032LocalIntegralSupportSmoke.source37_half_card": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032LocalIntegralSupportSmoke.source37_candidate_integral_at_two": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032LocalIntegralSupportSmoke.source37_actual_denominator_criterion": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032LocalIntegralSupportSmoke.source37_conditional_denominator_power": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelLocalIntegralityTest.toy": []
+  }
+}

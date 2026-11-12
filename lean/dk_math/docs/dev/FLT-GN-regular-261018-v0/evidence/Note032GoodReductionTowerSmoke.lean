@@ -1,0 +1,14 @@
+import DkMath
+
+#check DkMath.Lib.Algebra.FiniteFixedQuotient.card_le_card_fixed_mul
+#check DkMath.Lib.NumberTheory.FiniteFieldFrobeniusFixed.exists_preimage_of_pow_card_eq
+#check DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction.integerReduction_injOn_torsion
+#check DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction.card_fixed_torsion_le_finite_points
+#check DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction.torsion_index_le_finite_point_count_of_absorbing
+#check DkMath.FLT.Frey.Source.exists_good_prime_ne
+#check DkMath.FLT.Frey.Source.goodReductionPointCount_pos
+#check DkMath.FLT.Frey.Source.residual_cofixed_point_count_tower_resonant_inertia_impossible
+
+#print axioms DkMath.Lib.NumberTheory.EllipticFrobeniusFixedReduction.torsion_index_le_finite_point_count_of_absorbing
+#print axioms DkMath.FLT.Frey.Source.prime_power_pointAction_sub_mem_of_resonant_inertia
+#print axioms DkMath.FLT.Frey.Source.residual_cofixed_point_count_tower_resonant_inertia_impossible

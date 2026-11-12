@@ -1,0 +1,155 @@
+{
+  "checkpoint": "NOTE-032-004",
+  "date": "2026-10-25",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "d21c835157c6df441b552145285e652b387fca87",
+  "status": "completed: a=3 mod8 direct hno and irreducibility without address/geometry provider inputs; a=7 mod8 remains open",
+  "mathematical_changes": {
+    "general_place": "any characteristic-zero field L and prime q: lying-over in integralClosure Z L plus valuation subring existence yields LiesOverPrime A q",
+    "same_Source": "actual dyadic address and Frobenius supplied together; same point space, representation and zero component",
+    "public_endpoints": "Source, prime p>=5 and a=3 mod8 imply direct hno, irreducibility and no stable line; A,hA supplied internally",
+    "remaining_branch": "mod4 oriented Source and not irreducible implies a=7 mod8; no reverse implication or existence assertion",
+    "integer_counterexample": "same Source.ofCounterexample with PrimitiveReduction and OrientationTrace retained; irreducible or a=7 mod8"
+  },
+  "production": [
+    {
+      "path": "DkMath/Lib/NumberTheory/ValuationPrimeExistence.lean",
+      "public_theorems": [
+        "exists_liesOverPrime"
+      ],
+      "sha256": "2897072e8623d09e6acacd2ebd1115a6f5032a66fb45992e9d31c89beedc6a68"
+    },
+    {
+      "path": "DkMath/FLT/FreyModEightIrreducibility.lean",
+      "public_theorems": [
+        "residual_exists_dyadic_frobenius_branch_swap_of_a_mod_eight",
+        "residual_no_cofixed_line_of_a_mod_eight",
+        "residual_isIrreducible_of_a_mod_eight",
+        "residual_no_stable_line_of_a_mod_eight",
+        "residual_a_mod_eight_eq_seven_of_not_irreducible",
+        "ofCounterexample_residual_irreducible_or_seven"
+      ],
+      "sha256": "9fc4041472c8c1d5e48eb242c1ce2709c083ceb1fd15439b44878eed200c17fc"
+    }
+  ],
+  "checks": {
+    "target_build": {
+      "command": "lake build DkMath.Lib.NumberTheory.ValuationPrimeExistence DkMath.FLT.FreyModEightIrreducibility",
+      "jobs": 4046,
+      "exit_code": 0,
+      "warnings": 0
+    },
+    "standalone_boundary_theorems": 5,
+    "same_Source37_smoke_theorems": 4,
+    "audited_declarations": 16,
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "axiom_results": {
+      "DkMath.Lib.NumberTheory.ValuationPrimeExistence.exists_liesOverPrime": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_exists_dyadic_frobenius_branch_swap_of_a_mod_eight": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_no_cofixed_line_of_a_mod_eight": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_isIrreducible_of_a_mod_eight": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_no_stable_line_of_a_mod_eight": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_a_mod_eight_eq_seven_of_not_irreducible": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.ofCounterexample_residual_irreducible_or_seven": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "ValuationPrimeExistenceTest.transcendental_address": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "ValuationPrimeExistenceTest.rational_closure_frobenius": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "ValuationPrimeExistenceTest.one_address_boundary": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "ValuationPrimeExistenceTest.two_three_address_boundary": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "ValuationPrimeExistenceTest.positive_characteristic_boundary": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032ModEightIrreducibilitySmoke.source37_local_witness": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032ModEightIrreducibilitySmoke.source37_closed_profile": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032ModEightIrreducibilitySmoke.source37_remaining_branch": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032ModEightIrreducibilitySmoke.counterexample37_trace": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    "forbidden_construct_scan": "passed",
+    "lib_only_dependency_nodes": 2,
+    "prior_owners_unchanged": 18,
+    "original_note032_and_003c_report_and_evidence_unchanged": true,
+    "tracker": "OK: no mismatches found",
+    "normal_test_body_matches_independent_boundary": true,
+    "entrance_and_test_registration": "static only",
+    "git_diff_check": "passed",
+    "full_root_and_test_builds": "user validation split; not run",
+    "local_document_links": 86,
+    "new_file_whitespace_checks": 8
+  },
+  "boundary_examples": [
+    "Q(X): prime-37 address and actual residue characteristic 37",
+    "Qbar: dyadic address plus actual Frobenius without Frey Source",
+    "1 cannot be nonunit in valuation subring",
+    "2 and 3 cannot both be nonunits at same address",
+    "ZMod 2 has no prime-3 address; characteristic-zero assumption is substantive"
+  ],
+  "remaining": [
+    "a=7 mod8 and general hno (032-005)",
+    "general FLT; isogeny/Mazur/modularity/level-lowering connections are separate"
+  ]
+}

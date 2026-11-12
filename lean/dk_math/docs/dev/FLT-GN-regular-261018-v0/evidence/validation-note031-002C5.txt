@@ -1,0 +1,101 @@
+NOTE-031-002C5 verification evidence — 2026-10-22 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Completed scope:
+  Same CriticalCentre and TangentDirections on an arbitrary valuation-ring model.
+  Actual centre slope difference dichotomy (<1 or =1) from integrality at equal shallow depth.
+  Same branch: actual Point subtraction has HasSmoothReduction.
+  Opposite branches: actual Point addition has HasSmoothReduction, using negation of second point.
+  Sharp equality v(x1-x2)=v(x1-centre.x) requires a finite result with integral x coordinate.
+  Infinity, nonintegral result, equal-X inverse pairs retained in actual addition proof.
+  Same general-fiber model equality and same Frey Source retained in transport paths.
+  No prime/torsion assumptions needed for this geometric comparison.
+
+Remaining scope:
+  Torsion-depth recurrences and finite torsion orbit constraints.
+  Discriminant p-divisibility to all singular-reduction torsion fixedness.
+  Full multiplicative unramifiedness, additive zero-component submodule.
+  031-002 overall, 031-003 through 005, hcases/hno and general FLT remain incomplete.
+
+Actual regressions, on the previous curve y^2=x^3+x^2+1053:
+  P=(3,33); Q=(7107/169,-610401/2197).
+  Nonsingularity/curve equation verified at Q and R=(172961/10000,80785959/1000000).
+  Actual Point addition verifies P+Q=R.
+  Every valuation subring of Q over 3: same X-depth for P,Q;
+    centre slope difference=542234/30797 is a unit, so opposite-branch theorem applies.
+  Actual finite result x is integral; sharp-depth conclusion applied using P+Q=R.
+  P-(-Q) same-branch comparison via slope difference=135300/30797 (<1).
+  P-P=O and P+(-P)=O verified through respective comparison theorems.
+  No asserted identification of Q with a particular multiple of P.
+  Nonintegral-result branch retained in proof; no new numerical pole example constructed.
+
+Focused build:
+  lake build DkMath.Lib.NumberTheory.EllipticBranchComparison DkMath.FLT.FreyBranchComparison DkMathTest.FLT.FreyBranchComparison DkMathTest.FLT.Note031BranchComparisonDependencyAudit
+  exit 0; Build completed successfully (3202 jobs); no warnings/errors.
+  9 production and 14 regression public declarations: standard logical axioms only.
+  13 type/opaque-body graph audits; 6 explicit-input audits.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Forbidden: sorryAx, external P2M/P2MW/FltRegular/FreyPackage, old FLT endpoints,
+    DkMath.FLT.Kummer, RegularKummer and FoldedValuationOrbit.
+  Neutral library/concrete paths additionally exclude DkMath.FLT dependencies.
+  Required providers include actual Point.add_of_X_ne, same-centre slope classification,
+    negation branch distances, nodal smooth-reduction criterion and valuationModel_map.
+  Guards retained: same W/C/D, point nonsingularity, near/shallow, equal depth, branch distance,
+    general-fiber equality on transport paths; no hfix/hcases/hno inputs.
+
+Facade/root/test build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11742 jobs).
+  New code: no warnings/errors.
+  Five existing unrelated broad-root sorry warnings:
+    DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6
+    DkMath/CosmicFormula/TriominoFLT.lean:1919:6
+    DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8
+    DkMath/NumberTheory/GcdNextResearch.lean:850:6
+    DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8
+
+Entrances:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest; no warnings/errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE031BranchComparison.lean
+  exit 0; 7 endpoints reachable via import DkMath; Source transport type-checked at p=37;
+    both Source endpoints print standard-only axioms; no warnings/errors.
+  Source 37 reachability is conditional API type checking, not a constructed Source or Fermat counterexample.
+  python3 check_tracker_mismatch.py /tmp/note031-002C5-full.log
+  exit 0; OK: no mismatches found.
+
+Static checks:
+  python3 /tmp/check_note031C5.py
+  exit 0; 8 changed/new Lean files: 3 facades, 2 production, regression, audit, root smoke.
+  Exact markers, public textbook docstrings, final newlines, whitespace, Lib layering: PASS.
+  All 9 production and 14 regression public declarations listed in axiom audit: PASS.
+  No sorry/admit/native_decide/custom axiom/opaque/unsafe in checked new/changed Lean files.
+  Upstream LICENSE/NOTICE present; read-only connector fetches recorded in provenance manifest.
+  git diff --check: exit 0.
+
+This records the checked new paths and scope, not whole-repository axiom freedom.
+Disposable raw logs: /tmp/note031-002C5-{focused,full,entrance,smoke}.log.
+
+Compact new audit output:
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS: 9 production and 14 regression declarations; standard logical axioms only.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.EllipticBranchComparison.branch_distance_dichotomy; 8374 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.EllipticBranchComparison.sub_of_same_branch; 24207 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.EllipticBranchComparison.add_of_opposite_branch; 24209 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.EllipticBranchComparison.sub_of_same_branch_of_model; 24208 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.EllipticBranchComparison.add_of_opposite_branch_of_model; 24210 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.shallow_sub_of_same_branch; 25794 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.shallow_add_of_opposite_branch; 25796 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS: FreyBranchComparisonTest.sum_coordinates; 8456 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS: FreyBranchComparisonTest.add_comparison; 25087 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS: FreyBranchComparisonTest.sharp_depth; 25117 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS: FreyBranchComparisonTest.sub_comparison; 25086 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS: FreyBranchComparisonTest.diagonal_zero; 24965 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS: FreyBranchComparisonTest.inverse_zero; 24970 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS inputs: DkMath.Lib.NumberTheory.EllipticBranchComparison.sub_of_same_branch; explicit arithmetic guards and remaining inputs retained.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS inputs: DkMath.Lib.NumberTheory.EllipticBranchComparison.sub_of_same_branch_of_model; explicit arithmetic guards and remaining inputs retained.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS inputs: DkMath.FLT.Frey.Source.shallow_sub_of_same_branch; explicit arithmetic guards and remaining inputs retained.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS inputs: DkMath.Lib.NumberTheory.EllipticBranchComparison.add_of_opposite_branch; explicit arithmetic guards and remaining inputs retained.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS inputs: DkMath.Lib.NumberTheory.EllipticBranchComparison.add_of_opposite_branch_of_model; explicit arithmetic guards and remaining inputs retained.
+  DkMathTest/FLT/Note031BranchComparisonDependencyAudit.lean:80:0: PASS inputs: DkMath.FLT.Frey.Source.shallow_add_of_opposite_branch; explicit arithmetic guards and remaining inputs retained.

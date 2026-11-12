@@ -1,0 +1,75 @@
+{
+  "checkpoint": "NOTE-031-004 part 2",
+  "date": "2026-10-23",
+  "status": "IMPLEMENTED: both reduction cases and common-side transport at p; NOTE-031-005 and general FLT remain outside scope",
+  "branch": "feat/FLT-GNR-031-04-261023-codex",
+  "repository": "anthropics/fermats-last-theorem",
+  "live_connector_verification_this_turn": {
+    "path": "P2M/Sol/S_WeierstrassCurve_exists_torsion_zeroComponent_submodule_of_multiplicativeReduction.lean",
+    "blob": "38bdee599f8b536cb30402a8d1dbef001a3d89da"
+  },
+  "sources": [
+    {
+      "name": "WeierstrassCurve_exists_torsion_zeroComponent_submodule_of_multiplicativeReduction",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_torsion_zeroComponent_submodule_of_multiplicativeReduction.lean",
+      "blob": "38bdee599f8b536cb30402a8d1dbef001a3d89da",
+      "cached_content_git_blob_verified": true,
+      "cache_restoration": "remove the one LF appended during local extraction",
+      "lines": 3249,
+      "used_for": "Valuation residue utilities, slope and coordinate reduction, smooth addition cases; DkMath actual reduction kernel replaces upstream formal parameter construction"
+    },
+    {
+      "name": "WeierstrassCurve_inZeroComponentAt_torsionBy_residueChar",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_inZeroComponentAt_torsionBy_residueChar.lean",
+      "blob": "01d7a6df7cd7c56355d71af165e9f1ba34303e1c",
+      "cached_content_git_blob_verified": true,
+      "cache_restoration": "remove the one LF appended during local extraction",
+      "lines": 172,
+      "used_for": "Proof structure reconstructed with actual DkMath reduction homomorphism and existing CriticalCentre"
+    },
+    {
+      "name": "WeierstrassCurve_inZeroComponentAt_smul_sub_of_mem_inertiaSubgroupIn",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_inZeroComponentAt_smul_sub_of_mem_inertiaSubgroupIn.lean",
+      "blob": "4671d1857e26c4967080e5f48c4ce2fbe56484ee",
+      "cached_content_git_blob_verified": true,
+      "cache_restoration": "remove the one LF appended during local extraction",
+      "lines": 66,
+      "used_for": "Proof structure reconstructed using existing DkMath branch and critical-pair geometry"
+    }
+  ],
+  "lean": "4.34.1",
+  "lean_commit": "5045d0056413266e57c625dcd7c365b10e377c52",
+  "mathlib_commit": "d13f23b723b8a846827a245b89c10fc7d3f11612",
+  "validation": {
+    "new_production_declarations": 41,
+    "new_regression_declarations": 7,
+    "dependency_graph_roots": 14,
+    "input_contracts": 4,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "forbidden_dependencies": [
+      "sorryAx",
+      "FltRegular",
+      "P2M",
+      "P2MW",
+      "FreyPackage",
+      "RegularKummer",
+      "DkMath.FLT.Kummer",
+      "FoldedValuationOrbit",
+      "external FLT endpoints"
+    ],
+    "neutral_lib_roots_also_exclude": "DkMath.FLT"
+  },
+  "production_source_sha256": {
+    "DkMath/Lib/NumberTheory/ValuationResidue.lean": "465c02cbbc8efcd870b67dad33bd0028ec59dd77ddb7c39f9776417363093438",
+    "DkMath/Lib/NumberTheory/EllipticReductionSlope.lean": "2e9eb850f23490fbe04e7252e99556f52973e1d99a3f0762e88f493fd21875fa",
+    "DkMath/Lib/NumberTheory/EllipticReductionCoordinates.lean": "ed759bbe1c3db13769672992337c64f1297144eaaab11b95ea1af355f6b5e77d",
+    "DkMath/Lib/NumberTheory/EllipticSmoothReduction.lean": "3b148dd07922137b85c3e26f35b38c1633db77c2d997905eb5d9d9797a704622",
+    "DkMath/Lib/NumberTheory/EllipticNodalReductionKernel.lean": "aaa36e4da17e32f2e574bb7a5d880cf21287e793134dddf9cb127e2709e9aab2",
+    "DkMath/Lib/NumberTheory/EllipticNodalInertia.lean": "a7cbef9a5cbe0729d93c6745398ea6cce6ebd507b3aae7fad65533d13a6dee27",
+    "DkMath/FLT/FreyPrimeFiltration.lean": "b2c14535f55c0bc30c2fef3250cc3a0536439f93fe7e8bdf8fd4305deb979842"
+  }
+}

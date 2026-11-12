@@ -1,0 +1,64 @@
+NOTE-008 verification evidence — 2026-10-19
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1
+
+Focused dependency audit:
+  lake build DkMathTest.FLT.Note008DependencyAudit
+  exit 0; Build completed successfully (9018 jobs).
+  The final integrated build below also rebuilds this audit after adding the heartbeat rationale comment.
+
+Final integrated build:
+  lake build DkMath DkMath.FLT.Kummer DkMath.FLT DkMath.NumberTheory.Legendre DkMathTest
+  exit 0; Build completed successfully (11520 jobs).
+  All 9 new source/test modules appear as Built/Replayed with matching file markers.
+  No warnings in the 9 new modules; historical warnings elsewhere remain outside this change.
+
+Root smoke:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE008.lean
+  exit 0; import DkMath reaches all three strands and the same-prime comparison.
+
+Direct suite entrance (after final build):
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest
+
+Marker checker:
+  python3 check_tracker_mismatch.py /tmp/note008-final-build.log
+  exit 0; OK: no mismatches found
+
+Static source checks:
+  6 new production sources contain no sorry/admit/axiom/native_decide.
+  All 9 new module markers follow imports and match source module paths.
+  New Lean sources have no trailing whitespace.
+  git diff --check: exit 0.
+
+Regression examples: 23 (19 prime/depth/actual-class/State; 4 nonzero diagonal-vector tests).
+Public declarations audited: 64.
+Opaque proof bodies and types traversed in 10 selected dependency routes.
+Allowed axioms: propext, Classical.choice, Quot.sound only.
+No FLT endpoints, FltRegular/P2MW, Herbrand/Ribet providers, or global regularity providers.
+
+PASS: 64 public NOTE-008 declarations; standard logical axioms only.
+PASS: DkMath.Lib.LinearAlgebra.FiniteSpectrumProjectors.directSumEquiv; 13759 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.Cyclotomic37CharacterDecomposition.decomposition; 36300 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.Cyclotomic37CharacterDecomposition.mem_component_iff; 36027 reachable constants; expected providers present.
+PASS: DkMath.Lib.NumberTheory.Cyclotomic37CharacterDecomposition.projector_one; 45874 reachable constants; expected providers present.
+PASS: DkMath.FLT.Kummer.IrregularPrime37.observe_obstruction_dichotomy; 46853 reachable constants; expected providers present.
+PASS: DkMath.FLT.Kummer.IrregularPrime37.observe_nontrivial_character; 46986 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.exponent_dvd_valuation_iff_ne_two; 27424 reachable constants; expected providers present.
+PASS: DkMath.NumberTheory.Legendre.FreyC4CentralSeat.rationalJ_valuation; 12669 reachable constants; expected providers present.
+PASS: DkMath.NumberTheory.Legendre.FreyC4CentralSeat.exists_central_exact_jDepth; 15715 reachable constants; expected providers present.
+PASS: DkMath.FLT.Frey.Source.oldSupport_depth_pair; 27316 reachable constants; expected providers present.
+
+Mathematical scope:
+  Actual exponent-37 class-group kernel, actual Galois action, 36 character projectors and direct sum.
+  Integral-coordinate guard retained on State dichotomy; recorded obstruction recovered exactly.
+  Nonzero input is required to conclude a nonzero nontrivial character projection.
+  Prime p>=5: p divides the minimal discriminant valuation iff the local prime is not 2.
+  Prime q divides Q_n and n>0: v_q(j)=3*v_q(Q_n), including q=3.
+  Finite simple-root Hensel digit/exact-depth realization additionally requires q!=3 and k>=1.
+  Old-support input preserves q<=n. The two curves are compared, not identified.
+  No nonzero class existence, component dimensions, Herbrand-Ribet, Artin conductor,
+  residual Galois representations, level lowering, FLT37, prime existence, or CM conclusion.
+
+Raw transient logs: /tmp/note008-final-build.log, /tmp/note008-root-smoke.log,
+/tmp/note008-test-entrance.log. They are not repository artifacts.

@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-08",
+  "checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": {
+    "P2M/Sol/S_ValuationSubring_exists_mem_inertiaSubgroupIn_pow_eq_of_forall_apply_eq.lean": "2c082725e35f481433429f13825da019adfeb63829a5ec969687926f0931cc97",
+    "P2M/Sol/S_ValuationSubring_exists_pow_eq_of_kummer_descent.lean": "b7c934ac0490daf8faf64bbc27cb3f47b122f269dc20f18c7f1ba26bb9a77fd0"
+  },
+  "adaptation": "Closed decomposition subgroup; fixed-field stability; conjugate-unique Hensel descent; unit simple-root lifting; algebraic rational value relation; Bezout value normalization; exact root construction. Actual tail overfield endpoint internally supplies all stability/algebraicity/root/residue inputs. No external P2M/P2MW imports. Apache2 provenance and notices retained.",
+  "remaining": "Inertia-tail p-divisibility and Frey kernel comparison not implemented; general unconditional hno remains open.",
+  "notices": {
+    "DkMath/Lib/NumberTheory/RegularKummer/LICENSE": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+    "DkMath/Lib/NumberTheory/RegularKummer/ANTHROPIC-NOTICE": "42b1821f19a6aaa25e6811d22ab8f2fdc6433d4a37bc810b1cfafa5b6dd6b0b6"
+  }
+}

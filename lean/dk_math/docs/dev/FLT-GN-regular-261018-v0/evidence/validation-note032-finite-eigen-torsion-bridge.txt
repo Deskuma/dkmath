@@ -1,0 +1,115 @@
+NOTE-032 finite eigen-vanishing transfer from a power quotient to torsion
+Date: 2026-11-03
+Working directory: lean/dk_math
+
+Performed validation, all commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCyclotomicClassVanishing DkMathTest.FLT.Note032CyclotomicClassVanishingDependencyAudit
+   Build completed successfully (11087 jobs).
+2. lake test
+   Normal repository test driver passed (12192/12192 jobs).
+3. lake env lean DkMathTest.lean
+   Normal test import entrance passed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FiniteEigenTorsionBridgeSmoke.lean
+   Root import exposes the finite Fitting kernel theorem, weighted sum and both comparisons,
+   finite eigen-torsion bridge, actual class-group quotient/action, internal cyclotomic
+   Galois order invertibility and the same-Frey-class/unit conditional receivers.
+5. git diff --check
+   Passed. All six new Lean artifacts were also scanned directly for trailing whitespace.
+
+Regression scope:
+- In the actual group ZMod 9, the element 3 is nonzero, killed by 3 and killed by the natural
+  map to the quotient by 3-multiples. Thus this natural map is not treated as injective.
+- The Fitting kernel theorem is applied to the actual doubling endomorphism on ZMod 9,
+  supplying its quotient-kernel condition by an explicit multiple witness.
+- The group (ZMod 3) units acts trivially on ZMod 9; its identity character is nontrivial.
+  Its eigencomponent on the actual mod-3 quotient is proved zero by the element -1 and
+  invertibility of 2. The general theorem transports this to actual 3-torsion.
+- The integer lift of the weighted sum evaluates to S(1)=3 in ZMod 9. It is not zero in the
+  original group, despite being zero on the mod-3 quotient. Finite evaluation uses decide +kernel.
+- An actual primitive cube root in Qbar supplies the actual root field. The Galois cardinality
+  is 2 and invertible modulo 3. The actual class quotient is finite, and its action agrees
+  with the quotient of the same existing actual class-group action on every representative.
+
+Source/import checks:
+- Three new production modules, two new tests and root smoke contain no sorry, admit,
+  native_decide, unsafe or custom axiom declarations. The dependency audit intentionally
+  contains the name sorryAx as a forbidden-name check and axiom-related diagnostic strings.
+- No new-module/test warnings or errors in the final root/focused build or normal suite.
+- Unrelated historical sorry/linter warnings remain elsewhere in the repository.
+- Earlier production constructors and theorem statements/proofs are unchanged.
+- Public Lib/FLT facades, root DkMath and the normal test entrance expose the new modules.
+- The separate JSON records acyclic syntactic local import closures of 1, 27 and 269 modules,
+  no FreyHnoSmallIndex/RegularPrime/HardCase consumer imports, and public/root reachability.
+  Both new Lib modules have no FLT imports in their local closures.
+- Syntactic import checks are distinct from recursive proof/type/constructor audits.
+
+Selected axiom reports (11 declarations, standard axioms only):
+DkMath.Lib.Algebra.FiniteEigenTorsionBridge.torsion_kernel_eq_zero: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.FiniteEigenTorsionBridge.weightedSum_eigen: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.FiniteEigenTorsionBridge.liftedWeightedSum_quotient: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.FiniteEigenTorsionBridge.liftedWeightedSum_torsion: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.FiniteEigenTorsionBridge.torsion_eigen_eq_zero: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicClassVanishing.classTorsion_eq_one_of_quotient_eigen_vanishing: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicClassVanishing.root_galois_card: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicClassVanishing.root_galois_card_isUnit: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicClassVanishing.classImage_eq_one_of_quotient_weight_square_vanishing: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_kummer_classImage_eq_one_of_quotient_vanishing: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_kummer_unit_weight_square_of_quotient_vanishing: Classical.choice, Quot.sound, propext
+
+Recursive type/constructor/opaque-proof-body audit, public inputs and type guards (11 + 7 + 2):
+PASS: DkMath.Lib.Algebra.FiniteEigenTorsionBridge.torsion_kernel_eq_zero; 8596 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.FiniteEigenTorsionBridge.weightedSum_eigen; 3397 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.FiniteEigenTorsionBridge.liftedWeightedSum_quotient; 4508 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.FiniteEigenTorsionBridge.liftedWeightedSum_torsion; 3445 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.FiniteEigenTorsionBridge.torsion_eigen_eq_zero; 9452 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicClassVanishing.classTorsion_eq_one_of_quotient_eigen_vanishing; 35465 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicClassVanishing.root_galois_card; 48414 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicClassVanishing.root_galois_card_isUnit; 48428 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicClassVanishing.classImage_eq_one_of_quotient_weight_square_vanishing; 50166 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_kummer_classImage_eq_one_of_quotient_vanishing; 54612 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_kummer_unit_weight_square_of_quotient_vanishing; 54693 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.Algebra.FiniteEigenTorsionBridge.torsion_kernel_eq_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.FiniteEigenTorsionBridge.torsion_eigen_eq_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicClassVanishing.classTorsion_eq_one_of_quotient_eigen_vanishing; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicClassVanishing.root_galois_card_isUnit; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicClassVanishing.classImage_eq_one_of_quotient_weight_square_vanishing; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_kummer_classImage_eq_one_of_quotient_vanishing; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_kummer_unit_weight_square_of_quotient_vanishing; remaining arithmetic inputs explicit.
+PASS guards: DkMath.Lib.Algebra.FiniteEigenTorsionBridge.torsion_kernel_eq_zero; finite and coefficient hypotheses present.
+PASS guards: DkMath.Lib.Algebra.FiniteEigenTorsionBridge.torsion_eigen_eq_zero; finite and coefficient hypotheses present.
+
+Mathematical boundary:
+For a finite abelian group, Fitting decomposition of an actual endomorphism gives a kernel
+criterion: if its kernel modulo p is zero, its p-torsion kernel is zero. The finite kernel's
+p-multiplication is proved surjective then injective. No natural torsion-to-quotient injection
+is assumed. The finite action's weighted sum on a ZMod p module is genuinely chi-eigen.
+An integer-coefficient lift on the original group agrees with that sum after the natural
+quotient and acts by the group cardinality on original torsion eigenvectors. The defect
+endomorphism |Gamma| id - S is invertible modulo p when that cardinality is a unit; applying
+the Fitting criterion transfers quotient eigen vanishing to torsion. Finite A, Fintype Gamma,
+NeZero p and cardinality invertibility remain explicit. Primality is not needed by the generic
+bridge. Exactness on eigenspaces is not asserted.
+
+The actual finite number-field class group is supplied by Mathlib's construction. The
+same existing classGroupAction descends to ClassModP = Additive Cl / p Additive Cl. For the
+same cyclotomic root field, Gal order p-1 and invertibility modulo p are proved internally.
+Original classImage weight-square then gives its vanishing CONDITIONAL on arithmetic
+weight-square eigen vanishing of this actual class quotient.
+
+Both new Frey receivers retain the same S,L,K,m,v,P and explicitly require hsurj, original
+hval and quotient eigen vanishing hvanish. They derive the same classImage's hzero internally
+and pass it to the existing same-constant, same-vector, nontrivial unit-class reduction.
+Open-kernel and conjugation laws come from the existing same character. Arithmetic quotient
+vanishing itself, comparison with any external action/quotient convention, original Selmer
+membership, local pth powers at p, resonant geometry, arithmetic unit vanishing and tower
+iteration remain open. General hno is unfinished; final fixed-point counting still requires
+no hCH. No external FLT/vanishing theorem is imported to supply the arithmetic input.
+
+SHA256 of new production, tests, root smoke and textbook at validation:
+782629b4b10cb6b90562ff2cb10bb6d9e21e41250672a43d82cb4436b1af643f  DkMath/Lib/Algebra/FiniteEigenTorsionBridge.lean
+6ace7b94fcb62ba5053af47eb46a4a52f4b10c9c293caac7337eb3be972c6e35  DkMath/Lib/NumberTheory/CyclotomicClassVanishing.lean
+738f43af1f912b5459c8b6b89e97d0bb476bd47fbf502185286a1c83dd7a8d90  DkMath/FLT/FreyCyclotomicClassVanishing.lean
+de6a8aa23df7439999a55b550476e9c827028237346d1fe3f4b6f0f196f13f18  DkMathTest/FLT/FreyCyclotomicClassVanishing.lean
+5f079128a8b2b0971427653949eff8881926c94bf0bd1fc5e78898d4cb4885d3  DkMathTest/FLT/Note032CyclotomicClassVanishingDependencyAudit.lean
+85681117e01f9eef7734f833182ad4045d740e7fd36384a3f23fd7fac29c5084  docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FiniteEigenTorsionBridgeSmoke.lean
+4d07dbcb0303cca0af561c3b9e3059ffe012b7c8daaaceed785109c060c58515  docs/dev/FLT-GN-regular-261018-v0/TEXTBOOK-N032-FINITE-EIGEN-TORSION-BRIDGE-261103.md

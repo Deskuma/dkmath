@@ -1,0 +1,98 @@
+NOTE-032 actual at-p filtration and local splitting
+Date: 2026-11-01
+Working directory: lean/dk_math
+
+Performed validation, all commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyPrimePowerFiltration DkMathTest.FLT.Note032PrimePowerFiltrationDependencyAudit
+   Final revision: Build completed successfully (11051 jobs).
+2. lake test
+   Normal repository driver passed, including both new test modules.
+3. lake env lean DkMathTest.lean
+   Normal test import entrance passed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032PrimePowerFiltrationSmoke.lean
+   Root import DkMath exposes the new arithmetic and local splitting endpoints.
+5. git diff --check
+   Passed.
+
+Regression scope:
+- Actual nodal curve y^2=x^3+x^2 over ZMod 5, with singular centre and nondegenerate tangent cone.
+- All 5^m-torsion in the smooth residue point group vanishes (arbitrary m).
+- The same point group contains an explicit nonzero 2-torsion point; 5^m does not kill it.
+- Identity action with zero absorbing subgroup does not force the p-power cardinality lower bound
+  or containment of a nonzero cyclic group. Nontrivial bottom inertia is essential.
+
+Source checks:
+- Four production and two test modules pass the forbidden-construct scan.
+- No new-module warnings/errors in final focused/root build or normal suite.
+- Historical sorry/linter warnings remain in unrelated repository modules. Successful full build
+  is not a claim that all repository declarations are sorry-free.
+- Local anonymous instance collision found during root integration was fixed by unique local names;
+  the final root build and suite use the corrected source.
+
+Selected axiom audits (15 declarations; standard three axioms only):
+DkMath.FLT.Frey.Source.cyclic_tower_eq_primePowerReductionFiltration: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.primePowerReductionFiltration_cyclic_and_card: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.prime_power_pointAction_sub_mem_cyclic_tower_at_p: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.prime_power_reductionKernel_absorbs_at_p: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.prime_reductionKernel_card_le: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cofixed_cyclic_extension_locally_split_at_p: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cofixed_cyclic_tower_inertia_frobenius_impossible: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cofixed_inertia_moves_base_at_p: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.valuationReductionKernel_stable: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.AbsorbingTorsionFiltration.cyclic_and_card: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.AbsorbingTorsionFiltration.le_of_nontrivial_socle: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.CyclotomicInertia.exists_inertia_cyclotomic_eq: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticNodalReductionKernel.eq_zero_of_residue_characteristic_prime_power: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticNodalReductionKernel.mem_kernel_of_smooth_prime_power_torsion: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticNodalReductionKernel.pole_of_smooth_prime_power_torsion_of_model: Classical.choice, Quot.sound, propext
+
+Recursive dependency audit (types, constructors and opaque proof bodies):
+PASS: DkMath.Lib.NumberTheory.CyclotomicInertia.exists_inertia_cyclotomic_eq; 48368 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.primePowerReductionFiltration_cyclic_and_card; 53835 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.cyclic_tower_eq_primePowerReductionFiltration; 53850 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cofixed_cyclic_extension_locally_split_at_p; 54054 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cofixed_cyclic_tower_inertia_frobenius_impossible; 78915 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicInertia.exists_inertia_cyclotomic_eq; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.prime_power_reductionKernel_absorbs_at_p; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.primePowerReductionFiltration_cyclic_and_card; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.cyclic_tower_eq_primePowerReductionFiltration; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cofixed_cyclic_extension_locally_split_at_p; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cofixed_cyclic_tower_inertia_frobenius_impossible; remaining arithmetic inputs explicit.
+
+Five full dependency traversals and six public-input audits passed.
+Required dependencies include actual cyclotomic total ramification, finite inertia lifting,
+place conjugacy, integral stable-line torsion, multiplication surjectivity, nodal reduction,
+good reduction inertia, complement construction and final inertia/Frobenius group theory.
+The recursive audit rejects sorryAx, custom axioms, external P2M/P2MW, FltRegular,
+FreyPackage, DkMath.FLT.Kummer and completed FLT endpoints.
+
+Import audit: note032-at-p-local-splitting-import-audit.json
+All four new local import closures are acyclic and exclude FreyHnoSmallIndex,
+FreyHnoRegularPrime and FreyHnoHardCase.
+
+Mathematical boundary:
+PROVED: at every specified extension valuation above p, cyclotomic inertia surjectivity;
+all p^m torsion inertia differences lie in the same reduction kernel; actual
+F_m=E[p^m] intersect H_A has cardinal p^m and is cyclic for positive m; a global
+stable cyclic stage containing the original cofixed line equals that F_m; its
+extension has an actual decomposition-stable complementary line whose lift is F_(m+1).
+The local group/cardinality/stability/descent/splitting providers are absent from the endpoint.
+At the same exponent N, at-p absorption into K=F_N is supplied internally in the final obstruction.
+STILL OPEN: bad q != p absorption, global extension splitting, the full global cyclic tower,
+actual Frobenius Cayley-Hamilton and Eisenstein specialization; general hno is unfinished.
+No unproved hEXT, MazurStepThree or hno provider was introduced.
+
+Upstream provenance (Apache notices recorded in adapted source headers):
+394ae95ec48cc4d879df49e06a7b8ff8493d6bc9  S_ValuationSubring_exists_mem_inertiaSubgroupIn_apply_eq_pow
+125214f2533c1c8fcf1e358ab3d7147cf42d27d9  S_WeierstrassCurve_exists_atP_filtration_of_multiplicativeReduction
+cf7466796d1f8a4e4a57df2d4471e858379963a6  S_AddSubgroup_eq_atP_filtration_of_cyclic_stable_inertia_nontrivial
+These sources were read locally; no external package was added as a proof dependency.
+
+SHA256 of new source/test/smoke artifacts:
+680623bebfcf343502148811cacdc58ec9ef5db300f85fd7b27399e5d7dcecd1  DkMath/Lib/NumberTheory/CyclotomicInertia.lean
+2b9064de8bb7230b24bcf870df4f96e8c221d2d43d6e48c782bd22a13ab8ce0f  DkMath/Lib/Algebra/AbsorbingTorsionFiltration.lean
+78b5e3ec435f7728ae299f387aa15229128b9cbc1e14a7c74a54bb998cd19180  DkMath/Lib/NumberTheory/EllipticNodalPrimePowerKernel.lean
+155e90316e8449dbde772d52d72a5eef595e6d7109d17bf4e4f9683b62179a50  DkMath/FLT/FreyPrimePowerFiltration.lean
+a4abd03fbd372ffbc667c3870b8f9f098803539964830b46c0364cba72ecb25f  DkMathTest/FLT/FreyPrimePowerFiltration.lean
+33d125ea2da9cd665bee8101c8b4131fc93dde8b33ef0098ea23f8a9f6baa056  DkMathTest/FLT/Note032PrimePowerFiltrationDependencyAudit.lean
+9323f8f23f50bca206afa0b8af894e24da58415f8d026fe6c1dcbb28e40fedfc  docs/dev/FLT-GN-regular-261018-v0/evidence/Note032PrimePowerFiltrationSmoke.lean

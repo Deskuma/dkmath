@@ -1,0 +1,316 @@
+{
+  "checkpoint": "GN-LIB-005b",
+  "date": "2026-10-24",
+  "base_head": "69307a985f3e71fb4b9e2779a2444b08fdf7dea7",
+  "scope": "cofactor arithmetic, strong divisibility, exact borrowing gcd and normalized positive primitive additive triples; no ABC radical bound or FLT descent",
+  "new_definitions": 4,
+  "new_theorems": 25,
+  "declarations": [
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_symm",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactorArithmetic.lean",
+      "line": 23,
+      "source_signature": "theorem powerDifferenceCofactor_symm\n    {R : Type*} [CommSemiring R] (n : ℕ) (x y : R) :\n    powerDifferenceCofactor n x y = powerDifferenceCofactor n y x",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_add",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactorArithmetic.lean",
+      "line": 37,
+      "source_signature": "theorem powerDifferenceCofactor_add\n    {R : Type*} [CommSemiring R] (a b : ℕ) (x y : R) :\n    powerDifferenceCofactor (a + b) x y =\n      x ^ a * powerDifferenceCofactor b x y + y ^ b * powerDifferenceCofactor a x y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_mul",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactorArithmetic.lean",
+      "line": 51,
+      "source_signature": "theorem powerDifferenceCofactor_mul\n    {R : Type*} [CommSemiring R] (a b : ℕ) (x y : R) :\n    powerDifferenceCofactor (a * b) x y =\n      powerDifferenceCofactor a (x ^ b) (y ^ b) * powerDifferenceCofactor b x y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_even",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactorArithmetic.lean",
+      "line": 65,
+      "source_signature": "theorem powerDifferenceCofactor_even\n    {R : Type*} [CommSemiring R] (m : ℕ) (x y : R) :\n    powerDifferenceCofactor (2 * m) x y =\n      (x + y) * powerDifferenceCofactor m (x ^ 2) (y ^ 2)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.powerDifferenceCofactor_square_loan",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/PowerDifferenceCofactorArithmetic.lean",
+      "line": 75,
+      "source_signature": "theorem powerDifferenceCofactor_square_loan\n    {R : Type*} [CommSemiring R] (k : ℕ) (x y : R) :\n    powerDifferenceCofactor (2 * k + 3) x y +\n        x * y * powerDifferenceCofactor (2 * k + 1) x y =\n      (x + y) ^ 2 * powerDifferenceCofactor (k + 1) (x ^ 2) (y ^ 2)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.coprime_powerDifferenceCofactor_right",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorStrongDivisibility.lean",
+      "line": 30,
+      "source_signature": "theorem coprime_powerDifferenceCofactor_right\n    {n x y : ℕ} (hn : 0 < n) (hxy : x.Coprime y) :\n    (powerDifferenceCofactor n x y).Coprime y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.coprime_powerDifferenceCofactor_left",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorStrongDivisibility.lean",
+      "line": 38,
+      "source_signature": "theorem coprime_powerDifferenceCofactor_left\n    {n x y : ℕ} (hn : 0 < n) (hxy : x.Coprime y) :\n    (powerDifferenceCofactor n x y).Coprime x",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.coprime_powerDifferenceCofactor_coordinates",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorStrongDivisibility.lean",
+      "line": 45,
+      "source_signature": "theorem coprime_powerDifferenceCofactor_coordinates\n    {n x y : ℕ} (hn : 0 < n) (hxy : x.Coprime y) :\n    (powerDifferenceCofactor n x y).Coprime (x * y)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.gcd_powerDifferenceCofactor_add_self",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorStrongDivisibility.lean",
+      "line": 54,
+      "source_signature": "theorem gcd_powerDifferenceCofactor_add_self (m n x y : ℕ) (hxy : x.Coprime y) :\n    Nat.gcd (powerDifferenceCofactor m x y) (powerDifferenceCofactor (n + m) x y) =\n      Nat.gcd (powerDifferenceCofactor m x y) (powerDifferenceCofactor n x y)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.gcd_powerDifferenceCofactor_add_mul_self",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorStrongDivisibility.lean",
+      "line": 66,
+      "source_signature": "theorem gcd_powerDifferenceCofactor_add_mul_self (m n k x y : ℕ) (hxy : x.Coprime y) :\n    Nat.gcd (powerDifferenceCofactor m x y) (powerDifferenceCofactor (n + k * m) x y) =\n      Nat.gcd (powerDifferenceCofactor m x y) (powerDifferenceCofactor n x y)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.gcd_powerDifferenceCofactor",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorStrongDivisibility.lean",
+      "line": 79,
+      "source_signature": "theorem gcd_powerDifferenceCofactor (m n x y : ℕ) (hxy : x.Coprime y) :\n    Nat.gcd (powerDifferenceCofactor m x y) (powerDifferenceCofactor n x y) =\n      powerDifferenceCofactor (Nat.gcd m n) x y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.isStrongDvdSequence_powerDifferenceCofactor",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorStrongDivisibility.lean",
+      "line": 91,
+      "source_signature": "theorem isStrongDvdSequence_powerDifferenceCofactor (x y : ℕ) (hxy : x.Coprime y) :\n    Nat.IsStrongDvdSequence (fun n => powerDifferenceCofactor n x y)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.powerDifferenceCofactor_dvd_of_dvd",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorStrongDivisibility.lean",
+      "line": 98,
+      "source_signature": "theorem powerDifferenceCofactor_dvd_of_dvd {a b : ℕ} (hab : a ∣ b) (x y : ℕ) :\n    powerDifferenceCofactor a x y ∣ powerDifferenceCofactor b x y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.gcd_powerDifferenceCofactor_loan",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorStrongDivisibility.lean",
+      "line": 108,
+      "source_signature": "theorem gcd_powerDifferenceCofactor_loan (n x y : ℕ) (hxy : x.Coprime y) :\n    Nat.gcd (powerDifferenceCofactor (n + 2) x y)\n        (x * y * powerDifferenceCofactor n x y) =\n      powerDifferenceCofactor (Nat.gcd n 2) x y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.gcd_powerDifferenceCofactor_loan_odd",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorStrongDivisibility.lean",
+      "line": 117,
+      "source_signature": "theorem gcd_powerDifferenceCofactor_loan_odd (k x y : ℕ) (hxy : x.Coprime y) :\n    Nat.gcd (powerDifferenceCofactor (2 * k + 3) x y)\n        (x * y * powerDifferenceCofactor (2 * k + 1) x y) = 1",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.NumberTheory.gcd_powerDifferenceCofactor_loan_even",
+      "kind": "theorem",
+      "path": "DkMath/Lib/NumberTheory/PowerDifferenceCofactorStrongDivisibility.lean",
+      "line": 127,
+      "source_signature": "theorem gcd_powerDifferenceCofactor_loan_even (k x y : ℕ) (hxy : x.Coprime y) :\n    Nat.gcd (powerDifferenceCofactor (2 * k + 4) x y)\n        (x * y * powerDifferenceCofactor (2 * k + 2) x y) = x + y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionLoanFactor",
+      "kind": "def",
+      "path": "DkMath/Lib/Cosmic/CompletionLoan.lean",
+      "line": 31,
+      "source_signature": "def completionLoanFactor (n x y : ℕ) : ℕ",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionLoanA",
+      "kind": "def",
+      "path": "DkMath/Lib/Cosmic/CompletionLoan.lean",
+      "line": 34,
+      "source_signature": "def completionLoanA (n x y : ℕ) : ℕ",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionLoanB",
+      "kind": "def",
+      "path": "DkMath/Lib/Cosmic/CompletionLoan.lean",
+      "line": 37,
+      "source_signature": "def completionLoanB (n x y : ℕ) : ℕ",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionLoanC",
+      "kind": "def",
+      "path": "DkMath/Lib/Cosmic/CompletionLoan.lean",
+      "line": 41,
+      "source_signature": "def completionLoanC (n x y : ℕ) : ℕ",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionLoan_numerators_add",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionLoan.lean",
+      "line": 46,
+      "source_signature": "theorem completionLoan_numerators_add {n : ℕ} (hn : 2 ≤ n) (x y : ℕ) :\n    powerDifferenceCofactor n x y + x * y * powerDifferenceCofactor (n - 2) x y =\n      (x + y) * powerDifferenceCofactor (n - 1) x y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionLoanFactor_eq_gcd",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionLoan.lean",
+      "line": 56,
+      "source_signature": "theorem completionLoanFactor_eq_gcd {n x y : ℕ} (hn : 2 ≤ n) (hxy : x.Coprime y) :\n    completionLoanFactor n x y =\n      Nat.gcd (powerDifferenceCofactor n x y) (x * y * powerDifferenceCofactor (n - 2) x y)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionLoanFactor_pos",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionLoan.lean",
+      "line": 75,
+      "source_signature": "theorem completionLoanFactor_pos (n x y : ℕ) (hx : 0 < x) :\n    0 < completionLoanFactor n x y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionLoanFactor_dvd_numerators",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionLoan.lean",
+      "line": 83,
+      "source_signature": "theorem completionLoanFactor_dvd_numerators {n x y : ℕ}\n    (hn : 2 ≤ n) (hxy : x.Coprime y) :\n    completionLoanFactor n x y ∣ powerDifferenceCofactor n x y ∧\n    completionLoanFactor n x y ∣ x * y * powerDifferenceCofactor (n - 2) x y ∧\n    completionLoanFactor n x y ∣ (x + y) * powerDifferenceCofactor (n - 1) x y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionLoan_reconstruct",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionLoan.lean",
+      "line": 99,
+      "source_signature": "theorem completionLoan_reconstruct {n x y : ℕ} (hn : 2 ≤ n) (hxy : x.Coprime y) :\n    completionLoanA n x y * completionLoanFactor n x y = powerDifferenceCofactor n x y ∧\n    completionLoanB n x y * completionLoanFactor n x y =\n      x * y * powerDifferenceCofactor (n - 2) x y ∧\n    completionLoanC n x y * completionLoanFactor n x y =\n      (x + y) * powerDifferenceCofactor (n - 1) x y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionLoan_add",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionLoan.lean",
+      "line": 111,
+      "source_signature": "theorem completionLoan_add {n x y : ℕ} (hn : 2 ≤ n) (hx : 0 < x) (hxy : x.Coprime y) :\n    completionLoanA n x y + completionLoanB n x y = completionLoanC n x y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionLoan_pos",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionLoan.lean",
+      "line": 121,
+      "source_signature": "theorem completionLoan_pos {n x y : ℕ} (hn : 3 ≤ n) (hx : 0 < x) (hy : 0 < y)\n    (hxy : x.Coprime y) :\n    0 < completionLoanA n x y ∧ 0 < completionLoanB n x y ∧ 0 < completionLoanC n x y",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionLoan_pairwise_coprime",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionLoan.lean",
+      "line": 140,
+      "source_signature": "theorem completionLoan_pairwise_coprime {n x y : ℕ}\n    (hn : 2 ≤ n) (hx : 0 < x) (hxy : x.Coprime y) :\n    (completionLoanA n x y).Coprime (completionLoanB n x y) ∧\n    (completionLoanB n x y).Coprime (completionLoanC n x y) ∧\n    (completionLoanA n x y).Coprime (completionLoanC n x y)",
+      "docstring_has_promotion_marker": true
+    },
+    {
+      "name": "DkMath.Lib.Cosmic.completionLoan_primitive_triple",
+      "kind": "theorem",
+      "path": "DkMath/Lib/Cosmic/CompletionLoan.lean",
+      "line": 161,
+      "source_signature": "theorem completionLoan_primitive_triple {n x y : ℕ}\n    (hn : 3 ≤ n) (hx : 0 < x) (hy : 0 < y) (hxy : x.Coprime y) :\n    0 < completionLoanA n x y ∧ 0 < completionLoanB n x y ∧ 0 < completionLoanC n x y ∧\n    completionLoanA n x y + completionLoanB n x y = completionLoanC n x y ∧\n    (completionLoanA n x y).Coprime (completionLoanB n x y) ∧\n    (completionLoanB n x y).Coprime (completionLoanC n x y) ∧\n    (completionLoanA n x y).Coprime (completionLoanC n x y)",
+      "docstring_has_promotion_marker": true
+    }
+  ],
+  "inline_examples": 16,
+  "prior_39_declaration_owner_sources_unchanged": [
+    "DkMath/Lib/Cosmic/PowerDifferenceCofactor.lean",
+    "DkMath/Lib/Cosmic/CompletionDefect.lean",
+    "DkMath/Lib/NumberTheory/PowerDifferenceCofactorGcd.lean"
+  ],
+  "source_sha256": {
+    "DkMath/Lib/Cosmic/PowerDifferenceCofactorArithmetic.lean": "3b5e21b2ebbb76c68c63c613861119b4567c95c732b7f2a1cd63dea9c8cd0303",
+    "DkMath/Lib/NumberTheory/PowerDifferenceCofactorStrongDivisibility.lean": "a86bb8cdc609e2f0fedfbfcbc9bdaad6b0fbda38beff19657de42c6d00c275cb",
+    "DkMath/Lib/Cosmic/CompletionLoan.lean": "b13d217d94a2b5cdbcd6f978f711c0bf5e1b91b2e270fe67e7f1a3011f9d3aa8"
+  },
+  "local_import_closure": {
+    "DkMath.Lib.Cosmic.PowerDifferenceCofactorArithmetic": [
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactor"
+    ],
+    "DkMath.Lib.Cosmic.PowerDifferenceCofactor": [
+      "DkMath.Lib.Cosmic.GNSuccessor"
+    ],
+    "DkMath.Lib.Cosmic.GNSuccessor": [
+      "DkMath.Lib.Cosmic.GTailCyclotomic",
+      "Mathlib.RingTheory.Coprime.Basic"
+    ],
+    "DkMath.Lib.Cosmic.GTailCyclotomic": [
+      "DkMath.Lib.Cosmic.GTail",
+      "Mathlib.RingTheory.Polynomial.Cyclotomic.Basic"
+    ],
+    "DkMath.Lib.Cosmic.GTail": [
+      "Mathlib.Data.Nat.Choose.Sum",
+      "Lean.Elab.Tactic.Omega"
+    ],
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorStrongDivisibility": [
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactorArithmetic",
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd",
+      "Mathlib.Data.Nat.DvdSequence"
+    ],
+    "DkMath.Lib.NumberTheory.PowerDifferenceCofactorGcd": [
+      "DkMath.Lib.Cosmic.CompletionDefect",
+      "DkMath.Lib.Cosmic.GNSupport",
+      "DkMath.Lib.Cosmic.GTailBoundary"
+    ],
+    "DkMath.Lib.Cosmic.CompletionDefect": [
+      "DkMath.Lib.Cosmic.PowerDifferenceCofactor"
+    ],
+    "DkMath.Lib.Cosmic.GNSupport": [
+      "DkMath.Lib.Cosmic.GNSuccessor",
+      "Mathlib.Data.Nat.Prime.Basic",
+      "Mathlib.RingTheory.Coprime.Lemmas"
+    ],
+    "DkMath.Lib.Cosmic.GTailBoundary": [
+      "DkMath.Lib.Cosmic.GTail",
+      "Mathlib.Data.Nat.Prime.Basic"
+    ],
+    "DkMath.Lib.Cosmic.CompletionLoan": [
+      "DkMath.Lib.NumberTheory.PowerDifferenceCofactorStrongDivisibility"
+    ]
+  },
+  "all_DkMath_dependencies_are_Lib": true,
+  "original_material_hashes_verified": 24,
+  "proof_reference": "Mathlib.Data.Nat.Fib.Basic, fib_gcd: Euclidean induction organization only; cofactor addition and coprime arithmetic proved here",
+  "validation": {
+    "command": "lake build DkMath.Lib.Cosmic.PowerDifferenceCofactorArithmetic DkMath.Lib.NumberTheory.PowerDifferenceCofactorStrongDivisibility DkMath.Lib.Cosmic.CompletionLoan",
+    "result": "Build completed successfully (2796 jobs).",
+    "warnings": 0,
+    "audit_command": "lake env lean /tmp/GNLib005bAudit.lean",
+    "new_public_declarations_checked": 29,
+    "prior_public_declarations_checked": 39,
+    "allowed_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "aggregator": "three direct imports registered; static verification only",
+    "scope": "three production targets, inline examples and declaration audit; no full/root/DkMathTest/lake test builds per user request"
+  }
+}

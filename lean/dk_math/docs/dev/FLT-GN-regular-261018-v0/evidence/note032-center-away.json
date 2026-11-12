@@ -1,0 +1,196 @@
+{
+  "unit": "NOTE-032-CENTER-AWAY",
+  "date": "2026-10-27",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "3b8f5bbceb0249a7bf4e268d01528186f324707b",
+  "checks": [
+    {
+      "command": "./lean-build.sh DkMath.Lib.NumberTheory.OddRootPairMoments",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMath.Lib.NumberTheory.WeierstrassNodalCenter",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMath.Lib.NumberTheory.WeierstrassNodalCenterSmallChar",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMath.Lib.NumberTheory.EllipticFiniteKernelNodalCenterAll",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMath.FLT.FreyFiniteKernelZeroComponentAway",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMathTest.Lib.NumberTheory.WeierstrassNodalCenterSmallChar",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNodalCenter",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "27b4f2a3aff28de53f56cdf1394a2b1eeb77938f2e94111aff44f532ca8be7c3"
+    },
+    {
+      "command": "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CenterAwaySmoke.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "b9a9c5dc97baa48af4dcdf9ec3713dc2378df6a0e151fb665b874ba208c4702a"
+    },
+    {
+      "command": "lake env lean tmp/note032-center/Axioms1.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "e369b5868ff4926ae7a83869de5cd5c96bc976a409af334b7039988a3204b40a"
+    },
+    {
+      "command": "lake env lean tmp/note032-center/Axioms2.lean",
+      "status": "passed",
+      "warnings": 0,
+      "log_sha256": "1b07ab9193bccf0f0f8c4b0e0374b938f146bb8e4c4023dda02b8478df9eaaed"
+    }
+  ],
+  "axiom_audit": {
+    "declarations": 28,
+    "batches": [
+      12,
+      12,
+      4
+    ],
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "sorryAx": false
+  },
+  "production": {
+    "new_owners": 6,
+    "modified_owners": 1,
+    "theorems": 18,
+    "definitions": 1
+  },
+  "regression": {
+    "theorems": 5
+  },
+  "smoke_theorems": 4,
+  "files": [
+    {
+      "path": "DkMath/Lib/NumberTheory/OddRootPairMoments.lean",
+      "sha256": "f551d7380d7bc78e0d18b315c8d1e63e3cc70151747535eee073f1cac84c1e39",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.OddRootPairMoments.firstCoefficient_certificate"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassNodalCenter.lean",
+      "sha256": "de7395aa3b3c7662c652e97398e72b571864e0b870fcafd6297269ab739fdd72",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.WeierstrassNodalCenter.singular_invariants",
+        "DkMath.Lib.NumberTheory.WeierstrassNodalCenter.eq_of_sq_cube_eq",
+        "DkMath.Lib.NumberTheory.WeierstrassNodalCenter.candidate_center_scaled",
+        "DkMath.Lib.NumberTheory.WeierstrassNodalCenter.candidate_center_eq_singular"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/WeierstrassNodalCenterSmallChar.lean",
+      "sha256": "24814b89c83dfe34837ed605cafc1147f2c183670b13911e77c4b9c2e7980add",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.WeierstrassNodalCenterSmallChar.candidate_center_eq_singular_of_six_eq_zero",
+        "DkMath.Lib.NumberTheory.WeierstrassNodalCenterSmallChar.candidate_center_eq_singular"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelCriticalCentre.lean",
+      "sha256": "378f911dc08bb2f7be84d3f00a0248171b7422e3ef630f3fed119c239a7febfa",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_nodal_kernel_criticalCentre"
+      ]
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelNodalCenterAll.lean",
+      "sha256": "fdbd0fa4b333807026b9d8a7edc5146b4ddc649b96365cad5d822a6cc50e335c",
+      "public_declarations": [
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.nodal_center_residue_eq_candidate_all",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_smooth_of_nodal_all",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_smooth_of_nodal_frame",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.nodalZeroComponentHom",
+        "DkMath.Lib.NumberTheory.EllipticFiniteKernel.nodalZeroComponentHom_eq_zero_iff"
+      ]
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelNodalAll.lean",
+      "sha256": "036f6e1dc6feec0392a472d8e0df9c8f590cf9f67d23bfe8ac9d38f4b1fe6b50",
+      "public_declarations": [
+        "DkMath.FLT.Frey.Source.residual_pointHom_smooth_of_nodal_all",
+        "DkMath.FLT.Frey.Source.residual_pointHom_smooth_at_bad_place_of_le",
+        "DkMath.FLT.Frey.Source.residual_pointHom_smooth_at_bad_place",
+        "DkMath.FLT.Frey.Source.residual_integer_pointHom_smooth_at_bad_place"
+      ]
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelZeroComponentAway.lean",
+      "sha256": "8314ce78b3b07fe5f59ccb52d4487d26402a04d6595d25ec630a66547f69b1bb",
+      "public_declarations": [
+        "DkMath.FLT.Frey.Source.residual_pointHom_smooth_away",
+        "DkMath.FLT.Frey.Source.residual_integer_pointHom_smooth_away"
+      ]
+    },
+    {
+      "path": "DkMathTest/Lib/NumberTheory/EllipticFiniteKernelNodalCenter.lean",
+      "sha256": "05c5faf11a19ce44a17ea899701dc448ac0d3c79d9f52394df7ef4c9b6ea473a",
+      "public_declarations": [
+        "EllipticFiniteKernelNodalCenterTest.actual_all_smooth_at_47",
+        "EllipticFiniteKernelNodalCenterTest.exists_actual_nonzero_smooth_image"
+      ]
+    },
+    {
+      "path": "DkMathTest/Lib/NumberTheory/WeierstrassNodalCenterSmallChar.lean",
+      "sha256": "deb1b87f0c5fe51fc372256da762cc000a8b081e29ca84ff964cc02ff012dd33",
+      "public_declarations": [
+        "WeierstrassNodalCenterSmallCharTest.actual_quotient_singular_center",
+        "WeierstrassNodalCenterSmallCharTest.characteristic_two_three_kernel",
+        "WeierstrassNodalCenterSmallCharTest.characteristic_three_five_kernel"
+      ]
+    },
+    {
+      "path": "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CenterAwaySmoke.lean",
+      "sha256": "91b8d421ccf6ec1e7e10ff57c4b2fe01cc1dd755675bf28539dbcce5c149bc94"
+    }
+  ],
+  "static_checks": [
+    "file markers match paths",
+    "Lib public declarations have textbook docstrings and promotion markers",
+    "new owners contain no forbidden proof constructs or raised heartbeat limits",
+    "Lib imports do not depend on FLT or external solution modules",
+    "eight facade imports registered exactly once; no facade build",
+    "git diff HEAD --check passed",
+    "index unchanged"
+  ],
+  "scope_notes": [
+    "center equality for the same odd prime smooth kernel holds in arbitrary residue characteristic including two and three",
+    "Source forward E0 transport retains p at least five, q distinct from p, one-dimensional L, and source point smoothness",
+    "integer endpoint retains Galois stability of L",
+    "small-characteristic regression proves the statement for every singular point of the actual quotient and checks delta zero; it does not independently construct a singular point",
+    "no new claim of reduction square, inverse image, discriminant depth, p-place control, scheme isogeny, target torsion exclusion, or general hno"
+  ],
+  "full_build": {
+    "performed": false,
+    "reason": "user handles full build and full tests"
+  }
+}

@@ -1,0 +1,25 @@
+NOTE-032 continuous kernel bridge and sharp obstruction profile validation
+Date: 2026-11-09
+Lake cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+PASS production modules: 7 (two Lib without FLT import closure; five actual Frey modules)
+PASS new theorem roots: 28 recursive checked dependency audits (types, opaque proofs, constructors)
+PASS actual endpoint public inputs: 18 (no generator/cyclicity/kernel-comparison/open-kernel/continuity providers)
+PASS #print axioms: 28 (only propext, Classical.choice, Quot.sound)
+PASS focused production build: 4530 jobs
+PASS targeted tests and audit build: 4532 jobs
+PASS lake build DkMath DkMath.Lib DkMath.FLT and both new tests: 11234 jobs
+PASS lake test: 12419 jobs (command exited0)
+PASS lake env lean DkMathTest.lean (after suite)
+PASS root smoke: all 28 theorem roots reachable via import DkMath
+PASS Lib smoke: all 10 new Lib roots reachable via import DkMath.Lib
+PASS textbook: 7 full-source blocks byte-identical to production; each independently compiled
+PASS exact file module markers immediately after imports: 10 new checked Lean files
+PASS comment-aware import DAG, proper public facades/root and normal test entrance
+PASS forbidden source construct scan and source whitespace; git diff --check
+PASS upstream source HEAD/hashes and review hash; novel MIT DkMath composition, no external theorem imports
+
+Boundary regression: finite additive injection ZMod5 to ZMod25 is nonzero and consistent with the n=0 sharp cardinal profile; these numerical constraints alone are not a contradiction. B2 numerator nondivisibility checked independently of class vanishing.
+Existing warnings: 5 historical sorry warnings in each root/suite build; none in new modules/tests/book/smoke.
+Completed: actual omega2 target and B2 numerator arithmetic; continuous trivial-character cocycle/ordinary H1 injection; actual K continuous character embedding and SAME ordinary class; SAME connecting cocycle/delta and tame inflation; half-exponent bounds and n=0/1 profiles; SAME nonzero obstruction kernel detected by continuous character at SAME concrete gamma.
+Remaining: Herbrand/reflection arithmetic and class-action identification, hclass supply, global continuous H1/Selmer/unramified comparison, resonance exclusion, global contradiction and unconditional general hno. No full continuous cohomology theory claimed.

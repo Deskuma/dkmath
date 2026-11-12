@@ -1,0 +1,26 @@
+NOTE-032-ZERO-COMPONENT validation / 2026-10-27
+base: 813bc1696c131e08d78ac78b8a7f79707126db77
+
+PASS ./lean-build.sh DkMath.FLT.FreyFiniteKernelZeroComponent (0 warnings)
+PASS ./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelZeroComponent (0 warnings)
+PASS lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032ZeroComponentSmoke.lean (0 warnings)
+PASS lake env lean tmp/note032-zero-component/Axioms1.lean (0 warnings)
+PASS lake env lean tmp/note032-zero-component/Axioms2.lean (0 warnings)
+
+Production: 4 owners, 18 theorems and 1 definition.
+Actual three-point kernel regression: 6 theorems; includes existing multiplicative curve at seven, nonzero smooth point x=1 and formal point x=1/7 constructed in the algebraic closure.
+Source37 smoke: 3 theorems.
+Axiom audit: 28 declarations in batches 15 + 10 + 3.
+Observed axioms: propext, Classical.choice, Quot.sound; no sorryAx.
+
+PASS five production/test file markers match module paths
+PASS public Lib textbook docstrings and promotion markers
+PASS no forbidden proof constructs
+PASS Lib imports do not depend on FLT or external solution modules
+PASS five facade imports statically registered, no facade build
+PASS all existing mathematical owners and prior NOTE/evidence unchanged
+PASS index unchanged
+PASS upstream cache blob and Apache license/notice verified
+PASS git diff HEAD --check passed
+
+Boundary: singular-kernel branch only for whole zero-component transport; Source retains Disjoint. Formal-neighbourhood preservation applies to any odd unit-order kernel. General reduction square, integer-target point transport, smooth kernel branch, inverse-image criterion, discriminant depth, q=p and hno remain open.

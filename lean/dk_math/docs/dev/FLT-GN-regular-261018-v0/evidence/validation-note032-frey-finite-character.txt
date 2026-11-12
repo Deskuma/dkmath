@@ -1,0 +1,113 @@
+NOTE-032 FOUR STEPS: SAME finite inertia character, exact quotient cardinal, continuity, finite image and clopen kernel
+Date: 2026-11-07
+Working directory: lean/dk_math
+
+Successful final validations (all listed Lean/Lake commands exited 0):
+1. lake build DkMath.FLT.FreyInertiaCharacterFiniteImage
+   Build completed successfully (4215 jobs).
+2. lake build DkMath DkMathTest.FLT.FreyFiniteInertiaCharacter DkMathTest.FLT.Note032FreyFiniteCharacterDependencyAudit
+   Build completed successfully (11165 jobs).
+3. lake test
+   Normal repository driver passed; reached 12322/12322 jobs.
+4. lake env lean DkMathTest.lean
+   Rechecked after test dependencies built; passed, only existing file marker printed.
+5. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyFiniteCharacterSmoke.lean
+   Root exposes all nineteen new production declarations; final theorem uses only standard axioms.
+6. Four full textbook blocks extracted to /tmp/n032-finitechar-book-{1,2,3,4}.lean.
+   lake env lean run on each separately; all passed without warnings.
+   Exact production source and exact file markers immediately after imports retained.
+7. python3 /tmp/n032-finitechar-import-audit.py
+   Comment-aware local import closures are acyclic; all seven exact module markers,
+   four full textbook source copies, Lib/FLT/root/test reachability and source scans passed.
+   Closure sizes including self: generic character1, quotient cardinal309,
+   quotient topology344, actual Frey finite character346.
+   Generic Lib has no FLT imports. No FreyHnoSmallIndex/RegularPrime/HardCase consumers.
+   Saved JSON source SHA256 values rechecked at evidence generation.
+8. git diff --check and direct trailing-whitespace checks on new files passed.
+9. Local model-answer comparison: HEAD 115356cbc627159d0d16add0da6e9a2bb3655ed8.
+   Public isOpen_torsionBy_fixingSubgroup statement, its solution35-90, global consumer
+   hopen at1242 and hopen+hInert call1316 were read. Three file SHA256 values saved in
+   note032-frey-finite-character-reference-audit.json. No external proof/provider imports.
+
+Implemented mathematical content:
+Step 1. General character into group of cardinal p^m has actual image and kernel quotient
+        cardinal p^s and kernel index p^s with s<=m, using first isomorphism theorem.
+        Actual nontrivial value forces s>=1. No finiteness assumption on domain.
+Step 2. SAME upperStage is additively equivalent to SAME original T, preserving points.
+        Lifted stage cardinal p^(n+1); actual E[p^(n+2)]/T cardinal p^(n+3), computed
+        from actual elliptic torsion cardinal, not supplied as a new provider.
+Step 3. SAME canonical quotient topology is discrete. SAME actual quotient Galois action
+        has continuous orbits and joint action. SAME actual inertia difference homs
+        are continuous from original Krull/subgroup topology. SAME kernel is clopen
+        RELATIVE TO INERTIA, not asserted open in absolute Galois group.
+        Explicit SAME quotient action identity c_x(sigma)=sigma[x]-[x] is proved.
+Step 4. Define actual inertia-fixed subgroup of SAME upper quotient. Restrict SAME
+        canonical difference character to it, retaining its underlying actual value.
+        SAME character image/kernel quotient/index are p^s, s<=n+3.
+        SAME actual narrow witness y,tau yields nontrivial exact-order-p value and
+        clopen kernel with positive index exponent 1<=s<=n+3.
+        SAME exact hclass and SAME Cofixed candidate supply this final existence.
+        No new continuity/finite/image/index/placement/absorption/order providers.
+
+Regression scope:
+- ZMod25 actual multiplication-by-5 character has image cardinal5, kernel quotient
+  cardinal5 and kernel index5; positive exponent is EXACTLY1, not target exponent2.
+- Trivial hom has image cardinal1=p^0: finiteness alone does not force positivity.
+- #print axioms for all nineteen new production declarations: only standard
+  propext/Classical.choice/Quot.sound, with no sorryAx.
+- Checked-environment recursive proof/type/constructor/opaque-value audits for all
+  nineteen declarations, including required actual torsion-cardinality, actual orbit
+  continuity, original value fixedness and original narrow obstruction dependencies.
+- Sixteen public binder audits keep SAME final hclass/Cofixed and reject new providers.
+
+Warnings and scope:
+- Root/suite replay exactly five pre-existing unrelated declarations using sorry.
+  No new-module/test warning; all selected new dependencies reject sorryAx and nonstandard
+  axioms. No claim that the entire repository is sorry-free.
+- Multiplicative is a type tag on original additive quotient, not unit-valued Tate chi/d.
+- Nontrivial ordinary hom is in coboundary form in SAME Q; no nonzero H1 claim and no
+  group-cohomology API proof of H1 vanishing was added.
+- Values inertia-fixed does not mean entire quotient is inertia-fixed. One exact-order-p
+  value does not imply whole image has cardinal p. Finite continuous p-image is not zero
+  merely from these properties. No wild restriction vanishing, tame/Frobenius relation,
+  fixed-basepoint q-scaling, arithmetic obstruction exclusion or hclass supply proved.
+- UNCONDITIONAL GENERAL hno REMAINS INCOMPLETE.
+
+Nineteen checked roots and required-dependency results:
+PASS: DkMath.Lib.Algebra.FinitePrimePowerCharacter.card_quotient_kernel; 6835 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.FinitePrimePowerCharacter.image_profile; 7312 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.FinitePrimePowerCharacter.nontrivial_image_profile; 7341 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperStageEquiv; 24565 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperStage_card; 24568 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperQuotient_card; 31895 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperQuotientDiscreteTopology; 24874 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperQuotient_orbit_continuous; 26821 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperQuotient_action_continuous; 27010 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.inertiaDifferenceCharacter_continuous; 35237 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaQuotientDifferenceCharacter_continuous; 35274 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaQuotientDifferenceCharacter_kernel_isClopen; 35731 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaQuotientDifferenceCharacter_coboundary; 34507 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaFixedUpperQuotient; 24768 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaFixedDifferenceCharacter; 34526 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaFixedDifferenceCharacter_apply; 34527 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertia_character_image_profile; 35439 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.inertia_character_finite_profile; 36833 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_exists_finite_inertia_character; 83839 reachable constants; required actual theorems present.
+
+Sixteen checked public-input reports:
+PASS inputs: DkMath.Lib.Algebra.FinitePrimePowerCharacter.card_quotient_kernel; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.FinitePrimePowerCharacter.image_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.FinitePrimePowerCharacter.nontrivial_image_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperStageEquiv; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperStage_card; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperQuotient_card; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperQuotient_orbit_continuous; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.upperQuotient_action_continuous; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaFixedUpperQuotient; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaQuotientDifferenceCharacter_continuous; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaQuotientDifferenceCharacter_kernel_isClopen; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaQuotientDifferenceCharacter_coboundary; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaFixedDifferenceCharacter; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertia_character_image_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.inertia_character_finite_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_exists_finite_inertia_character; remaining arithmetic inputs explicit.

@@ -1,0 +1,114 @@
+NOTE-032 TWO STEPS: actual conditional successor and SAME coherent cyclic torsion tower
+Date: 2026-11-06
+Working directory: lean/dk_math
+
+Performed validations, listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCyclotomicConditionalTower DkMathTest.FLT.Note032FreyCyclotomicConditionalTowerDependencyAudit
+   Build completed successfully (11116 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12241/12241 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed; only its existing file marker printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyConditionalTowerSmoke.lean
+   Root exposes actual stages/successor, dependent tower/profile, same-stage p-lifts,
+   actual p-divisible stable union, original socle and conditional infinite union.
+5. Two textbook blocks extracted verbatim to /tmp/n032-condtower-book-{1,2}.lean.
+   lake env lean run on each individually; both passed without warnings. Each equals
+   its full production source, including exact module marker immediately after imports.
+6. python3 /tmp/n032-condtower-import-audit.py
+   Comment-aware syntactic local import closures, acyclicity, source scans/hashes,
+   FLT/root/normal-test reachability, five exact markers and two textbook copies passed.
+   Closure sizes including self: 296,297. No old FreyHnoSmallIndex/RegularPrime/HardCase consumer.
+7. git diff --check and direct trailing-whitespace checks on new Lean/textbook files passed.
+
+Step 1 IMPLEMENTED:
+- ResidualCyclicStage retains SAME Source, residual line, geometric point group and base.
+  Fields: actual subgroup, exact card p^(n+1), cyclicity, Galois stability, base inclusion.
+- Derive finite type from nonzero card, actual exponent annihilation from Lagrange,
+  and p-socle containment in SAME original base from existing finite-cyclic argument.
+- Base stage is constructed from SAME pointSubgroup, requiring no hclass/hbad.
+- At a stage T, retain SAME specific class quotient hclass and SAME stage-specific
+  resonant inertia condition p*y in T.carrier -> tau(y)-y in T.carrier.
+- Invoke proved SAME Frey complement theorem (including actual completed unit arithmetic),
+  then actual elliptic stable-complement lift. Output next stage's size/cyclicity/stability/
+  original base inclusion, actual subgroup inclusion and p-socle descent.
+- No stable complement, character triviality or next-stage existence provider is input.
+
+Step 2 IMPLEMENTED:
+- residualCyclicNext selects the actual preceding successor. Nat.rec constructs a
+  DEPENDENT sequence of stages starting at SAME original base and using SAME chosen
+  previous stage. It is not a list of independently chosen unrelated groups.
+- Stage inclusions give actual monotone tower; exact card p^(n+1), cyclicity, SAME action
+  stability, annihilation and original-base socle properties follow from construction.
+- Actual p-multiple preimages lie in SAME next stage: finite cyclic p-power range=kernel
+  applied to the actual next subgroup and preceding annihilation supplies the point.
+- The actual directed union inside SAME geometric point group has finite-stage membership,
+  is p-primary, p-divisible, and stable under SAME absolute Galois action.
+- Its p-socle is EXACTLY SAME original pointSubgroup, in both directions.
+- Union is infinite: a hypothetical finite union's actual card N would bound stage N's
+  card p^(N+1), contradicting strict growth. Infinite Nat.card=0 is not treated as finite size.
+
+EXPLICIT conditional arithmetic strength:
+- hclass is SAME Cl/pCl omega-square component vanishing as before, not whole plus-part vanishing.
+- A single successor uses stage-specific hbad. Iteration explicitly takes hbad FOR EVERY
+  eligible stage. This is stronger availability than hbad at one K, and is NOT a proved
+  arithmetic preservation statement. It is retained as an input, not renamed closure.
+- No all-high-torsion inertia absorption is inferred from the p-preimage condition.
+- No global quotient Galois fixedness is inferred from subgroup stability.
+- General hno, class arithmetic, resonant arithmetic and final good-reduction contradiction
+  connection remain UNFINISHED. Completed unit arithmetic is reused, not assumed again.
+
+Regression scope:
+- SAME abstract Source and residual line; no impossible numerical Fermat Source manufactured.
+- Base construction needs no class/resonance data. Under retained hclass/uniform-stage hbad,
+  SAME tower stages 0/1/2 have exact sizes p,p^2,p^3.
+- Compose two actual adjacent p-lifts of SAME original base point: its p^2 preimage is
+  in SAME stage 2. This checks dependent-stage compatibility.
+- p-torsion of stage 4 returns to ORIGINAL base, not only the previous stage.
+- SAME union's divisibility and exact socle checked; Infinite and Nat.card=0 coexist,
+  guarding the finite/infinite cardinality boundary.
+
+Audit scope:
+- Fifteen selected #print axioms reports contain only propext, Classical.choice, Quot.sound.
+- Fifteen recursive traversals inspect types, constructors and opaque proof bodies,
+  reject sorryAx, external P2M/P2MW/FltRegular/FreyPackage, old Kummer consumers,
+  FLT endpoints and all nonstandard axioms; require actual Frey split/unit proof,
+  elliptic lift, finite cyclic range=kernel and actual previous-stage recursion.
+- Eight input audits require hbad/hclass and original cofixed/line/root guards at successor
+  and iteration; reject complement/character/next/trace/rank/unit existence providers.
+  Finite/killed/base-socle facts do not require new arithmetic data.
+- No new warnings, sorry/admit/native_decide/unsafe/custom axioms.
+  Root output replays historical sorry warnings in unrelated existing modules;
+  no whole-repository axiom-clean assertion is made.
+
+External class-route source comparison:
+- Read actual source imports and final omega-square class argument, plus theorem interfaces
+  for Thaine plus-field relation, nonsplit degree-one generators and cyclotomic-unit detection.
+- Source HEAD and class solution blob re-read; source/interface SHA256 and reading scope saved
+  in matching JSON. No external build or proof/axiom audit, no theorem imported or ported.
+- No claim of whole plus-part vanishing or of hclass/hbad completion.
+
+Decisive recursive proof and input audits from the successful root build:
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.finite; 24376 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.killed; 24543 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.socle_mem_base; 27185 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cyclic_stage_successor; 80519 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicNext_spec; 80529 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTower; 80554 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTower_monotone; 80557 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTower_profile; 80557 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTower_lift; 80559 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.mem_residualCyclicTowerUnion; 80559 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTowerUnion_primary; 80560 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTowerUnion_divisible; 80563 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTowerUnion_stable; 80560 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTowerUnion_socle; 80562 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTowerUnion_infinite; 80560 reachable constants; required actual theorems present.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.finite; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.killed; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.socle_mem_base; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cyclic_stage_successor; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualCyclicTower; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualCyclicTower_lift; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualCyclicTowerUnion_socle; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualCyclicTowerUnion_infinite; remaining arithmetic inputs explicit.

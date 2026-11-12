@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-07",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.ValuationWildRigidity",
+    "DkMath.Lib.RepresentationTheory.UnipotentDifferencePower",
+    "DkMath.Lib.NumberTheory.EllipticWildRigidity",
+    "DkMath.FLT.FreyWildInertia"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.NumberTheory.ValuationWildRigidity": {
+      "local_module_count": 3,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.RepresentationTheory.UnipotentDifferencePower": {
+      "local_module_count": 2,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.EllipticWildRigidity": {
+      "local_module_count": 5,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyWildInertia": {
+      "local_module_count": 350,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/NumberTheory/ValuationWildRigidity.lean": true,
+    "DkMath/Lib/RepresentationTheory/UnipotentDifferencePower.lean": true,
+    "DkMath/Lib/NumberTheory/EllipticWildRigidity.lean": true,
+    "DkMath/FLT/FreyWildInertia.lean": true,
+    "DkMathTest/FLT/FreyWildInertia.lean": true,
+    "DkMathTest/FLT/Note032FreyWildInertiaDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyWildInertiaSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 4,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/NumberTheory/ValuationWildRigidity.lean": "11624095431fe344d169fc0ee859f2f4654c81729436d31bc98fd77b48746cef",
+    "DkMath/Lib/RepresentationTheory/UnipotentDifferencePower.lean": "eb693d8ad73d5cbce981dd9b6f98556ea4a43ca1408657584e2732b0a54bc720",
+    "DkMath/Lib/NumberTheory/EllipticWildRigidity.lean": "429c25bd6b548bcb42cb77d10d9f440d868f6ed642ece5e77638de2fc9991695",
+    "DkMath/FLT/FreyWildInertia.lean": "551b316fa738e998dcbe0e098aab7fc58c0d730dcfc69ae2241bb62c14cdabe1",
+    "DkMathTest/FLT/FreyWildInertia.lean": "86766a1a5031fd93acbaa55759316049fd51e25458a3b1746dddee791ee18953",
+    "DkMathTest/FLT/Note032FreyWildInertiaDependencyAudit.lean": "50022c9bd7234cbf624d60dd305bb5fb199f8d926bb9051dbd49d26001c6d9d5",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyWildInertiaSmoke.lean": "13470c85dc9e357671f35fe79649a337de3bdfa583d34037aac8a89d31c2e12a"
+  },
+  "boundary": "SAME wild congruence subgroup, unit-period rigidity and actual nodal inertia product-zero supply actual finite p-power torsion wild fixedness without new wild/pro-q/period providers. SAME ordinary difference character kills wild and, with actual IsFrobeniusAt witness retained, its evaluation on conjugate equals q-power at SAME basepoint. This is not module transport rho(phi)c(tau)=q*c(tau). SAME hclass+Cofixed supplies original nontrivial exact-order-p value with wild-kernel inclusion and Frobenius character formula. No normality/tame quotient descent, filtration/pro-q identification, tame arithmetic contradiction, hclass supply or unconditional hno."
+}

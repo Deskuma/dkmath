@@ -25,5 +25,9 @@ name = "DkMathTest"
 globs = ["DkMathTest.+"]
 
 [[lean_lib]]
+name = "DkMathHeavyTest"
+globs = ["DkMathHeavyTest.+"]
+
+[[lean_lib]]
 name = "DkMathlib"
 globs = ["DkMathlib.+"]

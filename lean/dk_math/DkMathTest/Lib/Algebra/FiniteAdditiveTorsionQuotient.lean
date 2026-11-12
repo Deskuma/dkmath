@@ -1,0 +1,70 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.Lib.Algebra.FiniteAdditiveTorsionQuotient
+
+#print "file: DkMathTest.Lib.Algebra.FiniteAdditiveTorsionQuotient"
+
+/-!
+# Regression uses for torsion in additive quotients
+
+These examples document the two interfaces used by a future component-group
+construction: a prime-torsion class detects prime quotient cardinality, and
+an exact `2*q`-torsion class has the stated double-or-component alternative.
+-/
+
+namespace DkMathTest.Lib.Algebra.FiniteAdditiveTorsionQuotient
+
+open DkMath.Lib.Algebra
+
+noncomputable section
+
+variable {G : Type*} [AddCommGroup G]
+
+example (H : AddSubgroup G) {q : ℕ} [Fact q.Prime] (R : G)
+    (hRq : q • R = 0) (hR : R ∉ H) :
+    q ∣ Nat.card (G ⧸ H) :=
+  prime_dvd_natCard_quotient_of_nsmul_not_mem H R hRq hR
+
+example {F : Type*} [AddCommGroup F] [Finite F]
+    (H : AddSubgroup G) (φ : G →+ F) (hker : φ.ker = H)
+    {q : ℕ} [Fact q.Prime] (R : G)
+    (hRq : q • R = 0) (hRnot : R ∉ H) :
+    q ∣ Nat.card F :=
+  prime_dvd_finite_component_of_ker H φ hker R hRq hRnot
+
+example {F : Type*} [AddCommGroup F] [Finite F]
+    (H : AddSubgroup G) (φ : G →+ F) (hker : φ.ker ≤ H)
+    {q : ℕ} [Fact q.Prime] (R : G)
+    (hRq : q • R = 0) (hRnot : R ∉ H) :
+    q ∣ Nat.card F :=
+  prime_dvd_finite_component_of_ker_le H φ hker R hRq hRnot
+
+example {q : ℕ} [Fact q.Prime] (R : G)
+    (horder : addOrderOf R = 2 * q) (hdouble : 2 • R ≠ 0) :
+    addOrderOf (2 • R) = q :=
+  addOrderOf_two_nsmul_eq_prime_of_addOrder_eq_two_mul_prime R horder hdouble
+
+example (H : AddSubgroup G) {q : ℕ} [Fact q.Prime] (R : G)
+    (horder : addOrderOf R = 2 * q) :
+    2 • R ∈ H ∨ q ∣ Nat.card (G ⧸ H) :=
+  two_nsmul_mem_or_prime_dvd_natCard_quotient_of_addOrder_eq_two_mul_prime H R horder
+
+example (H : AddSubgroup G) {q : ℕ} [Fact q.Prime] (R : G)
+    (horder : addOrderOf R = 2 * q)
+    (hker : ∀ x : G, x ∈ H → q • x = 0 → x = 0) :
+    q ∣ Nat.card (G ⧸ H) :=
+  prime_dvd_natCard_quotient_of_two_p_torsion H R horder hker
+
+#print axioms DkMath.Lib.Algebra.prime_dvd_natCard_quotient_of_nsmul_not_mem
+#print axioms DkMath.Lib.Algebra.prime_dvd_finite_component_of_ker
+#print axioms DkMath.Lib.Algebra.prime_dvd_finite_component_of_ker_le
+#print axioms DkMath.Lib.Algebra.addOrderOf_two_nsmul_eq_prime_of_addOrder_eq_two_mul_prime
+#print axioms DkMath.Lib.Algebra.two_nsmul_mem_or_prime_dvd_natCard_quotient_of_addOrder_eq_two_mul_prime
+#print axioms DkMath.Lib.Algebra.prime_dvd_natCard_quotient_of_two_p_torsion
+
+end
+end DkMathTest.Lib.Algebra.FiniteAdditiveTorsionQuotient

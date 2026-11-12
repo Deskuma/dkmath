@@ -1,0 +1,93 @@
+NOTE-032 concrete torsion extension and inertia absorption
+Date: 2026-11-01
+Build directory: lean/dk_math
+
+Performed validation (all commands returned exit code 0):
+1. lake build DkMath DkMathTest.Lib.Algebra.TorsionPreimageQuotient DkMathTest.Lib.NumberTheory.EllipticTorsionInertiaAbsorption DkMathTest.FLT.FreyCofixedTorsionExtension DkMathTest.FLT.Note032TorsionExtensionDependencyAudit
+   Build completed successfully (11045 jobs).
+2. lake test
+   Repository test driver passed, including the new tests and dependency audit.
+3. lake env lean DkMathTest.lean
+   Normal test facade passed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032TorsionExtensionInertiaSmoke.lean
+   Root import DkMath exposes the new extension, cyclic lifting, and inertia/Frobenius endpoints.
+5. git diff --check
+   Passed.
+
+Regression scope:
+- Actual subgroup and quotient classes in (ZMod 4)^2.
+- Failure of torsion descent if disjointness is omitted.
+- Good-reduction inertia fixes geometric 2-torsion above 3 for y^2=x^3-x.
+- Source-level forbidden-construct scan of all six production and four test modules passed.
+- No warning/error from these ten new modules in the final combined build.
+- The full repository build still reports historical sorry/linter warnings elsewhere;
+  this is not a claim that all repository declarations are sorry-free.
+
+Axiom audits (20 selected declarations):
+DkMath.FLT.Frey.Source.prime_power_pointAction_sub_mem_of_bad_inertia: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cofixed_preimage_extension_profile: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_cofixed_preimage_quotient_cyclotomic: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_line_tower_inertia_frobenius_impossible: Classical.choice, Quot.sound, propext
+DkMath.FLT.Frey.Source.residual_preimage_stable_complement_lifts: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.PrimePowerCyclicCriterion.isAddCyclic_and_card_dvd_of_prime_power_exponent: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.TorsionPreimageQuotient.card_liftSubmodule: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.TorsionPreimageQuotient.card_quotient: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.TorsionPreimageQuotient.card_torsionImage_mul_card_kernel: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.TorsionPreimageQuotient.representation_sub_nsmul_mem_torsionImage: Classical.choice, Quot.sound, propext
+DkMath.Lib.Algebra.TorsionPreimageQuotient.torsion_mem_of_lift_disjoint: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.card_preimageQuotient: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.card_torsionImage_of_cyclic: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.exists_tower_step_of_stable_complement: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finrank_preimageQuotient: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finrank_torsionImage_of_cyclic: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointAction_eq_of_inertia_of_integer_good: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointAction_sub_mem_of_inertia_absorbs: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointAction_sub_mem_of_inertia_absorbs_bad_support: Classical.choice, Quot.sound, propext
+DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.preimageRepresentation_kernel_isOpen: Classical.choice, Quot.sound, propext
+
+Dependency audit (types and opaque bodies, including imported declarations):
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointAction_sub_mem_of_inertia_absorbs; 74618 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_line_tower_inertia_frobenius_impossible; 75116 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cofixed_preimage_extension_profile; 33110 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cofixed_preimage_quotient_cyclotomic; 41697 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_preimage_stable_complement_lifts; 32631 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointAction_sub_mem_of_inertia_absorbs; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_line_tower_inertia_frobenius_impossible; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cofixed_preimage_extension_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_preimage_stable_complement_lifts; remaining arithmetic inputs explicit.
+
+All five root dependency traversals and all four public-input audits passed.
+The only allowed axioms were propext, Classical.choice, Quot.sound.
+Actual inertia generation, torsion finiteness, multiplication surjectivity,
+and the finite p-group cyclic criterion are required dependencies.
+External P2M/P2MW, FltRegular, FreyPackage, Kummer/FLT endpoints and sorryAx
+are rejected by the recursive audit.
+
+Import audit: note032-torsion-extension-import-audit.json
+- Acyclic local import closure.
+- No dependency on FreyHnoSmallIndex, FreyHnoRegularPrime, or FreyHnoHardCase
+  from any new production module.
+
+Mathematical boundary:
+Completed: actual V=(p^-1 K)/K, its Galois action/open kernel, dimension two,
+actual torsion image C of dimension one for cyclic K, initial cofixed C fixed
+pointwise and V/C cyclotomic, concrete stable-complement lifting preserving
+cardinality/cyclicity/exponent/stability/descent, and local inertia absorption
+implying global absorption (good primes supplied internally).
+Not completed: stable complements from the needed arithmetic conditions,
+bad-place absorption for higher p-power torsion, higher-stage quotient character,
+actual Frobenius Cayley-Hamilton relation, and geometric Eisenstein specialization.
+The general hno theorem is not claimed complete.
+
+Source SHA256:
+2305145e64f436fc8107def9f028deac50c3430fcd7264264d2c8347afafc97c  DkMath/Lib/Algebra/TorsionPreimageQuotient.lean
+8b76a539cf83658da024d71814b4f96a01cc38b6c0c3a554c0ac65b9948e824d  DkMath/Lib/Algebra/PrimePowerCyclicCriterion.lean
+aa683cd6b5a90a69b0989f1ee97de5303e5465b3a2ccd64667212cbce3b7fa1f  DkMath/Lib/NumberTheory/EllipticTorsionInertiaAbsorption.lean
+62e5e91c86d37c2b09c14db0b7eff7e7ff171110f4785419c48e9971de79d613  DkMath/Lib/NumberTheory/EllipticTorsionPreimageExtension.lean
+78daf42bdae1370533c8d84ad0074a4ee0d8764ad4f0c87ce3fd374787b3849e  DkMath/FLT/FreyTorsionInertiaAbsorption.lean
+4ec31f831ce524c4324b9c567242da4f5a2044f82c21df8b7b982cede9186baa  DkMath/FLT/FreyCofixedTorsionExtension.lean
+ebc01fffe5e6333a8a3176f7808413f7edfa253cee8f8a8dea5806947b8cf358  DkMathTest/Lib/Algebra/TorsionPreimageQuotient.lean
+b7326a219709523602e3a47076cdd35e7715477877813625ad4a481af9da5078  DkMathTest/Lib/NumberTheory/EllipticTorsionInertiaAbsorption.lean
+66b623f11699aca4b982d1d71aabd6f5083393d81fb37923e6dbf1063d3f61c3  DkMathTest/FLT/FreyCofixedTorsionExtension.lean
+314f379278293941f47e4c8ffbd2321dd12387c120692afb37adea0f9c125886  DkMathTest/FLT/Note032TorsionExtensionDependencyAudit.lean
+38512c43b1803fbc01583fcdc75d1133a569b5d5cdfdb270a5c26c9b60de6a5f  docs/dev/FLT-GN-regular-261018-v0/evidence/Note032TorsionExtensionInertiaSmoke.lean

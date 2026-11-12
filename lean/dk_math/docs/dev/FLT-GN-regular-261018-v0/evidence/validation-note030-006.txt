@@ -1,0 +1,101 @@
+NOTE-030-006 verification evidence — 2026-10-22 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Completed mathematical scope:
+  Division-free plus/minus polynomial identity over any commutative ring.
+  Normalized rational model a1=1, a3=a6=0; actual addX, doubling and point addition/subtraction.
+  Lower 0 a2, Exact gamma a4, Exact e x and 1<=e<=gamma-1:
+    Exact e (x+2y), including nonzero tangent denominator.
+  Actual double identity x(2Q)*(x+2y)^2=(x^2-a4)^2.
+  Actual plus/minus identity x(P+Q)*x(P-Q)*(x(P)-x(Q))^2=(x(P)*x(Q)-a4)^2.
+  Explicit nonzero factors before applying padicValRat.mul.
+  Prime-order p>=5 orbit supplies x(2Q) nonzero and the exact tangent denominator.
+  Interior 2<=k<=p-2 excludes kQ=Q and kQ=-Q, hence x(kQ)!=x(Q).
+  Nontrivial multiples supply nonzero x((k+1)Q) and x((k-1)Q).
+  Double numerator and interior plus/minus numerators proved nonzero.
+  Actual same-point valuation identities:
+    v2(x(2Q)) + 2*v2(x(Q)) = 2*v2(x(Q)^2-a4).
+    v2(x((k+1)Q)) + v2(x((k-1)Q)) + 2*v2(x(kQ)-x(Q))
+      = 2*v2(x(kQ)*x(Q)-a4).
+  Same Source, integer a,b,c, coprimality, normalization and rational point retained.
+  Even b explicit in Source tangent/doubling APIs; unnecessary for Source plus/minus API.
+
+Remaining scope:
+  030-007 and 030-008 unimplemented.
+  No complete e,A,B,A1 package, min/equal-depth conditions, endpoint or application of FoldedValuationOrbit.
+  No rational p-torsion vanishing, hrat supply, fixed/cofixed dichotomy, cofixed exclusion,
+    irreducibility or general FLT closure.
+
+Actual regression points:
+  Integer specialization of the division-free polynomial identity.
+  Previous order-5 point Q=(4,-20) on curve (1,-24,0,160,0).
+  Tangent denominator -36: Exact 2; double numerator -144: Exact 4.
+  Actual doubling valuation identity applies to the same Q.
+  All interior k=2,3: distinct x, nonzero numerator, actual plus/minus valuation recurrence.
+  At k=2 the numerator 16*4-160=-96 has Exact depth 5.
+  Endpoint 4Q=-Q has the same x as Q; cannot remove the interior-range guard.
+  Curve (1,-2,0,1,0), U=(1,0): nonsingular, 2U=T=(0,0), actual order 4.
+  U has unit tangent denominator, but x(2U)=0 and x(U)^2-a4=0;
+    the local nonzero-double-coordinate guard cannot be replaced by denominator nonzero alone.
+  Conditional same-Source 37 double and interior 2<=k<=35 plus/minus APIs.
+  No Frey Source, Fermat counterexample or nonzero rational 37-torsion existence claimed.
+  Local symbolic arithmetic discovered the polynomial certificate; Lean checked its linear combination.
+
+Static checks:
+  6 new Lean files: 3 production, 2 tests/audits, 1 root smoke.
+  Exact markers after imports, whitespace, final newlines: PASS.
+  All public production/regression declarations have textbook docstrings: PASS.
+  No sorry/admit/native_decide/custom axiom/opaque/unsafe or external provider imports.
+  General translated modules retain Apache-2.0 attribution, upstream blob
+    fe61fd5d4f94d55b5a9da38d1541903c84397df0 and existing module-relative LICENSE/NOTICE paths.
+  All 15 production and 14 regression declarations listed in the axiom audit.
+  git diff --check: exit 0.
+
+Focused build:
+  lake build DkMathTest.FLT.Note030IdentitiesDependencyAudit
+  exit 0; Build completed successfully (3163 jobs).
+  New code: no warnings or errors.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Full type and opaque-body dependency audit on 10 main paths:
+  15 production and 14 regression declarations; standard logical axioms only.
+  DkMath.Lib.NumberTheory.WeierstrassXIdentities.plus_minus_polynomial_identity; 1485 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.WeierstrassXIdentities.tangent_denominator_exact; 9077 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.WeierstrassXIdentities.double_x_identity; 22981 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.WeierstrassXIdentities.plus_minus_x_identity; 22985 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.WeierstrassTorsionIdentities.double_x_valuation_of_prime_order; 23911 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.WeierstrassTorsionIdentities.plus_minus_x_valuation_of_prime_order; 23474 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.double_x_valuation_identity; 24028 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.plus_minus_x_valuation_identity; 23497 reachable constants; expected providers present.
+  FreyRationalTorsionIdentitiesTest.actual_five_interior; 23614 reachable constants; expected providers present.
+  FreyRationalTorsionIdentitiesTest.four_point_order; 23061 reachable constants; expected providers present.
+
+  Forbidden: sorryAx, old FLT endpoints, external FltRegular/P2M/P2MW/FreyPackage,
+             Kummer endpoints and the still-unconnected FoldedValuationOrbit.
+  Polynomial theorem graph: no WeierstrassCurve or elliptic-core constants.
+  General Lib graph roots: no DkMath.FLT dependencies.
+
+Facade/root/test build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11687 jobs).
+  New code: no warnings or errors.
+  Five existing unrelated broad-root sorry warnings:
+  warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+  warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+  warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+  warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+  warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+
+Additional entrance checks:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest; no warnings or errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE030Identities.lean
+  exit 0; 5 selected endpoints reachable through import DkMath;
+          conditional Source 37 double/plus-minus APIs; standard-only axiom prints;
+          no warnings or errors.
+  python3 check_tracker_mismatch.py /tmp/note030-006-full.log
+  exit 0; OK: no mismatches found.
+
+Raw logs are disposable /tmp/note030-006-*.log files.
+This records the stated scope, not whole-repository axiom freedom.

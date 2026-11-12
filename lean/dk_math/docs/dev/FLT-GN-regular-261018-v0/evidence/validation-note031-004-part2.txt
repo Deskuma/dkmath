@@ -1,0 +1,82 @@
+NOTE-031-004 part 2 — 2026-10-23 JST
+branch: feat/FLT-GNR-031-04-261023-codex
+status: IMPLEMENTED for NOTE-031-004: both reduction cases and common-side transport at p.
+Outside scope: NOTE-031-005 global synthesis, no cofixed line, general FLT.
+
+Environment
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Focused validation (exit 0; new code has no warnings)
+lake build DkMath.Lib.NumberTheory.EllipticNodalReductionKernel
+  PASS: 2574 jobs, actual reduction homomorphism and nodal p-torsion bridge.
+lake build DkMath.Lib.NumberTheory.EllipticNodalInertia
+  PASS: 2798 jobs, all-point smooth inertia differences.
+lake build DkMath.FLT.FreyPrimeFiltration
+  PASS: 3262 jobs, bad-case absorption and complete local endpoint.
+lake build DkMathTest.FLT.FreyPrimeFiltrationComplete
+  PASS: concrete finite reduction at 5, actual non-5-torsion, Source37 interfaces.
+lake build DkMathTest.FLT.Note031PrimeFiltrationDependencyAudit
+  PASS: 3265 jobs, full type and opaque-body dependency audit.
+
+Facade/root validation
+lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  PASS (exit 0): 11786 jobs. Final build includes attribution-header changes.
+lake env lean DkMathTest.lean
+  PASS (exit 0): file: DkMathTest
+lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE031PrimeFiltration.lean
+  PASS (exit 0): actual homomorphism, nodal kernel bridge, bad-case absorption,
+  all-case local endpoint and common-side transport accessible via import DkMath.
+
+Dependency audit from final build
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS: 41 production and 7 regression declarations; standard logical axioms only.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS: DkMath.Lib.NumberTheory.EllipticReductionSlope.slope_mem_residue_of_not_inverse; 16298 reachable constants; expected providers present.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS: DkMath.Lib.NumberTheory.EllipticSmoothReduction.smooth_add_and_reduce; 24230 reachable constants; expected providers present.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS: DkMath.Lib.NumberTheory.EllipticSmoothReduction.zeroComponentReduction; 24237 reachable constants; expected providers present.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS: DkMath.Lib.NumberTheory.EllipticSmoothReduction.nsmul_reduce_eq_zero; 24243 reachable constants; expected providers present.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS: DkMath.Lib.NumberTheory.EllipticNodalReductionKernel.mem_kernel_of_smooth_torsion; 25911 reachable constants; expected providers present.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS: DkMath.Lib.NumberTheory.EllipticNodalReductionKernel.pole_of_smooth_torsion_of_model; 25935 reachable constants; expected providers present.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS: DkMath.Lib.NumberTheory.EllipticNodalInertia.inertia_difference_smooth; 26096 reachable constants; expected providers present.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS: DkMath.FLT.Frey.Source.inertia_difference_smooth_at_bad_prime; 30453 reachable constants; expected providers present.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS: DkMath.FLT.Frey.Source.residualReductionKernel_absorbs_at_bad_prime; 31038 reachable constants; expected providers present.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS: DkMath.FLT.Frey.Source.residualReductionKernel_absorbs_at_p; 31076 reachable constants; expected providers present.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS: DkMath.FLT.Frey.Source.residual_fixed_or_cofixed_at_p; 37134 reachable constants; expected providers present.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS: DkMath.FLT.Frey.Source.residual_common_side_at_p; 41997 reachable constants; expected providers present.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS: FreyPrimeFiltrationCompleteTest.node_point_not_five_torsion; 26386 reachable constants; expected providers present.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS: FreyPrimeFiltrationCompleteTest.source37_common_side; 41999 reachable constants; expected providers present.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS inputs: DkMath.Lib.NumberTheory.EllipticNodalReductionKernel.mem_kernel_of_smooth_torsion; explicit arithmetic guards and remaining inputs retained.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS inputs: DkMath.Lib.NumberTheory.EllipticNodalInertia.inertia_difference_smooth; explicit arithmetic guards and remaining inputs retained.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS inputs: DkMath.FLT.Frey.Source.residualReductionKernel_absorbs_at_bad_prime; explicit arithmetic guards and remaining inputs retained.
+DkMathTest/FLT/Note031PrimeFiltrationDependencyAudit.lean:81:0: PASS inputs: DkMath.FLT.Frey.Source.residual_common_side_at_p; explicit arithmetic guards and remaining inputs retained.
+
+#print axioms:
+  EllipticSmoothReduction.zeroComponentReduction
+  EllipticNodalReductionKernel.pole_of_smooth_torsion_of_model
+  DkMath.FLT.Frey.Source.residual_common_side_at_p
+All three depend only on [propext, Classical.choice, Quot.sound].
+All 41 new production and 7 regression declarations were audited.
+14 dependency-graph roots and 4 input-contract checks passed.
+Neutral Lib roots exclude DkMath.FLT; no external FLT endpoint, P2M/P2MW,
+FreyPackage, RegularKummer, Kummer, FoldedValuationOrbit or sorryAx is reachable.
+
+Markers and static source checks
+python3 check_tracker_mismatch.py /tmp/004p2-full-final.log
+  OK: no mismatches found
+Static scan: PASS, 13 Lean files, exact file markers, public docstrings,
+no sorry/admit/axiom/opaque/native_decide/unsafe, whitespace, neutral Lib imports;
+all 41 production and 7 regression declarations listed in the axiom audit.
+git diff --check: PASS.
+
+Source provenance
+Three consulted cached sources reproduce the recorded Git blob SHA after removing
+one extraction-added trailing LF. The reduction-construction source was also fetched
+through the GitHub connector this turn and its returned SHA matched.
+See upstream-note031-004-part2.json for SHA values, adaptations and source hashes.
+
+Historical full-build warnings, outside the audited new paths
+warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`

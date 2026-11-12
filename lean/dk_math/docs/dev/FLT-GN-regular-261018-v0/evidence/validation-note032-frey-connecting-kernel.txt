@@ -1,0 +1,131 @@
+NOTE-032 FIVE STEPS: SAME actual quotient triviality, connecting injectivity, kernel equivalences, prime-order coset/kernel element and positive p-power kernel cardinal
+Date: 2026-11-08
+Working directory: lean/dk_math
+
+Successful final validations (listed Lean/Lake commands exited 0):
+1. lake build DkMath.FLT.FreyConnectingKernelCertificate
+   Focused implementation build passed (4449 jobs).
+2. lake build DkMath DkMathTest.FLT.FreyConnectingKernel DkMathTest.FLT.Note032FreyKernelDependencyAudit
+   Build completed successfully (11187 jobs).
+3. lake test
+   Normal repository test driver passed; reached 12354/12354 jobs.
+4. lake env lean DkMathTest.lean
+   Rechecked after suite dependencies built; passed, only existing marker printed.
+5. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyKernelSmoke.lean
+   Root exposes all twenty-six new production declarations; final endpoint standard axioms only.
+6. FIVE full textbook blocks extracted to /tmp/n032-kernel-book-{1,2,3,4,5}.lean.
+   lake env lean run on each separately; all passed without warnings.
+   Exact full production source and exact markers immediately after imports retained.
+7. python3 /tmp/n032-kernel-import-audit.py
+   Comment-aware local imports acyclic; EIGHT exact markers, FIVE full source copies,
+   FLT/root/test reachability, forbidden-construct scans and source SHA256 passed.
+   Closure sizes including self: quotient fixedness364, connecting injectivity364,
+   actual coefficient kernel366, prime-order elements367, cardinal/certificate368.
+   All five production modules are Frey-specific; no new Lib module this cycle.
+   No FreyHnoSmallIndex/RegularPrime/HardCase consumers in their import closures.
+8. git diff --check and direct trailing-whitespace checks on new files passed.
+9. Local model answer HEAD 115356cbc627159d0d16add0da6e9a2bb3655ed8.
+   Compared invariant-lift/coboundary equivalence and short-exact connecting-map
+   naturality solution. Use actual Mathlib ordinary LES exactness and H0 naturality,
+   not external custom cochain/provider or P2M/P2MW imports.
+   Reference and Mathlib source SHA256 saved in note032-frey-connecting-kernel-reference-audit.json.
+
+Implemented content:
+Step 1. SAME actual Q/F entire inertia-fixed under original bad-address nodal geometry.
+        Every quotient element lifts through SAME Q and original finite torsion; previous
+        actual fixed-difference theorem supplies fixed coset. Construct SAME invariant
+        submodule~Q/F linear equivalence, preserving values. This is NOT Q action triviality.
+Step 2. SAME F=Q^I implies actual H0(Q)->H0(Q/F) projection MAP is zero, via actual H0
+        naturality and original projection. H0(Q) itself is NOT assumed zero.
+        Actual LES exactness im(H0 projection)=ker(delta) gives delta injective.
+        No local geometry/hclass/Cofixed in this injectivity theorem.
+Step 3. Actual SAME H1 coefficient map and integer-linear kernel K. Actual LES exactness
+        gives range(delta)=K. Corestrict SAME delta to K; injectivity and exactness give
+        actual LinearEquiv H0(Q/F)~K. Standard H0Iso gives (Q/F)^I~K.
+        Under SAME local nodal geometry, Step1 gives Q/F~K, using SAME quotient/classes.
+Step 4. Original p*y in T gives p*[y]=0, hence SAME coset ubar killed by p.
+        SAME prior nonzero coset gives EXACT order p in invariant submodule.
+        Standard H0Iso preserves order. SAME invariant-to-kernel equivalence gives
+        SAME kernel element k, k.val=SAME original alpha_I, exact order p.
+        SAME zmultiples(k) subgroup has cardinal p. No claim whole kernel cardinal p.
+Step 5. SAME actual quotient-kernel equivalence and subgroup cardinal formula yield
+        |K|*|F|=|Q|=p^(n+3). Thus |K|=p^s with s<=n+3 internally.
+        SAME order-p kernel element shows K nontrivial, hence s>=1.
+        SAME original hclass+Cofixed candidate supplies original n,T,q,A,tau,y,h,
+        exact-order-p coset/H0/kernel element, SAME cyclic subgroup cardinal p,
+        SAME kernel value alpha_I and whole kernel cardinal p^s (1<=s<=n+3).
+        No new injectivity/equivalence/range/cardinality/order/fixedness providers.
+
+Regression and audit scope:
+- Concrete ZMod5 shear: quotient projection fixed, original point(0,1) actually moves.
+- Actual linear kernel equivalence R~ker(second projection) preserves SAME coordinate
+  values and exact order5, kernel cardinal5 and SAME generator subgroup cardinal5.
+- Zero map on (ZMod5)^2 has whole ambient kernel, cardinal25, while SAME element(1,0)
+  generates cardinal5 subgroup, guarding against conflating cyclic subgroup/whole kernel.
+- #print axioms for all26 new declarations: standard propext/Classical.choice/Quot.sound,
+  no sorryAx. Recursive checked types/constructors/opaque values require actual prior
+  fixedness, actual H0 naturality/zero-map and LES exactness, actual delta injection/range,
+  original preimage and nonzero coset, actual H0 equivalence/order transport,
+  original finite torsion quotient cardinal and SAME arithmetic witness.
+- Eighteen public-input audits keep original final hclass/Cofixed and reject new
+  injection/equivalence/range/order/cardinality/fixedness providers. Geometry guards
+  explicit where Q/F is entirely fixed; delta injectivity independent of geometry.
+
+Boundaries:
+- Exactly five pre-existing unrelated sorry warnings in root/suite, no new warning.
+  No repository-wide sorry-free claim.
+- H0/H1 are ORDINARY group cohomology; no continuous H1 comparison/nonzero construction.
+- SAME Q/F entirely fixed does NOT imply SAME Q fixed or Q/F=0.
+- Whole kernel has positive p-power cardinal; it is NOT asserted always p.
+- Nonzero kernel/connecting image is consistent LES structure, not arithmetic contradiction.
+- No global cyclotomic class-group identification/supply, arithmetic conjugacy-invariance,
+  positive/negative resonance exclusion or unconditional general hno closure completed.
+- UNCONDITIONAL GENERAL hno REMAINS INCOMPLETE.
+
+Twenty-six checked roots and required dependencies:
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedQuotient_all_invariant; 34630 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedQuotient_action_trivial; 34631 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedQuotientInvariantEquiv; 34638 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedH0Projection; 29341 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedH0Projection_zero; 30349 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedConnecting_injective; 31693 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedH1CoefficientMap; 29327 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedH1CoefficientKernel; 29328 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedConnecting_range; 32033 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedConnectingToKernel; 32036 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedConnectingKernelEquiv; 32142 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.invariantConnectingKernelEquiv; 32146 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.quotientConnectingKernelEquiv; 41615 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.pointClass_killed; 25199 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedCoset_killed; 34858 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedCoset_order_eq_prime; 34872 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedCosetH0_order_eq_prime; 39957 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCosetKernelElement; 41608 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCosetKernelElement_val; 42070 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedKernel_order_eq_prime; 41843 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedKernel_cyclic_card; 41844 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.quotientKernelEquiv_coset; 41620 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernel_card_mul_fixed; 42432 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernel_prime_power_profile; 42437 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedKernel_positive_profile; 42606 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_exists_prime_cyclic_coefficient_kernel; 90693 reachable constants; required actual theorems present.
+
+Eighteen public input reports:
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedQuotient_all_invariant; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedQuotientInvariantEquiv; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedH0Projection_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedConnecting_injective; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedH1CoefficientKernel; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedConnecting_range; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedConnectingToKernel; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedConnectingKernelEquiv; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.invariantConnectingKernelEquiv; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.quotientConnectingKernelEquiv; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernel_card_mul_fixed; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedKernel_prime_power_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedCoset_order_eq_prime; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedCosetH0_order_eq_prime; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedKernel_order_eq_prime; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedKernel_cyclic_card; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixedKernel_positive_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_exists_prime_cyclic_coefficient_kernel; remaining arithmetic inputs explicit.

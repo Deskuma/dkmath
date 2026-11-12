@@ -1,0 +1,118 @@
+NOTE-032 FOUR STEPS: SAME actual tame inertia quotient, continuous descent and SAME witness resonant dichotomy
+Date: 2026-11-08
+Working directory: lean/dk_math
+
+Successful final validations (listed Lean/Lake commands exited 0):
+1. lake build DkMath.FLT.FreyTameResonance
+   Focused implementation build passed (4223 jobs).
+2. lake build DkMath DkMathTest.FLT.FreyTameResonance DkMathTest.FLT.Note032FreyTameResonanceDependencyAudit
+   Build completed successfully (11173 jobs).
+3. lake test
+   Normal repository test driver passed; reached 12334/12334 jobs.
+4. lake env lean DkMathTest.lean
+   Rechecked after suite dependencies built; passed, only existing marker printed.
+5. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTameResonanceSmoke.lean
+   Root exposes all sixteen new production declarations; final endpoint standard axioms only.
+6. Four full textbook blocks extracted to /tmp/n032-tame-book-{1,2,3,4}.lean.
+   lake env lean run on each separately; all passed without warnings.
+   Exact full production source and exact markers immediately after imports retained.
+7. python3 /tmp/n032-tame-import-audit.py
+   Comment-aware local import closures acyclic; seven exact markers, four full source copies,
+   Lib/FLT/root/test reachability, forbidden-construct scans and source SHA256 passed.
+   Closure sizes including self: wild normality8, actual tame quotient352,
+   general resonance1, actual Frey tame resonance354. No FLT imports in generic Lib modules.
+   No FreyHnoSmallIndex/RegularPrime/HardCase consumers in new production import closures.
+8. git diff --check and direct trailing-whitespace checks on new files passed.
+9. Local model answer HEAD 115356cbc627159d0d16add0da6e9a2bb3655ed8.
+   Compared inertia conjugacy/Frobenius wild-error solution and public actual Frobenius
+   error proof, plus theorem inputs and initial quotient calculation in finite-index
+   wild/tame/cyclic/unramified chain solution. Reference SHA256 saved in
+   note032-frey-tame-resonance-reference-audit.json. No P2M/P2MW theorem/provider imports.
+
+Implemented mathematical content:
+Step 1. SAME valuation-ring decomposition subgroup preserves SAME all-nonzero wild ratio
+        condition under conjugation, via actual preservation of nonunits. Hence pullback
+        of SAME wild subgroup to SAME inertia is normal. No algebraicity, completeness,
+        discreteness, filtration/pro-q or normality provider required.
+Step 2. Actual group quotient J=I/W of SAME inertia by SAME explicit wild-congruence subgroup.
+        Original canonical difference c:I->Multiplicative Q kills W by previous actual
+        Frey wild fixedness. QuotientGroup.lift defines cbar:J->Multiplicative Q.
+        SAME value on representatives and SAME image as sets are proved.
+        Original Krull/subgroup topology and standard quotient topology yield continuity
+        by quotient universal property, not by imposing a discrete topology on J.
+        Actual IsFrobeniusAt and original wild-error proof give quotient ELEMENT equality
+        [phi*tau*phi^-1]=[tau]^q, before applying any character.
+Step 3. SAME group element of EXACT order p has z^q=z iff q=1 in ZMod p.
+        q=-1 gives z^q=z^-1; if p>2, z^-1!=z and hence z^q!=z.
+        General group theory; no hidden Frey input or conjugacy invariance assumption.
+Step 4. SAME original narrow obstruction point/witness gives SAME nonzero EXACT-order-p
+        value after actual tame quotient descent. Construct actual SAME Frobenius witness
+        with IsFrobeniusAt proof and SAME conjugate class t'=t^q.
+        Fixedness of SAME value at t' iff positive residue1. Negative residue gives
+        inverse and a provably DIFFERENT value. Original obstruction resonance field
+        is actually used to output positive/negative dichotomy.
+        SAME exact hclass+Cofixed candidate supplies original n,T,q,A,tau,y,h and all
+        these continuous tame-character properties without new quotient/normality,
+        continuity/character/Frobenius/invariance/placement/absorption providers.
+
+Regression and audit scope:
+- Multiplicative ZMod5, SAME value of order5: power11 fixes; power19 inverts and changes;
+  power2 is not fixed. Nontrivial ZMod2 value equals inverse, testing necessity of p>2.
+- Actual reduction ZMod25->ZMod5 lifted through SAME kernel quotient: representatives
+  1 and6 retain SAME nontrivial character value of exact order5.
+- #print axioms for all16 new declarations: standard propext/Classical.choice/Quot.sound,
+  no sorryAx. Checked type/constructor/opaque-value recursion rejects forbidden endpoints
+  and nonstandard axioms. Required dependencies include previous actual wild-kernel
+  inclusion, quotient lift, actual orbit/difference continuity, original Frobenius error,
+  original nontrivial witness, original resonance field and exact-order general group theory.
+- Fifteen public-input audits retain only original arithmetic hclass/Cofixed in final
+  existence and reject new normality/continuity/Frobenius/conjugacy-invariance providers.
+
+Boundaries:
+- Exactly five pre-existing unrelated sorry warnings in root/suite; no new warning.
+  No repository-wide sorry-free claim.
+- W is SAME explicit all-nonzero wild-congruence group. No equivalence to separate
+  ramification filtration/pro-q API, no J finiteness/cyclicity/Hausdorff proof added.
+  Finite character image is preserved; the whole J is not asserted finite.
+- Frobenius relation is on actual quotient classes; no packaged quotient conjugation
+  automorphism API and no module transport rho(phi)c(tau)=q*c(tau) were added.
+- Exact-order-p claim is on SAME character value, not on inertia class t itself.
+- Negative-branch nonfixedness is NOT contradiction. No arithmetic conjugacy-invariance
+  supply, positive/negative obstruction exclusion, hclass supply or nonzero H1 claim.
+  Original difference remains in original quotient-module coboundary form.
+- UNCONDITIONAL GENERAL hno REMAINS INCOMPLETE.
+
+Sixteen checked roots and required dependencies:
+PASS: DkMath.Lib.NumberTheory.ValuationWildRigidity.IsWildAt.conjugate; 5433 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.ValuationWildRigidity.inertiaWild_normal; 6966 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.wildInertiaSubgroup_normal; 16289 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.tameInertiaQuotient; 16182 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.tameDifferenceCharacter; 34579 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.tameDifferenceCharacter_mk; 34580 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.tameDifferenceCharacter_continuous; 35365 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.tameDifferenceCharacter_range; 34581 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.tameInertia_frobenius_power; 19959 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.PrimeOrderResonance.pow_eq_self_iff; 2579 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.PrimeOrderResonance.pow_eq_inv; 2578 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.PrimeOrderResonance.inv_ne_self; 1716 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.PrimeOrderResonance.pow_ne_self_of_negative; 2608 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.tame_character_nontrivial; 34817 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.tame_resonant_profile; 42304 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_exists_resonant_tame_character; 83877 reachable constants; required actual theorems present.
+
+Fifteen public input reports:
+PASS inputs: DkMath.Lib.NumberTheory.ValuationWildRigidity.IsWildAt.conjugate; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.ValuationWildRigidity.inertiaWild_normal; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.wildInertiaSubgroup_normal; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.tameInertiaQuotient; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.tameDifferenceCharacter; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.tameDifferenceCharacter_mk; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.tameDifferenceCharacter_continuous; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.tameDifferenceCharacter_range; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.tameInertia_frobenius_power; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.PrimeOrderResonance.pow_eq_self_iff; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.PrimeOrderResonance.pow_eq_inv; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.PrimeOrderResonance.pow_ne_self_of_negative; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.tame_character_nontrivial; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.tame_resonant_profile; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_exists_resonant_tame_character; remaining arithmetic inputs explicit.

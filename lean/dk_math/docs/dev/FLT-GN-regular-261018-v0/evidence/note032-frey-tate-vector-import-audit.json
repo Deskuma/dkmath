@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-06",
+  "new_modules": [
+    "DkMath.Lib.Algebra.PrimePowerTateSequence",
+    "DkMath.FLT.FreyCyclicTateVector"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.Algebra.PrimePowerTateSequence": {
+      "local_module_count": 1,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclicTateVector": {
+      "local_module_count": 311,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/Algebra/PrimePowerTateSequence.lean": true,
+    "DkMath/FLT/FreyCyclicTateVector.lean": true,
+    "DkMathTest/FLT/FreyCyclicTateVector.lean": true,
+    "DkMathTest/FLT/Note032FreyCyclicTateVectorDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateVectorSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 2,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/Algebra/PrimePowerTateSequence.lean": "478f22ccdf3337f5e9312cd255867dbf4adea8691936f659359f07247488a8b0",
+    "DkMath/FLT/FreyCyclicTateVector.lean": "475a6129bc2f3481e27bf337ae681389c99262c4f6f53d9589057c7d40c8f6c7",
+    "DkMathTest/FLT/FreyCyclicTateVector.lean": "bf747df4d9aba76a60c7528bc844f9128c88d15d119886e0c6ef8ef678cc4617",
+    "DkMathTest/FLT/Note032FreyCyclicTateVectorDependencyAudit.lean": "d002738dce66aed06052a5325e1624ea6379afd8a46c681154c9ee73a6c72edb",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateVectorSmoke.lean": "f3b079a78301ce665047366aabbcc5c0930e497c82d218c9bdf268fde5724996"
+  },
+  "boundary": "Comment-aware local source/import audit only. Actual killed compatible point sequences form additive group with induced action and injective functorial maps. SAME conditional Frey tower supplies dependent compatible generators of exact order p^(n+1), actual generating property, nonzero Tate sequence, equivariant additive inclusion into full geometric point Tate sequences, and fixedness iff SAME p-adic character=1. SAME hclass and uniform all-stage hbad retained. No Zp module/rank-one linear isomorphism, Tate rank two, Weil pairing, or final arithmetic contradiction constructed. General hno unfinished. Lean proof/type/constructor and input audits are separate."
+}

@@ -1,0 +1,16 @@
+p,small_prime_bound,small_prime_count,x_digits,R_div_p_digits,all_q_le_B_have_exact_valuation_p,R_div_p_has_no_small_prime_factor,detected_escaping_q,escaping_q_valuation,q_above_B_with_nonmultiple_p_valuation
+3,7,4,7,13,True,True,1279,1,mathematically guaranteed
+3,17,7,17,33,True,True,19,1,mathematically guaranteed
+3,31,11,34,67,True,True,631,1,mathematically guaranteed
+3,97,25,109,217,True,True,919,1,mathematically guaranteed
+3,251,54,302,604,True,True,487,1,mathematically guaranteed
+5,7,4,11,43,True,True,271,1,mathematically guaranteed
+5,17,7,28,111,True,True,241,1,mathematically guaranteed
+5,31,11,56,223,True,True,431,1,mathematically guaranteed
+5,97,25,182,724,True,True,3911,1,mathematically guaranteed
+5,251,54,504,2013,True,True,,,mathematically guaranteed
+7,7,4,16,92,True,True,127,1,mathematically guaranteed
+7,17,7,40,234,True,True,421,1,mathematically guaranteed
+7,31,11,79,469,True,True,127,1,mathematically guaranteed
+7,97,25,254,1522,True,True,1877,1,mathematically guaranteed
+7,251,54,705,4229,True,True,,,mathematically guaranteed

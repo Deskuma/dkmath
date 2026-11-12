@@ -1,0 +1,100 @@
+NOTE-032 TWO STEPS: actual additive Tate sequences and SAME compatible cyclic generators
+Date: 2026-11-06
+Working directory: lean/dk_math
+
+Performed validations; listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyCyclicTateVector DkMathTest.FLT.Note032FreyCyclicTateVectorDependencyAudit
+   Build completed successfully (11122 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12253/12253 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed; only existing file marker printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateVectorSmoke.lean
+   Root exposes actual Tate sequence action/map, SAME compatible generators/exact orders/
+   generating property, additive equivariant inclusion, nonzero vector and fixedness criterion.
+5. Two textbook blocks extracted verbatim to /tmp/n032-tate-book-{1,2}.lean.
+   lake env lean run on each individually; both passed without warnings.
+   Full production source matches, exact file marker immediately after imports retained.
+6. python3 /tmp/n032-tate-import-audit.py
+   Comment-aware local import closures, acyclicity, source scans/SHA256, five exact markers,
+   two full textbook copies, Lib/FLT/root and normal test reachability passed.
+   Closure sizes including self: generic 1, Frey 311. Generic has no FLT imports.
+   No FreyHnoSmallIndex/RegularPrime/HardCase consumers. JSON saved alongside this record.
+7. git diff --check and direct trailing-whitespace checks on all new files passed.
+
+Step 1 IMPLEMENTED:
+- Define actual compatible killed point sequences as additive subgroup of Nat -> G:
+  p^(n+1)*x_n=0 and p*x_(n+1)=x_n. First component is p-torsion; the conventional
+  degree-zero trivial component is omitted. Generic construction needs no prime input.
+- Actual evaluation homomorphisms, annihilation, compatibility and pointwise extensionality.
+- An actual additive homomorphism induces componentwise sequence map; an injective map
+  stays injective. Actual group action induces SAME componentwise action on Tate sequences.
+- This is ADDITIVE construction only: no Zp scalar/module/rank/topology claim.
+
+Step 2 IMPLEMENTED:
+- SAME Source/L/rootField/conditional tower, original class input and uniform all-stage
+  resonant absorption retained. Pick first generator using SAME stage-zero coordinates.
+- Dependent recursion selects actual p-preimage of SAME preceding point inside SAME next
+  stage via existing residualCyclicTower_lift. No unrelated choices of finite generators.
+- Prove p^n*e_n=e_0 !=0 and actual stage annihilation p^(n+1)*e_n=0. Actual point order
+  is p^(n+1) via addOrderOf_eq_prime_pow. Compare Nat.card_zmultiples to SAME stage card
+  to prove each actual chosen point generates ENTIRE SAME stage.
+- Define actual additive subgroup of full geometric point Tate sequences whose nth
+  coordinate belongs to SAME tower stage n. Natural additive inclusion is injective,
+  SAME point action preserves subgroup, restricted action and equivariance proved.
+- Compatible generators define actual nonzero vector in SAME subgroup, detected at degree 0.
+- Fixing this ONE vector iff SAME p-adic tower character=1. Use actual finite generators
+  and earlier SAME union fixedness criterion, not an assumed scalar formula or fixedness.
+- SAME guarded good-reduction Frobenius moves the actual vector, by earlier p-adic
+  Frobenius nontriviality. Movement is not an arithmetic contradiction.
+
+Regression scope:
+- Tate 5 (ZMod 25) is zero: two transitions give x_n=25*x_(n+2)=0. Finite nonzero
+  torsion points are NOT confused with nonzero coherent infinite sequences.
+- Injective original group maps stay injective on actual sequence groups.
+- SAME abstract Source/tower: selected degree-2 point maps to SAME original point under
+  p^2 and has EXACT actual point order p^3; vector's degree-2 entry is SAME chosen point.
+- Inclusion into full geometric point Tate sequences preserves this vector's nonzeroness.
+  No impossible numerical Fermat Source manufactured.
+
+Audit scope and remaining mathematical boundaries:
+- Twelve selected #print axioms reports: standard propext, Classical.choice, Quot.sound only.
+- Twelve recursive traversals inspect checked types, constructors and opaque proof bodies.
+  Reject sorryAx, nonstandard axioms, P2M/P2MW/FltRegular/FreyPackage, old Kummer consumers
+  and FLT endpoints. Require actual previous-stage lift, prime-power order theorem,
+  actual generated-subgroup cardinality, same killed stages and SAME prior character proofs.
+- Ten public input audits preserve SAME hclass/uniform-stage hbad; reject supplied
+  hgen/hnext/hvector/hnonzero/hfixed/hchar/hmoved providers. Actual original point action
+  does not need class/resonance or a new action provider.
+- No new sorry/admit/native_decide/unsafe/custom axioms and no new warnings.
+  Root/suite replay historical sorry warnings in five unrelated existing modules.
+  No whole-repository axiom-clean assertion.
+- New subgroup is DEFINED by SAME stage membership, not yet identified via all p^n
+  torsion in union U. No Zp module structure, rank-one LINEAR isomorphism, scalar action
+  formula, full Tate rank two, Weil pairing or Frobenius characteristic polynomial supplied.
+- hclass, all-stage hbad and final Galois arithmetic remain unfinished. General hno
+  UNFINISHED. No external class/isogeny classification theorem imported or ported.
+
+Decisive audits from successful root build:
+PASS: DkMath.Lib.Algebra.PrimePowerTateSequence.map_injective; 907 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.Algebra.PrimePowerTateSequence.action; 1115 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateGenerators; 80594 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateGenerators_order; 80604 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateGenerators_generate; 80605 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTate_inclusion_injective; 80577 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTateAction; 80610 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTate_inclusion_equivariant; 80612 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTateVector; 80612 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTateVector_ne_zero; 80614 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTateVector_fixed_iff; 81222 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualCyclicTateVector_frobenius_moved; 81289 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.Algebra.PrimePowerTateSequence.sequences; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.PrimePowerTateSequence.map_injective; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.Algebra.PrimePowerTateSequence.action; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualPointActionHom; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateGenerators; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateGenerators_order; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualCyclicTateAction; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualCyclicTateVector_ne_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualCyclicTateVector_fixed_iff; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualCyclicTateVector_frobenius_moved; remaining arithmetic inputs explicit.

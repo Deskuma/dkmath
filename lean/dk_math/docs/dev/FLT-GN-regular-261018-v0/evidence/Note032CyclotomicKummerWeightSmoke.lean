@@ -1,0 +1,15 @@
+import DkMath
+
+#check DkMath.Lib.NumberTheory.KummerRadicalCharacter.radicalCharacter
+#check DkMath.Lib.NumberTheory.KummerRadicalCharacter.conjugate_ratio
+#check DkMath.Lib.NumberTheory.CyclotomicKummerWeight.baseCharacter_lift
+#check DkMath.Lib.NumberTheory.CyclotomicKummerWeight.conjugate_radical_div_mem
+#check DkMath.Lib.NumberTheory.CyclotomicKummerWeight.base_constant_weight_square
+#check DkMath.Lib.NumberTheory.CyclotomicKummerWeight.KummerClass
+#check DkMath.Lib.NumberTheory.CyclotomicKummerWeight.constantClass_ne_one
+#check DkMath.Lib.NumberTheory.CyclotomicKummerWeight.constantClass_weight_square
+#check DkMath.Lib.NumberTheory.CyclotomicKummerWeight.constantVector_weight_square
+#check DkMath.FLT.Frey.Source.residual_nonsplit_has_weight_two_kummer_class
+
+#print axioms DkMath.Lib.NumberTheory.CyclotomicKummerWeight.constantVector_weight_square
+#print axioms DkMath.FLT.Frey.Source.residual_nonsplit_has_weight_two_kummer_class

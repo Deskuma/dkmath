@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-02",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.KummerSelmerClassMap",
+    "DkMath.Lib.NumberTheory.KummerSelmerExact",
+    "DkMath.Lib.NumberTheory.CyclotomicKummerClassMap",
+    "DkMath.FLT.FreyCyclotomicKummerClassMap"
+  ],
+  "acyclic_local_import_closure": true,
+  "new_local_closure_size": 260,
+  "checks": {
+    "DkMath.Lib.NumberTheory.KummerSelmerClassMap": {
+      "local_module_count": 19,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.KummerSelmerExact": {
+      "local_module_count": 20,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.CyclotomicKummerClassMap": {
+      "local_module_count": 23,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclotomicKummerClassMap": {
+      "local_module_count": 260,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "boundary": "An actual representative-independent Selmer-to-ideal-class-group homomorphism and p-torsion codomain, a linear map on the same valuation submodule, and the unit-quotient injection/kernel-image equality/right surjection proving the group short exact sequence. The same cyclotomic constant has an actual class image unchanged by integer rescaling; conditional on its original Selmer membership and zero class image, the same constant is an actual integer-ring unit times a field pth power, preserving its nonzero vector and nontrivial unit quotient class. Original Frey Selmer membership, Galois equivariance and eigenspace transport, arithmetic class/unit vanishing, local pth powers/resonant geometry and tower iteration remain open; general hno is unfinished."
+}

@@ -1,0 +1,58 @@
+NOTE-032 hno global core validation
+Date: 2026-11-01 (Asia/Tokyo)
+Working directory: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+PASS (exit 0): lake build DkMathTest.Lib.Algebra.MazurStepThreeTwoAnchor DkMathTest.Lib.Algebra.TorsionTowerFrobenius DkMathTest.FLT.FreyHnoHardCase
+Build completed successfully (9701 jobs).
+PASS (exit 0): lake build DkMath
+Build completed successfully (11035 jobs).
+PASS (exit 0): lake test
+PASS (exit 0): lake env lean DkMathTest.lean
+PASS (exit 0): lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032HnoGlobalCoreSmoke.lean
+
+Selected axiom audits (22 declarations):
+DkMath.FLT.Five.fermatLastTheoremFor_five: propext, Classical.choice, Quot.sound
+DkMath.FLT.Frey.Source.false_of_regular_prime: propext, Classical.choice, Quot.sound
+DkMath.FLT.Frey.Source.false_of_small_prime_index: propext, Classical.choice, Quot.sound
+DkMath.FLT.Frey.Source.ofCounterexample_hard_case_of_cofixed: propext, Classical.choice, Quot.sound
+DkMath.FLT.Frey.Source.prime_dvd_cyclotomic_classGroup_card: propext, Classical.choice, Quot.sound
+DkMath.FLT.Frey.Source.residual_cofixed_line_forces_hard_case: propext, Classical.choice, Quot.sound
+DkMath.FLT.Frey.Source.residual_cofixed_line_forces_irregular_hard_case: propext, Classical.choice, Quot.sound
+DkMath.FLT.Frey.Source.residual_hno_iff_no_hard_case: propext, Classical.choice, Quot.sound
+DkMath.FLT.Frey.Source.residual_hno_iff_no_irregular_hard_case: propext, Classical.choice, Quot.sound
+DkMath.FLT.Frey.Source.residual_hno_of_regular_prime: propext, Classical.choice, Quot.sound
+DkMath.FLT.Frey.Source.residual_hno_of_small_prime_index: propext, Classical.choice, Quot.sound
+DkMath.FLT.Frey.Source.residual_line_tower_frobenius_impossible: propext, Classical.choice, Quot.sound
+DkMath.FLT.Frey.Source.residual_line_tower_scalar_absorption_impossible: propext, Classical.choice, Quot.sound
+DkMath.FLT.Frey.Source.seventeen_le_of_five_le: propext, Classical.choice, Quot.sound
+DkMath.Lib.Algebra.MazurStepThreeTwoAnchor.eq_zero_of_two_three_specializations: propext, Classical.choice, Quot.sound
+DkMath.Lib.Algebra.MazurStepThreeTwoAnchor.exists_prime_power_nsmul_eq_zero_of_specialization_zero: propext, Classical.choice, Quot.sound
+DkMath.Lib.Algebra.MazurStepThreeTwoAnchor.nonzero_cusp_not_killed_after_two_anchors: propext, Classical.choice, Quot.sound
+DkMath.Lib.Algebra.TorsionTowerFrobenius.false_of_rank_two_scalar_absorbs: propext, Classical.choice, Quot.sound
+DkMath.Lib.Algebra.TorsionTowerFrobenius.nsmul_mem_of_frobenius_relation: propext
+DkMath.Lib.Algebra.TorsionTowerFrobenius.prime_torsion_mem_of_scalar_absorbs: propext, Classical.choice, Quot.sound
+DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.false_of_prime_torsion_tower_frobenius: propext, Classical.choice, Quot.sound
+DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.false_of_prime_torsion_tower_scalar_absorbs: propext, Classical.choice, Quot.sound
+
+PASS: forbidden-token scan on 7 production and 3 regression modules.
+PASS: git diff --check.
+PASS: no new-module warnings in focused checks; historical repository sorry warnings remain.
+PASS: acyclic new local import closure; independent FLT and previous local core closures do not import new hno consumers.
+Import details: note032-hno-global-core-import-audit.json
+
+Boundary: small and regular-prime hno are proved using prior FLT.
+Hard-case reduction, two-anchor algebra, and final torsion/Frobenius algebra are proved.
+Actual Eisenstein quotient/specialization and construction of the Galois-stable torsion tower remain open.
+No unconditional general hno theorem is claimed.
+
+SHA-256 of checked sources:
+a989e13b8b4830c4970d836297ffc01555a7021aff6b3b35e2b7d6c9034351d2  DkMath/FLT/FreyHnoSmallIndex.lean
+22625d59cffa11e8cf1ee47391ff3487a1627cd58aae593dd5262f6cb421c5f3  DkMath/FLT/FreyHnoRegularPrime.lean
+ed9bdc95c5baa38735c0b9ce53229b8a13e3db75d672f0e7b24f071818487214  DkMath/FLT/FreyHnoHardCase.lean
+0c913af6079cf0bb3f7e7c9a3d5e5573b690beebe211b1ad03ab7d55f088d7de  DkMath/FLT/FreyTorsionTowerObstruction.lean
+a95e6abac9f9aec9d5c406408ec388dd063f1a68d84fcc675c816de47b59f120  DkMath/Lib/Algebra/MazurStepThreeTwoAnchor.lean
+3146e23d12edc3cfbd0b1661c6465c3bc0951980a80e603cd2ab5b3d0820ac1b  DkMath/Lib/Algebra/TorsionTowerFrobenius.lean
+1762e9a745289835f93eed76a62ab55699a5262c0e713e7e81e51751ad450048  DkMath/Lib/NumberTheory/EllipticTorsionTowerObstruction.lean
+439f853a0e42021388548c09b3d8710800a00992fa928847618aa1e7edd2c98c  DkMathTest/FLT/FreyHnoHardCase.lean
+37ee51903a14c703da09aabacb912169dea3de732e55b56d040ac3b5cd9dc307  DkMathTest/Lib/Algebra/MazurStepThreeTwoAnchor.lean
+35de2a75b5b44bc17da908480c1a1a3f25567802228528e6762db42f9116d719  DkMathTest/Lib/Algebra/TorsionTowerFrobenius.lean

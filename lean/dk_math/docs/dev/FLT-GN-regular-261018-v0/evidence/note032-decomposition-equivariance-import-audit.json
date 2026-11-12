@@ -1,0 +1,73 @@
+{
+  "date": "2026-11-09",
+  "new_modules": [
+    "DkMath.FLT.FreyDecompositionQuotientAction",
+    "DkMath.FLT.FreyConnectingDecompositionEquivariance",
+    "DkMath.FLT.FreyKernelDecompositionEvaluation",
+    "DkMath.FLT.FreyResidueDecompositionAction",
+    "DkMath.FLT.FreyKernelFrobeniusCovariance",
+    "DkMath.FLT.FreyKernelFrobeniusFixedCriterion",
+    "DkMath.FLT.FreyDecompositionInvariantObstruction"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.FLT.FreyDecompositionQuotientAction": {
+      "local_module_count": 422,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyConnectingDecompositionEquivariance": {
+      "local_module_count": 423,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyKernelDecompositionEvaluation": {
+      "local_module_count": 424,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyResidueDecompositionAction": {
+      "local_module_count": 425,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyKernelFrobeniusCovariance": {
+      "local_module_count": 426,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyKernelFrobeniusFixedCriterion": {
+      "local_module_count": 427,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyDecompositionInvariantObstruction": {
+      "local_module_count": 428,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/FLT/FreyDecompositionQuotientAction.lean": true,
+    "DkMath/FLT/FreyConnectingDecompositionEquivariance.lean": true,
+    "DkMath/FLT/FreyKernelDecompositionEvaluation.lean": true,
+    "DkMath/FLT/FreyResidueDecompositionAction.lean": true,
+    "DkMath/FLT/FreyKernelFrobeniusCovariance.lean": true,
+    "DkMath/FLT/FreyKernelFrobeniusFixedCriterion.lean": true,
+    "DkMath/FLT/FreyDecompositionInvariantObstruction.lean": true,
+    "DkMathTest/FLT/FreyDecompositionEquivariance.lean": true,
+    "DkMathTest/FLT/Note032DecompositionEquivarianceAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032DecompositionEquivarianceSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 7,
+  "new_lean_file_sha256": {
+    "DkMath/FLT/FreyDecompositionQuotientAction.lean": "e3af488e6ddb32fdf8c784207ba3af8e8b62b828c0dc4fb0b025922c941ec2e7",
+    "DkMath/FLT/FreyConnectingDecompositionEquivariance.lean": "2f549caa51d40811f1ef1243906cba72e0e452d1bbc5c68182749187b93b9f67",
+    "DkMath/FLT/FreyKernelDecompositionEvaluation.lean": "21c4d11fcf3bbec0332d838a8a83bdcf124f6eb2440d82bb379957f0b4e43c80",
+    "DkMath/FLT/FreyResidueDecompositionAction.lean": "def88eb6a123a1076012b045c3fa914b846b9d411b097e9571bae92657ab26cd",
+    "DkMath/FLT/FreyKernelFrobeniusCovariance.lean": "40dd64b0df1c14ffd50a9e6d5ba57e91bf3ff649e04ba6419f2e2ce344ca7b4b",
+    "DkMath/FLT/FreyKernelFrobeniusFixedCriterion.lean": "73d095b553da6de7a5df0fb0c9a529d65a9d49af809d3c0dd15551dc940554a3",
+    "DkMath/FLT/FreyDecompositionInvariantObstruction.lean": "2a089c4c5af85a26b049c19b51d95204a6dc2b160dd59bf6a0218c0fc9fd4a00",
+    "DkMathTest/FLT/FreyDecompositionEquivariance.lean": "64bd7859d70a4adefa60ecd837911c6e8c4bf2be44319770f84cbbb918c5e6cf",
+    "DkMathTest/FLT/Note032DecompositionEquivarianceAudit.lean": "8b02d327e294c3b9e9ea66324e8f4a3b495776034062f72bcb1987e08fa717ed",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032DecompositionEquivarianceSmoke.lean": "efe6a74fe67a8b7156ad587269c18f9760a8261a4a6afba959336cef187df41b"
+  },
+  "proper_FLT_facade_reachability": true,
+  "all_seven_modules_actual_FLT": true,
+  "boundary": "Seven FLT modules preserving original Source. OLD Q/F-to-K connecting equivalence made D-equivariant and checked against SAME point/cocycle evaluation. SAME F,E,K actions descend to actual D/I. Actual Frobenius satisfies q*ev_gamma(phi*k)=phi_F(ev_gamma(k)); actual finite p-power coefficient gives q-injectivity and iff fixedness criterion. SAME obstruction gamma value is nonzero; Frobenius supplied internally. No actual invariance/eigenvalue, H1(D,F) lift, class vanishing or global Selmer supply; unconditional hno remains open."
+}

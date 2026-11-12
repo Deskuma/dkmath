@@ -1,0 +1,48 @@
+NOTE-032 Mazur local inputs validation
+Date: 2026-11-01 (Asia/Tokyo)
+Working directory: /home/deskuma/develop/lean/dkmath/lean/dk_math
+
+PASS (exit 0): lake build DkMathTest.Lib.NumberTheory.WeierstrassNodalCenterCharThree DkMathTest.Lib.NumberTheory.EllipticRationalLocalTransport DkMathTest.FLT.FreyMazurLocalInputs
+Build completed successfully (4240 jobs).
+PASS (exit 0): lake build DkMath
+Build completed successfully (11028 jobs).
+PASS (exit 0): lake test
+PASS (exit 0): lake env lean DkMathTest.lean
+PASS (exit 0): lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032MazurLocalInputsSmoke.lean
+
+Axiom audit:
+DkMath.FLT.Frey.Source.residualTriadicValuationModel_residue_invariants: propext, Classical.choice, Quot.sound
+DkMath.FLT.Frey.Source.residual_cofixed_implies_geometric_prime_torsion_local_inputs: propext, Classical.choice, Quot.sound
+DkMath.FLT.Frey.Source.residual_cofixed_implies_geometric_rational_prime_torsion: propext, Classical.choice, Quot.sound
+DkMath.FLT.Frey.Source.residual_cofixed_mazur_integer_invariants: propext, Classical.choice, Quot.sound
+DkMath.FLT.Frey.Source.residual_cofixed_two_nsmul_not_smooth_above_two_three: propext, Classical.choice, Quot.sound
+DkMath.Lib.NumberTheory.EllipticRationalLocalTransport.hasSmoothReduction_iff_zero_or_exists: propext, Classical.choice, Quot.sound
+DkMath.Lib.NumberTheory.EllipticRationalLocalTransport.hasSmoothReduction_integer_baseChange_iff: propext, Classical.choice, Quot.sound
+DkMath.Lib.NumberTheory.EllipticRationalLocalTransport.integer_residue_invariants_iff: propext, Classical.choice, Quot.sound
+DkMath.Lib.NumberTheory.EllipticRationalLocalTransport.ratCast_nonunits_iff: propext, Classical.choice, Quot.sound
+DkMath.Lib.NumberTheory.WeierstrassNodalCenterCharThree.c4_eq_b2_sq: propext, Classical.choice, Quot.sound
+DkMath.Lib.NumberTheory.WeierstrassNodalCenterCharThree.candidate_defect_identity: propext, Classical.choice, Quot.sound
+DkMath.Lib.NumberTheory.WeierstrassNodalCenterCharThree.singularCentre_of_char_three_of_delta_zero_of_c4_ne_zero: propext, Classical.choice, Quot.sound
+
+PASS: forbidden-token scan on 12 changed/new implementation and test files.
+PASS: git diff --check.
+PASS: no new warnings in focused regression, facade smoke, or root test entrance.
+Root/suite include historical sorry warnings and historical sorryAx audits outside the new endpoints.
+This evidence does not assert the whole repository is sorry-free.
+
+Boundary: local point, integer invariants, and all extension valuations above 2 and 3 are proved.
+Global Mazur Step Three and the later general cofixed/hno exclusion are not proved.
+
+SHA-256 of checked Lean sources:
+d1c5f7c03176831c0f280ac3978e6edc32d6ba66214540538fbe1958402d7cc0  DkMath/FLT/FreyRationalTwoPTorsion.lean
+1c5173b7493d3a1a00f9ab678953710e1a8299555382c20e529d1143c00e82c8  DkMath/FLT/FreyTriadicComponentObstruction.lean
+ae7995316a57686c096fbd118bd94afab3d09802c8a05a5883c261ce9d855085  DkMath/FLT/FreyMazurLocalInputs.lean
+568ef94e1b1a1fb2fab8f76930abdb057501f1a351acb2ed787b2327b3ea58b8  DkMath/Lib/Algebra/FiniteAdditiveTorsionQuotient.lean
+bd9ae6faf6f59f3afb43270d47b2ec31c0eff5f86e60fa180e5c61d786d9a148  DkMath/Lib/NumberTheory/EllipticLocalComponentObstruction.lean
+7d41d124d973c3597660bacb0c5af08a16fea1e15a9648a77f44ced9d993fc3d  DkMath/Lib/NumberTheory/EllipticLocalComponentObstructionCharTwo.lean
+4cb8426b0e103a5875529096457db0c2befaf000b95d3d3d469d87823f57e440  DkMath/Lib/NumberTheory/EllipticLocalComponentObstructionCharThree.lean
+2daac5740bb9ac4f6e11a66709b4023be10a3f44eb1b8cb17ce27f3f9b2491d9  DkMath/Lib/NumberTheory/EllipticRationalLocalTransport.lean
+7cf8f088083c945c7d1fea56f222e47c3bfb8d3c65c2100e97ed07e89c5eb17e  DkMath/Lib/NumberTheory/WeierstrassNodalCenterCharThree.lean
+471f292d8e5189ef42282c15b7e78e7bd54c5f954412f0c44bdd9bbe4bdbcfa4  DkMathTest/FLT/FreyMazurLocalInputs.lean
+cc84202b25a4dc5f0f669db516cf1e6b2c2d7947b917a5e690f95c22c1a344b3  DkMathTest/Lib/NumberTheory/EllipticRationalLocalTransport.lean
+7e45d563342934ab6509a906dce47b16ecb1ebe6c4f87640b6b2fcfd04777e1b  DkMathTest/Lib/NumberTheory/WeierstrassNodalCenterCharThree.lean

@@ -1,0 +1,113 @@
+NOTE-032 TWO STEPS: SAME fixed places/projector trace; actual unit arithmetic CLOSED for p>=5
+Date: 2026-11-06
+Working directory: lean/dk_math
+
+Performed validations, listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.CyclotomicUnitClosure DkMathTest.FLT.Note032CyclotomicUnitClosureDependencyAudit
+   Build completed successfully (11114 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12237/12237 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed; only its existing file marker printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicUnitClosureSmoke.lean
+   Root exposes actual fixed-place criterion/count, SAME unitAction/projector traces,
+   actual rank one, actual primary-unit vanishing, global integer-unit pth root,
+   and new SAME Frey complement endpoint with only hbad,hclass arithmetic inputs.
+5. Three textbook blocks extracted verbatim to /tmp/n032-unitclosure-book-{1,2,3}.lean.
+   lake env lean run on each individually; all passed without warnings. Each equals
+   its full production source, including copyright and exact marker after imports.
+6. python3 /tmp/n032-unitclosure-import-audit.py
+   Comment-aware syntactic local import closures, acyclicity, source scans/hashes,
+   Lib/FLT/root/normal-test reachability, six exact markers and three textbook copies passed.
+   Local closure sizes including self: 35,42,295. Neither new Lib module imports DkMath.FLT.
+   New production closures exclude old FreyHnoSmallIndex/RegularPrime/HardCase consumers.
+7. git diff --check and direct trailing-whitespace checks on new Lean/textbook files passed.
+
+Step 1 IMPLEMENTED:
+- Retain SAME specified root, rootField and existing characterEquiv. Actual inverse
+  Galois action on the root uses exponent d^-1, never silently d.
+- Infinite-place equality is split by actual complex embedding equality or conjugate
+  equality. Embedding injectivity yields d=1 in the first case.
+- In the second case primitive-root norm is one, conjugation is inversion, and SAME
+  primitive-root order yields d^-1=-1, hence d=-1.
+- Converse for -1 uses SAME primitive-root power basis to prove full embedding
+  conjugacy, not just equality on an unrelated generator.
+- For p>2, actual sigma_d fixes any infinite place iff d=+/-1.
+  Actual count is (p-1)/2 in those two cases and zero otherwise. No count provider.
+
+Step 2 IMPLEMENTED:
+- Substitute actual fixed count into previously proved SAME unitAction trace.
+  trace(rho_d)=(d-1)+indicator(d=+/-1)*(p-1)/2 in Fp.
+- Obtain linear-map finite-sum equality from SAME existing omegaSquareProjector's
+  apply-units API; do not define a replacement projector or vector space.
+- Trace linearity, finite-field inverse-power sums for exponents 1,2, distinct +/-1
+  indicator sum and prime oddness give actual trace(omegaSquareProjector)=1.
+- Use previous actual finite dimension/range/<p bounds to derive natural finrank of
+  SAME weightSquareSpace equal to 1 WITHOUT hrank/htrace provider.
+- Combine SAME projected-global-unit nonzero log with that rank to prove actual
+  primaryWeightSquareSpace=bottom WITHOUT hunit/hdetect provider (prime p>=5).
+- Actual integer unit satisfying SAME eigen/local conditions has a GLOBAL integer
+  unit pth root. Quotient vanishing is converted through its proved power criterion.
+
+Frey integration IMPLEMENTED:
+- New residual_cyclic_extension_has_stable_complement_of_class_vanishing supplies
+  actual unit arithmetic internally, returns stable complement to SAME torsionImage
+  in SAME original preimageRepresentation.
+- It has no hrank,htrace,hunit,hdetect,g,v,P,hsurj,hns inputs.
+- It RETAINS exact hbad and actual class quotient hclass, and all original Source,
+  line/cofixed, cyclic stage, stability, cardinality, m>=1 and base-inclusion guards.
+- This remains CONDITIONAL on hbad/hclass and is NOT general hno closure.
+
+Regression scope:
+- Actual fifth/seventh primitive roots in Qbar and SAME root fields, integer rings,
+  character equivalences, actions, projectors and spaces.
+- At p=5, inverse Galois root exponent for d=2 is 3, not 2.
+- Fixed counts at +/-1 are 2; d=2 has zero fixed places and fixes no place.
+- SAME total unitAction traces at p=5: d=-1 gives 0, d=2 gives 1.
+  Fixing all complex places is not confused with identity on the unit quotient.
+- Actual projector trace=1, actual omega-square dimension=1 and actual primary
+  space=bottom hold with no corresponding providers. Actual unit global-root criterion applied.
+- At p=7 fixed count for -1 is 3 and same actual trace/rank/vanishing verified.
+
+Audit scope:
+- Twelve selected #print axioms reports contain only propext, Classical.choice, Quot.sound.
+- Twelve recursive traversals inspect types, constructors and opaque proof bodies,
+  reject sorryAx, external P2M/P2MW/FltRegular/FreyPackage, old Kummer consumers,
+  FLT endpoints and all nonstandard axioms; require actual fixed-place/log/rank bridges.
+- Eight public-input audits check absence of fixed-count/trace/rank/unit providers,
+  global-root result retains actual unit membership, and SAME Frey endpoint keeps
+  hbad,hclass and original cyclic-stage guards while removing all unit-side inputs.
+- No new warnings, sorry/admit/native_decide/unsafe/custom axioms.
+  Root output replays historical sorry warnings in unrelated existing modules;
+  no whole-repository axiom-clean assertion is made.
+
+Remaining mathematical boundary:
+- Unit-side omega-square rank and primary-unit vanishing are now CLOSED for p>=5
+  under the stated SAME primitive-root/actual-space definitions.
+- Actual class quotient vanishing hclass, resonant-prime hbad, cyclic tower iteration
+  and final general hno connection remain open. General hno remains UNFINISHED.
+- Adapted fixed-place and finite-sum sources retain Apache copyright, License/NOTICE
+  paths and upstream blob. Local HEAD/blob were re-read. No external theorem imported
+  or external checkout built or independently axiom-audited; see matching JSON provenance.
+
+Decisive recursive proof and public-input audits from the successful root build:
+PASS: DkMath.Lib.NumberTheory.CyclotomicInfinitePlaceFixed.symm_symm_apply_zeta; 48430 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicInfinitePlaceFixed.smul_infinitePlace_eq_self_iff; 49088 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicInfinitePlaceFixed.card_fixedPlaces_prime; 66755 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.sum_inv_sq_mul_sub_one; 13274 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.sum_inv_sq_mul_indicator; 5922 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.trace_unitAction; 72595 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.omegaSquareProjector_eq_units_sum; 48514 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.trace_omegaSquareProjector; 72644 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.weightSquareSpace_finrank_eq_one; 72762 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.primaryWeightSquareSpace_eq_bot; 74006 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.exists_global_unit_pow_of_primary; 74009 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_cyclic_extension_has_stable_complement_of_class_vanishing; 80501 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicInfinitePlaceFixed.smul_infinitePlace_eq_self_iff; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicInfinitePlaceFixed.card_fixedPlaces_prime; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.trace_unitAction; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.trace_omegaSquareProjector; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.weightSquareSpace_finrank_eq_one; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.primaryWeightSquareSpace_eq_bot; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.CyclotomicOmegaSquareTrace.exists_global_unit_pow_of_primary; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_cyclic_extension_has_stable_complement_of_class_vanishing; remaining arithmetic inputs explicit.

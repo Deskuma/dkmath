@@ -1,0 +1,100 @@
+{
+  "checkpoint": "NOTE-031-005",
+  "date": "2026-10-23",
+  "branch": "feat/FLT-GNR-031-05-261023-codex",
+  "base_commit": "4c7735e601f11f00bbe4e461996f63ed2dd86482",
+  "status": "IMPLEMENTED: common-side local synthesis, global stable-line dichotomy, hcases supplied; hno remains an explicit obstruction",
+  "approach": "Compose existing checked DkMath mathematical providers while preserving the same Source and submodule",
+  "lean_version": "4.34.1",
+  "lean_commit": "5045d0056413266e57c625dcd7c365b10e377c52",
+  "mathlib_commit": "d13f23b723b8a846827a245b89c10fc7d3f11612",
+  "providers": [
+    {
+      "path": "DkMath/FLT/FreyPrimeFiltration.lean",
+      "git_blob": "db481638c59e89c53b13b61bea736e460985d490",
+      "sha256": "b2c14535f55c0bc30c2fef3250cc3a0536439f93fe7e8bdf8fd4305deb979842",
+      "role": "031-004: common side over all places above p, both reduction cases"
+    },
+    {
+      "path": "DkMath/FLT/FreyDyadicInertia.lean",
+      "git_blob": "7cf39fbda47495371a567227a7325eefd8e79fd7",
+      "sha256": "bf2e82d1893464566832786079de649ddf25383b8cca393b0a8c2421a83a1152",
+      "role": "031-003: fixed and cofixed simultaneously above 2"
+    },
+    {
+      "path": "DkMath/FLT/FreyUnramifiedAway.lean",
+      "git_blob": "127e0a8aa9b8310980c0f2b1e5a75c2b9a499278",
+      "sha256": "1a9c6a7d357fa4197a46dc0d1fd07ff37a401710ad9ad27d5bc74c5a4e50d4bf",
+      "role": "031-002: full inertia fixedness away from 2 and p"
+    },
+    {
+      "path": "DkMath/FLT/FreyInertiaTransport.lean",
+      "git_blob": "dcb3e9438dd90f5af947c757e231a3c1058ca9cd",
+      "sha256": "44aec7ca764a5971ebecf3f8845e3d083838e4a5c832f437fa37211391a90bab",
+      "role": "031-001: same residual representation, local inertia to global conditions"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/AbsoluteInertiaGeneration.lean",
+      "git_blob": "0ab1e3e26b8d55b1c362426061b55a5446664625",
+      "sha256": "f6b9114a4f6740737340bdb8babf9b8e35d81a8cd0ee085ce407e85a4c0befdf",
+      "role": "Actual finite-level inertia generation and Minkowski bridge"
+    },
+    {
+      "path": "DkMath/FLT/FreyRationalTorsionBridge.lean",
+      "git_blob": "9f22442ca6d36cad241581d2f14457440575c210",
+      "sha256": "b3faf8fd10d40c8c2e4a42e26e8d2d337c0f29e4a590042412431fbaa284fef9",
+      "role": "NOTE-030: exclude fixed side using rational p-torsion vanishing"
+    },
+    {
+      "path": "DkMath/FLT/FreyCounterexample.lean",
+      "git_blob": "0cfdc37490ecc0a675ce4133e071d12603b03de9",
+      "sha256": "cd023ea5cf14549611c4f0688868677f665a4609190d70c7f5d486bb00be68f0",
+      "role": "Same chosen Source, PrimitiveReduction and OrientationTrace"
+    }
+  ],
+  "audit": {
+    "new_production_declarations": [
+      "DkMath.FLT.Frey.Source.residual_inertia_common_side_of_stable",
+      "DkMath.FLT.Frey.Source.residual_stable_submodule_fixed_or_cofixed",
+      "DkMath.FLT.Frey.Source.residual_stable_line_fixed_or_cofixed",
+      "DkMath.FLT.Frey.Source.residual_stable_line_cofixed_of_oriented",
+      "DkMath.FLT.Frey.Source.residual_exists_cofixed_line_of_not_irreducible",
+      "DkMath.FLT.Frey.Source.residual_isIrreducible_of_oriented_cofixed_obstruction",
+      "DkMath.FLT.Frey.Source.residual_not_irreducible_iff_exists_cofixed_line_of_oriented",
+      "DkMath.FLT.Frey.Source.ofCounterexample_residual_exists_cofixed_line"
+    ],
+    "new_regression_declarations": [
+      "FreyStableLineLocalGlobalTest.source37_dichotomy",
+      "FreyStableLineLocalGlobalTest.source37_stable_line_cofixed",
+      "FreyStableLineLocalGlobalTest.source37_cofixed_of_reducible",
+      "FreyStableLineLocalGlobalTest.source37_irreducible_with_obstruction",
+      "FreyStableLineLocalGlobalTest.counterexample37_profile",
+      "FreyStableLineLocalGlobalTest.actual_two_boundary",
+      "FreyStableLineLocalGlobalTest.incompatible_local_sides_boundary"
+    ],
+    "dependency_graph_roots": 12,
+    "input_contracts": 7,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "forbidden_dependencies": [
+      "sorryAx",
+      "FltRegular",
+      "P2M",
+      "P2MW",
+      "FreyPackage",
+      "RegularKummer",
+      "DkMath.FLT.Kummer",
+      "external FLT endpoints"
+    ],
+    "FoldedValuationOrbit": "Excluded from local/global dichotomy roots; required through the checked NOTE-030 rational-torsion exclusion on the cofixed selection path"
+  },
+  "remaining_obstruction": "Nonexistence of a cofixed stable line on the same oriented Source; not proved here",
+  "new_source_sha256": {
+    "DkMath/FLT/FreyStableLineLocalGlobal.lean": "3f645fea057a7f6318d7ec1f6d113c9ba42e008b7b163505dc35a022b8f797cd",
+    "DkMathTest/FLT/FreyStableLineLocalGlobal.lean": "cc3598df8e514519fb5830363e2326a268a9d7554e6beb05778a3e8fb7f56268",
+    "DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean": "bedd2f1153df77333a43c2a45d200b074dde9c503dd7e009848dc91489640350"
+  }
+}

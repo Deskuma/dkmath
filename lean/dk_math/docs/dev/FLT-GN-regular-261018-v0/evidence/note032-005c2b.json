@@ -1,0 +1,347 @@
+{
+  "checkpoint": "NOTE-032-005C2B",
+  "date": "2026-10-25",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "3f6cd7f1d42dad1ebf5cac6824fbe95457f28062",
+  "status": "exact poles, nonconstancy and individual transcendence of same normalized coordinates completed; fixed-field generation and target equation remain open",
+  "production": [
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticCoordinatePoles.lean",
+      "public_theorems": [
+        "pointValuation_zero_genericX",
+        "pointValuation_zero_genericY",
+        "pointValuation_genericX_le_one",
+        "pointValuation_genericY_le_one",
+        "pointValuation_zero_const_le_one",
+        "pointValuation_const_le_one",
+        "pointValuation_const_eq_one",
+        "transcendental_of_point_pole"
+      ],
+      "sha256": "5f2e6174db0d9d4028077f8884b8b7e28c7e42e55905224f3f4de086a1497a36"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelPoles.lean",
+      "public_theorems": [
+        "normalized_trace_valuation_zero",
+        "veluX_valuation_zero",
+        "veluY_valuation_zero",
+        "veluX_ne_const",
+        "veluY_ne_const",
+        "veluX_ne_zero",
+        "veluY_ne_zero",
+        "normalized_trace_regular_outside",
+        "veluX_regular_outside",
+        "veluY_regular_outside",
+        "veluX_valuation_of_mem",
+        "veluY_valuation_of_mem",
+        "velu_pole_support",
+        "velu_orders_of_mem",
+        "card_velu_pole_support",
+        "velu_total_pole_orders",
+        "veluX_transcendental",
+        "veluY_transcendental"
+      ],
+      "sha256": "8072ee7e0122aa22db20f935dd6fcd39695de46b4f6c8276f4af1caac978dde2"
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelPoles.lean",
+      "public_theorems": [
+        "residual_kernel_coordinates_nonconstant",
+        "residual_kernel_coordinate_valuations_of_mem",
+        "residual_kernel_coordinate_pole_support"
+      ],
+      "sha256": "61fe38552b08c2c1a94c61fe7e89987b32151a3f80401ed341e3b744025114d5"
+    }
+  ],
+  "mathematical_changes": {
+    "coordinates": "reuse existing all-point valuation; x,y have values exp2,exp3 at O, regular at finite points; constants regular everywhere, nonzero constants value1",
+    "dominant_sum": "only Q=O term has pole at O; other terms and arbitrary normalization constant regular; unique strictly greatest valuation survives",
+    "support": "same actual normalized functions have exact pole support H; values exp2,exp3 on H, at most1 outside H",
+    "orders": "nonzero functions have local integer orders -2,-3 on H; actual pole set cardinal |H|; total pole orders over finite set H are 2|H| and 3|H|",
+    "transcendence": "pole forces any nonzero polynomial evaluation nonzero; each normalized coordinate individually transcendental over coefficient field",
+    "Source": "same residualKernelX/residualKernelY, same actual pointSubgroup, nonconstancy, kernel valuations and exact support; no stable/cofixed hypothesis for pole computation"
+  },
+  "generality": [
+    "general field K, elliptic E and same actual finite subgroup H",
+    "no characteristic-zero, prime-order or odd-order requirement in Lib owners",
+    "point valuations on function field, distinct from dyadic valuation on coefficient field",
+    "individual transcendence does not assert algebraic independence of pair"
+  ],
+  "existing_owners_reused": [
+    "EllipticWeilTransport.pointValuation",
+    "EllipticWeilTransport.pointValuation_transEquiv",
+    "EllipticWeilTransport.pointOrder_eq_neg_log",
+    "EllipticTranslationInfinity.InfinityCoordinateRing norm-degree lemmas",
+    "Valuation.map_sum_eq_of_lt",
+    "Valuation.map_aeval_eq_pow_of_one_lt"
+  ],
+  "checks": {
+    "target_build": {
+      "command": "lake build DkMath.FLT.FreyFiniteKernelPoles",
+      "includes_three_new_production_modules": true,
+      "jobs": 4062,
+      "exit_code": 0,
+      "warnings": 0
+    },
+    "production_theorems": 29,
+    "standalone_boundary_theorems": 9,
+    "standalone_example_definitions": 2,
+    "same_Source37_smoke_theorems": 4,
+    "audited_declarations": 44,
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "axiom_results": {
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointValuation_zero_genericX": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointValuation_zero_genericY": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointValuation_genericX_le_one": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointValuation_genericY_le_one": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointValuation_zero_const_le_one": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointValuation_const_le_one": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointValuation_const_eq_one": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.transcendental_of_point_pole": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.normalized_trace_valuation_zero": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_valuation_zero": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_valuation_zero": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_ne_const": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_ne_const": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_ne_zero": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_ne_zero": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.normalized_trace_regular_outside": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_regular_outside": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_regular_outside": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_valuation_of_mem": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_valuation_of_mem": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_pole_support": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_orders_of_mem": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.card_velu_pole_support": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_total_pole_orders": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_transcendental": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluY_transcendental": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_kernel_coordinates_nonconstant": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_kernel_coordinate_valuations_of_mem": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "DkMath.FLT.Frey.Source.residual_kernel_coordinate_pole_support": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelPolesTest.actual_kernel_orders": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelPolesTest.actual_total_poles": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelPolesTest.rationalR": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelPolesTest.R": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelPolesTest.R_outside": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelPolesTest.actual_outside_regular": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelPolesTest.actual_nonconstant": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelPolesTest.actual_transcendental": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelPolesTest.cancellation_boundary": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelPolesTest.constant_boundary": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "EllipticFiniteKernelPolesTest.trivial_support": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FiniteKernelPolesSmoke.source37_nonconstant": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FiniteKernelPolesSmoke.source37_line_point_poles": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FiniteKernelPolesSmoke.source37_pole_support": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "Note032FiniteKernelPolesSmoke.source37_zeroComponent_pole_support": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    "forbidden_construct_scan": "passed",
+    "lib_only_dependency_nodes": 44,
+    "prior_owners_unchanged": 30,
+    "original_note032_and_005c2a_report_and_evidence_unchanged": true,
+    "tracker": "OK: no mismatches found",
+    "normal_test_body_matches_independent_boundary": true,
+    "entrance_and_test_registration": "static only",
+    "git_diff_check": "passed",
+    "full_root_and_test_builds": "user validation split; not run",
+    "local_document_links": 110,
+    "new_file_whitespace_checks": 9
+  },
+  "boundary_examples": [
+    "actual same curve y^2=x^3-x, same H={O,(1,0)}: poles exp2/exp3, orders -2/-3",
+    "actual pole sets cardinal2; total pole orders4/6",
+    "construct actual rational R=(-1,0), outside same kernel and regular for both functions",
+    "same functions nonconstant, individually transcendental and polynomial evaluation injective",
+    "equal-valued x and -x cancel; strict dominance necessary",
+    "normalized zero function stays zero; pole hypothesis necessary",
+    "trivial kernel has only O as pole and excludes nonzero Q"
+  ],
+  "remaining": [
+    "005C2C connect total pole orders to function-field extension degrees",
+    "same fixed-field generation and relative degrees2/3 not proved",
+    "target curve coefficients/equation and nonsingularity",
+    "actual point map and regular extension, additivity, exact kernel and equivariance for 005C1",
+    "zero-component transport at same place",
+    "global escape, general hno, Mazur Step Three, stable cyclic tower and general FLT"
+  ]
+}

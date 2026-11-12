@@ -1,0 +1,31 @@
+NOTE-032 POINT-SPECIALIZATION — 2026-10-26 JST
+branch: dev/FLT-GN-regular-261018-v0
+base HEAD: a212cc31359647f7b1ea36b09bf34d8a2d5d3b04
+
+PASS lake build DkMath.FLT.FreyFiniteKernelSpecialization (4088 jobs, zero warnings)
+PASS lake env lean evidence/Note032PointSpecializationBoundary.lean (11 theorems)
+PASS lake env lean evidence/Note032PointSpecializationSmoke.lean (5 Source37 theorems)
+PASS lake env lean tmp/note032-isogeny/Axioms.lean (67 declarations; actual boundary/smoke bodies re-elaborated)
+PASS axiom dependencies limited to propext, Classical.choice, Quot.sound
+PASS forbidden-construct/external-proof-import scans
+PASS textbook docstrings, DkMath.Lib markers and import-adjacent file markers
+PASS Lib-only transitive DkMath import closure
+PASS check_tracker_mismatch.py
+PASS facade imports statically registered; normal test equals independent boundary except marker
+PASS prior Lean owners unchanged except additive facade imports
+PASS NOTE-032 and previous quotient-model contract/evidence preserved
+PASS inspected upstream Git blob verification; Apache LICENSE/NOTICE retained
+PASS JSON roundtrip, local document links, new-file whitespace, git diff --check
+
+Completed: unique finite evaluation and evaluation AlgHom; SAME kernel-coordinate
+specialization/sums/equation/translation/negation; actual reflection-fixed points
+land in target two-torsion roots; odd-prime nonzero-two-torsion points outside kernel.
+Conditional: actual three-image separation implies target Delta!=0; target IsElliptic
+input gives all-point FUNCTION with exact zero fiber H and H-orbit invariance.
+Examples: same actual curve and two-point kernel yield (-2,0); distinct R,R+Q collide
+in x-image for even kernel; pole guard, cusp separation guard and trivial-kernel map.
+Remaining: actual odd-kernel image separation, unconditional target ellipticity,
+additivity/regular morphism/equivariance, isogeny, zero-component transport, hno.
+
+Full/root builds and lake test were not run; user performs the full build.
+Raw logs and inspection sources are temporary under tmp/note032-isogeny.

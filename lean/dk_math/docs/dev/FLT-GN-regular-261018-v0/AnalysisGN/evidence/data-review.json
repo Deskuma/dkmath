@@ -1,0 +1,34 @@
+{
+  "scope": "independent exact integer recomputation; finite data validation, not a Lean proof or full rerun of the supplied experiments",
+  "csv_files_present": 14,
+  "stored_example_rows_recomputed": 2183,
+  "aggregate_summary_csvs_not_regenerated": [
+    "data-1/DkMath_exponent_gauge_summary.csv",
+    "data-2/DkMath_gauge_v2_summary.csv",
+    "data-3/DkMath_gauge_v3_sweep.csv",
+    "data-4/DkMath_gauge_v4_sweep.csv"
+  ],
+  "bounded_contract_checks": {
+    "max_x": 25,
+    "degrees": "2..14",
+    "primitive_pairs": 199,
+    "cases": 2587
+  },
+  "v4_size_guard_counterexample": {
+    "p": 3,
+    "B": 3,
+    "y": 1001,
+    "M": 2,
+    "g": 72,
+    "x": 1073,
+    "interval_lower_bound_holds": false
+  },
+  "referenced_but_absent_csvs": [
+    "data-3/DkMath_gauge_v3_primitive_rare.csv",
+    "data-3/DkMath_gauge_v3_targeted.csv",
+    "data-2/DkMath_gauge_v2_trajectory.csv",
+    "data-2/DkMath_gauge_v2_uncertified.csv",
+    "data-4/DkMath_gauge_v4_trajectory.csv"
+  ],
+  "status": "PASS"
+}

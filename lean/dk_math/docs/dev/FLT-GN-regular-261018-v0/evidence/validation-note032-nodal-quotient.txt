@@ -1,0 +1,26 @@
+NOTE-032-NODAL-QUOTIENT validation (2026-10-26)
+Base HEAD: e9653adda33a53912e3ebcbbd81326b5cd7bef7e
+Branch: dev/FLT-GN-regular-261018-v0
+PASS focused production build: DkMath.FLT.FreyFiniteKernelNodalReduction
+PASS focused test build: DkMathTest.Lib.NumberTheory.WeierstrassNodalVelu
+PASS Source37 direct Lean: 4 theorems
+PASS axiom audit: 48 public declarations; only propext, Classical.choice, Quot.sound
+PASS forbidden-construct, P2M-command and external-proof-import scan
+PASS Lib dependency direction, textbook docstrings and promotion markers
+PASS file markers after imports and tracker mismatch check
+PASS facade import registration (static)
+PASS protected previous mathematical owners, checkpoint and evidence unchanged
+PASS appended README, ROADMAP and History preserve all previous contents
+PASS upstream solution blob hash and Apache-2.0 adaptation provenance
+PASS git diff HEAD --check, new-file whitespace and documentation links
+Counts: 6 new production owners, 26 public theorems, 5 definitions
+Tests: 9 theorems, 4 definitions
+Nonvacuous tests: actual nodal points from primitive roots, exact additive orders and generated kernel cards
+Characteristic 2: actual kernels of orders 3 and 37, same quotient discriminant 0 and c4 1
+Characteristic 3: actual kernels of orders 5 and 37, same quotient discriminant 0 and c4 1
+Boundary: order-2 canonical half fails inversion-half condition
+Completed: same cyclic nodal kernel invariant formulas c4'=n^4 c4, c6'=n^6 c6 and Delta'=0 in arbitrary characteristic
+Completed: same actual prime-cardinality kernel and valuation target residue connected without half-kernel replacement
+Completed: same Source integer target formally multiplicative at bad odd primes distinct from p; no Disjoint input
+Completed: same Source integer target formally multiplicative at 2 for p>=5; no geometry provider
+Unresolved: good reduction preservation, q=p control, discriminant depths, full zero-component transport, scheme isogeny, target torsion exclusion and general hno

@@ -1,0 +1,36 @@
+GN-Nested-State-Transport-261018-v0 local validation (2026-10-18)
+CWD: lean/dk_math
+Lean 4.34.1 (commit 5045d0056413266e57c625dcd7c365b10e377c52)
+
+PASS: lake build DkMath DkMath.FLT.Kummer
+Build completed successfully (10549 jobs).
+
+PASS: lake build DkMathTest
+Build completed successfully (11440 jobs).
+Existing ThreeGNDescent, FiveGNDescent, SevenGNDescent regressions present.
+
+PASS: lake build DkMathTest.FLT.Kummer.RegularTransportDependencyAudit
+Build completed successfully (9311 jobs).
+PASS: 75 new public declarations use only the allowed logical axioms.
+PASS: DkMath.FLT.Kummer.RegularDescent.descent_step; 19847 reachable constants; expected providers present.
+PASS: DkMath.FLT.Kummer.RegularDescent.no_state; 19854 reachable constants; expected providers present.
+PASS: DkMath.FLT.Kummer.RegularDescent.no_cubic_state; 73798 reachable constants; expected providers present.
+PASS: DkMath.FLT.Kummer.RegularDescent.no_quintic_state; 74333 reachable constants; expected providers present.
+PASS: DkMath.FLT.Kummer.SevenDescent.descent_step_via_regular; 75609 reachable constants; expected providers present.
+PASS: DkMath.FLT.Kummer.SevenDescent.State.ramified_depth_dvd_iff; 72856 reachable constants; expected providers present.
+PASS: DkMath.FLT.Kummer.RegularDescent.not_int_solution_caseII; 26664 reachable constants; expected providers present.
+
+PASS: lake env lean DkMathTest.lean
+PASS: lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmoke.lean
+Root-only import checks both new APIs and existing FLT3/5/7 endpoints.
+
+PASS: 9 new production files contain no sorry/admit/custom axiom constructs.
+PASS: 13 new Lean source/artifact files have no trailing whitespace.
+PASS: git diff --check
+PASS: no warnings in the final audit build from the new modules or tests.
+
+Axiom whitelist: propext, Classical.choice, Quot.sound.
+Full builds replay historical warnings, including historical sorry declarations in unrelated modules.
+The new declaration and dependency audits check actual theorem dependencies, not the whole import environment.
+Scope: conditional general State descent; concrete 3/5/7 State regressions; 11/13 phase regressions.
+11/13 arithmetic providers and general Case I remain open.

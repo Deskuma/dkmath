@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-04",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.CyclotomicOmegaSquareProjector",
+    "DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero",
+    "DkMath.FLT.FreyCyclotomicPrimaryLogSplit"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.NumberTheory.CyclotomicOmegaSquareProjector": {
+      "local_module_count": 31,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.CyclotomicPrimaryLogNonzero": {
+      "local_module_count": 36,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclotomicPrimaryLogSplit": {
+      "local_module_count": 289,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/NumberTheory/CyclotomicOmegaSquareProjector.lean": true,
+    "DkMath/Lib/NumberTheory/CyclotomicPrimaryLogNonzero.lean": true,
+    "DkMath/FLT/FreyCyclotomicPrimaryLogSplit.lean": true,
+    "DkMathTest/FLT/CyclotomicPrimaryLogNonzero.lean": true,
+    "DkMathTest/FLT/Note032CyclotomicPrimaryLogNonzeroDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicOmegaSquareDetectionSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 3,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/NumberTheory/CyclotomicOmegaSquareProjector.lean": "9c2ea038d9ac4288c6c4d6baa4b83b3750b3f7be7a195f30d7c2452a32353ceb",
+    "DkMath/Lib/NumberTheory/CyclotomicPrimaryLogNonzero.lean": "073f54ff17f493318f2ba6a14eebdcce72de5c473a043e373e25332d138a2a50",
+    "DkMath/FLT/FreyCyclotomicPrimaryLogSplit.lean": "f929b3fe7479c00304f6c19b105518371dba8c004b7824a542f7c8e2bde3e5da",
+    "DkMathTest/FLT/CyclotomicPrimaryLogNonzero.lean": "d2e95f71c80c9290b11606796307199cbe86e5e3c8f6732a60e5e3ebd45a39cb",
+    "DkMathTest/FLT/Note032CyclotomicPrimaryLogNonzeroDependencyAudit.lean": "c05b4e07f6ffb241233777d94e63dc862f181622bc7916aeec365bed1601ba38",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032CyclotomicOmegaSquareDetectionSmoke.lean": "240f3bb927e07d92d7995751d290a2fa5ec353340b4114df1fffb7ac8cac676c"
+  },
+  "boundary": "Syntactic comment-aware local import closures and source checks only; recursive Lean type/constructor/proof and input audits are separate. Same Galois/unit action projector has range equal to actual weightSquareSpace. Actual projected global cyclotomic unit is detected by the SAME primaryLog, with value -half^3*parameter^2. Rank one remains input; hdetect and hunit are now supplied internally to the new same-representation Frey complement endpoint. Rank one, hbad, hclass and cyclic-tower closure remain open; general hno unfinished. No external theorem import.",
+  "adapted_source": {
+    "repository": "anthropics/fermats-last-theorem",
+    "read_only_checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+    "head": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+    "path": "P2M/Sol/S_ExtCitation_Cyclotomic_unitsOmegaEigenvector_two_eq_zero_of_local_pow.lean",
+    "blob": "89f85644f3cc853c293396363bd290c9ff81a237",
+    "scope": "Adapt finite nilpotent binomial/log computations, conjugate cyclotomic-unit evaluation and weighted finite sums. Retain Apache notices. Reprove with the SAME DkMath unit quotient, projector, specified root and primaryLog; no external theorem import. No external checkout build or axiom audit."
+  }
+}

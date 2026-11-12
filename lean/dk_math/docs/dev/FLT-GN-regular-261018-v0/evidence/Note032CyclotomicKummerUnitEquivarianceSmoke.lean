@@ -1,0 +1,20 @@
+import DkMath
+
+open DkMath.Lib.NumberTheory
+
+#check KummerSelmerUnitEquivariance.unitClassEquiv
+#check KummerSelmerUnitEquivariance.selmerEquiv
+#check KummerSelmerUnitEquivariance.unitInclusion_equivariant
+#check KummerSelmerUnitEquivariance.short_exact_equivariant
+#check KummerSelmerUnitEquivariance.existsUnique_unitClass
+#check KummerSelmerUnitEquivariance.unitPreimage_equivariant
+#check KummerSelmerUnitEquivariance.unitClassLinearMap_weight
+#check CyclotomicKummerUnitEquivariance.unitClassAction
+#check CyclotomicKummerUnitEquivariance.selmerAction
+#check CyclotomicKummerUnitEquivariance.classTorsionAction
+#check CyclotomicKummerUnitEquivariance.numberField_short_exact_equivariant
+#check CyclotomicKummerUnitEquivariance.unitImage_ne_one
+#check CyclotomicKummerUnitEquivariance.unitImage_weight_square
+#check CyclotomicKummerUnitEquivariance.unit_of_classImage_eq_one_weight_square
+#check DkMath.FLT.Frey.Source.residual_kummer_unit_weight_square
+#print axioms DkMath.FLT.Frey.Source.residual_kummer_unit_weight_square

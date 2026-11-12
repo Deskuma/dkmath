@@ -1,0 +1,12 @@
+NOTE-032 2026-11-11 residue kernel orbit
+User-facing seven steps in TEXTBOOK-N032-RESIDUE-KERNEL-ORBIT-261111.md.
+Production: FreyResidueFiniteActionFactor, FreyKernelOrbitCriterion, FreyOrbitResonantLift.
+16 named new declarations; #print axioms on all 16: only propext, Classical.choice, Quot.sound.
+Textbook source blocks byte-identical: 3/3. Exact file markers immediately after imports: 3/3.
+Focused build: lake build DkMathTest.FLT.FreyResidueKernelOrbit, 4535 jobs, success.
+Root build: lake build DkMath DkMath.FLT DkMathTest.FLT.FreyResidueKernelOrbit, 11271 jobs, success.
+Suite: lake test, 12468 jobs, exit 0.
+Entrance: lake env lean DkMathTest.lean, success.
+git diff --check: success. New source forbidden scan: no sorry/admit/native_decide/unsafe/axiom.
+Model reference: Definitions/Def_GaloisRep_FrobeniusPowerDense.lean and P2M/Sol/S_FreyPackage_frobeniusPowerDense_inf_of_restrictionKer_le.lean; global varying primes/places/conjugates is distinct from fixed local q/A cyclicity.
+Boundary: actual finite residue-field factorization or kernel orbit generation unproved; hsign unproved; global Selmer/hclass/general unconditional hno unproved.

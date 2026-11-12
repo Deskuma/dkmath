@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-08",
+  "checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": {
+    "P2M/Sol/S_ValuationSubring_exists_tame_generator_inertiaSubgroupIn.lean": "b87b01d84d9e0c57b58dbe169e02e46b019fae8eea995d37e8b8b45d6d9935f5"
+  },
+  "comparison": "Read compatible radical tower, Kummer ratio primitiveness induction, finite-level matching in model. Reuse DkMath actual Kummer inertia arithmetic to move FIRST root (p does not divide1), so SAME actual inertia gamma acts primitively at EVERY positive level, no Nat.find shift or hgen/htail provider. Actual C_m=I/ker chi_m cyclic and cardp^m, bounded correction fixes SAME specified root. Frey H is a DIFFERENT quotient; retain projected correction and original d error evaluation. NO kernel containment/wildness/p-power-error/whole-H cyclicity/continuous-H1/global hclass/unconditional hno claimed. Four Lib adaptations retain Apache2 provenance and existing LICENSE/NOTICE references.",
+  "reused_local_source_sha256": {
+    "DkMath/Lib/NumberTheory/KummerInertia.lean": "56945c60a037334f5383a9a2a7e0b257fde444b80b4173f31d181f107d88cadd",
+    "DkMath/Lib/NumberTheory/ValuationInertiaPower.lean": "6eb16bbbbba04ec93f814cc5926cc5c986eb7ea29dd1e6dc113dd74e20a08664",
+    "DkMath/Lib/NumberTheory/RegularKummer/LICENSE": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+    "DkMath/Lib/NumberTheory/RegularKummer/ANTHROPIC-NOTICE": "42b1821f19a6aaa25e6811d22ab8f2fdc6433d4a37bc810b1cfafa5b6dd6b0b6"
+  },
+  "mathlib_source_sha256": {
+    "Mathlib/RingTheory/RootsOfUnity/PrimitiveRoots.lean": "226fe247c20101f787ea6fb3bfafb92bf73fd62674150eb7b8207342354a8efb",
+    "Mathlib/GroupTheory/OrderOfElement.lean": "338cd8fd86078ff1c852185399474d85bd2d11218c7c8c79a229cf21296e4650",
+    "Mathlib/GroupTheory/QuotientGroup/Basic.lean": "c2cf8cef6161a1bebaca1bd10e30f79648877f02cc020d0e06645ca6a70b8d65"
+  }
+}

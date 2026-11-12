@@ -1,0 +1,154 @@
+NOTE-032 FIVE STEPS: ACTUAL compatible radical tower, SAME all-stage primitive inertia generator, cyclic radical quotients and visible Frey correction
+Date: 2026-11-08
+Working directory: lean/dk_math
+
+Successful final validations (listed Lean/Lake commands exited 0):
+1. lake build DkMath.FLT.FreyRadicalGeneratorCertificate
+   Build completed successfully (4469 jobs).
+2. lake build DkMath.Lib DkMath DkMathTest.FLT.FreyRadicalGenerator DkMathTest.FLT.Note032FreyRadicalDependencyAudit
+   Build completed successfully (11207 jobs).
+3. lake test
+   Normal repository test driver passed; reached 12382/12382 jobs.
+4. lake env lean DkMathTest.lean
+   After suite dependencies built: passed, existing module marker printed.
+5. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyRadicalSmoke.lean
+   Root exposes all31 declarations; final endpoint standard axioms only.
+6. lake env lean /tmp/Note032RadicalLibSmoke.lean
+   import DkMath.Lib ALONE exposes all28 new Lib declarations and actual all-stage
+   generator/correction existence, standard axioms only, no Frey Source import needed.
+7. FIVE full production textbook blocks extracted to /tmp/n032-radical-book-{1,2,3,4,5}.lean.
+   lake env lean on each separately passed without warnings. Full sources and exact
+   module markers immediately after imports retained.
+8. python3 /tmp/n032-radical-import-audit.py
+   Comment-aware local imports acyclic; EIGHT repository Lean module markers,
+   FIVE full copies, Lib/FLT/root/test reachability, forbidden constructs and SHA256 passed.
+   Local import closure sizes including self: 1,5,12,13,388.
+   FOUR Lib arithmetic modules have NO FLT dependency; ONE Frey application module.
+   No FreyHnoSmallIndex/RegularPrime/HardCase consumer in these import closures.
+   Apache2 upstream commit, LICENSE/NOTICE references retained for all4 adapted Lib files.
+9. git diff --check and direct new-file trailing-whitespace checks passed.
+10. Local model-answer HEAD 115356cbc627159d0d16add0da6e9a2bb3655ed8.
+   Read root tower, ratio primitiveness induction and finite-level root matching.
+   Reuse DkMath Kummer inertia arithmetic to move FIRST root rather than Nat.find a
+   first moving stage. No hgen/htail/provider imported. Actual reused source, upstream,
+   license/notice and Mathlib SHA256 saved in note032-frey-radical-generator-reference-audit.json.
+
+Implemented content:
+Step1. ACTUAL tower from algebraic closedness, not root-existence provider. SAME base,
+       successor power, arbitrary stage compatibility, base powers and nonzero roots.
+Step2. Actual q-address makes p unit. SAME inertia fixes all p-power roots of unity by
+       existing unit-power rigidity. SAME root-action ratio becomes ORDINARY unit-valued
+       inertia character chi_n, retains field value and all-stage power compatibility.
+Step3. ACTUAL Kummer inertia theorem (finite splitting-field ramification, multiplicities,
+       inertia lift and place transport) moves alpha_1 with alpha_1^p=q since p does not
+       divide1. SAME gamma then has primitive ratios of exact order p^(n+1) at EVERY
+       positive level by compatibility and prime-power order induction. Named generator
+       chosen from PROVED existence, SAME gamma all stages. NO hgen/hcyclic/htail/hclass,
+       Cofixed or Source input to this arithmetic existence.
+Step4. Primitive SAME value spans all p-power root values with bounded j. Define actual
+       epsilon=(gamma^j)^(-1)*tau in SAME inertia, tau=gamma^j*epsilon; epsilon in chi
+       kernel and fixes SAME specified root. Actual chi range equals SAME generator's
+       zpowers. First isomorphism gives actual radical quotient C_m cyclic, cardp^m.
+       Local of_primitive lemmas' proof hprimitive supplied internally by actual generator;
+       final existence supplies SAME gamma for all positive stages/corrections.
+Step5. SPECIALIZE root stage n+3 to original Frey T and SAME actual tau. Preserve original
+       hclass/Cofixed witness n,T,q,A,tau,y,h,k,d and actual gamma,j,epsilon. SAME common
+       projection satisfies pi(tau)=pi(gamma)^j*pi(epsilon). SAME fixed difference
+       d=j*ev_gamma(k)+ev_epsilon(k), keeping correction VISIBLE. Final certificate includes
+       actual primitive radical value and cyclic radical quotient C_(n+3), exactcardp^(n+3).
+
+Regression and audit scope:
+- Two coordinate homs on Multiplicative((ZMod5)^2): root-side generator and root-fixed
+  correction coexist with nonzero OTHER quotient correction. Formal failure of root
+  kernel containment in other kernel; root quotient generation cannot be transferred blindly.
+- Bounded first-coordinate powers with SAME second-coordinate correction.
+- Exact order25 and 5-multiple nonzero in ZMod25 guards coherent prime-power lifting.
+- #print axioms all31 declarations: standard propext/Classical.choice/Quot.sound;
+  no sorryAx. Recursive checked types/constructors/opaque values require actual algebraic
+  closedness/root choices, actual inertia unit-root rigidity, ACTUAL Kummer inertia movement,
+  stage compatibility/order induction, actual first isomorphism, SAME named generator
+  and SAME original Frey character/error/witness.
+- Thirty-one public-input audits require hprimitive only in generic algebraic helpers;
+  actual generator existence/final witnesses ban hgen/hcyclic/htail/hprimitive and other
+  fixedness, wildness, cardinality, continuity, range, finite, injection/equivalence providers.
+  Four Lib modules have NO hclass/Cofixed/Source inputs. Final arithmetic certificate keeps
+  original hclass/Cofixed explicitly.
+
+Boundaries:
+- Five pre-existing unrelated sorry warnings in root/suite; no new warning.
+  No repository-wide sorry-free claim.
+- ACTUAL generation of all finite RADICAL inertia quotients C_m is implemented.
+- C_m=I/ker chi_m is DISTINCT from Frey common quotient H=J/ker Psi.
+- NOT implemented: ker chi_(n+3) <= ker pi, pi(epsilon)=1, wildness of epsilon,
+  all-stage fixedness of epsilon, inertia p^m-root existence, or full model decomposition
+  tau=gamma^j*x^(p^m)*w^(p^m). No new conditional API pretends to supply these.
+- Frey common quotient cyclicity/singleton detection remains unproved. Root-stage cyclicity
+  is NOT substituted for it. Original error evaluation term retained.
+- Ordinary H1 only; continuous-H1 comparison, global class supply, arithmetic resonance
+  exclusion and general UNCONDITIONAL hno remain INCOMPLETE.
+
+Thirty-one checked roots and required dependencies:
+PASS: DkMath.Lib.NumberTheory.PrimeRadicalTower.tower; 8011 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.PrimeRadicalTower.tower_zero; 8012 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.PrimeRadicalTower.tower_succ_pow; 8012 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.PrimeRadicalTower.tower_compat; 8022 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.PrimeRadicalTower.tower_pow; 8024 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.PrimeRadicalTower.tower_ne_zero; 8035 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.radical; 19012 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.ratio; 19079 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.radical_ne_zero; 19026 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.ratio_pow; 19097 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.ratio_compat; 19093 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.ratio_eq_one_iff; 19093 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.valuation_prime_eq_one; 16199 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.inertia_fixes_primePower_root; 16727 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.character; 20155 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.character_val; 20156 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.character_pow; 20156 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.character_compat; 20157 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.exists_primitive_generator; 41440 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.generator; 41442 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.generator_primitive; 41443 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.character_eq_one_iff_root_fixed; 20157 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.image_eq_pow_of_primitive; 20540 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.correction_of_primitive; 20548 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.range_eq_zpowers_of_primitive; 20550 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.quotient_card_of_primitive; 20922 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.quotient_isCyclic_of_primitive; 20754 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.InertiaRadical.exists_generator_corrections; 41579 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.radical_generator_stage_correction; 54385 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.radical_generator_error; 54460 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_exists_radical_generator_error; 90799 reachable constants; required actual theorems present.
+
+Thirty-one public-input reports:
+PASS inputs: DkMath.Lib.NumberTheory.PrimeRadicalTower.tower; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.PrimeRadicalTower.tower_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.PrimeRadicalTower.tower_succ_pow; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.PrimeRadicalTower.tower_compat; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.PrimeRadicalTower.tower_pow; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.PrimeRadicalTower.tower_ne_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.radical; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.ratio; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.radical_ne_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.ratio_pow; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.ratio_compat; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.ratio_eq_one_iff; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.valuation_prime_eq_one; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.inertia_fixes_primePower_root; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.character; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.character_val; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.character_pow; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.character_compat; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.exists_primitive_generator; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.generator; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.generator_primitive; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.character_eq_one_iff_root_fixed; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.image_eq_pow_of_primitive; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.correction_of_primitive; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.range_eq_zpowers_of_primitive; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.quotient_card_of_primitive; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.quotient_isCyclic_of_primitive; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.InertiaRadical.exists_generator_corrections; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.radical_generator_stage_correction; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.radical_generator_error; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_exists_radical_generator_error; remaining arithmetic inputs explicit.

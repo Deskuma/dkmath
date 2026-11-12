@@ -1,0 +1,367 @@
+{
+  "unit": "NOTE-032-TARGET-NONSINGULAR",
+  "date": "2026-10-26",
+  "branch": "dev/FLT-GN-regular-261018-v0",
+  "base_head": "cadb45a294d7c0a6920aa9fa60e9fed392417b8a",
+  "status": "actual two-torsion image separation and target Delta!=0/IsElliptic completed for characteristic zero and odd finite H; same K-model elliptic under stability; all-point FUNCTION and exact zero fiber no longer require external target ellipticity; additivity/isogeny remain open",
+  "numbering": "one target-nonsingularity unit; no additional internal checkpoint suffix",
+  "production": [
+    {
+      "path": "DkMath/Lib/Algebra/StrictFiberCardinality.lean",
+      "public_theorems": [
+        "card_lt_mul"
+      ],
+      "public_definitions": [],
+      "sha256": "012006c6aedda4077e75159af9e685735c9f91c102cc3ecfd3f89471ce07647b"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelRationalFiber.lean",
+      "public_theorems": [
+        "velu_bot_coordinates",
+        "finrank_over_genericX",
+        "veluX_mem_genericX",
+        "genericX_relative_degree",
+        "exists_veluX_rational",
+        "exists_veluX_fiber_polynomial",
+        "card_veluX_fiber_le"
+      ],
+      "public_definitions": [],
+      "sha256": "4b11aa3aa799ca2510013e14c3c92400077b0c56b2fe41edd48c1074ae419651"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelTwoTorsion.lean",
+      "public_theorems": [
+        "eq_zero_of_mem_odd_kernel_fixed",
+        "point_eq_or_eq_neg_of_xc_eq",
+        "card_xc_fiber_le_two",
+        "card_xc_fiber_le_one_of_fixed",
+        "kernelXAt_injective_on_twoTorsion"
+      ],
+      "public_definitions": [],
+      "sha256": "7fb204d9918e835d95ab108ded8489ee65a559d44cae1721ebbc5a9824ace9a4"
+    },
+    {
+      "path": "DkMath/Lib/NumberTheory/EllipticFiniteKernelNonsingular.lean",
+      "public_theorems": [
+        "exists_three_nonzero_fixed_points",
+        "kernelModel_discriminant_ne_zero_of_odd_card",
+        "kernelModel_isElliptic_of_odd_card",
+        "descendedKernelModel_isElliptic_of_odd_card",
+        "oddKernelPointMap_eq_zero_iff",
+        "oddKernelPointMap_translation"
+      ],
+      "public_definitions": [
+        "oddKernelPointMap"
+      ],
+      "sha256": "d7b65f17f4d1ed7ddfb8ed46c7a082fe49bbb51d3194978e40a0cb21dd691350"
+    },
+    {
+      "path": "DkMath/FLT/FreyFiniteKernelNonsingular.lean",
+      "public_theorems": [
+        "residual_kernel_model_discriminant_ne_zero",
+        "residual_kernel_model_isElliptic",
+        "residual_kernel_at_nonsingular",
+        "residual_odd_kernel_pointMap_eq_zero_iff",
+        "exists_rational_elliptic_residual_kernel_model"
+      ],
+      "public_definitions": [
+        "residualOddKernelPointMap"
+      ],
+      "sha256": "24f4998ee9a6cd0bd171e3691ae087de24b4ea85b6c7817df53cb9fd97534460"
+    }
+  ],
+  "counts": {
+    "production_modules": 5,
+    "production_theorems": 24,
+    "production_definitions": 2,
+    "production_lines": 567,
+    "boundary_theorems": 10,
+    "boundary_definitions": 1,
+    "source37_theorems": 5,
+    "audited_declarations": 42
+  },
+  "completed": {
+    "same_x_rational": "same X_H lies in original k(x) by nontrivial quadratic reflection fixed-field theorem; original x field degree2 from trivial kernel",
+    "rational_degree": "[k(x):k(X_H)]=|H| by tower; same RatFunc representative has maximum reduced numerator/denominator degree |H|",
+    "finite_fiber": "nonzero polynomial num-c*den of degree<=|H| vanishes at x-coordinate of each actual point with specialized X_H=c; no extra denominator nonvanishing at evaluation point; distinct x-fiber cardinal<=|H|",
+    "odd_kernel": "reflection-fixed element of odd H is O; two distinct fixed-point orbits disjoint",
+    "separation": "two whole orbits have2|H|points, x-fibers<=2 with one strict fiber<=1, forcing2|H|<2|image x|<=2|H| if images coincide; no half-orbit enumeration or cyclic generator",
+    "three_actual_points": "source cubic discriminant produces three actual distinct nonzero reflection-fixed points of same Points E",
+    "target": "same kernelModel Delta!=0 and IsElliptic for odd H; actual three-value separation internally supplied",
+    "descent": "same stable-kernel K-model IsElliptic follows from actual basechange equality and discriminant map",
+    "point_function": "same odd-kernel all-point function, exact zero fiber H, H-orbit invariance; no external IsElliptic provider",
+    "Source": "prime p!=2 and same dimension1 line supply odd cardinality; same residual model Delta/IsElliptic and finite-point nonsingularity; same point function exact zero fiber; stable line gives actual rational elliptic model"
+  },
+  "generality": [
+    "field K characteristic zero, elliptic E, actual finite subgroup H",
+    "rational and finite-fiber bounds hold for arbitrary finite H",
+    "separation and target nonsingularity require odd Nat.card H",
+    "no prime order, cyclicity, generator or half-orbit choices in Lib nonsingularity theorem",
+    "stability only needed for K-model descent",
+    "Source retains same dimension1 line and p!=2; no Source or line existence asserted"
+  ],
+  "removed_external_inputs": [
+    "actual three-image separation for same odd kernel",
+    "target kernelModel IsElliptic for same odd kernel and Source p!=2"
+  ],
+  "examples": {
+    "actual_curve": "y^2=x^3-x",
+    "actual_kernel": "full three-torsion subgroup of same geometric point group, proven cardinal9 and odd; no prime-order assumption",
+    "checks": [
+      "target Delta!=0",
+      "same rational maximum degree9 and distinct x-fiber bound9",
+      "existence of three actual separated two-torsion images",
+      "same kernel Galois stability and rational target ellipticity",
+      "exact all-point zero fiber and H-orbit invariance without supplied ellipticity",
+      "previous two-point kernel fails odd-cardinality guard; no singularity claim for even kernels"
+    ]
+  },
+  "provenance": {
+    "repository": "https://github.com/anthropics/fermats-last-theorem",
+    "inspected_blob": {
+      "S_WeierstrassCurve_veluX_oddOrderSummingSet_injOn_psi2Sq_roots": "7d20d1868f13706680f16addb3fdaaeb58be9c51"
+    },
+    "source_cache": "previously fetched pinned file under tmp/note032-isogeny; reread and Git blob verified",
+    "adaptation": "orbit/fiber contradiction reconstructed with whole orbits and strict fiber sum instead of cyclic half-orbit enumeration",
+    "license": "Apache-2.0 and existing LICENSE/NOTICE retained in EllipticFiniteKernelTwoTorsion",
+    "external_proof_imports_added": false
+  },
+  "validation": {
+    "focused_build": "lake build DkMath.FLT.FreyFiniteKernelNonsingular",
+    "focused_build_jobs": 4094,
+    "boundary": "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032TargetNonsingularBoundary.lean",
+    "smoke": "lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032TargetNonsingularSmoke.lean",
+    "axioms": "lake env lean tmp/note032-nonsingular/Axioms.lean; actual boundary/smoke bodies re-elaborated with Source import",
+    "warnings": 0,
+    "tracker": "OK: no mismatches found",
+    "lib_import_closure_count": 76,
+    "prior_owners_unchanged": true,
+    "prior_contract_unchanged": true,
+    "test_boundary_bodies_equal": true,
+    "facade_registration": "static check only",
+    "full_build_run": false,
+    "lake_test_run": false,
+    "root_test_build_run": false,
+    "git_diff_check": "pass"
+  },
+  "axioms": {
+    "DkMath.Lib.Algebra.StrictFiberCardinality.card_lt_mul": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.velu_bot_coordinates": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.finrank_over_genericX": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.veluX_mem_genericX": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.genericX_relative_degree": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_veluX_rational": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_veluX_fiber_polynomial": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.card_veluX_fiber_le": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.eq_zero_of_mem_odd_kernel_fixed": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.point_eq_or_eq_neg_of_xc_eq": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.card_xc_fiber_le_two": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.card_xc_fiber_le_one_of_fixed": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt_injective_on_twoTorsion": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.exists_three_nonzero_fixed_points": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_discriminant_ne_zero_of_odd_card": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelModel_isElliptic_of_odd_card": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.descendedKernelModel_isElliptic_of_odd_card": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_eq_zero_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_translation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_model_discriminant_ne_zero": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_model_isElliptic": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_kernel_at_nonsingular": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residualOddKernelPointMap": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.residual_odd_kernel_pointMap_eq_zero_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "DkMath.FLT.Frey.Source.exists_rational_elliptic_residual_kernel_model": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelNonsingularTest.fullThreeKernel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelNonsingularTest.fullThree_card": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelNonsingularTest.actual_target_discriminant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelNonsingularTest.actual_rational_degree": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelNonsingularTest.actual_fiber_bound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelNonsingularTest.actual_three_separated_images": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelNonsingularTest.fullThree_stable": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelNonsingularTest.actual_rational_target_elliptic": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelNonsingularTest.actual_zero_fiber": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelNonsingularTest.actual_orbit": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "EllipticFiniteKernelNonsingularTest.even_kernel_guard": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032TargetNonsingularSmoke.source37_discriminant": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032TargetNonsingularSmoke.source37_elliptic": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032TargetNonsingularSmoke.source37_nonsingular": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032TargetNonsingularSmoke.source37_zero_fiber": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Note032TargetNonsingularSmoke.source37_rational_elliptic": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  "remaining": [
+    "even-order-kernel target nonsingularity not supplied in this unit",
+    "all-point FUNCTION additivity and algebraic-morphism/isogeny structure",
+    "point isogeny exact kernel and degree",
+    "Galois equivariance of same point map",
+    "integral models, local reduction and zero-component transport",
+    "hno/general Frey irreducibility/general FLT"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-06",
+  "new_modules": [
+    "DkMath.Lib.Algebra.CyclicActionCharacter",
+    "DkMath.FLT.FreyCyclicTowerCharacter"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.Algebra.CyclicActionCharacter": {
+      "local_module_count": 1,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclicTowerCharacter": {
+      "local_module_count": 307,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/Algebra/CyclicActionCharacter.lean": true,
+    "DkMath/FLT/FreyCyclicTowerCharacter.lean": true,
+    "DkMathTest/FLT/FreyCyclicTowerCharacter.lean": true,
+    "DkMathTest/FLT/Note032FreyCyclicTowerCharacterDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTowerCharacterSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 2,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/Algebra/CyclicActionCharacter.lean": "e690286ed1183778a50e0fecf1d9f9993ccaad9c6303b767d4bad8ed4eccd3f6",
+    "DkMath/FLT/FreyCyclicTowerCharacter.lean": "88360f6e76fd87001f7115434b16b3e0817ab8e081ed8a2a67013463049b84ef",
+    "DkMathTest/FLT/FreyCyclicTowerCharacter.lean": "107403091b68f49c597aadb5fe0e3ad18aa5f0be2cd0d46e2e251f208c2de5f5",
+    "DkMathTest/FLT/Note032FreyCyclicTowerCharacterDependencyAudit.lean": "4a0419c1879f291c7aa0f29dcbcc073977c891a0187bfa37dbc9ab269b4e1317",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTowerCharacterSmoke.lean": "1249048cf9f9faddbecc5eb1d06d29615646bbbef4c1976e5da50923dc171413"
+  },
+  "boundary": "Comment-aware local import/source audit only; Lean proof/type/constructor and input audits are separate. Actual SAME cyclic stage action constructs an open-kernel unit character, coordinate independence, residue compatibility and original mod-p cyclotomic character. Good reduction bound explicitly retains Frobenius character=1, distinct from quotient-wide absorption. Tower family retains SAME class vanishing and uniform all-stage resonant absorption. No Zp limit or Tate module constructed. General hno unfinished. No external theorem import."
+}

@@ -1,0 +1,108 @@
+NOTE-032 THREE STEPS: actual high Weil determinant and full Tate cyclotomic determinant
+Date: 2026-11-07
+Working directory: lean/dk_math
+
+Performed validations; listed Lean/Lake commands returned exit code 0:
+1. lake build DkMath DkMathTest.FLT.FreyTateCyclotomicDeterminant DkMathTest.FLT.Note032FreyTateCyclotomicDeterminantDependencyAudit
+   Build completed successfully (11138 jobs).
+2. lake test
+   Normal repository test driver passed; reached 12281/12281 jobs.
+3. lake env lean DkMathTest.lean
+   Normal test entrance passed; only existing file marker printed.
+4. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateDeterminantSmoke.lean
+   Root exposes commutative-ring coefficient faithfulness, actual finite Weil determinant,
+   SAME finite/full basis and matrix bridges, actual full cyclotomic determinant and ratio.
+5. Three textbook blocks extracted verbatim to /tmp/n032-tatedet-book-{1,2,3}.lean.
+   lake env lean run on each individually; all passed without warnings.
+   Exact full production source and exact file markers immediately after imports retained.
+6. python3 /tmp/n032-tatedet-import-audit.py
+   Comment-aware local import closures, acyclicity, source scans/SHA256, six exact markers,
+   three full textbook copies, Lib/FLT/root and normal test reachability passed.
+   Closure sizes including self: ring 6, finite Weil 71, Frey 327.
+   Generic Lib modules have no FLT imports. No FreyHnoSmallIndex/RegularPrime/HardCase
+   consumers. JSON saved alongside.
+7. git diff --check and direct trailing-whitespace checks on new files passed.
+
+Step 1 IMPLEMENTED:
+- Commutative-ring alternating bilinear coordinates and determinant transformation.
+- Actual nondegeneracy implies coefficient action on SAME basis-pair value is injective:
+  equal scalar values imply (a-c)*b0 pairs to zero with all vectors, hence is zero;
+  its first basis coordinate proves a=c. No Field or nonzero-only cancellation.
+- Equivariance plus coefficient faithfulness identifies actual linear determinant.
+
+Step 2 IMPLEMENTED:
+- Actual modular cyclotomic character on SAME algebraic closure for every nonzero n.
+- Actual geometricWeilPairingData internally supplies pairing, alternation,
+  nondegeneracy and Galois equivariance. Root-character action and Step 1 prove
+  det(representation E n sigma)=torsionCyclotomicCharacter n sigma over ZMod n.
+- Characteristic zero and actual finite rank-two torsion basis remain explicit.
+  No new pairing/nondegeneracy/equivariance/determinant provider.
+  This module does not construct a finite basis for arbitrary n.
+
+Step 3 IMPLEMENTED:
+- SAME Source/L/rootField/tower/first generator/second point/full adapted basis/action.
+- Construct actual finite basis at p^(n+1) via SAME two point sequences and prior
+  actual tatePairLevelEquiv. No additional finite-basis provider at Frey endpoint.
+- Full basis coordinates, basis vectors and every actual action matrix entry reduce
+  to SAME finite basis coordinates/vectors/action at every positive-power precision.
+- RingHom.map_det transfers actual finite geometric Weil determinant to full matrix
+  residues. Mathlib actual p-adic cyclotomic character has SAME finite residues.
+  Actual p-adic residue extensionality proves det M = cyclo_infinity.
+- Previous SAME triangular determinant chi*d gives actual units relation
+  d = cyclo_infinity * chi_infinity^(-1), at all p-adic precisions.
+
+Regression scope:
+- Actual ZMod 25 nonzero 5 is annihilated by 5: nonzero cannot replace faithfulness.
+- Geometric determinant theorem instantiated at COMPOSITE n=25 for actual E[25]
+  with explicit actual finite basis. No supplied pairing provider or numerical
+  impossible Fermat Source.
+
+Audit scope and retained boundaries:
+- Fifteen selected #print axioms reports: only propext, Classical.choice, Quot.sound.
+- Fifteen recursive traversals inspect checked types, constructors and opaque proofs.
+  Reject sorryAx, nonstandard axioms, P2M/P2MW/FltRegular/FreyPackage, old Kummer
+  consumers and FLT endpoints. Require actual geometricWeilPairingData, ring
+  coefficient faithfulness, SAME finite/full basis and matrix bridges, actual
+  Mathlib cyclotomic residue theorem and p-adic residue extensionality.
+- Twelve public-input audits preserve actual generic nondegeneracy/finite basis
+  requirements and SAME Frey hclass/uniform ALL-stage hbad.
+  Reject new determinant/Weil/primitive-root/cyclotomic/ratio provider inputs.
+- No new sorry/admit/native_decide/unsafe/custom axioms or new-code warnings.
+  Root/suite replay historical sorry warnings in five unrelated existing modules.
+  No whole-repository axiom-clean assertion.
+- Primitive-root selection/order theorem is not newly constructed: direct
+  coefficient faithfulness proves the determinant without that intermediate API.
+- Full high determinant and second-character ratio NOW IMPLEMENTED, conditional on
+  SAME prior tower/basis arithmetic inputs. Not merely a mod-p determinant identity.
+- No higher triviality of d, first character=cyclotomic conclusion, Galois splitting,
+  Frobenius trace/characteristic-polynomial arithmetic or final contradiction proved.
+- hclass and ALL-stage hbad arithmetic remain unfinished. General hno UNFINISHED.
+
+Decisive audits from successful root build:
+PASS: DkMath.Lib.RepresentationTheory.AlternatingDeterminantRing.coordinates; 6721 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.AlternatingDeterminantRing.coefficient_injective; 6923 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.AlternatingDeterminantRing.map_eq_det_smul; 14769 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.AlternatingDeterminantRing.det_eq_of_equivariant; 14790 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsionCyclotomicCharacter_spec; 27998 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsion_determinant_all; 41384 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateFiniteBasis; 80736 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTate_coordinate_reduction; 81293 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTate_basis_reduction; 81295 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTate_matrix_reduction; 81320 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTate_determinant_finite; 81336 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.tateCyclotomicCharacter; 23217 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.tateCyclotomicCharacter_mod; 29223 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTate_determinant_cyclotomic; 81360 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residualTateSecondCharacter_eq_cyclotomic; 81461 reachable constants; required actual theorems present.
+PASS inputs: DkMath.Lib.RepresentationTheory.AlternatingDeterminantRing.coefficient_injective; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.RepresentationTheory.AlternatingDeterminantRing.map_eq_det_smul; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsion_determinant_all; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.torsionCyclotomicCharacter; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateFiniteBasis; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTate_coordinate_reduction; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTate_basis_reduction; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTate_matrix_reduction; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTate_determinant_finite; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTate_determinant_cyclotomic; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residualTateSecondCharacter_eq_cyclotomic; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.tateCyclotomicCharacter_mod; remaining arithmetic inputs explicit.

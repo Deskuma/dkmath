@@ -1,0 +1,25 @@
+NOTE-032-REDUCED-HOM validation / 2026-10-27
+base: e0f2f7832dcec78df0771141fb18c63ad1163a76
+
+PASS ./lean-build.sh DkMath.Lib.NumberTheory.EllipticFiniteKernelReducedHom (0 warnings)
+PASS ./lean-build.sh DkMath.FLT.FreyFiniteKernelReducedHom (0 warnings)
+PASS ./lean-build.sh DkMathTest.Lib.NumberTheory.EllipticFiniteKernelReducedHom (0 warnings)
+PASS lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032ReducedHomSmoke.lean (0 warnings)
+PASS lake env lean tmp/note032-reduced-hom/Axioms1.lean (0 warnings)
+PASS lake env lean tmp/note032-reduced-hom/Axioms2.lean (0 warnings)
+
+Production: 2 owners, 12 theorems and 5 definitions.
+Regression: 4 theorems; actual three-point kernel at 47, reduction commutativity, nonzero reduced kernel point, quotient representative formula.
+Source37 smoke: 2 theorems, including bad place 2 with internal frame.
+Axiom audit: 23 declarations in batches 11 + 10 + 2.
+Observed axioms: propext, Classical.choice, Quot.sound; no sorryAx.
+
+PASS file markers match paths
+PASS Lib public declarations have textbook docstrings and promotion markers
+PASS new owners contain no forbidden proof constructs or raised heartbeat limits
+PASS Lib imports do not depend on FLT or external solution modules
+PASS three facade imports registered exactly once; no facade build
+PASS git diff HEAD --check passed
+PASS index unchanged
+
+Boundary: actual reduction image only; reverse kernel inclusion, residual toric power law, full lifting, inverse E0, discriminant depth, q=p and general hno remain open.

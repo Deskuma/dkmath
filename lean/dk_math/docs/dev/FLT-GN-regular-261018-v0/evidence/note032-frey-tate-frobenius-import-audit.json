@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-07",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.CyclotomicFrobeniusAll",
+    "DkMath.Lib.RepresentationTheory.TriangularTwoCharacteristic",
+    "DkMath.FLT.FreyTateFrobenius"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.NumberTheory.CyclotomicFrobeniusAll": {
+      "local_module_count": 80,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.RepresentationTheory.TriangularTwoCharacteristic": {
+      "local_module_count": 3,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyTateFrobenius": {
+      "local_module_count": 330,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/NumberTheory/CyclotomicFrobeniusAll.lean": true,
+    "DkMath/Lib/RepresentationTheory/TriangularTwoCharacteristic.lean": true,
+    "DkMath/FLT/FreyTateFrobenius.lean": true,
+    "DkMathTest/FLT/FreyTateFrobenius.lean": true,
+    "DkMathTest/FLT/Note032FreyTateFrobeniusDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateFrobeniusSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 3,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/NumberTheory/CyclotomicFrobeniusAll.lean": "80bc9aceea163ec4603a468b077639407f16e5675b532f2350f1cfe639862783",
+    "DkMath/Lib/RepresentationTheory/TriangularTwoCharacteristic.lean": "999bb5a7149a37a94650f7b46da9b6b019e1812fee2bfbee9323425a43e43796",
+    "DkMath/FLT/FreyTateFrobenius.lean": "d90c3c6869059d2f10362ee9124faabb4080f75de28fabcc903eb8c0f972a807",
+    "DkMathTest/FLT/FreyTateFrobenius.lean": "43d2ac04c7d3f9c889eebfcc475c6ef5fa70174d3462b580e6b1b3174e6f77a9",
+    "DkMathTest/FLT/Note032FreyTateFrobeniusDependencyAudit.lean": "d948488dd1ff09d036eadd9ace5d29851407cca2c2edc154528d4b11cb7834d3",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateFrobeniusSmoke.lean": "f577af37e6d838cae9eb57e35c2bcdce24147a9db7ee1925f4c52073ca1cfeaa"
+  },
+  "boundary": "Comment-aware local source/import audit only. SAME actual Frobenius finite/p-adic cyclotomic value=q. Actual triangular characteristic polynomial and arbitrary two-dimensional matrix/linear-action quadratic relation. SAME Frey determinant=q, trace=chi+q*chi_inverse; actual full Tate and finite torsion action quadratic relations with actual trace coefficient. No point-count trace identification a_q=q+1-#E(F_q), no arithmetic Frobenius point-count polynomial, no higher quotient fixedness, splitting or hno closure. SAME hclass/uniform ALL-stage hbad retained. Recursive/input audits separate."
+}

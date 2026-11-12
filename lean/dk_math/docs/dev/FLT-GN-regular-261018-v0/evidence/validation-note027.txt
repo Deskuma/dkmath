@@ -1,0 +1,83 @@
+NOTE-027 verification evidence — 2026-10-21
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Mathematical scope:
+  Canonical coefficient action on the actual coordinate ring, extended to its fraction field.
+  Sigma-semilinearity over the extension field; base-field linearity only.
+  Generic X/Y fixed; actual translation intertwining proved.
+  Prime-ideal powers fix the normalization of Dedekind valuations under ring equivalence.
+  Finite-place transport holds for every function, including zero, at every P != O.
+  Existing Weil-function finite valuations and inverse point action give ratio valuations 1.
+  Existing finite-place constant criterion yields a unique nonzero generator scalar.
+  Cancel that scalar and use the existing eigenvalue uniqueness: c(sigma S,sigma T)=sigma c(S,T).
+  Same units, roots, alternating bicharacter, actual torsion representation and Source connected.
+  Regression uses distinct nonzero rational 2-torsion points (0,0), (4,-2); arbitrary sigma.
+  Arbitrary coefficient semilinearity, arbitrary function translation/valuation, scalar uniqueness,
+    off-diagonal values, residual API, n=1 and arbitrary n=37 torsion tested.
+  No nondegeneracy, nontrivial pairing value, invariant generator choice, fixed-field theorem,
+    WeilPairingData existence, unconditional det=cyclotomic, irreducibility or new FLT closure.
+
+Static checks:
+  Exact file markers, whitespace and forbidden-construct scan in 8 new Lean files: PASS.
+  No sorry/admit, custom axiom/opaque, unsafe or native_decide in new Lean code.
+  Four adapted modules retain Apache-2.0 attribution, upstream blobs and LICENSE/NOTICE paths.
+  git diff --check: exit 0.
+
+Focused build and dependency/axiom audit:
+  lake build DkMathTest.FLT.Note027DependencyAudit
+  exit 0; Build completed successfully (3218 jobs).
+  46 production and 14 regression declarations: standard logical axioms only.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  13 selected type-and-opaque-body dependency paths: PASS.
+  Selected paths forbid external unported providers, WeilPairingData, RootPairing,
+    torsion bases, old FLT endpoints and global Kummer input.
+  New production, regression and audit modules: no warnings.
+
+Selected audit output:
+  46 production and 14 regression declarations; standard logical axioms only.
+  DkMath.Lib.NumberTheory.EllipticFunctionField.galRingEquiv; 8243 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticFunctionField.galFunctionFieldEquiv; 8837 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticFunctionField.galFunctionFieldEquiv_const_mul; 8852 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticFunctionField.gal_transEquiv; 26073 reachable constants; expected providers present.
+  IsDedekindDomain.HeightOneSpectrum.valuation_comap_ringEquiv; 16646 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticFunctionField.valuation_galFunctionFieldEquiv; 19693 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.finitePointValuation_galois; 28656 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.existsUnique_scalar_galois_weilFunction; 32257 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilTranslationUnit_galois; 33945 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilAlternatingBicharacter_galois; 34052 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.curve_weilAlternatingBicharacter_residual; 37097 reachable constants; expected providers present.
+  FreyWeilGaloisTest.actual_unit_fixed; 37037 reachable constants; expected providers present.
+  FreyWeilGaloisTest.exponent_thirtySeven; 37093 reachable constants; expected providers present.
+
+Facade/root build:
+  lake build DkMath DkMath.FLT DkMath.Lib
+  exit 0; Build completed successfully (10691 jobs).
+
+Integrated build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11645 jobs).
+  Five historical sorry warnings outside new code:
+  warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+  warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+  warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+  warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+  warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+
+Root smoke:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE027.lean
+  exit 0; generic actual representation equivariance example elaborated.
+  #print axioms existsUnique_scalar_galois_weilFunction and weilTranslationUnit_galois:
+    [propext, Classical.choice, Quot.sound].
+
+Test entrance:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest.
+
+Tracker:
+  python3 check_tracker_mismatch.py /tmp/note027-audit3.log
+  python3 check_tracker_mismatch.py /tmp/note027-full.log
+  Both exit 0: OK: no mismatches found.
+  Raw temporary logs were /tmp/note027-audit3.log and /tmp/note027-full.log.
+  This file preserves compact results; raw logs are disposable.

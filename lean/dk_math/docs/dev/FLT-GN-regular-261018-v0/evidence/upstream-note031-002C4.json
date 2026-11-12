@@ -1,0 +1,23 @@
+{
+  "implementation_date": "2026-10-22",
+  "repository": "anthropics/fermats-last-theorem",
+  "path": "P2M/Sol/S_WeierstrassCurve_slope_mem_of_shallow.lean",
+  "blob_sha": "0b9d8a2eb9bfd9e038a8a875189907fdafd76f58",
+  "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_slope_mem_of_shallow.lean",
+  "source_transport": "Read-only local source cache acquired during NOTE-031-002C3; no new remote fetch in this step",
+  "selected_sections": [
+    "S04_n_slope (around lines 166-238): shifted quadratic identity and shallow residual estimate",
+    "S04_n_neg (around lines 240-273): negated slopes and unit separation"
+  ],
+  "reconstructed": "Generic separated-root small-product core; integrality and exclusive branches from existing DkMath tangent directions; same-C/Source finite-coordinate transport and actual shallow-point/boundary regressions",
+  "not_ported": [
+    "S04_res_quad three-root comparison",
+    "large addition/doubling polynomial identities S04_dbl_core/S04_pm_core and their frame wrappers",
+    "torsion-depth recurrence or full multiplicative unramifiedness"
+  ],
+  "nonclaims": [
+    "shallow inequalities supplied from arbitrary torsion points",
+    "inertia fixedness of all singular-reduction torsion points",
+    "zero-component additive submodule, hcases or general FLT closure"
+  ]
+}

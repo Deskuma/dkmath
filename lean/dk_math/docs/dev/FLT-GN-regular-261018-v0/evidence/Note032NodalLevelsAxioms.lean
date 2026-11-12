@@ -1,0 +1,23 @@
+import DkMathTest.Lib.NumberTheory.EllipticFiniteKernelNodalLevels
+
+#print "file: Note032NodalLevelsAxioms"
+
+#print axioms DkMath.Lib.NumberTheory.WeierstrassVeluNodalValuation.off_level_correction_lt_one
+#print axioms DkMath.Lib.NumberTheory.WeierstrassVeluNodalValuation.same_level_numerator_value
+#print axioms DkMath.Lib.NumberTheory.WeierstrassVeluNodalValuation.same_level_correction_ge_one
+#print axioms DkMath.Lib.NumberTheory.WeierstrassVeluNodalValuation.off_level_sum_lt_one
+#print axioms DkMath.Lib.NumberTheory.WeierstrassVeluNodalValuation.unique_level_sum_ge_one
+#print axioms DkMath.Lib.NumberTheory.velu_pair_nodal_numerator
+#print axioms DkMath.Lib.NumberTheory.velu_pair_nodal_correction
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.point_x_ne_halfKernel
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt_eq_nodal_levels
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt_nodal_off_levels
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.kernelXAt_nodal_unique_level
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.singular_nodal_centres_congr
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_nonsmooth_off_levels
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.oddKernelPointMap_smooth_unique_level
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.singular_smooth_implies_kernel_level
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.singular_target_smooth_iff_kernel_level
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.singular_three_target_smooth_iff_kernel_level
+#print axioms DkMath.Lib.NumberTheory.EllipticFiniteKernel.singular_target_smooth_of_kernel_translate
+#print axioms EllipticFiniteKernelNodalLevelsTest.sample_seven_level_criterion

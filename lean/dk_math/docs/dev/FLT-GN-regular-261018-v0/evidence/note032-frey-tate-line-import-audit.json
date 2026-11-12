@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-06",
+  "new_modules": [
+    "DkMath.Lib.Algebra.PrimePowerTateModule",
+    "DkMath.FLT.FreyCyclicTateLine"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.Algebra.PrimePowerTateModule": {
+      "local_module_count": 3,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclicTateLine": {
+      "local_module_count": 313,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/Algebra/PrimePowerTateModule.lean": true,
+    "DkMath/FLT/FreyCyclicTateLine.lean": true,
+    "DkMathTest/FLT/FreyCyclicTateLine.lean": true,
+    "DkMathTest/FLT/Note032FreyCyclicTateLineDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateLineSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 2,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/Algebra/PrimePowerTateModule.lean": "69bb324e546dc300081e18d939710396fc7faa1d1404ad08d609579da94f8a81",
+    "DkMath/FLT/FreyCyclicTateLine.lean": "cf5dbd839a2523f968938373efdeec7d7df223fedce3f413d4fdbb52082a5c96",
+    "DkMathTest/FLT/FreyCyclicTateLine.lean": "695c20dd39a97c8e1200de9ed70de3f825d446af00b3d652dfe9c9234044c2dd",
+    "DkMathTest/FLT/Note032FreyCyclicTateLineDependencyAudit.lean": "01a583deaa942270950fab59185f32c863b21e1b3862bc351c5cec3aa6b46cb1",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateLineSmoke.lean": "7a37566f4c493791e9799dcf2712ab6adc2cc6dcedb90f0139986c5eb5badaa5"
+  },
+  "boundary": "Comment-aware local source/import audit only. STANDARD p-adic scalar on SAME ambient Tate sequences is proved from annihilation and residue compatibility, before constructing line equivalence. SAME Frey tower subgroup is a submodule with linear inclusion. Actual chosen generator coordinates supply compatible coefficients; actual Cauchy limit proves surjectivity, residue extensionality proves injectivity of a->a*v. Actual rank-one linear equivalence and actual SAME Galois action=prior p-adic character scalar on ALL line points proved. SAME hclass and uniform ALL-stage hbad retained. Union torsion identification, full Tate rank two, Weil pairing and final contradiction unfinished. General hno unfinished. Lean recursive and input audits are separate."
+}

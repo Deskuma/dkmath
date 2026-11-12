@@ -1,0 +1,107 @@
+NOTE-031-001A verification evidence — 2026-10-22 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Completed scope: finite Galois stage of NOTE-031-001, named 031-001A.
+  For K/Q finite Galois, every subgroup containing all actual finite-prime inertia is top.
+  Fixed field F has every finite prime unramified over Z, by inertia cardinality and tower indices.
+  Nonzero ramification index explicitly supplied before cancellation.
+  Actual Mathlib Minkowski consequence forces [F:Q]=1; finite Galois cardinality gives H=top.
+  No normality hypothesis on H. No external inertia-generation or global-triviality input.
+  Generic subgroup Fixed/Cofixed transport keeps the same representation and submodule.
+  Common-side alternative is (forall local Fixed) OR (forall local Cofixed).
+  Application to actual Gal(K/Q) supplies generation from the arithmetic proof.
+  No module finiteness, dimension-two or additional submodule-stability inputs required.
+
+Remaining scope:
+  031-001B: absolute inertia lifting through integral closure and valuation subrings;
+    open subgroup containing all actual absolute inertia is top;
+    transport to the existing actual absolute-Galois torsion representation.
+  031-002 through 005: Frey local arithmetic and same-side assembly.
+  hcases and hno remain unsupplied; no unconditional irreducibility or general FLT closure.
+  031-001 overall is not yet complete.
+
+Regressions:
+  Actual CyclotomicField 3 Q has degree 2 and inertia generates its Galois group.
+  It has at least one nontrivial inertia subgroup; no specific ramifying prime identified here.
+  Same field, same representation and same submodule Fixed/Cofixed transport.
+  Finite boundary: G=F5^* x F5^*, rho(a,b)=diag(a,b), N=first axis in F5^2.
+  N has dimension 1 and is G-stable; the two factor subgroups generate G.
+  Each factor satisfies a local alternative, with different sides.
+  g=(2,1) disproves global Fixed; g=(1,2) disproves global Cofixed.
+  Thus forall i (Fixed_i OR Cofixed_i) is insufficient for a global alternative.
+  This finite boundary is not claimed to be an actual inertia or Frey representation.
+
+Source provenance:
+  Eight upstream files inspected using read-only GitHub fetch_file.
+  Exact paths, blob SHAs and use classification: upstream-note031-001A.json.
+  Ported finite arithmetic source: S_NumberField_subgroup_eq_top_of_forall_inertia_le.lean,
+    blob 9a2a7d73e9687c61b7dfeacc102b4c0e60a84af3.
+  Refactored into four DkMath public steps; current Mathlib ramification APIs used.
+  Copyright, Apache-2.0, modifications, LICENSE and NOTICE paths preserved in module header.
+  Other inspected sources are dependency inventory, not claimed implemented.
+
+Static checks:
+  Six new Lean files: three production, one regression, one audit, one root smoke.
+  Exact post-import markers, final newlines, whitespace, public textbook docstrings: PASS.
+  All 16 production and 25 regression declarations included in the axiom audit: PASS.
+  No new sorry/admit/native_decide/custom axiom/opaque/unsafe or external provider imports.
+  No new production/test imports of DkMath.FLT or RegularKummer.
+  Apache LICENSE/NOTICE files exist; eight upstream blob SHAs recorded.
+  git diff --check: exit 0.
+
+Focused build:
+  lake build DkMathTest.FLT.Note031FiniteInertiaDependencyAudit
+  exit 0; Build completed successfully (3616 jobs).
+  New code: no warnings or errors.
+  All 16 production and 25 regression declarations use standard logical axioms only.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Full type and opaque-body graph checks on nine paths:
+    fixedField_unramifiedAt_int_of_inertia_le: 39182 reachable constants.
+    fixedField_finrank_eq_one_of_inertia_le: 70760 reachable constants.
+    subgroup_eq_top_of_inertia_le: 70761 reachable constants.
+    generic isFixedOn_of_iSup_eq_top: 2465 reachable constants.
+    generic isCofixedOn_of_iSup_eq_top: 2583 reachable constants.
+    finite-field isFixedOn_of_inertia: 70775 reachable constants.
+    finite-field isCofixedOn_of_inertia: 70775 reachable constants.
+    rootField_has_nontrivial_inertia: 71528 reachable constants.
+    inconsistent_side_counterexample: 13075 reachable constants.
+  Required providers present on their specified paths:
+    inertia cardinality, ramification-index tower, unramified iff, Minkowski discriminant bound,
+    ramified-prime existence, finite Galois cardinality, actual finite inertia generation,
+    generic fixer subgroups, concrete degree, boundary stability/dimension and both failures.
+  Three public-input checks passed:
+    iSup_inertia_eq_top: no hH/hgen/hglobal.
+    isFixedOn_of_inertia and isCofixedOn_of_inertia: rho/N/hlocal retained;
+      no hH/hgen/hglobal input.
+  Forbidden graph dependencies:
+    sorryAx, DkMath.FLT, RegularKummer, FoldedValuationOrbit,
+    external FltRegular/P2M/P2MW/FreyPackage and old FLT endpoints.
+  Algebra-only paths additionally exclude NumberField, DkMath.Lib.NumberTheory,
+    elliptic geometry, inertia and ramification APIs.
+  General ring ideals used by ZMod module instances are allowed.
+
+Facade/root/test build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11699 jobs).
+  New code: no warnings or errors.
+  Five existing unrelated broad-root sorry warnings:
+    DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6
+    DkMath/CosmicFormula/TriominoFLT.lean:1919:6
+    DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8
+    DkMath/NumberTheory/GcdNextResearch.lean:850:6
+    DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8
+
+Additional entrance checks:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest; no warnings or errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE031FiniteInertia.lean
+  exit 0; seven selected endpoints reachable through import DkMath;
+    two standard-only axiom prints; actual finite-Galois cofixed example without hgen;
+    no warnings or errors.
+  python3 check_tracker_mismatch.py /tmp/note031-001A-full.log
+  exit 0; OK: no mismatches found.
+
+Raw logs are disposable /tmp/note031-001A-*.log files.
+This records the checked new paths and stated scope, not whole-repository axiom freedom.

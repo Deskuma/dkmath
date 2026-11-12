@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-08",
+  "checkout": "/home/deskuma/develop/github/fermats-last-theorem",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "files": {
+    "P2M/Sol/S_ValuationSubring_exists_tame_generator_inertiaSubgroupIn.lean": "b87b01d84d9e0c57b58dbe169e02e46b019fae8eea995d37e8b8b45d6d9935f5",
+    "P2M/Sol/S_ValuationSubring_exists_mem_inertiaSubgroupIn_pow_eq_of_forall_apply_eq.lean": "2c082725e35f481433429f13825da019adfeb63829a5ec969687926f0931cc97"
+  },
+  "comparison": "Re-read finite-level generator conclusion and tail-root discharge at public solutions. DkMath proves faithful SAME H values, commutativity with original Group structure, IsPGroup/cardinality/exponent and stage annihilation p^(n+3). Consumption theorem with EXPLICIT hgen yields SAME gamma generates SAME common quotient and its evaluation injective; separate hcyclic lemmas explicit. Existence of finite-level generator and tail-root theorem NOT ported. Final endpoint has no hgen/hcyclic input and outputs cyclic consequence as implication only. No external providers or FLT endpoint imported; unconditional hno incomplete.",
+  "mathlib_source_sha256": {
+    "Mathlib/GroupTheory/OrderOfElement.lean": "338cd8fd86078ff1c852185399474d85bd2d11218c7c8c79a229cf21296e4650",
+    "Mathlib/GroupTheory/PGroup.lean": "ee052e6d2eb13e044aea058792d40f93452526327c25cb185a5accb2566e9d6d",
+    "Mathlib/GroupTheory/SpecificGroups/Cyclic/Basic.lean": "76b6cbc177a8864bbd07c8a0cbbe113ef8c5e489174fd73d73ec4015bdf11edd",
+    "Mathlib/GroupTheory/QuotientGroup/Basic.lean": "c2cf8cef6161a1bebaca1bd10e30f79648877f02cc020d0e06645ca6a70b8d65"
+  }
+}

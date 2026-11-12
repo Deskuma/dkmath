@@ -1,0 +1,119 @@
+NOTE-031-002C3 verification evidence — 2026-10-22 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Completed scope:
+  TangentDirections indexed by the same existing CriticalCentre.
+  Actual direction existence/integrality when 2 is unit; sum/product and unit separation.
+  Roots of the tangent quadratic; distinct actual residue values.
+  Translated factorization and actual finite-point branch-product equation retaining nonzero defect.
+  Same rational curve's individual tangent directions fixed by inertia when 2 is unit.
+  Pure nodal geometry over arbitrary fields: other x coordinates nonsingular,
+    same x coordinate as a singular point forces same y coordinate.
+  Same-model finite-point classification:
+    not HasSmoothReduction iff valuation(x - centre.x) < 1.
+  Also valuation(y - centre.y) < 1; same-model transport without coordinate replacement.
+  Same Frey Source supplies same centre, directions, coordinate/direction fixedness and p-th-power defect depth.
+  For q!=p, same actual finite residual point away from centre fixed by inertia, via C1.
+  Explicit P.val=some x y h retained; no finite coordinates assigned to infinity.
+  No Source/common-factor/orientation/curve/centre/point replacement.
+
+Remaining scope:
+  Shallow-slope integrality under valuation(defect)<valuation(X)^2.
+  Per-point branch labels, equal-depth branch comparison, torsion-depth recurrence.
+  Singular-reduction torsion fixedness and discriminant p-divisibility to full multiplicative unramifiedness.
+  Additive zero-component submodule and external InZeroComponentAt formal identification.
+  031-002 overall incomplete; 031-003 through 005, hcases/hno and general FLT separate.
+  Fixed tangent directions do not imply all nearby torsion points fixed.
+
+Regressions:
+  Existing actual curve y^2+xy=x^3+4x^2+x, discriminant 225, c4=241.
+  At every valuation over 3, attach directions to every existing centre, separated in residue and fixed individually.
+  Also construct an actual centre/directions pair from the preceding actual centre-existence theorem.
+  Existing actual 2-torsion coordinates (-4,2) approach the same centre in both x and y.
+  Actual nonzero smooth E[2] point (0,0) does not approach that same centre in x.
+  Same actual finite coordinates satisfy branch-product equation with nonzero centre defect.
+  Cuspidal quadratic t^2 over ZMod 3: zero sum/product forces coinciding directions.
+  Same Source 37: centre/directions/depth supply and same actual nonclose finite residual point fixed.
+  No Source/counterexample existence or inertia movement of rational test points asserted.
+
+Source provenance:
+  Read-only GitHub fetch_file for nodal classification and shallow-slope solution.
+  Nodal classification blob: 7f417364bbc9f0369ceaec5cda32107156ecb069.
+  Direction construction uses local C2 source cache, blob e3a454fddddd39651f2791c4a538ec90c9e926d4.
+  Shallow-slope solution inspected, not ported: blob 0b9d8a2eb9bfd9e038a8a875189907fdafd76f58.
+  Exact paths/scopes/nonclaims in upstream-note031-002C3.json.
+  Adapted modules retain Apache-2.0, copyright, modifications and LICENSE/NOTICE locations.
+  No external FreyPackage/GaloisRep provider imports.
+
+Focused build:
+  lake build DkMathTest.FLT.Note031NodalReductionDependencyAudit
+  exit 0; Build completed successfully (3195 jobs).
+  18 new production and 9 regression declarations: standard logical axioms only.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Fourteen type/opaque-body graph checks and four public-input checks passed.
+  Required applicable providers: actual algebraically closed root existence, same centre's node unit,
+    tangent separation and factorization, same centre's inertia fixedness, actual residue inertia kernel,
+    nodal geometry, same centre's residue singularity, coordinate integrality,
+    same-Source model, existing centre constructor and C1's actual residual fixedness.
+  Pure nodal field path additionally excludes valuation/local Galois infrastructure.
+  Neutral library/concrete paths additionally exclude DkMath.FLT dependencies.
+  Forbidden graph: sorryAx, old FLT endpoints, FltRegular/P2M/P2MW/FreyPackage,
+    Kummer, RegularKummer and FoldedValuationOrbit.
+  Public inputs retain unit 2 for directions; no unit 2 or torsion assumptions in coordinate classification.
+  Same Source/C/P/hP/hdepth/hqp/hA/h_sigma retained on actual residual fixedness path.
+  No direction/fixedness/valuation-preservation/hcases/hno provider inputs.
+
+Facade/root/test build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11733 jobs).
+  New code: no warnings or errors.
+  Five existing unrelated broad-root sorry warnings:
+    DkMath/CosmicFormula/TriominoFLT.lean:1919:6
+    DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6
+    DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8
+    DkMath/NumberTheory/GcdNextResearch.lean:850:6
+    DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8
+
+Entrance checks:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest; no warnings/errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE031NodalReduction.lean
+  exit 0; seven public endpoints reachable through import DkMath;
+    standard-only Frey axiom print, same Source 37 centre/finite residual point kept;
+    no warnings/errors.
+  python3 check_tracker_mismatch.py /tmp/note031-002C3-full.log
+  exit 0; OK: no mismatches found.
+
+Static checks:
+  9 changed/new Lean files: three modified facades, six new (three production, regression, audit, smoke).
+  Exact file markers, public textbook docstrings, final newlines, tabs/trailing spaces: PASS.
+  All 18 new production and 9 regression declarations listed in axiom audit: PASS.
+  No sorry/admit/native_decide/custom axiom/opaque/unsafe in checked Lean files.
+  No Lib-to-FLT imports; upstream LICENSE/NOTICE exists.
+  git diff --check: exit 0.
+
+This records the checked new paths and scope, not whole-repository axiom freedom.
+Disposable raw logs: /tmp/note031-002C3-{focused,full,entrance,smoke}.log.
+
+Compact new audit output:
+  PASS: 18 production and 9 regression declarations; standard logical axioms only.
+  PASS: DkMath.Lib.NumberTheory.EllipticTangentDirections.exists_tangentDirections; 9491 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTangentDirections.TangentDirections.point_equation; 8048 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTangentDirections.TangentDirections.residue_ne; 6193 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTangentDirections.TangentDirections.inertia_fixed; 16663 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticNodalReduction.nonsingular_of_node_of_x_ne; 6855 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticNodalReduction.not_hasSmoothReduction_some_iff; 16320 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticNodalReduction.y_small_of_x_small; 16292 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.exists_criticalCentre_directions_at_bad_prime; 24639 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.not_smooth_reduction_iff_depth; 19900 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.residual_fixed_of_not_close_to_centre; 28249 reachable constants; expected providers present.
+  PASS: FreyNodalReductionTest.exists_nodal_data_at_three; 20713 reachable constants; expected providers present.
+  PASS: FreyNodalReductionTest.bad_point_depth; 19919 reachable constants; expected providers present.
+  PASS: FreyNodalReductionTest.smooth_point_not_depth; 25673 reachable constants; expected providers present.
+  PASS: FreyNodalReductionTest.source37_nonclose_fixed; 28264 reachable constants; expected providers present.
+  PASS inputs: DkMath.Lib.NumberTheory.EllipticTangentDirections.exists_tangentDirections; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.Lib.NumberTheory.EllipticNodalReduction.not_hasSmoothReduction_some_iff; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.FLT.Frey.Source.exists_criticalCentre_directions_at_bad_prime; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.FLT.Frey.Source.residual_fixed_of_not_close_to_centre; explicit arithmetic guards and remaining inputs retained.

@@ -1,0 +1,14 @@
+import DkMath
+
+#check DkMath.Lib.Algebra.CyclicSignSeparation.le_of_sub_or_add_mem
+#check DkMath.Lib.NumberTheory.CyclotomicFrobenius.cyclotomicCharacter_eq_natCast
+#check DkMath.Lib.NumberTheory.EllipticNodalDecomposition.centre_decomposition_fixed
+#check DkMath.Lib.NumberTheory.EllipticNodalDecomposition.sub_or_add_smooth_of_odd_torsion
+#check DkMath.FLT.Frey.Source.cyclic_tower_eq_smooth_torsion_of_nonresonant
+#check DkMath.FLT.Frey.Source.preimage_pointAction_sub_mem_of_nonresonant_bad
+#check DkMath.FLT.Frey.Source.residual_preimage_unramified_away_of_resonant_inertia
+#check DkMath.FLT.Frey.Source.residual_cofixed_tower_resonant_inertia_frobenius_impossible
+
+#print axioms DkMath.FLT.Frey.Source.preimage_pointAction_sub_mem_of_nonresonant_bad
+#print axioms DkMath.FLT.Frey.Source.residual_preimage_unramified_away_of_resonant_inertia
+#print axioms DkMath.FLT.Frey.Source.residual_cofixed_tower_resonant_inertia_frobenius_impossible

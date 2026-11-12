@@ -1,0 +1,10 @@
+{
+  "implementation_date": "2026-10-22",
+  "source_transport": "Read-only GitHub source cache from NOTE-031-002A",
+  "repository": "anthropics/fermats-last-theorem",
+  "path": "P2M/Sol/S_WeierstrassCurve_exists_torsion_zeroComponent_submodule_of_multiplicativeReduction.lean",
+  "blob_sha": "38bdee599f8b536cb30402a8d1dbef001a3d89da",
+  "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_torsion_zeroComponent_submodule_of_multiplicativeReduction.lean",
+  "ported_sections": "Residue equations; partial derivative unit; tangent/secant pole estimates (around lines 92-104, 213-434).",
+  "reconstructed_sections": "Torsion coordinate congruence injectivity and actual inertia fixed points reconstructed using DkMath 031-002A; no formal-group induction, zero-component construction or full reduction homomorphism ported."
+}

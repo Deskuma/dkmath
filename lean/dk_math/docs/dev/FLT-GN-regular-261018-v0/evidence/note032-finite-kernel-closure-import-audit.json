@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-08",
+  "new_modules": [
+    "DkMath.FLT.FreyCommonProjectionTopology",
+    "DkMath.Lib.NumberTheory.InertiaRadicalKernelTopology",
+    "DkMath.FLT.FreyRadicalFiniteDetection",
+    "DkMath.FLT.FreyRadicalKernelClosure",
+    "DkMath.FLT.FreyCommonTameCyclicClosure"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.FLT.FreyCommonProjectionTopology": {
+      "local_module_count": 404,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.InertiaRadicalKernelTopology": {
+      "local_module_count": 27,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyRadicalFiniteDetection": {
+      "local_module_count": 406,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyRadicalKernelClosure": {
+      "local_module_count": 407,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCommonTameCyclicClosure": {
+      "local_module_count": 408,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/FLT/FreyCommonProjectionTopology.lean": true,
+    "DkMath/Lib/NumberTheory/InertiaRadicalKernelTopology.lean": true,
+    "DkMath/FLT/FreyRadicalFiniteDetection.lean": true,
+    "DkMath/FLT/FreyRadicalKernelClosure.lean": true,
+    "DkMath/FLT/FreyCommonTameCyclicClosure.lean": true,
+    "DkMathTest/FLT/FreyFiniteKernelClosure.lean": true,
+    "DkMathTest/FLT/Note032FiniteKernelDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032RadicalKernelClosureSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 5,
+  "new_lean_file_sha256": {
+    "DkMath/FLT/FreyCommonProjectionTopology.lean": "6194b6478d1bbeb0f17dc4a9ed9c4942d96501620b60ec152673e99e5f5329fd",
+    "DkMath/Lib/NumberTheory/InertiaRadicalKernelTopology.lean": "d6d39a91fd5c57d046f6231b62ed17545ea7a8dc97d5168b9b8b60255d571d58",
+    "DkMath/FLT/FreyRadicalFiniteDetection.lean": "33f68feced78d9a80bad59f69a654769783da850b9045df797154a7a98e551d1",
+    "DkMath/FLT/FreyRadicalKernelClosure.lean": "a80b765814088cee881f7a21b397e1734e072aebed4ecee021e60352b544af68",
+    "DkMath/FLT/FreyCommonTameCyclicClosure.lean": "e9f6859632d7d2acc2be9929196af22c645e3dc87748720b0dd4f62cdcc9c45d",
+    "DkMathTest/FLT/FreyFiniteKernelClosure.lean": "4949c0eb1d249f6e61ad8ffd966b34fb0ecf98b2913a30322fd39e181726a417",
+    "DkMathTest/FLT/Note032FiniteKernelDependencyAudit.lean": "6d32629555b262cd66078552c644b4da522676ffec00eb543b5042b221953679",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032RadicalKernelClosureSmoke.lean": "89d5d43618ba2b6196c56b1b2399dedd11d5cb934aa90c6e87e62adf4e8371ff"
+  },
+  "proper_Lib_and_FLT_facade_reachability": true,
+  "one_Lib_file_no_FLT_dependency": true,
+  "boundary": "Four FLT modules using original Frey Source and one FLT-independent Lib module. Actual projection open kernel; same radical kernels closed and antitone with exact all-root tail intersection; compactness gives eventual detection; same actual primitive generator and existing exponent lower to n+3. Proves actual finite radical kernel inclusion, actual H cyclicity and same generator single evaluation injectivity; kernel card divides fixed coefficient card. No new hgen/hcyclic/hcompare/hopen/hcontinuous provider. Global hclass supply, resonance obstruction, continuous H1 comparison, global contradiction and unconditional hno remain unproved. Strong upstream three-factor p-power decomposition is not claimed."
+}

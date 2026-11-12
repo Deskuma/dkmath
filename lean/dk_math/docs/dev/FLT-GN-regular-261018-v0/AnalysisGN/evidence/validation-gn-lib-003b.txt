@@ -1,0 +1,48 @@
+GN-LIB-003b verification — 2026-10-23
+
+Branch: lib/FLT-GN-Completion-261023-v0
+Base HEAD: 4d74d7d2de03889ab5f3dc619dd552e98882bee7
+Lake cwd: lean/dk_math
+
+Validation contract: affected production modules only, per latest user instruction.
+Full build is delegated to the user. No DkMathTest/lake test build or test source changes.
+
+Command:
+  lake build DkMath.Lib.Algebra.SquareCompletion DkMath.Gnomon.Algebra DkMath.Gnomon.CosmicBridge DkMath.NumberTheory.Primitive.SquareBody
+Exit: 0
+Result: Build completed successfully (3115 jobs).
+Warnings: 0.
+
+New neutral owner:
+  7 CommSemiring theorems; 8 small textbook examples compiled inside this module.
+  Imports only 3 Mathlib modules; no application dependency or local import cycle.
+  Layer count and finite-sum indices remain natural numbers with casts into the semiring.
+
+Legacy compatibility:
+  7 old signatures/full names retained; proof bodies now call the general Lib kernel.
+  oddGnomon, squareGnomonBand, petalMul and squareBody definitions unchanged.
+  Primitive order/primality theorem suffix unchanged.
+  Gnomon.CosmicBridge source unchanged and compiled successfully.
+
+Lightweight metadata inspection (imports the already-built modules; no test library):
+  lake env lean /tmp/GNLib003bAudit.lean
+Exit: 0
+Result: GN-LIB-003b: 14 declarations checked; standard logical axioms only.
+Allowed axioms: propext, Classical.choice, Quot.sound.
+Public elaborated types retained in gn-lib-003b.json.
+
+Tracker:
+  python3 check_tracker_mismatch.py /tmp/gn-lib-003b-modules.log
+Exit: 0; no mismatches.
+
+Static closeout:
+  Four module file markers match paths.
+  No sorry/sorryAx/native_decide or axiom/unsafe declarations in checked source modules.
+  All 24 original input material hashes preserved.
+  git diff --check; changed document links, JSON and whitespace checked.
+
+Public integration boundary:
+  DkMath.Lib.lean has one new import; owner reachability registered statically.
+  The Lib aggregator and DkMath root were not built in this unit.
+  No full integration or full-suite success is claimed for these changes.
+  Scope is GN-LIB-003b, not prime existence, Legendre, hno or general FLT closure.

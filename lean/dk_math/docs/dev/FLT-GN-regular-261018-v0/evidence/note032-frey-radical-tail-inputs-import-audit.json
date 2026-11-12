@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-08",
+  "new_modules": [
+    "DkMath.FLT.FreyRadicalKernelComparison",
+    "DkMath.Lib.NumberTheory.AlgebraicResiduePowers",
+    "DkMath.Lib.NumberTheory.InertiaResidueRootLifts",
+    "DkMath.Lib.NumberTheory.InertiaResidueUnitRoots",
+    "DkMath.Lib.NumberTheory.InertiaRadicalTailField"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.FLT.FreyRadicalKernelComparison": {
+      "local_module_count": 389,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.AlgebraicResiduePowers": {
+      "local_module_count": 13,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.InertiaResidueRootLifts": {
+      "local_module_count": 14,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.InertiaResidueUnitRoots": {
+      "local_module_count": 15,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.InertiaRadicalTailField": {
+      "local_module_count": 16,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/FLT/FreyRadicalKernelComparison.lean": true,
+    "DkMath/Lib/NumberTheory/AlgebraicResiduePowers.lean": true,
+    "DkMath/Lib/NumberTheory/InertiaResidueRootLifts.lean": true,
+    "DkMath/Lib/NumberTheory/InertiaResidueUnitRoots.lean": true,
+    "DkMath/Lib/NumberTheory/InertiaRadicalTailField.lean": true,
+    "DkMathTest/FLT/FreyRadicalTailInputs.lean": true,
+    "DkMathTest/FLT/Note032FreyTailDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTailSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 5,
+  "new_lean_file_sha256": {
+    "DkMath/FLT/FreyRadicalKernelComparison.lean": "d79fb3ccdbfdd7fc51470a9f2747e88ea66039e9e192f2a549ef4e7c58090e24",
+    "DkMath/Lib/NumberTheory/AlgebraicResiduePowers.lean": "116f9f8018de34e50ad0e711db4ea566cad3da90dba93fa969f72895ddcbe981",
+    "DkMath/Lib/NumberTheory/InertiaResidueRootLifts.lean": "55e8a95fc1c56e57e4a7a1aa8ef3e6e120facb69266bb3820ce9053cbf1f2a44",
+    "DkMath/Lib/NumberTheory/InertiaResidueUnitRoots.lean": "6997b1d96076e9db505517a145beb6d5739f17ffd20fc886c7cda1b0c015f64b",
+    "DkMath/Lib/NumberTheory/InertiaRadicalTailField.lean": "339d36ae2ed610487cc07e893b0ef9b08a0b7a7b044785c049f90d66f6408f10",
+    "DkMathTest/FLT/FreyRadicalTailInputs.lean": "fba5148b3c3f042e5d9c25672f6382062931158fc1b1d960c0330a344e17fba9",
+    "DkMathTest/FLT/Note032FreyTailDependencyAudit.lean": "958ee8ff2191a755d7883b65ee5a4c26b53fdf295b0d9d036a86ccbd1ab382e1",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTailSmoke.lean": "b704897d22c753030a2364fdb67cbb677543d7ad4ca3722e6cddeb9719ff3ffa"
+  },
+  "proper_Lib_and_FLT_facade_reachability": true,
+  "four_Lib_files_no_FLT_dependency_and_Apache2_provenance": true,
+  "boundary": "ONE Frey kernel-comparison equivalence module and FOUR Lib arithmetic modules. Actual kernel inclusion iff all same K evaluations or original finite-torsion differences vanish; inclusion NOT proved. Residue powers surjective from algebraic closedness, nonzero algebraic residue finite-order from primitive polynomial/finite adjoin. Unit-exponent root reduction injective; actual p-power residue roots lift into SAME inertia fixed field. For actual E containing fixed field, construct UNIT approximate p-root internally using actual residue powers/torsion/fixed-root lifts. Construct actual tail field with all q roots and SAME compatible tower, supply these UNIT CONGRUENCES there and overfields. Structural E containment/unit/root guards explicit, no hroots/htor/hlifts/hgen/hcompare provider. NO exact p-roots/Henselian lifting/value-group/tail divisibility/kernel containment/common quotient cyclicity/continuous H1/global class supply/arith contradiction/unconditional hno."
+}

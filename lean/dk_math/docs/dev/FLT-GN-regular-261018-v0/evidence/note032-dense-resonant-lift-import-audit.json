@@ -1,0 +1,74 @@
+{
+  "date": "2026-11-09",
+  "new_modules": [
+    "DkMath.Lib.RepresentationTheory.ClosedFixedSubgroup",
+    "DkMath.FLT.FreyClosedKernelStabilizer",
+    "DkMath.FLT.FreyDenseKernelFixed",
+    "DkMath.Lib.NumberTheory.FrobeniusInertiaCoset",
+    "DkMath.FLT.FreyFrobeniusLiftIndependence",
+    "DkMath.FLT.FreyDenseResonantFixed",
+    "DkMath.FLT.FreyDenseResonantLift"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.Lib.RepresentationTheory.ClosedFixedSubgroup": {
+      "local_module_count": 1,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyClosedKernelStabilizer": {
+      "local_module_count": 437,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyDenseKernelFixed": {
+      "local_module_count": 438,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.FrobeniusInertiaCoset": {
+      "local_module_count": 5,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyFrobeniusLiftIndependence": {
+      "local_module_count": 440,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyDenseResonantFixed": {
+      "local_module_count": 441,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyDenseResonantLift": {
+      "local_module_count": 442,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/Lib/RepresentationTheory/ClosedFixedSubgroup.lean": true,
+    "DkMath/FLT/FreyClosedKernelStabilizer.lean": true,
+    "DkMath/FLT/FreyDenseKernelFixed.lean": true,
+    "DkMath/Lib/NumberTheory/FrobeniusInertiaCoset.lean": true,
+    "DkMath/FLT/FreyFrobeniusLiftIndependence.lean": true,
+    "DkMath/FLT/FreyDenseResonantFixed.lean": true,
+    "DkMath/FLT/FreyDenseResonantLift.lean": true,
+    "DkMathTest/FLT/FreyDenseResonantLift.lean": true,
+    "DkMathTest/FLT/Note032DenseResonantLiftAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032DenseResonantLiftSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 7,
+  "new_lean_file_sha256": {
+    "DkMath/Lib/RepresentationTheory/ClosedFixedSubgroup.lean": "b4ab754b163737df942491fa70583a54b7982c29cc354ad26e5e1a8703ea0554",
+    "DkMath/FLT/FreyClosedKernelStabilizer.lean": "09ce8be46ffba2b58034f6facd95e1e1f982b1cce07a7cf84f2d8e973652ce77",
+    "DkMath/FLT/FreyDenseKernelFixed.lean": "81654c54d9931ebba29ada772bf1725d07b67b8e368746dda32fa25dc03aa276",
+    "DkMath/Lib/NumberTheory/FrobeniusInertiaCoset.lean": "7a1a7f221c06ae2fd18decd88c65d21cbc8f7cb6ef7a646622aec074254e61c6",
+    "DkMath/FLT/FreyFrobeniusLiftIndependence.lean": "f2f6f88de3d923b0695f240f94602429fd40a6cfe4cb5fd21d0ec9d883672119",
+    "DkMath/FLT/FreyDenseResonantFixed.lean": "993d0a45d8e92aa2e173c572e5243ab89f51d75dc624bb8129f4d345abf83327",
+    "DkMath/FLT/FreyDenseResonantLift.lean": "54230a06722a687fd832903b8b1d5509f60d0934f627fa71046fb382d9b88f13",
+    "DkMathTest/FLT/FreyDenseResonantLift.lean": "24f0365e8bdd9f0733adc181e71f51f45d6fc88df57af151eb5783abcc2ff220",
+    "DkMathTest/FLT/Note032DenseResonantLiftAudit.lean": "780afc22102f6608d9f0be450541b85bc84c5b03eb9c56a7b81f8783e413b053",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032DenseResonantLiftSmoke.lean": "1b6b5c752b5cb443a5e595374adf086b761d7bcf733a412d6947038aa9e1e79e"
+  },
+  "proper_FLT_facade_reachability": true,
+  "two_generic_Lib_and_five_actual_FLT_modules": true,
+  "proper_Lib_facade_reachability": true,
+  "boundary": "Actual closed K stabilizer contains original inertia; explicit density and Frobenius fixedness supply hD. Two actual Frobenius lifts have quotient in original inertia, hence same F/E/K actions, same generated subgroup and equivalent density premises. Under hdense, same gamma eigenvalue/resonant sign iff D invariance. Endpoint derives hD from explicit hdense+hsign and reuses SAME nonzero continuous D lift. Actual density and eigenvalue arithmetic, global F Selmer, hclass and unconditional hno remain open."
+}

@@ -1,0 +1,127 @@
+NOTE-032 FOUR STEPS: SAME fixed coefficients, ordinary H1 nonzero classes, actual coefficient-map image zero
+Date: 2026-11-08
+Working directory: lean/dk_math
+
+Successful final validations (listed Lean/Lake commands exited 0):
+1. lake build DkMath.FLT.FreyInertiaH1CoefficientBoundary
+   Focused implementation build passed (4435 jobs).
+2. lake build DkMath DkMathTest.FLT.FreyFixedCoefficientH1 DkMathTest.FLT.Note032FreyFixedH1DependencyAudit
+   Build completed successfully (11177 jobs).
+3. lake test
+   Normal repository test driver passed; reached 12340/12340 jobs.
+4. lake env lean DkMathTest.lean
+   Rechecked after suite dependencies built; passed, only existing marker printed.
+5. lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyFixedH1Smoke.lean
+   Root exposes all twenty-five new production declarations; final endpoint standard axioms only.
+6. Four full textbook blocks extracted to /tmp/n032-h1-book-{1,2,3,4}.lean.
+   lake env lean run on each separately; all passed without warnings.
+   Exact full production source and exact markers immediately after imports retained.
+7. python3 /tmp/n032-h1-import-audit.py
+   Comment-aware local imports acyclic; seven exact markers, four full source copies,
+   Lib/FLT/root/test reachability, forbidden-construct scans and source SHA256 passed.
+   Closure sizes including self: generic trivial H1 class1, fixed tame character355,
+   actual fixed H1 classes357, actual coefficient boundary358. No FLT imports in generic Lib.
+   No FreyHnoSmallIndex/RegularPrime/HardCase consumers in new production import closures.
+8. git diff --check and direct trailing-whitespace checks on new files passed.
+9. Local model answer HEAD 115356cbc627159d0d16add0da6e9a2bb3655ed8.
+   Read ordinary H1 representative/conjugacy-with-coboundary correction solution and H2
+   inflation/restriction naturality/coboundary proof. Used actual Mathlib degree1 API,
+   not the external H2 statement. No external theorem/provider or P2M/P2MW imports.
+   Compared Mathlib ordinary H1 low-degree/functoriality and continuous low-degree scope.
+   Reference and Mathlib file SHA256 saved in note032-frey-fixed-h1-reference-audit.json.
+
+Implemented content:
+Step 1. SAME ordinary group hom f:Gamma->Multiplicative V gives SAME additive hom and
+        actual Mathlib cocycle/class for trivial integer-linear coefficient V.
+        H1IsoOfIsTrivial recovers SAME values. An actual nontrivial value implies class!=0.
+        This API uses ordinary groupCohomology.H1 on Type-valued groups/modules.
+Step 2. SAME actual F=Q^I fixed subgroup, SAME existing inertia fixed-valued difference
+        character; prove continuity in original subgroup topology. SAME wild subgroup
+        remains in kernel. Descend to SAME actual J=I/W with SAME values in F, prove
+        continuity in canonical quotient/subgroup topologies and value inclusion into
+        original Q recovers SAME prior tame character. No new topology/discrete-J input.
+Step 3. SAME F with trivial action supplies actual ordinary H1 classes for I and J.
+        Pullback representative values agree on SAME inertia element and quotient class.
+        SAME original nontrivial difference at SAME tau supplies BOTH nonzero classes.
+Step 4. SAME original Q actual inertia action is packaged as integer-linear Rep.
+        SAME quotient point [x] supplies actual d01([x]) cocycle, ordinary H1 class zero.
+        Inclusion F->Q is an ACTUAL representation morphism by original fixedness.
+        SAME included representative value equals SAME original quotient coboundary.
+        Actual groupCohomology.map at degree1, with identity group map and SAME coefficient
+        inclusion, sends SAME nonzero fixed-inertia class to zero. Uses actual H1 naturality,
+        not just separate cochain comparisons.
+        SAME exact hclass+Cofixed candidate supplies original n,T,q,A,tau,y,h and SAME
+        continuous tame character, nonzero ordinary fixed-coefficient classes, actual
+        coefficient-map image zero and actual Q coboundary class zero together.
+
+Regression and audit scope:
+- ZMod5 identity character: actual ordinary H1 class nonzero and SAME value1 recovered.
+- Trivial character: class zero, testing necessity of nontrivial-value guard.
+- Actual shear module (ZMod5)^2 with integer-linear group action: SAME d01(0,1) has
+  value(t,0) and actual ordinary H1 class zero in original shear coefficient module.
+  This concretely checks compatibility of nonzero trivial-coefficient character with
+  original-module coboundary rather than asserting a contradiction.
+- #print axioms for all25 new declarations: standard propext/Classical.choice/Quot.sound;
+  no sorryAx. Recursive checked types/constructors/opaque-value audits reject forbidden
+  FLT endpoints and nonstandard axioms. Required dependencies include actual previous
+  wild-kernel inclusion, actual continuity, SAME original nontrivial witness, actual
+  H1 trivial-coefficient isomorphism, degree1 naturality, original Q action/coboundary.
+- Sixteen public input audits verify internal continuity/H1 supply and keep SAME final
+  arithmetic hclass/Cofixed; no new class/continuity/coboundary/nonzero provider.
+
+Boundaries:
+- Exactly five pre-existing unrelated sorry warnings in root/suite, no new warning.
+  No repository-wide sorry-free claim.
+- All H1 claims here are ORDINARY groupCohomology.H1. Continuous representatives are
+  separately proved. No continuousCohomology1 nonzero result/comparison isomorphism.
+- SAME fixed coefficients F have trivial action, original Q has actual inertia action.
+  Nonzero in H1(I,F) mapping to zero in H1(I,Q) is NOT contradiction: different coefficients.
+- I/J pullback cocycle values agree; no actual H1 inflation comparison theorem was added.
+- No global cyclotomic ClassModP identification, hclass supply, arithmetic conjugacy-
+  invariance, positive/negative branch exclusion or general hno proof completed.
+- UNCONDITIONAL GENERAL hno REMAINS INCOMPLETE.
+
+Twenty-five checked roots and required dependencies:
+PASS: DkMath.Lib.RepresentationTheory.TrivialCharacterH1.coefficient; 1566 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.TrivialCharacterH1.additive; 549 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.TrivialCharacterH1.cocycle; 2149 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.TrivialCharacterH1.cocycle_apply; 2150 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.TrivialCharacterH1.cohomologyClass; 13473 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.TrivialCharacterH1.class_evaluate; 13500 reachable constants; required actual theorems present.
+PASS: DkMath.Lib.RepresentationTheory.TrivialCharacterH1.class_ne_zero; 13501 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaFixedDifferenceCharacter_continuous; 35310 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.wildInertia_le_fixed_character_kernel; 34562 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedTameCharacter; 34613 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedTameCharacter_mk; 34614 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedTameCharacter_value; 34618 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedTameCharacter_continuous; 35402 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedTameH1Class; 39050 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedInertiaH1Class; 38963 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCocycle_inflation_value; 34737 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_character_nontrivial; 34766 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_H1_nonzero; 39311 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fullInertiaCoefficient; 24772 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fullInertiaCocycle; 24848 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fullInertiaClass_zero; 29483 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCoefficientInclusion; 24847 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCocycle_include_value; 34676 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedInertiaClass_map_zero; 39075 reachable constants; required actual theorems present.
+PASS: DkMath.FLT.Frey.Source.residual_exists_fixed_coefficient_H1; 87834 reachable constants; required actual theorems present.
+
+Sixteen public input reports:
+PASS inputs: DkMath.Lib.RepresentationTheory.TrivialCharacterH1.coefficient; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.RepresentationTheory.TrivialCharacterH1.cocycle; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.RepresentationTheory.TrivialCharacterH1.cohomologyClass; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.Lib.RepresentationTheory.TrivialCharacterH1.class_ne_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.inertiaFixedDifferenceCharacter_continuous; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.wildInertia_le_fixed_character_kernel; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedTameCharacter; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedTameCharacter_continuous; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedTameH1Class; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedInertiaH1Class; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedInertiaClass_map_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.fixed_H1_nonzero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fullInertiaCoefficient; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fullInertiaClass_zero; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedCoefficientInclusion; remaining arithmetic inputs explicit.
+PASS inputs: DkMath.FLT.Frey.Source.residual_exists_fixed_coefficient_H1; remaining arithmetic inputs explicit.

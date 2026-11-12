@@ -1,0 +1,25 @@
+NOTE-032-REDUCTION-SQUARE-INTEGER validation / 2026-10-27
+base: a9518a88fb9be1187ee172e66fd9e56076192b88
+
+PASS ./lean-build.sh DkMath.FLT.FreyFiniteKernelReductionSquare (0 warnings)
+PASS ./lean-build.sh DkMathTest.Lib.NumberTheory.FreyReductionTransport (0 warnings)
+PASS lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/Note032ReductionSquareSmoke.lean (0 warnings)
+PASS lake env lean tmp/note032-reduction-square/Axioms1.lean (0 warnings)
+PASS lake env lean tmp/note032-reduction-square/Axioms2.lean (0 warnings)
+
+Production: 5 owners, 15 theorems and 2 definitions.
+Regression: 5 theorems and 2 definitions; actual three-point kernel at seven, nontrivial denominator two and same integer model, actual nonzero smooth integerized point, nonunit boundary at two.
+Source37 smoke: 3 theorems.
+Axiom audit: 27 public declarations in batches 15 + 9 + 3.
+Observed axioms: propext, Classical.choice, Quot.sound; no sorryAx.
+
+PASS six production/test module file markers match paths
+PASS public Lib textbook docstrings and promotion markers
+PASS no forbidden proof constructs or increased heartbeat limits
+PASS Lib imports do not depend on FLT or external solution modules
+PASS six facade imports statically registered; no facade build
+PASS all existing mathematical owners and prior NOTE/evidence unchanged
+PASS index unchanged
+PASS git diff HEAD --check passed
+
+Boundary: smooth kernel branch, inverse-image criterion, discriminant depth, q=p, scheme isogeny, target rational torsion exclusion and general hno remain open. Integerization smoothness equivalence does not directly identify different residue models pointwise.

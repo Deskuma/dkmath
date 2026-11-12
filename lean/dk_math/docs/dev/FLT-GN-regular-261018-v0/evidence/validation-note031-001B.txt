@@ -1,0 +1,119 @@
+NOTE-031-001B verification evidence — 2026-10-22 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Completed scope: NOTE-031-001B; together with 001A this completes 031-001.
+  Actual finite inertia lifts to the absolute Galois group through integral closure.
+  Residue action corrected by profinite stabilizer surjectivity, not assumed trivial.
+  DVR fractions give an integral numerator with unit integral denominator in a valuation subring.
+  Integral congruences extend to the whole valuation ring; both sigma and sigma inverse preserve it.
+  Inertia inside the decomposition group is mapped into the full absolute Galois group.
+  Every open subgroup containing all inertia at all rational finite primes is top.
+  Krull finite normal level and the proved finite arithmetic of 001A are used.
+  No normality assumption on H; its openness is retained.
+  Open-kernel representations admit same-representation/same-submodule Fixed/Cofixed transport.
+  Actual nonzero torsion supplies its open kernel via geometric finiteness and coordinate continuity.
+  Same Frey Source APIs retain only local conditions; no new hgen/hlift/hopen/hrat/hcases/hno inputs.
+  Common-side alternative is (all local Fixed) OR (all local Cofixed).
+
+Remaining scope:
+  031-002: inertia triviality away from 2,p for the actual Frey representation.
+  031-003: at 2, both subspace and quotient inertia triviality.
+  031-004: at p, uniform local side selection.
+  031-005: assemble all local sides into same-Source hcases.
+  hcases, hno, unconditional irreducibility and general FLT remain unproved here.
+  Local arithmetic hypotheses are not supplied by the globalization theorem itself.
+
+Regressions:
+  Nonidentity finite inertia retains nonidentity under the lift, by restriction equality.
+  A proper open subgroup misses an actual inertia element at some finite prime.
+  q=1 cannot satisfy the valuation address; unit integral denominators are nonzero.
+  Same Source 37, same N: Fixed, Cofixed and common-side conditional transport.
+  Failure of global Cofixed yields q, a valuation subring over q, an inertia element,
+    and an actual point in the same residual space whose difference lies outside N.
+  Existing stable one-dimensional finite boundary retained; pointwise local choices cannot be exchanged.
+  No Source 37 or Fermat counterexample existence is asserted.
+
+Source provenance:
+  Four source files from the read-only GitHub source cache of NOTE-031-001A reused.
+  Exact blob SHAs, paths and port classification: upstream-note031-001B.json.
+  Four adapted modules preserve copyright, Apache-2.0, changes, LICENSE and NOTICE paths.
+  Generic representation and same-Frey wrappers reuse DkMath APIs.
+  No external provider imports, no Lib-to-FLT imports, no RegularKummer Lean dependency.
+
+Static checks:
+  10 new Lean files: seven production, one regression, one audit, one root smoke.
+  Exact post-import markers, final newlines, whitespace and public textbook docstrings: PASS.
+  All 19 production and 9 regression declarations listed in axiom audit: PASS.
+  No new sorry/admit/native_decide/custom axiom/opaque/unsafe or external provider imports.
+  Apache LICENSE/NOTICE paths and four upstream blob SHAs checked.
+  git diff --check: exit 0.
+
+Focused build:
+  lake build DkMathTest.FLT.Note031AbsoluteInertiaDependencyAudit
+  exit 0; Build completed successfully (3876 jobs).
+  New code: no warnings or errors.
+  All 19 production and 9 regression declarations use standard logical axioms only.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Sixteen full type/opaque-body graph checks passed, with expected providers present.
+  Four public-input checks passed, retaining openness/locality and the same Source.
+  Required providers on designated paths:
+    profinite ideal transitivity and residue-action surjectivity;
+    local Dedekind DVR and valuation-ring comparison;
+    integral unit-denominator fractions and valuation subring existence;
+    finite inertia generation via Minkowski discriminant bound;
+    Krull finite normal level;
+    actual torsion finiteness, point stabilizer openness and representation kernel openness.
+  Forbidden graph dependencies:
+    sorryAx, external FltRegular/P2M/P2MW/FreyPackage, old FLT endpoints,
+    DkMath.FLT.Kummer, RegularKummer and FoldedValuationOrbit.
+  Neutral library roots additionally forbid all DkMath.FLT dependencies.
+  Finite boundary path additionally forbids number-field, elliptic, inertia and ramification APIs.
+
+Facade/root/test build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11708 jobs).
+  New code: no warnings or errors.
+  Five existing unrelated broad-root sorry warnings:
+    DkMath/CosmicFormula/TriominoFLT.lean:1919:6
+    DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6
+    DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8
+    DkMath/NumberTheory/GcdNextResearch.lean:850:6
+    DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8
+
+Additional entrance checks:
+  lake env lean DkMathTest.lean
+  exit 0; file: DkMathTest; no warnings or errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE031AbsoluteInertia.lean
+  exit 0; eight endpoints reachable through import DkMath;
+    two standard-only axiom prints; same Source 37/N example with hlocal only;
+    no warnings or errors.
+  python3 check_tracker_mismatch.py /tmp/note031-001B-full.log
+  exit 0; OK: no mismatches found.
+
+Raw logs are disposable /tmp/note031-001B-*.log files.
+This records the checked new paths and stated scope, not whole-repository axiom freedom.
+
+Compact audit output (type and opaque-body graphs, inputs):
+  PASS: 19 production and 9 regression declarations; standard logical axioms only.
+  PASS: DkMath.Lib.NumberTheory.IntegralClosureInertiaLift.exists_lift_mem_inertia_integralClosure; 32048 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.ValuationInertiaLift.FractionRepresentation.exists_div_rep_or_inv_div_rep_of_ne_bot; 28516 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.ValuationInertiaLift.FractionRepresentation.exists_integral_fraction; 28894 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.ValuationInertiaLift.exists_valuation_inertia_of_integral_congruence; 29490 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.AbsoluteInertiaGeneration.exists_lift_mem_valuation_inertia; 35543 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.AbsoluteInertiaGeneration.subgroup_eq_top_of_inertia_le; 72554 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.AbsoluteInertiaRepresentation.isFixedOn_of_inertia; 72591 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.AbsoluteInertiaRepresentation.isCofixedOn_of_inertia; 72591 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.isFixedOn_of_inertia; 74610 reachable constants; expected providers present.
+  PASS: DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.isCofixedOn_of_inertia; 74610 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.residual_isFixedOn_of_inertia; 74621 reachable constants; expected providers present.
+  PASS: DkMath.FLT.Frey.Source.residual_isCofixedOn_of_inertia; 74621 reachable constants; expected providers present.
+  PASS: AbsoluteInertiaLocalGlobalTest.lift_preserves_nontriviality; 35562 reachable constants; expected providers present.
+  PASS: AbsoluteInertiaLocalGlobalTest.proper_open_subgroup_has_local_witness; 72578 reachable constants; expected providers present.
+  PASS: AbsoluteInertiaLocalGlobalTest.source37_cofixed_failure_local_witness; 74628 reachable constants; expected providers present.
+  PASS: AbsoluteInertiaLocalGlobalTest.inconsistent_side_boundary; 12928 reachable constants; expected providers present.
+  PASS inputs: DkMath.Lib.NumberTheory.AbsoluteInertiaGeneration.subgroup_eq_top_of_inertia_le; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.Lib.NumberTheory.AbsoluteInertiaRepresentation.isCofixedOn_of_inertia; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.FLT.Frey.Source.residual_isCofixedOn_of_inertia; explicit arithmetic guards and remaining inputs retained.
+  PASS inputs: DkMath.FLT.Frey.Source.residual_fixed_or_cofixed_of_inertia_common_side; explicit arithmetic guards and remaining inputs retained.

@@ -1,0 +1,19 @@
+NOTE-032-GLOBAL-FIBERS-DIVISOR validation (2026-10-26)
+Base HEAD: 4cfb0c40f783b4dff1bd3d5105b41ba77ab2e88f
+Branch: dev/FLT-GN-regular-261018-v0
+PASS focused production build: DkMath.FLT.FreyFiniteKernelGlobal
+PASS focused test build: DkMathTest.Lib.NumberTheory.EllipticFiniteKernelGlobal
+PASS Source37 direct Lean: 4 theorems
+PASS axiom audit: 51 declarations; only propext, Classical.choice, Quot.sound
+PASS forbidden-construct and external-proof-import scan
+PASS Lib dependency direction, textbook docstrings, promotion markers
+PASS file markers after imports and tracker mismatch check
+PASS facade import registration (static)
+PASS previous owners and checkpoint documents unchanged
+PASS cached upstream divisor/Pic0 solution blob hash
+PASS git diff --check and new-file whitespace
+Counts: 8 production owners, 29 theorems, 8 definitions, 707 lines
+Actual tests: 9 theorems, 1 definition; same E[3] of order 9, nonzero Weil divisor pushforward
+Completed: all fibers are H cosets; surjectivity; every target fiber has cardinal |H|
+Completed: principal-divisor preservation, induced divisor-class homomorphism and point-difference class computation
+Boundary: Abel correspondence, point additivity, isogeny, rational-image p-torsion, integral models and hno remain open

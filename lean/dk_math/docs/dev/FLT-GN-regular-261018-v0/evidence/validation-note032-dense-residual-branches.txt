@@ -1,0 +1,12 @@
+NOTE-032 dense Frobenius and residual branches, 2026-11-12
+Seven production modules; textbook source equality 7/7 and exact module markers 7/7.
+Focused build: lake build DkMathTest.FLT.FreyResidualFrobeniusBranches DkMathTest.FLT.Note032ResidualFrobeniusBranchesAudit, 4551 jobs, passed.
+16 declarations checked by #print axioms; only propext, Classical.choice, Quot.sound used.
+Recursive checked dependency and input audits passed for three endpoints; 34603, 59274, 59321 reachable constants. hcofixed and hres remain inputs for the branch theorem; hq1 also remains on the lift.
+Root build: lake build DkMath DkMath.Lib DkMath.FLT DkMathTest.FLT.FreyResidualFrobeniusBranches DkMathTest.FLT.Note032ResidualFrobeniusBranchesAudit, 11286 jobs, passed.
+Suite: lake test, 12486 jobs, exit 0. Root and suite contain five historical sorry warnings in other source files.
+Entrance: lake env lean DkMathTest.lean, passed.
+Root smoke: lake env lean /tmp/Note032DenseResidualSmoke.lean, passed.
+git diff --check and source forbidden-construct scan passed.
+Model reference: P2M/Sol/S_FreyPackage_frey_torsion_fixed_eq_zero.lean, checkout 115356cbc627159d0d16add0da6e9a2bb3655ed8; it applies to actual globally fixed p-torsion and does not directly supply a lift of the quotient obstruction.
+Boundary: residual representative hres, cofixed input, global Selmer comparison, hclass, and unconditional general hno are not supplied.

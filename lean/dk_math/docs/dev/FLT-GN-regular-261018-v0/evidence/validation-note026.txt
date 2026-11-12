@@ -1,0 +1,94 @@
+NOTE-026 verification evidence — 2026-10-21
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Mathematical scope:
+  Actual all-point orders of nonzero products are additive; finite products handled by induction.
+  Zero orders at all points -> unique constant unit via NOTE-025, comparing with function 1.
+  Right additivity: choose actual U with nU=T via proved multiplication surjectivity.
+  h=w(T)*transEquiv(-U)(w(R)) has the same orders as existing w(T+R).
+  NOTE-025 unique scalar and commuting translations identify the actual right eigenvalue.
+  Alternation: actual H=product over i in range n of transEquiv(iU)(w(T)).
+  All factors and H are nonzero.
+  Order of factor = d(i-1)-d(i); nT=0 gives d(j+n)=d(j).
+  Finite periodic difference sum vanishes, including the -1 endpoint.
+  H is a proved nonzero constant, so translation by U fixes H.
+  Cancelling common nonzero factors proves transEquiv(T)(w(T))=w(T).
+  Unique actual eigenvalue satisfies c(T,T)=1, stronger than c(T,T)^n=1.
+  Both additivities and alternation give c(S,T)=c(T,S)^-1.
+  Actual nested AddChar E[n] (AddChar E[n] mu_n) constructed with the same NOTE-025 values.
+  Source 2 uses the same normalized rational curve y^2+xy=x^3-2*x^2-9*x.
+  Actual distinct nonzero 2-torsion points (0,0) and (4,-2) proved and used in regressions.
+  Orbit orders at O and actual finite U, orbit constant, self-translation, both additivities,
+    diagonal values, off-diagonal swap, n=1 and arbitrary n=37 diagonal tested.
+  No nondegeneracy, nontrivial pairing value, Galois equivariance, fixed-field descent,
+    WeilPairingData existence, unconditional det=cyclotomic or new FLT closure asserted.
+
+Static checks:
+  Exact file markers, whitespace and forbidden-construct scan in 8 new Lean files: PASS.
+  Whitespace in all 10 new files: PASS.
+  No sorry/admit, custom axiom/opaque, unsafe or native_decide in new Lean files.
+  Two adapted files retain Apache-2.0 attribution, upstream blobs and LICENSE/NOTICE paths.
+  git diff --check: exit 0.
+
+Focused build and audit:
+  lake build DkMathTest.FLT.Note026DependencyAudit
+  exit 0; Build completed successfully (3212 jobs).
+  New production and regression/audit modules: no warnings.
+  28 production and 22 regression declarations: standard logical axioms only.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  14 selected type-and-opaque-body dependency paths: PASS.
+  Required actual multiplication surjectivity, all-point orders, unique scalar criterion,
+    periodic differences, nonzero factors, eigenvalue uniqueness and existing same character.
+  Selected paths forbid external unported providers, Weil pairing data, torsion bases,
+    old FLT endpoints and global Kummer input.
+
+Selected audit output:
+  28 production and 22 regression declarations; standard logical axioms only.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointOrder_mul; 28753 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointOrder_prod; 28765 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilTranslationUnit_add_right; 33837 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.pointOrder_weilTranslateOrbitProduct; 33816 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.existsUnique_unit_weilTranslateOrbitProduct; 33847 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.transEquiv_weilFunction_self; 33854 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilTranslationUnit_self; 33862 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilTranslationUnit_swap; 33867 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilAlternatingBicharacter; 33928 reachable constants; expected providers present.
+  DkMath.Lib.NumberTheory.EllipticTorsionRepresentation.weilAlternatingBicharacter_self; 33958 reachable constants; expected providers present.
+  DkMath.FLT.Frey.Source.curve_weilAlternatingBicharacter; 36957 reachable constants; expected providers present.
+  FreyWeilBicharacterTest.otherTarget_ne_target; 24192 reachable constants; expected providers present.
+  FreyWeilBicharacterTest.actual_self_unit; 36928 reachable constants; expected providers present.
+  FreyWeilBicharacterTest.exponent_thirtySeven; 36999 reachable constants; expected providers present.
+
+Facade/root build:
+  lake build DkMath DkMath.FLT DkMath.Lib
+  exit 0; Build completed successfully (10686 jobs).
+
+Integrated build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11638 jobs).
+  New modules: no warnings.
+  Five pre-existing unrelated sorry warnings were replayed:
+    DkMath/CosmicFormula/TriominoFLT.lean:1919
+    DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147
+    DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187
+    DkMath/NumberTheory/GcdNextResearch.lean:850
+    DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389
+  These declarations are not in the selected audited dependency paths.
+
+Root smoke:
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE026.lean
+  exit 0; no warnings; root checks, actual nested AddChar and diagonal example elaborated.
+  #print axioms for weilTranslationUnit_add_right and weilTranslationUnit_self:
+    [propext, Classical.choice, Quot.sound].
+
+Test entrance:
+  lake env lean DkMathTest.lean
+  exit 0; output: file: DkMathTest
+
+Tracker checks:
+  python3 check_tracker_mismatch.py /tmp/note026-audit.log
+  python3 check_tracker_mismatch.py /tmp/note026-roots.log
+  python3 check_tracker_mismatch.py /tmp/note026-full.log
+  all exit 0; OK: no mismatches found.

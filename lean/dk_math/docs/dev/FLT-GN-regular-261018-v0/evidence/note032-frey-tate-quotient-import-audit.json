@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-07",
+  "new_modules": [
+    "DkMath.FLT.FreyTateFiniteQuotient",
+    "DkMath.FLT.FreyTateInertiaQuotient",
+    "DkMath.FLT.FreyTateGoodReductionCharacter",
+    "DkMath.FLT.FreyTateResonantWitness"
+  ],
+  "acyclic_local_import_closure": true,
+  "checks": {
+    "DkMath.FLT.FreyTateFiniteQuotient": {
+      "local_module_count": 328,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyTateInertiaQuotient": {
+      "local_module_count": 329,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyTateGoodReductionCharacter": {
+      "local_module_count": 330,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyTateResonantWitness": {
+      "local_module_count": 331,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "public_facade_and_root_reachability": true,
+  "normal_test_entrance_reachability": true,
+  "module_markers_immediately_after_imports": {
+    "DkMath/FLT/FreyTateFiniteQuotient.lean": true,
+    "DkMath/FLT/FreyTateInertiaQuotient.lean": true,
+    "DkMath/FLT/FreyTateGoodReductionCharacter.lean": true,
+    "DkMath/FLT/FreyTateResonantWitness.lean": true,
+    "DkMathTest/FLT/FreyTateResonantWitness.lean": true,
+    "DkMathTest/FLT/Note032FreyTateQuotientDependencyAudit.lean": true,
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateQuotientSmoke.lean": true
+  },
+  "textbook_lean_blocks_matching_full_production_source": 4,
+  "new_lean_file_sha256": {
+    "DkMath/FLT/FreyTateFiniteQuotient.lean": "17f9f39f0eb30551932c9901d351e569dd823c76b56f356f6f5d8a3660d61226",
+    "DkMath/FLT/FreyTateInertiaQuotient.lean": "95288c62ab5af18e0de8eed2adcef59c67bbe1f46ae6ccf9961974b96f1cb0fe",
+    "DkMath/FLT/FreyTateGoodReductionCharacter.lean": "9e44b699b12ae352d92dcdef5e094bc626219b835ce6da59b81fdd05acb86b8b",
+    "DkMath/FLT/FreyTateResonantWitness.lean": "9504e48f79b1803f0f9e78c6101c943802a374f7156053c8957239b07cce2221",
+    "DkMathTest/FLT/FreyTateResonantWitness.lean": "e1299409690ce9e2a6482f76ff87a46a1f00a1d3ca842ab93f5ba9a4f144ad8f",
+    "DkMathTest/FLT/Note032FreyTateQuotientDependencyAudit.lean": "7596f7721f8dcb24dd92ba84d7e73a4e1ee8e4789e719109df8b17784ddeee6d",
+    "docs/dev/FLT-GN-regular-261018-v0/evidence/Note032FreyTateQuotientSmoke.lean": "37d2286175a0ab5e615d53fa4fcce9feec6dc63117c5ceb19e0c3351aa38e677"
+  },
+  "boundary": "Comment-aware local source/import audit only. SAME finite second coordinate has kernel exactly original cyclic tower stage, and induces actual quotient equivalence. Full finite-torsion absorption iff SAME second-character reduction=1. Good reduction fixed-torsion point count bounds yield high Frobenius nontriviality. SAME original conditional tower yields explicit resonant bad prime/inertia/point witness of HIGH absorption failure and second-character nontriviality. Witness p*y is outside SAME stage; narrow ResonantAbsorptionAt input is retained, not contradicted. hclass/uniform narrow hbad remain inputs. No trace-pointcount identification, local arithmetic exclusion or general hno closure."
+}

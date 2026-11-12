@@ -1,0 +1,22 @@
+NOTE-032-VELU-EQUATION validation (2026-10-26)
+Base HEAD: 2e739fb8c7119b29eecaf49cc6de4fcc91a1c476
+Branch: dev/FLT-GN-regular-261018-v0
+PASS focused production build: DkMath.FLT.FreyFiniteKernelDenominatorSupport
+PASS focused test build: DkMathTest.Lib.NumberTheory.EllipticFiniteKernelVeluEquation
+PASS Source37 direct Lean: 5 theorems
+PASS axiom audit: 58 public declarations including existing polynomial owner; only propext, Classical.choice, Quot.sound
+PASS forbidden-construct and external-proof-import scan
+PASS Lib dependency direction, textbook docstrings and promotion markers
+PASS file markers after imports and tracker mismatch check
+PASS facade import registration (static)
+PASS protected prior owners, checkpoint and prior evidence unchanged
+PASS two predecessor comment-only updates preserve stripped code
+PASS existing polynomial owner extended without changing earlier declarations
+PASS two upstream solution blob hashes and license provenance
+PASS git diff --check and new-file whitespace
+Counts: 5 new production owners, 1 extended polynomial owner, 28 new public theorems, 6 new definitions
+Tests: 8 theorems, 4 definitions; noncyclic order-9 kernel, actual order-3 kernel with original target y2+y=x3-7 and discriminant -19683, even order-2 candidate mismatch
+Source37: same model identity, actual 37-power denominator, dyadic integrality, denominator valuation unit away from 37, dyadic integerization invariant valuation equality
+Completed: same-coordinate candidate equation and original kernelModel equality without equation provider
+Completed: same actual Source target p-power denominator and target integerization invariant values away from p
+Unresolved: source-to-quotient local reduction, minimal models, zero components, scheme isogeny, target torsion exclusion and general hno

@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-11",
+  "HEAD": "115356cbc627159d0d16add0da6e9a2bb3655ed8",
+  "reference_sha256": {
+    "P2M/Sol/S_FreyPackage_frobeniusPowerDense_inf_of_restrictionKer_le.lean": "901947febf2bf246affce00578223e73a53afdccf470d5efac65cf01db29282b",
+    "Definitions/Def_GaloisRep_FrobeniusPowerDense.lean": "f615c109f04a34b9a90fe4221605c7434dda5a43b46d680af9969aa1ba4f0c86"
+  },
+  "local_reused_source_sha256": {
+    "DkMath/Lib/NumberTheory/ValuationFrobenius.lean": "afdd33704ba7733541e8a52f9b9626e580aa85997647d99ecc0028ea3b65a265",
+    "DkMath/FLT/FreyDecompositionOrbitContinuity.lean": "653776e7970299d74733e35b0dc83d91274ab095494baf7a4db35ebb47d1b3ba",
+    "DkMath/FLT/FreyKernelCommonTameQuotient.lean": "c3d86634e32adda2738554ac5818435eb334f9390ad070db2b5b19648e0e67b0",
+    ".lake/packages/mathlib/Mathlib/FieldTheory/Finite/Basic.lean": "5e92972b7030c2b6a27bf66ea79de25a7a24e7b2110a840f7fb877fb8c7268c5",
+    ".lake/packages/mathlib/Mathlib/RingTheory/Invariant/Profinite.lean": "238832f299099333b7d63a03db00b03e315c5357ff9fff57d6232406a0cbfdf0"
+  },
+  "review_sha256": "6a04dea22a8a8cf845c323b848b163bd3062ec280a3fbf0a4711b6068d9df051",
+  "comparison": "Read model global FrobeniusPowerDense theorem and definition: varying primes, places and conjugates do not supply fixed local Frobenius generation. Audited existing residue-action profinite surjectivity use and checked finite-field Frobenius bijection. Original K finite image quotient is faithful, finite and discrete with open original action kernel; generation remains explicit.",
+  "boundary": "No actual arithmetic himage, hdense, hfactor or hsign supplied. Endpoint derives hD from explicit finite-image generation himage and hsign and reuses same original nonzero continuous D lift. Global F/Selmer, hclass, resonance exclusion and unconditional hno remain open."
+}

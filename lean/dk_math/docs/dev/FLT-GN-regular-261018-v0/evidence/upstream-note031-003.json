@@ -1,0 +1,46 @@
+{
+  "checkpoint": "NOTE-031-003",
+  "retrieved": "2026-10-23",
+  "repository": "anthropics/fermats-last-theorem",
+  "access": "GitHub connector fetch_file, default branch, file blob SHAs recorded",
+  "sources": [
+    {
+      "name": "S_FreyPackage_frey_inertia_at_two_trivial_on_stable_submodule.lean",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_inertia_at_two_trivial_on_stable_submodule.lean",
+      "blob": "25aa86a5830188d425f5ddd7b361207f10ba732a",
+      "lines": 191
+    },
+    {
+      "name": "S_FreyPackage_frey_wild_inertia_at_two_trivial.lean",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_wild_inertia_at_two_trivial.lean",
+      "blob": "0131af47435077971efee94c10fe2363fbfa1eb8",
+      "lines": 632
+    },
+    {
+      "name": "S_ValuationSubring_exists_algEquiv_conj_mul_pow_inv_wild_of_liesOverPrime.lean",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_ValuationSubring_exists_algEquiv_conj_mul_pow_inv_wild_of_liesOverPrime.lean",
+      "blob": "d929d9a91ec393a88ff620a219e60bf10c6bafb3",
+      "lines": 371
+    },
+    {
+      "name": "S_ValuationSubring_exists_isFrobeniusAt_of_liesOverPrime.lean",
+      "url": "https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_ValuationSubring_exists_isFrobeniusAt_of_liesOverPrime.lean",
+      "blob": "bd12adb9f848a63454efd82d8e4797dd594826c3",
+      "lines": 315
+    }
+  ],
+  "additional_consulted": [
+    {
+      "name": "Definitions/Def_EllipticCurve_FrobeniusTrace.lean",
+      "blob": "03840706ee7d86b860918ebc71218deb9100404d",
+      "used": "IsFrobeniusAt and projections, DkMath namespace"
+    }
+  ],
+  "license": "Apache-2.0 adaptations retain local RegularKummer/LICENSE and ANTHROPIC-NOTICE",
+  "adaptations": [
+    "Reuse ValuationInertiaLift.FractionRepresentation.exists_integral_fraction for Frobenius construction; omit unused place-transitivity existence theorem.",
+    "Use actual DkMath nsmul-kernel torsion, pointAction/Point.map and residualRepresentation.",
+    "General dyadic coordinate separation and wild fixedness are neutral Lib lemmas; Frey.Source supplies same integral model and coefficients.",
+    "Use existing division-polynomial coordinate integrality, existing residual rank two, no new arithmetic provider hypotheses."
+  ]
+}

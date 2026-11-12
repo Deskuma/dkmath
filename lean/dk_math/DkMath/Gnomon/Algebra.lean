@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.Lib.Algebra.SquareCompletion
 import Mathlib.Algebra.Ring.Parity
 import Mathlib.Data.Finset.Interval
 import Mathlib.Tactic
@@ -13,7 +14,9 @@ import Mathlib.Tactic
 /-!
 # Neutral square-gnomon arithmetic
 
-This module is the application-independent natural-number source for the
+The general square-completion and finite-band arithmetic is owned by
+`DkMath.Lib.Algebra.SquareCompletion` (GN-LIB-003b).
+This module keeps the natural-number definitions and compatibility adapters for the
 odd gnomon and its finite square-growth bands.  The parameter `u` in
 `squareGnomonBand x u` is a side-thickness, not an area increment.  The unit
 case `u = 1` is the atomic lattice growth step, whose induced area increment
@@ -94,15 +97,23 @@ theorem oddGnomon_petalMul (a b : ℕ) :
   simp only [oddGnomon, petalMul]
   ring
 
+/--
+[DkMath.Lib] 昇格済み: `DkMath.Lib.Algebra.square_add_unit_layer`。
+この旧APIは従来のNat carrier・全修飾名・型を保持し、Libの一般半環の式を特殊化する。
+新しい一般consumerは `DkMath.Lib.Algebra.SquareCompletion` を直接importできる。
+-/
 theorem square_add_oddGnomon (x : ℕ) :
     x ^ 2 + oddGnomon x = (x + 1) ^ 2 := by
-  simp only [oddGnomon]
-  ring
+  simpa only [oddGnomon] using DkMath.Lib.Algebra.square_add_unit_layer x
 
+/--
+[DkMath.Lib] 昇格済み: `DkMath.Lib.Algebra.square_add_band`。
+この旧APIは従来のNat carrier・全修飾名・型を保持し、Libの一般半環の式を特殊化する。
+新しい一般consumerは `DkMath.Lib.Algebra.SquareCompletion` を直接importできる。
+-/
 theorem square_add_squareGnomonBand (x u : ℕ) :
     x ^ 2 + squareGnomonBand x u = (x + u) ^ 2 := by
-  simp only [squareGnomonBand]
-  ring
+  simpa only [squareGnomonBand] using DkMath.Lib.Algebra.square_add_band x u
 
 @[simp] theorem squareGnomonBand_zero (x : ℕ) :
     squareGnomonBand x 0 = 0 := by
@@ -116,46 +127,48 @@ theorem square_add_squareGnomonBand (x u : ℕ) :
     squareGnomonBand 0 u = u ^ 2 := by
   simp [squareGnomonBand, pow_two]
 
+/--
+[DkMath.Lib] 昇格済み: `DkMath.Lib.Algebra.band_add_thickness`。
+この旧APIは従来のNat carrier・全修飾名・型を保持し、Libの一般半環の式を特殊化する。
+新しい一般consumerは `DkMath.Lib.Algebra.SquareCompletion` を直接importできる。
+-/
 theorem squareGnomonBand_add (x u v : ℕ) :
     squareGnomonBand x (u + v) =
       squareGnomonBand x u + squareGnomonBand (x + u) v := by
-  simp only [squareGnomonBand]
-  ring
+  simpa only [squareGnomonBand] using DkMath.Lib.Algebra.band_add_thickness x u v
 
+/--
+[DkMath.Lib] 昇格済み: `DkMath.Lib.Algebra.band_eq_sum_unit_layers`。
+この旧APIは従来のNat carrier・全修飾名・型を保持し、Libの一般半環の式を特殊化する。
+新しい一般consumerは `DkMath.Lib.Algebra.SquareCompletion` を直接importできる。
+-/
 theorem squareGnomonBand_eq_sum_shifted_oddGnomon
     (x u : ℕ) :
     squareGnomonBand x u =
       (Finset.range u).sum (fun i => oddGnomon (x + i)) := by
-  induction u with
-  | zero =>
-      simp
-  | succ u ih =>
-      calc
-        squareGnomonBand x (u + 1) =
-            squareGnomonBand x u + squareGnomonBand (x + u) 1 :=
-          squareGnomonBand_add x u 1
-        _ = (Finset.range u).sum (fun i => oddGnomon (x + i)) +
-              oddGnomon (x + u) := by
-          rw [ih, squareGnomonBand_unit]
-        _ = (Finset.range (u + 1)).sum (fun i => oddGnomon (x + i)) := by
-          rw [Finset.sum_range_succ]
+  simpa only [squareGnomonBand, oddGnomon, Nat.cast_id] using
+    (DkMath.Lib.Algebra.band_eq_sum_unit_layers (R := ℕ) x u)
 
+/--
+[DkMath.Lib] 昇格済み: `DkMath.Lib.Algebra.sum_unit_layers_eq_square`。
+この旧APIは従来のNat carrier・全修飾名・型を保持し、Libの一般半環の式を特殊化する。
+新しい一般consumerは `DkMath.Lib.Algebra.SquareCompletion` を直接importできる。
+-/
 theorem sum_oddGnomon_eq_square (n : ℕ) :
     (Finset.range n).sum oddGnomon = n ^ 2 := by
-  induction n with
-  | zero =>
-      simp
-  | succ n ih =>
-      rw [Finset.sum_range_succ, ih]
-      simpa [Nat.succ_eq_add_one] using (square_add_oddGnomon n)
+  change (Finset.range n).sum (fun i => 2 * i + 1) = n ^ 2
+  simpa only [Nat.cast_id] using
+    (DkMath.Lib.Algebra.sum_unit_layers_eq_square (R := ℕ) n)
 
+/--
+[DkMath.Lib] 昇格済み: `DkMath.Lib.Algebra.sum_unit_layers_eq_square`。
+この旧APIは従来のNat carrier・全修飾名・型を保持し、Libの一般半環の式を特殊化する。
+新しい一般consumerは `DkMath.Lib.Algebra.SquareCompletion` を直接importできる。
+-/
 theorem sum_odd_eq_square (n : ℕ) :
     (Finset.range n).sum (fun i => 2 * i + 1) = n ^ 2 := by
-  have hodd : oddGnomon = (fun i => 2 * i + 1) := by
-    funext i
-    rfl
-  rw [← hodd]
-  exact sum_oddGnomon_eq_square n
+  simpa only [Nat.cast_id] using
+    (DkMath.Lib.Algebra.sum_unit_layers_eq_square (R := ℕ) n)
 
 example : oddGnomon 0 = 1 := by norm_num [oddGnomon]
 

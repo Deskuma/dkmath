@@ -1,0 +1,37 @@
+import DkMath
+
+#print "file: docs.dev.FLT-GN-regular-261018-v0.evidence.Note032ResonantDecompositionLiftSmoke"
+
+#check DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.generatorValue_order_eq_prime
+#check DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.generatorValue_nsmul_mod
+#check DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.generatorValue_q_smul_plus
+#check DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.generatorValue_q_smul_minus
+#check DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.frobenius_fixed_resonant_signs
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.fullInertiaCoefficientTopology
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.fullInertiaCoefficientDiscrete
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedQuotientCoefficientTopology
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedQuotientCoefficientDiscrete
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedDecomposition_orbit_continuous
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.quotientDecomposition_orbit_continuous
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.kernelDecomposition_orbit_evaluation_continuous
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.kernelDecomposition_stabilizer_isClosed
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.fixedDecompositionCoefficientTopology
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.fullDecompositionCoefficient
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.quotientDecompositionCoefficient
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.decompositionCoefficientInclusion
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.decompositionCoefficientProjection
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.decompositionCoefficientSequence
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.decompositionCoefficientSequence_shortExact
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.decompositionConnecting
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.decompositionCosetH0
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.decomposition_difference_mem_fixed
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.decompositionConnectingCocycle
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.decompositionConnectingCocycle_continuous
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.decompositionConnectingCocycle_class
+#check DkMath.FLT.Frey.Source.inertiaToDecomposition
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.decompositionInertiaCoefficient
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.decompositionInertiaRestriction
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.decompositionCocycle_restrict
+#check DkMath.FLT.Frey.Source.ResidualCyclicStage.decompositionClass_restrict_kernel
+#check DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.exists_prime_sign_frobenius_criterion
+#check DkMath.FLT.Frey.Source.NarrowAbsorptionObstruction.decomposition_lift_of_kernel_fixed

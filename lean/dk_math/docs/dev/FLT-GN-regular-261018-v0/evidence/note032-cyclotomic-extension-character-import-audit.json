@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-02",
+  "new_modules": [
+    "DkMath.Lib.RepresentationTheory.FixedLineExtension",
+    "DkMath.FLT.FreyCyclotomicExtensionCharacter"
+  ],
+  "acyclic_local_import_closure": true,
+  "new_local_closure_size": 241,
+  "checks": {
+    "DkMath.Lib.RepresentationTheory.FixedLineExtension": {
+      "local_module_count": 5,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclotomicExtensionCharacter": {
+      "local_module_count": 241,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "boundary": "Actual fixed-line-valued finite additive characters on the cyclotomic kernel are constructed. Inverse-character conjugation, open kernel, at-p decomposition-kernel vanishing and away inertia-kernel vanishing (conditional on resonant bad-place absorption) are proved. Nonsplitting produces a surjective order-p character; character vanishing is equivalent to splitting and gives a tower step. Global character vanishing, full tower, resonant bad-place absorption, actual Frobenius relation and Mazur/Eisenstein geometry remain open; general hno is unfinished."
+}

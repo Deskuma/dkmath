@@ -1,0 +1,90 @@
+NOTE-031-003 verification — 2026-10-23 (JST)
+cwd: /home/deskuma/develop/lean/dkmath/lean/dk_math
+Branch: feat/FLT-GNR-031-03-261023-codex
+Lean: 4.34.1 (5045d0056413266e57c625dcd7c365b10e377c52)
+Mathlib: d13f23b723b8a846827a245b89c10fc7d3f11612
+
+Completed scope:
+  Actual Frobenius at every valuation subring of Qbar above a rational prime q.
+  Tame-character conjugation: phi*tau*phi^-1*(tau^q)^-1 belongs to inertia and
+    satisfies sigma(z)/z-1 in A.nonunits for every nonzero z.
+  Dyadic nodal coordinate separation; odd unit-order torsion fixed under this wild congruence.
+  Same Frey Source supplies actual integral model, coefficients, nonzero a4 and odd unit order.
+  Actual residual representation satisfies conjugate-square relation at every A above 2.
+  Same globally stable proper nonzero submodule N and its quotient are both inertia fixed.
+  Final theorem: DkMath.FLT.Frey.Source.residual_fixed_and_cofixed_at_two.
+  Final inputs: Source p, Fact p.Prime, p!=2, N, global stability, N!=bottom, N!=top, A, LiesOverPrime A 2.
+  No Frobenius, wild-fixedness, conjugation-relation, rank-two or hcases/hno provider in final inputs.
+  Source coordinates, equation, coprimality and normalization retained without reselection.
+
+Outside scope:
+  p=2; p-adic local alternative (031-004); 031-005; global hcases/hno assembly; general FLT.
+  No claim that the stable submodule exists; no claim of full-space dyadic inertia triviality.
+  No claim of a new mathematical FLT proof.
+
+Focused checkpoint:
+  lake build DkMath.Lib.RepresentationTheory.ConjugateSquare: exit 0.
+  lake build DkMathTest.FLT.FreyDyadicInertia: exit 0, 3229 jobs, no warnings/errors.
+  lake build DkMathTest.FLT.Note031DyadicInertiaDependencyAudit: exit 0, 3230 jobs, no warnings/errors.
+  All 82 public production and 6 public regression declarations have standard logical axioms only.
+  10 type/opaque-body graph audits and 4 input audits passed.
+  Allowed axioms: propext, Classical.choice, Quot.sound.
+  Forbidden graph dependencies: sorryAx, external P2M/P2MW/FltRegular/FreyPackage,
+    old FLT endpoints, DkMath.FLT.Kummer, RegularKummer, FoldedValuationOrbit.
+  Neutral Lib paths additionally exclude DkMath.FLT; the linear algebra graph excludes number theory.
+
+Concrete regressions:
+  On F3^2: T(x,y)=(x+y,y), M(x,y)=(2x,y), M*M=id, M*T*M=T*T.
+  The same horizontal line and quotient are fixed, but T(0,1)!=(0,1).
+  Prime 37: final theorem specializes to any same Source and globally stable proper nonzero N.
+  This is conditional API specialization, not a constructed Source or integer counterexample.
+
+Normal root/facade/suite build:
+  lake build DkMath DkMath.FLT DkMath.Lib DkMathTest
+  exit 0; Build completed successfully (11765 jobs).
+  No new/changed code warnings/errors.
+  Five historical unrelated sorry warnings:
+  warning: DkMath/CosmicFormula/TriominoFLT.lean:1919:6: declaration uses `sorry`
+  warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:147:6: declaration uses `sorry`
+  warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4187:8: declaration uses `sorry`
+  warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+  warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5389:8: declaration uses `sorry`
+
+Direct entrances:
+  lake env lean DkMathTest.lean: exit 0; file: DkMathTest; no warnings/errors.
+  lake env lean docs/dev/FLT-GN-regular-261018-v0/evidence/RootSmokeNOTE031DyadicInertia.lean
+  exit 0; root import resolves all six key declarations; final theorem standard axioms only.
+
+Static checks:
+  python3 check_tracker_mismatch.py /tmp/031003-full.log: OK: no mismatches found.
+  12 Lean files: exact file markers, public docstrings, whitespace, final newline, forbidden constructs and Lib layering passed.
+  All 82 production and 6 regression declaration names covered in axiom audit.
+  Adapted code retains Apache-2.0 provenance and LICENSE/NOTICE references.
+  git diff --check: exit 0.
+
+Compact axiom/provider evidence:
+  DkMathTest/FLT/Note031DyadicInertiaDependencyAudit.lean:80:0: PASS: 82 production and 6 regression declarations; standard logical axioms only.
+  DkMathTest/FLT/Note031DyadicInertiaDependencyAudit.lean:80:0: PASS: DkMath.Lib.RepresentationTheory.ConjugateSquare.eq_id_on_line_of_conj_eq_sq; 16354 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DyadicInertiaDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.ValuationFrobenius.exists_isFrobeniusAt_of_liesOverPrime; 35161 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DyadicInertiaDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.ValuationTameCharacter.exists_conjugate_pow_wild; 35227 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DyadicInertiaDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.EllipticDyadicSeparation.v_a₄_le_of_torsion; 25505 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DyadicInertiaDependencyAudit.lean:80:0: PASS: DkMath.Lib.NumberTheory.EllipticDyadicWildInertia.fixed_of_wild; 26756 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DyadicInertiaDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.residual_fixed_of_dyadic_wild; 30220 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DyadicInertiaDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.residual_exists_dyadic_conjugate_square; 40922 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DyadicInertiaDependencyAudit.lean:80:0: PASS: DkMath.FLT.Frey.Source.residual_fixed_and_cofixed_at_two; 41341 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DyadicInertiaDependencyAudit.lean:80:0: PASS: FreyDyadicInertiaTest.shear_fixed_cofixed; 17435 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DyadicInertiaDependencyAudit.lean:80:0: PASS: FreyDyadicInertiaTest.source37_fixed_cofixed; 41361 reachable constants; expected providers present.
+  DkMathTest/FLT/Note031DyadicInertiaDependencyAudit.lean:80:0: PASS inputs: DkMath.FLT.Frey.Source.residual_fixed_and_cofixed_at_two; explicit arithmetic guards and remaining inputs retained.
+  DkMathTest/FLT/Note031DyadicInertiaDependencyAudit.lean:80:0: PASS inputs: DkMath.FLT.Frey.Source.residual_exists_dyadic_conjugate_square; explicit arithmetic guards and remaining inputs retained.
+  DkMathTest/FLT/Note031DyadicInertiaDependencyAudit.lean:80:0: PASS inputs: DkMath.Lib.NumberTheory.ValuationFrobenius.exists_isFrobeniusAt_of_liesOverPrime; explicit arithmetic guards and remaining inputs retained.
+  DkMathTest/FLT/Note031DyadicInertiaDependencyAudit.lean:80:0: PASS inputs: DkMath.Lib.NumberTheory.ValuationTameCharacter.exists_conjugate_pow_wild; explicit arithmetic guards and remaining inputs retained.
+
+Source SHA-256 (checked implementation and regression/audit):
+a83cea312d0f3740530053b8713e5b912b06621b040285e13aae3e522cea2341  DkMath/Lib/RepresentationTheory/ConjugateSquare.lean
+afdd33704ba7733541e8a52f9b9626e580aa85997647d99ecc0028ea3b65a265  DkMath/Lib/NumberTheory/ValuationFrobenius.lean
+a26ec9fdfdcf9eda382352721b6ba787e454a28e2869648ccc1113a71f53c87d  DkMath/Lib/NumberTheory/ValuationTameCharacter.lean
+03735cdcefc8cba8ee82a59dd89f1c67241168054d0a8e6bbef5976c5985e789  DkMath/Lib/NumberTheory/EllipticDyadicSeparation.lean
+d908ce754c4fd386b89a2172557b38cdd95c37ab488fe3133fce8781d2c87342  DkMath/Lib/NumberTheory/EllipticDyadicWildInertia.lean
+bf2e82d1893464566832786079de649ddf25383b8cca393b0a8c2421a83a1152  DkMath/FLT/FreyDyadicInertia.lean
+7dc1760300c15928ac8abfa823405518d195f2710e4e50f8f288185cd7a8fd84  DkMathTest/FLT/FreyDyadicInertia.lean
+cd0487ce4998a94039452c1e42df8c11e41d3411b5aea04f1905c647f9002a29  DkMathTest/FLT/Note031DyadicInertiaDependencyAudit.lean

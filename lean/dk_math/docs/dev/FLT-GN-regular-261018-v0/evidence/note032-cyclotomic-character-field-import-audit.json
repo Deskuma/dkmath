@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-02",
+  "new_modules": [
+    "DkMath.Lib.NumberTheory.CyclotomicKernelField",
+    "DkMath.Lib.NumberTheory.CyclotomicCharacterField",
+    "DkMath.FLT.FreyCyclotomicCharacterField"
+  ],
+  "acyclic_local_import_closure": true,
+  "new_local_closure_size": 244,
+  "checks": {
+    "DkMath.Lib.NumberTheory.CyclotomicKernelField": {
+      "local_module_count": 10,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.Lib.NumberTheory.CyclotomicCharacterField": {
+      "local_module_count": 11,
+      "forbidden_FLT_consumer_modules": []
+    },
+    "DkMath.FLT.FreyCyclotomicCharacterField": {
+      "local_module_count": 244,
+      "forbidden_FLT_consumer_modules": []
+    }
+  },
+  "boundary": "The actual cyclotomic kernel is the fixing subgroup of Q(zeta_p), with same-action decomposition and inertia transport. The evaluated character kernel defines an actual number field, finite Galois over Q. Nonsplitting supplies a surjective character and thus a cyclic degree-p Galois extension of that same cyclotomic field, with conditional local fixedness of all field elements. Prime-ideal unramified predicates, class-group/unit eigenspace maps, Kummer twist/duality, global vanishing, full tower iteration and resonant-place geometry remain open; general hno is unfinished."
+}
