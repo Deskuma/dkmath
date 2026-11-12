@@ -64,4 +64,23 @@ example : Tendsto (fun n => outerApprox n - areaApprox n) atTop (𝓝 0) :=
 example (n : ℕ) : intrinsicPolygonPerimeter n / 2 = areaApprox (n+1) := by
   rw [intrinsicPolygonPerimeter_div_two, halfPerimeterApprox_eq_areaApprox_succ]
 
+
+example (n : ℕ) : outerApprox n =
+    areaApprox n / (QuadrantUnitKernel.sequence (n+1)).core ^ 2 :=
+  outerApprox_eq_areaApprox_div_core_sq n
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    MeasurableSet (intrinsicOriginTriangle n j) := intrinsicOriginTriangle_measurable n j
+
+example (n : ℕ)
+    (harea : MeasureTheory.volume (intrinsicPolygonRegion n) = ENNReal.ofReal (areaApprox n)) :
+    MeasureTheory.volume (intrinsicPolygonOuterRegion n) = ENNReal.ofReal (outerApprox n) :=
+  intrinsicPolygonOuterRegion_volume_of_region n harea
+
+example
+    (harea : ∀ n, MeasureTheory.volume (intrinsicPolygonRegion n) = ENNReal.ofReal (areaApprox n))
+    (hcover : ∀ n, Metric.closedBall (0 : EuclideanPlane) 1 ⊆ intrinsicPolygonOuterRegion n) :
+    MeasureTheory.volume.real (Metric.closedBall (0 : EuclideanPlane) 1) = intrinsicPi :=
+  disk_measureReal_eq_intrinsicPi_of_polygon_sandwich harea hcover
+
 end DkMathTest.CosmicFormula.Rotation.CF2D

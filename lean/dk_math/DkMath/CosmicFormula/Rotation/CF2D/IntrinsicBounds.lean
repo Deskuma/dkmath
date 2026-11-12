@@ -13,11 +13,32 @@ import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPi
 
 第一座標 `c_n` は `1-c_n ≤ 2⁻ⁿ` を満たす。これから `c_n → 1` を得る。
 外側の候補 `U_n` は面積候補の上限以上であり、内側の候補 `A_n` との間隔は
-高々 `8/4^n` である。これらの証明は円周率や三角関数を使わない。
+高々 `8/4^n` である。これは段階数に関する等比的な誤差上界であり、
+隣接する誤差の間の二次収束を主張するものではない。これらの証明は円周率や三角関数を使わない。
 -/
 namespace DkMath.CosmicFormula.Rotation.CF2D
 open QuadrantUnitKernel Filter
 open scoped Topology
+
+
+/-- 有限段階では第一座標は 1 より小さい。 -/
+theorem core_lt_one (n : ℕ) : (sequence n).core < 1 := by
+  induction n with
+  | zero => norm_num [QuadrantUnitKernel.sequence, initial, core]
+  | succ n ih =>
+    have hs := core_succ_sq n
+    have hc := (sequence (n+1)).core_nonneg
+    change 0 ≤ (sequence (n+1)).core at hc
+    nlinarith
+
+/-- 有限段階では第二座標は正である。 -/
+theorem beam_pos (n : ℕ) : 0 < (sequence n).beam := by
+  cases n with
+  | zero => norm_num [QuadrantUnitKernel.sequence, initial, beam]
+  | succ n =>
+    have hc := core_lt_one n
+    change 0 < Real.sqrt ((1 - (sequence n).core) / 2)
+    exact Real.sqrt_pos.2 (by linarith)
 
 /-- 各段階の core の 1 からの差は非負である。 -/
 theorem one_sub_core_nonneg (n : ℕ) : 0 ≤ 1 - (sequence n).core := by

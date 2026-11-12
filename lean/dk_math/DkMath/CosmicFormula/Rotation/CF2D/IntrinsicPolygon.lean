@@ -136,6 +136,17 @@ theorem core_succ_pos (n : ℕ) : 0 < (sequence (n + 1)).core := by
 noncomputable def outerApprox (n : ℕ) : ℝ := areaApprox (n + 1) / (sequence (n + 1)).core
 
 /--
+内側と外側の候補を同じ段階の面積候補で表す恒等式
+`U_n = A_n / c_(n+1)^2`。二分後の core が正なので除算できる。
+この式自体は拡大多角形の幾何学的包含や面積を主張しない。
+-/
+theorem outerApprox_eq_areaApprox_div_core_sq (n : ℕ) :
+    outerApprox n = areaApprox n / (sequence (n+1)).core ^ 2 := by
+  have hn : (sequence (n+1)).core ≠ 0 := ne_of_gt (core_succ_pos n)
+  rw [outerApprox, areaApprox_eq_core_mul_succ n]
+  field_simp
+
+/--
 外接候補 `U_n` は単調非増加。
 
 分母の正性を使って分数の比較を積の比較に直す。漸化式と
