@@ -13,7 +13,7 @@ import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPi
 
 第一座標 `c_n` は `1-c_n ≤ 2⁻ⁿ` を満たす。これから `c_n → 1` を得る。
 外側の候補 `U_n` は面積候補の上限以上であり、内側の候補 `A_n` との間隔は
-高々 `8/2^n` である。これらの証明は円周率や三角関数を使わない。
+高々 `8/4^n` である。これらの証明は円周率や三角関数を使わない。
 -/
 namespace DkMath.CosmicFormula.Rotation.CF2D
 open QuadrantUnitKernel Filter
@@ -87,6 +87,83 @@ theorem one_half_le_core_succ (n : ℕ) : (1 / 2 : ℝ) ≤ (sequence (n+1)).cor
   have hp := core_succ_pos n
   change 0 ≤ (sequence n).core at hc
   nlinarith
+
+
+/-- 面積候補の上界 `A_(n+1) ≤ 4` から得る beam の幾何級数評価。 -/
+theorem beam_succ_le_half_pow (n : ℕ) :
+    (sequence (n+1)).beam ≤ (1 / 2 : ℝ) ^ n := by
+  have h := areaApprox_le_four (n+1)
+  have hp : 0 < (2 : ℝ) ^ n := pow_pos (by norm_num) _
+  have hmul : (2 : ℝ) ^ n * (sequence (n+1)).beam ≤ 1 := by
+    simp only [areaApprox, pow_succ] at h
+    nlinarith
+  have hdiv : (sequence (n+1)).beam ≤ 1 / (2 : ℝ) ^ n := by
+    apply (le_div_iff₀ hp).2
+    nlinarith
+  simpa only [one_div, inv_pow] using hdiv
+
+/--
+保存量 `c²+s²=1` による内外誤差の正確な表示。
+分母の core は `core_succ_pos` により正である。
+-/
+theorem outerApprox_sub_areaApprox_eq (n : ℕ) :
+    outerApprox n - areaApprox n =
+      areaApprox (n+1) * (sequence (n+1)).beam ^ 2 / (sequence (n+1)).core := by
+  have hn : (sequence (n+1)).core ≠ 0 := ne_of_gt (core_succ_pos n)
+  have hq := (sequence (n+1)).norm
+  rw [outerApprox, areaApprox_eq_core_mul_succ n]
+  field_simp
+  have he : 1 - (sequence (n+1)).core ^ 2 = (sequence (n+1)).beam ^ 2 := by linarith
+  rw [he]
+
+/--
+π-free の高精度評価 `0 ≤ U_n-A_n ≤ 8(1/4)^n`。
+`A_(n+1) ≤ 4`、`c_(n+1) ≥ 1/2` と beam の二乗評価を用いる。
+-/
+theorem outerApprox_sub_areaApprox_le_quarter_pow (n : ℕ) :
+    outerApprox n - areaApprox n ≤ 8 * (1 / 4 : ℝ) ^ n := by
+  have hp := core_succ_pos n
+  have hc := one_half_le_core_succ n
+  have ha := areaApprox_nonneg (n+1)
+  have ha4 := areaApprox_le_four (n+1)
+  have hb := beam_succ_le_half_pow n
+  have hb0 := (sequence (n+1)).beam_nonneg
+  change 0 ≤ (sequence (n+1)).beam at hb0
+  have ht0 : 0 ≤ (1 / 2 : ℝ) ^ n := pow_nonneg (by norm_num) _
+  have hs : (sequence (n+1)).beam ^ 2 ≤ (1 / 4 : ℝ) ^ n := by
+    have ht : (1 / 2 : ℝ) ^ n * (1 / 2 : ℝ) ^ n = (1 / 4 : ℝ) ^ n := by
+      rw [← mul_pow]
+      congr 1
+      norm_num
+    rw [← ht]
+    nlinarith
+  have hm : areaApprox (n+1) * (sequence (n+1)).beam ^ 2 ≤
+      4 * (1 / 4 : ℝ) ^ n := by
+    have := mul_nonneg (sub_nonneg.mpr ha4) (sq_nonneg (sequence (n+1)).beam)
+    nlinarith
+  rw [outerApprox_sub_areaApprox_eq, div_le_iff₀ hp]
+  have := mul_nonneg (sub_nonneg.mpr hc) (pow_nonneg (show (0 : ℝ) ≤ 1 / 4 by norm_num) n)
+  nlinarith
+
+/-- 内側の候補から内在的定数までの差にも `4⁻ⁿ` 評価が成り立つ。 -/
+theorem intrinsicPi_sub_areaApprox_le_quarter_pow (n : ℕ) :
+    0 ≤ intrinsicPi - areaApprox n ∧
+      intrinsicPi - areaApprox n ≤ 8 * (1 / 4 : ℝ) ^ n := by
+  constructor
+  · exact sub_nonneg.mpr (areaApprox_le_intrinsicPi n)
+  · have h := intrinsicPi_le_outerApprox n
+    have he := outerApprox_sub_areaApprox_le_quarter_pow n
+    linarith
+
+/-- 内在的定数から外側の候補までの差にも `4⁻ⁿ` 評価が成り立つ。 -/
+theorem outerApprox_sub_intrinsicPi_le_quarter_pow (n : ℕ) :
+    0 ≤ outerApprox n - intrinsicPi ∧
+      outerApprox n - intrinsicPi ≤ 8 * (1 / 4 : ℝ) ^ n := by
+  constructor
+  · exact sub_nonneg.mpr (intrinsicPi_le_outerApprox n)
+  · have h := areaApprox_le_intrinsicPi n
+    have he := outerApprox_sub_areaApprox_le_quarter_pow n
+    linarith
 
 /-- 内外の差に対する π-free の明示的誤差上界。 -/
 theorem outerApprox_sub_areaApprox_le (n : ℕ) :

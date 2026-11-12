@@ -16,6 +16,7 @@ import DkMath.CosmicFormula.Rotation.CF2D.CFSinCos
 import DkMath.CosmicFormula.Rotation.CF2D.Real
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicBounds
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicRegularPolygon
+import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonMeasure
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPiBridge
 
 #print "file: DkMath.CosmicFormula.Rotation.CF2D"

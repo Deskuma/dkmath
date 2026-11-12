@@ -32,6 +32,32 @@ example (n : ℕ) : areaApprox n ≤ intrinsicPi ∧ intrinsicPi ≤ outerApprox
 example (n : ℕ) : intrinsicPi - areaApprox n ≤ 8 * (1 / 2 : ℝ) ^ n :=
   intrinsicPi_sub_areaApprox_le n
 
+example (n : ℕ) : 0 ≤ intrinsicPi - areaApprox n ∧
+    intrinsicPi - areaApprox n ≤ 8 * (1 / 4 : ℝ) ^ n :=
+  intrinsicPi_sub_areaApprox_le_quarter_pow n
+
+example (n : ℕ) : 0 ≤ outerApprox n - intrinsicPi ∧
+    outerApprox n - intrinsicPi ≤ 8 * (1 / 4 : ℝ) ^ n :=
+  outerApprox_sub_intrinsicPi_le_quarter_pow n
+
+example : outerApprox 2 - areaApprox 2 ≤ (1 / 2 : ℝ) := by
+  have h := outerApprox_sub_areaApprox_le_quarter_pow 2
+  norm_num at h
+  linarith
+
+example (n : ℕ) : MeasurableSet (intrinsicPolygonRegion n) :=
+  intrinsicPolygonRegion_measurable n
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    intrinsicPolygonFanTriangle n j ⊆ intrinsicPolygonRegion n :=
+  intrinsicPolygonFanTriangle_subset_region n j
+
+example (n : ℕ) : intrinsicPolygonRegion n ⊆ Metric.closedBall (0 : EuclideanPlane) 1 :=
+  intrinsicPolygonRegion_subset_closedBall n
+
+example (n : ℕ) : MeasureTheory.volume (intrinsicPolygonRegion n) ≤ ENNReal.ofReal intrinsicPi :=
+  intrinsicPolygonRegion_volume_le_intrinsicPi n
+
 example : Tendsto (fun n => outerApprox n - areaApprox n) atTop (𝓝 0) :=
   tendsto_outer_sub_area_zero
 
