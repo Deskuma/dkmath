@@ -157,4 +157,21 @@ example (n : ℕ) :
     Metric.closedBall (0 : EuclideanPlane) (QuadrantUnitKernel.sequence (n + 1)).core ⊆
       intrinsicEdgeHalfSpaces n := intrinsicInnerBall_subset_edgeHalfSpaces n
 
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    MeasureTheory.AEDisjoint MeasureTheory.volume (intrinsicOriginTriangle n j)
+      (intrinsicOriginTriangle n (intrinsicOppositeIndex n j)) :=
+  intrinsicOriginTriangle_aedisjoint_opposite n j
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    MeasureTheory.AEDisjoint MeasureTheory.volume (intrinsicOriginTriangle n j)
+      (intrinsicOriginTriangle n (regularVertexNext (dyadicSides_pos n) j)) :=
+  intrinsicOriginTriangle_aedisjoint_next n j
+
+example : MeasureTheory.volume (intrinsicOriginFan 0) = ENNReal.ofReal 2 :=
+  intrinsicOriginFan_zero_volume
+
+example (n : ℕ) : 0 < MeasureTheory.volume (intrinsicPolygonRegion n) :=
+  intrinsicPolygonRegion_volume_pos n
+
 end DkMathTest.CosmicFormula.Rotation.CF2D
