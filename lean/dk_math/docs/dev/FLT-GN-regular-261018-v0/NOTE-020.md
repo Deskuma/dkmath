@@ -1,6 +1,6 @@
 # 🐺 NOTE-019 — 全指数のねじれ点群が Core に確定
 
-うむ、ぬしよ。今回も DkMath の証明本体、[NOTE-019 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE019-261021.md?utm_source=chatgpt.com)、回帰と依存監査を照合した。
+うむ、ぬしよ。今回も DkMath の証明本体、[NOTE-019 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE019-261021.md)、回帰と依存監査を照合した。
 
 判定：NOTE-019 は無条件の Core として固定してよい。
 
@@ -36,7 +36,7 @@
 
 ### 保存されたものは、位数だけではない
 
-[`EllipticTorsionAllCard.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticTorsionAllCard.lean?utm_source=chatgpt.com) では、包含と倍写像が元のガロア作用と可換することも固定されている。
+[`EllipticTorsionAllCard.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticTorsionAllCard.lean) では、包含と倍写像が元のガロア作用と可換することも固定されている。
 
 \[ \iota(\sigma P)=\sigma\iota(P), \qquad [n]\\ (\sigma P)=\sigma([n]P). \]
 

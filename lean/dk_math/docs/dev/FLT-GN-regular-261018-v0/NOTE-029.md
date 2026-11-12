@@ -4,7 +4,7 @@
 
 NOTE-018 で条件付きの定理として固定した円分行列式が、NOTE-028 で実際の楕円曲線の幾何学から無条件に供給される定理へ変わった。
 
-[NOTE-028 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE028-261021.md?utm_source=chatgpt.com)、主要な Lean 証明、依存監査、保存されたビルド記録を照合した。
+[NOTE-028 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE028-261021.md)、主要な Lean 証明、依存監査、保存されたビルド記録を照合した。
 
 判定：A・B・C および円分行列式への接続を、証明済み Core として固定することを推奨する。
 
@@ -84,7 +84,7 @@ NOTE-022 で作った点群と類群の橋が、NOTE-028 で非退化性を証�
 
 ## 3. ついに `WeilPairingData` の仮定が消えた
 
-実際のソース [`EllipticGeometricWeilPairing.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticGeometricWeilPairing.lean?utm_source=chatgpt.com) を確認した。
+実際のソース [`EllipticGeometricWeilPairing.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticGeometricWeilPairing.lean) を確認した。
 
 そこでは、新しい形式的な対を仮定するのではなく、既存の
 
@@ -129,7 +129,7 @@ theorem torsion_determinant_eq_cyclotomic :
 
 を証明したことになる。
 
-さらに [`FreyGeometricWeilPairing.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/FLT/FreyGeometricWeilPairing.lean?utm_source=chatgpt.com) では、
+さらに [`FreyGeometricWeilPairing.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/FLT/FreyGeometricWeilPairing.lean) では、
 
 ```
 theorem residual_determinant_eq_cyclotomic :
@@ -257,13 +257,13 @@ theorem FreyPackage.Mazur_Frey (P : FreyPackage) :
       (K := AlgebraicClosure ℚ) ℚ P.freyCurve P.p
 ```
 
-参照：[模範解答 ](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_Mazur_Frey.lean?utm_source=chatgpt.com)[`Mazur_Frey`](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_Mazur_Frey.lean?utm_source=chatgpt.com)
+参照：[模範解答 ](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_Mazur_Frey.lean)[`Mazur_Frey`](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_Mazur_Frey.lean)
 
 そして、この証明は 指数 \(p\) の大きさと、Frey 曲線の係数 \(a\) の合同条件によって場合分けされている。
 
 ## 1. 模範解答の分岐構造
 
-実際の [`S_FreyPackage_Mazur_Frey.lean`](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_Mazur_Frey.lean?utm_source=chatgpt.com) の証明部分を抜き出すと、次の構造じゃ。
+実際の [`S_FreyPackage_Mazur_Frey.lean`](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_Mazur_Frey.lean) の証明部分を抜き出すと、次の構造じゃ。
 
 ```
 private theorem mazurM3asmB_of_no_cofixed (P : FreyPackage) :
@@ -300,7 +300,7 @@ private theorem mazurM3asmB_of_no_cofixed (P : FreyPackage) :
 
 重要な中間定理は、
 
-[`frey_reducible_hasCofixedLine`](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_reducible_hasCofixedLine.lean?utm_source=chatgpt.com)
+[`frey_reducible_hasCofixedLine`](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_reducible_hasCofixedLine.lean)
 
 じゃ。
 
@@ -328,7 +328,7 @@ private theorem mazurM3asmB_of_no_cofixed (P : FreyPackage) :
 
 ここが最も重い。
 
-[`frey_no_cofixed_large`](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_no_cofixed_large.lean?utm_source=chatgpt.com)
+[`frey_no_cofixed_large`](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_no_cofixed_large.lean)
 
 は約1,450行の証明モジュールじゃ。
 
@@ -347,7 +347,7 @@ private theorem mazurM3asmB_of_no_cofixed (P : FreyPackage) :
 
 中心にある大定理は、
 
-[`WeierstrassCurve.mazurStepThree_not_inZeroComponentAt`](https://github.com/anthropics/fermats-last-theorem/blob/main/Theorems/Thm_WeierstrassCurve_mazurStepThree_not_inZeroComponentAt.lean?utm_source=chatgpt.com)
+[`WeierstrassCurve.mazurStepThree_not_inZeroComponentAt`](https://github.com/anthropics/fermats-last-theorem/blob/main/Theorems/Thm_WeierstrassCurve_mazurStepThree_not_inZeroComponentAt.lean)
 
 になる。
 

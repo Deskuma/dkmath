@@ -947,4 +947,4 @@ $$
 
 そしてその先には、実三次の $13=10+3$ が、完全七次円分体の $26=20+6$ の影であることまで見えています。
 
-[1]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/NumberField/Units/DirichletTheorem.html?utm_source=chatgpt.com "Mathlib.NumberTheory.NumberField.Units.DirichletTheorem"
+[1]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/NumberField/Units/DirichletTheorem.html "Mathlib.NumberTheory.NumberField.Units.DirichletTheorem"

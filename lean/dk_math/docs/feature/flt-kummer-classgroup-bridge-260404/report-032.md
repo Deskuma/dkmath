@@ -243,4 +243,4 @@ $$
 つまり今は、もう「戦線が広い」状態ではない。
 **勝負どころが 2 基の砲台に縮んだ**、というのが正確な分析じゃ。
 
-[1]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/NumberField/Cyclotomic/Basic.html?utm_source=chatgpt.com "Mathlib.NumberTheory.NumberField.Cyclotomic.Basic"
+[1]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/NumberField/Cyclotomic/Basic.html "Mathlib.NumberTheory.NumberField.Cyclotomic.Basic"

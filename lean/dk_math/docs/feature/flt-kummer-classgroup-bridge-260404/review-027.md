@@ -162,6 +162,6 @@ $$
 exact に同名の ideal theorem は見つからなんだが、**もっと直接的な element divisibility theorem は既にある **。
 ゆえに、いまは新理論を掘るより、** adapter を 1 本書くのが最短** と見るぞい。 ([leanprover-community.github.io][2])
 
-[1]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/NumberField/Cyclotomic/Basic.html?utm_source=chatgpt.com "Mathlib.NumberTheory.NumberField.Cyclotomic.Basic"
+[1]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/NumberField/Cyclotomic/Basic.html "Mathlib.NumberTheory.NumberField.Cyclotomic.Basic"
 [2]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/NumberField/Cyclotomic/Basic.html "Mathlib.NumberTheory.NumberField.Cyclotomic.Basic"
 [3]: https://leansearch.net/?q=For+any+nonzero+natural+number+%24n%24+and+primitive+%24n%24-th+root+of+unity+%24%5Czeta%24+in+a+commutative+ring+%24A%24%2C+the+images+%24%5Csigma%28%5Czeta+-+1%29%24+and+%24%5Ctau%28%5Czeta+-+1%29%24+are+associated+elements+in+%24A%24+for+any+%24R%24-algebra+automorphisms+%24%5Csigma%2C+%5Ctau%3A+A+%5Cto+A%24.&utm_source=chatgpt.com "Find theorems in Mathlib4 using natural language query"

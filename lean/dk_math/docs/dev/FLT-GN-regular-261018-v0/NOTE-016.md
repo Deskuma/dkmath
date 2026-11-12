@@ -1,6 +1,6 @@
 # 🐺 NOTE-015 — 数える段階から「独立性を証明する段階」へ
 
-NOTE-015 の [実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE015-261020.md?utm_source=chatgpt.com) と公開定理の本体を確認した。
+NOTE-015 の [実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE015-261020.md) と公開定理の本体を確認した。
 
 今回 Core として固定されたのは、特に次の二点じゃ。
 
@@ -26,7 +26,7 @@ NOTE-015 の [実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-re
 
 ## 模範解答は、この先どうなっているか
 
-参照したのは Anthropic の [S_WeierstrassCurve_card_torsion_of_isAlgClosed.lean](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_card_torsion_of_isAlgClosed.lean?utm_source=chatgpt.com) じゃ。
+参照したのは Anthropic の [S_WeierstrassCurve_card_torsion_of_isAlgClosed.lean](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_card_torsion_of_isAlgClosed.lean) じゃ。
 
 奇数指数の証明は、大きく次の順番で進んでいる。
 

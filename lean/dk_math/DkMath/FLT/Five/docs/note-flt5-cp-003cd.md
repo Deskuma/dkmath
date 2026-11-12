@@ -300,5 +300,5 @@ $$z-y=a^5,\qquad GN_5(a^5,y)=b^5$$
 
 **宇宙式の敵が、とうとう正規形を持った。** 🐺🔥
 
-[1]: https://www.cambridge.org/core/journals/mathematical-gazette/article/pells-equation-and-fermat/D234B3003E96A398BBDB05B361FFC3E8?utm_source=chatgpt.com "Pell's equation and Fermat | The Mathematical Gazette | Cambridge Core"
-[2]: https://www.cambridge.org/core/journals/bulletin-of-the-australian-mathematical-society/article/equations-de-fermat-de-type-5-5p/B5DDBE59187E60F5D2CD29EDE937A7A7?utm_source=chatgpt.com "Équations de Fermat de type (5, 5,p) | Bulletin of the Australian Mathematical Society | Cambridge Core"
+[1]: https://www.cambridge.org/core/journals/mathematical-gazette/article/pells-equation-and-fermat/D234B3003E96A398BBDB05B361FFC3E8 "Pell's equation and Fermat | The Mathematical Gazette | Cambridge Core"
+[2]: https://www.cambridge.org/core/journals/bulletin-of-the-australian-mathematical-society/article/equations-de-fermat-de-type-5-5p/B5DDBE59187E60F5D2CD29EDE937A7A7 "Équations de Fermat de type (5, 5,p) | Bulletin of the Australian Mathematical Society | Cambridge Core"

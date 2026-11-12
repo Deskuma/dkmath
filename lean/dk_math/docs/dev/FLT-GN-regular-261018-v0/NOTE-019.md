@@ -1,6 +1,6 @@
 # 🐺 NOTE-018 — 円分行列式の論理的な橋が完成
 
-[NOTE-018 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE018-261021.md?utm_source=chatgpt.com) と、主要な Lean 証明・依存監査を照合した。
+[NOTE-018 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE018-261021.md) と、主要な Lean 証明・依存監査を照合した。
 
 判定：NOTE-018 の実装は採用・固定を推奨する。ただし円分行列式は引き続き条件付き Core じゃ。
 
@@ -108,7 +108,7 @@ NOTE-016 では既にすべての素数 \(p\) について、
 
 ## Weil 対の幾何学は、別の Frontier として保持する
 
-[模範解答の Weil 対構成](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_pairing_torsionBy.lean?utm_source=chatgpt.com) も改めて確認した。
+[模範解答の Weil 対構成](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_pairing_torsionBy.lean) も改めて確認した。
 
 こちらでは、関数体上に `weilFun` を作り、平行移動によって生じる定数を対の値として定義する。そして双加法性、交代性、ガロア同変性、非退化性をそれぞれ証明している。
 

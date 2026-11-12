@@ -8,11 +8,11 @@
 
 対象は標数0の体上の楕円曲線、その代数閉包上の実際のねじれ点群じゃ。
 
-[NOTE-016 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE016-261020.md?utm_source=chatgpt.com) と次の証明を直接照合した。
+[NOTE-016 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE016-261020.md) と次の証明を直接照合した。
 
-- [`multiplication_polynomials_isCoprime`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticMultiplicationCoordinates.lean?utm_source=chatgpt.com) — Jacobian 座標の \(X=Z=0\) が非特異性に反することから分子・分母の共通根を排除する。
-- [`finite_not_separable_fiber`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/Algebra/RationalPolynomialFiber.lean?utm_source=chatgpt.com) — Wronskian の根を使い、重根が発生する例外値を有限集合に閉じ込める。
-- [`square_le_card_torsion`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticTorsionRegularFiber.lean?utm_source=chatgpt.com) — 分離的ファイバーの根から、実際の倍写像ファイバーへの単射を作り、核との平行移動で下界を得る。
+- [`multiplication_polynomials_isCoprime`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticMultiplicationCoordinates.lean) — Jacobian 座標の \(X=Z=0\) が非特異性に反することから分子・分母の共通根を排除する。
+- [`finite_not_separable_fiber`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/Algebra/RationalPolynomialFiber.lean) — Wronskian の根を使い、重根が発生する例外値を有限集合に閉じ込める。
+- [`square_le_card_torsion`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticTorsionRegularFiber.lean) — 分離的ファイバーの根から、実際の倍写像ファイバーへの単射を作り、核との平行移動で下界を得る。
 - `card_torsion_prime_sq`、`finrank_torsion_prime` — NOTE-013 の既存上界と結合して等号へ閉じる。
 
 特に優れているのは、根の \(x\) 座標を保存する単射じゃ。
@@ -37,7 +37,7 @@
 
 ## 次の Frontier：二次元の点群を、二次元のガロア表現として使う
 
-模範解答の後続も確認した。参照先は [Anthropic の PROOF-PATH.md](https://github.com/anthropics/fermats-last-theorem/blob/main/PROOF-PATH.md?utm_source=chatgpt.com) と [ResidualGaloisRep の定義](https://github.com/anthropics/fermats-last-theorem/blob/main/Definitions/Def_GaloisRep_Residual.lean?utm_source=chatgpt.com) じゃ。
+模範解答の後続も確認した。参照先は [Anthropic の PROOF-PATH.md](https://github.com/anthropics/fermats-last-theorem/blob/main/PROOF-PATH.md) と [ResidualGaloisRep の定義](https://github.com/anthropics/fermats-last-theorem/blob/main/Definitions/Def_GaloisRep_Residual.lean) じゃ。
 
 興味深いことに、模範解答は `ResidualGaloisRep` という構造体に、主として次の情報を要求している。
 
@@ -110,11 +110,11 @@ Frey 固有の算術的障害を排除する
 
 模範解答には、
 
-[exists_pairing_torsionBy](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_pairing_torsionBy.lean?utm_source=chatgpt.com)
+[exists_pairing_torsionBy](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_pairing_torsionBy.lean)
 
 および
 
-[apply_eq_pow_det_galoisRep_of_pow_eq_one](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_apply_eq_pow_det_galoisRep_of_pow_eq_one.lean?utm_source=chatgpt.com)
+[apply_eq_pow_det_galoisRep_of_pow_eq_one](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_apply_eq_pow_det_galoisRep_of_pow_eq_one.lean)
 
 がある。
 

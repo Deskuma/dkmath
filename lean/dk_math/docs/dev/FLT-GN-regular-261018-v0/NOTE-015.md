@@ -4,7 +4,7 @@
 
 NOTE-013 で得た次元上界に対して、NOTE-014 は楕円曲線の幾何学から正の次元を証明した。
 
-[実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE014-261020.md?utm_source=chatgpt.com) と Lean の証明本体を確認した。既に確定した上界を仮定し直すのではなく、実際の非零点を構成して下界を与えている。
+[実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE014-261020.md) と Lean の証明本体を確認した。既に確定した上界を仮定し直すのではなく、実際の非零点を構成して下界を与えている。
 
 ### 今回、固定できた数学的事実
 
@@ -30,7 +30,7 @@ NOTE-013 で得た次元上界に対して、NOTE-014 は楕円曲線の幾何�
 
 ### 証明の核心は「根から実際の点群へ戻した」こと
 
-[EllipticTorsionNontrivial.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticTorsionNontrivial.lean?utm_source=chatgpt.com) の `exists_nonzero_torsion_of_one_lt` は、次の道筋を証明している。
+[EllipticTorsionNontrivial.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticTorsionNontrivial.lean) の `exists_nonzero_torsion_of_one_lt` は、次の道筋を証明している。
 
 除法多項式の次数が正
 

@@ -17,11 +17,11 @@
 
 #### **実際のコード状況**
 
-| 行番号 | 補題名 | sorry タイプ | 状態 |
-|--------|--------|---------|------|
-| 891 | `squarefree_implies_padic_val_le_one` | **メイン補題** | ⏳ 未完成 |
-| 943 | example (コメント例) | **ダミー** | コメント内のみ |
-| 1082 | `padicValNat_le_one_of_prime_divisor_case_three` | **メイン補題** | ⏳ 未完成 |
+| 行番号 | 補題名                                           | sorry タイプ   | 状態           |
+| ------ | ------------------------------------------------ | -------------- | -------------- |
+| 891    | `squarefree_implies_padic_val_le_one`            | **メイン補題** | ⏳ 未完成       |
+| 943    | example (コメント例)                             | **ダミー**     | コメント内のみ |
+| 1082   | `padicValNat_le_one_of_prime_divisor_case_three` | **メイン補題** | ⏳ 未完成       |
 
 **✅ 正確性：** ドキュメントの「2箇所」記述は **正しい**（メイン補題は2個）
 
@@ -46,10 +46,10 @@ lemma exists_primitive_prime_factor_basic
 
 #### **層B（精密層）：⏳ 2個の sorry で停滞**
 
-| sorry | 数学的内容 | 理由 |
-|-------|---------|------|
-| (1) `squarefree_implies_padic_val_le_one` | padicValNat ≤ 1 の一般上界 | **G の構造解析が難しい** |
-| (2) `padicValNat_le_one_of_prime_divisor_case_three` | d=3 での精密評価 | **反例 (a=18, b=1) で v_q = 3** |
+| sorry                                                | 数学的内容                 | 理由                            |
+| ---------------------------------------------------- | -------------------------- | ------------------------------- |
+| (1) `squarefree_implies_padic_val_le_one`            | padicValNat ≤ 1 の一般上界 | **G の構造解析が難しい**        |
+| (2) `padicValNat_le_one_of_prime_divisor_case_three` | d=3 での精密評価           | **反例 (a=18, b=1) で v_q = 3** |
 
 ---
 
@@ -104,12 +104,12 @@ lemma exists_primitive_prime_factor_basic
 
 ### 💡 ドキュメント vs コードの乖離箇所
 
-| ポイント | ドキュメント | コード | 評価 |
-|---------|------------|--------|------|
-| 完成補題数 | 8個 | 10個以上 | ✅ **コードが進んでいる** |
-| sorry 数 | 2個 | 2個（+1ダミー） | ✅ **一致（ダミーは無視）** |
-| 層A 状態 | no sorry で完成 | no sorry で完成 | ✅ **完全に一致** |
-| 層B 方針 | 分離・追加仮定で | 反例で立ち止まり | ⚠️ **方針転換が必要** |
+| ポイント   | ドキュメント     | コード           | 評価                       |
+| ---------- | ---------------- | ---------------- | -------------------------- |
+| 完成補題数 | 8個              | 10個以上         | ✅ **コードが進んでいる**   |
+| sorry 数   | 2個              | 2個（+1ダミー）  | ✅ **一致（ダミーは無視）** |
+| 層A 状態   | no sorry で完成  | no sorry で完成  | ✅ **完全に一致**           |
+| 層B 方針   | 分離・追加仮定で | 反例で立ち止まり | ⚠️ **方針転換が必要**       |
 
 ---
 
@@ -565,8 +565,8 @@ cyclotomic 側には `Polynomial.squarefree_cyclotomic` などが既にあるの
 （必要なら次の返答で、prime exponent の primitive 証明を Lean スケルトンでそのまま貼り付けられる形にしてやる。ぬしの repo 流儀に合わせて `ZMod`/`orderOf` ルートで組むのが速い。）
 
 [3]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Data/Nat/ModEq.html "Mathlib.Data.Nat.ModEq"
-[4]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html?utm_source=chatgpt.com "Mathlib.RingTheory.Polynomial.Cyclotomic.Basic"
-[5]: https://leanprover-community.github.io/1000.html?utm_source=chatgpt.com "1000+ theorems"
+[4]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/RingTheory/Polynomial/Cyclotomic/Basic.html "Mathlib.RingTheory.Polynomial.Cyclotomic.Basic"
+[5]: https://leanprover-community.github.io/1000.html "1000+ theorems"
 
 ---
 

@@ -1,6 +1,6 @@
 # 🐺🍎 DkMath NOTE-031-005 実装レビュー
 
-対象：`Deskuma/dkmath` ブランチ：`dev/FLT-GN-regular-261018-v0` 確認した HEAD：[`19e927dbf2e414af7551c8b02d75484579aa4b03`](https://github.com/Deskuma/dkmath/commit/19e927dbf2e414af7551c8b02d75484579aa4b03?utm_source=chatgpt.com)
+対象：`Deskuma/dkmath` ブランチ：`dev/FLT-GN-regular-261018-v0` 確認した HEAD：[`19e927dbf2e414af7551c8b02d75484579aa4b03`](https://github.com/Deskuma/dkmath/commit/19e927dbf2e414af7551c8b02d75484579aa4b03)
 
 ## 1. 結論：`hcases` の実装が完成した
 
@@ -12,7 +12,7 @@
 
 を、同じ Frey Source の局所算術から導出する定理として実装したことじゃ。
 
-実際に [FreyStableLineLocalGlobal.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/FLT/FreyStableLineLocalGlobal.lean?utm_source=chatgpt.com) を読み、`residual_stable_line_fixed_or_cofixed` の宣言と証明本体を確認した。
+実際に [FreyStableLineLocalGlobal.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/FLT/FreyStableLineLocalGlobal.lean) を読み、`residual_stable_line_fixed_or_cofixed` の宣言と証明本体を確認した。
 
 ```
 theorem residual_stable_line_fixed_or_cofixed (hp5 : 5 ≤ p)
@@ -92,7 +92,7 @@ S.residual_fixed_or_cofixed_of_inertia_common_side N
 
 ここで重要なのは、呼び出した先の内容じゃ。
 
-[AbsoluteInertiaRepresentation.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/AbsoluteInertiaRepresentation.lean?utm_source=chatgpt.com) と [AbsoluteInertiaGeneration.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/AbsoluteInertiaGeneration.lean?utm_source=chatgpt.com) まで遡って確認した。
+[AbsoluteInertiaRepresentation.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/AbsoluteInertiaRepresentation.lean) と [AbsoluteInertiaGeneration.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/AbsoluteInertiaGeneration.lean) まで遡って確認した。
 
 大域化では、まず残余表現の核が開部分群であることを利用する。
 
@@ -252,7 +252,7 @@ NOTE-030 では、\(p\ge5\)、`Even S.b` の下で、
 
 ## 8. 監査とビルドの検証
 
-保存された [validation-note031-005.txt](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/evidence/validation-note031-005.txt?utm_source=chatgpt.com) を確認した。
+保存された [validation-note031-005.txt](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/evidence/validation-note031-005.txt) を確認した。
 
 | 検証項目                    | 記録された結果                              |
 | --------------------------- | ------------------------------------------- |
@@ -267,7 +267,7 @@ NOTE-030 では、\(p\ge5\)、`Even S.b` の下で、
 | 新規コードの警告・エラー    | なしとの記録                                |
 | 既存の無関係な `sorry` 警告 | 5件                                         |
 
-[依存監査ソース](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean?utm_source=chatgpt.com) も確認した。
+[依存監査ソース](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMathTest/FLT/Note031StableLineLocalGlobalDependencyAudit.lean) も確認した。
 
 特に重要なのは、監査が次の依存経路を実際に要求していることじゃ。
 

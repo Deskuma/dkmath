@@ -2,7 +2,7 @@
 
 暫定評価を更新して、NOTE-012 は固定推奨じゃ。しかも今回は、NOTE-011 の条件付き定理に対し、欠けていた数学的入力を実際に供給できた点が重要じゃ。
 
-指定ブランチ `dev/FLT-GN-regular-261018-v0` の [実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE012-261020.md?utm_source=chatgpt.com)、実際の有限性定理、Frey 接続、検証証跡を確認した。
+指定ブランチ `dev/FLT-GN-regular-261018-v0` の [実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE012-261020.md)、実際の有限性定理、Frey 接続、検証証跡を確認した。
 
 統合ビルド
 
@@ -61,7 +61,7 @@ jobs 成功
 
 結論は、通っておる。
 
-[EllipticDivisionMultiplication.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticDivisionMultiplication.lean?utm_source=chatgpt.com) では、単に除法多項式の次数を利用したのではなく、普遍点の倍写像を Jacobian 座標で構成し、実際の点群へ特殊化している。
+[EllipticDivisionMultiplication.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticDivisionMultiplication.lean) では、単に除法多項式の次数を利用したのではなく、普遍点の倍写像を Jacobian 座標で構成し、実際の点群へ特殊化している。
 
 特に、次の補題が重要じゃ。
 
@@ -85,7 +85,7 @@ jobs 成功
 
 を得る。
 
-最後に [EllipticTorsionFinite.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticTorsionFinite.lean?utm_source=chatgpt.com) が、次の論理を完成させておる。
+最後に [EllipticTorsionFinite.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticTorsionFinite.lean) が、次の論理を完成させておる。
 
 \[ \begin{aligned} \Psi_n^{\mathrm{Sq}}&\ne0\\ &\Downarrow\\ \#\{\text{根}\}&<\infty\\ &\Downarrow\\ \#\{\text{根の上の非特異点}\}&<\infty\\ &\Downarrow\\ \#E[n]&<\infty. \end{aligned} \]
 

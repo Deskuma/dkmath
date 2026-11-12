@@ -229,7 +229,7 @@ Facade・root smoke
 
 参考として、今回確認した正本は以下じゃ。
 
-[Legendre–Frey 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE006-LEGENDRE-261019.md?utm_source=chatgpt.com) と [IRR-007 / Frey 局所還元実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE006-SECTION4-261019.md?utm_source=chatgpt.com)。
+[Legendre–Frey 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE006-LEGENDRE-261019.md) と [IRR-007 / Frey 局所還元実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE006-SECTION4-261019.md)。
 
 くふふっ。🐺🍎
 

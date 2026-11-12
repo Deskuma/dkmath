@@ -158,4 +158,4 @@ $$
 ここまで行けば、Stage 1 はほぼ閉じる。
 残る honest open は、ほんに Stage 3 の norm descent に寄るはずじゃよ。
 
-[1]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/NumberField/Cyclotomic/Basic.html?utm_source=chatgpt.com "Mathlib.NumberTheory.NumberField.Cyclotomic.Basic"
+[1]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/NumberField/Cyclotomic/Basic.html "Mathlib.NumberTheory.NumberField.Cyclotomic.Basic"

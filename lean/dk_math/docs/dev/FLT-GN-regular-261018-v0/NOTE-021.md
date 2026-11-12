@@ -1,6 +1,6 @@
 # 🐺 NOTE-020 レビュー — ねじれ点群の構造 Core が完成
 
-うむ、ぬしよ。今回も [NOTE-020 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE020-261021.md?utm_source=chatgpt.com)、Lean の証明本体、回帰、依存監査を直接照合した。
+うむ、ぬしよ。今回も [NOTE-020 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE020-261021.md)、Lean の証明本体、回帰、依存監査を直接照合した。
 
 判定：NOTE-020 は無条件の構造定理として固定を推奨する。
 
@@ -14,7 +14,7 @@
 
 ### 1. Nakayama を使わない、DkMath 独自の生成原理
 
-[`TorsionPowerLifting.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/Algebra/TorsionPowerLifting.lean?utm_source=chatgpt.com) の `lifted_pair_generates` が今回の核心じゃ。
+[`TorsionPowerLifting.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/Algebra/TorsionPowerLifting.lean) の `lifted_pair_generates` が今回の核心じゃ。
 
 \[ [p^k]P_i=Q_i\quad(i=0,1) \]
 
@@ -163,7 +163,7 @@ theorem exists_weilPairingData
 
 これは目標形であり、まだ存在証明を実装したものではない。
 
-実装の初手では、[模範解答の Weil 対構成](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_pairing_torsionBy.lean?utm_source=chatgpt.com) を参考に、まず楕円曲線の座標環の Dedekind 性、関数体、点による平行移動を整備する。
+実装の初手では、[模範解答の Weil 対構成](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_pairing_torsionBy.lean) を参考に、まず楕円曲線の座標環の Dedekind 性、関数体、点による平行移動を整備する。
 
 その後、`weilFun` に対応する有理関数と付値の関係から双加法性・交代性・ガロア同変性・非退化性を証明していく。
 

@@ -17,14 +17,14 @@ Frey 曲線の実際の有理点から2進付値の整数軌道を構成し、�
 
 両コミットの比較結果は `ahead_by = 6`、つまり開始コミットの後に6コミットが積み重なっておる。
 
-| STEP         | コミット                                                                                                              | 実装内容                                                 |
-| ------------ | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| 030-001〜003 | [`6e38e97`](https://github.com/Deskuma/dkmath/commit/6e38e976014ace19daf61e4dc11e900954b6d19b?utm_source=chatgpt.com) | 2進付値演算、Frey 係数の整性、有限軌道による負の付値排除 |
-| 030-004      | [`64eb5d6`](https://github.com/Deskuma/dkmath/commit/64eb5d687a45e593201f533a63c27a356d554f93?utm_source=chatgpt.com) | 付値0の排除。全非自明倍点で \(v_2(x)\ge1\)               |
-| 030-005      | [`317dd78`](https://github.com/Deskuma/dkmath/commit/317dd782d0b92dc3ed5335271b7193cf4895f651?utm_source=chatgpt.com) | 2-torsion 反射と付値上界                                 |
-| 030-006      | [`52656a2`](https://github.com/Deskuma/dkmath/commit/52656a2b24e52c56b156cae1133b421bbdd90922?utm_source=chatgpt.com) | 接線分母の付値、倍点・和差恒等式                         |
-| 030-007      | [`ba20cbf`](https://github.com/Deskuma/dkmath/commit/ba20cbfca3f0283db18c7c6a7f83ddd0573a4a4c?utm_source=chatgpt.com) | 有理 \(p\)-torsion の排除                                |
-| 030-008      | [`228eb86`](https://github.com/Deskuma/dkmath/commit/228eb86c924836be9baeaa3841be13e19f5e3cd3?utm_source=chatgpt.com) | `NoNonzeroFixed` 証明と cofixed 抽出への接続             |
+| STEP         | コミット                                                                                       | 実装内容                                                 |
+| ------------ | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| 030-001〜003 | [`6e38e97`](https://github.com/Deskuma/dkmath/commit/6e38e976014ace19daf61e4dc11e900954b6d19b) | 2進付値演算、Frey 係数の整性、有限軌道による負の付値排除 |
+| 030-004      | [`64eb5d6`](https://github.com/Deskuma/dkmath/commit/64eb5d687a45e593201f533a63c27a356d554f93) | 付値0の排除。全非自明倍点で \(v_2(x)\ge1\)               |
+| 030-005      | [`317dd78`](https://github.com/Deskuma/dkmath/commit/317dd782d0b92dc3ed5335271b7193cf4895f651) | 2-torsion 反射と付値上界                                 |
+| 030-006      | [`52656a2`](https://github.com/Deskuma/dkmath/commit/52656a2b24e52c56b156cae1133b421bbdd90922) | 接線分母の付値、倍点・和差恒等式                         |
+| 030-007      | [`ba20cbf`](https://github.com/Deskuma/dkmath/commit/ba20cbfca3f0283db18c7c6a7f83ddd0573a4a4c) | 有理 \(p\)-torsion の排除                                |
+| 030-008      | [`228eb86`](https://github.com/Deskuma/dkmath/commit/228eb86c924836be9baeaa3841be13e19f5e3cd3) | `NoNonzeroFixed` 証明と cofixed 抽出への接続             |
 
 6コミットのうち最初のコミットが3ステップをまとめているので、計8ステップじゃな。
 
@@ -110,7 +110,7 @@ theorem residual_noNonzeroFixed_of_oriented
 
 ## 4. 次は NOTE-031：局所慣性から `hcases` へ
 
-Anthropic の [fixed/cofixed 二択の模範解答](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_stable_submodule_fixed_or_cofixed.lean?utm_source=chatgpt.com) も確認した。
+Anthropic の [fixed/cofixed 二択の模範解答](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_stable_submodule_fixed_or_cofixed.lean) も確認した。
 
 最終合流の証明は55行程度で、実際の主要部分はそれが参照する局所定理群にある。
 
@@ -320,7 +320,7 @@ NOTE-028 の成果から、
 
 模範解答の
 
-[AlgebraicClosure.subgroup_eq_top_of_inertiaSubgroupIn_le](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_AlgebraicClosure_subgroup_eq_top_of_inertiaSubgroupIn_le.lean?utm_source=chatgpt.com)
+[AlgebraicClosure.subgroup_eq_top_of_inertiaSubgroupIn_le](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_AlgebraicClosure_subgroup_eq_top_of_inertiaSubgroupIn_le.lean)
 
 に対応する一般定理が重要になる。
 
@@ -350,7 +350,7 @@ NOTE-028 の成果から、
 
 模範解答：
 
-[freyGaloisRep_isUnramifiedAt](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_freyGaloisRep_isUnramifiedAt.lean?utm_source=chatgpt.com)
+[freyGaloisRep_isUnramifiedAt](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_freyGaloisRep_isUnramifiedAt.lean)
 
 ### 数学的な内容
 
@@ -421,7 +421,7 @@ Frey 曲線の判別式には、本質的に
 
 模範解答：
 
-[frey_inertia_at_two_trivial_on_stable_submodule](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_inertia_at_two_trivial_on_stable_submodule.lean?utm_source=chatgpt.com)
+[frey_inertia_at_two_trivial_on_stable_submodule](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_inertia_at_two_trivial_on_stable_submodule.lean)
 
 ### なぜ2が特殊なのか？
 
@@ -487,7 +487,7 @@ Frey 曲線の判別式には \(2^8\) の分母があり、奇素数で使った
 
 模範解答：
 
-[frey_inertia_at_p_trivial_on_submodule_or_quotient_at](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_inertia_at_p_trivial_on_submodule_or_quotient_at.lean?utm_source=chatgpt.com)
+[frey_inertia_at_p_trivial_on_submodule_or_quotient_at](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_inertia_at_p_trivial_on_submodule_or_quotient_at.lean)
 
 ### 数学的な目標
 
@@ -569,7 +569,7 @@ Frey 曲線の判別式には \(2^8\) の分母があり、奇素数で使った
 
 模範解答の最終ファイル：
 
-[frey_stable_submodule_fixed_or_cofixed](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_stable_submodule_fixed_or_cofixed.lean?utm_source=chatgpt.com)
+[frey_stable_submodule_fixed_or_cofixed](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_stable_submodule_fixed_or_cofixed.lean)
 
 このファイルでは、まず \(p\) における局所二択を取得する。
 

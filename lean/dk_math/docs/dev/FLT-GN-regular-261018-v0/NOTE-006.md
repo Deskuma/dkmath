@@ -426,7 +426,7 @@ IRR-006 は `DkMath.Lib` および `DkMath.FLT.Kummer`、NOTE-005 は `DkMath.Li
 
 ただし、未実装の Herbrand–Ribet 接続や Frey–Ribet の終端まで証明済みとみなしてはならぬ。
 
-参照した正本は、[IRR-006 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-IRR006-261019.md?utm_source=chatgpt.com) と [NOTE-005 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE005-261019.md) じゃ。
+参照した正本は、[IRR-006 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-IRR006-261019.md) と [NOTE-005 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE005-261019.md) じゃ。
 
 ## 総合評価
 

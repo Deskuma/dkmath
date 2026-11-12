@@ -32,7 +32,7 @@ FLT13
     \end{gathered}
 \]
 
-特に [ElevenThirteenFLT.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/FLT/Kummer/ElevenThirteenFLT.lean?utm_source=chatgpt.com) では、11・13 の具体的な類数1証明を一般定理へ渡している。最終的な整数版は Mathlib の整数・自然数版同値で接続されておる。
+特に [ElevenThirteenFLT.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/FLT/Kummer/ElevenThirteenFLT.lean) では、11・13 の具体的な類数1証明を一般定理へ渡している。最終的な整数版は Mathlib の整数・自然数版同値で接続されておる。
 
 これは、以前の「正深度 State が存在しない」という途中結果とは明確に異なる。今回の公開定理の結論そのものが、整数・自然数上の FLT になっている のじゃ。
 
@@ -72,7 +72,7 @@ GN 因子抽出
 
 ### Case I：係数剛性は正しく一般化されている
 
-今回、特に高く評価するのは [CyclotomicPhaseCoefficientRigidity.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/CyclotomicPhaseCoefficientRigidity.lean?utm_source=chatgpt.com) じゃ。
+今回、特に高く評価するのは [CyclotomicPhaseCoefficientRigidity.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/CyclotomicPhaseCoefficientRigidity.lean) じゃ。
 
 主定理は、
 
@@ -116,7 +116,7 @@ GN 因子抽出
 
 ### Case II：以前の未完成部分を適切に閉じている
 
-[IntegerCounterexampleOrientation.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/FLT/Kummer/IntegerCounterexampleOrientation.lean?utm_source=chatgpt.com) では、\(p\) が \(a,b,c\) のどれを割る場合も扱い、右辺が \(p\) の倍数となる方向へ移動している。
+[IntegerCounterexampleOrientation.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/FLT/Kummer/IntegerCounterexampleOrientation.lean) では、\(p\) が \(a,b,c\) のどれを割る場合も扱い、右辺が \(p\) の倍数となる方向へ移動している。
 
 そして、
 

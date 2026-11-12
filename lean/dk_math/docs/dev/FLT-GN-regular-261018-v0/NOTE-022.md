@@ -2,7 +2,7 @@
 
 うむ、ぬしよ。今回はかなり重要な転換点じゃ。
 
-[NOTE-021 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE021-261021.md?utm_source=chatgpt.com)、Lean の証明本体、監査コード、検証記録を照合した。
+[NOTE-021 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE021-261021.md)、Lean の証明本体、監査コード、検証記録を照合した。
 
 判定：NOTE-021 の幾何学 Core は固定を推奨する。Weil 対の存在は、引き続き未証明として保持する。
 
@@ -19,7 +19,7 @@
 | 平行移動       | 関数体の代数自己同型、合成則、逆元、忠実性 |
 | 有限点の場所   | 非零素イデアルとの一対一対応               |
 
-特に [`EllipticFunctionFieldTranslation.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticFunctionFieldTranslation.lean?utm_source=chatgpt.com) の `transEquiv_injective` は、面白い一般定理じゃ。
+特に [`EllipticFunctionFieldTranslation.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticFunctionFieldTranslation.lean) の `transEquiv_injective` は、面白い一般定理じゃ。
 
 点 \(S\) による平行移動を
 
@@ -49,7 +49,7 @@
 
 模範解答の依存関係をさらに追ったところ、次の一手として興味深い橋を確認した。
 
-[CoordinateRing_isPrincipal_prod_XYIdeal_zpow_iff](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_CoordinateRing_isPrincipal_prod_XYIdeal_zpow_iff.lean?utm_source=chatgpt.com)
+[CoordinateRing_isPrincipal_prod_XYIdeal_zpow_iff](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_CoordinateRing_isPrincipal_prod_XYIdeal_zpow_iff.lean)
 
 この定理は、楕円曲線上の有限点 \(P_i\) と整数 \(m_i\) について、おおむね次の関係を与える。
 
@@ -109,7 +109,7 @@ NOTE-021 では、有限点と非零素イデアルの対応を完成させた�
 
 となる \(P=-S\) は、付値の輸送で特別に扱う必要がある。
 
-模範解答の [valuation_transEquiv_weilFun](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_valuation_transEquiv_weilFun.lean?utm_source=chatgpt.com) も、この通常の場合と例外の場合を分けている。
+模範解答の [valuation_transEquiv_weilFun](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_valuation_transEquiv_weilFun.lean) も、この通常の場合と例外の場合を分けている。
 
 そのため NOTE-022 で主イデアルの生成元まで固定した後は、有限点における付値公式、無限遠点に関係する次数公式、平行移動での付値輸送へ進むのが自然じゃ。
 

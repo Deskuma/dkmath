@@ -2,7 +2,7 @@
 
 判定：NOTE-009 は、三系統とも定理として成立する実装が確認できた。特に Frey の入口は、NOTE-008 までに残っていた重要な欠落を埋めておる。
 
-指定ブランチ `dev/FLT-GN-regular-261018-v0` から、[実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE009-261019.md?utm_source=chatgpt.com)、本体3モジュール、検証証跡を直接確認した。
+指定ブランチ `dev/FLT-GN-regular-261018-v0` から、[実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE009-261019.md)、本体3モジュール、検証証跡を直接確認した。
 
 統合ビルド
 

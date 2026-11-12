@@ -225,10 +225,10 @@ Frey 側は全素数での局所半安定性へ進み、Legendre 側は実際の
 
 今回の正本も Facade 経由で確認した。
 
-- [IRR-008 の一般イデアルノルム](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/GaloisIdealNorm.lean?utm_source=chatgpt.com)
-- [Frey の素数2局所算術](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/FLT/FreyTwo.lean?utm_source=chatgpt.com)
-- [Legendre の \(j\)-不変量](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/NumberTheory/Legendre/FreyJCentralSeat.lean?utm_source=chatgpt.com)
-- [NOTE-007 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE007-261019.md?utm_source=chatgpt.com)
+- [IRR-008 の一般イデアルノルム](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/GaloisIdealNorm.lean)
+- [Frey の素数2局所算術](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/FLT/FreyTwo.lean)
+- [Legendre の \(j\)-不変量](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/NumberTheory/Legendre/FreyJCentralSeat.lean)
+- [NOTE-007 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE007-261019.md)
 
 くふふっ……🐺
 

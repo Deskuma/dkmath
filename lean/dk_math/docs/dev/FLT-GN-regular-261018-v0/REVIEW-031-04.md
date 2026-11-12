@@ -1,6 +1,6 @@
 # 🐺🍎 DkMath NOTE-031-004 実装レビュー
 
-対象：`Deskuma/dkmath` ブランチ：`dev/FLT-GN-regular-261018-v0` 確認した先頭コミット：[`4c7735e`](https://github.com/Deskuma/dkmath/commit/4c7735e601f11f00bbe4e461996f63ed2dd86482?utm_source=chatgpt.com)
+対象：`Deskuma/dkmath` ブランチ：`dev/FLT-GN-regular-261018-v0` 確認した先頭コミット：[`4c7735e`](https://github.com/Deskuma/dkmath/commit/4c7735e601f11f00bbe4e461996f63ed2dd86482)
 
 ## 1. 今回の到達点
 
@@ -21,13 +21,13 @@
 
 実装記録：
 
-[031-004 第1部：良還元と同側輸送](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE031-004-261023.md?utm_source=chatgpt.com)
+[031-004 第1部：良還元と同側輸送](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE031-004-261023.md)
 
-[031-004 第2部：乗法的還元と最終閉鎖](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE031-004-PART2-261023.md?utm_source=chatgpt.com)
+[031-004 第2部：乗法的還元と最終閉鎖](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE031-004-PART2-261023.md)
 
 ## 2. 最終 Lean 定理の検証
 
-[実装本体：FreyPrimeFiltration.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/FLT/FreyPrimeFiltration.lean?utm_source=chatgpt.com)
+[実装本体：FreyPrimeFiltration.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/FLT/FreyPrimeFiltration.lean)
 
 実際の定理宣言と証明本体を確認した。
 
@@ -108,7 +108,7 @@ theorem residual_common_side_at_p (hp5 : 5 ≤ p)
 
 ## 4. 第2部の核心：還元準同型を実装した
 
-[EllipticSmoothReduction.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticSmoothReduction.lean?utm_source=chatgpt.com)
+[EllipticSmoothReduction.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticSmoothReduction.lean)
 
 第1部で未解決だった数学的障害は、
 
@@ -156,7 +156,7 @@ noncomputable def zeroComponentReduction :
 
 ## 5. 標数 \(p\) の節点から還元核へ
 
-[EllipticNodalTorsion.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticNodalTorsion.lean?utm_source=chatgpt.com)
+[EllipticNodalTorsion.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticNodalTorsion.lean)
 
 節点曲線の滑らかな点群は、代数閉包上では乗法群に対応する。
 
@@ -198,7 +198,7 @@ noncomputable def zeroComponentReduction :
 
 ## 6. 慣性変化量の吸収も確認
 
-[EllipticNodalInertia.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticNodalInertia.lean?utm_source=chatgpt.com)
+[EllipticNodalInertia.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticNodalInertia.lean)
 
 このモジュールでは、任意の実点 \(P\) に対して、
 
@@ -236,7 +236,7 @@ residualReductionKernel_absorbs_at_bad_prime
 
 ここも確認した。
 
-[AbsorbingSubspace.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/RepresentationTheory/AbsorbingSubspace.lean?utm_source=chatgpt.com)
+[AbsorbingSubspace.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/RepresentationTheory/AbsorbingSubspace.lean)
 
 二次元空間の安定直線 \(N\) と真の吸収空間 \(M\) について、
 

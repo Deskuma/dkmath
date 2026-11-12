@@ -37,7 +37,7 @@ NOTE-030 の最初の目標は、有理 \(p\)-torsion 点の不存在を、実�
 
 ## 2. 模範解答から発見した、DkMath に持ち帰るべき構造
 
-Anthropic の [S_FreyPackage_freyCurve_rational_p_torsion_eq_zero.lean](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_freyCurve_rational_p_torsion_eq_zero.lean?utm_source=chatgpt.com) を実際に取得して照合した。
+Anthropic の [S_FreyPackage_freyCurve_rational_p_torsion_eq_zero.lean](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_freyCurve_rational_p_torsion_eq_zero.lean) を実際に取得して照合した。
 
 上流 blob はハンドオフ記録と一致する。
 

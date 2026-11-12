@@ -1726,7 +1726,7 @@ docs/dev/das-p2l-260607/review/report-petal-304.md
 
 次は offset 座標へ戻してから global block へ写す。これが正しい攻略法じゃ。
 
-[1]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Data/Finset/Range.html?utm_source=chatgpt.com "Mathlib.Data.Finset.Range - Lean community"
+[1]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Data/Finset/Range.html "Mathlib.Data.Finset.Range - Lean community"
 
 ## Diff
 

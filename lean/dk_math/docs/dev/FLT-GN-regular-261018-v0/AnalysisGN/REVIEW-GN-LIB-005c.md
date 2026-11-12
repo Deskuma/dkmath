@@ -2,7 +2,7 @@
 
 これで、数値実験から始まった 完成不足 \(D_n\) の gcd 理論が、奇数・偶数ともに Lean で確定した わけじゃな。
 
-指定ブランチの [実装報告](https://github.com/Deskuma/dkmath/blob/lib/FLT-GN-Completion-261023-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/AnalysisGN/IMPLEMENTATION-GN-LIB-005c.md?utm_source=chatgpt.com) と ROADMAP、検証記録を確認したぞ。
+指定ブランチの [実装報告](https://github.com/Deskuma/dkmath/blob/lib/FLT-GN-Completion-261023-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/AnalysisGN/IMPLEMENTATION-GN-LIB-005c.md) と ROADMAP、検証記録を確認したぞ。
 
 ## 1. GN-LIB-005c の成果
 

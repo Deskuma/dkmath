@@ -2,7 +2,7 @@
 
 判定：NOTE-013 は固定推奨じゃ。今回は、有限性だけでなく、実際の \(E[p]\) が高々2次元であることを、位数公式を仮定せずに証明できている。
 
-指定ブランチの [実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE013-261020.md?utm_source=chatgpt.com)、本体3モジュール、回帰、監査証跡を照合した。
+指定ブランチの [実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE013-261020.md)、本体3モジュール、回帰、監査証跡を照合した。
 
 統合ビルド
 

@@ -255,7 +255,7 @@ Frey 側では2の補正が最後まで正確に保存され、Legendre 側で�
 
 ただし、DkMath には模範解答の単なる未完成版とは異なる成果もある。GN–Kummer による降下、37次の類群障害の指標分解、そして Legendre との橋じゃ。
 
-比較対象は、従来参照していた [Anthropic の FLT 形式化](https://github.com/anthropics/fermats-last-theorem?utm_source=chatgpt.com) のコミット `6e837e7` に固定した。実際の `PROOF-PATH.md` と、最終証明の依存関係を確認した。
+比較対象は、従来参照していた [Anthropic の FLT 形式化](https://github.com/anthropics/fermats-last-theorem) のコミット `6e837e7` に固定した。実際の `PROOF-PATH.md` と、最終証明の依存関係を確認した。
 
 ## 1. 全体を並べると
 

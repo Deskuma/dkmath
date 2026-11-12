@@ -1,6 +1,6 @@
 # 🐺 NOTE-025 レビュー — Weil 対の「片側」が実際の指標になった
 
-うむ、ぬしよ。今回も [NOTE-025 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE025-261021.md?utm_source=chatgpt.com)、Lean 証明本体、回帰・依存監査、保存された検証記録を照合した。
+うむ、ぬしよ。今回も [NOTE-025 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE025-261021.md)、Lean 証明本体、回帰・依存監査、保存された検証記録を照合した。
 
 判定：NOTE-025 は無条件の Core として固定を推奨する。
 
@@ -16,7 +16,7 @@
 
 しかも、この \(c(S,T)\) は一意じゃ。
 
-[`EllipticFunctionFieldConstants.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticFunctionFieldConstants.lean?utm_source=chatgpt.com) では、全有限場所で付値1となる非零関数が定数であることを、Dedekind 整域とノルム次数から証明している。
+[`EllipticFunctionFieldConstants.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticFunctionFieldConstants.lean) では、全有限場所で付値1となる非零関数が定数であることを、Dedekind 整域とノルム次数から証明している。
 
 それを一般的な固有値復元定理に整理し、NOTE-024 の位数保存と接続した。
 
@@ -36,7 +36,7 @@
 
 という `AddChar` が構成された。
 
-[`EllipticWeilCharacter.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticWeilCharacter.lean?utm_source=chatgpt.com) の `weilTranslationCharacter` が、その実際の対象じゃ。
+[`EllipticWeilCharacter.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticWeilCharacter.lean) の `weilTranslationCharacter` が、その実際の対象じゃ。
 
 この段階では、まだ任意の双線形形式を仮定していない。
 
@@ -81,8 +81,8 @@ NOTE-025 では、分子と分母をそれぞれ非零定数倍で選び直し�
 
 模範解答の次の二つも確認した。
 
-- [weilPairing0_add_right](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_weilPairing0_add_right.lean?utm_source=chatgpt.com)
-- [weilPairing0_self](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_weilPairing0_self.lean?utm_source=chatgpt.com)
+- [weilPairing0_add_right](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_weilPairing0_add_right.lean)
+- [weilPairing0_self](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_weilPairing0_self.lean)
 
 ここに、DkMath の既存 Core を利用した短縮経路が見える。
 
@@ -221,7 +221,7 @@ NOTE-025 の定数比判定から、\(H\) は非零定数じゃ。
 
 とりわけ非退化性が、次の大きな Frontier になる。
 
-模範解答は [eq_zero_of_forall_transEquiv_eq](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_eq_zero_of_forall_transEquiv_eq.lean?utm_source=chatgpt.com) において、有限ガロア群による不変体と倍写像の引き戻しを比較する。
+模範解答は [eq_zero_of_forall_transEquiv_eq](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_eq_zero_of_forall_transEquiv_eq.lean) において、有限ガロア群による不変体と倍写像の引き戻しを比較する。
 
 その核心は、
 

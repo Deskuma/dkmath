@@ -1,6 +1,6 @@
 # 🐺 NOTE-017 — GL₂ 表現の Core を固定
 
-うむ、ぬしよ。指定ブランチの [NOTE-017 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE017-261021.md?utm_source=chatgpt.com)、Lean 本体、回帰、依存監査と検証記録を照合した。
+うむ、ぬしよ。指定ブランチの [NOTE-017 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE017-261021.md)、Lean 本体、回帰、依存監査と検証記録を照合した。
 
 判定：NOTE-017 は採用・固定を推奨する。
 
@@ -57,8 +57,8 @@
 
 参照先は次の二つ。
 
-- [Weil 対の構成](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_pairing_torsionBy.lean?utm_source=chatgpt.com)
-- [Weil 対から行列式を求める定理](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_apply_eq_pow_det_galoisRep_of_pow_eq_one.lean?utm_source=chatgpt.com)
+- [Weil 対の構成](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_pairing_torsionBy.lean)
+- [Weil 対から行列式を求める定理](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_apply_eq_pow_det_galoisRep_of_pow_eq_one.lean)
 
 数学的な核心は美しい。
 

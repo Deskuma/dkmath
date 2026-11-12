@@ -88,7 +88,7 @@ jobs 成功
 
 ## 3. 模範解答をさらに調べて分かったこと
 
-今回、模範解答の [位数公式の証明本体](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_card_torsion_of_isAlgClosed.lean?utm_source=chatgpt.com) を、補題単位まで追ってみた。
+今回、模範解答の [位数公式の証明本体](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_card_torsion_of_isAlgClosed.lean) を、補題単位まで追ってみた。
 
 すると、次の重要な分岐が見つかった。
 

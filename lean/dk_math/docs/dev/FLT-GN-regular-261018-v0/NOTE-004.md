@@ -26,7 +26,7 @@ jobs / PASS
 
 最初の非正則素数
 
-保存された [検証証跡](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/evidence/validation-irr.txt?utm_source=chatgpt.com) の結果。独立の再ビルドではない。
+保存された [検証証跡](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/evidence/validation-irr.txt) の結果。独立の再ビルドではない。
 
 | 実装    | 判定             | 数学的な意味                       |
 | ------- | ---------------- | ---------------------------------- |
@@ -80,7 +80,7 @@ jobs / PASS
 
 ## 3. 37次と11・13次を比較して分かったこと
 
-[GNPrime37.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/Cosmic/GNPrime37.lean?utm_source=chatgpt.com) では、任意の素数 \(p\)、\(0 < k < p\) に対して、
+[GNPrime37.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/Cosmic/GNPrime37.lean) では、任意の素数 \(p\)、\(0 < k < p\) に対して、
 
 \[ \boxed{ p\mid\binom pk,\qquad p^2\nmid\binom pk } \]
 
@@ -100,7 +100,7 @@ jobs / PASS
 
 その対照例が Bernoulli 数じゃな。
 
-[BernoulliPrime37.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/BernoulliPrime37.lean?utm_source=chatgpt.com) では、`bernoulli'_def` の再帰を使って値を順に証明し、
+[BernoulliPrime37.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/BernoulliPrime37.lean) では、`bernoulli'_def` の再帰を使って値を順に証明し、
 
 \[ B_{32}=-\frac{7709321041217}{510} \]
 

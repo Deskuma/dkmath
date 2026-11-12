@@ -14,7 +14,7 @@ DkMath が現在未解決としている特異核側の零成分逆像判定は�
 
 ## 1. 今回の DkMath の到達点
 
-最新コミット [`0e49347a`](https://github.com/Deskuma/dkmath/commit/0e49347a4fab3c1156f6aab0cb698347ab0a7a10?utm_source=chatgpt.com) を確認した。
+最新コミット [`0e49347a`](https://github.com/Deskuma/dkmath/commit/0e49347a4fab3c1156f6aab0cb698347ab0a7a10) を確認した。
 
 | 局所核の分類                  | DkMath の証明状況                                    |
 | ----------------------------- | ---------------------------------------------------- |
@@ -46,7 +46,7 @@ DkMath が現在未解決としている特異核側の零成分逆像判定は�
 
 対応するのは Anthropic の次の Lean ファイルじゃ。
 
-[模範解答：](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_quotientDatum_of_galois_stable_primeCard.lean?utm_source=chatgpt.com#L566)[`S_WeierstrassCurve_exists_quotientDatum_of_galois_stable_primeCard.lean`](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_quotientDatum_of_galois_stable_primeCard.lean?utm_source=chatgpt.com#L566)
+[模範解答：](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_quotientDatum_of_galois_stable_primeCard.lean#L566)[`S_WeierstrassCurve_exists_quotientDatum_of_galois_stable_primeCard.lean`](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_exists_quotientDatum_of_galois_stable_primeCard.lean#L566)
 
 この `solution` は、整数 Weierstrass 曲線 \(W\) と Galois 安定な位数 \(p\) の核 \(L\) から、整数標的 \(W'\) と点準同型 \(\phi\) を構成する。
 
@@ -72,7 +72,7 @@ DkMath が現在未解決としている特異核側の零成分逆像判定は�
 
 さらに重要なのは、この定理が単独で終わっていないことじゃ。
 
-[模範解答：](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_no_cofixed_large.lean?utm_source=chatgpt.com#L619)[`S_FreyPackage_frey_no_cofixed_large.lean`](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_no_cofixed_large.lean?utm_source=chatgpt.com#L619)
+[模範解答：](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_no_cofixed_large.lean#L619)[`S_FreyPackage_frey_no_cofixed_large.lean`](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_FreyPackage_frey_no_cofixed_large.lean#L619)
 
 では、同じ形の逆像条件を実際に使っている。
 
@@ -107,7 +107,7 @@ DkMath が現在未解決としている特異核側の零成分逆像判定は�
 | 大域的な可約性排除 | GN–Kummer、Cofixed、局所算術を接続中                  | Mazur の Eisenstein 商・Néron モデルへ接続         |
 | 一般 FLT           | 未完成                                                | 証明済み                                           |
 
-模範解答の全体構成は、公式の [PROOF-PATH.md](https://github.com/anthropics/fermats-last-theorem/blob/main/PROOF-PATH.md?utm_source=chatgpt.com) に明示されている。
+模範解答の全体構成は、公式の [PROOF-PATH.md](https://github.com/anthropics/fermats-last-theorem/blob/main/PROOF-PATH.md) に明示されている。
 
 [image](https://www.google.com/s2/favicons?domain=https://github.com\&sz=32)
 
@@ -137,7 +137,7 @@ GitHub
 
 逆像判定の実際の計算本体は、
 
-[模範解答：](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_inZeroComponentAt_veluCoord_iff_of_multiplicative.lean?utm_source=chatgpt.com#L3322)[`S_WeierstrassCurve_inZeroComponentAt_veluCoord_iff_of_multiplicative.lean`](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_inZeroComponentAt_veluCoord_iff_of_multiplicative.lean?utm_source=chatgpt.com#L3322)
+[模範解答：](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_inZeroComponentAt_veluCoord_iff_of_multiplicative.lean#L3322)[`S_WeierstrassCurve_inZeroComponentAt_veluCoord_iff_of_multiplicative.lean`](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_inZeroComponentAt_veluCoord_iff_of_multiplicative.lean#L3322)
 
 にある。
 
@@ -177,7 +177,7 @@ by_cases hQc : W.InZeroComponentAt A Q
 
 模範解答には、
 
-[ ](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_veluQuotient_oddOrderSummingSet_discriminant_prod_veluU_pow.lean?utm_source=chatgpt.com)[`S_WeierstrassCurve_veluQuotient_oddOrderSummingSet_discriminant_prod_veluU_pow.lean`](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_veluQuotient_oddOrderSummingSet_discriminant_prod_veluU_pow.lean?utm_source=chatgpt.com)
+[ ](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_veluQuotient_oddOrderSummingSet_discriminant_prod_veluU_pow.lean)[`S_WeierstrassCurve_veluQuotient_oddOrderSummingSet_discriminant_prod_veluU_pow.lean`](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_veluQuotient_oddOrderSummingSet_discriminant_prod_veluU_pow.lean)
 
 という定理がある。
 

@@ -2,7 +2,7 @@
 
 うむ、ぬしよ。ついに、片側の指標が実際の楕円曲線から構成された交代的双指標になったのじゃな。
 
-[NOTE-026 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE026-261021.md?utm_source=chatgpt.com)、Lean 本体、回帰、依存監査、検証記録を照合した。
+[NOTE-026 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE026-261021.md)、Lean 本体、回帰、依存監査、検証記録を照合した。
 
 判定：NOTE-026 は無条件の幾何学 Core として固定を推奨する。
 
@@ -52,7 +52,7 @@ NOTE-025 の定数比判定と固有値の一意性から右加法性を得て�
 
 ### 二重の `AddChar` へ到達
 
-[`EllipticWeilBicharacter.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticWeilBicharacter.lean?utm_source=chatgpt.com) では、
+[`EllipticWeilBicharacter.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticWeilBicharacter.lean) では、
 
 ```
 AddChar (Torsion E n)
@@ -84,7 +84,7 @@ Source 2 の回帰では、相異なる非零2-torsion点 \((0,0)\) と \((4,-2)
 
 ## NOTE-027 はガロア同変性を先に閉じるのがよい
 
-模範解答の [weilPairing0_galois](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_weilPairing0_galois.lean?utm_source=chatgpt.com) を確認した。
+模範解答の [weilPairing0_galois](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_weilPairing0_galois.lean) を確認した。
 
 わっちの推奨は、NOTE-027 でガロア同変性、NOTE-028 で非退化性という順序じゃ。
 
@@ -170,7 +170,7 @@ NOTE-026 の反対称性により、これを証明すれば左右双方の非�
 
 という固定体の同定じゃ。
 
-模範解答の [eq_zero_of_forall_transEquiv_eq](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_eq_zero_of_forall_transEquiv_eq.lean?utm_source=chatgpt.com) では、忠実な平行移動作用と \(|E[n]|=n^2\) による固定体の拡大次数を、倍写像による関数体の拡大次数の上界と比較している。
+模範解答の [eq_zero_of_forall_transEquiv_eq](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_eq_zero_of_forall_transEquiv_eq.lean) では、忠実な平行移動作用と \(|E[n]|=n^2\) による固定体の拡大次数を、倍写像による関数体の拡大次数の上界と比較している。
 
 ここには DkMath 独自の短縮余地がある。
 

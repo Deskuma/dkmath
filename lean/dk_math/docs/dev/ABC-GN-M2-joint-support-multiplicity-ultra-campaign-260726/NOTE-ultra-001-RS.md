@@ -438,4 +438,4 @@ modulus ∣ GNNonExceptionalPart p a b
 
 **ダブルBrain判定：S は閉じられる。しかも難所は数学ではなく、`exp / log / rpow / Finset` の正規化だけじゃ。** 🧠⚔️🧠
 
-[1]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Analysis/SpecialFunctions/Pow/Real.html?utm_source=chatgpt.com "Mathlib.Analysis.SpecialFunctions.Pow.Real"
+[1]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Analysis/SpecialFunctions/Pow/Real.html "Mathlib.Analysis.SpecialFunctions.Pow.Real"

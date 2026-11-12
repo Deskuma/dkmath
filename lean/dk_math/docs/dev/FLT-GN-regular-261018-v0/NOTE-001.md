@@ -33,7 +33,7 @@
 
 という位相関係がある。
 
-参照元は [CaseI/Statement.lean](https://github.com/leanprover-community/flt-regular/blob/b8a5f23ab44a7be9fd49f6e3c831da54573c3c89/FltRegular/CaseI/Statement.lean?utm_source=chatgpt.com) と [Cyclotomic/CaseI.lean](https://github.com/leanprover-community/flt-regular/blob/b8a5f23ab44a7be9fd49f6e3c831da54573c3c89/FltRegular/NumberTheory/Cyclotomic/CaseI.lean?utm_source=chatgpt.com) じゃ。
+参照元は [CaseI/Statement.lean](https://github.com/leanprover-community/flt-regular/blob/b8a5f23ab44a7be9fd49f6e3c831da54573c3c89/FltRegular/CaseI/Statement.lean) と [Cyclotomic/CaseI.lean](https://github.com/leanprover-community/flt-regular/blob/b8a5f23ab44a7be9fd49f6e3c831da54573c3c89/FltRegular/NumberTheory/Cyclotomic/CaseI.lean) じゃ。
 
 そして面白いことに、DkMath の `GNFirstCase.lean` には、すでに前半の
 

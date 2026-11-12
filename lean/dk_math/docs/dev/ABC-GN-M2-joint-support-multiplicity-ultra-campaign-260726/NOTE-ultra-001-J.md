@@ -421,5 +421,5 @@ base住所は高々 p−1
 
 🧙‍♀️✨️ **裏ボスの姿が、ついに「一本の枝は一意にしか地下へ伸びない」という局所魔法へ縮んだ。ここは倒せる形をしておる。**
 
-[1]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Algebra/Polynomial/Taylor.html?utm_source=chatgpt.com "Mathlib.Algebra.Polynomial.Taylor"
-[2]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/Padics/Hensel.html?utm_source=chatgpt.com "Mathlib.NumberTheory.Padics.Hensel"
+[1]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Algebra/Polynomial/Taylor.html "Mathlib.Algebra.Polynomial.Taylor"
+[2]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/Padics/Hensel.html "Mathlib.NumberTheory.Padics.Hensel"

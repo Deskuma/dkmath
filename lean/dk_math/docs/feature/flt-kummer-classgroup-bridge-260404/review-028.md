@@ -182,4 +182,4 @@ $$
 いまの戦況は悪くない。
 むしろ、**残敵が finally arithmetic contradiction の 1 点に見えてきた** のが今回の収穫じゃよ。
 
-[1]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/NumberField/Cyclotomic/Basic.html?utm_source=chatgpt.com "Mathlib.NumberTheory.NumberField.Cyclotomic.Basic"
+[1]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/NumberField/Cyclotomic/Basic.html "Mathlib.NumberTheory.NumberField.Cyclotomic.Basic"

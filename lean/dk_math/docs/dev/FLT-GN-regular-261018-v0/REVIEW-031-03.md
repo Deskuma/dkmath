@@ -1,10 +1,10 @@
 # 🐺🍎 DkMath NOTE-031-003 実装レビュー
 
-対象：`Deskuma/dkmath` ブランチ：`dev/FLT-GN-regular-261018-v0` 確認した先頭コミット：[`4258a1c`](https://github.com/Deskuma/dkmath/commit/4258a1c1b8b906e355c7a420e16063d4042ba3a7?utm_source=chatgpt.com)
+対象：`Deskuma/dkmath` ブランチ：`dev/FLT-GN-regular-261018-v0` 確認した先頭コミット：[`4258a1c`](https://github.com/Deskuma/dkmath/commit/4258a1c1b8b906e355c7a420e16063d4042ba3a7)
 
 031-003 は、実装報告書上では完了しており、最終定理の目標も明確に達成されている。 今回は条件付きの線形代数だけで終わらず、Frobenius 元の構成、野生慣性の作用の消去、Frey 残余表現への接続まで実装している。
 
-報告書は [IMPLEMENTATION-NOTE031-003-261023.md](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE031-003-261023.md?utm_source=chatgpt.com)。
+報告書は [IMPLEMENTATION-NOTE031-003-261023.md](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE031-003-261023.md)。
 
 ## 1. 何が完成したか
 
@@ -36,12 +36,12 @@
 
 今回の開発は、主に次の3コミットとマージで構成されていた。
 
-| コミット                                                                                                              | 内容                                     |
-| --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| [`bb5dfc1`](https://github.com/Deskuma/dkmath/commit/bb5dfc1d1122e90e860310810e84e3bcc20e3c49?utm_source=chatgpt.com) | 共役二乗関係から安定直線と商の固定を証明 |
-| [`1a5c47e`](https://github.com/Deskuma/dkmath/commit/1a5c47e868b9a38f1b2938398c7ef97af57c0d3e?utm_source=chatgpt.com) | 2進慣性の算術を供給し、最終定理へ接続    |
-| [`f199106`](https://github.com/Deskuma/dkmath/commit/f19910693bf41e21de8971917ef8675ae5015b2b?utm_source=chatgpt.com) | 回帰、依存監査、完了報告                 |
-| [`4258a1c`](https://github.com/Deskuma/dkmath/commit/4258a1c1b8b906e355c7a420e16063d4042ba3a7?utm_source=chatgpt.com) | 指定開発ブランチへ統合                   |
+| コミット                                                                                       | 内容                                     |
+| ---------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| [`bb5dfc1`](https://github.com/Deskuma/dkmath/commit/bb5dfc1d1122e90e860310810e84e3bcc20e3c49) | 共役二乗関係から安定直線と商の固定を証明 |
+| [`1a5c47e`](https://github.com/Deskuma/dkmath/commit/1a5c47e868b9a38f1b2938398c7ef97af57c0d3e) | 2進慣性の算術を供給し、最終定理へ接続    |
+| [`f199106`](https://github.com/Deskuma/dkmath/commit/f19910693bf41e21de8971917ef8675ae5015b2b) | 回帰、依存監査、完了報告                 |
+| [`4258a1c`](https://github.com/Deskuma/dkmath/commit/4258a1c1b8b906e355c7a420e16063d4042ba3a7) | 指定開発ブランチへ統合                   |
 
 前回の 031-002 が多数の部分段階に分かれたのに対し、031-003 は比較的まとまったコミット履歴じゃ。
 
@@ -59,7 +59,7 @@ Lean 本体を確認すると、証明は次の順序で接続されていた。
 
 確認先：
 
-[Frobenius の構成 — ValuationFrobenius.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/ValuationFrobenius.lean?utm_source=chatgpt.com)
+[Frobenius の構成 — ValuationFrobenius.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/ValuationFrobenius.lean)
 
 `exists_isFrobeniusAt_of_liesOverPrime` は、任意の素数 \(q\) と、その上の付値環 \(A\) について、剰余体上で \(q\) 乗写像として作用するガロア元 \(\varphi\) を構成する。
 
@@ -83,7 +83,7 @@ Ideal.Quotient.stabilizerHom_surjective_of_profinite
 
 確認先：
 
-[穏分岐指標 — ValuationTameCharacter.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/ValuationTameCharacter.lean?utm_source=chatgpt.com)
+[穏分岐指標 — ValuationTameCharacter.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/ValuationTameCharacter.lean)
 
 ここでは、非零元 \(z\) に対して、慣性元 \(\tau\) の作用比
 
@@ -113,7 +113,7 @@ Ideal.Quotient.stabilizerHom_surjective_of_profinite
 
 確認先：
 
-[EllipticDyadicWildInertia.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticDyadicWildInertia.lean?utm_source=chatgpt.com)
+[EllipticDyadicWildInertia.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticDyadicWildInertia.lean)
 
 今回、最も難しい算術的な部分はここじゃ。
 
@@ -156,7 +156,7 @@ Ideal.Quotient.stabilizerHom_surjective_of_profinite
 
 確認先：
 
-[ConjugateSquare.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/RepresentationTheory/ConjugateSquare.lean?utm_source=chatgpt.com)
+[ConjugateSquare.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/RepresentationTheory/ConjugateSquare.lean)
 
 ここでは二次元ベクトル空間 \(V\)、非零真部分空間 \(N\)、線形作用素 \(T,M,M'\) に対し、
 
@@ -206,7 +206,7 @@ Ideal.Quotient.stabilizerHom_surjective_of_profinite
 
 確認先：
 
-[FreyDyadicInertia.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/FLT/FreyDyadicInertia.lean?utm_source=chatgpt.com)
+[FreyDyadicInertia.lean](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/FLT/FreyDyadicInertia.lean)
 
 最終定理は次の通り。
 
@@ -243,7 +243,7 @@ theorem residual_fixed_and_cofixed_at_two
 
 ## 6. 検証記録の監査
 
-保存された [validation-note031-003.txt](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/evidence/validation-note031-003.txt?utm_source=chatgpt.com) と監査ソースを確認した。
+保存された [validation-note031-003.txt](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/evidence/validation-note031-003.txt) と監査ソースを確認した。
 
 | 項目                        | 記録された結果                              |
 | --------------------------- | ------------------------------------------- |

@@ -4,7 +4,7 @@
 
 結論から言うと、非正則素数の類群障害を GN–Kummer の内部で消去しているのではない。証明する対象を、円分整数環から楕円曲線とガロア表現へ移しているのじゃ。
 
-今回参照したのは、一般 FLT の形式化である [Anthropic 版 PROOF-PATH.md](https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/PROOF-PATH.md?utm_source=chatgpt.com) と、既存の [flt-regular](https://github.com/leanprover-community/flt-regular/tree/b8a5f23ab44a7be9fd49f6e3c831da54573c3c89?utm_source=chatgpt.com) じゃ。
+今回参照したのは、一般 FLT の形式化である [Anthropic 版 PROOF-PATH.md](https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/PROOF-PATH.md) と、既存の [flt-regular](https://github.com/leanprover-community/flt-regular/tree/b8a5f23ab44a7be9fd49f6e3c831da54573c3c89) じゃ。
 
 ## まず、模範解答の分岐点
 
@@ -137,7 +137,7 @@ Frey 曲線は
 | `FreyPackage.level_lowering_to_two` | 非零のレベル2尖点形式を構成     |
 | `ModularForm.S2_Gamma0_2_eq_zero`   | その尖点形式が0になることを証明 |
 
-これは [S_FreyPackage_no_frey_package.lean](https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/P2M/Sol/S_FreyPackage_no_frey_package.lean?utm_source=chatgpt.com) で直接確認できる。
+これは [S_FreyPackage_no_frey_package.lean](https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/P2M/Sol/S_FreyPackage_no_frey_package.lean) で直接確認できる。
 
 興味深い実装上の特徴もある。`level_lowering_to_two` はモジュラー性の証明を引数として受け取るが、内部で呼ぶ `modularRepOfConductorLevel` が必要なモジュラー性の情報を独自に再構成しているため、その引数は実際には使われていない。
 

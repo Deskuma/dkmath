@@ -89,7 +89,7 @@ Frey 曲線の整数係数、判別式、素数2における特殊な還元構�
 
 ## 🐺🍎 模範解答の `hno` は、指数を三つに分けて解決していた
 
-Anthropic の [fermats-last-theorem](https://github.com/anthropics/fermats-last-theorem?utm_source=chatgpt.com) の実際の Lean 証明と、公式の [PROOF-PATH.md](https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/PROOF-PATH.md?utm_source=chatgpt.com) を確認したぞ。
+Anthropic の [fermats-last-theorem](https://github.com/anthropics/fermats-last-theorem) の実際の Lean 証明と、公式の [PROOF-PATH.md](https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/PROOF-PATH.md) を確認したぞ。
 
 結論から言えば、模範解答は `hno` を一つの一般定理で解いていない。指数によって異なる証明を使っている。
 
@@ -107,7 +107,7 @@ Anthropic の [fermats-last-theorem](https://github.com/anthropics/fermats-last-
 
 ### 重要な発見：小さい指数では `hno` を直接証明していない
 
-実際の [小指数の Lean コード](https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/P2M/Sol/S_FreyPackage_frey_no_cofixed_small.lean?utm_source=chatgpt.com) は、概ね次の形じゃ。
+実際の [小指数の Lean コード](https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/P2M/Sol/S_FreyPackage_frey_no_cofixed_small.lean) は、概ね次の形じゃ。
 
 ```
 theorem solution (P : FreyPackage)
@@ -143,7 +143,7 @@ Frey 曲線の性質を分析して Cofixed 直線を否定しているわけで
 
 ## \(p\ge17\)：Mazur の証明はかなり大掛かり
 
-確認した本体は [S_FreyPackage_frey_no_cofixed_large.lean](https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/P2M/Sol/S_FreyPackage_frey_no_cofixed_large.lean?utm_source=chatgpt.com)。約1,450行の最終組立てで、その背後にモジュラー曲線などの膨大な補題群がある。
+確認した本体は [S_FreyPackage_frey_no_cofixed_large.lean](https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/P2M/Sol/S_FreyPackage_frey_no_cofixed_large.lean)。約1,450行の最終組立てで、その背後にモジュラー曲線などの膨大な補題群がある。
 
 大筋は次のようになっておった。
 
@@ -173,7 +173,7 @@ Frey 曲線の性質を分析して Cofixed 直線を否定しているわけで
 
 という、素数2の局所構造から直接 `hno` を証明する別ルートが存在した。
 
-[実際の Lean 証明](https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/P2M/Sol/S_FreyPackage_frey_no_cofixed_of_a_mod_eight.lean?utm_source=chatgpt.com)
+[実際の Lean 証明](https://github.com/anthropics/fermats-last-theorem/blob/6e837e75355538c7f80bab5b956861e86c4eacc2/P2M/Sol/S_FreyPackage_frey_no_cofixed_of_a_mod_eight.lean)
 
 この証明は、2上の還元核 \(M\) を作り、次を組み合わせる。
 

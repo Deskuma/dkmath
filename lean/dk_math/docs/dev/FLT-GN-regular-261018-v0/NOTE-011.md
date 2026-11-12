@@ -4,7 +4,7 @@ NOTE-010 は固定推奨じゃ。今回、DkMath は単なる Frey 曲線の局�
 
 これは NOTE-009 までと比べて、扱う数学的対象が一段変わったことを意味する。
 
-GitHub の指定ブランチから、4本の本体ソース、実装報告、検証証跡を照合した。また、模範解答の [Def_FLTPrelim_GaloisRep.lean](https://github.com/anthropics/fermats-last-theorem/blob/main/Definitions/Def_FLTPrelim_GaloisRep.lean?utm_source=chatgpt.com) も直接確認している。
+GitHub の指定ブランチから、4本の本体ソース、実装報告、検証証跡を照合した。また、模範解答の [Def_FLTPrelim_GaloisRep.lean](https://github.com/anthropics/fermats-last-theorem/blob/main/Definitions/Def_FLTPrelim_GaloisRep.lean) も直接確認している。
 
 ## 1. 実装結果の判定
 
@@ -146,7 +146,7 @@ def IsGaloisStable (S : Source p)
 
 模範解答には、まさに必要な定理がある。
 
-[WeierstrassCurve.finrank_zmod_torsionBy_point_eq_two](https://github.com/anthropics/fermats-last-theorem/blob/main/Theorems/Thm_WeierstrassCurve_finrank_zmod_torsionBy_point_eq_two.lean?utm_source=chatgpt.com)
+[WeierstrassCurve.finrank_zmod_torsionBy_point_eq_two](https://github.com/anthropics/fermats-last-theorem/blob/main/Theorems/Thm_WeierstrassCurve_finrank_zmod_torsionBy_point_eq_two.lean)
 
 その数学的内容は、
 
@@ -160,7 +160,7 @@ DkMath の Frey 曲線は \(\mathbb Q\) 上にあるので、この標数条件�
 
 ただし、模範解答の証明を読むと、前段に次がある。
 
-[WeierstrassCurve.card_torsion_of_isAlgClosed](https://github.com/anthropics/fermats-last-theorem/blob/main/Theorems/Thm_WeierstrassCurve_card_torsion_of_isAlgClosed.lean?utm_source=chatgpt.com)
+[WeierstrassCurve.card_torsion_of_isAlgClosed](https://github.com/anthropics/fermats-last-theorem/blob/main/Theorems/Thm_WeierstrassCurve_card_torsion_of_isAlgClosed.lean)
 
 \[ \boxed{|E[n]|=n^2} \]
 
@@ -206,7 +206,7 @@ DkMath に移植するなら、先に Mathlib 4.34.1 で同等の位数・有限
 
 ここまで進むと、模範解答の
 
-[Def_GaloisRep_Residual.lean](https://github.com/anthropics/fermats-last-theorem/blob/main/Definitions/Def_GaloisRep_Residual.lean?utm_source=chatgpt.com)
+[Def_GaloisRep_Residual.lean](https://github.com/anthropics/fermats-last-theorem/blob/main/Definitions/Def_GaloisRep_Residual.lean)
 
 が持つ `GaloisFactorsThroughFiniteLevel` に接続できる。
 
@@ -226,7 +226,7 @@ NOTE-010 で証明した各点の連続性と、この有限性を合わせれ�
 
 模範解答には次の証明がある。
 
-[WeierstrassCurve.exists_pairing_torsionBy](https://github.com/anthropics/fermats-last-theorem/blob/main/Theorems/Thm_WeierstrassCurve_exists_pairing_torsionBy.lean?utm_source=chatgpt.com)
+[WeierstrassCurve.exists_pairing_torsionBy](https://github.com/anthropics/fermats-last-theorem/blob/main/Theorems/Thm_WeierstrassCurve_exists_pairing_torsionBy.lean)
 
 Weil 対とは、
 
@@ -260,7 +260,7 @@ Weil 対とは、
 
 さらに模範解答には、
 
-[GlobalGaloisRep.IsUnramifiedAt](https://github.com/anthropics/fermats-last-theorem/blob/main/Definitions/Def_GaloisRep_GlobalUnramifiedAt.lean?utm_source=chatgpt.com)
+[GlobalGaloisRep.IsUnramifiedAt](https://github.com/anthropics/fermats-last-theorem/blob/main/Definitions/Def_GaloisRep_GlobalUnramifiedAt.lean)
 
 という定義がある。
 

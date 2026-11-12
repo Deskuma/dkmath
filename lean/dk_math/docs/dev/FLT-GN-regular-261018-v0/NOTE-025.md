@@ -1,6 +1,6 @@
 # 🐺 NOTE-024 レビュー — 無限遠点を含む付値輸送が完成
 
-[NOTE-024 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE024-261021.md?utm_source=chatgpt.com)、主要な Lean 証明、依存監査と検証記録を照合した。
+[NOTE-024 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE024-261021.md)、主要な Lean 証明、依存監査と検証記録を照合した。
 
 判定：NOTE-024 は無条件の幾何学 Core として固定を推奨する。
 
@@ -28,7 +28,7 @@ NOTE-022 の実際の生成元 \(f_{n,T}\) に対して、
 
 ### 2. 平行移動の例外がなくなった
 
-最も重要なのは、[`pointValuation_transEquiv`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticWeilTransport.lean?utm_source=chatgpt.com) じゃ。
+最も重要なのは、[`pointValuation_transEquiv`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticWeilTransport.lean) じゃ。
 
 任意の点 \(P,S\)、任意の有理関数 \(h\) に対し、
 
@@ -82,8 +82,8 @@ NOTE-023 の有限点公式が、NOTE-024 では全点の公式となった。
 
 確認したのは、Anthropic の二つの補題じゃ。
 
-- [全有限場所で付値1なら定数](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_FunctionField_exists_eq_algebraMap_of_valuation_eq_one.lean?utm_source=chatgpt.com)
-- [平行移動による比例定数の存在](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_exists_transEquiv_weilFun_eq.lean?utm_source=chatgpt.com)
+- [全有限場所で付値1なら定数](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_FunctionField_exists_eq_algebraMap_of_valuation_eq_one.lean)
+- [平行移動による比例定数の存在](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_exists_transEquiv_weilFun_eq.lean)
 
 ### 第一の橋：零点も極もなければ定数
 

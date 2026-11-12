@@ -2,7 +2,7 @@
 
 うむ、ぬしよ。今回の成果は、NOTE-021 で構築した幾何学が、初めて具体的な関数の存在証明へ結び付いたことじゃ。
 
-[NOTE-022 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE022-261021.md?utm_source=chatgpt.com)、主要な Lean 証明、回帰、依存監査を照合した。
+[NOTE-022 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE022-261021.md)、主要な Lean 証明、回帰、依存監査を照合した。
 
 判定：NOTE-022 は無条件の幾何学 Core として固定を推奨する。
 
@@ -56,7 +56,7 @@
 
 ## 次の一手：NOTE-023 は付値公式を Core にする
 
-模範解答の [valuation_weilNum](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_valuation_weilNum.lean?utm_source=chatgpt.com) と [valuation_weilFun](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_valuation_weilFun.lean?utm_source=chatgpt.com) も確認した。
+模範解答の [valuation_weilNum](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_valuation_weilNum.lean) と [valuation_weilFun](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_valuation_weilFun.lean) も確認した。
 
 NOTE-022 には、既に非常に強い入力がある。
 

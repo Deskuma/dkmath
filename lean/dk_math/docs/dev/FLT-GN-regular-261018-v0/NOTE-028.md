@@ -2,7 +2,7 @@
 
 うむ、ぬしよ。これで NOTE-026 の交代的双指標が、実際のガロア表現とも結び付いたのじゃな。
 
-[NOTE-027 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE027-261021.md?utm_source=chatgpt.com)、Lean の主要な証明本体、回帰・依存監査、検証記録を照合した。
+[NOTE-027 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE027-261021.md)、Lean の主要な証明本体、回帰・依存監査、検証記録を照合した。
 
 判定：NOTE-027 は無条件の幾何学 Core として固定を推奨する。
 
@@ -16,7 +16,7 @@
 
 ### 何が証明として重要だったか
 
-まず、[`EllipticFunctionFieldGalois.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticFunctionFieldGalois.lean?utm_source=chatgpt.com) では、座標環への係数作用を実際に構成し、関数体へ延長している。
+まず、[`EllipticFunctionFieldGalois.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticFunctionFieldGalois.lean) では、座標環への係数作用を実際に構成し、関数体へ延長している。
 
 この作用 \(\Phi_\sigma\) は、係数について半線形じゃ。
 
@@ -46,7 +46,7 @@ NOTE-022 で作った Weil 関数の生成元は、ガロア作用の下で文�
 
 となる。
 
-[`EllipticWeilGalois.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticWeilGalois.lean?utm_source=chatgpt.com) の `existsUnique_scalar_galois_weilFunction` は、この定数の存在と一意性を実際の付値比較から証明している。
+[`EllipticWeilGalois.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticWeilGalois.lean) の `existsUnique_scalar_galois_weilFunction` は、この定数の存在と一意性を実際の付値比較から証明している。
 
 そして、既存の固有方程式
 
@@ -78,7 +78,7 @@ NOTE-022 で作った Weil 関数の生成元は、ガロア作用の下で文�
 
 ## NOTE-028 — 非退化性の最短経路を確認した
 
-模範解答の [eq_zero_of_forall_transEquiv_eq](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_eq_zero_of_forall_transEquiv_eq.lean?utm_source=chatgpt.com) を調べると、次に証明すべきものが明確になる。
+模範解答の [eq_zero_of_forall_transEquiv_eq](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_eq_zero_of_forall_transEquiv_eq.lean) を調べると、次に証明すべきものが明確になる。
 
 今回、DkMath に既に存在する Core が特に役立つ。
 
@@ -132,7 +132,7 @@ NOTE-016 の `multiplication_fiber_natDegree` は \(x\) 座標について次数
 
 \(y\) 座標も管理しなければならない。単純に二次拡大の評価を重ねると \(2n^2\) までしか得られない可能性がある。
 
-模範解答の [finrank_fieldRange_mulPull_le](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_finrank_fieldRange_mulPull_le.lean?utm_source=chatgpt.com) は、この余分な2を排除するために除法多項式と楕円曲線の反転作用を使っている。
+模範解答の [finrank_fieldRange_mulPull_le](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_finrank_fieldRange_mulPull_le.lean) は、この余分な2を排除するために除法多項式と楕円曲線の反転作用を使っている。
 
 NOTE-028 で最初に攻略すべき難所は、まさにここじゃろう。
 
@@ -194,7 +194,7 @@ NOTE-028 は大きいため、三つの証明境界に分けるのがよい。
 
 ### 非退化性が完成したら
 
-NOTE-018 の [`RootPairing`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/RootPairingDeterminant.lean?utm_source=chatgpt.com) が要求するものは、既にほとんどそろっている。
+NOTE-018 の [`RootPairing`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/RootPairingDeterminant.lean) が要求するものは、既にほとんどそろっている。
 
 | `RootPairing` の要求 | 現状                     |
 | -------------------- | ------------------------ |

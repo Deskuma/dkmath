@@ -2,7 +2,7 @@
 
 うむ、ぬしよ。今回、重要な境界を一つ越えたのぅ。
 
-[NOTE-023 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE023-261021.md?utm_source=chatgpt.com)、Lean 証明本体、回帰・依存監査、保存されたビルド記録を照合した。
+[NOTE-023 実装報告](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/docs/dev/FLT-GN-regular-261018-v0/IMPLEMENTATION-NOTE023-261021.md)、Lean 証明本体、回帰・依存監査、保存されたビルド記録を照合した。
 
 判定：NOTE-023 は採用・固定を推奨する。
 
@@ -35,7 +35,7 @@
 
 ### 2. 数学的に重要なのは「生成元を変えても位数が変わらない」こと
 
-[`EllipticPointIdealValuation.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticPointIdealValuation.lean?utm_source=chatgpt.com) の `intValuation_generator_independent` は、同じ点イデアル積を生成する二つの元が、すべての有限点で同じ付値を持つことを証明した。
+[`EllipticPointIdealValuation.lean`](https://github.com/Deskuma/dkmath/blob/dev/FLT-GN-regular-261018-v0/lean/dk_math/DkMath/Lib/NumberTheory/EllipticPointIdealValuation.lean) の `intValuation_generator_independent` は、同じ点イデアル積を生成する二つの元が、すべての有限点で同じ付値を持つことを証明した。
 
 NOTE-022 の `weilNumerator` は、主イデアルの生成元を非計算的に選んでいる。
 
@@ -68,7 +68,7 @@ NOTE-022 の `weilNumerator` は、主イデアルの生成元を非計算的に
 
 ## NOTE-024 の核心は「無限遠点に隠れていた1」を取り出すこと
 
-模範解答の [valuation_transEquiv_weilFun](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_valuation_transEquiv_weilFun.lean?utm_source=chatgpt.com) も確認した。
+模範解答の [valuation_transEquiv_weilFun](https://github.com/anthropics/fermats-last-theorem/blob/main/P2M/Sol/S_WeierstrassCurve_Affine_valuation_transEquiv_weilFun.lean) も確認した。
 
 ここには、NOTE-023 から導ける、興味深い次の公式がある。
 
