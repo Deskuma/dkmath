@@ -83,4 +83,65 @@ example
     MeasureTheory.volume.real (Metric.closedBall (0 : EuclideanPlane) 1) = intrinsicPi :=
   disk_measureReal_eq_intrinsicPi_of_polygon_sandwich harea hcover
 
+
+example (n : ℕ) : (0 : EuclideanPlane) ∈ intrinsicPolygonRegion n :=
+  intrinsicPolygonRegion_origin_mem n
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    intrinsicOriginTriangle n j ⊆ intrinsicPolygonRegion n :=
+  intrinsicOriginTriangle_subset_region_unconditional n j
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    ‖midpoint ℝ ((intrinsicRegularPolygon n).vertices j)
+      ((intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j))‖ =
+      (QuadrantUnitKernel.sequence (n+1)).core :=
+  intrinsicPolygon_edge_midpoint_norm n j
+
+example (n : ℕ) : Metric.closedBall (0 : EuclideanPlane) 1 ⊆ intrinsicPolygonOuterRegion n ↔
+    Metric.closedBall (0 : EuclideanPlane) (QuadrantUnitKernel.sequence (n+1)).core ⊆
+      intrinsicPolygonRegion n :=
+  closedBall_subset_outerRegion_iff_innerBall_subset n
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    originTriangleLinearMap n j '' standardTriangle = intrinsicOriginTriangle n j :=
+  originTriangleLinearMap_image n j
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    (originTriangleMatrix n j).det = (QuadrantUnitKernel.sequence n).beam :=
+  originTriangleMatrix_det n j
+
+
+example (n : ℕ) : (0 : EuclideanPlane) ∈ intrinsicPolygonRegion n :=
+  intrinsicPolygonRegion_origin_mem n
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    intrinsicOriginTriangle n j ⊆ intrinsicPolygonRegion n :=
+  intrinsicOriginTriangle_subset_region_unconditional n j
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    ‖midpoint ℝ ((intrinsicRegularPolygon n).vertices j)
+      ((intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j))‖ =
+      (QuadrantUnitKernel.sequence (n + 1)).core := intrinsicPolygon_edge_midpoint_norm n j
+
+example (n : ℕ) :
+    Metric.closedBall (0 : EuclideanPlane) 1 ⊆ intrinsicPolygonOuterRegion n ↔
+      Metric.closedBall (0 : EuclideanPlane) (QuadrantUnitKernel.sequence (n + 1)).core ⊆
+        intrinsicPolygonRegion n := closedBall_subset_outerRegion_iff_innerBall_subset n
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    originTriangleLinearMap n j '' standardTriangle = intrinsicOriginTriangle n j :=
+  originTriangleLinearMap_image n j
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    MeasureTheory.volume (intrinsicOriginTriangle n j) =
+      ENNReal.ofReal ((QuadrantUnitKernel.sequence n).beam) * MeasureTheory.volume standardTriangle :=
+  intrinsicOriginTriangle_volume_eq_beam_mul_standard n j
+
+
+example (n : ℕ) (j : Fin (dyadicSides n))
+    (h : MeasureTheory.volume standardTriangle = ENNReal.ofReal (1 / 2)) :
+    MeasureTheory.volume (intrinsicOriginTriangle n j) =
+      ENNReal.ofReal ((QuadrantUnitKernel.sequence n).beam / 2) :=
+  intrinsicOriginTriangle_volume_of_standard n j h
+
 end DkMathTest.CosmicFormula.Rotation.CF2D

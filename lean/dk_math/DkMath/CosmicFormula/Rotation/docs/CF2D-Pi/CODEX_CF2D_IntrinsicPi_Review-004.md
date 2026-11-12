@@ -256,3 +256,28 @@ Codex はその点を適切に区別しておる。
 そして、その型に必要な仮定を一つずつ取り除いている。
 
 これは、形式数学の研究として非常に健全な進み方じゃよ。🐺🍎
+
+---
+
+レビューで最優先とされた**原点の凸包所属を無条件で証明**し、原点ファンの各三角形が多角形領域に含まれる定理を追加しました。三角形の測度公式と円盤包含についても、残る条件を絞り込みました。
+
+[IntrinsicPolygonCircumscribed.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicPolygonCircumscribed.lean) では、半周先の頂点が `(-1,0)` であることから、対向頂点の中点として原点が凸包に属することを示しました。さらに、各辺の中点の原点からの距離が `cₙ₊₁` であることと、次の包含条件が同値であることを証明しました。
+
+\[
+B(0,1)\subseteq K_n^{\mathrm{out}}
+\quad\Longleftrightarrow\quad
+B(0,c_{n+1})\subseteq K_n.
+\]
+
+[IntrinsicOriginTriangleLinear.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicOriginTriangleLinear.lean) を追加し、標準三角形の線形像が原点三角形に一致し、その行列式が `sₙ > 0` であることを証明しました。測度の変換則まで接続し、無条件で
+
+\[
+\operatorname{volume}(T_{n,j})
+=s_n\operatorname{volume}(\Delta)
+\]
+
+を得ています。したがって `volume(Δ) = 1/2` を仮定すれば、各三角形の面積が `sₙ/2` になることも型検査済みです。
+
+**未完了**なのは、標準三角形の測度 `1/2`、原点ファンによる凸包の被覆、異なる三角形の重なりの測度零、内接円盤の凸包への包含です。そのため、凸包の測度 `= Aₙ` と円盤測度 `= intrinsicPi` の無条件定理はまだ成立していません。幾何モジュールは既存の標準角度との bridge に依存しています。
+
+CF2D 集約モジュールと [専用回帰テスト](/lean/dk_math/DkMathTest/CosmicFormula/Rotation/CF2D/IntrinsicPiReview.lean) の focused build、`git diff --check` は成功しました。主要追加定理の `#print axioms` はすべて `[propext, Classical.choice, Quot.sound]` でした。
