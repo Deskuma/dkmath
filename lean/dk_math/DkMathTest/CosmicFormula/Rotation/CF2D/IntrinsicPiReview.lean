@@ -172,4 +172,30 @@ example (n : ℕ) (j : Fin (dyadicSides n)) :
     QuadrantUnitKernel.directVertex n j = regularVertex (dyadicSides n) j :=
   directVertex_eq_regularVertex n j
 
+
+example (n : ℕ) (j : Fin (4 * 2 ^ n)) :
+    QuadrantUnitKernel.directVertex (n + 1) (QuadrantUnitKernel.evenIndex n j) =
+      QuadrantUnitKernel.directVertex n j :=
+  QuadrantUnitKernel.directVertex_even n j
+
+example (n : ℕ) (k : Fin (4 * 2 ^ (n + 1))) :
+    (∃ j, QuadrantUnitKernel.evenIndex n j = k) ∨
+      (∃ j, QuadrantUnitKernel.oddIndex n j = k) :=
+  QuadrantUnitKernel.refinement_index_even_or_odd n k
+
+example : QuadrantUnitKernel.directVertexNext 0 ⟨3, by norm_num⟩ =
+    ⟨0, by norm_num⟩ := by
+  apply Fin.ext
+  norm_num [QuadrantUnitKernel.directVertexNext]
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    (2 * (QuadrantUnitKernel.sequence (n + 1)).core) •
+        (intrinsicRegularPolygon (n + 1)).vertices (QuadrantUnitKernel.oddIndex n j) =
+      (intrinsicRegularPolygon n).vertices j +
+        (intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j) :=
+  intrinsicRegularPolygon_odd_vertex_scaled n j
+
+example (m n : ℕ) (h : m ≤ n) : intrinsicPolygonRegion m ⊆ intrinsicPolygonRegion n :=
+  intrinsicPolygonRegion_mono h
+
 end DkMathTest.CosmicFormula.Rotation.CF2D

@@ -323,3 +323,15 @@ theorem directVertex_eq_regularVertex
 次の鍵は、回転核の代数的二分割と、正多角形の幾何学的細分化が同じ操作であることの証明。
 
 ふふっ……CF2D が目指していた本来の数学的構造が、ますますはっきりしてきたのう！🐺🍎
+
+---
+
+レビューの優先項目のうち、**π-free な頂点の二分化公式と、凸包の単調性を実装・型検査しました**。一般のファン被覆、全三角形対の `AEDisjoint`、支持半平面表示は未完成です。
+
+[HalfKernelRefinement.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/HalfKernelRefinement.lean) では、偶数頂点の保存、奇数頂点の正規化中点公式、最後の辺から最初の頂点への巡回、細分後の全添字の偶奇分類を証明しました。このファイルの証明には `Real.pi` を使っていません。
+
+[IntrinsicPolygonRefinement.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicPolygonRefinement.lean) では、頂点の対応を既存のユークリッド軌道に移し、`intrinsicPolygonRegion_mono` を証明しました。新しい奇数頂点は一般に旧辺上ではなく、その中点を通る半直線上にあるため、旧辺が二つの線分に分割されるとは主張していません。この幾何層は既存の標準角度との bridge に依存します。
+
+残る一般段階の証明には、頂点の**幾何学的な巡回順序と辺の向き**を確立する必要があります。今回の添字の巡回と中点公式だけでは、ファンの被覆や非隣接三角形の測度零の交わりは導けていません。
+
+公開 import と回帰例を追加し、`lake build DkMathTest.CosmicFormula.Rotation.CF2D.IntrinsicPiReview` が成功しました。主要定理の `#print axioms` と `sorry`・`admit`・追加 `axiom` の検索も確認済みです。
