@@ -319,3 +319,21 @@ CF2D の二分核から、πを使用せずに、正 \(4\cdot2^n\) 角形の巡�
 第5段階の成果を維持しつつ、v1 は継続開発を推奨。次の最重要課題は一般の凸包被覆と内接円盤の包含じゃ。
 
 ふふっ。CF2D の π 研究が、単なる定数の構成から、代数・群論・幾何・測度論をつなぐ体系へ育ってきたのう。🐺🍎
+
+---
+
+レビューの優先課題のうち、**正方形 `n=0` の凸包**と、**二分核の正確な位数・直接軌道**を実装しました。一般の `n` に対する幾何学的な最終定理は未完了です。
+
+[IntrinsicPolygonSquare.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicPolygonSquare.lean) では、正方形の凸包を `|x| + |y| ≤ 1` で特徴付け、次を無条件で証明しました。
+
+- `intrinsicPolygonRegion_zero_eq_originFan`：凸包と原点ファンの集合としての一致。
+- `intrinsicPolygonRegion_zero_volume`：凸包の測度は `2`。
+- `intrinsicPolygonRegion_zero_eq_edgeHalfSpaces`：凸包と４辺の支持半平面の共通部分の一致。
+- `closedBall_subset_intrinsicPolygonOuterRegion_zero`：拡大領域への単位円盤の包含。
+
+[HalfKernelOrder.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/HalfKernelOrder.lean) では、πや三角関数を直接使わずに `gₙ^(2ⁿ) = g₀`、半周・全周の累乗、および **`orderOf gₙ = 4 · 2ⁿ`** を証明しました。この核から直接生成した軌道について、二乗和の保存、頂点の相異性、巡回後継、半周対称性も示しています。
+[IntrinsicDirectOrbitBridge.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicDirectOrbitBridge.lean) では、その直接軌道と既存の標準角度を使う軌道を同一視しました。
+
+**未証明の範囲**は、一般の `n` における幾何学的な巡回順序、原点ファンによる凸包被覆、全ての異なる三角形対の測度零、支持半平面表示 `Kₙ = Hₙ` です。したがって、一般の凸包の面積公式と、幾何学的な挟み込みによる円盤測度 `= intrinsicPi` も未完了です。既存の `Polygon` は頂点列であり、これらの幾何条件を自動では保証しないため、相対位置を扱う補題が必要です。
+
+CF2D 集約モジュールと専用回帰テストの focused build は成功しました。追加した主要11定理の `#print axioms` はすべて `[propext, Classical.choice, Quot.sound]` で、追加ファイルに `sorry`、`admit`、新しい `axiom` はありません。

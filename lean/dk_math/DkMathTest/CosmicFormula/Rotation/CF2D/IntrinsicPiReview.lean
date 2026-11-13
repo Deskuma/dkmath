@@ -94,33 +94,6 @@ example (n : ℕ) (j : Fin (dyadicSides n)) :
 example (n : ℕ) (j : Fin (dyadicSides n)) :
     ‖midpoint ℝ ((intrinsicRegularPolygon n).vertices j)
       ((intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j))‖ =
-      (QuadrantUnitKernel.sequence (n+1)).core :=
-  intrinsicPolygon_edge_midpoint_norm n j
-
-example (n : ℕ) : Metric.closedBall (0 : EuclideanPlane) 1 ⊆ intrinsicPolygonOuterRegion n ↔
-    Metric.closedBall (0 : EuclideanPlane) (QuadrantUnitKernel.sequence (n+1)).core ⊆
-      intrinsicPolygonRegion n :=
-  closedBall_subset_outerRegion_iff_innerBall_subset n
-
-example (n : ℕ) (j : Fin (dyadicSides n)) :
-    originTriangleLinearMap n j '' standardTriangle = intrinsicOriginTriangle n j :=
-  originTriangleLinearMap_image n j
-
-example (n : ℕ) (j : Fin (dyadicSides n)) :
-    (originTriangleMatrix n j).det = (QuadrantUnitKernel.sequence n).beam :=
-  originTriangleMatrix_det n j
-
-
-example (n : ℕ) : (0 : EuclideanPlane) ∈ intrinsicPolygonRegion n :=
-  intrinsicPolygonRegion_origin_mem n
-
-example (n : ℕ) (j : Fin (dyadicSides n)) :
-    intrinsicOriginTriangle n j ⊆ intrinsicPolygonRegion n :=
-  intrinsicOriginTriangle_subset_region_unconditional n j
-
-example (n : ℕ) (j : Fin (dyadicSides n)) :
-    ‖midpoint ℝ ((intrinsicRegularPolygon n).vertices j)
-      ((intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j))‖ =
       (QuadrantUnitKernel.sequence (n + 1)).core := intrinsicPolygon_edge_midpoint_norm n j
 
 example (n : ℕ) :
@@ -131,6 +104,11 @@ example (n : ℕ) :
 example (n : ℕ) (j : Fin (dyadicSides n)) :
     originTriangleLinearMap n j '' standardTriangle = intrinsicOriginTriangle n j :=
   originTriangleLinearMap_image n j
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    (originTriangleMatrix n j).det = (QuadrantUnitKernel.sequence n).beam :=
+  originTriangleMatrix_det n j
+
 
 example (n : ℕ) (j : Fin (dyadicSides n)) :
     MeasureTheory.volume (intrinsicOriginTriangle n j) =
@@ -173,5 +151,25 @@ example : MeasureTheory.volume (intrinsicOriginFan 0) = ENNReal.ofReal 2 :=
 
 example (n : ℕ) : 0 < MeasureTheory.volume (intrinsicPolygonRegion n) :=
   intrinsicPolygonRegion_volume_pos n
+
+
+example : intrinsicPolygonRegion 0 = intrinsicOriginFan 0 :=
+  intrinsicPolygonRegion_zero_eq_originFan
+
+example : MeasureTheory.volume (intrinsicPolygonRegion 0) = ENNReal.ofReal 2 :=
+  intrinsicPolygonRegion_zero_volume
+
+example : Metric.closedBall (0 : EuclideanPlane) 1 ⊆ intrinsicPolygonOuterRegion 0 :=
+  closedBall_subset_intrinsicPolygonOuterRegion_zero
+
+example (n : ℕ) : orderOf (QuadrantUnitKernel.sequence n).kernel = 4 * 2 ^ n :=
+  QuadrantUnitKernel.sequence_kernel_orderOf n
+
+example (n : ℕ) : Function.Injective (QuadrantUnitKernel.directVertex n) :=
+  QuadrantUnitKernel.directVertex_injective n
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    QuadrantUnitKernel.directVertex n j = regularVertex (dyadicSides n) j :=
+  directVertex_eq_regularVertex n j
 
 end DkMathTest.CosmicFormula.Rotation.CF2D
