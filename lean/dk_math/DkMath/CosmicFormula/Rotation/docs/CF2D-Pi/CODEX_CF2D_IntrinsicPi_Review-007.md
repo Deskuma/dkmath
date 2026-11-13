@@ -4,9 +4,9 @@
 
 今回は 正方形の幾何学的証明が閉じたこと と、πを使わずに正確な有限回転群を構成できたこと の二つが重要じゃ。
 
-GitHub の [`dev/CF2D-pi-261112-v1`](https://github.com/Deskuma/dkmath/tree/dev/CF2D-pi-261112-v1?utm_source=chatgpt.com) を確認した。
+GitHub の [`dev/CF2D-pi-261112-v1`](https://github.com/Deskuma/dkmath/tree/dev/CF2D-pi-261112-v1) を確認した。
 
-対象 HEAD：[`1259fcf27787`](https://github.com/Deskuma/dkmath/commit/1259fcf277877a65d9252e6244b5c13e41fce2a8?utm_source=chatgpt.com)
+対象 HEAD：[`1259fcf27787`](https://github.com/Deskuma/dkmath/commit/1259fcf277877a65d9252e6244b5c13e41fce2a8)
 
 `develop` から3コミット先行、遅れ0コミット。今回の追加分は独立した開発変更として整理されておる。
 
@@ -26,7 +26,7 @@ GitHub の [`dev/CF2D-pi-261112-v1`](https://github.com/Deskuma/dkmath/tree/dev/
 
 ## 1. `HalfKernelOrder.lean` — 今回最大の成果
 
-[実装を見る](https://github.com/Deskuma/dkmath/blob/dev/CF2D-pi-261112-v1/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/HalfKernelOrder.lean?utm_source=chatgpt.com)
+[実装を見る](https://github.com/Deskuma/dkmath/blob/dev/CF2D-pi-261112-v1/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/HalfKernelOrder.lean)
 
 まず、二分核の反復から、
 
@@ -110,7 +110,7 @@ directVertex_opposite
 
 ## 2. `IntrinsicPolygonSquare.lean` — 正方形の幾何学が完成
 
-[実装を見る](https://github.com/Deskuma/dkmath/blob/dev/CF2D-pi-261112-v1/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicPolygonSquare.lean?utm_source=chatgpt.com)
+[実装を見る](https://github.com/Deskuma/dkmath/blob/dev/CF2D-pi-261112-v1/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicPolygonSquare.lean)
 
 今回の正方形は、単位円に内接する45°回転した正方形じゃ。
 
@@ -252,7 +252,7 @@ closedBall_subset_intrinsicPolygonOuterRegion_zero
 
 ## 4. `IntrinsicDirectOrbitBridge.lean` の設計評価
 
-[実装を見る](https://github.com/Deskuma/dkmath/blob/dev/CF2D-pi-261112-v1/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicDirectOrbitBridge.lean?utm_source=chatgpt.com)
+[実装を見る](https://github.com/Deskuma/dkmath/blob/dev/CF2D-pi-261112-v1/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicDirectOrbitBridge.lean)
 
 このファイルは、わずか28行ほどじゃが、設計上の役割は明確じゃ。
 

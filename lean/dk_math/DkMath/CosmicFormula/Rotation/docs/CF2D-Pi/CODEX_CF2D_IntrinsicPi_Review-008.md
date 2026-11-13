@@ -6,7 +6,7 @@
 
 これによって、最初の「正方形を対称的に細分化して円へ近づける」という構想が、代数と集合論の両方で裏付けられたのじゃ。
 
-確認対象は [`dev/CF2D-pi-261112-v1`](https://github.com/Deskuma/dkmath/tree/dev/CF2D-pi-261112-v1?utm_source=chatgpt.com)、HEAD [`1ff66b4431f3`](https://github.com/Deskuma/dkmath/commit/1ff66b4431f3c805ca20de4eeef5446f750945ea?utm_source=chatgpt.com)。
+確認対象は [`dev/CF2D-pi-261112-v1`](https://github.com/Deskuma/dkmath/tree/dev/CF2D-pi-261112-v1)、HEAD [`1ff66b4431f3`](https://github.com/Deskuma/dkmath/commit/1ff66b4431f3c805ca20de4eeef5446f750945ea)。
 
 `develop` から5コミット先行、遅れ0コミットじゃ。
 
@@ -29,7 +29,7 @@
 
 ## 2. `HalfKernelRefinement.lean` のレビュー
 
-[実装を見る](https://github.com/Deskuma/dkmath/blob/dev/CF2D-pi-261112-v1/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/HalfKernelRefinement.lean?utm_source=chatgpt.com)
+[実装を見る](https://github.com/Deskuma/dkmath/blob/dev/CF2D-pi-261112-v1/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/HalfKernelRefinement.lean)
 
 ここでは、古い頂点を \(v_{n,j}\)、二分後の頂点を \(v_{n+1,k}\) として、次の二式が証明されている。
 
@@ -61,7 +61,7 @@ refinement_index_even_or_odd
 
 ## 3. `IntrinsicPolygonRefinement.lean` のレビュー
 
-[実装を見る](https://github.com/Deskuma/dkmath/blob/dev/CF2D-pi-261112-v1/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicPolygonRefinement.lean?utm_source=chatgpt.com)
+[実装を見る](https://github.com/Deskuma/dkmath/blob/dev/CF2D-pi-261112-v1/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicPolygonRefinement.lean)
 
 ここでは、π-free な直接軌道の偶数頂点保存を、既存のユークリッド平面の頂点へ移している。
 
