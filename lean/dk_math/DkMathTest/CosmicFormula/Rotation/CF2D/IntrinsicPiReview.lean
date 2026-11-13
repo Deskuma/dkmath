@@ -198,4 +198,21 @@ example (n : ℕ) (j : Fin (dyadicSides n)) :
 example (m n : ℕ) (h : m ≤ n) : intrinsicPolygonRegion m ⊆ intrinsicPolygonRegion n :=
   intrinsicPolygonRegion_mono h
 
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    (intrinsicRegularPolygon (n + 1)).vertices (QuadrantUnitKernel.oddIndex n j) ∉
+      intrinsicPolygonRegion n := refinement_new_vertex_not_mem_old_region n j
+
+example (m n : ℕ) (h : m < n) : intrinsicPolygonRegion m ⊂ intrinsicPolygonRegion n :=
+  intrinsicPolygonRegion_strict_mono h
+
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    refinementCap n j ⊆ intrinsicPolygonRegion (n + 1) :=
+  intrinsicPolygonRefinement_cap_subset n j
+
+example (n : ℕ) (j : Fin (4 * 2 ^ n)) :
+    0 < QuadrantUnitKernel.refinementCross (QuadrantUnitKernel.directVertex n j)
+      (QuadrantUnitKernel.directVertex (n + 1) (QuadrantUnitKernel.oddIndex n j)) :=
+  (QuadrantUnitKernel.refinement_vertex_cross_pos n j).1
+
 end DkMathTest.CosmicFormula.Rotation.CF2D

@@ -265,3 +265,18 @@ refinement_index_even_or_odd
 もし細分化の各段階で面積がどのように増えるかを、CF2D の代数だけで追跡できれば、一般の凸包面積公式へ進む別の帰納法が手に入る。
 
 いよいよ 代数的な二分回転が、面積を持つ幾何学的対象を生み出す仕組み が見えてきたのう。🐺🍎
+
+---
+
+レビューで優先された局所配置と凸包の真の増大を実装し、Lean で型検査しました。増分三角形の集合等式と面積増分公式は、後述のとおり未完成です。
+
+[HalfKernelRefinementGeometry.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/HalfKernelRefinementGeometry.lean) では、π-free の座標計算により、次を証明しました。
+
+- 新頂点が旧辺を含む直線に対して原点と反対側にあること。
+- 新しい隣接頂点対の外積がともに `sₙ / (2cₙ₊₁)` であり、正であること。
+
+[IntrinsicPolygonRefinement.lean](/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicPolygonRefinement.lean) では、単位円盤の極点を利用して、各新頂点が旧凸包に属さないことと、`intrinsicPolygonRegion_strict_mono` を証明しました。また、旧辺と新頂点から増分三角形を定義し、次段階の領域が「旧領域と全増分三角形の和集合の**凸包**」に等しいことを示しました。
+
+**未証明**なのは、この和集合自体が凸であること、それによる凸包を外した集合等式、および増分三角形の測度を加算する面積増分公式です。和集合の凸性を仮定すれば集合等式が成立する条件付き定理は追加しています。
+
+公開 import と回帰例を追加し、`lake build DkMathTest.CosmicFormula.Rotation.CF2D.IntrinsicPiReview` は成功しました。主要定理の公理依存を確認し、追加した座標層には `sorry`、`admit`、追加 `axiom`、`Real.pi`・三角関数への参照がないことも確認しました。
