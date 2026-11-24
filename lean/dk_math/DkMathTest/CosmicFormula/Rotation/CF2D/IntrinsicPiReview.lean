@@ -251,4 +251,17 @@ example (n : ℕ) : MeasureTheory.volume (intrinsicPolygonRegion n) =
 #print axioms intrinsicPolygon_refinement_caps
 #print axioms intrinsicPolygonRegion_volume_eq_areaApprox
 
+example (n : ℕ) : intrinsicPolygonRegion n = intrinsicEdgeHalfSpaces n :=
+  intrinsicPolygonRegion_eq_edgeHalfSpaces n
+
+example (n : ℕ) :
+    Metric.closedBall (0 : EuclideanPlane) 1 ⊆ intrinsicPolygonOuterRegion n :=
+  closedBall_subset_intrinsicPolygonOuterRegion n
+
+example : MeasureTheory.volume.real (Metric.closedBall (0 : EuclideanPlane) 1) = intrinsicPi :=
+  disk_measureReal_eq_intrinsicPi
+
+#print axioms intrinsicPolygonRegion_eq_edgeHalfSpaces
+#print axioms disk_measureReal_eq_intrinsicPi
+
 end DkMathTest.CosmicFormula.Rotation.CF2D

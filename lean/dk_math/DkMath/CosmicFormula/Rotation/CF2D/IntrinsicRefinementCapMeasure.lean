@@ -174,4 +174,10 @@ theorem intrinsicPolygonRegion_volume_eq_areaApprox (n : ℕ) :
     volume (intrinsicPolygonRegion n) = ENNReal.ofReal (areaApprox n) :=
   intrinsicPolygonRegion_volume_of_cap_cover intrinsicPolygon_refinement_caps n
 
+/-- 内接・外接多角形の測度で挟むと、単位閉円盤の実数値測度は内在的な円周率に一致する。 -/
+theorem disk_measureReal_eq_intrinsicPi :
+    volume.real (Metric.closedBall (0 : EuclideanPlane) 1) = intrinsicPi :=
+  disk_measureReal_eq_intrinsicPi_of_polygon_sandwich
+    intrinsicPolygonRegion_volume_eq_areaApprox closedBall_subset_intrinsicPolygonOuterRegion
+
 end DkMath.CosmicFormula.Rotation.CF2D
