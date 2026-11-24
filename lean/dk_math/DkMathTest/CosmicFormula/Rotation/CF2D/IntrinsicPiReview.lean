@@ -215,4 +215,40 @@ example (n : ℕ) (j : Fin (4 * 2 ^ n)) :
       (QuadrantUnitKernel.directVertex (n + 1) (QuadrantUnitKernel.oddIndex n j)) :=
   (QuadrantUnitKernel.refinement_vertex_cross_pos n j).1
 
+example (n : ℕ) (j : Fin (dyadicSides n)) :
+    MeasureTheory.volume (refinementCap n j) =
+      ENNReal.ofReal ((QuadrantUnitKernel.sequence (n + 1)).beam -
+        (QuadrantUnitKernel.sequence n).beam / 2) :=
+  refinementCap_volume n j
+
+example (n : ℕ) :
+    (∑ j : Fin (dyadicSides n), MeasureTheory.volume (refinementCap n j)) =
+      ENNReal.ofReal (areaApprox (n + 1) - areaApprox n) :=
+  refinementCaps_sum_volume n
+
+open MeasureTheory in
+example (hcover : ∀ n, intrinsicPolygonRegion (n + 1) =
+      intrinsicPolygonRegion n ∪ (⋃ j, refinementCap n j))
+    (hpair : ∀ n, Pairwise (Function.onFun (AEDisjoint volume) (refinementCap n)))
+    (hold : ∀ n, AEDisjoint volume (intrinsicPolygonRegion n) (⋃ j, refinementCap n j))
+    (n : ℕ) : volume (intrinsicPolygonRegion n) = ENNReal.ofReal (areaApprox n) :=
+  intrinsicPolygonRegion_volume_of_cap_decomposition hcover hpair hold n
+
+#print axioms intrinsicPolygonRegion_subset_edgeHalfSpaces
+#print axioms refinementCaps_aedisjoint_old_region
+#print axioms refinementCap_volume
+#print axioms refinementCaps_sum_volume
+#print axioms intrinsicPolygonRegion_volume_of_cap_decomposition
+
+example (n : ℕ) : intrinsicPolygonRegion (n + 1) =
+    intrinsicPolygonRegion n ∪ (⋃ j, refinementCap n j) :=
+  intrinsicPolygon_refinement_caps n
+
+example (n : ℕ) : MeasureTheory.volume (intrinsicPolygonRegion n) =
+    ENNReal.ofReal (areaApprox n) :=
+  intrinsicPolygonRegion_volume_eq_areaApprox n
+
+#print axioms intrinsicPolygon_refinement_caps
+#print axioms intrinsicPolygonRegion_volume_eq_areaApprox
+
 end DkMathTest.CosmicFormula.Rotation.CF2D

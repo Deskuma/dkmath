@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonRefinement
+import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonSupport
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicStandardTriangleMeasure
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonSquare
 
@@ -152,5 +152,26 @@ theorem intrinsicPolygonRegion_volume_of_cap_decomposition
         (sub_nonneg.mpr (areaApprox_monotone (Nat.le_succ n)))]
     congr 1
     ring
+
+/-- 支持直線による分離を使うと、面積の帰納法に必要なのは被覆と増分三角形同士の零交差である。 -/
+theorem intrinsicPolygonRegion_volume_of_cap_cover_and_pairwise
+    (hcover : ∀ n, intrinsicPolygonRegion (n + 1) =
+      intrinsicPolygonRegion n ∪ (⋃ j, refinementCap n j))
+    (hpair : ∀ n, Pairwise (Function.onFun (AEDisjoint volume) (refinementCap n)))
+    (n : ℕ) : volume (intrinsicPolygonRegion n) = ENNReal.ofReal (areaApprox n) :=
+  intrinsicPolygonRegion_volume_of_cap_decomposition hcover hpair refinementCaps_aedisjoint_old_region n
+
+/-- 増分三角形の被覆が各段階で成立すれば、凸包の測度は面積候補に一致する。
+加法性に必要な零交差は各旧辺の支持直線から従う。 -/
+theorem intrinsicPolygonRegion_volume_of_cap_cover
+    (hcover : ∀ n, intrinsicPolygonRegion (n + 1) =
+      intrinsicPolygonRegion n ∪ (⋃ j, refinementCap n j))
+    (n : ℕ) : volume (intrinsicPolygonRegion n) = ENNReal.ofReal (areaApprox n) :=
+  intrinsicPolygonRegion_volume_of_cap_cover_and_pairwise hcover refinementCaps_pairwise_aedisjoint n
+
+/-- 二分化で得る内接多角形の凸包の測度は、代数的な面積候補に等しい。 -/
+theorem intrinsicPolygonRegion_volume_eq_areaApprox (n : ℕ) :
+    volume (intrinsicPolygonRegion n) = ENNReal.ofReal (areaApprox n) :=
+  intrinsicPolygonRegion_volume_of_cap_cover intrinsicPolygon_refinement_caps n
 
 end DkMath.CosmicFormula.Rotation.CF2D
