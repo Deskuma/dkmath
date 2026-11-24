@@ -29,6 +29,7 @@ import DkMath.CosmicFormula.Rotation.CF2D.HalfKernelRefinementGeometry
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicDirectOrbitBridge
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonSquare
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonRefinement
+import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicRefinementCapMeasure
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPiBridge
 
 #print "file: DkMath.CosmicFormula.Rotation.CF2D"
