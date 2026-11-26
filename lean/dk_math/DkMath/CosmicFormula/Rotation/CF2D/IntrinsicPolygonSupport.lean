@@ -7,151 +7,46 @@ Authors: D. and Wise Wolf.
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonRefinement
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonCircumscribed
 import Mathlib.LinearAlgebra.Dual.Lemmas
-import DkMath.CosmicFormula.Rotation.CF2D.DyadicCone
+import DkMath.CosmicFormula.Rotation.CF2D.DyadicConeSupport
 
 #print "file: DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonSupport"
 
-/-! # 標準角度との比較による辺の支持性 -/
+/-! # 保存量と非負錐による辺の支持性 -/
 
 namespace DkMath.CosmicFormula.Rotation.CF2D
 open QuadrantUnitKernel
 open scoped InnerProductSpace
 
-/-- 第 j 頂点の座標を標準角度で表す。生成核の j 乗は位相を j 倍するので、座標はその角度の余弦と正弦になる。 -/
-private theorem vertex_coordinates (n : ℕ) (j : Fin (dyadicSides n)) :
-    (intrinsicRegularPolygon n).vertices j 0 = Real.cos (j.val * dyadicAngle n) ∧
-    (intrinsicRegularPolygon n).vertices j 1 = Real.sin (j.val * dyadicAngle n) := by
-  have ha : normalizedPhaseAngle (j.val • regularPhaseStep (dyadicSides n)) =
-      j.val * dyadicAngle n := by
-    rw [← regularStepAngle_dyadic]
-    simp [normalizedPhaseAngle, nsmul_eq_mul, mul_assoc, mul_left_comm]
-  have hv : regularVertex (dyadicSides n) j =
-      (realTrigKernelFamily.kernel (normalizedPhaseAngle (j.val • regularPhaseStep (dyadicSides n)))).val := by
-    unfold regularVertex kernelOrbitVertex
-    rw [UnitKernel.act_vecOne, regularKernel, ← normalizedRealKernelFamily.kernel_nsmul]
-    rfl
-  simp [intrinsicRegularPolygon, euclideanRegularVertex, hv, show normalizedPhaseAngle (↑j.val * regularPhaseStep (dyadicSides n)) = _ by simpa only [nsmul_eq_mul] using ha, pairToEuclideanPlane,
-    Vec.toProd, realTrigKernelFamily]
+private theorem directVertex_plane (n : ℕ) (j : Fin (dyadicSides n)) :
+    pairToEuclideanPlane (directVertex n j).toProd = (intrinsicRegularPolygon n).vertices j := by
+  exact congrArg (fun v => pairToEuclideanPlane v.toProd) (directVertex_eq_regularVertex n j)
 
-private theorem dyadicAngle_mul_sides (n : ℕ) :
-    (dyadicSides n : ℝ) * dyadicAngle (n + 1) = Real.pi := by
-  simp [dyadicSides, dyadicAngle, pow_succ]
-  field_simp
+private theorem midpoint_inner_coordinates (p q x : Vec ℝ) :
+    ⟪midpoint ℝ (pairToEuclideanPlane p.toProd) (pairToEuclideanPlane q.toProd),
+      pairToEuclideanPlane x.toProd⟫_ℝ =
+      refinementDot (refinementMidpoint p q) x := by
+  simp [midpoint_eq_smul_add, inner_add_left, PiLp.inner_apply,
+    Fin.sum_univ_two, pairToEuclideanPlane, Vec.toProd, refinementDot, refinementMidpoint,
+    invOf_eq_inv]
   ring
 
-/-- 各辺の中点を法線とする内側半平面に、旧多角形のすべての頂点が入る。
-角度の差は半ステップの奇数倍なので、その円周上の距離は半ステップ以上である。 -/
+/-- 全旧頂点は辺の内側半平面に属する。二分軌道上の保存量による不等式を平面へ移す。 -/
 theorem intrinsicPolygon_vertex_mem_edge_halfspace (n : ℕ) (j k : Fin (dyadicSides n)) :
     ⟪midpoint ℝ ((intrinsicRegularPolygon n).vertices j)
       ((intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j)),
       (intrinsicRegularPolygon n).vertices k⟫_ℝ ≤ (sequence (n + 1)).core ^ 2 := by
-  let d := dyadicAngle (n + 1)
-  let t : ℝ := (2 * (k.val : ℝ) - (2 * (j.val : ℝ) + 1)) * d
-  have hd : 0 < d := div_pos Real.pi_pos (by positivity)
-  have hN : (dyadicSides n : ℝ) * d = Real.pi := dyadicAngle_mul_sides n
-  have hj : (j.val : ℝ) + 1 ≤ dyadicSides n := by exact_mod_cast j.isLt
-  have hk : (k.val : ℝ) + 1 ≤ dyadicSides n := by exact_mod_cast k.isLt
-  have hj0 : (0 : ℝ) ≤ j.val := by positivity
-  have hk0 : (0 : ℝ) ≤ k.val := by positivity
-  have ht : |t| ≤ 2 * Real.pi - d := by
-    apply abs_le.mpr
-    dsimp [t]
-    constructor <;> nlinarith [mul_nonneg (sub_nonneg.mpr hj) hd.le,
-      mul_nonneg (sub_nonneg.mpr hk) hd.le, mul_nonneg hj0 hd.le, mul_nonneg hk0 hd.le]
-  have ht' : d ≤ |t| := by
-    rcases le_or_gt k.val j.val with h | h
-    · have h' : (k.val : ℝ) ≤ j.val := by exact_mod_cast h
-      dsimp [t]
-      rw [abs_of_nonpos (mul_nonpos_of_nonpos_of_nonneg (by linarith) hd.le)]
-      nlinarith [mul_nonneg (sub_nonneg.mpr h') hd.le]
-    · have h' : (j.val : ℝ) + 1 ≤ k.val := by exact_mod_cast h
-      dsimp [t]
-      rw [abs_of_nonneg (mul_nonneg (by linarith) hd.le)]
-      nlinarith [mul_nonneg (sub_nonneg.mpr h') hd.le]
-  have hcos : Real.cos t ≤ Real.cos d := by
-    rw [← Real.cos_abs t]
-    by_cases h : |t| ≤ Real.pi
-    · exact Real.cos_le_cos_of_nonneg_of_le_pi hd.le h ht'
-    · rw [← Real.cos_two_pi_sub]
-      exact Real.cos_le_cos_of_nonneg_of_le_pi hd.le (by linarith) (by linarith)
-  have hm := intrinsicRegularPolygon_odd_vertex_scaled n j
-  have hmid : midpoint ℝ ((intrinsicRegularPolygon n).vertices j)
-      ((intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j)) =
-      (sequence (n + 1)).core • (intrinsicRegularPolygon (n + 1)).vertices (oddIndex n j) := by
-    rw [midpoint_eq_smul_add, ← hm, smul_smul]
-    congr 1
-    norm_num [invOf_eq_inv]
-    ring
-  rw [hmid, real_inner_smul_left]
-  have hc : (sequence (n + 1)).core = Real.cos d := (sequence_trig (n + 1)).1
-  have hv := vertex_coordinates (n + 1) (oddIndex n j)
-  have hu := vertex_coordinates (n + 1) (evenIndex n k)
-  rw [← intrinsicRegularPolygon_even_vertex n k]
-  rw [PiLp.inner_apply, Fin.sum_univ_two]
-  simp only [RCLike.inner_apply, conj_trivial, hv.1, hv.2, hu.1, hu.2]
-  have he : ((evenIndex n k).val : ℝ) * d - ((oddIndex n j).val : ℝ) * d = t := by
-    simp [evenIndex, oddIndex, t]
-    ring
-  rw [pow_two]
-  apply mul_le_mul_of_nonneg_left _ (core_succ_pos n).le
-  rw [← hc, ← he] at hcos
-  simpa [Real.cos_sub, mul_comm, d] using hcos
+  rw [← directVertex_plane n j, ← directVertex_plane n (regularVertexNext (dyadicSides_pos n) j),
+    ← directVertex_plane n k, midpoint_inner_coordinates]
+  exact directVertex_mem_edge_halfspace n j k
 
-/-- 辺 j と異なる辺 k に追加した奇数頂点は、辺 j の内側半平面に入る。二つの奇数頂点の角度差は半ステップの非零の偶数倍であり、一周を法としても半ステップ以上離れる。 -/
+/-- 他の辺に追加する新頂点の支持不等式を、直接軌道からユークリッド平面へ移す。 -/
 private theorem other_odd_mem_halfspace (n : ℕ) (j k : Fin (dyadicSides n)) (hne : j ≠ k) :
     ⟪midpoint ℝ ((intrinsicRegularPolygon n).vertices j)
       ((intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j)),
       (intrinsicRegularPolygon (n + 1)).vertices (oddIndex n k)⟫_ℝ ≤ (sequence (n + 1)).core ^ 2 := by
-  let d := dyadicAngle (n + 1)
-  let t : ℝ := (2 * (k.val : ℝ) - 2 * (j.val : ℝ)) * d
-  have hd : 0 < d := div_pos Real.pi_pos (by positivity)
-  have hN : (dyadicSides n : ℝ) * d = Real.pi := dyadicAngle_mul_sides n
-  have hj : (j.val : ℝ) + 1 ≤ dyadicSides n := by exact_mod_cast j.isLt
-  have hk : (k.val : ℝ) + 1 ≤ dyadicSides n := by exact_mod_cast k.isLt
-  have hj0 : (0 : ℝ) ≤ j.val := by positivity
-  have hk0 : (0 : ℝ) ≤ k.val := by positivity
-  have ht : |t| ≤ 2 * Real.pi - d := by
-    apply abs_le.mpr
-    dsimp [t]
-    constructor <;> nlinarith [mul_nonneg (sub_nonneg.mpr hj) hd.le,
-      mul_nonneg (sub_nonneg.mpr hk) hd.le, mul_nonneg hj0 hd.le, mul_nonneg hk0 hd.le]
-  have ht' : d ≤ |t| := by
-    rcases lt_or_gt_of_ne (fun h => hne (Fin.ext h).symm) with h | h
-    · have h' : (k.val : ℝ) + 1 ≤ j.val := by exact_mod_cast h
-      dsimp [t]
-      rw [abs_of_nonpos (mul_nonpos_of_nonpos_of_nonneg (by linarith) hd.le)]
-      nlinarith [mul_nonneg (sub_nonneg.mpr h') hd.le]
-    · have h' : (j.val : ℝ) + 1 ≤ k.val := by exact_mod_cast h
-      dsimp [t]
-      rw [abs_of_nonneg (mul_nonneg (by linarith) hd.le)]
-      nlinarith [mul_nonneg (sub_nonneg.mpr h') hd.le]
-  have hcos : Real.cos t ≤ Real.cos d := by
-    rw [← Real.cos_abs t]
-    by_cases h : |t| ≤ Real.pi
-    · exact Real.cos_le_cos_of_nonneg_of_le_pi hd.le h ht'
-    · rw [← Real.cos_two_pi_sub]
-      exact Real.cos_le_cos_of_nonneg_of_le_pi hd.le (by linarith) (by linarith)
-  have hm := intrinsicRegularPolygon_odd_vertex_scaled n j
-  have hmid : midpoint ℝ ((intrinsicRegularPolygon n).vertices j)
-      ((intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j)) =
-      (sequence (n + 1)).core • (intrinsicRegularPolygon (n + 1)).vertices (oddIndex n j) := by
-    rw [midpoint_eq_smul_add, ← hm, smul_smul]
-    congr 1
-    norm_num [invOf_eq_inv]
-    ring
-  rw [hmid, real_inner_smul_left]
-  have hc : (sequence (n + 1)).core = Real.cos d := (sequence_trig (n + 1)).1
-  have hv := vertex_coordinates (n + 1) (oddIndex n j)
-  have hu := vertex_coordinates (n + 1) (oddIndex n k)
-  rw [PiLp.inner_apply, Fin.sum_univ_two]
-  simp only [RCLike.inner_apply, conj_trivial, hv.1, hv.2, hu.1, hu.2]
-  have he : ((oddIndex n k).val : ℝ) * d - ((oddIndex n j).val : ℝ) * d = t := by
-    simp [oddIndex, t]
-    ring
-  rw [pow_two]
-  apply mul_le_mul_of_nonneg_left _ (core_succ_pos n).le
-  rw [← hc, ← he] at hcos
-  simpa [Real.cos_sub, mul_comm, d] using hcos
+  rw [← directVertex_plane n j, ← directVertex_plane n (regularVertexNext (dyadicSides_pos n) j),
+    ← directVertex_plane (n + 1) (oddIndex n k), midpoint_inner_coordinates]
+  exact other_odd_mem_halfspace_pi_free n j k hne
 
 /-- 辺の内側半平面は凸なので、全頂点の包含は旧凸包の包含に延びる。 -/
 theorem intrinsicPolygonRegion_subset_edgeHalfSpaces (n : ℕ) :

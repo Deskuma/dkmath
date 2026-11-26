@@ -24,7 +24,9 @@
 
 この表示により半径 `cₙ₊₁` の閉円盤は `Kₙ` に含まれる。拡大すると、単位閉円盤が外接領域に含まれる。内接・外接領域の測度 `Aₙ, Uₙ` が同じ極限を持つため、`disk_measureReal_eq_intrinsicPi` が成立する。[支持半平面の証明](../../CF2D/IntrinsicPolygonSupport.lean) · [円盤測度の最終定理](../../CF2D/IntrinsicRefinementCapMeasure.lean)
 
-円盤測度の挟み込みは `intrinsicPi_eq_real_pi` を使わない。凸包から支持半平面への包含では、頂点の配置を比較するために `Real.pi` と三角関数を使う。一般の原点ファン被覆と、標準角度への依存を減らす構成は、完了済みの主定理とは別の研究課題である。
+円盤測度の挟み込みは `intrinsicPi_eq_real_pi` を使わない。辺の支持不等式は直接軌道で証明する。支持直線の外側にある点の係数を `a, b` とすると、`a+b>1` と `Vec.q2 ≤ 1` から両係数の正性が従う。すると、別の頂点がこの条件を満たすことは錐の内部非交差と矛盾する。[DyadicConeSupport.lean](../../CF2D/DyadicConeSupport.lean)
+
+既存のユークリッド多角形への移送には、直接軌道を標準角度で定義された軌道と同一視する `directVertex_eq_regularVertex` を使う。直接軌道から凸包を定義し、この比較を最後へ移すことと、一般の原点ファン被覆は今後の課題である。
 
 ## 検証
 

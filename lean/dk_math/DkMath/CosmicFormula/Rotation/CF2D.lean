@@ -28,6 +28,7 @@ import DkMath.CosmicFormula.Rotation.CF2D.HalfKernelRefinement
 import DkMath.CosmicFormula.Rotation.CF2D.HalfKernelRefinementGeometry
 import DkMath.CosmicFormula.Rotation.CF2D.DyadicPhase
 import DkMath.CosmicFormula.Rotation.CF2D.DyadicCone
+import DkMath.CosmicFormula.Rotation.CF2D.DyadicConeSupport
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicDirectOrbitBridge
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonSquare
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonRefinement

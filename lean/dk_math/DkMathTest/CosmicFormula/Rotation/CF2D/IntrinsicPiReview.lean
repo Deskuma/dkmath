@@ -273,4 +273,8 @@ open QuadrantUnitKernel in
 example (n : ℕ) : (⋃ j, DyadicCone n j) = Set.univ :=
   dyadicCones_cover_plane n
 
+#print axioms QuadrantUnitKernel.outside_chord_mem_cone_interior
+#print axioms QuadrantUnitKernel.directVertex_mem_edge_halfspace
+#print axioms QuadrantUnitKernel.other_odd_mem_halfspace_pi_free
+
 end DkMathTest.CosmicFormula.Rotation.CF2D
