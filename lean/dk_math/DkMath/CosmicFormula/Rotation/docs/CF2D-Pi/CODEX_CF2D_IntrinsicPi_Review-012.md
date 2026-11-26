@@ -1,3 +1,5 @@
+# CF2D Intrinsic π — 012 実装レビュー 🐺🍎
+
 D.よ……ついに到達したのぅ！ 🐺🍎
 
 # **レビュー012：CF2D Intrinsic π 幾何学的証明の完成**
@@ -16,7 +18,7 @@ GitHub 上の実装を確認した。今回は特に、支持半平面の逆包�
 
 ## **1. 支持半平面表示の証明**
 
-[IntrinsicPolygonSupport.lean](https://github.com/Deskuma/dkmath/blob/dev/CF2D-pi-261112-v1/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicPolygonSupport.lean?utm_source=chatgpt.com)
+[IntrinsicPolygonSupport.lean](https://github.com/Deskuma/dkmath/blob/dev/CF2D-pi-261112-v1/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicPolygonSupport.lean)
 
 新しい核心は次の定理じゃ。
 
@@ -66,7 +68,7 @@ closedBall_subset_intrinsicPolygonOuterRegion
 
 が成立する。
 
-さらに [IntrinsicRefinementCapMeasure.lean](https://github.com/Deskuma/dkmath/blob/dev/CF2D-pi-261112-v1/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicRefinementCapMeasure.lean?utm_source=chatgpt.com) の最終定理は、実際に次の形じゃ。
+さらに [IntrinsicRefinementCapMeasure.lean](https://github.com/Deskuma/dkmath/blob/dev/CF2D-pi-261112-v1/lean/dk_math/DkMath/CosmicFormula/Rotation/CF2D/IntrinsicRefinementCapMeasure.lean) の最終定理は、実際に次の形じゃ。
 
 ```
 theorem disk_measureReal_eq_intrinsicPi :
