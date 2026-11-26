@@ -15,7 +15,7 @@ import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonSquare
 namespace DkMath.CosmicFormula.Rotation.CF2D
 open MeasureTheory QuadrantUnitKernel
 
-/-- 三角形の測度は、一頂点を原点へ移した二辺の行列式の絶対値の半分。 -/
+/-- 三角形の測度は、一頂点 p から伸びる二辺 w − p と q − p の行列式の絶対値の半分である。標準三角形を二辺を列に持つ行列で移し、さらに p だけ平行移動する。測度の倍率は行列式の絶対値で、平行移動は測度を保つ。頂点が共線の場合も含む。 -/
 theorem triangle_volume_eq_abs_cross (p w q : EuclideanPlane) :
     volume (convexHull ℝ {p, w, q}) =
       ENNReal.ofReal (|vertexCross (w - p) (q - p)| / 2) := by
@@ -103,7 +103,7 @@ theorem refinementCap_cross (n : ℕ) (j : Fin (dyadicSides n)) :
   simp only [vertexCross, PiLp.sub_apply] at *
   linarith only [h₀, h₁, h₂]
 
-/-- 各増分三角形の測度は半角核の beam から旧 beam の半分を引いた値。 -/
+/-- 各増分三角形の測度は s_(n+1) − s_n/2 である。行列式 2s_(n+1) − s_n は、倍角関係で 2(1 − c_(n+1))s_(n+1) と書けるので正である。三角形の行列式公式により、その半分が測度になる。 -/
 theorem refinementCap_volume (n : ℕ) (j : Fin (dyadicSides n)) :
     volume (refinementCap n j) =
       ENNReal.ofReal ((sequence (n + 1)).beam - (sequence n).beam / 2) := by
@@ -114,7 +114,7 @@ theorem refinementCap_volume (n : ℕ) (j : Fin (dyadicSides n)) :
   · rw [refinement_beam n]
     nlinarith [mul_pos (sub_pos.mpr (core_lt_one (n + 1))) (beam_pos (n + 1))]
 
-/-- 個々の測度の総和は面積候補の一段分の差に一致する。 -/
+/-- 増分三角形の個別測度の総和は A_(n+1) − A_n に等しい。三角形の個数 4·2^n を共通の測度に掛けると得られる。和集合の測度への読み替えには、別途、測度零の交わりが必要である。 -/
 theorem refinementCaps_sum_volume (n : ℕ) :
     (∑ j : Fin (dyadicSides n), volume (refinementCap n j)) =
       ENNReal.ofReal (areaApprox (n + 1) - areaApprox n) := by
@@ -169,12 +169,14 @@ theorem intrinsicPolygonRegion_volume_of_cap_cover
     (n : ℕ) : volume (intrinsicPolygonRegion n) = ENNReal.ofReal (areaApprox n) :=
   intrinsicPolygonRegion_volume_of_cap_cover_and_pairwise hcover refinementCaps_pairwise_aedisjoint n
 
-/-- 二分化で得る内接多角形の凸包の測度は、代数的な面積候補に等しい。 -/
+/-- 各段階の凸包の測度は、代数的な面積候補 A_n に等しい。初期正方形の測度は 2。細分化による集合分割と測度零の交わりにより、次の段階では A_(n+1) − A_n が加わる。 -/
 theorem intrinsicPolygonRegion_volume_eq_areaApprox (n : ℕ) :
     volume (intrinsicPolygonRegion n) = ENNReal.ofReal (areaApprox n) :=
   intrinsicPolygonRegion_volume_of_cap_cover intrinsicPolygon_refinement_caps n
 
-/-- 内接・外接多角形の測度で挟むと、単位閉円盤の実数値測度は内在的な円周率に一致する。 -/
+/-- 単位閉円盤の実数値測度は内在的な円周率に等しい。
+
+内接凸包の測度 A_n と外接領域の測度 U_n は、円盤の測度を上下から挟み、どちらも intrinsicPi に収束する。この導出は intrinsicPi_eq_real_pi を使わない。円盤包含を得る支持半平面の幾何証明は標準角度と三角関数を使う。 -/
 theorem disk_measureReal_eq_intrinsicPi :
     volume.real (Metric.closedBall (0 : EuclideanPlane) 1) = intrinsicPi :=
   disk_measureReal_eq_intrinsicPi_of_polygon_sandwich

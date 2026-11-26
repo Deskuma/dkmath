@@ -17,6 +17,7 @@ namespace DkMath.CosmicFormula.Rotation.CF2D
 open QuadrantUnitKernel
 open scoped InnerProductSpace
 
+/-- 第 j 頂点の座標を標準角度で表す。生成核の j 乗は位相を j 倍するので、座標はその角度の余弦と正弦になる。 -/
 private theorem vertex_coordinates (n : ℕ) (j : Fin (dyadicSides n)) :
     (intrinsicRegularPolygon n).vertices j 0 = Real.cos (j.val * dyadicAngle n) ∧
     (intrinsicRegularPolygon n).vertices j 1 = Real.sin (j.val * dyadicAngle n) := by
@@ -96,6 +97,7 @@ theorem intrinsicPolygon_vertex_mem_edge_halfspace (n : ℕ) (j k : Fin (dyadicS
   rw [← hc, ← he] at hcos
   simpa [Real.cos_sub, mul_comm, d] using hcos
 
+/-- 辺 j と異なる辺 k に追加した奇数頂点は、辺 j の内側半平面に入る。二つの奇数頂点の角度差は半ステップの非零の偶数倍であり、一周を法としても半ステップ以上離れる。 -/
 private theorem other_odd_mem_halfspace (n : ℕ) (j k : Fin (dyadicSides n)) (hne : j ≠ k) :
     ⟪midpoint ℝ ((intrinsicRegularPolygon n).vertices j)
       ((intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j)),
@@ -227,6 +229,7 @@ theorem refinementCap_inter_old_subset_edge_line (n : ℕ) (j : Fin (dyadicSides
   exact le_antisymm (intrinsicPolygonRegion_subset_edgeHalfSpaces n hx.1 j)
     (refinementCap_subset_outer_halfspace n j hx.2)
 
+/-- 旧辺の支持直線は、内積を取る線形写像の核を辺の端点まで平行移動したもの。右辺の値が正なので原点を含まず、平面の真のアフィン部分空間として測度零になる。 -/
 private theorem edge_line_null (n : ℕ) (j : Fin (dyadicSides n)) :
     let p := (intrinsicRegularPolygon n).vertices j
     let q := (intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j)
@@ -287,6 +290,9 @@ theorem refinementCaps_pairwise_aedisjoint (n : ℕ) :
   intro x hx
   exact le_antisymm (hk hx.2) (refinementCap_subset_outer_halfspace n j hx.1)
 
+/-- 単位円周上の異なる二点 p, q で同じ値を取る非零線形写像 f を考える。単位円盤内の点 x も同じ値を取るなら、x は線分 pq 上にある。
+
+平面では f の核は一次元で、q − p がこれを張る。よって x = p + t(q − p) と書ける。両端のノルムが 1 であることを使ってノルムの二乗を展開すると、円盤条件は t(t − 1) ≤ 0 を与える。 -/
 private theorem chord_of_level {p q x : EuclideanPlane} {f : EuclideanPlane →ₗ[ℝ] ℝ}
     (hf : f ≠ 0) (hpq : p ≠ q) (hp : ‖p‖ = 1) (hq : ‖q‖ = 1)
     (hx : ‖x‖ ≤ 1) (heq : f q = f p) (hex : f x = f p) :
@@ -328,6 +334,7 @@ private theorem chord_of_level {p q x : EuclideanPlane} {f : EuclideanPlane →�
     dsimp [v]
     module
 
+/-- 二つの凸集合が線形汎関数の等位面の両側にあり、両者を結ぶ線分が等位面で両集合に共通する点を通るなら、和集合も凸になる。線分をその点で分け、両側でそれぞれ凸性を適用する。 -/
 private theorem convex_union_across_level {S T : Set EuclideanPlane}
     (hS : Convex ℝ S) (hT : Convex ℝ T)
     (f : EuclideanPlane →ₗ[ℝ] ℝ) (c : ℝ)
@@ -455,12 +462,15 @@ private theorem convex_partial_caps (n : ℕ) (s : Finset (Fin (dyadicSides n)))
           hT.segment_subset hpT hqT hzseg⟩
     simpa [S, Finset.set_biUnion_insert, Set.union_assoc, Set.union_left_comm, Set.union_comm] using hconv
 
-/-- 次段階の凸包は旧領域と全増分三角形で覆われる。 -/
+/-- 次段階の凸包は、旧凸包と全増分三角形の和集合に等しい。
+
+旧辺の支持直線と単位円盤の共通部分は旧辺そのものである。この弦を共有して増分三角形を一枚ずつ加えると、和集合の凸性が保たれる。偶数頂点と奇数頂点の分類により、新段階のすべての頂点はこの和集合に属する。 -/
 theorem intrinsicPolygon_refinement_caps (n : ℕ) :
     intrinsicPolygonRegion (n + 1) = intrinsicPolygonRegion n ∪ (⋃ j, refinementCap n j) := by
   apply intrinsicPolygon_refinement_caps_of_convex
   simpa using convex_partial_caps n Finset.univ
 
+/-- 非零の平面ベクトルを正の長さと偏角で表す。複素数の主偏角が負なら一周分を加え、角度を区間 [0, 2π) にそろえる。 -/
 private theorem ray_angle (x : EuclideanPlane) (hx : x ≠ 0) :
     ∃ r θ : ℝ, 0 < r ∧ 0 ≤ θ ∧ θ < 2 * Real.pi ∧
       x 0 = r * Real.cos θ ∧ x 1 = r * Real.sin θ := by
@@ -492,6 +502,7 @@ private theorem ray_angle (x : EuclideanPlane) (hx : x ≠ 0) :
     · rwa [Real.cos_add_two_pi]
     · rwa [Real.sin_add_two_pi]
 
+/-- 偏角を一辺分の回転角で割って床を取ると、その方向を挟む隣接頂点が得られる。終端の辺では次頂点が先頭に戻る。外積を角度差の正弦で表すと、扇形の両側の不等式が得られる。 -/
 private theorem ray_between_vertices (n : ℕ) (x : EuclideanPlane) (hx : x ≠ 0) :
     ∃ j : Fin (dyadicSides n),
       let p := (intrinsicRegularPolygon n).vertices j
@@ -612,7 +623,7 @@ theorem intrinsicEdgeHalfSpaces_subset_intrinsicPolygonRegion (n : ℕ) :
   rw [smul_add, smul_smul, smul_smul, hcancel, hcancel] at hz
   rwa [← he] at hz
 
-/-- 内接多角形の凸包は各辺の内側半平面の共通部分に一致する。 -/
+/-- 内接多角形の凸包は、全辺の内側半平面の共通部分に等しい。順方向は全頂点に対する支持不等式と半平面の凸性から従う。逆方向では偏角を挟む隣接頂点を選び、点を原点と両頂点の凸結合に表す。 -/
 theorem intrinsicPolygonRegion_eq_edgeHalfSpaces (n : ℕ) :
     intrinsicPolygonRegion n = intrinsicEdgeHalfSpaces n :=
   Set.Subset.antisymm (intrinsicPolygonRegion_subset_edgeHalfSpaces n)
