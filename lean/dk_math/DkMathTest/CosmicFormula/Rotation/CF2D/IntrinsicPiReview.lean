@@ -264,4 +264,13 @@ example : MeasureTheory.volume.real (Metric.closedBall (0 : EuclideanPlane) 1) =
 #print axioms intrinsicPolygonRegion_eq_edgeHalfSpaces
 #print axioms disk_measureReal_eq_intrinsicPi
 
+open QuadrantUnitKernel in
+example (n : ℕ) (j : Fin (4 * 2 ^ n)) :
+    (DyadicPhase.ofIndex n j).vertex = directVertex n j :=
+  DyadicPhase.vertex_of_index n j
+
+open QuadrantUnitKernel in
+example (n : ℕ) : (⋃ j, DyadicCone n j) = Set.univ :=
+  dyadicCones_cover_plane n
+
 end DkMathTest.CosmicFormula.Rotation.CF2D

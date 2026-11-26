@@ -7,7 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonRefinement
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonCircumscribed
 import Mathlib.LinearAlgebra.Dual.Lemmas
-import Mathlib.Analysis.SpecialFunctions.Complex.Arg
+import DkMath.CosmicFormula.Rotation.CF2D.DyadicCone
 
 #print "file: DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonSupport"
 
@@ -470,98 +470,8 @@ theorem intrinsicPolygon_refinement_caps (n : ℕ) :
   apply intrinsicPolygon_refinement_caps_of_convex
   simpa using convex_partial_caps n Finset.univ
 
-/-- 非零の平面ベクトルを正の長さと偏角で表す。複素数の主偏角が負なら一周分を加え、角度を区間 [0, 2π) にそろえる。 -/
-private theorem ray_angle (x : EuclideanPlane) (hx : x ≠ 0) :
-    ∃ r θ : ℝ, 0 < r ∧ 0 ≤ θ ∧ θ < 2 * Real.pi ∧
-      x 0 = r * Real.cos θ ∧ x 1 = r * Real.sin θ := by
-  let z : ℂ := ⟨x 0, x 1⟩
-  have hz : z ≠ 0 := by
-    intro h
-    apply hx
-    ext i
-    fin_cases i
-    · exact congrArg Complex.re h
-    · exact congrArg Complex.im h
-  have hr := norm_pos_iff.mpr hz
-  have harg := Complex.arg_mem_Ioc z
-  have hc := Complex.cos_arg hz
-  have hs := Complex.sin_arg z
-  have hcos : x 0 = ‖z‖ * Real.cos (Complex.arg z) := by
-    rw [hc]
-    change x 0 = ‖z‖ * (x 0 / ‖z‖)
-    field_simp
-  have hsin : x 1 = ‖z‖ * Real.sin (Complex.arg z) := by
-    rw [hs]
-    change x 1 = ‖z‖ * (x 1 / ‖z‖)
-    field_simp
-  by_cases h : 0 ≤ Complex.arg z
-  · exact ⟨‖z‖, Complex.arg z, hr, h, by linarith [harg.2, Real.pi_pos], hcos, hsin⟩
-  · refine ⟨‖z‖, Complex.arg z + 2 * Real.pi, hr, ?_, ?_, ?_, ?_⟩
-    · linarith [harg.1, Real.pi_pos]
-    · linarith
-    · rwa [Real.cos_add_two_pi]
-    · rwa [Real.sin_add_two_pi]
-
-/-- 偏角を一辺分の回転角で割って床を取ると、その方向を挟む隣接頂点が得られる。終端の辺では次頂点が先頭に戻る。外積を角度差の正弦で表すと、扇形の両側の不等式が得られる。 -/
-private theorem ray_between_vertices (n : ℕ) (x : EuclideanPlane) (hx : x ≠ 0) :
-    ∃ j : Fin (dyadicSides n),
-      let p := (intrinsicRegularPolygon n).vertices j
-      let q := (intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j)
-      0 ≤ vertexCross p x ∧ 0 ≤ vertexCross x q := by
-  obtain ⟨r, θ, hr, hθ, hθ', hx0, hx1⟩ := ray_angle x hx
-  let d := dyadicAngle n
-  have hd : 0 < d := div_pos Real.pi_pos (by positivity)
-  have hdπ : d ≤ Real.pi := by
-    unfold d dyadicAngle
-    apply div_le_self Real.pi_pos.le
-    exact one_le_pow₀ (by norm_num)
-  have hN : (dyadicSides n : ℝ) * d = 2 * Real.pi := by
-    have h := dyadicAngle_mul_sides n
-    have he : d = 2 * dyadicAngle (n + 1) := by
-      simp [d, dyadicAngle, pow_succ]
-      ring
-    rw [he, mul_left_comm, h]
-  let k := ⌊θ / d⌋₊
-  have hnd : 0 ≤ θ / d := div_nonneg hθ hd.le
-  have hk : k < dyadicSides n := (Nat.floor_lt hnd).mpr
-    ((div_lt_iff₀ hd).mpr (by rwa [hN]))
-  let j : Fin (dyadicSides n) := ⟨k, hk⟩
-  refine ⟨j, ?_⟩
-  dsimp only
-  have hp := vertex_coordinates n j
-  have hq := vertex_coordinates n (regularVertexNext (dyadicSides_pos n) j)
-  have h₁ : (k : ℝ) * d ≤ θ := (le_div_iff₀ hd).mp (Nat.floor_le hnd)
-  have h₂ : θ < ((k : ℝ) + 1) * d := (div_lt_iff₀ hd).mp (Nat.lt_floor_add_one _)
-  have hq' : (intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j) 0 =
-      Real.cos (((k : ℝ) + 1) * d) ∧
-      (intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j) 1 =
-      Real.sin (((k : ℝ) + 1) * d) := by
-    rw [hq.1, hq.2]
-    change Real.cos (↑((k + 1) % dyadicSides n) * d) = _ ∧
-      Real.sin (↑((k + 1) % dyadicSides n) * d) = _
-    by_cases h : k + 1 < dyadicSides n
-    · rw [Nat.mod_eq_of_lt h, Nat.cast_add, Nat.cast_one]
-      exact ⟨rfl, rfl⟩
-    · have he : k + 1 = dyadicSides n := by omega
-      have he' : ((k : ℝ) + 1) = (dyadicSides n : ℝ) := by exact_mod_cast he
-      rw [he, Nat.mod_self, he', hN]
-      simp
-  have hs₁ := Real.sin_nonneg_of_nonneg_of_le_pi (show 0 ≤ θ - (k : ℝ) * d by linarith)
-    (show θ - (k : ℝ) * d ≤ Real.pi by linarith)
-  have hs₂ := Real.sin_nonneg_of_nonneg_of_le_pi (show 0 ≤ ((k : ℝ) + 1) * d - θ by linarith)
-    (show ((k : ℝ) + 1) * d - θ ≤ Real.pi by linarith)
-  change (intrinsicRegularPolygon n).vertices j 0 = Real.cos ((k : ℝ) * d) ∧
-    (intrinsicRegularPolygon n).vertices j 1 = Real.sin ((k : ℝ) * d) at hp
-  constructor
-  · rw [vertexCross, hp.1, hp.2, hx0, hx1]
-    rw [Real.sin_sub] at hs₁
-    nlinarith [mul_nonneg hr.le hs₁]
-  · rw [vertexCross, hq'.1, hq'.2, hx0, hx1]
-    rw [Real.sin_sub] at hs₂
-    nlinarith [mul_nonneg hr.le hs₂]
-
 /-- 各辺の内側半平面の共通部分は凸包に含まれる。
-点の偏角を含む扇形を選び、その両端の頂点の非負線形結合で点を表す。
+非負錐の被覆から、点を隣接頂点の非負線形結合で表す。
 対応する辺の不等式により、係数の和は高々一になる。 -/
 theorem intrinsicEdgeHalfSpaces_subset_intrinsicPolygonRegion (n : ℕ) :
     intrinsicEdgeHalfSpaces n ⊆ intrinsicPolygonRegion n := by
@@ -569,34 +479,31 @@ theorem intrinsicEdgeHalfSpaces_subset_intrinsicPolygonRegion (n : ℕ) :
   by_cases hzero : x = 0
   · rw [hzero]
     exact intrinsicPolygonRegion_origin_mem n
-  obtain ⟨j, hpx, hxq⟩ := ray_between_vertices n x hzero
+  have hxcover : euclideanPlaneToPair x ∈ ⋃ j, DyadicCone n j := by
+    rw [dyadicCones_cover_plane]
+    exact Set.mem_univ _
+  obtain ⟨j, hj⟩ := Set.mem_iUnion.mp hxcover
+  change Fin (dyadicSides n) at j
+  obtain ⟨a, b, ha, hb, hpair⟩ := hj
   let p := (intrinsicRegularPolygon n).vertices j
   let q := (intrinsicRegularPolygon n).vertices (regularVertexNext (dyadicSides_pos n) j)
-  let d := vertexCross p q
-  have hd : 0 < d := intrinsicOriginTriangle_vertexCross_pos n j
-  let a := vertexCross x q / d
-  let b := vertexCross p x / d
-  have ha : 0 ≤ a := div_nonneg hxq hd.le
-  have hb : 0 ≤ b := div_nonneg hpx hd.le
-  have had : a * d = vertexCross x q := div_mul_cancel₀ _ hd.ne'
-  have hbd : b * d = vertexCross p x := div_mul_cancel₀ _ hd.ne'
-  have hcoord (i : Fin 2) : (a * p i + b * q i) * d =
-      vertexCross x q * p i + vertexCross p x * q i := by
-    rw [← had, ← hbd]
-    ring
+  have hvertex (k : Fin (dyadicSides n)) :
+      pairToEuclideanPlane (orbitPair n k) = (intrinsicRegularPolygon n).vertices k := by
+    change pairToEuclideanPlane (Vec.toProd (directVertex n k)) =
+      pairToEuclideanPlane (Vec.toProd (regularVertex (dyadicSides n) k))
+    exact congrArg (fun v => pairToEuclideanPlane (Vec.toProd v))
+      (directVertex_eq_regularVertex n k)
   have he : x = a • p + b • q := by
-    ext i
-    fin_cases i
-    · change x 0 = a * p 0 + b * q 0
-      apply mul_right_cancel₀ hd.ne'
-      rw [hcoord]
-      dsimp only [d, vertexCross]
-      ring
-    · change x 1 = a * p 1 + b * q 1
-      apply mul_right_cancel₀ hd.ne'
-      rw [hcoord]
-      dsimp only [d, vertexCross]
-      ring
+    let L := (EuclideanSpace.equiv (Fin 2) ℝ).symm.toLinearMap.comp
+      (ContinuousLinearEquiv.finTwoArrow ℝ ℝ).symm.toLinearMap
+    have e := congrArg (fun z => L z) hpair
+    rw [map_add, map_smul, map_smul] at e
+    change pairToEuclideanPlane (euclideanPlaneToPair x) =
+      a • pairToEuclideanPlane (orbitPair n j) +
+        b • pairToEuclideanPlane (orbitPair n (regularVertexNext (dyadicSides_pos n) j)) at e
+    rw [pairToEuclideanPlane_euclideanPlaneToPair] at e
+    exact e.trans (congrArg₂ (fun v w : EuclideanPlane => a • v + b • w)
+      (hvertex j) (hvertex (regularVertexNext (dyadicSides_pos n) j)))
   let f := (innerSL ℝ (midpoint ℝ p q)).toLinearMap
   let c := (sequence (n + 1)).core ^ 2
   have hc : 0 < c := pow_pos (core_succ_pos n) _
@@ -623,7 +530,7 @@ theorem intrinsicEdgeHalfSpaces_subset_intrinsicPolygonRegion (n : ℕ) :
   rw [smul_add, smul_smul, smul_smul, hcancel, hcancel] at hz
   rwa [← he] at hz
 
-/-- 内接多角形の凸包は、全辺の内側半平面の共通部分に等しい。順方向は全頂点に対する支持不等式と半平面の凸性から従う。逆方向では偏角を挟む隣接頂点を選び、点を原点と両頂点の凸結合に表す。 -/
+/-- 内接多角形の凸包は、全辺の内側半平面の共通部分に等しい。順方向は全頂点に対する支持不等式と半平面の凸性から従う。逆方向では非負錐の被覆から隣接頂点を選び、点を原点と両頂点の凸結合に表す。 -/
 theorem intrinsicPolygonRegion_eq_edgeHalfSpaces (n : ℕ) :
     intrinsicPolygonRegion n = intrinsicEdgeHalfSpaces n :=
   Set.Subset.antisymm (intrinsicPolygonRegion_subset_edgeHalfSpaces n)
