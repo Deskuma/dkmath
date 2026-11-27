@@ -240,4 +240,29 @@ theorem outerApprox_sub_intrinsicPi_le (n : ℕ) :
   have he := outerApprox_sub_areaApprox_le n
   linarith
 
+/-- 32 辺の外側近似はエジプト円の係数 `256/81` より小さい。
+半角の二乗関係を有理数の下界で順に評価し、第 4 核の両座標の商を抑える。 -/
+theorem outerApprox_three_lt_egyptianPi : outerApprox 3 < (256 : ℝ) / 81 := by
+  have h0 : (sequence 0).core = 0 := rfl
+  have lower (n : ℕ) (r : ℝ) (hr : 0 ≤ r)
+      (h : r ^ 2 < (1 + (sequence n).core) / 2) : r < (sequence (n + 1)).core :=
+    (sq_lt_sq₀ hr (core_succ_pos n).le).mp (by rwa [core_succ_sq])
+  have h1 := lower 0 (707 / 1000) (by norm_num) (by rw [h0]; norm_num)
+  have h2 := lower 1 (9238 / 10000) (by norm_num) (by linarith)
+  have h3 := lower 2 (98075 / 100000) (by norm_num) (by linarith)
+  have h4 := lower 3 (995 / 1000) (by norm_num) (by linarith)
+  have hb4 : (sequence 4).beam < (982 : ℝ) / 10000 := by
+    apply (sq_lt_sq₀ (beam_pos 4).le (by norm_num)).mp
+    have hs := core_succ_sq 3
+    have hu := (sequence 4).norm
+    linarith
+  change (2 : ℝ) ^ 5 * (sequence 4).beam / (sequence 4).core < _
+  apply (div_lt_iff₀ (core_succ_pos 3)).2
+  linarith
+
+/-- 内在的円周率はエジプト円の有理近似より厳密に小さい。
+単調有界列の上限を有限段階の外側近似で抑える。 -/
+theorem intrinsicPi_lt_egyptianPi : intrinsicPi < (256 : ℝ) / 81 :=
+  ((intrinsicPi_bounds 3).2).trans_lt outerApprox_three_lt_egyptianPi
+
 end DkMath.CosmicFormula.Rotation.CF2D
