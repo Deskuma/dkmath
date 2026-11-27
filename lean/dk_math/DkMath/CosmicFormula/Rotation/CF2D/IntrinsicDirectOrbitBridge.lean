@@ -4,8 +4,8 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.CosmicFormula.Rotation.CF2D.HalfKernelOrder
-import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicRegularPolygon
+import DkMath.CosmicFormula.Rotation.CF2D.DirectPolygon
+import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonMeasure
 
 #print "file: DkMath.CosmicFormula.Rotation.CF2D.IntrinsicDirectOrbitBridge"
 
@@ -23,5 +23,21 @@ theorem directVertex_eq_regularVertex (n : ℕ) (j : Fin (dyadicSides n)) :
     QuadrantUnitKernel.directVertex n j = regularVertex (dyadicSides n) j := by
   unfold QuadrantUnitKernel.directVertex regularVertex kernelOrbitVertex
   rw [regularKernel_dyadic]
+
+open QuadrantUnitKernel
+
+/-- 直接軌道から構成したユークリッド頂点は既存の正多角形の頂点に一致する。 -/
+theorem intrinsicDirectVertex_eq_regular (n : ℕ) (j : Fin (dyadicSides n)) :
+    intrinsicDirectVertex n j = (intrinsicRegularPolygon n).vertices j := by
+  change pairToEuclideanPlane (directVertex n j).toProd =
+    pairToEuclideanPlane (regularVertex (dyadicSides n) j).toProd
+  exact congrArg (fun v => pairToEuclideanPlane v.toProd) (directVertex_eq_regularVertex n j)
+
+/-- 対応する頂点が等しいので、直接軌道と既存の正多角形は同じ凸包を張る。 -/
+theorem intrinsicDirectPolygonRegion_eq_region (n : ℕ) :
+    intrinsicDirectPolygonRegion n = intrinsicPolygonRegion n := by
+  apply congrArg (convexHull ℝ)
+  apply congrArg Set.range
+  exact funext (intrinsicDirectVertex_eq_regular n)
 
 end DkMath.CosmicFormula.Rotation.CF2D
