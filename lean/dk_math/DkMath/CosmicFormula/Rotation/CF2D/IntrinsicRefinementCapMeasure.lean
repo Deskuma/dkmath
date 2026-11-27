@@ -15,70 +15,11 @@ import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonSquare
 namespace DkMath.CosmicFormula.Rotation.CF2D
 open MeasureTheory QuadrantUnitKernel
 
-/-- 三角形の測度は、一頂点 p から伸びる二辺 w − p と q − p の行列式の絶対値の半分である。標準三角形を二辺を列に持つ行列で移し、さらに p だけ平行移動する。測度の倍率は行列式の絶対値で、平行移動は測度を保つ。頂点が共線の場合も含む。 -/
+/-- 行列式による三角形の測度公式を既存の外積の記法で表す。 -/
 theorem triangle_volume_eq_abs_cross (p w q : EuclideanPlane) :
     volume (convexHull ℝ {p, w, q}) =
-      ENNReal.ofReal (|vertexCross (w - p) (q - p)| / 2) := by
-  let M : Matrix (Fin 2) (Fin 2) ℝ :=
-    !![(w - p) 0, (q - p) 0; (w - p) 1, (q - p) 1]
-  let f := Matrix.toLin' M
-  let a := WithLp.ofLp p
-  let g : (Fin 2 → ℝ) →ᵃ[ℝ] (Fin 2 → ℝ) :=
-    AffineMap.mk' (fun x => f x + a) f 0 (by simp)
-  let L := (WithLp.linearEquiv 2 ℝ (Fin 2 → ℝ)).toLinearMap
-  have hf0 : g 0 = a := by change f 0 + a = a; simp
-  have hf1 : g (Pi.single 0 1) = WithLp.ofLp w := by
-    funext i
-    fin_cases i <;> change (Matrix.mulVec M (Pi.single 0 1) + a) _ = _ <;>
-      simp [M, a]
-  have hf2 : g (Pi.single 1 1) = WithLp.ofLp q := by
-    funext i
-    fin_cases i <;> change (Matrix.mulVec M (Pi.single 1 1) + a) _ = _ <;>
-      simp [M, a]
-  have hi : g '' standardTriangle = convexHull ℝ {a, WithLp.ofLp w, WithLp.ofLp q} := by
-    rw [standardTriangle, AffineMap.image_convexHull]
-    simp [hf0, hf1, hf2]
-  have hpre : (WithLp.ofLp : EuclideanPlane → (Fin 2 → ℝ)) ⁻¹' (g '' standardTriangle) =
-      convexHull ℝ {p, w, q} := by
-    have he : L '' convexHull ℝ {p, w, q} = g '' standardTriangle := by
-      rw [L.image_convexHull, hi]
-      simp [L, a]
-    rw [← he]
-    exact Set.preimage_image_eq _ (WithLp.linearEquiv 2 ℝ (Fin 2 → ℝ)).injective
-  have hc : IsCompact (f '' standardTriangle) :=
-    ((Set.toFinite _).isCompact_convexHull ℝ).image
-      (LinearMap.continuous_of_finiteDimensional f)
-  have htrans : (fun x : Fin 2 → ℝ => x - a) ⁻¹' (f '' standardTriangle) =
-      g '' standardTriangle := by
-    ext y
-    constructor
-    · rintro ⟨x, hx, he⟩
-      exact ⟨x, hx, eq_sub_iff_add_eq.mp he⟩
-    · rintro ⟨x, hx, rfl⟩
-      exact ⟨x, hx, by change f x = f x + a - a; simp⟩
-  have hm := (PiLp.volume_preserving_ofLp (Fin 2)).measure_preimage
-    (s := g '' standardTriangle) (by rw [hi]; exact ((Set.toFinite _).isCompact_convexHull ℝ).isClosed.measurableSet.nullMeasurableSet)
-  rw [hpre] at hm
-  rw [hm, ← htrans]
-  -- 平行移動は測度を保ち、線形部分の測度倍率は行列式の絶対値である。
-  have ht' : volume ((fun x : Fin 2 → ℝ => x - a) ⁻¹' (f '' standardTriangle)) =
-      volume (f '' standardTriangle) :=
-    by
-      have h := (volume.measurePreserving_sub_left (-a)).comp
-        (volume.measurePreserving_sub_left (0 : Fin 2 → ℝ))
-      have he : (fun x : Fin 2 → ℝ => -a - (0 - x)) = fun x => x - a := by
-        funext x
-        abel
-      change MeasurePreserving (fun x : Fin 2 → ℝ => -a - (0 - x)) volume volume at h
-      rw [he] at h
-      exact h.measure_preimage hc.isClosed.measurableSet.nullMeasurableSet
-  rw [ht', Measure.addHaar_image_linearMap, standardTriangle_volume]
-  have hd : LinearMap.det f = vertexCross (w - p) (q - p) := by
-    rw [← LinearMap.det_toMatrix (Pi.basisFun ℝ (Fin 2))]
-    simp [f, M, Matrix.det_fin_two, vertexCross, mul_comm]
-  rw [hd, ← ENNReal.ofReal_mul (abs_nonneg _)]
-  congr 1
-  ring
+      ENNReal.ofReal (|vertexCross (w - p) (q - p)| / 2) :=
+  euclideanTriangle_volume_eq_abs_det p w q
 
 set_option backward.isDefEq.respectTransparency false in
 /-- 二分化で追加する三角形の二辺の行列式。二つの新辺の外積の和から旧辺の外積を引く。 -/

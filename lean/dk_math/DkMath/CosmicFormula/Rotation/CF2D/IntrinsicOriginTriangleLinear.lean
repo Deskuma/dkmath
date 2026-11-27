@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonCircumscribed
+import DkMath.CosmicFormula.Rotation.CF2D.TriangleMeasure
 
 #print "file: DkMath.CosmicFormula.Rotation.CF2D.IntrinsicOriginTriangleLinear"
 
@@ -18,9 +19,6 @@ import DkMath.CosmicFormula.Rotation.CF2D.IntrinsicPolygonCircumscribed
 -/
 namespace DkMath.CosmicFormula.Rotation.CF2D
 open QuadrantUnitKernel
-/-- 座標平面の原点と二つの標準基底からなる三角形。 -/
-noncomputable def standardTriangle : Set (Fin 2 → ℝ) :=
-  convexHull ℝ {0, Pi.single 0 1, Pi.single 1 1}
 /-- 標準基底を二つの隣接頂点に送る線形写像。 -/
 noncomputable def originTriangleLinearMap (n : ℕ) (j : Fin (dyadicSides n)) :
     (Fin 2 → ℝ) →ₗ[ℝ] EuclideanPlane :=
