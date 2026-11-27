@@ -277,4 +277,9 @@ example (n : ℕ) : (⋃ j, DyadicCone n j) = Set.univ :=
 #print axioms QuadrantUnitKernel.directVertex_mem_edge_halfspace
 #print axioms QuadrantUnitKernel.other_odd_mem_halfspace_pi_free
 
+#print axioms QuadrantUnitKernel.intrinsicDirectCaps_pairwise_aedisjoint
+#print axioms QuadrantUnitKernel.intrinsicDirectPolygon_refinement_caps
+#print axioms QuadrantUnitKernel.intrinsicDirectPolygonRegion_volume_eq_areaApprox
+#print axioms QuadrantUnitKernel.direct_disk_measureReal_eq_intrinsicPi
+
 end DkMathTest.CosmicFormula.Rotation.CF2D

@@ -26,7 +26,9 @@
 
 円盤測度の挟み込みは `intrinsicPi_eq_real_pi` を使わない。辺の支持不等式は直接軌道で証明する。支持直線の外側にある点の係数を `a, b` とすると、`a+b>1` と `Vec.q2 ≤ 1` から両係数の正性が従う。すると、別の頂点がこの条件を満たすことは錐の内部非交差と矛盾する。[DyadicConeSupport.lean](../../CF2D/DyadicConeSupport.lean)
 
-既存のユークリッド多角形への移送には、直接軌道を標準角度で定義された軌道と同一視する `directVertex_eq_regularVertex` を使う。直接軌道から凸包を定義し、この比較を最後へ移すことと、一般の原点ファン被覆は今後の課題である。
+直接軌道側でも同じ経路が閉じている。`intrinsicDirectPolygon_refinement_caps` が被覆を与え、支持直線の零測度から面積の加法性が従う。初期正方形は対角線で二分して測度 2 を得る。これを基底として `intrinsicDirectPolygonRegion_volume_eq_areaApprox` を証明し、内外の測度を挟んで `direct_disk_measureReal_eq_intrinsicPi` を得る。この経路の CF2D import 依存には標準角度との比較層が入らない。[DirectPolygonMeasure.lean](../../CF2D/DirectPolygonMeasure.lean)
+
+既存のユークリッド多角形との一致には、比較層の `directVertex_eq_regularVertex` を使う。
 
 ## 検証
 

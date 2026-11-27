@@ -94,7 +94,7 @@ theorem dyadicCone_refinement (n : ℕ) (j : Fin (4 * 2 ^ n)) :
   have h := directVertex_odd_scaled n j
   exact Prod.ext h.1.symm h.2.symm
 
-private theorem orbitPair_zero (j : Fin 4) :
+theorem orbitPair_zero (j : Fin 4) :
     orbitPair 0 j = ![(1, 0), (0, 1), (-1, 0), (0, -1)] j := by
   fin_cases j <;>
     norm_num [orbitPair, directVertex_eq_rawVertex, rawVertex, sequence, initial,
